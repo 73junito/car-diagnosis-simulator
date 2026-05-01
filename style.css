@@ -11,3 +11,10 @@ h1{margin:8px 0 20px}
 button{background:var(--accent);border:none;color:#072024;padding:10px 14px;border-radius:6px;margin:6px;cursor:pointer}
 button:hover{opacity:0.95}
 #result{min-height:48px;display:flex;align-items:center}
+
+/* Start overlay */
+.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(rgba(2,6,23,0.75), rgba(2,6,23,0.85));z-index:60;padding:24px}
+.overlay-card{max-width:720px;text-align:left}
+.overlay-card h2{margin-top:0}
+.overlay-card .muted{color:var(--muted);font-size:0.95rem}
+.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}

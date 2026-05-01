@@ -294,4 +294,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('btn-refresh').addEventListener('click', () => loadTeacherData());
   document.getElementById('btn-export').addEventListener('click', () => exportAll());
+
+  // Start overlay handlers
+  const start = document.getElementById('btn-start');
+  if (start) start.addEventListener('click', () => {
+    const o = document.getElementById('startOverlay');
+    if (o) o.style.display = 'none';
+    const login = document.getElementById('loginScreen');
+    if (login) login.style.display = 'block';
+    const u = document.getElementById('username'); if (u) u.focus();
+  });
+  const skip = document.getElementById('btn-skip');
+  if (skip) skip.addEventListener('click', () => {
+    const o = document.getElementById('startOverlay');
+    if (o) o.style.display = 'none';
+    const login = document.getElementById('loginScreen');
+    if (login) login.style.display = 'block';
+  });
 });

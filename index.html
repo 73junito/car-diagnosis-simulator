@@ -9,7 +9,25 @@
 <body>
   <h1>Car Diagnosis Simulator</h1>
 
-  <div id="loginScreen" class="card">
+  <div id="startOverlay" class="overlay">
+    <div class="overlay-card card">
+      <h2>Car Diagnosis Simulator</h2>
+      <p class="muted">Practice automotive diagnostic reasoning with realistic scenarios and instant feedback.</p>
+      <h3>How to use</h3>
+      <ol>
+        <li>Read the vehicle problem scenario.</li>
+        <li>Use diagnostic tools to investigate the issue.</li>
+        <li>Select the most likely fault and receive instant feedback.</li>
+        <li>Track scores and progress over multiple scenarios.</li>
+      </ol>
+      <div style="margin-top:12px">
+        <button id="btn-start">Start Simulation</button>
+        <button id="btn-skip" class="ghost">Skip Intro</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loginScreen" class="card" style="display:block">
     <h2>Welcome</h2>
     <input id="username" placeholder="Enter name" />
     <select id="role">
