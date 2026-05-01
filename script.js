@@ -263,6 +263,8 @@ function getScenarioRecommendations(classData = [], scenariosList = []){
 }
 
 function renderScenarioRecommendations(classData = [], scenariosList = []){
+  // load any current assignment to highlight if present
+  const classAssignment = JSON.parse(localStorage.getItem('carSim_assignment') || 'null');
   const rec = getScenarioRecommendations(classData, scenariosList);
   const container = document.getElementById('teacherRecommendations');
   if (!container) return;
@@ -274,13 +276,78 @@ function renderScenarioRecommendations(classData = [], scenariosList = []){
   if (!rec.recommendedScenarios || rec.recommendedScenarios.length === 0) html += `<div>No matching scenarios found for the current focus/difficulty.</div>`;
   else {
     rec.recommendedScenarios.forEach(s => {
-      html += `<div style="margin:6px 0;padding:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.01)">`;
-      html += `<strong>Scenario ${s.id}</strong><div style="font-size:90%">${s.symptoms}</div>`;
-      if (s.trainingFocus) html += `<div style="font-size:85%;color:var(--muted,#999)">${s.trainingFocus}</div>`;
+      const assigned = classAssignment && classAssignment.activeScenario && String(classAssignment.activeScenario) === String(s.id);
+      html += `<div style="margin:6px 0;padding:8px;border:1px solid ${assigned ? 'rgba(100,200,100,0.7)' : 'rgba(255,255,255,0.04)'};background:${assigned ? 'linear-gradient(90deg, rgba(100,200,100,0.06), rgba(255,255,255,0.01))' : 'rgba(255,255,255,0.01)'}">`;
+      html += `<div style="display:flex;justify-content:space-between;align-items:center;"><div><strong>Scenario ${s.id}</strong><div style="font-size:90%">${s.symptoms}</div>${s.trainingFocus?`<div style=\"font-size:85%;color:var(--muted,#999)\">${s.trainingFocus}</div>`:''}</div>`;
+      html += `<div style="display:flex;gap:6px"><button onclick="showScenarioPreview('${s.id}')">Preview</button><button onclick="assignScenarioToClass('${s.id}')">Assign to Class</button></div></div>`;
       html += `</div>`;
     });
   }
   container.innerHTML = html;
+}
+
+// Helper: find scenario by id (flexible matching)
+function findScenarioById(id){
+  if (!scenarios || !id) return null;
+  // try strict id match
+  let s = scenarios.find(ss => ss.id === id || String(ss.id) === String(id));
+  if (s) return s;
+  // try numeric index (id may be 1-based index)
+  const asNum = parseInt(id);
+  if (!isNaN(asNum) && scenarios[asNum - 1]) return scenarios[asNum - 1];
+  return scenarios.find(ss => String(ss.index) === String(id)) || null;
+}
+
+function showScenarioPreview(id){
+  const scen = findScenarioById(id);
+  const modal = document.getElementById('scenarioPreviewModal');
+  if (!modal) return alert('Preview unavailable');
+  document.getElementById('preview-title').innerText = `Scenario ${scen && scen.id ? scen.id : id} Preview`;
+  document.getElementById('preview-meta').innerText = scen ? `Difficulty: ${scen.difficulty || 'N/A'} — Primary: ${scen.primarySystem || 'N/A'}` : '';
+  document.getElementById('preview-symptoms').innerText = scen ? scen.symptoms || '' : 'No data';
+  const stepsEl = document.getElementById('preview-steps');
+  stepsEl.innerHTML = '';
+  if (scen && scen.steps && scen.steps.length){
+    scen.steps.forEach((st, i) => {
+      const d = document.createElement('div');
+      d.style.padding = '6px 0';
+      d.innerHTML = `<strong>Step ${i+1}:</strong> ${st.description || st.instruction || ''} <div style='font-size:90%; color:var(--muted,#aaa)'>Expected: ${st.expectedOutcome || '—'}</div>`;
+      stepsEl.appendChild(d);
+    });
+  } else {
+    stepsEl.innerHTML = '<div style="color:var(--muted,#999)">No procedural steps defined for this scenario.</div>';
+  }
+  // wire assign button
+  const assignBtn = document.getElementById('preview-assign');
+  assignBtn.onclick = () => { assignScenarioToClass(id); };
+  const closeBtn = document.getElementById('preview-close');
+  closeBtn.onclick = () => { closeScenarioPreview(); };
+  modal.style.display = 'flex';
+}
+
+function closeScenarioPreview(){
+  const modal = document.getElementById('scenarioPreviewModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function assignScenarioToClass(id){
+  const scen = findScenarioById(id);
+  const assignment = { activeScenario: id, assignedTo: 'class', assignedAt: new Date().toISOString(), metadata: { difficulty: scen && scen.difficulty, primarySystem: scen && scen.primarySystem } };
+  localStorage.setItem('carSim_assignment', JSON.stringify(assignment));
+  // show confirmation in teacherDecisions
+  const dec = document.getElementById('teacherDecisions');
+  if (dec) {
+    dec.style.display = 'block';
+    dec.innerHTML = `
+      <h3>Assignment</h3>
+      <div>Assigned scenario <strong>${id}</strong> to the class.</div>
+      <div style="font-size:90%;color:var(--muted,#999)">Assigned at ${assignment.assignedAt}</div>
+    `;
+  }
+  // refresh recommendations to highlight assignment
+  try { renderScenarioRecommendations(JSON.parse(localStorage.getItem('carSim_class')||'[]'), scenarios || []); } catch(e){}
+  // close preview modal if open
+  closeScenarioPreview();
 }
 
 
