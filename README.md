@@ -18,3 +18,4 @@ Next ideas:
 - Add multiple-choice tools and limited tool uses
 - Add scoring and progression
 - Add user accounts / paid content hosting
+# car-diagnosis-simulator
