@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Car Diagnosis Simulator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Car Diagnosis Simulator</h1>
+
+  <div id="loginScreen" class="card">
+    <h2>Welcome</h2>
+    <input id="username" placeholder="Enter name" />
+    <select id="role">
+      <option value="student">Student</option>
+      <option value="teacher">Teacher</option>
+    </select>
+    <input id="schoolCode" placeholder="School Code (optional)" />
+    <div style="margin-top:8px">
+      <button id="btn-enter">Enter</button>
+    </div>
+  </div>
+
+  <div id="gameScreen" style="display:none;">
+  <div id="ui">
+    <div class="card" id="meta">
+      <div id="userInfo"></div>
+      <div id="progress">Loading...</div>
+      <div id="score">Score: 0</div>
+      <div id="toolsLeft">Tools left: 3</div>
+    </div>
+
+    <div id="symptoms" class="card">Loading scenario...</div>
+
+    <div id="tools" class="card">
+      <h3>Tools</h3>
+      <button id="btn-battery">Check Battery</button>
+      <button id="btn-starter">Check Starter</button>
+      <button id="btn-fuel">Check Fuel</button>
+      <button id="btn-obd">Read OBD Code</button>
+    </div>
+
+    <div id="result" class="card"></div>
+
+    <div class="card">
+      <button id="diag-battery">Replace Battery</button>
+      <button id="diag-starter">Replace Starter</button>
+      <button id="diag-fuel">Replace Fuel Pump</button>
+      <button id="diag-spark">Replace Spark Plug(s)</button>
+      <button id="next">Next Scenario</button>
+      <button id="download-report" style="display:none;">Download Report</button>
+    </div>
+  </div>
+  </div>
+
+  <div id="teacherScreen" style="display:none;" class="card">
+    <h2>Teacher Dashboard</h2>
+    <div style="margin-bottom:8px">
+      <button id="btn-back">Back to Login</button>
+      <button id="btn-refresh">Refresh</button>
+      <button id="btn-export">Export All</button>
+    </div>
+    <div id="studentList"></div>
+  </div>
+
+  <script src="data/scenarios.js"></script>
+  <!-- Optional: Firebase (create firebase-config.js from firebase-config.example.js) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
