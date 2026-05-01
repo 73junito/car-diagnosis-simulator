@@ -47,6 +47,9 @@ let evidence = {
   other: []
 };
 
+// pending diagnosis choice while user picks confidence via UI
+let pendingDiagnosisChoice = null;
+
 async function saveProgress(){
   if (!currentUser) return;
 
@@ -164,32 +167,33 @@ function check(component){
 }
 
 async function diagnose(choice){
+  // Show confidence UI instead of prompt
+  pendingDiagnosisChoice = choice;
+  const panel = document.getElementById('confidencePanel');
+  if (panel) panel.style.display = 'block';
+}
+
+// Apply diagnosis after user selects confidence via UI
+async function applyDiagnosisWithConfidence(conf){
+  const choice = pendingDiagnosisChoice;
+  pendingDiagnosisChoice = null;
   const s = currentScenario();
   const out = document.getElementById('result');
-
-  // Ask for confidence level
-  let conf = prompt('Confidence (high / medium / low)?', 'high');
-  if (!conf) conf = 'high';
-  conf = conf.toLowerCase();
   const confScore = conf === 'high' ? 10 : (conf === 'medium' ? 6 : 3);
 
-  // Simple evidence-based evaluation
+  // Simple evidence-based evaluation (same heuristics)
   let correct = false;
   const sys = (choice === 'battery' || choice === 'starter' || choice === 'alternator') ? 'electrical'
             : (choice === 'fuel' ? 'fuel' : (choice === 'spark' || choice === 'spark_plugs' ? 'ignition' : null));
 
   if (sys && evidence[sys] && evidence[sys].length > 0) {
-    // heuristics: look for PROBLEM/LOW/NO PRESSURE etc.
     const problematic = evidence[sys].some(e => /low|no|problem|leak|slip|misfire|degrad|sticky|clog|<12v|0 psi/i.test(e.reading + ' ' + e.interpretation));
     if (problematic) {
-      // if scenario hidden fault matches or evidence suggests chosen system
       correct = (s.fault && s.fault.includes(choice)) || problematic;
     } else {
-      // evidence suggests OK -> only correct if choice matches an OK-resolved component (rare)
       correct = (s.fault && s.fault.includes(choice) && !problematic);
     }
   } else {
-    // fallback to original behavior when no evidence collected
     correct = (choice === s.fault);
   }
 
@@ -211,6 +215,10 @@ async function diagnose(choice){
   });
   if (summary.length) out.innerText += '\n\nEvidence:\n' + summary.join('\n');
 
+  // hide confidence panel
+  const panel = document.getElementById('confidencePanel');
+  if (panel) panel.style.display = 'none';
+
   currentIndex++;
   await saveProgress();
   if(currentIndex < scenarios.length){
@@ -218,7 +226,6 @@ async function diagnose(choice){
   } else {
     setTimeout(endGame, 800);
   }
-}
 
 function nextScenario(){
   if(currentIndex < scenarios.length - 1) currentIndex++;
@@ -384,4 +391,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const login = document.getElementById('loginScreen');
     if (login) login.style.display = 'block';
   });
+
+  // confidence button handlers
+  const ch = document.getElementById('conf-high');
+  const cm = document.getElementById('conf-medium');
+  const cl = document.getElementById('conf-low');
+  if (ch) ch.addEventListener('click', () => applyDiagnosisWithConfidence('high'));
+  if (cm) cm.addEventListener('click', () => applyDiagnosisWithConfidence('medium'));
+  if (cl) cl.addEventListener('click', () => applyDiagnosisWithConfidence('low'));
 });

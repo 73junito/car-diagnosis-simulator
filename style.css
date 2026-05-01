@@ -18,3 +18,9 @@ button:hover{opacity:0.95}
 .overlay-card h2{margin-top:0}
 .overlay-card .muted{color:var(--muted);font-size:0.95rem}
 .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
+
+/* Confidence buttons */
+.conf-btn{background:#10b981;border:none;color:#032; padding:8px 12px;border-radius:6px;margin:6px;cursor:pointer}
+.conf-btn:hover{opacity:0.95}
+.conf-btn[disabled]{opacity:0.5;cursor:not-allowed}
+.conf-btn + .conf-btn{margin-left:8px}
