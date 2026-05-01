@@ -50,6 +50,10 @@ let evidence = {
 // pending diagnosis choice while user picks confidence via UI
 let pendingDiagnosisChoice = null;
 
+// selected system for the current scenario (must choose before using tools)
+let selectedSystem = null;
+
+
 async function saveProgress(){
   if (!currentUser) return;
 
@@ -111,6 +115,7 @@ function loadScenario(){
   // reset per-scenario evidence and counters
   evidence = { electrical:[], fuel:[], ignition:[], air:[], ecu:[], engine:[], cooling:[], hvac:[], transmission:[], other:[] };
   toolUses = 0;
+  selectedSystem = null;
   document.getElementById('symptoms').innerText = s.symptoms;
   document.getElementById('result').innerText = '';
   document.getElementById('progress').innerText = `Scenario ${currentIndex + 1} of ${total}`;
@@ -119,10 +124,21 @@ function loadScenario(){
   const dl = document.getElementById('download-report');
   if (dl) dl.style.display = 'none';
   document.getElementById('userInfo').innerText = currentUser ? `Student: ${currentUser}` : '';
+
+  // show system isolation panel and guide student
+  const sp = document.getElementById('systemPanel');
+  if (sp) sp.style.display = 'block';
+  const conf = document.getElementById('confidencePanel');
+  if (conf) conf.style.display = 'none';
 }
 
 function check(component){
   const s = currentScenario();
+  if (!selectedSystem) {
+    document.getElementById('result').innerText = '🔎 Please select the suspected SYSTEM first.';
+    return;
+  }
+
   if(toolUses >= maxToolUses){
     document.getElementById('result').innerText = '⚠️ No tool uses left!';
     return;
@@ -156,6 +172,9 @@ function check(component){
   if (!evidence[output.system]) evidence[output.system] = [];
   evidence[output.system].push(output);
 
+  // annotate evidence with current selected system context
+  output.contextSystem = selectedSystem || 'unspecified';
+
   // display friendly evidence
   document.getElementById('result').innerText = `${component.toUpperCase()} → ${output.reading} (${output.interpretation})`;
   if(toolUses > 2){
@@ -163,6 +182,20 @@ function check(component){
     document.getElementById('score').innerText = `Score: ${score}`;
   }
   document.getElementById('toolsLeft').innerText = `Tools left: ${maxToolUses - toolUses}`;
+  saveProgress();
+}
+
+function selectSystem(sys){
+  selectedSystem = sys;
+  const panel = document.getElementById('systemPanel');
+  if (panel) panel.style.display = 'none';
+  document.getElementById('result').innerText = `🔧 System selected: ${sys.toUpperCase()}. Now use tools to gather evidence.`;
+  // small hint: show confidence panel only after diagnosis; ensure it's hidden
+  const conf = document.getElementById('confidencePanel');
+  if (conf) conf.style.display = 'none';
+  // record selection in evidence as a starting note
+  if (!evidence[sys]) evidence[sys] = [];
+  evidence[sys].push({ system: sys, reading: 'SYSTEM ISOLATION', interpretation: 'SELECTED', source: 'systemSelection' });
   saveProgress();
 }
 
@@ -399,4 +432,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (ch) ch.addEventListener('click', () => applyDiagnosisWithConfidence('high'));
   if (cm) cm.addEventListener('click', () => applyDiagnosisWithConfidence('medium'));
   if (cl) cl.addEventListener('click', () => applyDiagnosisWithConfidence('low'));
+
+  // system selection handlers
+  const se = document.getElementById('sys-electrical'); if (se) se.addEventListener('click', () => selectSystem('electrical'));
+  const sf = document.getElementById('sys-fuel'); if (sf) sf.addEventListener('click', () => selectSystem('fuel'));
+  const si = document.getElementById('sys-ignition'); if (si) si.addEventListener('click', () => selectSystem('ignition'));
+  const sa = document.getElementById('sys-air'); if (sa) sa.addEventListener('click', () => selectSystem('air'));
+  const sc = document.getElementById('sys-ecu'); if (sc) sc.addEventListener('click', () => selectSystem('ecu'));
+  const so = document.getElementById('sys-other'); if (so) so.addEventListener('click', () => selectSystem('other'));
 });

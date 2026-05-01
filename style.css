@@ -24,3 +24,9 @@ button:hover{opacity:0.95}
 .conf-btn:hover{opacity:0.95}
 .conf-btn[disabled]{opacity:0.5;cursor:not-allowed}
 .conf-btn + .conf-btn{margin-left:8px}
+
+/* System isolation buttons */
+.sys-panel{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.sys-btn{background:#0369a1;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+.sys-btn:hover{opacity:0.95}
+.sys-badge{font-size:0.9rem;color:var(--muted);margin-top:6px}
