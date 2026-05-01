@@ -134,6 +134,68 @@ function applyEvidenceToModel(component, interpretation){
   });
 }
 
+// --- Student learning/profile memory (lightweight) ---
+let studentProfile = {
+  weakSystems: {},
+  misconceptionMap: {},
+  reasoningScoreHistory: []
+};
+
+function calculateReasoningScore(){
+  let score = 0;
+  try {
+    if (systemJustification && systemJustification.length > 10) score += 3;
+    if (lastExplanation && lastExplanation.topEvidence && lastExplanation.topEvidence.length) score += 2;
+  } catch(e){}
+  return score;
+}
+
+function updateStudentProfile(isCorrect, chosenSystem, correctSystem){
+  if (!studentProfile) studentProfile = { weakSystems: {}, misconceptionMap: {}, reasoningScoreHistory: [] };
+  if (!chosenSystem) chosenSystem = 'unknown';
+  // track system weakness
+  if (!studentProfile.weakSystems[chosenSystem]) studentProfile.weakSystems[chosenSystem] = 0;
+  studentProfile.weakSystems[chosenSystem] += isCorrect ? 0 : 1;
+
+  // track misconception pattern
+  const key = `${chosenSystem}->${correctSystem || 'unknown'}`;
+  if (!studentProfile.misconceptionMap[key]) studentProfile.misconceptionMap[key] = 0;
+  studentProfile.misconceptionMap[key]++;
+
+  // track reasoning trend
+  const reasoningScore = calculateReasoningScore() || 0;
+  studentProfile.reasoningScoreHistory.push(reasoningScore);
+  // cap history length
+  if (studentProfile.reasoningScoreHistory.length > 100) studentProfile.reasoningScoreHistory.shift();
+}
+
+function adaptNextScenarioDifficulty(){
+  const entries = Object.entries(studentProfile.weakSystems || {});
+  if (!entries.length) return null;
+  entries.sort((a,b)=> b[1]-a[1]);
+  const top = entries[0];
+  if (top && top[1] > 2) return top[0];
+  return null;
+}
+
+function getLearningInsightsForClass(classData){
+  // aggregate weakest systems and misconceptions across class
+  const aggWeak = {};
+  const aggMis = {};
+  const reasoningSamples = [];
+  (classData || []).forEach(s => {
+    const p = s.studentProfile || null;
+    if (!p) return;
+    Object.entries(p.weakSystems||{}).forEach(([k,v]) => { aggWeak[k] = (aggWeak[k]||0) + v; });
+    Object.entries(p.misconceptionMap||{}).forEach(([k,v]) => { aggMis[k] = (aggMis[k]||0) + v; });
+    if (p.reasoningScoreHistory && p.reasoningScoreHistory.length) reasoningSamples.push(p.reasoningScoreHistory.slice(-5));
+  });
+  const weakest = Object.entries(aggWeak).sort((a,b)=> b[1]-a[1])[0] || null;
+  const topMis = Object.entries(aggMis).sort((a,b)=> b[1]-a[1])[0] || null;
+  const reasoningTrend = reasoningSamples.length ? reasoningSamples.map(arr => arr.reduce((a,c)=>a+c,0)/arr.length) : [];
+  return { weakestSystem: weakest, topMisconception: topMis, reasoningTrend };
+}
+
 
 async function saveProgress(){
   if (!currentUser) return;
@@ -146,6 +208,7 @@ async function saveProgress(){
     currentLevel: currentIndex,
     selectedSystem,
     lastExplanation: lastExplanation || null,
+    studentProfile: studentProfile || {},
     completed: currentIndex >= scenarios.length,
     lastUpdated: new Date().toISOString()
   };
@@ -204,6 +267,8 @@ async function loadUserData(){
   wrongAnswers = saved.wrong || 0;
   currentIndex = saved.currentLevel || 0;
   selectedSystem = saved.selectedSystem || null;
+  // restore student profile if present
+  studentProfile = saved.studentProfile || studentProfile || { weakSystems: {}, misconceptionMap: {}, reasoningScoreHistory: [] };
 }
 
 function loadScenario(){
@@ -409,6 +474,12 @@ async function applyDiagnosisWithConfidence(conf){
       final: correct ? 'Correct' : 'Incorrect',
       scenarioIndex: currentIndex
     };
+
+    // update student learning profile (remember across sessions)
+    try {
+      const isCorrect = (lastExplanation.final === 'Correct');
+      updateStudentProfile(isCorrect, selectedSystem || 'unspecified', s.fault || null);
+    } catch(e) { console.warn('Failed to update student profile', e); }
 
     // render into DOM
     const panel = document.getElementById('explanationPanel');
@@ -880,6 +951,16 @@ function renderTeacherInsights(){
     snap.appendChild(table);
   }
   panel.appendChild(snap);
+
+  // Learning insights aggregated across class
+  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  const li = getLearningInsightsForClass(classData || []);
+  const learn = document.createElement('div'); learn.style.marginTop = '12px';
+  learn.innerHTML = '<h4>Learning Insights (class)</h4>';
+  learn.innerHTML += `<div><strong>Most frequent weak system:</strong> ${li.weakestSystem ? li.weakestSystem[0] + ' (' + li.weakestSystem[1] + ')' : 'N/A'}</div>`;
+  learn.innerHTML += `<div><strong>Top misconception:</strong> ${li.topMisconception ? li.topMisconception[0] + ' (' + li.topMisconception[1] + ')' : 'N/A'}</div>`;
+  if (li.reasoningTrend && li.reasoningTrend.length) learn.innerHTML += `<div><strong>Recent reasoning trend (avg last 5 samples per student):</strong> [${li.reasoningTrend.map(v=>v.toFixed(1)).join(', ')}]</div>`;
+  panel.appendChild(learn);
 
   // Compact calibration + Why-this details toggle
   const cal = document.createElement('div'); cal.style.marginTop = '10px';
