@@ -33,6 +33,20 @@ function currentScenario(){
   return scenarios[currentIndex] || {symptoms:'No scenario', fault:null, tests:{}};
 }
 
+// Evidence state per scenario (reset on load)
+let evidence = {
+  electrical: [],
+  fuel: [],
+  ignition: [],
+  air: [],
+  ecu: [],
+  engine: [],
+  cooling: [],
+  hvac: [],
+  transmission: [],
+  other: []
+};
+
 async function saveProgress(){
   if (!currentUser) return;
 
@@ -91,6 +105,8 @@ async function loadUserData(){
 
 function loadScenario(){
   const s = currentScenario();
+  // reset per-scenario evidence and counters
+  evidence = { electrical:[], fuel:[], ignition:[], air:[], ecu:[], engine:[], cooling:[], hvac:[], transmission:[], other:[] };
   toolUses = 0;
   document.getElementById('symptoms').innerText = s.symptoms;
   document.getElementById('result').innerText = '';
@@ -111,9 +127,34 @@ function check(component){
 
   toolUses++;
   totalToolUsed++;
+  // Build structured evidence from scenario tests
+  const raw = (s.tests && s.tests[component]);
+  let output = { system: 'other', reading: 'No data', interpretation: 'UNKNOWN', source: component };
+  if (raw) {
+    if (typeof raw === 'string') {
+      // backward compatible: simple string -> wrap
+      output.reading = raw;
+      const txt = raw.toLowerCase();
+      if (txt.includes('low') || txt.includes('no pressure') || txt.includes('no fuel') || txt.includes('<12v') || txt.includes('0 psi')) output.interpretation = 'PROBLEM';
+      else output.interpretation = 'OK';
+      // basic system mapping
+      if (component.includes('bat') || component === 'battery' || txt.includes('volt')) output.system = 'electrical';
+      else if (component.includes('fuel')) output.system = 'fuel';
+      else if (component.includes('spark') || component.includes('ignit')) output.system = 'ignition';
+      else if (component.includes('obd')) output.system = 'ecu';
+    } else if (typeof raw === 'object') {
+      output.system = raw.system || 'other';
+      output.reading = raw.reading || '';
+      output.interpretation = raw.interpretation || '';
+    }
+  }
 
-  const result = (s.tests && s.tests[component]) || (component === 'obd' ? (s.obd || 'No stored OBD codes.') : 'No issue found.');
-  document.getElementById('result').innerText = result;
+  // store evidence
+  if (!evidence[output.system]) evidence[output.system] = [];
+  evidence[output.system].push(output);
+
+  // display friendly evidence
+  document.getElementById('result').innerText = `${component.toUpperCase()} → ${output.reading} (${output.interpretation})`;
   if(toolUses > 2){
     score = Math.max(0, score - 2);
     document.getElementById('score').innerText = `Score: ${score}`;
@@ -125,25 +166,57 @@ function check(component){
 async function diagnose(choice){
   const s = currentScenario();
   const out = document.getElementById('result');
-  if(choice === s.fault){
-    correctAnswers++;
-    score += 10;
-    out.innerText = '✅ Correct diagnosis! +10 points';
-    document.getElementById('score').innerText = `Score: ${score}`;
 
-    currentIndex++;
-    await saveProgress();
-    if(currentIndex < scenarios.length){
-      setTimeout(loadScenario, 1200);
+  // Ask for confidence level
+  let conf = prompt('Confidence (high / medium / low)?', 'high');
+  if (!conf) conf = 'high';
+  conf = conf.toLowerCase();
+  const confScore = conf === 'high' ? 10 : (conf === 'medium' ? 6 : 3);
+
+  // Simple evidence-based evaluation
+  let correct = false;
+  const sys = (choice === 'battery' || choice === 'starter' || choice === 'alternator') ? 'electrical'
+            : (choice === 'fuel' ? 'fuel' : (choice === 'spark' || choice === 'spark_plugs' ? 'ignition' : null));
+
+  if (sys && evidence[sys] && evidence[sys].length > 0) {
+    // heuristics: look for PROBLEM/LOW/NO PRESSURE etc.
+    const problematic = evidence[sys].some(e => /low|no|problem|leak|slip|misfire|degrad|sticky|clog|<12v|0 psi/i.test(e.reading + ' ' + e.interpretation));
+    if (problematic) {
+      // if scenario hidden fault matches or evidence suggests chosen system
+      correct = (s.fault && s.fault.includes(choice)) || problematic;
     } else {
-      setTimeout(endGame, 800);
+      // evidence suggests OK -> only correct if choice matches an OK-resolved component (rare)
+      correct = (s.fault && s.fault.includes(choice) && !problematic);
     }
   } else {
+    // fallback to original behavior when no evidence collected
+    correct = (choice === s.fault);
+  }
+
+  if (correct) {
+    correctAnswers++;
+    score += confScore;
+    out.innerText = `✅ Correct diagnosis based on evidence (+${confScore} pts)`;
+  } else {
     wrongAnswers++;
-    score = Math.max(0, score - 10);
-    out.innerText = '❌ Incorrect diagnosis! -10 points';
-    document.getElementById('score').innerText = `Score: ${score}`;
-    await saveProgress();
+    score = Math.max(0, score - 5);
+    out.innerText = `❌ Incorrect diagnosis (-5 pts)`;
+  }
+  document.getElementById('score').innerText = `Score: ${score}`;
+
+  // show evidence summary
+  const summary = [];
+  Object.keys(evidence).forEach(k => {
+    if (evidence[k] && evidence[k].length) summary.push(`${k}: ${evidence[k].map(e=>e.reading + ' ('+e.interpretation+')').join('; ')}`);
+  });
+  if (summary.length) out.innerText += '\n\nEvidence:\n' + summary.join('\n');
+
+  currentIndex++;
+  await saveProgress();
+  if(currentIndex < scenarios.length){
+    setTimeout(loadScenario, 1200);
+  } else {
+    setTimeout(endGame, 800);
   }
 }
 
