@@ -14,8 +14,22 @@ let schoolCode = '';
 const scenarios = window.scenarios || [];
 const total = scenarios.length;
 
+// Central application state (stabilization layer)
+const AppState = {
+  user: null,
+  role: 'student',
+  scenarioIndex: 0,
+  score: 0,
+  system: null,
+  profile: {},
+  ui: { view: 'homeScreen', context: null }
+};
+
 // Central SPA view router
-function setView(viewId) {
+function setView(viewId, data){
+  // update central UI state
+  AppState.ui.view = viewId;
+  AppState.ui.context = data || null;
   const views = ['homeScreen','loginScreen','scenarioSelectScreen','gameScreen','teacherScreen'];
   views.forEach(id => {
     const el = document.getElementById(id);
@@ -23,6 +37,11 @@ function setView(viewId) {
   });
   const target = document.getElementById(viewId);
   if (target) target.style.display = 'block';
+}
+
+// navigation alias that accepts context
+function navigate(viewId, data){
+  setView(viewId, data);
 }
 // Scenario selection utilities
 function populateFilterSystem(){
@@ -508,6 +527,11 @@ function loadScenario(){
   evidence = { electrical:[], fuel:[], ignition:[], air:[], ecu:[], engine:[], cooling:[], hvac:[], transmission:[], other:[] };
   toolUses = 0;
   selectedSystem = null;
+  // sync runtime state into AppState
+  AppState.scenarioIndex = currentIndex;
+  AppState.score = score;
+  AppState.system = selectedSystem;
+  AppState.profile = studentProfile || AppState.profile || {};
   // initialize lightweight fault probability priors for this scenario
   faultProbabilities = {
     battery: 0.5,
@@ -808,6 +832,10 @@ async function login(){
   userRole = role;
   schoolCode = code;
 
+  // sync into AppState
+  AppState.user = currentUser;
+  AppState.role = userRole;
+
   // route via central router
   if(userRole === 'teacher'){
     setView('teacherScreen');
@@ -817,6 +845,7 @@ async function login(){
 
   // STUDENT flow: if teacher has assigned a scenario, start it; otherwise show selection
   await loadUserData();
+  AppState.profile = studentProfile || {};
   const assignment = JSON.parse(localStorage.getItem('carSim_assignment') || 'null');
   if (assignment && assignment.activeScenario) {
     // try to locate scenario index
@@ -825,6 +854,7 @@ async function login(){
     if (target) idx = scenarios.findIndex(s => s === target);
     if (idx < 0) idx = 0;
     currentIndex = idx;
+    AppState.scenarioIndex = currentIndex;
     setView('gameScreen');
     loadScenario();
     return;
