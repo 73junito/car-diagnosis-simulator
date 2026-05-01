@@ -53,6 +53,20 @@ let pendingDiagnosisChoice = null;
 // selected system for the current scenario (must choose before using tools)
 let selectedSystem = null;
 
+// system importance weights (used to bias evidence relevance after isolation)
+const systemWeights = {
+  electrical: 1.0,
+  fuel: 1.0,
+  ignition: 1.0,
+  air: 0.9,
+  ecu: 0.9,
+  engine: 0.8,
+  cooling: 0.8,
+  hvac: 0.6,
+  transmission: 0.6,
+  other: 0.5
+};
+
 
 async function saveProgress(){
   if (!currentUser) return;
@@ -63,6 +77,7 @@ async function saveProgress(){
     correct: correctAnswers,
     wrong: wrongAnswers,
     currentLevel: currentIndex,
+    selectedSystem,
     completed: currentIndex >= scenarios.length,
     lastUpdated: new Date().toISOString()
   };
@@ -95,6 +110,7 @@ async function loadUserData(){
         correctAnswers = data.correct || 0;
         wrongAnswers = data.wrong || 0;
         currentIndex = data.currentLevel || 0;
+        selectedSystem = data.selectedSystem || null;
         return;
       }
     } catch (e) {
@@ -108,6 +124,7 @@ async function loadUserData(){
   correctAnswers = saved.correct || 0;
   wrongAnswers = saved.wrong || 0;
   currentIndex = saved.currentLevel || 0;
+  selectedSystem = saved.selectedSystem || null;
 }
 
 function loadScenario(){
@@ -170,6 +187,11 @@ function check(component){
 
   // store evidence
   if (!evidence[output.system]) evidence[output.system] = [];
+  // compute adaptive weight: base by system importance, boost if matches selected system, boost if interpretation indicates problem
+  const baseImportance = systemWeights[output.system] || 0.5;
+  const isolationBoost = (selectedSystem && selectedSystem === output.system) ? 1.2 : 1.0;
+  const problemBoost = (/problem|low|no|<12v|0 psi|leak|misfire/i.test(output.reading + ' ' + output.interpretation)) ? 1.4 : 1.0;
+  output.weight = +(baseImportance * isolationBoost * problemBoost).toFixed(2);
   evidence[output.system].push(output);
 
   // annotate evidence with current selected system context
@@ -195,7 +217,7 @@ function selectSystem(sys){
   if (conf) conf.style.display = 'none';
   // record selection in evidence as a starting note
   if (!evidence[sys]) evidence[sys] = [];
-  evidence[sys].push({ system: sys, reading: 'SYSTEM ISOLATION', interpretation: 'SELECTED', source: 'systemSelection' });
+  evidence[sys].push({ system: sys, reading: 'SYSTEM ISOLATION', interpretation: 'SELECTED', source: 'systemSelection', weight: (systemWeights[sys] || 0.5) });
   saveProgress();
 }
 
@@ -220,20 +242,29 @@ async function applyDiagnosisWithConfidence(conf){
             : (choice === 'fuel' ? 'fuel' : (choice === 'spark' || choice === 'spark_plugs' ? 'ignition' : null));
 
   if (sys && evidence[sys] && evidence[sys].length > 0) {
+    // compute weighted relevance for the candidate system
+    const evidenceSum = evidence[sys].reduce((a,c)=> a + (c.weight || 0), 0);
+    const totalSum = Object.keys(evidence).reduce((a,k)=> a + (evidence[k]||[]).reduce((x,y)=> x + (y.weight||0), 0), 0) || 1;
+    const relevance = evidenceSum / totalSum; // 0..1 ratio for how much evidence supports this system
+
     const problematic = evidence[sys].some(e => /low|no|problem|leak|slip|misfire|degrad|sticky|clog|<12v|0 psi/i.test(e.reading + ' ' + e.interpretation));
-    if (problematic) {
-      correct = (s.fault && s.fault.includes(choice)) || problematic;
-    } else {
-      correct = (s.fault && s.fault.includes(choice) && !problematic);
-    }
+
+    // Decide correctness using fault match and evidence relevance. If student isolated correctly, allow lower thresholds.
+    const faultMatch = (s.fault && s.fault.includes(choice));
+    const isolationCorrect = selectedSystem === sys;
+
+    if (faultMatch && (relevance >= 0.2 || isolationCorrect || problematic)) correct = true;
+    else correct = false;
   } else {
     correct = (choice === s.fault);
   }
 
   if (correct) {
     correctAnswers++;
-    score += confScore;
-    out.innerText = `✅ Correct diagnosis based on evidence (+${confScore} pts)`;
+    // reward confidence + isolation bonus
+    const isolationBonus = selectedSystem ? (selectedSystem === sys ? 2 : -2) : 0;
+    score += confScore + isolationBonus;
+    out.innerText = `✅ Correct diagnosis based on evidence (+${confScore + (isolationBonus>0?isolationBonus:0)} pts)`;
   } else {
     wrongAnswers++;
     score = Math.max(0, score - 5);
