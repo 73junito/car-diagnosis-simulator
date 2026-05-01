@@ -52,6 +52,8 @@ let pendingDiagnosisChoice = null;
 
 // selected system for the current scenario (must choose before using tools)
 let selectedSystem = null;
+// last explanation object produced after diagnosis
+let lastExplanation = null;
 
 // system importance weights (used to bias evidence relevance after isolation)
 const systemWeights = {
@@ -78,6 +80,7 @@ async function saveProgress(){
     wrong: wrongAnswers,
     currentLevel: currentIndex,
     selectedSystem,
+    lastExplanation: lastExplanation || null,
     completed: currentIndex >= scenarios.length,
     lastUpdated: new Date().toISOString()
   };
@@ -271,6 +274,51 @@ async function applyDiagnosisWithConfidence(conf){
     out.innerText = `❌ Incorrect diagnosis (-5 pts)`;
   }
   document.getElementById('score').innerText = `Score: ${score}`;
+
+  // Build explanation object and render explanation panel for teacher/student transparency
+  try {
+    const evidenceSum = (sys && evidence[sys]) ? evidence[sys].reduce((a,c)=> a + (c.weight || 0), 0) : 0;
+    const totalSum = Object.keys(evidence).reduce((a,k)=> a + (evidence[k]||[]).reduce((x,y)=> x + (y.weight||0), 0), 0) || 1;
+    const relevance = totalSum ? (evidenceSum / totalSum) : 0;
+    const isolationCorrect = selectedSystem === sys;
+    const topEvidence = (sys && evidence[sys]) ? (evidence[sys].slice().sort((a,b)=> (b.weight||0)-(a.weight||0)).slice(0,3).map(e=>({reading:e.reading, interpretation:e.interpretation, weight:e.weight, source:e.source}))) : [];
+    const isolationBonus = selectedSystem ? (selectedSystem === sys ? 2 : -2) : 0;
+    lastExplanation = {
+      selectedSystem: selectedSystem || null,
+      diagnosedSystem: sys || null,
+      relevance: +relevance.toFixed(2),
+      evidenceSum: +evidenceSum.toFixed(2),
+      totalSum: +totalSum.toFixed(2),
+      topEvidence,
+      isolationCorrect,
+      confidence: conf,
+      scoreDelta: correct ? (confScore + isolationBonus) : -5,
+      final: correct ? 'Correct' : 'Incorrect'
+    };
+
+    // render into DOM
+    const panel = document.getElementById('explanationPanel');
+    if (panel) panel.style.display = 'block';
+    const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
+    setText('exp-system', lastExplanation.selectedSystem || '—');
+    setText('exp-relevance', Math.round(lastExplanation.relevance * 100) + '%');
+    setText('exp-isolation', lastExplanation.isolationCorrect ? 'Correct' : 'Incorrect');
+    setText('exp-confidence', lastExplanation.confidence);
+    const evidEl = document.getElementById('exp-evidence');
+    if (evidEl) {
+      evidEl.innerHTML = '';
+      if (lastExplanation.topEvidence.length === 0) evidEl.innerHTML = '<div class="evidence-entry">(no system-specific evidence collected)</div>';
+      lastExplanation.topEvidence.forEach(ev => {
+        const d = document.createElement('div');
+        d.className = 'evidence-entry';
+        d.innerText = `${ev.reading} — ${ev.interpretation} (w:${ev.weight})`;
+        evidEl.appendChild(d);
+      });
+    }
+    setText('exp-final', `Result: ${lastExplanation.final}. Score change: ${lastExplanation.scoreDelta}`);
+  } catch (e) {
+    console.warn('Failed to build explanation', e);
+  }
 
   // show evidence summary
   const summary = [];

@@ -30,3 +30,12 @@ button:hover{opacity:0.95}
 .sys-btn{background:#0369a1;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
 .sys-btn:hover{opacity:0.95}
 .sys-badge{font-size:0.9rem;color:var(--muted);margin-top:6px}
+
+/* Explanation / reasoning panel */
+.explain-panel{background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.04);padding:10px;margin-top:12px;border-radius:8px}
+.explain-panel h4{margin:0 0 8px 0;color:#fff;font-size:1rem}
+.explain-item{font-size:0.95rem;color:var(--muted);margin:4px 0}
+.explain-key{color:var(--muted);font-weight:600;margin-right:6px}
+.explain-value{color:#e6eef3}
+.evidence-list{margin:6px 0;padding-left:14px}
+.evidence-entry{margin:2px 0;font-size:0.9rem}

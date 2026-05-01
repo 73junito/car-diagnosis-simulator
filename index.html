@@ -93,6 +93,20 @@
         <div class="sys-badge">Select a system first — this models system isolation.</div>
       </div>
     </div>
+
+    <!-- Explanation / Reasoning Panel (hidden until diagnosis completes) -->
+    <div id="explanationPanel" class="explain-panel" style="display:none;">
+      <h4>Reasoning Summary</h4>
+      <div id="explanationContent">
+        <div class="explain-item"><span class="explain-key">Selected system:</span> <span class="explain-value" id="exp-system">—</span></div>
+        <div class="explain-item"><span class="explain-key">Evidence relevance:</span> <span class="explain-value" id="exp-relevance">—</span></div>
+        <div class="explain-item"><span class="explain-key">Isolation:</span> <span class="explain-value" id="exp-isolation">—</span></div>
+        <div class="explain-item"><span class="explain-key">Confidence:</span> <span class="explain-value" id="exp-confidence">—</span></div>
+        <div class="explain-item"><span class="explain-key">Top evidence:</span></div>
+        <div class="evidence-list" id="exp-evidence"></div>
+        <div class="explain-item" id="exp-final"></div>
+      </div>
+    </div>
   </div>
   </div>
 
