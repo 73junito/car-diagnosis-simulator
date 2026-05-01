@@ -90,6 +90,9 @@
           <button id="sys-ecu" class="sys-btn">ECU / Sensors</button>
           <button id="sys-other" class="sys-btn">Other</button>
         </div>
+        <div style="margin-top:8px">
+          <input id="systemReason" placeholder="(optional) Why are you choosing this system?" style="width:100%; padding:8px; box-sizing:border-box" />
+        </div>
         <div class="sys-badge">Select a system first — this models system isolation.</div>
       </div>
     </div>
@@ -99,9 +102,11 @@
       <h4>Reasoning Summary</h4>
       <div id="explanationContent">
         <div class="explain-item"><span class="explain-key">Selected system:</span> <span class="explain-value" id="exp-system">—</span></div>
+        <div class="explain-item"><span class="explain-key">System rationale:</span> <span class="explain-value" id="exp-rationale">—</span></div>
         <div class="explain-item"><span class="explain-key">Evidence relevance:</span> <span class="explain-value" id="exp-relevance">—</span></div>
         <div class="explain-item"><span class="explain-key">Isolation:</span> <span class="explain-value" id="exp-isolation">—</span></div>
         <div class="explain-item"><span class="explain-key">Confidence:</span> <span class="explain-value" id="exp-confidence">—</span></div>
+        <div class="explain-item"><span class="explain-key">Technician reasoning:</span> <div class="explain-value" id="exp-reasoning">—</div></div>
         <div class="explain-item"><span class="explain-key">Top evidence:</span></div>
         <div class="evidence-list" id="exp-evidence"></div>
         <div class="explain-item" id="exp-final"></div>

@@ -52,6 +52,8 @@ let pendingDiagnosisChoice = null;
 
 // selected system for the current scenario (must choose before using tools)
 let selectedSystem = null;
+// optional short justification entered by student when selecting a system
+let systemJustification = '';
 // last explanation object produced after diagnosis
 let lastExplanation = null;
 
@@ -201,6 +203,8 @@ function check(component){
 
   // store evidence
   if (!evidence[output.system]) evidence[output.system] = [];
+  // attach the student's justification/rationale for this isolation (if any)
+  output.justification = systemJustification || '';
   // compute adaptive weight: base by system importance, boost if matches selected system, boost if interpretation indicates problem
   const baseImportance = systemWeights[output.system] || 0.5;
   const isolationBoost = (selectedSystem && selectedSystem === output.system) ? 1.2 : 1.0;
@@ -211,8 +215,12 @@ function check(component){
   // annotate evidence with current selected system context
   output.contextSystem = selectedSystem || 'unspecified';
 
-  // display friendly evidence
-  document.getElementById('result').innerText = `${component.toUpperCase()} → ${output.reading} (${output.interpretation})`;
+  // display shop-style evidence message (more realistic phrasing)
+  const friendly = `${component.toUpperCase()} Test Result:\n${output.reading} — ${output.interpretation}.`;
+  const guidance = (output.interpretation && /PROBLEM|problem|LOW|low|NO|no|<12v|0 psi|LEAK|leak/i.test(output.reading + ' ' + output.interpretation))
+                    ? 'Notes: reading suggests a potential issue; consider follow-up tests.'
+                    : 'Notes: reading within expected range.';
+  document.getElementById('result').innerText = friendly + '\n' + guidance + (systemJustification ? `\nReason for isolation: ${systemJustification}` : '');
   if(toolUses > 2){
     score = Math.max(0, score - 2);
     document.getElementById('score').innerText = `Score: ${score}`;
@@ -223,15 +231,17 @@ function check(component){
 
 function selectSystem(sys){
   selectedSystem = sys;
+  // capture optional short justification from the UI input
+  try { systemJustification = (document.getElementById('systemReason') && document.getElementById('systemReason').value) ? document.getElementById('systemReason').value.trim() : ''; } catch(e){ systemJustification = ''; }
   const panel = document.getElementById('systemPanel');
   if (panel) panel.style.display = 'none';
   document.getElementById('result').innerText = `🔧 System selected: ${sys.toUpperCase()}. Now use tools to gather evidence.`;
   // small hint: show confidence panel only after diagnosis; ensure it's hidden
   const conf = document.getElementById('confidencePanel');
   if (conf) conf.style.display = 'none';
-  // record selection in evidence as a starting note
+  // record selection in evidence as a starting note (include student rationale)
   if (!evidence[sys]) evidence[sys] = [];
-  evidence[sys].push({ system: sys, reading: 'SYSTEM ISOLATION', interpretation: 'SELECTED', source: 'systemSelection', weight: (systemWeights[sys] || 0.5) });
+  evidence[sys].push({ system: sys, reading: 'SYSTEM ISOLATION', interpretation: 'SELECTED', source: 'systemSelection', weight: (systemWeights[sys] || 0.5), justification: systemJustification });
   saveProgress();
 }
 
@@ -297,6 +307,7 @@ async function applyDiagnosisWithConfidence(conf){
     lastExplanation = {
       selectedSystem: selectedSystem || null,
       diagnosedSystem: sys || null,
+      systemRationale: systemJustification || '',
       relevance: +relevance.toFixed(2),
       evidenceSum: +evidenceSum.toFixed(2),
       totalSum: +totalSum.toFixed(2),
@@ -313,9 +324,20 @@ async function applyDiagnosisWithConfidence(conf){
     if (panel) panel.style.display = 'block';
     const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
     setText('exp-system', lastExplanation.selectedSystem || '—');
+    setText('exp-rationale', lastExplanation.systemRationale || '—');
     setText('exp-relevance', Math.round(lastExplanation.relevance * 100) + '%');
     setText('exp-isolation', lastExplanation.isolationCorrect ? 'Correct' : 'Incorrect');
     setText('exp-confidence', lastExplanation.confidence);
+    // technician reasoning summary (simple natural language synthesis of top evidence)
+    const reasoningEl = document.getElementById('exp-reasoning');
+    if (reasoningEl) {
+      if (lastExplanation.topEvidence && lastExplanation.topEvidence.length) {
+        const s = lastExplanation.topEvidence.map(e => `${e.reading} (${e.interpretation})`).join('; ');
+        reasoningEl.innerText = `Technician reasoning: observed ${s}.`;
+      } else {
+        reasoningEl.innerText = 'Technician reasoning: No system-specific evidence collected.';
+      }
+    }
     const evidEl = document.getElementById('exp-evidence');
     if (evidEl) {
       evidEl.innerHTML = '';
