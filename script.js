@@ -97,6 +97,17 @@ async function saveProgress(){
   localStorage.setItem('carSim_' + currentUser, JSON.stringify(student));
   const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
   const existingIndex = classData.findIndex(s => s.name === currentUser);
+  // preserve and append explanations history per student
+  const existing = (existingIndex >= 0) ? classData[existingIndex] : null;
+  student.explanations = existing && existing.explanations ? existing.explanations.slice() : [];
+  if (lastExplanation) {
+    const lastSaved = student.explanations.length ? student.explanations[student.explanations.length - 1] : null;
+    if (!lastSaved || lastSaved.scenarioIndex !== lastExplanation.scenarioIndex) {
+      // add timestamp and store a copy
+      const copy = Object.assign({}, lastExplanation, { savedAt: new Date().toISOString() });
+      student.explanations.push(copy);
+    }
+  }
   if (existingIndex >= 0) classData[existingIndex] = student;
   else classData.push(student);
   localStorage.setItem('carSim_class', JSON.stringify(classData));
@@ -293,7 +304,8 @@ async function applyDiagnosisWithConfidence(conf){
       isolationCorrect,
       confidence: conf,
       scoreDelta: correct ? (confScore + isolationBonus) : -5,
-      final: correct ? 'Correct' : 'Incorrect'
+      final: correct ? 'Correct' : 'Incorrect',
+      scenarioIndex: currentIndex
     };
 
     // render into DOM
@@ -416,6 +428,7 @@ async function loadTeacherData(){
             <p>Level: ${s.currentLevel + 1}/${total}</p>
             <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>
             <p>Last: ${s.lastUpdated || '—'}</p>
+            <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>
           </div>
         `;
       });
@@ -435,6 +448,7 @@ async function loadTeacherData(){
       <p>Level: ${s.currentLevel + 1}/${total}</p>
       <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>
       <p>Last: ${s.lastUpdated || '—'}</p>
+      <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>
     </div>
   `).join('');
 }
@@ -455,8 +469,8 @@ async function exportAll(){
       console.warn('Failed to export from Firestore', e);
     }
   }
-
   const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  // include per-student explanations if present (already persisted in saveProgress)
   const blob = new Blob([JSON.stringify(classData, null, 2)], { type: 'application/json' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
