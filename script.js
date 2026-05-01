@@ -227,6 +227,62 @@ function getAdaptiveRecommendation(studentProfile = {}, classData = []){
   };
 }
 
+// Curriculum-aware scenario recommendation engine (teacher-facing)
+function getScenarioRecommendations(classData = [], scenariosList = []){
+  const systemWeakness = {};
+  const difficultyWeakness = {};
+
+  (classData || []).forEach(student => {
+    const profile = student.studentProfile || {};
+    Object.entries(profile.weakSystems || {}).forEach(([sys, val]) => {
+      systemWeakness[sys] = (systemWeakness[sys] || 0) + val;
+    });
+
+    // fallback: use explanations to infer difficulty errors if runHistory absent
+    (student.explanations || []).forEach(ex => {
+      const scen = (typeof ex.scenarioIndex === 'number' && scenarios[ex.scenarioIndex]) ? scenarios[ex.scenarioIndex] : null;
+      const d = scen && scen.difficulty ? scen.difficulty : 2;
+      difficultyWeakness[d] = (difficultyWeakness[d] || 0) + (ex.final === 'Correct' ? 0 : 1);
+    });
+  });
+
+  const focusSystem = Object.entries(systemWeakness).sort((a,b)=> b[1]-a[1])[0]?.[0] || Object.keys(systemWeights)[0] || 'electrical';
+  const worstDifficulty = Object.entries(difficultyWeakness).sort((a,b)=> b[1]-a[1])[0]?.[0] || 2;
+
+  const minDiff = Math.max(1, parseInt(worstDifficulty));
+  const maxDiff = Math.min(5, minDiff + 1);
+
+  const recommended = (scenariosList || []).filter(s => s.primarySystem === focusSystem && s.difficulty >= minDiff && s.difficulty <= maxDiff).slice(0,3);
+
+  return {
+    focusSystem,
+    difficultyBand: `${minDiff}-${maxDiff}`,
+    recommendedScenarios: recommended,
+    reason: `Class shows concentrated errors in ${focusSystem} within difficulty ${minDiff}-${maxDiff}`
+  };
+}
+
+function renderScenarioRecommendations(classData = [], scenariosList = []){
+  const rec = getScenarioRecommendations(classData, scenariosList);
+  const container = document.getElementById('teacherRecommendations');
+  if (!container) return;
+  container.style.display = 'block';
+  let html = `<h3>Recommended Training Scenarios</h3>`;
+  html += `<div><strong>Focus system:</strong> ${rec.focusSystem}</div>`;
+  html += `<div><strong>Difficulty band:</strong> ${rec.difficultyBand}</div>`;
+  html += `<div style="margin-bottom:8px;font-style:italic;color:var(--muted,#999)">${rec.reason}</div>`;
+  if (!rec.recommendedScenarios || rec.recommendedScenarios.length === 0) html += `<div>No matching scenarios found for the current focus/difficulty.</div>`;
+  else {
+    rec.recommendedScenarios.forEach(s => {
+      html += `<div style="margin:6px 0;padding:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.01)">`;
+      html += `<strong>Scenario ${s.id}</strong><div style="font-size:90%">${s.symptoms}</div>`;
+      if (s.trainingFocus) html += `<div style="font-size:85%;color:var(--muted,#999)">${s.trainingFocus}</div>`;
+      html += `</div>`;
+    });
+  }
+  container.innerHTML = html;
+}
+
 
 async function saveProgress(){
   if (!currentUser) return;
@@ -1008,6 +1064,11 @@ function renderTeacherInsights(){
       `;
     }
   } catch(e) { console.warn('Failed to compute adaptive recommendation', e); }
+
+  // Scenario-level recommendations (curriculum-aware)
+  try {
+    renderScenarioRecommendations(classData || [], scenarios || []);
+  } catch (e) { console.warn('Failed to render scenario recommendations', e); }
 
   // Compact calibration + Why-this details toggle
   const cal = document.createElement('div'); cal.style.marginTop = '10px';
