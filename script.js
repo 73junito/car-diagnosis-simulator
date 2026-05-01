@@ -533,4 +533,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const sa = document.getElementById('sys-air'); if (sa) sa.addEventListener('click', () => selectSystem('air'));
   const sc = document.getElementById('sys-ecu'); if (sc) sc.addEventListener('click', () => selectSystem('ecu'));
   const so = document.getElementById('sys-other'); if (so) so.addEventListener('click', () => selectSystem('other'));
+
+  // teacher CSV export for explanations
+  const be = document.getElementById('btn-export-explanations');
+  if (be) be.addEventListener('click', () => exportExplanationsCSV());
 });
+
+function escapeCSV(val){
+  if (val === null || val === undefined) return '';
+  const s = String(val).replace(/"/g, '""');
+  return '"' + s + '"';
+}
+
+function exportExplanationsCSV(){
+  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  const rows = [];
+  const header = ['Student','ScenarioIndex','ScenarioSymptoms','Fault','SelectedSystem','DiagnosedSystem','IsolationCorrect','Confidence','ScoreDelta','TopEvidence','SavedAt'];
+  rows.push(header.map(escapeCSV).join(','));
+
+  classData.forEach(student => {
+    const name = student.name || 'Unknown';
+    const explanations = student.explanations || [];
+    explanations.forEach(ex => {
+      const scen = (typeof ex.scenarioIndex === 'number' && scenarios[ex.scenarioIndex]) ? scenarios[ex.scenarioIndex] : null;
+      const symptoms = scen ? (scen.symptoms || '') : '';
+      const fault = scen ? (scen.fault || '') : '';
+      const topEv = (ex.topEvidence || []).map(e => `${e.reading} (${e.interpretation})`).join(' | ');
+      const row = [
+        name,
+        ex.scenarioIndex,
+        symptoms,
+        fault,
+        ex.selectedSystem,
+        ex.diagnosedSystem,
+        ex.isolationCorrect,
+        ex.confidence,
+        ex.scoreDelta,
+        topEv,
+        ex.savedAt || ''
+      ];
+      rows.push(row.map(escapeCSV).join(','));
+    });
+  });
+
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'carSim_explanations_export.csv';
+  link.click();
+}
