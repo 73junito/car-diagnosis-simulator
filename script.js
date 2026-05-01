@@ -71,6 +71,11 @@ const systemWeights = {
   other: 0.5
 };
 
+// Format tool outputs into a consistent technician-style report
+function formatToolOutput(systemLabel, testName, value, interpretation, conclusion){
+  return `[SYSTEM: ${systemLabel}]\nTest: ${testName}\nResult: ${value}\nInterpretation: ${interpretation}\nConclusion: ${conclusion}`;
+}
+
 
 async function saveProgress(){
   if (!currentUser) return;
@@ -216,11 +221,16 @@ function check(component){
   output.contextSystem = selectedSystem || 'unspecified';
 
   // display shop-style evidence message (more realistic phrasing)
-  const friendly = `${component.toUpperCase()} Test Result:\n${output.reading} — ${output.interpretation}.`;
-  const guidance = (output.interpretation && /PROBLEM|problem|LOW|low|NO|no|<12v|0 psi|LEAK|leak/i.test(output.reading + ' ' + output.interpretation))
-                    ? 'Notes: reading suggests a potential issue; consider follow-up tests.'
-                    : 'Notes: reading within expected range.';
-  document.getElementById('result').innerText = friendly + '\n' + guidance + (systemJustification ? `\nReason for isolation: ${systemJustification}` : '');
+  // standardized technician-style output
+  const systemMap = { battery: 'Electrical', starter: 'Starting', fuel: 'Fuel Delivery', obd: 'On-Board Diagnostics' };
+  const systemLabel = systemMap[component] || (output.system ? output.system.charAt(0).toUpperCase() + output.system.slice(1) : 'General System');
+  const interpretationText = (output.interpretation && /PROBLEM|problem|LOW|low|NO|no|<12v|0 psi|LEAK|leak/i.test(output.reading + ' ' + output.interpretation)) ? 'Below normal operating range' : 'Within expected range';
+  let conclusion = 'No immediate fault indicated';
+  if (/low|no pressure|<12v|0 psi|leak|stuck|sticky|slipping|slip|misfire|clog/i.test(output.reading + ' ' + output.interpretation)) {
+    conclusion = 'Potential issue detected; follow-up testing recommended';
+  }
+  const formatted = formatToolOutput(systemLabel, component.toUpperCase() + ' TEST', output.reading, interpretationText, conclusion);
+  document.getElementById('result').innerText = formatted + (systemJustification ? `\n\nReason for isolation: ${systemJustification}` : '');
   if(toolUses > 2){
     score = Math.max(0, score - 2);
     document.getElementById('score').innerText = `Score: ${score}`;
