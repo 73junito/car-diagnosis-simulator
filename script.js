@@ -537,6 +537,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // teacher CSV export for explanations
   const be = document.getElementById('btn-export-explanations');
   if (be) be.addEventListener('click', () => exportExplanationsCSV());
+  const bi = document.getElementById('btn-insights');
+  if (bi) bi.addEventListener('click', () => renderTeacherInsights());
 });
 
 function escapeCSV(val){
@@ -581,4 +583,170 @@ function exportExplanationsCSV(){
   link.href = URL.createObjectURL(blob);
   link.download = 'carSim_explanations_export.csv';
   link.click();
+}
+
+// --- Teacher Insights / Summary (compact, aggregated) ---
+function faultToSystem(fault){
+  if (!fault) return 'other';
+  const f = String(fault).toLowerCase();
+  if (f.includes('battery') || f.includes('starter') || f.includes('alternator')) return 'electrical';
+  if (f.includes('fuel')) return 'fuel';
+  if (f.includes('spark') || f.includes('ignit') || f.includes('spark_plug')) return 'ignition';
+  if (f.includes('ecu') || f.includes('obd')) return 'ecu';
+  if (f.includes('air')) return 'air';
+  return 'other';
+}
+
+function computeClassSummary(){
+  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  const summary = {
+    totalStudents: classData.length,
+    avgScore: 0,
+    avgAccuracy: 0,
+    avgConfidence: 0,
+    mostCommonMisdiagnosedSystem: null,
+    skillProfiles: {},
+    isolationAccuracy: 0,
+    commonConfusions: [],
+    students: []
+  };
+  if (classData.length === 0) return summary;
+
+  let scoreSum = 0; let accSum = 0; let confSum = 0; let confCount = 0; let explanationCount = 0;
+  const miscount = {}; // diagnosedSystem -> count when wrong
+  const confusionPairs = {}; // expected|diagnosed -> count
+  const perSystem = {}; // system -> {correct:0,total:0}
+  const isolationCorrectCount = {ok:0, total:0};
+
+  classData.forEach(student => {
+    scoreSum += (student.score || 0);
+    const exs = student.explanations || [];
+    explanationCount += exs.length;
+    let studentProfile = { name: student.name || 'Unknown', score: student.score || 0, explanations: exs.length, weakest: null };
+
+    // per-student per-system counts for weakest
+    const sp = {};
+    exs.forEach(ex => {
+      const scen = (typeof ex.scenarioIndex === 'number' && scenarios[ex.scenarioIndex]) ? scenarios[ex.scenarioIndex] : null;
+      const expected = faultToSystem(scen && scen.fault);
+      const diagnosed = ex.diagnosedSystem || 'other';
+      // accumulate perSystem
+      if (!perSystem[expected]) perSystem[expected] = { correct:0, total:0 };
+      if (!sp[expected]) sp[expected] = { correct:0, total:0 };
+      perSystem[expected].total++; sp[expected].total++;
+      if (ex.final === 'Correct') { perSystem[expected].correct++; sp[expected].correct++; }
+
+      // confidence
+      if (ex.confidence) { confSum += (ex.confidence === 'high' ? 1 : (ex.confidence === 'medium' ? 0.66 : 0.33)); confCount++; }
+
+      // isolation
+      isolationCorrectCount.total++; if (ex.isolationCorrect) isolationCorrectCount.ok++;
+
+      // confusion pair
+      if (diagnosed !== expected){
+        const key = `${expected}→${diagnosed}`;
+        confusionPairs[key] = (confusionPairs[key] || 0) + 1;
+        miscount[diagnosed] = (miscount[diagnosed] || 0) + 1;
+      }
+    });
+
+    // student weakest system
+    let weakest = null; let weakestRate = 1;
+    Object.keys(sp).forEach(sys => {
+      const t = sp[sys].total || 0; if (!t) return;
+      const rate = 1 - (sp[sys].correct || 0) / t;
+      if (rate > weakestRate) { weakestRate = rate; weakest = sys; }
+    });
+    studentProfile.weakest = weakest || 'N/A';
+    summary.students.push(studentProfile);
+  });
+
+  // aggregate metrics
+  summary.avgScore = +(scoreSum / classData.length).toFixed(1);
+  // overall accuracy from perSystem totals
+  let totalCorrect = 0; let totalAttempts = 0;
+  Object.keys(perSystem).forEach(k => { totalCorrect += perSystem[k].correct; totalAttempts += perSystem[k].total; });
+  summary.avgAccuracy = totalAttempts ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
+  summary.avgConfidence = confCount ? +(confSum / confCount).toFixed(2) : 0;
+  summary.isolationAccuracy = isolationCorrectCount.total ? Math.round((isolationCorrectCount.ok / isolationCorrectCount.total) * 100) : 0;
+
+  // most common misdiagnosed
+  let max = 0; let common = null;
+  Object.keys(miscount).forEach(k => { if (miscount[k] > max){ max = miscount[k]; common = k; } });
+  summary.mostCommonMisdiagnosedSystem = common || 'None';
+
+  // confusions top 5
+  const pairs = Object.keys(confusionPairs).map(k => ({pair:k,count:confusionPairs[k]})).sort((a,b)=> b.count - a.count).slice(0,6);
+  summary.commonConfusions = pairs;
+
+  // skill profiles
+  Object.keys(systemWeights).forEach(sys => {
+    const stat = perSystem[sys] || {correct:0,total:0};
+    const pct = stat.total ? Math.round((stat.correct / stat.total) * 100) : 0;
+    summary.skillProfiles[sys] = pct;
+  });
+
+  return summary;
+}
+
+function renderTeacherInsights(){
+  const panel = document.getElementById('teacherSummaryPanel');
+  if (!panel) return;
+  const s = computeClassSummary();
+  panel.style.display = 'block';
+  panel.innerHTML = '';
+
+  // Top-level summary (3-5 metrics)
+  const top = document.createElement('div');
+  top.innerHTML = `
+    <div style="display:flex; gap:12px; flex-wrap:wrap">
+      <div><strong>Total students:</strong> ${s.totalStudents}</div>
+      <div><strong>Average score:</strong> ${s.avgScore}</div>
+      <div><strong>Average accuracy:</strong> ${s.avgAccuracy}%</div>
+      <div><strong>Avg confidence (0-1):</strong> ${s.avgConfidence}</div>
+      <div><strong>Isolation accuracy:</strong> ${s.isolationAccuracy}%</div>
+    </div>
+  `;
+  panel.appendChild(top);
+
+  // Skill insight block
+  const skills = document.createElement('div');
+  skills.style.marginTop = '10px';
+  skills.innerHTML = '<h4>Skill Insight</h4>';
+  const list = document.createElement('div');
+  Object.keys(s.skillProfiles).forEach(sys => {
+    const v = s.skillProfiles[sys];
+    const row = document.createElement('div');
+    row.innerHTML = `<strong>${sys}:</strong> ${v}%`;
+    list.appendChild(row);
+  });
+  skills.appendChild(list);
+  panel.appendChild(skills);
+
+  // Common misconceptions
+  const mis = document.createElement('div'); mis.style.marginTop = '10px';
+  mis.innerHTML = '<h4>Common Misconceptions</h4>';
+  if (s.commonConfusions.length === 0) mis.innerHTML += '<div>No common confusions detected.</div>';
+  else {
+    const ul = document.createElement('ul');
+    s.commonConfusions.forEach(p => { const li = document.createElement('li'); li.innerText = `${p.pair.replace('→',' → ')} — ${p.count}`; ul.appendChild(li); });
+    mis.appendChild(ul);
+  }
+  panel.appendChild(mis);
+
+  // Student snapshot list (minimal)
+  const snap = document.createElement('div'); snap.style.marginTop = '10px';
+  snap.innerHTML = '<h4>Student Snapshots</h4>';
+  if (s.students.length === 0) snap.innerHTML += '<div>No students.</div>';
+  else {
+    const table = document.createElement('div');
+    table.style.display = 'grid'; table.style.gridTemplateColumns = '2fr 1fr 1fr 1fr'; table.style.gap = '6px';
+    table.innerHTML = `<div><strong>Name</strong></div><div><strong>Score</strong></div><div><strong>Weakest</strong></div><div><strong>Explanations</strong></div>`;
+    s.students.forEach(st => {
+      table.innerHTML += `<div>${st.name}</div><div>${st.score}</div><div>${st.weakest}</div><div>${st.explanations}</div>`;
+    });
+    snap.appendChild(table);
+  }
+  panel.appendChild(snap);
+
 }
