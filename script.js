@@ -699,6 +699,7 @@ async function applyDiagnosisWithConfidence(conf){
   } else {
     setTimeout(endGame, 800);
   }
+}
 
 function nextScenario(){
   if(currentIndex < scenarios.length - 1) currentIndex++;
