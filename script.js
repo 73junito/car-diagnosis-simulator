@@ -608,7 +608,9 @@ function computeClassSummary(){
     skillProfiles: {},
     isolationAccuracy: 0,
     commonConfusions: [],
-    students: []
+    students: [],
+    calibration: { highTotal:0, highCorrect:0, calibrationPct:0 },
+    examples: { confusionExamples: [], skillExamples: [], calibrationExamples: [] }
   };
   if (classData.length === 0) return summary;
 
@@ -617,6 +619,7 @@ function computeClassSummary(){
   const confusionPairs = {}; // expected|diagnosed -> count
   const perSystem = {}; // system -> {correct:0,total:0}
   const isolationCorrectCount = {ok:0, total:0};
+  const calibrationCounts = { highTotal:0, highCorrect:0 };
 
   classData.forEach(student => {
     scoreSum += (student.score || 0);
@@ -638,6 +641,13 @@ function computeClassSummary(){
 
       // confidence
       if (ex.confidence) { confSum += (ex.confidence === 'high' ? 1 : (ex.confidence === 'medium' ? 0.66 : 0.33)); confCount++; }
+      // calibration counts: record high-confidence correctness
+      if (ex.confidence === 'high'){
+        calibrationCounts.highTotal++;
+        if (ex.final === 'Correct') calibrationCounts.highCorrect++;
+        // keep short example for calibration
+        if (calibrationCounts.highTotal <= 6) summary.examples.calibrationExamples.push({ student: student.name || 'Unknown', scenarioIndex: ex.scenarioIndex, final: ex.final, diagnosed: ex.diagnosedSystem, selectedSystem: ex.selectedSystem, topEvidence: ex.topEvidence });
+      }
 
       // isolation
       isolationCorrectCount.total++; if (ex.isolationCorrect) isolationCorrectCount.ok++;
@@ -647,6 +657,10 @@ function computeClassSummary(){
         const key = `${expected}→${diagnosed}`;
         confusionPairs[key] = (confusionPairs[key] || 0) + 1;
         miscount[diagnosed] = (miscount[diagnosed] || 0) + 1;
+        // add example for this confusion pair (up to 4 examples)
+        if ((summary.examples.confusionExamples.filter(x=>x.pair===key).length || 0) < 4) {
+          summary.examples.confusionExamples.push({ pair: key, student: student.name || 'Unknown', scenarioIndex: ex.scenarioIndex, expected, diagnosed, final: ex.final, topEvidence: ex.topEvidence });
+        }
       }
     });
 
@@ -669,6 +683,11 @@ function computeClassSummary(){
   summary.avgAccuracy = totalAttempts ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
   summary.avgConfidence = confCount ? +(confSum / confCount).toFixed(2) : 0;
   summary.isolationAccuracy = isolationCorrectCount.total ? Math.round((isolationCorrectCount.ok / isolationCorrectCount.total) * 100) : 0;
+
+  // calibration summary
+  summary.calibration.highTotal = calibrationCounts.highTotal;
+  summary.calibration.highCorrect = calibrationCounts.highCorrect;
+  summary.calibration.calibrationPct = calibrationCounts.highTotal ? Math.round((calibrationCounts.highCorrect / calibrationCounts.highTotal) * 100) : 0;
 
   // most common misdiagnosed
   let max = 0; let common = null;
@@ -748,5 +767,26 @@ function renderTeacherInsights(){
     snap.appendChild(table);
   }
   panel.appendChild(snap);
+
+  // Compact calibration + Why-this details toggle
+  const cal = document.createElement('div'); cal.style.marginTop = '10px';
+  cal.innerHTML = `<strong>Confidence calibration (high-confidence correct):</strong> ${s.calibration.highCorrect}/${s.calibration.highTotal} (${s.calibration.calibrationPct}%)`;
+  const whyBtn = document.createElement('button'); whyBtn.style.marginLeft = '10px'; whyBtn.innerText = 'Why this?';
+  const detail = document.createElement('div'); detail.style.display = 'none'; detail.style.marginTop = '8px'; detail.style.padding = '8px'; detail.style.border = '1px dashed rgba(255,255,255,0.04)';
+  whyBtn.addEventListener('click', () => { detail.style.display = detail.style.display === 'none' ? 'block' : 'none'; whyBtn.innerText = detail.style.display === 'none' ? 'Why this?' : 'Hide'; });
+  // populate examples
+  if (s.examples.confusionExamples.length) {
+    const h = document.createElement('div'); h.innerHTML = '<strong>Examples (confusions):</strong>';
+    const ul = document.createElement('ul'); s.examples.confusionExamples.forEach(ex => { const li = document.createElement('li'); li.innerText = `${ex.student}: ${ex.pair.replace('→',' → ')} (scenario ${ex.scenarioIndex}) — ${ex.final}`; ul.appendChild(li); });
+    detail.appendChild(h); detail.appendChild(ul);
+  }
+  if (s.examples.calibrationExamples.length) {
+    const h2 = document.createElement('div'); h2.innerHTML = '<strong>Examples (high-confidence responses):</strong>';
+    const ul2 = document.createElement('ul'); s.examples.calibrationExamples.forEach(ex => { const li = document.createElement('li'); li.innerText = `${ex.student}: ${ex.final} — diagnosed ${ex.diagnosed} (scenario ${ex.scenarioIndex})`; ul2.appendChild(li); });
+    detail.appendChild(h2); detail.appendChild(ul2);
+  }
+  cal.appendChild(whyBtn);
+  cal.appendChild(detail);
+  panel.appendChild(cal);
 
 }
