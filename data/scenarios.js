@@ -100,5 +100,58 @@ window.scenarios = [
       fuel: { system: 'fuel', reading: 'Adequate', interpretation: 'OK' }
     }
   }
+  ,
+  // New ASE-style procedural scenario (single-fault)
+  {
+    id: 11,
+    symptoms: "Engine will not crank. Starter clicks when key is turned.",
+    // procedural steps (ordered) with expected outcomes for procedure-first evaluation
+    steps: [
+      { id: 's11-1', label: 'Inspect battery terminals and cables', type: 'inspect', allowedTools: ['visual'], timeCost: 30,
+        expectedOutcome: { system: 'electrical', signal: 'corroded_terminals', confidenceImpact: 'medium' }
+      },
+      { id: 's11-2', label: 'Measure battery voltage (at resting)', type: 'measure', allowedTools: ['voltmeter'], timeCost: 45,
+        expectedOutcome: { system: 'electrical', signal: 'low_voltage', confidenceImpact: 'high' }
+      },
+      { id: 's11-3', label: 'Attempt crank and observe starter behaviour', type: 'action', allowedTools: ['starter_check'], timeCost: 20,
+        expectedOutcome: { system: 'electrical', signal: 'clicking_no_turnover', confidenceImpact: 'medium' }
+      }
+    ],
+    faults: [
+      { id: 'F11', system: 'electrical', label: 'Dead / low battery' }
+    ],
+    faultRelationships: [],
+    timeLimit: 600
+  }
+
+  ,
+  // New ASE-style procedural scenario (multi-fault: battery + starter interaction)
+  {
+    id: 12,
+    symptoms: "Engine cranks slowly, intermittent clicking, sometimes fails to start.",
+    steps: [
+      { id: 's12-1', label: 'Visual inspect battery and starter connections', type: 'inspect', allowedTools: ['visual'], timeCost: 30,
+        expectedOutcome: { system: 'electrical', signal: 'loose_connections', confidenceImpact: 'medium' }
+      },
+      { id: 's12-2', label: 'Measure battery voltage under load (while cranking)', type: 'measure', allowedTools: ['voltmeter','clamp_meter'], timeCost: 60,
+        expectedOutcome: { system: 'electrical', signal: 'voltage_drop_under_load', confidenceImpact: 'high' }
+      },
+      { id: 's12-3', label: 'Check starter relay / observe starter engagement', type: 'test', allowedTools: ['multimeter','starter_test'], timeCost: 45,
+        expectedOutcome: { system: 'electrical', signal: 'starter_sticking_or_high_draw', confidenceImpact: 'high' }
+      },
+      { id: 's12-4', label: 'Perform cranking current draw test', type: 'measure', allowedTools: ['clamp_meter'], timeCost: 60,
+        expectedOutcome: { system: 'electrical', signal: 'high_current_draw', confidenceImpact: 'high' }
+      }
+    ],
+    faults: [
+      { id: 'F12', system: 'electrical', label: 'Weak / discharged battery' },
+      { id: 'F13', system: 'electrical', label: 'Sticking starter / starter motor fault' }
+    ],
+    // relationship: symptom overlap and masking (battery issues can mask starter faults)
+    faultRelationships: [
+      { faultIds: ['F12','F13'], interaction: 'symptom_overlap' }
+    ],
+    timeLimit: 900
+  }
 ];
 
