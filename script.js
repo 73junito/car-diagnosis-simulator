@@ -856,6 +856,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (login) login.style.display = 'block';
   });
 
+  // HOME SCREEN NAVIGATION
+  const btnStudent = document.getElementById('btn-start-student');
+  if (btnStudent) btnStudent.addEventListener('click', () => {
+    const home = document.getElementById('homeScreen'); if (home) home.style.display = 'none';
+    const login = document.getElementById('loginScreen'); if (login) login.style.display = 'block';
+    userRole = 'student';
+  });
+
+  const btnTeacher = document.getElementById('btn-start-teacher');
+  if (btnTeacher) btnTeacher.addEventListener('click', () => {
+    const home = document.getElementById('homeScreen'); if (home) home.style.display = 'none';
+    const login = document.getElementById('loginScreen'); if (login) login.style.display = 'block';
+    userRole = 'teacher';
+  });
+
+  const btnHow = document.getElementById('btn-how');
+  if (btnHow) btnHow.addEventListener('click', () => {
+    alert(
+      "1. Select a scenario\n2. Use diagnostic tools\n3. Analyze evidence\n4. Choose the fault\n5. Get scored feedback"
+    );
+  });
+
   // confidence button handlers
   const ch = document.getElementById('conf-high');
   const cm = document.getElementById('conf-medium');

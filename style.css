@@ -39,3 +39,50 @@ button:hover{opacity:0.95}
 .explain-value{color:#e6eef3}
 .evidence-list{margin:6px 0;padding-left:14px}
 .evidence-entry{margin:2px 0;font-size:0.9rem}
+
+/* ================= HOMEPAGE ================= */
+
+.hero h1 {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  max-width: 700px;
+  margin: auto;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.steps {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.step {
+  background: rgba(255,255,255,0.04);
+  padding: 16px;
+  border-radius: 10px;
+  width: 200px;
+}
+
+.mode-card {
+  background: rgba(255,255,255,0.05);
+  padding: 20px;
+  border-radius: 12px;
+  width: 260px;
+  text-align: left;
+}
+
+.mode-card h2 {
+  margin-top: 0;
+  color: #06b6d4;
+}
+
+.mode-card ul {
+  padding-left: 18px;
+  color: #cbd5e1;
+}
