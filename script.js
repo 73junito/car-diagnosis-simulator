@@ -24,6 +24,72 @@ function setView(viewId) {
   const target = document.getElementById(viewId);
   if (target) target.style.display = 'block';
 }
+// Scenario selection utilities
+function populateFilterSystem(){
+  const sel = document.getElementById('filter-system');
+  if (!sel) return;
+  // clear existing options except 'all'
+  const existing = Array.from(sel.querySelectorAll('option')).map(o=>o.value);
+  const systems = Object.keys(systemWeights || {});
+  systems.forEach(sys => {
+    if (!existing.includes(sys)){
+      const opt = document.createElement('option'); opt.value = sys; opt.innerText = sys.charAt(0).toUpperCase() + sys.slice(1);
+      sel.appendChild(opt);
+    }
+  });
+}
+
+function renderScenarioList(){
+  const container = document.getElementById('scenarioList');
+  if (!container) return;
+  populateFilterSystem();
+  const fs = document.getElementById('filter-system').value || 'all';
+  const fd = document.getElementById('filter-difficulty').value || 'all';
+  let list = (scenarios || []).slice();
+  if (fs && fs !== 'all') list = list.filter(s => s.primarySystem === fs || (s.secondarySystems && s.secondarySystems.includes(fs)));
+  if (fd && fd !== 'all') list = list.filter(s => String(s.difficulty) === String(fd));
+
+  if (list.length === 0) { container.innerHTML = '<div style="color:var(--muted)">No scenarios match the current filters.</div>'; return; }
+  const html = list.map(s => {
+    const id = s.id || s.index || '';
+    const symptoms = (s.symptoms||'').slice(0,120);
+    return `
+      <div class="scenario-card">
+        <div>
+          <h4>Scenario ${id}</h4>
+          <div class="scenario-meta">${s.primarySystem || 'N/A'} • Difficulty ${s.difficulty || 'N/A'}</div>
+          <div style="margin-top:8px;color:var(--muted);font-size:90%">${symptoms}</div>
+        </div>
+        <div class="scenario-actions">
+          <div style="flex:1"></div>
+          <button onclick="showScenarioPreview('${id}')">Preview</button>
+          <button onclick="startScenarioById('${id}')">Start</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  container.innerHTML = html;
+
+  // wire small UI buttons
+  const refresh = document.getElementById('btn-refresh-scenarios'); if (refresh) refresh.onclick = () => renderScenarioList();
+  const back = document.getElementById('btn-back-to-login'); if (back) back.onclick = () => setView('loginScreen');
+  const fsEl = document.getElementById('filter-system'); if (fsEl) fsEl.onchange = () => renderScenarioList();
+  const fdEl = document.getElementById('filter-difficulty'); if (fdEl) fdEl.onchange = () => renderScenarioList();
+}
+
+function startScenarioById(id){
+  const scen = findScenarioById(id);
+  if (!scen) return alert('Scenario not found');
+  const idx = scenarios.findIndex(s => s === scen || String(s.id) === String(id));
+  currentIndex = idx >= 0 ? idx : 0;
+  setView('gameScreen');
+  loadScenario();
+}
+
+function openScenarioSelect(){
+  setView('scenarioSelectScreen');
+  renderScenarioList();
+}
 
 // Firestore optional integration (CDN/global firebase)
 let useFirestore = false;
@@ -746,11 +812,27 @@ async function login(){
   if(userRole === 'teacher'){
     setView('teacherScreen');
     await loadTeacherData();
-  } else {
-    setView('gameScreen');
-    await loadUserData();
-    loadScenario();
+    return;
   }
+
+  // STUDENT flow: if teacher has assigned a scenario, start it; otherwise show selection
+  await loadUserData();
+  const assignment = JSON.parse(localStorage.getItem('carSim_assignment') || 'null');
+  if (assignment && assignment.activeScenario) {
+    // try to locate scenario index
+    const target = findScenarioById(assignment.activeScenario);
+    let idx = 0;
+    if (target) idx = scenarios.findIndex(s => s === target);
+    if (idx < 0) idx = 0;
+    currentIndex = idx;
+    setView('gameScreen');
+    loadScenario();
+    return;
+  }
+
+  // otherwise show scenario selector
+  setView('scenarioSelectScreen');
+  renderScenarioList();
 }
 
 function logout(){

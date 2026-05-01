@@ -86,3 +86,18 @@ button:hover{opacity:0.95}
   padding-left: 18px;
   color: #cbd5e1;
 }
+
+/* Scenario selection screen */
+.scenario-card {
+  background: rgba(255,255,255,0.02);
+  padding: 12px;
+  border-radius: 8px;
+  min-height: 120px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.scenario-card h4{margin:0 0 6px 0}
+.scenario-meta{font-size:0.9rem;color:var(--muted)}
+.scenario-actions{display:flex;gap:8px;align-items:center}
+.filter-pill{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:6px;font-size:90%;color:var(--muted)}

@@ -107,6 +107,34 @@
     </div>
   </div>
 
+  <!-- Scenario selection screen (SPA) -->
+  <div id="scenarioSelectScreen" style="display:none; max-width:900px; width:100%;">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2>Select a Scenario</h2>
+        <div>
+          <button id="btn-back-to-login">Back</button>
+        </div>
+      </div>
+      <div style="margin-top:8px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+        <label style="font-size:90%; color:var(--muted)">Filter:</label>
+        <select id="filter-system">
+          <option value="all">All Systems</option>
+        </select>
+        <select id="filter-difficulty">
+          <option value="all">All Difficulty</option>
+          <option value="1">Level 1</option>
+          <option value="2">Level 2</option>
+          <option value="3">Level 3</option>
+          <option value="4">Level 4</option>
+          <option value="5">Level 5</option>
+        </select>
+        <button id="btn-refresh-scenarios">Refresh</button>
+      </div>
+      <div id="scenarioList" style="margin-top:12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px"></div>
+    </div>
+  </div>
+
   <div id="gameScreen" style="display:none;">
   <div id="ui">
     <div class="card" id="meta">
