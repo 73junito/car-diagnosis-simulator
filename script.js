@@ -14,6 +14,17 @@ let schoolCode = '';
 const scenarios = window.scenarios || [];
 const total = scenarios.length;
 
+// Central SPA view router
+function setView(viewId) {
+  const views = ['homeScreen','loginScreen','scenarioSelectScreen','gameScreen','teacherScreen'];
+  views.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const target = document.getElementById(viewId);
+  if (target) target.style.display = 'block';
+}
+
 // Firestore optional integration (CDN/global firebase)
 let useFirestore = false;
 let db = null;
@@ -730,12 +741,12 @@ async function login(){
   userRole = role;
   schoolCode = code;
 
-  document.getElementById('loginScreen').style.display = 'none';
+  // route via central router
   if(userRole === 'teacher'){
-    document.getElementById('teacherScreen').style.display = 'block';
+    setView('teacherScreen');
     await loadTeacherData();
   } else {
-    document.getElementById('gameScreen').style.display = 'block';
+    setView('gameScreen');
     await loadUserData();
     loadScenario();
   }
@@ -744,9 +755,7 @@ async function login(){
 function logout(){
   currentUser = null;
   userRole = 'student';
-  document.getElementById('loginScreen').style.display = 'block';
-  document.getElementById('gameScreen').style.display = 'none';
-  document.getElementById('teacherScreen').style.display = 'none';
+  setView('loginScreen');
 }
 
 async function loadTeacherData(){
@@ -844,37 +853,33 @@ document.addEventListener('DOMContentLoaded', () => {
   if (start) start.addEventListener('click', () => {
     const o = document.getElementById('startOverlay');
     if (o) o.style.display = 'none';
-    const login = document.getElementById('loginScreen');
-    if (login) login.style.display = 'block';
+    setView('loginScreen');
     const u = document.getElementById('username'); if (u) u.focus();
   });
   const skip = document.getElementById('btn-skip');
   if (skip) skip.addEventListener('click', () => {
     const o = document.getElementById('startOverlay');
     if (o) o.style.display = 'none';
-    const login = document.getElementById('loginScreen');
-    if (login) login.style.display = 'block';
+    setView('loginScreen');
   });
 
-  // HOME SCREEN NAVIGATION
+  // HOME SCREEN NAVIGATION (use router)
   const btnStudent = document.getElementById('btn-start-student');
   if (btnStudent) btnStudent.addEventListener('click', () => {
-    const home = document.getElementById('homeScreen'); if (home) home.style.display = 'none';
-    const login = document.getElementById('loginScreen'); if (login) login.style.display = 'block';
     userRole = 'student';
+    setView('loginScreen');
   });
 
   const btnTeacher = document.getElementById('btn-start-teacher');
   if (btnTeacher) btnTeacher.addEventListener('click', () => {
-    const home = document.getElementById('homeScreen'); if (home) home.style.display = 'none';
-    const login = document.getElementById('loginScreen'); if (login) login.style.display = 'block';
     userRole = 'teacher';
+    setView('loginScreen');
   });
 
   const btnHow = document.getElementById('btn-how');
   if (btnHow) btnHow.addEventListener('click', () => {
     alert(
-      "1. Select a scenario\n2. Use diagnostic tools\n3. Analyze evidence\n4. Choose the fault\n5. Get scored feedback"
+      "1. Select a role\n2. Diagnose vehicle symptoms\n3. Use tools\n4. Submit fault\n5. Get scored feedback"
     );
   });
 
@@ -899,6 +904,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (be) be.addEventListener('click', () => exportExplanationsCSV());
   const bi = document.getElementById('btn-insights');
   if (bi) bi.addEventListener('click', () => renderTeacherInsights());
+
+  // ensure initial view is homepage
+  try { setView('homeScreen'); } catch(e) {}
 });
 
 function escapeCSV(val){
