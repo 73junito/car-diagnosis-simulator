@@ -3,6 +3,11 @@ window.scenarios = [
   {
     id: 1,
     symptoms: "Engine will not crank. Clicking sound when key is turned.",
+    difficulty: 2,
+    primarySystem: 'electrical',
+    secondarySystems: ['starter'],
+    symptomCategory: 'no-crank',
+    trainingFocus: 'battery health, terminal and cable inspection',
     fault: "battery",
     tests: {
       battery: { system: 'electrical', reading: '11.2V', interpretation: 'LOW VOLTAGE' },
@@ -13,6 +18,11 @@ window.scenarios = [
   {
     id: 2,
     symptoms: "Engine cranks but does not start.",
+    difficulty: 2,
+    primarySystem: 'fuel',
+    secondarySystems: ['ignition'],
+    symptomCategory: 'no-start',
+    trainingFocus: 'fuel pressure and delivery diagnosis',
     fault: "fuel",
     tests: {
       battery: { system: 'electrical', reading: '12.6V', interpretation: 'OK' },
@@ -23,6 +33,11 @@ window.scenarios = [
   {
     id: 3,
     symptoms: "Engine overheats after 10 minutes of driving.",
+    difficulty: 3,
+    primarySystem: 'cooling',
+    secondarySystems: ['engine'],
+    symptomCategory: 'overheating',
+    trainingFocus: 'cooling system leak and circulation diagnostics',
     fault: "coolant",
     tests: {
       coolant: { system: 'cooling', reading: 'Low level and visible leak', interpretation: 'LEAK / LOW' },
@@ -33,6 +48,11 @@ window.scenarios = [
   {
     id: 4,
     symptoms: "Headlights are dim and flicker while driving.",
+    difficulty: 3,
+    primarySystem: 'electrical',
+    secondarySystems: ['battery'],
+    symptomCategory: 'electrical-load',
+    trainingFocus: 'charging system output and alternator load testing',
     fault: "alternator",
     tests: {
       alternator: { system: 'electrical', reading: 'Output <12V under load', interpretation: 'LOW OUTPUT' },
@@ -43,6 +63,11 @@ window.scenarios = [
   {
     id: 5,
     symptoms: "Engine misfires under acceleration.",
+    difficulty: 3,
+    primarySystem: 'ignition',
+    secondarySystems: ['fuel'],
+    symptomCategory: 'misfire',
+    trainingFocus: 'ignition component inspection and spark quality',
     fault: "spark_plugs",
     tests: {
       spark_plugs: { system: 'ignition', reading: 'Heavy carbon buildup', interpretation: 'DEGRADATION' },
@@ -53,6 +78,11 @@ window.scenarios = [
   {
     id: 6,
     symptoms: "Car pulls to the right while driving.",
+    difficulty: 2,
+    primarySystem: 'chassis',
+    secondarySystems: ['suspension'],
+    symptomCategory: 'steering_alignment',
+    trainingFocus: 'wheel alignment and suspension wear diagnostics',
     fault: "alignment",
     tests: {
       alignment: { system: 'chassis', reading: 'Toe/camber out of spec', interpretation: 'MISALIGNMENT' },
@@ -63,6 +93,11 @@ window.scenarios = [
   {
     id: 7,
     symptoms: "Air conditioning not cooling.",
+    difficulty: 2,
+    primarySystem: 'hvac',
+    secondarySystems: ['engine'],
+    symptomCategory: 'hvac_cooling',
+    trainingFocus: 'refrigerant charge and leak detection',
     fault: "refrigerant",
     tests: {
       refrigerant: { system: 'hvac', reading: 'Low refrigerant', interpretation: 'LOW' },
@@ -73,6 +108,11 @@ window.scenarios = [
   {
     id: 8,
     symptoms: "Engine stalls at idle.",
+    difficulty: 3,
+    primarySystem: 'air',
+    secondarySystems: ['fuel'],
+    symptomCategory: 'stalling',
+    trainingFocus: 'idle control and airflow diagnosis',
     fault: "idle_valve",
     tests: {
       idle_valve: { system: 'air', reading: 'IAC valve stuck', interpretation: 'STICKY' },
@@ -83,6 +123,11 @@ window.scenarios = [
   {
     id: 9,
     symptoms: "Check engine light is on. Code P0300 detected.",
+    difficulty: 3,
+    primarySystem: 'engine',
+    secondarySystems: ['fuel','ignition'],
+    symptomCategory: 'misfire',
+    trainingFocus: 'DTC interpretation and misfire root cause analysis',
     fault: "misfire",
     tests: {
       misfire: { system: 'engine', reading: 'Random cylinder misfires', interpretation: 'MISFIRE' },
@@ -93,6 +138,11 @@ window.scenarios = [
   {
     id: 10,
     symptoms: "Vehicle struggles to accelerate uphill.",
+    difficulty: 4,
+    primarySystem: 'transmission',
+    secondarySystems: ['engine'],
+    symptomCategory: 'power_loss',
+    trainingFocus: 'transmission slip and load performance diagnostics',
     fault: "transmission",
     tests: {
       transmission: { system: 'transmission', reading: 'Slipping under load', interpretation: 'SLIP' },
@@ -105,6 +155,11 @@ window.scenarios = [
   {
     id: 11,
     symptoms: "Engine will not crank. Starter clicks when key is turned.",
+    difficulty: 2,
+    primarySystem: 'electrical',
+    secondarySystems: ['starter'],
+    symptomCategory: 'no-crank',
+    trainingFocus: 'battery load testing and terminal integrity',
     // procedural steps (ordered) with expected outcomes for procedure-first evaluation
     steps: [
       { id: 's11-1', label: 'Inspect battery terminals and cables', type: 'inspect', allowedTools: ['visual'], timeCost: 30,
@@ -129,6 +184,11 @@ window.scenarios = [
   {
     id: 12,
     symptoms: "Engine cranks slowly, intermittent clicking, sometimes fails to start.",
+    difficulty: 3,
+    primarySystem: 'electrical',
+    secondarySystems: ['starter'],
+    symptomCategory: 'intermittent_starting',
+    trainingFocus: 'differential diagnosis: battery vs starter (current draw & voltage under load)',
     steps: [
       { id: 's12-1', label: 'Visual inspect battery and starter connections', type: 'inspect', allowedTools: ['visual'], timeCost: 30,
         expectedOutcome: { system: 'electrical', signal: 'loose_connections', confidenceImpact: 'medium' }
