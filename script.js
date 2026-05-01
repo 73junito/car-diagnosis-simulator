@@ -196,6 +196,37 @@ function getLearningInsightsForClass(classData){
   return { weakestSystem: weakest, topMisconception: topMis, reasoningTrend };
 }
 
+// Conservative adaptive recommendation engine (teacher-facing only)
+function getAdaptiveRecommendation(studentProfile = {}, classData = []){
+  const weakSystems = studentProfile && studentProfile.weakSystems ? studentProfile.weakSystems : {};
+  // choose student's recommended focus (highest error count)
+  let recommendedSystem = null;
+  let maxErr = 0;
+  Object.entries(weakSystems).forEach(([sys, cnt]) => { if (cnt > maxErr){ maxErr = cnt; recommendedSystem = sys; } });
+  if (!recommendedSystem) recommendedSystem = Object.keys(systemWeights)[0] || 'electrical';
+
+  // aggregate class-level weakness
+  const agg = {};
+  (classData || []).forEach(s => {
+    const p = (s && s.studentProfile && s.studentProfile.weakSystems) ? s.studentProfile.weakSystems : {};
+    Object.entries(p).forEach(([k,v]) => { agg[k] = (agg[k]||0) + v; });
+  });
+  const classWideWeakSystem = Object.entries(agg).sort((a,b)=> b[1]-a[1])[0]?.[0] || recommendedSystem;
+
+  // suggested difficulty: conservative mapping
+  // more errors -> suggest lower difficulty to rebuild fundamentals (1 easiest -> 5 hardest)
+  const suggestedDifficulty = (maxErr >= 6) ? 1 : (maxErr >= 4) ? 2 : (maxErr >= 2) ? 3 : 4;
+
+  const reason = `Repeated errors observed in ${recommendedSystem}. Class-level weakness: ${classWideWeakSystem}.`;
+
+  return {
+    recommendedSystem,
+    classWideWeakSystem,
+    suggestedDifficulty,
+    reason
+  };
+}
+
 
 async function saveProgress(){
   if (!currentUser) return;
@@ -961,6 +992,22 @@ function renderTeacherInsights(){
   learn.innerHTML += `<div><strong>Top misconception:</strong> ${li.topMisconception ? li.topMisconception[0] + ' (' + li.topMisconception[1] + ')' : 'N/A'}</div>`;
   if (li.reasoningTrend && li.reasoningTrend.length) learn.innerHTML += `<div><strong>Recent reasoning trend (avg last 5 samples per student):</strong> [${li.reasoningTrend.map(v=>v.toFixed(1)).join(', ')}]</div>`;
   panel.appendChild(learn);
+
+  // Adaptive recommendation (teacher-only, conservative)
+  try {
+    const rec = getAdaptiveRecommendation({}, classData || []);
+    const dec = document.getElementById('teacherDecisions');
+    if (dec) {
+      dec.style.display = 'block';
+      dec.innerHTML = `
+        <h3>📌 Adaptive Training Recommendation</h3>
+        <div><strong>Class weak system:</strong> ${rec.classWideWeakSystem}</div>
+        <div><strong>Suggested focus system:</strong> ${rec.recommendedSystem}</div>
+        <div><strong>Suggested difficulty band:</strong> Level ${rec.suggestedDifficulty}</div>
+        <div style="margin-top:6px;font-style:italic;color:var(--muted,#999)">${rec.reason}</div>
+      `;
+    }
+  } catch(e) { console.warn('Failed to compute adaptive recommendation', e); }
 
   // Compact calibration + Why-this details toggle
   const cal = document.createElement('div'); cal.style.marginTop = '10px';
