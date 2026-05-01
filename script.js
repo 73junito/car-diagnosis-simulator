@@ -76,6 +76,64 @@ function formatToolOutput(systemLabel, testName, value, interpretation, conclusi
   return `[SYSTEM: ${systemLabel}]\nTest: ${testName}\nResult: ${value}\nInterpretation: ${interpretation}\nConclusion: ${conclusion}`;
 }
 
+// Lightweight fault probability model (priors initialized per scenario)
+let faultProbabilities = {};
+
+// Simple fault interaction model (keeps interactions small and explainable)
+const faultInteractions = {
+  battery: {
+    affects: {
+      starter: { symptomShift: 'weak_crank', probabilityBoost: 0.2 }
+    }
+  },
+  starter: {
+    affects: {
+      battery: { falseIndication: 'low_voltage_reading', probabilityBoost: 0.1 }
+    }
+  }
+};
+
+// Centralized evidence -> model update function
+function applyEvidenceToModel(component, interpretation){
+  if (!faultProbabilities || typeof faultProbabilities !== 'object') return;
+  const it = String(interpretation || '').toLowerCase();
+
+  switch(component){
+    case 'battery':
+      if (it.includes('low') || it.includes('problem') || it.includes('<12v')){
+        faultProbabilities.battery = (faultProbabilities.battery || 0.5) + 0.25;
+        faultProbabilities.starter = (faultProbabilities.starter || 0.5) - 0.10;
+      }
+      break;
+    case 'starter':
+      faultProbabilities.starter = (faultProbabilities.starter || 0.5) + 0.20;
+      break;
+    case 'fuel':
+      if (it.includes('no pressure') || it.includes('0 psi')) faultProbabilities.fuel = (faultProbabilities.fuel || 0.5) + 0.20;
+      break;
+    case 'obd':
+      // OBD codes strengthen ECU-related faults moderately
+      faultProbabilities.ecu = (faultProbabilities.ecu || 0.5) + 0.15;
+      break;
+    default:
+      break;
+  }
+
+  // Interaction propagation (small explainable boosts)
+  Object.keys(faultInteractions).forEach(fault => {
+    const inter = faultInteractions[fault];
+    if (inter && inter.affects && inter.affects[component]){
+      const effect = inter.affects[component];
+      faultProbabilities[fault] = (faultProbabilities[fault] || 0.5) + (effect.probabilityBoost || 0);
+    }
+  });
+
+  // clamp probabilities 0..1
+  Object.keys(faultProbabilities).forEach(k => {
+    faultProbabilities[k] = Math.max(0, Math.min(1, faultProbabilities[k]));
+  });
+}
+
 
 async function saveProgress(){
   if (!currentUser) return;
@@ -154,6 +212,14 @@ function loadScenario(){
   evidence = { electrical:[], fuel:[], ignition:[], air:[], ecu:[], engine:[], cooling:[], hvac:[], transmission:[], other:[] };
   toolUses = 0;
   selectedSystem = null;
+  // initialize lightweight fault probability priors for this scenario
+  faultProbabilities = {
+    battery: 0.5,
+    starter: 0.5,
+    fuel: 0.5,
+    ecu: 0.5,
+    ignition: 0.5
+  };
   document.getElementById('symptoms').innerText = s.symptoms;
   document.getElementById('result').innerText = '';
   document.getElementById('progress').innerText = `Scenario ${currentIndex + 1} of ${total}`;
@@ -220,6 +286,9 @@ function check(component){
   // annotate evidence with current selected system context
   output.contextSystem = selectedSystem || 'unspecified';
 
+  // apply evidence into the lightweight probabilistic model
+  try { applyEvidenceToModel(component, output.interpretation || output.reading || ''); } catch(e){ /* safe fallback */ }
+
   // display shop-style evidence message (more realistic phrasing)
   // standardized technician-style output
   const systemMap = { battery: 'Electrical', starter: 'Starting', fuel: 'Fuel Delivery', obd: 'On-Board Diagnostics' };
@@ -231,6 +300,18 @@ function check(component){
   }
   const formatted = formatToolOutput(systemLabel, component.toUpperCase() + ' TEST', output.reading, interpretationText, conclusion);
   document.getElementById('result').innerText = formatted + (systemJustification ? `\n\nReason for isolation: ${systemJustification}` : '');
+  // append ranked diagnostic likelihoods (top 3)
+  try {
+    if (faultProbabilities && Object.keys(faultProbabilities).length) {
+      const ranked = Object.entries(faultProbabilities).sort((a,b)=> b[1]-a[1]).slice(0,3);
+      const lines = ranked.map(f => `- ${f[0]}: ${Math.round(f[1]*100)}%`);
+      document.getElementById('result').innerText += `\n\n📊 Diagnostic Likelihoods:\n${lines.join('\n')}`;
+      // ambiguous hint example: starter symptoms may be driven by battery
+      if (component === 'starter' && (faultProbabilities.battery || 0) > 0.6) {
+        document.getElementById('result').innerText += `\n\n⚠️ Note: Starter symptoms may be ambiguous — battery condition is currently likely (${Math.round((faultProbabilities.battery||0)*100)}%).`;
+      }
+    }
+  } catch(e){ /* ignore readout errors */ }
   if(toolUses > 2){
     score = Math.max(0, score - 2);
     document.getElementById('score').innerText = `Score: ${score}`;
