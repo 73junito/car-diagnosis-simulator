@@ -328,6 +328,16 @@
     <!-- Replay viewer for teacher -->
     <div id="replayViewer" class="card" style="display:none; margin-top:12px;">
       <h3>Scenario Replay</h3>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <button id="replay-play">Play</button>
+        <button id="replay-stop" class="ghost">Stop</button>
+        <label style="margin-left:8px;color:var(--muted);font-size:90%">Speed</label>
+        <select id="replay-speed" style="margin-left:6px">
+          <option value="800">Normal</option>
+          <option value="400">Fast</option>
+          <option value="1200">Slow</option>
+        </select>
+      </div>
       <div id="replayTimeline"></div>
     </div>
   </div>

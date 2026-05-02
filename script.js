@@ -800,14 +800,84 @@ function showReplay(student){
   // show most recent replay by default
   const last = replays[replays.length - 1];
   timeline.innerHTML = '';
-  last.actions.forEach(a => {
-    const el = document.createElement('div'); el.className = 'replay-item';
+  const actions = last.actions || [];
+  actions.forEach((a, idx) => {
+    const el = document.createElement('div'); el.className = 'replay-item'; el.setAttribute('data-idx', idx);
     const t = document.createElement('span'); t.className = 'replay-time'; t.innerText = new Date(a.time).toLocaleTimeString();
-    const content = document.createElement('span'); content.innerHTML = formatReplayAction(a);
+    const prev = idx > 0 ? actions[idx - 1] : null;
+    const content = document.createElement('span'); content.innerHTML = formatReplayActionWithDelta(a, prev);
+    // highlight wrong actions against scenario if possible
+    const scen = (typeof last.scenario === 'number' && scenarios[last.scenario]) ? scenarios[last.scenario] : null;
+    if (isWrongAction(a, scen)) el.classList.add('wrong');
     el.appendChild(t); el.appendChild(content);
     timeline.appendChild(el);
   });
+  // wire playback controls for this replay
+  const playBtn = document.getElementById('replay-play');
+  const stopBtn = document.getElementById('replay-stop');
+  const speedSel = document.getElementById('replay-speed');
+  if (playBtn) {
+    playBtn.onclick = () => playReplay(actions, speedSel ? Number(speedSel.value) : 800);
+  }
+  if (stopBtn) {
+    stopBtn.onclick = () => stopReplay();
+  }
   viewer.style.display = 'block';
+}
+
+let replayTimer = null;
+function playReplay(actions, intervalMs){
+  stopReplay();
+  if (!actions || !actions.length) return;
+  const timeline = document.getElementById('replayTimeline');
+  let i = 0;
+  replayTimer = setInterval(() => {
+    if (i >= actions.length){ stopReplay(); return; }
+    // highlight current
+    const prev = timeline.querySelector('.replay-item.playing'); if (prev) prev.classList.remove('playing');
+    const cur = timeline.querySelector('.replay-item[data-idx="' + i + '"]');
+    // fallback selection method
+    const cur2 = timeline.querySelector('[data-idx="' + i + '"]');
+    const node = cur || cur2;
+    if (node) { node.classList.add('playing'); node.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    i++;
+  }, intervalMs || 800);
+}
+
+function stopReplay(){ if (replayTimer) { clearInterval(replayTimer); replayTimer = null; const prev = document.querySelector('.replay-item.playing'); if (prev) prev.classList.remove('playing'); } }
+
+function formatReplayActionWithDelta(a, prev){
+  const time = new Date(a.time).toLocaleTimeString();
+  let delta = '';
+  if (prev && prev.time) {
+    const diff = Math.round((a.time - prev.time) / 1000);
+    delta = ` <span style="color:var(--muted);font-size:0.9rem">(+${diff}s)</span>`;
+  }
+  return `[${time}] ` + actionLabel(a) + delta;
+}
+
+function actionLabel(a){
+  if (!a || !a.type) return '';
+  switch(a.type){
+    case 'system': return `Selected system: <strong>${a.value}</strong>` + (a.justification ? ` — ${a.justification}` : '');
+    case 'tool': return `Used tool: <strong>${a.value}</strong>`;
+    case 'diagnosis': return `Diagnosis: <strong>${a.value}</strong>`;
+    case 'confidence': return `Confidence: <strong>${a.value}</strong>`;
+    default: return `${a.type}: ${JSON.stringify(a)}`;
+  }
+}
+
+function isWrongAction(a, scenario){
+  if (!a || !scenario) return false;
+  if (a.type === 'system'){
+    return String(a.value).toLowerCase() !== String(scenario.primarySystem || '').toLowerCase();
+  }
+  if (a.type === 'diagnosis'){
+    // compare to scenario.fault (handle object/label)
+    const expected = scenario.fault || scenario.correct || scenario.answer || '';
+    return String(a.value).toLowerCase() !== String(expected).toLowerCase();
+  }
+  return false;
 }
 
 function formatReplayAction(a){
