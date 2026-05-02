@@ -829,6 +829,18 @@ document.addEventListener('DOMContentLoaded', () => {
   try { setView('landingPage'); } catch(e) { setView('homeScreen'); }
 });
 
+/* Demo modal controls */
+function openDemo(){ const m = $('demoModal'); if (m) m.style.display = 'flex'; }
+function closeDemo(){ const m = $('demoModal'); if (m) m.style.display = 'none'; }
+
+// Bind modal buttons (also allow landing hero button to open modal)
+safeBind('btn-demo', openDemo);
+safeBind('btn-start-demo', () => { closeDemo(); startDemo(); });
+safeBind('btn-close-demo', closeDemo);
+
+// Hero teacher CTA (open login as teacher)
+safeBind('btn-teacher-hero', () => { userRole = 'teacher'; setView('loginScreen'); });
+
 function escapeCSV(val){
   if (val === null || val === undefined) return '';
   const s = String(val).replace(/"/g, '""');

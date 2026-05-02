@@ -61,6 +61,24 @@
         <button id="btn-start-training">▶ Start Training</button>
         <button id="btn-demo" class="ghost">▶ Try Demo</button>
       </div>
+
+      <!-- HERO MEDIA (demo video or placeholder) -->
+      <div class="hero-media" aria-hidden="false">
+        <video id="heroDemoVideo" autoplay muted loop playsinline>
+          <source src="demo.mp4" type="video/mp4">
+          <!-- fallback image -->
+          <img src="demo-placeholder.png" alt="TorqueMind demo preview" />
+        </video>
+      </div>
+
+      <p class="muted" style="margin-top:10px;">No account required for demo</p>
+
+      <!-- Teacher banner (above the fold) -->
+      <div class="teacher-banner" role="region" aria-label="For instructors">
+        <strong>For Instructors:</strong>
+        Track performance, identify weaknesses, and assign targeted training.
+        <button id="btn-teacher-hero" class="secondary-cta">Open Dashboard</button>
+      </div>
     </section>
 
     <!-- FEATURES -->
@@ -294,6 +312,18 @@
       </div>
     </div>
     <div id="studentList"></div>
+  </div>
+
+  <!-- DEMO MODAL -->
+  <div id="demoModal" class="overlay" style="display:none;">
+    <div class="overlay-card">
+      <h2>Try TorqueMind</h2>
+      <p class="muted">Run a real diagnostic scenario instantly without signing in.</p>
+      <div style="margin-top:12px">
+        <button id="btn-start-demo">Start Demo</button>
+        <button id="btn-close-demo" class="ghost">Close</button>
+      </div>
+    </div>
   </div>
 
   <script src="./data/scenarios.js"></script>
