@@ -1,0 +1,35 @@
+name: Auth-aware API Smoke Test
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  smoke:
+    name: Run smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install API dependencies
+        run: |
+          cd car-diagnosis-sim/torquemind-api
+          npm ci
+
+      - name: Run auth-aware smoke test
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
+          TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: |
+          cd car-diagnosis-sim/torquemind-api
+          npm run test:smoke
