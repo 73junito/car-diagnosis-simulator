@@ -10,6 +10,7 @@ let totalToolUsed = 0;
 let currentUser = null;
 let userRole = 'student';
 let schoolCode = '';
+let demoMode = false;
 
 const scenarios = window.scenarios || [];
 const total = scenarios.length;
@@ -37,6 +38,19 @@ function setView(viewId, data){
   });
   const target = document.getElementById(viewId);
   if (target) target.style.display = 'block';
+}
+
+// Start a demo session without requiring login (one-scenario quick demo)
+function startDemo(){
+  demoMode = true;
+  currentUser = 'Demo';
+  userRole = 'student';
+  AppState.user = currentUser;
+  AppState.role = userRole;
+  // start at first scenario for demo
+  currentIndex = 0;
+  setView('gameScreen');
+  loadScenario();
 }
 
 // navigation alias that accepts context
@@ -447,6 +461,7 @@ function assignScenarioToClass(id){
 
 async function saveProgress(){
   if (!currentUser) return;
+  if (demoMode) return; // don't persist demo sessions
 
   const student = {
     name: currentUser,
@@ -793,6 +808,12 @@ document.addEventListener('DOMContentLoaded', () => {
     userRole = 'teacher';
     setView('loginScreen');
   });
+
+  const btnDemo = document.getElementById('btn-view-demo');
+  if (btnDemo) btnDemo.addEventListener('click', () => startDemo());
+
+  const finalCta = document.getElementById('final-cta');
+  if (finalCta) finalCta.addEventListener('click', () => setView('loginScreen'));
 
   const btnHow = document.getElementById('btn-how');
   if (btnHow) btnHow.addEventListener('click', () => {
