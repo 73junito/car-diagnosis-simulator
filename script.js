@@ -501,6 +501,41 @@ function generateConfidenceInsight(data){
   return 'ℹ️ Confidence levels are moderately aligned with performance.';
 }
 
+// --- System performance heatmap ---
+function computeSystemPerformance(classData){
+  const systems = {};
+  (classData || []).forEach(student => {
+    (student.replays || []).forEach(r => {
+      const systemAction = (r.actions || []).find(a => a.type === 'system');
+      if (!systemAction) return;
+      const system = systemAction.value || 'unknown';
+      systems[system] = systems[system] || { correct: 0, total: 0 };
+      systems[system].total++;
+      if (isCorrectDiagnosis(r)) systems[system].correct++;
+    });
+  });
+  return systems;
+}
+
+function renderSystemHeatmap(classData){
+  const el = document.getElementById('systemHeatmap');
+  if (!el) return;
+  const data = computeSystemPerformance(classData || []);
+  const entries = Object.entries(data).sort((a,b) => {
+    const pa = a[1].total ? a[1].correct / a[1].total : 0;
+    const pb = b[1].total ? b[1].correct / b[1].total : 0;
+    return pb - pa;
+  });
+  if (!entries.length) { el.innerHTML = '<div style="color:var(--muted)">No system data yet.</div>'; return; }
+  el.innerHTML = entries.map(([system, stats]) => {
+    const pct = stats.total ? Math.round((stats.correct / stats.total) * 100) : 0;
+    let level = 'medium';
+    if (pct < 50) level = 'low';
+    else if (pct > 75) level = 'high';
+    return `\n      <div class="heatmap-cell ${level}">\n        <strong>${system}</strong><br>\n        ${pct}%\n      </div>\n    `;
+  }).join('');
+}
+
 // Helper: find scenario by id (flexible matching)
 function findScenarioById(id){
   if (!scenarios || !id) return null;
@@ -869,6 +904,7 @@ async function loadTeacherData(){
   }, 10);
   // render confidence chart for class
   try { renderConfidenceChart(classData); } catch(e) { console.warn('Confidence chart render failed', e); }
+  try { renderSystemHeatmap(classData); } catch(e) { console.warn('System heatmap render failed', e); }
 }
 
 // Open student detail and show latest replay (if present)
