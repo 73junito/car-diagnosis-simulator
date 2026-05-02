@@ -1,21 +1,30 @@
-# Car Diagnosis Simulator — Starter
+# TorqueMind — Diagnostic Training Platform
 
-This is a minimal web-based starter for the Car Diagnosis Simulator.
+TorqueMind is a lightweight browser-based training platform for automotive diagnostic reasoning. It provides evidence-driven scenarios, system isolation workflows, and teacher analytics to help trainees build reliable troubleshooting skills.
 
-Run locally:
+Features
+- Scenario-based diagnostic exercises with tool simulations
+- System isolation and evidence tracking for structured reasoning
+- Confidence-weighted decisions and instant feedback
+- Teacher dashboard with exports and basic insights
 
-1. Install the *Live Server* extension in VS Code and open `index.html` with Live Server.
+Run locally
 
-Or use a simple static server (Python example):
+1. Open a terminal in the project folder:
 
 ```bash
 cd "d:/Car Diagnosis Simulator/car-diagnosis-sim"
 python -m http.server 8000
-# then open http://localhost:8000 in a browser
+# open http://localhost:8000 in your browser
 ```
 
-Next ideas:
-- Add multiple-choice tools and limited tool uses
-- Add scoring and progression
-- Add user accounts / paid content hosting
-# car-diagnosis-simulator
+Development notes
+- The app is a single-page static site (HTML/CSS/JS). No build step required.
+- Diagnostic logic lives in `engine/diagnosticEngine.js` and is loaded before `script.js`.
+- Keep `firebase-config.js` untracked — it's excluded by `.gitignore` for security.
+
+Contributing
+- Open a PR against `main` or create feature branches. This repo favors small, focused commits.
+
+License
+- MIT
