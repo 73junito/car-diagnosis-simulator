@@ -11,6 +11,7 @@ let currentUser = null;
 let userRole = 'student';
 let schoolCode = '';
 let demoMode = false;
+let activeSystemFilter = null;
 
 const scenarios = window.scenarios || [];
 const total = scenarios.length;
@@ -534,6 +535,57 @@ function renderSystemHeatmap(classData){
     else if (pct > 75) level = 'high';
     return `\n      <div class="heatmap-cell ${level}">\n        <strong>${system}</strong><br>\n        ${pct}%\n      </div>\n    `;
   }).join('');
+  // bind clicks and tooltips
+  el.querySelectorAll('.heatmap-cell').forEach(cell => {
+    const sysText = cell.querySelector('strong') ? cell.querySelector('strong').innerText : cell.textContent || '';
+    const sys = sysText.trim();
+    const stats = data[sys] || {correct:0,total:0};
+    cell.setAttribute('data-system', sys);
+    cell.title = `${stats.correct}/${stats.total} correct`;
+    cell.addEventListener('click', () => {
+      applySystemFilter(sys);
+      el.querySelectorAll('.heatmap-cell').forEach(c => c.classList.toggle('selected', c.getAttribute('data-system') === sys));
+    });
+  });
+  if (activeSystemFilter) {
+    const sel = el.querySelector(`.heatmap-cell[data-system="${activeSystemFilter}"]`);
+    if (sel) sel.classList.add('selected');
+  }
+}
+
+function applySystemFilter(system){
+  activeSystemFilter = system;
+  renderFilteredStudents();
+}
+
+function clearSystemFilter(){
+  activeSystemFilter = null;
+  renderFilteredStudents();
+  const hm = document.getElementById('systemHeatmap'); if (hm) hm.querySelectorAll('.heatmap-cell').forEach(c => c.classList.remove('selected'));
+}
+
+function renderFilteredStudents(){
+  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  const list = document.getElementById('studentList');
+  if (!list) return;
+  let filtered = classData;
+  if (activeSystemFilter){
+    filtered = classData.filter(s => (s.replays || []).some(r => {
+      const sys = (r.actions || []).find(a => a.type === 'system');
+      return sys && String(sys.value) === String(activeSystemFilter);
+    }));
+  }
+  list.innerHTML = `\n    <div style="margin-bottom:8px;">\n      ${activeSystemFilter ? `<span class="filter-pill">Filtered: ${activeSystemFilter}</span><button onclick="clearSystemFilter()" class="ghost">Clear</button>` : '' }\n    </div>\n  ` + (filtered.length ? filtered.map(s => `\n      <div class="teacher-student-entry" data-student-name="${s.name}" style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">\n        <h3>${s.name}</h3>\n        <p>Score: ${s.score}</p>\n        <p>Accuracy: ${s.correct} / ${s.correct + s.wrong}</p>\n        <p>Level: ${s.currentLevel + 1}/${total}</p>\n        <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>\n        <p>Last: ${s.lastUpdated || '—'}</p>\n        <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>\n        <div style="margin-top:8px"><button class="btn-view-replay secondary-cta" data-name="${s.name}">View Replay</button></div>\n      </div>\n    `).join('') : '<div style="color:var(--muted)">No students match the filter.</div>');
+
+  // bind replay buttons
+  setTimeout(() => {
+    const buttons = document.querySelectorAll('.btn-view-replay');
+    buttons.forEach(b => {
+      const name = b.getAttribute('data-name');
+      if (!name) return;
+      b.addEventListener('click', () => openStudentDetail(name));
+    });
+  }, 10);
 }
 
 // Helper: find scenario by id (flexible matching)
@@ -880,28 +932,8 @@ async function loadTeacherData(){
 
   const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
   if (classData.length === 0){ container.innerHTML = '<p>No student data yet.</p>'; return; }
-  container.innerHTML = classData.map(s => `
-    <div class="teacher-student-entry" data-student-name="${s.name}" style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">
-      <h3>${s.name}</h3>
-      <p>Score: ${s.score}</p>
-      <p>Accuracy: ${s.correct} / ${s.correct + s.wrong}</p>
-      <p>Level: ${s.currentLevel + 1}/${total}</p>
-      <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>
-      <p>Last: ${s.lastUpdated || '—'}</p>
-      <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>
-      <div style="margin-top:8px"><button class="btn-view-replay secondary-cta" data-name="${s.name}">View Replay</button></div>
-    </div>
-  `).join('');
-
-  // bind replay buttons
-  setTimeout(() => {
-    const buttons = document.querySelectorAll('.btn-view-replay');
-    buttons.forEach(b => {
-      const name = b.getAttribute('data-name');
-      if (!name) return;
-      b.addEventListener('click', () => openStudentDetail(name));
-    });
-  }, 10);
+  // render student list (supports active system filter)
+  renderFilteredStudents();
   // render confidence chart for class
   try { renderConfidenceChart(classData); } catch(e) { console.warn('Confidence chart render failed', e); }
   try { renderSystemHeatmap(classData); } catch(e) { console.warn('System heatmap render failed', e); }

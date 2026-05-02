@@ -143,6 +143,15 @@ button:hover{opacity:0.95}
 .heatmap-cell.low { background: rgba(248,113,113,0.12); }
 .heatmap-cell.medium { background: rgba(250,204,21,0.12); }
 .heatmap-cell.high { background: rgba(34,197,94,0.12); }
+.heatmap-cell { cursor: pointer; transition: transform 120ms ease, box-shadow 120ms ease; }
+.heatmap-cell:hover { transform: scale(1.03); box-shadow: 0 6px 18px rgba(0,0,0,0.4); }
+.heatmap-cell.selected { outline: 2px solid rgba(6,182,212,0.25); }
+
+.heatmap-legend { margin-top: 10px; display:flex; gap:10px; font-size:0.85rem; align-items:center }
+.legend { padding:4px 8px; border-radius:6px }
+.legend.low { background: rgba(248,113,113,0.12) }
+.legend.medium { background: rgba(250,204,21,0.12) }
+.legend.high { background: rgba(34,197,94,0.12) }
 
 /* replay controls */
 #replay-play, #replay-stop { padding:8px 10px; border-radius:6px; }
