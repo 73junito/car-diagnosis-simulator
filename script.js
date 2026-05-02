@@ -415,23 +415,31 @@ function computeConfidenceData(classData){
   (classData || []).forEach(s => {
     (s.replays || []).forEach(r => {
       const conf = (r.actions || []).find(a => a.type === 'confidence');
-      const diag = (r.actions || []).find(a => a.type === 'diagnosis');
-      if (!conf || !diag) return;
-      const level = String(conf.value).toLowerCase();
+      // fallback: if no confidence recorded, assume 'medium'
+      const levelRaw = conf && typeof conf.value !== 'undefined' ? conf.value : 'medium';
+      const level = String(levelRaw).toLowerCase();
       const key = (level === 'high' || level === 'h') ? 'high' : (level === 'medium' || level === 'm') ? 'medium' : 'low';
       buckets[key].total++;
-      // diag may contain a boolean 'correct' flag or the chosen label — we consider stored r.result or diag.correct or compare to scenario
-      if (r.result === 'Correct' || r.result === 'correct' || diag.correct === true){
+      // determine correctness by comparing diagnosis to scenario truth
+      if (isCorrectDiagnosis(r)) {
         buckets[key].correct++;
-      } else if (typeof diag.value !== 'undefined' && typeof r.scenario !== 'undefined'){
-        // best-effort compare to scenario's fault
-        const scen = (typeof r.scenario === 'number' && scenarios[r.scenario]) ? scenarios[r.scenario] : null;
-        const expected = scen ? (scen.fault || scen.correct || scen.answer || '') : '';
-        if (String(diag.value).toLowerCase() === String(expected).toLowerCase()) buckets[key].correct++;
       }
     });
   });
   return buckets;
+}
+
+function isCorrectDiagnosis(replay){
+  if (!replay || !Array.isArray(replay.actions)) return false;
+  const diag = replay.actions.find(a => a.type === 'diagnosis');
+  if (!diag) return false;
+  const scenRef = replay.scenario;
+  let scenario = null;
+  if (typeof scenRef === 'number') scenario = scenarios[scenRef];
+  else scenario = (scenarios || []).find(s => String(s.id) === String(scenRef));
+  if (!scenario) return false;
+  const expected = scenario.fault || scenario.correct || scenario.answer || '';
+  return String(diag.value).toLowerCase() === String(expected).toLowerCase();
 }
 
 function renderConfidenceChart(classData){
@@ -452,18 +460,45 @@ function renderConfidenceChart(classData){
   const baseY = 180;
   ctx.font = '12px Inter, sans-serif';
   ctx.fillStyle = '#fff';
+  // draw baseline
+  ctx.beginPath(); ctx.moveTo(20, baseY); ctx.lineTo(canvas.width - 20, baseY); ctx.strokeStyle = '#555'; ctx.stroke();
+  // y axis labels
+  [0,25,50,75,100].forEach(p => {
+    const y = baseY - (p/100)*150;
+    ctx.fillStyle = '#888';
+    ctx.fillText(p + '%', 6, y + 4);
+    // small grid line
+    ctx.beginPath(); ctx.moveTo(28, y); ctx.lineTo(canvas.width - 28, y); ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.stroke();
+  });
+  // title
+  ctx.fillStyle = '#fff'; ctx.fillText('Accuracy by Confidence', 120, 16);
+
   labels.forEach((lab, i) => {
-    const x = i * (barWidth + gap) + 40;
+    const x = i * (barWidth + gap) + 60;
     const h = (values[i] / 100) * 150;
     // bar
     ctx.fillStyle = 'rgba(6,182,212,0.95)';
     ctx.fillRect(x, baseY - h, barWidth, h);
     // label
     ctx.fillStyle = '#fff';
-    ctx.fillText(lab.charAt(0).toUpperCase() + lab.slice(1), x, baseY + 15);
+    ctx.fillText(lab.charAt(0).toUpperCase() + lab.slice(1), x, baseY + 18);
     // value
-    ctx.fillText(Math.round(values[i]) + '%', x, baseY - h - 6);
+    ctx.fillText(Math.round(values[i]) + '%', x, baseY - h - 8);
   });
+
+  // insight text under chart
+  try{
+    const insightEl = document.getElementById('confidenceInsight');
+    if (insightEl) insightEl.innerText = generateConfidenceInsight(data);
+  }catch(e){}
+}
+
+function generateConfidenceInsight(data){
+  const high = data.high || {correct:0,total:0};
+  const pct = high.total ? (high.correct / high.total) : 0;
+  if (pct < 0.5) return '⚠️ Students are overconfident — high confidence answers are often incorrect.';
+  if (pct > 0.8) return '✅ High confidence aligns well with correct answers.';
+  return 'ℹ️ Confidence levels are moderately aligned with performance.';
 }
 
 // Helper: find scenario by id (flexible matching)
