@@ -31,7 +31,7 @@ function setView(viewId, data){
   // update central UI state
   AppState.ui.view = viewId;
   AppState.ui.context = data || null;
-  const views = ['homeScreen','loginScreen','scenarioSelectScreen','gameScreen','teacherScreen'];
+  const views = ['landingPage','homeScreen','loginScreen','scenarioSelectScreen','gameScreen','teacherScreen'];
   views.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
@@ -39,6 +39,16 @@ function setView(viewId, data){
   const target = document.getElementById(viewId);
   if (target) target.style.display = 'block';
 }
+
+/* =========== SAFE DOM HELPERS =========== */
+function $(id){ return document.getElementById(id); }
+function setText(id, value){ const el = $(id); if (el) el.innerText = value; }
+function setHTML(id, value){ const el = $(id); if (el) el.innerHTML = value; }
+function show(id){ const el = $(id); if (el) el.style.display = 'block'; }
+function hide(id){ const el = $(id); if (el) el.style.display = 'none'; }
+function safeBind(id, handler){ const el = $(id); if (!el) return; el.addEventListener('click', handler); }
+
+let appReady = false;
 
 // Start a demo session without requiring login (one-scenario quick demo)
 function startDemo(){
@@ -759,109 +769,64 @@ async function exportAll(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('btn-battery').addEventListener('click', () => check('battery'));
-  document.getElementById('btn-starter').addEventListener('click', () => check('starter'));
-  document.getElementById('btn-fuel').addEventListener('click', () => check('fuel'));
-  document.getElementById('btn-obd').addEventListener('click', () => check('obd'));
+  if (appReady) return;
+  appReady = true;
 
-  document.getElementById('diag-battery').addEventListener('click', () => diagnose('battery'));
-  document.getElementById('diag-starter').addEventListener('click', () => diagnose('starter'));
-  document.getElementById('diag-fuel').addEventListener('click', () => diagnose('fuel'));
-  document.getElementById('diag-spark').addEventListener('click', () => diagnose('spark'));
+  /* ===== LANDING BUTTONS ===== */
+  safeBind('btn-start-training', () => setView('loginScreen'));
+  safeBind('btn-start-final', () => setView('loginScreen'));
 
-  document.getElementById('next').addEventListener('click', nextScenario);
-  const dl = document.getElementById('download-report');
-  if (dl) dl.addEventListener('click', downloadReport);
+  safeBind('btn-student', () => { userRole = 'student'; setView('loginScreen'); });
+  safeBind('btn-teacher', () => { userRole = 'teacher'; setView('loginScreen'); });
 
-  document.getElementById('btn-enter').addEventListener('click', () => login());
-  document.getElementById('btn-back').addEventListener('click', () => {
-    document.getElementById('teacherScreen').style.display = 'none';
-    document.getElementById('loginScreen').style.display = 'block';
-  });
-  document.getElementById('btn-refresh').addEventListener('click', () => loadTeacherData());
-  document.getElementById('btn-export').addEventListener('click', () => exportAll());
+  safeBind('btn-demo', () => startDemo());
 
-  // Start overlay handlers
-  const start = document.getElementById('btn-start');
-  if (start) start.addEventListener('click', () => {
-    const o = document.getElementById('startOverlay');
-    if (o) o.style.display = 'none';
-    setView('loginScreen');
-    const u = document.getElementById('username'); if (u) u.focus();
-  });
-  const skip = document.getElementById('btn-skip');
-  if (skip) skip.addEventListener('click', () => {
-    const o = document.getElementById('startOverlay');
-    if (o) o.style.display = 'none';
-    setView('loginScreen');
-  });
+  /* ===== LOGIN ===== */
+  safeBind('btn-enter', () => login());
 
-  // HOME SCREEN NAVIGATION (use router)
-  const btnStudent = document.getElementById('btn-start-student');
-  if (btnStudent) btnStudent.addEventListener('click', () => {
-    userRole = 'student';
-    setView('loginScreen');
-  });
+  /* ===== GAME TOOLS ===== */
+  safeBind('btn-battery', () => check('battery'));
+  safeBind('btn-starter', () => check('starter'));
+  safeBind('btn-fuel', () => check('fuel'));
+  safeBind('btn-obd', () => check('obd'));
 
-  const btnTeacher = document.getElementById('btn-start-teacher');
-  if (btnTeacher) btnTeacher.addEventListener('click', () => {
-    userRole = 'teacher';
-    setView('loginScreen');
-  });
+  /* ===== DIAGNOSIS ===== */
+  safeBind('diag-battery', () => diagnose('battery'));
+  safeBind('diag-starter', () => diagnose('starter'));
+  safeBind('diag-fuel', () => diagnose('fuel'));
+  safeBind('diag-spark', () => diagnose('spark'));
 
-  const btnDemo = document.getElementById('btn-view-demo');
-  if (btnDemo) btnDemo.addEventListener('click', () => startDemo());
+  safeBind('next', nextScenario);
+  safeBind('download-report', downloadReport);
 
-  const finalCta = document.getElementById('final-cta');
-  if (finalCta) finalCta.addEventListener('click', () => setView('loginScreen'));
+  /* ===== TEACHER ===== */
+  safeBind('btn-refresh', loadTeacherData);
+  safeBind('btn-export', exportAll);
+  safeBind('btn-export-explanations', exportExplanationsCSV);
+  safeBind('btn-insights', renderTeacherInsights);
 
-  // New landing buttons
-  const btnStartTraining = document.getElementById('btn-start-training');
-  if (btnStartTraining) btnStartTraining.addEventListener('click', () => setView('loginScreen'));
+  /* ===== CONFIDENCE ===== */
+  safeBind('conf-high', () => applyDiagnosisWithConfidence('high'));
+  safeBind('conf-medium', () => applyDiagnosisWithConfidence('medium'));
+  safeBind('conf-low', () => applyDiagnosisWithConfidence('low'));
 
-  const btnDemoNew = document.getElementById('btn-demo');
-  if (btnDemoNew) btnDemoNew.addEventListener('click', () => startDemo());
+  /* ===== SYSTEM SELECT ===== */
+  safeBind('sys-electrical', () => selectSystem('electrical'));
+  safeBind('sys-fuel', () => selectSystem('fuel'));
+  safeBind('sys-ignition', () => selectSystem('ignition'));
+  safeBind('sys-air', () => selectSystem('air'));
+  safeBind('sys-ecu', () => selectSystem('ecu'));
+  safeBind('sys-other', () => selectSystem('other'));
 
-  const btnStartFinal = document.getElementById('btn-start-final');
-  if (btnStartFinal) btnStartFinal.addEventListener('click', () => setView('loginScreen'));
+  /* ===== EXPORT / TEACHER HELPERS ===== */
+  safeBind('btn-export-explanations', exportExplanationsCSV);
 
-  const btnStudentMode = document.getElementById('btn-student');
-  if (btnStudentMode) btnStudentMode.addEventListener('click', () => { userRole = 'student'; setView('loginScreen'); });
+  /* ===== OVERLAY START/SKIP (optional) ===== */
+  const startOverlayBtn = $( 'btn-start' ); if (startOverlayBtn) startOverlayBtn.addEventListener('click', () => { const o = $('startOverlay'); if (o) o.style.display = 'none'; setView('loginScreen'); const u = $('username'); if (u) u.focus(); });
+  const skip = $('btn-skip'); if (skip) skip.addEventListener('click', () => { const o = $('startOverlay'); if (o) o.style.display = 'none'; setView('loginScreen'); });
 
-  const btnTeacherMode = document.getElementById('btn-teacher');
-  if (btnTeacherMode) btnTeacherMode.addEventListener('click', () => { userRole = 'teacher'; setView('loginScreen'); });
-
-  const btnHow = document.getElementById('btn-how');
-  if (btnHow) btnHow.addEventListener('click', () => {
-    alert(
-      "1. Select a role\n2. Diagnose vehicle symptoms\n3. Use tools\n4. Submit fault\n5. Get scored feedback"
-    );
-  });
-
-  // confidence button handlers
-  const ch = document.getElementById('conf-high');
-  const cm = document.getElementById('conf-medium');
-  const cl = document.getElementById('conf-low');
-  if (ch) ch.addEventListener('click', () => applyDiagnosisWithConfidence('high'));
-  if (cm) cm.addEventListener('click', () => applyDiagnosisWithConfidence('medium'));
-  if (cl) cl.addEventListener('click', () => applyDiagnosisWithConfidence('low'));
-
-  // system selection handlers
-  const se = document.getElementById('sys-electrical'); if (se) se.addEventListener('click', () => selectSystem('electrical'));
-  const sf = document.getElementById('sys-fuel'); if (sf) sf.addEventListener('click', () => selectSystem('fuel'));
-  const si = document.getElementById('sys-ignition'); if (si) si.addEventListener('click', () => selectSystem('ignition'));
-  const sa = document.getElementById('sys-air'); if (sa) sa.addEventListener('click', () => selectSystem('air'));
-  const sc = document.getElementById('sys-ecu'); if (sc) sc.addEventListener('click', () => selectSystem('ecu'));
-  const so = document.getElementById('sys-other'); if (so) so.addEventListener('click', () => selectSystem('other'));
-
-  // teacher CSV export for explanations
-  const be = document.getElementById('btn-export-explanations');
-  if (be) be.addEventListener('click', () => exportExplanationsCSV());
-  const bi = document.getElementById('btn-insights');
-  if (bi) bi.addEventListener('click', () => renderTeacherInsights());
-
-  // ensure initial view is homepage
-  try { setView('homeScreen'); } catch(e) {}
+  /* ===== INITIAL VIEW ===== */
+  try { setView('landingPage'); } catch(e) { setView('homeScreen'); }
 });
 
 function escapeCSV(val){
