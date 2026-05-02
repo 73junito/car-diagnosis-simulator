@@ -10,6 +10,9 @@
   <h1>TorqueMind</h1>
 
   <div id="startOverlay" class="overlay">
+    <!-- hidden by default to keep landing as primary view -->
+    <!-- display this via JS when you want an intro overlay -->
+    <style> #startOverlay{display:none;} </style>
     <div class="overlay-card card">
       <h2>TorqueMind</h2>
       <p class="muted">Diagnostic Training Platform — practice real-world diagnostic reasoning with evidence-driven scenarios.</p>
@@ -42,6 +45,10 @@
       <div style="margin-top:10px"><button id="final-cta" class="primary-cta">Start Training</button></div>
     </div>
   </div>
+  <!-- ================= TORQUEMIND LANDING ================= -->
+
+  <!-- Clean view container -->
+  <div id="clean-views">
 
   <!-- ================= TORQUEMIND LANDING ================= -->
   <div id="landingPage" class="landing">
@@ -165,6 +172,7 @@
   </div>
 
   <div id="loginScreen" class="card" style="display:none">
+    <button class="ghost" onclick="setView('landingPage')">← Back</button>
     <h2>Welcome</h2>
     <input id="username" placeholder="Enter name" />
     <select id="role">
@@ -179,6 +187,7 @@
 
   <!-- Scenario selection screen (SPA) -->
   <div id="scenarioSelectScreen" style="display:none; max-width:900px; width:100%;">
+    <div style="margin-bottom:8px"><button class="ghost" onclick="setView('landingPage')">← Back</button></div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <h2>Select a Scenario</h2>
@@ -206,6 +215,9 @@
   </div>
 
   <div id="gameScreen" style="display:none;">
+  <div style="max-width:720px;width:100%; margin:auto;">
+    <div style="margin-bottom:8px"><button class="ghost" onclick="setView('landingPage')">← Back</button></div>
+  </div>
   <div id="ui">
     <div class="card" id="meta">
       <div id="userInfo"></div>
@@ -279,6 +291,7 @@
   </div>
 
   <div id="teacherScreen" style="display:none;" class="card">
+    <div style="margin-bottom:8px"><button class="ghost" onclick="setView('landingPage')">← Back</button></div>
     <h2>Teacher Dashboard</h2>
     <div style="margin-bottom:8px">
       <button id="btn-back">Back to Login</button>
@@ -313,6 +326,8 @@
     </div>
     <div id="studentList"></div>
   </div>
+
+  </div> <!-- /#clean-views -->
 
   <!-- DEMO MODAL -->
   <div id="demoModal" class="overlay" style="display:none;">
