@@ -22,6 +22,195 @@ const total = scenarios.length;
 // API base: set `window.API_BASE_URL` in hosting environment to point to deployed API.
 const API_BASE = (typeof window.API_BASE_URL !== 'undefined' && window.API_BASE_URL) ? String(window.API_BASE_URL).replace(/\/$/, '') : '';
 
+// ------------------- Supabase-lite auth helpers (frontend) -------------------
+// Uses Supabase Auth REST endpoints directly so we don't need the full SDK here.
+async function supabaseSignIn(email, password){
+  const url = (window.SUPABASE_URL || '').replace(/\/$/, '');
+  const anon = window.SUPABASE_ANON_KEY || '';
+  if (!url || !anon) return { error: 'Supabase not configured' };
+  try {
+    const res = await fetch(url + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': anon,
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
+    const body = await res.json();
+    if (!res.ok) return body;
+    // body contains access_token, expires_in, refresh_token, token_type
+    if (body.access_token){
+      localStorage.setItem('supabase_access_token', body.access_token);
+      localStorage.setItem('supabase_refresh_token', body.refresh_token || '');
+      localStorage.setItem('supabase_user_email', email);
+    }
+    return body;
+  } catch (e){ return { error: e.message || String(e) }; }
+}
+
+function supabaseSignOut(){
+  localStorage.removeItem('supabase_access_token');
+  localStorage.removeItem('supabase_refresh_token');
+  localStorage.removeItem('supabase_user_email');
+}
+
+function getAccessToken(){ return localStorage.getItem('supabase_access_token') || null; }
+
+// Monkey-patch fetch to automatically attach Authorization Bearer token for API_BASE calls
+(() => {
+  const origFetch = window.fetch.bind(window);
+  window.fetch = async function(resource, init){
+    try {
+      let url = typeof resource === 'string' ? resource : (resource && resource.url) ? resource.url : '';
+      const shouldAttach = API_BASE && url && url.startsWith(API_BASE);
+      if (shouldAttach){
+        init = init || {};
+        init.headers = init.headers || {};
+        // normalize Headers
+        const headers = new Headers(init.headers);
+        const token = getAccessToken();
+        if (token) headers.set('Authorization', 'Bearer ' + token);
+        init.headers = headers;
+      }
+      const resp = await origFetch(resource, init);
+      // Global handling for auth failures from our API: clear tokens and route to login
+      try {
+        const respUrl = (typeof resource === 'string') ? resource : (resource && resource.url) ? resource.url : '';
+        if (respUrl && API_BASE && respUrl.startsWith(API_BASE) && (resp.status === 401 || resp.status === 403)){
+          supabaseSignOut();
+          // notify listeners that auth expired
+          window.dispatchEvent(new CustomEvent('supabase:authExpired', { detail: { status: resp.status } }));
+        }
+      } catch (e){}
+      return resp;
+    } catch (e){ return Promise.reject(e); }
+  };
+})();
+
+// Simple teacher-login flow triggered from teacher buttons. Uses prompt() for minimal UX.
+async function teacherLoginPrompt(){
+  if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) return alert('Supabase is not configured for this frontend.');
+  const email = prompt('Teacher email (Supabase):');
+  if (!email) return;
+  const password = prompt('Password:');
+  if (!password) return;
+  const res = await supabaseSignIn(email, password);
+  if (res && res.access_token){
+    alert('Signed in successfully');
+    return true;
+  }
+  alert('Sign-in failed: ' + (res?.error_description || res?.error || JSON.stringify(res)));
+  return false;
+}
+
+// Wire teacher-facing buttons to prompt for login then open teacher screen.
+document.addEventListener('DOMContentLoaded', () => {
+  const teacherBtns = ['btn-teacher', 'btn-teacher-hero', 'btn-teacher-hero'];
+  teacherBtns.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('click', async (e) => {
+      e.preventDefault();
+      // delegate to setView which will enforce auth before rendering teacher screen
+      setView('teacherScreen');
+    });
+  });
+
+  const logoutEl = document.getElementById('btn-back'); // reuse Back button as a quick sign-out for teachers
+  if (logoutEl) logoutEl.addEventListener('click', () => { supabaseSignOut(); setView('loginScreen'); });
+});
+
+// Listen for global auth expiry events (triggered from fetch monkey-patch)
+window.addEventListener('supabase:authExpired', (ev) => {
+  const status = ev?.detail?.status;
+  try { showTeacherError('Session expired. Please sign in again.'); } catch (e){}
+  setTimeout(() => { setView('loginScreen'); }, 700);
+});
+
+/* ========== Teacher auth + UI helpers ========== */
+function showTeacherError(msg){
+  let container = document.getElementById('teacherErrorMsg');
+  if (!container){
+    const teacherScreen = document.getElementById('teacherScreen');
+    if (!teacherScreen) return;
+    container = document.createElement('div');
+    container.id = 'teacherErrorMsg';
+    container.style.margin = '12px 0';
+    container.style.padding = '10px';
+    container.style.background = 'var(--bg-muted, #2b2b2b)';
+    container.style.color = 'var(--fg, #fff)';
+    container.style.borderRadius = '6px';
+    teacherScreen.insertBefore(container, teacherScreen.firstChild);
+  }
+  container.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="flex:1">${escapeHtml(msg)}</div><div><button id="teacher-error-retry">Retry</button> <button id="teacher-error-signin">Sign in</button></div></div>`;
+  // wire retry and sign-in buttons
+  const retry = document.getElementById('teacher-error-retry'); if (retry) retry.onclick = () => { clearTeacherError(); loadTeacherData(); };
+  const signin = document.getElementById('teacher-error-signin'); if (signin) signin.onclick = async () => { clearTeacherError(); const ok = await teacherLoginPrompt(); if (ok) loadTeacherData(); };
+}
+
+function clearTeacherError(){ const el = document.getElementById('teacherErrorMsg'); if (el) el.remove(); }
+
+function escapeHtml(str){ if (!str) return ''; return String(str).replace(/[&<>\\"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
+
+async function ensureTeacherAuthAndRender(){
+  // Called when navigating to teacherScreen. Ensures token exists and is valid.
+  const token = getAccessToken();
+  if (!token){
+    // no token: prompt sign-in inline
+    showTeacherError('You must sign in as a teacher to view this dashboard.');
+    return;
+  }
+  // token present: verify by calling protected endpoint
+  try {
+    const url = API_BASE + '/api/teacher/data';
+    const res = await fetch(url, { method: 'GET', credentials: 'same-origin' });
+    if (res.status === 401 || res.status === 403){
+      supabaseSignOut();
+      showTeacherError('Authentication failed. Please sign in again.');
+      return;
+    }
+    if (!res.ok){
+      showTeacherError('Unable to fetch teacher data (' + res.status + '). Retry or sign in.');
+      return;
+    }
+    const data = await res.json();
+    clearTeacherError();
+    renderTeacherData(data);
+  } catch (e){
+    showTeacherError('Network error while loading teacher data. Check connection and retry.');
+  }
+}
+
+async function loadTeacherData(){
+  // wrapper used by retry button
+  await ensureTeacherAuthAndRender();
+}
+
+function renderTeacherData(data){
+  // Minimal rendering: show summary panel and student list; more enhancements later
+  try {
+    const panel = document.getElementById('teacherSummaryPanel'); if (panel) panel.style.display = 'block';
+    const studentList = document.getElementById('studentList'); if (studentList){
+      studentList.innerHTML = '';
+      if (Array.isArray(data.students) && data.students.length){
+        const list = document.createElement('div'); list.className = 'card';
+        data.students.forEach(s => {
+          const row = document.createElement('div'); row.style.padding = '6px 0';
+          row.innerHTML = `<strong>${escapeHtml(s.name || s.email || 'Student')}</strong> — ${escapeHtml(s.class || '')} <button onclick="viewStudent('${escapeHtml(s.id||'')}')">View</button>`;
+          list.appendChild(row);
+        });
+        studentList.appendChild(list);
+      } else {
+        studentList.innerHTML = '<div style="color:var(--muted)">No students yet.</div>';
+      }
+    }
+  } catch (e){ console.warn('renderTeacherData failed', e); }
+}
+
+function viewStudent(id){ alert('Open student view: ' + id); }
+
 // Central application state (stabilization layer)
 const AppState = {
   user: null,
@@ -45,6 +234,11 @@ function setView(viewId, data){
   });
   const target = document.getElementById(viewId);
   if (target) target.style.display = 'block';
+  // If navigating to teacher screen, enforce auth and load data
+  if (viewId === 'teacherScreen'){
+    // small async fire-and-forget
+    setTimeout(() => { loadTeacherData(); }, 0);
+  }
 }
 
 /* =========== SAFE DOM HELPERS =========== */
