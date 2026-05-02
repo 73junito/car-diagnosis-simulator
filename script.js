@@ -650,6 +650,66 @@ function renderAssignedWork(student){
   el.innerHTML = `\n    <h3>Assigned Training</h3>\n    ${student.assigned.map(a => { const done = (a.completed || []).length; const total = (a.scenarios || []).length; return `\n      <div style="margin-bottom:8px;">\n        <strong>${a.system}</strong><br>\n        ${done}/${total} completed\n      </div>\n    `; }).join('')}\n  `;
 }
 
+function analyzeClassWeakness(classData){
+  const systems = {};
+  (classData || []).forEach(student => {
+    (student.replays || []).forEach(r => {
+      const sysAct = (r.actions || []).find(a => a.type === 'system');
+      if (!sysAct) return;
+      const system = sysAct.value || 'other';
+      if (!systems[system]) systems[system] = { correct:0, total:0 };
+      systems[system].total++;
+      if (isCorrectDiagnosis(r)) systems[system].correct++;
+    });
+  });
+  return Object.entries(systems).map(([system,stats]) => ({ system, pct: stats.total ? stats.correct / stats.total : 0, total: stats.total })).sort((a,b)=> a.pct - b.pct);
+}
+
+function countWeakStudents(classData, system){
+  return (classData || []).filter(s => studentWeakInSystem(s, system)).length;
+}
+
+function generateAutoRecommendations(classData){
+  const analysis = analyzeClassWeakness(classData);
+  return analysis.slice(0,3).map(item => ({
+    system: item.system,
+    accuracy: Math.round((item.pct || 0) * 100),
+    weakStudents: countWeakStudents(classData, item.system),
+    scenarios: getRecommendedScenarios(item.system)
+  }));
+}
+
+function renderAutoRecommendations(classData){
+  const el = document.getElementById('autoRecommendations');
+  if (!el) return;
+  const recs = generateAutoRecommendations(classData);
+  if (!recs.length) { el.innerHTML = '<p style="color:var(--muted)">No recommendations available</p>'; return; }
+  el.innerHTML = recs.map(r => `\n    <div class="card" style="margin-bottom:10px; padding:10px">\n      <strong>${r.system}</strong><br>\n      Accuracy: ${r.accuracy}%<br>\n      Weak Students: ${r.weakStudents}<br>\n      <div style="margin-top:8px">\n        <button onclick="assignTraining('${r.system}')">Assign ${r.system} Training</button>\n      </div>\n    </div>\n  `).join('');
+}
+
+function renderStudentRecommendations(student){
+  if (!student) return;
+  // pick top weak system from profile, fallback to analysis of replays
+  const profile = student.studentProfile || {};
+  let topSystem = null;
+  if (profile.weakSystems){
+    const entries = Object.entries(profile.weakSystems || {}).sort((a,b)=> b[1]-a[1]);
+    if (entries.length) topSystem = entries[0][0];
+  }
+  if (!topSystem){
+    // fallback: analyze student's replays to find weakest
+    const analysis = analyzeClassWeakness([student]);
+    if (analysis && analysis.length) topSystem = analysis[0].system;
+  }
+  const el = document.getElementById('assignedWork');
+  if (!el) return;
+  const recs = topSystem ? getRecommendedScenarios(topSystem) : [];
+  if (!recs.length) return;
+  // append recommendations below assigned work
+  const markup = `\n    <div style="margin-top:10px; border-top:1px dashed rgba(255,255,255,0.03); padding-top:10px">\n      <h4>Recommended Practice</h4>\n      <div>Target: <strong>${topSystem}</strong></div>\n      ${recs.map(s => `<div style="margin-top:6px">${s.id || s.index} — ${s.primarySystem || ''} • Difficulty ${s.difficulty || ''} <button onclick="startScenarioById('${s.id || s.index}')" style="margin-left:8px">Start</button></div>`).join('')}\n    </div>\n  `;
+  el.innerHTML = (el.innerHTML || '') + markup;
+}
+
 // Helper: find scenario by id (flexible matching)
 function findScenarioById(id){
   if (!scenarios || !id) return null;
@@ -1010,6 +1070,7 @@ async function loadTeacherData(){
   // render confidence chart for class
   try { renderConfidenceChart(classData); } catch(e) { console.warn('Confidence chart render failed', e); }
   try { renderSystemHeatmap(classData); } catch(e) { console.warn('System heatmap render failed', e); }
+  try { renderAutoRecommendations(classData); } catch(e) { console.warn('Auto recommendations render failed', e); }
 }
 
 // Open student detail and show latest replay (if present)
