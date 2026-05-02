@@ -1,21 +1,37 @@
-# Car Diagnosis Simulator — Starter
+# TorqueMind — Diagnostic Training Platform
 
-This is a minimal web-based starter for the Car Diagnosis Simulator.
+TorqueMind is a lightweight browser-based training platform for automotive diagnostic reasoning. It provides evidence-driven scenarios, system isolation workflows, and teacher analytics to help trainees build reliable troubleshooting skills.
+TorqueMind is a lightweight browser-based training platform for automotive diagnostic reasoning. It provides evidence-driven scenarios, system isolation workflows, and teacher analytics to help trainees build reliable troubleshooting skills.
 
-Run locally:
+Overview
+TorqueMind helps technicians and instructors practice evidence-based diagnostic reasoning using realistic vehicle scenarios. Students collect evidence, isolate systems, and make confidence-weighted diagnoses while instructors get aggregated insights.
 
-1. Install the *Live Server* extension in VS Code and open `index.html` with Live Server.
+Features
+- Scenario-based diagnostic exercises with simulated tools
+- System isolation and evidence tracking for structured reasoning
+- Confidence-weighted decisions and instant feedback
+- Teacher dashboard with exports, insights, and scenario assignment
 
-Or use a simple static server (Python example):
+Demo
+Visit the live demo: https://car-diagnosis-simulator.vercel.app/
 
+Run locally
 ```bash
 cd "d:/Car Diagnosis Simulator/car-diagnosis-sim"
 python -m http.server 8000
-# then open http://localhost:8000 in a browser
+# open http://localhost:8000 in your browser
 ```
 
-Next ideas:
-- Add multiple-choice tools and limited tool uses
-- Add scoring and progression
-- Add user accounts / paid content hosting
-# car-diagnosis-simulator
+Development notes
+- The app is a single-page static site (HTML/CSS/JS). No build step required.
+- Diagnostic logic lives in `engine/diagnosticEngine.js` and is loaded before `script.js`.
+- Keep `firebase-config.js` untracked — it's excluded by `.gitignore` for security.
+
+Who it's for
+- Technical instructors, vocational trainers, and learners preparing for ASE-style assessments.
+
+Contributing
+- Open a PR against `main` or create feature branches. This repo favors small, focused commits.
+
+License
+- MIT

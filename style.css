@@ -47,6 +47,19 @@ button:hover{opacity:0.95}
   margin-bottom: 10px;
 }
 
+.hero .subhead {
+  margin: 0 0 6px 0;
+  color: #9be7ef;
+  font-size: 1.1rem;
+  font-weight:600;
+}
+
+.hero .tagline {
+  color: #cbd5e1;
+  margin-top:6px;
+  font-weight:600;
+}
+
 .hero p {
   max-width: 700px;
   margin: auto;
