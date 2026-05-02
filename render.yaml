@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: torquemind-api
+    env: node
+    branch: main
+    rootDir: torquemind-api
+    buildCommand: npm ci
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
