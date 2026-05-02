@@ -404,6 +404,68 @@ function renderScenarioRecommendations(classData = [], scenariosList = []){
   container.innerHTML = html;
 }
 
+// --- Confidence calibration chart (teacher dashboard) ---
+function computeConfidenceData(classData){
+  const buckets = {
+    high: { correct:0, total:0 },
+    medium: { correct:0, total:0 },
+    low: { correct:0, total:0 }
+  };
+
+  (classData || []).forEach(s => {
+    (s.replays || []).forEach(r => {
+      const conf = (r.actions || []).find(a => a.type === 'confidence');
+      const diag = (r.actions || []).find(a => a.type === 'diagnosis');
+      if (!conf || !diag) return;
+      const level = String(conf.value).toLowerCase();
+      const key = (level === 'high' || level === 'h') ? 'high' : (level === 'medium' || level === 'm') ? 'medium' : 'low';
+      buckets[key].total++;
+      // diag may contain a boolean 'correct' flag or the chosen label — we consider stored r.result or diag.correct or compare to scenario
+      if (r.result === 'Correct' || r.result === 'correct' || diag.correct === true){
+        buckets[key].correct++;
+      } else if (typeof diag.value !== 'undefined' && typeof r.scenario !== 'undefined'){
+        // best-effort compare to scenario's fault
+        const scen = (typeof r.scenario === 'number' && scenarios[r.scenario]) ? scenarios[r.scenario] : null;
+        const expected = scen ? (scen.fault || scen.correct || scen.answer || '') : '';
+        if (String(diag.value).toLowerCase() === String(expected).toLowerCase()) buckets[key].correct++;
+      }
+    });
+  });
+  return buckets;
+}
+
+function renderConfidenceChart(classData){
+  const canvas = document.getElementById('confidenceChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const data = computeConfidenceData(classData || []);
+  const labels = ['high','medium','low'];
+  const values = labels.map(l => {
+    const b = data[l];
+    return b.total ? (b.correct / b.total) * 100 : 0;
+  });
+
+  // simple bar chart
+  const barWidth = 80;
+  const gap = 40;
+  const baseY = 180;
+  ctx.font = '12px Inter, sans-serif';
+  ctx.fillStyle = '#fff';
+  labels.forEach((lab, i) => {
+    const x = i * (barWidth + gap) + 40;
+    const h = (values[i] / 100) * 150;
+    // bar
+    ctx.fillStyle = 'rgba(6,182,212,0.95)';
+    ctx.fillRect(x, baseY - h, barWidth, h);
+    // label
+    ctx.fillStyle = '#fff';
+    ctx.fillText(lab.charAt(0).toUpperCase() + lab.slice(1), x, baseY + 15);
+    // value
+    ctx.fillText(Math.round(values[i]) + '%', x, baseY - h - 6);
+  });
+}
+
 // Helper: find scenario by id (flexible matching)
 function findScenarioById(id){
   if (!scenarios || !id) return null;
@@ -770,6 +832,8 @@ async function loadTeacherData(){
       b.addEventListener('click', () => openStudentDetail(name));
     });
   }, 10);
+  // render confidence chart for class
+  try { renderConfidenceChart(classData); } catch(e) { console.warn('Confidence chart render failed', e); }
 }
 
 // Open student detail and show latest replay (if present)
