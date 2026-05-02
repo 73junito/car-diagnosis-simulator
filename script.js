@@ -19,6 +19,9 @@ let currentClassCode = localStorage.getItem('carSim_currentClassCode') || null;
 const scenarios = window.scenarios || [];
 const total = scenarios.length;
 
+// API base: set `window.API_BASE_URL` in hosting environment to point to deployed API.
+const API_BASE = (typeof window.API_BASE_URL !== 'undefined' && window.API_BASE_URL) ? String(window.API_BASE_URL).replace(/\/$/, '') : '';
+
 // Central application state (stabilization layer)
 const AppState = {
   user: null,
@@ -70,7 +73,8 @@ function startDemo(){
 /* =========== API HELPERS (minimal, with local fallback) =========== */
 async function apiGet(path){
   try {
-    const res = await fetch(path, { credentials: 'same-origin' });
+    const url = API_BASE ? (API_BASE + path) : path;
+    const res = await fetch(url, { credentials: 'same-origin' });
     if (!res.ok) return null;
     return await res.json();
   } catch (e){ return null; }
@@ -78,7 +82,8 @@ async function apiGet(path){
 
 async function apiPost(path, body){
   try {
-    const res = await fetch(path, { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body), credentials: 'same-origin' });
+    const url = API_BASE ? (API_BASE + path) : path;
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body), credentials: 'same-origin' });
     if (!res.ok) return null;
     return await res.json();
   } catch (e){ return null; }
