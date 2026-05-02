@@ -19,17 +19,15 @@ jobs:
           node-version: '18'
 
       - name: Install API dependencies
-        run: |
-          cd car-diagnosis-sim/torquemind-api
-          npm ci
+        working-directory: torquemind-api
+        run: npm ci
 
       - name: Run auth-aware smoke test
+        working-directory: torquemind-api
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
           BASE_URL: ${{ secrets.BASE_URL }}
-        run: |
-          cd car-diagnosis-sim/torquemind-api
-          npm run test:smoke
+        run: npm run test:smoke
