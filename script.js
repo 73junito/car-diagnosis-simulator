@@ -808,11 +808,22 @@ function showReplay(student){
     const content = document.createElement('span'); content.innerHTML = formatReplayActionWithDelta(a, prev);
     // highlight wrong actions against scenario if possible
     const scen = (typeof last.scenario === 'number' && scenarios[last.scenario]) ? scenarios[last.scenario] : null;
-    if (isWrongAction(a, scen)) el.classList.add('wrong');
+    const wrong = isWrongAction(a, scen);
+    if (wrong) {
+      el.classList.add('wrong');
+      const tag = document.createElement('span'); tag.className = 'tag'; tag.innerText = 'Incorrect';
+      content.appendChild(tag);
+    }
     el.appendChild(t); el.appendChild(content);
     timeline.appendChild(el);
   });
+  // summary at top
+  const summaryHtml = `<div class="replay-summary"><strong>Outcome:</strong> ${last.result || last.lastResult || '—'}</div>`;
+  timeline.insertAdjacentHTML('afterbegin', summaryHtml);
+
   // wire playback controls for this replay
+  // ensure any previous playback is stopped when opening a new replay
+  stopReplay();
   const playBtn = document.getElementById('replay-play');
   const stopBtn = document.getElementById('replay-stop');
   const speedSel = document.getElementById('replay-speed');
@@ -826,25 +837,44 @@ function showReplay(student){
 }
 
 let replayTimer = null;
-function playReplay(actions, intervalMs){
-  stopReplay();
-  if (!actions || !actions.length) return;
-  const timeline = document.getElementById('replayTimeline');
-  let i = 0;
-  replayTimer = setInterval(() => {
-    if (i >= actions.length){ stopReplay(); return; }
-    // highlight current
-    const prev = timeline.querySelector('.replay-item.playing'); if (prev) prev.classList.remove('playing');
-    const cur = timeline.querySelector('.replay-item[data-idx="' + i + '"]');
-    // fallback selection method
-    const cur2 = timeline.querySelector('[data-idx="' + i + '"]');
-    const node = cur || cur2;
-    if (node) { node.classList.add('playing'); node.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-    i++;
-  }, intervalMs || 800);
+
+function highlightStep(index){
+  const items = document.querySelectorAll('.replay-item');
+  items.forEach((el, i) => el.classList.toggle('active', i === index));
+  const cur = document.querySelector('.replay-item.active');
+  if (cur) cur.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-function stopReplay(){ if (replayTimer) { clearInterval(replayTimer); replayTimer = null; const prev = document.querySelector('.replay-item.playing'); if (prev) prev.classList.remove('playing'); } }
+function playReplay(actions, baseMs){
+  // Prevent overlap
+  stopReplay();
+  if (!actions || !actions.length) return;
+  // Reset previous highlights
+  document.querySelectorAll('.replay-item').forEach(el => el.classList.remove('active'));
+
+  const speedBase = baseMs || 800;
+  const speedFactor = speedBase / 800;
+  let i = 0;
+
+  function step(){
+    if (i >= actions.length){ stopReplay(); return; }
+    highlightStep(i);
+    const prevTime = actions[i-1]?.time;
+    let delay = speedBase;
+    if (prevTime){
+      const raw = actions[i].time - prevTime;
+      delay = Math.min(Math.max(raw, 200), 3000) * speedFactor;
+    }
+    replayTimer = setTimeout(() => { i++; step(); }, delay);
+  }
+
+  step();
+}
+
+function stopReplay(){
+  if (replayTimer){ clearTimeout(replayTimer); replayTimer = null; }
+  document.querySelectorAll('.replay-item.active').forEach(el => el.classList.remove('active'));
+}
 
 function formatReplayActionWithDelta(a, prev){
   const time = new Date(a.time).toLocaleTimeString();
@@ -873,7 +903,6 @@ function isWrongAction(a, scenario){
     return String(a.value).toLowerCase() !== String(scenario.primarySystem || '').toLowerCase();
   }
   if (a.type === 'diagnosis'){
-    // compare to scenario.fault (handle object/label)
     const expected = scenario.fault || scenario.correct || scenario.answer || '';
     return String(a.value).toLowerCase() !== String(expected).toLowerCase();
   }

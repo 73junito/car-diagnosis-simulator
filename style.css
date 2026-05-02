@@ -123,7 +123,10 @@ button:hover{opacity:0.95}
 
 /* replay highlights */
 .replay-item.wrong { color: #f87171; }
-.replay-item.playing { background: rgba(6,182,212,0.06); border-left:3px solid var(--accent); }
+.replay-item.active { background: rgba(6,182,212,0.08); border-left:3px solid var(--accent); transition: background 220ms ease; }
+
+.replay-summary{ margin-bottom:8px; font-size:0.95rem; color:var(--muted,#9aa); }
+.tag{ margin-left:10px; font-size:0.75rem; color:#f87171; background:rgba(248,113,113,0.06); padding:2px 6px; border-radius:4px; }
 
 /* replay controls */
 #replay-play, #replay-stop { padding:8px 10px; border-radius:6px; }
