@@ -180,6 +180,24 @@
       <option value="teacher">Teacher</option>
     </select>
     <input id="schoolCode" placeholder="School Code (optional)" />
+    <!-- Class flow controls -->
+    <div id="classControls" style="margin-top:8px">
+      <div id="teacherClassControls" style="display:none">
+        <label style="font-size:90%; color:var(--muted)">Your Classes</label>
+        <select id="teacherClassesSelect"></select>
+        <div style="margin-top:6px; display:flex; gap:8px">
+          <input id="newClassName" placeholder="New class name" />
+          <button id="btn-create-class">Create Class</button>
+        </div>
+      </div>
+      <div id="studentClassControls" style="display:none">
+        <label style="font-size:90%; color:var(--muted)">Join Class</label>
+        <div style="display:flex; gap:8px; margin-top:6px">
+          <input id="joinClassCode" placeholder="Enter class code" />
+          <button id="btn-join-class">Join</button>
+        </div>
+      </div>
+    </div>
     <div style="margin-top:8px">
       <button id="btn-enter">Enter</button>
     </div>

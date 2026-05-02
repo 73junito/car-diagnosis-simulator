@@ -12,6 +12,9 @@ let userRole = 'student';
 let schoolCode = '';
 let demoMode = false;
 let activeSystemFilter = null;
+// Class context
+let currentClassId = localStorage.getItem('carSim_currentClassId') || null;
+let currentClassCode = localStorage.getItem('carSim_currentClassCode') || null;
 
 const scenarios = window.scenarios || [];
 const total = scenarios.length;
@@ -63,6 +66,29 @@ function startDemo(){
   setView('gameScreen');
   loadScenario();
 }
+
+/* =========== API HELPERS (minimal, with local fallback) =========== */
+async function apiGet(path){
+  try {
+    const res = await fetch(path, { credentials: 'same-origin' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e){ return null; }
+}
+
+async function apiPost(path, body){
+  try {
+    const res = await fetch(path, { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body), credentials: 'same-origin' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e){ return null; }
+}
+
+async function createClass(name){ return apiPost('/api/classes', { name }); }
+async function getClasses(){ return apiGet('/api/classes'); }
+async function findClassByCode(code){ return apiGet('/api/classes/by-code/' + encodeURIComponent(code)); }
+async function enrollInClass(classId, code){ return apiPost(`/api/classes/${classId}/enroll`, { code }); }
+
 
 // navigation alias that accepts context
 function navigate(viewId, data){
@@ -661,6 +687,12 @@ function markScenarioComplete(student, scenarioId){
       if (!a.completed.includes(scenarioId)) a.completed.push(scenarioId);
     }
   });
+  // attempt to record completion to backend
+  try {
+    if (typeof currentUser !== 'undefined' && currentUser && !demoMode){
+      apiPost('/api/complete', { userId: currentUser, scenarioId, classId: currentClassId });
+    }
+  } catch(e){}
 }
 
 function getStudentRecord(name){
@@ -861,6 +893,13 @@ async function saveProgress(){
   if (existingIndex >= 0) classData[existingIndex] = student;
   else classData.push(student);
   localStorage.setItem('carSim_class', JSON.stringify(classData));
+  // attempt to send replay to backend (best-effort)
+  try {
+    if (!demoMode && currentUser){
+      const payload = { userId: currentUser, scenarioId: currentIndex, actions: student.replays && student.replays.length ? student.replays[student.replays.length-1].actions : [], result: (lastExplanation && lastExplanation.final) || null, confidence: (lastExplanation && lastExplanation.confidence) || null, classId: currentClassId };
+      apiPost('/api/replay', payload);
+    }
+  } catch(e){}
 }
 
 async function loadUserData(){
@@ -1027,6 +1066,27 @@ async function login(){
 
   // route via central router
   if(userRole === 'teacher'){
+    // attempt to load or create a class for this teacher
+    try {
+      const list = await getClasses();
+      const classes = (list && list.classes) ? list.classes : (list && list.length ? list : []);
+      if (classes && classes.length){
+        // pick first by default
+        currentClassId = classes[0].id;
+        currentClassCode = classes[0].class_code || null;
+        localStorage.setItem('carSim_currentClassId', currentClassId);
+        localStorage.setItem('carSim_currentClassCode', currentClassCode || '');
+      } else {
+        // create a default class
+        const created = await createClass(currentUser + "'s Class");
+        if (created && created.success && created.class){
+          currentClassId = created.class.id;
+          currentClassCode = created.class.class_code || null;
+          localStorage.setItem('carSim_currentClassId', currentClassId);
+          localStorage.setItem('carSim_currentClassCode', currentClassCode || '');
+        }
+      }
+    } catch(e){ console.warn('Class load/create failed', e); }
     setView('teacherScreen');
     await loadTeacherData();
     return;
@@ -1290,6 +1350,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ===== LOGIN ===== */
   safeBind('btn-enter', () => login());
+  // class UI handlers
+  const teacherControls = document.getElementById('teacherClassControls');
+  const studentControls = document.getElementById('studentClassControls');
+  const roleSel = document.getElementById('role');
+  if (roleSel){
+    roleSel.onchange = () => {
+      if (roleSel.value === 'teacher') { if (teacherControls) teacherControls.style.display = 'block'; if (studentControls) studentControls.style.display = 'none'; }
+      else { if (teacherControls) teacherControls.style.display = 'none'; if (studentControls) studentControls.style.display = 'block'; }
+    };
+  }
+  // create class
+  const createBtn = document.getElementById('btn-create-class');
+  if (createBtn) createBtn.onclick = async () => {
+    const name = (document.getElementById('newClassName') || {}).value || (currentUser ? (currentUser + "'s Class") : 'New Class');
+    if (!name) return alert('Enter a class name');
+    const res = await createClass(name);
+    if (res && res.success && res.class){
+      currentClassId = res.class.id;
+      currentClassCode = res.class.class_code || null;
+      localStorage.setItem('carSim_currentClassId', currentClassId);
+      localStorage.setItem('carSim_currentClassCode', currentClassCode || '');
+      // refresh teacher classes select
+      try { await loadTeacherClasses(); } catch(e){}
+      alert('Class created: ' + (res.class.name || '') + ' — code: ' + (currentClassCode || '')); 
+      setView('teacherScreen');
+      await loadTeacherData();
+    } else {
+      alert('Failed to create class (backend unavailable) — saved locally');
+      currentClassId = 'local-' + Date.now();
+      currentClassCode = Math.random().toString(36).slice(2,8).toUpperCase();
+      localStorage.setItem('carSim_currentClassId', currentClassId);
+      localStorage.setItem('carSim_currentClassCode', currentClassCode);
+      setView('teacherScreen');
+      await loadTeacherData();
+    }
+  };
+
+  // join class (student)
+  const joinBtn = document.getElementById('btn-join-class');
+  if (joinBtn) joinBtn.onclick = async () => {
+    const code = (document.getElementById('joinClassCode') || {}).value.trim();
+    if (!code) return alert('Enter a class code to join');
+    const found = await findClassByCode(code);
+    if (found && found.id || (found && found.class && found.class.id)){
+      const cls = found.class || found;
+      const res = await enrollInClass(cls.id, code);
+      if (res && res.success){
+        currentClassId = cls.id;
+        currentClassCode = cls.class_code || code;
+        localStorage.setItem('carSim_currentClassId', currentClassId);
+        localStorage.setItem('carSim_currentClassCode', currentClassCode || '');
+        alert('Joined class');
+        // proceed to student flow
+        setView('scenarioSelectScreen');
+        renderScenarioList();
+      } else {
+        alert('Failed to join class.');
+      }
+    } else {
+      alert('Class code not found');
+    }
+  };
 
   /* ===== GAME TOOLS ===== */
   safeBind('btn-battery', () => check('battery'));
