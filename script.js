@@ -495,12 +495,14 @@ async function saveProgress(){
     }
   }
 
+  // attach replays to student record when available
   localStorage.setItem('carSim_' + currentUser, JSON.stringify(student));
   const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
   const existingIndex = classData.findIndex(s => s.name === currentUser);
-  // preserve and append explanations history per student
+  // preserve and append explanations and replays history per student
   const existing = (existingIndex >= 0) ? classData[existingIndex] : null;
   student.explanations = existing && existing.explanations ? existing.explanations.slice() : [];
+  student.replays = existing && existing.replays ? existing.replays.slice() : [];
   if (lastExplanation) {
     const lastSaved = student.explanations.length ? student.explanations[student.explanations.length - 1] : null;
     if (!lastSaved || lastSaved.scenarioIndex !== lastExplanation.scenarioIndex) {
@@ -508,6 +510,12 @@ async function saveProgress(){
       const copy = Object.assign({}, lastExplanation, { savedAt: new Date().toISOString() });
       student.explanations.push(copy);
     }
+  }
+  // save replay snapshot if any actions captured
+  if (currentReplay && currentReplay.length) {
+    student.replays.push({ scenario: currentIndex, actions: currentReplay.slice(), savedAt: new Date().toISOString() });
+    // reset current replay after saving
+    currentReplay = [];
   }
   if (existingIndex >= 0) classData[existingIndex] = student;
   else classData.push(student);
@@ -551,6 +559,8 @@ function loadScenario(){
   toolUses = 0;
   selectedSystem = null;
   // sync runtime state into AppState
+  // reset replay for this scenario run
+  currentReplay = [];
   AppState.scenarioIndex = currentIndex;
   AppState.score = score;
   AppState.system = selectedSystem;
@@ -584,6 +594,8 @@ function loadScenario(){
 }
 
 function check(component){
+  // capture tool use for replay
+  try { currentReplay.push({ type: 'tool', value: component, time: Date.now() }); } catch(e){}
   if (window.DiagnosticEngine && window.DiagnosticEngine.useTool) {
     return window.DiagnosticEngine.useTool(AppState, component);
   }
@@ -594,6 +606,8 @@ function check(component){
 function selectSystem(sys){
   selectedSystem = sys;
   AppState.system = sys;
+  // record selection in replay (justification captured below)
+  try { currentReplay.push({ type: 'system', value: sys, time: Date.now() }); } catch(e){}
   // capture optional short justification from the UI input
   try { systemJustification = (document.getElementById('systemReason') && document.getElementById('systemReason').value) ? document.getElementById('systemReason').value.trim() : ''; } catch(e){ systemJustification = ''; }
   const panel = document.getElementById('systemPanel');
@@ -609,6 +623,8 @@ function selectSystem(sys){
 }
 
 async function diagnose(choice){
+  // capture diagnosis selection for replay
+  try { currentReplay.push({ type: 'diagnosis', value: choice, time: Date.now() }); } catch(e){}
   if (window.DiagnosticEngine && window.DiagnosticEngine.diagnose) return window.DiagnosticEngine.diagnose(AppState, choice);
   pendingDiagnosisChoice = choice;
   const panel = document.getElementById('confidencePanel'); if (panel) panel.style.display = 'block';
@@ -616,6 +632,8 @@ async function diagnose(choice){
 
 // Apply diagnosis after user selects confidence via UI
 async function applyDiagnosisWithConfidence(conf){
+  // capture confidence selection
+  try { currentReplay.push({ type: 'confidence', value: conf, time: Date.now() }); } catch(e){}
   if (window.DiagnosticEngine && window.DiagnosticEngine.applyDiagnosisWithConfidence) return window.DiagnosticEngine.applyDiagnosisWithConfidence(AppState, conf);
   // fallback
   alert('Diagnostic engine unavailable');
@@ -731,7 +749,7 @@ async function loadTeacherData(){
   const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
   if (classData.length === 0){ container.innerHTML = '<p>No student data yet.</p>'; return; }
   container.innerHTML = classData.map(s => `
-    <div style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">
+    <div class="teacher-student-entry" data-student-name="${s.name}" style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">
       <h3>${s.name}</h3>
       <p>Score: ${s.score}</p>
       <p>Accuracy: ${s.correct} / ${s.correct + s.wrong}</p>
@@ -739,8 +757,68 @@ async function loadTeacherData(){
       <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>
       <p>Last: ${s.lastUpdated || '—'}</p>
       <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>
+      <div style="margin-top:8px"><button class="btn-view-replay secondary-cta" data-name="${s.name}">View Replay</button></div>
     </div>
   `).join('');
+
+  // bind replay buttons
+  setTimeout(() => {
+    const buttons = document.querySelectorAll('.btn-view-replay');
+    buttons.forEach(b => {
+      const name = b.getAttribute('data-name');
+      if (!name) return;
+      b.addEventListener('click', () => openStudentDetail(name));
+    });
+  }, 10);
+}
+
+// Open student detail and show latest replay (if present)
+function openStudentDetail(name){
+  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  const student = classData.find(s => s.name === name);
+  if (!student){ alert('Student data not found'); return; }
+  // render some quick stats into teacherDecisions area
+  const dec = document.getElementById('teacherDecisions');
+  if (dec) {
+    dec.style.display = 'block';
+    dec.innerHTML = `
+      <h3>${student.name}</h3>
+      <p>Score: ${student.score}</p>
+      <p>Accuracy: ${student.correct} / ${student.correct + student.wrong}</p>
+      <p>Last: ${student.lastUpdated || '—'}</p>
+    `;
+  }
+  showReplay(student);
+}
+
+function showReplay(student){
+  const viewer = document.getElementById('replayViewer');
+  const timeline = document.getElementById('replayTimeline');
+  if (!viewer || !timeline) return;
+  const replays = student.replays || [];
+  if (!replays.length){ timeline.innerHTML = '<p>No replay data available for this student.</p>'; viewer.style.display = 'block'; return; }
+  // show most recent replay by default
+  const last = replays[replays.length - 1];
+  timeline.innerHTML = '';
+  last.actions.forEach(a => {
+    const el = document.createElement('div'); el.className = 'replay-item';
+    const t = document.createElement('span'); t.className = 'replay-time'; t.innerText = new Date(a.time).toLocaleTimeString();
+    const content = document.createElement('span'); content.innerHTML = formatReplayAction(a);
+    el.appendChild(t); el.appendChild(content);
+    timeline.appendChild(el);
+  });
+  viewer.style.display = 'block';
+}
+
+function formatReplayAction(a){
+  if (!a || !a.type) return '';
+  switch(a.type){
+    case 'system': return `Selected system: <strong>${a.value}</strong>` + (a.justification ? ` — ${a.justification}` : '');
+    case 'tool': return `Used tool: <strong>${a.value}</strong>`;
+    case 'diagnosis': return `Diagnosis chosen: <strong>${a.value}</strong>`;
+    case 'confidence': return `Confidence: <strong>${a.value}</strong>`;
+    default: return `${a.type}: ${JSON.stringify(a)}`;
+  }
 }
 
 async function exportAll(){

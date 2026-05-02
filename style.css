@@ -116,6 +116,11 @@ button:hover{opacity:0.95}
 .overlay-card{background:var(--card);padding:20px;border-radius:10px;color:#fff;max-width:420px;text-align:center}
 .overlay-card .muted{color:var(--muted)}
 
+/* Replay viewer */
+#replayTimeline { margin-top:10px; font-size:0.95rem; }
+.replay-item { padding:8px 6px; border-bottom:1px solid rgba(255,255,255,0.04); }
+.replay-time { color:var(--muted); font-size:0.85rem; margin-right:8px }
+
 /* CTA styles */
 .primary-cta{background:#06b6d4;color:#042b2e;border:none;padding:12px 16px;border-radius:8px;font-weight:600}
 .ghost-cta{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff;padding:10px 14px;border-radius:8px}
