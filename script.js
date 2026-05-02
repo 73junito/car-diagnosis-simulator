@@ -110,6 +110,49 @@ function openScenarioSelect(){
   renderScenarioList();
 }
 
+// render tools dynamically based on scenario.tests
+function renderTools(scenario){
+  const toolsDiv = document.getElementById('tools');
+  if (!toolsDiv) return;
+  // clear and build
+  toolsDiv.innerHTML = '<h3>Tools</h3>';
+  const tests = scenario && scenario.tests ? Object.keys(scenario.tests) : [];
+  if (!tests.length) {
+    toolsDiv.innerHTML += '<div style="color:var(--muted)">No tools available for this scenario.</div>';
+    return;
+  }
+  tests.forEach(test => {
+    const btn = document.createElement('button');
+    btn.innerText = `Check ${test}`;
+    btn.onclick = () => check(test);
+    // disable if student isolated a different system (optional enforcement)
+    const toolSystem = (scenario.tests && scenario.tests[test] && scenario.tests[test].system) ? scenario.tests[test].system : (test.includes('bat')||test.includes('battery')? 'electrical' : (test.includes('fuel')? 'fuel' : 'other'));
+    if (AppState.system && toolSystem && AppState.system !== toolSystem) btn.disabled = true; // disable irrelevant tools when a system is isolated
+    toolsDiv.appendChild(btn);
+  });
+}
+
+// render diagnoses (repair actions) dynamically
+function renderDiagnoses(scenario){
+  const diagContainer = document.getElementById('diagnosisActions');
+  if (!diagContainer) return;
+  // keep Next and Download buttons present — we will prepend diagnosis buttons
+  const keepNext = diagContainer.querySelector('#next');
+  const keepDl = diagContainer.querySelector('#download-report');
+  const faults = scenario && scenario.faults && scenario.faults.length ? scenario.faults : (scenario && scenario.fault ? [{label: scenario.fault}] : []);
+  // clear
+  diagContainer.innerHTML = '';
+  faults.forEach(f => {
+    const label = f.label || f;
+    const btn = document.createElement('button');
+    btn.innerText = (typeof label === 'string') ? label : JSON.stringify(label);
+    btn.onclick = () => diagnose(label);
+    diagContainer.appendChild(btn);
+  });
+  if (keepNext) diagContainer.appendChild(keepNext);
+  if (keepDl) diagContainer.appendChild(keepDl);
+}
+
 // Firestore optional integration (CDN/global firebase)
 let useFirestore = false;
 let db = null;
@@ -167,67 +210,22 @@ const systemWeights = {
   other: 0.5
 };
 
-// Format tool outputs into a consistent technician-style report
+// Delegate diagnostic functions to DiagnosticEngine (extracted module)
 function formatToolOutput(systemLabel, testName, value, interpretation, conclusion){
-  return `[SYSTEM: ${systemLabel}]\nTest: ${testName}\nResult: ${value}\nInterpretation: ${interpretation}\nConclusion: ${conclusion}`;
+  return (window.DiagnosticEngine && window.DiagnosticEngine.formatToolOutput)
+    ? window.DiagnosticEngine.formatToolOutput(systemLabel, testName, value, interpretation, conclusion)
+    : `[SYSTEM: ${systemLabel}]\nTest: ${testName}\nResult: ${value}\nInterpretation: ${interpretation}\nConclusion: ${conclusion}`;
 }
 
-// Lightweight fault probability model (priors initialized per scenario)
-let faultProbabilities = {};
+// Use engine's shared fault probabilities if available
+let faultProbabilities = (window.DiagnosticEngine && window.DiagnosticEngine.faultProbabilities) ? window.DiagnosticEngine.faultProbabilities : {};
 
-// Simple fault interaction model (keeps interactions small and explainable)
-const faultInteractions = {
-  battery: {
-    affects: {
-      starter: { symptomShift: 'weak_crank', probabilityBoost: 0.2 }
-    }
-  },
-  starter: {
-    affects: {
-      battery: { falseIndication: 'low_voltage_reading', probabilityBoost: 0.1 }
-    }
-  }
-};
+// Keep a reference to interactions if engine exposes them
+const faultInteractions = (window.DiagnosticEngine && window.DiagnosticEngine.faultInteractions) ? window.DiagnosticEngine.faultInteractions : {};
 
-// Centralized evidence -> model update function
 function applyEvidenceToModel(component, interpretation){
-  if (!faultProbabilities || typeof faultProbabilities !== 'object') return;
-  const it = String(interpretation || '').toLowerCase();
-
-  switch(component){
-    case 'battery':
-      if (it.includes('low') || it.includes('problem') || it.includes('<12v')){
-        faultProbabilities.battery = (faultProbabilities.battery || 0.5) + 0.25;
-        faultProbabilities.starter = (faultProbabilities.starter || 0.5) - 0.10;
-      }
-      break;
-    case 'starter':
-      faultProbabilities.starter = (faultProbabilities.starter || 0.5) + 0.20;
-      break;
-    case 'fuel':
-      if (it.includes('no pressure') || it.includes('0 psi')) faultProbabilities.fuel = (faultProbabilities.fuel || 0.5) + 0.20;
-      break;
-    case 'obd':
-      // OBD codes strengthen ECU-related faults moderately
-      faultProbabilities.ecu = (faultProbabilities.ecu || 0.5) + 0.15;
-      break;
-    default:
-      break;
-  }
-
-  // Interaction propagation (small explainable boosts)
-  Object.keys(faultInteractions).forEach(fault => {
-    const inter = faultInteractions[fault];
-    if (inter && inter.affects && inter.affects[component]){
-      const effect = inter.affects[component];
-      faultProbabilities[fault] = (faultProbabilities[fault] || 0.5) + (effect.probabilityBoost || 0);
-    }
-  });
-
-  // clamp probabilities 0..1
-  Object.keys(faultProbabilities).forEach(k => {
-    faultProbabilities[k] = Math.max(0, Math.min(1, faultProbabilities[k]));
-  });
+  if (window.DiagnosticEngine && window.DiagnosticEngine.applyEvidenceToModel) return window.DiagnosticEngine.applyEvidenceToModel(component, interpretation);
+  return null;
 }
 
 // --- Student learning/profile memory (lightweight) ---
@@ -554,94 +552,23 @@ function loadScenario(){
   if (sp) sp.style.display = 'block';
   const conf = document.getElementById('confidencePanel');
   if (conf) conf.style.display = 'none';
+
+  // render dynamic tools + diagnosis options for this scenario
+  try { renderTools(s); } catch(e) { console.warn('renderTools failed', e); }
+  try { renderDiagnoses(s); } catch(e) { console.warn('renderDiagnoses failed', e); }
 }
 
 function check(component){
-  const s = currentScenario();
-  if (!selectedSystem) {
-    document.getElementById('result').innerText = '🔎 Please select the suspected SYSTEM first.';
-    return;
+  if (window.DiagnosticEngine && window.DiagnosticEngine.useTool) {
+    return window.DiagnosticEngine.useTool(AppState, component);
   }
-
-  if(toolUses >= maxToolUses){
-    document.getElementById('result').innerText = '⚠️ No tool uses left!';
-    return;
-  }
-
-  toolUses++;
-  totalToolUsed++;
-  // Build structured evidence from scenario tests
-  const raw = (s.tests && s.tests[component]);
-  let output = { system: 'other', reading: 'No data', interpretation: 'UNKNOWN', source: component };
-  if (raw) {
-    if (typeof raw === 'string') {
-      // backward compatible: simple string -> wrap
-      output.reading = raw;
-      const txt = raw.toLowerCase();
-      if (txt.includes('low') || txt.includes('no pressure') || txt.includes('no fuel') || txt.includes('<12v') || txt.includes('0 psi')) output.interpretation = 'PROBLEM';
-      else output.interpretation = 'OK';
-      // basic system mapping
-      if (component.includes('bat') || component === 'battery' || txt.includes('volt')) output.system = 'electrical';
-      else if (component.includes('fuel')) output.system = 'fuel';
-      else if (component.includes('spark') || component.includes('ignit')) output.system = 'ignition';
-      else if (component.includes('obd')) output.system = 'ecu';
-    } else if (typeof raw === 'object') {
-      output.system = raw.system || 'other';
-      output.reading = raw.reading || '';
-      output.interpretation = raw.interpretation || '';
-    }
-  }
-
-  // store evidence
-  if (!evidence[output.system]) evidence[output.system] = [];
-  // attach the student's justification/rationale for this isolation (if any)
-  output.justification = systemJustification || '';
-  // compute adaptive weight: base by system importance, boost if matches selected system, boost if interpretation indicates problem
-  const baseImportance = systemWeights[output.system] || 0.5;
-  const isolationBoost = (selectedSystem && selectedSystem === output.system) ? 1.2 : 1.0;
-  const problemBoost = (/problem|low|no|<12v|0 psi|leak|misfire/i.test(output.reading + ' ' + output.interpretation)) ? 1.4 : 1.0;
-  output.weight = +(baseImportance * isolationBoost * problemBoost).toFixed(2);
-  evidence[output.system].push(output);
-
-  // annotate evidence with current selected system context
-  output.contextSystem = selectedSystem || 'unspecified';
-
-  // apply evidence into the lightweight probabilistic model
-  try { applyEvidenceToModel(component, output.interpretation || output.reading || ''); } catch(e){ /* safe fallback */ }
-
-  // display shop-style evidence message (more realistic phrasing)
-  // standardized technician-style output
-  const systemMap = { battery: 'Electrical', starter: 'Starting', fuel: 'Fuel Delivery', obd: 'On-Board Diagnostics' };
-  const systemLabel = systemMap[component] || (output.system ? output.system.charAt(0).toUpperCase() + output.system.slice(1) : 'General System');
-  const interpretationText = (output.interpretation && /PROBLEM|problem|LOW|low|NO|no|<12v|0 psi|LEAK|leak/i.test(output.reading + ' ' + output.interpretation)) ? 'Below normal operating range' : 'Within expected range';
-  let conclusion = 'No immediate fault indicated';
-  if (/low|no pressure|<12v|0 psi|leak|stuck|sticky|slipping|slip|misfire|clog/i.test(output.reading + ' ' + output.interpretation)) {
-    conclusion = 'Potential issue detected; follow-up testing recommended';
-  }
-  const formatted = formatToolOutput(systemLabel, component.toUpperCase() + ' TEST', output.reading, interpretationText, conclusion);
-  document.getElementById('result').innerText = formatted + (systemJustification ? `\n\nReason for isolation: ${systemJustification}` : '');
-  // append ranked diagnostic likelihoods (top 3)
-  try {
-    if (faultProbabilities && Object.keys(faultProbabilities).length) {
-      const ranked = Object.entries(faultProbabilities).sort((a,b)=> b[1]-a[1]).slice(0,3);
-      const lines = ranked.map(f => `- ${f[0]}: ${Math.round(f[1]*100)}%`);
-      document.getElementById('result').innerText += `\n\n📊 Diagnostic Likelihoods:\n${lines.join('\n')}`;
-      // ambiguous hint example: starter symptoms may be driven by battery
-      if (component === 'starter' && (faultProbabilities.battery || 0) > 0.6) {
-        document.getElementById('result').innerText += `\n\n⚠️ Note: Starter symptoms may be ambiguous — battery condition is currently likely (${Math.round((faultProbabilities.battery||0)*100)}%).`;
-      }
-    }
-  } catch(e){ /* ignore readout errors */ }
-  if(toolUses > 2){
-    score = Math.max(0, score - 2);
-    document.getElementById('score').innerText = `Score: ${score}`;
-  }
-  document.getElementById('toolsLeft').innerText = `Tools left: ${maxToolUses - toolUses}`;
-  saveProgress();
+  // fallback: engine not available
+  document.getElementById('result').innerText = 'Diagnostic engine unavailable.';
 }
 
 function selectSystem(sys){
   selectedSystem = sys;
+  AppState.system = sys;
   // capture optional short justification from the UI input
   try { systemJustification = (document.getElementById('systemReason') && document.getElementById('systemReason').value) ? document.getElementById('systemReason').value.trim() : ''; } catch(e){ systemJustification = ''; }
   const panel = document.getElementById('systemPanel');
@@ -657,138 +584,16 @@ function selectSystem(sys){
 }
 
 async function diagnose(choice){
-  // Show confidence UI instead of prompt
+  if (window.DiagnosticEngine && window.DiagnosticEngine.diagnose) return window.DiagnosticEngine.diagnose(AppState, choice);
   pendingDiagnosisChoice = choice;
-  const panel = document.getElementById('confidencePanel');
-  if (panel) panel.style.display = 'block';
+  const panel = document.getElementById('confidencePanel'); if (panel) panel.style.display = 'block';
 }
 
 // Apply diagnosis after user selects confidence via UI
 async function applyDiagnosisWithConfidence(conf){
-  const choice = pendingDiagnosisChoice;
-  pendingDiagnosisChoice = null;
-  const s = currentScenario();
-  const out = document.getElementById('result');
-  const confScore = conf === 'high' ? 10 : (conf === 'medium' ? 6 : 3);
-
-  // Simple evidence-based evaluation (same heuristics)
-  let correct = false;
-  const sys = (choice === 'battery' || choice === 'starter' || choice === 'alternator') ? 'electrical'
-            : (choice === 'fuel' ? 'fuel' : (choice === 'spark' || choice === 'spark_plugs' ? 'ignition' : null));
-
-  if (sys && evidence[sys] && evidence[sys].length > 0) {
-    // compute weighted relevance for the candidate system
-    const evidenceSum = evidence[sys].reduce((a,c)=> a + (c.weight || 0), 0);
-    const totalSum = Object.keys(evidence).reduce((a,k)=> a + (evidence[k]||[]).reduce((x,y)=> x + (y.weight||0), 0), 0) || 1;
-    const relevance = evidenceSum / totalSum; // 0..1 ratio for how much evidence supports this system
-
-    const problematic = evidence[sys].some(e => /low|no|problem|leak|slip|misfire|degrad|sticky|clog|<12v|0 psi/i.test(e.reading + ' ' + e.interpretation));
-
-    // Decide correctness using fault match and evidence relevance. If student isolated correctly, allow lower thresholds.
-    const faultMatch = (s.fault && s.fault.includes(choice));
-    const isolationCorrect = selectedSystem === sys;
-
-    if (faultMatch && (relevance >= 0.2 || isolationCorrect || problematic)) correct = true;
-    else correct = false;
-  } else {
-    correct = (choice === s.fault);
-  }
-
-  if (correct) {
-    correctAnswers++;
-    // reward confidence + isolation bonus
-    const isolationBonus = selectedSystem ? (selectedSystem === sys ? 2 : -2) : 0;
-    score += confScore + isolationBonus;
-    out.innerText = `✅ Correct diagnosis based on evidence (+${confScore + (isolationBonus>0?isolationBonus:0)} pts)`;
-  } else {
-    wrongAnswers++;
-    score = Math.max(0, score - 5);
-    out.innerText = `❌ Incorrect diagnosis (-5 pts)`;
-  }
-  document.getElementById('score').innerText = `Score: ${score}`;
-
-  // Build explanation object and render explanation panel for teacher/student transparency
-  try {
-    const evidenceSum = (sys && evidence[sys]) ? evidence[sys].reduce((a,c)=> a + (c.weight || 0), 0) : 0;
-    const totalSum = Object.keys(evidence).reduce((a,k)=> a + (evidence[k]||[]).reduce((x,y)=> x + (y.weight||0), 0), 0) || 1;
-    const relevance = totalSum ? (evidenceSum / totalSum) : 0;
-    const isolationCorrect = selectedSystem === sys;
-    const topEvidence = (sys && evidence[sys]) ? (evidence[sys].slice().sort((a,b)=> (b.weight||0)-(a.weight||0)).slice(0,3).map(e=>({reading:e.reading, interpretation:e.interpretation, weight:e.weight, source:e.source}))) : [];
-    const isolationBonus = selectedSystem ? (selectedSystem === sys ? 2 : -2) : 0;
-    lastExplanation = {
-      selectedSystem: selectedSystem || null,
-      diagnosedSystem: sys || null,
-      systemRationale: systemJustification || '',
-      relevance: +relevance.toFixed(2),
-      evidenceSum: +evidenceSum.toFixed(2),
-      totalSum: +totalSum.toFixed(2),
-      topEvidence,
-      isolationCorrect,
-      confidence: conf,
-      scoreDelta: correct ? (confScore + isolationBonus) : -5,
-      final: correct ? 'Correct' : 'Incorrect',
-      scenarioIndex: currentIndex
-    };
-
-    // update student learning profile (remember across sessions)
-    try {
-      const isCorrect = (lastExplanation.final === 'Correct');
-      updateStudentProfile(isCorrect, selectedSystem || 'unspecified', s.fault || null);
-    } catch(e) { console.warn('Failed to update student profile', e); }
-
-    // render into DOM
-    const panel = document.getElementById('explanationPanel');
-    if (panel) panel.style.display = 'block';
-    const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
-    setText('exp-system', lastExplanation.selectedSystem || '—');
-    setText('exp-rationale', lastExplanation.systemRationale || '—');
-    setText('exp-relevance', Math.round(lastExplanation.relevance * 100) + '%');
-    setText('exp-isolation', lastExplanation.isolationCorrect ? 'Correct' : 'Incorrect');
-    setText('exp-confidence', lastExplanation.confidence);
-    // technician reasoning summary (simple natural language synthesis of top evidence)
-    const reasoningEl = document.getElementById('exp-reasoning');
-    if (reasoningEl) {
-      if (lastExplanation.topEvidence && lastExplanation.topEvidence.length) {
-        const s = lastExplanation.topEvidence.map(e => `${e.reading} (${e.interpretation})`).join('; ');
-        reasoningEl.innerText = `Technician reasoning: observed ${s}.`;
-      } else {
-        reasoningEl.innerText = 'Technician reasoning: No system-specific evidence collected.';
-      }
-    }
-    const evidEl = document.getElementById('exp-evidence');
-    if (evidEl) {
-      evidEl.innerHTML = '';
-      if (lastExplanation.topEvidence.length === 0) evidEl.innerHTML = '<div class="evidence-entry">(no system-specific evidence collected)</div>';
-      lastExplanation.topEvidence.forEach(ev => {
-        const d = document.createElement('div');
-        d.className = 'evidence-entry';
-        d.innerText = `${ev.reading} — ${ev.interpretation} (w:${ev.weight})`;
-        evidEl.appendChild(d);
-      });
-    }
-    setText('exp-final', `Result: ${lastExplanation.final}. Score change: ${lastExplanation.scoreDelta}`);
-  } catch (e) {
-    console.warn('Failed to build explanation', e);
-  }
-
-  // show evidence summary
-  const summary = [];
-  Object.keys(evidence).forEach(k => {
-    if (evidence[k] && evidence[k].length) summary.push(`${k}: ${evidence[k].map(e=>e.reading + ' ('+e.interpretation+')').join('; ')}`);
-  });
-  if (summary.length) out.innerText += '\n\nEvidence:\n' + summary.join('\n');
-
-  // hide confidence panel
-  const panel = document.getElementById('confidencePanel');
-  if (panel) panel.style.display = 'none';
-
-  currentIndex++;
-  await saveProgress();
-  if(currentIndex < scenarios.length){
-    setTimeout(loadScenario, 1200);
-  } else {
-    setTimeout(endGame, 800);
-  }
+  if (window.DiagnosticEngine && window.DiagnosticEngine.applyDiagnosisWithConfidence) return window.DiagnosticEngine.applyDiagnosisWithConfidence(AppState, conf);
+  // fallback
+  alert('Diagnostic engine unavailable');
 }
 
 function nextScenario(){

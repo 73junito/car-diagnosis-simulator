@@ -156,13 +156,11 @@
 
     <div id="result" class="card"></div>
 
-    <div class="card">
-      <button id="diag-battery">Replace Battery</button>
-      <button id="diag-starter">Replace Starter</button>
-      <button id="diag-fuel">Replace Fuel Pump</button>
-      <button id="diag-spark">Replace Spark Plug(s)</button>
-      <button id="next">Next Scenario</button>
-      <button id="download-report" style="display:none;">Download Report</button>
+    <div id="diagnosisPanel" class="card">
+      <div id="diagnosisActions">
+        <button id="next">Next Scenario</button>
+        <button id="download-report" style="display:none;">Download Report</button>
+      </div>
       <div id="confidencePanel" class="card" style="display:none; margin-top:12px">
         <h4 style="margin:6px 0">Select Confidence</h4>
         <div>
@@ -247,10 +245,12 @@
   </div>
 
   <script src="./data/scenarios.js"></script>
+  <script src="./engine/diagnosticEngine.js"></script>
   <!-- Firebase (compat UMD builds) - use compat so existing non-module script.js works -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="./firebase-config.js"></script>
+  <script src="./engine/diagnosticEngine.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>
