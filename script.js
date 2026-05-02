@@ -575,7 +575,7 @@ function renderFilteredStudents(){
       return sys && String(sys.value) === String(activeSystemFilter);
     }));
   }
-  list.innerHTML = `\n    <div style="margin-bottom:8px;">\n      ${activeSystemFilter ? `<span class="filter-pill">Filtered: ${activeSystemFilter}</span><button onclick="clearSystemFilter()" class="ghost">Clear</button>` : '' }\n    </div>\n  ` + (filtered.length ? filtered.map(s => `\n      <div class="teacher-student-entry" data-student-name="${s.name}" style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">\n        <h3>${s.name}</h3>\n        <p>Score: ${s.score}</p>\n        <p>Accuracy: ${s.correct} / ${s.correct + s.wrong}</p>\n        <p>Level: ${s.currentLevel + 1}/${total}</p>\n        <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>\n        <p>Last: ${s.lastUpdated || '—'}</p>\n        <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>\n        <div style="margin-top:8px"><button class="btn-view-replay secondary-cta" data-name="${s.name}">View Replay</button></div>\n      </div>\n    `).join('') : '<div style="color:var(--muted)">No students match the filter.</div>');
+  list.innerHTML = `\n    <div style="margin-bottom:8px;">\n      ${activeSystemFilter ? `<span class="filter-pill">Filtered: ${activeSystemFilter}</span><button onclick="clearSystemFilter()" class="ghost">Clear</button><button onclick="assignTraining('${activeSystemFilter}')">Assign Training</button>` : '' }\n    </div>\n  ` + (filtered.length ? filtered.map(s => `\n      <div class="teacher-student-entry" data-student-name="${s.name}" style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">\n        <h3>${s.name}</h3>\n        <p>Score: ${s.score}</p>\n        <p>Accuracy: ${s.correct} / ${s.correct + s.wrong}</p>\n        <p>Level: ${s.currentLevel + 1}/${total}</p>\n        <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>\n        <p>Last: ${s.lastUpdated || '—'}</p>\n        <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>\n        <div style="margin-top:8px"><button class="btn-view-replay secondary-cta" data-name="${s.name}">View Replay</button></div>\n      </div>\n    `).join('') : '<div style="color:var(--muted)">No students match the filter.</div>');
 
   // bind replay buttons
   setTimeout(() => {
@@ -586,6 +586,68 @@ function renderFilteredStudents(){
       b.addEventListener('click', () => openStudentDetail(name));
     });
   }, 10);
+}
+
+// Recommendation: top 3 scenarios for a system
+function getRecommendedScenarios(system){
+  if (!system) return [];
+  return (scenarios || []).filter(s => s.primarySystem === system).slice(0,3);
+}
+
+function studentWeakInSystem(student, system){
+  const replays = student.replays || [];
+  const relevant = replays.filter(r => {
+    const sys = (r.actions || []).find(a => a.type === 'system');
+    return sys && String(sys.value) === String(system);
+  });
+  if (!relevant.length) return true; // no data -> treat as weak
+  const correct = relevant.filter(r => isCorrectDiagnosis(r)).length;
+  const pct = correct / relevant.length;
+  return pct < 0.7; // threshold
+}
+
+function assignTraining(system){
+  if (!system) return alert('No system selected for assignment');
+  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  const rec = getRecommendedScenarios(system);
+  let assignedCount = 0;
+  const updated = classData.map(student => {
+    if (!studentWeakInSystem(student, system)) return student;
+    student.assigned = student.assigned || [];
+    student.assigned.push({ system, scenarios: rec.map(s => s.id), completed: [], date: Date.now() });
+    assignedCount++;
+    return student;
+  });
+  localStorage.setItem('carSim_class', JSON.stringify(updated));
+  alert(`Assigned ${rec.length} ${system} scenarios to ${assignedCount} weak students`);
+  // refresh view
+  renderFilteredStudents();
+}
+
+function markScenarioComplete(student, scenarioId){
+  if (!student || !student.assigned) return;
+  student.assigned.forEach(a => {
+    if (a.scenarios && a.scenarios.includes(scenarioId)){
+      a.completed = a.completed || [];
+      if (!a.completed.includes(scenarioId)) a.completed.push(scenarioId);
+    }
+  });
+}
+
+function getStudentRecord(name){
+  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  const found = classData.find(s => s.name === name);
+  if (found) return found;
+  const saved = JSON.parse(localStorage.getItem('carSim_' + name) || 'null');
+  return saved || null;
+}
+
+function renderAssignedWork(student){
+  const el = document.getElementById('assignedWork');
+  if (!el) return;
+  if (!student || !student.assigned || !student.assigned.length){ el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.innerHTML = `\n    <h3>Assigned Training</h3>\n    ${student.assigned.map(a => { const done = (a.completed || []).length; const total = (a.scenarios || []).length; return `\n      <div style="margin-bottom:8px;">\n        <strong>${a.system}</strong><br>\n        ${done}/${total} completed\n      </div>\n    `; }).join('')}\n  `;
 }
 
 // Helper: find scenario by id (flexible matching)
@@ -701,6 +763,12 @@ async function saveProgress(){
     // reset current replay after saving
     currentReplay = [];
   }
+  // if last explanation was correct, mark assigned scenario completed
+  try {
+    if (lastExplanation && (lastExplanation.final === 'Correct' || lastExplanation.outcome === 'correct')){
+      markScenarioComplete(student, lastExplanation.scenarioIndex || currentIndex);
+    }
+  } catch(e){}
   if (existingIndex >= 0) classData[existingIndex] = student;
   else classData.push(student);
   localStorage.setItem('carSim_class', JSON.stringify(classData));
@@ -878,6 +946,11 @@ async function login(){
   // STUDENT flow: if teacher has assigned a scenario, start it; otherwise show selection
   await loadUserData();
   AppState.profile = studentProfile || {};
+  // render assigned work for student after loading profile
+  try {
+    const studentRecord = getStudentRecord(currentUser);
+    renderAssignedWork(studentRecord);
+  } catch(e){}
   const assignment = JSON.parse(localStorage.getItem('carSim_assignment') || 'null');
   if (assignment && assignment.activeScenario) {
     // try to locate scenario index
