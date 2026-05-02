@@ -1151,7 +1151,34 @@ async function loadTeacherData(){
       console.warn('Failed to load teacher data from Firestore', e);
     }
   }
+  // If currentClassId is set, try to load class-scoped teacher data from backend
+  if (currentClassId) {
+    try {
+      const resp = await apiGet(`/api/teacher/data?classId=${encodeURIComponent(currentClassId)}`);
+      if (resp && resp.users && resp.replays) {
+        // transform API data into classData shape used by UI
+        const users = resp.users || [];
+        const replays = resp.replays || [];
+        const completions = resp.completions || [];
+        const enrolls = resp.enrollments || [];
+        const classData = users.map(u => {
+          const uid = u.id || u.user_id || '';
+          const name = u.email || u.name || uid;
+          const userReplays = replays.filter(r => String(r.user_id) === String(uid)).map(r => ({ scenario: r.scenario_id, actions: r.actions || [], savedAt: r.created_at }));
+          return { name, id: uid, replays: userReplays, explanations: [], studentProfile: {}, completed: completions.some(c => String(c.user_id) === String(uid)) };
+        });
+        if (!classData.length) container.innerHTML = '<p>No student data yet.</p>';
+        // attach to local rendering functions
+        try { renderFilteredStudents(classData); } catch(e){ renderFilteredStudents(); }
+        try { renderConfidenceChart(classData); } catch(e) { console.warn('Confidence chart render failed', e); }
+        try { renderSystemHeatmap(classData); } catch(e) { console.warn('System heatmap render failed', e); }
+        try { renderAutoRecommendations(classData); } catch(e) { console.warn('Auto recommendations render failed', e); }
+        return;
+      }
+    } catch (e) { console.warn('Failed to load class-scoped teacher data', e); }
+  }
 
+  // Fallback to localStorage when backend not available or class not selected
   const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
   if (classData.length === 0){ container.innerHTML = '<p>No student data yet.</p>'; return; }
   // render student list (supports active system filter)
@@ -1353,6 +1380,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // class UI handlers
   const teacherControls = document.getElementById('teacherClassControls');
   const studentControls = document.getElementById('studentClassControls');
+  const teacherSelect = document.getElementById('teacherClassesSelect');
   const roleSel = document.getElementById('role');
   if (roleSel){
     roleSel.onchange = () => {
@@ -1412,6 +1440,30 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Class code not found');
     }
   };
+
+  // load teacher classes into select
+  async function loadTeacherClasses(){
+    const sel = document.getElementById('teacherClassesSelect');
+    if (!sel) return;
+    sel.innerHTML = '';
+    try {
+      const resp = await getClasses();
+      const classes = (resp && resp.classes) ? resp.classes : (resp && resp.length ? resp : []);
+      classes.forEach(c => {
+        const opt = document.createElement('option'); opt.value = c.id; opt.innerText = c.name + (c.class_code ? ` (${c.class_code})` : '');
+        sel.appendChild(opt);
+      });
+      if (currentClassId) sel.value = currentClassId;
+      sel.onchange = async () => {
+        currentClassId = sel.value;
+        localStorage.setItem('carSim_currentClassId', currentClassId || '');
+        await loadTeacherData();
+      };
+    } catch(e){ console.warn('Failed to load teacher classes', e); }
+  }
+
+  // ensure teacher classes loaded when teacher view active
+  if (teacherSelect && roleSel && roleSel.value === 'teacher') loadTeacherClasses();
 
   /* ===== GAME TOOLS ===== */
   safeBind('btn-battery', () => check('battery'));
