@@ -1,0 +1,35 @@
+name: API Smoke Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies (torquemind-api)
+        working-directory: torquemind-api
+        run: npm ci
+
+      - name: Start API server
+        working-directory: torquemind-api
+        run: |
+          nohup npm start >/tmp/torquemind.log 2>&1 &
+          echo "Server starting..."
+
+      - name: Wait for server
+        run: sleep 3
+
+      - name: Run smoke test
+        working-directory: torquemind-api
+        run: npm run test:smoke
