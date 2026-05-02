@@ -815,6 +815,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const finalCta = document.getElementById('final-cta');
   if (finalCta) finalCta.addEventListener('click', () => setView('loginScreen'));
 
+  // New landing buttons
+  const btnStartTraining = document.getElementById('btn-start-training');
+  if (btnStartTraining) btnStartTraining.addEventListener('click', () => setView('loginScreen'));
+
+  const btnDemoNew = document.getElementById('btn-demo');
+  if (btnDemoNew) btnDemoNew.addEventListener('click', () => startDemo());
+
+  const btnStartFinal = document.getElementById('btn-start-final');
+  if (btnStartFinal) btnStartFinal.addEventListener('click', () => setView('loginScreen'));
+
+  const btnStudentMode = document.getElementById('btn-student');
+  if (btnStudentMode) btnStudentMode.addEventListener('click', () => { userRole = 'student'; setView('loginScreen'); });
+
+  const btnTeacherMode = document.getElementById('btn-teacher');
+  if (btnTeacherMode) btnTeacherMode.addEventListener('click', () => { userRole = 'teacher'; setView('loginScreen'); });
+
   const btnHow = document.getElementById('btn-how');
   if (btnHow) btnHow.addEventListener('click', () => {
     alert(

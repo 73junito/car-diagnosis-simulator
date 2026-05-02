@@ -43,35 +43,31 @@
     </div>
   </div>
 
-  <!-- ================= HOMEPAGE ================= -->
-  <div id="homeScreen" style="display:block; padding:40px; text-align:center;">
+  <!-- ================= TORQUEMIND LANDING ================= -->
+  <div id="landingPage" class="landing">
 
     <!-- HERO -->
-    <div class="hero">
-      <div style="display:flex;gap:24px;align-items:center;justify-content:center;flex-wrap:wrap;">
-        <div style="max-width:520px;text-align:left">
-          <h1>TorqueMind</h1>
-          <h2 class="subhead">Diagnostic Training Platform</h2>
-          <p class="tagline">Train the Way You Diagnose.</p>
-          <p>
-            Real-world automotive diagnostic training built on system isolation,
-            evidence-based reasoning, and performance scoring.
-          </p>
+    <section class="hero">
+      <h1>TorqueMind</h1>
+      <p class="hero-sub">
+        Train the Way You Diagnose.
+      </p>
+      <p class="hero-desc">
+        Real-world automotive diagnostic training built on system isolation,
+        evidence-based reasoning, and performance scoring.
+      </p>
 
-          <div style="margin-top:20px; display:flex; gap:10px;">
-            <button id="btn-start-student" class="primary-cta">Start Training</button>
-            <button id="btn-view-demo" class="ghost-cta">View Demo</button>
-            <button id="btn-start-teacher" class="secondary-cta">Instructor</button>
-          </div>
-        </div>
-
-        <div class="hero-media" aria-hidden="true">
-          <!-- visual anchor: add screenshot or animated GIF later -->
-          <div class="hero-media-placeholder">Simulator screenshot<br>placeholder</div>
-        </div>
+      <div class="hero-actions">
+        <button id="btn-start-training">▶ Start Training</button>
+        <button id="btn-demo" class="ghost">▶ Try Demo</button>
       </div>
+    </section>
 
-      <div class="features" style="margin-top:26px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap;">
+    <!-- FEATURES -->
+    <section class="features">
+      <h2>Why TorqueMind</h2>
+
+      <div class="feature-grid">
         <div class="feature">
           <h3>System Isolation</h3>
           <p>Train technicians to diagnose by narrowing systems first.</p>
@@ -83,14 +79,19 @@
         </div>
 
         <div class="feature">
-          <h3>Instructor Analytics</h3>
+          <h3>Real Diagnostic Scenarios</h3>
+          <p>Practice with real-world faults across multiple vehicle systems.</p>
+        </div>
+
+        <div class="feature">
+          <h3>Instructor Insights</h3>
           <p>Track performance, identify weaknesses, and assign targeted training.</p>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- HOW IT WORKS -->
-    <div class="card" style="margin-top:40px;">
+    <section class="how">
       <h2>How It Works</h2>
 
       <div class="steps">
@@ -101,32 +102,47 @@
 
         <div class="step">
           <h3>2. Gather Evidence</h3>
-          <p>Use real diagnostic tools to collect data and interpret results.</p>
+          <p>Use diagnostic tools to collect real data.</p>
         </div>
 
         <div class="step">
           <h3>3. Make the Call</h3>
-          <p>Choose the fault with confidence and receive instant scoring.</p>
+          <p>Choose the fault and receive instant scoring.</p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- MODE CARDS -->
-    <div style="display:flex; gap:20px; justify-content:center; margin-top:40px; flex-wrap:wrap;">
+    <!-- MODES -->
+    <section class="modes">
+      <h2>Training Modes</h2>
 
-      <div class="mode-card">
-        <h2>Student Mode</h2>
-        <p>Practice diagnostic scenarios and improve accuracy.</p>
-        <div style="margin-top:8px"><button onclick="setView('loginScreen')">Start Student Mode</button></div>
+      <div class="mode-grid">
+        <div class="mode-card">
+          <h3>Student Mode</h3>
+          <p>Practice diagnostic scenarios and improve accuracy.</p>
+          <button id="btn-student">Start Student Mode</button>
+        </div>
+
+        <div class="mode-card">
+          <h3>Instructor Mode</h3>
+          <p>Monitor performance and assign targeted training.</p>
+          <button id="btn-teacher">Open Dashboard</button>
+        </div>
       </div>
+    </section>
 
-      <div class="mode-card">
-        <h2>Instructor Mode</h2>
-        <p>Monitor class performance and assign targeted scenarios.</p>
-        <div style="margin-top:8px"><button onclick="setView('loginScreen')">Open Instructor Dashboard</button></div>
-      </div>
+    <!-- TRUST -->
+    <section class="trust">
+      <p>
+        Built for CTE Programs • Automotive Training • Military Maintenance Units
+      </p>
+    </section>
 
-    </div>
+    <!-- FINAL CTA -->
+    <section class="cta">
+      <h2>Ready to train real diagnostic skills?</h2>
+      <button id="btn-start-final">Start Training</button>
+    </section>
 
   </div>
 
