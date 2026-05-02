@@ -400,7 +400,11 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
     window.API_BASE_URL = "https://torquemind-api.onrender.com";
+    // Public Supabase values: replace with your project-specific placeholders
+    window.SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+    window.SUPABASE_ANON_KEY = "YOUR_PUBLIC_ANON_KEY";
   </script>
+  <!-- Lightweight Supabase-free login (no SDK) will use /auth/v1 endpoints directly from script.js -->
   <script src="./script.js"></script>
 </body>
 </html>
