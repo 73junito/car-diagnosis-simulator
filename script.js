@@ -576,6 +576,7 @@ function renderFilteredStudents(){
     }));
   }
   list.innerHTML = `\n    <div style="margin-bottom:8px;">\n      ${activeSystemFilter ? `<span class="filter-pill">Filtered: ${activeSystemFilter}</span><button onclick="clearSystemFilter()" class="ghost">Clear</button><button onclick="assignTraining('${activeSystemFilter}')">Assign Training</button>` : '' }\n    </div>\n  ` + (filtered.length ? filtered.map(s => `\n      <div class="teacher-student-entry" data-student-name="${s.name}" style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">\n        <h3>${s.name}</h3>\n        <p>Score: ${s.score}</p>\n        <p>Accuracy: ${s.correct} / ${s.correct + s.wrong}</p>\n        <p>Level: ${s.currentLevel + 1}/${total}</p>\n        <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>\n        <p>Last: ${s.lastUpdated || '—'}</p>\n        <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>\n        <div style="margin-top:8px"><button class="btn-view-replay secondary-cta" data-name="${s.name}">View Replay</button></div>\n      </div>\n    `).join('') : '<div style="color:var(--muted)">No students match the filter.</div>');
+  list.innerHTML = `\n    <div style="margin-bottom:8px; display:flex; gap:8px; align-items:center">\n      ${activeSystemFilter ? `<span class="filter-pill">Filtered: ${activeSystemFilter}</span><button onclick="clearSystemFilter()" class="ghost">Clear</button><button onclick="assignTraining('${activeSystemFilter}')">Assign to Weak Students</button><button onclick="assignTrainingToSelected('${activeSystemFilter}')">Assign to Selected</button>` : '' }\n    </div>\n  ` + (filtered.length ? filtered.map(s => `\n      <div class="student-row" data-student-name="${s.name}">\n        <input type="checkbox" class="student-select" value="${s.name}" />\n        <div style="flex:1">\n          <strong>${s.name}</strong><br>\n          <span class="muted">${getStudentAssignmentProgress(s)}</span>\n        </div>\n        <div style="display:flex; gap:8px;">\n          <button onclick="openStudentDetail('${s.name}')" class="secondary-cta">View</button>\n          <button class="btn-view-replay secondary-cta" data-name="${s.name}">Replay</button>\n        </div>\n      </div>\n    `).join('') : '<div style="color:var(--muted)">No students match the filter.</div>');
 
   // bind replay buttons
   setTimeout(() => {
@@ -586,6 +587,34 @@ function renderFilteredStudents(){
       b.addEventListener('click', () => openStudentDetail(name));
     });
   }, 10);
+}
+
+function getSelectedStudents(){
+  return Array.from(document.querySelectorAll('.student-select:checked')).map(el => el.value);
+}
+
+function assignTrainingToSelected(system){
+  if (!system) return alert('No system selected for assignment');
+  const selectedNames = getSelectedStudents();
+  if (!selectedNames.length) return alert('Select at least one student');
+  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
+  const rec = getRecommendedScenarios(system);
+  let assignedCount = 0;
+  const updated = classData.map(student => {
+    if (!selectedNames.includes(student.name)) return student;
+    student.assigned = student.assigned || [];
+    student.assigned.push({ system, scenarios: rec.map(s => s.id), completed: [], date: Date.now() });
+    assignedCount++;
+    return student;
+  });
+  localStorage.setItem('carSim_class', JSON.stringify(updated));
+  alert(`Assigned ${system} training to ${assignedCount} selected students`);
+  renderFilteredStudents();
+}
+
+function getStudentAssignmentProgress(student){
+  if (!student || !student.assigned || !student.assigned.length) return '';
+  return student.assigned.map(a => `${a.system}: ${ (a.completed || []).length }/${ (a.scenarios || []).length }`).join(' | ');
 }
 
 // Recommendation: top 3 scenarios for a system

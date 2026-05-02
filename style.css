@@ -273,3 +273,9 @@ button:hover{opacity:0.95}
 .scenario-meta{font-size:0.9rem;color:var(--muted)}
 .scenario-actions{display:flex;gap:8px;align-items:center}
 .filter-pill{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:6px;font-size:90%;color:var(--muted)}
+
+/* Teacher student row */
+.student-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.01)}
+.student-select{width:18px;height:18px}
+.student-row strong{font-size:1rem}
+.student-row .muted{font-size:0.9rem;color:var(--muted)}
