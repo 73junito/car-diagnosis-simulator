@@ -91,7 +91,6 @@ async function main() {
   }
 
   const classId = createClass.body.id || createClass.body.class?.id;
-  const classCode = createClass.body.class_code || createClass.body.class?.class_code;
 
   if (!classId) {
     console.error("Create class response missing class id", createClass.body);
