@@ -99,33 +99,53 @@ async function getUserFromToken(token) {
 async function ensureProfile(userId) {
   if (!userId) return;
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) return;
+  // Prefer using the Supabase admin client with the service role key to bypass RLS
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
-      method: 'POST',
-      headers: {
-        apikey: SUPABASE_SERVICE_ROLE_KEY,
-        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-        'Content-Type': 'application/json',
-        Prefer: 'resolution=merge-duplicates'
-      },
-      body: JSON.stringify({ id: userId, email: TEST_TEACHER_EMAIL, role: 'teacher' })
-    });
-    let error = null;
-    let body = null;
-    try { body = await res.json(); } catch (e) { body = null; }
-    if (!res.ok) {
-      error = body && (body.message || body.error_description || body.error) || `status:${res.status}`;
-    }
+    const { createClient } = require('@supabase/supabase-js');
+    const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const { error } = await admin
+      .from('profiles')
+      .upsert({ id: userId, email: TEST_TEACHER_EMAIL, role: 'teacher' }, { onConflict: 'id', returning: 'minimal' });
+
     console.log('ensureProfile result', {
-      ok: res.ok,
+      ok: !error,
       userId: userId || null,
       email: TEST_TEACHER_EMAIL || null,
       role: 'teacher',
-      error: error || null
+      error: error ? (error.message || JSON.stringify(error)) : null,
     });
-    return { ok: res.ok, body };
+
+    return { ok: !error };
   } catch (e) {
-    console.log('ensureProfile result', { ok: false, userId: userId || null, email: TEST_TEACHER_EMAIL || null, role: 'teacher', error: e && e.message });
+    // Fallback: try REST upsert if the admin client is unavailable
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_SERVICE_ROLE_KEY,
+          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'resolution=merge-duplicates, return=representation'
+        },
+        body: JSON.stringify({ id: userId, email: TEST_TEACHER_EMAIL, role: 'teacher' })
+      });
+      let error = null;
+      let body = null;
+      try { body = await res.json(); } catch (e) { body = null; }
+      if (!res.ok) {
+        error = body && (body.message || body.error_description || body.error) || `status:${res.status}`;
+      }
+      console.log('ensureProfile result', {
+        ok: res.ok,
+        userId: userId || null,
+        email: TEST_TEACHER_EMAIL || null,
+        role: 'teacher',
+        error: error || (e && e.message) || null
+      });
+      return { ok: res.ok, body };
+    } catch (err2) {
+      console.log('ensureProfile result', { ok: false, userId: userId || null, email: TEST_TEACHER_EMAIL || null, role: 'teacher', error: err2 && err2.message });
+    }
   }
 }
 
