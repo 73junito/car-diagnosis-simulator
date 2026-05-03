@@ -71,3 +71,9 @@ jobs:
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
           BASE_URL: http://localhost:3000
         run: npm run test:smoke
+
+      - name: Show server log (after tests)
+        if: always()
+        run: |
+          echo "--- /tmp/torquemind.log (after tests) ---"
+          tail -n +1 /tmp/torquemind.log || true
