@@ -78,6 +78,24 @@ async function signInTeacher() {
   return { token: body.access_token, user: body.user || null };
 }
 
+async function getUserFromToken(token) {
+  if (!token || !SUPABASE_URL) return null;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json'
+      }
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.user || data;
+  } catch (e) {
+    return null;
+  }
+}
+
 async function ensureProfile(userId) {
   if (!userId) return;
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) return;
@@ -102,7 +120,12 @@ async function main() {
 
   const signIn = await signInTeacher();
   const token = signIn && signIn.token;
-  const userId = signIn && signIn.user && signIn.user.id;
+  let userId = signIn && signIn.user && signIn.user.id;
+
+  if (!userId && token) {
+    const u = await getUserFromToken(token);
+    userId = u && u.id;
+  }
 
   // Ensure the test teacher has a profile with teacher role (use service role key)
   await ensureProfile(userId);
