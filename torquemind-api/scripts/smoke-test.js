@@ -19,11 +19,13 @@ async function request(path, options = {}, token = null) {
     headers,
   });
 
-  let body = null;
+  const raw = await res.text();
+  let body = raw;
+
   try {
-    body = await res.json();
+    body = raw ? JSON.parse(raw) : null;
   } catch {
-    body = await res.text();
+    body = raw;
   }
 
   return { status: res.status, ok: res.ok, body };
