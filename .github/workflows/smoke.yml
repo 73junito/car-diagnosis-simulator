@@ -47,6 +47,12 @@ jobs:
           cat /tmp/torquemind.log || true
           exit 1
 
+      - name: Show API startup log
+        run: |
+          echo "----- API LOG -----"
+          cat /tmp/torquemind.log || true
+          echo "-------------------"
+
       - name: Run auth-aware smoke test
         working-directory: torquemind-api
         env:
