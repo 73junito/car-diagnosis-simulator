@@ -55,6 +55,12 @@ jobs:
           cat /tmp/torquemind.log || true
           exit 1
 
+      - name: Show server log
+        if: always()
+        run: |
+          echo "--- /tmp/torquemind.log ---"
+          cat /tmp/torquemind.log || true
+
       - name: Run smoke test
         working-directory: torquemind-api
         env:
