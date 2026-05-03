@@ -1,3 +1,5 @@
+const { createClient } = require('@supabase/supabase-js');
+
 module.exports = function createAuthMiddleware(supabase){
   return async function authMiddleware(req, res, next){
     // Quick request-level trace to confirm middleware invocation in CI
@@ -24,20 +26,34 @@ module.exports = function createAuthMiddleware(supabase){
         return res.status(401).json({ error: 'Invalid or expired token' });
       }
       const user = data.user;
-      // Prefer loading role from a dedicated `profiles` table (recommended)
-      // Fallback to `users` table if `profiles` doesn't exist or has no role field.
+      // Prefer loading role from a dedicated `profiles` table (recommended).
+      // Because projects often enable RLS, run the profiles query as the
+      // authenticated user by creating a temporary client with the
+      // user's access token so auth.uid() policies work correctly.
       let attached = { id: user.id, email: user.email };
       try {
-        const { data: prof, error: profErr } = await supabase.from('profiles').select('role, id, email, name').eq('id', user.id).maybeSingle();
-        if (prof && Object.keys(prof).length) {
-          attached = { ...attached, ...prof };
+        const anon = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+        const url = process.env.SUPABASE_URL;
+        let prof = null;
+        if (url && anon) {
+          const authedClient = createClient(url, anon, { global: { headers: { Authorization: `Bearer ${token}` } } });
+          const { data: profData } = await authedClient.from('profiles').select('role, id, email, name').eq('id', user.id).maybeSingle();
+          if (profData && Object.keys(profData).length) prof = profData;
+          else {
+            const { data: u } = await authedClient.from('users').select('*').eq('id', user.id).maybeSingle();
+            if (u && Object.keys(u).length) prof = u;
+          }
         } else {
-          // fallback to older `users` table used in some deployments
-          const { data: u, error: uErr } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle();
-          if (u && Object.keys(u).length) attached = { ...attached, ...u };
+          // Fallback to existing client if envs aren't available
+          const { data: profData } = await supabase.from('profiles').select('role, id, email, name').eq('id', user.id).maybeSingle();
+          if (profData && Object.keys(profData).length) prof = profData;
+          else {
+            const { data: u } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle();
+            if (u && Object.keys(u).length) prof = u;
+          }
         }
+        if (prof) attached = { ...attached, ...prof };
       } catch (fetchErr) {
-        // If anything goes wrong querying profiles/users, attach basic user info and continue.
         console.warn('Profile lookup failed; continuing with basic user info', fetchErr && fetchErr.message);
       }
       req.user = attached;
