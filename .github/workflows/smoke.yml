@@ -22,6 +22,31 @@ jobs:
         working-directory: torquemind-api
         run: npm install
 
+      - name: Start API server
+        working-directory: torquemind-api
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          nohup npm start >/tmp/torquemind.log 2>&1 &
+          echo "Server starting..."
+
+      - name: Wait for API
+        working-directory: torquemind-api
+        run: |
+          for i in {1..20}; do
+            if curl -fsS http://localhost:3000/ >/dev/null; then
+              echo "API is ready"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+          echo "API failed to start"
+          cat /tmp/torquemind.log || true
+          exit 1
+
       - name: Run auth-aware smoke test
         working-directory: torquemind-api
         env:
