@@ -59,13 +59,37 @@ async function signInTeacher() {
   }
 
   console.log("0/7 OK: teacher sign-in");
-  return body.access_token;
+  return { token: body.access_token, user: body.user || null };
+}
+
+async function ensureProfile(userId) {
+  if (!userId) return;
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ id: userId, email: TEST_TEACHER_EMAIL, role: 'teacher' })
+    });
+  } catch (e) {
+    console.warn('Failed to ensure profile', e && e.message);
+  }
 }
 
 async function main() {
   console.log(`TorqueMind smoke test against ${BASE_URL}`);
 
-  const token = await signInTeacher();
+  const signIn = await signInTeacher();
+  const token = signIn && signIn.token;
+  const userId = signIn && signIn.user && signIn.user.id;
+
+  // Ensure the test teacher has a profile with teacher role (use service role key)
+  await ensureProfile(userId);
 
   const health = await request("/", {}, token);
   if (!health.ok) {
