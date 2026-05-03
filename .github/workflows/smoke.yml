@@ -16,18 +16,58 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 20
 
       - name: Install API dependencies
         working-directory: torquemind-api
         run: npm ci
+
+      - name: Start API server
+        working-directory: torquemind-api
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          nohup npm start >/tmp/torquemind.log 2>&1 &
+          echo "Server starting..."
+
+      - name: Wait for API
+        working-directory: torquemind-api
+        run: |
+          for i in {1..20}; do
+            if curl -fsS http://localhost:3000/ >/dev/null; then
+              echo "API is ready"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+          echo "API failed to start"
+          cat /tmp/torquemind.log || true
+          exit 1
+
+      - name: Show API startup log
+        run: |
+          echo "----- API LOG -----"
+          cat /tmp/torquemind.log || true
+          echo "-------------------"
 
       - name: Run auth-aware smoke test
         working-directory: torquemind-api
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
-          BASE_URL: ${{ secrets.BASE_URL }}
+          BASE_URL: http://localhost:3000
         run: npm run test:smoke
+
+      - name: Show API runtime log
+        if: always()
+        run: |
+          echo "----- API RUNTIME LOG -----"
+          cat /tmp/torquemind.log || true
+          echo "---------------------------"

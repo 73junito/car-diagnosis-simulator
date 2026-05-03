@@ -9,15 +9,22 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL || null;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
 const SUPABASE_KEY = process.env.SUPABASE_KEY || null;
 
 let supabase = null;
-if (SUPABASE_URL && SUPABASE_KEY) {
+if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+  supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  console.log('Supabase client initialized (ANON)');
+  app.set('supabaseConfigured', true);
+} else if (SUPABASE_URL && SUPABASE_KEY) {
+  // Fallback: initialize with service role key if anon not available
+  // Note: service role key cannot verify client JWTs via supabase.auth.getUser(token)
   supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-  console.log('Supabase client initialized');
+  console.warn('Supabase client initialized with SERVICE key; auth verification may fail');
   app.set('supabaseConfigured', true);
 } else {
-  console.warn('Supabase not configured — set SUPABASE_URL and SUPABASE_KEY');
+  console.warn('Supabase not configured — set SUPABASE_URL and SUPABASE_ANON_KEY');
   app.set('supabaseConfigured', false);
 }
 
@@ -26,8 +33,8 @@ const createAuth = require('./middleware/auth');
 const requireRole = require('./middleware/requireRole');
 const authMiddleware = createAuth(supabase);
 
-// Optional: attach auth middleware to routes to populate `req.user`
-app.use((req,res,next)=> authMiddleware(req,res,next));
+// Auth middleware populates `req.user` on every request when Supabase is configured.
+app.use((req, res, next) => authMiddleware(req, res, next));
 
 // Basic health
 app.get('/', (req, res) => {
