@@ -20,7 +20,7 @@ jobs:
 
       - name: Install API dependencies
         working-directory: torquemind-api
-        run: npm install
+        run: npm ci
 
       - name: Start API server
         working-directory: torquemind-api
