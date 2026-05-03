@@ -20,8 +20,13 @@ module.exports = function createAuthMiddleware(supabase){
 
     const token = auth.replace(/^Bearer\s+/i, '');
     try {
+      console.log('Auth token snippet', { length: token.length, snippet: token.slice(0, 8) });
+    } catch (e) {}
+    try {
       const { data, error } = await supabase.auth.getUser(token);
+      console.log('getUser result', { userId: data && data.user && data.user.id, error: error && error.message });
       if (error || !data || !data.user) {
+        console.warn('Auth failed: invalid/expired token', error && error.message);
         req.user = null;
         return res.status(401).json({ error: 'Invalid or expired token' });
       }
