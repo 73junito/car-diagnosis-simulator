@@ -33,8 +33,8 @@ const createAuth = require('./middleware/auth');
 const requireRole = require('./middleware/requireRole');
 const authMiddleware = createAuth(supabase);
 
-// Optional: attach auth middleware to routes to populate `req.user`
-app.use((req,res,next)=> authMiddleware(req,res,next));
+// Auth middleware populates `req.user` on every request when Supabase is configured.
+app.use((req, res, next) => authMiddleware(req, res, next));
 
 // Basic health
 app.get('/', (req, res) => {
@@ -103,7 +103,7 @@ app.get('/api/teacher/data', requireRole('teacher'), async (req, res) => {
 });
 
 // Create an assignment
-app.post('/api/assign', authMiddleware, requireRole('teacher'), async (req, res) => {
+app.post('/api/assign', requireRole('teacher'), async (req, res) => {
   const { system, scenarioIds, studentIds, classId } = req.body;
   if (!system || !Array.isArray(scenarioIds)) return res.status(400).json({ error: 'system and scenarioIds required' });
   if (!supabase) return res.status(501).json({ error: 'Supabase not configured' });
@@ -146,7 +146,7 @@ function makeClassCode(){
 }
 
 // Create a class (teacher)
-app.post('/api/classes', authMiddleware, requireRole('teacher'), async (req, res) => {
+app.post('/api/classes', requireRole('teacher'), async (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: 'name required' });
   if (!supabase) {
@@ -163,7 +163,7 @@ app.post('/api/classes', authMiddleware, requireRole('teacher'), async (req, res
 });
 
 // Get classes for teacher
-app.get('/api/classes', authMiddleware, requireRole('teacher'), async (req, res) => {
+app.get('/api/classes', requireRole('teacher'), async (req, res) => {
   if (!supabase) return res.json({ classes: [] });
   try {
     const { data, error } = await supabase.from('classes').select('*').eq('owner_id', req.user.id);
@@ -213,7 +213,7 @@ app.post('/api/classes/:classId/enroll', async (req, res) => {
 });
 
 // Get students in a class (teacher)
-app.get('/api/classes/:classId/students', authMiddleware, requireRole('teacher'), async (req, res) => {
+app.get('/api/classes/:classId/students', requireRole('teacher'), async (req, res) => {
   const { classId } = req.params;
   if (!supabase) return res.json({ students: [] });
   try {

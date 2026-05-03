@@ -1,6 +1,7 @@
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TEST_TEACHER_EMAIL = process.env.TEST_TEACHER_EMAIL;
 const TEST_TEACHER_PASSWORD = process.env.TEST_TEACHER_PASSWORD;
 const TIMEOUT = 15000;
@@ -79,13 +80,13 @@ async function signInTeacher() {
 
 async function ensureProfile(userId) {
   if (!userId) return;
-  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) return;
   try {
     await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
       method: 'POST',
       headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: `Bearer ${SUPABASE_KEY}`,
+        apikey: SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
         'Content-Type': 'application/json',
         Prefer: 'resolution=merge-duplicates'
       },
@@ -151,7 +152,7 @@ async function main() {
       method: "POST",
       body: JSON.stringify({
         classId,
-        userId: "smoke-test-teacher",
+        ...(userId && { userId }),
         scenarioId: 1,
         actions: [
           { type: "system", value: "electrical", time: Date.now() },
@@ -178,7 +179,7 @@ async function main() {
       method: "POST",
       body: JSON.stringify({
         classId,
-        userId: "smoke-test-teacher",
+        ...(userId && { userId }),
         scenarioId: 1,
       }),
     },
