@@ -41,16 +41,26 @@ jobs:
           echo "Server starting..."
 
       - name: Wait for server
-        run: sleep 3
+        run: |
+          for i in {1..20}; do
+            if curl -fsS http://localhost:3000/ >/dev/null; then
+              echo "API is ready"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+          echo "API failed to start"
+          cat /tmp/torquemind.log || true
+          exit 1
 
       - name: Run smoke test
         working-directory: torquemind-api
         env:
-          # ensure test step has explicit keys when job-level env is not inherited
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
-          BASE_URL: ${{ secrets.BASE_URL }}
+          BASE_URL: http://localhost:3000
         run: npm run test:smoke
