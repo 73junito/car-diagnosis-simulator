@@ -153,7 +153,11 @@ async function main() {
   }
   console.log("5/7 OK: post completion");
 
-  const teacherData = await request(`/api/teacher/data?classId=${classId}`, {}, token);
+  const teacherData = await request(
+    `/api/teacher/data?classId=${encodeURIComponent(classId)}`,
+    {},
+    token
+  );
 
   if (!teacherData.ok) {
     if (teacherData.status === 501) {
