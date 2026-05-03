@@ -190,6 +190,19 @@ async function main() {
       process.exit(8);
     }
   } else {
+    const teacherDataText =
+      typeof teacherData.body === "string"
+        ? teacherData.body
+        : JSON.stringify(teacherData.body);
+
+    if (!teacherDataText || !teacherDataText.includes(classId)) {
+      console.error("Teacher data missing expected class reference", {
+        classId,
+        teacherData: teacherData.body,
+      });
+      process.exit(8);
+    }
+
     console.log("6/7 OK: teacher data");
   }
 
