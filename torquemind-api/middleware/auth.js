@@ -1,5 +1,11 @@
 module.exports = function createAuthMiddleware(supabase){
   return async function authMiddleware(req, res, next){
+    // Quick request-level trace to confirm middleware invocation in CI
+    try {
+      console.log('Auth middleware entry', { method: req.method, path: req.path, hasAuth: !!(req.headers && (req.headers.authorization || req.headers.Authorization)) });
+    } catch (e) {
+      // ignore logging failures
+    }
     // If Supabase not configured, allow through (localStorage fallback/dev)
     if (!supabase){ req.user = null; return next(); }
     const auth = req.headers.authorization || req.headers.Authorization;
