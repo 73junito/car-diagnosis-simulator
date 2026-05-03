@@ -32,37 +32,41 @@ module.exports = function createAuthMiddleware(supabase){
       // user's access token so auth.uid() policies work correctly.
       let attached = { id: user.id, email: user.email };
       try {
-        const anon = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
         const url = process.env.SUPABASE_URL;
-        let prof = null;
-        if (url && anon) {
-          const authedClient = createClient(url, anon, { global: { headers: { Authorization: `Bearer ${token}` } } });
-          const { data: profData } = await authedClient.from('profiles').select('role, id, email, name').eq('id', user.id).maybeSingle();
-          if (profData && Object.keys(profData).length) prof = profData;
-          else {
-            const { data: u } = await authedClient.from('users').select('*').eq('id', user.id).maybeSingle();
-            if (u && Object.keys(u).length) prof = u;
-          }
+        // create an authed client using the user's bearer token and the anon key
+        const authedSupabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
+          global: {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        });
+
+        const { data: prof, error: profErr } = await authedSupabase
+          .from('profiles')
+          .select('role, id, email, name')
+          .eq('id', user.id)
+          .maybeSingle();
+
+        if (prof && Object.keys(prof).length) {
+          attached = { ...attached, ...prof };
         } else {
-          // Fallback to existing client if envs aren't available
-          const { data: profData } = await supabase.from('profiles').select('role, id, email, name').eq('id', user.id).maybeSingle();
-          if (profData && Object.keys(profData).length) prof = profData;
-          else {
-            const { data: u } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle();
-            if (u && Object.keys(u).length) prof = u;
-          }
+          // fallback to users table as a last resort
+          const { data: u, error: uErr } = await authedSupabase.from('users').select('*').eq('id', user.id).maybeSingle();
+          if (u && Object.keys(u).length) attached = { ...attached, ...u };
+          if (!prof && uErr) console.warn('User lookup error', uErr.message || uErr);
         }
-        if (prof) attached = { ...attached, ...prof };
+
+        console.log('Auth resolved user', {
+          id: attached.id,
+          email: attached.email,
+          role: attached.role,
+          profileError: profErr && profErr.message ? profErr.message : null,
+        });
       } catch (fetchErr) {
         console.warn('Profile lookup failed; continuing with basic user info', fetchErr && fetchErr.message);
       }
       req.user = attached;
-      // Safe debug log: don't print tokens or sensitive data.
-      console.log('Auth resolved user', {
-        id: req.user && req.user.id,
-        email: req.user && req.user.email,
-        role: req.user && req.user.role,
-      });
       return next();
     } catch (e){
       console.error('Auth middleware error', e);
