@@ -18,9 +18,29 @@ module.exports = function createAuthMiddleware(supabase){
         return res.status(401).json({ error: 'Invalid or expired token' });
       }
       const user = data.user;
-      // load profile from users table (if present)
-      const { data: profile, error: pErr } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle();
-      req.user = profile || { id: user.id, email: user.email };
+      // Prefer loading role from a dedicated `profiles` table (recommended)
+      // Fallback to `users` table if `profiles` doesn't exist or has no role field.
+      let attached = { id: user.id, email: user.email };
+      try {
+        const { data: prof, error: profErr } = await supabase.from('profiles').select('role, id, email, name').eq('id', user.id).maybeSingle();
+        if (prof && Object.keys(prof).length) {
+          attached = { ...attached, ...prof };
+        } else {
+          // fallback to older `users` table used in some deployments
+          const { data: u, error: uErr } = await supabase.from('users').select('*').eq('id', user.id).maybeSingle();
+          if (u && Object.keys(u).length) attached = { ...attached, ...u };
+        }
+      } catch (fetchErr) {
+        // If anything goes wrong querying profiles/users, attach basic user info and continue.
+        console.warn('Profile lookup failed; continuing with basic user info', fetchErr && fetchErr.message);
+      }
+      req.user = attached;
+      // Safe debug log: don't print tokens or sensitive data.
+      console.log('Auth resolved user', {
+        id: req.user && req.user.id,
+        email: req.user && req.user.email,
+        role: req.user && req.user.role,
+      });
       return next();
     } catch (e){
       console.error('Auth middleware error', e);
