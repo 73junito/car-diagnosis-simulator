@@ -29,5 +29,5 @@ jobs:
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
-          BASE_URL: ${{ secrets.BASE_URL }}
+          BASE_URL: http://localhost:3000
         run: npm run test:smoke

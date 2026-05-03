@@ -9,6 +9,13 @@ on:
 jobs:
   smoke:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
+      TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+      BASE_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install dependencies (torquemind-api)
         working-directory: torquemind-api
@@ -25,6 +32,10 @@ jobs:
 
       - name: Start API server
         working-directory: torquemind-api
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           nohup npm start >/tmp/torquemind.log 2>&1 &
           echo "Server starting..."
@@ -34,4 +45,12 @@ jobs:
 
       - name: Run smoke test
         working-directory: torquemind-api
+        env:
+          # ensure test step has explicit keys when job-level env is not inherited
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
+          TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+          BASE_URL: ${{ secrets.BASE_URL }}
         run: npm run test:smoke
