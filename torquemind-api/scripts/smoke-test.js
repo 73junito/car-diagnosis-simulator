@@ -3,6 +3,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const TEST_TEACHER_EMAIL = process.env.TEST_TEACHER_EMAIL;
 const TEST_TEACHER_PASSWORD = process.env.TEST_TEACHER_PASSWORD;
+const TIMEOUT = 15000;
 
 async function request(path, options = {}, token = null) {
   const headers = {
@@ -14,10 +15,24 @@ async function request(path, options = {}, token = null) {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers,
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT);
+
+  let res;
+  try {
+    res = await fetch(`${BASE_URL}${path}`, {
+      ...options,
+      headers,
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (err.name === "AbortError") {
+      throw new Error(`Request to ${path} timed out after ${TIMEOUT}ms`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
 
   const raw = await res.text();
   let body = raw;
