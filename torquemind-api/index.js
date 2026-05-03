@@ -62,7 +62,7 @@ app.post('/api/replay', async (req, res) => {
 });
 
 // Teacher: aggregated data for dashboard
-app.get('/api/teacher/data', authMiddleware, requireRole('teacher'), async (req, res) => {
+app.get('/api/teacher/data', requireRole('teacher'), async (req, res) => {
   if (!supabase) return res.status(501).json({ error: 'Supabase not configured' });
   const classId = req.query.classId || null;
   try {
