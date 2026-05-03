@@ -64,3 +64,10 @@ jobs:
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
           BASE_URL: http://localhost:3000
         run: npm run test:smoke
+
+      - name: Show API runtime log
+        if: always()
+        run: |
+          echo "----- API RUNTIME LOG -----"
+          cat /tmp/torquemind.log || true
+          echo "---------------------------"
