@@ -49,7 +49,7 @@ module.exports = function createAuthMiddleware(supabase){
 
         const { data: prof, error: profErr } = await authedSupabase
           .from('profiles')
-          .select('role, id, email, name')
+          .select('role, id, email')
           .eq('id', user.id)
           .maybeSingle();
 
