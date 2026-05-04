@@ -9,15 +9,22 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL || null;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
 const SUPABASE_KEY = process.env.SUPABASE_KEY || null;
 
 let supabase = null;
-if (SUPABASE_URL && SUPABASE_KEY) {
+if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+  supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  console.log('Supabase client initialized (ANON)');
+  app.set('supabaseConfigured', true);
+} else if (SUPABASE_URL && SUPABASE_KEY) {
+  // Fallback: initialize with service role key if anon not available
+  // Note: service role key cannot verify client JWTs via supabase.auth.getUser(token)
   supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-  console.log('Supabase client initialized');
+  console.warn('Supabase client initialized with SERVICE key; auth verification may fail');
   app.set('supabaseConfigured', true);
 } else {
-  console.warn('Supabase not configured — set SUPABASE_URL and SUPABASE_KEY');
+  console.warn('Supabase not configured — set SUPABASE_URL and SUPABASE_ANON_KEY');
   app.set('supabaseConfigured', false);
 }
 
@@ -26,8 +33,8 @@ const createAuth = require('./middleware/auth');
 const requireRole = require('./middleware/requireRole');
 const authMiddleware = createAuth(supabase);
 
-// Optional: attach auth middleware to routes to populate `req.user`
-app.use((req,res,next)=> authMiddleware(req,res,next));
+// Auth middleware populates `req.user` on every request when Supabase is configured.
+app.use((req, res, next) => authMiddleware(req, res, next));
 
 // Basic health
 app.get('/', (req, res) => {
@@ -36,18 +43,35 @@ app.get('/', (req, res) => {
 
 // Save a replay
 app.post('/api/replay', async (req, res) => {
-  const { userId, scenarioId, actions, result, confidence } = req.body;
+  const { scenarioId, actions, result, confidence } = req.body;
   // if Supabase configured, require authenticated user
   if (app.get('supabaseConfigured')){
     if (!req.user) return res.status(401).json({ error: 'Authentication required' });
-    // prefer authenticated user id when available
-    const uid = req.user.id || userId;
+    // enforce server-owned authenticated user id (ignore any client-provided userId)
+    const uid = req.user.id;
     if (!uid || typeof scenarioId === 'undefined') return res.status(400).json({ error: 'userId and scenarioId required' });
     try {
       const payload = { user_id: uid, scenario_id: scenarioId, actions: actions || [], result: result || null, confidence: confidence || null };
-      const { data, error } = await supabase.from('replays').insert([payload]);
+
+      // Use a per-request authed client so RLS policies using auth.uid() run as the authenticated user
+      let client = supabase;
+      if (SUPABASE_URL && SUPABASE_ANON_KEY && req.headers && req.headers.authorization) {
+        client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { headers: { Authorization: req.headers.authorization } } });
+        console.log('Authed client created for replay; auth header present:', Boolean(req.headers && req.headers.authorization));
+      } else if (SUPABASE_URL && process.env.SUPABASE_KEY) {
+        // fallback to service role if available (server-only)
+        client = createClient(SUPABASE_URL, process.env.SUPABASE_KEY);
+        console.log('Service client used for replay insert');
+      }
+
+      const { data, error } = await client
+        .from('replays')
+        .insert([payload])
+        .select('id, user_id, scenario_id, actions, result, confidence, created_at')
+        .single();
+
       if (error) throw error;
-      return res.json({ success: true, replay: data && data[0] });
+      return res.json({ success: true, replay: data });
     } catch (e){ console.error('Failed to save replay', e); return res.status(500).json({ error: e.message || String(e) }); }
   }
   // fallback: supabase not configured — accept and return success for local flow
@@ -148,10 +172,29 @@ app.post('/api/classes', requireRole('teacher'), async (req, res) => {
   }
 
   try {
+    // Diagnostic: ensure owner_id, role, and auth header are present
+    console.log("Create class payload", {
+      owner_id: req.user && req.user.id,
+      userRole: req.user && req.user.role,
+      hasAuth: Boolean(req.headers && req.headers.authorization)
+    });
+
+    // Create a per-request authed client so RLS policies using auth.uid() run as the user
+    const authedClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
+    console.log('Authed client created for create class; auth header present:', Boolean(req.headers && req.headers.authorization));
+
     const payload = { name, owner_id: req.user.id, class_code: makeClassCode() };
-    const { data, error } = await supabase.from('classes').insert([payload]);
+    const { data, error } = await authedClient
+      .from('classes')
+      .insert([payload])
+      .select('id, name, owner_id, class_code, created_at')
+      .single();
+
     if (error) throw error;
-    return res.json({ success: true, class: data && data[0] });
+
+    return res.json({ success: true, class: data });
   } catch (e){ console.error('Failed to create class', e); return res.status(500).json({ error: e.message || String(e) }); }
 });
 
@@ -159,7 +202,16 @@ app.post('/api/classes', requireRole('teacher'), async (req, res) => {
 app.get('/api/classes', requireRole('teacher'), async (req, res) => {
   if (!supabase) return res.json({ classes: [] });
   try {
-    const { data, error } = await supabase.from('classes').select('*').eq('owner_id', req.user.id);
+    // Diagnostic for listing classes
+    console.log('List classes request', { owner_id: req.user && req.user.id, userRole: req.user && req.user.role, hasAuth: Boolean(req.headers && req.headers.authorization) });
+
+    // Use a per-request authed client so RLS select policies using auth.uid() run as the user
+    const authedClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
+    console.log('Authed client created for list classes; auth header present:', Boolean(req.headers && req.headers.authorization));
+
+    const { data, error } = await authedClient.from('classes').select('*').eq('owner_id', req.user.id);
     if (error) throw error;
     return res.json({ classes: data || [] });
   } catch (e){ console.error('Failed to load classes', e); return res.status(500).json({ error: e.message || String(e) }); }

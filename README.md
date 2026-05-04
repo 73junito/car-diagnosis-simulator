@@ -25,7 +25,7 @@ python -m http.server 8000
 Development notes
 - The app is a single-page static site (HTML/CSS/JS). No build step required.
 - Diagnostic logic lives in `engine/diagnosticEngine.js` and is loaded before `script.js`.
-- Keep `firebase-config.js` untracked — it's excluded by `.gitignore` for security.
+- Backend/Auth powered by Supabase. Firebase removed from the project as of 2026-05-04.
 
 Who it's for
 - Technical instructors, vocational trainers, and learners preparing for ASE-style assessments.
