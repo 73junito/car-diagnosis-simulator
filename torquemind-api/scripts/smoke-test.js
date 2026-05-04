@@ -83,14 +83,15 @@ async function signInTeacher() {
 }
 
 async function getUserFromToken(token) {
-  if (!token || !SUPABASE_URL) return null;
+  if (!token || !SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
   try {
     const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-      method: 'GET',
+      method: "GET",
       headers: {
+        apikey: SUPABASE_ANON_KEY,
         Authorization: `Bearer ${token}`,
-        Accept: 'application/json'
-      }
+        Accept: "application/json",
+      },
     });
     if (!res.ok) return null;
     const data = await res.json();
