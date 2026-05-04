@@ -70,7 +70,11 @@ async function signInTeacher() {
   const body = await res.json();
 
   if (!res.ok || !body.access_token) {
-    console.error("Teacher sign-in failed", { status: res.status, body });
+    const message =
+      body && typeof body === "object"
+        ? body.message || body.error_description || body.error || body.msg || "Authentication failed"
+        : "Authentication failed";
+    console.error("Teacher sign-in failed", { status: res.status, message });
     process.exit(2);
   }
 
