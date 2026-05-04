@@ -169,19 +169,15 @@ app.post('/api/classes', requireRole('teacher'), async (req, res) => {
     console.log('Authed client created for create class; auth header present:', Boolean(req.headers && req.headers.authorization));
 
     const payload = { name, owner_id: req.user.id, class_code: makeClassCode() };
-    const { data, error } = await authedClient.from('classes').insert([payload]);
-    console.log('Insert result (authed client)', { data, error: error && (error.message || error) });
-    // If insert didn't return the created row, check with service role to see if the row exists
-    if ((!data || !data.length) && process.env.SUPABASE_KEY) {
-      try {
-        const serviceClient = createClient(SUPABASE_URL, process.env.SUPABASE_KEY);
-        const { data: svcRow, error: svcErr } = await serviceClient.from('classes').select('*').eq('class_code', payload.class_code).maybeSingle();
-        console.log('Service select after insert', { svcRow, svcErr: svcErr && (svcErr.message || svcErr) });
-      } catch (svcE) {
-        console.error('Service select error', svcE && svcE.message ? svcE.message : svcE);
-      }
-    }
-    return res.json({ success: true, class: data && data[0] });
+    const { data, error } = await authedClient
+      .from('classes')
+      .insert([payload])
+      .select('id, name, owner_id, class_code, created_at')
+      .single();
+
+    if (error) throw error;
+
+    return res.json({ success: true, class: data });
   } catch (e){ console.error('Failed to create class', e); return res.status(500).json({ error: e.message || String(e) }); }
 });
 
