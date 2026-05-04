@@ -52,6 +52,7 @@ app.post('/api/replay', async (req, res) => {
     if (!uid || typeof scenarioId === 'undefined') return res.status(400).json({ error: 'userId and scenarioId required' });
     try {
       const payload = { user_id: uid, scenario_id: scenarioId, actions: actions || [], result: result || null, confidence: confidence || null };
+      console.log('Replay payload', { user_id: payload.user_id, scenario_id: payload.scenario_id, actionsCount: (payload.actions || []).length });
 
       // Use a per-request authed client so RLS policies using auth.uid() run as the authenticated user
       let client = supabase;
