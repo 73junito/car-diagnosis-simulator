@@ -43,12 +43,12 @@ app.get('/', (req, res) => {
 
 // Save a replay
 app.post('/api/replay', async (req, res) => {
-  const { userId, scenarioId, actions, result, confidence } = req.body;
+  const { scenarioId, actions, result, confidence } = req.body;
   // if Supabase configured, require authenticated user
   if (app.get('supabaseConfigured')){
     if (!req.user) return res.status(401).json({ error: 'Authentication required' });
-    // prefer authenticated user id when available
-    const uid = req.user.id || userId;
+    // enforce server-owned authenticated user id (ignore any client-provided userId)
+    const uid = req.user.id;
     if (!uid || typeof scenarioId === 'undefined') return res.status(400).json({ error: 'userId and scenarioId required' });
     try {
       const payload = { user_id: uid, scenario_id: scenarioId, actions: actions || [], result: result || null, confidence: confidence || null };
