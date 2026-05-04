@@ -155,8 +155,21 @@ app.post('/api/classes', requireRole('teacher'), async (req, res) => {
   }
 
   try {
+    // Diagnostic: ensure owner_id, role, and auth header are present
+    console.log("Create class payload", {
+      owner_id: req.user && req.user.id,
+      userRole: req.user && req.user.role,
+      hasAuth: Boolean(req.headers && req.headers.authorization)
+    });
+
+    // Create a per-request authed client so RLS policies using auth.uid() run as the user
+    const authedClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
+    console.log('Authed client created for create class; auth header present:', Boolean(req.headers && req.headers.authorization));
+
     const payload = { name, owner_id: req.user.id, class_code: makeClassCode() };
-    const { data, error } = await supabase.from('classes').insert([payload]);
+    const { data, error } = await authedClient.from('classes').insert([payload]);
     if (error) throw error;
     return res.json({ success: true, class: data && data[0] });
   } catch (e){ console.error('Failed to create class', e); return res.status(500).json({ error: e.message || String(e) }); }
@@ -166,7 +179,16 @@ app.post('/api/classes', requireRole('teacher'), async (req, res) => {
 app.get('/api/classes', requireRole('teacher'), async (req, res) => {
   if (!supabase) return res.json({ classes: [] });
   try {
-    const { data, error } = await supabase.from('classes').select('*').eq('owner_id', req.user.id);
+    // Diagnostic for listing classes
+    console.log('List classes request', { owner_id: req.user && req.user.id, userRole: req.user && req.user.role, hasAuth: Boolean(req.headers && req.headers.authorization) });
+
+    // Use a per-request authed client so RLS select policies using auth.uid() run as the user
+    const authedClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: req.headers.authorization } }
+    });
+    console.log('Authed client created for list classes; auth header present:', Boolean(req.headers && req.headers.authorization));
+
+    const { data, error } = await authedClient.from('classes').select('*').eq('owner_id', req.user.id);
     if (error) throw error;
     return res.json({ classes: data || [] });
   } catch (e){ console.error('Failed to load classes', e); return res.status(500).json({ error: e.message || String(e) }); }
