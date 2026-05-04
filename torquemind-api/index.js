@@ -52,9 +52,26 @@ app.post('/api/replay', async (req, res) => {
     if (!uid || typeof scenarioId === 'undefined') return res.status(400).json({ error: 'userId and scenarioId required' });
     try {
       const payload = { user_id: uid, scenario_id: scenarioId, actions: actions || [], result: result || null, confidence: confidence || null };
-      const { data, error } = await supabase.from('replays').insert([payload]);
+
+      // Use a per-request authed client so RLS policies using auth.uid() run as the authenticated user
+      let client = supabase;
+      if (SUPABASE_URL && SUPABASE_ANON_KEY && req.headers && req.headers.authorization) {
+        client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { headers: { Authorization: req.headers.authorization } } });
+        console.log('Authed client created for replay; auth header present:', Boolean(req.headers && req.headers.authorization));
+      } else if (SUPABASE_URL && process.env.SUPABASE_KEY) {
+        // fallback to service role if available (server-only)
+        client = createClient(SUPABASE_URL, process.env.SUPABASE_KEY);
+        console.log('Service client used for replay insert');
+      }
+
+      const { data, error } = await client
+        .from('replays')
+        .insert([payload])
+        .select('id, user_id, scenario_id, actions, result, confidence, created_at')
+        .single();
+
       if (error) throw error;
-      return res.json({ success: true, replay: data && data[0] });
+      return res.json({ success: true, replay: data });
     } catch (e){ console.error('Failed to save replay', e); return res.status(500).json({ error: e.message || String(e) }); }
   }
   // fallback: supabase not configured — accept and return success for local flow
