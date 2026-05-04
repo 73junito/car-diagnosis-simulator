@@ -37,7 +37,6 @@ module.exports = function createAuthMiddleware(supabase){
       // user's access token so auth.uid() policies work correctly.
       let attached = { id: user.id, email: user.email };
       try {
-        const url = process.env.SUPABASE_URL;
         // create an authed client using the user's bearer token and the anon key
         const authedSupabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
           global: {
