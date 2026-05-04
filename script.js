@@ -403,20 +403,9 @@ function renderDiagnoses(scenario){
   if (keepDl) diagContainer.appendChild(keepDl);
 }
 
-// Firestore optional integration (CDN/global firebase)
+// Firestore integration removed — frontend uses Supabase + API.
 let useFirestore = false;
 let db = null;
-if (window.firebase && window.firebaseConfig) {
-  try {
-    firebase.initializeApp(window.firebaseConfig);
-    db = firebase.firestore();
-    useFirestore = true;
-    console.log('Firestore enabled');
-  } catch (e) {
-    console.warn('Firebase init failed, falling back to localStorage', e);
-    useFirestore = false;
-  }
-}
 
 function currentScenario(){
   return scenarios[currentIndex] || {symptoms:'No scenario', fault:null, tests:{}};
