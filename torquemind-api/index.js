@@ -13,9 +13,10 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
 const SUPABASE_KEY = process.env.SUPABASE_KEY || null;
 
 let supabase = null;
+const DEBUG_API = process.env.DEBUG_API === 'true';
 if (SUPABASE_URL && SUPABASE_ANON_KEY) {
   supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  console.log('Supabase client initialized (ANON)');
+  if (DEBUG_API) console.log('Supabase client initialized (ANON)');
   app.set('supabaseConfigured', true);
 } else if (SUPABASE_URL && SUPABASE_KEY) {
   // Fallback: initialize with service role key if anon not available
@@ -52,17 +53,17 @@ app.post('/api/replay', async (req, res) => {
     if (!uid || typeof scenarioId === 'undefined') return res.status(400).json({ error: 'userId and scenarioId required' });
     try {
       const payload = { user_id: uid, scenario_id: scenarioId, actions: actions || [], result: result || null, confidence: confidence || null };
-      console.log('Replay payload', { user_id: payload.user_id, scenario_id: payload.scenario_id, actionsCount: (payload.actions || []).length });
+      if (DEBUG_API) console.log('Replay payload', { user_id: payload.user_id, scenario_id: payload.scenario_id, actionsCount: (payload.actions || []).length });
 
       // Use a per-request authed client so RLS policies using auth.uid() run as the authenticated user
       let client = supabase;
       if (SUPABASE_URL && SUPABASE_ANON_KEY && req.headers && req.headers.authorization) {
         client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { headers: { Authorization: req.headers.authorization } } });
-        console.log('Authed client created for replay; auth header present:', Boolean(req.headers && req.headers.authorization));
+        if (DEBUG_API) console.log('Authed client created for replay; auth header present:', Boolean(req.headers && req.headers.authorization));
       } else if (SUPABASE_URL && process.env.SUPABASE_KEY) {
         // fallback to service role if available (server-only)
         client = createClient(SUPABASE_URL, process.env.SUPABASE_KEY);
-        console.log('Service client used for replay insert');
+        if (DEBUG_API) console.log('Service client used for replay insert');
       }
 
       const { data, error } = await client
@@ -83,7 +84,7 @@ app.post('/api/replay', async (req, res) => {
 app.get('/api/teacher/data', requireRole('teacher'), async (req, res) => {
   if (!supabase) return res.status(501).json({ error: 'Supabase not configured' });
   const classId = req.query.classId || null;
-  try {
+    try {
     if (!classId) {
       // return full data as before
       const [{ data: users }, { data: replays }, { data: assignments }, { data: completions }, { data: classes }, { data: enrollments }] = await Promise.all([
@@ -125,7 +126,7 @@ app.get('/api/teacher/data', requireRole('teacher'), async (req, res) => {
 
     return res.json({ users: users || [], replays: replays || [], assignments: assignments || [], completions: completions || [], classes: [cls], enrollments: enrolls || [] });
   } catch (e) {
-    console.error('Failed to load teacher data', e);
+    if (DEBUG_API) console.error('Failed to load teacher data', e);
     return res.status(500).json({ error: e.message || String(e) });
   }
 });
@@ -142,7 +143,7 @@ app.post('/api/assign', requireRole('teacher'), async (req, res) => {
     if (error) throw error;
     return res.json({ success: true, assignment: data && data[0] });
   } catch (e) {
-    console.error('Failed to create assignment', e);
+    if (DEBUG_API) console.error('Failed to create assignment', e);
     return res.status(500).json({ error: e.message || String(e) });
   }
 });
@@ -161,11 +162,11 @@ app.post('/api/complete', async (req, res) => {
       let client = supabase;
       if (SUPABASE_URL && SUPABASE_ANON_KEY && req.headers && req.headers.authorization) {
         client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { headers: { Authorization: req.headers.authorization } } });
-        console.log('Authed client created for completion; auth header present:', Boolean(req.headers && req.headers.authorization));
+        if (DEBUG_API) console.log('Authed client created for completion; auth header present:', Boolean(req.headers && req.headers.authorization));
       } else if (SUPABASE_URL && process.env.SUPABASE_KEY) {
         // fallback to service role if available (server-only)
         client = createClient(SUPABASE_URL, process.env.SUPABASE_KEY);
-        console.log('Service client used for completion insert');
+        if (DEBUG_API) console.log('Service client used for completion insert');
       }
 
       const { data, error } = await client
@@ -199,9 +200,9 @@ app.post('/api/classes', requireRole('teacher'), async (req, res) => {
     return res.json({ success: true, class: { id: `local-${Date.now()}`, name, class_code: makeClassCode(), owner_id: req.user && req.user.id } });
   }
 
-  try {
-    // Diagnostic: ensure owner_id, role, and auth header are present
-    console.log("Create class payload", {
+    try {
+    // Create a per-request authed client so RLS policies using auth.uid() run as the user
+    if (DEBUG_API) console.log("Create class payload", {
       owner_id: req.user && req.user.id,
       userRole: req.user && req.user.role,
       hasAuth: Boolean(req.headers && req.headers.authorization)
@@ -211,7 +212,7 @@ app.post('/api/classes', requireRole('teacher'), async (req, res) => {
     const authedClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       global: { headers: { Authorization: req.headers.authorization } }
     });
-    console.log('Authed client created for create class; auth header present:', Boolean(req.headers && req.headers.authorization));
+    if (DEBUG_API) console.log('Authed client created for create class; auth header present:', Boolean(req.headers && req.headers.authorization));
 
     const payload = { name, owner_id: req.user.id, class_code: makeClassCode() };
     const { data, error } = await authedClient
@@ -230,14 +231,13 @@ app.post('/api/classes', requireRole('teacher'), async (req, res) => {
 app.get('/api/classes', requireRole('teacher'), async (req, res) => {
   if (!supabase) return res.json({ classes: [] });
   try {
-    // Diagnostic for listing classes
-    console.log('List classes request', { owner_id: req.user && req.user.id, userRole: req.user && req.user.role, hasAuth: Boolean(req.headers && req.headers.authorization) });
-
     // Use a per-request authed client so RLS select policies using auth.uid() run as the user
+    if (DEBUG_API) console.log('List classes request', { owner_id: req.user && req.user.id, userRole: req.user && req.user.role, hasAuth: Boolean(req.headers && req.headers.authorization) });
+
     const authedClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       global: { headers: { Authorization: req.headers.authorization } }
     });
-    console.log('Authed client created for list classes; auth header present:', Boolean(req.headers && req.headers.authorization));
+    if (DEBUG_API) console.log('Authed client created for list classes; auth header present:', Boolean(req.headers && req.headers.authorization));
 
     const { data, error } = await authedClient.from('classes').select('*').eq('owner_id', req.user.id);
     if (error) throw error;

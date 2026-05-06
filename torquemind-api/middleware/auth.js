@@ -2,9 +2,10 @@ const { createClient } = require('@supabase/supabase-js');
 
 module.exports = function createAuthMiddleware(supabase){
   return async function authMiddleware(req, res, next){
-    // Quick request-level trace to confirm middleware invocation in CI
+    const debugAuth = process.env.DEBUG_AUTH === 'true';
+    // Quick request-level trace to confirm middleware invocation in CI (guarded)
     try {
-      console.log('Auth middleware entry', { method: req.method, path: req.path, hasAuth: !!(req.headers && (req.headers.authorization || req.headers.Authorization)) });
+      if (debugAuth) console.log('Auth middleware entry', { method: req.method, path: req.path, hasAuth: !!(req.headers && (req.headers.authorization || req.headers.Authorization)) });
     } catch (e) {
       // ignore logging failures
     }
@@ -20,11 +21,13 @@ module.exports = function createAuthMiddleware(supabase){
 
     const token = auth.replace(/^Bearer\s+/i, '');
     try {
-      console.log('Auth token snippet', { length: token.length, snippet: token.slice(0, 8) });
+      if (debugAuth) {
+        try { console.log('Auth token snippet', { length: token.length, snippet: token.slice(0, 8) }); } catch (e) {}
+      }
     } catch (e) {}
     try {
       const { data, error } = await supabase.auth.getUser(token);
-      console.log('getUser result', { userId: data && data.user && data.user.id, error: error && error.message });
+      if (debugAuth) console.log('getUser result', { userId: data && data.user && data.user.id, error: error && error.message });
       if (error || !data || !data.user) {
         console.warn('Auth failed: invalid/expired token', error && error.message);
         req.user = null;
@@ -61,7 +64,7 @@ module.exports = function createAuthMiddleware(supabase){
           if (!prof && uErr) console.warn('User lookup error', uErr.message || uErr);
         }
 
-        console.log('Auth resolved user', {
+        if (debugAuth) console.log('Auth resolved user', {
           id: attached.id,
           email: attached.email,
           role: attached.role,
