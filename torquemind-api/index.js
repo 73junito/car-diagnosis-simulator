@@ -97,23 +97,33 @@ app.get('/api/teacher/data', requireRole('teacher'), async (req, res) => {
       return res.json({ users, replays, assignments, completions, classes, enrollments });
     }
 
+    // Use a per-request authed client so RLS policies using auth.uid() run as the user
+    const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { headers: { Authorization: req.headers.authorization } } });
+
+    // Ensure the requesting teacher actually owns the class
+    const { data: cls, error: clsErr } = await client
+      .from('classes')
+      .select('*')
+      .eq('id', classId)
+      .eq('owner_id', req.user.id)
+      .maybeSingle();
+    if (clsErr) throw clsErr;
+    if (!cls) return res.status(404).json({ error: 'Class not found' });
+
     // class-scoped: find enrollments for the class to identify students
-    const { data: enrolls, error: eErr } = await supabase.from('enrollments').select('*').eq('class_id', classId);
+    const { data: enrolls, error: eErr } = await client.from('enrollments').select('*').eq('class_id', classId);
     if (eErr) throw eErr;
     const userIds = (enrolls || []).map(r => r.user_id).filter(Boolean);
 
-    // fetch users, replays, completions, assignments for that class
+    // fetch users, replays, completions, assignments for that class (empty userIds handled)
     const promises = [];
-    promises.push(supabase.from('users').select('*').in('id', userIds));
-    promises.push(supabase.from('replays').select('*').in('user_id', userIds));
-    promises.push(supabase.from('completions').select('*').in('user_id', userIds));
-    promises.push(supabase.from('assignments').select('*').eq('class_id', classId));
+    promises.push(client.from('users').select('*').in('id', userIds.length ? userIds : ['']));
+    promises.push(client.from('replays').select('*').in('user_id', userIds.length ? userIds : ['']));
+    promises.push(client.from('completions').select('*').in('user_id', userIds.length ? userIds : ['']));
+    promises.push(client.from('assignments').select('*').eq('class_id', classId));
     const [{ data: users }, { data: replays }, { data: completions }, { data: assignments }] = await Promise.all(promises);
 
-    // include class metadata
-    const { data: classes } = await supabase.from('classes').select('*').eq('id', classId).maybeSingle();
-
-    return res.json({ users: users || [], replays: replays || [], assignments: assignments || [], completions: completions || [], classes: classes ? [classes] : [], enrollments: enrolls || [] });
+    return res.json({ users: users || [], replays: replays || [], assignments: assignments || [], completions: completions || [], classes: [cls], enrollments: enrolls || [] });
   } catch (e) {
     console.error('Failed to load teacher data', e);
     return res.status(500).json({ error: e.message || String(e) });
