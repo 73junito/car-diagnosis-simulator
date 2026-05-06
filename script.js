@@ -56,6 +56,38 @@ function supabaseSignOut(){
   localStorage.removeItem('supabase_user_email');
 }
 
+function showToast(msg, timeout=3000){
+  let t = document.getElementById('carSim_toast');
+  if (!t){
+    t = document.createElement('div'); t.id = 'carSim_toast';
+    t.style.position = 'fixed'; t.style.right = '12px'; t.style.top = '12px'; t.style.zIndex = 10000;
+    document.body.appendChild(t);
+  }
+  const el = document.createElement('div'); el.style.background = 'rgba(0,0,0,0.8)'; el.style.color='white'; el.style.padding='8px 12px'; el.style.marginTop='8px'; el.style.borderRadius='6px'; el.innerText = msg;
+  t.appendChild(el);
+  setTimeout(()=>{ el.remove(); }, timeout);
+}
+
+function copyToClipboard(text){
+  if (!text) return false;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard'));
+    return true;
+  }
+  try { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('Copied to clipboard'); return true; } catch(e){ return false; }
+}
+
+function clearLocalFallbackOnAuth(){
+  // Remove any local-* class ids once a real auth session exists
+  const token = getAccessToken();
+  if (!token) return;
+  if (currentClassId && String(currentClassId).startsWith('local-')){
+    currentClassId = null; currentClassCode = null;
+    localStorage.removeItem('carSim_currentClassId');
+    localStorage.removeItem('carSim_currentClassCode');
+  }
+}
+
 function getAccessToken(){ return localStorage.getItem('supabase_access_token') || null; }
 
 // Monkey-patch fetch to automatically attach Authorization Bearer token for API_BASE calls
@@ -98,7 +130,9 @@ async function teacherLoginPrompt(){
   if (!password) return;
   const res = await supabaseSignIn(email, password);
   if (res && res.access_token){
-    alert('Signed in successfully');
+    showToast('Signed in successfully');
+    // clear any local fallback class ids and refresh teacher class list
+    try { clearLocalFallbackOnAuth(); if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses(); } catch(e){}
     return true;
   }
   alert('Sign-in failed: ' + (res?.error_description || res?.error || JSON.stringify(res)));
@@ -164,7 +198,9 @@ async function ensureTeacherAuthAndRender(){
   }
   // token present: verify by calling protected endpoint
   try {
-    const url = API_BASE + '/api/teacher/data';
+    // if authenticated, clear any local fallback class ids
+    try { clearLocalFallbackOnAuth(); } catch(e){}
+    const url = API_BASE + '/api/teacher/data' + (currentClassId ? ('?classId=' + encodeURIComponent(currentClassId)) : '');
     const res = await fetch(url, { method: 'GET', credentials: 'same-origin' });
     if (res.status === 401 || res.status === 403){
       supabaseSignOut();
@@ -177,6 +213,7 @@ async function ensureTeacherAuthAndRender(){
     }
     const data = await res.json();
     clearTeacherError();
+    try { if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses(); } catch(e){}
     renderTeacherData(data);
   } catch (e){
     showTeacherError('Network error while loading teacher data. Check connection and retry.');
@@ -1581,6 +1618,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (createBtn) createBtn.onclick = async () => {
     const name = (document.getElementById('newClassName') || {}).value || (currentUser ? (currentUser + "'s Class") : 'New Class');
     if (!name) return alert('Enter a class name');
+    showToast('Creating class...');
     const res = await createClass(name);
     if (res && res.success && res.class){
       currentClassId = res.class.id;
@@ -1589,11 +1627,11 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('carSim_currentClassCode', currentClassCode || '');
       // refresh teacher classes select
       try { await loadTeacherClasses(); } catch(e){}
-      alert('Class created: ' + (res.class.name || '') + ' — code: ' + (currentClassCode || '')); 
+      showToast('Class created');
       setView('teacherScreen');
       await loadTeacherData();
     } else {
-      alert('Failed to create class (backend unavailable) — saved locally');
+      showToast('Failed to create class (backend unavailable). Saved locally');
       currentClassId = 'local-' + Date.now();
       currentClassCode = Math.random().toString(36).slice(2,8).toUpperCase();
       localStorage.setItem('carSim_currentClassId', currentClassId);
@@ -1608,8 +1646,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (joinBtn) joinBtn.onclick = async () => {
     const code = (document.getElementById('joinClassCode') || {}).value.trim();
     if (!code) return alert('Enter a class code to join');
+    showToast('Joining class...');
     const found = await findClassByCode(code);
-    if (found && found.id || (found && found.class && found.class.id)){
+    if (found && (found.id || (found.class && found.class.id))){
       const cls = found.class || found;
       const res = await enrollInClass(cls.id, code);
       if (res && res.success){
@@ -1617,15 +1656,15 @@ document.addEventListener('DOMContentLoaded', () => {
         currentClassCode = cls.class_code || code;
         localStorage.setItem('carSim_currentClassId', currentClassId);
         localStorage.setItem('carSim_currentClassCode', currentClassCode || '');
-        alert('Joined class');
+        showToast('Joined class');
         // proceed to student flow
         setView('scenarioSelectScreen');
         renderScenarioList();
       } else {
-        alert('Failed to join class.');
+        showToast('Failed to join class.');
       }
     } else {
-      alert('Class code not found');
+      showToast('Class code not found');
     }
   };
 
@@ -1637,6 +1676,10 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await getClasses();
       const classes = (resp && resp.classes) ? resp.classes : (resp && resp.length ? resp : []);
+      // add a small class info container for code + copy
+      let info = document.getElementById('teacherClassInfo');
+      if (!info){ info = document.createElement('div'); info.id = 'teacherClassInfo'; info.style.marginTop = '8px'; sel.parentNode.insertBefore(info, sel.nextSibling); }
+      info.innerHTML = '';
       classes.forEach(c => {
         const opt = document.createElement('option'); opt.value = c.id; opt.innerText = c.name + (c.class_code ? ` (${c.class_code})` : '');
         sel.appendChild(opt);
@@ -1646,12 +1689,26 @@ document.addEventListener('DOMContentLoaded', () => {
         currentClassId = sel.value;
         localStorage.setItem('carSim_currentClassId', currentClassId || '');
         await loadTeacherData();
+        // update class info display
+        const cls = classes.find(x=>x.id===currentClassId);
+        const info = document.getElementById('teacherClassInfo');
+        if (info){
+          if (cls && cls.class_code){
+            info.innerHTML = `<div style="display:flex;gap:8px;align-items:center"><div>Code: <strong>${escapeHtml(cls.class_code)}</strong></div><div><button id=\"copyInvite\">Copy</button></div></div>`;
+            const copy = document.getElementById('copyInvite'); if (copy) copy.onclick = () => copyToClipboard(cls.class_code || '');
+          } else { info.innerHTML = ''; }
+        }
       };
+      // populate initial info for selected class
+      if (currentClassId){ const cls = classes.find(x=>x.id===currentClassId); if (cls && cls.class_code){ const infoEl = document.getElementById('teacherClassInfo'); infoEl.innerHTML = `<div style="display:flex;gap:8px;align-items:center"><div>Code: <strong>${escapeHtml(cls.class_code)}</strong></div><div><button id=\"copyInvite\">Copy</button></div></div>`; const copy = document.getElementById('copyInvite'); if (copy) copy.onclick = () => copyToClipboard(cls.class_code || ''); } }
     } catch(e){ console.warn('Failed to load teacher classes', e); }
   }
 
   // ensure teacher classes loaded when teacher view active
   if (teacherSelect && roleSel && roleSel.value === 'teacher') loadTeacherClasses();
+
+  // When a teacher signs in, remove any local fallback class IDs
+  window.addEventListener('supabase:authExpired', ()=>{});
 
   /* ===== GAME TOOLS ===== */
   safeBind('btn-battery', () => check('battery'));
