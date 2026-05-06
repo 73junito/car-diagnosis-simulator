@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 
 // Save a replay
 app.post('/api/replay', async (req, res) => {
-  const { scenarioId, actions, result, confidence } = req.body;
+  const { userId, scenarioId, actions, result, confidence } = req.body;
   // if Supabase configured, require authenticated user
   if (app.get('supabaseConfigured')){
     if (!req.user) return res.status(401).json({ error: 'Authentication required' });
@@ -273,6 +273,10 @@ app.get('/api/classes/:classId/students', requireRole('teacher'), async (req, re
   } catch (e){ console.error('Failed to list students', e); return res.status(500).json({ error: e.message || String(e) }); }
 });
 
-app.listen(PORT, () => {
-  console.log(`TorqueMind API listening on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`TorqueMind API listening on port ${PORT}`);
+  });
+}
+
+module.exports = { app };
