@@ -97,23 +97,33 @@ app.get('/api/teacher/data', requireRole('teacher'), async (req, res) => {
       return res.json({ users, replays, assignments, completions, classes, enrollments });
     }
 
+    // Use a per-request authed client so RLS policies using auth.uid() run as the user
+    const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { headers: { Authorization: req.headers.authorization } } });
+
+    // Ensure the requesting teacher actually owns the class
+    const { data: cls, error: clsErr } = await client
+      .from('classes')
+      .select('*')
+      .eq('id', classId)
+      .eq('owner_id', req.user.id)
+      .maybeSingle();
+    if (clsErr) throw clsErr;
+    if (!cls) return res.status(404).json({ error: 'Class not found' });
+
     // class-scoped: find enrollments for the class to identify students
-    const { data: enrolls, error: eErr } = await supabase.from('enrollments').select('*').eq('class_id', classId);
+    const { data: enrolls, error: eErr } = await client.from('enrollments').select('*').eq('class_id', classId);
     if (eErr) throw eErr;
     const userIds = (enrolls || []).map(r => r.user_id).filter(Boolean);
 
-    // fetch users, replays, completions, assignments for that class
+    // fetch users, replays, completions, assignments for that class (empty userIds handled)
     const promises = [];
-    promises.push(supabase.from('users').select('*').in('id', userIds));
-    promises.push(supabase.from('replays').select('*').in('user_id', userIds));
-    promises.push(supabase.from('completions').select('*').in('user_id', userIds));
-    promises.push(supabase.from('assignments').select('*').eq('class_id', classId));
+    promises.push(client.from('users').select('*').in('id', userIds.length ? userIds : ['']));
+    promises.push(client.from('replays').select('*').in('user_id', userIds.length ? userIds : ['']));
+    promises.push(client.from('completions').select('*').in('user_id', userIds.length ? userIds : ['']));
+    promises.push(client.from('assignments').select('*').eq('class_id', classId));
     const [{ data: users }, { data: replays }, { data: completions }, { data: assignments }] = await Promise.all(promises);
 
-    // include class metadata
-    const { data: classes } = await supabase.from('classes').select('*').eq('id', classId).maybeSingle();
-
-    return res.json({ users: users || [], replays: replays || [], assignments: assignments || [], completions: completions || [], classes: classes ? [classes] : [], enrollments: enrolls || [] });
+    return res.json({ users: users || [], replays: replays || [], assignments: assignments || [], completions: completions || [], classes: [cls], enrollments: enrolls || [] });
   } catch (e) {
     console.error('Failed to load teacher data', e);
     return res.status(500).json({ error: e.message || String(e) });
@@ -142,13 +152,30 @@ app.post('/api/complete', async (req, res) => {
   const { userId, scenarioId } = req.body;
   if (app.get('supabaseConfigured')){
     if (!req.user) return res.status(401).json({ error: 'Authentication required' });
-    const uid = req.user.id || userId;
+    const uid = req.user.id;
     if (!uid || typeof scenarioId === 'undefined') return res.status(400).json({ error: 'userId and scenarioId required' });
     try {
       const payload = { user_id: uid, scenario_id: scenarioId };
-      const { data, error } = await supabase.from('completions').insert([payload]);
+
+      // Use a per-request authed client so RLS policies using auth.uid() run as the user
+      let client = supabase;
+      if (SUPABASE_URL && SUPABASE_ANON_KEY && req.headers && req.headers.authorization) {
+        client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { headers: { Authorization: req.headers.authorization } } });
+        console.log('Authed client created for completion; auth header present:', Boolean(req.headers && req.headers.authorization));
+      } else if (SUPABASE_URL && process.env.SUPABASE_KEY) {
+        // fallback to service role if available (server-only)
+        client = createClient(SUPABASE_URL, process.env.SUPABASE_KEY);
+        console.log('Service client used for completion insert');
+      }
+
+      const { data, error } = await client
+        .from('completions')
+        .insert([payload])
+        .select('id, user_id, scenario_id, created_at')
+        .single();
+
       if (error) throw error;
-      return res.json({ success: true, completion: data && data[0] });
+      return res.json({ success: true, completion: data });
     } catch (e) { console.error('Failed to record completion', e); return res.status(500).json({ error: e.message || String(e) }); }
   }
   // fallback
