@@ -142,13 +142,30 @@ app.post('/api/complete', async (req, res) => {
   const { userId, scenarioId } = req.body;
   if (app.get('supabaseConfigured')){
     if (!req.user) return res.status(401).json({ error: 'Authentication required' });
-    const uid = req.user.id || userId;
+    const uid = req.user.id;
     if (!uid || typeof scenarioId === 'undefined') return res.status(400).json({ error: 'userId and scenarioId required' });
     try {
       const payload = { user_id: uid, scenario_id: scenarioId };
-      const { data, error } = await supabase.from('completions').insert([payload]);
+
+      // Use a per-request authed client so RLS policies using auth.uid() run as the user
+      let client = supabase;
+      if (SUPABASE_URL && SUPABASE_ANON_KEY && req.headers && req.headers.authorization) {
+        client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { global: { headers: { Authorization: req.headers.authorization } } });
+        console.log('Authed client created for completion; auth header present:', Boolean(req.headers && req.headers.authorization));
+      } else if (SUPABASE_URL && process.env.SUPABASE_KEY) {
+        // fallback to service role if available (server-only)
+        client = createClient(SUPABASE_URL, process.env.SUPABASE_KEY);
+        console.log('Service client used for completion insert');
+      }
+
+      const { data, error } = await client
+        .from('completions')
+        .insert([payload])
+        .select('id, user_id, scenario_id, created_at')
+        .single();
+
       if (error) throw error;
-      return res.json({ success: true, completion: data && data[0] });
+      return res.json({ success: true, completion: data });
     } catch (e) { console.error('Failed to record completion', e); return res.status(500).json({ error: e.message || String(e) }); }
   }
   // fallback
