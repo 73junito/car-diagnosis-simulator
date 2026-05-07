@@ -1,6 +1,7 @@
 const fs = require('fs');
 const vm = require('vm');
 const path = require('path');
+const Ajv = require('ajv');
 
 const SCENARIOS_PATH = path.join(__dirname, '..', 'data', 'scenarios.js');
 
@@ -30,6 +31,26 @@ function validate() {
   const metaCounts = {};
   requiredMetadata.forEach(k => metaCounts[k] = 0);
 
+  // AJV schema validation
+  const schemaPath = path.join(__dirname, '..', 'schemas', 'scenario.schema.json');
+  let ajvErrorsByScenario = {};
+  try {
+    const schemaRaw = fs.readFileSync(schemaPath, 'utf8');
+    const schema = JSON.parse(schemaRaw);
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    const validateSchema = ajv.compile(schema);
+    scenarios.forEach((s) => {
+      const valid = validateSchema(s);
+      if (!valid) {
+        ajvErrorsByScenario[`scenario[id=${s && s.id}]`] = (validateSchema.errors || []).map(e => ({ message: e.message, instancePath: e.instancePath, keyword: e.keyword, params: e.params }));
+      }
+    });
+  } catch (err) {
+    console.error('AJV schema load/compile error:', err.message);
+    // continue with custom checks; report will note AJV failure
+    ajvErrorsByScenario = { schemaLoadError: [err.message] };
+  }
+
   scenarios.forEach((s, idx) => {
     const ctx = `scenario[id=${s && s.id}]`;
     const local = [];
@@ -56,6 +77,21 @@ function validate() {
     if (local.length) scenarioErrors[ctx] = local;
   });
 
+  // Merge AJV errors into failures
+  const ajvFailures = {};
+  Object.keys(ajvErrorsByScenario).forEach(k => {
+    // map AJV entries into readable strings
+    const list = ajvErrorsByScenario[k];
+    if (!list) return;
+    ajvFailures[k] = list.map(err => {
+      if (typeof err === 'string') return err;
+      return `${err.instancePath || ''} ${err.keyword || ''}: ${err.message || JSON.stringify(err.params)}`.trim();
+    });
+    // merge with existing scenarioErrors
+    if (scenarioErrors[k]) scenarioErrors[k] = scenarioErrors[k].concat(ajvFailures[k]);
+    else scenarioErrors[k] = ajvFailures[k];
+  });
+
   const total = scenarios.length;
   const failedCount = Object.keys(scenarioErrors).length;
   const passed = total - failedCount;
@@ -72,7 +108,8 @@ function validate() {
     failedScenarios: failedCount,
     categoriesKnown: categories.slice(),
     metadataCoverage,
-    failures: scenarioErrors
+    failures: scenarioErrors,
+    schemaErrors: ajvErrorsByScenario
   };
 
   // write report

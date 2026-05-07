@@ -254,6 +254,11 @@ window.scenarios = [
     faults: [
       { id: 'F11', system: 'electrical', label: 'Dead / low battery' }
     ],
+    // provide compatibility for AJV schema: include 'fault' and 'tests' placeholders
+    fault: 'battery',
+    tests: {
+      battery: { system: 'electrical', reading: '11.2V', interpretation: 'LOW VOLTAGE' }
+    },
     faultRelationships: [],
     timeLimit: 600
   }
@@ -286,6 +291,11 @@ window.scenarios = [
       { id: 'F12', system: 'electrical', label: 'Weak / discharged battery' },
       { id: 'F13', system: 'electrical', label: 'Sticking starter / starter motor fault' }
     ],
+    fault: 'battery_or_starter',
+    tests: {
+      battery: { system: 'electrical', reading: '12.0V under load', interpretation: 'LOW_UNDER_LOAD' },
+      starter: { system: 'electrical', reading: 'High current draw', interpretation: 'HIGH_DRAW' }
+    },
     // relationship: symptom overlap and masking (battery issues can mask starter faults)
     faultRelationships: [
       { faultIds: ['F12','F13'], interaction: 'symptom_overlap' }

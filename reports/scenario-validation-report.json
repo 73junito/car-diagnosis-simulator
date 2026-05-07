@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-07T05:03:41.025Z",
+  "timestamp": "2026-05-07T05:08:48.149Z",
   "totalScenarios": 16,
   "passedScenarios": 16,
   "failedScenarios": 0,
@@ -61,5 +61,6 @@
       "percent": 100
     }
   },
-  "failures": {}
+  "failures": {},
+  "schemaErrors": {}
 }

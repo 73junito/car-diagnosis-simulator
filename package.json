@@ -4,5 +4,8 @@
 	"private": true,
 	"scripts": {
 		"validate:scenarios": "node tools/validate-scenarios.js"
+	},
+	"devDependencies": {
+		"ajv": "^8.20.0"
 	}
 }
