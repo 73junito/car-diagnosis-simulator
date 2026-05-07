@@ -28,13 +28,20 @@ jobs:
           node-version: '20'
 
       - name: Validate scenarios
+        id: validate-scenarios
         run: npm run validate:scenarios
+        continue-on-error: true
 
       - name: Upload scenario validation report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: scenario-validation-report
           path: reports/scenario-validation-report.json
+
+      - name: Fail if scenario validation failed
+        if: steps.validate-scenarios.outcome == 'failure'
+        run: exit 1
 
       - name: Install dependencies (torquemind-api)
         working-directory: torquemind-api
