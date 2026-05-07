@@ -166,7 +166,7 @@
   </div>
 
   <div id="loginScreen" class="card" style="display:none">
-    <button class="ghost" onclick="setView('landingPage')">← Back</button>
+     <button class="ghost btn-back-to-landing">← Back</button>
     <h2>Welcome</h2>
     <input id="username" placeholder="Enter name" />
     <select id="role">
@@ -199,7 +199,7 @@
 
   <!-- Scenario selection screen (SPA) -->
   <div id="scenarioSelectScreen" style="display:none; max-width:900px; width:100%;">
-    <div style="margin-bottom:8px"><button class="ghost" onclick="setView('landingPage')">← Back</button></div>
+     <div style="margin-bottom:8px"><button class="ghost btn-back-to-landing">← Back</button></div>
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <h2>Select a Scenario</h2>
@@ -229,7 +229,7 @@
 
   <div id="gameScreen" style="display:none;">
   <div style="max-width:720px;width:100%; margin:auto;">
-    <div style="margin-bottom:8px"><button class="ghost" onclick="setView('landingPage')">← Back</button></div>
+     <div style="margin-bottom:8px"><button class="ghost btn-back-to-landing">← Back</button></div>
   </div>
   <div id="ui">
     <div class="card" id="meta">
@@ -396,6 +396,8 @@
     window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
   </script>
   <!-- Lightweight Supabase-free login (no SDK) will use /auth/v1 endpoints directly from script.js -->
+  <script src="./auth.js"></script>
+  <script src="./apiClient.js"></script>
   <script src="./script.js"></script>
 </body>
 </html>
