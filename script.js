@@ -22,25 +22,22 @@ const total = scenarios.length;
 // API base: set `window.API_BASE_URL` in hosting environment to point to deployed API.
 const API_BASE = (typeof window.API_BASE_URL !== 'undefined' && window.API_BASE_URL) ? String(window.API_BASE_URL).replace(/\/$/, '') : '';
 
-// ------------------- Supabase-lite auth helpers (frontend) -------------------
-// Uses Supabase Auth REST endpoints directly so we don't need the full SDK here.
+// Lightweight wrappers that delegate to central auth/api modules when available.
+// These ensure `auth.js` / `apiClient.js` can provide implementations.
 async function supabaseSignIn(email, password){
+  if (window.supabaseSignIn && window.supabaseSignIn !== supabaseSignIn) return window.supabaseSignIn(email, password);
+  // fallback inline implementation
   const url = (window.SUPABASE_URL || '').replace(/\/$/, '');
   const anon = window.SUPABASE_ANON_KEY || '';
   if (!url || !anon) return { error: 'Supabase not configured' };
   try {
     const res = await fetch(url + '/auth/v1/token?grant_type=password', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': anon,
-        'Accept': 'application/json'
-      },
+      headers: { 'Content-Type':'application/json','apikey': anon,'Accept':'application/json' },
       body: JSON.stringify({ email, password })
     });
     const body = await res.json();
     if (!res.ok) return body;
-    // body contains access_token, expires_in, refresh_token, token_type
     if (body.access_token){
       localStorage.setItem('supabase_access_token', body.access_token);
       localStorage.setItem('supabase_refresh_token', body.refresh_token || '');
@@ -51,92 +48,188 @@ async function supabaseSignIn(email, password){
 }
 
 function supabaseSignOut(){
+  if (window.supabaseSignOut && window.supabaseSignOut !== supabaseSignOut) return window.supabaseSignOut();
   localStorage.removeItem('supabase_access_token');
   localStorage.removeItem('supabase_refresh_token');
   localStorage.removeItem('supabase_user_email');
 }
 
 function showToast(msg, timeout=3000){
+  if (window.showToast && window.showToast !== showToast) return window.showToast(msg, timeout);
   let t = document.getElementById('carSim_toast');
-  if (!t){
-    t = document.createElement('div'); t.id = 'carSim_toast';
-    t.style.position = 'fixed'; t.style.right = '12px'; t.style.top = '12px'; t.style.zIndex = 10000;
-    document.body.appendChild(t);
-  }
+  if (!t){ t = document.createElement('div'); t.id = 'carSim_toast'; t.style.position = 'fixed'; t.style.right = '12px'; t.style.top = '12px'; t.style.zIndex = 10000; document.body.appendChild(t); }
   const el = document.createElement('div'); el.style.background = 'rgba(0,0,0,0.8)'; el.style.color='white'; el.style.padding='8px 12px'; el.style.marginTop='8px'; el.style.borderRadius='6px'; el.innerText = msg;
-  t.appendChild(el);
-  setTimeout(()=>{ el.remove(); }, timeout);
+  t.appendChild(el); setTimeout(()=>{ el.remove(); }, timeout);
 }
 
 function copyToClipboard(text){
   if (!text) return false;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard'));
-    return true;
-  }
+  if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard')); return true; }
   try { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('Copied to clipboard'); return true; } catch(e){ return false; }
 }
 
 function clearLocalFallbackOnAuth(){
-  // Remove any local-* class ids once a real auth session exists
-  const token = getAccessToken();
-  if (!token) return;
-  if (currentClassId && String(currentClassId).startsWith('local-')){
-    currentClassId = null; currentClassCode = null;
-    localStorage.removeItem('carSim_currentClassId');
-    localStorage.removeItem('carSim_currentClassCode');
-  }
+  if (window.clearLocalFallbackOnAuth && window.clearLocalFallbackOnAuth !== clearLocalFallbackOnAuth) return window.clearLocalFallbackOnAuth();
+  const token = getAccessToken(); if (!token) return; if (currentClassId && String(currentClassId).startsWith('local-')){ currentClassId = null; currentClassCode = null; localStorage.removeItem('carSim_currentClassId'); localStorage.removeItem('carSim_currentClassCode'); }
 }
 
-function getAccessToken(){ return localStorage.getItem('supabase_access_token') || null; }
+function getAccessToken(){ if (window.getAccessToken && window.getAccessToken !== getAccessToken) return window.getAccessToken(); return localStorage.getItem('supabase_access_token') || null; }
 
-// Monkey-patch fetch to automatically attach Authorization Bearer token for API_BASE calls
-(() => {
-  const origFetch = window.fetch.bind(window);
-  window.fetch = async function(resource, init){
-    try {
-      let url = typeof resource === 'string' ? resource : (resource && resource.url) ? resource.url : '';
-      const shouldAttach = API_BASE && url && url.startsWith(API_BASE);
-      if (shouldAttach){
-        init = init || {};
-        init.headers = init.headers || {};
-        // normalize Headers
-        const headers = new Headers(init.headers);
-        const token = getAccessToken();
-        if (token) headers.set('Authorization', 'Bearer ' + token);
-        init.headers = headers;
-      }
-      const resp = await origFetch(resource, init);
-      // Global handling for auth failures from our API: clear tokens and route to login
-      try {
-        const respUrl = (typeof resource === 'string') ? resource : (resource && resource.url) ? resource.url : '';
-        if (respUrl && API_BASE && respUrl.startsWith(API_BASE) && (resp.status === 401 || resp.status === 403)){
-          supabaseSignOut();
-          // notify listeners that auth expired
-          window.dispatchEvent(new CustomEvent('supabase:authExpired', { detail: { status: resp.status } }));
-        }
-      } catch (e){}
-      return resp;
-    } catch (e){ return Promise.reject(e); }
-  };
-})();
+// Modal-based teacher sign-in (replaces prompt-based flow)
+function ensureTeacherLoginModal(){
+  let modal = document.getElementById('teacherLoginModal');
+  if (modal) return modal;
 
-// Simple teacher-login flow triggered from teacher buttons. Uses prompt() for minimal UX.
-async function teacherLoginPrompt(){
-  if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) return alert('Supabase is not configured for this frontend.');
-  const email = prompt('Teacher email (Supabase):');
-  if (!email) return;
-  const password = prompt('Password:');
-  if (!password) return;
-  const res = await supabaseSignIn(email, password);
-  if (res && res.access_token){
-    showToast('Signed in successfully');
-    // clear any local fallback class ids and refresh teacher class list
-    try { clearLocalFallbackOnAuth(); if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses(); } catch(e){}
-    return true;
+  // inject styles for modal inputs/buttons
+  injectTeacherLoginModalStyles();
+
+  modal = document.createElement('div');
+  modal.id = 'teacherLoginModal';
+  modal.style.cssText = `
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.65); z-index:10001;
+  `;
+
+  modal.innerHTML = `
+    <div style="width:min(420px,92vw);background:var(--bg,#111);color:var(--fg,#fff);
+      border-radius:12px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.35)">
+      <h2>Teacher Sign In</h2>
+      <p style="color:var(--muted,#aaa)">Sign in to access the teacher dashboard.</p>
+
+      <form id="teacherLoginForm">
+        <label for="teacherLoginEmail">Email</label>
+        <input id="teacherLoginEmail" name="email" type="email" autocomplete="username"
+          style="width:100%;margin:6px 0 12px;padding:10px">
+
+        <label for="teacherLoginPassword">Password</label>
+        <input id="teacherLoginPassword" name="password" type="password" autocomplete="current-password"
+          style="width:100%;margin:6px 0 12px;padding:10px">
+
+        <div id="teacherLoginError" style="color:#ff8a8a;margin-bottom:10px"></div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button id="teacherLoginCancel" type="button">Cancel</button>
+          <button id="teacherLoginSubmit" type="submit">Sign In</button>
+        </div>
+      </form>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function injectTeacherLoginModalStyles(){
+  if (document.getElementById('teacherLoginModalStyles')) return;
+
+  const style = document.createElement('style');
+  style.id = 'teacherLoginModalStyles';
+  style.textContent = `
+    #teacherLoginModal input {
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,.06);
+      color: inherit;
+      outline: none;
+    }
+
+    #teacherLoginModal input:focus {
+      border-color: rgba(6,182,212,.9);
+      box-shadow: 0 0 0 3px rgba(6,182,212,.18);
+    }
+
+    #teacherLoginModal button {
+      border-radius: 8px;
+      padding: 9px 14px;
+      cursor: pointer;
+    }
+
+    #teacherLoginSubmit {
+      font-weight: 700;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function teacherLoginPrompt(){
+  if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+    alert('Supabase is not configured for this frontend.');
+    return Promise.resolve(false);
   }
-  alert('Sign-in failed: ' + (res?.error_description || res?.error || JSON.stringify(res)));
-  return false;
+
+  const modal = ensureTeacherLoginModal();
+  const emailEl = document.getElementById('teacherLoginEmail');
+  const passEl = document.getElementById('teacherLoginPassword');
+  const errEl = document.getElementById('teacherLoginError');
+  const submit = document.getElementById('teacherLoginSubmit');
+  const cancel = document.getElementById('teacherLoginCancel');
+
+  if (errEl) errEl.innerText = '';
+  if (passEl) passEl.value = '';
+  modal.style.display = 'flex';
+  setTimeout(() => { if (emailEl) emailEl.focus(); }, 0);
+
+  return new Promise(resolve => {
+    const cleanup = result => {
+      if (submit) submit.onclick = null;
+      if (cancel) cancel.onclick = null;
+      if (modal) modal.onclick = null;
+      if (emailEl) emailEl.removeEventListener('keydown', onKeyDown);
+      if (passEl) passEl.removeEventListener('keydown', onKeyDown);
+      modal.style.display = 'none';
+      resolve(result);
+    };
+
+    if (cancel) cancel.onclick = () => cleanup(false);
+
+    modal.onclick = e => { if (e.target === modal) cleanup(false); };
+
+    if (submit) submit.onclick = async () => {
+      const email = (emailEl && emailEl.value) ? emailEl.value.trim() : '';
+      const password = passEl ? passEl.value : '';
+
+      if (!email || !password) {
+        if (errEl) errEl.innerText = 'Enter both email and password.';
+        return;
+      }
+
+      submit.disabled = true;
+      submit.innerText = 'Signing in...';
+
+      const res = await supabaseSignIn(email, password);
+
+      submit.disabled = false;
+      submit.innerText = 'Sign In';
+
+      if (res && res.access_token) {
+        showToast('Signed in successfully');
+        try {
+          clearLocalFallbackOnAuth();
+          if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses();
+        } catch(e){}
+        cleanup(true);
+        return;
+      }
+
+      if (errEl) errEl.innerText = 'Sign-in failed: ' + (res?.error_description || res?.error || 'Invalid login');
+    };
+
+    // keyboard handlers: Enter submits, Escape cancels
+    function onKeyDown(e){
+      if (e.key === 'Enter'){
+        e.preventDefault();
+        if (submit) submit.click();
+      }
+      if (e.key === 'Escape'){
+        e.preventDefault();
+        cleanup(false);
+      }
+    }
+
+    if (emailEl) emailEl.addEventListener('keydown', onKeyDown);
+    if (passEl) passEl.addEventListener('keydown', onKeyDown);
+  });
 }
 
 // Wire teacher-facing buttons to prompt for login then open teacher screen.
@@ -150,6 +243,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // delegate to setView which will enforce auth before rendering teacher screen
       setView('teacherScreen');
     });
+  });
+
+  // wire any static "back to landing" buttons added in HTML
+  document.querySelectorAll('.btn-back-to-landing').forEach(btn => {
+    btn.addEventListener('click', (e) => { e.preventDefault(); setView('landingPage'); });
   });
 
   const logoutEl = document.getElementById('btn-back'); // reuse Back button as a quick sign-out for teachers
@@ -200,18 +298,26 @@ async function ensureTeacherAuthAndRender(){
   try {
     // if authenticated, clear any local fallback class ids
     try { clearLocalFallbackOnAuth(); } catch(e){}
-    const url = API_BASE + '/api/teacher/data' + (currentClassId ? ('?classId=' + encodeURIComponent(currentClassId)) : '');
-    const res = await fetch(url, { method: 'GET', credentials: 'same-origin' });
-    if (res.status === 401 || res.status === 403){
-      supabaseSignOut();
-      showTeacherError('Authentication failed. Please sign in again.');
+    const path = '/api/teacher/data' + (currentClassId ? ('?classId=' + encodeURIComponent(currentClassId)) : '');
+    try {
+      const data = await apiGet(path);
+      if (!data){
+        showTeacherError('Unable to fetch teacher data. Retry or sign in.');
+        return;
+      }
+      clearTeacherError();
+      try { if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses(); } catch(e){}
+      renderTeacherData(data);
+      return;
+    } catch (e){
+      if (e && (e.status === 401 || e.status === 403)){
+        try { supabaseSignOut(); } catch(_){}
+        showTeacherError('Authentication failed. Please sign in again.');
+        return;
+      }
+      showTeacherError('Unable to fetch teacher data (' + (e && e.status ? e.status : 'network') + '). Retry or sign in.');
       return;
     }
-    if (!res.ok){
-      showTeacherError('Unable to fetch teacher data (' + res.status + '). Retry or sign in.');
-      return;
-    }
-    const data = await res.json();
     clearTeacherError();
     try { if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses(); } catch(e){}
     renderTeacherData(data);
@@ -220,10 +326,7 @@ async function ensureTeacherAuthAndRender(){
   }
 }
 
-async function loadTeacherData(){
-  // wrapper used by retry button
-  await ensureTeacherAuthAndRender();
-}
+// `loadTeacherData()` implemented later — avoid duplicate definition.
 
 function renderTeacherData(data){
   // Minimal rendering: show summary panel and student list; more enhancements later
@@ -235,7 +338,13 @@ function renderTeacherData(data){
         const list = document.createElement('div'); list.className = 'card';
         data.students.forEach(s => {
           const row = document.createElement('div'); row.style.padding = '6px 0';
-          row.innerHTML = `<strong>${escapeHtml(s.name || s.email || 'Student')}</strong> — ${escapeHtml(s.class || '')} <button onclick="viewStudent('${escapeHtml(s.id||'')}')">View</button>`;
+          const nameEl = document.createElement('strong'); nameEl.innerText = s.name || s.email || 'Student';
+          const sep = document.createElement('span'); sep.style.marginLeft = '8px'; sep.innerText = ' — ' + (s.class || '');
+          const btn = document.createElement('button'); btn.className = 'secondary-cta btn-view-student'; btn.innerText = 'View';
+          btn.addEventListener('click', () => viewStudent(s.id || ''));
+          row.appendChild(nameEl);
+          row.appendChild(sep);
+          row.appendChild(btn);
           list.appendChild(row);
         });
         studentList.appendChild(list);
@@ -258,6 +367,14 @@ const AppState = {
   profile: {},
   ui: { view: 'homeScreen', context: null }
 };
+
+// Ensure a global studentProfile object exists early so loadScenario() can rely on it
+let studentProfile = window.studentProfile || {
+  weakSystems: {},
+  misconceptionMap: {},
+  reasoningScoreHistory: []
+};
+window.studentProfile = studentProfile;
 
 // Central SPA view router
 function setView(viewId, data){
@@ -303,6 +420,7 @@ function startDemo(){
 
 /* =========== API HELPERS (minimal, with local fallback) =========== */
 async function apiGet(path){
+  if (window.apiGet && window.apiGet !== apiGet) return window.apiGet(path);
   try {
     const url = API_BASE ? (API_BASE + path) : path;
     const res = await fetch(url, { credentials: 'same-origin' });
@@ -312,6 +430,7 @@ async function apiGet(path){
 }
 
 async function apiPost(path, body){
+  if (window.apiPost && window.apiPost !== apiPost) return window.apiPost(path, body);
   try {
     const url = API_BASE ? (API_BASE + path) : path;
     const res = await fetch(url, { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify(body), credentials: 'same-origin' });
@@ -368,13 +487,19 @@ function renderScenarioList(){
         </div>
         <div class="scenario-actions">
           <div style="flex:1"></div>
-          <button onclick="showScenarioPreview('${id}')">Preview</button>
-          <button onclick="startScenarioById('${id}')">Start</button>
+          <button class="btn-preview" data-id="${id}">Preview</button>
+          <button class="btn-start" data-id="${id}">Start</button>
         </div>
       </div>
     `;
   }).join('');
   container.innerHTML = html;
+
+  // attach handlers for preview/start buttons
+  setTimeout(() => {
+    container.querySelectorAll('.btn-preview').forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => showScenarioPreview(id)); });
+    container.querySelectorAll('.btn-start').forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => startScenarioById(id)); });
+  }, 0);
 
   // wire small UI buttons
   const refresh = document.getElementById('btn-refresh-scenarios'); if (refresh) refresh.onclick = () => renderScenarioList();
@@ -505,65 +630,77 @@ function applyEvidenceToModel(component, interpretation){
 }
 
 // --- Student learning/profile memory (lightweight) ---
-let studentProfile = {
-  weakSystems: {},
-  misconceptionMap: {},
-  reasoningScoreHistory: []
-};
-
-function calculateReasoningScore(){
-  let score = 0;
-  try {
-    if (systemJustification && systemJustification.length > 10) score += 3;
-    if (lastExplanation && lastExplanation.topEvidence && lastExplanation.topEvidence.length) score += 2;
-  } catch(e){}
-  return score;
-}
-
-function updateStudentProfile(isCorrect, chosenSystem, correctSystem){
-  if (!studentProfile) studentProfile = { weakSystems: {}, misconceptionMap: {}, reasoningScoreHistory: [] };
-  if (!chosenSystem) chosenSystem = 'unknown';
-  // track system weakness
-  if (!studentProfile.weakSystems[chosenSystem]) studentProfile.weakSystems[chosenSystem] = 0;
-  studentProfile.weakSystems[chosenSystem] += isCorrect ? 0 : 1;
-
-  // track misconception pattern
-  const key = `${chosenSystem}->${correctSystem || 'unknown'}`;
-  if (!studentProfile.misconceptionMap[key]) studentProfile.misconceptionMap[key] = 0;
-  studentProfile.misconceptionMap[key]++;
-
-  // track reasoning trend
-  const reasoningScore = calculateReasoningScore() || 0;
-  studentProfile.reasoningScoreHistory.push(reasoningScore);
-  // cap history length
-  if (studentProfile.reasoningScoreHistory.length > 100) studentProfile.reasoningScoreHistory.shift();
-}
-
-function adaptNextScenarioDifficulty(){
-  const entries = Object.entries(studentProfile.weakSystems || {});
-  if (!entries.length) return null;
-  entries.sort((a,b)=> b[1]-a[1]);
-  const top = entries[0];
-  if (top && top[1] > 2) return top[0];
-  return null;
-}
-
+// Lightweight fallback: compute simple learning insights for a class
 function getLearningInsightsForClass(classData){
-  // aggregate weakest systems and misconceptions across class
-  const aggWeak = {};
-  const aggMis = {};
-  const reasoningSamples = [];
-  (classData || []).forEach(s => {
-    const p = s.studentProfile || null;
-    if (!p) return;
-    Object.entries(p.weakSystems||{}).forEach(([k,v]) => { aggWeak[k] = (aggWeak[k]||0) + v; });
-    Object.entries(p.misconceptionMap||{}).forEach(([k,v]) => { aggMis[k] = (aggMis[k]||0) + v; });
-    if (p.reasoningScoreHistory && p.reasoningScoreHistory.length) reasoningSamples.push(p.reasoningScoreHistory.slice(-5));
-  });
-  const weakest = Object.entries(aggWeak).sort((a,b)=> b[1]-a[1])[0] || null;
-  const topMis = Object.entries(aggMis).sort((a,b)=> b[1]-a[1])[0] || null;
-  const reasoningTrend = reasoningSamples.length ? reasoningSamples.map(arr => arr.reduce((a,c)=>a+c,0)/arr.length) : [];
-  return { weakestSystem: weakest, topMisconception: topMis, reasoningTrend };
+  try {
+    // safe defaults
+    const systemWeakness = {};
+    const misconceptions = {};
+    const reasoningPerStudent = [];
+
+    if (!Array.isArray(classData) || classData.length === 0) {
+      return { weakestSystem: null, topMisconception: null, reasoningTrend: [], systemWeakness: {}, misconceptions: {} };
+    }
+
+    // Walk students and collect signals
+    classData.forEach(student => {
+      // 1) aggregate weak system counts (support studentProfile.weakSystems or legacy weakSystems)
+      const ws = (student && student.studentProfile && student.studentProfile.weakSystems) ? student.studentProfile.weakSystems : (student && student.weakSystems) ? student.weakSystems : {};
+      Object.entries(ws || {}).forEach(([sys, cnt]) => { systemWeakness[sys] = (systemWeakness[sys] || 0) + (Number(cnt) || 0); });
+
+      // 2) aggregate misconception pairs from explanations if available
+      const exs = Array.isArray(student.explanations) ? student.explanations : [];
+      exs.forEach(ex => {
+        // prefer an explicit 'pair' like "battery->starter" or 'confusion'
+        let key = null;
+        if (ex && ex.pair) key = String(ex.pair);
+        else if (ex && ex.confusion) key = String(ex.confusion);
+        else if (ex && ex.selectedSystem && ex.diagnosed) key = `${ex.selectedSystem}->${ex.diagnosed}`;
+        if (key) misconceptions[key] = (misconceptions[key] || 0) + 1;
+      });
+
+      // 3) collect recent reasoning scores (support multiple field names)
+      let scores = [];
+      if (Array.isArray(student.reasoningSamples) && student.reasoningSamples.length) scores = student.reasoningSamples.map(Number).filter(n=>!isNaN(n));
+      else if (Array.isArray(student.reasoningHistory) && student.reasoningHistory.length) scores = student.reasoningHistory.map(Number).filter(n=>!isNaN(n));
+      else if (exs.length){
+        // try to extract numeric confidence/reasoningScore per explanation
+        const confidences = exs.map(e => (e && (typeof e.confidence === 'number' ? e.confidence : (typeof e.reasoningScore === 'number' ? e.reasoningScore : null)))).filter(n=>typeof n === 'number');
+        scores = confidences;
+      }
+      if (scores.length) reasoningPerStudent.push(scores.slice(-5)); // keep last up to 5 samples per student
+    });
+
+    // Determine weakest system (highest aggregated count)
+    const weakestEntry = Object.entries(systemWeakness).sort((a,b)=> b[1]-a[1])[0] || null;
+
+    // Determine top misconception
+    const topMisEntry = Object.entries(misconceptions).sort((a,b)=> b[1]-a[1])[0] || null;
+
+    // Build reasoningTrend: align samples from most-recent backwards up to 5 points
+    const maxLen = reasoningPerStudent.reduce((m, arr) => Math.max(m, arr.length), 0);
+    const points = Math.min(5, maxLen);
+    const trend = [];
+    for (let i = points; i >= 1; i--){
+      // index-from-end = i (1 => oldest of last window, points => most recent)
+      const idxFromEnd = i;
+      const vals = reasoningPerStudent.map(arr => arr[arr.length - idxFromEnd]).filter(v=>typeof v === 'number');
+      if (vals.length){
+        const avg = vals.reduce((a,b)=>a+b,0)/vals.length;
+        trend.push(Math.round(avg * 10)/10);
+      }
+    }
+
+    return {
+      weakestSystem: weakestEntry ? weakestEntry[0] : null,
+      topMisconception: topMisEntry ? topMisEntry[0] : null,
+      reasoningTrend: trend,
+      systemWeakness,
+      misconceptions
+    };
+  } catch (e){
+    return { weakestSystem: null, topMisconception: null, reasoningTrend: [], systemWeakness: {}, misconceptions: {} };
+  }
 }
 
 // Conservative adaptive recommendation engine (teacher-facing only)
@@ -649,11 +786,16 @@ function renderScenarioRecommendations(classData = [], scenariosList = []){
       const assigned = classAssignment && classAssignment.activeScenario && String(classAssignment.activeScenario) === String(s.id);
       html += `<div style="margin:6px 0;padding:8px;border:1px solid ${assigned ? 'rgba(100,200,100,0.7)' : 'rgba(255,255,255,0.04)'};background:${assigned ? 'linear-gradient(90deg, rgba(100,200,100,0.06), rgba(255,255,255,0.01))' : 'rgba(255,255,255,0.01)'}">`;
       html += `<div style="display:flex;justify-content:space-between;align-items:center;"><div><strong>Scenario ${s.id}</strong><div style="font-size:90%">${s.symptoms}</div>${s.trainingFocus?`<div style=\"font-size:85%;color:var(--muted,#999)\">${s.trainingFocus}</div>`:''}</div>`;
-      html += `<div style="display:flex;gap:6px"><button onclick="showScenarioPreview('${s.id}')">Preview</button><button onclick="assignScenarioToClass('${s.id}')">Assign to Class</button></div></div>`;
+      html += `<div style="display:flex;gap:6px"><button class="btn-preview" data-id="${s.id}">Preview</button><button class="btn-assign-scenario" data-id="${s.id}">Assign to Class</button></div></div>`;
       html += `</div>`;
     });
   }
   container.innerHTML = html;
+  // attach handlers for preview and assign buttons
+  setTimeout(() => {
+    container.querySelectorAll('.btn-preview').forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => showScenarioPreview(id)); });
+    container.querySelectorAll('.btn-assign-scenario').forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => assignScenarioToClass(id)); });
+  }, 0);
 }
 
 // --- Confidence calibration chart (teacher dashboard) ---
@@ -826,18 +968,43 @@ function renderFilteredStudents(){
       return sys && String(sys.value) === String(activeSystemFilter);
     }));
   }
-  list.innerHTML = `\n    <div style="margin-bottom:8px;">\n      ${activeSystemFilter ? `<span class="filter-pill">Filtered: ${activeSystemFilter}</span><button onclick="clearSystemFilter()" class="ghost">Clear</button><button onclick="assignTraining('${activeSystemFilter}')">Assign Training</button>` : '' }\n    </div>\n  ` + (filtered.length ? filtered.map(s => `\n      <div class="teacher-student-entry" data-student-name="${s.name}" style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">\n        <h3>${s.name}</h3>\n        <p>Score: ${s.score}</p>\n        <p>Accuracy: ${s.correct} / ${s.correct + s.wrong}</p>\n        <p>Level: ${s.currentLevel + 1}/${total}</p>\n        <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>\n        <p>Last: ${s.lastUpdated || '—'}</p>\n        <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>\n        <div style="margin-top:8px"><button class="btn-view-replay secondary-cta" data-name="${s.name}">View Replay</button></div>\n      </div>\n    `).join('') : '<div style="color:var(--muted)">No students match the filter.</div>');
-  list.innerHTML = `\n    <div style="margin-bottom:8px; display:flex; gap:8px; align-items:center">\n      ${activeSystemFilter ? `<span class="filter-pill">Filtered: ${activeSystemFilter}</span><button onclick="clearSystemFilter()" class="ghost">Clear</button><button onclick="assignTraining('${activeSystemFilter}')">Assign to Weak Students</button><button onclick="assignTrainingToSelected('${activeSystemFilter}')">Assign to Selected</button>` : '' }\n    </div>\n  ` + (filtered.length ? filtered.map(s => `\n      <div class="student-row" data-student-name="${s.name}">\n        <input type="checkbox" class="student-select" value="${s.name}" />\n        <div style="flex:1">\n          <strong>${s.name}</strong><br>\n          <span class="muted">${getStudentAssignmentProgress(s)}</span>\n        </div>\n        <div style="display:flex; gap:8px;">\n          <button onclick="openStudentDetail('${s.name}')" class="secondary-cta">View</button>\n          <button class="btn-view-replay secondary-cta" data-name="${s.name}">Replay</button>\n        </div>\n      </div>\n    `).join('') : '<div style="color:var(--muted)">No students match the filter.</div>');
 
-  // bind replay buttons
-  setTimeout(() => {
-    const buttons = document.querySelectorAll('.btn-view-replay');
-    buttons.forEach(b => {
-      const name = b.getAttribute('data-name');
-      if (!name) return;
-      b.addEventListener('click', () => openStudentDetail(name));
+  // build header with optional filter controls
+  list.innerHTML = '';
+  const header = document.createElement('div'); header.style.marginBottom = '8px'; header.style.display = 'flex'; header.style.gap = '8px'; header.style.alignItems = 'center';
+  if (activeSystemFilter){
+    const pill = document.createElement('span'); pill.className = 'filter-pill'; pill.innerText = `Filtered: ${activeSystemFilter}`;
+    const btnClear = document.createElement('button'); btnClear.className = 'ghost btn-clear-filter'; btnClear.innerText = 'Clear';
+    const btnAssignWeak = document.createElement('button'); btnAssignWeak.className = 'btn-assign-weak'; btnAssignWeak.dataset.system = activeSystemFilter; btnAssignWeak.innerText = 'Assign to Weak Students';
+    const btnAssignSel = document.createElement('button'); btnAssignSel.className = 'btn-assign-selected'; btnAssignSel.dataset.system = activeSystemFilter; btnAssignSel.innerText = 'Assign to Selected';
+    header.appendChild(pill); header.appendChild(btnClear); header.appendChild(btnAssignWeak); header.appendChild(btnAssignSel);
+  }
+  list.appendChild(header);
+
+  // build student entries
+  const container = document.createElement('div');
+  if (!filtered.length){
+    container.innerHTML = '<div style="color:var(--muted)">No students match the filter.</div>';
+    list.appendChild(container);
+  } else {
+    filtered.forEach(s => {
+      const row = document.createElement('div'); row.className = 'student-row'; row.dataset.studentName = s.name; row.style.display = 'flex'; row.style.alignItems = 'center'; row.style.gap = '8px'; row.style.padding = '8px 0';
+      const chk = document.createElement('input'); chk.type = 'checkbox'; chk.className = 'student-select'; chk.value = s.name;
+      const info = document.createElement('div'); info.style.flex = '1'; info.innerHTML = `<strong>${escapeHtml(s.name)}</strong><br><span class="muted">${escapeHtml(getStudentAssignmentProgress(s))}</span>`;
+      const actions = document.createElement('div'); actions.style.display = 'flex'; actions.style.gap = '8px';
+      const btnView = document.createElement('button'); btnView.className = 'secondary-cta btn-open-student'; btnView.innerText = 'View'; btnView.addEventListener('click', () => openStudentDetail(s.name));
+      const btnReplay = document.createElement('button'); btnReplay.className = 'btn-view-replay secondary-cta'; btnReplay.dataset.name = s.name; btnReplay.innerText = 'Replay'; btnReplay.addEventListener('click', () => openStudentDetail(s.name));
+      actions.appendChild(btnView); actions.appendChild(btnReplay);
+      row.appendChild(chk); row.appendChild(info); row.appendChild(actions);
+      container.appendChild(row);
     });
-  }, 10);
+    list.appendChild(container);
+  }
+
+  // attach header listeners
+  const btnClearEl = list.querySelector('.btn-clear-filter'); if (btnClearEl) btnClearEl.addEventListener('click', clearSystemFilter);
+  const btnAssignWeakEl = list.querySelector('.btn-assign-weak'); if (btnAssignWeakEl) btnAssignWeakEl.addEventListener('click', () => assignTraining(btnAssignWeakEl.dataset.system));
+  const btnAssignSelEl = list.querySelector('.btn-assign-selected'); if (btnAssignSelEl) btnAssignSelEl.addEventListener('click', () => assignTrainingToSelected(btnAssignSelEl.dataset.system));
 }
 
 function getSelectedStudents(){
@@ -970,7 +1137,13 @@ function renderAutoRecommendations(classData){
   if (!el) return;
   const recs = generateAutoRecommendations(classData);
   if (!recs.length) { el.innerHTML = '<p style="color:var(--muted)">No recommendations available</p>'; return; }
-  el.innerHTML = recs.map(r => `\n    <div class="card" style="margin-bottom:10px; padding:10px">\n      <strong>${r.system}</strong><br>\n      Accuracy: ${r.accuracy}%<br>\n      Weak Students: ${r.weakStudents}<br>\n      <div style="margin-top:8px">\n        <button onclick="assignTraining('${r.system}')">Assign ${r.system} Training</button>\n      </div>\n    </div>\n  `).join('');
+  el.innerHTML = recs.map(r => `\n    <div class="card" style="margin-bottom:10px; padding:10px">\n      <strong>${r.system}</strong><br>\n      Accuracy: ${r.accuracy}%<br>\n      Weak Students: ${r.weakStudents}<br>\n      <div style="margin-top:8px">\n        <button class="btn-assign-rec" data-system="${r.system}">Assign ${r.system} Training</button>\n      </div>\n    </div>\n  `).join('');
+
+  // attach assign listeners
+  setTimeout(() => {
+    const btns = el.querySelectorAll('.btn-assign-rec');
+    btns.forEach(b => { const sys = b.getAttribute('data-system'); if (!sys) return; b.addEventListener('click', () => assignTraining(sys)); });
+  }, 0);
 }
 
 function renderStudentRecommendations(student){
@@ -992,8 +1165,13 @@ function renderStudentRecommendations(student){
   const recs = topSystem ? getRecommendedScenarios(topSystem) : [];
   if (!recs.length) return;
   // append recommendations below assigned work
-  const markup = `\n    <div style="margin-top:10px; border-top:1px dashed rgba(255,255,255,0.03); padding-top:10px">\n      <h4>Recommended Practice</h4>\n      <div>Target: <strong>${topSystem}</strong></div>\n      ${recs.map(s => `<div style="margin-top:6px">${s.id || s.index} — ${s.primarySystem || ''} • Difficulty ${s.difficulty || ''} <button onclick="startScenarioById('${s.id || s.index}')" style="margin-left:8px">Start</button></div>`).join('')}\n    </div>\n  `;
+  const markup = `\n    <div class="student-recs" style="margin-top:10px; border-top:1px dashed rgba(255,255,255,0.03); padding-top:10px">\n      <h4>Recommended Practice</h4>\n      <div>Target: <strong>${topSystem}</strong></div>\n      ${recs.map(s => `<div style="margin-top:6px">${s.id || s.index} — ${s.primarySystem || ''} • Difficulty ${s.difficulty || ''} <button class="btn-start-scenario" data-id="${s.id || s.index}" style="margin-left:8px">Start</button></div>`).join('')}\n    </div>\n  `;
   el.innerHTML = (el.innerHTML || '') + markup;
+  // attach start listeners
+  setTimeout(() => {
+    const starts = el.querySelectorAll('.btn-start-scenario');
+    starts.forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => startScenarioById(id)); });
+  }, 0);
 }
 
 // Helper: find scenario by id (flexible matching)
@@ -1291,8 +1469,15 @@ async function login(){
 
   // route via central router
   if(userRole === 'teacher'){
-    // attempt to load or create a class for this teacher
+    // ensure teacher is signed into Supabase before calling protected endpoints
     try {
+      const token = getAccessToken();
+      if (!token) {
+        const signed = await teacherLoginPrompt();
+        if (!signed) { showToast('Teacher sign-in required'); return; }
+      }
+
+      // attempt to load or create a class for this teacher
       const list = await getClasses();
       const classes = (list && list.classes) ? list.classes : (list && list.length ? list : []);
       if (classes && classes.length){
@@ -1437,12 +1622,35 @@ function showReplay(student){
   const viewer = document.getElementById('replayViewer');
   const timeline = document.getElementById('replayTimeline');
   if (!viewer || !timeline) return;
-  const replays = student.replays || [];
-  if (!replays.length){ timeline.innerHTML = '<p>No replay data available for this student.</p>'; viewer.style.display = 'block'; return; }
+  // Ensure viewer is visible upfront so any later errors won't leave it hidden
+  try {
+    console.log('showReplay invoked', student && (student.id || student.name || '[no-id]'));
+    viewer.style.display = 'block';
+    viewer.hidden = false;
+    viewer.classList.remove('hidden');
+    viewer.style.visibility = 'visible';
+  } catch(e){}
+
+  // show a loading placeholder immediately so headless tests can observe content
+  try { timeline.innerHTML = '<div class="replay-loading">Loading replay...</div>'; } catch(e){}
+
+  const replays = (student && student.replays) || [];
+  if (!replays.length){
+    console.log('showReplay: no replays for student', student && (student.id || student.name));
+    timeline.innerHTML = '<p>No replay data available for this student.</p>';
+    return;
+  }
   // show most recent replay by default
   const last = replays[replays.length - 1];
   timeline.innerHTML = '';
   const actions = last.actions || [];
+  // validate actions exist
+  if (!Array.isArray(actions) || actions.length === 0){
+    console.log('showReplay: replay has no actions', last);
+    timeline.innerHTML = '<p>No actions recorded in this replay.</p>';
+    return;
+  }
+  console.log('showReplay: rendering', actions.length, 'actions; sample:', actions[0]);
   actions.forEach((a, idx) => {
     const el = document.createElement('div'); el.className = 'replay-item'; el.setAttribute('data-idx', idx);
     const t = document.createElement('span'); t.className = 'replay-time'; t.innerText = new Date(a.time).toLocaleTimeString();
@@ -1470,12 +1678,25 @@ function showReplay(student){
   const stopBtn = document.getElementById('replay-stop');
   const speedSel = document.getElementById('replay-speed');
   if (playBtn) {
-    playBtn.onclick = () => playReplay(actions, speedSel ? Number(speedSel.value) : 800);
+    try { playBtn.removeEventListener('click', playBtn._replayHandler); } catch(e){}
+    const playHandler = () => playReplay(actions, speedSel ? Number(speedSel.value) : 800);
+    playBtn.addEventListener('click', playHandler);
+    playBtn._replayHandler = playHandler;
   }
   if (stopBtn) {
-    stopBtn.onclick = () => stopReplay();
+    try { stopBtn.removeEventListener('click', stopBtn._stopHandler); } catch(e){}
+    const stopHandler = () => stopReplay();
+    stopBtn.addEventListener('click', stopHandler);
+    stopBtn._stopHandler = stopHandler;
   }
-  viewer.style.display = 'block';
+
+  // final visibility enforcement in case other code toggles display
+  try {
+    viewer.style.display = 'block';
+    viewer.hidden = false;
+    viewer.classList.remove('hidden');
+    viewer.style.visibility = 'visible';
+  } catch(e){}
 }
 
 let replayTimer = null;
@@ -1517,6 +1738,14 @@ function stopReplay(){
   if (replayTimer){ clearTimeout(replayTimer); replayTimer = null; }
   document.querySelectorAll('.replay-item.active').forEach(el => el.classList.remove('active'));
 }
+
+// Expose helpers to `window` so external scripts/tests can call them reliably
+try {
+  if (typeof window !== 'undefined'){
+    window.showReplay = showReplay;
+    window.openStudentDetail = openStudentDetail;
+  }
+} catch(e){}
 
 function formatReplayActionWithDelta(a, prev){
   const time = new Date(a.time).toLocaleTimeString();
@@ -1617,6 +1846,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const createBtn = document.getElementById('btn-create-class');
   if (createBtn) createBtn.onclick = async () => {
     const name = (document.getElementById('newClassName') || {}).value || (currentUser ? (currentUser + "'s Class") : 'New Class');
+    // require teacher sign-in before attempting backend create
+    const token = getAccessToken();
+    if (!token) {
+      const signed = await teacherLoginPrompt();
+      if (!signed) { showToast('Teacher sign-in required'); return; }
+    }
     if (!name) return alert('Enter a class name');
     showToast('Creating class...');
     const res = await createClass(name);
@@ -1674,6 +1909,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!sel) return;
     sel.innerHTML = '';
     try {
+      // ensure teacher is signed in before calling protected endpoint
+      const token = getAccessToken();
+      if (!token) {
+        const signed = await teacherLoginPrompt();
+        if (!signed) { showToast('Teacher sign-in required to load classes'); return; }
+      }
       const resp = await getClasses();
       const classes = (resp && resp.classes) ? resp.classes : (resp && resp.length ? resp : []);
       // add a small class info container for code + copy
