@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TorqueMind Scenario",
+  "type": "object",
+  "required": ["id","symptoms","fault","tests","symptomCategory"],
+  "properties": {
+    "id": { "type": ["integer","string"] },
+    "symptoms": { "type": "string" },
+    "difficulty": { "type": "number", "minimum": 1, "maximum": 5 },
+    "primarySystem": { "type": "string" },
+    "secondarySystems": { "type": "array" },
+    "symptomCategory": { "type": "string" },
+    "aseArea": { "type": "string" },
+    "vehicleType": { "type": "string" },
+    "faultType": { "type": "string" },
+    "diagnosticMode": { "type": "string" },
+    "requiredTools": { "type": "array", "items": { "type": "string" } },
+    "safetyLevel": { "type": "string" },
+    "fault": { "type": "string" },
+    "tests": { "type": "object" }
+  }
+}

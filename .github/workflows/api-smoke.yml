@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Validate scenarios
+        run: npm run validate:scenarios
+
       - name: Install dependencies (torquemind-api)
         working-directory: torquemind-api
         run: npm ci

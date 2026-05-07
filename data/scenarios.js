@@ -1,4 +1,77 @@
 // Realistic scenarios for training and assessment
+
+// Centralized category registry (attached to window for non-module environments)
+const SCENARIO_CATEGORIES = [
+  'no-crank',
+  'no-start',
+  'overheating',
+  'electrical-load',
+  'misfire',
+  'steering_alignment',
+  'hvac_cooling',
+  'stalling',
+  'power_loss',
+  'intermittent_starting',
+  // recommended expansions (examples)
+  'charging-system',
+  'battery-drain',
+  'fuel-delivery',
+  'sensor-failure',
+  'can-bus-network',
+  'abs-brake-system',
+  'transmission-shift',
+  'hybrid-ev',
+  'diesel-aftertreatment',
+  'air-conditioning-electrical',
+  'cooling-fan-control',
+  'starting-voltage-drop',
+  'ground-fault',
+  'parasitic-draw',
+  'turbo-underboost',
+  'emissions-evap',
+  'adas-calibration',
+  'high-voltage-safety',
+  'network-security',
+  'data-stream-analysis'
+];
+window.SCENARIO_CATEGORIES = SCENARIO_CATEGORIES;
+
+// Default metadata applied to scenarios (keeps existing numeric `difficulty` intact)
+const DEFAULT_SCENARIO_METADATA = {
+  aseArea: '',
+  vehicleType: 'gasoline',
+  faultType: 'single',
+  diagnosticMode: 'basic',
+  requiredTools: ['DVOM', 'Scan Tool'],
+  safetyLevel: 'normal',
+  difficultyLevel: 'intermediate'
+};
+
+// Validate and normalize scenario metadata in-place
+function validateScenarioMetadata(s) {
+  if (!s) return;
+  if (!s.aseArea) s.aseArea = DEFAULT_SCENARIO_METADATA.aseArea;
+  if (!s.vehicleType) s.vehicleType = DEFAULT_SCENARIO_METADATA.vehicleType;
+  if (!s.faultType) s.faultType = DEFAULT_SCENARIO_METADATA.faultType;
+  if (!s.diagnosticMode) s.diagnosticMode = DEFAULT_SCENARIO_METADATA.diagnosticMode;
+  if (!Array.isArray(s.requiredTools)) s.requiredTools = DEFAULT_SCENARIO_METADATA.requiredTools.slice();
+  if (!s.safetyLevel) s.safetyLevel = DEFAULT_SCENARIO_METADATA.safetyLevel;
+  if (!s.difficultyLevel) {
+    if (typeof s.difficulty === 'number') {
+      s.difficultyLevel = s.difficulty >= 4 ? 'advanced' : (s.difficulty >= 3 ? 'intermediate' : 'beginner');
+    } else {
+      s.difficultyLevel = DEFAULT_SCENARIO_METADATA.difficultyLevel;
+    }
+  }
+  if (s.symptomCategory && !SCENARIO_CATEGORIES.includes(s.symptomCategory)) {
+    // keep category but add to registry for discoverability
+    SCENARIO_CATEGORIES.push(s.symptomCategory);
+  }
+}
+
+// Expose defaults for debugging / external scripts
+window.DEFAULT_SCENARIO_METADATA = DEFAULT_SCENARIO_METADATA;
+
 window.scenarios = [
   {
     id: 1,
@@ -22,6 +95,12 @@ window.scenarios = [
     primarySystem: 'fuel',
     secondarySystems: ['ignition'],
     symptomCategory: 'no-start',
+    aseArea: 'A8',
+    vehicleType: 'gasoline',
+    faultType: 'single',
+    diagnosticMode: 'pressure-testing',
+    requiredTools: ['Fuel Pressure Gauge','Scan Tool','DVOM'],
+    safetyLevel: 'normal',
     trainingFocus: 'fuel pressure and delivery diagnosis',
     fault: "fuel",
     tests: {
@@ -213,5 +292,93 @@ window.scenarios = [
     ],
     timeLimit: 900
   }
+  ,
+  // Example: charging system (ASE A6)
+  {
+    id: 13,
+    symptoms: "Battery drains while driving, warning lamp for charging appears.",
+    difficulty: 3,
+    primarySystem: 'electrical',
+    secondarySystems: ['charging','battery'],
+    symptomCategory: 'charging-system',
+    aseArea: 'A6',
+    vehicleType: 'gasoline',
+    faultType: 'alternator',
+    diagnosticMode: 'ripple-and-load-test',
+    requiredTools: ['DVOM','Oscilloscope','Charge Load Tester'],
+    safetyLevel: 'normal',
+    trainingFocus: 'alternator output and charging regulation',
+    fault: 'alternator',
+    tests: {
+      alternator: { system: 'electrical', reading: 'Output <12V under load', interpretation: 'LOW OUTPUT' },
+      battery: { system: 'electrical', reading: 'Partially discharged', interpretation: 'LOW' }
+    }
+  },
+  // Example: CAN bus network issue
+  {
+    id: 14,
+    symptoms: "Intermittent module communication errors; multiple U-codes present.",
+    difficulty: 4,
+    primarySystem: 'network',
+    secondarySystems: ['power','modules'],
+    symptomCategory: 'can-bus-network',
+    aseArea: 'network',
+    vehicleType: 'gasoline',
+    faultType: 'communication',
+    diagnosticMode: 'bus-analysis',
+    requiredTools: ['Scan Tool','Oscilloscope','CAN BUS Analyzer'],
+    safetyLevel: 'normal',
+    trainingFocus: 'CAN bus isolation and module communication',
+    fault: 'open_bus_segment',
+    tests: {
+      bus: { system: 'network', reading: 'No ACK on CAN ID 0x7E0', interpretation: 'BUS_FAULT' },
+      module: { system: 'electrical', reading: 'Module asleep/unresponsive', interpretation: 'SLEEP/NO_COMM' }
+    }
+  },
+  // Example: hybrid / EV safety-related scenario
+  {
+    id: 15,
+    symptoms: "Hybrid system disables on startup; HV battery isolation fault logged.",
+    difficulty: 5,
+    primarySystem: 'hybrid',
+    secondarySystems: ['inverter','battery'],
+    symptomCategory: 'hybrid-ev',
+    aseArea: 'hybrid-ev',
+    vehicleType: 'hybrid',
+    faultType: 'high-voltage',
+    diagnosticMode: 'isolation-and-inverter-check',
+    requiredTools: ['HV Insulation Tester','Scan Tool','PPE'],
+    safetyLevel: 'high-voltage',
+    trainingFocus: 'HV isolation, inverter readiness, safety protocols',
+    fault: 'hv_isolation_fault',
+    tests: {
+      hv: { system: 'hybrid', reading: 'Insulation resistance low', interpretation: 'FAIL' },
+      inverter: { system: 'hybrid', reading: 'Inverter disabled', interpretation: 'FAULT' }
+    }
+  },
+  // Example: diesel aftertreatment
+  {
+    id: 16,
+    symptoms: "DPF regeneration incomplete; excessive soot and reduced engine power.",
+    difficulty: 4,
+    primarySystem: 'exhaust',
+    secondarySystems: ['emissions','engine'],
+    symptomCategory: 'diesel-aftertreatment',
+    aseArea: 'diesel',
+    vehicleType: 'diesel',
+    faultType: 'soot_load',
+    diagnosticMode: 'dpf-regeneration-diagnosis',
+    requiredTools: ['Scan Tool','Smoke Machine','Exhaust Gas Analyzer'],
+    safetyLevel: 'normal',
+    trainingFocus: 'DPF regen procedures and DEF/SCR diagnosis',
+    fault: 'dpf_clogged',
+    tests: {
+      dpf: { system: 'exhaust', reading: 'High soot mass', interpretation: 'CLOGGED' },
+      nox: { system: 'emissions', reading: 'Elevated NOx', interpretation: 'UNUSUAL' }
+    }
+  }
 ];
+
+// Normalize and apply defaults to every scenario
+window.scenarios.forEach(validateScenarioMetadata);
 
