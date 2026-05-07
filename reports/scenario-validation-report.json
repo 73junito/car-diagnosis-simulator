@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-07T05:08:48.149Z",
+  "timestamp": "2026-05-07T05:14:43.956Z",
   "totalScenarios": 16,
   "passedScenarios": 16,
   "failedScenarios": 0,
@@ -36,15 +36,7 @@
     "data-stream-analysis"
   ],
   "metadataCoverage": {
-    "aseArea": {
-      "count": 16,
-      "percent": 100
-    },
     "vehicleType": {
-      "count": 16,
-      "percent": 100
-    },
-    "faultType": {
       "count": 16,
       "percent": 100
     },

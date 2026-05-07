@@ -37,10 +37,9 @@ const SCENARIO_CATEGORIES = [
 window.SCENARIO_CATEGORIES = SCENARIO_CATEGORIES;
 
 // Default metadata applied to scenarios (keeps existing numeric `difficulty` intact)
+
 const DEFAULT_SCENARIO_METADATA = {
-  aseArea: '',
   vehicleType: 'gasoline',
-  faultType: 'single',
   diagnosticMode: 'basic',
   requiredTools: ['DVOM', 'Scan Tool'],
   safetyLevel: 'normal',
@@ -50,12 +49,12 @@ const DEFAULT_SCENARIO_METADATA = {
 // Validate and normalize scenario metadata in-place
 function validateScenarioMetadata(s) {
   if (!s) return;
-  if (!s.aseArea) s.aseArea = DEFAULT_SCENARIO_METADATA.aseArea;
-  if (!s.vehicleType) s.vehicleType = DEFAULT_SCENARIO_METADATA.vehicleType;
-  if (!s.faultType) s.faultType = DEFAULT_SCENARIO_METADATA.faultType;
-  if (!s.diagnosticMode) s.diagnosticMode = DEFAULT_SCENARIO_METADATA.diagnosticMode;
+  if (s.aseArea === undefined && DEFAULT_SCENARIO_METADATA.aseArea) s.aseArea = DEFAULT_SCENARIO_METADATA.aseArea;
+  if (s.vehicleType === undefined && DEFAULT_SCENARIO_METADATA.vehicleType) s.vehicleType = DEFAULT_SCENARIO_METADATA.vehicleType;
+  if (s.faultType === undefined && DEFAULT_SCENARIO_METADATA.faultType) s.faultType = DEFAULT_SCENARIO_METADATA.faultType;
+  if (s.diagnosticMode === undefined && DEFAULT_SCENARIO_METADATA.diagnosticMode) s.diagnosticMode = DEFAULT_SCENARIO_METADATA.diagnosticMode;
   if (!Array.isArray(s.requiredTools)) s.requiredTools = DEFAULT_SCENARIO_METADATA.requiredTools.slice();
-  if (!s.safetyLevel) s.safetyLevel = DEFAULT_SCENARIO_METADATA.safetyLevel;
+  if (s.safetyLevel === undefined && DEFAULT_SCENARIO_METADATA.safetyLevel) s.safetyLevel = DEFAULT_SCENARIO_METADATA.safetyLevel;
   if (!s.difficultyLevel) {
     if (typeof s.difficulty === 'number') {
       s.difficultyLevel = s.difficulty >= 4 ? 'advanced' : (s.difficulty >= 3 ? 'intermediate' : 'beginner');
@@ -97,8 +96,8 @@ window.scenarios = [
     symptomCategory: 'no-start',
     aseArea: 'A8',
     vehicleType: 'gasoline',
-    faultType: 'single',
-    diagnosticMode: 'pressure-testing',
+    faultType: 'hard-fault',
+    diagnosticMode: 'scan-tool',
     requiredTools: ['Fuel Pressure Gauge','Scan Tool','DVOM'],
     safetyLevel: 'normal',
     trainingFocus: 'fuel pressure and delivery diagnosis',
@@ -313,8 +312,8 @@ window.scenarios = [
     symptomCategory: 'charging-system',
     aseArea: 'A6',
     vehicleType: 'gasoline',
-    faultType: 'alternator',
-    diagnosticMode: 'ripple-and-load-test',
+    faultType: 'electrical',
+    diagnosticMode: 'waveform-analysis',
     requiredTools: ['DVOM','Oscilloscope','Charge Load Tester'],
     safetyLevel: 'normal',
     trainingFocus: 'alternator output and charging regulation',
@@ -332,10 +331,10 @@ window.scenarios = [
     primarySystem: 'network',
     secondarySystems: ['power','modules'],
     symptomCategory: 'can-bus-network',
-    aseArea: 'network',
+    aseArea: 'A6',
     vehicleType: 'gasoline',
-    faultType: 'communication',
-    diagnosticMode: 'bus-analysis',
+    faultType: 'network',
+    diagnosticMode: 'scan-tool',
     requiredTools: ['Scan Tool','Oscilloscope','CAN BUS Analyzer'],
     safetyLevel: 'normal',
     trainingFocus: 'CAN bus isolation and module communication',
@@ -353,10 +352,10 @@ window.scenarios = [
     primarySystem: 'hybrid',
     secondarySystems: ['inverter','battery'],
     symptomCategory: 'hybrid-ev',
-    aseArea: 'hybrid-ev',
+    aseArea: 'A6',
     vehicleType: 'hybrid',
-    faultType: 'high-voltage',
-    diagnosticMode: 'isolation-and-inverter-check',
+    faultType: 'electrical',
+    diagnosticMode: 'guided-diagnostics',
     requiredTools: ['HV Insulation Tester','Scan Tool','PPE'],
     safetyLevel: 'high-voltage',
     trainingFocus: 'HV isolation, inverter readiness, safety protocols',
@@ -374,10 +373,10 @@ window.scenarios = [
     primarySystem: 'exhaust',
     secondarySystems: ['emissions','engine'],
     symptomCategory: 'diesel-aftertreatment',
-    aseArea: 'diesel',
+    aseArea: 'A8',
     vehicleType: 'diesel',
-    faultType: 'soot_load',
-    diagnosticMode: 'dpf-regeneration-diagnosis',
+    faultType: 'mechanical',
+    diagnosticMode: 'scan-tool',
     requiredTools: ['Scan Tool','Smoke Machine','Exhaust Gas Analyzer'],
     safetyLevel: 'normal',
     trainingFocus: 'DPF regen procedures and DEF/SCR diagnosis',

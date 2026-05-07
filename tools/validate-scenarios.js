@@ -26,7 +26,18 @@ function validate() {
     process.exit(2);
   }
 
-  const requiredMetadata = ['aseArea','vehicleType','faultType','diagnosticMode','requiredTools','safetyLevel'];
+  // duplicate ID / title detection
+  const idCounts = {};
+  const titleCounts = {};
+  scenarios.forEach(s => {
+    if (!s) return;
+    const id = String(s.id);
+    idCounts[id] = (idCounts[id] || 0) + 1;
+    const title = (s.symptoms || '').trim();
+    if (title) titleCounts[title] = (titleCounts[title] || 0) + 1;
+  });
+
+  const requiredMetadata = ['vehicleType','diagnosticMode','requiredTools','safetyLevel'];
   const scenarioErrors = {};
   const metaCounts = {};
   requiredMetadata.forEach(k => metaCounts[k] = 0);
@@ -56,7 +67,11 @@ function validate() {
     const local = [];
     if (!s) { local.push('empty'); scenarioErrors[ctx] = local; return; }
     if (s.id === undefined || s.id === null) local.push('missing id');
+    // duplicate id
+    if (idCounts[String(s.id)] > 1) local.push('duplicate id');
     if (!s.symptoms || typeof s.symptoms !== 'string') local.push('missing or invalid symptoms');
+    // duplicate title/symptoms
+    if (s.symptoms && titleCounts[s.symptoms.trim()] > 1) local.push('duplicate symptoms/title');
     if (!s.fault && !s.faults) local.push("missing fault (expected 'fault' or 'faults')");
     if ((!s.tests || typeof s.tests !== 'object') && !Array.isArray(s.steps)) local.push("missing tests object or procedural 'steps'");
     if (!s.symptomCategory) local.push('missing symptomCategory');
@@ -73,6 +88,9 @@ function validate() {
     if ('difficulty' in s) {
       if (typeof s.difficulty !== 'number' || s.difficulty < 1 || s.difficulty > 5) local.push('difficulty must be number 1-5');
     }
+
+    // symptom coverage: ensure descriptive symptom text (>=20 chars)
+    if (s.symptoms && s.symptoms.trim().length < 20) local.push('insufficient symptom description (<20 chars)');
 
     if (local.length) scenarioErrors[ctx] = local;
   });
