@@ -130,6 +130,58 @@ function validate() {
     schemaErrors: ajvErrorsByScenario
   };
 
+  // Prepare fix suggestions (non-destructive)
+  const args = process.argv.slice(2);
+  const fixMode = args.includes('--fix-suggestions');
+  const suggestions = {};
+
+  const allowedFaultTypes = ['hard-fault','intermittent','electrical','mechanical','network'];
+  const allowedDiagnosticModes = ['basic','scan-tool','waveform-analysis','guided-diagnostics'];
+
+  scenarios.forEach((s) => {
+    const key = `scenario[id=${s && s.id}]`;
+    const sug = [];
+    // schema errors
+    const schemaErrs = ajvErrorsByScenario[key] || [];
+    (schemaErrs || []).forEach(e => {
+      if (e.instancePath === '/faultType') {
+        sug.push(`Fault type invalid. Suggested values: ${allowedFaultTypes.join(', ')}`);
+      }
+      if (e.instancePath === '/diagnosticMode') {
+        sug.push(`Diagnostic mode invalid. Suggested values: ${allowedDiagnosticModes.join(', ')}`);
+      }
+      if (e.instancePath === '/aseArea') {
+        // suggest a conservative ASE area
+        const map = { electrical: 'A6', engine: 'A8', fuel: 'A8', cooling: 'A6', hybrid: 'A6', transmission: 'A2' };
+        const hint = map[(s.primarySystem || '').toLowerCase()] || 'A6';
+        sug.push(`aseArea invalid. Suggested value: ${hint}`);
+      }
+      if (e.instancePath === '/requiredTools') {
+        sug.push(`Add at least one entry to 'requiredTools', e.g. ${DEFAULT_SCENARIO_METADATA.requiredTools.join(', ')}`);
+      }
+      if (e.instancePath === '/symptoms') {
+        sug.push('Expand symptoms description to include when/conditions (>=20 chars)');
+      }
+    });
+
+    // custom checks
+    const custom = scenarioErrors[key] || [];
+    custom.forEach(c => {
+      if (c.includes('duplicate id')) sug.push('Duplicate id detected — ensure unique id');
+      if (c.includes('duplicate symptoms/title')) sug.push('Duplicate symptoms/title — make the description unique');
+      if (c.includes('missing metadata field')) {
+        if (c.includes('requiredTools')) sug.push(`Add 'requiredTools': ${DEFAULT_SCENARIO_METADATA.requiredTools.join(', ')}`);
+        if (c.includes('aseArea')) sug.push('Add a valid `aseArea` like A6 or A8');
+        if (c.includes('faultType')) sug.push(`Set 'faultType' to one of: ${allowedFaultTypes.join(', ')}`);
+      }
+      if (c.includes('insufficient symptom description')) sug.push('Expand symptoms to be more descriptive (>=20 chars)');
+    });
+
+    if (sug.length) suggestions[key] = sug;
+  });
+
+  report.suggestions = suggestions;
+
   // write report
   const reportDir = path.join(__dirname, '..', 'reports');
   try {
@@ -138,6 +190,14 @@ function validate() {
     console.log('Wrote report to', path.join(reportDir, 'scenario-validation-report.json'));
   } catch (err) {
     console.error('Failed to write report:', err.message);
+  }
+
+  if (fixMode) {
+    console.log('\nFix suggestions (non-destructive):');
+    Object.keys(suggestions).forEach(k => {
+      console.log(k + ':');
+      suggestions[k].forEach(s => console.log(' -', s));
+    });
   }
 
   if (failedCount) {
