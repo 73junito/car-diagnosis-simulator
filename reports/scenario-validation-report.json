@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-05-07T05:03:41.025Z",
+  "totalScenarios": 16,
+  "passedScenarios": 16,
+  "failedScenarios": 0,
+  "categoriesKnown": [
+    "no-crank",
+    "no-start",
+    "overheating",
+    "electrical-load",
+    "misfire",
+    "steering_alignment",
+    "hvac_cooling",
+    "stalling",
+    "power_loss",
+    "intermittent_starting",
+    "charging-system",
+    "battery-drain",
+    "fuel-delivery",
+    "sensor-failure",
+    "can-bus-network",
+    "abs-brake-system",
+    "transmission-shift",
+    "hybrid-ev",
+    "diesel-aftertreatment",
+    "air-conditioning-electrical",
+    "cooling-fan-control",
+    "starting-voltage-drop",
+    "ground-fault",
+    "parasitic-draw",
+    "turbo-underboost",
+    "emissions-evap",
+    "adas-calibration",
+    "high-voltage-safety",
+    "network-security",
+    "data-stream-analysis"
+  ],
+  "metadataCoverage": {
+    "aseArea": {
+      "count": 16,
+      "percent": 100
+    },
+    "vehicleType": {
+      "count": 16,
+      "percent": 100
+    },
+    "faultType": {
+      "count": 16,
+      "percent": 100
+    },
+    "diagnosticMode": {
+      "count": 16,
+      "percent": 100
+    },
+    "requiredTools": {
+      "count": 16,
+      "percent": 100
+    },
+    "safetyLevel": {
+      "count": 16,
+      "percent": 100
+    }
+  },
+  "failures": {}
+}

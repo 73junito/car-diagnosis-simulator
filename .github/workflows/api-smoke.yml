@@ -30,6 +30,12 @@ jobs:
       - name: Validate scenarios
         run: npm run validate:scenarios
 
+      - name: Upload scenario validation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: scenario-validation-report
+          path: reports/scenario-validation-report.json
+
       - name: Install dependencies (torquemind-api)
         working-directory: torquemind-api
         run: npm ci
