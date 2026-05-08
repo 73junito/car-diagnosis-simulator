@@ -1,7 +1,8 @@
 # PowerShell wrapper for DB SSL validation
 param(
   [switch]$SkipPrompt,
-  [switch]$Quiet
+  [switch]$Quiet,
+  [switch]$Ci
 )
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -15,6 +16,12 @@ function Out-Info($m) { if (-not $Quiet) { Write-Host $m } }
 function Out-Important($m) { Write-Host $m }
 
 Out-Info "Running DB SSL validator wrapper in: $repoRoot"
+
+# If CI flag provided, force non-interactive quiet mode
+if ($Ci) {
+  $SkipPrompt = $true
+  $Quiet = $true
+}
 
 if (-not (Test-Path $envFile)) {
   if (Test-Path $envExample) {
@@ -49,6 +56,16 @@ $pghost = [System.Environment]::GetEnvironmentVariable('PGHOST')
 $pgmode = [System.Environment]::GetEnvironmentVariable('PGSSLMODE')
 $pgport = [System.Environment]::GetEnvironmentVariable('PGPORT')
 
+# In CI mode, fail fast on missing critical environment or CA
+$ciFailed = $false
+$required = @('PGHOST','PGPORT','PGDATABASE','PGUSER','PGPASSWORD','PGSSLMODE')
+$missing = $required | Where-Object { [string]::IsNullOrEmpty([System.Environment]::GetEnvironmentVariable($_)) }
+if ($missing.Count -gt 0) {
+  Out-Info "Env vars present: $((($required | Where-Object { -not ($missing -contains $_) }) -join ', ') -or '(none)')"
+  Write-Warning "Env vars missing: $($missing -join ', ')"
+  if ($Ci) { Write-Error 'CI mode: missing required environment variables, aborting.'; exit 5 }
+}
+
 Out-Info "PGHOST: $($pghost -or '(not set)')"
 Out-Info "PGSSLMODE: $($pgmode -or '(not set)')"
 Out-Important "PGSSLROOTCERT: $($pgssl -or '(not set)')"
@@ -58,6 +75,9 @@ if ($pgssl) {
     Out-Important "CA file exists: $pgssl"
   } else {
     Write-Warning "CA file not found at: $pgssl"
+    if ($Ci) {
+      Write-Error 'CI mode: CA file missing, aborting.'; exit 2
+    }
     if (-not $SkipPrompt) {
       if (-not $Quiet) {
         $ans = Read-Host "Continue anyway? (y/N)"
@@ -132,18 +152,22 @@ if ($exit -ne 0) {
   Write-Host "- Network: confirm your machine can resolve and reach the host. Try: `nslookup <your-host>` or `Test-NetConnection -ComputerName <host> -Port <port>` in PowerShell."
   # Run Test-NetConnection if host looks real and port is set
   if ($pghost -and -not ($pghost -match 'your-project' -or $pghost -match 'db\.your-project') -and $pgport) {
-    if (-not $Quiet) { Write-Host "`n- Running Test-NetConnection $pghost -Port $pgport" }
-    try {
-      $tnc = Test-NetConnection -ComputerName $pghost -Port ([int]$pgport) -WarningAction SilentlyContinue
-      if ($tnc.TcpTestSucceeded) {
-        Write-Host "  - TCP connection succeeded (port reachable)."
-      } else {
-        Write-Host "  - TCP connection failed. Test-NetConnection output:"
-        Write-Host ($tnc | Out-String)
+      if (-not $Quiet) { Write-Host "`n- Running Test-NetConnection $pghost -Port $pgport" }
+      try {
+        $tnc = Test-NetConnection -ComputerName $pghost -Port ([int]$pgport) -WarningAction SilentlyContinue
+        if ($tnc.TcpTestSucceeded) {
+          Write-Host "  - TCP connection succeeded (port reachable)."
+        } else {
+          Write-Host "  - TCP connection failed. Test-NetConnection output:"
+          Write-Host ($tnc | Out-String)
+          if ($Ci) { Write-Error 'CI mode: network connectivity to DB host failed.'; exit 6 }
+          $ciFailed = $true
+        }
+      } catch {
+        Write-Host "  - Test-NetConnection failed to run: $($_.Exception.Message)"
+        if ($Ci) { Write-Error 'CI mode: Test-NetConnection failed.'; exit 7 }
+        $ciFailed = $true
       }
-    } catch {
-      Write-Host "  - Test-NetConnection failed to run: $($_.Exception.Message)"
-    }
   }
 
   # Optional: psql guidance if installed
@@ -158,4 +182,12 @@ if ($exit -ne 0) {
 
   Write-Host "- Supabase docs: https://supabase.com/docs/guides/platform/ssl-enforcement"
 }
-exit $exit
+if ($Ci) {
+  if ($exit -eq 0 -and -not $ciFailed) {
+    Exit 0
+  } else {
+    Exit 1
+  }
+} else {
+  exit $exit
+}
