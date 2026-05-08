@@ -17,11 +17,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-            cache: npm
-            cache-dependency-path: package-lock.json
+          cache: npm
+          cache-dependency-path: package-lock.json
 
-        - name: Install dependencies (root)
-          run: npm ci
+      - name: Debug workspace
+        if: always()
+        shell: pwsh
+        run: |
+          Get-Location
+          Get-ChildItem -Force
+          Get-ChildItem .github/workflows -Force
+          node --version
+          npm --version
+
+      - name: Install dependencies (root)
+        run: npm ci
 
       - name: Validate scenarios
         id: validate-scenarios
@@ -92,3 +102,12 @@ jobs:
           echo "----- API RUNTIME LOG -----"
           cat /tmp/torquemind.log || true
           echo "---------------------------"
+
+      - name: Upload diagnostic artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics
+          path: |
+            reports/**
+            torquemind-api/reports/**
