@@ -135,3 +135,15 @@ Required GitHub secrets when ready:
 
 Do not commit `.env` or private credentials.
 
+### Validate the generated report locally
+
+After running the PowerShell wrapper to produce a report, you can validate the JSON against the schema locally:
+
+```powershell
+cd torquemind-api
+.\scripts\validate-db-ssl.ps1 -Ci -Quiet
+npm run db:validate-report
+```
+
+Note: the GitHub Actions workflow uploads the `db-ssl-validation-report` artifact even when schema validation fails, so you can download the report and debug failures from the run.
+
