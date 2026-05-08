@@ -1,6 +1,7 @@
 # PowerShell wrapper for DB SSL validation
 param(
-  [switch]$SkipPrompt
+  [switch]$SkipPrompt,
+  [switch]$Quiet
 )
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -10,17 +11,20 @@ Set-Location $repoRoot
 $envExample = Join-Path $repoRoot '.env.example'
 $envFile = Join-Path $repoRoot '.env'
 
-Write-Host "Running DB SSL validator wrapper in: $repoRoot"
+function Out-Info($m) { if (-not $Quiet) { Write-Host $m } }
+function Out-Important($m) { Write-Host $m }
+
+Out-Info "Running DB SSL validator wrapper in: $repoRoot"
 
 if (-not (Test-Path $envFile)) {
   if (Test-Path $envExample) {
     Copy-Item -Path $envExample -Destination $envFile -Force
-    Write-Host "Copied .env.example -> .env. Please edit $envFile and set your Supabase values and PGSSLROOTCERT before full validation."
+    Out-Info "Copied .env.example -> .env. Please edit $envFile and set your Supabase values and PGSSLROOTCERT before full validation."
   } else {
     Write-Warning ".env.example not found; create $envFile manually with your values."
   }
   if (-not $SkipPrompt) {
-    Read-Host -Prompt "Edit .env now if needed, then press Enter to continue (or Ctrl+C to abort)"
+    if (-not $Quiet) { Read-Host -Prompt "Edit .env now if needed, then press Enter to continue (or Ctrl+C to abort)" }
   }
 }
 
@@ -45,29 +49,39 @@ $pghost = [System.Environment]::GetEnvironmentVariable('PGHOST')
 $pgmode = [System.Environment]::GetEnvironmentVariable('PGSSLMODE')
 $pgport = [System.Environment]::GetEnvironmentVariable('PGPORT')
 
-Write-Host "PGHOST: $($pghost -or '(not set)')"
-Write-Host "PGSSLMODE: $($pgmode -or '(not set)')"
-Write-Host "PGSSLROOTCERT: $($pgssl -or '(not set)')"
+Out-Info "PGHOST: $($pghost -or '(not set)')"
+Out-Info "PGSSLMODE: $($pgmode -or '(not set)')"
+Out-Important "PGSSLROOTCERT: $($pgssl -or '(not set)')"
 
 if ($pgssl) {
   if (Test-Path $pgssl) {
-    Write-Host "CA file exists: $pgssl"
+    Out-Important "CA file exists: $pgssl"
   } else {
     Write-Warning "CA file not found at: $pgssl"
     if (-not $SkipPrompt) {
-      $ans = Read-Host "Continue anyway? (y/N)"
-      if ($ans -notin @('y','Y','yes','YES')) { Write-Host 'Aborting at user request.'; exit 2 }
+      if (-not $Quiet) {
+        $ans = Read-Host "Continue anyway? (y/N)"
+        if ($ans -notin @('y','Y','yes','YES')) { Write-Host 'Aborting at user request.'; exit 2 }
+      } else {
+        Write-Warning 'CA file not found and running in Quiet mode; aborting.'; exit 2
+      }
     }
   }
 } else {
   Write-Warning 'PGSSLROOTCERT not set in .env — full verification (verify-full) requires a CA file.'
 }
 
-Write-Host "Running dry-run validator (no DB connection)..."
-& npm run db:validate -- --dry-run
+Out-Info "Running dry-run validator (no DB connection)..."
+if ($Quiet) {
+  & npm run db:validate -- --dry-run > $null 2>&1
+} else {
+  & npm run db:validate -- --dry-run
+}
 $dryExit = $LASTEXITCODE
 if ($dryExit -ne 0) {
-  Write-Warning "Dry-run returned exit code $dryExit"
+  if ($Quiet) { Write-Host "Dry-run: FAIL (exit $dryExit)" } else { Write-Warning "Dry-run returned exit code $dryExit" }
+} else {
+  if ($Quiet) { Write-Host "Dry-run: OK" } else { Out-Info "Dry-run completed successfully." }
 }
 
 if (-not $SkipPrompt) {
@@ -75,12 +89,15 @@ if (-not $SkipPrompt) {
   if ($proceed -notin @('y','Y','yes','YES')) { Write-Host 'Skipping full validation.'; exit $dryExit }
 }
 
-Write-Host "Running full validator (will attempt DB connection)..."
-& npm run db:validate
+Out-Info "Running full validator (will attempt DB connection)..."
+if ($Quiet) {
+  & npm run db:validate > $null 2>&1
+} else {
+  & npm run db:validate
+}
 $exit = $LASTEXITCODE
 if ($exit -ne 0) {
-  Write-Warning "Validator exited with code $exit"
-  Write-Host "`nTroubleshooting checklist:`n"
+  if ($Quiet) { Write-Host "Validation: FAIL (exit $exit)" } else { Write-Warning "Validator exited with code $exit"; Write-Host "`nTroubleshooting checklist:`n" }
 
   if (-not $pghost -or $pghost -match 'your-project' -or $pghost -match 'db\.your-project') {
     Write-Host "- PGHOST appears to be a placeholder or not set. Update 'PGHOST' in .env to your Supabase DB host (e.g. db.<your-project>.supabase.co)."
@@ -115,7 +132,7 @@ if ($exit -ne 0) {
   Write-Host "- Network: confirm your machine can resolve and reach the host. Try: `nslookup <your-host>` or `Test-NetConnection -ComputerName <host> -Port <port>` in PowerShell."
   # Run Test-NetConnection if host looks real and port is set
   if ($pghost -and -not ($pghost -match 'your-project' -or $pghost -match 'db\.your-project') -and $pgport) {
-    Write-Host "`n- Running Test-NetConnection $pghost -Port $pgport"
+    if (-not $Quiet) { Write-Host "`n- Running Test-NetConnection $pghost -Port $pgport" }
     try {
       $tnc = Test-NetConnection -ComputerName $pghost -Port ([int]$pgport) -WarningAction SilentlyContinue
       if ($tnc.TcpTestSucceeded) {
@@ -130,9 +147,11 @@ if ($exit -ne 0) {
   }
 
   # Optional: psql guidance if installed
+  $portToUse = if ($pgport) { $pgport } else { '5432' }
   if (Get-Command psql -ErrorAction SilentlyContinue) {
     Write-Host "- psql found. To test with psql, run (replace YOUR_PASSWORD):"
-    Write-Host "  psql \"postgresql://postgres:YOUR_PASSWORD@$pghost:$($pgport -or '5432')/postgres?sslmode=verify-full&sslrootcert=$pgssl\""
+    $psqlCmd = '  psql "postgresql://postgres:YOUR_PASSWORD@{0}:{1}/postgres?sslmode=verify-full&sslrootcert={2}"' -f $pghost, $portToUse, $pgssl
+    Write-Host $psqlCmd
   } else {
     Write-Host "- psql not installed; skipping psql test."
   }
