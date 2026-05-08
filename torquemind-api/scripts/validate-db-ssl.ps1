@@ -56,6 +56,46 @@ $pghost = [System.Environment]::GetEnvironmentVariable('PGHOST')
 $pgmode = [System.Environment]::GetEnvironmentVariable('PGSSLMODE')
 $pgport = [System.Environment]::GetEnvironmentVariable('PGPORT')
 
+# Ensure defaults so Write-Report can run safely before early exits
+$dryExit = 1
+$exit = 1
+
+# Helper: write report then exit with code (and record an optional error key/message)
+function Write-Report-And-Exit($code, $errKey, $errMsg) {
+  if ($errKey) { $errors += $errKey }
+  $exit = $code
+  try { Write-Report } catch { Write-Warning "Failed to write report: $($_.Exception.Message)" }
+  if ($errMsg) { Write-Error $errMsg }
+  exit $code
+}
+
+# Report helpers
+$reportDir = Join-Path $repoRoot 'reports'
+$reportFile = Join-Path $reportDir 'db-ssl-validation-report.json'
+$errors = @()
+$networkReachable = $false
+$psqlAvailable = $false
+
+function Write-Report {
+  if (-not (Test-Path $reportDir)) { New-Item -Path $reportDir -ItemType Directory | Out-Null }
+  $report = [PSCustomObject]@{
+    timestamp = (Get-Date).ToString('o')
+    mode = if ($Ci) { 'ci' } else { 'interactive' }
+    dryRun = if ($dryExit -eq 0) { 'ok' } else { 'fail' }
+    validation = if ($exit -eq 0) { 'ok' } else { 'fail' }
+    exitCode = $exit
+    hostSet = ($pghost -and -not ($pghost -match 'your-project' -or $pghost -match 'db\.your-project'))
+    caSet = -not [string]::IsNullOrEmpty($pgssl)
+    caExists = ($pgssl -and (Test-Path $pgssl)) -eq $true
+    sslMode = $pgmode
+    networkReachable = $networkReachable
+    psqlAvailable = $psqlAvailable
+    errors = $errors
+  }
+  $json = $report | ConvertTo-Json -Depth 4
+  $json | Out-File -FilePath $reportFile -Encoding utf8
+}
+
 # In CI mode, fail fast on missing critical environment or CA
 $ciFailed = $false
 $required = @('PGHOST','PGPORT','PGDATABASE','PGUSER','PGPASSWORD','PGSSLMODE')
@@ -63,7 +103,8 @@ $missing = $required | Where-Object { [string]::IsNullOrEmpty([System.Environmen
 if ($missing.Count -gt 0) {
   Out-Info "Env vars present: $((($required | Where-Object { -not ($missing -contains $_) }) -join ', ') -or '(none)')"
   Write-Warning "Env vars missing: $($missing -join ', ')"
-  if ($Ci) { Write-Error 'CI mode: missing required environment variables, aborting.'; exit 5 }
+  $errors += "missing_env: $($missing -join ',')"
+  if ($Ci) { Write-Report-And-Exit 5 'missing_env' 'CI mode: missing required environment variables, aborting.' }
 }
 
 Out-Info "PGHOST: $($pghost -or '(not set)')"
@@ -76,7 +117,7 @@ if ($pgssl) {
   } else {
     Write-Warning "CA file not found at: $pgssl"
     if ($Ci) {
-      Write-Error 'CI mode: CA file missing, aborting.'; exit 2
+      Write-Report-And-Exit 2 'ca_missing' 'CI mode: CA file missing, aborting.'
     }
     if (-not $SkipPrompt) {
       if (-not $Quiet) {
@@ -157,15 +198,18 @@ if ($exit -ne 0) {
         $tnc = Test-NetConnection -ComputerName $pghost -Port ([int]$pgport) -WarningAction SilentlyContinue
         if ($tnc.TcpTestSucceeded) {
           Write-Host "  - TCP connection succeeded (port reachable)."
+          $networkReachable = $true
         } else {
           Write-Host "  - TCP connection failed. Test-NetConnection output:"
           Write-Host ($tnc | Out-String)
-          if ($Ci) { Write-Error 'CI mode: network connectivity to DB host failed.'; exit 6 }
+          $errors += 'network_unreachable'
+          if ($Ci) { Write-Report-And-Exit 6 'network_unreachable' 'CI mode: network connectivity to DB host failed.' }
           $ciFailed = $true
         }
       } catch {
         Write-Host "  - Test-NetConnection failed to run: $($_.Exception.Message)"
-        if ($Ci) { Write-Error 'CI mode: Test-NetConnection failed.'; exit 7 }
+        $errors += 'test_netconnection_failed'
+        if ($Ci) { Write-Report-And-Exit 7 'test_netconnection_failed' 'CI mode: Test-NetConnection failed.' }
         $ciFailed = $true
       }
   }
@@ -173,21 +217,26 @@ if ($exit -ne 0) {
   # Optional: psql guidance if installed
   $portToUse = if ($pgport) { $pgport } else { '5432' }
   if (Get-Command psql -ErrorAction SilentlyContinue) {
+    $psqlAvailable = $true
     Write-Host "- psql found. To test with psql, run (replace YOUR_PASSWORD):"
     $psqlCmd = '  psql "postgresql://postgres:YOUR_PASSWORD@{0}:{1}/postgres?sslmode=verify-full&sslrootcert={2}"' -f $pghost, $portToUse, $pgssl
     Write-Host $psqlCmd
   } else {
     Write-Host "- psql not installed; skipping psql test."
+    $psqlAvailable = $false
   }
 
   Write-Host "- Supabase docs: https://supabase.com/docs/guides/platform/ssl-enforcement"
 }
 if ($Ci) {
+  # Write a machine-readable report for CI upload
+  Write-Report
   if ($exit -eq 0 -and -not $ciFailed) {
     Exit 0
   } else {
     Exit 1
   }
 } else {
+  Write-Report
   exit $exit
 }
