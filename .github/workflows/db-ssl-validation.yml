@@ -40,3 +40,9 @@ jobs:
         with:
           name: db-ssl-validation-report
           path: torquemind-api/reports/db-ssl-validation-report.json
+      
+      - name: Validate DB SSL report schema
+        if: always()
+        working-directory: torquemind-api
+        run: |
+          npm run db:validate-report
