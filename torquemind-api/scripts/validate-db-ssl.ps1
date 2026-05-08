@@ -113,8 +113,30 @@ if ($exit -ne 0) {
   }
 
   Write-Host "- Network: confirm your machine can resolve and reach the host. Try: `nslookup <your-host>` or `Test-NetConnection -ComputerName <host> -Port <port>` in PowerShell."
-  Write-Host "- psql test: use psql with sslrootcert to verify:"
-  Write-Host "  psql \"postgresql://postgres:YOUR_PASSWORD@$pghost:$($pgport -or '5432')/postgres?sslmode=verify-full&sslrootcert=$pgssl\""
+  # Run Test-NetConnection if host looks real and port is set
+  if ($pghost -and -not ($pghost -match 'your-project' -or $pghost -match 'db\.your-project') -and $pgport) {
+    Write-Host "`n- Running Test-NetConnection $pghost -Port $pgport"
+    try {
+      $tnc = Test-NetConnection -ComputerName $pghost -Port ([int]$pgport) -WarningAction SilentlyContinue
+      if ($tnc.TcpTestSucceeded) {
+        Write-Host "  - TCP connection succeeded (port reachable)."
+      } else {
+        Write-Host "  - TCP connection failed. Test-NetConnection output:"
+        Write-Host ($tnc | Out-String)
+      }
+    } catch {
+      Write-Host "  - Test-NetConnection failed to run: $($_.Exception.Message)"
+    }
+  }
+
+  # Optional: psql guidance if installed
+  if (Get-Command psql -ErrorAction SilentlyContinue) {
+    Write-Host "- psql found. To test with psql, run (replace YOUR_PASSWORD):"
+    Write-Host "  psql \"postgresql://postgres:YOUR_PASSWORD@$pghost:$($pgport -or '5432')/postgres?sslmode=verify-full&sslrootcert=$pgssl\""
+  } else {
+    Write-Host "- psql not installed; skipping psql test."
+  }
+
   Write-Host "- Supabase docs: https://supabase.com/docs/guides/platform/ssl-enforcement"
 }
 exit $exit
