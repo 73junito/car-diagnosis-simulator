@@ -111,3 +111,27 @@ There is a PowerShell wrapper that loads `.env`, checks the CA file, runs the dr
 
 It will copy `.env.example` to `.env` if a `.env` is not present and prompt you to edit it before proceeding.
 
+## Manual DB SSL Validation Workflow
+
+A manual GitHub Actions workflow is available:
+
+`.github/workflows/db-ssl-validation.yml`
+
+To run it:
+1. Go to GitHub → Actions.
+2. Select **DB SSL Validation**.
+3. Click **Run workflow**.
+4. Set `run-db-ssl` to `true`.
+5. Download the artifact: `db-ssl-validation-report`.
+
+Required GitHub secrets when ready:
+- `PGHOST`
+- `PGPORT`
+- `PGDATABASE`
+- `PGUSER`
+- `PGPASSWORD`
+- `PGSSLMODE`
+- `PGSSLROOTCERT` or a secure way to provide the CA certificate
+
+Do not commit `.env` or private credentials.
+
