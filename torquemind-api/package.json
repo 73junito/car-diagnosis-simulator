@@ -6,10 +6,12 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "db:validate": "node scripts/validate-db-ssl.js",
     "test": "jest --runInBand --forceExit",
     "test:smoke": "node scripts/smoke-test.js"
   },
   "dependencies": {
+    "pg": "^8.10.0",
     "@supabase/supabase-js": "^2.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",

@@ -62,3 +62,52 @@ Next steps I can implement for you (pick one):
 - Replace current frontend `localStorage` calls with API calls and wire sign-in flows.
 - Add endpoint tests and CI configuration.
 
+## DB SSL validation helper
+
+A small local-only helper validates your PostgreSQL SSL settings and optionally connects to the database.
+
+Usage
+
+1. Create a `.env` in `torquemind-api/` (copy `.env.example`) and set these values:
+
+```
+PGHOST=db.your-project.supabase.co
+PGPORT=5432
+PGDATABASE=postgres
+PGUSER=postgres
+PGPASSWORD=your_password
+PGSSLMODE=verify-full
+PGSSLROOTCERT=C:\\Users\\rod63\\Downloads\\prod-ca-2021.crt
+```
+
+2. Run the validator in dry-run mode (no DB connection):
+
+```powershell
+cd torquemind-api
+npm run db:validate -- --dry-run
+```
+
+The dry-run checks that env vars are loaded, the CA path (if provided) exists, and prints SSL mode diagnostics.
+
+3. Run the full validation (will attempt a DB connection):
+
+```powershell
+npm run db:validate
+```
+
+Notes
+
+- Do not commit your private CA or DB password into the repository.
+- The script reads `PGSSLROOTCERT` from your local path; keep `prod-ca-2021.crt` locally (e.g. `C:\Users\rod63\Downloads`).
+- If you need the script to attempt policy validation against `db/classroom_policies.sql`, place that file in `torquemind-api/db/` and run the full validation; the script will preview the SQL and provide guidance (it will not modify DB schema automatically).
+
+### PowerShell wrapper (Windows)
+
+There is a PowerShell wrapper that loads `.env`, checks the CA file, runs the dry-run diagnostics, and then runs the full validation if you confirm:
+
+```powershell
+.\scripts\validate-db-ssl.ps1
+```
+
+It will copy `.env.example` to `.env` if a `.env` is not present and prompt you to edit it before proceeding.
+
