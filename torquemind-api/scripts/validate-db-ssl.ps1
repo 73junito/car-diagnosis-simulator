@@ -78,20 +78,42 @@ $psqlAvailable = $false
 
 function Write-Report {
   if (-not (Test-Path $reportDir)) { New-Item -Path $reportDir -ItemType Directory | Out-Null }
+
+  # Normalize values to match the JSON schema expectations
+  $outSslMode = ''
+  if ($pgmode) { $outSslMode = [string]$pgmode }
+
+  if ($errors -is [System.Array]) {
+    $outErrors = $errors
+  } elseif ($errors) {
+    $outErrors = @($errors)
+  } else {
+    $outErrors = @()
+  }
+
+  # Prepare string-valued fields to avoid inline expressions in the hashtable
+  $outMode = 'interactive'
+  if ($Ci) { $outMode = 'ci' }
+  $outDryRun = 'fail'
+  if ($dryExit -eq 0) { $outDryRun = 'ok' }
+  $outValidation = 'fail'
+  if ($exit -eq 0) { $outValidation = 'ok' }
+
   $report = [PSCustomObject]@{
     timestamp = (Get-Date).ToString('o')
-    mode = if ($Ci) { 'ci' } else { 'interactive' }
-    dryRun = if ($dryExit -eq 0) { 'ok' } else { 'fail' }
-    validation = if ($exit -eq 0) { 'ok' } else { 'fail' }
+    mode = $outMode
+    dryRun = $outDryRun
+    validation = $outValidation
     exitCode = $exit
     hostSet = ($pghost -and -not ($pghost -match 'your-project' -or $pghost -match 'db\.your-project'))
     caSet = -not [string]::IsNullOrEmpty($pgssl)
     caExists = ($pgssl -and (Test-Path $pgssl)) -eq $true
-    sslMode = $pgmode
+    sslMode = $outSslMode
     networkReachable = $networkReachable
     psqlAvailable = $psqlAvailable
-    errors = $errors
+    errors = $outErrors
   }
+
   $json = $report | ConvertTo-Json -Depth 4
   $json | Out-File -FilePath $reportFile -Encoding utf8
 }
