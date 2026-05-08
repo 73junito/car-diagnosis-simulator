@@ -83,6 +83,17 @@ function validateScenarioMetadata(s) {
   }
 }
 
+// Normalize and validate scoring weights; ensure total equals 100
+function normalizeScoringWeights(weights) {
+  if (!weights || typeof weights !== 'object') return Object.assign({}, DEFAULT_SCENARIO_METADATA.scoringWeights);
+  const vals = Object.values(weights).map(v => Number(v) || 0);
+  const total = vals.reduce((a, b) => a + b, 0);
+  if (total !== 100) {
+    throw new Error(`scoringWeights must total 100 (got ${total})`);
+  }
+  return weights;
+}
+
 // Expose defaults for debugging / external scripts
 window.DEFAULT_SCENARIO_METADATA = DEFAULT_SCENARIO_METADATA;
 
@@ -399,6 +410,29 @@ window.scenarios = [
     tests: {
       dpf: { system: 'exhaust', reading: 'High soot mass', interpretation: 'CLOGGED' },
       nox: { system: 'emissions', reading: 'Elevated NOx', interpretation: 'UNUSUAL' }
+    }
+  }
+  ,
+  // Explicit EV / high-voltage safety scenario example
+  {
+    id: 17,
+    symptoms: "Hybrid/EV high-voltage insulation fault; vehicle disables on startup.",
+    difficulty: 5,
+    primarySystem: 'hybrid',
+    secondarySystems: ['battery','inverter'],
+    symptomCategory: 'hybrid-ev',
+    aseArea: 'A6',
+    vehicleType: 'hybrid',
+    faultType: 'electrical',
+    diagnosticMode: 'guided-diagnostics',
+    requiredTools: ['HV Insulation Tester','PPE','Scan Tool'],
+    safetyLevel: 'high-voltage',
+    requiresSafetyAcknowledgment: true,
+    trainingFocus: 'HV isolation checks and safety lockout procedures',
+    fault: 'hv_isolation_fault',
+    tests: {
+      hv: { system: 'hybrid', reading: 'Insulation resistance low', interpretation: 'FAIL' },
+      inverter: { system: 'hybrid', reading: 'Inverter disabled', interpretation: 'FAULT' }
     }
   }
 ];
