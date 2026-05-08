@@ -39,8 +39,9 @@ The `main` branch is protected. All changes must go through a pull request and p
 
 - `Unit Tests / unit-tests`
 - `API Smoke Test / smoke`
+- `db-ssl-validation`
 
-`db-ssl-validation` is a manual `workflow_dispatch` check gated by the `run-db-ssl` input, so it is optional and not required on every PR.
+Branch protection currently requires `db-ssl-validation` to pass on pull requests.
 
 One approving review is required, branches must be up to date, and force-pushes/deletions are blocked.
 
