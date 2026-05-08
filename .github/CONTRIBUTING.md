@@ -5,9 +5,11 @@ All changes to this repository must go through a Pull Request (PR) targeting the
 Required checks before merging:
 
 - `unit-tests`
-- `api-smoke`
 - `smoke`
-- `db-ssl-validation`
+
+Manual/exception workflows:
+
+- `db-ssl-validation` is a manually triggered workflow and is not a universally required PR check.
 
 Merge requirements:
 
