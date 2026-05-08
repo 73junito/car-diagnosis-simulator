@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DB SSL Validation Report",
+  "description": "Schema for the JSON report produced by scripts/validate-db-ssl.ps1",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "mode",
+    "dryRun",
+    "validation",
+    "exitCode"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp when the report was written"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["ci", "interactive"],
+      "description": "Run mode"
+    },
+    "dryRun": {
+      "type": "string",
+      "enum": ["ok", "fail"],
+      "description": "Result of the dry-run checks"
+    },
+    "validation": {
+      "type": "string",
+      "enum": ["ok", "fail"],
+      "description": "Result of the full validation (DB connection)"
+    },
+    "exitCode": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Exit code returned by the validator"
+    },
+    "hostSet": { "type": "boolean" },
+    "caSet": { "type": "boolean" },
+    "caExists": { "type": "boolean" },
+    "sslMode": { "type": "string" },
+    "networkReachable": { "type": "boolean" },
+    "psqlAvailable": { "type": "boolean" },
+    "errors": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}
