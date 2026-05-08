@@ -95,7 +95,7 @@ jobs:
               fi
             fi
             # show if port listened (best-effort)
-            ss -lnt 2>/dev/null | grep -q ':3000' && echo "port 3000 listening" && break || true
+            ss -lnt 2>/dev/null | grep -q ':3000' && echo "port 3000 listening" || true
             sleep 2
           done
 
