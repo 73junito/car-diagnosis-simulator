@@ -33,14 +33,15 @@ Who it's for
 Contributing
 - Open a PR against `main` or create feature branches. This repo favors small, focused commits.
 
-## Contribution and Branch Protection
+Contribution and Branch Protection
 
-The `main` branch is protected. All changes must go through a pull request and pass required checks:
+The `main` branch is protected. All changes must go through a pull request and pass these required PR checks:
 
-- `unit-tests`
-- `api-smoke`
-- `smoke`
+- `Unit Tests / unit-tests`
+- `API Smoke Test / smoke`
 - `db-ssl-validation`
+
+Branch protection currently requires `db-ssl-validation` to pass on pull requests.
 
 One approving review is required, branches must be up to date, and force-pushes/deletions are blocked.
 
