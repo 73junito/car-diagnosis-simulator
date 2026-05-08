@@ -36,15 +36,24 @@ jobs:
           cd torquemind-api
           ./scripts/validate-db-ssl.ps1 -Ci -Quiet
 
+      - name: Check for DB SSL report
+        id: report
+        shell: pwsh
+        run: |
+          if (Test-Path "torquemind-api/reports/db-ssl-validation-report.json") {
+            "exists=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          } else {
+            "exists=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          }
+
       - name: Upload DB SSL validation report
-        if: always()
+        if: always() && steps.report.outputs.exists == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: db-ssl-validation-report
           path: torquemind-api/reports/db-ssl-validation-report.json
-      
+
       - name: Validate DB SSL report schema
-        if: always()
+        if: always() && steps.report.outputs.exists == 'true'
         working-directory: torquemind-api
-        run: |
-          npm run db:validate-report
+        run: npm run db:validate-report
