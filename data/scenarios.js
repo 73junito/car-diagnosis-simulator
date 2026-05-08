@@ -43,18 +43,33 @@ const DEFAULT_SCENARIO_METADATA = {
   diagnosticMode: 'basic',
   requiredTools: ['DVOM', 'Scan Tool'],
   safetyLevel: 'normal',
-  difficultyLevel: 'intermediate'
+  difficultyLevel: 'intermediate',
+  // scenario metadata defaults for versioning and scoring
+  schemaVersion: '1.2',
+  scoringWeights: {
+    diagnosticAccuracy: 40,
+    proceduralCorrectness: 25,
+    safetyCompliance: 20,
+    toolEfficiency: 15
+  }
 };
 
 // Validate and normalize scenario metadata in-place
 function validateScenarioMetadata(s) {
   if (!s) return;
+  // ensure schema version and scoring weights exist
+  if (s.schemaVersion === undefined) s.schemaVersion = DEFAULT_SCENARIO_METADATA.schemaVersion;
+  if (s.scoringWeights === undefined || typeof s.scoringWeights !== 'object') s.scoringWeights = Object.assign({}, DEFAULT_SCENARIO_METADATA.scoringWeights);
   if (s.aseArea === undefined && DEFAULT_SCENARIO_METADATA.aseArea) s.aseArea = DEFAULT_SCENARIO_METADATA.aseArea;
   if (s.vehicleType === undefined && DEFAULT_SCENARIO_METADATA.vehicleType) s.vehicleType = DEFAULT_SCENARIO_METADATA.vehicleType;
   if (s.faultType === undefined && DEFAULT_SCENARIO_METADATA.faultType) s.faultType = DEFAULT_SCENARIO_METADATA.faultType;
   if (s.diagnosticMode === undefined && DEFAULT_SCENARIO_METADATA.diagnosticMode) s.diagnosticMode = DEFAULT_SCENARIO_METADATA.diagnosticMode;
   if (!Array.isArray(s.requiredTools)) s.requiredTools = DEFAULT_SCENARIO_METADATA.requiredTools.slice();
   if (s.safetyLevel === undefined && DEFAULT_SCENARIO_METADATA.safetyLevel) s.safetyLevel = DEFAULT_SCENARIO_METADATA.safetyLevel;
+  // for high-voltage scenarios, require an explicit safety acknowledgement
+  if (s.requiresSafetyAcknowledgment === undefined) {
+    s.requiresSafetyAcknowledgment = (s.safetyLevel === 'high-voltage');
+  }
   if (!s.difficultyLevel) {
     if (typeof s.difficulty === 'number') {
       s.difficultyLevel = s.difficulty >= 4 ? 'advanced' : (s.difficulty >= 3 ? 'intermediate' : 'beginner');
