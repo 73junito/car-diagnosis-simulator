@@ -4,8 +4,8 @@ All changes to this repository must go through a Pull Request (PR) targeting the
 
 Required checks before merging:
 
-- `unit-tests`
-- `smoke`
+- `Unit Tests / unit-tests`
+- `Smoke / smoke`
 
 Manual/exception workflows:
 
