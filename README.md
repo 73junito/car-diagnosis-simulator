@@ -35,12 +35,12 @@ Contributing
 
 ## Contribution and Branch Protection
 
-The `main` branch is protected. All changes must go through a pull request and pass required checks:
+The `main` branch is protected. All changes must go through a pull request and pass these required PR checks:
 
-- `unit-tests`
-- `api-smoke`
-- `smoke`
-- `db-ssl-validation`
+- `Unit Tests / unit-tests`
+- `API Smoke Test / smoke`
+
+`db-ssl-validation` is a manual `workflow_dispatch` check gated by the `run-db-ssl` input, so it is optional and not required on every PR.
 
 One approving review is required, branches must be up to date, and force-pushes/deletions are blocked.
 
