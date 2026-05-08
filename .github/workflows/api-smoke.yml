@@ -68,35 +68,40 @@ jobs:
         working-directory: torquemind-api
         run: npm ci
 
-      - name: Start API server
+      - name: Start API server and wait
         working-directory: torquemind-api
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
+          # start server in background and record pid/log
           nohup npm start >/tmp/torquemind.log 2>&1 &
-          echo "Server starting..."
+          echo $! > /tmp/torquemind.pid || true
+          sleep 1
+          if [ -s /tmp/torquemind.log ]; then echo "server log created"; fi
 
-      - name: Wait for server
-        run: |
-          for i in {1..20}; do
+          # Poll for readiness, also check process and listening port
+          for i in $(seq 1 30); do
             if curl -fsS http://localhost:3000/ >/dev/null; then
               echo "API is ready"
               exit 0
             fi
-            echo "Waiting for API..."
+            echo "Waiting for API... ($i)"
+            if [ -f /tmp/torquemind.pid ]; then
+              if ! ps -p $(cat /tmp/torquemind.pid) >/dev/null 2>&1; then
+                echo "Background process not running"
+                break
+              fi
+            fi
+            # show if port listened (best-effort)
+            ss -lnt 2>/dev/null | grep -q ':3000' && echo "port 3000 listening" && break || true
             sleep 2
           done
-          echo "API failed to start"
-          cat /tmp/torquemind.log || true
-          exit 1
 
-      - name: Show server log
-        if: always()
-        run: |
-          echo "--- /tmp/torquemind.log ---"
-          cat /tmp/torquemind.log || true
+          echo "API failed to start; dumping /tmp/torquemind.log:"
+          sed -n '1,200p' /tmp/torquemind.log || true
+          exit 1
 
       - name: Run smoke test
         working-directory: torquemind-api
