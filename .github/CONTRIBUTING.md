@@ -20,4 +20,4 @@ Merge requirements:
 
 Repository administrators are currently subject to the same rules (`enforce_admins: true`).
 
-If you need an exception, contact a repository admin and follow the project's governance process.
+If you need an exception, contact a repository admin and include the requested exception, the reason it is needed, and the PR or branch it applies to. Do not merge until a repository admin has provided explicit written approval, and link that approval from the PR description or comments.
