@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const Ajv = require('ajv')
+const addFormats = require('ajv-formats')
 
 function loadJson(p) {
   const s = fs.readFileSync(p, 'utf8')
@@ -25,6 +26,7 @@ const schema = loadJson(schemaPath)
 const report = loadJson(reportPath)
 
 const ajv = new Ajv({ allErrors: true, strict: false })
+addFormats(ajv)
 const validate = ajv.compile(schema)
 const valid = validate(report)
 if (valid) {
