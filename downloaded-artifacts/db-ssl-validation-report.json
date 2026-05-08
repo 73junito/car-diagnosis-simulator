@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-05-08T00:55:32.7277146+00:00",
+  "mode": "ci",
+  "dryRun": "fail",
+  "validation": "fail",
+  "exitCode": 5,
+  "hostSet": false,
+  "caSet": false,
+  "caExists": false,
+  "sslMode": "",
+  "networkReachable": false,
+  "psqlAvailable": false,
+  "errors": [
+    "missing_env"
+  ]
+}

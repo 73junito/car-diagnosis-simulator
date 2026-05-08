@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-05-07T19:52:59.2689389-05:00",
+  "mode": "ci",
+  "dryRun": "ok",
+  "validation": "fail",
+  "exitCode": 3,
+  "hostSet": false,
+  "caSet": false,
+  "caExists": false,
+  "sslMode": "verify-full",
+  "networkReachable": false,
+  "psqlAvailable": false,
+  "errors": []
+}
