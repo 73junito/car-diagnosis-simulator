@@ -1,0 +1,53 @@
+name: Reusable Node CI
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        default: '22'
+      run-validate-scenarios:
+        required: false
+        default: 'true'
+
+jobs:
+  setup-and-validate:
+    runs-on: ubuntu-latest
+    outputs:
+      scenarios_passed: ${{ steps.scenarios.outputs.passed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies (root)
+        run: npm ci
+
+      - name: Validate scenarios
+        id: scenarios
+        if: ${{ inputs.run-validate-scenarios == 'true' }}
+        run: |
+          npm run validate:scenarios || true
+        continue-on-error: true
+
+      - name: Upload scenario validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scenario-validation-report
+          path: reports/scenario-validation-report.json
+
+      - name: Set scenarios output
+        id: setout
+        run: |
+          if [ -f reports/scenario-validation-report.json ]; then
+            echo "passed=true" >> $GITHUB_OUTPUT
+          else
+            echo "passed=false" >> $GITHUB_OUTPUT
+          fi

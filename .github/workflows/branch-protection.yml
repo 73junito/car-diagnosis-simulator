@@ -1,0 +1,53 @@
+name: Configure branch protection
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  administration: write
+
+jobs:
+  protect-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check inputs
+        run: echo "Applying branch protection to 'main' with required checks: unit-tests, api-smoke, smoke, db-ssl-validation"
+
+      - name: Create payload
+        run: |
+          cat > payload.json <<'JSON'
+          {
+            "required_status_checks": {
+              "strict": true,
+              "contexts": [
+                "unit-tests",
+                "api-smoke",
+                "smoke",
+                "db-ssl-validation"
+              ]
+            },
+            "enforce_admins": true,
+            "required_pull_request_reviews": {
+              "dismiss_stale_reviews": true,
+              "require_code_owner_reviews": false,
+              "required_approving_review_count": 1
+            },
+            "restrictions": null,
+            "allow_deletions": false,
+            "allow_force_pushes": false
+          }
+          JSON
+
+      - name: Apply branch protection
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -sS -X PUT \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/branches/main/protection \
+            -d @payload.json
+
+      - name: Confirm
+        run: echo "Branch protection request sent. Verify in repository settings or via GitHub API."

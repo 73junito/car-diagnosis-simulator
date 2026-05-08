@@ -5,9 +5,15 @@ on:
     branches: [ main ]
   workflow_dispatch: {}
 
+# Note: consider pinning actions to specific commit SHAs for increased security.
+# e.g. replace uses: actions/checkout@v4 with uses: actions/checkout@<COMMIT_SHA>
+
 jobs:
   smoke:
     name: Run smoke test
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -111,3 +117,12 @@ jobs:
           path: |
             reports/**
             torquemind-api/reports/**
+
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: |
+            coverage/**
+            torquemind-api/coverage/**

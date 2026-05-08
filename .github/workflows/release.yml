@@ -1,0 +1,234 @@
+name: Release Gating
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Tag/version to create (e.g. v1.2.3)'
+        required: true
+      dry-run:
+        description: 'If true, do everything except push tag/create release'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+
+jobs:
+  validate-scenarios:
+    name: Validate scenarios
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate scenarios
+        id: validate
+        run: npm run validate:scenarios
+
+      - name: Upload scenario validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scenario-validation-report
+          path: reports/scenario-validation-report.json
+
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    needs: validate-scenarios
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies (root)
+        run: npm ci
+
+      - name: Install torquemind-api dependencies
+        working-directory: torquemind-api
+        run: npm ci
+
+      - name: Run unit tests
+        working-directory: torquemind-api
+        run: npm test
+
+  api-smoke:
+    name: API smoke
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
+      TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+      BASE_URL: http://localhost:3000
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies (root)
+        run: npm ci
+
+      - name: Install API dependencies
+        working-directory: torquemind-api
+        run: npm ci
+
+      - name: Start API server
+        working-directory: torquemind-api
+        run: |
+          nohup npm start >/tmp/torquemind.log 2>&1 &
+          echo "Server starting..."
+
+      - name: Wait for server
+        run: |
+          for i in {1..20}; do
+            if curl -fsS http://localhost:3000/ >/dev/null; then
+              echo "API is ready"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+          echo "API failed to start"
+          cat /tmp/torquemind.log || true
+          exit 1
+
+      - name: Run API smoke tests
+        working-directory: torquemind-api
+        run: npm run test:smoke
+
+      - name: Upload API diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-diagnostics
+          path: |
+            torquemind-api/reports/**
+            reports/**
+
+  ui-smoke:
+    name: UI smoke
+    runs-on: ubuntu-latest
+    needs: api-smoke
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate scenarios (UI)
+        run: npm run validate:scenarios
+
+      - name: Upload UI scenario report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scenario-validation-report-ui
+          path: reports/scenario-validation-report.json
+
+  create-release:
+    name: Create tag & release
+    runs-on: ubuntu-latest
+    needs: [validate-scenarios, unit-tests, api-smoke, ui-smoke]
+    steps:
+      - name: Checkout (fetch all)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version format
+        run: |
+          set -euo pipefail
+          VERSION="${{ github.event.inputs.version }}"
+          if [[ ! "${VERSION}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Version '${VERSION}' does not match ^vMAJOR.MINOR.PATCH$"
+            exit 1
+          fi
+
+      - name: Ensure tag does not already exist
+        run: |
+          set -euo pipefail
+          git fetch --tags
+          if git rev-parse "${{ github.event.inputs.version }}" >/dev/null 2>&1; then
+            echo "Tag ${{ github.event.inputs.version }} already exists"
+            exit 1
+          fi
+
+      - name: Prepare release notes from CHANGELOG.md (if present)
+        id: release-notes
+        run: |
+          set -euo pipefail
+          VERSION="${{ github.event.inputs.version }}"
+          NOTES_FILE=/tmp/release-notes.md
+          if [ -f CHANGELOG.md ]; then
+            # Try to extract a section headed by '## VERSION' or '## [VERSION]'
+            awk -v ver="${VERSION}" '
+              BEGIN{found=0}
+              /^##[ ]+\[*v?[0-9]+\.[0-9]+\.[0-9]+\]*[ ]*/{
+                if ($0 ~ ver) {found=1; next}
+                if (found==1) exit
+              }
+              { if(found==1) print }
+            ' CHANGELOG.md > "$NOTES_FILE" || true
+            if [ -s "$NOTES_FILE" ]; then
+              echo "notes_file=$NOTES_FILE" >> $GITHUB_OUTPUT
+            else
+              # fallback to full CHANGELOG
+              echo "notes_file=CHANGELOG.md" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "notes_file=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create and push tag (unless dry-run)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event.inputs.dry-run }}" = 'true' ]; then
+            echo "Dry run: would create tag ${{ github.event.inputs.version }}"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ github.event.inputs.version }}" -m "Release ${{ github.event.inputs.version }}"
+          git push origin "${{ github.event.inputs.version }}"
+
+      - name: Create GitHub release (using gh)
+        if: ${{ github.event.inputs.dry-run != 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION=${{ github.event.inputs.version }}
+          NOTES_FILE="${{ steps.release-notes.outputs.notes_file }}"
+          if [ -n "$NOTES_FILE" ]; then
+            gh release create "$VERSION" --title "Release $VERSION" --notes-file "$NOTES_FILE"
+          else
+            gh release create "$VERSION" --title "Release $VERSION" --notes "Release created by release gating workflow."
+          fi

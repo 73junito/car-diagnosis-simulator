@@ -8,9 +8,15 @@ on:
         required: false
         default: 'false'
 
+# Note: consider pinning actions to specific commit SHAs for increased security.
+# e.g. replace uses: actions/checkout@v4 with uses: actions/checkout@<COMMIT_SHA>
+
 jobs:
   db-ssl-validation:
     if: "${{ github.event.inputs.run-db-ssl == 'true' }}"
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     runs-on: windows-latest
     steps:
       - name: Checkout
