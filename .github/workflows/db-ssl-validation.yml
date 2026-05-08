@@ -1,0 +1,42 @@
+name: DB SSL validation (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      run-db-ssl:
+        description: 'Set to "true" to run DB SSL validation (keeps workflow manual/optional)'
+        required: false
+        default: 'false'
+
+jobs:
+  db-ssl-validation:
+    if: "${{ github.event.inputs.run-db-ssl == 'true' }}"
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          cd torquemind-api
+          npm ci
+
+      - name: Validate DB SSL configuration
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          cd torquemind-api
+          ./scripts/validate-db-ssl.ps1 -Ci -Quiet
+
+      - name: Upload DB SSL validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: db-ssl-validation-report
+          path: torquemind-api/reports/db-ssl-validation-report.json
