@@ -16,6 +16,17 @@ app.get('/dashboard/analytics', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'dashboard', 'analytics.html'));
 });
 
+// Register analytics routes (serve aggregated reports from repo `reports/`)
+try {
+  const { registerSessionsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'sessions'));
+  const { registerStudentsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'students'));
+  const { registerExportRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'export'));
+  registerSessionsRoutes(app);
+  registerStudentsRoutes(app);
+  registerExportRoutes(app);
+} catch (e) {
+  if (DEBUG_API) console.warn('Analytics routes not available:', e && e.message);
+}
 const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL || null;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
