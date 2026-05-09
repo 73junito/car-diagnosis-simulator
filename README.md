@@ -48,6 +48,10 @@ One approving review is required, branches must be up to date, and force-pushes/
 License
 - MIT
 
+Security notes
+- Enable GitHub Secret Scanning and Push Protection to prevent accidental commits of secrets (API keys, tokens, service credentials). This must be enabled in the repository Security settings by an administrator.
+- We recommend enabling Dependency Review and Dependabot alerts for automated dependency vulnerability detection.
+
 ## Analytics Exports
 
 Generate instructor analytics artifacts:
