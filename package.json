@@ -3,7 +3,8 @@
 	"version": "0.1.1",
 	"private": true,
 	"scripts": {
-		"validate:scenarios": "node tools/validate-scenarios.js"
+		"validate:scenarios": "node tools/validate-scenarios.js",
+		"test:analytics": "node tests/session-summary.test.js"
 	},
 	"devDependencies": {
 		"ajv": "^8.20.0"
