@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 const path = require('path');
+const DEBUG_API = process.env.DEBUG_API === 'true';
 
 // Serve dashboard static assets from the repo-level `dashboard` folder
 app.use('/dashboard', express.static(path.join(__dirname, '..', 'dashboard')));
@@ -40,7 +41,6 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
 const SUPABASE_KEY = process.env.SUPABASE_KEY || null;
 
 let supabase = null;
-const DEBUG_API = process.env.DEBUG_API === 'true';
 if (SUPABASE_URL && SUPABASE_ANON_KEY) {
   supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   if (DEBUG_API) console.log('Supabase client initialized (ANON)');
