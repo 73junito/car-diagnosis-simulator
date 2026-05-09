@@ -81,8 +81,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
       const tr = document.createElement('tr')
       const name = document.createElement('td'); name.textContent = s.name || s.id || '—'
       const sessions = document.createElement('td'); sessions.textContent = (s.sessions||0)
-      const avgScore = document.createElement('td'); avgScore.textContent = s.avgScore!=null ? fmtNumber(s.avgScore)+'%' : '—'
-      const avgConfidence = document.createElement('td'); avgConfidence.textContent = s.avgConfidence!=null ? fmtNumber(s.avgConfidence)+'%' : '—'
+      const avgScoreValue = s.averageScore != null ? s.averageScore : s.avgScore
+      const avgConfidenceValue = s.averageConfidence != null ? s.averageConfidence : s.avgConfidence
+      const avgScore = document.createElement('td'); avgScore.textContent = avgScoreValue!=null ? fmtNumber(avgScoreValue)+'%' : '—'
+      const avgConfidence = document.createElement('td'); avgConfidence.textContent = avgConfidenceValue!=null ? fmtNumber(avgConfidenceValue)+'%' : '—'
       tr.appendChild(name); tr.appendChild(sessions); tr.appendChild(avgScore); tr.appendChild(avgConfidence)
       studentTbody.appendChild(tr)
     })
