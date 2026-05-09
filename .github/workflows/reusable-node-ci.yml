@@ -51,6 +51,10 @@ jobs:
         if: always()
         run: npm run test:analytics
 
+      - name: Test analytics routes
+        if: always()
+        run: npm run test:analytics-routes
+
       - name: Generate analytics exports
         if: always()
         run: npm run export:analytics

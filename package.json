@@ -7,9 +7,13 @@
 		"test:analytics": "node tests/session-summary.test.js",
 		"export:csv": "node tools/export-csv.js",
 		"export:xapi": "node tools/export-xapi.js",
-		"export:analytics": "npm run export:csv && npm run export:xapi"
+		"export:analytics": "npm run export:csv && npm run export:xapi",
+		"test:analytics-api": "node tests/analytics-api.test.js",
+		"test:analytics-routes": "node tests/analytics-routes.test.js"
 	},
 	"devDependencies": {
-		"ajv": "^8.20.0"
+		"ajv": "^8.20.0",
+		"supertest": "^6.3.3",
+		"express": "^4.18.2"
 	}
 }
