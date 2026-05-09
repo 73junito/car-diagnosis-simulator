@@ -2,18 +2,45 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+const path = require('path');
+const DEBUG_API = process.env.DEBUG_API === 'true';
 
+// Serve dashboard static assets from the repo-level `dashboard` folder
+app.use('/dashboard', express.static(path.join(__dirname, '..', 'dashboard')));
+
+// Rate limiter for dashboard file-serving routes
+const dashboardLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
+// Dashboard HTML route
+app.get('/dashboard/analytics', dashboardLimiter, (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'dashboard', 'analytics.html'));
+});
+
+// Register analytics routes (serve aggregated reports from repo `reports/`)
+try {
+  const { registerSessionsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'sessions'));
+  const { registerStudentsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'students'));
+  const { registerExportRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'export'));
+  registerSessionsRoutes(app);
+  registerStudentsRoutes(app);
+  registerExportRoutes(app);
+} catch (e) {
+  if (DEBUG_API) console.warn('Analytics routes not available:', e && e.message);
+}
 const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL || null;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
 const SUPABASE_KEY = process.env.SUPABASE_KEY || null;
 
 let supabase = null;
-const DEBUG_API = process.env.DEBUG_API === 'true';
 if (SUPABASE_URL && SUPABASE_ANON_KEY) {
   supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   if (DEBUG_API) console.log('Supabase client initialized (ANON)');
