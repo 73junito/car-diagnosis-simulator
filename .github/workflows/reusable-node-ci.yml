@@ -47,6 +47,10 @@ jobs:
           path: reports/scenario-validation-report.json
           if-no-files-found: warn
 
+      - name: Test analytics tooling
+        if: always()
+        run: npm run test:analytics
+
       - name: Set scenarios output
         id: setout
         if: always()
