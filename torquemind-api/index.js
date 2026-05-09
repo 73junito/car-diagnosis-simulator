@@ -6,6 +6,15 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 app.use(cors());
 app.use(express.json());
+const path = require('path');
+
+// Serve dashboard static assets from the repo-level `dashboard` folder
+app.use('/dashboard', express.static(path.join(__dirname, '..', 'dashboard')));
+
+// Dashboard HTML route
+app.get('/dashboard/analytics', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'dashboard', 'analytics.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL || null;
