@@ -1,3 +1,12 @@
+# Changelog
+
+## [Unreleased]
+
+- Scenario Schema v1.2
+  - Add `schemaVersion: "1.2"` and `scoringWeights` defaults.
+  - Enforce `requiresSafetyAcknowledgment` for high-voltage scenarios.
+  - Validator now enforces `scoringWeights` totals equal 100.
+  - Add example EV/high-voltage scenario (requiresSafetyAcknowledgment: true).
 ## 0.1.1 - Stable
 
 ### Highlights

@@ -6,15 +6,20 @@ on:
       node-version:
         required: false
         default: '22'
+        type: string
+
       run-validate-scenarios:
         required: false
-        default: 'true'
+        default: true
+        type: boolean
 
 jobs:
   setup-and-validate:
     runs-on: ubuntu-latest
+
     outputs:
-      scenarios_passed: ${{ steps.scenarios.outputs.passed }}
+      scenarios_passed: ${{ steps.setout.outputs.passed }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
@@ -31,10 +36,8 @@ jobs:
 
       - name: Validate scenarios
         id: scenarios
-        if: ${{ inputs.run-validate-scenarios == 'true' }}
-        run: |
-          npm run validate:scenarios || true
-        continue-on-error: true
+        if: ${{ inputs.run-validate-scenarios }}
+        run: npm run validate:scenarios
 
       - name: Upload scenario validation report
         if: always()
@@ -42,9 +45,11 @@ jobs:
         with:
           name: scenario-validation-report
           path: reports/scenario-validation-report.json
+          if-no-files-found: warn
 
       - name: Set scenarios output
         id: setout
+        if: always()
         run: |
           if [ -f reports/scenario-validation-report.json ]; then
             echo "passed=true" >> $GITHUB_OUTPUT
