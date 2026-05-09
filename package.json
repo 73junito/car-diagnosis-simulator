@@ -4,7 +4,10 @@
 	"private": true,
 	"scripts": {
 		"validate:scenarios": "node tools/validate-scenarios.js",
-		"test:analytics": "node tests/session-summary.test.js"
+		"test:analytics": "node tests/session-summary.test.js",
+		"export:csv": "node tools/export-csv.js",
+		"export:xapi": "node tools/export-xapi.js",
+		"export:analytics": "npm run export:csv && npm run export:xapi"
 	},
 	"devDependencies": {
 		"ajv": "^8.20.0"
