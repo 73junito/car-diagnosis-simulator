@@ -48,6 +48,19 @@ One approving review is required, branches must be up to date, and force-pushes/
 License
 - MIT
 
+## Analytics Exports
+
+Generate instructor analytics artifacts:
+
+```bash
+npm run export:analytics
+```
+
+Outputs:
+
+- `reports/student-performance.csv`
+- `reports/xapi-statements.json`
+
 Supabase setup + RLS policies
 -----------------------------
 
