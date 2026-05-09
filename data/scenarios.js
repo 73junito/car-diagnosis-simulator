@@ -43,18 +43,33 @@ const DEFAULT_SCENARIO_METADATA = {
   diagnosticMode: 'basic',
   requiredTools: ['DVOM', 'Scan Tool'],
   safetyLevel: 'normal',
-  difficultyLevel: 'intermediate'
+  difficultyLevel: 'intermediate',
+  // scenario metadata defaults for versioning and scoring
+  schemaVersion: '1.2',
+  scoringWeights: {
+    diagnosticAccuracy: 40,
+    proceduralCorrectness: 25,
+    safetyCompliance: 20,
+    toolEfficiency: 15
+  }
 };
 
 // Validate and normalize scenario metadata in-place
 function validateScenarioMetadata(s) {
   if (!s) return;
+  // ensure schema version and scoring weights exist
+  if (s.schemaVersion === undefined) s.schemaVersion = DEFAULT_SCENARIO_METADATA.schemaVersion;
+  if (s.scoringWeights === undefined || typeof s.scoringWeights !== 'object') s.scoringWeights = Object.assign({}, DEFAULT_SCENARIO_METADATA.scoringWeights);
   if (s.aseArea === undefined && DEFAULT_SCENARIO_METADATA.aseArea) s.aseArea = DEFAULT_SCENARIO_METADATA.aseArea;
   if (s.vehicleType === undefined && DEFAULT_SCENARIO_METADATA.vehicleType) s.vehicleType = DEFAULT_SCENARIO_METADATA.vehicleType;
   if (s.faultType === undefined && DEFAULT_SCENARIO_METADATA.faultType) s.faultType = DEFAULT_SCENARIO_METADATA.faultType;
   if (s.diagnosticMode === undefined && DEFAULT_SCENARIO_METADATA.diagnosticMode) s.diagnosticMode = DEFAULT_SCENARIO_METADATA.diagnosticMode;
   if (!Array.isArray(s.requiredTools)) s.requiredTools = DEFAULT_SCENARIO_METADATA.requiredTools.slice();
   if (s.safetyLevel === undefined && DEFAULT_SCENARIO_METADATA.safetyLevel) s.safetyLevel = DEFAULT_SCENARIO_METADATA.safetyLevel;
+  // for high-voltage scenarios, require an explicit safety acknowledgement
+  if (s.requiresSafetyAcknowledgment === undefined) {
+    s.requiresSafetyAcknowledgment = (s.safetyLevel === 'high-voltage');
+  }
   if (!s.difficultyLevel) {
     if (typeof s.difficulty === 'number') {
       s.difficultyLevel = s.difficulty >= 4 ? 'advanced' : (s.difficulty >= 3 ? 'intermediate' : 'beginner');
@@ -66,6 +81,17 @@ function validateScenarioMetadata(s) {
     // keep category but add to registry for discoverability
     SCENARIO_CATEGORIES.push(s.symptomCategory);
   }
+}
+
+// Normalize and validate scoring weights; ensure total equals 100
+function normalizeScoringWeights(weights) {
+  if (!weights || typeof weights !== 'object') return Object.assign({}, DEFAULT_SCENARIO_METADATA.scoringWeights);
+  const vals = Object.values(weights).map(v => Number(v) || 0);
+  const total = vals.reduce((a, b) => a + b, 0);
+  if (total !== 100) {
+    throw new Error(`scoringWeights must total 100 (got ${total})`);
+  }
+  return weights;
 }
 
 // Expose defaults for debugging / external scripts
@@ -384,6 +410,29 @@ window.scenarios = [
     tests: {
       dpf: { system: 'exhaust', reading: 'High soot mass', interpretation: 'CLOGGED' },
       nox: { system: 'emissions', reading: 'Elevated NOx', interpretation: 'UNUSUAL' }
+    }
+  }
+  ,
+  // Explicit EV / high-voltage safety scenario example
+  {
+    id: 17,
+    symptoms: "Hybrid/EV high-voltage insulation fault; vehicle disables on startup.",
+    difficulty: 5,
+    primarySystem: 'hybrid',
+    secondarySystems: ['battery','inverter'],
+    symptomCategory: 'hybrid-ev',
+    aseArea: 'A6',
+    vehicleType: 'hybrid',
+    faultType: 'electrical',
+    diagnosticMode: 'guided-diagnostics',
+    requiredTools: ['HV Insulation Tester','PPE','Scan Tool'],
+    safetyLevel: 'high-voltage',
+    requiresSafetyAcknowledgment: true,
+    trainingFocus: 'HV isolation checks and safety lockout procedures',
+    fault: 'hv_isolation_fault',
+    tests: {
+      hv: { system: 'hybrid', reading: 'Insulation resistance low', interpretation: 'FAIL' },
+      inverter: { system: 'hybrid', reading: 'Inverter disabled', interpretation: 'FAULT' }
     }
   }
 ];

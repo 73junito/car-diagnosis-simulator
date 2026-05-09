@@ -89,6 +89,17 @@ function validate() {
       if (typeof s.difficulty !== 'number' || s.difficulty < 1 || s.difficulty > 5) local.push('difficulty must be number 1-5');
     }
 
+    // scoringWeights total must equal 100 when present
+    if ('scoringWeights' in s) {
+      try {
+        const weights = s.scoringWeights;
+        const total = Object.values(weights).reduce((a, b) => a + (typeof b === 'number' ? b : Number(b) || 0), 0);
+        if (total !== 100) local.push(`scoringWeights total must equal 100 (got ${total})`);
+      } catch (e) {
+        local.push('invalid scoringWeights structure');
+      }
+    }
+
     // symptom coverage: ensure descriptive symptom text (>=20 chars)
     if (s.symptoms && s.symptoms.trim().length < 20) local.push('insufficient symptom description (<20 chars)');
 

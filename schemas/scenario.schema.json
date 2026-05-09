@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "TorqueMind Scenario",
   "type": "object",
-  "required": ["id","symptoms","fault","tests","symptomCategory"],
+  "required": ["id","symptoms","fault","tests","symptomCategory","schemaVersion","scoringWeights","safetyLevel","requiredTools"],
   "properties": {
     "id": { "type": ["integer","string"] },
     "symptoms": { "type": "string", "minLength": 10 },
@@ -16,6 +16,18 @@
     "diagnosticMode": { "type": "string", "enum": ["basic","scan-tool","waveform-analysis","guided-diagnostics"] },
     "requiredTools": { "type": "array", "minItems": 1, "items": { "type": "string" } },
     "safetyLevel": { "type": "string" },
+    "schemaVersion": { "type": "string", "pattern": "^1\\.2$" },
+    "scoringWeights": {
+      "type": "object",
+      "required": ["diagnosticAccuracy","proceduralCorrectness","safetyCompliance","toolEfficiency"],
+      "properties": {
+        "diagnosticAccuracy": { "type": "number", "minimum": 0, "maximum": 100 },
+        "proceduralCorrectness": { "type": "number", "minimum": 0, "maximum": 100 },
+        "safetyCompliance": { "type": "number", "minimum": 0, "maximum": 100 },
+        "toolEfficiency": { "type": "number", "minimum": 0, "maximum": 100 }
+      },
+      "additionalProperties": false
+    },
     "fault": { "type": "string" },
     "tests": { "type": "object" }
   }
