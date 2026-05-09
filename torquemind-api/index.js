@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 app.use(cors());
@@ -11,8 +12,14 @@ const path = require('path');
 // Serve dashboard static assets from the repo-level `dashboard` folder
 app.use('/dashboard', express.static(path.join(__dirname, '..', 'dashboard')));
 
+// Rate limiter for dashboard file-serving routes
+const dashboardLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
 // Dashboard HTML route
-app.get('/dashboard/analytics', (req, res) => {
+app.get('/dashboard/analytics', dashboardLimiter, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'dashboard', 'analytics.html'));
 });
 
