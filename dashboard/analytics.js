@@ -79,12 +79,40 @@ document.addEventListener('DOMContentLoaded', ()=>{
     studentTbody.innerHTML = ''
     (data.students||[]).forEach(s=>{
       const tr = document.createElement('tr')
+      tr.className = 'tm-table-row'
+
       const name = document.createElement('td'); name.textContent = s.name || s.id || '—'
-      const sessions = document.createElement('td'); sessions.textContent = (s.sessions||0)
+
+      const sessions = document.createElement('td');
+      sessions.className = 'metric-small';
+      sessions.textContent = (s.sessions||0)
+
       const avgScoreValue = s.averageScore != null ? s.averageScore : s.avgScore
       const avgConfidenceValue = s.averageConfidence != null ? s.averageConfidence : s.avgConfidence
-      const avgScore = document.createElement('td'); avgScore.textContent = avgScoreValue!=null ? fmtNumber(avgScoreValue)+'%' : '—'
-      const avgConfidence = document.createElement('td'); avgConfidence.textContent = avgConfidenceValue!=null ? fmtNumber(avgConfidenceValue)+'%' : '—'
+
+      const avgScore = document.createElement('td');
+      const scoreSpan = document.createElement('span');
+      if (avgScoreValue == null) { scoreSpan.textContent = '—'; scoreSpan.className='metric' }
+      else { scoreSpan.textContent = fmtNumber(avgScoreValue)+'%'; scoreSpan.className='metric'; }
+      // badge color by thresholds
+      if (avgScoreValue != null){
+        if (avgScoreValue >= 85) scoreSpan.classList.add('badge-success')
+        else if (avgScoreValue >= 70) scoreSpan.classList.add('badge-warn')
+        else scoreSpan.classList.add('badge-danger')
+      }
+      avgScore.appendChild(scoreSpan)
+
+      const avgConfidence = document.createElement('td');
+      const confSpan = document.createElement('span');
+      if (avgConfidenceValue == null) { confSpan.textContent = '—'; confSpan.className='metric' }
+      else { confSpan.textContent = fmtNumber(avgConfidenceValue)+'%'; confSpan.className='metric' }
+      if (avgConfidenceValue != null){
+        if (avgConfidenceValue >= 80) confSpan.classList.add('badge-success')
+        else if (avgConfidenceValue >= 60) confSpan.classList.add('badge-warn')
+        else confSpan.classList.add('badge-danger')
+      }
+      avgConfidence.appendChild(confSpan)
+
       tr.appendChild(name); tr.appendChild(sessions); tr.appendChild(avgScore); tr.appendChild(avgConfidence)
       studentTbody.appendChild(tr)
     })
