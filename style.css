@@ -2,7 +2,8 @@
 *{box-sizing:border-box}
 body{
   margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  background:linear-gradient(180deg,var(--bg),#050708);color:#fff;font-family:Inter,Segoe UI,Arial,sans-serif;padding:32px
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(56,189,248,0.03), transparent), linear-gradient(180deg,var(--bg),#050708);
+  color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;padding:28px
 }
 h1{margin:8px 0 20px}
 #ui{max-width:720px;width:100%}
@@ -11,6 +12,9 @@ h1{margin:8px 0 20px}
 button{background:var(--accent);border:none;color:#072024;padding:10px 14px;border-radius:6px;margin:6px;cursor:pointer}
 button:hover{opacity:0.95}
 #result{min-height:48px;display:flex;align-items:center}
+
+/* Panels */
+.panel { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.03); }
 
 /* Start overlay */
 .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(rgba(2,6,23,0.75), rgba(2,6,23,0.85));z-index:60;padding:24px}
@@ -277,5 +281,32 @@ button:hover{opacity:0.95}
 /* Teacher student row */
 .student-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.01)}
 .student-select{width:18px;height:18px}
+
+/* NAV */
+.topnav { position: sticky; top: 0; z-index: 80; width:100%; backdrop-filter: blur(6px); background: linear-gradient(180deg, rgba(11,17,23,0.6), rgba(11,17,23,0.4)); border-bottom:1px solid rgba(255,255,255,0.03); }
+.topnav .nav-inner { max-width:1100px; margin:0 auto; display:flex;align-items:center;justify-content:space-between;padding:12px 20px; }
+.nav-brand { font-weight:800; color:var(--text); letter-spacing:0.4px }
+.nav-links { display:flex; gap:14px; align-items:center }
+.nav-links a { color:var(--muted); text-decoration:none; padding:8px 10px; border-radius:6px }
+.nav-links a.primary { background:var(--accent); color:#07121a }
+
+/* HERO LAYOUT */
+.hero-grid { display:grid; grid-template-columns: 1fr 420px; gap:28px; align-items:start; max-width:1100px; margin: 0 auto; }
+.hero-card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:12px; padding:18px; box-shadow: 0 8px 30px rgba(2,6,23,0.6); }
+.diagnostic-card { background: linear-gradient(180deg, var(--panel), var(--panel-soft)); border-radius:12px; padding:14px; color:var(--text); }
+.diagnostic-row { display:flex; justify-content:space-between; align-items:center; margin:6px 0; }
+.badge { background: rgba(255,255,255,0.04); padding:6px 8px; border-radius:8px; font-size:0.85rem; color:var(--muted) }
+.status-pass { color:var(--success); font-weight:700 }
+.status-warn { color:var(--accent); font-weight:700 }
+.status-danger { color:var(--danger); font-weight:700 }
+
+/* FOOTER */
+footer.site-footer { max-width:1100px; width:100%; margin:28px auto 6px; padding:18px 20px; border-top:1px solid rgba(255,255,255,0.03); color:var(--muted); display:flex; justify-content:space-between; align-items:center }
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .topnav .nav-inner { padding:10px 12px }
+}
 .student-row strong{font-size:1rem}
 .student-row .muted{font-size:0.9rem;color:var(--muted)}
