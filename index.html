@@ -188,32 +188,32 @@
   <div id="loginScreen" class="card" style="display:none">
      <button class="ghost btn-back-to-landing">← Back</button>
     <h2>Welcome</h2>
-    <input id="username" placeholder="Enter name" />
-    <select id="role">
+    <input id="username" class="input" placeholder="Enter name" />
+    <select id="role" class="input">
       <option value="student">Student</option>
       <option value="teacher">Teacher</option>
     </select>
-    <input id="schoolCode" placeholder="School Code (optional)" />
+    <input id="schoolCode" class="input" placeholder="School Code (optional)" />
     <!-- Class flow controls -->
     <div id="classControls" style="margin-top:8px">
       <div id="teacherClassControls" style="display:none">
         <label style="font-size:90%; color:var(--muted)">Your Classes</label>
         <select id="teacherClassesSelect"></select>
         <div style="margin-top:6px; display:flex; gap:8px">
-          <input id="newClassName" placeholder="New class name" />
-          <button id="btn-create-class">Create Class</button>
+          <input id="newClassName" class="input" placeholder="New class name" />
+          <button id="btn-create-class" class="btn btn-primary">Create Class</button>
         </div>
       </div>
       <div id="studentClassControls" style="display:none">
         <label style="font-size:90%; color:var(--muted)">Join Class</label>
         <div style="display:flex; gap:8px; margin-top:6px">
-          <input id="joinClassCode" placeholder="Enter class code" />
-          <button id="btn-join-class">Join</button>
+          <input id="joinClassCode" class="input" placeholder="Enter class code" />
+          <button id="btn-join-class" class="btn btn-primary">Join</button>
         </div>
       </div>
     </div>
     <div style="margin-top:8px">
-      <button id="btn-enter">Enter</button>
+      <button id="btn-enter" class="btn btn-primary">Enter</button>
     </div>
   </div>
 
@@ -227,12 +227,12 @@
           <button id="btn-back-to-login">Back</button>
         </div>
       </div>
-      <div style="margin-top:8px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+        <div style="margin-top:8px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
         <label style="font-size:90%; color:var(--muted)">Filter:</label>
-        <select id="filter-system">
+        <select id="filter-system" class="input">
           <option value="all">All Systems</option>
         </select>
-        <select id="filter-difficulty">
+        <select id="filter-difficulty" class="input">
           <option value="all">All Difficulty</option>
           <option value="1">Level 1</option>
           <option value="2">Level 2</option>
@@ -240,7 +240,7 @@
           <option value="4">Level 4</option>
           <option value="5">Level 5</option>
         </select>
-        <button id="btn-refresh-scenarios">Refresh</button>
+        <button id="btn-refresh-scenarios" class="btn btn-ghost">Refresh</button>
       </div>
       <div id="scenarioList" style="margin-top:12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px"></div>
       <div id="assignedWork" class="card" style="margin-top:12px; display:none;"></div>
@@ -263,10 +263,10 @@
 
     <div id="tools" class="card">
       <h3>Tools</h3>
-      <button id="btn-battery">Check Battery</button>
-      <button id="btn-starter">Check Starter</button>
-      <button id="btn-fuel">Check Fuel</button>
-      <button id="btn-obd">Read OBD Code</button>
+      <button id="btn-battery" class="btn btn-secondary">Check Battery</button>
+      <button id="btn-starter" class="btn btn-secondary">Check Starter</button>
+      <button id="btn-fuel" class="btn btn-secondary">Check Fuel</button>
+      <button id="btn-obd" class="btn btn-secondary">Read OBD Code</button>
     </div>
 
     <div id="result" class="card"></div>
@@ -299,7 +299,7 @@
           <button id="sys-other" class="sys-btn">Other</button>
         </div>
         <div style="margin-top:8px">
-          <input id="systemReason" placeholder="(optional) Why are you choosing this system?" style="width:100%; padding:8px; box-sizing:border-box" />
+          <input id="systemReason" class="input" placeholder="(optional) Why are you choosing this system?" style="width:100%" />
         </div>
         <div class="sys-badge">Select a system first — this models system isolation.</div>
       </div>
@@ -327,11 +327,11 @@
     <div style="margin-bottom:8px"><button class="ghost" onclick="setView('landingPage')">← Back</button></div>
     <h2>Teacher Dashboard</h2>
     <div style="margin-bottom:8px">
-      <button id="btn-back">Back to Login</button>
-      <button id="btn-refresh">Refresh</button>
-      <button id="btn-export">Export All (JSON)</button>
-      <button id="btn-export-explanations">Export Explanations (CSV)</button>
-      <button id="btn-insights">Show Insights</button>
+      <button id="btn-back" class="btn btn-ghost">Back to Login</button>
+      <button id="btn-refresh" class="btn btn-ghost">Refresh</button>
+      <button id="btn-export" class="btn btn-ghost">Export All (JSON)</button>
+      <button id="btn-export-explanations" class="btn btn-ghost">Export Explanations (CSV)</button>
+      <button id="btn-insights" class="btn btn-primary">Show Insights</button>
     </div>
     <div id="teacherSummaryPanel" style="display:none; margin-top:12px;">
       <!-- Teacher insights rendered here -->
@@ -379,11 +379,11 @@
     <!-- Replay viewer for teacher -->
     <div id="replayViewer" class="card" style="display:none; margin-top:12px;">
       <h3>Scenario Replay</h3>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-        <button id="replay-play">Play</button>
-        <button id="replay-stop" class="ghost">Stop</button>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <button id="replay-play" class="btn btn-primary">Play</button>
+        <button id="replay-stop" class="btn btn-ghost">Stop</button>
         <label style="margin-left:8px;color:var(--muted);font-size:90%">Speed</label>
-        <select id="replay-speed" style="margin-left:6px">
+        <select id="replay-speed" class="input" style="margin-left:6px">
           <option value="800">Normal</option>
           <option value="400">Fast</option>
           <option value="1200">Slow</option>
