@@ -212,38 +212,187 @@
   <div id="landingPage" class="landing">
 
     <!-- HERO -->
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="hero-card tm-card">
-          <h1>Train the Way You Diagnose.</h1>
-          <p class="hero-desc">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
+    <section class="tm-hero">
+      <div class="tm-hero-inner">
 
-          <div style="margin-top:18px">
-            <button id="btn-start-training" class="btn btn-primary">Start Demo</button>
-            <button id="btn-open-dashboard" class="btn btn-ghost">Open Instructor Dashboard</button>
-            <button id="btn-view-scenarios" class="btn btn-secondary">View Scenarios</button>
+        <div class="tm-hero-left">
+          <h1 class="tm-hero-title">Train the Way You Diagnose.</h1>
+          <p class="tm-hero-subtitle">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
+
+          <div class="tm-hero-actions">
+            <a href="/demo" id="btn-start-training" class="btn btn-primary">Start Demo</a>
+            <a href="/dashboard/analytics" id="btn-open-dashboard" class="btn btn-secondary">Open Instructor Dashboard</a>
+            <a href="/scenarios" id="btn-view-scenarios" class="btn btn-ghost">View Scenarios</a>
           </div>
 
-          <div style="margin-top:18px" class="teacher-banner">
-            <strong>Instructor Analytics:</strong>
-            <span style="margin-left:8px; color:var(--muted)">See confidence, ASE weakness trends, and exportable reports.</span>
-            <a href="/dashboard/analytics" style="margin-left:12px" class="btn btn-ghost">Open Analytics</a>
+          <div class="mt-3">
+            <div class="tm-card">
+              <strong>Instructor Analytics:</strong>
+              <div class="mt-1" style="color:var(--tm-muted)">See confidence, ASE weakness trends, and exportable reports.</div>
+              <div class="mt-2"><a href="/dashboard/analytics" class="btn btn-ghost">Open Analytics</a></div>
+            </div>
           </div>
         </div>
 
-        <aside class="diagnostic-card tm-diagnostic-card" aria-hidden="false">
-          <h3 style="margin-top:0">Live Diagnostic Preview</h3>
-          <div class="diagnostic-row"><div>Scenario</div><div class="badge">No-start condition</div></div>
-          <div class="diagnostic-row"><div>System</div><div class="badge">Electrical</div></div>
-          <div class="diagnostic-row"><div>Evidence</div><div style="text-align:right; color:var(--muted)">Battery voltage, starter draw, OBD P0335</div></div>
-          <hr style="border-color:rgba(255,255,255,0.04); margin:10px 0">
-          <div class="diagnostic-row"><div>Score</div><div class="status-pass">82%</div></div>
-          <div class="diagnostic-row"><div>Confidence</div><div class="status-warn">Medium</div></div>
-          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--tm-accent, var(--accent));font-weight:700">Verify CKP signal</div></div>
-          <div style="margin-top:12px"><button class="btn btn-primary">Start This Scenario</button></div>
-        </aside>
+        <div class="tm-hero-right">
+          <div class="tm-diagnostic-card" role="group" aria-label="Diagnostic preview card">
+            <div class="tm-diagnostic-header">
+              <span class="badge badge--accent">Scenario</span>
+              <h3>No-Start Condition</h3>
+            </div>
+
+            <div class="tm-diagnostic-body">
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">System</span>
+                <span class="badge badge--pill">Electrical</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">Tools Left</span>
+                <span class="metric">3</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">Confidence</span>
+                <span class="badge badge-warn">Medium</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">OBD Code</span>
+                <span class="badge badge-danger">P0335</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">Score</span>
+                <span class="metric metric-large">82</span>
+              </div>
+            </div>
+
+            <div class="tm-diagnostic-footer">
+              <p class="tm-diagnostic-next">Recommended Next Step: Verify crankshaft position signal</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
+
+    <!-- ========================= -->
+    <!--  HOMEPAGE WIREFRAME (scenarios, instructor CTA, features, footer) -->
+    <!-- ========================= -->
+
+    <section class="tm-section tm-scenarios">
+      <div class="tm-section-inner">
+
+        <h2 class="tm-section-title">Hands-On Diagnostic Scenarios</h2>
+        <p class="tm-section-subtitle">Realistic automotive faults designed for CTE programs and instructor-led training.</p>
+
+        <div class="tm-scenario-grid">
+
+          <div class="tm-card tm-scenario-card">
+            <div class="tm-card-header">
+              <span class="badge badge-accent">Electrical</span>
+              <h3>No-Start Condition</h3>
+            </div>
+            <div class="tm-card-body">
+              <p class="tm-card-text">Students diagnose a crank/no-start with live OBD data.</p>
+            </div>
+            <div class="tm-card-footer">
+              <a href="/scenarios/no-start" class="btn btn-secondary">View Scenario</a>
+            </div>
+          </div>
+
+          <div class="tm-card tm-scenario-card">
+            <div class="tm-card-header">
+              <span class="badge badge-accent">HVAC</span>
+              <h3>Weak Cooling</h3>
+            </div>
+            <div class="tm-card-body">
+              <p class="tm-card-text">Students test pressures and diagnose low refrigerant flow.</p>
+            </div>
+            <div class="tm-card-footer">
+              <a href="/scenarios/hvac" class="btn btn-secondary">View Scenario</a>
+            </div>
+          </div>
+
+          <div class="tm-card tm-scenario-card">
+            <div class="tm-card-header">
+              <span class="badge badge-accent">Engine</span>
+              <h3>Rough Idle</h3>
+            </div>
+            <div class="tm-card-body">
+              <p class="tm-card-text">Students isolate misfires using live data and test plans.</p>
+            </div>
+            <div class="tm-card-footer">
+              <a href="/scenarios/rough-idle" class="btn btn-secondary">View Scenario</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section class="tm-section tm-instructor-cta">
+      <div class="tm-section-inner tm-instructor-cta-inner">
+
+        <div class="tm-instructor-cta-text">
+          <h2 class="tm-section-title">Built for Instructors</h2>
+          <p class="tm-section-subtitle">Track student performance, identify weaknesses, and run live diagnostic labs.</p>
+
+          <div class="tm-instructor-actions">
+            <a href="/dashboard" class="btn btn-primary">Open Instructor Dashboard</a>
+            <a href="/docs" class="btn btn-secondary">View Documentation</a>
+          </div>
+        </div>
+
+        <div class="tm-instructor-cta-visual">
+          <div class="tm-card tm-instructor-preview">
+            <h3>Analytics Preview</h3>
+            <p class="tm-card-text">Live scoring, ASE weakness tracking, and scenario analytics.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="tm-section tm-features">
+      <div class="tm-section-inner">
+
+        <h2 class="tm-section-title">Why TorqueMind?</h2>
+
+        <div class="tm-feature-list">
+
+          <div class="tm-feature">
+            <h3>Realistic Faults</h3>
+            <p>Every scenario is based on real-world diagnostic workflows.</p>
+          </div>
+
+          <div class="tm-feature">
+            <h3>Instructor Tools</h3>
+            <p>Analytics, dashboards, and class management built for CTE programs.</p>
+          </div>
+
+          <div class="tm-feature">
+            <h3>Student-Friendly</h3>
+            <p>Guided steps, confidence scoring, and OBD data visualization.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="tm-footer">
+      <div class="tm-footer-inner">
+        <p>© 2026 TorqueMind — Automotive Diagnostic Training</p>
+        <nav class="tm-footer-nav">
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </div>
+    </footer>
 
     <!-- FEATURES -->
     <section class="features">
