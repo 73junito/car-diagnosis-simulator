@@ -6,16 +6,17 @@
   <link rel="icon" href="data:,">
   <title>TorqueMind — Diagnostic Training Platform</title>
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./theme.css">
 </head>
 <body>
-  <header class="topnav" role="banner">
+  <header class="tm-topnav" role="banner">
     <div class="nav-inner">
-      <div class="nav-brand">TorqueMind</div>
-      <nav class="nav-links" aria-label="Main navigation">
+      <div class="tm-brand">TorqueMind</div>
+      <nav class="tm-nav" aria-label="Main navigation">
         <a href="#">Demo</a>
         <a href="#scenarios">Scenarios</a>
         <a href="/dashboard/analytics">Instructor Dashboard</a>
-        <a href="/dashboard/analytics" class="primary">Analytics</a>
+        <a href="/dashboard/analytics" class="tm-badge tm-badge--pill tm-badge--accent">Analytics</a>
         <a href="https://github.com/73junito/car-diagnosis-simulator">GitHub</a>
       </nav>
     </div>
@@ -27,7 +28,7 @@
     <!-- hidden by default to keep landing as primary view -->
     <!-- display this via JS when you want an intro overlay -->
     <style> #startOverlay{display:none;} </style>
-    <div class="overlay-card card">
+    <div class="overlay-card card tm-card">
       <h2>TorqueMind</h2>
       <p class="muted">Diagnostic Training Platform — practice real-world diagnostic reasoning with evidence-driven scenarios.</p>
       <h3>How to use</h3>
@@ -38,8 +39,8 @@
         <li>Track scores and progress over multiple scenarios.</li>
       </ol>
       <div style="margin-top:12px">
-        <button id="btn-start">Start Simulation</button>
-        <button id="btn-skip" class="ghost">Skip Intro</button>
+        <button id="btn-start" class="btn btn-primary">Start Simulation</button>
+        <button id="btn-skip" class="btn btn-ghost">Skip Intro</button>
       </div>
     </div>
 
@@ -56,7 +57,7 @@
     <!-- FINAL CTA -->
     <div style="margin-top:24px; text-align:center">
       <h3>Ready to train real diagnostic skills?</h3>
-      <div style="margin-top:10px"><button id="final-cta" class="primary-cta">Start Training</button></div>
+      <div style="margin-top:10px"><button id="final-cta" class="btn btn-primary">Start Training</button></div>
     </div>
   </div>
   <!-- ================= TORQUEMIND LANDING ================= -->
@@ -70,24 +71,24 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-grid">
-        <div class="hero-card">
+        <div class="hero-card tm-card">
           <h1>Train the Way You Diagnose.</h1>
           <p class="hero-desc">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
 
           <div style="margin-top:18px">
-            <button id="btn-start-training" class="primary-cta">Start Demo</button>
-            <button id="btn-open-dashboard" class="ghost-cta">Open Instructor Dashboard</button>
-            <button id="btn-view-scenarios" class="secondary-cta">View Scenarios</button>
+            <button id="btn-start-training" class="btn btn-primary">Start Demo</button>
+            <button id="btn-open-dashboard" class="btn btn-ghost">Open Instructor Dashboard</button>
+            <button id="btn-view-scenarios" class="btn btn-secondary">View Scenarios</button>
           </div>
 
           <div style="margin-top:18px" class="teacher-banner">
             <strong>Instructor Analytics:</strong>
             <span style="margin-left:8px; color:var(--muted)">See confidence, ASE weakness trends, and exportable reports.</span>
-            <a href="/dashboard/analytics" style="margin-left:12px" class="ghost-cta">Open Analytics</a>
+            <a href="/dashboard/analytics" style="margin-left:12px" class="btn btn-ghost">Open Analytics</a>
           </div>
         </div>
 
-        <aside class="diagnostic-card" aria-hidden="false">
+        <aside class="diagnostic-card tm-diagnostic-card" aria-hidden="false">
           <h3 style="margin-top:0">Live Diagnostic Preview</h3>
           <div class="diagnostic-row"><div>Scenario</div><div class="badge">No-start condition</div></div>
           <div class="diagnostic-row"><div>System</div><div class="badge">Electrical</div></div>
@@ -95,8 +96,8 @@
           <hr style="border-color:rgba(255,255,255,0.04); margin:10px 0">
           <div class="diagnostic-row"><div>Score</div><div class="status-pass">82%</div></div>
           <div class="diagnostic-row"><div>Confidence</div><div class="status-warn">Medium</div></div>
-          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--accent);font-weight:700">Verify CKP signal</div></div>
-          <div style="margin-top:12px"><button class="primary-cta">Start This Scenario</button></div>
+          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--tm-accent);font-weight:700">Verify CKP signal</div></div>
+          <div style="margin-top:12px"><button class="btn btn-primary">Start This Scenario</button></div>
         </aside>
       </div>
     </section>
@@ -155,16 +156,16 @@
       <h2>Training Modes</h2>
 
       <div class="mode-grid">
-        <div class="mode-card">
+        <div class="mode-card tm-card">
           <h3>Student Mode</h3>
           <p>Practice diagnostic scenarios and improve accuracy.</p>
-          <button id="btn-student">Start Student Mode</button>
+          <button id="btn-student" class="btn btn-primary">Start Student Mode</button>
         </div>
 
-        <div class="mode-card">
+        <div class="mode-card tm-card">
           <h3>Instructor Mode</h3>
           <p>Monitor performance and assign targeted training.</p>
-          <button id="btn-teacher">Open Dashboard</button>
+          <button id="btn-teacher" class="btn btn-ghost">Open Dashboard</button>
         </div>
       </div>
     </section>
