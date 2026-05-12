@@ -61,7 +61,7 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;min-height:100vh;background:var(--tm-bg);color:var(--tm-text);font-family:var(--font-sans);font-size:var(--type-base);line-height:1.45;-webkit-font-smoothing:antialiased;padding:var(--space-4);
+  margin:0;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;background:var(--tm-bg);color:var(--tm-text);font-family:var(--font-sans);font-size:var(--type-base);line-height:1.45;-webkit-font-smoothing:antialiased;padding:var(--space-4);
 }
 
 /* Containers */
@@ -88,7 +88,7 @@ body{
 .tm-nav a:hover{color:var(--tm-text)}
 
 /* Buttons */
-.btn{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:10px 14px;border:none;cursor:pointer;font-weight:700}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:10px 14px;border:none;cursor:pointer;font-weight:700;text-decoration:none}
 .btn:focus{outline:3px solid rgba(245,158,11,0.18);outline-offset:2px}
 .btn-primary{background:var(--tm-accent);color:#07121a}
 .btn-primary:hover{filter:brightness(0.98)}
