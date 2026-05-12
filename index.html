@@ -69,36 +69,68 @@
   <div id="landingPage" class="landing">
 
     <!-- HERO -->
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="hero-card tm-card">
-          <h1>Train the Way You Diagnose.</h1>
-          <p class="hero-desc">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
+    <section class="tm-hero">
+      <div class="tm-hero-inner">
 
-          <div style="margin-top:18px">
-            <button id="btn-start-training" class="btn btn-primary">Start Demo</button>
-            <button id="btn-open-dashboard" class="btn btn-ghost">Open Instructor Dashboard</button>
-            <button id="btn-view-scenarios" class="btn btn-secondary">View Scenarios</button>
+        <div class="tm-hero-left">
+          <h1 class="tm-hero-title">Train the Way You Diagnose.</h1>
+          <p class="tm-hero-subtitle">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
+
+          <div class="tm-hero-actions">
+            <a href="/demo" id="btn-start-training" class="btn btn-primary">Start Demo</a>
+            <a href="/dashboard/analytics" id="btn-open-dashboard" class="btn btn-secondary">Open Instructor Dashboard</a>
+            <a href="/scenarios" id="btn-view-scenarios" class="btn btn-ghost">View Scenarios</a>
           </div>
 
-          <div style="margin-top:18px" class="teacher-banner">
-            <strong>Instructor Analytics:</strong>
-            <span style="margin-left:8px; color:var(--muted)">See confidence, ASE weakness trends, and exportable reports.</span>
-            <a href="/dashboard/analytics" style="margin-left:12px" class="btn btn-ghost">Open Analytics</a>
+          <div class="mt-3">
+            <div class="tm-card">
+              <strong>Instructor Analytics:</strong>
+              <div class="mt-1" style="color:var(--tm-muted)">See confidence, ASE weakness trends, and exportable reports.</div>
+              <div class="mt-2"><a href="/dashboard/analytics" class="btn btn-ghost">Open Analytics</a></div>
+            </div>
           </div>
         </div>
 
-        <aside class="diagnostic-card tm-diagnostic-card" aria-hidden="false">
-          <h3 style="margin-top:0">Live Diagnostic Preview</h3>
-          <div class="diagnostic-row"><div>Scenario</div><div class="badge">No-start condition</div></div>
-          <div class="diagnostic-row"><div>System</div><div class="badge">Electrical</div></div>
-          <div class="diagnostic-row"><div>Evidence</div><div style="text-align:right; color:var(--muted)">Battery voltage, starter draw, OBD P0335</div></div>
-          <hr style="border-color:rgba(255,255,255,0.04); margin:10px 0">
-          <div class="diagnostic-row"><div>Score</div><div class="status-pass">82%</div></div>
-          <div class="diagnostic-row"><div>Confidence</div><div class="status-warn">Medium</div></div>
-          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--tm-accent);font-weight:700">Verify CKP signal</div></div>
-          <div style="margin-top:12px"><button class="btn btn-primary">Start This Scenario</button></div>
-        </aside>
+        <div class="tm-hero-right">
+          <div class="tm-diagnostic-card" role="region" aria-label="Diagnostic preview">
+            <div class="tm-diagnostic-header">
+              <span class="badge badge--accent">Scenario</span>
+              <h3 style="margin:6px 0 0">No-Start Condition</h3>
+            </div>
+
+            <div class="tm-diagnostic-body">
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">System</span>
+                <span class="badge badge--pill">Electrical</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">Tools Left</span>
+                <span class="metric">3</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">Confidence</span>
+                <span class="badge badge-warn">Medium</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">OBD Code</span>
+                <span class="badge badge-danger">P0335</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">Score</span>
+                <span class="metric metric-large">82</span>
+              </div>
+            </div>
+
+            <div class="tm-diagnostic-footer">
+              <p class="tm-diagnostic-next">Recommended Next Step: Verify crankshaft position signal</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
