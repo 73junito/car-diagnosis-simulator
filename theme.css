@@ -88,7 +88,7 @@ body{
 .tm-nav a:hover{color:var(--tm-text)}
 
 /* Buttons */
-.btn{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:10px 14px;border:none;cursor:pointer;font-weight:700}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:10px 14px;border:none;cursor:pointer;font-weight:700;text-decoration:none}
 .btn:focus{outline:3px solid rgba(245,158,11,0.18);outline-offset:2px}
 .btn-primary{background:var(--tm-accent);color:#07121a}
 .btn-primary:hover{filter:brightness(0.98)}
