@@ -4,41 +4,41 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Analytics Dashboard</title>
-  <link rel="stylesheet" href="./analytics.css" />
+  <link rel="stylesheet" href="../theme.css" />
 </head>
 <body>
   <main class="container">
     <h1>Instructor Analytics</h1>
 
     <section class="cards" id="summary-cards">
-      <div class="card" id="card-total">
+      <div class="tm-card" id="card-total">
         <div class="label">Total Sessions</div>
         <div class="value">—</div>
       </div>
-      <div class="card" id="card-confidence">
+      <div class="tm-card" id="card-confidence">
         <div class="label">Average Confidence</div>
         <div class="value">—</div>
       </div>
-      <div class="card" id="card-time">
+      <div class="tm-card" id="card-time">
         <div class="label">Average Time</div>
         <div class="value">—</div>
       </div>
-      <div class="card" id="card-safety">
+      <div class="tm-card" id="card-safety">
         <div class="label">Safety Misses</div>
         <div class="value">—</div>
       </div>
     </section>
 
     <section class="exports">
-      <button id="download-csv">Download CSV</button>
-      <button id="download-xapi">Download xAPI JSON</button>
+      <button id="download-csv" class="btn btn-ghost">Download CSV</button>
+      <button id="download-xapi" class="btn btn-ghost">Download xAPI JSON</button>
     </section>
 
     <section class="students">
       <h2>Student Performance</h2>
-      <table id="student-table">
+      <table id="student-table" class="tm-table">
         <thead>
-          <tr><th>Student</th><th>Sessions</th><th>Avg Score</th><th>Avg Confidence</th></tr>
+          <tr class="tm-table-header"><th>Student</th><th>Sessions</th><th>Avg Score</th><th>Avg Confidence</th></tr>
         </thead>
         <tbody></tbody>
       </table>
