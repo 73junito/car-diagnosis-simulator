@@ -6,16 +6,160 @@
   <link rel="icon" href="data:,">
   <title>TorqueMind — Diagnostic Training Platform</title>
   <link rel="stylesheet" href="./style.css">
+  <style>
+    :root {
+      --tm-bg: #0b1020;
+      --tm-surface: #121935;
+      --tm-surface-alt: #182142;
+      --tm-text: #e8ecf8;
+      --tm-text-muted: #a9b4d0;
+      --tm-border: rgba(255, 255, 255, 0.12);
+      --tm-primary: #4f8cff;
+      --tm-primary-strong: #2f6fe6;
+      --tm-accent: #12c48b;
+      --tm-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      --tm-radius: 14px;
+    }
+
+    body {
+      color: var(--tm-text);
+      background: var(--tm-bg);
+    }
+
+    .tm-topnav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      background: rgba(11, 16, 32, 0.78);
+      border-bottom: 1px solid var(--tm-border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .tm-brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--tm-text);
+    }
+
+    .tm-nav {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tm-nav a {
+      color: var(--tm-text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .tm-nav a:hover,
+    .tm-nav a:focus-visible {
+      color: var(--tm-text);
+    }
+
+    .tm-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1;
+      border: 1px solid transparent;
+    }
+
+    .tm-badge--pill {
+      border-radius: 999px;
+    }
+
+    .tm-badge--accent {
+      color: #08111f;
+      background: var(--tm-accent);
+    }
+
+    .tm-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)), var(--tm-surface);
+      border: 1px solid var(--tm-border);
+      border-radius: var(--tm-radius);
+      box-shadow: var(--tm-shadow);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 40px;
+      padding: 0.65rem 1rem;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--tm-primary);
+      border-color: var(--tm-primary);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      background: var(--tm-primary-strong);
+      border-color: var(--tm-primary-strong);
+    }
+
+    .btn-ghost {
+      color: var(--tm-text);
+      background: transparent;
+      border-color: var(--tm-border);
+    }
+
+    .btn-ghost:hover,
+    .btn-ghost:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    input,
+    select,
+    textarea {
+      color: var(--tm-text);
+      background: var(--tm-surface-alt);
+      border: 1px solid var(--tm-border);
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
-  <header class="topnav" role="banner">
+  <header class="tm-topnav" role="banner">
     <div class="nav-inner">
-      <div class="nav-brand">TorqueMind</div>
-      <nav class="nav-links" aria-label="Main navigation">
+      <div class="tm-brand">TorqueMind</div>
+      <nav class="tm-nav" aria-label="Main navigation">
         <a href="#">Demo</a>
         <a href="#scenarios">Scenarios</a>
         <a href="/dashboard/analytics">Instructor Dashboard</a>
-        <a href="/dashboard/analytics" class="primary">Analytics</a>
+        <a href="/dashboard/analytics" class="tm-badge tm-badge--pill tm-badge--accent">Analytics</a>
         <a href="https://github.com/73junito/car-diagnosis-simulator">GitHub</a>
       </nav>
     </div>
@@ -27,7 +171,7 @@
     <!-- hidden by default to keep landing as primary view -->
     <!-- display this via JS when you want an intro overlay -->
     <style> #startOverlay{display:none;} </style>
-    <div class="overlay-card card">
+    <div class="overlay-card card tm-card">
       <h2>TorqueMind</h2>
       <p class="muted">Diagnostic Training Platform — practice real-world diagnostic reasoning with evidence-driven scenarios.</p>
       <h3>How to use</h3>
@@ -38,8 +182,8 @@
         <li>Track scores and progress over multiple scenarios.</li>
       </ol>
       <div style="margin-top:12px">
-        <button id="btn-start">Start Simulation</button>
-        <button id="btn-skip" class="ghost">Skip Intro</button>
+        <button id="btn-start" class="btn btn-primary">Start Simulation</button>
+        <button id="btn-skip" class="btn btn-ghost">Skip Intro</button>
       </div>
     </div>
 
@@ -56,7 +200,7 @@
     <!-- FINAL CTA -->
     <div style="margin-top:24px; text-align:center">
       <h3>Ready to train real diagnostic skills?</h3>
-      <div style="margin-top:10px"><button id="final-cta" class="primary-cta">Start Training</button></div>
+      <div style="margin-top:10px"><button id="final-cta" class="btn btn-primary">Start Training</button></div>
     </div>
   </div>
   <!-- ================= TORQUEMIND LANDING ================= -->
@@ -70,24 +214,24 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-grid">
-        <div class="hero-card">
+        <div class="hero-card tm-card">
           <h1>Train the Way You Diagnose.</h1>
           <p class="hero-desc">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
 
           <div style="margin-top:18px">
-            <button id="btn-start-training" class="primary-cta">Start Demo</button>
-            <button id="btn-open-dashboard" class="ghost-cta">Open Instructor Dashboard</button>
-            <button id="btn-view-scenarios" class="secondary-cta">View Scenarios</button>
+            <button id="btn-start-training" class="btn btn-primary">Start Demo</button>
+            <button id="btn-open-dashboard" class="btn btn-ghost">Open Instructor Dashboard</button>
+            <button id="btn-view-scenarios" class="btn btn-secondary">View Scenarios</button>
           </div>
 
           <div style="margin-top:18px" class="teacher-banner">
             <strong>Instructor Analytics:</strong>
             <span style="margin-left:8px; color:var(--muted)">See confidence, ASE weakness trends, and exportable reports.</span>
-            <a href="/dashboard/analytics" style="margin-left:12px" class="ghost-cta">Open Analytics</a>
+            <a href="/dashboard/analytics" style="margin-left:12px" class="btn btn-ghost">Open Analytics</a>
           </div>
         </div>
 
-        <aside class="diagnostic-card" aria-hidden="false">
+        <aside class="diagnostic-card tm-diagnostic-card" aria-hidden="false">
           <h3 style="margin-top:0">Live Diagnostic Preview</h3>
           <div class="diagnostic-row"><div>Scenario</div><div class="badge">No-start condition</div></div>
           <div class="diagnostic-row"><div>System</div><div class="badge">Electrical</div></div>
@@ -95,8 +239,8 @@
           <hr style="border-color:rgba(255,255,255,0.04); margin:10px 0">
           <div class="diagnostic-row"><div>Score</div><div class="status-pass">82%</div></div>
           <div class="diagnostic-row"><div>Confidence</div><div class="status-warn">Medium</div></div>
-          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--accent);font-weight:700">Verify CKP signal</div></div>
-          <div style="margin-top:12px"><button class="primary-cta">Start This Scenario</button></div>
+          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--tm-accent, var(--accent));font-weight:700">Verify CKP signal</div></div>
+          <div style="margin-top:12px"><button class="btn btn-primary">Start This Scenario</button></div>
         </aside>
       </div>
     </section>
@@ -155,16 +299,16 @@
       <h2>Training Modes</h2>
 
       <div class="mode-grid">
-        <div class="mode-card">
+        <div class="mode-card tm-card">
           <h3>Student Mode</h3>
           <p>Practice diagnostic scenarios and improve accuracy.</p>
-          <button id="btn-student">Start Student Mode</button>
+          <button id="btn-student" class="btn btn-primary">Start Student Mode</button>
         </div>
 
-        <div class="mode-card">
+        <div class="mode-card tm-card">
           <h3>Instructor Mode</h3>
           <p>Monitor performance and assign targeted training.</p>
-          <button id="btn-teacher">Open Dashboard</button>
+          <button id="btn-teacher" class="btn btn-ghost">Open Dashboard</button>
         </div>
       </div>
     </section>
@@ -187,32 +331,32 @@
   <div id="loginScreen" class="card" style="display:none">
      <button class="ghost btn-back-to-landing">← Back</button>
     <h2>Welcome</h2>
-    <input id="username" placeholder="Enter name" />
-    <select id="role">
+    <input id="username" class="input" placeholder="Enter name" />
+    <select id="role" class="input">
       <option value="student">Student</option>
       <option value="teacher">Teacher</option>
     </select>
-    <input id="schoolCode" placeholder="School Code (optional)" />
+    <input id="schoolCode" class="input" placeholder="School Code (optional)" />
     <!-- Class flow controls -->
     <div id="classControls" style="margin-top:8px">
       <div id="teacherClassControls" style="display:none">
         <label style="font-size:90%; color:var(--muted)">Your Classes</label>
         <select id="teacherClassesSelect"></select>
         <div style="margin-top:6px; display:flex; gap:8px">
-          <input id="newClassName" placeholder="New class name" />
-          <button id="btn-create-class">Create Class</button>
+          <input id="newClassName" class="input" placeholder="New class name" />
+          <button id="btn-create-class" class="btn btn-primary">Create Class</button>
         </div>
       </div>
       <div id="studentClassControls" style="display:none">
         <label style="font-size:90%; color:var(--muted)">Join Class</label>
         <div style="display:flex; gap:8px; margin-top:6px">
-          <input id="joinClassCode" placeholder="Enter class code" />
-          <button id="btn-join-class">Join</button>
+          <input id="joinClassCode" class="input" placeholder="Enter class code" />
+          <button id="btn-join-class" class="btn btn-primary">Join</button>
         </div>
       </div>
     </div>
     <div style="margin-top:8px">
-      <button id="btn-enter">Enter</button>
+      <button id="btn-enter" class="btn btn-primary">Enter</button>
     </div>
   </div>
 
@@ -226,12 +370,12 @@
           <button id="btn-back-to-login">Back</button>
         </div>
       </div>
-      <div style="margin-top:8px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+        <div style="margin-top:8px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
         <label style="font-size:90%; color:var(--muted)">Filter:</label>
-        <select id="filter-system">
+        <select id="filter-system" class="input">
           <option value="all">All Systems</option>
         </select>
-        <select id="filter-difficulty">
+        <select id="filter-difficulty" class="input">
           <option value="all">All Difficulty</option>
           <option value="1">Level 1</option>
           <option value="2">Level 2</option>
@@ -239,7 +383,7 @@
           <option value="4">Level 4</option>
           <option value="5">Level 5</option>
         </select>
-        <button id="btn-refresh-scenarios">Refresh</button>
+        <button id="btn-refresh-scenarios" class="btn btn-ghost">Refresh</button>
       </div>
       <div id="scenarioList" style="margin-top:12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px"></div>
       <div id="assignedWork" class="card" style="margin-top:12px; display:none;"></div>
@@ -262,10 +406,10 @@
 
     <div id="tools" class="card">
       <h3>Tools</h3>
-      <button id="btn-battery">Check Battery</button>
-      <button id="btn-starter">Check Starter</button>
-      <button id="btn-fuel">Check Fuel</button>
-      <button id="btn-obd">Read OBD Code</button>
+      <button id="btn-battery" class="btn btn-secondary">Check Battery</button>
+      <button id="btn-starter" class="btn btn-secondary">Check Starter</button>
+      <button id="btn-fuel" class="btn btn-secondary">Check Fuel</button>
+      <button id="btn-obd" class="btn btn-secondary">Read OBD Code</button>
     </div>
 
     <div id="result" class="card"></div>
@@ -298,7 +442,7 @@
           <button id="sys-other" class="sys-btn">Other</button>
         </div>
         <div style="margin-top:8px">
-          <input id="systemReason" placeholder="(optional) Why are you choosing this system?" style="width:100%; padding:8px; box-sizing:border-box" />
+          <input id="systemReason" class="input" placeholder="(optional) Why are you choosing this system?" style="width:100%" />
         </div>
         <div class="sys-badge">Select a system first — this models system isolation.</div>
       </div>
@@ -326,11 +470,11 @@
     <div style="margin-bottom:8px"><button class="ghost" onclick="setView('landingPage')">← Back</button></div>
     <h2>Teacher Dashboard</h2>
     <div style="margin-bottom:8px">
-      <button id="btn-back">Back to Login</button>
-      <button id="btn-refresh">Refresh</button>
-      <button id="btn-export">Export All (JSON)</button>
-      <button id="btn-export-explanations">Export Explanations (CSV)</button>
-      <button id="btn-insights">Show Insights</button>
+      <button id="btn-back" class="btn btn-ghost">Back to Login</button>
+      <button id="btn-refresh" class="btn btn-ghost">Refresh</button>
+      <button id="btn-export" class="btn btn-ghost">Export All (JSON)</button>
+      <button id="btn-export-explanations" class="btn btn-ghost">Export Explanations (CSV)</button>
+      <button id="btn-insights" class="btn btn-primary">Show Insights</button>
     </div>
     <div id="teacherSummaryPanel" style="display:none; margin-top:12px;">
       <!-- Teacher insights rendered here -->
@@ -378,11 +522,11 @@
     <!-- Replay viewer for teacher -->
     <div id="replayViewer" class="card" style="display:none; margin-top:12px;">
       <h3>Scenario Replay</h3>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-        <button id="replay-play">Play</button>
-        <button id="replay-stop" class="ghost">Stop</button>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <button id="replay-play" class="btn btn-primary">Play</button>
+        <button id="replay-stop" class="btn btn-ghost">Stop</button>
         <label style="margin-left:8px;color:var(--muted);font-size:90%">Speed</label>
-        <select id="replay-speed" style="margin-left:6px">
+        <select id="replay-speed" class="input" style="margin-left:6px">
           <option value="800">Normal</option>
           <option value="400">Fast</option>
           <option value="1200">Slow</option>
