@@ -8,7 +8,20 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <h1>TorqueMind</h1>
+  <header class="topnav" role="banner">
+    <div class="nav-inner">
+      <div class="nav-brand">TorqueMind</div>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#">Demo</a>
+        <a href="#scenarios">Scenarios</a>
+        <a href="/dashboard/analytics">Instructor Dashboard</a>
+        <a href="/dashboard/analytics" class="primary">Analytics</a>
+        <a href="https://github.com/73junito/car-diagnosis-simulator">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <h1 style="display:none">TorqueMind</h1>
 
   <div id="startOverlay" class="overlay">
     <!-- hidden by default to keep landing as primary view -->
@@ -56,29 +69,35 @@
 
     <!-- HERO -->
     <section class="hero">
-      <h1>TorqueMind</h1>
-      <p class="hero-sub">
-        Train the Way You Diagnose.
-      </p>
-      <p class="hero-desc">
-        Real-world automotive diagnostic training built on system isolation,
-        evidence-based reasoning, and performance scoring.
-      </p>
+      <div class="hero-grid">
+        <div class="hero-card">
+          <h1>Train the Way You Diagnose.</h1>
+          <p class="hero-desc">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
 
-      <div class="hero-actions">
-        <button id="btn-start-training">▶ Start Training</button>
-        <button id="btn-demo" class="ghost">▶ Try Demo</button>
-      </div>
+          <div style="margin-top:18px">
+            <button id="btn-start-training" class="primary-cta">Start Demo</button>
+            <button id="btn-open-dashboard" class="ghost-cta">Open Instructor Dashboard</button>
+            <button id="btn-view-scenarios" class="secondary-cta">View Scenarios</button>
+          </div>
 
-      <!-- HERO MEDIA removed (demo.mp4 and demo-placeholder.png not included) -->
+          <div style="margin-top:18px" class="teacher-banner">
+            <strong>Instructor Analytics:</strong>
+            <span style="margin-left:8px; color:var(--muted)">See confidence, ASE weakness trends, and exportable reports.</span>
+            <a href="/dashboard/analytics" style="margin-left:12px" class="ghost-cta">Open Analytics</a>
+          </div>
+        </div>
 
-      <p class="muted" style="margin-top:10px;">No account required for demo</p>
-
-      <!-- Teacher banner (above the fold) -->
-      <div class="teacher-banner" role="region" aria-label="For instructors">
-        <strong>For Instructors:</strong>
-        Track performance, identify weaknesses, and assign targeted training.
-        <button id="btn-teacher-hero" class="secondary-cta">Open Dashboard</button>
+        <aside class="diagnostic-card" aria-hidden="false">
+          <h3 style="margin-top:0">Live Diagnostic Preview</h3>
+          <div class="diagnostic-row"><div>Scenario</div><div class="badge">No-start condition</div></div>
+          <div class="diagnostic-row"><div>System</div><div class="badge">Electrical</div></div>
+          <div class="diagnostic-row"><div>Evidence</div><div style="text-align:right; color:var(--muted)">Battery voltage, starter draw, OBD P0335</div></div>
+          <hr style="border-color:rgba(255,255,255,0.04); margin:10px 0">
+          <div class="diagnostic-row"><div>Score</div><div class="status-pass">82%</div></div>
+          <div class="diagnostic-row"><div>Confidence</div><div class="status-warn">Medium</div></div>
+          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--accent);font-weight:700">Verify CKP signal</div></div>
+          <div style="margin-top:12px"><button class="primary-cta">Start This Scenario</button></div>
+        </aside>
       </div>
     </section>
 
