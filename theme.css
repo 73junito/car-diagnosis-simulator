@@ -259,3 +259,19 @@ body{
   .tm-footer-inner{flex-direction:column;gap:8px;text-align:center}
 }
 
+/* ---------------------------------------------
+   SCENARIO CARD POLISH
+--------------------------------------------- */
+.tm-scenario-card{display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-4);background:linear-gradient(180deg,var(--tm-panel-soft),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.03);border-radius:var(--radius-md);transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.tm-scenario-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(2,6,23,0.55);border-color:var(--tm-accent-2)}
+.tm-scenario-card h3{margin:0;font-size:1.15rem;color:var(--tm-text)}
+.tm-card-header{display:flex;flex-direction:column;gap:var(--space-2)}
+.tm-card-body{flex:1}
+.tm-card-text{color:var(--tm-muted);font-size:0.95rem;line-height:1.45;margin:0}
+.tm-card-footer{padding-top:var(--space-3);border-top:1px solid rgba(255,255,255,0.03);display:flex;justify-content:flex-end}
+
+.tm-scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);margin-top:var(--space-4)}
+@media (max-width:900px){.tm-scenario-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.tm-scenario-grid{grid-template-columns:1fr}}
+
+
