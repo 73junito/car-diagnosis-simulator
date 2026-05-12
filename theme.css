@@ -168,8 +168,12 @@ body{
 .tm-label{font-size:0.95rem;color:var(--tm-muted);font-weight:700}
 
 /* Accessibility helpers */
-:focus{outline:none}
-[tabindex]:focus{outline:3px solid rgba(56,189,248,0.12);outline-offset:2px}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible{outline:3px solid rgba(56,189,248,0.12);outline-offset:2px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* Utility spacing */
