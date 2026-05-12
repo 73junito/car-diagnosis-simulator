@@ -6,7 +6,150 @@
   <link rel="icon" href="data:,">
   <title>TorqueMind — Diagnostic Training Platform</title>
   <link rel="stylesheet" href="./style.css">
-  <link rel="stylesheet" href="./theme.css">
+  <style>
+    :root {
+      --tm-bg: #0b1020;
+      --tm-surface: #121935;
+      --tm-surface-alt: #182142;
+      --tm-text: #e8ecf8;
+      --tm-text-muted: #a9b4d0;
+      --tm-border: rgba(255, 255, 255, 0.12);
+      --tm-primary: #4f8cff;
+      --tm-primary-strong: #2f6fe6;
+      --tm-accent: #12c48b;
+      --tm-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      --tm-radius: 14px;
+    }
+
+    body {
+      color: var(--tm-text);
+      background: var(--tm-bg);
+    }
+
+    .tm-topnav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      background: rgba(11, 16, 32, 0.78);
+      border-bottom: 1px solid var(--tm-border);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .tm-brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--tm-text);
+    }
+
+    .tm-nav {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tm-nav a {
+      color: var(--tm-text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .tm-nav a:hover,
+    .tm-nav a:focus-visible {
+      color: var(--tm-text);
+    }
+
+    .tm-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1;
+      border: 1px solid transparent;
+    }
+
+    .tm-badge--pill {
+      border-radius: 999px;
+    }
+
+    .tm-badge--accent {
+      color: #08111f;
+      background: var(--tm-accent);
+    }
+
+    .tm-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)), var(--tm-surface);
+      border: 1px solid var(--tm-border);
+      border-radius: var(--tm-radius);
+      box-shadow: var(--tm-shadow);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 40px;
+      padding: 0.65rem 1rem;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--tm-primary);
+      border-color: var(--tm-primary);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      background: var(--tm-primary-strong);
+      border-color: var(--tm-primary-strong);
+    }
+
+    .btn-ghost {
+      color: var(--tm-text);
+      background: transparent;
+      border-color: var(--tm-border);
+    }
+
+    .btn-ghost:hover,
+    .btn-ghost:focus-visible {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    input,
+    select,
+    textarea {
+      color: var(--tm-text);
+      background: var(--tm-surface-alt);
+      border: 1px solid var(--tm-border);
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
   <header class="tm-topnav" role="banner">
@@ -96,7 +239,7 @@
           <hr style="border-color:rgba(255,255,255,0.04); margin:10px 0">
           <div class="diagnostic-row"><div>Score</div><div class="status-pass">82%</div></div>
           <div class="diagnostic-row"><div>Confidence</div><div class="status-warn">Medium</div></div>
-          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--tm-accent);font-weight:700">Verify CKP signal</div></div>
+          <div class="diagnostic-row"><div>Recommended next</div><div style="color:var(--tm-accent, var(--accent));font-weight:700">Verify CKP signal</div></div>
           <div style="margin-top:12px"><button class="btn btn-primary">Start This Scenario</button></div>
         </aside>
       </div>
