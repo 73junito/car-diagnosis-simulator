@@ -61,7 +61,7 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;min-height:100vh;background:var(--tm-bg);color:var(--tm-text);font-family:var(--font-sans);font-size:var(--type-base);line-height:1.45;-webkit-font-smoothing:antialiased;padding:var(--space-4);
+  margin:0;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;background:var(--tm-bg);color:var(--tm-text);font-family:var(--font-sans);font-size:var(--type-base);line-height:1.45;-webkit-font-smoothing:antialiased;padding:var(--space-4);
 }
 
 /* Containers */
