@@ -138,6 +138,12 @@ body{
 .metric{font-weight:800;color:var(--tm-text)}
 .metric-small{font-weight:700;color:var(--tm-muted);font-size:0.95rem}
 
+/* Larger metric for score displays */
+.metric-large{font-weight:900;color:var(--tm-text);font-size:1.4rem}
+
+/* soft badge (subtle) */
+.badge-soft{background:rgba(255,255,255,0.02);color:var(--tm-muted);padding:6px 10px;border-radius:8px}
+
 /* Badge semantic variants */
 .badge-success{background:rgba(34,197,94,0.10);color:var(--tm-success);font-weight:800}
 .badge-warn{background:rgba(245,158,11,0.10);color:var(--tm-warning);font-weight:800}
