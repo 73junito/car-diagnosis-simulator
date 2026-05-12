@@ -1,0 +1,168 @@
+/* TorqueMind UI Theme — Single Source of Truth
+   - Tokens: colors, spacing, typography, radii
+   - Component shells: panels, cards, buttons, badges
+   - Diagnostic UI primitives: score, status, mini-meters
+   - Accessibility: focus states, reduced-motion
+*/
+:root{
+  /* Color palette */
+  --tm-bg: #0b1117;
+  --tm-panel: #111827;
+  --tm-panel-soft: #1f2937;
+  --tm-surface-pressed: #0f1720;
+  --tm-text: #f9fafb;
+  --tm-muted: #9ca3af;
+  --tm-accent: #f59e0b; /* amber */
+  --tm-accent-2: #38bdf8; /* electric blue */
+  --tm-success: #22c55e;
+  --tm-warning: #f59e0b;
+  --tm-danger: #ef4444;
+  --tm-glow: rgba(56,189,248,0.08);
+
+  /* Spacing scale (px) */
+  --space-0: 4px;
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+
+  /* Typography */
+  --font-sans: Inter, "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
+  --font-mono: "JetBrains Mono", "Fira Code", SFMono-Regular, Menlo, monospace;
+  --type-xs: 12px;
+  --type-sm: 14px;
+  --type-base: 16px;
+  --type-lg: 20px;
+  --type-xl: 28px;
+  --type-xxl: 36px;
+
+  /* Radii and borders */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --border-1: 1px solid rgba(255,255,255,0.03);
+
+  /* Elevation */
+  --elev-1: 0 6px 18px rgba(2,6,23,0.45);
+  --elev-2: 0 10px 30px rgba(2,6,23,0.55);
+
+  /* Layout */
+  --container-max: 1120px;
+}
+
+/* Dark-mode fallback when prefers-color-scheme supported */
+@media (prefers-color-scheme: light) {
+  /* keep palette intentionally dark; override only if required */
+}
+
+/* Base resets */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;background:var(--tm-bg);color:var(--tm-text);font-family:var(--font-sans);font-size:var(--type-base);line-height:1.45;-webkit-font-smoothing:antialiased;padding:var(--space-4);
+}
+
+/* Containers */
+.container{max-width:var(--container-max);margin:0 auto;padding:0 var(--space-4)}
+.section{padding:var(--space-5) 0}
+
+/* Panels & Cards */
+.tm-panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius-md);border:var(--border-1);padding:var(--space-3);box-shadow:var(--elev-1)}
+.tm-card{background:linear-gradient(180deg,var(--tm-panel),var(--tm-panel-soft));border-radius:var(--radius-md);border:var(--border-1);padding:var(--space-3);box-shadow:var(--elev-1)}
+.tm-card--soft{background:var(--tm-panel-soft)}
+
+/* Hero */
+.hero-grid{display:grid;grid-template-columns:1fr 420px;gap:var(--space-4);align-items:start}
+.hero-title{font-size:var(--type-xxl);line-height:1.05;margin:0 0 var(--space-2);font-weight:800}
+.hero-sub{color:var(--tm-accent-2);font-weight:700}
+.hero-desc{color:var(--tm-muted);max-width:680px}
+
+/* Navigation */
+.tm-topnav{position:sticky;top:0;z-index:90;background:linear-gradient(180deg, rgba(11,17,23,0.6), rgba(11,17,23,0.35));backdrop-filter:blur(6px);border-bottom:var(--border-1)}
+.tm-topnav .nav-inner{max-width:var(--container-max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 18px}
+.tm-brand{font-weight:900;letter-spacing:0.4px}
+.tm-nav{display:flex;gap:12px;align-items:center}
+.tm-nav a{color:var(--tm-muted);text-decoration:none;padding:8px;border-radius:8px}
+.tm-nav a:hover{color:var(--tm-text)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:8px;padding:10px 14px;border:none;cursor:pointer;font-weight:700;text-decoration:none}
+.btn:focus{outline:3px solid rgba(245,158,11,0.18);outline-offset:2px}
+.btn-primary{background:var(--tm-accent);color:#07121a}
+.btn-primary:hover{filter:brightness(0.98)}
+.btn-ghost{background:transparent;border:var(--border-1);color:var(--tm-text)}
+.btn-secondary{background:rgba(255,255,255,0.03);color:var(--tm-text)}
+.btn-danger{background:var(--tm-danger);color:#fff}
+.btn-success{background:var(--tm-success);color:#05210d}
+
+/* Badges */
+.tm-badge{display:inline-block;padding:6px 8px;border-radius:8px;font-size:0.85rem;background:rgba(255,255,255,0.03);color:var(--tm-muted)}
+.tm-badge--accent{background:linear-gradient(90deg, rgba(245,158,11,0.12), rgba(56,189,248,0.06));color:var(--tm-accent)}
+.tm-badge--pill{border-radius:999px;padding:6px 12px}
+
+/* Diagnostic UI */
+.tm-diagnostic-card{padding:var(--space-3);border-radius:var(--radius-lg);background:linear-gradient(180deg,var(--tm-panel),var(--tm-panel-soft));border:var(--border-1);box-shadow:var(--elev-2)}
+.tm-diagnostic-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
+.tm-diagnostic-key{color:var(--tm-muted);font-weight:600}
+.tm-diagnostic-value{font-weight:700}
+
+/* Score meter */
+.tm-score{display:inline-flex;align-items:center;gap:10px}
+.tm-score .value{font-size:1.4rem;font-weight:900;color:var(--tm-text)}
+.tm-score .spark{height:10px;width:80px;border-radius:6px;background:linear-gradient(90deg,var(--tm-success),var(--tm-accent))}
+
+/* Status utility classes */
+.status-pass{color:var(--tm-success);font-weight:800}
+.status-warn{color:var(--tm-warning);font-weight:800}
+.status-fail{color:var(--tm-danger);font-weight:800}
+
+/* Tables */
+.tm-table{width:100%;border-collapse:collapse}
+.tm-table th{text-align:left;padding:10px;color:var(--tm-muted);font-size:0.95rem}
+.tm-table td{padding:10px;border-top:1px solid rgba(255,255,255,0.03)}
+
+/* Grids and responsive */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4)}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-4)}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}.tm-topnav .nav-inner{padding:8px}}
+
+/* Forms */
+.input{background:transparent;border:var(--border-1);padding:8px 10px;border-radius:8px;color:var(--tm-text)}
+.input:focus{outline:3px solid rgba(56,189,248,0.12);outline-offset:2px}
+
+/* Field wrappers and labels */
+.tm-field{display:flex;flex-direction:column;gap:var(--space-1);margin-bottom:var(--space-2)}
+.tm-label{font-size:0.95rem;color:var(--tm-muted);font-weight:700}
+
+/* Accessibility helpers */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.tm-nav a:focus-visible{
+  outline:3px solid rgba(56,189,248,0.12);
+  outline-offset:2px
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Utility spacing */
+.mt-1{margin-top:var(--space-1)}
+.mt-2{margin-top:var(--space-2)}
+.mt-3{margin-top:var(--space-3)}
+.mb-3{margin-bottom:var(--space-3)}
+.p-2{padding:var(--space-2)}
+
+/* Motion */
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* Example usage doc note (do not remove):
+
+  - Use `.tm-card` for consistent card surfaces.
+  - Use `.tm-panel` for lightweight panels and ribbons.
+  - Use `.btn-primary` / `.btn-ghost` for CTA hierarchy.
+  - Use `.tm-diagnostic-card` for scenario preview panels (score, status rows).
+*/
