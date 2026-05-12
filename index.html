@@ -188,24 +188,36 @@
   <div id="loginScreen" class="card" style="display:none">
      <button class="ghost btn-back-to-landing">← Back</button>
     <h2>Welcome</h2>
-    <input id="username" class="input" placeholder="Enter name" />
-    <select id="role" class="input">
-      <option value="student">Student</option>
-      <option value="teacher">Teacher</option>
-    </select>
-    <input id="schoolCode" class="input" placeholder="School Code (optional)" />
+    <div class="tm-field">
+      <label for="username" class="tm-label">Name</label>
+      <input id="username" class="input" placeholder="Enter name" />
+    </div>
+    <div class="tm-field">
+      <label for="role" class="tm-label">Role</label>
+      <select id="role" class="input">
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+      </select>
+    </div>
+    <div class="tm-field">
+      <label for="schoolCode" class="tm-label">School Code (optional)</label>
+      <input id="schoolCode" class="input" placeholder="School Code (optional)" />
+    </div>
     <!-- Class flow controls -->
     <div id="classControls" style="margin-top:8px">
       <div id="teacherClassControls" style="display:none">
-        <label style="font-size:90%; color:var(--muted)">Your Classes</label>
-        <select id="teacherClassesSelect"></select>
+        <label class="tm-label">Your Classes</label>
+        <select id="teacherClassesSelect" class="input"></select>
         <div style="margin-top:6px; display:flex; gap:8px">
-          <input id="newClassName" class="input" placeholder="New class name" />
+          <div class="tm-field" style="flex:1;margin:0">
+            <label for="newClassName" class="sr-only">New class name</label>
+            <input id="newClassName" class="input" placeholder="New class name" />
+          </div>
           <button id="btn-create-class" class="btn btn-primary">Create Class</button>
         </div>
       </div>
       <div id="studentClassControls" style="display:none">
-        <label style="font-size:90%; color:var(--muted)">Join Class</label>
+        <label class="tm-label">Join Class</label>
         <div style="display:flex; gap:8px; margin-top:6px">
           <input id="joinClassCode" class="input" placeholder="Enter class code" />
           <button id="btn-join-class" class="btn btn-primary">Join</button>
@@ -228,8 +240,8 @@
         </div>
       </div>
         <div style="margin-top:8px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
-        <label style="font-size:90%; color:var(--muted)">Filter:</label>
-        <select id="filter-system" class="input">
+          <label class="tm-label">Filter:</label>
+          <select id="filter-system" class="input">
           <option value="all">All Systems</option>
         </select>
         <select id="filter-difficulty" class="input">
