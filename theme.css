@@ -102,6 +102,11 @@ body{
 .tm-badge--accent{background:linear-gradient(90deg, rgba(245,158,11,0.12), rgba(56,189,248,0.06));color:var(--tm-accent)}
 .tm-badge--pill{border-radius:999px;padding:6px 12px}
 
+/* Legacy alias for existing markup */
+.badge{display:inline-block;padding:6px 8px;border-radius:8px;font-size:0.85rem;background:rgba(255,255,255,0.03);color:var(--tm-muted)}
+.badge--accent{background:linear-gradient(90deg, rgba(245,158,11,0.12), rgba(56,189,248,0.06));color:var(--tm-accent)}
+.badge--pill{border-radius:999px;padding:6px 12px}
+
 /* Diagnostic UI */
 .tm-diagnostic-card{padding:var(--space-3);border-radius:var(--radius-lg);background:linear-gradient(180deg,var(--tm-panel),var(--tm-panel-soft));border:var(--border-1);box-shadow:var(--elev-2)}
 .tm-diagnostic-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0}
