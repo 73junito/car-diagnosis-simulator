@@ -189,3 +189,39 @@ body{
   - Use `.btn-primary` / `.btn-ghost` for CTA hierarchy.
   - Use `.tm-diagnostic-card` for scenario preview panels (score, status rows).
 */
+
+/* ---------------------------------------------
+   HERO (theme-driven)
+   Uses existing theme tokens (var(--tm-...), --space-*)
+--------------------------------------------- */
+.tm-hero{
+  padding:var(--space-5) var(--space-4);
+  background:var(--tm-panel);
+  border-bottom:var(--border-1);
+}
+
+.tm-hero-inner{
+  max-width:var(--container-max);
+  margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:var(--space-4);align-items:center;
+}
+
+.tm-hero-left{display:flex;flex-direction:column;gap:var(--space-4)}
+.tm-hero-title{font-size:var(--type-xxl);font-weight:800;line-height:1.05;margin:0;color:var(--tm-text)}
+.tm-hero-subtitle{font-size:var(--type-lg);color:var(--tm-muted);max-width:48ch}
+.tm-hero-actions{display:flex;gap:var(--space-3);align-items:center}
+
+.tm-hero-right{display:flex;justify-content:center}
+.tm-diagnostic-card{background:linear-gradient(180deg,var(--tm-panel),var(--tm-panel-soft));border-radius:var(--radius-md);border:var(--border-1);padding:var(--space-3);width:100%;max-width:380px;display:flex;flex-direction:column;gap:var(--space-3)}
+.tm-diagnostic-header h3{margin:0;font-size:var(--type-lg);color:var(--tm-text)}
+.tm-diagnostic-body{display:flex;flex-direction:column;gap:var(--space-2)}
+.tm-diagnostic-row{display:flex;justify-content:space-between;align-items:center}
+.tm-diagnostic-footer{padding-top:var(--space-2);border-top:var(--border-1)}
+.tm-diagnostic-next{font-size:var(--type-sm);color:var(--tm-muted);margin:0}
+
+@media (max-width:900px){
+  .tm-hero-inner{grid-template-columns:1fr;text-align:center}
+  .tm-hero-left{align-items:center}
+  .tm-hero-actions{justify-content:center;flex-wrap:wrap}
+  .tm-hero-right{margin-top:var(--space-4)}
+}
+
