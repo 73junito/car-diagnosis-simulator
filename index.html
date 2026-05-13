@@ -77,10 +77,20 @@
           <p class="tm-hero-subtitle">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
 
           <div class="tm-hero-actions">
-            <a href="/demo" id="btn-start-training" class="btn btn-primary">Start Demo</a>
+            <button
+              data-hero-cta
+              data-cta-mode="demo-load"
+              data-scenario-id="demo-default"
+              class="btn btn-primary"
+              type="button"
+              aria-busy="false"
+            >Start Demo</button>
             <a href="/dashboard/analytics" id="btn-open-dashboard" class="btn btn-secondary">Open Instructor Dashboard</a>
             <a href="/scenarios" id="btn-view-scenarios" class="btn btn-ghost">View Scenarios</a>
           </div>
+
+          <!-- HERO-004: aria-live error toast region -->
+          <div data-hero-toast aria-live="polite" aria-atomic="true" class="hero-toast"></div>
 
           <div class="mt-3">
             <div class="tm-card">
@@ -620,5 +630,9 @@
   <script src="./apiClient.js"></script>
   <script src="./js/cta-analytics.js"></script>
   <script src="./script.js"></script>
+  <script type="module">
+    import { initHeroCta } from './js/hero.js';
+    document.addEventListener('DOMContentLoaded', initHeroCta);
+  </script>
 </body>
 </html>

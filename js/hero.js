@@ -73,6 +73,10 @@ export function _resetStateForTesting() {
  * document.addEventListener('DOMContentLoaded', initHeroCta);
  */
 export function initHeroCta() {
+  // Reset module-level state so re-initialisation (e.g. in tests) starts clean.
+  _lastActivationAt = null;
+  _inflightLoad = null;
+
   const btn = /** @type {HTMLButtonElement | null} */ (
     document.querySelector('[data-hero-cta]')
   );
@@ -167,8 +171,14 @@ function _runDemoLoad(btn, scenarioId) {
 
   const startedAt = Date.now();
 
-  _inflightLoad = loadDemoScenario(scenarioId)
-    .then((scenarioData) => {
+  // Use an IIFE async function so try/finally collapses to one microtask
+  // suspension point (the single `await loadDemoScenario(...)` call).
+  // A chained .then().catch().finally() adds one extra hop per link, pushing
+  // the finally handler past where the debounce guard needs it cleared.
+  // @see docs/hero-cta.md §3a (debounce), §4 (restore-on-error)
+  _inflightLoad = (async () => {
+    try {
+      const scenarioData = await loadDemoScenario(scenarioId);
       track('hero_demo_load_success', {
         source: 'homepage', mode: CTA_MODES.DEMO_LOAD, scenarioId,
         duration_ms: Date.now() - startedAt,
@@ -183,8 +193,7 @@ function _runDemoLoad(btn, scenarioId) {
         container.setAttribute('tabindex', '-1');
         container.focus({ preventScroll: false });
       }
-    })
-    .catch((err) => {
+    } catch (err) {
       track('hero_demo_load_fail', {
         source: 'homepage', mode: CTA_MODES.DEMO_LOAD, scenarioId,
         duration_ms: Date.now() - startedAt,
@@ -192,11 +201,11 @@ function _runDemoLoad(btn, scenarioId) {
       console.error('[hero] Demo load failed:', err);
       _showErrorToast("Couldn't load the demo. Try again.");
       scrollToTarget('#demo-section');
-    })
-    .finally(() => {
+    } finally {
       _setLoadingState(btn, false);
       _inflightLoad = null;
-    });
+    }
+  })();
 }
 
 /**
@@ -209,7 +218,17 @@ function _openScenarioModal() {
 }
 
 /**
+ * Sentinel stored in `data-label-original` to indicate the button had no
+ * `aria-label` attribute before loading began, so the attribute is removed
+ * rather than restored to an empty string on clear.
+ * @type {string}
+ */
+const _NO_LABEL = '\x00';
+
+/**
  * Sets or clears aria-busy / disabled / btn-loading on the CTA button.
+ * Also manages aria-label so screen readers announce "Loading…" while busy
+ * and the original accessible name is restored when done.
  * @see docs/hero-cta.md §3a — HERO-004
  * @param {HTMLButtonElement} btn
  * @param {boolean} isLoading
@@ -218,6 +237,20 @@ function _setLoadingState(btn, isLoading) {
   btn.setAttribute('aria-busy', isLoading ? 'true' : 'false');
   btn.disabled = isLoading;
   btn.classList.toggle('btn-loading', isLoading);
+  if (isLoading) {
+    btn.dataset.labelOriginal = btn.getAttribute('aria-label') ?? _NO_LABEL;
+    btn.setAttribute('aria-label', 'Loading\u2026');
+  } else {
+    const stored = btn.dataset.labelOriginal;
+    if (stored !== undefined) {
+      if (stored === _NO_LABEL) {
+        btn.removeAttribute('aria-label');
+      } else {
+        btn.setAttribute('aria-label', stored);
+      }
+      delete btn.dataset.labelOriginal;
+    }
+  }
 }
 
 /**
