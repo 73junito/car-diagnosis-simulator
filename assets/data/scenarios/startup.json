@@ -1,0 +1,9 @@
+{
+  "id": "startup",
+  "headline": "Ship Fleet Diagnostics Faster",
+  "subheadline": "Built for lean teams and small fleets.",
+  "ctaLabel": "See the Startup Demo",
+  "imageUrl": "/assets/images/hero-startup.webp",
+  "assetUrls": ["/assets/data/scenarios/startup.json"],
+  "meta": { "description": "Startup demo", "audience": "startup", "addedIn": "1.0.0" }
+}
