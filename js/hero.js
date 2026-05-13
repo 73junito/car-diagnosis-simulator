@@ -96,7 +96,9 @@ export function scrollToTarget(selector) {
   const nav     = document.querySelector('header');
   const offset  = nav ? nav.offsetHeight : 0;
   const top     = target.getBoundingClientRect().top + window.scrollY - offset;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = typeof window.matchMedia === 'function'
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false;
 
   window.scrollTo({ top, behavior: reduced ? 'auto' : 'smooth' });
 
