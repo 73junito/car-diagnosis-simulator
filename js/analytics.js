@@ -14,9 +14,18 @@
  */
 export function track(eventName, properties = {}) {
   try {
+    // Prefer a bridge set by the classic-script `cta-analytics.js` when present
+    if (typeof window !== 'undefined' && typeof window.__torquemind_track === 'function') {
+      window.__torquemind_track(eventName, properties);
+      return;
+    }
+
     if (typeof window !== 'undefined' && typeof window.analytics?.track === 'function') {
       window.analytics.track(eventName, properties);
-    } else if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+      return;
+    }
+
+    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
       // best-effort fallback: send a lightweight beacon to a telemetry endpoint
       try {
         const payload = JSON.stringify({ event: eventName, props: properties, source: 'homepage' });
