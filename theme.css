@@ -60,6 +60,7 @@
 /* Base resets */
 *{box-sizing:border-box}
 html,body{height:100%}
+html{scroll-behavior:smooth}
 body{
   margin:0;min-height:100vh;background:var(--tm-bg);color:var(--tm-text);font-family:var(--font-sans);font-size:var(--type-base);line-height:1.45;-webkit-font-smoothing:antialiased;padding:var(--space-4);
 }
@@ -187,6 +188,7 @@ body{
 
 /* Motion */
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
 
 /* Example usage doc note (do not remove):
 
@@ -377,5 +379,4 @@ body{
 .tm-top-student{transition:background .12s ease}
 .tm-top-student:hover{background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));cursor:pointer}
 .tm-top-student:hover .tm-top-student-name{text-decoration:underline}
-
 
