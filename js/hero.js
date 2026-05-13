@@ -16,7 +16,7 @@
  */
 
 import { loadDemoScenario } from './scenario-loader.js';
-import { track } from './cta-analytics.js';
+import { track } from './analytics.js';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
