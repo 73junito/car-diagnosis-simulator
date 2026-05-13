@@ -5,6 +5,7 @@
 	"scripts": {
 		"test": "jest",
 		"validate:scenarios": "node tools/validate-scenarios.js",
+		"validate:obd2": "node tools/validate-obd2.js",
 		"test:analytics": "node tests/session-summary.test.js",
 		"export:csv": "node tools/export-csv.js",
 		"export:xapi": "node tools/export-xapi.js",

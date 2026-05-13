@@ -1,0 +1,38 @@
+{
+  "demo-default": {
+    "id": "demo-default",
+    "headline": "Diagnose Any Car Problem in Minutes",
+    "subheadline": "Step-by-step AI-guided diagnostics for learners and instructors.",
+    "ctaLabel": "Start Free Demo",
+    "imageUrl": "/assets/images/hero-default.webp",
+    "assetUrls": ["/assets/data/scenarios/demo-default.json"],
+    "meta": { "description": "Default demo scenario", "audience": "general", "addedIn": "1.0.0" }
+  },
+  "startup": {
+    "id": "startup",
+    "headline": "Ship Fleet Diagnostics Faster",
+    "subheadline": "Built for lean teams and small fleets.",
+    "ctaLabel": "See the Startup Demo",
+    "imageUrl": "/assets/images/hero-startup.webp",
+    "assetUrls": ["/assets/data/scenarios/startup.json"],
+    "meta": { "description": "Startup demo", "audience": "startup", "addedIn": "1.0.0" }
+  },
+  "agency": {
+    "id": "agency",
+    "headline": "Agency Diagnostics — Multi-Module Coverage",
+    "subheadline": "In-depth diagnostics for independent garages and agencies.",
+    "ctaLabel": "Try the Agency Demo",
+    "imageUrl": "/assets/images/hero-agency.webp",
+    "assetUrls": ["/assets/data/scenarios/agency.json"],
+    "meta": { "description": "Agency demo", "audience": "agency", "addedIn": "1.0.0" }
+  },
+  "enterprise": {
+    "id": "enterprise",
+    "headline": "Enterprise Fleet Diagnostics and Compliance",
+    "subheadline": "Designed for large fleets, ISO workflows, and SSO integrations.",
+    "ctaLabel": "Explore Enterprise Features",
+    "imageUrl": "/assets/images/hero-enterprise.webp",
+    "assetUrls": ["/assets/data/scenarios/enterprise.json"],
+    "meta": { "description": "Enterprise demo", "audience": "enterprise", "addedIn": "1.0.0" }
+  }
+}

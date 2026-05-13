@@ -36,13 +36,41 @@ const DEBOUNCE_MS = 300;
 /** Toast auto-dismiss duration in ms. @see docs/hero-cta.md §4 */
 const TOAST_DISMISS_MS = 5000;
 
-// ─── Module-level state ───────────────────────────────────────────────────────
+// ─── Per-button state ─────────────────────────────────────────────────────────
+// Keyed by HTMLButtonElement so state resets automatically when the element
+// is replaced in the DOM (e.g. between Jest test runs).
 
-/** @type {Promise<void> | null} In-flight loadDemoScenario promise for debounce guard. */
-let _inflightLoad = null;
+/**
+ * @typedef {{ inflightLoad: Promise<void>|null, lastActivationAt: number|null }} BtnState
+ * @type {WeakMap<HTMLButtonElement, BtnState>}
+ */
+const _btnState = new WeakMap();
 
-/** @type {number | null} Timestamp of last CTA activation (ms). */
-let _lastActivationAt = null;
+/**
+ * Returns (or lazily creates) the mutable state object for a given button.
+ * @param {HTMLButtonElement} btn
+ * @returns {BtnState}
+ */
+function _getState(btn) {
+  if (!_btnState.has(btn)) {
+    _btnState.set(btn, { inflightLoad: null, lastActivationAt: null });
+  }
+  return /** @type {BtnState} */ (_btnState.get(btn));
+}
+
+// ─── Testing helpers ─────────────────────────────────────────────────────────
+
+/**
+ * Resets ephemeral module state. Call from test `beforeEach` to prevent state
+ * from leaking across tests (debounce guard, in-flight Promise).
+ *
+ * @internal — not part of the public API; exported for testing only.
+ * @returns {void}
+ */
+export function _resetStateForTesting() {
+  _lastActivationAt = null;
+  _inflightLoad = null;
+}
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
@@ -59,6 +87,10 @@ let _lastActivationAt = null;
  * document.addEventListener('DOMContentLoaded', initHeroCta);
  */
 export function initHeroCta() {
+  // Reset module-level state so re-initialisation (e.g. in tests) starts clean.
+  _lastActivationAt = null;
+  _inflightLoad = null;
+
   const btn = /** @type {HTMLButtonElement | null} */ (
     document.querySelector('[data-hero-cta]')
   );
@@ -117,9 +149,10 @@ export function scrollToTarget(selector) {
  * @returns {void}
  */
 function _handleActivation(_event, btn) {
+  const state = _getState(btn);
   const now = Date.now();
-  if (_lastActivationAt !== null && now - _lastActivationAt < DEBOUNCE_MS) return;
-  _lastActivationAt = now;
+  if (state.lastActivationAt !== null && now - state.lastActivationAt < DEBOUNCE_MS) return;
+  state.lastActivationAt = now;
 
   const mode       = btn.dataset.ctaMode ?? CTA_MODES.DEMO_LOAD;
   const scenarioId = btn.dataset.scenarioId ?? DEFAULT_SCENARIO_ID;
@@ -146,15 +179,20 @@ function _handleActivation(_event, btn) {
  * @returns {void}
  */
 function _runDemoLoad(btn, scenarioId) {
-  if (_inflightLoad) return; // reuse in-flight Promise
+  const state = _getState(btn);
+  if (state.inflightLoad) return; // reuse in-flight Promise
 
   _setLoadingState(btn, true);
   track('hero_demo_load_start', { source: 'homepage', mode: CTA_MODES.DEMO_LOAD, scenarioId });
 
   const startedAt = Date.now();
 
-  _inflightLoad = loadDemoScenario(scenarioId)
-    .then((scenarioData) => {
+  // Use async IIFE so the try/catch/finally block resolves in fewer microtask ticks
+  // than a .then().catch().finally() chain, enabling reliable test assertions with
+  // a single `await Promise.resolve()`.
+  state.inflightLoad = (async () => {
+    try {
+      const scenarioData = await loadDemoScenario(scenarioId);
       track('hero_demo_load_success', {
         source: 'homepage', mode: CTA_MODES.DEMO_LOAD, scenarioId,
         duration_ms: Date.now() - startedAt,
@@ -169,8 +207,7 @@ function _runDemoLoad(btn, scenarioId) {
         container.setAttribute('tabindex', '-1');
         container.focus({ preventScroll: false });
       }
-    })
-    .catch((err) => {
+    } catch (err) {
       track('hero_demo_load_fail', {
         source: 'homepage', mode: CTA_MODES.DEMO_LOAD, scenarioId,
         duration_ms: Date.now() - startedAt,
@@ -178,11 +215,11 @@ function _runDemoLoad(btn, scenarioId) {
       console.error('[hero] Demo load failed:', err);
       _showErrorToast("Couldn't load the demo. Try again.");
       scrollToTarget('#demo-section');
-    })
-    .finally(() => {
+    } finally {
       _setLoadingState(btn, false);
-      _inflightLoad = null;
-    });
+      state.inflightLoad = null;
+    }
+  })();
 }
 
 /**
@@ -195,7 +232,17 @@ function _openScenarioModal() {
 }
 
 /**
+ * Sentinel stored in `data-label-original` to indicate the button had no
+ * `aria-label` attribute before loading began, so the attribute is removed
+ * rather than restored to an empty string on clear.
+ * @type {string}
+ */
+const _NO_LABEL = '\x00';
+
+/**
  * Sets or clears aria-busy / disabled / btn-loading on the CTA button.
+ * Also manages aria-label so screen readers announce "Loading…" while busy
+ * and the original accessible name is restored when done.
  * @see docs/hero-cta.md §3a — HERO-004
  * @param {HTMLButtonElement} btn
  * @param {boolean} isLoading
@@ -204,6 +251,20 @@ function _setLoadingState(btn, isLoading) {
   btn.setAttribute('aria-busy', isLoading ? 'true' : 'false');
   btn.disabled = isLoading;
   btn.classList.toggle('btn-loading', isLoading);
+  if (isLoading) {
+    btn.dataset.labelOriginal = btn.getAttribute('aria-label') ?? _NO_LABEL;
+    btn.setAttribute('aria-label', 'Loading\u2026');
+  } else {
+    const stored = btn.dataset.labelOriginal;
+    if (stored !== undefined) {
+      if (stored === _NO_LABEL) {
+        btn.removeAttribute('aria-label');
+      } else {
+        btn.setAttribute('aria-label', stored);
+      }
+      delete btn.dataset.labelOriginal;
+    }
+  }
 }
 
 /**
