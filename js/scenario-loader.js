@@ -20,7 +20,7 @@ const LOAD_TIMEOUT_MS = 10_000;
 
 // ─── Cache ────────────────────────────────────────────────────────────────────
 
-/** @type {Record<string, ScenarioConfig> | null} */
+/** @type {Promise<Record<string, ScenarioConfig>> | null} */
 let configPromise = null;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -93,11 +93,9 @@ export async function loadDemoScenario(scenarioId) {
 // ─── Private helpers ──────────────────────────────────────────────────────────
 
 /**
- * Fetches hero-scenarios.json (with caching) and returns the config for scenarioId.
- * Falls back to "demo-default" if id not found.
+ * Fetches hero-scenarios.json (with caching) and returns the config map.
  *
- * @param {string} scenarioId
- * @returns {Promise<ScenarioConfig>}
+ * @returns {Promise<Record<string, ScenarioConfig>>}
  */
 function _getScenarioConfig() {
   if (!configPromise) {
@@ -187,4 +185,3 @@ function _withTimeout(promise, ms, message = `Timed out after ${ms}ms`) {
 function _log(event, id) {
   console.debug(`[scenario-loader] ${event} — "${id}"`);
 }
-
