@@ -4,7 +4,7 @@
  * Spec: docs/hero-cta.md §3a, §4 | Issue: HERO-003
  */
 
-import { loadDemoScenario } from '../js/scenario-loader.js';
+import { loadDemoScenario, resetConfigCache } from '../js/scenario-loader.js';
 
 const MOCK_CONFIG = {
   'demo-default': {
@@ -38,7 +38,7 @@ function stubPrefetchLinks() {
   });
 }
 
-beforeEach(() => { jest.useFakeTimers(); stubPrefetchLinks(); });
+beforeEach(() => { jest.useFakeTimers(); resetConfigCache(); stubPrefetchLinks(); });
 afterEach(() => { jest.useRealTimers(); jest.restoreAllMocks(); jest.resetModules(); });
 
 describe('loadDemoScenario', () => {
