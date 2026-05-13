@@ -1,5 +1,5 @@
 /** @type {import('jest').Config} */
-export default {
+module.exports = {
   testEnvironment: 'jsdom',
   transform:       { '^.+\\.js$': ['babel-jest', { presets: ['@babel/preset-env'] }] },
   testMatch:       ['**/tests/**/*.spec.js'],
