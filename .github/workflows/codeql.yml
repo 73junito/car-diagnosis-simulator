@@ -18,6 +18,7 @@ jobs:
         uses: github/codeql-action/init@b8d3b6e8af63cde30bdc382c0bc28114f4346c88
         with:
           languages: javascript
+          build-mode: none
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@b8d3b6e8af63cde30bdc382c0bc28114f4346c88
