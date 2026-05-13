@@ -62,11 +62,20 @@ export async function loadDemoScenario(scenarioId) {
 
   const config = await _withTimeout(
     _getScenarioConfig().then((map) => {
-      const cfg = map[scenarioId] ?? map['demo-default'];
-      if (!cfg) {
+      const cfg = map[scenarioId];
+      if (cfg) {
+        return cfg;
+      }
+
+      const fallbackCfg = map['demo-default'];
+      if (!fallbackCfg) {
         throw new Error('[scenario-loader] "demo-default" missing from hero-scenarios.json.');
       }
-      return cfg;
+
+      console.warn(
+        `[scenario-loader] Unknown scenarioId "${scenarioId}", falling back to "demo-default".`,
+      );
+      return fallbackCfg;
     }),
     LOAD_TIMEOUT_MS,
     `loadDemoScenario("${scenarioId}") timed out after ${LOAD_TIMEOUT_MS}ms`,
