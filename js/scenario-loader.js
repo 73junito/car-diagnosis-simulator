@@ -65,11 +65,12 @@ export async function loadDemoScenario(scenarioId) {
     LOAD_TIMEOUT_MS,
     `loadDemoScenario("${scenarioId}") timed out after ${LOAD_TIMEOUT_MS}ms`,
   );
+  const resolvedScenarioId = config.id || 'demo-default';
 
   await _prefetchAssets(config);
 
-  _log('success', scenarioId);
-  return { id: scenarioId, config };
+  _log('success', resolvedScenarioId);
+  return { id: resolvedScenarioId, config };
 }
 
 // ─── Private helpers ──────────────────────────────────────────────────────────
