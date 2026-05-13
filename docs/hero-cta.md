@@ -1,10 +1,3 @@
-# `docs/hero-cta.md` — Hero CTA Behavior Spec
-
-Save this file to `car-diagnosis-sim/docs/hero-cta.md` and commit it on the HERO-001 branch.
-
----
-
-```markdown
 # Hero CTA — Behavior & UX Specification
 
 **Issue:** HERO-001
@@ -251,24 +244,3 @@ npm test
 | Analytics | @analytics-owner | ⬜ Pending | — |
 
 _Post sign-off comment on HERO-001 and update this table before merging._
-```
-
----
-
-### Commit it in one command
-
-```powershell
-# From D:\\Car Diagnosis Simulator
-New-Item -ItemType Directory -Force -Path "car-diagnosis-sim\\docs" | Out-Null
-# (paste the markdown above into car-diagnosis-sim\\docs\\hero-cta.md, then:)
-git add car-diagnosis-sim/docs/hero-cta.md
-git commit -m "docs(hero): add Hero CTA behavior & UX spec (HERO-001)
-
-Covers decision log, three CTA interaction flows, error/retry UX,
-telemetry schema with example payloads, responsive breakpoints,
-manual QA checklist, automated test coverage map, and sign-off table."
-git push -u origin feat/hero-structure
-```
-
-The spec is fully self-contained — reviewers can sign off directly on HERO-001 without chasing context across multiple files. A solid follow-on would be generating the `js/hero.js` and `js/scenario-loader.js` stubs with JSDoc comments wired to this spec, so contributors have a ready-to-fill implementation skeleton the moment HERO-001 is signed off.
-
