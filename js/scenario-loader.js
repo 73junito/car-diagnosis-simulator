@@ -21,7 +21,7 @@ const LOAD_TIMEOUT_MS = 10_000;
 // ─── Cache ────────────────────────────────────────────────────────────────────
 
 /** @type {Record<string, ScenarioConfig> | null} */
-let _configCache = null;
+let configPromise = null;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -61,13 +61,21 @@ export async function loadDemoScenario(scenarioId) {
   _log('start', scenarioId);
 
   const config = await _withTimeout(
-    _fetchScenarioConfig(scenarioId),
+    _getScenarioConfig().then((map) => {
+      const cfg = map[scenarioId] ?? map['demo-default'];
+      if (!cfg) {
+        throw new Error('[scenario-loader] "demo-default" missing from hero-scenarios.json.');
+      }
+      return cfg;
+    }),
     LOAD_TIMEOUT_MS,
     `loadDemoScenario("${scenarioId}") timed out after ${LOAD_TIMEOUT_MS}ms`,
   );
+
   const resolvedScenarioId = config.id || 'demo-default';
 
-  await _prefetchAssets(config);
+  // fire-and-forget prefetch: do not block the demo-load flow on asset prefetch
+  _prefetchAssets(config);
 
   _log('success', resolvedScenarioId);
   return { id: resolvedScenarioId, config };
@@ -82,26 +90,22 @@ export async function loadDemoScenario(scenarioId) {
  * @param {string} scenarioId
  * @returns {Promise<ScenarioConfig>}
  */
-async function _fetchScenarioConfig(scenarioId) {
-  if (!_configCache) {
-    const res = await fetch(SCENARIOS_CONFIG_URL);
-    if (!res.ok) throw new Error(
-      `[scenario-loader] Config fetch failed: ${res.status} ${res.statusText}`,
-    );
-    _configCache = await res.json();
+function _getScenarioConfig() {
+  if (!configPromise) {
+    configPromise = fetch(SCENARIOS_CONFIG_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error(
+          `[scenario-loader] Config fetch failed: ${res.status} ${res.statusText}`,
+        );
+        return res.json();
+      })
+      .catch((err) => {
+        // Reset the promise so subsequent attempts can retry (important for tests)
+        configPromise = null;
+        throw err;
+      });
   }
-
-  if (_configCache[scenarioId]) return _configCache[scenarioId];
-
-  console.warn(
-    `[scenario-loader] "${scenarioId}" not found — falling back to "demo-default".`,
-  );
-
-  const fallback = _configCache['demo-default'];
-  if (!fallback) throw new Error(
-    '[scenario-loader] "demo-default" missing from hero-scenarios.json.',
-  );
-  return fallback;
+  return configPromise;
 }
 
 /**
@@ -111,15 +115,15 @@ async function _fetchScenarioConfig(scenarioId) {
  * @param {ScenarioConfig} config
  * @returns {Promise<void>}
  */
-async function _prefetchAssets(config) {
+function _prefetchAssets(config) {
   const urls = [config.imageUrl, ...(config.assetUrls ?? [])].filter(Boolean);
-  await Promise.allSettled(
-    urls.map((url) =>
-      _prefetchUrl(url).catch((err) =>
-        console.warn(`[scenario-loader] Prefetch failed "${url}":`, err),
-      ),
-    ),
-  );
+  // Non-blocking: kick off prefetches but don't await them. Each prefetch logs
+  // its own failure; we don't want asset prefetch failures to reject the demo-load.
+  urls.forEach((url) => {
+    _prefetchUrl(url).catch((err) =>
+      console.warn(`[scenario-loader] Prefetch failed "${url}":`, err),
+    );
+  });
 }
 
 /**
