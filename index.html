@@ -69,28 +69,28 @@
   <div id="landingPage" class="landing">
 
     <!-- HERO -->
-    <section class="tm-hero">
+    <section class="tm-hero" aria-labelledby="hero-title">
       <div class="tm-hero-inner">
 
         <div class="tm-hero-left">
-          <h1 class="tm-hero-title">Train the Way You Diagnose.</h1>
+          <h1 id="hero-title" class="tm-hero-title">Train the Way You Diagnose.</h1>
           <p class="tm-hero-subtitle">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
 
-          <div class="tm-hero-actions">
+          <div class="tm-hero-actions" role="group" aria-label="Primary actions">
             <button
               data-hero-cta
               data-cta-mode="demo-load"
               data-scenario-id="demo-default"
+              id="btn-start-training"
               class="btn btn-primary"
-              type="button"
               aria-busy="false"
             >Start Demo</button>
             <a href="/dashboard/analytics" id="btn-open-dashboard" class="btn btn-secondary">Open Instructor Dashboard</a>
             <a href="/scenarios" id="btn-view-scenarios" class="btn btn-ghost">View Scenarios</a>
           </div>
 
-          <!-- HERO-004: aria-live error toast region -->
-          <div data-hero-toast aria-live="polite" aria-atomic="true" class="hero-toast"></div>
+          <!-- aria-live toast region for error messages (HERO-006 §4) -->
+          <div data-hero-toast aria-live="polite" aria-atomic="true" class="tm-hero-toast"></div>
 
           <div class="mt-3">
             <div class="tm-card">
@@ -144,11 +144,18 @@
       </div>
     </section>
 
+    <!-- Focus target after successful demo load (HERO-006 §3a).
+         tabindex="-1" allows programmatic focus; no aria-label since the
+         container is empty until a scenario loads. -->
+    <div class="demo-container" tabindex="-1"></div>
+
     <!-- ========================= -->
     <!--  HOMEPAGE WIREFRAME (scenarios, instructor CTA, features, footer) -->
     <!-- ========================= -->
 
-    <section id="scenarios" class="tm-section tm-scenarios">
+    <!-- #scenarios anchor for nav link; #demo-section is the scroll target for the Hero CTA (HERO-002) -->
+    <span id="scenarios"></span>
+    <section id="demo-section" class="tm-section tm-scenarios">
       <div class="tm-section-inner">
 
         <h2 class="tm-section-title">Hands-On Diagnostic Scenarios</h2>
@@ -630,6 +637,7 @@
   <script src="./apiClient.js"></script>
   <script src="./js/cta-analytics.js"></script>
   <script src="./script.js"></script>
+  <!-- Hero CTA controller — keyboard accessibility & ARIA (HERO-006) -->
   <script type="module">
     import { initHeroCta } from './js/hero.js';
     document.addEventListener('DOMContentLoaded', initHeroCta);

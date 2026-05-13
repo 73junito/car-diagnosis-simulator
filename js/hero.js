@@ -36,13 +36,27 @@ const DEBOUNCE_MS = 300;
 /** Toast auto-dismiss duration in ms. @see docs/hero-cta.md §4 */
 const TOAST_DISMISS_MS = 5000;
 
-// ─── Module-level state ───────────────────────────────────────────────────────
+// ─── Per-button state ─────────────────────────────────────────────────────────
+// Keyed by HTMLButtonElement so state resets automatically when the element
+// is replaced in the DOM (e.g. between Jest test runs).
 
-/** @type {Promise<void> | null} In-flight loadDemoScenario promise for debounce guard. */
-let _inflightLoad = null;
+/**
+ * @typedef {{ inflightLoad: Promise<void>|null, lastActivationAt: number|null }} BtnState
+ * @type {WeakMap<HTMLButtonElement, BtnState>}
+ */
+const _btnState = new WeakMap();
 
-/** @type {number | null} Timestamp of last CTA activation (ms). */
-let _lastActivationAt = null;
+/**
+ * Returns (or lazily creates) the mutable state object for a given button.
+ * @param {HTMLButtonElement} btn
+ * @returns {BtnState}
+ */
+function _getState(btn) {
+  if (!_btnState.has(btn)) {
+    _btnState.set(btn, { inflightLoad: null, lastActivationAt: null });
+  }
+  return /** @type {BtnState} */ (_btnState.get(btn));
+}
 
 // ─── Testing helpers ─────────────────────────────────────────────────────────
 
@@ -135,9 +149,10 @@ export function scrollToTarget(selector) {
  * @returns {void}
  */
 function _handleActivation(_event, btn) {
+  const state = _getState(btn);
   const now = Date.now();
-  if (_lastActivationAt !== null && now - _lastActivationAt < DEBOUNCE_MS) return;
-  _lastActivationAt = now;
+  if (state.lastActivationAt !== null && now - state.lastActivationAt < DEBOUNCE_MS) return;
+  state.lastActivationAt = now;
 
   const mode       = btn.dataset.ctaMode ?? CTA_MODES.DEMO_LOAD;
   const scenarioId = btn.dataset.scenarioId ?? DEFAULT_SCENARIO_ID;
@@ -164,19 +179,18 @@ function _handleActivation(_event, btn) {
  * @returns {void}
  */
 function _runDemoLoad(btn, scenarioId) {
-  if (_inflightLoad) return; // reuse in-flight Promise
+  const state = _getState(btn);
+  if (state.inflightLoad) return; // reuse in-flight Promise
 
   _setLoadingState(btn, true);
   track('hero_demo_load_start', { source: 'homepage', mode: CTA_MODES.DEMO_LOAD, scenarioId });
 
   const startedAt = Date.now();
 
-  // Use an IIFE async function so try/finally collapses to one microtask
-  // suspension point (the single `await loadDemoScenario(...)` call).
-  // A chained .then().catch().finally() adds one extra hop per link, pushing
-  // the finally handler past where the debounce guard needs it cleared.
-  // @see docs/hero-cta.md §3a (debounce), §4 (restore-on-error)
-  _inflightLoad = (async () => {
+  // Use async IIFE so the try/catch/finally block resolves in fewer microtask ticks
+  // than a .then().catch().finally() chain, enabling reliable test assertions with
+  // a single `await Promise.resolve()`.
+  state.inflightLoad = (async () => {
     try {
       const scenarioData = await loadDemoScenario(scenarioId);
       track('hero_demo_load_success', {
@@ -203,7 +217,7 @@ function _runDemoLoad(btn, scenarioId) {
       scrollToTarget('#demo-section');
     } finally {
       _setLoadingState(btn, false);
-      _inflightLoad = null;
+      state.inflightLoad = null;
     }
   })();
 }
