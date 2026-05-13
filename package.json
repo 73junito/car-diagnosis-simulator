@@ -1,24 +1,9 @@
 {
-	"name": "car-diagnosis-sim",
-	"version": "0.1.1",
-	"private": true,
-	"scripts": {
-		"test": "jest",
-		"validate:scenarios": "node tools/validate-scenarios.js",
-		"test:analytics": "node tests/session-summary.test.js",
-		"export:csv": "node tools/export-csv.js",
-		"export:xapi": "node tools/export-xapi.js",
-		"export:analytics": "npm run export:csv && npm run export:xapi",
-		"test:analytics-api": "node tests/analytics-api.test.js",
-		"test:analytics-routes": "node tests/analytics-routes.test.js"
-	},
-	"devDependencies": {
-		"@babel/core": "^7.29.0",
-		"@babel/preset-env": "^7.24.0",
-		"ajv": "^8.20.0",
-		"babel-jest": "^29.7.0",
-		"express": "^4.18.2",
-		"jest": "^29.7.0",
-		"jest-environment-jsdom": "^30.4.1"
-	}
+  "scripts": {
+    "validate:obd2": "node tools/validate-obd2.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
 }

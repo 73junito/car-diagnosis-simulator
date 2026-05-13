@@ -1,0 +1,47 @@
+[
+  {
+    "code": "P0001",
+    "description": "Fuel Volume Regulator Control Circuit/Open",
+    "system_category": "Fuel System",
+    "severity": "High",
+    "student_hint": "Check fuel pressure and regulator wiring",
+    "possible_causes": ["Fuel volume regulator open","wiring fault"],
+    "diagnostic_steps": ["Verify wiring","test regulator","check fuel pressure"]
+  },
+  {
+    "code": "P0100",
+    "description": "Mass or Volume Air Flow Circuit Malfunction",
+    "system_category": "Air Intake",
+    "severity": "Medium",
+    "student_hint": "Inspect MAF sensor and intake for leaks",
+    "possible_causes": ["MAF sensor faulty","wiring issue","intake leak"],
+    "diagnostic_steps": ["Clean/replace MAF","inspect intake","check connectors"]
+  },
+  {
+    "code": "P0300",
+    "description": "Random/Multiple Cylinder Misfire Detected",
+    "system_category": "Ignition/Misfire",
+    "severity": "High",
+    "student_hint": "Check for misfire patterns and run compression tests",
+    "possible_causes": ["Spark plugs","coils","fuel delivery","compression issues"],
+    "diagnostic_steps": ["Read freeze frame","swap coils/plugs","perform compression test"]
+  },
+  {
+    "code": "P0420",
+    "description": "Catalyst System Efficiency Below Threshold",
+    "system_category": "Emission Control",
+    "severity": "Medium",
+    "student_hint": "Check oxygen sensors and catalytic converter",
+    "possible_causes": ["O2 sensors bad","catalyst degraded","exhaust leaks"],
+    "diagnostic_steps": ["Test O2 sensors","inspect catalytic converter"]
+  },
+  {
+    "code": "P0171",
+    "description": "System Too Lean (Bank 1)",
+    "system_category": "Fuel/Air Mixture",
+    "severity": "High",
+    "student_hint": "Look for vacuum leaks and fuel trims",
+    "possible_causes": ["Vacuum leak","weak fuel pressure","faulty MAF"],
+    "diagnostic_steps": ["Check for vacuum leaks","fuel pressure test","inspect MAF"]
+  }
+]
