@@ -13,11 +13,48 @@ function readJson(p) {
 function readCsv(p) {
   const s = fs.readFileSync(p, 'utf8');
   const lines = s.split(/\r?\n/).filter(Boolean);
-  const headers = lines[0].split(',').map(h=>h.trim());
-  return lines.slice(1).map(l=>{
-    const cols = l.split(',');
+  
+  // Parse CSV with RFC4180 quoted field support
+  function parseCsvLine(line) {
+    const cols = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const next = line[i + 1];
+      
+      if (char === '"') {
+        if (inQuotes && next === '"') {
+          // Escaped quote
+          current += '"';
+          i++;
+        } else {
+          // Toggle quote state
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        // End of field
+        cols.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    cols.push(current.trim());
+    return cols;
+  }
+  
+  const headers = parseCsvLine(lines[0]);
+  const expectedColCount = headers.length;
+  
+  return lines.slice(1).map((l, idx) => {
+    const cols = parseCsvLine(l);
+    if (cols.length !== expectedColCount) {
+      throw new Error(`CSV row ${idx + 2}: column count mismatch (expected ${expectedColCount}, got ${cols.length})`);
+    }
     const obj = {};
-    headers.forEach((h,i)=>obj[h]=cols[i] ? cols[i].trim() : '');
+    headers.forEach((h, i) => obj[h] = cols[i] || '');
     return obj;
   });
 }
@@ -37,24 +74,29 @@ function validate() {
   records.forEach((r, idx) => {
     if (!r.code) errors.push(`Record ${idx+1}: missing code`);
     if (!r.description) errors.push(`Record ${idx+1} (${r.code}): missing description`);
-    if (!codeRegex.test(r.code)) errors.push(`Record ${idx+1} (${r.code}): invalid code format`);
-    const cu = r.code.toUpperCase();
-    if (seen.has(cu)) errors.push(`Duplicate code: ${cu}`);
-    seen.add(cu);
+    if (r.code && !codeRegex.test(r.code)) errors.push(`Record ${idx+1} (${r.code}): invalid code format`);
+    if (r.code) {
+      const cu = r.code.toUpperCase();
+      if (seen.has(cu)) errors.push(`Duplicate code: ${cu}`);
+      seen.add(cu);
+    }
   });
 
   // cross-check CSV codes
   csv.forEach((r, idx) => {
     if (!r.code) errors.push(`CSV row ${idx+2}: missing code`);
     if (!r.description) errors.push(`CSV row ${idx+2} (${r.code}): missing description`);
-    if (!codeRegex.test(r.code)) errors.push(`CSV row ${idx+2} (${r.code}): invalid code format`);
-    if (!seen.has(r.code.toUpperCase())) errors.push(`CSV row ${idx+2} (${r.code}): not found in JSON dataset`);
+    if (r.code && !codeRegex.test(r.code)) errors.push(`CSV row ${idx+2} (${r.code}): invalid code format`);
+    if (r.code && !seen.has(r.code.toUpperCase())) errors.push(`CSV row ${idx+2} (${r.code}): not found in JSON dataset`);
   });
 
   // seeds reference valid codes
   seeds.forEach((s, idx) => {
-    if (!s.code) errors.push(`Seed ${idx+1}: missing code`);
-    if (!seen.has(String(s.code).toUpperCase())) errors.push(`Seed ${idx+1} (${s.code}): code not found in dataset`);
+    if (!s.code) {
+      errors.push(`Seed ${idx+1}: missing code`);
+    } else if (!seen.has(String(s.code).toUpperCase())) {
+      errors.push(`Seed ${idx+1} (${s.code}): code not found in dataset`);
+    }
   });
 
   if (errors.length) {

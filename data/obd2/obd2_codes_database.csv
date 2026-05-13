@@ -1,6 +1,6 @@
 code,description,system_category,severity,student_hint,possible_causes,diagnostic_steps
-P0001,Fuel Volume Regulator Control Circuit/Open,Fuel System,High,Check fuel pressure and regulator wiring,Fuel volume regulator open or wiring fault,Verify wiring, test regulator, check fuel pressure
-P0100,Mass or Volume Air Flow Circuit Malfunction,Air Intake,Medium,Inspect MAF sensor and intake for leaks,MAF sensor faulty, wiring issue, intake leak,Clean/replace MAF, inspect intake, check connectors
-P0300,Random/Multiple Cylinder Misfire Detected,Ignition/Misfire,High,Check for misfire patterns and run compression tests,Spark plugs, coils, fuel delivery, compression issues,Read freeze frame, swap coils/plugs, perform compression test
-P0420,Catalyst System Efficiency Below Threshold,Emission Control,Medium,Check oxygen sensors and catalytic converter,O2 sensors bad, catalyst degraded, exhaust leaks,Test upstream/downstream O2 sensors, inspect catalytic converter
-P0171,System Too Lean (Bank 1),Fuel/Air Mixture,High,Look for vacuum leaks and fuel trims,Vacuum leak, weak fuel pressure, faulty MAF,Check for vacuum leaks, fuel pressure test, inspect MAF
+P0001,Fuel Volume Regulator Control Circuit/Open,Fuel System,High,Check fuel pressure and regulator wiring,"Fuel volume regulator open or wiring fault","Verify wiring, test regulator, check fuel pressure"
+P0100,Mass or Volume Air Flow Circuit Malfunction,Air Intake,Medium,Inspect MAF sensor and intake for leaks,"MAF sensor faulty, wiring issue, intake leak","Clean/replace MAF, inspect intake, check connectors"
+P0300,Random/Multiple Cylinder Misfire Detected,Ignition/Misfire,High,Check for misfire patterns and run compression tests,"Spark plugs, coils, fuel delivery, compression issues","Read freeze frame, swap coils/plugs, perform compression test"
+P0420,Catalyst System Efficiency Below Threshold,Emission Control,Medium,Check oxygen sensors and catalytic converter,"O2 sensors bad, catalyst degraded, exhaust leaks","Test upstream/downstream O2 sensors, inspect catalytic converter"
+P0171,System Too Lean (Bank 1),Fuel/Air Mixture,High,Look for vacuum leaks and fuel trims,"Vacuum leak, weak fuel pressure, faulty MAF","Check for vacuum leaks, fuel pressure test, inspect MAF"
