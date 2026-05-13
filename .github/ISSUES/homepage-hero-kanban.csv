@@ -1,0 +1,91 @@
+id,title,status,priority,milestone,labels,body
+1,Define behavior & UX spec,Ready,High,Homepage Hero,"spec,ux","## Overview
+Establish the complete behavioral and UX specification for the Homepage Hero CTA section before any implementation begins.
+
+## Acceptance Criteria
+- [ ] Document all CTA button states: default, hover, active, disabled, loading
+- [ ] Define scroll behavior trigger points and animation curves
+- [ ] Specify responsive breakpoints (mobile 320px, tablet 768px, desktop 1280px+)
+- [ ] Include annotated wireframes or Figma link covering all states
+- [ ] Review sign-off from design lead and product owner
+
+## Notes
+This spec gates all other Hero issues. Must be merged to `main` before work begins on HERO-002 through HERO-007."
+2,Smooth scroll,In Progress,Medium,Homepage Hero,"enhancement,animation","## Overview
+Implement smooth, physics-based scroll behavior when the Hero CTA button is clicked and targets an anchor section below the fold.
+
+## Acceptance Criteria
+- [ ] Clicking the CTA scrolls to the `#features` section smoothly (no instant jump)
+- [ ] Scroll duration: 600ms with ease-in-out easing
+- [ ] Works across Chrome, Firefox, Safari, and Edge (latest 2 versions)
+- [ ] Respects `prefers-reduced-motion` — falls back to instant scroll
+- [ ] No layout shift or paint during scroll animation
+
+## Implementation Notes
+Use `window.scrollTo({ behavior: 'smooth' })` with a polyfill for Safari. Guard with `matchMedia('(prefers-reduced-motion: reduce)')` check.
+
+## Related
+Depends on HERO-001 (UX spec) for target anchor definition."
+3,Demo scenario loader,Backlog,Medium,Homepage Hero,"enhancement,demo","## Overview
+Build a lightweight scenario loader that populates the Hero section with pre-defined demo content (copy, imagery, CTA label) based on a URL query parameter or user segment.
+
+## Acceptance Criteria
+- [ ] Supports `?scenario=startup`, `?scenario=enterprise`, `?scenario=agency` query params
+- [ ] Each scenario loads its own headline, subheadline, CTA label, and background image
+- [ ] Falls back to default Hero content when no param is present or param is invalid
+- [ ] Scenario config stored in a single `hero-scenarios.json` file (not hardcoded)
+- [ ] No visible flash of default content before scenario content renders
+
+## Implementation Notes
+Fetch scenario config on `DOMContentLoaded`. Apply before first paint using inline `<script>` in `<head>` or SSR pre-rendering."
+4,Loading state & debounce,Backlog,High,Homepage Hero,"enhancement,ux","## Overview
+Add a visual loading state to the Hero CTA button and debounce rapid repeated clicks to prevent duplicate API calls or navigation events.
+
+## Acceptance Criteria
+- [ ] Button shows a spinner icon and 'Loading…' label within 100ms of click
+- [ ] Button is disabled (pointer-events: none) during loading state
+- [ ] Debounce threshold: 300ms — subsequent clicks within threshold are ignored
+- [ ] Loading state resolves (success or error) and button returns to normal within 5s max
+- [ ] ARIA: `aria-busy='true'` set on button during loading; `aria-live` region announces completion
+
+## Related
+Coordinates with HERO-006 (Keyboard accessibility & ARIA) for ARIA attribute contract."
+5,Track click analytics,Backlog,Low,Homepage Hero,"analytics,tracking","## Overview
+Instrument the Hero CTA button with click event tracking to capture user engagement data in the analytics platform.
+
+## Acceptance Criteria
+- [ ] Fires a `hero_cta_clicked` event on every button click
+- [ ] Event payload includes: `{ timestamp, scenario, user_segment, page_variant, session_id }`
+- [ ] Works with Google Analytics 4 (gtag) and the internal event bus
+- [ ] Does not block or delay the primary click action
+- [ ] No PII captured in the event payload
+- [ ] Verified in GA4 DebugView and browser console before merge
+
+## Implementation Notes
+Use `navigator.sendBeacon` for non-blocking delivery. Wrap in try/catch so analytics failure never breaks the CTA."
+6,Keyboard accessibility & ARIA,Review,High,Homepage Hero,"accessibility,a11y","## Overview
+Ensure the Hero CTA button and surrounding section are fully keyboard-navigable and screen-reader-friendly per WCAG 2.1 AA.
+
+## Acceptance Criteria
+- [ ] CTA button is reachable via Tab key from page top
+- [ ] Enter and Space keys trigger the CTA action
+- [ ] `role='button'` and `aria-label` set correctly on custom elements (native `<button>` preferred)
+- [ ] Section heading has `aria-labelledby` pointing to Hero `<h1>`
+- [ ] `aria-live='polite'` region announces CTA outcome (scroll start, loading, success)
+- [ ] Passes automated axe-core scan with zero critical violations
+- [ ] Manual test with NVDA + Chrome and VoiceOver + Safari documented
+
+## Related
+ARIA attribute contract shared with HERO-004 (Loading state & debounce)."
+7,Focus ring styling,Done,Low,Homepage Hero,"accessibility,css","## Overview
+Apply a visible, on-brand focus ring to the Hero CTA button that satisfies WCAG 2.1 AA contrast requirements.
+
+## Acceptance Criteria
+- [x] Focus ring visible on keyboard focus (not mouse click) using `:focus-visible`
+- [x] Ring color passes 3:1 contrast ratio against all Hero background variants
+- [x] Offset: 3px; width: 2px; style: solid (or equivalent box-shadow approach)
+- [x] Does not appear on mouse or touch interaction (`:focus-visible` selector only)
+- [x] Reviewed in high-contrast Windows mode
+
+## Implementation Notes
+Use `outline: 2px solid var(--color-focus-ring); outline-offset: 3px;` scoped to `:focus-visible`. Confirmed shipped and passing QA."

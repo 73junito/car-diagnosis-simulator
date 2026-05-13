@@ -143,3 +143,66 @@ document.addEventListener('DOMContentLoaded', ()=>{
   })
 
 })
+
+// Expose a summary function so other pages (homepage CTA) can consume
+window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummary(){
+  async function safeFetchJson(path){
+    try{
+      const res = await fetch(path);
+      if (!res.ok) return null;
+      return await res.json();
+    }catch(e){return null}
+  }
+
+  function isFiniteNumber(value){ return typeof value === 'number' && Number.isFinite(value) }
+  function readFirstNumber(source, keys){
+    for (const key of keys){ if (isFiniteNumber(source?.[key])) return source[key] }
+    return null
+  }
+
+  try{
+    const sessionsData = await safeFetchJson('/api/analytics/sessions')
+    const studentsData = await safeFetchJson('/api/analytics/students')
+
+    let avgScore = null
+    let completionRate = null
+    let weakAreas = null
+
+    if (sessionsData && sessionsData.ok){
+      if (isFiniteNumber(sessionsData.averageScore)) avgScore = sessionsData.averageScore
+      completionRate = sessionsData.completionRate ?? sessionsData.completion ?? null
+      weakAreas = sessionsData.weakAreas ?? sessionsData.aseWeaknessesCount ?? null
+    }
+
+    if (avgScore == null && studentsData && Array.isArray(studentsData.students)){
+      const vals = studentsData.students.map(s=>{
+        if (isFiniteNumber(s.averageScore)) return s.averageScore
+        if (isFiniteNumber(s.avgScore)) return s.avgScore
+        return null
+      }).filter(v=>v!=null)
+      if (vals.length) avgScore = vals.reduce((a,b)=>a+b,0)/vals.length
+    }
+
+    // Top student calculation (if student list available)
+    let topStudent = null
+    if (studentsData && Array.isArray(studentsData.students) && studentsData.students.length) {
+      const best = studentsData.students.reduce((bestSoFar, s) => {
+        const val = (isFiniteNumber(s.averageScore) ? s.averageScore : (isFiniteNumber(s.avgScore) ? s.avgScore : -Infinity))
+        if (val > (bestSoFar.score ?? -Infinity)) return { name: s.name || s.id || '—', score: Math.round(val) }
+        return bestSoFar
+      }, null)
+      if (best && best.score != null) topStudent = best
+      // include id when present
+      if (topStudent && !topStudent.id){
+        const s = studentsData.students.find(ss=> (ss.name||ss.id) === topStudent.name)
+        if (s && s.id) topStudent.id = s.id
+      }
+    }
+
+    // Ensure numeric rounding for display
+    if (avgScore != null) avgScore = Math.round(avgScore)
+    if (completionRate != null) completionRate = Math.round(completionRate)
+
+    return { avgScore, completionRate, weakAreas, topStudent }
+  }catch(e){ return null }
+}
