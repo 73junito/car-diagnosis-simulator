@@ -152,10 +152,22 @@ function _prefetchUrl(url) {
  * @returns {Promise<T>}
  */
 function _withTimeout(promise, ms, message = `Timed out after ${ms}ms`) {
-  const timeout = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error(`[scenario-loader] ${message}`)), ms),
-  );
-  return Promise.race([promise, timeout]);
+  return new Promise((resolve, reject) => {
+    const timerId = setTimeout(() => {
+      reject(new Error(`[scenario-loader] ${message}`));
+    }, ms);
+
+    promise.then(
+      (value) => {
+        clearTimeout(timerId);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timerId);
+        reject(error);
+      },
+    );
+  });
 }
 
 /** @param {'start'|'success'|'fail'} event @param {string} id */
