@@ -226,6 +226,12 @@ body{
 .tm-diagnostic-footer{padding-top:var(--space-2);border-top:var(--border-1)}
 .tm-diagnostic-next{font-size:var(--type-sm);color:var(--tm-muted);margin:0}
 
+/* Hero toast — aria-live error region (HERO-006 §4) */
+.tm-hero-toast{font-size:var(--type-sm);color:var(--tm-danger,#d93025);min-height:1.4em}
+
+/* Hero CTA loading state (HERO-006 §3a) */
+.btn-loading{opacity:.7;cursor:wait}
+
 @media (max-width:900px){
   .tm-hero-inner{grid-template-columns:1fr;text-align:center}
   .tm-hero-left{align-items:center}
