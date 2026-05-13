@@ -159,9 +159,9 @@ function _runDemoLoad(btn, scenarioId) {
 
   // Use an IIFE async function so try/finally collapses to one microtask
   // suspension point (the single `await loadDemoScenario(...)` call).
-  // A chained .then().catch().finally() would add extra hops (one per link)
-  // and push the finally handler past the 2-await limit used in tests and
-  // expected by the 300 ms debounce window.
+  // A chained .then().catch().finally() adds one extra hop per link, pushing
+  // the finally handler past where the debounce guard needs it cleared.
+  // @see docs/hero-cta.md §3a (debounce), §4 (restore-on-error)
   _inflightLoad = (async () => {
     try {
       const scenarioData = await loadDemoScenario(scenarioId);
@@ -204,8 +204,17 @@ function _openScenarioModal() {
 }
 
 /**
+ * Sentinel stored in `data-label-original` to indicate the button had no
+ * `aria-label` attribute before loading began, so the attribute is removed
+ * rather than restored to an empty string on clear.
+ * @type {string}
+ */
+const _NO_LABEL = '\x00';
+
+/**
  * Sets or clears aria-busy / disabled / btn-loading on the CTA button.
- * Also updates aria-label so screen readers announce the loading state.
+ * Also manages aria-label so screen readers announce "Loading…" while busy
+ * and the original accessible name is restored when done.
  * @see docs/hero-cta.md §3a — HERO-004
  * @param {HTMLButtonElement} btn
  * @param {boolean} isLoading
@@ -215,15 +224,15 @@ function _setLoadingState(btn, isLoading) {
   btn.disabled = isLoading;
   btn.classList.toggle('btn-loading', isLoading);
   if (isLoading) {
-    btn.dataset.labelOriginal = btn.getAttribute('aria-label') ?? '';
-    btn.setAttribute('aria-label', 'Loading…');
+    btn.dataset.labelOriginal = btn.getAttribute('aria-label') ?? _NO_LABEL;
+    btn.setAttribute('aria-label', 'Loading\u2026');
   } else {
-    const original = btn.dataset.labelOriginal;
-    if (original !== undefined) {
-      if (original) {
-        btn.setAttribute('aria-label', original);
-      } else {
+    const stored = btn.dataset.labelOriginal;
+    if (stored !== undefined) {
+      if (stored === _NO_LABEL) {
         btn.removeAttribute('aria-label');
+      } else {
+        btn.setAttribute('aria-label', stored);
       }
       delete btn.dataset.labelOriginal;
     }
