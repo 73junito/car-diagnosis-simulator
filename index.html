@@ -144,15 +144,17 @@
       </div>
     </section>
 
-    <!-- Focus target after successful demo load (HERO-006 §3a) -->
-    <div class="demo-container" tabindex="-1" aria-label="Demo simulator"></div>
+    <!-- Focus target after successful demo load (HERO-006 §3a).
+         tabindex="-1" allows programmatic focus; no aria-label since the
+         container is empty until a scenario loads. -->
+    <div class="demo-container" tabindex="-1"></div>
 
     <!-- ========================= -->
     <!--  HOMEPAGE WIREFRAME (scenarios, instructor CTA, features, footer) -->
     <!-- ========================= -->
 
     <!-- #scenarios anchor for nav link; #demo-section is the scroll target for the Hero CTA (HERO-002) -->
-    <span id="scenarios" aria-hidden="true"></span>
+    <span id="scenarios"></span>
     <section id="demo-section" class="tm-section tm-scenarios">
       <div class="tm-section-inner">
 
