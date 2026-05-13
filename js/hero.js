@@ -157,9 +157,11 @@ function _runDemoLoad(btn, scenarioId) {
 
   const startedAt = Date.now();
 
-  // Use an IIFE async function so try/finally runs in a single microtask hop,
-  // keeping loading-state restoration within the 2-tick budget expected by tests
-  // and the in-flight guard cleared promptly for the 300 ms debounce window.
+  // Use an IIFE async function so try/finally collapses to one microtask
+  // suspension point (the single `await loadDemoScenario(...)` call).
+  // A chained .then().catch().finally() would add extra hops (one per link)
+  // and push the finally handler past the 2-await limit used in tests and
+  // expected by the 300 ms debounce window.
   _inflightLoad = (async () => {
     try {
       const scenarioData = await loadDemoScenario(scenarioId);
@@ -203,6 +205,7 @@ function _openScenarioModal() {
 
 /**
  * Sets or clears aria-busy / disabled / btn-loading on the CTA button.
+ * Also updates aria-label so screen readers announce the loading state.
  * @see docs/hero-cta.md §3a — HERO-004
  * @param {HTMLButtonElement} btn
  * @param {boolean} isLoading
@@ -211,6 +214,20 @@ function _setLoadingState(btn, isLoading) {
   btn.setAttribute('aria-busy', isLoading ? 'true' : 'false');
   btn.disabled = isLoading;
   btn.classList.toggle('btn-loading', isLoading);
+  if (isLoading) {
+    btn.dataset.labelOriginal = btn.getAttribute('aria-label') ?? '';
+    btn.setAttribute('aria-label', 'Loading…');
+  } else {
+    const original = btn.dataset.labelOriginal;
+    if (original !== undefined) {
+      if (original) {
+        btn.setAttribute('aria-label', original);
+      } else {
+        btn.removeAttribute('aria-label');
+      }
+      delete btn.dataset.labelOriginal;
+    }
+  }
 }
 
 /**
