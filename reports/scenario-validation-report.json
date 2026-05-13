@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-05-08T19:10:24.228Z",
-  "totalScenarios": 16,
-  "passedScenarios": 16,
+  "timestamp": "2026-05-13T22:23:59.555Z",
+  "totalScenarios": 17,
+  "passedScenarios": 17,
   "failedScenarios": 0,
   "categoriesKnown": [
     "no-crank",
@@ -37,19 +37,19 @@
   ],
   "metadataCoverage": {
     "vehicleType": {
-      "count": 16,
+      "count": 17,
       "percent": 100
     },
     "diagnosticMode": {
-      "count": 16,
+      "count": 17,
       "percent": 100
     },
     "requiredTools": {
-      "count": 16,
+      "count": 17,
       "percent": 100
     },
     "safetyLevel": {
-      "count": 16,
+      "count": 17,
       "percent": 100
     }
   },
