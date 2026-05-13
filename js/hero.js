@@ -44,6 +44,20 @@ let _inflightLoad = null;
 /** @type {number | null} Timestamp of last CTA activation (ms). */
 let _lastActivationAt = null;
 
+// ─── Testing helpers ─────────────────────────────────────────────────────────
+
+/**
+ * Resets ephemeral module state. Call from test `beforeEach` to prevent state
+ * from leaking across tests (debounce guard, in-flight Promise).
+ *
+ * @internal — not part of the public API; exported for testing only.
+ * @returns {void}
+ */
+export function _resetStateForTesting() {
+  _lastActivationAt = null;
+  _inflightLoad = null;
+}
+
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 /**
