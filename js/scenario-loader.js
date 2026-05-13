@@ -44,6 +44,15 @@ let configPromise = null;
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 /**
+ * Resets the internal config cache. Intended for use in tests only.
+ *
+ * @returns {void}
+ */
+export function resetConfigCache() {
+  configPromise = null;
+}
+
+/**
  * Loads a demo scenario: fetches config (cached), prefetches assets,
  * resolves with ScenarioData. Falls back to "demo-default" on unknown id.
  *
@@ -73,7 +82,7 @@ export async function loadDemoScenario(scenarioId) {
       }
 
       console.warn(
-        `[scenario-loader] Unknown scenarioId "${scenarioId}", falling back to "demo-default".`,
+        `[scenario-loader] Scenario "${scenarioId}" not found, falling back to "demo-default".`,
       );
       return fallbackCfg;
     }),
