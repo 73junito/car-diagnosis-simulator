@@ -193,4 +193,22 @@ document.addEventListener('DOMContentLoaded', () => {
       // ignore failures — widget already has fallback values
     }
   })();
+
+  // Expose a simple trackEvent bridge for ESM consumers (e.g. `import { track } from './analytics.js'`).
+  // This ensures the classic script and new ES module can coexist on the same page.
+  function trackEvent(eventName, properties) {
+    try {
+      if (typeof window !== 'undefined' && typeof window.analytics?.track === 'function') {
+        window.analytics.track(eventName, properties);
+        return;
+      }
+      // no-op fallback — keep telemetry lightweight and non-blocking
+    } catch (e) {
+      // swallow telemetry errors
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    window.__torquemind_track = window.__torquemind_track || trackEvent;
+  }
 });
