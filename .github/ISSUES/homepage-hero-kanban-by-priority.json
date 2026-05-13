@@ -1,0 +1,76 @@
+{
+  "milestone": "Homepage Hero",
+  "columns": ["Backlog", "Ready", "In Progress", "Review", "Done"],
+  "issues": [
+    {
+      "id": "HERO-001",
+      "title": "Define behavior & UX spec",
+      "status": "Ready",
+      "priority": "High",
+      "labels": ["spec","ux"],
+      "milestone": "Homepage Hero",
+      "pr_template": ".github/PULL_REQUEST_TEMPLATE/hero-001-ux-spec.md",
+      "body": "Establish the UX spec for the Hero CTA. Gates other Hero work."
+    },
+    {
+      "id": "HERO-004",
+      "title": "Loading state & debounce",
+      "status": "Backlog",
+      "priority": "High",
+      "labels": ["enhancement","ux"],
+      "milestone": "Homepage Hero",
+      "pr_template": ".github/PULL_REQUEST_TEMPLATE/hero-004-loading-debounce.md",
+      "body": "Add loading state, aria-busy and debounce to CTA."
+    },
+    {
+      "id": "HERO-006",
+      "title": "Keyboard accessibility & ARIA",
+      "status": "Review",
+      "priority": "High",
+      "labels": ["accessibility","a11y"],
+      "milestone": "Homepage Hero",
+      "pr_template": ".github/PULL_REQUEST_TEMPLATE/hero-006-keyboard-aria.md",
+      "body": "Ensure keyboard operability and ARIA live regions."
+    },
+    {
+      "id": "HERO-002",
+      "title": "Smooth scroll",
+      "status": "In Progress",
+      "priority": "Medium",
+      "labels": ["enhancement","animation"],
+      "milestone": "Homepage Hero",
+      "pr_template": ".github/PULL_REQUEST_TEMPLATE/hero-002-smooth-scroll.md",
+      "body": "Implement smooth scroll with sticky-nav offset and focus management."
+    },
+    {
+      "id": "HERO-003",
+      "title": "Demo scenario loader",
+      "status": "Backlog",
+      "priority": "Medium",
+      "labels": ["enhancement","demo"],
+      "milestone": "Homepage Hero",
+      "pr_template": ".github/PULL_REQUEST_TEMPLATE/hero-003-scenario-loader.md",
+      "body": "Implement loadDemoScenario(id) to preload and init demo."
+    },
+    {
+      "id": "HERO-005",
+      "title": "Track click analytics",
+      "status": "Backlog",
+      "priority": "Low",
+      "labels": ["analytics","tracking"],
+      "milestone": "Homepage Hero",
+      "pr_template": ".github/PULL_REQUEST_TEMPLATE/hero-005-analytics.md",
+      "body": "Instrument CTA with telemetry events; no PII."
+    },
+    {
+      "id": "HERO-007",
+      "title": "Focus ring styling",
+      "status": "Done",
+      "priority": "Low",
+      "labels": ["accessibility","css"],
+      "milestone": "Homepage Hero",
+      "pr_template": ".github/PULL_REQUEST_TEMPLATE/hero-007-focus-ring.md",
+      "body": "Focus ring styling in theme.css using tokens; :focus-visible."
+    }
+  ]
+}

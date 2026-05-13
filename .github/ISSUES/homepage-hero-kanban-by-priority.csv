@@ -1,0 +1,8 @@
+id,title,status,priority,milestone,labels,body
+1,Define behavior & UX spec,Ready,High,Homepage Hero,"spec,ux","Establish the UX spec for Hero CTA. Gates other Hero work."
+4,Loading state & debounce,Backlog,High,Homepage Hero,"enhancement,ux","Add loading state, aria-busy and debounce to CTA."
+6,Keyboard accessibility & ARIA,Review,High,Homepage Hero,"accessibility,a11y","Ensure keyboard operability and ARIA live regions."
+2,Smooth scroll,In Progress,Medium,Homepage Hero,"enhancement,animation","Implement smooth scroll with sticky-nav offset and focus management."
+3,Demo scenario loader,Backlog,Medium,Homepage Hero,"enhancement,demo","Implement loadDemoScenario(id) to preload and init demo."
+5,Track click analytics,Backlog,Low,Homepage Hero,"analytics,tracking","Instrument CTA with telemetry events; no PII."
+7,Focus ring styling,Done,Low,Homepage Hero,"accessibility,css","Focus ring styling in theme.css using tokens; :focus-visible." 
