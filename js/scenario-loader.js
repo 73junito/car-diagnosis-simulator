@@ -105,7 +105,7 @@ async function _fetchScenarioConfig(scenarioId) {
 }
 
 /**
- * Prefetchs all assets in the config via <link rel="prefetch">.
+ * Prefetches all assets in the config via <link rel="prefetch">.
  * Per-asset failures are non-fatal.
  *
  * @param {ScenarioConfig} config
