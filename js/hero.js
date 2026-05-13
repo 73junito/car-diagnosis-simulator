@@ -59,6 +59,10 @@ let _lastActivationAt = null;
  * document.addEventListener('DOMContentLoaded', initHeroCta);
  */
 export function initHeroCta() {
+  // Reset module-level state so re-initialisation (e.g. in tests) starts clean.
+  _lastActivationAt = null;
+  _inflightLoad = null;
+
   const btn = /** @type {HTMLButtonElement | null} */ (
     document.querySelector('[data-hero-cta]')
   );
@@ -153,8 +157,12 @@ function _runDemoLoad(btn, scenarioId) {
 
   const startedAt = Date.now();
 
-  _inflightLoad = loadDemoScenario(scenarioId)
-    .then((scenarioData) => {
+  // Use an IIFE async function so try/finally runs in a single microtask hop,
+  // keeping loading-state restoration within the 2-tick budget expected by tests
+  // and the in-flight guard cleared promptly for the 300 ms debounce window.
+  _inflightLoad = (async () => {
+    try {
+      const scenarioData = await loadDemoScenario(scenarioId);
       track('hero_demo_load_success', {
         source: 'homepage', mode: CTA_MODES.DEMO_LOAD, scenarioId,
         duration_ms: Date.now() - startedAt,
@@ -169,8 +177,7 @@ function _runDemoLoad(btn, scenarioId) {
         container.setAttribute('tabindex', '-1');
         container.focus({ preventScroll: false });
       }
-    })
-    .catch((err) => {
+    } catch (err) {
       track('hero_demo_load_fail', {
         source: 'homepage', mode: CTA_MODES.DEMO_LOAD, scenarioId,
         duration_ms: Date.now() - startedAt,
@@ -178,11 +185,11 @@ function _runDemoLoad(btn, scenarioId) {
       console.error('[hero] Demo load failed:', err);
       _showErrorToast("Couldn't load the demo. Try again.");
       scrollToTarget('#demo-section');
-    })
-    .finally(() => {
+    } finally {
       _setLoadingState(btn, false);
       _inflightLoad = null;
-    });
+    }
+  })();
 }
 
 /**

@@ -27,7 +27,16 @@ function mountHero({ mode = 'demo-load', scenarioId = 'demo-default' } = {}) {
 const click = (btn) => btn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 const key   = (btn, k) => btn.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true }));
 
-beforeEach(() => { jest.useFakeTimers(); jest.clearAllMocks(); loadDemoScenario.mockResolvedValue(SCENARIO_DATA); });
+beforeEach(() => {
+  jest.useFakeTimers();
+  jest.clearAllMocks();
+  loadDemoScenario.mockResolvedValue(SCENARIO_DATA);
+  // jsdom does not implement matchMedia; provide a stub so spyOn works.
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockReturnValue({ matches: false }),
+  });
+});
 afterEach(() => { jest.useRealTimers(); document.body.innerHTML = ''; });
 
 describe('initHeroCta', () => {
