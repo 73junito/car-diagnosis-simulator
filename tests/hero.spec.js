@@ -4,7 +4,7 @@
  * Spec: docs/hero-cta.md §2,§3a–c,§4,§5 | Issues: HERO-002, HERO-004, HERO-006
  */
 
-import { initHeroCta, scrollToTarget } from '../js/hero.js';
+import { initHeroCta, scrollToTarget, _resetStateForTesting } from '../js/hero.js';
 
 jest.mock('../js/scenario-loader.js', () => ({ loadDemoScenario: jest.fn() }));
 jest.mock('../js/analytics.js',       () => ({ track: jest.fn() }));
@@ -30,12 +30,8 @@ const key   = (btn, k) => btn.dispatchEvent(new KeyboardEvent('keydown', { key: 
 beforeEach(() => {
   jest.useFakeTimers();
   jest.clearAllMocks();
+  _resetStateForTesting();
   loadDemoScenario.mockResolvedValue(SCENARIO_DATA);
-  // jsdom does not implement matchMedia; provide a stub so spyOn works.
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockReturnValue({ matches: false }),
-  });
 });
 afterEach(() => { jest.useRealTimers(); document.body.innerHTML = ''; });
 
@@ -70,7 +66,8 @@ describe('debounce guard — 300 ms (HERO-004)', () => {
   it('allows a second activation after 300 ms', async () => {
     const btn = mountHero();
     click(btn);
-    await Promise.resolve();
+    // .then() → .catch() → .finally() each add a microtask tick; three ticks clears _inflightLoad
+    await Promise.resolve(); await Promise.resolve(); await Promise.resolve();
     jest.advanceTimersByTime(301);
     click(btn);
     expect(loadDemoScenario).toHaveBeenCalledTimes(2);
@@ -99,7 +96,7 @@ describe('ARIA loading state — HERO-004', () => {
   it('restores button state after success', async () => {
     const btn = mountHero();
     click(btn);
-    await Promise.resolve(); await Promise.resolve();
+    await Promise.resolve(); await Promise.resolve(); await Promise.resolve();
     expect(btn.disabled).toBe(false);
     expect(btn.classList.contains('btn-loading')).toBe(false);
   });
@@ -108,7 +105,7 @@ describe('ARIA loading state — HERO-004', () => {
     loadDemoScenario.mockRejectedValue(new Error('fail'));
     jest.spyOn(console, 'error').mockImplementation(() => {});
     click(btn);
-    await Promise.resolve(); await Promise.resolve();
+    await Promise.resolve(); await Promise.resolve(); await Promise.resolve();
     expect(btn.disabled).toBe(false);
   });
 });
@@ -191,7 +188,8 @@ describe('scroll mode — HERO-002', () => {
   });
   it('uses behavior:"auto" when prefers-reduced-motion is active', () => {
     const btn = mountHero({ mode: 'scroll' });
-    jest.spyOn(window, 'matchMedia').mockReturnValue({ matches: true });
+    // jsdom does not define window.matchMedia; define it before the test uses it
+    window.matchMedia = jest.fn().mockReturnValue({ matches: true });
     const spy = jest.spyOn(window, 'scrollTo').mockImplementation(() => {});
     click(btn);
     expect(spy).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'auto' }));
