@@ -69,18 +69,15 @@ describe('track() — beacon payload schema', () => {
 describe('track() — no PII in payloads', () => {
   const PII_FIELDS = ['email', 'name', 'userId', 'ip', 'phone', 'address'];
 
-  it('hero_cta_click payload contains no PII fields', () => {
+  it.each([
+    ['hero_cta_click',         { source: 'homepage', mode: 'demo-load', scenarioId: 'demo-default' }],
+    ['hero_demo_load_start',   { source: 'homepage', mode: 'demo-load', scenarioId: 'demo-default' }],
+    ['hero_demo_load_success', { source: 'homepage', mode: 'demo-load', scenarioId: 'demo-default', duration_ms: 1240 }],
+    ['hero_demo_load_fail',    { source: 'homepage', mode: 'demo-load', scenarioId: 'demo-default', duration_ms: 10004 }],
+  ])('%s payload contains no PII fields', (eventName, properties) => {
     const analyticsTrack = jest.fn();
     window.analytics = { track: analyticsTrack };
-    track('hero_cta_click', { source: 'homepage', mode: 'demo-load', scenarioId: 'demo-default' });
-    const props = analyticsTrack.mock.calls[0][1];
-    PII_FIELDS.forEach((field) => expect(props).not.toHaveProperty(field));
-  });
-
-  it('hero_demo_load_success payload contains no PII fields', () => {
-    const analyticsTrack = jest.fn();
-    window.analytics = { track: analyticsTrack };
-    track('hero_demo_load_success', { source: 'homepage', mode: 'demo-load', scenarioId: 'demo-default', duration_ms: 1240 });
+    track(eventName, properties);
     const props = analyticsTrack.mock.calls[0][1];
     PII_FIELDS.forEach((field) => expect(props).not.toHaveProperty(field));
   });

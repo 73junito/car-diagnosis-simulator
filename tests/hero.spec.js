@@ -27,7 +27,12 @@ function mountHero({ mode = 'demo-load', scenarioId = 'demo-default' } = {}) {
 const click = (btn) => btn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 const key   = (btn, k) => btn.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true }));
 
-beforeEach(() => { jest.useFakeTimers(); jest.clearAllMocks(); _resetStateForTesting(); loadDemoScenario.mockResolvedValue(SCENARIO_DATA); });
+beforeEach(() => {
+  jest.useFakeTimers();
+  jest.clearAllMocks();
+  _resetStateForTesting();
+  loadDemoScenario.mockResolvedValue(SCENARIO_DATA);
+});
 afterEach(() => { jest.useRealTimers(); document.body.innerHTML = ''; });
 
 describe('initHeroCta', () => {
