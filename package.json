@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "validate:obd2": "node tools/validate-obd2.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

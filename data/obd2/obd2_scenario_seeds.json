@@ -1,0 +1,23 @@
+[
+  {
+    "code": "P0001",
+    "title": "Fuel Volume Regulator Circuit/Open",
+    "difficulty": "Intermediate",
+    "scenario": "Low fuel pressure with regulator circuit fault - verify wiring and regulator",
+    "tags": ["fuel", "regulator", "pressure"]
+  },
+  {
+    "code": "P0100",
+    "title": "MAF Circuit Malfunction",
+    "difficulty": "Beginner",
+    "scenario": "MAF sensor reading erratic, investigate sensor and intake leaks",
+    "tags": ["air", "maf"]
+  },
+  {
+    "code": "P0300",
+    "title": "Random/Multiple Cylinder Misfire",
+    "difficulty": "Advanced",
+    "scenario": "Misfire detected across multiple cylinders, test ignition and fuel delivery",
+    "tags": ["misfire","ignition"]
+  }
+]
