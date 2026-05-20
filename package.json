@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"test": "jest",
+		"test:live-session": "node tests/live-session-ui.test.js",
 		"validate:scenarios": "node tools/validate-scenarios.js",
 		"validate:obd2": "node tools/validate-obd2.js",
 		"test:analytics": "node tests/session-summary.test.js",
