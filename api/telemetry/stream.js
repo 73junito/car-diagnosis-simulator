@@ -1,3 +1,4 @@
+const express = require('express');
 const { telemetryEmitter, addTelemetryEvent, getRecentEvents } = require('./events');
 
 function createSseHandler(emitter = telemetryEmitter) {
@@ -42,19 +43,15 @@ function createSseHandler(emitter = telemetryEmitter) {
 function registerTelemetryRoutes(app, emitter = telemetryEmitter) {
   app.get('/api/telemetry/stream', createSseHandler(emitter));
 
-  app.post('/api/telemetry/events', (req, res) => {
-    let body = '';
-    req.on('data', (c) => (body += c));
-    req.on('end', () => {
-      try {
-        const json = body ? JSON.parse(body) : {};
-        const ok = addTelemetryEvent(json);
-        if (!ok) return res.status(400).json({ ok: false, error: 'invalid_event' });
-        return res.json({ ok: true });
-      } catch (e) {
-        return res.status(400).json({ ok: false, error: 'invalid_json' });
-      }
-    });
+  app.post('/api/telemetry/events', express.json({ limit: '10kb' }), (req, res) => {
+    try {
+      const json = req.body && typeof req.body === 'object' ? req.body : {};
+      const ok = addTelemetryEvent(json);
+      if (!ok) return res.status(400).json({ ok: false, error: 'invalid_event' });
+      return res.json({ ok: true });
+    } catch (e) {
+      return res.status(400).json({ ok: false, error: 'invalid_json' });
+    }
   });
 }
 
