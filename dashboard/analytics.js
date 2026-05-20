@@ -142,6 +142,38 @@ document.addEventListener('DOMContentLoaded', ()=>{
     download('/api/analytics/export?format=xapi','xapi-statements.json')
   })
 
+  // --- Live telemetry (SSE) hookup ---
+  (function attachLiveTelemetry(){
+    try{
+      const wrapper = document.createElement('div');
+      wrapper.id = 'telemetry-panel';
+      wrapper.style.marginTop = '1rem';
+      const title = document.createElement('h3'); title.textContent = 'Live Telemetry';
+      wrapper.appendChild(title);
+      const list = document.createElement('ul'); list.id = 'telemetry-events-list'; list.style.maxHeight = '200px'; list.style.overflow = 'auto'; list.style.fontSize = '0.9rem';
+      wrapper.appendChild(list);
+      document.body.appendChild(wrapper);
+
+      const s = document.createElement('script');
+      s.src = '/dashboard/live-telemetry.js';
+      s.onload = function(){
+        try{
+          const live = (window.liveTelemetry || {}).initLiveTelemetry(function(evt){
+            const li = document.createElement('li');
+            const ts = evt.timestamp || (new Date()).toISOString();
+            li.textContent = `[${ts}] ${evt.type} ${evt.id ? '('+evt.id+')' : ''} ` + (evt.payload ? JSON.stringify(evt.payload) : JSON.stringify(evt));
+            list.insertBefore(li, list.firstChild);
+            // cap UI list to 200
+            while(list.children.length > 200) list.removeChild(list.lastChild);
+          });
+          // expose for debugging
+          window._liveTelemetryHandle = live;
+        }catch(e){ console.warn('live telemetry init failed', e) }
+      };
+      document.body.appendChild(s);
+    }catch(e){ /* ignore */ }
+  })();
+
 })
 
 // Expose a summary function so other pages (homepage CTA) can consume
