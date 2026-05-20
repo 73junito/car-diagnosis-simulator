@@ -1,0 +1,465 @@
+Jest (jsdom)	Run tests	﻿2026-05-20T22:51:43.4506978Z ##[group]Run npm test -- --ci --reporters=default
+Jest (jsdom)	Run tests	2026-05-20T22:51:43.4507417Z [36;1mnpm test -- --ci --reporters=default[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:43.4546424Z shell: /usr/bin/bash -e {0}
+Jest (jsdom)	Run tests	2026-05-20T22:51:43.4546711Z ##[endgroup]
+Jest (jsdom)	Run tests	2026-05-20T22:51:43.5714093Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:43.5714999Z > car-diagnosis-sim@0.1.1 test
+Jest (jsdom)	Run tests	2026-05-20T22:51:43.5715480Z > jest --ci --reporters=default
+Jest (jsdom)	Run tests	2026-05-20T22:51:43.5715680Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.5913169Z PASS tests/analytics.spec.js
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.7054579Z PASS tests/smooth-scroll.spec.js
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9673827Z PASS tests/scenario-loader.spec.js
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9927638Z   ● Console
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9927950Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9928223Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9928793Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9929174Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9929430Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9929760Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9929902Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9930395Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9930831Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9931055Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9931362Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9931490Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9931955Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9932275Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9932484Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9933009Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9933145Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9933635Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9933972Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9934196Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9934522Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9934652Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9935108Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9935407Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9935640Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9935985Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9936135Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9936636Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9936957Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9937175Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9937487Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9937618Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9938174Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9938481Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9938723Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9939033Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9939165Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9939633Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9939959Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9940167Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9940471Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9940607Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9941113Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9941427Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9941627Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9941956Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9942081Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9942578Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9943200Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9943436Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9943744Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9943888Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9944333Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9944604Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9944786Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9945063Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9945179Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9945591Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9945887Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9946094Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9946441Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9946577Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9947045Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9947334Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9947539Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9947818Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9947932Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9948319Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9949195Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9949454Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9949802Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9949926Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9950437Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9950802Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9951051Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9951334Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9951490Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9951971Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9952641Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9953227Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9953607Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9953747Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9954299Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9954662Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9954931Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9955252Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9955420Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9955931Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9956315Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9956549Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9956915Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9957066Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9957599Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9957951Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9958186Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9958510Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9958661Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9959226Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9959633Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9959899Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9960235Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9960404Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9960945Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9961281Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9961549Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9961935Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9962059Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9962845Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9963170Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9963422Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9963748Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9963888Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9964520Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9964846Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9965055Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9965391Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9965525Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9966074Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9966452Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9966673Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9967039Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9967204Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9967737Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9968091Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9968295Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9968656Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9968782Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9969367Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9969713Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9969975Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9970334Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9970718Z FAIL tests/hero.spec.js
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9971499Z   ● initHeroCta › does not throw when no [data-hero-cta] element exists
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9971999Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9972281Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9972672Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9973123Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9973997Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9975145Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9976223Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9977064Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9977691Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9978456Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9978716Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9978994Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9979642Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9980038Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9980612Z   ● telemetry — hero_cta_click › fires immediately on click before async work
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9981171Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9981457Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:45.9982470Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0013061Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0014209Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0015388Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0016318Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0017174Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0017878Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0018312Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0018543Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0018813Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0019503Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0019902Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0020431Z   ● telemetry — hero_cta_click › includes scenarioId in the payload
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0020967Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0021249Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0021646Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0021926Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0023074Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0024292Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0025254Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0026094Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0026756Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0027176Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0027416Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0027681Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0028357Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0028783Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0029581Z   ● debounce guard — 300 ms (HERO-004) › calls loadDemoScenario once on 5 rapid clicks within 200 ms
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0030304Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0030636Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0031050Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0031348Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0032197Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0033519Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0034473Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0035340Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0036002Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0036443Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0036685Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0036968Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0037613Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0038011Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0038604Z   ● debounce guard — 300 ms (HERO-004) › allows a second activation after 300 ms
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0039161Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0039472Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0039869Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0040147Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0040998Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0042149Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0074130Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0075136Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0075881Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0076410Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0076666Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0076945Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0077664Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0078110Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0079311Z   ● debounce guard — 300 ms (HERO-004) › reuses in-flight Promise — no second load while one is pending
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0080125Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0080463Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0080937Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0081204Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0082222Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0083765Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0084919Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0085881Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0086636Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0087091Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0087371Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0087703Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0088457Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0088904Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0089579Z   ● ARIA loading state — HERO-004 › sets aria-busy and disabled during load
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0090184Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0090549Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0091019Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0091309Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0092298Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0093849Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0094945Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0095952Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0096708Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0097188Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0097509Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0097821Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0098591Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0099054Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0099701Z   ● ARIA loading state — HERO-004 › restores button state after success
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0100297Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0100653Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0101131Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0101467Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0102467Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0103925Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0104985Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0105899Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0106686Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0107210Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0107476Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0107790Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0108617Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0109058Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0109631Z   ● ARIA loading state — HERO-004 › restores button state after failure
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0110192Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0110545Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0111069Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0111353Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0112618Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0114126Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0115247Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0116229Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0116979Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0117506Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0118040Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0118360Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0119104Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0119604Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0120454Z   ● telemetry — load lifecycle (HERO-005) › fires hero_demo_load_start on invocation
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0121254Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0121637Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0122191Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0122626Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0124067Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0125640Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0126869Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0128024Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0128850Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0129423Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0129750Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0130115Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0130975Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0131503Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0132409Z   ● telemetry — load lifecycle (HERO-005) › fires hero_demo_load_success with non-negative duration_ms
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0133353Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0133642Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0134158Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0134459Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0135287Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0136341Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0137408Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0138299Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0138972Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0139503Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0139817Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0140153Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0140963Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0141464Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0142215Z   ● telemetry — load lifecycle (HERO-005) › fires hero_demo_load_fail on rejection
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0143254Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0143674Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0144190Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0144591Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0145630Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0147029Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0148230Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0149215Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0150077Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0150617Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0150954Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0151314Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0152122Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0152513Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0154357Z   ● keyboard accessibility — HERO-006 › activates on Space and prevents default page scroll
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0155344Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0155682Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0156094Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0156422Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0157714Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0158645Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0159498Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0160012Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0160437Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0160699Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0160854Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0161032Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0161432Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0161672Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0162062Z   ● keyboard accessibility — HERO-006 › does not activate on Tab, Escape, or ArrowDown
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0162436Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0162642Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0163260Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0163561Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0164521Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0165567Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0166483Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0167254Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0167924Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0168325Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0168557Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0168816Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0169475Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0169880Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0170556Z   ● keyboard accessibility — HERO-006 › moves focus to .demo-container after successful load
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0171173Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0171468Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0171860Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0172151Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0173182Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0174406Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0175385Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0176305Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0176994Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0177430Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0177676Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0177959Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0178665Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0179085Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0192998Z   ● error toast — §4 › populates [data-hero-toast] on load failure
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0193651Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0194035Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0194564Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0195055Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0196239Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0197828Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0199013Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0199812Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0200273Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0200582Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0200761Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0201228Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0201699Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0201963Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0202281Z   ● error toast — §4 › auto-dismisses toast after 5 000 ms
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0202576Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0203030Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0203294Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0203519Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0204110Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0205028Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0205578Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0206068Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0206442Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0206680Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0206847Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0207004Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0207364Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0207635Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0208085Z   ● scroll mode — HERO-002 › calls window.scrollTo when mode is "scroll"
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0208501Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0208772Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0209114Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0209363Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0210100Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0210833Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0211332Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0211785Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0212132Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0212371Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0212511Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0212663Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0213333Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0213637Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0214092Z   ● scroll mode — HERO-002 › uses behavior:"auto" when prefers-reduced-motion is active
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0214415Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0214586Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0214791Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0214961Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0215409Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0216004Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0216750Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0217486Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0218063Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0218421Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0218639Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0218876Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0219444Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0219784Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0220332Z   ● scroll mode — HERO-002 › warns and does not throw when scroll target is missing
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0220847Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0221114Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0221468Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0221699Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0222437Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0223573Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0224370Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0225103Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0225898Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0226256Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0226464Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0226682Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0227229Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0227548Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0228196Z   ● error fallback scroll — §4 › scrolls to #demo-section when loadDemoScenario rejects
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0228984Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0229261Z     ReferenceError: _lastActivationAt is not defined
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0229617Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0229872Z     [0m [90m 69 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0230611Z      [90m 70 |[39m [36mexport[39m [36mfunction[39m _resetStateForTesting() {
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0231593Z     [31m[1m>[22m[39m[90m 71 |[39m   _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0232385Z      [90m    |[39m                    [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0239362Z      [90m 72 |[39m   _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0239911Z      [90m 73 |[39m }
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0240271Z      [90m 74 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0240478Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0240632Z       at _resetStateForTesting (js/hero.js:71:20)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0240989Z       at Object.<anonymous> (tests/hero.spec.js:33:24)
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0241197Z 
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0263895Z Test Suites: 1 failed, 3 passed, 4 total
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0264534Z Tests:       21 failed, 29 passed, 50 total
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0265026Z Snapshots:   0 total
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0265393Z Time:        2.087 s
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.0265731Z Ran all test suites.
+Jest (jsdom)	Run tests	2026-05-20T22:51:46.1094854Z ##[error]Process completed with exit code 1.

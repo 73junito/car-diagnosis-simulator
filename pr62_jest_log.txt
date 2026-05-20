@@ -1,0 +1,228 @@
+Jest (jsdom)	Run tests	﻿2026-05-20T23:17:41.3641283Z ##[group]Run npm test -- --ci --reporters=default
+Jest (jsdom)	Run tests	2026-05-20T23:17:41.3641733Z [36;1mnpm test -- --ci --reporters=default[0m
+Jest (jsdom)	Run tests	2026-05-20T23:17:41.3674961Z shell: /usr/bin/bash -e {0}
+Jest (jsdom)	Run tests	2026-05-20T23:17:41.3675250Z ##[endgroup]
+Jest (jsdom)	Run tests	2026-05-20T23:17:41.4891093Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:41.4891578Z > car-diagnosis-sim@0.1.1 test
+Jest (jsdom)	Run tests	2026-05-20T23:17:41.4892223Z > jest --ci --reporters=default
+Jest (jsdom)	Run tests	2026-05-20T23:17:41.4892518Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.5500119Z PASS tests/analytics.spec.js
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.7485821Z PASS tests/smooth-scroll.spec.js
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9473964Z PASS tests/scenario-loader.spec.js
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9813126Z   ● Console
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9813521Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9813790Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9814377Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9814736Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9814936Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9815166Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9815262Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9815597Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9815913Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9816074Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9816294Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9816391Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9816702Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9816912Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9817054Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9817251Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9817346Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9817684Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9817889Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9818029Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9818517Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9818696Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9819141Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9819349Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9819527Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9819733Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9819837Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9820192Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9820419Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9820562Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9820764Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9820853Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9821148Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9821335Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9821484Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9821686Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9821796Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9822088Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9822279Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9822420Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9822633Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9822720Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9823011Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9823204Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9823346Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9823535Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9823627Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9823930Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9824151Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9824288Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9824485Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9824571Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9824868Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9825058Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9825202Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9825392Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9825477Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9825770Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9825972Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9826106Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9826678Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9826770Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9827077Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9827273Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9827410Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9827609Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9827693Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9827982Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9828915Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9829084Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9829285Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9829395Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9829720Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9829923Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9830060Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9830262Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9830347Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9830646Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9830858Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9830999Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9831203Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9831296Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9831580Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9831781Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9831917Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9832112Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9832198Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9832494Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9832709Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9832851Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9833043Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9833129Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9833421Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9833622Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9833757Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9833948Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9834041Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9834337Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9834538Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9834672Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9834914Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9835001Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9835300Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9835517Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9835654Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9835907Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9836000Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9836307Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9836507Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9836643Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9836838Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9836924Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9837207Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9837395Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9837539Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9837729Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9837822Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9838105Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9838459Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9838660Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9838996Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9839094Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9839412Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9839609Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9839752Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9839939Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9840031Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9840341Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9840556Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9840692Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:17:43.9840886Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0011869Z FAIL tests/hero.spec.js
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0022157Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0022810Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0023250Z     Jest encountered an unexpected token
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0023910Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0025273Z     Jest failed to parse a file. This happens e.g. when your code or its dependencies use non-standard JavaScript syntax, or when Jest is not configured to support such syntax.
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0027238Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0028726Z     Out of the box Jest supports Babel, which will be used to transform your files into valid JS based on your Babel configuration.
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0029990Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0030669Z     By default "node_modules" folder is ignored by transformers.
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0031553Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0031986Z     Here's what you can do:
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0034168Z      • If you are trying to use ECMAScript Modules, see https://jestjs.io/docs/ecmascript-modules for how to enable it.
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0036456Z      • If you are trying to use TypeScript, see https://jestjs.io/docs/getting-started#using-typescript
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0039082Z      • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0041245Z      • If you need a custom transformation, specify a "transform" option in your config.
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0043478Z      • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0044748Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0045502Z     You'll find more details and examples of these config options in the docs:
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0046658Z     https://jestjs.io/docs/configuration
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0047637Z     For information about custom transformations, see:
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0048961Z     https://jestjs.io/docs/code-transformation
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0049758Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0049995Z     Details:
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0050283Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0051386Z     SyntaxError: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/js/hero.js: Identifier '_inflightLoad' has already been declared. (67:4)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0052517Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0053363Z     [0m [90m 65 |[39m [90m// Module-level ephemeral state (kept for tests that reset module state).[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0054502Z      [90m 66 |[39m [90m/** @type {Promise<void>|null} */[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0055694Z     [31m[1m>[22m[39m[90m 67 |[39m [36mlet[39m _inflightLoad [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0056690Z      [90m    |[39m     [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0057442Z      [90m 68 |[39m [90m/** @type {number|null} */[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0058668Z      [90m 69 |[39m [36mlet[39m _lastActivationAt [33m=[39m [36mnull[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0059642Z      [90m 70 |[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0059962Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0060323Z     [0m [90m  5 |[39m [90m */[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0060982Z      [90m  6 |[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0062833Z     [31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m { initHeroCta[33m,[39m scrollToTarget[33m,[39m _resetStateForTesting } [36mfrom[39m [32m'../js/hero.js'[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0064513Z      [90m    |[39m [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0065161Z      [90m  8 |[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0066757Z      [90m  9 |[39m jest[33m.[39mmock([32m'../js/scenario-loader.js'[39m[33m,[39m () [33m=>[39m ({ loadDemoScenario[33m:[39m jest[33m.[39mfn() }))[33m;[39m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0069395Z      [90m 10 |[39m jest[33m.[39mmock([32m'../js/analytics.js'[39m[33m,[39m       () [33m=>[39m ({ track[33m:[39m jest[33m.[39mfn() }))[33m;[39m[0m
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0070401Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0070949Z       at constructor (node_modules/@babel/parser/src/parse-error.ts:95:45)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0072320Z       at Parser.toParseError [as raise] (node_modules/@babel/parser/src/tokenizer/index.ts:1504:19)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0073942Z       at ScopeHandler.raise [as checkRedeclarationInScope] (node_modules/@babel/parser/src/util/scope.ts:164:19)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0075839Z       at ScopeHandler.checkRedeclarationInScope [as declareName] (node_modules/@babel/parser/src/util/scope.ts:118:12)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0077663Z       at Parser.declareName [as declareNameFromIdentifier] (node_modules/@babel/parser/src/parser/lval.ts:876:16)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0080054Z       at Parser.declareNameFromIdentifier [as checkIdentifier] (node_modules/@babel/parser/src/parser/lval.ts:871:12)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0081714Z       at Parser.checkIdentifier [as checkLVal] (node_modules/@babel/parser/src/parser/lval.ts:763:12)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0083213Z       at Parser.checkLVal [as parseVarId] (node_modules/@babel/parser/src/parser/statement.ts:1633:10)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0085039Z       at Parser.parseVarId [as parseVar] (node_modules/@babel/parser/src/parser/statement.ts:1582:12)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0086653Z       at Parser.parseVar [as parseVarStatement] (node_modules/@babel/parser/src/parser/statement.ts:1251:10)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0088739Z       at Parser.parseVarStatement [as parseStatementContent] (node_modules/@babel/parser/src/parser/statement.ts:612:21)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0090704Z       at Parser.parseStatementContent [as parseStatementLike] (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0092601Z       at Parser.parseStatementLike [as parseModuleItem] (node_modules/@babel/parser/src/parser/statement.ts:419:17)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0094574Z       at Parser.parseModuleItem [as parseBlockOrModuleBlockBody] (node_modules/@babel/parser/src/parser/statement.ts:1443:16)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0096580Z       at Parser.parseBlockOrModuleBlockBody [as parseBlockBody] (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0098648Z       at Parser.parseBlockBody [as parseProgram] (node_modules/@babel/parser/src/parser/statement.ts:229:10)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0100352Z       at Parser.parseProgram [as parseTopLevel] (node_modules/@babel/parser/src/parser/statement.ts:203:25)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0101846Z       at Parser.parseTopLevel [as parse] (node_modules/@babel/parser/src/parser/index.ts:83:25)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0102977Z       at parse (node_modules/@babel/parser/src/index.ts:86:38)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0103857Z       at parser (node_modules/@babel/core/src/parser/index.ts:29:19)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0104623Z           at parser.next (<anonymous>)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0105562Z       at normalizeFile (node_modules/@babel/core/src/transformation/normalize-file.ts:50:24)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0106615Z           at normalizeFile.next (<anonymous>)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0107508Z       at run (node_modules/@babel/core/src/transformation/index.ts:41:36)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0108483Z           at run.next (<anonymous>)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0109228Z       at transform (node_modules/@babel/core/src/transform.ts:29:20)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0110000Z           at transform.next (<anonymous>)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0110742Z       at evaluateSync (node_modules/gensync/index.js:251:28)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0111525Z       at sync (node_modules/gensync/index.js:89:14)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0112458Z       at fn (node_modules/@babel/core/src/errors/rewrite-stack-trace.ts:99:14)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0113540Z       at transformSync (node_modules/@babel/core/src/transform.ts:66:52)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0114789Z       at ScriptTransformer.transformSource (node_modules/@jest/transform/build/index.js:415:31)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0116358Z       at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/index.js:512:40)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0117820Z       at ScriptTransformer.transform (node_modules/@jest/transform/build/index.js:551:19)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0119876Z       at Object.require (tests/hero.spec.js:7:1)
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0120363Z 
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0312322Z Test Suites: 1 failed, 3 passed, 4 total
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0312795Z Tests:       29 passed, 29 total
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0313081Z Snapshots:   0 total
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0313318Z Time:        2.153 s
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.0313533Z Ran all test suites.
+Jest (jsdom)	Run tests	2026-05-20T23:17:44.1156660Z ##[error]Process completed with exit code 1.
