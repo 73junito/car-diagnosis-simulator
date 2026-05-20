@@ -9,5 +9,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/dashboard/analytics",
+      "destination": "/dashboard/analytics.html"
+    },
+    {
+      "source": "/dashboard/analytics/",
+      "destination": "/dashboard/analytics.html"
+    }
   ]
 }
