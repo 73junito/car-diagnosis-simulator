@@ -18,6 +18,10 @@
 import { loadDemoScenario } from './scenario-loader.js';
 import { track } from './analytics.js';
 
+// Module-level ephemeral state used by tests and init/reset flows.
+let _inflightLoad = null;
+let _lastActivationAt = null;
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 /** @see docs/hero-cta.md §2 */
@@ -57,6 +61,12 @@ function _getState(btn) {
   }
   return /** @type {BtnState} */ (_btnState.get(btn));
 }
+
+// Module-level ephemeral state (kept for tests that reset module state).
+/** @type {Promise<void>|null} */
+let _inflightLoad = null;
+/** @type {number|null} */
+let _lastActivationAt = null;
 
 // ─── Testing helpers ─────────────────────────────────────────────────────────
 

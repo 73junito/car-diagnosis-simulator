@@ -9,5 +9,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/dashboard/analytics/",
+      "destination": "/dashboard/analytics",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/dashboard/analytics",
+      "destination": "/dashboard/analytics.html"
+    }
   ]
 }
