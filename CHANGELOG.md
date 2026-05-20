@@ -7,6 +7,11 @@
   - Enforce `requiresSafetyAcknowledgment` for high-voltage scenarios.
   - Validator now enforces `scoringWeights` totals equal 100.
   - Add example EV/high-voltage scenario (requiresSafetyAcknowledgment: true).
+- Added Vercel rewrite for `/dashboard/analytics`.
+- Confirmed `/dashboard/analytics` returns HTTP 200 after deployment.
+- Confirmed `/dashboard/analytics/` redirects correctly with HTTP 308.
+- Merged Dependabot `babel-jest` update after syncing lockfile.
+- Fixed `hero.js` Jest failure by ensuring activation state variables are declared.
 ## 0.1.1 - Stable
 
 ### Highlights
@@ -64,14 +69,3 @@ Current modularization path:
 
 ## 0.1.0 - TBD
 - Initial project files
-
-## Unreleased
-
-### Fixed
-- Added Vercel rewrite for `/dashboard/analytics`.
-- Confirmed `/dashboard/analytics` returns HTTP 200 after deployment.
-- Confirmed `/dashboard/analytics/` redirects correctly with HTTP 308.
-
-### CI
-- Merged Dependabot `babel-jest` update after syncing lockfile.
-- Fixed `hero.js` Jest failure by ensuring activation state variables are declared.
