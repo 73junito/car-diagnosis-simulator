@@ -1,4 +1,5 @@
 const { telemetryEmitter, addTelemetryEvent, getRecentEvents } = require('./events');
+const MAX_TELEMETRY_EVENT_BODY_BYTES = 1024 * 1024;
 
 function createSseHandler(emitter = telemetryEmitter) {
   return (req, res) => {
@@ -44,8 +45,20 @@ function registerTelemetryRoutes(app, emitter = telemetryEmitter) {
 
   app.post('/api/telemetry/events', (req, res) => {
     let body = '';
-    req.on('data', (c) => (body += c));
+    let bodyBytes = 0;
+    let payloadTooLarge = false;
+    req.on('data', (c) => {
+      if (payloadTooLarge) return;
+      const chunk = Buffer.isBuffer(c) ? c : Buffer.from(String(c));
+      bodyBytes += chunk.length;
+      if (bodyBytes > MAX_TELEMETRY_EVENT_BODY_BYTES) {
+        payloadTooLarge = true;
+        return res.status(413).json({ ok: false, error: 'payload_too_large' });
+      }
+      body += chunk.toString('utf8');
+    });
     req.on('end', () => {
+      if (payloadTooLarge) return;
       try {
         const json = body ? JSON.parse(body) : {};
         const ok = addTelemetryEvent(json);
