@@ -62,11 +62,7 @@ function _getState(btn) {
   return /** @type {BtnState} */ (_btnState.get(btn));
 }
 
-// Module-level ephemeral state (kept for tests that reset module state).
-/** @type {Promise<void>|null} */
-let _inflightLoad = null;
-/** @type {number|null} */
-let _lastActivationAt = null;
+// (Module-level state already declared above.)
 
 // ─── Testing helpers ─────────────────────────────────────────────────────────
 
