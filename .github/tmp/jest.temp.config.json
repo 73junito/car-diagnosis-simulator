@@ -1,0 +1,5 @@
+{
+  "testEnvironment": "node",
+  "modulePathIgnorePatterns": ["<rootDir>/car-diagnosis-sim/torquemind-api", "<rootDir>/torquemind-api"],
+  "testPathIgnorePatterns": ["<rootDir>/car-diagnosis-sim/__tests__", "<rootDir>/torquemind-api/__tests__"]
+}

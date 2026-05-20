@@ -1,4 +1,4 @@
-const { telemetryEmitter } = require('./events');
+const { telemetryEmitter, addTelemetryEvent, getRecentEvents } = require('./events');
 
 function createSseHandler(emitter = telemetryEmitter) {
   return (req, res) => {
@@ -10,6 +10,8 @@ function createSseHandler(emitter = telemetryEmitter) {
     const onEvent = (evt) => {
       try {
         const payload = JSON.stringify(evt);
+        if (evt.id) res.write(`id: ${evt.id}\n`);
+        res.write(`event: telemetry\n`);
         res.write(`data: ${payload}\n\n`);
       } catch (e) {
         // ignore circular
@@ -17,6 +19,15 @@ function createSseHandler(emitter = telemetryEmitter) {
     };
 
     emitter.on('event', onEvent);
+    // replay recent events for new client
+    try {
+      const recent = getRecentEvents();
+      for (const e of recent) {
+        if (e.id) res.write(`id: ${e.id}\n`);
+        res.write(`event: telemetry\n`);
+        res.write(`data: ${JSON.stringify(e)}\n\n`);
+      }
+    } catch (e) {}
     const ping = setInterval(() => {
       res.write(': ping\n\n');
     }, 15000);
@@ -37,10 +48,11 @@ function registerTelemetryRoutes(app, emitter = telemetryEmitter) {
     req.on('end', () => {
       try {
         const json = body ? JSON.parse(body) : {};
-        emitter.emit('event', json);
-        res.json({ ok: true });
+        const ok = addTelemetryEvent(json);
+        if (!ok) return res.status(400).json({ ok: false, error: 'invalid_event' });
+        return res.json({ ok: true });
       } catch (e) {
-        res.status(400).json({ ok: false, error: 'invalid_json' });
+        return res.status(400).json({ ok: false, error: 'invalid_json' });
       }
     });
   });
