@@ -63,6 +63,14 @@ jobs:
         if: always()
         run: npm run test:analytics-routes
 
+      - name: Test telemetry stream
+        if: always()
+        run: node scripts/run-telemetry-test.js
+
+      - name: Test live session UI
+        if: always()
+        run: npm run test:live-session
+
       - name: Generate analytics exports
         if: always()
         run: npm run export:analytics

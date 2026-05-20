@@ -1,0 +1,331 @@
+Jest (jsdom)	Set up job	﻿2026-05-20T23:19:25.4034532Z Current runner version: '2.334.0'
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4070259Z ##[group]Runner Image Provisioner
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4071659Z Hosted Compute Agent
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4072565Z Version: 20260213.493
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4073448Z Commit: 5c115507f6dd24b8de37d8bbe0bb4509d0cc0fa3
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4074459Z Build Date: 2026-02-13T00:28:41Z
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4075502Z Worker ID: {b583a1c1-5648-4cc8-b2cb-c3a16827ea70}
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4076541Z Azure Region: eastus
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4077289Z ##[endgroup]
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4079870Z ##[group]Operating System
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4081038Z Ubuntu
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4081781Z 24.04.4
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4082553Z LTS
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4083185Z ##[endgroup]
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4083915Z ##[group]Runner Image
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4084780Z Image: ubuntu-24.04
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4085602Z Version: 20260518.149.1
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4087160Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260518.149/images/ubuntu/Ubuntu2404-Readme.md
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4089837Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260518.149
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4091457Z ##[endgroup]
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4093274Z ##[group]GITHUB_TOKEN Permissions
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4096101Z Contents: read
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4096970Z Metadata: read
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4097732Z Packages: read
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4098424Z ##[endgroup]
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4101887Z Secret source: Actions
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4103451Z Prepare workflow directory
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4573399Z Prepare all required actions
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.4628464Z Getting action download info
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.7679550Z Download action repository 'actions/checkout@v4' (SHA:34e114876b0b11c390a56381ad16ebd13914f8d5)
+Jest (jsdom)	Set up job	2026-05-20T23:19:25.9037077Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Jest (jsdom)	Set up job	2026-05-20T23:19:26.1810536Z Complete job name: Jest (jsdom)
+Jest (jsdom)	Run actions/checkout@v4	﻿2026-05-20T23:19:26.2560558Z ##[group]Run actions/checkout@v4
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2561803Z with:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2562335Z   repository: 73junito/car-diagnosis-simulator
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2563196Z   token: ***
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2563598Z   ssh-strict: true
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2564021Z   ssh-user: git
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2564454Z   persist-credentials: true
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2564933Z   clean: true
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2565358Z   sparse-checkout-cone-mode: true
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2565865Z   fetch-depth: 1
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2566296Z   fetch-tags: false
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2566722Z   show-progress: true
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2567168Z   lfs: false
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2567585Z   submodules: false
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2568016Z   set-safe-directory: true
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.2568659Z ##[endgroup]
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3734283Z Syncing repository: 73junito/car-diagnosis-simulator
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3736342Z ##[group]Getting Git version info
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3737256Z Working directory is '/home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator'
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3738495Z [command]/usr/bin/git version
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3799537Z git version 2.54.0
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3826310Z ##[endgroup]
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3843816Z Temporarily overriding HOME='/home/runner/work/_temp/0b4c8cea-41ee-4beb-9cfd-fd7b00c308d6' before making global git config changes
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3846337Z Adding repository directory to the temporary git global config as a safe directory
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3851870Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3900315Z Deleting the contents of '/home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator'
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3904049Z ##[group]Initializing the repository
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3909834Z [command]/usr/bin/git init /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.3998778Z hint: Using 'master' as the name for the initial branch. This default branch name
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4000972Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4003068Z hint: to use in all of your new repositories, which will suppress this warning,
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4004344Z hint: call:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4004863Z hint:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4005404Z hint: 	git config --global init.defaultBranch <name>
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4006021Z hint:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4006588Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4007552Z hint: 'development'. The just-created branch can be renamed via this command:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4008276Z hint:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4008671Z hint: 	git branch -m <name>
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4009132Z hint:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4009735Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4011327Z Initialized empty Git repository in /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/.git/
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4020427Z [command]/usr/bin/git remote add origin https://github.com/73junito/car-diagnosis-simulator
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4065820Z ##[endgroup]
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4066636Z ##[group]Disabling automatic garbage collection
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4072707Z [command]/usr/bin/git config --local gc.auto 0
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4109176Z ##[endgroup]
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4109891Z ##[group]Setting up auth
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4120497Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4160299Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4499757Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4534853Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4801037Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.4837992Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.5091710Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.5130708Z ##[endgroup]
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.5132081Z ##[group]Fetching the repository
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.5140271Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +486be2359f969a6083df72e47e1ba19718c212c4:refs/remotes/pull/62/merge
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.7905843Z From https://github.com/73junito/car-diagnosis-simulator
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.7908500Z  * [new ref]         486be2359f969a6083df72e47e1ba19718c212c4 -> pull/62/merge
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.7939311Z ##[endgroup]
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.7941094Z ##[group]Determining the checkout info
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.7942946Z ##[endgroup]
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.7947515Z [command]/usr/bin/git sparse-checkout disable
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.7990175Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8017590Z ##[group]Checking out the ref
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8021448Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/62/merge
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8148006Z Note: switching to 'refs/remotes/pull/62/merge'.
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8149018Z 
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8149680Z You are in 'detached HEAD' state. You can look around, make experimental
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8151728Z changes and commit them, and you can discard any commits you make in this
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8153972Z state without impacting any branches by switching back to a branch.
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8155275Z 
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8156101Z If you want to create a new branch to retain commits you create, you may
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8158060Z do so (now or later) by using -c with the switch command. Example:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8159655Z 
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8160136Z   git switch -c <new-branch-name>
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8161182Z 
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8161708Z Or undo this operation with:
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8162465Z 
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8162889Z   git switch -
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8163512Z 
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8164482Z Turn off this advice by setting config variable advice.detachedHead to false
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8166016Z 
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8167731Z HEAD is now at 486be23 Merge 1fa8473f26ea1cb2937334e5816e2b4ad0858bcd into 0e7c01e65bb9bbcf53abba40377ae48051d2c42a
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8172804Z ##[endgroup]
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8202567Z [command]/usr/bin/git log -1 --format=%H
+Jest (jsdom)	Run actions/checkout@v4	2026-05-20T23:19:26.8227175Z 486be2359f969a6083df72e47e1ba19718c212c4
+Jest (jsdom)	Run actions/setup-node@v4	﻿2026-05-20T23:19:26.8568274Z ##[group]Run actions/setup-node@v4
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:26.8569434Z with:
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:26.8570211Z   node-version: 20
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:26.8571220Z   cache: npm
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:26.8572043Z   always-auth: false
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:26.8572961Z   check-latest: false
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:26.8574173Z   token: ***
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:26.8574955Z ##[endgroup]
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:27.0405671Z Attempting to download 20...
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:27.3927799Z Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-linux-x64.tar.gz
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:27.7529211Z Extracting ...
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:27.7630074Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/ac528f64-59a6-4e77-847c-df3edee50b7d -f /home/runner/work/_temp/08f28bab-ce18-4962-afd7-5d3dcc5fbf18
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:28.8774273Z Adding to the cache ...
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:30.3523054Z ##[group]Environment details
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:30.5781150Z node: v20.20.2
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:30.5781879Z npm: 10.8.2
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:30.5782194Z yarn: 1.22.22
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:30.5783030Z ##[endgroup]
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:30.5802935Z [command]/opt/hostedtoolcache/node/20.20.2/x64/bin/npm config get cache
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:30.6856729Z /home/runner/.npm
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:30.7421842Z Cache hit for: node-cache-Linux-x64-npm-da6e978571c632f784e6c6d40926eb57e18d380aac4f405638eab3c9103a2cd6
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:31.2017210Z Received 14000472 of 14000472 (100.0%), 33.2 MBs/sec
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:31.2017875Z Cache Size: ~13 MB (14000472 B)
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:31.2044859Z [command]/usr/bin/tar -xf /home/runner/work/_temp/5cd08080-436c-4198-acc4-0974adb4ca04/cache.tzst -P -C /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator --use-compress-program unzstd
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:31.3021116Z Cache restored successfully
+Jest (jsdom)	Run actions/setup-node@v4	2026-05-20T23:19:31.3032903Z Cache restored from key: node-cache-Linux-x64-npm-da6e978571c632f784e6c6d40926eb57e18d380aac4f405638eab3c9103a2cd6
+Jest (jsdom)	Install dependencies	﻿2026-05-20T23:19:31.3302600Z ##[group]Run npm ci
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:31.3302962Z [36;1mnpm ci[0m
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:31.3346260Z shell: /usr/bin/bash -e {0}
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:31.3346550Z ##[endgroup]
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:32.8973700Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:32.9666948Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.0232547Z npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.3137068Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.3142580Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.3146486Z npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.8745434Z 
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.8746467Z added 510 packages, and audited 511 packages in 2s
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.8746931Z 
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.8747202Z 73 packages are looking for funding
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.8747688Z   run `npm fund` for details
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.8762192Z 
+Jest (jsdom)	Install dependencies	2026-05-20T23:19:33.8762453Z found 0 vulnerabilities
+Jest (jsdom)	Run tests	﻿2026-05-20T23:19:33.8986068Z ##[group]Run npm test -- --ci --reporters=default
+Jest (jsdom)	Run tests	2026-05-20T23:19:33.8986497Z [36;1mnpm test -- --ci --reporters=default[0m
+Jest (jsdom)	Run tests	2026-05-20T23:19:33.9026027Z shell: /usr/bin/bash -e {0}
+Jest (jsdom)	Run tests	2026-05-20T23:19:33.9026314Z ##[endgroup]
+Jest (jsdom)	Run tests	2026-05-20T23:19:34.0175132Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:34.0175690Z > car-diagnosis-sim@0.1.1 test
+Jest (jsdom)	Run tests	2026-05-20T23:19:34.0176093Z > jest --ci --reporters=default
+Jest (jsdom)	Run tests	2026-05-20T23:19:34.0176299Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:35.8162070Z PASS tests/analytics.spec.js
+Jest (jsdom)	Run tests	2026-05-20T23:19:35.9716388Z PASS tests/smooth-scroll.spec.js
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3660196Z PASS tests/scenario-loader.spec.js
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3897387Z   ● Console
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3897612Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3897758Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3898311Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3898636Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3898873Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3899166Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3899257Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3899706Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3900114Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3900333Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3900630Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3900954Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3901445Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3901757Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3901965Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3902265Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3902409Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3902927Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3903244Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3903455Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3903760Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3903883Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3904337Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3904624Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3904842Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3905362Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3905452Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3905812Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3906018Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3906189Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3906377Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3906478Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3906783Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3906959Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3907094Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3907267Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3907359Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3907631Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3907811Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3907946Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3908137Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3908218Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3908514Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3908692Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3908827Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3908998Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3909088Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3909432Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3909643Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3909767Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3909948Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3910297Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3910583Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3910959Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3911302Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3911562Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3911691Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3912069Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3912261Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3912422Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3912620Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3912716Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3913048Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3913250Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3913407Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3913621Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3913733Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3914101Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3914618Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3914792Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3914971Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3915091Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3915417Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3915627Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3915762Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3915983Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3916070Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3916419Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3916631Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3916794Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3916996Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3917103Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3917452Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3917672Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3917826Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3918034Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3918148Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3918498Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3918727Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3918876Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3919097Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3919200Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3919517Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3919738Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3919875Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3920086Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3920180Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3920513Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3920727Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3921086Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3921291Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3921396Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3921714Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3921914Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3922075Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3922274Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3922374Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3922760Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3923060Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3923200Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3923418Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3923527Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3923841Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3924051Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3924221Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3924427Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3924540Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3924850Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3925074Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3925204Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3925427Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3925520Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3925853Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3926038Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3926206Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3926388Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3926473Z     console.debug
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3926819Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3927053Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3927182Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3927556Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.3927679Z PASS tests/hero.spec.js
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.4178049Z 
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.4184694Z Test Suites: 4 passed, 4 total
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.4185300Z Tests:       50 passed, 50 total
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.4185730Z Snapshots:   0 total
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.4186083Z Time:        2.03 s
+Jest (jsdom)	Run tests	2026-05-20T23:19:36.4186418Z Ran all test suites.
+Jest (jsdom)	Post Run actions/setup-node@v4	﻿2026-05-20T23:19:36.4819830Z Post job cleanup.
+Jest (jsdom)	Post Run actions/setup-node@v4	2026-05-20T23:19:36.6366469Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-da6e978571c632f784e6c6d40926eb57e18d380aac4f405638eab3c9103a2cd6, not saving cache.
+Jest (jsdom)	Post Run actions/checkout@v4	﻿2026-05-20T23:19:36.6498905Z Post job cleanup.
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7487355Z [command]/usr/bin/git version
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7523701Z git version 2.54.0
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7575105Z Temporarily overriding HOME='/home/runner/work/_temp/f41e0994-b11e-4df6-a23a-92e061d19875' before making global git config changes
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7576549Z Adding repository directory to the temporary git global config as a safe directory
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7581559Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7618559Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7652989Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7899465Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7926447Z http.https://github.com/.extraheader
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7943024Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.7978657Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.8235861Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Jest (jsdom)	Post Run actions/checkout@v4	2026-05-20T23:19:36.8273614Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Jest (jsdom)	Complete job	﻿2026-05-20T23:19:36.8649924Z Cleaning up orphan processes
+Jest (jsdom)	Complete job	2026-05-20T23:19:36.8955116Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/checkout@v4, actions/setup-node@v4. Actions will be forced to run with Node.js 24 by default starting June 2nd, 2026. Node.js 20 will be removed from the runner on September 16th, 2026. Please check if updated versions of these actions are available that support Node.js 24. To opt into Node.js 24 now, set the FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true environment variable on the runner or in your workflow file. Once Node.js 24 becomes the default, you can temporarily opt out by setting ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

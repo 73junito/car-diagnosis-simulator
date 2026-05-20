@@ -22,5 +22,10 @@
       "source": "/dashboard/analytics",
       "destination": "/dashboard/analytics.html"
     }
+    ,
+    {
+      "source": "/dashboard/live-session",
+      "destination": "/dashboard/live-session.html"
+    }
   ]
 }

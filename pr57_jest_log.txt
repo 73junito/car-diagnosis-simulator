@@ -1,0 +1,50 @@
+Jest (jsdom)	Install dependencies	﻿2026-05-20T23:01:11.0797416Z ##[group]Run npm ci
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:11.0797758Z [36;1mnpm ci[0m
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:11.0840931Z shell: /usr/bin/bash -e {0}
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:11.0841231Z ##[endgroup]
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2311846Z npm error code EUSAGE
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2312295Z npm error
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2313696Z npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2314467Z npm error
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2314778Z npm error Missing: debug@4.4.3 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2315165Z npm error Missing: debug@4.4.3 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2315520Z npm error Missing: debug@4.4.3 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2315910Z npm error Missing: mime-types@2.1.35 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2316301Z npm error Missing: negotiator@0.6.3 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2316682Z npm error Missing: raw-body@2.5.3 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2317084Z npm error Missing: type-is@1.6.18 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2317510Z npm error Missing: safe-buffer@5.2.1 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2317868Z npm error Missing: ms@2.0.0 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2318261Z npm error Missing: merge-descriptors@1.0.3 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2318951Z npm error Missing: path-to-regexp@0.1.13 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2319556Z npm error Missing: send@0.19.2 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2319968Z npm error Missing: serve-static@1.16.3 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2320482Z npm error Missing: type-is@1.6.18 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2321050Z npm error Missing: utils-merge@1.0.1 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2321541Z npm error Missing: mime-db@1.52.0 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2322131Z npm error Missing: media-typer@0.3.0 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2323051Z npm error Missing: mime-types@2.1.35 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2323500Z npm error Missing: mime-db@1.52.0 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2324203Z npm error Missing: media-typer@0.3.0 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2324577Z npm error Missing: mime-types@2.1.35 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2324955Z npm error Missing: mime-db@1.52.0 from lock file
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2325236Z npm error
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2325484Z npm error Clean install a project
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2325740Z npm error
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2325985Z npm error Usage:
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2326189Z npm error npm ci
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2326388Z npm error
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2326584Z npm error Options:
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2327041Z npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2327679Z npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2328319Z npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2328959Z npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2329454Z npm error [--no-bin-links] [--no-fund] [--dry-run]
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2329966Z npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2330546Z npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2330907Z npm error
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2331275Z npm error aliases: clean-install, ic, install-clean, isntall-clean
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2331621Z npm error
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2331865Z npm error Run "npm help ci" for more info
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2332684Z npm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-05-20T23_01_11_154Z-debug-0.log
+Jest (jsdom)	Install dependencies	2026-05-20T23:01:12.2403562Z ##[error]Process completed with exit code 1.
