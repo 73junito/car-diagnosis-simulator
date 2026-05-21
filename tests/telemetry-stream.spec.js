@@ -68,11 +68,16 @@ test('POST /api/telemetry/events rejects pre-parsed body when telemetry parser i
   const app = { get() {}, post(path, ...handlers) {
     const middleware = handlers[0];
     const req = new EventEmitter();
-    req.headers = {};
-    req.body = {
+    const body = {
       type: 'telemetry.event',
       timestamp: '2026-05-21T00:00:00.000Z',
       payload: 'x'.repeat(10 * 1024),
+    };
+    req.body = body;
+    req._body = true; // simulate upstream express.json() already parsed this request
+    req.headers = {
+      'content-type': 'application/json',
+      'content-length': String(Buffer.byteLength(JSON.stringify(body))),
     };
     const res = {
       statusCode: 200,
