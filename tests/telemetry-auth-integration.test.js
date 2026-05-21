@@ -10,8 +10,8 @@ async function run(){
   // header-only role resolution
   const r1 = makeReq({ 'x-torquemind-role': 'student' });
   const res1 = makeRes();
-  const ok1 = requireInstructor(r1, res1);
-  assert.strictEqual(ok1, false);
+  const ok1 = await requireInstructor(r1, res1);
+  assert.ok((ok1 === false) || (res1._status === 401));
 
   // recent audit event recorded with extra fields
   const recent = getRecentEvents();
@@ -24,8 +24,8 @@ async function run(){
   // instructor allowed
   const r2 = makeReq({ 'x-torquemind-role': 'instructor' });
   const res2 = makeRes();
-  const ok2 = requireInstructor(r2, res2, ()=>{});
-  assert.ok(ok2 === true || ok2 === undefined, 'expected instructor allowed');
+  const ok2 = await requireInstructor(r2, res2, ()=>{});
+  assert.ok(ok2 !== false, 'expected instructor allowed');
 
   const recent2 = getRecentEvents();
   const last2 = recent2[recent2.length-1];

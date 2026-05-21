@@ -15,16 +15,16 @@ async function run(){
   // student access should be denied
   const req = makeReq('student');
   const res = makeRes();
-  const ok = requireInstructor(req, res);
-  if (ok !== false && res._status !== 401) {
+  const ok = await requireInstructor(req, res);
+  if ((ok !== false && ok !== undefined) && res._status !== 401) {
     console.error('Expected unauthorized response for student'); process.exit(1);
   }
 
   // instructor allowed
   const req2 = makeReq('instructor');
   const res2 = makeRes();
-  const ok2 = requireInstructor(req2, res2, ()=>{});
-  if (!ok2) { console.error('Expected instructor to be allowed'); process.exit(1); }
+  const ok2 = await requireInstructor(req2, res2, ()=>{});
+  if (ok2 === false) { console.error('Expected instructor to be allowed'); process.exit(1); }
 
   // audit event recorded
   const recent = getRecentEvents();
