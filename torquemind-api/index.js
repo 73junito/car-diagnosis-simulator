@@ -24,6 +24,16 @@ app.get('/dashboard/analytics', dashboardLimiter, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'dashboard', 'analytics.html'));
 });
 
+// Protect live session page for instructors (lightweight header-based gate)
+try {
+  const { requireInstructor } = require(path.join(__dirname, '..', 'api', 'telemetry', 'access'));
+  app.get('/dashboard/live-session', dashboardLimiter, requireInstructor, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'dashboard', 'live-session.html'));
+  });
+} catch (e) {
+  if (DEBUG_API) console.warn('Live-session access middleware not available:', e && e.message);
+}
+
 // Register analytics routes (serve aggregated reports from repo `reports/`)
 try {
   const { registerSessionsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'sessions'));
