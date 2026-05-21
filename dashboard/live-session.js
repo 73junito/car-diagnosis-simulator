@@ -7,6 +7,18 @@
   const active = qs('#active-sessions');
   const lastEvent = qs('#last-event');
 
+  // Access placeholder: show unauthorized state if role not instructor
+  function showUnauthorizedState(){
+    const main = document.querySelector('main');
+    if (!main) return;
+    main.innerHTML = '<div class="tm-card"><h2>Unauthorized</h2><p>Instructor access required to view live sessions.</p></div>';
+  }
+
+  try{
+    const role = localStorage.getItem('torquemindRole');
+    if (role !== 'instructor') { showUnauthorizedState(); return; }
+  }catch(e){ /* ignore */ }
+
   let es = null;
   function setStatus(s){
     status.textContent = s.text;
