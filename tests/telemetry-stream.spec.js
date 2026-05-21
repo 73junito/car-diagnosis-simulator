@@ -1,6 +1,10 @@
 const EventEmitter = require('events');
 const { registerTelemetryRoutes } = require('../api/telemetry/stream');
 
+// Ensure the existing telemetry route tests in `telemetry-stream.test.js`
+// are executed under the current Jest `**/tests/**/*.spec.js` pattern.
+require('./telemetry-stream.test');
+
 test('POST /api/telemetry/events rejects oversized payloads', (done) => {
   let postHandler;
   const app = {
