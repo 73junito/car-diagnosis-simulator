@@ -1,4 +1,5 @@
 const EventEmitter = require('events');
+const { Readable } = require('stream');
 const { createSseHandler } = require('../api/telemetry/stream');
 
 test('SSE handler sets headers and writes event data including id and event', (done) => {
@@ -36,9 +37,15 @@ test('POST /api/telemetry/events rejects invalid event', (done) => {
   // simulate POST route using the registered middleware chain
   const { registerTelemetryRoutes } = require('../api/telemetry/stream');
   const app = { get() {}, post(path, ...handlers) {
-    // simulate request without required fields; body pre-parsed as express.json() would do
-    const req = new EventEmitter();
-    req.body = { invalid: true };
+    // simulate request without required fields and let express.json() parse it
+    const rawBody = JSON.stringify({ invalid: true });
+    const req = Readable.from([Buffer.from(rawBody)]);
+    req.headers = {
+      'content-type': 'application/json',
+      'content-length': String(Buffer.byteLength(rawBody)),
+    };
+    req.method = 'POST';
+    req.url = '/api/telemetry/events';
     const res = {
       statusCode: 200,
       status(code) { this.statusCode = code; return this; },
