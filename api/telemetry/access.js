@@ -1,19 +1,23 @@
 const { addTelemetryEvent } = require('./events');
+const { resolveUserRole } = require(path.join(__dirname, '..', 'auth', 'role'));
 
 function hasInstructorAccess(req) {
-  return req && req.headers && req.headers['x-torquemind-role'] === 'instructor';
+  const info = resolveUserRole(req);
+  return info && info.role === 'instructor';
 }
 
 function requireInstructor(req, res, next) {
-  const role = (req && req.headers && req.headers['x-torquemind-role']) || 'anonymous';
-  const allowed = hasInstructorAccess(req);
+  const info = resolveUserRole(req || {});
+  const allowed = info && info.role === 'instructor';
 
-  // audit the access attempt
+  // audit the access attempt with richer context
   try {
     addTelemetryEvent({
       type: 'access_attempt',
       scope: 'live-session',
-      role,
+      role: info.role,
+      userId: info.userId || null,
+      source: info.source || null,
       allowed: Boolean(allowed),
       timestamp: new Date().toISOString()
     });
