@@ -71,6 +71,18 @@ jobs:
         if: always()
         run: npm run test:live-session
 
+      - name: Test live session route access
+        if: always()
+        run: npm run test:live-session-route
+
+      - name: Test Supabase token auth scaffold
+        if: always()
+        run: node tests/supabase-token-auth.test.js
+
+      - name: Test Supabase route auth
+        if: always()
+        run: node tests/supabase-route.test.js
+
       - name: Generate analytics exports
         if: always()
         run: npm run export:analytics
