@@ -47,18 +47,25 @@ function registerTelemetryRoutes(app, emitter = telemetryEmitter) {
     let body = '';
     let bodyBytes = 0;
     let payloadTooLarge = false;
-    req.on('data', (c) => {
+    function cleanupRequestListeners() {
+      req.removeListener('data', onData);
+      req.removeListener('end', onEnd);
+    }
+    const onData = (c) => {
       if (payloadTooLarge) return;
       const chunk = Buffer.isBuffer(c) ? c : Buffer.from(String(c));
       bodyBytes += chunk.length;
       if (bodyBytes > MAX_TELEMETRY_EVENT_BODY_BYTES) {
         payloadTooLarge = true;
+        if (typeof req.pause === 'function') req.pause();
+        cleanupRequestListeners();
         return res.status(413).json({ ok: false, error: 'payload_too_large' });
       }
       body += chunk.toString('utf8');
-    });
-    req.on('end', () => {
+    };
+    const onEnd = () => {
       if (payloadTooLarge) return;
+      cleanupRequestListeners();
       try {
         const json = body ? JSON.parse(body) : {};
         const ok = addTelemetryEvent(json);
@@ -67,7 +74,9 @@ function registerTelemetryRoutes(app, emitter = telemetryEmitter) {
       } catch (e) {
         return res.status(400).json({ ok: false, error: 'invalid_json' });
       }
-    });
+    };
+    req.on('data', onData);
+    req.on('end', onEnd);
   });
 }
 
