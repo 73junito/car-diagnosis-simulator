@@ -33,11 +33,9 @@ test('SSE handler sets headers and writes event data including id and event', (d
 });
 
 test('POST /api/telemetry/events rejects invalid event', (done) => {
-  // simulate POST handler using the real route logic
+  // simulate POST route using the registered middleware chain
   const { registerTelemetryRoutes } = require('../api/telemetry/stream');
   const app = { get() {}, post(path, ...handlers) {
-    // get the actual route handler (last argument, after any middleware)
-    const h = handlers[handlers.length - 1];
     // simulate request without required fields; body pre-parsed as express.json() would do
     const req = new EventEmitter();
     req.body = { invalid: true };
@@ -46,8 +44,20 @@ test('POST /api/telemetry/events rejects invalid event', (done) => {
       status(code) { this.statusCode = code; return this; },
       json(obj) { try { expect(this.statusCode).toBe(400); expect(obj.ok).toBe(false); done(); } catch (e) { done(e); } }
     };
-    // call handler
-    h(req, res);
+    const runHandler = (index) => {
+      const handler = handlers[index];
+      if (!handler) return;
+      if (handler.length >= 3) {
+        handler(req, res, (err) => {
+          if (err) return done(err);
+          return runHandler(index + 1);
+        });
+        return;
+      }
+      handler(req, res);
+    };
+
+    runHandler(0);
   } };
 
   registerTelemetryRoutes(app);
