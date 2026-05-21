@@ -32,3 +32,10 @@ Auth integration (scaffold)
 - `api/telemetry/access.js` uses `resolveUserRole(req)` and emits richer audit events containing `userId`, `role`, `source`, and `allowed`.
 
 This scaffold is intentionally minimal to allow integration testing and to avoid embedding secrets or provider-specific logic in the repository. The next step is to integrate with a real auth provider and add production-ready checks.
+
+Supabase token verification (scaffold)
+
+- If `SUPABASE_URL` and `SUPABASE_ANON_KEY` are present in the environment, the server will attempt to verify `Authorization: Bearer <token>` using Supabase's JS client.
+- The verifier is implemented in `api/auth/supabase-token.js` and used by `api/auth/role.js`. When verification succeeds, audit events include `userId`, `role`, and `source: "supabase"`.
+- If the env vars are missing or verification fails, the system falls back to the lightweight header-based check (`x-torquemind-role`).
+- Tests mock the Supabase client to avoid network calls.

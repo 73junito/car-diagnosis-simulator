@@ -1,22 +1,30 @@
-// Lightweight role resolution scaffold for telemetry auth integration
-// This intentionally does NOT verify tokens or contact an auth provider.
-// It resolves a best-effort `role` and `userId` from request headers/placeholders.
+// Role resolution: tries Supabase token verification when env vars are set
+const { verifyToken } = require('./supabase-token');
 
-function resolveUserRole(req) {
+async function resolveUserRole(req, clientFactory) {
   let role = 'anonymous';
   let userId = null;
   let source = 'none';
 
   if (req && req.headers) {
+    // If Authorization header present and Supabase env configured, attempt token verification
+    if (req.headers.authorization) {
+      const tokenInfo = await verifyToken(req.headers.authorization, clientFactory);
+      if (tokenInfo) {
+        return { role: tokenInfo.role || 'anonymous', userId: tokenInfo.userId || null, source: tokenInfo.source || 'supabase' };
+      }
+      // token verification failed or not configured; fall through to header-based
+    }
+
     if (req.headers['x-torquemind-role']) {
       role = req.headers['x-torquemind-role'];
       source = 'header';
     }
-    // Placeholder: if an Authorization header is present we mark the source.
-    if (req.headers.authorization) {
-      source = source === 'header' ? 'header+token' : 'token';
-      // NOTE: do NOT attempt to verify tokens here — that will be implemented
-      // in the next PR which integrates a real auth provider.
+
+    if (req.headers.authorization && source === 'header') {
+      source = 'header+token';
+    } else if (req.headers.authorization) {
+      source = 'token';
     }
   }
 
