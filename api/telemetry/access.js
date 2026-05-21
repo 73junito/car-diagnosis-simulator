@@ -1,3 +1,4 @@
+const path = require('path');
 const { addTelemetryEvent } = require('./events');
 const { resolveUserRole } = require(path.join(__dirname, '..', 'auth', 'role'));
 
