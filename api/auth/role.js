@@ -10,10 +10,14 @@ async function resolveUserRole(req, clientFactory) {
     // If Authorization header present and Supabase env configured, attempt token verification
     if (req.headers.authorization) {
       const tokenInfo = await verifyToken(req.headers.authorization, clientFactory);
+      // If verifier returns an explicit denial (object with `denied: true`), treat as authoritative
+      if (tokenInfo && tokenInfo.denied) {
+        return { role: 'anonymous', userId: null, source: tokenInfo.source || 'supabase' };
+      }
       if (tokenInfo) {
         return { role: tokenInfo.role || 'anonymous', userId: tokenInfo.userId || null, source: tokenInfo.source || 'supabase' };
       }
-      // token verification failed or not configured; fall through to header-based
+      // token verification failed or not configured; fall through to header-based (demo) behavior
     }
 
     if (req.headers['x-torquemind-role']) {

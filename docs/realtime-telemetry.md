@@ -39,3 +39,7 @@ Supabase token verification (scaffold)
 - The verifier is implemented in `api/auth/supabase-token.js` and used by `api/auth/role.js`. When verification succeeds, audit events include `userId`, `role`, and `source: "supabase"`.
 - If the env vars are missing or verification fails, the system falls back to the lightweight header-based check (`x-torquemind-role`).
 - Tests mock the Supabase client to avoid network calls.
+- The repository also supports an explicit mode via `TORQUEMIND_AUTH_MODE`:
+  - `demo` (default): keeps header fallback when no Supabase config is present.
+  - `supabase`: strict mode — token verification is required when `Authorization` is present and missing/invalid credentials will deny access.
+  - See `docs/supabase-auth.md` for full guidance on configuration, Vercel env setup, and testing.
