@@ -63,11 +63,12 @@ test('POST /api/telemetry/events rejects invalid event', (done) => {
   registerTelemetryRoutes(app);
 });
 
-test('POST /api/telemetry/events rejects oversized pre-parsed body', (done) => {
+test('POST /api/telemetry/events rejects pre-parsed body when telemetry parser is bypassed', (done) => {
   const { registerTelemetryRoutes } = require('../api/telemetry/stream');
   const app = { get() {}, post(path, ...handlers) {
     const middleware = handlers[0];
     const req = new EventEmitter();
+    req.headers = {};
     req.body = {
       type: 'telemetry.event',
       timestamp: '2026-05-21T00:00:00.000Z',
@@ -78,9 +79,9 @@ test('POST /api/telemetry/events rejects oversized pre-parsed body', (done) => {
       status(code) { this.statusCode = code; return this; },
       json(obj) {
         try {
-          expect(this.statusCode).toBe(413);
+          expect(this.statusCode).toBe(500);
           expect(obj.ok).toBe(false);
-          expect(obj.error).toBe('payload_too_large');
+          expect(obj.error).toBe('telemetry_parser_required');
           done();
         } catch (e) {
           done(e);
@@ -88,7 +89,7 @@ test('POST /api/telemetry/events rejects oversized pre-parsed body', (done) => {
       }
     };
 
-    middleware(req, res, () => done(new Error('expected oversized payload to be rejected')));
+    middleware(req, res, () => done(new Error('expected pre-parsed payload to be rejected')));
   } };
 
   registerTelemetryRoutes(app);

@@ -2,12 +2,19 @@ const express = require('express');
 const { telemetryEmitter, addTelemetryEvent, getRecentEvents } = require('./events');
 
 const TELEMETRY_EVENT_LIMIT_BYTES = 10 * 1024;
-const telemetryEventJson = express.json({ limit: '10kb' });
+const telemetryEventJson = express.json({
+  limit: '10kb',
+  verify(req, res, buf) {
+    req.telemetryRawBodySize = buf.length;
+  },
+});
 
 function validateTelemetryEventBody(req, res, next) {
   try {
-    const payload = typeof req.body === 'string' ? req.body : JSON.stringify(req.body || {});
-    if (Buffer.byteLength(payload, 'utf8') > TELEMETRY_EVENT_LIMIT_BYTES) {
+    if (typeof req.telemetryRawBodySize !== 'number') {
+      return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
+    }
+    if (req.telemetryRawBodySize > TELEMETRY_EVENT_LIMIT_BYTES) {
       return res.status(413).json({ ok: false, error: 'payload_too_large' });
     }
     return next();
@@ -17,10 +24,6 @@ function validateTelemetryEventBody(req, res, next) {
 }
 
 function parseTelemetryEventBody(req, res, next) {
-  if (typeof req.body !== 'undefined') {
-    return validateTelemetryEventBody(req, res, next);
-  }
-
   return telemetryEventJson(req, res, (err) => {
     if (err) {
       if (err.type === 'entity.too.large') {
