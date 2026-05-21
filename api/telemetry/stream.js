@@ -12,7 +12,10 @@ const telemetryEventJson = express.json({
 function validateTelemetryEventBody(req, res, next) {
   try {
     if (typeof req.telemetryRawBodySize !== 'number') {
-      return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
+      if (!req.is('json')) {
+        return res.status(415).json({ ok: false, error: 'unsupported_media_type' });
+      }
+      return res.status(400).json({ ok: false, error: 'missing_body' });
     }
     if (req.telemetryRawBodySize > TELEMETRY_EVENT_LIMIT_BYTES) {
       return res.status(413).json({ ok: false, error: 'payload_too_large' });
