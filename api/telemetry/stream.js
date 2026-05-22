@@ -35,7 +35,10 @@ function parseTelemetryEventBody(req, res, next) {
   if (req._body && req.body && typeof req.body === 'object') {
     return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
   }
-  if (!req.is || !req.is('json')) {
+  // Prefer checking the Content-Type header directly because in tests
+  // `req` may be a stream-like object without Express helpers (e.g. `req.is`).
+  const contentType = req.headers && (req.headers['content-type'] || req.headers['Content-Type']);
+  if (!contentType || !/application\/json/i.test(contentType)) {
     return res.status(415).json({ ok: false, error: 'unsupported_media_type' });
   }
   return telemetryEventJson(req, res, (err) => {
