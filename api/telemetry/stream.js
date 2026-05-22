@@ -29,6 +29,15 @@ function validateTelemetryEventBody(req, res, next) {
 }
 
 function parseTelemetryEventBody(req, res, next) {
+  // Defensive: if the request was already parsed upstream, reject
+  // immediately to avoid body-parser attempting to read a non-stream
+  // object (which happens in tests where `req` is an EventEmitter).
+  if (req._body && req.body && typeof req.body === 'object') {
+    return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
+  }
+  if (!req.is || !req.is('json')) {
+    return res.status(415).json({ ok: false, error: 'unsupported_media_type' });
+  }
   return telemetryEventJson(req, res, (err) => {
     if (err) {
       if (err.type === 'entity.too.large') {
