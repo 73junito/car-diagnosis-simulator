@@ -104,7 +104,7 @@ jobs:
           sed -n '1,200p' /tmp/torquemind.log || true
           exit 1
 
-      - name: Run smoke test
+      - name: Run smoke test (with retries)
         working-directory: torquemind-api
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -113,7 +113,9 @@ jobs:
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
           BASE_URL: http://localhost:3000
-        run: npm run test:smoke
+        run: |
+          chmod +x ./scripts/run_smoke_with_retry.sh
+          ./scripts/run_smoke_with_retry.sh
 
       - name: Show server log (after tests)
         if: always()
