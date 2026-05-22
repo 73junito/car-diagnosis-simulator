@@ -74,6 +74,7 @@ test('POST /api/telemetry/events rejects pre-parsed body when telemetry parser i
   const { registerTelemetryRoutes } = require('../api/telemetry/stream');
   const app = { get() {}, post(path, ...handlers) {
     const middleware = handlers[0];
+    // CI trigger: validate telemetry parser contract
     const req = new EventEmitter();
     const body = {
       type: 'telemetry.event',
