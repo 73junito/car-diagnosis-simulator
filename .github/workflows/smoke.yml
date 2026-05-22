@@ -10,7 +10,7 @@ on:
 
 jobs:
   smoke:
-    name: Run smoke test
+    name: smoke
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
