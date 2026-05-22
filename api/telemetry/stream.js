@@ -1,5 +1,6 @@
 const express = require('express');
 const { telemetryEmitter, addTelemetryEvent, getRecentEvents } = require('./events');
+const MAX_TELEMETRY_EVENT_BODY_BYTES = 1024 * 1024;
 
 const TELEMETRY_EVENT_LIMIT_BYTES = 10 * 1024;
 const telemetryEventJson = express.json({
