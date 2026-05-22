@@ -11,8 +11,17 @@ const telemetryEventJson = express.json({
 
 function validateTelemetryEventBody(req, res, next) {
   try {
+    // If the telemetry JSON parser never ran we expect the parser
+    // to have set `req.telemetryRawBodySize`. If the request was
+    // already parsed upstream (e.g. `req._body === true` and
+    // `req.body` exists) that's a programmer error in middleware
+    // ordering and should be rejected with a distinct 500 code so
+    // callers can detect and fix the integration.
     if (typeof req.telemetryRawBodySize !== 'number') {
-      if (!req.is('json')) {
+      if (req._body && req.body && typeof req.body === 'object') {
+        return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
+      }
+      if (!req.is || !req.is('json')) {
         return res.status(415).json({ ok: false, error: 'unsupported_media_type' });
       }
       return res.status(400).json({ ok: false, error: 'missing_body' });
