@@ -12,6 +12,7 @@ on:
 
 jobs:
   smoke:
+    name: api-smoke
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
