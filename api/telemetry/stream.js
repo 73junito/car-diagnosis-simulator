@@ -3,7 +3,7 @@ const { telemetryEmitter, addTelemetryEvent, getRecentEvents } = require('./even
 
 const TELEMETRY_EVENT_LIMIT_BYTES = 10 * 1024;
 const telemetryEventJson = express.json({
-  limit: '10kb',
+  limit: TELEMETRY_EVENT_LIMIT_BYTES,
   verify(req, res, buf) {
     req.telemetryRawBodySize = buf.length;
   },
