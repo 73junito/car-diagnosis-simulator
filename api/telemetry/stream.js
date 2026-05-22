@@ -63,7 +63,10 @@ function preParseTelemetryChecks(req, res, next) {
   }
 
   // Require JSON content-type for telemetry ingestion.
-  if (!req.is || !req.is('json')) {
+  // Prefer checking the Content-Type header directly because in tests
+  // `req` may be a stream-like object without Express helpers (e.g. `req.is`).
+  const contentType = req.headers && (req.headers['content-type'] || req.headers['Content-Type']);
+  if (!contentType || !/application\/json/i.test(contentType)) {
     return res.status(415).json({ ok: false, error: 'unsupported_media_type' });
   }
 
