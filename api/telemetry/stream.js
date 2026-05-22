@@ -12,20 +12,12 @@ const telemetryEventJson = express.json({
 
 function validateTelemetryEventBody(req, res, next) {
   try {
-    // If the telemetry JSON parser never ran we expect the parser
-    // to have set `req.telemetryRawBodySize`. If the request was
-    // already parsed upstream (e.g. `req._body === true` and
-    // `req.body` exists) that's a programmer error in middleware
-    // ordering and should be rejected with a distinct 500 code so
-    // callers can detect and fix the integration.
+    // At this point the JSON parser should have run and set
+    // `req.telemetryRawBodySize`. If it's missing that's an
+    // integration error; return an explicit server error so callers
+    // can detect middleware ordering problems.
     if (typeof req.telemetryRawBodySize !== 'number') {
-      if (req._body && req.body && typeof req.body === 'object') {
-        return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
-      }
-      if (!req.is || !req.is('json')) {
-        return res.status(415).json({ ok: false, error: 'unsupported_media_type' });
-      }
-      return res.status(400).json({ ok: false, error: 'missing_body' });
+      return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
     }
     if (req.telemetryRawBodySize > TELEMETRY_EVENT_LIMIT_BYTES) {
       return res.status(413).json({ ok: false, error: 'payload_too_large' });
@@ -47,6 +39,24 @@ function parseTelemetryEventBody(req, res, next) {
 
     return validateTelemetryEventBody(req, res, next);
   });
+}
+
+function preParseTelemetryChecks(req, res, next) {
+  // If the request was already parsed upstream (e.g. `req._body === true`
+  // and `req.body` exists) that's a programmer error in middleware
+  // ordering and should be rejected with a distinct 500 code so callers
+  // can detect and fix the integration.
+  if (req._body && req.body && typeof req.body === 'object') {
+    return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
+  }
+
+  // Require JSON content-type for telemetry ingestion.
+  if (!req.is || !req.is('json')) {
+    return res.status(415).json({ ok: false, error: 'unsupported_media_type' });
+  }
+
+  // Continue to parser which will set telemetryRawBodySize.
+  return next();
 }
 
 function createSseHandler(emitter = telemetryEmitter) {
@@ -91,7 +101,7 @@ function createSseHandler(emitter = telemetryEmitter) {
 function registerTelemetryRoutes(app, emitter = telemetryEmitter) {
   app.get('/api/telemetry/stream', createSseHandler(emitter));
 
-  app.post('/api/telemetry/events', parseTelemetryEventBody, (req, res) => {
+  app.post('/api/telemetry/events', preParseTelemetryChecks, parseTelemetryEventBody, (req, res) => {
     try {
       const json = req.body && typeof req.body === 'object' ? req.body : {};
       const ok = addTelemetryEvent(json);
