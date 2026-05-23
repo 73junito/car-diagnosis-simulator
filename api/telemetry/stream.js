@@ -28,11 +28,16 @@ function validateTelemetryEventBody(req, res, next) {
 }
 
 function parseTelemetryEventBody(req, res, next) {
-  // Defensive: if the request was already parsed upstream, reject
-  // immediately to avoid body-parser attempting to read a non-stream
-  // object (which happens in tests where `req` is an EventEmitter).
+  // If the request was already parsed upstream, skip reparsing and
+  // enforce the raw-size contract using Content-Length.
   if (req._body && req.body && typeof req.body === 'object') {
-    return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
+    const contentLengthHeader = req.headers && (req.headers['content-length'] || req.headers['Content-Length']);
+    const parsedLength = Number(contentLengthHeader);
+    if (!Number.isFinite(parsedLength) || parsedLength < 0) {
+      return res.status(400).json({ ok: false, error: 'invalid_content_length' });
+    }
+    req.telemetryRawBodySize = parsedLength;
+    return validateTelemetryEventBody(req, res, next);
   }
   // Prefer checking the Content-Type header directly because in tests
   // `req` may be a stream-like object without Express helpers (e.g. `req.is`).

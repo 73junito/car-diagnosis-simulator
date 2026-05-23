@@ -119,16 +119,15 @@ test('POST /api/telemetry/events rejects oversized payload with 413 payload_too_
   registerTelemetryRoutes(app);
 });
 
-test('POST /api/telemetry/events rejects pre-parsed body when telemetry parser is bypassed', (done) => {
+test('POST /api/telemetry/events accepts pre-parsed body and enforces size from content-length', (done) => {
   const { registerTelemetryRoutes } = require('../api/telemetry/stream');
   const app = { get() {}, post(path, ...handlers) {
-    const middleware = handlers[0];
-    // CI trigger: validate telemetry parser contract
+    const finalHandler = handlers[handlers.length - 1];
     const req = new EventEmitter();
     const body = {
       type: 'telemetry.event',
       timestamp: '2026-05-21T00:00:00.000Z',
-      payload: 'x'.repeat(10 * 1024),
+      payload: 'x',
     };
     req.body = body;
     req._body = true; // simulate upstream express.json() already parsed this request
@@ -141,9 +140,8 @@ test('POST /api/telemetry/events rejects pre-parsed body when telemetry parser i
       status(code) { this.statusCode = code; return this; },
       json(obj) {
         try {
-          expect(this.statusCode).toBe(500);
-          expect(obj.ok).toBe(false);
-          expect(obj.error).toBe('telemetry_parser_required');
+          expect(this.statusCode).toBe(200);
+          expect(obj.ok).toBe(true);
           done();
         } catch (e) {
           done(e);
@@ -151,7 +149,20 @@ test('POST /api/telemetry/events rejects pre-parsed body when telemetry parser i
       }
     };
 
-    middleware(req, res, () => done(new Error('expected pre-parsed payload to be rejected')));
+    const runHandler = (index) => {
+      const handler = handlers[index];
+      if (!handler) return;
+      if (handler.length >= 3) {
+        handler(req, res, (err) => {
+          if (err) return done(err);
+          return runHandler(index + 1);
+        });
+        return;
+      }
+      finalHandler(req, res);
+    };
+
+    runHandler(0);
   } };
 
   registerTelemetryRoutes(app);
