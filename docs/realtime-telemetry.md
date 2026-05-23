@@ -20,7 +20,7 @@ Export endpoints
 - `GET /api/telemetry/export.json` — server-side export (JSON) with optional `session` and `limit` query params. Default `limit=50`, hard max `500`.
 - `GET /api/telemetry/export.csv` — server-side CSV export. Columns: `id,session_id,user_id,event_type,source,created_at,payload_json`.
 
-Both endpoints return newest-first results from the configured storage adapter and gracefully return empty responses when storage is not configured.
+Both endpoints return newest-first results from the configured storage adapter. When storage is not configured, `GET /api/telemetry/export.json` responds with `{ ok: false, format: 'json', count: 0, events: [] }` (and may include a `message`), while `GET /api/telemetry/export.csv` returns only the CSV header row.
 # Realtime Telemetry (SSE)
 
 This document describes the lightweight Server-Sent Events (SSE) telemetry scaffolding.
