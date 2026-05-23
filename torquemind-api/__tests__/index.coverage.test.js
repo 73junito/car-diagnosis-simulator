@@ -305,4 +305,32 @@ describe('index.js route coverage additions', () => {
     expect(res.status).toBe(500);
     expect(res.body.error).toMatch(/completion write failed/i);
   });
+
+  it('serves telemetry history through the main app instance', async () => {
+    jest.resetModules();
+    process.env.SUPABASE_URL = 'https://test.supabase.co';
+    process.env.SUPABASE_ANON_KEY = 'test-anon-key';
+    delete process.env.SUPABASE_KEY;
+
+    const createClient = createClientFactory({});
+    const listTelemetryEvents = jest.fn().mockResolvedValue({
+      ok: true,
+      data: [{ id: 'event-1', session_id: 'session-1' }],
+    });
+
+    jest.doMock('@supabase/supabase-js', () => ({ createClient }));
+    jest.doMock('../../api/telemetry/storage', () => ({ listTelemetryEvents }));
+
+    const { app } = require('../index');
+    const res = await request(app)
+      .get('/api/telemetry/history')
+      .query({ session: 'session-1', limit: 10 });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      ok: true,
+      data: [{ id: 'event-1', session_id: 'session-1' }],
+    });
+    expect(listTelemetryEvents).toHaveBeenCalledWith({ sessionId: 'session-1', limit: 10 });
+  });
 });

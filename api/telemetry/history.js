@@ -1,4 +1,3 @@
-const express = require('express');
 const storage = require('./storage');
 
 function registerTelemetryHistoryRoute(app, middleware) {
