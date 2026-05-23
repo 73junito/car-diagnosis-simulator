@@ -45,6 +45,14 @@ try {
 } catch (e) {
   if (DEBUG_API) console.warn('Analytics routes not available:', e && e.message);
 }
+
+// Register telemetry export routes if present
+try {
+  const { registerTelemetryExportRoutes } = require(path.join(__dirname, '..', 'api', 'telemetry', 'export'));
+  registerTelemetryExportRoutes(app);
+} catch (e) {
+  if (DEBUG_API) console.warn('Telemetry export routes not available:', e && e.message);
+}
 const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL || null;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
