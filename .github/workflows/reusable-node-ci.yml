@@ -95,6 +95,10 @@ jobs:
         if: always()
         run: node tests/session-history-ui.test.js
 
+      - name: Test telemetry export endpoints
+        if: always()
+        run: node tests/telemetry-export.test.js
+
       - name: Generate analytics exports
         if: always()
         run: npm run export:analytics
