@@ -3,7 +3,7 @@
 This document describes the telemetry replay architecture and controller.
 
 Server adapter
-- `api/telemetry/replay.js`: thin adapter that reuses the storage layer to return telemetry events (newest-first).
+- `api/telemetry/replay.js`: thin, currently unused helper for planned route integration; current telemetry routes call `storage.listTelemetryEvents` directly.
 
 Client controller
 - `dashboard/replay-controller.js`: stateful replay controller that loads events from `/api/telemetry/history`, normalizes timestamps, preserves newest-first API response but sorts oldest-first internally for playback.
