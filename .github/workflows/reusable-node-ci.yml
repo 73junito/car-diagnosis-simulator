@@ -83,6 +83,10 @@ jobs:
         if: always()
         run: node tests/supabase-route.test.js
 
+      - name: Test telemetry storage
+        if: always()
+        run: node tests/telemetry-storage.test.js
+
       - name: Generate analytics exports
         if: always()
         run: npm run export:analytics
