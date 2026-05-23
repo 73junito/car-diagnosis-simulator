@@ -9,6 +9,12 @@ Expected behavior:
 - Invalid payloads return `400`.
 - JSON parsing remains scoped to the telemetry event route.
 - SSE streaming remains separate from POST ingestion.
+
+Persistent storage scaffold
+
+Planned migration and storage adapter files live under `db/migrations` and `api/telemetry/storage.js`.
+The initial migration will create a `telemetry_events` table with indexes on `session_id` and `created_at`.
+The storage adapter uses Supabase when `SUPABASE_URL` and a service key are present and otherwise fails gracefully.
 # Realtime Telemetry (SSE)
 
 This document describes the lightweight Server-Sent Events (SSE) telemetry scaffolding.
