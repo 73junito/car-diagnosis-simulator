@@ -118,6 +118,28 @@
     debounceTimer = setTimeout(()=>{ doFetchAndRender() }, DEBOUNCE_MS);
   }
 
+  function buildExportUrl(kind){
+    const sessionEl = document.getElementById('session-filter');
+    const limitEl = document.getElementById('limit-select');
+    const session = sessionEl ? sessionEl.value.trim() : '';
+    const limit = limitEl ? Number(limitEl.value) || 50 : 50;
+    const q = new URLSearchParams();
+    if (session) q.set('session', session);
+    if (limit) q.set('limit', String(limit));
+    const ext = kind === 'csv' ? 'csv' : 'json';
+    return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
+  }
+
+  function triggerDownload(url){
+    const a = document.createElement('a');
+    a.href = url;
+    a.rel = 'noopener';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    try{ a.click(); }catch(e){ window.location.href = url }
+    document.body.removeChild(a);
+  }
+
   function initSessionHistory(){
     try{
       const sessionInput = $id('session-filter');
@@ -134,26 +156,7 @@
         if (exportStatus) exportStatus.textContent = on ? 'Preparing download…' : '';
       }
 
-      function buildExportUrl(kind){
-        const session = $id('session-filter').value.trim();
-        const limit = Number($id('limit-select').value) || 50;
-        const q = new URLSearchParams();
-        if (session) q.set('session', session);
-        if (limit) q.set('limit', String(limit));
-        const ext = kind === 'csv' ? 'csv' : 'json';
-        return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
-      }
-
-      function triggerDownload(url){
-        // create temporary anchor and click to trigger browser download/navigation
-        const a = document.createElement('a');
-        a.href = url;
-        a.rel = 'noopener';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        try{ a.click(); }catch(e){ window.location.href = url }
-        document.body.removeChild(a);
-      }
+      // use top-level buildExportUrl and triggerDownload
 
       if (exportJson) exportJson.addEventListener('click', async ()=>{
         setExportLoading(true);
