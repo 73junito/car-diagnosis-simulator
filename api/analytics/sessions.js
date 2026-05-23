@@ -96,7 +96,3 @@ module.exports = function handler(req, res) {
   }
 };
 
-if (implementation) {
-  module.exports.registerSessionsRoutes = implementation.registerSessionsRoutes;
-  module.exports.aggregateSessions = implementation.aggregateSessions;
-}

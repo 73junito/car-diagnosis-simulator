@@ -71,8 +71,3 @@ module.exports = function handler(req, res) {
   }
 };
 
-// Attach named exports for Express integration when available
-if (implementation) {
-  module.exports.registerStudentsRoutes = implementation.registerStudentsRoutes;
-  module.exports.aggregateStudents = implementation.aggregateStudents;
-}
