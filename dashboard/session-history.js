@@ -124,13 +124,56 @@
       const limitSelect = $id('limit-select');
       sessionInput.addEventListener('input', scheduleFetch);
       limitSelect.addEventListener('change', scheduleFetch);
+      // Export buttons
+      const exportJson = $id('export-json-btn');
+      const exportCsv = $id('export-csv-btn');
+      const exportStatus = $id('export-status');
+      function setExportLoading(on){
+        if (exportJson) exportJson.disabled = on;
+        if (exportCsv) exportCsv.disabled = on;
+        if (exportStatus) exportStatus.textContent = on ? 'Preparing download…' : '';
+      }
+
+      function buildExportUrl(kind){
+        const session = $id('session-filter').value.trim();
+        const limit = Number($id('limit-select').value) || 50;
+        const q = new URLSearchParams();
+        if (session) q.set('session', session);
+        if (limit) q.set('limit', String(limit));
+        const ext = kind === 'csv' ? 'csv' : 'json';
+        return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
+      }
+
+      function triggerDownload(url){
+        // create temporary anchor and click to trigger browser download/navigation
+        const a = document.createElement('a');
+        a.href = url;
+        a.rel = 'noopener';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        try{ a.click(); }catch(e){ window.location.href = url }
+        document.body.removeChild(a);
+      }
+
+      if (exportJson) exportJson.addEventListener('click', async ()=>{
+        setExportLoading(true);
+        const url = buildExportUrl('json');
+        triggerDownload(url);
+        setExportLoading(false);
+      });
+      if (exportCsv) exportCsv.addEventListener('click', async ()=>{
+        setExportLoading(true);
+        const url = buildExportUrl('csv');
+        triggerDownload(url);
+        setExportLoading(false);
+      });
       // initial fetch
       scheduleFetch();
     }catch(e){ /* page elements missing — ignore */ }
   }
 
   if (typeof module !== 'undefined' && module.exports){
-    module.exports = { initSessionHistory, sanitizePayload, fmtTimestamp };
+    module.exports = { initSessionHistory, sanitizePayload, fmtTimestamp, buildExportUrl };
   }
 
   document.addEventListener('DOMContentLoaded', initSessionHistory);

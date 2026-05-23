@@ -73,4 +73,36 @@ describe('Session history UI', ()=>{
     jest.useRealTimers();
   });
 
+  test('export buttons and URLs include session and limit', async ()=>{
+    const mockData = { ok:true, data: [] };
+    global.fetch = jest.fn().mockResolvedValue({ ok:true, json: ()=>Promise.resolve(mockData) });
+    const { initSessionHistory, buildExportUrl } = require('../dashboard/session-history.js');
+    initSessionHistory();
+    // default limit is 50
+    document.getElementById('session-filter').value = 'session-42';
+    document.getElementById('limit-select').value = '25';
+
+    const jsonUrl = buildExportUrl('json');
+    const csvUrl = buildExportUrl('csv');
+
+    expect(document.getElementById('export-json-btn')).not.toBeNull();
+    expect(document.getElementById('export-csv-btn')).not.toBeNull();
+    expect(jsonUrl).toMatch(/\/api\/telemetry\/export\.json/);
+    expect(csvUrl).toMatch(/\/api\/telemetry\/export\.csv/);
+    expect(jsonUrl).toMatch(/session=session-42/);
+    expect(csvUrl).toMatch(/limit=25/);
+  });
+
+  test('empty session filter omits session param', async ()=>{
+    const mockData = { ok:true, data: [] };
+    global.fetch = jest.fn().mockResolvedValue({ ok:true, json: ()=>Promise.resolve(mockData) });
+    const { initSessionHistory, buildExportUrl } = require('../dashboard/session-history.js');
+    initSessionHistory();
+    document.getElementById('session-filter').value = '';
+    document.getElementById('limit-select').value = '10';
+    const url = buildExportUrl('json');
+    expect(url).toMatch(/limit=10/);
+    expect(url).not.toMatch(/session=/);
+  });
+
 });
