@@ -70,6 +70,55 @@ test('POST /api/telemetry/events rejects invalid event', (done) => {
   registerTelemetryRoutes(app);
 });
 
+test('POST /api/telemetry/events rejects oversized payload with 413 payload_too_large', (done) => {
+  const { registerTelemetryRoutes } = require('../api/telemetry/stream');
+  const app = { get() {}, post(path, ...handlers) {
+    const oversizedBody = {
+      type: 'telemetry.event',
+      timestamp: '2026-05-22T00:00:00.000Z',
+      payload: 'x'.repeat((10 * 1024) + 1),
+    };
+    const rawBody = JSON.stringify(oversizedBody);
+    const req = Readable.from([Buffer.from(rawBody)]);
+    req.headers = {
+      'content-type': 'application/json',
+      'content-length': String(Buffer.byteLength(rawBody)),
+    };
+    req.method = 'POST';
+    req.url = '/api/telemetry/events';
+    const res = {
+      statusCode: 200,
+      status(code) { this.statusCode = code; return this; },
+      json(obj) {
+        try {
+          expect(this.statusCode).toBe(413);
+          expect(obj.ok).toBe(false);
+          expect(obj.error).toBe('payload_too_large');
+          done();
+        } catch (e) {
+          done(e);
+        }
+      }
+    };
+    const runHandler = (index) => {
+      const handler = handlers[index];
+      if (!handler) return;
+      if (handler.length >= 3) {
+        handler(req, res, (err) => {
+          if (err) return done(err);
+          return runHandler(index + 1);
+        });
+        return;
+      }
+      handler(req, res);
+    };
+
+    runHandler(0);
+  } };
+
+  registerTelemetryRoutes(app);
+});
+
 test('POST /api/telemetry/events rejects pre-parsed body when telemetry parser is bypassed', (done) => {
   const { registerTelemetryRoutes } = require('../api/telemetry/stream');
   const app = { get() {}, post(path, ...handlers) {
