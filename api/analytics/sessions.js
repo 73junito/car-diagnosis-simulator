@@ -74,7 +74,13 @@ function registerSessionsRoutes(app) {
 // Default serverless handler for Vercel (and similar platforms). Keep named exports too.
 function handler(req, res){
   if (req.method && req.method.toUpperCase() !== 'GET') return res.status(405).end();
-  return res.json(aggregateSessions());
+  try {
+    const data = aggregateSessions();
+    return res.status(200).json(data);
+  } catch (err) {
+    console.error('sessions handler error', err && err.stack ? err.stack : err);
+    return res.status(500).json({ ok: false, error: String(err && err.message ? err.message : err), stack: err && err.stack });
+  }
 }
 
 module.exports = handler;

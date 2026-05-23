@@ -50,7 +50,13 @@ function registerStudentsRoutes(app) {
 // (e.g., Vercel). We keep the named exports for Express integration.
 function handler(req, res){
   if (req.method && req.method.toUpperCase() !== 'GET') return res.status(405).end();
-  return res.json(aggregateStudents());
+  try {
+    const data = aggregateStudents();
+    return res.status(200).json(data);
+  } catch (err) {
+    console.error('students handler error', err && err.stack ? err.stack : err);
+    return res.status(500).json({ ok: false, error: String(err && err.message ? err.message : err), stack: err && err.stack });
+  }
 }
 
 module.exports = handler;
