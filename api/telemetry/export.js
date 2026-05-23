@@ -6,7 +6,7 @@ function serializeCsvRow(ev){
   const esc = (s) => {
     if (s === null || typeof s === 'undefined') return '';
     const str = typeof s === 'string' ? s : JSON.stringify(s);
-    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+    if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
       return '"' + str.replace(/"/g, '""') + '"';
     }
     return str;
