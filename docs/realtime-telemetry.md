@@ -1,3 +1,22 @@
+# Realtime Telemetry & Replay
+
+This document describes the telemetry replay architecture and controller.
+
+Server adapter
+- `api/telemetry/replay.js`: thin adapter that reuses the storage layer to return telemetry events (newest-first).
+
+Client controller
+- `dashboard/replay-controller.js`: stateful replay controller that loads events from `/api/telemetry/history`, normalizes timestamps, preserves newest-first API response but sorts oldest-first internally for playback.
+
+States
+- `idle`, `loading`, `ready`, `playing`, `paused`, `ended`, `error`
+
+Actions
+- `load(sessionId, limit)`, `play()`, `pause()`, `stepForward()`, `stepBack()`, `seek(index)`, `reset()`
+
+Notes
+- Timestamps are validated with `Date.parse`; malformed timestamps are filtered out.
+- This initial implementation focuses on the controller logic and tests; UI components will be added separately.
 ## CI Compatibility Notes
 
 The telemetry POST handler now uses route-scoped `express.json({ limit: "10kb" })` and `req.body` instead of manually reading the request stream.

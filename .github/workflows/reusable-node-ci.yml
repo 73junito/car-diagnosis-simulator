@@ -95,6 +95,10 @@ jobs:
         if: always()
         run: node tests/session-history-ui.test.js
 
+      - name: Test session replay controller
+        if: always()
+        run: node tests/session-replay-controller.test.js
+
       - name: Test telemetry export endpoints
         if: always()
         run: node tests/telemetry-export.test.js
