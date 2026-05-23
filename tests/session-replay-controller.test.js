@@ -34,25 +34,35 @@ async function testMalformedTimestamps(){
   assert.strictEqual(ctl.events[0].id, 'b');
 }
 
+async function waitForCondition(predicate, timeoutMs = 250, intervalMs = 5){
+  const start = Date.now();
+  while(Date.now() - start < timeoutMs){
+    if(predicate()) return true;
+    await new Promise(r=>setTimeout(r, intervalMs));
+  }
+  return predicate();
+}
+
 async function testPlayPauseStep(){
   const rows = [ { id:'1', created_at:'2020-01-01T00:00:00Z' }, { id:'2', created_at:'2020-01-02T00:00:00Z' } ];
   mockFetch(rows);
   const ctl = new ReplayController({ tickMs: 20 });
   await ctl.load(null, 10);
   assert.strictEqual(ctl.state, 'ready');
+  const initialIndex = ctl.currentIndex;
   ctl.play();
   assert.ok(ctl.state === 'playing' || ctl.state === 'ended');
-  // wait for one tick to advance
-  await new Promise(r=>setTimeout(r, 50));
-  // should have advanced at least one step or reached end
-  assert.ok(ctl.currentIndex >= 0);
+  const advanced = await waitForCondition(() => ctl.currentIndex > initialIndex || ctl.state === 'ended');
+  assert.ok(advanced, 'play() should advance currentIndex or reach ended');
+  assert.ok(ctl.currentIndex > initialIndex || ctl.state === 'ended');
   ctl.pause();
   assert.ok(ctl.state === 'paused' || ctl.state === 'ended');
   const prev = ctl.currentIndex;
   ctl.stepForward();
-  assert.ok(ctl.currentIndex >= prev);
+  assert.strictEqual(ctl.currentIndex, Math.min(prev + 1, ctl.events.length - 1));
+  const beforeStepBack = ctl.currentIndex;
   ctl.stepBack();
-  assert.ok(ctl.currentIndex <= ctl.events.length-1);
+  assert.strictEqual(ctl.currentIndex, Math.max(beforeStepBack - 1, 0));
   ctl.seek(0);
   assert.strictEqual(ctl.currentIndex, 0);
   ctl.reset();
