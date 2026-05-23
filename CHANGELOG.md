@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+- chore(deps): bump qs 6.14.2 → 6.15.2 in torquemind-api; lockfile also includes Express 4.22.1 → 4.22.2 and body-parser ~1.20.3 → ~1.20.5 due to the updated Express direct dependency range (^4.18.2 → ^4.22.2).
 - Scenario Schema v1.2
   - Add `schemaVersion: "1.2"` and `scoringWeights` defaults.
   - Enforce `requiresSafetyAcknowledgment` for high-voltage scenarios.
