@@ -1,4 +1,5 @@
 {
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "(.*)",
@@ -21,18 +22,14 @@
     {
       "source": "/dashboard/analytics",
       "destination": "/dashboard/analytics.html"
-    }
-    ,
+    },
     {
       "source": "/dashboard/live-session",
       "destination": "/dashboard/live-session.html"
-    }
-    ,
+    },
     {
       "source": "/dashboard/session-history",
       "destination": "/dashboard/session-history.html"
     }
   ]
-
-,  "outputDirectory": "."
 }
