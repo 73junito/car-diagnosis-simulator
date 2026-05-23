@@ -1,3 +1,14 @@
+## CI Compatibility Notes
+
+The telemetry POST handler now uses route-scoped `express.json({ limit: "10kb" })` and `req.body` instead of manually reading the request stream.
+
+This avoids test/runtime compatibility issues in CI environments where request body streams, `TextDecoder`, or raw stream handling may behave differently across Node/JSDOM/Jest contexts.
+
+Expected behavior:
+- Valid telemetry POST payloads are read from `req.body`.
+- Invalid payloads return `400`.
+- JSON parsing remains scoped to the telemetry event route.
+- SSE streaming remains separate from POST ingestion.
 # Realtime Telemetry (SSE)
 
 This document describes the lightweight Server-Sent Events (SSE) telemetry scaffolding.
