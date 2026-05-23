@@ -46,4 +46,13 @@ function registerStudentsRoutes(app) {
   });
 }
 
-module.exports = { registerStudentsRoutes, aggregateStudents };
+// Export a default handler for platforms that treat this file as a serverless function
+// (e.g., Vercel). We keep the named exports for Express integration.
+function handler(req, res){
+  if (req.method && req.method.toUpperCase() !== 'GET') return res.status(405).end();
+  return res.json(aggregateStudents());
+}
+
+module.exports = handler;
+module.exports.registerStudentsRoutes = registerStudentsRoutes;
+module.exports.aggregateStudents = aggregateStudents;

@@ -71,4 +71,12 @@ function registerSessionsRoutes(app) {
   });
 }
 
-module.exports = { registerSessionsRoutes, aggregateSessions };
+// Default serverless handler for Vercel (and similar platforms). Keep named exports too.
+function handler(req, res){
+  if (req.method && req.method.toUpperCase() !== 'GET') return res.status(405).end();
+  return res.json(aggregateSessions());
+}
+
+module.exports = handler;
+module.exports.registerSessionsRoutes = registerSessionsRoutes;
+module.exports.aggregateSessions = aggregateSessions;
