@@ -33,4 +33,6 @@
       "destination": "/dashboard/session-history.html"
     }
   ]
+
+,  "outputDirectory": "."
 }
