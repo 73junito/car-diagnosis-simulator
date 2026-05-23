@@ -24,7 +24,7 @@ function registerTelemetryExportRoutes(app){
       if (limit > HARD_MAX) limit = HARD_MAX;
 
       const { ok, data, error } = await storage.listTelemetryEvents({ sessionId, limit });
-      if (!ok) return res.status(200).json({ ok: false, format: 'json', count: 0, events: [] });
+      if (!ok) return res.status(200).json({ ok: false, format: 'json', count: 0, events: [], message: error && error.message });
       return res.json({ ok: true, format: 'json', count: Array.isArray(data)?data.length:0, events: data });
     }catch(err){
       return res.status(500).json({ ok: false, format: 'json', count: 0, events: [] });

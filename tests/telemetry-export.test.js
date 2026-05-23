@@ -25,6 +25,15 @@ describe('Telemetry export endpoints', () => {
     expect(res.body.events).toEqual(sample);
   });
 
+  test('JSON export includes storage error message when unavailable', async ()=>{
+    storage.listTelemetryEvents.mockResolvedValue({ ok:false, data: [], error: new Error('Not configured') });
+    const res = await request(app).get('/api/telemetry/export.json');
+    expect(res.status).toBe(200);
+    expect(res.body.ok).toBe(false);
+    expect(res.body.message).toBe('Not configured');
+    expect(res.body.events).toEqual([]);
+  });
+
   test('CSV export returns header even when storage not configured', async ()=>{
     storage.listTelemetryEvents.mockResolvedValue({ ok:false, data: [] });
     const res = await request(app).get('/api/telemetry/export.csv');
