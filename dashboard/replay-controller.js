@@ -73,4 +73,10 @@ class ReplayController {
   getCurrentEvent(){ return (this.currentIndex >=0 && this.currentIndex < this.events.length) ? this.events[this.currentIndex] : null }
 }
 
-module.exports = ReplayController;
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = ReplayController;
+} else if (typeof window !== 'undefined') {
+  window.ReplayController = ReplayController;
+} else if (typeof globalThis !== 'undefined') {
+  globalThis.ReplayController = ReplayController;
+}
