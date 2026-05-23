@@ -52,27 +52,6 @@ function parseTelemetryEventBody(req, res, next) {
   });
 }
 
-function preParseTelemetryChecks(req, res, next) {
-  // If the request was already parsed upstream (e.g. `req._body === true`
-  // and `req.body` exists) that's a programmer error in middleware
-  // ordering and should be rejected with a distinct 500 code so callers
-  // can detect and fix the integration.
-  if (req._body && req.body && typeof req.body === 'object') {
-    return res.status(500).json({ ok: false, error: 'telemetry_parser_required' });
-  }
-
-  // Require JSON content-type for telemetry ingestion.
-  // Prefer checking the Content-Type header directly because in tests
-  // `req` may be a stream-like object without Express helpers (e.g. `req.is`).
-  const contentType = req.headers && (req.headers['content-type'] || req.headers['Content-Type']);
-  if (!contentType || !/application\/json/i.test(contentType)) {
-    return res.status(415).json({ ok: false, error: 'unsupported_media_type' });
-  }
-
-  // Continue to parser which will set telemetryRawBodySize.
-  return next();
-}
-
 function createSseHandler(emitter = telemetryEmitter) {
   return (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -115,7 +94,7 @@ function createSseHandler(emitter = telemetryEmitter) {
 function registerTelemetryRoutes(app, emitter = telemetryEmitter) {
   app.get('/api/telemetry/stream', createSseHandler(emitter));
 
-  app.post('/api/telemetry/events', preParseTelemetryChecks, parseTelemetryEventBody, (req, res) => {
+  app.post('/api/telemetry/events', parseTelemetryEventBody, (req, res) => {
     try {
       const json = req.body && typeof req.body === 'object' ? req.body : {};
       const ok = addTelemetryEvent(json);
