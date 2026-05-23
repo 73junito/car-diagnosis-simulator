@@ -1,8 +1,10 @@
 const express = require('express');
 const storage = require('./storage');
 
-function registerTelemetryHistoryRoute(app) {
-  app.get('/api/telemetry/history', async (req, res) => {
+function registerTelemetryHistoryRoute(app, middleware) {
+  const handlers = [];
+  if (typeof middleware === 'function') handlers.push(middleware);
+  handlers.push(async (req, res) => {
     try {
       const sessionId = req.query.session || req.query.sessionId || null;
       let limit = parseInt(req.query.limit, 10);
@@ -22,6 +24,8 @@ function registerTelemetryHistoryRoute(app) {
       return res.status(500).json({ ok: false, error: err.message });
     }
   });
+
+  app.get('/api/telemetry/history', ...handlers);
 }
 
 module.exports = { registerTelemetryHistoryRoute };

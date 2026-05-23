@@ -49,7 +49,11 @@ try {
 // Register telemetry history route if present
 try {
   const { registerTelemetryHistoryRoute } = require(path.join(__dirname, '..', 'api', 'telemetry', 'history'));
-  registerTelemetryHistoryRoute(app);
+  const { requireInstructor } = require(path.join(__dirname, '..', 'api', 'telemetry', 'access'));
+  registerTelemetryHistoryRoute(app, (req, res, next) => {
+    req.telemetryAccessScope = 'telemetry-history';
+    return requireInstructor(req, res, next);
+  });
 } catch (e) {
   if (DEBUG_API) console.warn('Telemetry history route not available:', e && e.message);
 }
