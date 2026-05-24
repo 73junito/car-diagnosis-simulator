@@ -9,3 +9,5 @@ torquemind-api/coverage/
 .env.local
 .env.*.local
 firebase-config.js
+.vercel
+.env*
