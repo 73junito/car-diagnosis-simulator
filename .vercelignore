@@ -1,0 +1,8 @@
+car-diagnosis-sim/**
+.github/tmp/**
+*_log.txt
+pr*_log.txt
+rerun_logs.txt
+dashboard_live.html
+dashboard_test.html
+csv_out.txt
