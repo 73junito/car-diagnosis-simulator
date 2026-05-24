@@ -325,6 +325,9 @@ describe('index.js route coverage additions', () => {
 
     jest.doMock('@supabase/supabase-js', () => ({ createClient }));
     jest.doMock('../../api/telemetry/storage', () => ({ listTelemetryEvents }));
+    jest.doMock('../../api/telemetry/access', () => ({
+      requireInstructor: (req, res, next) => next(),
+    }));
 
     const { app } = require('../index');
     const res = await request(app)
