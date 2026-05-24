@@ -46,6 +46,14 @@ try {
   if (DEBUG_API) console.warn('Analytics routes not available:', e && e.message);
 }
 
+// Register telemetry export routes if present
+try {
+  const { registerTelemetryExportRoutes } = require(path.join(__dirname, '..', 'api', 'telemetry', 'export'));
+  registerTelemetryExportRoutes(app);
+} catch (e) {
+  if (DEBUG_API) console.warn('Telemetry export routes not available:', e && e.message);
+}
+
 // Register telemetry history route if present
 try {
   const { registerTelemetryHistoryRoute } = require(path.join(__dirname, '..', 'api', 'telemetry', 'history'));
