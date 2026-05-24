@@ -40,10 +40,17 @@ function aggregateStudents() {
   return { ok: true, students, totalStudents: students.length };
 }
 
-function registerStudentsRoutes(app) {
-  app.get('/api/analytics/students', (req, res) => {
-    res.json(aggregateStudents());
-  });
+function handler(req, res) {
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
+  try {
+    return res.json(aggregateStudents());
+  } catch (err) {
+    console.error('[/api/analytics/students]', err);
+    return res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
 }
 
-module.exports = { registerStudentsRoutes, aggregateStudents };
+// Default export must be a function for Vercel serverless. Attach helpers
+// to the exported function so other modules (e.g. summary) can access them.
+module.exports = handler;
+module.exports.aggregateStudents = aggregateStudents;
