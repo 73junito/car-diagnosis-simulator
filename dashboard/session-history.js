@@ -118,6 +118,18 @@
     debounceTimer = setTimeout(()=>{ doFetchAndRender() }, DEBOUNCE_MS);
   }
 
+  function buildExportUrl(kind){
+    const sessionEl = $id('session-filter');
+    const limitEl = $id('limit-select');
+    const session = sessionEl ? sessionEl.value.trim() : '';
+    const limit = limitEl ? Number(limitEl.value) : 50;
+    const q = new URLSearchParams();
+    if (session) q.set('session', session);
+    if (limit) q.set('limit', String(limit));
+    const ext = kind === 'csv' ? 'csv' : 'json';
+    return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
+  }
+
   function initSessionHistory(){
     try{
       const sessionInput = $id('session-filter');
@@ -134,15 +146,8 @@
         if (exportStatus) exportStatus.textContent = on ? 'Preparing download…' : '';
       }
 
-      function buildExportUrl(kind){
-        const session = $id('session-filter').value.trim();
-        const limit = Number($id('limit-select').value) || 50;
-        const q = new URLSearchParams();
-        if (session) q.set('session', session);
-        if (limit) q.set('limit', String(limit));
-        const ext = kind === 'csv' ? 'csv' : 'json';
-        return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
-      }
+      // export helper `buildExportUrl` is defined at module scope so tests
+      // and other modules can import it. See below for the implementation.
 
       function triggerDownload(url){
         // create temporary anchor and click to trigger browser download/navigation
