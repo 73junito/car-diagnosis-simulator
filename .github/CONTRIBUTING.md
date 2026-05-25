@@ -56,3 +56,7 @@ If your PR updates the `car-diagnosis-sim` submodule:
 - Ensure the submodule commit includes any required test or workflow fixes
 - CI will run against the submodule’s exact commit, so keep it in sync with your changes
 
+## More CI details
+
+For the full, authoritative CI contract (required checks, expected job names, re-run procedures, and common failure modes), see [docs/ci-contract.md](../docs/ci-contract.md).
+
