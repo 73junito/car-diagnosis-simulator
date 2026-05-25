@@ -114,8 +114,17 @@ jobs:
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
           BASE_URL: http://localhost:3000
         run: |
-          chmod +x ./scripts/run_smoke_with_retry.sh
-          ./scripts/run_smoke_with_retry.sh
+          max_attempts=3
+          attempt=1
+          until npm run test:smoke; do
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "Smoke test failed after $attempt attempts."
+              exit 1
+            fi
+            echo "Smoke test failed on attempt $attempt. Retrying in 10 seconds..."
+            attempt=$((attempt + 1))
+            sleep 10
+          done
 
       - name: Show server log (after tests)
         if: always()
