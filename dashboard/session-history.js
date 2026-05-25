@@ -167,16 +167,6 @@
     }catch(e){ /* page elements missing — ignore */ }
   }
 
-  function buildExportUrl(kind){
-    const session = $id('session-filter') ? $id('session-filter').value.trim() : '';
-    const limit = (typeof $id === 'function' && $id('limit-select')) ? Number($id('limit-select').value) || 50 : 50;
-    const q = new URLSearchParams();
-    if (session) q.set('session', session);
-    if (limit) q.set('limit', String(limit));
-    const ext = kind === 'csv' ? 'csv' : 'json';
-    return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
-  }
-
   if (typeof module !== 'undefined' && module.exports){
     module.exports = { initSessionHistory, sanitizePayload, fmtTimestamp, buildExportUrl };
   }
