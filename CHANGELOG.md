@@ -13,6 +13,14 @@
 - Confirmed `/dashboard/analytics/` redirects correctly with HTTP 308.
 - Merged Dependabot `babel-jest` update after syncing lockfile.
 - Fixed `hero.js` Jest failure by ensuring activation state variables are declared.
+ 
+### CI / Infrastructure
+
+- **Fix:** Add CodeQL permissions — added `security-events: write` to `.github/workflows/codeql.yml` so SARIF uploads succeed (PR #90).
+- **Fix:** Remove stale submodule metadata — removed `car-diagnosis-sim` gitlink that caused Actions checkout warnings (PR #89).
+- **Fix:** Prevent Jest parse-time error — removed invalid top-level `await` usage in `dashboard/session-history.js` to avoid SyntaxError during test collection (PR #88).
+- **Tests:** Harden Jest environment — added `tests/jest-setup.js` polyfills and smoke tests to stabilize CI runtime environment (PR #88).
+- **Chore:** Rebased documentation CI branch — `chore/docs/ci-contributing` rebased onto `main` with resolved conflicts; CI rerun pending final verification before merge (PR #87).
 ## 0.1.1 - Stable
 
 ### Highlights
