@@ -3,14 +3,19 @@ name: Auth-aware API Smoke Test
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch: {}
+
+permissions:
+  contents: read
 
 # Note: consider pinning actions to specific commit SHAs for increased security.
 # e.g. replace uses: actions/checkout@v4 with uses: actions/checkout@<COMMIT_SHA>
 
 jobs:
   smoke:
-    name: Run smoke test
+    name: api-smoke
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
