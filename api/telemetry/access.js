@@ -15,7 +15,7 @@ async function requireInstructor(req, res, next) {
   try {
     addTelemetryEvent({
       type: 'access_attempt',
-      scope: 'live-session',
+      scope: (req && req.telemetryAccessScope) || 'live-session',
       role: info.role,
       userId: info.userId || null,
       source: info.source || null,

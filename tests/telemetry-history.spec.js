@@ -44,4 +44,16 @@ describe('GET /api/telemetry/history', () => {
     expect(res.body.ok).toBe(true);
     expect(storage.listTelemetryEvents).toHaveBeenCalledWith({ sessionId: null, limit: 500 });
   });
+
+  test('runs route middleware before returning telemetry history', async () => {
+    const guardedApp = express();
+    const middleware = jest.fn((req, res, next) => next());
+    storage.listTelemetryEvents.mockResolvedValue({ ok: true, data: [] });
+    registerTelemetryHistoryRoute(guardedApp, middleware);
+
+    const res = await request(guardedApp).get('/api/telemetry/history');
+
+    expect(res.status).toBe(200);
+    expect(middleware).toHaveBeenCalled();
+  });
 });
