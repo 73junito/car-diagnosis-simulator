@@ -53,6 +53,18 @@ try {
 } catch (e) {
   if (DEBUG_API) console.warn('Telemetry export routes not available:', e && e.message);
 }
+
+// Register telemetry history route if present
+try {
+  const { registerTelemetryHistoryRoute } = require(path.join(__dirname, '..', 'api', 'telemetry', 'history'));
+  const { requireInstructor } = require(path.join(__dirname, '..', 'api', 'telemetry', 'access'));
+  registerTelemetryHistoryRoute(app, (req, res, next) => {
+    req.telemetryAccessScope = 'telemetry-history';
+    return requireInstructor(req, res, next);
+  });
+} catch (e) {
+  if (DEBUG_API) console.warn('Telemetry history route not available:', e && e.message);
+}
 const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL || null;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;

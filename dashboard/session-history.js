@@ -109,6 +109,17 @@
     debounceTimer = setTimeout(()=>{ doFetchAndRender() }, DEBOUNCE_MS);
   }
 
+  // buildExportUrl is available at module scope so tests can import it
+  function buildExportUrl(kind){
+    const session = (typeof document !== 'undefined' && $id('session-filter')) ? $id('session-filter').value.trim() : '';
+    const limit = (typeof document !== 'undefined' && $id('limit-select')) ? Number($id('limit-select').value) || 50 : 50;
+    const q = new URLSearchParams();
+    if (session) q.set('session', session);
+    if (limit) q.set('limit', String(limit));
+    const ext = kind === 'csv' ? 'csv' : 'json';
+    return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
+  }
+
   function initSessionHistory(){
     try{
       const sessionInput = $id('session-filter');
@@ -138,6 +149,7 @@
         document.body.removeChild(a);
       }
 
+      
       if (exportJson) exportJson.addEventListener('click', async ()=>{
         setExportLoading(true);
         const url = buildExportUrl('json');
