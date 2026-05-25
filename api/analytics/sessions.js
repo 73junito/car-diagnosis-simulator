@@ -65,10 +65,29 @@ function aggregateSessions() {
   };
 }
 
+function handler(req, res) {
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
+  try {
+    return res.json(aggregateSessions());
+  } catch (err) {
+    console.error('[/api/analytics/sessions]', err);
+    return res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+}
+
+// Default export must be a function for Vercel serverless. Attach helpers
+// to the exported function so other modules can access them.
+module.exports = handler;
+module.exports.aggregateSessions = aggregateSessions;
 function registerSessionsRoutes(app) {
   app.get('/api/analytics/sessions', (req, res) => {
-    res.json(aggregateSessions());
+    try {
+      return res.json(aggregateSessions());
+    } catch (err) {
+      console.error('[registerSessionsRoutes] error', err);
+      return res.status(500).json({ ok: false, error: 'Internal server error' });
+    }
   });
 }
 
-module.exports = { registerSessionsRoutes, aggregateSessions };
+module.exports.registerSessionsRoutes = registerSessionsRoutes;

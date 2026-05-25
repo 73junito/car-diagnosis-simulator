@@ -118,11 +118,10 @@
     debounceTimer = setTimeout(()=>{ doFetchAndRender() }, DEBOUNCE_MS);
   }
 
+  // buildExportUrl is available at module scope so tests can import it
   function buildExportUrl(kind){
-    const sessionEl = $id('session-filter');
-    const limitEl = $id('limit-select');
-    const session = sessionEl ? sessionEl.value.trim() : '';
-    const limit = limitEl ? Number(limitEl.value) : 50;
+    const session = (typeof document !== 'undefined' && $id('session-filter')) ? $id('session-filter').value.trim() : '';
+    const limit = (typeof document !== 'undefined' && $id('limit-select')) ? Number($id('limit-select').value) || 50 : 50;
     const q = new URLSearchParams();
     if (session) q.set('session', session);
     if (limit) q.set('limit', String(limit));
@@ -146,9 +145,8 @@
         if (exportStatus) exportStatus.textContent = on ? 'Preparing download…' : '';
       }
 
-      // export helper `buildExportUrl` is defined at module scope so tests
-      // and other modules can import it. See below for the implementation.
-
+      // buildExportUrl is defined at module scope and reused by tests
+      
       function triggerDownload(url){
         // create temporary anchor and click to trigger browser download/navigation
         const a = document.createElement('a');
@@ -160,6 +158,7 @@
         document.body.removeChild(a);
       }
 
+      
       if (exportJson) exportJson.addEventListener('click', async ()=>{
         setExportLoading(true);
         const url = buildExportUrl('json');
