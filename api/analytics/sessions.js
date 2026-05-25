@@ -79,3 +79,15 @@ function handler(req, res) {
 // to the exported function so other modules can access them.
 module.exports = handler;
 module.exports.aggregateSessions = aggregateSessions;
+function registerSessionsRoutes(app) {
+  app.get('/api/analytics/sessions', (req, res) => {
+    try {
+      return res.json(aggregateSessions());
+    } catch (err) {
+      console.error('[registerSessionsRoutes] error', err);
+      return res.status(500).json({ ok: false, error: 'Internal server error' });
+    }
+  });
+}
+
+module.exports.registerSessionsRoutes = registerSessionsRoutes;
