@@ -68,15 +68,6 @@
 
   function setLoading(on){
     $id('loading').hidden = !on;
-  }
-  function setError(msg){
-    const el = $id('error');
-    if (!msg){ el.hidden = true; el.textContent = ''; return }
-    el.hidden = false; el.textContent = msg;
-  }
-  function setEmpty(on){ $id('empty').hidden = !on }
-
-  async function doFetchAndRender(){
     const session = $id('session-filter').value.trim() || null;
     const limit = Number($id('limit-select').value) || 50;
 
@@ -134,15 +125,7 @@
         if (exportStatus) exportStatus.textContent = on ? 'Preparing download…' : '';
       }
 
-      function buildExportUrl(kind){
-        const session = $id('session-filter').value.trim();
-        const limit = Number($id('limit-select').value) || 50;
-        const q = new URLSearchParams();
-        if (session) q.set('session', session);
-        if (limit) q.set('limit', String(limit));
-        const ext = kind === 'csv' ? 'csv' : 'json';
-        return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
-      }
+      // buildExportUrl is defined at module scope
 
       function triggerDownload(url){
         // create temporary anchor and click to trigger browser download/navigation
@@ -170,6 +153,16 @@
       // initial fetch
       scheduleFetch();
     }catch(e){ /* page elements missing — ignore */ }
+  }
+
+  function buildExportUrl(kind){
+    const session = $id('session-filter') ? $id('session-filter').value.trim() : '';
+    const limit = (typeof $id === 'function' && $id('limit-select')) ? Number($id('limit-select').value) || 50 : 50;
+    const q = new URLSearchParams();
+    if (session) q.set('session', session);
+    if (limit) q.set('limit', String(limit));
+    const ext = kind === 'csv' ? 'csv' : 'json';
+    return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
   }
 
   if (typeof module !== 'undefined' && module.exports){
