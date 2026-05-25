@@ -95,6 +95,11 @@ function loadApp({ user, profile, tables, failures }) {
 
   const createClient = createClientFactory({ user, profile, tables, failures });
   jest.doMock('@supabase/supabase-js', () => ({ createClient }));
+  // Tests in this file expect to exercise history routes without real instructor auth.
+  // Mock the instructor gate so route coverage tests can call the handler directly.
+  jest.doMock('../../api/telemetry/access', () => ({
+    requireInstructor: (req, res, next) => next(),
+  }));
   const { app } = require('../index');
   return { app, createClient };
 }

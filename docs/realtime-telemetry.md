@@ -1,3 +1,26 @@
+## CI Compatibility Notes
+
+The telemetry POST handler now uses route-scoped `express.json({ limit: "10kb" })` and `req.body` instead of manually reading the request stream.
+
+This avoids test/runtime compatibility issues in CI environments where request body streams, `TextDecoder`, or raw stream handling may behave differently across Node/JSDOM/Jest contexts.
+
+Expected behavior:
+- Valid telemetry POST payloads are read from `req.body`.
+- Invalid payloads return `400`.
+- JSON parsing remains scoped to the telemetry event route.
+- SSE streaming remains separate from POST ingestion.
+
+Persistent storage scaffold
+
+Planned migration and storage adapter files live under `db/migrations` and `api/telemetry/storage.js`.
+The initial migration will create a `telemetry_events` table with indexes on `session_id` and `created_at`.
+The storage adapter uses Supabase when `SUPABASE_URL` and a service key are present and otherwise fails gracefully.
+Export endpoints
+
+- `GET /api/telemetry/export.json` — server-side export (JSON) with optional `session` and `limit` query params. Default `limit=50`, hard max `500`.
+- `GET /api/telemetry/export.csv` — server-side CSV export. Columns: `id,session_id,user_id,event_type,source,created_at,payload_json`.
+
+Both endpoints return newest-first results from the configured storage adapter. When storage is not configured, `GET /api/telemetry/export.json` responds with `{ ok: false, format: 'json', count: 0, events: [] }` (and may include a `message`), while `GET /api/telemetry/export.csv` returns only the CSV header row.
 # Realtime Telemetry (SSE)
 
 This document describes the lightweight Server-Sent Events (SSE) telemetry scaffolding.

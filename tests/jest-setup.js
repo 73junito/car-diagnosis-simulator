@@ -31,3 +31,19 @@ if (typeof window !== 'undefined' && !window.matchMedia) {
     };
   };
 }
+
+// Node (older runtimes used in some CI images) may not have TextDecoder
+// globally available. Provide a lightweight polyfill using the Node
+// `util` module so modules that import or use `TextDecoder` during
+// module initialization (for example in `express` dependencies) do not
+// throw during test collection.
+if (typeof global.TextDecoder === 'undefined') {
+  try {
+    // eslint-disable-next-line global-require
+    const { TextDecoder } = require('util');
+    global.TextDecoder = TextDecoder;
+  } catch (e) {
+    // best-effort polyfill; if unavailable leave it undefined and tests
+    // that require it will fail explicitly.
+  }
+}
