@@ -36,3 +36,16 @@ if (typeof global.TextDecoder === 'undefined') {
     // that require it will fail explicitly.
   }
 }
+
+// Some dependencies expect a global TextEncoder (web API). Provide a
+// lightweight polyfill using Node's `util` where available to avoid
+// errors during module initialization in tests.
+if (typeof global.TextEncoder === 'undefined') {
+  try {
+    // eslint-disable-next-line global-require
+    const { TextEncoder } = require('util');
+    global.TextEncoder = TextEncoder;
+  } catch (e) {
+    // best-effort; if not available, tests will surface the missing API.
+  }
+}
