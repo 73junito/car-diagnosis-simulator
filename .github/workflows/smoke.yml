@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   smoke:
-    name: api-smoke
+    name: smoke
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
