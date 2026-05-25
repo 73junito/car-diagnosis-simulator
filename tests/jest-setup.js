@@ -4,48 +4,45 @@
  * Defines browser APIs that jsdom does not implement.
  */
 
-// jsdom does not implement window.matchMedia; define a no-op stub so that
-// jest.spyOn(window, 'matchMedia') works in tests (HERO-006).
-if (typeof window !== 'undefined' && !window.matchMedia) {
-  window.matchMedia = function matchMedia(_query) {
-    return {
-      matches:             false,
-      media:               _query,
-      onchange:            null,
-      addListener:         function () {},
-      removeListener:      function () {},
-      addEventListener:    function () {},
-      removeEventListener: function () {},
-      dispatchEvent:       function () { return false; },
-    };
-  };
+// -----------------------------------------------------------------------------
+// matchMedia
+// -----------------------------------------------------------------------------
+
+// jsdom does not implement window.matchMedia.
+// Define a minimal stub so tests using responsive hooks/components work.
+if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(), // deprecated
+      removeListener: jest.fn(), // deprecated
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
 }
 
-// Node (older runtimes used in some CI images) may not have TextDecoder
-// globally available. Provide a lightweight polyfill using the Node
-// `util` module so modules that import or use `TextDecoder` during
-// module initialization (for example in `express` dependencies) do not
-// throw during test collection.
-if (typeof global.TextDecoder === 'undefined') {
-  try {
-    // eslint-disable-next-line global-require
-    const { TextDecoder } = require('util');
+// -----------------------------------------------------------------------------
+// TextDecoder / TextEncoder
+// -----------------------------------------------------------------------------
+
+// Older Node runtimes used in CI may not expose these globally.
+try {
+  // eslint-disable-next-line global-require
+  const { TextDecoder, TextEncoder } = require('util');
+
+  if (typeof global.TextDecoder === 'undefined') {
     global.TextDecoder = TextDecoder;
-  } catch (e) {
-    // best-effort polyfill; if unavailable leave it undefined and tests
-    // that require it will fail explicitly.
   }
-}
 
-// Some dependencies expect a global TextEncoder (web API). Provide a
-// lightweight polyfill using Node's `util` where available to avoid
-// errors during module initialization in tests.
-if (typeof global.TextEncoder === 'undefined') {
-  try {
-    // eslint-disable-next-line global-require
-    const { TextEncoder } = require('util');
+  if (typeof global.TextEncoder === 'undefined') {
     global.TextEncoder = TextEncoder;
-  } catch (e) {
-    // best-effort; if not available, tests will surface the missing API.
   }
+} catch (err) {
+  // Best-effort polyfill; tests requiring these APIs will fail explicitly
+  // if the APIs are unavailable in the runtime.
 }

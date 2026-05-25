@@ -68,40 +68,51 @@
 
   function setLoading(on){
     $id('loading').hidden = !on;
-    const session = $id('session-filter').value.trim() || null;
-    const limit = Number($id('limit-select').value) || 50;
+  }
+
+  function setError(msg){
+    const el = $id('error');
+    if (!msg){ el.hidden = true; el.textContent = ''; return }
+    el.hidden = false; el.textContent = msg;
+  }
+  function setEmpty(on){ $id('empty').hidden = !on }
+
+  function doFetchAndRender(){
+    const session = (typeof document !== 'undefined' && $id('session-filter')) ? $id('session-filter').value.trim() : null;
+    const limit = (typeof document !== 'undefined' && $id('limit-select')) ? Number($id('limit-select').value) || 50 : 50;
 
     setError(null);
     setEmpty(false);
     setLoading(true);
 
-    try{
-      inflight = fetchEvents(session, limit);
-      const data = await inflight;
-      inflight = null;
-      setLoading(false);
-      if (!data || data.ok === false){
-        setError('No data available');
+    inflight = fetchEvents(session, limit)
+      .then((data) => {
+        inflight = null;
+        setLoading(false);
+        if (!data || data.ok === false){
+          setError('No data available');
+          renderRows([]);
+          setEmpty(true);
+          return;
+        }
+        const rows = Array.isArray(data.data) ? data.data : [];
+        if (!rows.length){ renderRows([]); setEmpty(true); return }
+        // ensure newest-first
+        rows.sort((a,b)=>{
+          const ta = Date.parse(a.created_at||a.timestamp||a.ts||a.time);
+          const tb = Date.parse(b.created_at||b.timestamp||b.ts||b.time);
+          return (isNaN(tb)?0:tb) - (isNaN(ta)?0:ta);
+        });
+        renderRows(rows);
+      })
+      .catch((err) => {
+        inflight = null;
+        setLoading(false);
+        setError('Error fetching events');
         renderRows([]);
         setEmpty(true);
-        return;
-      }
-      const rows = Array.isArray(data.data) ? data.data : [];
-      if (!rows.length){ renderRows([]); setEmpty(true); return }
-      // ensure newest-first
-      rows.sort((a,b)=>{
-        const ta = Date.parse(a.created_at||a.timestamp||a.ts||a.time);
-        const tb = Date.parse(b.created_at||b.timestamp||b.ts||b.time);
-        return (isNaN(tb)?0:tb) - (isNaN(ta)?0:ta);
+        console.warn('session-history fetch failed', err);
       });
-      renderRows(rows);
-    }catch(err){
-      setLoading(false);
-      setError('Error fetching events');
-      renderRows([]);
-      setEmpty(true);
-      console.warn('session-history fetch failed', err);
-    }
   }
 
   function scheduleFetch(){
