@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Student Scenario Dashboard</title>
+  <link rel="stylesheet" href="/dashboard/student.css">
+</head>
+<body>
+  <main class="wrapper">
+    <h1>Student Scenario Dashboard</h1>
+
+    <div class="dashboard-map" id="dashboardMap">
+      <img id="mapImg" src="/assets/images/dashboard/scenario-dashboard.png" alt="Scenario dashboard map">
+
+      <!-- 17 hotspots mapped to scenarios -->
+      <button class="hotspot hs-1" data-scenario="no-crank" aria-label="no-crank"></button>
+      <button class="hotspot hs-2" data-scenario="no-start" aria-label="no-start"></button>
+      <button class="hotspot hs-3" data-scenario="overheating" aria-label="overheating"></button>
+      <button class="hotspot hs-4" data-scenario="electrical-load" aria-label="electrical-load"></button>
+      <button class="hotspot hs-5" data-scenario="misfire" aria-label="misfire"></button>
+      <button class="hotspot hs-6" data-scenario="steering_alignment" aria-label="steering_alignment"></button>
+      <button class="hotspot hs-7" data-scenario="hvac_cooling" aria-label="hvac_cooling"></button>
+      <button class="hotspot hs-8" data-scenario="stalling" aria-label="stalling"></button>
+      <button class="hotspot hs-9" data-scenario="misfire-p0300" aria-label="misfire-p0300"></button>
+      <button class="hotspot hs-10" data-scenario="power_loss" aria-label="power_loss"></button>
+      <button class="hotspot hs-11" data-scenario="no-crank-ase" aria-label="no-crank-ase"></button>
+      <button class="hotspot hs-12" data-scenario="intermittent_starting" aria-label="intermittent_starting"></button>
+      <button class="hotspot hs-13" data-scenario="charging-system" aria-label="charging-system"></button>
+      <button class="hotspot hs-14" data-scenario="can-bus-network" aria-label="can-bus-network"></button>
+      <button class="hotspot hs-15" data-scenario="hybrid-ev-isolation" aria-label="hybrid-ev-isolation"></button>
+      <button class="hotspot hs-16" data-scenario="diesel-aftertreatment" aria-label="diesel-aftertreatment"></button>
+      <button class="hotspot hs-17" data-scenario="hybrid-ev-insulation" aria-label="hybrid-ev-insulation"></button>
+    </div>
+
+    <aside id="detail" class="detail hidden" aria-live="polite">
+      <button id="backBtn" class="back">Back to dashboard</button>
+      <h2 id="detailTitle"></h2>
+      <p id="customerComplaint"></p>
+      <ul id="symptomsList"></ul>
+      <div id="dtcs"></div>
+      <div id="liveData"></div>
+      <div id="availableTests"></div>
+      <label for="diagnosis">Your diagnosis</label>
+      <textarea id="diagnosis" rows="4"></textarea>
+      <button id="submitDiagnosis">Submit diagnosis</button>
+    </aside>
+  </main>
+
+  <script src="/data/scenarios.js"></script>
+  <script src="/dashboard/student.js" defer></script>
+</body>
+</html>

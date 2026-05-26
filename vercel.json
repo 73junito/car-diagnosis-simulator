@@ -3,6 +3,11 @@
     {
       "source": "(.*)",
       "headers": [
+    ,
+    {
+      "source": "/dashboard/student",
+      "destination": "/dashboard/student.html"
+    }
         {
           "key": "Content-Security-Policy",
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://pffdgqpynpbffbcnxmum.supabase.co https://torquemind-api.onrender.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; frame-ancestors 'none';"
