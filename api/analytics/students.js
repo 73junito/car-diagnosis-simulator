@@ -35,7 +35,7 @@ function aggregateStudents() {
   const students = Array.from(perStudent.values()).map((s) => ({
     id: s.id,
     sessions: s.sessions,
-    averageScore: s.sessions ? s.scoreSum / s.sessions : 0,
+    averageScore: s.sessions ? round(s.scoreSum / s.sessions, 0) : 0,
     averageConfidence: s.sessions ? round(s.confidenceSum / s.sessions, 2) : 0,
   }));
 
