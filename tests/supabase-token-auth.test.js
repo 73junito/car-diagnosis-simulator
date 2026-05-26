@@ -5,9 +5,9 @@ const { resolveUserRole } = require('../api/auth/role');
 function makeMockClientFactory(user) {
   return () => ({
     auth: {
-      getUser: async ({ access_token }) => ({ data: { user } })
+      getUser: async () => ({ data: { user } })
     },
-    getUser: async (token) => ({ data: { user } })
+    getUser: async () => ({ data: { user } })
   });
 }
 

@@ -128,7 +128,7 @@
           if (outEl) outEl.innerText += `\n\n⚠️ Note: Starter symptoms may be ambiguous — battery condition is currently likely (${Math.round((faultProbabilities.battery||0)*100)}%).`;
         }
       }
-    } catch(e){}
+    } catch(e){ /* ignore: UI likelihood render error */ }
 
     // update tool counters
     window.toolUses = (window.toolUses || 0) + 1;
@@ -140,7 +140,7 @@
     const toolsLeftEl = document.getElementById('toolsLeft'); if (toolsLeftEl) toolsLeftEl.innerText = `Tools left: ${Math.max(0,(window.maxToolUses||3) - window.toolUses)}`;
 
     // persist progress
-    try { if (window.saveProgress) window.saveProgress(); } catch(e){}
+    try { if (window.saveProgress) window.saveProgress(); } catch(e){ /* ignore: non-fatal persistence error */ }
 
     return output;
   };
@@ -217,7 +217,7 @@
       try {
         const isCorrect = (lastExplanation.final === 'Correct');
         if (window.updateStudentProfile) window.updateStudentProfile(isCorrect, AppState.system || 'unspecified', s.fault || null);
-      } catch(e){}
+      } catch(e){ /* ignore: profile update failure */ }
 
       // render into DOM
       const panel = document.getElementById('explanationPanel'); if (panel) panel.style.display = 'block';
@@ -238,8 +238,10 @@
       }
       const evidEl = document.getElementById('exp-evidence');
       if (evidEl) {
-        evidEl.innerHTML = '';
-        if (lastExplanation.topEvidence.length === 0) evidEl.innerHTML = '<div class="evidence-entry">(no system-specific evidence collected)</div>';
+        while (evidEl.firstChild) evidEl.removeChild(evidEl.firstChild);
+        if (lastExplanation.topEvidence.length === 0) {
+          const none = document.createElement('div'); none.className = 'evidence-entry'; none.innerText = '(no system-specific evidence collected)'; evidEl.appendChild(none);
+        }
         lastExplanation.topEvidence.forEach(ev => {
           const d = document.createElement('div'); d.className = 'evidence-entry'; d.innerText = `${ev.reading} — ${ev.interpretation} (w:${ev.weight})`; evidEl.appendChild(d);
         });
@@ -259,43 +261,6 @@
 
   // expose Engine
   window.DiagnosticEngine = Engine;
-
-  // small helper bound into engine scope (keeps model consistent with engine internals)
-  function applyEvidenceToModel(component, interpretation){
-    applyEvidenceToModel = applyEvidenceToModel; // noop placeholder to avoid linter
-    // call internal implementation
-    // internal implementation uses faultProbabilities and faultInteractions defined above
-    const it = String(interpretation || '').toLowerCase();
-    switch(component){
-      case 'battery':
-        if (it.includes('low') || it.includes('problem') || it.includes('<12v')){
-          faultProbabilities.battery = (faultProbabilities.battery || 0.5) + 0.25;
-          faultProbabilities.starter = (faultProbabilities.starter || 0.5) - 0.10;
-        }
-        break;
-      case 'starter':
-        faultProbabilities.starter = (faultProbabilities.starter || 0.5) + 0.20;
-        break;
-      case 'fuel':
-        if (it.includes('no pressure') || it.includes('0 psi')) faultProbabilities.fuel = (faultProbabilities.fuel || 0.5) + 0.20;
-        break;
-      case 'obd':
-        faultProbabilities.ecu = (faultProbabilities.ecu || 0.5) + 0.15;
-        break;
-      default:
-        break;
-    }
-    Object.keys(faultInteractions).forEach(fault => {
-      const inter = faultInteractions[fault];
-      if (inter && inter.affects && inter.affects[component]){
-        const effect = inter.affects[component];
-        faultProbabilities[fault] = (faultProbabilities[fault] || 0.5) + (effect.probabilityBoost || 0);
-      }
-    });
-    Object.keys(faultProbabilities).forEach(k => { faultProbabilities[k] = Math.max(0, Math.min(1, faultProbabilities[k])); });
-    // sync global snapshot
-    window.faultProbabilities = Object.assign({}, faultProbabilities);
-  }
 
 })();
 // Lightweight Diagnostic Engine extracted from script.js
@@ -402,7 +367,7 @@
     window.evidence[output.system].push(output);
     output.contextSystem = window.selectedSystem || 'unspecified';
 
-    try { DiagnosticEngine.applyEvidenceToModel(component, output.interpretation || output.reading || ''); } catch(e){}
+    try { DiagnosticEngine.applyEvidenceToModel(component, output.interpretation || output.reading || ''); } catch(e){ /* ignore: model update best-effort */ }
 
     const systemMap = { battery: 'Electrical', starter: 'Starting', fuel: 'Fuel Delivery', obd: 'On-Board Diagnostics' };
     const systemLabel = systemMap[component] || (output.system ? output.system.charAt(0).toUpperCase() + output.system.slice(1) : 'General System');
@@ -423,7 +388,7 @@
           if (document.getElementById('result')) document.getElementById('result').innerText += `\n\n⚠️ Note: Starter symptoms may be ambiguous — battery condition is currently likely (${Math.round((DiagnosticEngine.faultProbabilities.battery||0)*100)}%).`;
         }
       }
-    } catch(e){}
+    } catch(e){ /* ignore: UI likelihood render error */ }
 
     if(window.toolUses > 2){
       window.score = Math.max(0, window.score - 2);
@@ -497,7 +462,7 @@
         scenarioIndex: window.currentIndex || 0
       };
 
-      try { window.updateStudentProfile && window.updateStudentProfile(window.lastExplanation.final === 'Correct', window.selectedSystem || 'unspecified', s.fault || null); } catch(e){}
+      try { window.updateStudentProfile && window.updateStudentProfile(window.lastExplanation.final === 'Correct', window.selectedSystem || 'unspecified', s.fault || null); } catch(e){ /* ignore: profile update failure */ }
 
       const panel = document.getElementById('explanationPanel'); if (panel) panel.style.display = 'block';
       const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.innerText = txt; };
@@ -517,12 +482,14 @@
       }
       const evidEl = document.getElementById('exp-evidence');
       if (evidEl) {
-        evidEl.innerHTML = '';
-        if (window.lastExplanation.topEvidence.length === 0) evidEl.innerHTML = '<div class="evidence-entry">(no system-specific evidence collected)</div>';
+        while (evidEl.firstChild) evidEl.removeChild(evidEl.firstChild);
+        if (window.lastExplanation.topEvidence.length === 0) {
+          const none = document.createElement('div'); none.className = 'evidence-entry'; none.innerText = '(no system-specific evidence collected)'; evidEl.appendChild(none);
+        }
         window.lastExplanation.topEvidence.forEach(ev => { const d = document.createElement('div'); d.className='evidence-entry'; d.innerText = `${ev.reading} — ${ev.interpretation} (w:${ev.weight})`; evidEl.appendChild(d); });
       }
       setText('exp-final', `Result: ${window.lastExplanation.final}. Score change: ${window.lastExplanation.scoreDelta}`);
-    } catch(e){}
+    } catch(e){ /* ignore: explanation render error */ }
 
     const summary = [];
     Object.keys(window.evidence).forEach(k => { if (window.evidence[k] && window.evidence[k].length) summary.push(`${k}: ${window.evidence[k].map(e=>e.reading + ' ('+e.interpretation+')').join('; ')}`); });

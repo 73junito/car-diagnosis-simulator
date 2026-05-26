@@ -16,21 +16,7 @@
 
 const ENGINE_PATH = '../../engine/diagnosticEngine.js';
 
-const DOM_TEMPLATE = `
-  <div id="result"></div>
-  <div id="score"></div>
-  <div id="toolsLeft"></div>
-  <div id="confidencePanel" style="display:none"></div>
-  <div id="explanationPanel" style="display:none"></div>
-  <div id="exp-system"></div>
-  <div id="exp-rationale"></div>
-  <div id="exp-relevance"></div>
-  <div id="exp-isolation"></div>
-  <div id="exp-confidence"></div>
-  <div id="exp-reasoning"></div>
-  <div id="exp-evidence"></div>
-  <div id="exp-final"></div>
-`;
+// DOM_TEMPLATE replaced by programmatic construction inside setupEngine
 
 // Scenarios used by the engine via window.currentScenario()
 const SCENARIO_BATTERY_FAULT = {
@@ -55,7 +41,13 @@ const SCENARIO_FUEL_FAULT = {
 function setupEngine(scenario = SCENARIO_BATTERY_FAULT) {
   jest.resetModules();
 
-  document.body.innerHTML = DOM_TEMPLATE;
+  // build minimal DOM required by the engine tests
+  while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
+  ['result','score','toolsLeft','confidencePanel','explanationPanel','exp-system','exp-rationale','exp-relevance','exp-isolation','exp-confidence','exp-reasoning','exp-evidence','exp-final'].forEach((id)=>{
+    const el = document.createElement('div'); el.id = id;
+    if (id === 'confidencePanel' || id === 'explanationPanel') el.style.display = 'none';
+    document.body.appendChild(el);
+  });
 
   window.currentScenario = () => scenario;
   window.scenarios = [SCENARIO_BATTERY_FAULT, SCENARIO_FUEL_FAULT];

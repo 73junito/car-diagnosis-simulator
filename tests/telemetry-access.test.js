@@ -1,4 +1,4 @@
-const { hasInstructorAccess, requireInstructor } = require('../api/telemetry/access');
+const { requireInstructor } = require('../api/telemetry/access');
 const { getRecentEvents } = require('../api/telemetry/events');
 
 function makeReq(role){ return { headers: { 'x-torquemind-role': role } }; }

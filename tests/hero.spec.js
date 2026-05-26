@@ -15,14 +15,24 @@ import { track }            from '../js/analytics.js';
 const SCENARIO_DATA = { id: 'demo-default', config: { headline: 'Test' } };
 
 function mountHero({ mode = 'demo-load', scenarioId = 'demo-default' } = {}) {
-  document.body.innerHTML = `
-    <header style="height:60px"></header>
-    <button data-hero-cta data-cta-mode="${mode}" data-scenario-id="${scenarioId}">CTA</button>
-    <div id="demo-section" tabindex="-1"></div>
-    <div class="demo-container"></div>
-    <div data-hero-toast aria-live="polite"></div>`;
+  // build DOM safely
+  while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
+  const header = document.createElement('header'); header.style.height = '60px';
+  const btn = document.createElement('button');
+  btn.setAttribute('data-hero-cta', '');
+  btn.setAttribute('data-cta-mode', mode);
+  btn.setAttribute('data-scenario-id', scenarioId);
+  btn.textContent = 'CTA';
+  const demo = document.createElement('div'); demo.id = 'demo-section'; demo.tabIndex = -1;
+  const container = document.createElement('div'); container.className = 'demo-container';
+  const toast = document.createElement('div'); toast.setAttribute('data-hero-toast', ''); toast.setAttribute('aria-live', 'polite');
+  document.body.appendChild(header);
+  document.body.appendChild(btn);
+  document.body.appendChild(demo);
+  document.body.appendChild(container);
+  document.body.appendChild(toast);
   initHeroCta();
-  return document.querySelector('[data-hero-cta]');
+  return btn;
 }
 const click = (btn) => btn.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 const key   = (btn, k) => btn.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true }));
@@ -33,11 +43,11 @@ beforeEach(() => {
   _resetStateForTesting();
   loadDemoScenario.mockResolvedValue(SCENARIO_DATA);
 });
-afterEach(() => { jest.useRealTimers(); document.body.innerHTML = ''; });
+afterEach(() => { jest.useRealTimers(); while (document.body.firstChild) document.body.removeChild(document.body.firstChild); });
 
 describe('initHeroCta', () => {
   it('does not throw when no [data-hero-cta] element exists', () => {
-    document.body.innerHTML = '';
+    while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
     expect(() => initHeroCta()).not.toThrow();
   });
 });

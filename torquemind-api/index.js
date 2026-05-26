@@ -7,6 +7,12 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 app.use(cors());
 app.use(express.json());
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false
+});
 const path = require('path');
 const DEBUG_API = process.env.DEBUG_API === 'true';
 
@@ -90,6 +96,9 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
 const createAuth = require('./middleware/auth');
 const requireRole = require('./middleware/requireRole');
 const authMiddleware = createAuth(supabase);
+
+// Apply rate limiting before auth to reduce DoS risk from expensive auth checks.
+app.use(apiLimiter);
 
 // Auth middleware populates `req.user` on every request when Supabase is configured.
 app.use((req, res, next) => authMiddleware(req, res, next));
