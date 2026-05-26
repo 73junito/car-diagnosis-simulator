@@ -1,13 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-
 function loadReport() {
-  const reportPath = path.join(process.cwd(), 'reports', 'analytics.json');
-  if (!fs.existsSync(reportPath)) return null;
+  const fs = require('fs');
+  const path = require('path');
+  const reportPath = path.join(__dirname, 'analytics-report.json');
   try {
-    return JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-  } catch (e) {
-    return null;
+    const raw = fs.readFileSync(reportPath, 'utf8');
+    return JSON.parse(raw);
+  } catch (err) {
+    return { sessions: [] };
   }
 }
 
@@ -17,7 +16,7 @@ function round(value, digits = 2) {
 
 function aggregateStudents() {
   const report = loadReport();
-  const sessions = Array.isArray(report?.sessions) ? report.sessions : [];
+  const sessions = Array.isArray(report && report.sessions) ? report.sessions : [];
 
   if (sessions.length === 0) {
     return { ok: true, totalStudents: 0, students: [] };
@@ -26,18 +25,18 @@ function aggregateStudents() {
   const perStudent = new Map();
   for (const session of sessions) {
     const id = session.userId || session.user || 'unknown';
-    const current = perStudent.get(id) || { id, sessions: 0, scoreTotal: 0, confidenceTotal: 0 };
-    current.sessions += 1;
-    current.scoreTotal += Number(session.score) || 0;
-    current.confidenceTotal += Number(session.confidence) || 0;
-    perStudent.set(id, current);
+    if (!perStudent.has(id)) perStudent.set(id, { id, sessions: 0, scoreSum: 0, confidenceSum: 0 });
+    const cur = perStudent.get(id);
+    cur.sessions += 1;
+    cur.scoreSum += Number(session.score) || 0;
+    cur.confidenceSum += Number(session.confidence) || 0;
   }
 
   const students = Array.from(perStudent.values()).map((s) => ({
     id: s.id,
     sessions: s.sessions,
-    averageScore: s.scoreTotal / s.sessions,
-    averageConfidence: round(s.confidenceTotal / s.sessions, 2)
+    averageScore: s.sessions ? s.scoreSum / s.sessions : 0,
+    averageConfidence: s.sessions ? round(s.confidenceSum / s.sessions, 2) : 0,
   }));
 
   return { ok: true, totalStudents: students.length, students };

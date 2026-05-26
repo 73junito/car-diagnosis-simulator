@@ -1,13 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-
 function loadReport() {
-  const reportPath = path.join(process.cwd(), 'reports', 'analytics.json');
-  if (!fs.existsSync(reportPath)) return null;
+  const fs = require('fs');
+  const path = require('path');
+  const reportPath = path.join(__dirname, 'analytics-report.json');
   try {
-    return JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-  } catch (e) {
-    return null;
+    const raw = fs.readFileSync(reportPath, 'utf8');
+    return JSON.parse(raw);
+  } catch (err) {
+    return { sessions: [] };
   }
 }
 
@@ -17,40 +16,41 @@ function round(value, digits = 3) {
 
 function aggregateSessions() {
   const report = loadReport();
-  const sessions = Array.isArray(report?.sessions) ? report.sessions : [];
+  const sessions = Array.isArray(report && report.sessions) ? report.sessions : [];
 
   if (sessions.length === 0) {
     return {
       ok: true,
       totalSessions: 0,
       averageConfidence: 0,
-      students: []
+      students: [],
     };
   }
 
   const totalSessions = sessions.length;
-  const averageConfidence = round(sessions.reduce((sum, s) => sum + (Number(s.confidence) || 0), 0) / totalSessions, 3);
+  const totalConfidence = sessions.reduce((sum, s) => sum + (Number(s.confidence) || 0), 0);
+  const averageConfidence = round(totalConfidence / totalSessions, 3);
 
   const perStudent = new Map();
   for (const session of sessions) {
     const id = session.userId || session.user || 'unknown';
-    const current = perStudent.get(id) || { id, sessions: 0, confidenceTotal: 0 };
-    current.sessions += 1;
-    current.confidenceTotal += Number(session.confidence) || 0;
-    perStudent.set(id, current);
+    if (!perStudent.has(id)) perStudent.set(id, { id, sessions: 0, confidenceSum: 0 });
+    const cur = perStudent.get(id);
+    cur.sessions += 1;
+    cur.confidenceSum += Number(session.confidence) || 0;
   }
 
   const students = Array.from(perStudent.values()).map((s) => ({
     id: s.id,
     sessions: s.sessions,
-    averageConfidence: round(s.confidenceTotal / s.sessions, 3)
+    averageConfidence: round(s.confidenceSum / s.sessions, 3),
   }));
 
   return {
     ok: true,
     totalSessions,
     averageConfidence,
-    students
+    students,
   };
 }
 
