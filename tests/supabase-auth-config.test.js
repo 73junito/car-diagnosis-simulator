@@ -2,7 +2,7 @@ const request = require('supertest');
 const assert = require('assert');
 
 // Mocked Supabase client for tests
-const mockCreateClient = (url, key) => ({
+const mockCreateClient = () => ({
   auth: {
     getUser: async ({ access_token }) => {
       if (access_token === 'instructor-token') return { data: { user: { id: 'u-instructor', user_metadata: { role: 'instructor' } } } };

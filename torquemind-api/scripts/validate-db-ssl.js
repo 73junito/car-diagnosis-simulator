@@ -123,7 +123,7 @@ async function main() {
       console.warn('Suggestion: SSL certificate verification failed. Confirm `PGSSLROOTCERT` points to the CA used by the server.');
     }
     process.exitCode = 3;
-    try { await client.end(); } catch (e) {}
+    try { await client.end(); } catch (e) { void e; }
   }
 }
 

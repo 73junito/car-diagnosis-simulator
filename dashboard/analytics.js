@@ -71,12 +71,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
     cardConfidence.textContent = (data.averageConfidence!=null) ? (fmtNumber(data.averageConfidence)+'%') : '—'
     cardTime.textContent = (summary.averageTime!=null) ? `${Math.round(summary.averageTime)}s` : '—'
     cardSafety.textContent = summary.safetyMisses ?? '0'
-  }).catch(e=>{ console.warn('sessions fetch failed', e) })
+  }).catch(e=>{ console.warn('sessions fetch failed', e); });
 
   // students
   fetchJson('/api/analytics/students').then(data=>{
     if (!data || !data.ok) return
-    studentTbody.innerHTML = ''
+    while (studentTbody.firstChild) studentTbody.removeChild(studentTbody.firstChild);
     (data.students||[]).forEach(s=>{
       const tr = document.createElement('tr')
       tr.className = 'tm-table-row'
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       tr.appendChild(name); tr.appendChild(sessions); tr.appendChild(avgScore); tr.appendChild(avgConfidence)
       studentTbody.appendChild(tr)
     })
-  }).catch(e=>{ console.warn('students fetch failed', e) })
+  }).catch(e=>{ console.warn('students fetch failed', e); });
 
   // download helpers
   async function download(path, filename){
@@ -137,10 +137,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   downloadCsv.addEventListener('click', ()=>{
     download('/api/analytics/export?format=csv','student-performance.csv')
-  })
+  });
   downloadXapi.addEventListener('click', ()=>{
     download('/api/analytics/export?format=xapi','xapi-statements.json')
-  })
+  });
 
   // --- Live telemetry (SSE) hookup ---
   (function attachLiveTelemetry(){
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }catch(e){ /* ignore */ }
   })();
 
-})
+});
 
 // Expose a summary function so other pages (homepage CTA) can consume
 window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummary(){
@@ -187,10 +187,6 @@ window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummar
   }
 
   function isFiniteNumber(value){ return typeof value === 'number' && Number.isFinite(value) }
-  function readFirstNumber(source, keys){
-    for (const key of keys){ if (isFiniteNumber(source?.[key])) return source[key] }
-    return null
-  }
 
   try{
     const sessionsData = await safeFetchJson('/api/analytics/sessions')

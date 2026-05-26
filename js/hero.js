@@ -21,6 +21,8 @@ import { track } from './analytics.js';
 // Module-level ephemeral state used by tests and init/reset flows.
 let _inflightLoad = null;
 let _lastActivationAt = null;
+// Mark as referenced so linters know these are intentionally-kept ephemeral state used by tests
+void _inflightLoad; void _lastActivationAt;
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 

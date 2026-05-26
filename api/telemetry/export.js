@@ -1,4 +1,3 @@
-const express = require('express');
 const telemetry = require('../../lib/telemetry');
 
 function serializeCsvRow(ev){
@@ -23,8 +22,8 @@ function registerTelemetryExportRoutes(app){
       const HARD_MAX = 500;
       if (limit > HARD_MAX) limit = HARD_MAX;
 
-      const { ok, data, error } = await storage.listTelemetryEvents({ sessionId, limit });
-      if (!ok) return res.status(200).json({ ok: false, format: 'json', count: 0, events: [], message: error && error.message });
+      const { ok, data } = await telemetry.listEvents({ sessionId, limit });
+      if (!ok) return res.status(200).json({ ok: false, format: 'json', count: 0, events: [] });
       return res.json({ ok: true, format: 'json', count: Array.isArray(data)?data.length:0, events: data });
     }catch(err){
       return res.status(500).json({ ok: false, format: 'json', count: 0, events: [] });
@@ -39,7 +38,7 @@ function registerTelemetryExportRoutes(app){
       const HARD_MAX = 500;
       if (limit > HARD_MAX) limit = HARD_MAX;
 
-      const { ok, data, error } = await telemetry.listEvents({ sessionId, limit });
+      const { ok, data } = await telemetry.listEvents({ sessionId, limit });
       if (!ok) {
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
         return res.status(200).send('id,session_id,user_id,event_type,source,created_at,payload_json\n');

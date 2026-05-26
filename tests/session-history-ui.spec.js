@@ -2,17 +2,51 @@
  * Jest spec for dashboard/session-history.js
  */
 
-const fs = require('fs');
-const path = require('path');
+// minimal DOM fixture created programmatically; no file IO required
 
 beforeEach(()=>{
-  // load HTML fixture
-  const html = fs.readFileSync(path.join(__dirname,'..','dashboard','session-history.html'),'utf8');
-  document.documentElement.innerHTML = html;
+  // construct minimal DOM fixture safely (avoid innerHTML)
+  if (!document.body) document.documentElement.appendChild(document.createElement('body'));
+  while (document.body.firstChild) document.body.removeChild(document.body.firstChild);
+  const main = document.createElement('main'); main.className = 'container';
+  const h1 = document.createElement('h1'); h1.textContent = 'Session History';
+  const controls = document.createElement('section'); controls.id = 'controls';
+  const label = document.createElement('label'); label.textContent = 'Session filter: ';
+  const input = document.createElement('input'); input.id = 'session-filter'; input.placeholder = 'Enter session id';
+  label.appendChild(input);
+  const limitLabel = document.createElement('label'); limitLabel.textContent = 'Limit: ';
+  const select = document.createElement('select'); select.id = 'limit-select';
+  ['10','25','50','100'].forEach((v)=>{ const opt = document.createElement('option'); opt.value = v; opt.textContent = v; if (v==='50') opt.selected = true; select.appendChild(opt); });
+  limitLabel.appendChild(select);
+  const exportControls = document.createElement('div'); exportControls.id = 'export-controls';
+  const jsonBtn = document.createElement('button'); jsonBtn.id = 'export-json-btn'; jsonBtn.textContent = 'Export JSON';
+  const csvBtn = document.createElement('button'); csvBtn.id = 'export-csv-btn'; csvBtn.textContent = 'Export CSV';
+  const exportStatus = document.createElement('span'); exportStatus.id = 'export-status'; exportStatus.setAttribute('aria-live','polite');
+  exportControls.appendChild(jsonBtn); exportControls.appendChild(csvBtn); exportControls.appendChild(exportStatus);
+  controls.appendChild(label); controls.appendChild(limitLabel); controls.appendChild(exportControls);
+
+  const status = document.createElement('section'); status.id = 'status';
+  const loading = document.createElement('div'); loading.id = 'loading'; loading.setAttribute('aria-live','polite'); loading.hidden = true; loading.textContent = 'Loading…';
+  const error = document.createElement('div'); error.id = 'error'; error.role = 'alert'; error.hidden = true;
+  const empty = document.createElement('div'); empty.id = 'empty'; empty.hidden = true; empty.textContent = 'No events found.';
+  status.appendChild(loading); status.appendChild(error); status.appendChild(empty);
+
+  const section = document.createElement('section');
+  const table = document.createElement('table'); table.id = 'session-history-table'; table.className = 'tm-table';
+  const thead = document.createElement('thead');
+  const tr = document.createElement('tr');
+  ['Timestamp','Type','Session','Payload'].forEach((txt)=>{ const th = document.createElement('th'); th.textContent = txt; tr.appendChild(th); });
+  thead.appendChild(tr);
+  const tbody = document.createElement('tbody');
+  table.appendChild(thead); table.appendChild(tbody);
+  section.appendChild(table);
+
+  main.appendChild(h1); main.appendChild(controls); main.appendChild(status); main.appendChild(section);
+  document.body.appendChild(main);
   jest.resetModules();
 });
 
-afterEach(()=>{ document.body.innerHTML = ''; jest.clearAllMocks(); });
+afterEach(()=>{ while (document.body.firstChild) document.body.removeChild(document.body.firstChild); jest.clearAllMocks(); });
 
 function tick(ms){ return new Promise(r=>setTimeout(r, ms)); }
 

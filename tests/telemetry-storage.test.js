@@ -1,5 +1,3 @@
-const path = require('path');
-
 jest.mock('@supabase/supabase-js', () => ({
   createClient: jest.fn()
 }));
@@ -19,10 +17,10 @@ describe('telemetry storage adapter', () => {
     process.env.SUPABASE_URL = 'https://example.supabase.co';
     process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-key';
 
-    const insertMock = jest.fn().mockResolvedValue({ data: { id: '1' }, error: null });
     const selectMock = jest.fn(() => ({ single: () => Promise.resolve({ data: { id: '1' }, error: null }) }));
+    const insertMock = jest.fn(() => ({ select: selectMock }));
     // chainable mock: from(...).insert(...).select().single()
-    const fromMock = jest.fn(() => ({ insert: jest.fn(() => ({ select: selectMock })) }));
+    const fromMock = jest.fn(() => ({ insert: insertMock }));
     const supabase = { from: fromMock };
     createClient.mockReturnValue(supabase);
 

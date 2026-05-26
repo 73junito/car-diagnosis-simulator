@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer');
     if (msg.type() === 'error') results.errors.push(text);
   });
   page.on('pageerror', err => {
-    try { results.errors.push((err && err.stack) ? err.stack : (err && err.message) ? err.message : String(err)); } catch(e){}
+    try { results.errors.push((err && err.stack) ? err.stack : (err && err.message) ? err.message : String(err)); } catch(e){ void e; }
   });
 
   const base = 'http://localhost:8080/';
@@ -25,7 +25,7 @@ const puppeteer = require('puppeteer');
     results.actions.push('supabaseSignIn_present:' + hasAuthJs);
 
     // debug: presence of replay helpers and localStorage class data
-    const helpers = await page.evaluate(() => ({ showReplay: typeof window.showReplay, openStudentDetail: typeof window.openStudentDetail, classRaw: localStorage.getItem('carSim_class') }));
+    const helpers = await page.evaluate(() => ({ showReplay: typeof globalThis['showReplay'], openStudentDetail: typeof globalThis['openStudentDetail'], classRaw: localStorage.getItem('carSim_class') }));
     results.actions.push('helpers:' + JSON.stringify({ showReplay: helpers.showReplay, openStudentDetail: helpers.openStudentDetail, classRawLen: (helpers.classRaw || '').length }));
 
     // Inject sample scenarios and seeded class data into the page so preview/start and teacher flows render
@@ -43,12 +43,12 @@ const puppeteer = require('puppeteer');
         // set a current class id so teacher flows consider class-scoped mode
         localStorage.setItem('carSim_currentClassId', 'local-1');
         // ensure modal creation still works
-        if (typeof ensureTeacherLoginModal === 'function') ensureTeacherLoginModal();
-      } catch (e) { /* ignore */ }
+        if (typeof globalThis['ensureTeacherLoginModal'] === 'function') globalThis['ensureTeacherLoginModal']();
+      } catch (e) { void e; }
     });
 
     // create modal via ensureTeacherLoginModal and check it exists
-    const modalCreated = await page.evaluate(() => { if (typeof ensureTeacherLoginModal === 'function') ensureTeacherLoginModal(); return !!document.getElementById('teacherLoginModal'); });
+    const modalCreated = await page.evaluate(() => { if (typeof globalThis['ensureTeacherLoginModal'] === 'function') globalThis['ensureTeacherLoginModal'](); return !!document.getElementById('teacherLoginModal'); });
     results.actions.push('modalCreated:' + modalCreated);
 
     // click a teacher button if present
@@ -61,7 +61,7 @@ const puppeteer = require('puppeteer');
     results.actions.push('clickedTeacherBtn:' + (clickedTeacher || 'none'));
 
     // render scenario list so preview/start buttons appear
-    await page.evaluate(() => { try { renderScenarioList(); } catch (e) {} });
+    await page.evaluate(() => { try { if (typeof globalThis['renderScenarioList'] === 'function') globalThis['renderScenarioList'](); } catch (e) { void e; } });
     // wait a moment then check for teacher modal or teacher screen
     await new Promise(r => setTimeout(r, 700));
     const teacherScreenVisible = await page.evaluate(() => {
@@ -83,9 +83,9 @@ const puppeteer = require('puppeteer');
     results.actions.push('backClicked:' + backClicked);
 
     // attempt to open teacher dashboard explicitly and wait for data or error container
-    await page.evaluate(() => { try { setView('teacherScreen'); } catch(e){} });
+    await page.evaluate(() => { try { if (typeof globalThis['setView'] === 'function') globalThis['setView']('teacherScreen'); } catch(e){ void e; } });
     // ensure student list rendered from seeded localStorage
-    await page.evaluate(() => { try { renderFilteredStudents(); } catch(e){} });
+    await page.evaluate(() => { try { if (typeof globalThis['renderFilteredStudents'] === 'function') globalThis['renderFilteredStudents'](); } catch(e){ void e; } });
     // wait for either teacherSummaryPanel or teacherErrorMsg or studentList
     await page.waitForFunction(() => !!document.getElementById('teacherSummaryPanel') || !!document.getElementById('teacherErrorMsg') || !!document.getElementById('studentList'), { timeout: 5000 });
     const teacherPanelExists = await page.evaluate(() => !!document.getElementById('teacherSummaryPanel'));
@@ -111,10 +111,10 @@ const puppeteer = require('puppeteer');
           if (!list) return false;
           const row = document.createElement('div');
           const btn = document.createElement('button'); btn.innerText = 'View';
-          btn.addEventListener('click', () => { if (typeof openStudentDetail === 'function') openStudentDetail('Test Student'); });
+          btn.addEventListener('click', () => { if (typeof globalThis['openStudentDetail'] === 'function') globalThis['openStudentDetail']('Test Student'); });
           row.appendChild(btn);
           list.appendChild(row);
-        } catch(e){}
+        } catch(e){ void e; }
       });
       // update summary after injection
       const updated = await page.evaluate(() => { const el = document.getElementById('studentList'); return el ? el.querySelectorAll('button').length : 0; });
@@ -131,22 +131,22 @@ const puppeteer = require('puppeteer');
       const any = Array.from(document.querySelectorAll('button')).find(b => /\bView\b/i.test(b.innerText || ''));
       if (any){ any.click(); return true; }
       // last-resort: call openStudentDetail for the seeded student if available
-      if (typeof openStudentDetail === 'function') { try { openStudentDetail('Test Student'); return true; } catch(e){} }
+      if (typeof globalThis['openStudentDetail'] === 'function') { try { globalThis['openStudentDetail']('Test Student'); return true; } catch(e){ void e; } }
       return false;
     });
     results.actions.push('viewStudentClicked:' + viewStudentClicked);
     await new Promise(r => setTimeout(r, 500));
     const replayViewerVisible = await page.evaluate(() => { const rv = document.getElementById('replayViewer'); return !!(rv && rv.style.display && rv.style.display !== 'none'); });
     results.actions.push('replayViewerVisible:' + replayViewerVisible);
-    const replayViewerState = await page.evaluate(() => { const rv = document.getElementById('replayViewer'); if (!rv) return 'no-replayViewer'; const tl = document.getElementById('replayTimeline'); return (rv.style.display || '') + '|' + (tl ? (tl.innerText || tl.innerHTML || '').slice(0,200) : 'no-tl'); });
+    const replayViewerState = await page.evaluate(() => { const rv = document.getElementById('replayViewer'); if (!rv) return 'no-replayViewer'; const tl = document.getElementById('replayTimeline'); return (rv.style.display || '') + '|' + (tl ? (tl.textContent || tl.innerText || '').slice(0,200) : 'no-tl'); });
     results.actions.push('replayViewerState:' + replayViewerState);
     // If the replay viewer did not open, call showReplay directly with a small seeded replay as a last-resort for smoke test
     if (!replayViewerVisible){
       await page.evaluate(() => {
         try {
           const fake = { name: 'Test Student', replays: [{ scenario: 1, actions: [{ time: Date.now(), type: 'system', value: 'engine' }, { time: Date.now() + 500, type: 'diagnosis', value: 'spark plugs' }], result: 'needs repair', created_at: new Date().toISOString() }] };
-          if (typeof showReplay === 'function') { showReplay(fake); }
-        } catch(e){}
+          if (typeof globalThis['showReplay'] === 'function') { globalThis['showReplay'](fake); }
+        } catch(e){ void e; }
       });
       await new Promise(r => setTimeout(r, 300));
       const replayViewerVisible2 = await page.evaluate(() => { const rv = document.getElementById('replayViewer'); return !!(rv && rv.style.display && rv.style.display !== 'none'); });

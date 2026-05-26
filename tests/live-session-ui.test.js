@@ -20,7 +20,7 @@ class MockEventSource {
 async function run() {
   const html = fs.readFileSync(path.resolve(__dirname, '../dashboard/live-session.html'), 'utf8');
   const scriptSrc = fs.readFileSync(path.resolve(__dirname, '../dashboard/live-session.js'), 'utf8');
-  const css = ''; // not required
+  // CSS not required for this test
 
   const dom = new JSDOM(html, { runScripts: 'dangerously', resources: 'usable' });
   const { window } = dom;

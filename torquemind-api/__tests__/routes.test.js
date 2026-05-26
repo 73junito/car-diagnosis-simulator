@@ -37,6 +37,8 @@ function makeMockClient(result, authGetUserResult) {
     auth: { getUser: jest.fn().mockResolvedValue(authGetUserResult || { data: null, error: { message: 'no auth' } }) },
   };
 }
+// makeMockClient is intentionally present for test clarity; silence unused-var lint when needed
+void makeMockClient;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Suite A – Supabase NOT configured (fallback / local mode)
@@ -188,6 +190,7 @@ describe('Routes — Supabase NOT configured (fallback mode)', () => {
 describe('Routes — Supabase configured (mocked)', () => {
   let app;
   let mockCreateClient;
+  void mockCreateClient;
 
   // A teacher user returned by auth.getUser
   const teacherUser = { id: 'teacher-uid', email: 'teacher@school.com' };

@@ -49,6 +49,7 @@ describe('supabaseAdapter', () => {
     const res = await adapter.recordSessionStep({ session_id: 's1', step: 1, event: { ok: true } });
     expect(mockFrom).toHaveBeenCalledWith('session_history');
     expect(mockInsert).toHaveBeenCalled();
+    void res;
     await adapter.close();
   });
 });

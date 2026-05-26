@@ -47,7 +47,7 @@ module.exports = async function handler(req, res) {
       .map(e => ({ session_id: e.session_id, step: e.step || 0, event: e.payload || {}, created_at: e.created_at }));
 
     if (sessionSteps.length > 0) {
-      const { data: stepsData, error: stepsErr } = await supabase.from('session_history').insert(sessionSteps);
+      const { error: stepsErr } = await supabase.from('session_history').insert(sessionSteps);
       if (stepsErr) console.error('[insert_telemetry_batch] session_history insert error', stepsErr);
     }
 

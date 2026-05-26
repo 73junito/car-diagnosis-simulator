@@ -39,7 +39,7 @@ module.exports = async function handler(req, res) {
 
     // upsert into analytics_daily
     const upsert = { date, total_sessions: totalSessions, avg_confidence: avgConfidence, top_errors: null };
-    const { data: upData, error: upErr } = await supabase.from('analytics_daily').upsert(upsert, { onConflict: ['date'] });
+    const { error: upErr } = await supabase.from('analytics_daily').upsert(upsert, { onConflict: ['date'] });
     if (upErr) console.error('[get_daily_analytics] upsert error', upErr);
 
     return respond(res, 200, { ok: true, date, totalSessions, avgConfidence });

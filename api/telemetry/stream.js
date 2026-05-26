@@ -70,7 +70,7 @@ function createSseHandler(emitter = telemetry.streamEmitter) {
         res.write(`event: telemetry\n`);
         res.write(`data: ${payload}\n\n`);
       } catch (e) {
-        // ignore circular
+        void e;
       }
     };
     if (emitter && typeof emitter.on === 'function') {
@@ -84,7 +84,7 @@ function createSseHandler(emitter = telemetry.streamEmitter) {
         res.write(`event: telemetry\n`);
         res.write(`data: ${JSON.stringify(e)}\n\n`);
       }
-    } catch (e) {}
+    } catch (e) { void e; }
     const ping = setInterval(() => {
       res.write(': ping\n\n');
     }, 15000);
