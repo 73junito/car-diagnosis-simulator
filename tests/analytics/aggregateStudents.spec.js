@@ -1,9 +1,10 @@
 jest.mock('fs');
-const fs = require('fs');
+let fs;
 
 describe('aggregateStudents', () => {
   beforeEach(() => {
     jest.resetModules();
+    fs = require('fs');
     fs.existsSync.mockReset();
     fs.readFileSync.mockReset();
   });
