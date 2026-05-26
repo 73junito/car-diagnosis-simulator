@@ -10,6 +10,8 @@
     "sourceType": "module"
   },
   "rules": {
+    "no-implied-eval": "error",
+    "no-new-func": "error",
     "no-restricted-syntax": [
       "error",
       {

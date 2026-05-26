@@ -16,6 +16,7 @@
 		"lint": "eslint . --ext .js"
 	},
 	"devDependencies": {
+		"acorn": "^8.10.0",
 		"@babel/core": "^7.29.0",
 		"@babel/preset-env": "^7.24.0",
 		"ajv": "^8.20.0",
