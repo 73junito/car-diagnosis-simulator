@@ -1,5 +1,3 @@
-const express = require('express');
-const telemetry = require('../../lib/telemetry');
 const storage = require('./storage');
 
 function serializeCsvRow(ev){

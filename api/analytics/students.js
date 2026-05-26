@@ -1,5 +1,3 @@
-const path = require('path');
-
 function loadReport() {
   const fs = require('fs');                
   const path = require('path');
