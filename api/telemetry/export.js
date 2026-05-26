@@ -1,4 +1,3 @@
-const express = require('express');
 const storage = require('./storage');
 
 function serializeCsvRow(ev){
@@ -23,9 +22,13 @@ function registerTelemetryExportRoutes(app){
       const HARD_MAX = 500;
       if (limit > HARD_MAX) limit = HARD_MAX;
 
-      const { ok, data, error } = await storage.listTelemetryEvents({ sessionId, limit });
-      if (!ok) return res.status(200).json({ ok: false, format: 'json', count: 0, events: [], message: error && error.message });
-      return res.json({ ok: true, format: 'json', count: Array.isArray(data)?data.length:0, events: data });
+      const result = await storage.listTelemetryEvents({ sessionId, limit });
+      if (!result || result.ok === false) {
+        const message = result && result.error ? String(result.error.message || result.error) : undefined;
+        return res.status(200).json({ ok: false, format: 'json', count: 0, events: [], message });
+      }
+      const data = result.data;
+      return res.json({ ok: true, format: 'json', count: Array.isArray(data) ? data.length : 0, events: data });
     }catch(err){
       return res.status(500).json({ ok: false, format: 'json', count: 0, events: [] });
     }
@@ -39,12 +42,13 @@ function registerTelemetryExportRoutes(app){
       const HARD_MAX = 500;
       if (limit > HARD_MAX) limit = HARD_MAX;
 
-      const { ok, data, error } = await storage.listTelemetryEvents({ sessionId, limit });
-      if (!ok) {
+      const result = await storage.listTelemetryEvents({ sessionId, limit });
+      if (!result || result.ok === false) {
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
         return res.status(200).send('id,session_id,user_id,event_type,source,created_at,payload_json\n');
       }
 
+      const data = result.data;
       const header = 'id,session_id,user_id,event_type,source,created_at,payload_json\n';
       const rows = (Array.isArray(data) ? data : []).map(serializeCsvRow).join('\n');
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');

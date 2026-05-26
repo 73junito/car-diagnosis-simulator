@@ -4,6 +4,7 @@
     const live = liveTelemetry.initLiveTelemetry((evt) => { console.log(evt); });
     // live.close() to stop
 */
+/* global define */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) define([], factory);
   else if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -17,12 +18,11 @@
       try {
         const data = JSON.parse(e.data);
         if (onEvent) onEvent(data);
-      } catch (err) {
-        // ignore
-      }
+      } catch (err) { void err; }
     };
     es.onerror = function () {
       // EventSource auto-reconnects; consumers can listen for visibilitychange to reattach
+      void 0;
     };
     return {
       source: es,

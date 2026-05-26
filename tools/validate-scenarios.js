@@ -62,7 +62,7 @@ function validate() {
     ajvErrorsByScenario = { schemaLoadError: [err.message] };
   }
 
-  scenarios.forEach((s, idx) => {
+  scenarios.forEach((s) => {
     const ctx = `scenario[id=${s && s.id}]`;
     const local = [];
     if (!s) { local.push('empty'); scenarioErrors[ctx] = local; return; }
@@ -168,7 +168,8 @@ function validate() {
         sug.push(`aseArea invalid. Suggested value: ${hint}`);
       }
       if (e.instancePath === '/requiredTools') {
-        sug.push(`Add at least one entry to 'requiredTools', e.g. ${DEFAULT_SCENARIO_METADATA.requiredTools.join(', ')}`);
+        const FALLBACK_REQUIRED_TOOLS = ['DVOM','Scan Tool'];
+        sug.push(`Add at least one entry to 'requiredTools', e.g. ${FALLBACK_REQUIRED_TOOLS.join(', ')}`);
       }
       if (e.instancePath === '/symptoms') {
         sug.push('Expand symptoms description to include when/conditions (>=20 chars)');
@@ -181,7 +182,7 @@ function validate() {
       if (c.includes('duplicate id')) sug.push('Duplicate id detected — ensure unique id');
       if (c.includes('duplicate symptoms/title')) sug.push('Duplicate symptoms/title — make the description unique');
       if (c.includes('missing metadata field')) {
-        if (c.includes('requiredTools')) sug.push(`Add 'requiredTools': ${DEFAULT_SCENARIO_METADATA.requiredTools.join(', ')}`);
+      if (c.includes('requiredTools')) sug.push(`Add 'requiredTools': DVOM, Scan Tool`);
         if (c.includes('aseArea')) sug.push('Add a valid `aseArea` like A6 or A8');
         if (c.includes('faultType')) sug.push(`Set 'faultType' to one of: ${allowedFaultTypes.join(', ')}`);
       }

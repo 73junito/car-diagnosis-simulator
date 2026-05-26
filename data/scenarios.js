@@ -440,3 +440,6 @@ window.scenarios = [
 // Normalize and apply defaults to every scenario
 window.scenarios.forEach(validateScenarioMetadata);
 
+// Expose helper for external tools/validation
+window.normalizeScoringWeights = normalizeScoringWeights;
+

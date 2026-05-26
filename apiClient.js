@@ -4,7 +4,7 @@
   const API_BASE = (typeof window.API_BASE_URL !== 'undefined' && window.API_BASE_URL) ? String(window.API_BASE_URL).replace(/\/$/, '') : '';
 
   function getToken(){
-    try { if (window.getAccessToken) return window.getAccessToken(); } catch(e){}
+    try { if (window.getAccessToken) return window.getAccessToken(); } catch(e){ /* ignore: best-effort token retrieval */ }
     return localStorage.getItem('supabase_access_token') || null;
   }
 
@@ -48,14 +48,14 @@
             const respUrl = (typeof resource === 'string') ? resource : (resource && resource.url) ? resource.url : '';
             if (respUrl && API_BASE && respUrl.startsWith(API_BASE) && (resp.status === 401 || resp.status === 403)){
               // on auth failure, clear local tokens and notify listeners
-              try { if (window.supabaseSignOut) window.supabaseSignOut(); } catch(e){}
-              try { window.dispatchEvent(new CustomEvent('supabase:authExpired', { detail: { status: resp.status } })); } catch(e){}
+              try { if (window.supabaseSignOut) window.supabaseSignOut(); } catch(e){ /* ignore: best-effort sign-out */ }
+              try { window.dispatchEvent(new CustomEvent('supabase:authExpired', { detail: { status: resp.status } })); } catch(e){ /* ignore: best-effort event dispatch */ }
             }
-          } catch(e){}
+          } catch(e){ /* ignore: non-fatal response handling error */ }
           return resp;
         } catch (e){ return Promise.reject(e); }
       };
-    } catch(e){}
+    } catch(e){ /* ignore: fetch patch failed */ }
   }
 
   window.apiGet = async function(path){ return apiFetch('GET', path); };

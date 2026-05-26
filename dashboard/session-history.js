@@ -1,7 +1,7 @@
 (function(){
   const DEBOUNCE_MS = 300;
   let debounceTimer = null;
-  let inflight = null;
+  let _inflight = null;
 
   function $id(id){ return document.getElementById(id) }
 
@@ -45,7 +45,7 @@
 
   function renderRows(events){
     const tbody = document.querySelector('#session-history-table tbody');
-    tbody.innerHTML = '';
+    if (tbody) while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
     if (!Array.isArray(events) || events.length === 0) return;
     // newest-first expected; ensure ordering
     const frag = document.createDocumentFragment();
@@ -85,9 +85,9 @@
     setEmpty(false);
     setLoading(true);
 
-    inflight = fetchEvents(session, limit)
+    _inflight = fetchEvents(session, limit)
       .then((data) => {
-        inflight = null;
+        _inflight = null;
         setLoading(false);
         if (!data || data.ok === false){
           setError('No data available');
@@ -106,7 +106,7 @@
         renderRows(rows);
       })
       .catch((err) => {
-        inflight = null;
+        _inflight = null;
         setLoading(false);
         setError('Error fetching events');
         renderRows([]);
@@ -141,15 +141,15 @@
       const exportJson = $id('export-json-btn');
       const exportCsv = $id('export-csv-btn');
       const exportStatus = $id('export-status');
-      function setExportLoading(on){
+      const setExportLoading = (on) => {
         if (exportJson) exportJson.disabled = on;
         if (exportCsv) exportCsv.disabled = on;
         if (exportStatus) exportStatus.textContent = on ? 'Preparing download…' : '';
-      }
+      };
 
       // buildExportUrl is defined at module scope
 
-      function triggerDownload(url){
+      const triggerDownload = (url) => {
         // create temporary anchor and click to trigger browser download/navigation
         const a = document.createElement('a');
         a.href = url;
@@ -158,7 +158,7 @@
         document.body.appendChild(a);
         try{ a.click(); }catch(e){ window.location.href = url }
         document.body.removeChild(a);
-      }
+      };
 
       
       if (exportJson) exportJson.addEventListener('click', async ()=>{
@@ -175,12 +175,15 @@
       });
       // initial fetch
       scheduleFetch();
-    }catch(e){ /* page elements missing — ignore */ }
+    }catch(e){ void e; }
   }
 
   if (typeof module !== 'undefined' && module.exports){
     module.exports = { initSessionHistory, sanitizePayload, fmtTimestamp, buildExportUrl };
   }
+
+  // mark tracked promise variable as intentionally unused for lint
+  void _inflight;
 
   document.addEventListener('DOMContentLoaded', initSessionHistory);
 })();

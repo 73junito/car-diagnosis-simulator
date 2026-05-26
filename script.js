@@ -7,9 +7,12 @@ let correctAnswers = 0;
 let wrongAnswers = 0;
 let totalToolUsed = 0;
 
+// current replay buffer for recording student actions during a scenario
+let currentReplay = [];
+
 let currentUser = null;
 let userRole = 'student';
-let schoolCode = '';
+let _schoolCode = '';
 let demoMode = false;
 let activeSystemFilter = null;
 // Class context
@@ -46,6 +49,32 @@ async function supabaseSignIn(email, password){
     return body;
   } catch (e){ return { error: e.message || String(e) }; }
 }
+
+// Expose selected helpers and state for external callers (HTML or other modules)
+try {
+  if (typeof window !== 'undefined') {
+    window.$ = $;
+    window.setText = setText;
+    window.setHTML = setHTML;
+    window.show = show;
+    window.hide = hide;
+    window.safeBind = safeBind;
+    window.navigate = navigate;
+    window.openScenarioSelect = openScenarioSelect;
+    window.formatToolOutput = formatToolOutput;
+    window.applyEvidenceToModel = applyEvidenceToModel;
+    window.faultProbabilities = faultProbabilities;
+    window.faultInteractions = faultInteractions;
+    window.renderStudentRecommendations = renderStudentRecommendations;
+    window.endGame = endGame;
+    window.logout = logout;
+    window.formatReplayAction = formatReplayAction;
+    window.pendingDiagnosisChoice = pendingDiagnosisChoice;
+    window._schoolCode = _schoolCode;
+    window.escapeHtml = escapeHtml;
+    window.ensureTeacherAuthAndRender = ensureTeacherAuthAndRender;
+  }
+} catch (e) { /* ignore: exposing helpers is best-effort */ }
 
 function supabaseSignOut(){
   if (window.supabaseSignOut && window.supabaseSignOut !== supabaseSignOut) return window.supabaseSignOut();
@@ -89,31 +118,24 @@ function ensureTeacherLoginModal(){
     position:fixed; inset:0; display:none; align-items:center; justify-content:center;
     background:rgba(0,0,0,.65); z-index:10001;
   `;
-
-  modal.innerHTML = `
-    <div style="width:min(420px,92vw);background:var(--bg,#111);color:var(--fg,#fff);
-      border-radius:12px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.35)">
-      <h2>Teacher Sign In</h2>
-      <p style="color:var(--muted,#aaa)">Sign in to access the teacher dashboard.</p>
-
-      <form id="teacherLoginForm">
-        <label for="teacherLoginEmail">Email</label>
-        <input id="teacherLoginEmail" name="email" type="email" autocomplete="username"
-          style="width:100%;margin:6px 0 12px;padding:10px">
-
-        <label for="teacherLoginPassword">Password</label>
-        <input id="teacherLoginPassword" name="password" type="password" autocomplete="current-password"
-          style="width:100%;margin:6px 0 12px;padding:10px">
-
-        <div id="teacherLoginError" style="color:#ff8a8a;margin-bottom:10px"></div>
-
-        <div style="display:flex;gap:8px;justify-content:flex-end">
-          <button id="teacherLoginCancel" type="button">Cancel</button>
-          <button id="teacherLoginSubmit" type="submit">Sign In</button>
-        </div>
-      </form>
-    </div>
-  `;
+  // build modal content using safe DOM APIs
+  const modalContent = document.createElement('div');
+  modalContent.style.cssText = 'width:min(420px,92vw);background:var(--bg,#111);color:var(--fg,#fff);border-radius:12px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.35)';
+  const h2 = document.createElement('h2'); h2.innerText = 'Teacher Sign In';
+  const p = document.createElement('p'); p.style.color = 'var(--muted,#aaa)'; p.innerText = 'Sign in to access the teacher dashboard.';
+  const form = document.createElement('form'); form.id = 'teacherLoginForm';
+  const lblEmail = document.createElement('label'); lblEmail.setAttribute('for','teacherLoginEmail'); lblEmail.innerText = 'Email';
+  const inputEmail = document.createElement('input'); inputEmail.id = 'teacherLoginEmail'; inputEmail.name = 'email'; inputEmail.type = 'email'; inputEmail.autocomplete = 'username'; inputEmail.style.width = '100%'; inputEmail.style.margin = '6px 0 12px'; inputEmail.style.padding = '10px';
+  const lblPass = document.createElement('label'); lblPass.setAttribute('for','teacherLoginPassword'); lblPass.innerText = 'Password';
+  const inputPass = document.createElement('input'); inputPass.id = 'teacherLoginPassword'; inputPass.name = 'password'; inputPass.type = 'password'; inputPass.autocomplete = 'current-password'; inputPass.style.width = '100%'; inputPass.style.margin = '6px 0 12px'; inputPass.style.padding = '10px';
+  const errDiv = document.createElement('div'); errDiv.id = 'teacherLoginError'; errDiv.style.color = '#ff8a8a'; errDiv.style.marginBottom = '10px';
+  const btnRow = document.createElement('div'); btnRow.style.display = 'flex'; btnRow.style.gap = '8px'; btnRow.style.justifyContent = 'flex-end';
+  const cancelBtn = document.createElement('button'); cancelBtn.id = 'teacherLoginCancel'; cancelBtn.type = 'button'; cancelBtn.innerText = 'Cancel';
+  const submitBtn = document.createElement('button'); submitBtn.id = 'teacherLoginSubmit'; submitBtn.type = 'submit'; submitBtn.innerText = 'Sign In';
+  btnRow.appendChild(cancelBtn); btnRow.appendChild(submitBtn);
+  form.appendChild(lblEmail); form.appendChild(inputEmail); form.appendChild(lblPass); form.appendChild(inputPass); form.appendChild(errDiv); form.appendChild(btnRow);
+  modalContent.appendChild(h2); modalContent.appendChild(p); modalContent.appendChild(form);
+  modal.appendChild(modalContent);
 
   document.body.appendChild(modal);
   return modal;
@@ -206,8 +228,8 @@ function teacherLoginPrompt(){
         showToast('Signed in successfully');
         try {
           clearLocalFallbackOnAuth();
-          if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses();
-        } catch(e){}
+          if (document.getElementById('teacherClassesSelect') && typeof window.loadTeacherClasses === 'function') await window.loadTeacherClasses();
+        } catch(e){ /* ignore: optional teacher class refresh */ }
         cleanup(true);
         return;
       }
@@ -255,9 +277,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Listen for global auth expiry events (triggered from fetch monkey-patch)
-window.addEventListener('supabase:authExpired', (ev) => {
-  const status = ev?.detail?.status;
-  try { showTeacherError('Session expired. Please sign in again.'); } catch (e){}
+window.addEventListener('supabase:authExpired', () => {
+  try { showTeacherError('Session expired. Please sign in again.'); } catch (e){ /* ignore */ }
   setTimeout(() => { setView('loginScreen'); }, 700);
 });
 
@@ -276,7 +297,16 @@ function showTeacherError(msg){
     container.style.borderRadius = '6px';
     teacherScreen.insertBefore(container, teacherScreen.firstChild);
   }
-  container.innerHTML = `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="flex:1">${escapeHtml(msg)}</div><div><button id="teacher-error-retry">Retry</button> <button id="teacher-error-signin">Sign in</button></div></div>`;
+  // build error content safely
+  while (container.firstChild) container.removeChild(container.firstChild);
+  const wrap = document.createElement('div'); wrap.style.display = 'flex'; wrap.style.alignItems = 'center'; wrap.style.justifyContent = 'space-between'; wrap.style.gap = '12px';
+  const left = document.createElement('div'); left.style.flex = '1'; left.innerText = String(msg || '');
+  const btns = document.createElement('div');
+  const retryBtn = document.createElement('button'); retryBtn.id = 'teacher-error-retry'; retryBtn.innerText = 'Retry';
+  const signinBtn = document.createElement('button'); signinBtn.id = 'teacher-error-signin'; signinBtn.innerText = 'Sign in';
+  btns.appendChild(retryBtn); btns.appendChild(signinBtn);
+  wrap.appendChild(left); wrap.appendChild(btns);
+  container.appendChild(wrap);
   // wire retry and sign-in buttons
   const retry = document.getElementById('teacher-error-retry'); if (retry) retry.onclick = () => { clearTeacherError(); loadTeacherData(); };
   const signin = document.getElementById('teacher-error-signin'); if (signin) signin.onclick = async () => { clearTeacherError(); const ok = await teacherLoginPrompt(); if (ok) loadTeacherData(); };
@@ -297,34 +327,36 @@ async function ensureTeacherAuthAndRender(){
   // token present: verify by calling protected endpoint
   try {
     // if authenticated, clear any local fallback class ids
-    try { clearLocalFallbackOnAuth(); } catch(e){}
+    try { clearLocalFallbackOnAuth(); } catch(e){ void e; }
     const path = '/api/teacher/data' + (currentClassId ? ('?classId=' + encodeURIComponent(currentClassId)) : '');
-    try {
+      try {
       const data = await apiGet(path);
       if (!data){
         showTeacherError('Unable to fetch teacher data. Retry or sign in.');
         return;
       }
       clearTeacherError();
-      try { if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses(); } catch(e){}
+      try { if (document.getElementById('teacherClassesSelect') && typeof window.loadTeacherClasses === 'function') await window.loadTeacherClasses(); } catch(e){ /* ignore: optional teacher class refresh */ }
       renderTeacherData(data);
       return;
     } catch (e){
       if (e && (e.status === 401 || e.status === 403)){
-        try { supabaseSignOut(); } catch(_){}
+        try { supabaseSignOut(); } catch(_){ void _; }
         showTeacherError('Authentication failed. Please sign in again.');
         return;
       }
       showTeacherError('Unable to fetch teacher data (' + (e && e.status ? e.status : 'network') + '). Retry or sign in.');
       return;
     }
-    clearTeacherError();
-    try { if (document.getElementById('teacherClassesSelect')) await loadTeacherClasses(); } catch(e){}
-    renderTeacherData(data);
+    // removed duplicate unreachable rendering block
   } catch (e){
     showTeacherError('Network error while loading teacher data. Check connection and retry.');
   }
 }
+
+/* exported $, setText, setHTML, show, hide, safeBind, navigate, openScenarioSelect,
+   formatToolOutput, applyEvidenceToModel, faultProbabilities, faultInteractions,
+   renderStudentRecommendations, endGame, logout, formatReplayAction */
 
 // `loadTeacherData()` implemented later — avoid duplicate definition.
 
@@ -333,7 +365,7 @@ function renderTeacherData(data){
   try {
     const panel = document.getElementById('teacherSummaryPanel'); if (panel) panel.style.display = 'block';
     const studentList = document.getElementById('studentList'); if (studentList){
-      studentList.innerHTML = '';
+      while (studentList.firstChild) studentList.removeChild(studentList.firstChild);
       if (Array.isArray(data.students) && data.students.length){
         const list = document.createElement('div'); list.className = 'card';
         data.students.forEach(s => {
@@ -349,7 +381,8 @@ function renderTeacherData(data){
         });
         studentList.appendChild(list);
       } else {
-        studentList.innerHTML = '<div style="color:var(--muted)">No students yet.</div>';
+        while (studentList.firstChild) studentList.removeChild(studentList.firstChild);
+        const no = document.createElement('div'); no.style.color = 'var(--muted)'; no.innerText = 'No students yet.'; studentList.appendChild(no);
       }
     }
   } catch (e){ console.warn('renderTeacherData failed', e); }
@@ -398,7 +431,7 @@ function setView(viewId, data){
 /* =========== SAFE DOM HELPERS =========== */
 function $(id){ return document.getElementById(id); }
 function setText(id, value){ const el = $(id); if (el) el.innerText = value; }
-function setHTML(id, value){ const el = $(id); if (el) el.innerHTML = value; }
+function setHTML(id, value){ const el = $(id); if (!el) return; while(el.firstChild) el.removeChild(el.firstChild); el.appendChild(document.createTextNode(String(value))); }
 function show(id){ const el = $(id); if (el) el.style.display = 'block'; }
 function hide(id){ const el = $(id); if (el) el.style.display = 'none'; }
 function safeBind(id, handler){ const el = $(id); if (!el) return; el.addEventListener('click', handler); }
@@ -474,32 +507,34 @@ function renderScenarioList(){
   if (fs && fs !== 'all') list = list.filter(s => s.primarySystem === fs || (s.secondarySystems && s.secondarySystems.includes(fs)));
   if (fd && fd !== 'all') list = list.filter(s => String(s.difficulty) === String(fd));
 
-  if (list.length === 0) { container.innerHTML = '<div style="color:var(--muted)">No scenarios match the current filters.</div>'; return; }
-  const html = list.map(s => {
-    const id = s.id || s.index || '';
-    const symptoms = (s.symptoms||'').slice(0,120);
-    return `
-      <div class="scenario-card">
-        <div>
-          <h4>Scenario ${id}</h4>
-          <div class="scenario-meta">${s.primarySystem || 'N/A'} • Difficulty ${s.difficulty || 'N/A'}</div>
-          <div style="margin-top:8px;color:var(--muted);font-size:90%">${symptoms}</div>
-        </div>
-        <div class="scenario-actions">
-          <div style="flex:1"></div>
-          <button class="btn-preview" data-id="${id}">Preview</button>
-          <button class="btn-start" data-id="${id}">Start</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-  container.innerHTML = html;
+  if (list.length === 0) {
+    // show friendly empty state
+    while (container.firstChild) container.removeChild(container.firstChild);
+    const no = document.createElement('div'); no.style.color = 'var(--muted)'; no.textContent = 'No scenarios match the current filters.';
+    container.appendChild(no);
+    return;
+  }
 
-  // attach handlers for preview/start buttons
-  setTimeout(() => {
-    container.querySelectorAll('.btn-preview').forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => showScenarioPreview(id)); });
-    container.querySelectorAll('.btn-start').forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => startScenarioById(id)); });
-  }, 0);
+  // build scenario cards using safe DOM APIs
+  while (container.firstChild) container.removeChild(container.firstChild);
+  list.forEach(s => {
+    const id = s.id || s.index || '';
+    const card = document.createElement('div'); card.className = 'scenario-card';
+    const left = document.createElement('div');
+    const h4 = document.createElement('h4'); h4.innerText = `Scenario ${id}`;
+    const meta = document.createElement('div'); meta.className = 'scenario-meta'; meta.innerText = `${s.primarySystem || 'N/A'} • Difficulty ${s.difficulty || 'N/A'}`;
+    const symptoms = document.createElement('div'); symptoms.style.marginTop = '8px'; symptoms.style.color = 'var(--muted)'; symptoms.style.fontSize = '90%'; symptoms.innerText = String((s.symptoms||'').slice(0,120));
+    left.appendChild(h4); left.appendChild(meta); left.appendChild(symptoms);
+
+    const actions = document.createElement('div'); actions.className = 'scenario-actions';
+    const spacer = document.createElement('div'); spacer.style.flex = '1';
+    const btnPreview = document.createElement('button'); btnPreview.className = 'btn-preview'; btnPreview.dataset.id = id; btnPreview.innerText = 'Preview'; btnPreview.addEventListener('click', () => showScenarioPreview(id));
+    const btnStart = document.createElement('button'); btnStart.className = 'btn-start'; btnStart.dataset.id = id; btnStart.innerText = 'Start'; btnStart.addEventListener('click', () => startScenarioById(id));
+    actions.appendChild(spacer); actions.appendChild(btnPreview); actions.appendChild(btnStart);
+
+    card.appendChild(left); card.appendChild(actions);
+    container.appendChild(card);
+  });
 
   // wire small UI buttons
   const refresh = document.getElementById('btn-refresh-scenarios'); if (refresh) refresh.onclick = () => renderScenarioList();
@@ -526,11 +561,12 @@ function openScenarioSelect(){
 function renderTools(scenario){
   const toolsDiv = document.getElementById('tools');
   if (!toolsDiv) return;
-  // clear and build
-  toolsDiv.innerHTML = '<h3>Tools</h3>';
+  // clear and build (use safe DOM methods)
+  while (toolsDiv.firstChild) toolsDiv.removeChild(toolsDiv.firstChild);
+  const _toolsH = document.createElement('h3'); _toolsH.innerText = 'Tools'; toolsDiv.appendChild(_toolsH);
   const tests = scenario && scenario.tests ? Object.keys(scenario.tests) : [];
   if (!tests.length) {
-    toolsDiv.innerHTML += '<div style="color:var(--muted)">No tools available for this scenario.</div>';
+    const no = document.createElement('div'); no.style.color = 'var(--muted)'; no.innerText = 'No tools available for this scenario.'; toolsDiv.appendChild(no);
     return;
   }
   tests.forEach(test => {
@@ -553,7 +589,7 @@ function renderDiagnoses(scenario){
   const keepDl = diagContainer.querySelector('#download-report');
   const faults = scenario && scenario.faults && scenario.faults.length ? scenario.faults : (scenario && scenario.fault ? [{label: scenario.fault}] : []);
   // clear
-  diagContainer.innerHTML = '';
+  while (diagContainer.firstChild) diagContainer.removeChild(diagContainer.firstChild);
   faults.forEach(f => {
     const label = f.label || f;
     const btn = document.createElement('button');
@@ -776,26 +812,31 @@ function renderScenarioRecommendations(classData = [], scenariosList = []){
   const container = document.getElementById('teacherRecommendations');
   if (!container) return;
   container.style.display = 'block';
-  let html = `<h3>Recommended Training Scenarios</h3>`;
-  html += `<div><strong>Focus system:</strong> ${rec.focusSystem}</div>`;
-  html += `<div><strong>Difficulty band:</strong> ${rec.difficultyBand}</div>`;
-  html += `<div style="margin-bottom:8px;font-style:italic;color:var(--muted,#999)">${rec.reason}</div>`;
-  if (!rec.recommendedScenarios || rec.recommendedScenarios.length === 0) html += `<div>No matching scenarios found for the current focus/difficulty.</div>`;
-  else {
+  // build content using DOM APIs to avoid HTML injection
+  while (container.firstChild) container.removeChild(container.firstChild);
+  const h3 = document.createElement('h3'); h3.innerText = 'Recommended Training Scenarios'; container.appendChild(h3);
+  const fSys = document.createElement('div'); const fStrong = document.createElement('strong'); fStrong.innerText = 'Focus system:'; fSys.appendChild(fStrong); fSys.appendChild(document.createTextNode(' ' + (rec.focusSystem || ''))); container.appendChild(fSys);
+  const diff = document.createElement('div'); const dStrong = document.createElement('strong'); dStrong.innerText = 'Difficulty band:'; diff.appendChild(dStrong); diff.appendChild(document.createTextNode(' ' + (rec.difficultyBand || ''))); container.appendChild(diff);
+  const reason = document.createElement('div'); reason.style.marginBottom = '8px'; reason.style.fontStyle = 'italic'; reason.style.color = 'var(--muted,#999)'; reason.innerText = rec.reason; container.appendChild(reason);
+  if (!rec.recommendedScenarios || rec.recommendedScenarios.length === 0){
+    const no = document.createElement('div'); no.innerText = 'No matching scenarios found for the current focus/difficulty.'; container.appendChild(no);
+  } else {
     rec.recommendedScenarios.forEach(s => {
       const assigned = classAssignment && classAssignment.activeScenario && String(classAssignment.activeScenario) === String(s.id);
-      html += `<div style="margin:6px 0;padding:8px;border:1px solid ${assigned ? 'rgba(100,200,100,0.7)' : 'rgba(255,255,255,0.04)'};background:${assigned ? 'linear-gradient(90deg, rgba(100,200,100,0.06), rgba(255,255,255,0.01))' : 'rgba(255,255,255,0.01)'}">`;
-      html += `<div style="display:flex;justify-content:space-between;align-items:center;"><div><strong>Scenario ${s.id}</strong><div style="font-size:90%">${s.symptoms}</div>${s.trainingFocus?`<div style=\"font-size:85%;color:var(--muted,#999)\">${s.trainingFocus}</div>`:''}</div>`;
-      html += `<div style="display:flex;gap:6px"><button class="btn-preview" data-id="${s.id}">Preview</button><button class="btn-assign-scenario" data-id="${s.id}">Assign to Class</button></div></div>`;
-      html += `</div>`;
+      const box = document.createElement('div'); box.style.margin = '6px 0'; box.style.padding = '8px'; box.style.border = '1px solid ' + (assigned ? 'rgba(100,200,100,0.7)' : 'rgba(255,255,255,0.04)'); box.style.background = assigned ? 'linear-gradient(90deg, rgba(100,200,100,0.06), rgba(255,255,255,0.01))' : 'rgba(255,255,255,0.01)';
+      const row = document.createElement('div'); row.style.display = 'flex'; row.style.justifyContent = 'space-between'; row.style.alignItems = 'center';
+      const left = document.createElement('div');
+      const title = document.createElement('strong'); title.innerText = 'Scenario ' + (s.id || '');
+      const desc = document.createElement('div'); desc.style.fontSize = '90%'; desc.innerText = s.symptoms || '';
+      left.appendChild(title); left.appendChild(desc);
+      if (s.trainingFocus){ const tf = document.createElement('div'); tf.style.fontSize = '85%'; tf.style.color = 'var(--muted,#999)'; tf.innerText = s.trainingFocus; left.appendChild(tf); }
+      const right = document.createElement('div'); right.style.display = 'flex'; right.style.gap = '6px';
+      const btnPreview = document.createElement('button'); btnPreview.className = 'btn-preview'; btnPreview.dataset.id = s.id; btnPreview.innerText = 'Preview'; btnPreview.addEventListener('click', () => showScenarioPreview(s.id));
+      const btnAssign = document.createElement('button'); btnAssign.className = 'btn-assign-scenario'; btnAssign.dataset.id = s.id; btnAssign.innerText = 'Assign to Class'; btnAssign.addEventListener('click', () => assignScenarioToClass(s.id));
+      right.appendChild(btnPreview); right.appendChild(btnAssign);
+      row.appendChild(left); row.appendChild(right); box.appendChild(row); container.appendChild(box);
     });
   }
-  container.innerHTML = html;
-  // attach handlers for preview and assign buttons
-  setTimeout(() => {
-    container.querySelectorAll('.btn-preview').forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => showScenarioPreview(id)); });
-    container.querySelectorAll('.btn-assign-scenario').forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => assignScenarioToClass(id)); });
-  }, 0);
 }
 
 // --- Confidence calibration chart (teacher dashboard) ---
@@ -884,7 +925,7 @@ function renderConfidenceChart(classData){
   try{
     const insightEl = document.getElementById('confidenceInsight');
     if (insightEl) insightEl.innerText = generateConfidenceInsight(data);
-  }catch(e){}
+  } catch(e){ void e; }
 }
 
 function generateConfidenceInsight(data){
@@ -920,14 +961,19 @@ function renderSystemHeatmap(classData){
     const pb = b[1].total ? b[1].correct / b[1].total : 0;
     return pb - pa;
   });
-  if (!entries.length) { el.innerHTML = '<div style="color:var(--muted)">No system data yet.</div>'; return; }
-  el.innerHTML = entries.map(([system, stats]) => {
+  if (!entries.length) { while(el.firstChild) el.removeChild(el.firstChild); const no = document.createElement('div'); no.style.color = 'var(--muted)'; no.innerText = 'No system data yet.'; el.appendChild(no); return; }
+  while(el.firstChild) el.removeChild(el.firstChild);
+  entries.forEach(([system, stats]) => {
     const pct = stats.total ? Math.round((stats.correct / stats.total) * 100) : 0;
     let level = 'medium';
     if (pct < 50) level = 'low';
     else if (pct > 75) level = 'high';
-    return `\n      <div class="heatmap-cell ${level}">\n        <strong>${system}</strong><br>\n        ${pct}%\n      </div>\n    `;
-  }).join('');
+    const cell = document.createElement('div'); cell.className = 'heatmap-cell ' + level;
+    const strong = document.createElement('strong'); strong.innerText = system;
+    const br = document.createElement('div'); br.style.marginTop = '4px'; br.innerText = pct + '%';
+    cell.appendChild(strong); cell.appendChild(br);
+    el.appendChild(cell);
+  });
   // bind clicks and tooltips
   el.querySelectorAll('.heatmap-cell').forEach(cell => {
     const sysText = cell.querySelector('strong') ? cell.querySelector('strong').innerText : cell.textContent || '';
@@ -970,7 +1016,7 @@ function renderFilteredStudents(){
   }
 
   // build header with optional filter controls
-  list.innerHTML = '';
+  while (list.firstChild) list.removeChild(list.firstChild);
   const header = document.createElement('div'); header.style.marginBottom = '8px'; header.style.display = 'flex'; header.style.gap = '8px'; header.style.alignItems = 'center';
   if (activeSystemFilter){
     const pill = document.createElement('span'); pill.className = 'filter-pill'; pill.innerText = `Filtered: ${activeSystemFilter}`;
@@ -984,13 +1030,16 @@ function renderFilteredStudents(){
   // build student entries
   const container = document.createElement('div');
   if (!filtered.length){
-    container.innerHTML = '<div style="color:var(--muted)">No students match the filter.</div>';
-    list.appendChild(container);
+    const no = document.createElement('div'); no.style.color = 'var(--muted)'; no.innerText = 'No students match the filter.'; container.appendChild(no); list.appendChild(container);
   } else {
     filtered.forEach(s => {
       const row = document.createElement('div'); row.className = 'student-row'; row.dataset.studentName = s.name; row.style.display = 'flex'; row.style.alignItems = 'center'; row.style.gap = '8px'; row.style.padding = '8px 0';
       const chk = document.createElement('input'); chk.type = 'checkbox'; chk.className = 'student-select'; chk.value = s.name;
-      const info = document.createElement('div'); info.style.flex = '1'; info.innerHTML = `<strong>${escapeHtml(s.name)}</strong><br><span class="muted">${escapeHtml(getStudentAssignmentProgress(s))}</span>`;
+      const info = document.createElement('div'); info.style.flex = '1';
+      const nameStrong = document.createElement('strong'); nameStrong.innerText = s.name || '';
+      const br = document.createElement('br');
+      const prog = document.createElement('span'); prog.className = 'muted'; prog.innerText = getStudentAssignmentProgress(s) || '';
+      info.appendChild(nameStrong); info.appendChild(br); info.appendChild(prog);
       const actions = document.createElement('div'); actions.style.display = 'flex'; actions.style.gap = '8px';
       const btnView = document.createElement('button'); btnView.className = 'secondary-cta btn-open-student'; btnView.innerText = 'View'; btnView.addEventListener('click', () => openStudentDetail(s.name));
       const btnReplay = document.createElement('button'); btnReplay.className = 'btn-view-replay secondary-cta'; btnReplay.dataset.name = s.name; btnReplay.innerText = 'Replay'; btnReplay.addEventListener('click', () => openStudentDetail(s.name));
@@ -1084,7 +1133,7 @@ function markScenarioComplete(student, scenarioId){
     if (typeof currentUser !== 'undefined' && currentUser && !demoMode){
       apiPost('/api/complete', { userId: currentUser, scenarioId, classId: currentClassId });
     }
-  } catch(e){}
+  } catch(e){ void e; }
 }
 
 function getStudentRecord(name){
@@ -1100,7 +1149,15 @@ function renderAssignedWork(student){
   if (!el) return;
   if (!student || !student.assigned || !student.assigned.length){ el.style.display = 'none'; return; }
   el.style.display = 'block';
-  el.innerHTML = `\n    <h3>Assigned Training</h3>\n    ${student.assigned.map(a => { const done = (a.completed || []).length; const total = (a.scenarios || []).length; return `\n      <div style="margin-bottom:8px;">\n        <strong>${a.system}</strong><br>\n        ${done}/${total} completed\n      </div>\n    `; }).join('')}\n  `;
+  while (el.firstChild) el.removeChild(el.firstChild);
+  const h3 = document.createElement('h3'); h3.innerText = 'Assigned Training'; el.appendChild(h3);
+  student.assigned.forEach(a => {
+    const done = (a.completed || []).length; const total = (a.scenarios || []).length;
+    const row = document.createElement('div'); row.style.marginBottom = '8px';
+    const strong = document.createElement('strong'); strong.innerText = a.system;
+    const br = document.createElement('div'); br.innerText = `${done}/${total} completed`;
+    row.appendChild(strong); row.appendChild(br); el.appendChild(row);
+  });
 }
 
 function analyzeClassWeakness(classData){
@@ -1136,14 +1193,17 @@ function renderAutoRecommendations(classData){
   const el = document.getElementById('autoRecommendations');
   if (!el) return;
   const recs = generateAutoRecommendations(classData);
-  if (!recs.length) { el.innerHTML = '<p style="color:var(--muted)">No recommendations available</p>'; return; }
-  el.innerHTML = recs.map(r => `\n    <div class="card" style="margin-bottom:10px; padding:10px">\n      <strong>${r.system}</strong><br>\n      Accuracy: ${r.accuracy}%<br>\n      Weak Students: ${r.weakStudents}<br>\n      <div style="margin-top:8px">\n        <button class="btn-assign-rec" data-system="${r.system}">Assign ${r.system} Training</button>\n      </div>\n    </div>\n  `).join('');
-
-  // attach assign listeners
-  setTimeout(() => {
-    const btns = el.querySelectorAll('.btn-assign-rec');
-    btns.forEach(b => { const sys = b.getAttribute('data-system'); if (!sys) return; b.addEventListener('click', () => assignTraining(sys)); });
-  }, 0);
+  if (!recs.length){ while (el.firstChild) el.removeChild(el.firstChild); const p = document.createElement('p'); p.style.color = 'var(--muted)'; p.innerText = 'No recommendations available'; el.appendChild(p); return; }
+  while (el.firstChild) el.removeChild(el.firstChild);
+  recs.forEach(r => {
+    const card = document.createElement('div'); card.className = 'card'; card.style.marginBottom = '10px'; card.style.padding = '10px';
+    const strong = document.createElement('strong'); strong.innerText = r.system; card.appendChild(strong);
+    const br = document.createElement('div'); br.innerText = `Accuracy: ${r.accuracy}%`; card.appendChild(br);
+    const weak = document.createElement('div'); weak.innerText = `Weak Students: ${r.weakStudents}`; card.appendChild(weak);
+    const actionWrap = document.createElement('div'); actionWrap.style.marginTop = '8px';
+    const btn = document.createElement('button'); btn.className = 'btn-assign-rec'; btn.dataset.system = r.system; btn.innerText = `Assign ${r.system} Training`; btn.addEventListener('click', () => assignTraining(r.system));
+    actionWrap.appendChild(btn); card.appendChild(actionWrap); el.appendChild(card);
+  });
 }
 
 function renderStudentRecommendations(student){
@@ -1166,12 +1226,18 @@ function renderStudentRecommendations(student){
   if (!recs.length) return;
   // append recommendations below assigned work
   const markup = `\n    <div class="student-recs" style="margin-top:10px; border-top:1px dashed rgba(255,255,255,0.03); padding-top:10px">\n      <h4>Recommended Practice</h4>\n      <div>Target: <strong>${topSystem}</strong></div>\n      ${recs.map(s => `<div style="margin-top:6px">${s.id || s.index} — ${s.primarySystem || ''} • Difficulty ${s.difficulty || ''} <button class="btn-start-scenario" data-id="${s.id || s.index}" style="margin-left:8px">Start</button></div>`).join('')}\n    </div>\n  `;
-  el.innerHTML = (el.innerHTML || '') + markup;
-  // attach start listeners
-  setTimeout(() => {
-    const starts = el.querySelectorAll('.btn-start-scenario');
-    starts.forEach(b => { const id = b.getAttribute('data-id'); if (!id) return; b.addEventListener('click', () => startScenarioById(id)); });
-  }, 0);
+  // append markup as DOM nodes to avoid innerHTML concatenation
+  const frag = document.createElement('div'); frag.className = 'student-recs'; frag.style.marginTop = '10px'; frag.style.borderTop = '1px dashed rgba(255,255,255,0.03)'; frag.style.paddingTop = '10px';
+  const title = document.createElement('h4'); title.innerText = 'Recommended Practice'; frag.appendChild(title);
+  const target = document.createElement('div'); const tLabel = document.createTextNode('Target: '); const tStrong = document.createElement('strong'); tStrong.innerText = topSystem || ''; target.appendChild(tLabel); target.appendChild(tStrong); frag.appendChild(target);
+  recs.forEach(s => {
+    const row = document.createElement('div'); row.style.marginTop = '6px'; row.innerText = `${s.id || s.index} — ${s.primarySystem || ''} • Difficulty ${s.difficulty || ''}`;
+    const btn = document.createElement('button'); btn.className = 'btn-start-scenario'; btn.dataset.id = s.id || s.index; btn.style.marginLeft = '8px'; btn.innerText = 'Start'; btn.addEventListener('click', () => startScenarioById(s.id || s.index));
+    row.appendChild(btn); frag.appendChild(row);
+  });
+  // `markup` is kept for reference but DOM is built safely; mark as used to satisfy linter
+  void markup;
+  el.appendChild(frag);
 }
 
 // Helper: find scenario by id (flexible matching)
@@ -1194,16 +1260,19 @@ function showScenarioPreview(id){
   document.getElementById('preview-meta').innerText = scen ? `Difficulty: ${scen.difficulty || 'N/A'} — Primary: ${scen.primarySystem || 'N/A'}` : '';
   document.getElementById('preview-symptoms').innerText = scen ? scen.symptoms || '' : 'No data';
   const stepsEl = document.getElementById('preview-steps');
-  stepsEl.innerHTML = '';
+  while (stepsEl.firstChild) stepsEl.removeChild(stepsEl.firstChild);
   if (scen && scen.steps && scen.steps.length){
     scen.steps.forEach((st, i) => {
       const d = document.createElement('div');
       d.style.padding = '6px 0';
-      d.innerHTML = `<strong>Step ${i+1}:</strong> ${st.description || st.instruction || ''} <div style='font-size:90%; color:var(--muted,#aaa)'>Expected: ${st.expectedOutcome || '—'}</div>`;
+      const strong = document.createElement('strong'); strong.innerText = `Step ${i+1}:`;
+      const text = document.createElement('span'); text.style.marginLeft = '6px'; text.innerText = st.description || st.instruction || '';
+      const expect = document.createElement('div'); expect.style.fontSize = '90%'; expect.style.color = 'var(--muted,#aaa)'; expect.innerText = `Expected: ${st.expectedOutcome || '—'}`;
+      d.appendChild(strong); d.appendChild(text); d.appendChild(expect);
       stepsEl.appendChild(d);
     });
   } else {
-    stepsEl.innerHTML = '<div style="color:var(--muted,#999)">No procedural steps defined for this scenario.</div>';
+    const no = document.createElement('div'); no.style.color = 'var(--muted,#999)'; no.innerText = 'No procedural steps defined for this scenario.'; stepsEl.appendChild(no);
   }
   // wire assign button
   const assignBtn = document.getElementById('preview-assign');
@@ -1226,14 +1295,16 @@ function assignScenarioToClass(id){
   const dec = document.getElementById('teacherDecisions');
   if (dec) {
     dec.style.display = 'block';
-    dec.innerHTML = `
-      <h3>Assignment</h3>
-      <div>Assigned scenario <strong>${id}</strong> to the class.</div>
-      <div style="font-size:90%;color:var(--muted,#999)">Assigned at ${assignment.assignedAt}</div>
-    `;
+    while (dec.firstChild) dec.removeChild(dec.firstChild);
+    const h = document.createElement('h3'); h.innerText = 'Assignment';
+    const msg = document.createElement('div'); msg.innerText = 'Assigned scenario ';
+    const strong = document.createElement('strong'); strong.innerText = String(id);
+    msg.appendChild(strong); msg.appendChild(document.createTextNode(' to the class.'));
+    const when = document.createElement('div'); when.style.fontSize = '90%'; when.style.color = 'var(--muted,#999)'; when.innerText = 'Assigned at ' + assignment.assignedAt;
+    dec.appendChild(h); dec.appendChild(msg); dec.appendChild(when);
   }
   // refresh recommendations to highlight assignment
-  try { renderScenarioRecommendations(JSON.parse(localStorage.getItem('carSim_class')||'[]'), scenarios || []); } catch(e){}
+  try { renderScenarioRecommendations(JSON.parse(localStorage.getItem('carSim_class')||'[]'), scenarios || []); } catch(e){ void e; }
   // close preview modal if open
   closeScenarioPreview();
 }
@@ -1292,7 +1363,7 @@ async function saveProgress(){
     if (lastExplanation && (lastExplanation.final === 'Correct' || lastExplanation.outcome === 'correct')){
       markScenarioComplete(student, lastExplanation.scenarioIndex || currentIndex);
     }
-  } catch(e){}
+  } catch(e){ void e; }
   if (existingIndex >= 0) classData[existingIndex] = student;
   else classData.push(student);
   localStorage.setItem('carSim_class', JSON.stringify(classData));
@@ -1302,7 +1373,7 @@ async function saveProgress(){
       const payload = { userId: currentUser, scenarioId: currentIndex, actions: student.replays && student.replays.length ? student.replays[student.replays.length-1].actions : [], result: (lastExplanation && lastExplanation.final) || null, confidence: (lastExplanation && lastExplanation.confidence) || null, classId: currentClassId };
       apiPost('/api/replay', payload);
     }
-  } catch(e){}
+  } catch(e){ void e; }
 }
 
 async function loadUserData(){
@@ -1378,7 +1449,7 @@ function loadScenario(){
 
 function check(component){
   // capture tool use for replay
-  try { currentReplay.push({ type: 'tool', value: component, time: Date.now() }); } catch(e){}
+  if (Array.isArray(currentReplay)) currentReplay.push({ type: 'tool', value: component, time: Date.now() });
   if (window.DiagnosticEngine && window.DiagnosticEngine.useTool) {
     return window.DiagnosticEngine.useTool(AppState, component);
   }
@@ -1390,9 +1461,12 @@ function selectSystem(sys){
   selectedSystem = sys;
   AppState.system = sys;
   // record selection in replay (justification captured below)
-  try { currentReplay.push({ type: 'system', value: sys, time: Date.now() }); } catch(e){}
+  if (Array.isArray(currentReplay)) currentReplay.push({ type: 'system', value: sys, time: Date.now() });
   // capture optional short justification from the UI input
-  try { systemJustification = (document.getElementById('systemReason') && document.getElementById('systemReason').value) ? document.getElementById('systemReason').value.trim() : ''; } catch(e){ systemJustification = ''; }
+  try {
+    const sr = document.getElementById('systemReason');
+    systemJustification = (sr && sr.value) ? String(sr.value).trim() : '';
+  } catch (e) { systemJustification = ''; }
   const panel = document.getElementById('systemPanel');
   if (panel) panel.style.display = 'none';
   document.getElementById('result').innerText = `🔧 System selected: ${sys.toUpperCase()}. Now use tools to gather evidence.`;
@@ -1407,7 +1481,7 @@ function selectSystem(sys){
 
 async function diagnose(choice){
   // capture diagnosis selection for replay
-  try { currentReplay.push({ type: 'diagnosis', value: choice, time: Date.now() }); } catch(e){}
+  if (Array.isArray(currentReplay)) currentReplay.push({ type: 'diagnosis', value: choice, time: Date.now() });
   if (window.DiagnosticEngine && window.DiagnosticEngine.diagnose) return window.DiagnosticEngine.diagnose(AppState, choice);
   pendingDiagnosisChoice = choice;
   const panel = document.getElementById('confidencePanel'); if (panel) panel.style.display = 'block';
@@ -1416,7 +1490,7 @@ async function diagnose(choice){
 // Apply diagnosis after user selects confidence via UI
 async function applyDiagnosisWithConfidence(conf){
   // capture confidence selection
-  try { currentReplay.push({ type: 'confidence', value: conf, time: Date.now() }); } catch(e){}
+  if (Array.isArray(currentReplay)) currentReplay.push({ type: 'confidence', value: conf, time: Date.now() });
   if (window.DiagnosticEngine && window.DiagnosticEngine.applyDiagnosisWithConfidence) return window.DiagnosticEngine.applyDiagnosisWithConfidence(AppState, conf);
   // fallback
   alert('Diagnostic engine unavailable');
@@ -1438,7 +1512,15 @@ async function endGame(){
   else grade = 'D';
 
   document.getElementById('symptoms').innerText = 'Assessment Complete';
-  document.getElementById('result').innerHTML = `Final Score: ${score} <br>Accuracy: ${accuracy}% <br>Efficiency: ${efficiency}% <br>Grade: ${grade}`;
+  const resultEl = document.getElementById('result');
+  if (resultEl) {
+    while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
+    const r1 = document.createElement('div'); r1.innerText = `Final Score: ${score}`;
+    const r2 = document.createElement('div'); r2.innerText = `Accuracy: ${accuracy}%`;
+    const r3 = document.createElement('div'); r3.innerText = `Efficiency: ${efficiency}%`;
+    const r4 = document.createElement('div'); r4.innerText = `Grade: ${grade}`;
+    resultEl.appendChild(r1); resultEl.appendChild(r2); resultEl.appendChild(r3); resultEl.appendChild(r4);
+  }
   document.getElementById('progress').innerText = '';
   const dl = document.getElementById('download-report');
   if (dl) dl.style.display = 'inline-block';
@@ -1461,7 +1543,7 @@ async function login(){
   if(!name){ alert('Please enter a name'); return; }
   currentUser = name;
   userRole = role;
-  schoolCode = code;
+  _schoolCode = code;
 
   // sync into AppState
   AppState.user = currentUser;
@@ -1509,7 +1591,7 @@ async function login(){
   try {
     const studentRecord = getStudentRecord(currentUser);
     renderAssignedWork(studentRecord);
-  } catch(e){}
+  } catch(e){ void e; }
   const assignment = JSON.parse(localStorage.getItem('carSim_assignment') || 'null');
   if (assignment && assignment.activeScenario) {
     // try to locate scenario index
@@ -1537,24 +1619,23 @@ function logout(){
 
 async function loadTeacherData(){
   const container = document.getElementById('studentList');
-  container.innerHTML = '';
+  while (container.firstChild) container.removeChild(container.firstChild);
   if (useFirestore && db) {
     try {
       const snapshot = await db.collection('students').get();
-      if (snapshot.empty) { container.innerHTML = '<p>No student data yet.</p>'; return; }
+      if (snapshot.empty) { const p = document.createElement('p'); p.innerText = 'No student data yet.'; container.appendChild(p); return; }
       snapshot.forEach(doc => {
         const s = doc.data();
-        container.innerHTML += `
-          <div style="border:1px solid rgba(255,255,255,0.06); padding:10px; margin:8px; background:rgba(255,255,255,0.01)">
-            <h3>${s.name}</h3>
-            <p>Score: ${s.score}</p>
-            <p>Accuracy: ${s.correct} / ${s.correct + s.wrong}</p>
-            <p>Level: ${s.currentLevel + 1}/${total}</p>
-            <p>Status: ${s.completed ? 'Completed' : 'In Progress'}</p>
-            <p>Last: ${s.lastUpdated || '—'}</p>
-            <p>Explanations: ${s.explanations ? s.explanations.length : 0}</p>
-          </div>
-        `;
+        const card = document.createElement('div'); card.style.border = '1px solid rgba(255,255,255,0.06)'; card.style.padding = '10px'; card.style.margin = '8px'; card.style.background = 'rgba(255,255,255,0.01)';
+        const h3 = document.createElement('h3'); h3.innerText = s.name || '';
+        const pScore = document.createElement('p'); pScore.innerText = 'Score: ' + (s.score || 0);
+        const pAcc = document.createElement('p'); pAcc.innerText = 'Accuracy: ' + (s.correct || 0) + ' / ' + ((s.correct || 0) + (s.wrong || 0));
+        const pLevel = document.createElement('p'); pLevel.innerText = 'Level: ' + ((s.currentLevel || 0) + 1) + '/' + total;
+        const pStatus = document.createElement('p'); pStatus.innerText = 'Status: ' + (s.completed ? 'Completed' : 'In Progress');
+        const pLast = document.createElement('p'); pLast.innerText = 'Last: ' + (s.lastUpdated || '—');
+        const pEx = document.createElement('p'); pEx.innerText = 'Explanations: ' + (s.explanations ? s.explanations.length : 0);
+        card.appendChild(h3); card.appendChild(pScore); card.appendChild(pAcc); card.appendChild(pLevel); card.appendChild(pStatus); card.appendChild(pLast); card.appendChild(pEx);
+        container.appendChild(card);
       });
       return;
     } catch (e) {
@@ -1571,13 +1652,15 @@ async function loadTeacherData(){
         const replays = resp.replays || [];
         const completions = resp.completions || [];
         const enrolls = resp.enrollments || [];
+        // mark `enrolls` used to avoid linter false-positive when it's optional
+        void enrolls;
         const classData = users.map(u => {
           const uid = u.id || u.user_id || '';
           const name = u.email || u.name || uid;
           const userReplays = replays.filter(r => String(r.user_id) === String(uid)).map(r => ({ scenario: r.scenario_id, actions: r.actions || [], savedAt: r.created_at }));
           return { name, id: uid, replays: userReplays, explanations: [], studentProfile: {}, completed: completions.some(c => String(c.user_id) === String(uid)) };
         });
-        if (!classData.length) container.innerHTML = '<p>No student data yet.</p>';
+        if (!classData.length) { while (container.firstChild) container.removeChild(container.firstChild); const p = document.createElement('p'); p.innerText = 'No student data yet.'; container.appendChild(p); }
         // attach to local rendering functions
         try { renderFilteredStudents(classData); } catch(e){ renderFilteredStudents(); }
         try { renderConfidenceChart(classData); } catch(e) { console.warn('Confidence chart render failed', e); }
@@ -1590,7 +1673,7 @@ async function loadTeacherData(){
 
   // Fallback to localStorage when backend not available or class not selected
   const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
-  if (classData.length === 0){ container.innerHTML = '<p>No student data yet.</p>'; return; }
+  if (classData.length === 0){ while (container.firstChild) container.removeChild(container.firstChild); const p = document.createElement('p'); p.innerText = 'No student data yet.'; container.appendChild(p); return; }
   // render student list (supports active system filter)
   renderFilteredStudents();
   // render confidence chart for class
@@ -1608,24 +1691,12 @@ function openStudentDetail(name){
   const dec = document.getElementById('teacherDecisions');
   if (dec) {
     dec.style.display = 'block';
-    dec.textContent = '';
-
-    const title = document.createElement('h3');
-    title.textContent = String(student.name || '');
-
-    const scoreP = document.createElement('p');
-    scoreP.textContent = `Score: ${student.score}`;
-
-    const accuracyP = document.createElement('p');
-    accuracyP.textContent = `Accuracy: ${student.correct} / ${student.correct + student.wrong}`;
-
-    const lastP = document.createElement('p');
-    lastP.textContent = `Last: ${student.lastUpdated || '—'}`;
-
-    dec.appendChild(title);
-    dec.appendChild(scoreP);
-    dec.appendChild(accuracyP);
-    dec.appendChild(lastP);
+    while (dec.firstChild) dec.removeChild(dec.firstChild);
+    const h = document.createElement('h3'); h.innerText = student.name || '';
+    const p1 = document.createElement('p'); p1.innerText = 'Score: ' + (student.score || 0);
+    const p2 = document.createElement('p'); p2.innerText = 'Accuracy: ' + (student.correct || 0) + ' / ' + (((student.correct || 0) + (student.wrong || 0)));
+    const p3 = document.createElement('p'); p3.innerText = 'Last: ' + (student.lastUpdated || '—');
+    dec.appendChild(h); dec.appendChild(p1); dec.appendChild(p2); dec.appendChild(p3);
   }
   showReplay(student);
 }
@@ -1641,25 +1712,27 @@ function showReplay(student){
     viewer.hidden = false;
     viewer.classList.remove('hidden');
     viewer.style.visibility = 'visible';
-  } catch(e){}
+  } catch(e){ void e; }
 
   // show a loading placeholder immediately so headless tests can observe content
-  try { timeline.innerHTML = '<div class="replay-loading">Loading replay...</div>'; } catch(e){}
+  try { while (timeline.firstChild) timeline.removeChild(timeline.firstChild); const ld = document.createElement('div'); ld.className = 'replay-loading'; ld.innerText = 'Loading replay...'; timeline.appendChild(ld); } catch(e){ /* ignore: replay UI init */ }
 
   const replays = (student && student.replays) || [];
   if (!replays.length){
     console.log('showReplay: no replays for student', student && (student.id || student.name));
-    timeline.innerHTML = '<p>No replay data available for this student.</p>';
+    while (timeline.firstChild) timeline.removeChild(timeline.firstChild);
+    const no = document.createElement('p'); no.innerText = 'No replay data available for this student.'; timeline.appendChild(no);
     return;
   }
   // show most recent replay by default
   const last = replays[replays.length - 1];
-  timeline.innerHTML = '';
+  while (timeline.firstChild) timeline.removeChild(timeline.firstChild);
   const actions = last.actions || [];
   // validate actions exist
   if (!Array.isArray(actions) || actions.length === 0){
     console.log('showReplay: replay has no actions', last);
-    timeline.innerHTML = '<p>No actions recorded in this replay.</p>';
+    while (timeline.firstChild) timeline.removeChild(timeline.firstChild);
+    const none = document.createElement('p'); none.innerText = 'No actions recorded in this replay.'; timeline.appendChild(none);
     return;
   }
   console.log('showReplay: rendering', actions.length, 'actions; sample:', actions[0]);
@@ -1667,7 +1740,7 @@ function showReplay(student){
     const el = document.createElement('div'); el.className = 'replay-item'; el.setAttribute('data-idx', idx);
     const t = document.createElement('span'); t.className = 'replay-time'; t.innerText = new Date(a.time).toLocaleTimeString();
     const prev = idx > 0 ? actions[idx - 1] : null;
-    const content = document.createElement('span'); content.innerHTML = formatReplayActionWithDelta(a, prev);
+    const content = document.createElement('span'); content.textContent = formatReplayActionWithDelta(a, prev);
     // highlight wrong actions against scenario if possible
     const scen = (typeof last.scenario === 'number' && scenarios[last.scenario]) ? scenarios[last.scenario] : null;
     const wrong = isWrongAction(a, scen);
@@ -1679,9 +1752,26 @@ function showReplay(student){
     el.appendChild(t); el.appendChild(content);
     timeline.appendChild(el);
   });
-  // summary at top
-  const summaryHtml = `<div class="replay-summary"><strong>Outcome:</strong> ${last.result || last.lastResult || '—'}</div>`;
-  timeline.insertAdjacentHTML('afterbegin', summaryHtml);
+  // summary at top (safe DOM construction to avoid XSS)
+  const summary = document.createElement('div');
+  summary.className = 'replay-summary';
+
+  const strong = document.createElement('strong');
+  strong.textContent = 'Outcome:';
+
+  const value = document.createElement('span');
+  value.textContent = last.result || last.lastResult || '—';
+
+  summary.appendChild(strong);
+  summary.appendChild(document.createTextNode(' '));
+  summary.appendChild(value);
+
+  // Insert at top of timeline
+  if (typeof timeline.prepend === 'function') {
+    timeline.prepend(summary);
+  } else {
+    timeline.insertBefore(summary, timeline.firstChild);
+  }
 
   // wire playback controls for this replay
   // ensure any previous playback is stopped when opening a new replay
@@ -1690,13 +1780,13 @@ function showReplay(student){
   const stopBtn = document.getElementById('replay-stop');
   const speedSel = document.getElementById('replay-speed');
   if (playBtn) {
-    try { playBtn.removeEventListener('click', playBtn._replayHandler); } catch(e){}
+    try { playBtn.removeEventListener('click', playBtn._replayHandler); } catch(e){ /* ignore: handler detach */ }
     const playHandler = () => playReplay(actions, speedSel ? Number(speedSel.value) : 800);
     playBtn.addEventListener('click', playHandler);
     playBtn._replayHandler = playHandler;
   }
   if (stopBtn) {
-    try { stopBtn.removeEventListener('click', stopBtn._stopHandler); } catch(e){}
+    try { stopBtn.removeEventListener('click', stopBtn._stopHandler); } catch(e){ /* ignore: handler detach */ }
     const stopHandler = () => stopReplay();
     stopBtn.addEventListener('click', stopHandler);
     stopBtn._stopHandler = stopHandler;
@@ -1708,7 +1798,7 @@ function showReplay(student){
     viewer.hidden = false;
     viewer.classList.remove('hidden');
     viewer.style.visibility = 'visible';
-  } catch(e){}
+  } catch(e){ /* ignore: replay playback error */ }
 }
 
 let replayTimer = null;
@@ -1757,14 +1847,14 @@ try {
     window.showReplay = showReplay;
     window.openStudentDetail = openStudentDetail;
   }
-} catch(e){}
+} catch(e){ /* ignore: bootstrap analytics error */ }
 
 function formatReplayActionWithDelta(a, prev){
   const time = new Date(a.time).toLocaleTimeString();
   let delta = '';
   if (prev && prev.time) {
     const diff = Math.round((a.time - prev.time) / 1000);
-    delta = ` <span style="color:var(--muted);font-size:0.9rem">(+${diff}s)</span>`;
+    delta = ` (+${diff}s)`;
   }
   return `[${time}] ` + actionLabel(a) + delta;
 }
@@ -1772,10 +1862,10 @@ function formatReplayActionWithDelta(a, prev){
 function actionLabel(a){
   if (!a || !a.type) return '';
   switch(a.type){
-    case 'system': return `Selected system: <strong>${a.value}</strong>` + (a.justification ? ` — ${a.justification}` : '');
-    case 'tool': return `Used tool: <strong>${a.value}</strong>`;
-    case 'diagnosis': return `Diagnosis: <strong>${a.value}</strong>`;
-    case 'confidence': return `Confidence: <strong>${a.value}</strong>`;
+    case 'system': return `Selected system: ${a.value}` + (a.justification ? ` — ${a.justification}` : '');
+    case 'tool': return `Used tool: ${a.value}`;
+    case 'diagnosis': return `Diagnosis: ${a.value}`;
+    case 'confidence': return `Confidence: ${a.value}`;
     default: return `${a.type}: ${JSON.stringify(a)}`;
   }
 }
@@ -1795,9 +1885,9 @@ function isWrongAction(a, scenario){
 function formatReplayAction(a){
   if (!a || !a.type) return '';
   switch(a.type){
-    case 'system': return `Selected system: <strong>${a.value}</strong>` + (a.justification ? ` — ${a.justification}` : '');
-    case 'tool': return `Used tool: <strong>${a.value}</strong>`;
-    case 'diagnosis': return `Diagnosis chosen: <strong>${a.value}</strong>`;
+    case 'system': return `Selected system: ${a.value}` + (a.justification ? ` — ${a.justification}` : '');
+    case 'tool': return `Used tool: ${a.value}`;
+    case 'diagnosis': return `Diagnosis chosen: ${a.value}`;
     case 'confidence': return `Confidence: <strong>${a.value}</strong>`;
     default: return `${a.type}: ${JSON.stringify(a)}`;
   }
@@ -1873,7 +1963,7 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('carSim_currentClassId', currentClassId);
       localStorage.setItem('carSim_currentClassCode', currentClassCode || '');
       // refresh teacher classes select
-      try { await loadTeacherClasses(); } catch(e){}
+      try { await loadTeacherClasses(); } catch(e){ /* ignore: refresh teacher classes failed */ }
       showToast('Class created');
       setView('teacherScreen');
       await loadTeacherData();
@@ -1919,7 +2009,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function loadTeacherClasses(){
     const sel = document.getElementById('teacherClassesSelect');
     if (!sel) return;
-    sel.innerHTML = '';
+    while (sel.firstChild) sel.removeChild(sel.firstChild);
     try {
       // ensure teacher is signed in before calling protected endpoint
       const token = getAccessToken();
@@ -1932,7 +2022,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // add a small class info container for code + copy
       let info = document.getElementById('teacherClassInfo');
       if (!info){ info = document.createElement('div'); info.id = 'teacherClassInfo'; info.style.marginTop = '8px'; sel.parentNode.insertBefore(info, sel.nextSibling); }
-      info.innerHTML = '';
+      while (info.firstChild) info.removeChild(info.firstChild);
       classes.forEach(c => {
         const opt = document.createElement('option'); opt.value = c.id; opt.innerText = c.name + (c.class_code ? ` (${c.class_code})` : '');
         sel.appendChild(opt);
@@ -1946,14 +2036,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const cls = classes.find(x=>x.id===currentClassId);
         const info = document.getElementById('teacherClassInfo');
         if (info){
+          while (info.firstChild) info.removeChild(info.firstChild);
           if (cls && cls.class_code){
-            info.innerHTML = `<div style="display:flex;gap:8px;align-items:center"><div>Code: <strong>${escapeHtml(cls.class_code)}</strong></div><div><button id=\"copyInvite\">Copy</button></div></div>`;
-            const copy = document.getElementById('copyInvite'); if (copy) copy.onclick = () => copyToClipboard(cls.class_code || '');
-          } else { info.innerHTML = ''; }
+            const wrap = document.createElement('div'); wrap.style.display = 'flex'; wrap.style.gap = '8px'; wrap.style.alignItems = 'center';
+            const codeDiv = document.createElement('div'); codeDiv.innerText = 'Code: ';
+            const strong = document.createElement('strong'); strong.innerText = cls.class_code || '';
+            codeDiv.appendChild(strong);
+            const btnWrap = document.createElement('div'); const copyBtn = document.createElement('button'); copyBtn.id = 'copyInvite'; copyBtn.innerText = 'Copy'; btnWrap.appendChild(copyBtn);
+            wrap.appendChild(codeDiv); wrap.appendChild(btnWrap); info.appendChild(wrap);
+            copyBtn.onclick = () => copyToClipboard(cls.class_code || '');
+          }
         }
       };
       // populate initial info for selected class
-      if (currentClassId){ const cls = classes.find(x=>x.id===currentClassId); if (cls && cls.class_code){ const infoEl = document.getElementById('teacherClassInfo'); infoEl.innerHTML = `<div style="display:flex;gap:8px;align-items:center"><div>Code: <strong>${escapeHtml(cls.class_code)}</strong></div><div><button id=\"copyInvite\">Copy</button></div></div>`; const copy = document.getElementById('copyInvite'); if (copy) copy.onclick = () => copyToClipboard(cls.class_code || ''); } }
+        if (currentClassId){ const cls = classes.find(x=>x.id===currentClassId); if (cls && cls.class_code){ const infoEl = document.getElementById('teacherClassInfo'); while (infoEl.firstChild) infoEl.removeChild(infoEl);
+          const wrap = document.createElement('div'); wrap.style.display = 'flex'; wrap.style.gap = '8px'; wrap.style.alignItems = 'center';
+          const codeDiv = document.createElement('div'); codeDiv.innerText = 'Code: '; const strong = document.createElement('strong'); strong.innerText = cls.class_code || ''; codeDiv.appendChild(strong);
+          const btnWrap = document.createElement('div'); const copyBtn = document.createElement('button'); copyBtn.id = 'copyInvite'; copyBtn.innerText = 'Copy'; btnWrap.appendChild(copyBtn);
+          wrap.appendChild(codeDiv); wrap.appendChild(btnWrap); infoEl.appendChild(wrap);
+          copyBtn.onclick = () => copyToClipboard(cls.class_code || ''); } }
     } catch(e){ console.warn('Failed to load teacher classes', e); }
   }
 
@@ -2184,6 +2285,9 @@ function computeClassSummary(){
     summary.skillProfiles[sys] = pct;
   });
 
+  // mark derived-but-unused locals as used to quiet linter until further refactor
+  void accSum; void explanationCount;
+
   return summary;
 }
 
@@ -2192,39 +2296,33 @@ function renderTeacherInsights(){
   if (!panel) return;
   const s = computeClassSummary();
   panel.style.display = 'block';
-  panel.innerHTML = '';
-
+  while (panel.firstChild) panel.removeChild(panel.firstChild);
   // Top-level summary (3-5 metrics)
-  const top = document.createElement('div');
-  top.innerHTML = `
-    <div style="display:flex; gap:12px; flex-wrap:wrap">
-      <div><strong>Total students:</strong> ${s.totalStudents}</div>
-      <div><strong>Average score:</strong> ${s.avgScore}</div>
-      <div><strong>Average accuracy:</strong> ${s.avgAccuracy}%</div>
-      <div><strong>Avg confidence (0-1):</strong> ${s.avgConfidence}</div>
-      <div><strong>Isolation accuracy:</strong> ${s.isolationAccuracy}%</div>
-    </div>
-  `;
-  panel.appendChild(top);
+  const top = document.createElement('div'); top.style.display = 'flex'; top.style.gap = '12px'; top.style.flexWrap = 'wrap';
+  const t1 = document.createElement('div'); const t1s = document.createElement('strong'); t1s.innerText = 'Total students:'; t1.appendChild(t1s); t1.appendChild(document.createTextNode(' ' + String(s.totalStudents)));
+  const t2 = document.createElement('div'); const t2s = document.createElement('strong'); t2s.innerText = 'Average score:'; t2.appendChild(t2s); t2.appendChild(document.createTextNode(' ' + String(s.avgScore)));
+  const t3 = document.createElement('div'); const t3s = document.createElement('strong'); t3s.innerText = 'Average accuracy:'; t3.appendChild(t3s); t3.appendChild(document.createTextNode(' ' + String(s.avgAccuracy) + '%'));
+  const t4 = document.createElement('div'); const t4s = document.createElement('strong'); t4s.innerText = 'Avg confidence (0-1):'; t4.appendChild(t4s); t4.appendChild(document.createTextNode(' ' + String(s.avgConfidence)));
+  const t5 = document.createElement('div'); const t5s = document.createElement('strong'); t5s.innerText = 'Isolation accuracy:'; t5.appendChild(t5s); t5.appendChild(document.createTextNode(' ' + String(s.isolationAccuracy) + '%'));
+  top.appendChild(t1); top.appendChild(t2); top.appendChild(t3); top.appendChild(t4); top.appendChild(t5); panel.appendChild(top);
 
   // Skill insight block
-  const skills = document.createElement('div');
-  skills.style.marginTop = '10px';
-  skills.innerHTML = '<h4>Skill Insight</h4>';
+  const skills = document.createElement('div'); skills.style.marginTop = '10px';
+  const h4Skills = document.createElement('h4'); h4Skills.innerText = 'Skill Insight'; skills.appendChild(h4Skills);
   const list = document.createElement('div');
   Object.keys(s.skillProfiles).forEach(sys => {
     const v = s.skillProfiles[sys];
     const row = document.createElement('div');
-    row.innerHTML = `<strong>${sys}:</strong> ${v}%`;
+    const strong = document.createElement('strong'); strong.innerText = sys + ':'; row.appendChild(strong);
+    const span = document.createElement('span'); span.style.marginLeft = '6px'; span.innerText = v + '%'; row.appendChild(span);
     list.appendChild(row);
   });
-  skills.appendChild(list);
-  panel.appendChild(skills);
+  skills.appendChild(list); panel.appendChild(skills);
 
   // Common misconceptions
   const mis = document.createElement('div'); mis.style.marginTop = '10px';
-  mis.innerHTML = '<h4>Common Misconceptions</h4>';
-  if (s.commonConfusions.length === 0) mis.innerHTML += '<div>No common confusions detected.</div>';
+  const h4Mis = document.createElement('h4'); h4Mis.innerText = 'Common Misconceptions'; mis.appendChild(h4Mis);
+  if (s.commonConfusions.length === 0){ const no = document.createElement('div'); no.innerText = 'No common confusions detected.'; mis.appendChild(no); }
   else {
     const ul = document.createElement('ul');
     s.commonConfusions.forEach(p => { const li = document.createElement('li'); li.innerText = `${p.pair.replace('→',' → ')} — ${p.count}`; ul.appendChild(li); });
@@ -2234,14 +2332,23 @@ function renderTeacherInsights(){
 
   // Student snapshot list (minimal)
   const snap = document.createElement('div'); snap.style.marginTop = '10px';
-  snap.innerHTML = '<h4>Student Snapshots</h4>';
-  if (s.students.length === 0) snap.innerHTML += '<div>No students.</div>';
+  const h4snap = document.createElement('h4'); h4snap.innerText = 'Student Snapshots'; snap.appendChild(h4snap);
+  if (s.students.length === 0){ const no = document.createElement('div'); no.innerText = 'No students.'; snap.appendChild(no); }
   else {
     const table = document.createElement('div');
     table.style.display = 'grid'; table.style.gridTemplateColumns = '2fr 1fr 1fr 1fr'; table.style.gap = '6px';
-    table.innerHTML = `<div><strong>Name</strong></div><div><strong>Score</strong></div><div><strong>Weakest</strong></div><div><strong>Explanations</strong></div>`;
+    const hdrName = document.createElement('div'); const hdrScore = document.createElement('div'); const hdrWeak = document.createElement('div'); const hdrEx = document.createElement('div');
+    const hNameStrong = document.createElement('strong'); hNameStrong.innerText = 'Name'; hdrName.appendChild(hNameStrong);
+    const hScoreStrong = document.createElement('strong'); hScoreStrong.innerText = 'Score'; hdrScore.appendChild(hScoreStrong);
+    const hWeakStrong = document.createElement('strong'); hWeakStrong.innerText = 'Weakest'; hdrWeak.appendChild(hWeakStrong);
+    const hExStrong = document.createElement('strong'); hExStrong.innerText = 'Explanations'; hdrEx.appendChild(hExStrong);
+    table.appendChild(hdrName); table.appendChild(hdrScore); table.appendChild(hdrWeak); table.appendChild(hdrEx);
     s.students.forEach(st => {
-      table.innerHTML += `<div>${st.name}</div><div>${st.score}</div><div>${st.weakest}</div><div>${st.explanations}</div>`;
+      const n = document.createElement('div'); n.innerText = st.name;
+      const sc = document.createElement('div'); sc.innerText = String(st.score);
+      const w = document.createElement('div'); w.innerText = st.weakest;
+      const ex = document.createElement('div'); ex.innerText = String(st.explanations);
+      table.appendChild(n); table.appendChild(sc); table.appendChild(w); table.appendChild(ex);
     });
     snap.appendChild(table);
   }
@@ -2251,10 +2358,10 @@ function renderTeacherInsights(){
   const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
   const li = getLearningInsightsForClass(classData || []);
   const learn = document.createElement('div'); learn.style.marginTop = '12px';
-  learn.innerHTML = '<h4>Learning Insights (class)</h4>';
-  learn.innerHTML += `<div><strong>Most frequent weak system:</strong> ${li.weakestSystem ? li.weakestSystem[0] + ' (' + li.weakestSystem[1] + ')' : 'N/A'}</div>`;
-  learn.innerHTML += `<div><strong>Top misconception:</strong> ${li.topMisconception ? li.topMisconception[0] + ' (' + li.topMisconception[1] + ')' : 'N/A'}</div>`;
-  if (li.reasoningTrend && li.reasoningTrend.length) learn.innerHTML += `<div><strong>Recent reasoning trend (avg last 5 samples per student):</strong> [${li.reasoningTrend.map(v=>v.toFixed(1)).join(', ')}]</div>`;
+  const h4learn = document.createElement('h4'); h4learn.innerText = 'Learning Insights (class)'; learn.appendChild(h4learn);
+  const weakDiv = document.createElement('div'); weakDiv.innerText = 'Most frequent weak system: ' + (li.weakestSystem ? (li.weakestSystem[0] + ' (' + li.weakestSystem[1] + ')') : 'N/A'); learn.appendChild(weakDiv);
+  const topMis = document.createElement('div'); topMis.innerText = 'Top misconception: ' + (li.topMisconception ? (li.topMisconception[0] + ' (' + li.topMisconception[1] + ')') : 'N/A'); learn.appendChild(topMis);
+  if (li.reasoningTrend && li.reasoningTrend.length){ const trend = document.createElement('div'); trend.innerText = 'Recent reasoning trend (avg last 5 samples per student): [' + li.reasoningTrend.map(v=>v.toFixed(1)).join(', ') + ']'; learn.appendChild(trend); }
   panel.appendChild(learn);
 
   // Adaptive recommendation (teacher-only, conservative)
@@ -2263,13 +2370,13 @@ function renderTeacherInsights(){
     const dec = document.getElementById('teacherDecisions');
     if (dec) {
       dec.style.display = 'block';
-      dec.innerHTML = `
-        <h3>📌 Adaptive Training Recommendation</h3>
-        <div><strong>Class weak system:</strong> ${rec.classWideWeakSystem}</div>
-        <div><strong>Suggested focus system:</strong> ${rec.recommendedSystem}</div>
-        <div><strong>Suggested difficulty band:</strong> Level ${rec.suggestedDifficulty}</div>
-        <div style="margin-top:6px;font-style:italic;color:var(--muted,#999)">${rec.reason}</div>
-      `;
+      while (dec.firstChild) dec.removeChild(dec.firstChild);
+      const h = document.createElement('h3'); h.innerText = '📌 Adaptive Training Recommendation';
+      const cws = document.createElement('div'); cws.innerText = 'Class weak system: ' + (rec.classWideWeakSystem || '');
+      const sug = document.createElement('div'); sug.innerText = 'Suggested focus system: ' + (rec.recommendedSystem || '');
+      const diff = document.createElement('div'); diff.innerText = 'Suggested difficulty band: Level ' + (rec.suggestedDifficulty || '');
+      const reasonEl = document.createElement('div'); reasonEl.style.marginTop = '6px'; reasonEl.style.fontStyle = 'italic'; reasonEl.style.color = 'var(--muted,#999)'; reasonEl.innerText = rec.reason || '';
+      dec.appendChild(h); dec.appendChild(cws); dec.appendChild(sug); dec.appendChild(diff); dec.appendChild(reasonEl);
     }
   } catch(e) { console.warn('Failed to compute adaptive recommendation', e); }
 
@@ -2280,18 +2387,19 @@ function renderTeacherInsights(){
 
   // Compact calibration + Why-this details toggle
   const cal = document.createElement('div'); cal.style.marginTop = '10px';
-  cal.innerHTML = `<strong>Confidence calibration (high-confidence correct):</strong> ${s.calibration.highCorrect}/${s.calibration.highTotal} (${s.calibration.calibrationPct}%)`;
+  const calStrong = document.createElement('strong'); calStrong.innerText = 'Confidence calibration (high-confidence correct):'; cal.appendChild(calStrong);
+  cal.appendChild(document.createTextNode(' ' + s.calibration.highCorrect + '/' + s.calibration.highTotal + ' (' + s.calibration.calibrationPct + '%)'));
   const whyBtn = document.createElement('button'); whyBtn.style.marginLeft = '10px'; whyBtn.innerText = 'Why this?';
   const detail = document.createElement('div'); detail.style.display = 'none'; detail.style.marginTop = '8px'; detail.style.padding = '8px'; detail.style.border = '1px dashed rgba(255,255,255,0.04)';
   whyBtn.addEventListener('click', () => { detail.style.display = detail.style.display === 'none' ? 'block' : 'none'; whyBtn.innerText = detail.style.display === 'none' ? 'Why this?' : 'Hide'; });
   // populate examples
   if (s.examples.confusionExamples.length) {
-    const h = document.createElement('div'); h.innerHTML = '<strong>Examples (confusions):</strong>';
+  const h = document.createElement('div'); const hs = document.createElement('strong'); hs.innerText = 'Examples (confusions):'; h.appendChild(hs);
     const ul = document.createElement('ul'); s.examples.confusionExamples.forEach(ex => { const li = document.createElement('li'); li.innerText = `${ex.student}: ${ex.pair.replace('→',' → ')} (scenario ${ex.scenarioIndex}) — ${ex.final}`; ul.appendChild(li); });
     detail.appendChild(h); detail.appendChild(ul);
   }
   if (s.examples.calibrationExamples.length) {
-    const h2 = document.createElement('div'); h2.innerHTML = '<strong>Examples (high-confidence responses):</strong>';
+    const h2 = document.createElement('div'); const h2s = document.createElement('strong'); h2s.innerText = 'Examples (high-confidence responses):'; h2.appendChild(h2s);
     const ul2 = document.createElement('ul'); s.examples.calibrationExamples.forEach(ex => { const li = document.createElement('li'); li.innerText = `${ex.student}: ${ex.final} — diagnosed ${ex.diagnosed} (scenario ${ex.scenarioIndex})`; ul2.appendChild(li); });
     detail.appendChild(h2); detail.appendChild(ul2);
   }

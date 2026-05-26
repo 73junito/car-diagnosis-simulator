@@ -3,7 +3,7 @@ const assert = require('assert');
 
 // Prepare a mock Supabase client before loading the app so role resolution
 // will use the mocked client when env vars are present.
-const mockCreateClient = (url, key) => ({
+const mockCreateClient = () => ({
   auth: {
     getUser: async ({ access_token }) => {
       if (access_token === 'instructor-token') return { data: { user: { id: 'u-instructor', user_metadata: { role: 'instructor' } } } };
@@ -31,7 +31,6 @@ const { getRecentEvents } = require('../api/telemetry/events');
 async function run() {
   // clear recent events
   let recent = getRecentEvents();
-  const startLen = recent.length;
 
   // instructor token -> 200
   await request(app)

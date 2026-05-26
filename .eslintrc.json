@@ -1,0 +1,60 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-implied-eval": "error",
+    "no-new-func": "error",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "MemberExpression[property.name='innerHTML']",
+        "message": "Avoid using innerHTML; use textContent or safe DOM APIs instead."
+      },
+      {
+        "selector": "MemberExpression[property.name='outerHTML']",
+        "message": "Avoid using outerHTML; use safe DOM APIs instead."
+      },
+      {
+        "selector": "CallExpression[callee.property.name='insertAdjacentHTML']",
+        "message": "Avoid insertAdjacentHTML; build nodes with createElement and textContent."
+      },
+      {
+        "selector": "CallExpression[callee.object.name='document'][callee.property.name='write']",
+        "message": "Avoid document.write; use DOM APIs instead."
+      },
+      {
+        "selector": "CallExpression[callee.name='eval']",
+        "message": "Avoid eval()."
+      },
+      {
+        "selector": "CallExpression[callee.name='setTimeout'][arguments.0.type='Literal']",
+        "message": "Avoid passing code strings to setTimeout; pass a function instead."
+      },
+      {
+        "selector": "CallExpression[callee.property.name='html']",
+        "message": "Avoid jQuery-like .html() insertion; use safe DOM APIs or sanitize input."
+      }
+    ]
+  }
+  ,
+  "overrides": [
+    {
+      "files": [
+        "**/*.test.js",
+        "tests/**",
+        "**/__tests__/**"
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
+}

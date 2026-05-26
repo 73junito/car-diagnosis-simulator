@@ -74,12 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
               deltaEl.style.display = 'none';
             }
           }
-        } catch (e) {
-          // ignore localStorage errors
-        }
+        } catch (e) { void e; }
 
         // persist current avg for next-visit delta calculation
-        try { localStorage.setItem('tm_cta_avgScore_v1', String(curr)); } catch (e) {}
+        try { localStorage.setItem('tm_cta_avgScore_v1', String(curr)); } catch (e) { void e; }
       }
 
       if (completionEl && d.completionRate != null) completionEl.textContent = d.completionRate + '%';
@@ -104,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             topStudentInitialsEl.style.display = '';
           }
         }
-      } catch (e) { /* noop */ }
+      } catch (e) { void e; }
       // make row actionable: navigate to student report when clicked (if id available)
       try{
         const sid = d.topStudent && (d.topStudent.id || d.topStudent.studentId || d.topStudent.uid) ? (d.topStudent.id || d.topStudent.studentId || d.topStudent.uid) : null
@@ -115,11 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
             else window.location.href = '/dashboard'
           }
         }
-      }catch(e){/* noop */}
+      }catch(e){ void e; }
       if (barFillEl && d.avgScore != null) barFillEl.style.width = Math.max(0, Math.min(100, d.avgScore)) + '%';
-    } catch (e) {
-      // noop
-    }
+    } catch (e) { void e; }
   };
 
   // If dashboard exposes a summary function, use it to populate the CTA when available
@@ -134,9 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
           weakAreas: result.weakAreas ?? result.aseWeaknessesCount ?? null
         }
         window.updateCTAAnalytics(payload)
-      }).catch(()=>{/* ignore */})
+      }).catch(()=>{ void 0; })
     }
-  }catch(e){/* noop */}
+  } catch (e) { void e; }
 
   // Try to fetch a small analytics summary from the server if available
   async function fetchSummary() {

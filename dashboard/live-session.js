@@ -11,13 +11,23 @@
   function showUnauthorizedState(){
     const main = document.querySelector('main');
     if (!main) return;
-    main.innerHTML = '<div class="tm-card"><h2>Unauthorized</h2><p>Instructor access required to view live sessions.</p></div>';
+    // build DOM nodes safely rather than injecting HTML
+    while (main.firstChild) main.removeChild(main.firstChild);
+    const card = document.createElement('div');
+    card.className = 'tm-card';
+    const h2 = document.createElement('h2');
+    h2.textContent = 'Unauthorized';
+    const p = document.createElement('p');
+    p.textContent = 'Instructor access required to view live sessions.';
+    card.appendChild(h2);
+    card.appendChild(p);
+    main.appendChild(card);
   }
 
   try{
     const role = localStorage.getItem('torquemindRole');
     if (role !== 'instructor') { showUnauthorizedState(); return; }
-  }catch(e){ /* ignore */ }
+  }catch(e){ void e; }
 
   let es = null;
   function setStatus(s){
@@ -47,14 +57,18 @@
           addEventToList(data);
           // rough active sessions count from payload
           if (data.activeSessions != null) active.textContent = data.activeSessions;
-        }catch(er){}
+        }catch(er){ void er; }
       };
       es.onerror = function(){ setStatus({ text: 'Disconnected', cls: 'badge-danger' }); };
     }catch(e){ setStatus({ text: 'Error', cls: 'badge-danger' }); }
   }
 
   reconnectBtn.addEventListener('click', ()=> connect());
-  clearBtn.addEventListener('click', ()=> { list.innerHTML=''; lastEvent.textContent='—'; });
+  clearBtn.addEventListener('click', ()=> {
+    // clear list without using innerHTML
+    while (list.firstChild) list.removeChild(list.firstChild);
+    lastEvent.textContent = '—';
+  });
 
   // auto-connect
   connect();

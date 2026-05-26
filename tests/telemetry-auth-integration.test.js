@@ -1,5 +1,4 @@
 const assert = require('assert');
-const { resolveUserRole } = require('../api/auth/role');
 const { requireInstructor } = require('../api/telemetry/access');
 const { getRecentEvents } = require('../api/telemetry/events');
 
