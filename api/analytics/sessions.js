@@ -1,9 +1,18 @@
 function loadReport() {
-  const fs = require('fs');
+  const fs = require('fs');                
   const path = require('path');
   const reportPath = path.join(__dirname, 'analytics-report.json');
   try {
+    const exists = fs.existsSync && typeof fs.existsSync === 'function' ? fs.existsSync(reportPath) : undefined;
+    try {
+      console.debug('[loadReport sessions] fs keys:', Object.keys(fs));
+    } catch (e) {
+      console.debug('[loadReport sessions] fs keys: <unable to list>');
+    }
+    console.debug('[loadReport sessions] existsSync:', exists, 'path:', reportPath);
+    if (exists === false) return { sessions: [] };
     const raw = fs.readFileSync(reportPath, 'utf8');
+    console.debug('[loadReport sessions] readFileSync type:', typeof raw);
     return JSON.parse(raw);
   } catch (err) {
     return { sessions: [] };

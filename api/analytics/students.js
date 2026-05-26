@@ -1,5 +1,5 @@
 function loadReport() {
-  const fs = require('fs');
+  const fs = require('fs');                
   const path = require('path');
   const reportPath = path.join(__dirname, 'analytics-report.json');
   try {
@@ -67,3 +67,4 @@ function registerStudentsRoutes(app) {
 }
 
 module.exports.registerStudentsRoutes = registerStudentsRoutes;
+
