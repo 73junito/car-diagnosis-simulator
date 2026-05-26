@@ -57,13 +57,12 @@ function parseTelemetryEventBody(req, res, next) {
   });
 }
 
-function createSseHandler(emitter = telemetryEmitter) {
+function createSseHandler(emitter = telemetry.streamEmitter) {
   return (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     res.write(': connected\n\n');
-    const emitter = telemetry.streamEmitter;
     const onEvent = (evt) => {
       try {
         const payload = JSON.stringify(evt);
@@ -74,7 +73,6 @@ function createSseHandler(emitter = telemetryEmitter) {
         // ignore circular
       }
     };
-
     if (emitter && typeof emitter.on === 'function') {
       emitter.on('event', onEvent);
     }
@@ -93,7 +91,9 @@ function createSseHandler(emitter = telemetryEmitter) {
 
     req.on('close', () => {
       clearInterval(ping);
-      emitter.removeListener('event', onEvent);
+      if (emitter && typeof emitter.removeListener === 'function') {
+        emitter.removeListener('event', onEvent);
+      }
     });
   };
 }

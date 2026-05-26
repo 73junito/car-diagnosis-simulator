@@ -1,4 +1,4 @@
-const telemetry = require('../../lib/telemetry');
+const storage = require('./storage');
 
 function registerTelemetryHistoryRoute(app, middleware) {
   const handlers = [];
@@ -11,10 +11,12 @@ function registerTelemetryHistoryRoute(app, middleware) {
       const HARD_MAX = 500;
       if (limit > HARD_MAX) limit = HARD_MAX;
 
-      const { ok, data, error } = await telemetry.listEvents({ sessionId, limit });
+      const { ok, data, error } = await storage.listTelemetryEvents({ sessionId, limit });
+
       if (!ok) {
         return res.status(200).json({ ok: false, data: [], message: error && error.message });
       }
+
       return res.json({ ok: true, data });
     } catch (err) {
       return res.status(500).json({ ok: false, error: err.message });

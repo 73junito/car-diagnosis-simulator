@@ -2,66 +2,55 @@ const fs = require('fs');
 const path = require('path');
 
 function loadReport() {
-  const pJson = path.resolve('reports/student-performance-report.json');
-  const pCsv = path.resolve('reports/student-performance.csv');
-  if (fs.existsSync(pJson)) {
-    try { return JSON.parse(fs.readFileSync(pJson, 'utf8')); } catch (e) { return null; }
+  const reportPath = path.join(process.cwd(), 'reports', 'analytics.json');
+  if (!fs.existsSync(reportPath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+  } catch (e) {
+    return null;
   }
-  // fallback: try to read CSV (very simple parsing)
-  if (fs.existsSync(pCsv)) {
-    const txt = fs.readFileSync(pCsv, 'utf8');
-    const lines = txt.split(/\r?\n/).filter(Boolean);
-    const headers = lines.shift().split(',').map(h => h.replace(/"/g, ''));
-    const rows = lines.map(l => l.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/));
-    const sessions = rows.map(cols => {
-      const obj = {};
-      headers.forEach((h,i)=> obj[h]=cols[i]||'');
-      return obj;
-    });
-    return { sessions };
-  }
-  return null;
+}
+
+function round(value, digits = 3) {
+  return Number(Number(value).toFixed(digits));
 }
 
 function aggregateSessions() {
-  const report = loadReport() || {};
-  const sessions = report.sessions || report.data || [];
-  const totalSessions = sessions.length;
-  // compute averageConfidence if present
-  let avg = null;
-  const confs = [];
-  const studentsMap = new Map();
-  for (const s of sessions) {
-    const c = Number(s.confidence || s.avgConfidence || s.averageConfidence || s.confidenceAverage || 0) || 0;
-    if (!isNaN(c)) confs.push(c);
-    const uid = s.userId || s.user || s.studentId || s.student || s.userId;
-    if (uid) {
-      const entry = studentsMap.get(uid) || { id: uid, sessions: 0, totalConfidence: 0 };
-      entry.sessions += 1;
-      entry.totalConfidence += c;
-      studentsMap.set(uid, entry);
-    }
+  const report = loadReport();
+  const sessions = Array.isArray(report?.sessions) ? report.sessions : [];
+
+  if (sessions.length === 0) {
+    return {
+      ok: true,
+      totalSessions: 0,
+      averageConfidence: 0,
+      students: []
+    };
   }
-  if (confs.length) avg = confs.reduce((a,b)=>a+b,0)/confs.length;
 
-  const students = Array.from(studentsMap.values()).map(s => ({ id: s.id, sessions: s.sessions, averageConfidence: s.sessions? s.totalConfidence/s.sessions:0 }));
+  const totalSessions = sessions.length;
+  const averageConfidence = round(sessions.reduce((sum, s) => sum + (Number(s.confidence) || 0), 0) / totalSessions, 3);
 
-  // ASE weaknesses: try to read from report. If not present, empty array
-  const aseWeaknesses = report.aseWeaknesses || report.weaknesses || [];
+  const perStudent = new Map();
+  for (const session of sessions) {
+    const id = session.userId || session.user || 'unknown';
+    const current = perStudent.get(id) || { id, sessions: 0, confidenceTotal: 0 };
+    current.sessions += 1;
+    current.confidenceTotal += Number(session.confidence) || 0;
+    perStudent.set(id, current);
+  }
 
-  const exports = [];
-  const csv = path.resolve('reports/student-performance.csv');
-  const xapi = path.resolve('reports/xapi-statements.json');
-  if (fs.existsSync(csv)) exports.push('student-performance.csv');
-  if (fs.existsSync(xapi)) exports.push('xapi-statements.json');
+  const students = Array.from(perStudent.values()).map((s) => ({
+    id: s.id,
+    sessions: s.sessions,
+    averageConfidence: round(s.confidenceTotal / s.sessions, 3)
+  }));
 
   return {
     ok: true,
     totalSessions,
-    averageConfidence: avg === null ? 0 : Number(avg.toFixed(3)),
-    students,
-    aseWeaknesses,
-    exports
+    averageConfidence,
+    students
   };
 }
 
@@ -75,10 +64,9 @@ function handler(req, res) {
   }
 }
 
-// Default export must be a function for Vercel serverless. Attach helpers
-// to the exported function so other modules can access them.
 module.exports = handler;
 module.exports.aggregateSessions = aggregateSessions;
+
 function registerSessionsRoutes(app) {
   app.get('/api/analytics/sessions', (req, res) => {
     try {
