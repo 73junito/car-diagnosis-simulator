@@ -1,9 +1,10 @@
 jest.mock('fs');
-const fs = require('fs');
+let fs;
 
 describe('fs hoist + resetModules repro', () => {
   beforeEach(() => {
     jest.resetModules();
+    fs = require('fs');
     fs.existsSync.mockReset && fs.existsSync.mockReset();
     fs.readFileSync.mockReset && fs.readFileSync.mockReset();
   });
