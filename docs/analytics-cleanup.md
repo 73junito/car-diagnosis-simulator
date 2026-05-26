@@ -29,7 +29,8 @@ How to review
 -------------
 - PRs should be small and focused (one area at a time)
 - Include test coverage for changed behavior
-- Run `npm test` and `gh workflow run` for smoke tests when applicable
+- Run the dedicated analytics/smoke test scripts for the area you changed (for example, the relevant `npm run test:analytics*` script and `torquemind-api: npm run test:smoke`) instead of relying on root `npm test`, which only runs Jest `**/tests/**/*.spec.js` matches
+- When smoke workflows need to be re-run to republish the required `api-smoke` status, follow `docs/ci-contract.md` and re-run them from the GitHub Actions UI
 
 Next steps (this PR)
 ---------------------
