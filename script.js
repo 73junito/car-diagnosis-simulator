@@ -1608,12 +1608,24 @@ function openStudentDetail(name){
   const dec = document.getElementById('teacherDecisions');
   if (dec) {
     dec.style.display = 'block';
-    dec.innerHTML = `
-      <h3>${student.name}</h3>
-      <p>Score: ${student.score}</p>
-      <p>Accuracy: ${student.correct} / ${student.correct + student.wrong}</p>
-      <p>Last: ${student.lastUpdated || '—'}</p>
-    `;
+    dec.textContent = '';
+
+    const title = document.createElement('h3');
+    title.textContent = String(student.name || '');
+
+    const scoreP = document.createElement('p');
+    scoreP.textContent = `Score: ${student.score}`;
+
+    const accuracyP = document.createElement('p');
+    accuracyP.textContent = `Accuracy: ${student.correct} / ${student.correct + student.wrong}`;
+
+    const lastP = document.createElement('p');
+    lastP.textContent = `Last: ${student.lastUpdated || '—'}`;
+
+    dec.appendChild(title);
+    dec.appendChild(scoreP);
+    dec.appendChild(accuracyP);
+    dec.appendChild(lastP);
   }
   showReplay(student);
 }
