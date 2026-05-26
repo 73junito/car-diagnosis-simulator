@@ -1,11 +1,13 @@
-const fs = require('fs');
 const path = require('path');
 
 function loadReport() {
+  const fs = require('fs');
   const reportPath = path.join(process.cwd(), 'reports', 'analytics.json');
-  if (!fs.existsSync(reportPath)) return null;
+  console.debug('[loadReport sessions] fs.readFileSync type:', typeof fs.readFileSync, 'hasMock:', !!fs.readFileSync?.mock);
   try {
-    return JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+    const content = fs.readFileSync(reportPath, 'utf8');
+    console.debug('[loadReport sessions] content', typeof content === 'string' ? content.slice(0,200) : content);
+    return JSON.parse(content);
   } catch (e) {
     return null;
   }

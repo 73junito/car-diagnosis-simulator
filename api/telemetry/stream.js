@@ -98,7 +98,7 @@ function createSseHandler(emitter = telemetry.streamEmitter) {
   };
 }
 
-function registerTelemetryRoutes(app, emitter = telemetryEmitter) {
+function registerTelemetryRoutes(app, emitter = telemetry.streamEmitter) {
   app.get('/api/telemetry/stream', createSseHandler(emitter));
 
     app.post('/api/telemetry/events', parseTelemetryEventBody, async (req, res) => {

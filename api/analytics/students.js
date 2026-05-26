@@ -1,11 +1,13 @@
-const fs = require('fs');
 const path = require('path');
 
 function loadReport() {
+  const fs = require('fs');
   const reportPath = path.join(process.cwd(), 'reports', 'analytics.json');
-  if (!fs.existsSync(reportPath)) return null;
+  console.debug('[loadReport students] fs.readFileSync type:', typeof fs.readFileSync, 'hasMock:', !!fs.readFileSync?.mock);
   try {
-    return JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+    const content = fs.readFileSync(reportPath, 'utf8');
+    console.debug('[loadReport students] content', typeof content === 'string' ? content.slice(0,200) : content);
+    return JSON.parse(content);
   } catch (e) {
     return null;
   }
@@ -36,7 +38,7 @@ function aggregateStudents() {
   const students = Array.from(perStudent.values()).map((s) => ({
     id: s.id,
     sessions: s.sessions,
-    averageScore: s.scoreTotal / s.sessions,
+    averageScore: round(s.scoreTotal / s.sessions, 0),
     averageConfidence: round(s.confidenceTotal / s.sessions, 2)
   }));
 
