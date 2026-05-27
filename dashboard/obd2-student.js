@@ -123,7 +123,7 @@
     const rubric = (window.rubrics && window.rubrics[scenario]) || window.rubrics && window.rubrics['default'] || null;
     const score = rubric ? calculateScore({ symptoms, tests, diagnosis }, rubric) : null;
     if(window.attemptAdapter && window.attemptAdapter.saveAttempt) {
-      try{ window.attemptAdapter.saveAttempt(scenario, { symptoms, tests, diagnosis, score }); }catch(e){}
+      try{ window.attemptAdapter.saveAttempt(scenario, { symptoms, tests, diagnosis, score }); }catch(e){ void e; }
     }
   }
 
@@ -151,7 +151,7 @@
   function resetAttemptState(scenario){
     const resetter = (window.attemptAdapter && window.attemptAdapter.resetAttempt) ? window.attemptAdapter.resetAttempt : (window.attemptStore && window.attemptStore.resetAttempt);
     if(!resetter) return;
-    try{ resetter(scenario); }catch(e){}
+    try{ resetter(scenario); }catch(e){ void e; }
     resetWorkflow();
     const panel = document.getElementById('score-summary'); if(panel) panel.hidden = true;
   }

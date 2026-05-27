@@ -73,7 +73,7 @@
     const safety = !!(document.getElementById('ase-safety-ack') && document.getElementById('ase-safety-ack').checked);
     const completion = document.getElementById('ase-completion-state') ? document.getElementById('ase-completion-state').textContent : null;
     if(window.attemptAdapter && window.attemptAdapter.saveAttempt) {
-      try{ window.attemptAdapter.saveAttempt(scenario, { steps: checks, safetyAck: safety, completion }); }catch(e){}
+      try{ window.attemptAdapter.saveAttempt(scenario, { steps: checks, safetyAck: safety, completion }); }catch(e){ void e; }
     }
   }
 
@@ -101,7 +101,7 @@
   function resetAttemptState(scenario){
     const resetter = (window.attemptAdapter && window.attemptAdapter.resetAttempt) ? window.attemptAdapter.resetAttempt : (window.attemptStore && window.attemptStore.resetAttempt);
     if(!resetter) return;
-    try{ resetter(scenario); }catch(e){}
+    try{ resetter(scenario); }catch(e){ void e; }
     const checks = document.querySelectorAll('#ase-step-list input[type=checkbox]'); checks.forEach(cb => { cb.checked = false; cb.dispatchEvent(new Event('change')); });
     if(document.getElementById('ase-safety-ack')) document.getElementById('ase-safety-ack').checked = false; const el = document.getElementById('ase-completion-state'); if(el) el.classList.add('hidden');
   }

@@ -36,9 +36,9 @@ describe('attemptAdapter wiring', () => {
     document.head.appendChild(Object.assign(document.createElement('script'),{textContent: adapterCode}));
 
     expect(window.attemptAdapter).toBeDefined();
-    const res = await window.attemptAdapter.saveAttempt('s2', { a: 2 });
+    await window.attemptAdapter.saveAttempt('s2', { a: 2 });
     expect(window.attemptSupabase.saveAttempt).toHaveBeenCalled();
-    const loaded = await window.attemptAdapter.loadAttempt('s2');
+    await window.attemptAdapter.loadAttempt('s2');
     expect(window.attemptSupabase.loadAttempt).toHaveBeenCalled();
   });
 });
