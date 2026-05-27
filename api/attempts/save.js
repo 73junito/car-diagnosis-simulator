@@ -1,4 +1,21 @@
 const { createClient } = require('@supabase/supabase-js');
+const Ajv = require('ajv');
+
+const ajv = new Ajv({ allErrors: true });
+const bodySchema = {
+  type: 'object',
+  required: ['scenario', 'workflow_type'],
+  properties: {
+    user_id: { type: 'string' },
+    scenario: { type: 'string', minLength: 1 },
+    workflow_type: { type: 'string', minLength: 1 },
+    payload_json: { type: 'object' },
+    score: { type: 'number' },
+    completion_state: { type: 'string' },
+  },
+  additionalProperties: false,
+};
+const validateBody = ajv.compile(bodySchema);
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
@@ -7,8 +24,8 @@ module.exports = async (req, res) => {
     const body = req.body || {};
     const { user_id, scenario, workflow_type, payload_json, score, completion_state } = body;
 
-    if (!scenario || !workflow_type) {
-      return res.status(400).json({ ok: false, error: 'validation', message: 'scenario and workflow_type are required' });
+    if (!validateBody(body)) {
+      return res.status(400).json({ ok: false, error: 'validation', details: validateBody.errors });
     }
 
     const SUPABASE_URL = process.env.SUPABASE_URL || null;
