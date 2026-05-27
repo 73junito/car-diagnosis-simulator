@@ -13,12 +13,12 @@ window.initStudentDashboard = function(){
     detail.classList.remove('hidden');
     detailTitle.textContent = s.symptomCategory || s.symptoms || ('Scenario ' + s.id);
     customerComplaint.textContent = s.symptoms || '';
-    symptomsList.innerHTML = '';
+    while(symptomsList.firstChild) symptomsList.removeChild(symptomsList.firstChild);
     (s.symptoms && [s.symptoms] || s.symptomsList || []).forEach(x => {
       const li = document.createElement('li'); li.textContent = x; symptomsList.appendChild(li);
     });
     dtcs.textContent = s.possibleDtcs ? ('Possible DTCs: ' + s.possibleDtcs.join(', ')) : '';
-    availableTests.innerHTML = '';
+    while(availableTests.firstChild) availableTests.removeChild(availableTests.firstChild);
     if(s.tests){
       const ul = document.createElement('ul');
       Object.keys(s.tests).forEach(k => { const li = document.createElement('li'); li.textContent = `${k}: ${JSON.stringify(s.tests[k])}`; ul.appendChild(li); });
