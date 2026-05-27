@@ -51,6 +51,9 @@ async function run() {
   const status = failures > 0 ? `❌ ${failures} failing test(s)` : `✅ All tests passed (${total} tests)`;
 
   let body = `<!-- junit-summary -->\n**Test results:** ${status}\n`;
+  const [owner, repoName] = repo.split('/');
+  const dashboardUrl = `https://${owner}.github.io/${repoName}/dashboard.html`;
+  body += `\n**Live dashboard:** [Open test dashboard](${dashboardUrl})\n`;
   if (failing.length) {
     body += '\n**Failing tests (top 10):**\n';
     for (const f of failing.slice(0, 10)) body += `- ${f}\n`;
