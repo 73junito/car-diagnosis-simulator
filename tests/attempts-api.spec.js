@@ -29,6 +29,11 @@ describe('Attempts API endpoints (mocked Supabase)', () => {
     }
   });
 
+  afterEach(() => {
+    jest.resetModules();
+    jest.clearAllMocks();
+  });
+
   test('save endpoint returns 200 with id on success', async () => {
     // Mock supabase client
     jest.doMock('@supabase/supabase-js', () => ({
@@ -104,6 +109,11 @@ describe('Attempts API endpoints (mocked Supabase)', () => {
     } else {
       delete process.env.SUPABASE_ANON_KEY;
     }
+  });
+
+  afterEach(() => {
+    jest.resetModules();
+    jest.clearAllMocks();
   });
 
   test('save endpoint returns 200 with id on success', async () => {
