@@ -59,6 +59,7 @@ async function run() {
   const [owner, repoName] = repo.split('/');
   const junitPath = path.resolve(process.cwd(), 'test-results', 'junit.xml');
   const failures = parseJUnitFailures(junitPath);
+  const dashboardUrl = `https://${owner}.github.io/${repoName}/dashboard.html`;
 
   let history = await downloadLatestHistory(owner, repoName, token).catch(() => null) || { updatedAt: null, runs: [], tests: {} };
 
@@ -105,6 +106,7 @@ async function run() {
 
   if (prNumber && (newlyFlaky.length || flakyTests.length)) {
     let body = `<!-- flaky-summary -->\n`;
+    body += `\n**Live dashboard:** [Open test dashboard](${dashboardUrl})\n\n`;
     if (newlyFlaky.length) {
       body += `**Newly flaky tests (crossed ${threshold} failures this run):**\n${newlyFlaky.slice(0, 20).map(t => `- ${t}`).join('\n')}\n\n`;
     }

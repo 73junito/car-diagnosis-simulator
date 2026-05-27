@@ -48,7 +48,10 @@ async function run() {
   if (prNumber && repo && token && slow.length) {
     const { GITHUB_API = 'https://api.github.com' } = process.env;
     const [owner, repoName] = repo.split('/');
-    const body = `<!-- slow-tests -->\n**Slow tests detected (>= ${thresholdMs}ms):**\n${slow.slice(0, topN).map(s => `- ${s.classname} — ${s.name} — ${s.timeMs}ms`).join('\n')}\n`;
+    const dashboardUrl = `https://${owner}.github.io/${repoName}/dashboard.html`;
+    let body = `<!-- slow-tests -->\n`;
+    body += `\n**Live dashboard:** [Open test dashboard](${dashboardUrl})\n\n`;
+    body += `**Slow tests detected (>= ${thresholdMs}ms):**\n${slow.slice(0, topN).map(s => `- ${s.classname} — ${s.name} — ${s.timeMs}ms`).join('\n')}\n`;
     // post or update PR comment
     const listUrl = `${GITHUB_API}/repos/${owner}/${repoName}/issues/${prNumber}/comments`;
     const headers = { Authorization: `token ${token}`, 'User-Agent': 'slow-test-detector' };
