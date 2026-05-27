@@ -34,5 +34,10 @@
       "source": "/dashboard/student",
       "destination": "/dashboard/student.html"
     }
+    ,
+    {
+      "source": "/dashboard/obd2",
+      "destination": "/dashboard/obd2.html"
+    }
   ]
 }
