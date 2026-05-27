@@ -97,8 +97,13 @@
     populateScenarioSelect(scenarios);
     populateTestChecklist(testsAvailable);
 
-    const sel = document.getElementById('scenario-select'); if(sel) sel.addEventListener('change', () => resetWorkflow());
+    const sel = document.getElementById('scenario-select'); if(sel) sel.addEventListener('change', () => { resetWorkflow(); const s = sel.value; loadAttemptState(s); });
     const submit = document.getElementById('submit-diagnosis'); if(submit) submit.addEventListener('click', submitDiagnosis);
+
+    // wire lightweight persistence hooks
+    const symptomInput = document.getElementById('symptom-text'); if(symptomInput) symptomInput.addEventListener('input', () => { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); });
+    const diagInput = document.getElementById('diagnosis-input'); if(diagInput) diagInput.addEventListener('input', () => { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); });
+    document.addEventListener('change', (e) => { if(e && e.target && e.target.closest && e.target.closest('#test-checklist')) { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); } });
 
     // set initial
     const chosen = scenarios.find(s => s.slug===initialScenario) || scenarios[0] || null;
@@ -107,6 +112,37 @@
   };
 
   // expose some helpers for tests
-  window._obd2Student = { resetWorkflow, submitDiagnosis, populateTestChecklist, calculateScore, renderScoreSummary };
+  // persistence helpers
+  function saveAttemptState(scenario){
+    if(!window.attemptStore) return;
+    if(!scenario) return;
+    const symptoms = (document.getElementById('symptom-text')||{}).value || '';
+    const tests = Array.from(document.querySelectorAll('#test-checklist input[type=checkbox]:checked')).map(i=>i.value);
+    const diagnosis = (document.getElementById('diagnosis-input')||{}).value || '';
+    const rubric = (window.rubrics && window.rubrics[scenario]) || window.rubrics && window.rubrics['default'] || null;
+    const score = rubric ? calculateScore({ symptoms, tests, diagnosis }, rubric) : null;
+    window.attemptStore.saveAttempt(scenario, { symptoms, tests, diagnosis, score });
+  }
+
+  function loadAttemptState(scenario){
+    if(!window.attemptStore) return null;
+    const data = window.attemptStore.loadAttempt(scenario);
+    if(!data) return null;
+    // restore UI
+    const txt = document.getElementById('symptom-text'); if(txt) txt.value = data.symptoms || '';
+    const diag = document.getElementById('diagnosis-input'); if(diag) diag.value = data.diagnosis || '';
+    const cbs = document.querySelectorAll('#test-checklist input[type=checkbox]'); cbs.forEach(cb => { cb.checked = (data.tests || []).indexOf(cb.value) !== -1; cb.dispatchEvent(new Event('change')); });
+    if(data.score) renderScoreSummary(data.score);
+    return data;
+  }
+
+  function resetAttemptState(scenario){
+    if(!window.attemptStore) return;
+    window.attemptStore.resetAttempt(scenario);
+    resetWorkflow();
+    const panel = document.getElementById('score-summary'); if(panel) panel.hidden = true;
+  }
+
+  window._obd2Student = { resetWorkflow, submitDiagnosis, populateTestChecklist, calculateScore, renderScoreSummary, saveAttemptState, loadAttemptState, resetAttemptState };
 
 })();
