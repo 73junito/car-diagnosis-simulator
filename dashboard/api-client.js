@@ -59,7 +59,7 @@ function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
             return retryResp;
           }
           // still stale -> notify with forceReload hint
-          onStale && onStale(serverVersion);
+          onStale && onStale(serverVersion, { forceReload: true });
           return retryResp;
         }
       }
