@@ -49,7 +49,7 @@ describe('API app-version header', () => {
     const res1 = makeRes();
     summary(req, res1);
     expect(res1.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res1.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
+    expect(res1.headers['x-app-version']).toBe(process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || process.env.APP_VERSION || 'dev');
 
     const res2 = makeRes();
     students(req, res2);
