@@ -184,3 +184,15 @@ jobs:
         with:
           name: slow-tests
           path: test-results/slow-tests.json
+
+      - name: Generate test dashboard (artifact)
+        if: always()
+        run: |
+          node scripts/generate-dashboard.js
+
+      - name: Upload test dashboard
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-dashboard
+          path: test-results/dashboard.html
