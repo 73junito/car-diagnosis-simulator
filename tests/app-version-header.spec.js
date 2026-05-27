@@ -33,7 +33,7 @@ describe('API app-version header', () => {
     const res = makeRes();
     await load(req, res);
     expect(res.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res.headers['x-app-version']).toBe('test-version');
+    expect(res.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
   });
 
   test('attempts/save sets x-app-version', async () => {
@@ -41,7 +41,7 @@ describe('API app-version header', () => {
     const res = makeRes();
     await save(req, res);
     expect(res.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res.headers['x-app-version']).toBe('test-version');
+    expect(res.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
   });
 
   test('analytics handlers set x-app-version', () => {
@@ -49,16 +49,16 @@ describe('API app-version header', () => {
     const res1 = makeRes();
     summary(req, res1);
     expect(res1.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res1.headers['x-app-version']).toBe('test-version');
+    expect(res1.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
 
     const res2 = makeRes();
     students(req, res2);
     expect(res2.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res2.headers['x-app-version']).toBe('test-version');
+    expect(res2.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
 
     const res3 = makeRes();
     sessions(req, res3);
     expect(res3.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res3.headers['x-app-version']).toBe('test-version');
+    expect(res3.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
   });
 });
