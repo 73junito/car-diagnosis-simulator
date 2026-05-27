@@ -17,3 +17,16 @@
 .dtc-detail{flex:1;padding:12px;border-radius:6px;background:#fff;border:1px solid #eee}
 .dtc-detail h3{margin:0 0 8px 0}
 .dtc-detail p{margin:0}
+
+.obd2-live{margin-top:16px}
+.live-controls{margin-bottom:8px}
+.live-list{list-style:none;padding:8px;border-radius:6px;background:#fff;border:1px solid #eee;max-height:160px;overflow:auto}
+.live-list li{padding:6px;border-bottom:1px solid #f6f6f6}
+
+.obd2-freeze{margin-top:12px}
+.freeze-wrapper{display:flex;gap:12px}
+.freeze-list{width:40%;list-style:none;padding:8px;border-radius:6px;background:#fff;border:1px solid #eee;max-height:160px;overflow:auto}
+.freeze-list li{padding:6px;border-bottom:1px solid #f6f6f6;cursor:pointer}
+.freeze-detail{flex:1;padding:12px;border-radius:6px;background:#fff;border:1px solid #eee}
+.freeze-detail h3{margin:0 0 8px 0}
+.freeze-detail p{margin:0}

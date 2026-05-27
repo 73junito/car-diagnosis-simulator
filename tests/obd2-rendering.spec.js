@@ -22,8 +22,8 @@ describe('OBD2 dashboard rendering', () => {
     // initialize
     window.initObd2Dashboard('demo');
 
-    expect(document.getElementById('gauge-rpm').textContent).toBe('800');
-    expect(document.getElementById('gauge-voltage').textContent).toBe('12.6V');
+    expect(document.getElementById('gauge-rpm').textContent.trim()).toBe('800');
+    expect(document.getElementById('gauge-voltage').textContent.trim()).toBe('12.6V');
     const dtcs = document.getElementById('dtc-list');
     expect(dtcs.children.length).toBeGreaterThanOrEqual(1);
 
@@ -32,7 +32,7 @@ describe('OBD2 dashboard rendering', () => {
     sel.value = 'rough-idle';
     sel.dispatchEvent(new Event('change'));
 
-    expect(document.getElementById('gauge-rpm').textContent).toBe('900');
+    expect(document.getElementById('gauge-rpm').textContent.trim()).toBe('900');
     expect(document.getElementById('dtc-list').children.length).toBeGreaterThanOrEqual(1);
   });
 });
