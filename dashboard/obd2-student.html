@@ -31,6 +31,11 @@
       <input id="diagnosis-input" placeholder="Enter your diagnosis" />
       <button id="submit-diagnosis">Submit Diagnosis</button>
       <div id="diagnosis-feedback" class="feedback" aria-live="polite">No submission yet.</div>
+      <div id="score-summary" class="score-summary" aria-live="polite" hidden>
+        <div id="score-value">Score: --</div>
+        <div id="score-breakdown"></div>
+        <div id="score-state"></div>
+      </div>
     </section>
   </main>
   <script src="/dashboard/obd2-student.js"></script>
