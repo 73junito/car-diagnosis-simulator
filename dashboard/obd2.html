@@ -49,6 +49,26 @@
       </div>
     </section>
 
+    <section class="obd2-live">
+      <h2>Live Scan Stream</h2>
+      <div class="live-controls">
+        <button id="live-start">Start</button>
+        <button id="live-stop">Stop</button>
+      </div>
+      <ul id="live-list" class="live-list" aria-live="polite"></ul>
+    </section>
+
+    <section class="obd2-freeze">
+      <h2>Freeze-Frame</h2>
+      <div class="freeze-wrapper">
+        <ul id="freeze-list" class="freeze-list"></ul>
+        <aside id="freeze-detail" class="freeze-detail">
+          <h3 id="freeze-detail-title">Select frame</h3>
+          <p id="freeze-desc">Click a frame to see details.</p>
+        </aside>
+      </div>
+    </section>
+
   </main>
   <script src="/dashboard/obd2.js"></script>
 </body>

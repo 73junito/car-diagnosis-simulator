@@ -57,6 +57,12 @@
       if(s) { renderGauges(s.values || {}); renderDtcs(s.dtcs || []); }
     });
 
+    // live scan controls
+    const startBtn = document.getElementById('live-start');
+    const stopBtn = document.getElementById('live-stop');
+    if(startBtn) startBtn.addEventListener('click', () => startLiveScan());
+    if(stopBtn) stopBtn.addEventListener('click', () => stopLiveScan());
+
     const chosen = findScenario(scenarios, initialScenario) || scenarios[0];
     if(chosen){
       sel.value = chosen.slug || chosen.id || chosen.name;
@@ -66,6 +72,24 @@
       renderGauges({}); renderDtcs([]);
     }
   };
+
+  // Live scan / freeze-frame helpers
+  let _liveInterval = null;
+  function emitLiveFrame(){
+    const ul = document.getElementById('live-list'); if(!ul) return;
+    const id = String(Date.now());
+    const li = document.createElement('li'); li.textContent = `frame-${id}`; li.dataset.frame = id; ul.appendChild(li);
+  }
+
+  function startLiveScan(){ if(_liveInterval) return; _liveInterval = setInterval(emitLiveFrame, 80); }
+  function stopLiveScan(){ if(!_liveInterval) return; clearInterval(_liveInterval); _liveInterval = null; }
+
+  function addFreezeFrame(frame){ const ul = document.getElementById('freeze-list'); if(!ul) return; const li = document.createElement('li'); li.textContent = frame.label || (frame.id||'frame'); li.dataset.id = frame.id || String(Date.now()); li.addEventListener('click', () => showFreezeDetail(frame)); ul.appendChild(li); }
+
+  function showFreezeDetail(frame){ const title = document.getElementById('freeze-detail-title'); const desc = document.getElementById('freeze-desc'); if(title) title.textContent = frame.label || 'Frame'; if(desc) desc.textContent = frame.desc || JSON.stringify(frame); }
+
+  // expose live helpers for tests
+  window._obd2Live = { emitLiveFrame, startLiveScan, stopLiveScan, addFreezeFrame, showFreezeDetail };
 
   // DTC detail content (placeholder descriptions)
   const dtcDetails = {
