@@ -1,4 +1,10 @@
-const { createClient } = require('@supabase/supabase-js');
+let createClient = null;
+try {
+  // lazy require so missing dependency doesn't crash non-configured envs
+  ({ createClient } = require('@supabase/supabase-js'));
+} catch (e) {
+  createClient = null;
+}
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
@@ -13,7 +19,7 @@ module.exports = async (req, res) => {
     const SUPABASE_URL = process.env.SUPABASE_URL || null;
     const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || null;
-    if (!SUPABASE_URL || !(SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY)) {
+    if (!createClient || !SUPABASE_URL || !(SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY)) {
       return res.status(503).json({ ok: false, error: 'supabase_unavailable' });
     }
 
