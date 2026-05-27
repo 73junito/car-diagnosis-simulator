@@ -1,4 +1,5 @@
 /* Supabase attempt persistence adapter (client-side) - graceful fallback to in-memory store */
+/* global supabase */
 (function(){
   const SUPABASE_URL = (typeof process !== 'undefined' && process.env && process.env.SUPABASE_URL) || window.SUPABASE_URL || null;
   const SUPABASE_KEY = (typeof process !== 'undefined' && process.env && process.env.SUPABASE_KEY) || window.SUPABASE_KEY || null;
