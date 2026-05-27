@@ -30,11 +30,14 @@
 		"eslint": "^8.56.0",
 		"jest-junit": "^13.5.0",
 		"jest-html-reporter": "^6.0.0",
-		"fast-xml-parser": "^4.1.1"
+		"fast-xml-parser": "^4.1.1",
+		"jest-circus": "^30.4.2"
 	}
 	,
 	"jest": {
 		"testTimeout": 30000,
+		"testRunner": "jest-circus/runner",
+		"setupFilesAfterEnv": ["<rootDir>/scripts/jest-setup-retries.js"],
 		"reporters": [
 			"default",
 			[

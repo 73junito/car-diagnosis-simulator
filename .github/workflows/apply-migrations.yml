@@ -114,6 +114,7 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
           CI_TEST_RETRIES: 1
           CI_TEST_BACKOFF_MS: 2000
+          CI_PER_TEST_RETRIES: 1
         run: |
           node scripts/ci-run-tests.js
 
