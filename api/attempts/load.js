@@ -11,11 +11,12 @@ module.exports = async (req, res) => {
 
     const SUPABASE_URL = process.env.SUPABASE_URL || null;
     const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || null;
+    if (!SUPABASE_URL || !(SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY)) {
       return res.status(503).json({ ok: false, error: 'supabase_unavailable' });
     }
 
-    const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const client = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY);
 
     let query = client.from('attempts').select('*');
     if (user_id) query = query.eq('user_id', user_id);
