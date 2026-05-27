@@ -1,5 +1,13 @@
 const appVersionUtil = require('../_utils/app-version');
 
+let createClient = null;
+try {
+  // lazy require so missing dependency doesn't crash non-configured envs
+  ({ createClient } = require('@supabase/supabase-js'));
+} catch (e) {
+  createClient = null;
+}
+
 module.exports = async (req, res) => {
   appVersionUtil.setAppVersionHeader(res);
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
@@ -8,18 +16,18 @@ module.exports = async (req, res) => {
     const user_id = req.query.user_id || null;
     const scenario = req.query.scenario || null;
 
+    if (!user_id) return res.status(400).json({ ok: false, error: 'validation', message: 'user_id is required' });
     if (!scenario) return res.status(400).json({ ok: false, error: 'validation', message: 'scenario is required' });
 
     const SUPABASE_URL = process.env.SUPABASE_URL || null;
     const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || null;
-    if (!SUPABASE_URL || !(SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY)) {
+    if (!createClient || !SUPABASE_URL || !(SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY)) {
       return res.status(503).json({ ok: false, error: 'supabase_unavailable' });
     }
 
-  // Lazy-require supabase so tests don't need the dependency installed
-  const supabase = require('@supabase/supabase-js');
-  const client = supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY);
+    // Create supabase client using the available factory
+    const client = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY);
     let resp = null;
 
     // Build and execute query defensively so mocks or different client shapes work in tests.
@@ -32,9 +40,11 @@ module.exports = async (req, res) => {
     try {
       // Preferred shape: chainable builder with `select()`
       if (tableRef && typeof tableRef.select === 'function') {
-        let q = tableRef.select('*');
-        if (user_id) q = q.eq('user_id', user_id);
-        q = q.eq('scenario', scenario).order('created_at', { ascending: false }).limit(1);
+        let q = tableRef.select('*')
+          .eq('user_id', user_id)
+          .eq('scenario', scenario)
+          .order('created_at', { ascending: false })
+          .limit(1);
         resp = await q;
       } else if (tableRef && typeof tableRef.then === 'function') {
         // If `from()` returned a thenable/Promise that already resolves to a response
@@ -42,8 +52,7 @@ module.exports = async (req, res) => {
       } else if (tableRef && typeof tableRef.eq === 'function') {
         // If `from()` returned an object that supports `eq` directly
         let q = tableRef;
-        if (user_id) q = q.eq('user_id', user_id);
-        q = q.eq('scenario', scenario).order('created_at', { ascending: false }).limit(1);
+        q = q.eq('user_id', user_id).eq('scenario', scenario).order('created_at', { ascending: false }).limit(1);
         resp = await q;
         } else if (tableRef && typeof tableRef.insert === 'function') {
           // Fallback for mocks where `from()` returns an object with `insert()` (test ordering issues)

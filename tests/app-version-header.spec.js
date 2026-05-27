@@ -4,7 +4,6 @@ process.env.APP_VERSION = process.env.APP_VERSION || 'test-version';
 
 // Expected version precedence must match api/_utils/app-version.js
 const expectedVersion = process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || process.env.APP_VERSION || 'dev';
-
 // Mock supabase client to avoid requiring the real package in tests
 jest.mock('@supabase/supabase-js', () => ({
   createClient: () => ({

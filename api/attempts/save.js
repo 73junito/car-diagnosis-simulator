@@ -1,4 +1,4 @@
-const { createClient } = require('@supabase/supabase-js');
+const { setAppVersionHeader } = require('../_utils/app-version');
 const Ajv = require('ajv');
 
 const ajv = new Ajv({ allErrors: true });
@@ -18,6 +18,7 @@ const bodySchema = {
 const validateBody = ajv.compile(bodySchema);
 
 module.exports = async (req, res) => {
+  setAppVersionHeader(res);
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
 
   try {
@@ -37,6 +38,8 @@ module.exports = async (req, res) => {
       return res.status(503).json({ ok: false, error: 'supabase_unavailable' });
     }
 
+    // Lazy-require supabase so tests don't need the package installed
+    const { createClient } = require('@supabase/supabase-js');
     const client = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // Insert attempt record
