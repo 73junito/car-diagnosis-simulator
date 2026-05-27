@@ -1,7 +1,9 @@
 const { aggregateSessions } = require('./sessions');
+const { setAppVersionHeader } = require('../_utils/app-version');
 
 // Vercel serverless handler — returns a small analytics summary
 module.exports = (req, res) => {
+  setAppVersionHeader(res);
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
   try {
     const data = aggregateSessions();
