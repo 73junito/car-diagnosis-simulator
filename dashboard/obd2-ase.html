@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OBD-II ASE Procedural Assessment</title>
+  <link rel="stylesheet" href="/dashboard/obd2-ase.css">
+</head>
+<body>
+  <main class="ase-assessment">
+    <header>
+      <h1>ASE Procedural Checklist</h1>
+      <div class="controls">
+        <label for="ase-scenario-select">Scenario</label>
+        <select id="ase-scenario-select"></select>
+      </div>
+    </header>
+
+    <section class="ase-steps">
+      <h2>Procedure Steps</h2>
+      <ul id="ase-step-list" class="ase-step-list"></ul>
+    </section>
+
+    <section class="ase-safety">
+      <label id="ase-safety-label" class="hidden"><input type="checkbox" id="ase-safety-ack" /> I acknowledge HV/EV safety procedures</label>
+    </section>
+
+    <section class="ase-completion">
+      <button id="ase-check-complete">Check Completion</button>
+      <div id="ase-completion-state" class="hidden" aria-live="polite"></div>
+    </section>
+  </main>
+  <script src="/dashboard/obd2-ase.js"></script>
+</body>
+</html>
