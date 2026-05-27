@@ -29,7 +29,8 @@
 		"supertest": "^7.2.2",
 		"eslint": "^8.56.0",
 		"jest-junit": "^13.5.0",
-		"jest-html-reporter": "^6.0.0"
+		"jest-html-reporter": "^6.0.0",
+		"fast-xml-parser": "^4.1.1"
 	}
 	,
 	"jest": {

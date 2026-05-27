@@ -128,3 +128,12 @@ jobs:
         with:
           name: jest-html-report
           path: test-results/jest-report.html
+
+      - name: Post PR test summary
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/post-junit-summary.js
