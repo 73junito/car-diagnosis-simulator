@@ -7,3 +7,10 @@
 #diagnosis-input{width:100%;padding:8px;border:1px solid #e6e6e6;border-radius:6px;margin-bottom:8px}
 #submit-diagnosis{padding:8px 12px;border-radius:6px;background:#1976d2;color:#fff;border:none;cursor:pointer}
 .feedback{margin-top:8px;padding:8px;border-radius:6px;background:#f8f9fa;border:1px solid #eee}
+
+.score-summary{margin-top:10px;padding:10px;border-radius:6px;background:#fff;border:1px solid #e0e0e0}
+.score-summary.pass{border-left:4px solid #4caf50}
+.score-summary.fail{border-left:4px solid #f44336}
+.score-summary #score-value{font-weight:800;margin-bottom:6px}
+.score-summary #score-breakdown{font-size:13px;color:#444;margin-bottom:6px}
+.score-summary #score-state{font-weight:700}
