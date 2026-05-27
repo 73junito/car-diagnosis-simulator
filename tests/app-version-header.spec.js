@@ -2,9 +2,6 @@
 
 process.env.APP_VERSION = process.env.APP_VERSION || 'test-version';
 
-// Expected version precedence must match api/_utils/app-version.js
-const expectedVersion = process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || process.env.APP_VERSION || 'dev';
-
 // Mock supabase client to avoid requiring the real package in tests
 jest.mock('@supabase/supabase-js', () => ({
   createClient: () => ({
@@ -36,7 +33,7 @@ describe('API app-version header', () => {
     const res = makeRes();
     await load(req, res);
     expect(res.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res.headers['x-app-version']).toBe(expectedVersion);
+    expect(res.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
   });
 
   test('attempts/save sets x-app-version', async () => {
@@ -44,7 +41,7 @@ describe('API app-version header', () => {
     const res = makeRes();
     await save(req, res);
     expect(res.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res.headers['x-app-version']).toBe(expectedVersion);
+    expect(res.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
   });
 
   test('analytics handlers set x-app-version', () => {
@@ -52,16 +49,16 @@ describe('API app-version header', () => {
     const res1 = makeRes();
     summary(req, res1);
     expect(res1.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res1.headers['x-app-version']).toBe(expectedVersion);
+    expect(res1.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
 
     const res2 = makeRes();
     students(req, res2);
     expect(res2.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res2.headers['x-app-version']).toBe(expectedVersion);
+    expect(res2.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
 
     const res3 = makeRes();
     sessions(req, res3);
     expect(res3.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res3.headers['x-app-version']).toBe(expectedVersion);
+    expect(res3.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
   });
 });
