@@ -4,7 +4,7 @@ const path = require('path');
 
 async function main() {
   try {
-    const version = process.env.APP_VERSION || process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || 'dev';
+    const version = process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || process.env.APP_VERSION || 'dev';
     const outDir = path.resolve(__dirname, '..', 'public');
     const outFile = path.join(outDir, 'version.json');
 
