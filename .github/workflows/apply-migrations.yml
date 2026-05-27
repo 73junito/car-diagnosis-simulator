@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+  pages: write
+
 jobs:
   apply-migrations:
     name: Apply migrations against disposable Postgres
@@ -196,3 +200,19 @@ jobs:
         with:
           name: test-dashboard
           path: test-results/dashboard.html
+
+      - name: Configure Pages
+        if: always()
+        uses: actions/configure-pages@v3
+
+      - name: Upload Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: test-results/dashboard.html
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: actions/deploy-pages@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
