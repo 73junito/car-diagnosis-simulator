@@ -19,6 +19,8 @@ function loadReport() {
   }
 }
 
+const { setAppVersionHeader } = require('../_utils/app-version');
+
 function round(value, digits = 3) {
   return Number(Number(value).toFixed(digits));
 }
@@ -64,6 +66,7 @@ function aggregateSessions() {
 }
 
 function handler(req, res) {
+  setAppVersionHeader(res);
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method Not Allowed' });
   try {
     return res.json(aggregateSessions());
