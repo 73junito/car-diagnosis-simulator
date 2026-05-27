@@ -32,5 +32,10 @@
       "source": "/dashboard/session-history",
       "destination": "/dashboard/session-history.html"
     }
+    ,
+    {
+      "source": "/dashboard/student",
+      "destination": "/dashboard/student.html"
+    }
   ]
 }

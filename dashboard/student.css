@@ -1,0 +1,34 @@
+:root{--gap:12px;--card-bg:#fff;--card-border:#ddd}
+body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7f9;margin:0;padding:24px}
+.wrapper{max-width:1200px;margin:0 auto}
+h1{margin:0 0 16px}
+
+/* Dashboard map */
+.dashboard-map{position:relative;max-width:1400px;margin:0 auto}
+.dashboard-map img{width:100%;display:block;border-radius:6px}
+.hotspot{position:absolute;background:transparent;border:none;cursor:pointer}
+.hotspot:focus{outline:2px solid #49a}
+
+/* Example absolute positions (percent-based). Adjust as needed to match the real image. */
+.hs-1{top:6%;left:4%;width:12%;height:18%}
+.hs-2{top:6%;left:18%;width:12%;height:18%}
+.hs-3{top:6%;left:32%;width:12%;height:18%}
+.hs-4{top:6%;left:46%;width:12%;height:18%}
+.hs-5{top:6%;left:60%;width:12%;height:18%}
+.hs-6{top:6%;left:74%;width:12%;height:18%}
+.hs-7{top:6%;left:88%;width:8%;height:18%}
+.hs-8{top:36%;left:4%;width:12%;height:18%}
+.hs-9{top:36%;left:18%;width:12%;height:18%}
+.hs-10{top:36%;left:32%;width:12%;height:18%}
+.hs-11{top:36%;left:46%;width:12%;height:18%}
+.hs-12{top:36%;left:60%;width:12%;height:18%}
+.hs-13{top:36%;left:74%;width:12%;height:18%}
+.hs-14{top:36%;left:88%;width:8%;height:18%}
+.hs-15{top:66%;left:4%;width:20%;height:28%}
+.hs-16{top:66%;left:28%;width:20%;height:28%}
+.hs-17{top:66%;left:56%;width:20%;height:28%}
+
+.detail{position:fixed;right:24px;top:80px;width:420px;background:#fff;border:1px solid #ccc;padding:16px;border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+.detail.hidden{display:none}
+.back{display:inline-block;margin-bottom:8px}
+#diagnosis{width:100%}
