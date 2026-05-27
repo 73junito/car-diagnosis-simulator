@@ -54,7 +54,7 @@ describe('API app-version header', () => {
     const res2 = makeRes();
     students(req, res2);
     expect(res2.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res2.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
+    expect(res2.headers['x-app-version']).toBe(process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || process.env.APP_VERSION || 'dev');
 
     const res3 = makeRes();
     sessions(req, res3);
