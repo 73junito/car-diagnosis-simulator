@@ -1,0 +1,73 @@
+name: Apply DB Migrations (PR)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  apply-migrations:
+    name: Apply migrations against disposable Postgres
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            sleep 1
+          done
+
+      - name: Install psql client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Apply SQL migrations
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: |
+          echo "Applying migrations to $DATABASE_URL"
+          ls -1 db/migrations || true
+          for f in db/migrations/*.sql; do
+            if [ -f "$f" ]; then
+              echo "--- applying $f ---"
+              psql "$DATABASE_URL" -f "$f"
+            fi
+          done
+
+      - name: Verify sample table access
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: |
+          # Show tables and privileges for quick debugging
+          psql "$DATABASE_URL" -c "\\dt public.*"
+          psql "$DATABASE_URL" -c "SELECT table_schema, table_name, privilege_type, grantee FROM information_schema.role_table_grants WHERE table_schema='public' LIMIT 50;"
+
+      - name: Run grants audit
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: |
+          echo "Running grants audit"
+          psql "$DATABASE_URL" -At -F"," -f db/scripts/grants_audit.sql > /tmp/grants_audit.out || true
+          if [ -s /tmp/grants_audit.out ]; then
+            echo "Missing grants detected:" >&2
+            cat /tmp/grants_audit.out >&2
+            echo "Failing job: missing required Data API grants" >&2
+            exit 1
+          else
+            echo "All required grants appear present (audit returned no rows)."
+          fi
