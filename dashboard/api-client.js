@@ -11,20 +11,23 @@ function getClientVersion() {
   }
 }
 
-function defaultOnStale(serverVersion, info = {}) {
+function defaultOnStale(serverVersion) {
   try {
-    // Broadcast reload request to other tabs; version-sync will pick this up
     if (typeof window !== 'undefined' && window.localStorage) {
       window.localStorage.setItem('__version_reload_request', Date.now().toString());
     }
-  } catch (e) {
-    // ignore localStorage errors
+  } catch {
+    // Ignore storage errors
   }
 }
 
 function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
   if (typeof window === 'undefined' || !window.fetch) return;
   const originalFetch = window.fetch.bind(window);
+
+  // lazy init version sync (browser-only)
+  const { createVersionSync } = require('./version-sync');
+  let versionSync = null;
 
   window.fetch = async function(input, init) {
     const resp = await originalFetch(input, init);
@@ -34,8 +37,19 @@ function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
 
       const clientVersion = getClientVersion();
       if (clientVersion && serverVersion !== clientVersion) {
-        // signal stale
-        onStale && onStale(serverVersion, { input, init });
+        // ensure version-sync is available and trigger a check after this response
+        try {
+          if (!versionSync) {
+            versionSync = createVersionSync({ url: '/version.json', interval: 30000, onStale });
+          }
+          // fire-and-forget check to update internal state
+          versionSync.checkNow && versionSync.checkNow().catch(() => {});
+        } catch (e) {
+          // ignore version-sync init errors
+        }
+
+        // immediate stale notification
+        onStale && onStale(serverVersion);
 
         if (retryOnce) {
           // attempt one retry
@@ -45,7 +59,7 @@ function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
             return retryResp;
           }
           // still stale -> notify with forceReload hint
-          onStale && onStale(serverVersion, { input, init, forceReload: true });
+          onStale && onStale(serverVersion);
           return retryResp;
         }
       }
