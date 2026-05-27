@@ -65,14 +65,20 @@ async function run() {
   const timestamp = new Date().toISOString();
   const runRecord = { runId, timestamp, failures };
   history.runs = (history.runs || []).slice(-99).concat([runRecord]);
-  // update tests map
-  const testsMap = history.tests || {};
-  // increment totalRuns for all known tests
-  for (const t of Object.keys(testsMap)) {
-    testsMap[t].totalRuns = (testsMap[t].totalRuns || 0) + 1;
+  // update tests map (increment totalRuns, update flake counts)
+  const prevTests = history.tests || {};
+  const testsMap = {};
+  // increment totalRuns for previous tests
+  for (const [name, data] of Object.entries(prevTests)) {
+    testsMap[name] = {
+      totalRuns: (data.totalRuns || 0) + 1,
+      flakeCount: data.flakeCount || 0,
+      lastFailureAt: data.lastFailureAt || null,
+    };
   }
+  // account for current failures (new tests get totalRuns = 1)
   for (const f of failures) {
-    if (!testsMap[f]) testsMap[f] = { totalRuns: 0, flakeCount: 0, lastFailureAt: null };
+    if (!testsMap[f]) testsMap[f] = { totalRuns: 1, flakeCount: 0, lastFailureAt: null };
     testsMap[f].flakeCount = (testsMap[f].flakeCount || 0) + 1;
     testsMap[f].lastFailureAt = timestamp;
   }
@@ -85,11 +91,26 @@ async function run() {
   fs.writeFileSync(outPath, JSON.stringify(history, null, 2));
   console.log(`Wrote flaky history to ${outPath}`);
 
-  // If any test has flakeCount >= threshold (3), post a PR comment warning
+  // Detect newly-flaky tests that crossed the threshold this run
   const threshold = Number(process.env.FLAKY_THRESHOLD || 3);
+  const newlyFlaky = [];
+  for (const f of failures) {
+    const prevCount = (prevTests[f] && prevTests[f].flakeCount) || 0;
+    const newCount = (testsMap[f] && testsMap[f].flakeCount) || 0;
+    if (prevCount < threshold && newCount >= threshold) newlyFlaky.push(f);
+  }
+
+  // Also keep cumulative list for visibility
   const flakyTests = Object.entries(testsMap).filter(([name, data]) => (data.flakeCount || 0) >= threshold).map(([n]) => n);
-  if (prNumber && flakyTests.length) {
-    const body = `<!-- flaky-summary -->\n**Flaky tests detected** (>= ${threshold} failures):\n${flakyTests.slice(0, 20).map(t => `- ${t}`).join('\n')}\n`;
+
+  if (prNumber && (newlyFlaky.length || flakyTests.length)) {
+    let body = `<!-- flaky-summary -->\n`;
+    if (newlyFlaky.length) {
+      body += `**Newly flaky tests (crossed ${threshold} failures this run):**\n${newlyFlaky.slice(0, 20).map(t => `- ${t}`).join('\n')}\n\n`;
+    }
+    if (flakyTests.length) {
+      body += `**Cumulative flaky tests (>= ${threshold} failures):**\n${flakyTests.slice(0, 50).map(t => `- ${t}`).join('\n')}\n`;
+    }
     await postOrUpdateComment(owner, repoName, prNumber, body, token);
   }
 }
