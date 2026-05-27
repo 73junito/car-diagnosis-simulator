@@ -88,6 +88,6 @@
 
   function resetAttemptState(scenario){ if(!window.attemptStore) return; window.attemptStore.resetAttempt(scenario); const checks = document.querySelectorAll('#ase-step-list input[type=checkbox]'); checks.forEach(cb => { cb.checked = false; cb.dispatchEvent(new Event('change')); }); if(document.getElementById('ase-safety-ack')) document.getElementById('ase-safety-ack').checked = false; const el = document.getElementById('ase-completion-state'); if(el) el.classList.add('hidden'); }
 
-  window._obd2Ase = { initAseAssessment, populateSteps, checkCompletion };
+  window._obd2Ase = { initAseAssessment, populateSteps, checkCompletion, saveAttemptState, loadAttemptState, resetAttemptState };
   window.initAseAssessment = initAseAssessment;
 })();

@@ -41,7 +41,7 @@
       renderScoreSummary(scoreObj);
     }
     // persist attempt after submission (save regardless of rubric presence)
-    try{ saveAttemptState(scenario); }catch(e){}
+    try{ saveAttemptState(scenario); }catch(e){ /* ignore persistence errors in-memory */ }
   }
 
   // Rubric logic
