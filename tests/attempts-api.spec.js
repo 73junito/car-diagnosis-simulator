@@ -37,7 +37,7 @@ describe('Attempts API endpoints (mocked Supabase)', () => {
           insert: () => ({ select: () => ({ single: async () => ({ data: { id: 'abc-123' }, error: null }) }) })
         }),
       }),
-    }));
+    }), { virtual: true });
 
     const save = require('../api/attempts/save');
 
@@ -61,7 +61,7 @@ describe('Attempts API endpoints (mocked Supabase)', () => {
           })
         }),
       }),
-    }));
+    }), { virtual: true });
 
     const load = require('../api/attempts/load');
     const req = { method: 'GET', query: { scenario: 'no-start' } };
