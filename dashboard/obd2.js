@@ -2,17 +2,22 @@
   function clearChildren(el){ while(el.firstChild) el.removeChild(el.firstChild); }
 
   function renderGauges(state){
-    const map = {
-      rpm: document.getElementById('gauge-rpm'),
-      speed: document.getElementById('gauge-speed'),
-      coolant: document.getElementById('gauge-coolant'),
-      voltage: document.getElementById('gauge-voltage')
-    };
-    if(!map.rpm) return;
-    map.rpm.textContent = state.rpm != null ? String(state.rpm) : '--';
-    map.speed.textContent = state.speed != null ? String(state.speed) : '--';
-    map.coolant.textContent = state.coolant != null ? String(state.coolant) + '°F' : '--';
-    map.voltage.textContent = state.voltage != null ? String(state.voltage) + 'V' : '--';
+    const ids = ['rpm','speed','coolant','voltage'];
+    ids.forEach(key => {
+      const el = document.getElementById('gauge-' + key);
+      if(!el) return;
+      const val = state[key];
+      const vspan = el.querySelector('.g-value');
+      const fill = el.querySelector('.g-fill');
+      vspan.textContent = (val !== undefined && val !== null) ? (key==='coolant'? String(val) + '°F' : key==='voltage'? String(val) + 'V' : String(val)) : '--';
+      // normalize values to percent for a simple bar visualization
+      let pct = 0;
+      if(key==='rpm') pct = Math.min(100, Math.round((val||0)/8000*100));
+      if(key==='speed') pct = Math.min(100, Math.round((val||0)/200*100));
+      if(key==='coolant') pct = Math.min(100, Math.round(((val||0)-60)/200*100));
+      if(key==='voltage') pct = Math.min(100, Math.round(((val||0)-9)/6*100));
+      if(fill) fill.style.width = pct + '%';
+    });
   }
 
   function renderDtcs(dtcs){
@@ -22,7 +27,11 @@
     if(!dtcs || dtcs.length===0){
       const li = document.createElement('li'); li.textContent = 'No DTCs'; ul.appendChild(li); return;
     }
-    dtcs.forEach(code => { const li = document.createElement('li'); li.textContent = code; ul.appendChild(li); });
+    dtcs.forEach(code => {
+      const li = document.createElement('li'); li.textContent = code; li.dataset.code = code;
+      li.addEventListener('click', () => showDtcDetail(code));
+      ul.appendChild(li);
+    });
   }
 
   function populateScenarioSelect(scenarios){
@@ -57,5 +66,22 @@
       renderGauges({}); renderDtcs([]);
     }
   };
+
+  // DTC detail content (placeholder descriptions)
+  const dtcDetails = {
+    'P0335': 'Crankshaft Position Sensor A - Circuit/Range',
+    'P0300': 'Random/Multiple Cylinder Misfire Detected',
+    'P0420': 'Catalyst System Efficiency Below Threshold (Bank 1)'
+  };
+
+  function showDtcDetail(code){
+    const codeEl = document.getElementById('dtc-detail-code');
+    const descEl = document.getElementById('dtc-detail-desc');
+    if(codeEl) codeEl.textContent = code;
+    if(descEl) descEl.textContent = dtcDetails[code] || 'No description available.';
+  }
+
+  // expose for tests
+  window._obd2Internal = { renderGauges, renderDtcs, showDtcDetail };
 
 })();
