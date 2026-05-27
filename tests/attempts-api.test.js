@@ -1,16 +1,32 @@
 /** @jest-environment node */
 
 describe('Attempts API endpoints (mocked Supabase)', () => {
-  let originalEnv;
+  let originalSupabaseUrl;
+  let originalSupabaseAnonKey;
+  let hadSupabaseUrl;
+  let hadSupabaseAnonKey;
 
   beforeAll(() => {
-    originalEnv = Object.assign({}, process.env);
+    hadSupabaseUrl = Object.prototype.hasOwnProperty.call(process.env, 'SUPABASE_URL');
+    hadSupabaseAnonKey = Object.prototype.hasOwnProperty.call(process.env, 'SUPABASE_ANON_KEY');
+    originalSupabaseUrl = process.env.SUPABASE_URL;
+    originalSupabaseAnonKey = process.env.SUPABASE_ANON_KEY;
     process.env.SUPABASE_URL = 'https://example.supabase.co';
     process.env.SUPABASE_ANON_KEY = 'anon-key';
   });
 
   afterAll(() => {
-    process.env = originalEnv;
+    if (hadSupabaseUrl) {
+      process.env.SUPABASE_URL = originalSupabaseUrl;
+    } else {
+      delete process.env.SUPABASE_URL;
+    }
+
+    if (hadSupabaseAnonKey) {
+      process.env.SUPABASE_ANON_KEY = originalSupabaseAnonKey;
+    } else {
+      delete process.env.SUPABASE_ANON_KEY;
+    }
   });
 
   test('save endpoint returns 200 with id on success', async () => {
