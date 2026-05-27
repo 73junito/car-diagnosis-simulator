@@ -114,33 +114,46 @@
   };
 
   // expose some helpers for tests
-  // persistence helpers
+  // persistence helpers (use attemptAdapter which can be supabase or in-memory)
   function saveAttemptState(scenario){
-    if(!window.attemptStore) return;
     if(!scenario) return;
     const symptoms = (document.getElementById('symptom-text')||{}).value || '';
     const tests = Array.from(document.querySelectorAll('#test-checklist input[type=checkbox]:checked')).map(i=>i.value);
     const diagnosis = (document.getElementById('diagnosis-input')||{}).value || '';
     const rubric = (window.rubrics && window.rubrics[scenario]) || window.rubrics && window.rubrics['default'] || null;
     const score = rubric ? calculateScore({ symptoms, tests, diagnosis }, rubric) : null;
-    window.attemptStore.saveAttempt(scenario, { symptoms, tests, diagnosis, score });
+    if(window.attemptAdapter && window.attemptAdapter.saveAttempt) {
+      try{ window.attemptAdapter.saveAttempt(scenario, { symptoms, tests, diagnosis, score }); }catch(e){ void e; }
+    } else if(window.attemptStore && window.attemptStore.saveAttempt) {
+      try{ window.attemptStore.saveAttempt(scenario, { symptoms, tests, diagnosis, score }); }catch(e){ void e; }
+    }
   }
 
   function loadAttemptState(scenario){
-    if(!window.attemptStore) return null;
-    const data = window.attemptStore.loadAttempt(scenario);
-    if(!data) return null;
-    // restore UI
+    if(!scenario) return null;
+    const loader = (window.attemptAdapter && window.attemptAdapter.loadAttempt) ? window.attemptAdapter.loadAttempt : (window.attemptStore && window.attemptStore.loadAttempt);
+    if(!loader) return null;
+    const maybe = loader(scenario);
+    // support promise-returning adapters (supabase) or synchronous in-memory
+    if(maybe && typeof maybe.then === 'function'){
+      return maybe.then(data => { if(!data) return null; restoreStudentUIFromData(data); return data; }).catch(()=>null);
+    }
+    if(!maybe) return null;
+    restoreStudentUIFromData(maybe);
+    return maybe;
+  }
+
+  function restoreStudentUIFromData(data){
     const txt = document.getElementById('symptom-text'); if(txt) txt.value = data.symptoms || '';
     const diag = document.getElementById('diagnosis-input'); if(diag) diag.value = data.diagnosis || '';
     const cbs = document.querySelectorAll('#test-checklist input[type=checkbox]'); cbs.forEach(cb => { cb.checked = (data.tests || []).indexOf(cb.value) !== -1; cb.dispatchEvent(new Event('change')); });
     if(data.score) renderScoreSummary(data.score);
-    return data;
   }
 
   function resetAttemptState(scenario){
-    if(!window.attemptStore) return;
-    window.attemptStore.resetAttempt(scenario);
+    const resetter = (window.attemptAdapter && window.attemptAdapter.resetAttempt) ? window.attemptAdapter.resetAttempt : (window.attemptStore && window.attemptStore.resetAttempt);
+    if(!resetter) return;
+    try{ resetter(scenario); }catch(e){ void e; }
     resetWorkflow();
     const panel = document.getElementById('score-summary'); if(panel) panel.hidden = true;
   }

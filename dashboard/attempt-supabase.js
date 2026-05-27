@@ -40,6 +40,7 @@
       return res;
     }catch(e){
       if(window.attemptStore) return window.attemptStore.saveAttempt(scenario, attempt);
+      void e;
       throw e;
     }
   }
@@ -50,6 +51,7 @@
       return res;
     }catch(e){
       if(window.attemptStore) return window.attemptStore.loadAttempt(scenario);
+      void e;
       return null;
     }
   }

@@ -68,17 +68,31 @@
 
   // persistence helpers
   function saveAttemptState(scenario){
-    if(!window.attemptStore || !scenario) return;
+    if(!scenario) return;
     const checks = Array.from(document.querySelectorAll('#ase-step-list input[type=checkbox]')).map(cb => !!cb.checked);
     const safety = !!(document.getElementById('ase-safety-ack') && document.getElementById('ase-safety-ack').checked);
     const completion = document.getElementById('ase-completion-state') ? document.getElementById('ase-completion-state').textContent : null;
-    window.attemptStore.saveAttempt(scenario, { steps: checks, safetyAck: safety, completion });
+    if(window.attemptAdapter && window.attemptAdapter.saveAttempt) {
+      try{ window.attemptAdapter.saveAttempt(scenario, { steps: checks, safetyAck: safety, completion }); }catch(e){ void e; }
+    } else if(window.attemptStore && window.attemptStore.saveAttempt){
+      try{ window.attemptStore.saveAttempt(scenario, { steps: checks, safetyAck: safety, completion }); }catch(e){ void e; }
+    }
   }
 
   function loadAttemptState(scenario){
-    if(!window.attemptStore || !scenario) return null;
-    const data = window.attemptStore.loadAttempt(scenario);
-    if(!data) return null;
+    if(!scenario) return null;
+    const loader = (window.attemptAdapter && window.attemptAdapter.loadAttempt) ? window.attemptAdapter.loadAttempt : (window.attemptStore && window.attemptStore.loadAttempt);
+    if(!loader) return null;
+    const maybe = loader(scenario);
+    if(maybe && typeof maybe.then === 'function'){
+      return maybe.then(data => { if(!data) return null; restoreAseUIFromData(data); return data; }).catch(()=>null);
+    }
+    if(!maybe) return null;
+    restoreAseUIFromData(maybe);
+    return maybe;
+  }
+
+  function restoreAseUIFromData(data){
     const checks = document.querySelectorAll('#ase-step-list input[type=checkbox]');
     checks.forEach((cb, idx) => { cb.checked = !!(data.steps && data.steps[idx]); cb.dispatchEvent(new Event('change')); });
     if(document.getElementById('ase-safety-ack')) document.getElementById('ase-safety-ack').checked = !!data.safetyAck;
@@ -86,7 +100,13 @@
     return data;
   }
 
-  function resetAttemptState(scenario){ if(!window.attemptStore) return; window.attemptStore.resetAttempt(scenario); const checks = document.querySelectorAll('#ase-step-list input[type=checkbox]'); checks.forEach(cb => { cb.checked = false; cb.dispatchEvent(new Event('change')); }); if(document.getElementById('ase-safety-ack')) document.getElementById('ase-safety-ack').checked = false; const el = document.getElementById('ase-completion-state'); if(el) el.classList.add('hidden'); }
+  function resetAttemptState(scenario){
+    const resetter = (window.attemptAdapter && window.attemptAdapter.resetAttempt) ? window.attemptAdapter.resetAttempt : (window.attemptStore && window.attemptStore.resetAttempt);
+    if(!resetter) return;
+    try{ resetter(scenario); }catch(e){ void e; }
+    const checks = document.querySelectorAll('#ase-step-list input[type=checkbox]'); checks.forEach(cb => { cb.checked = false; cb.dispatchEvent(new Event('change')); });
+    if(document.getElementById('ase-safety-ack')) document.getElementById('ase-safety-ack').checked = false; const el = document.getElementById('ase-completion-state'); if(el) el.classList.add('hidden');
+  }
 
   window._obd2Ase = { initAseAssessment, populateSteps, checkCompletion, saveAttemptState, loadAttemptState, resetAttemptState };
   window.initAseAssessment = initAseAssessment;
