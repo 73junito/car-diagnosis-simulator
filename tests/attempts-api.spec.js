@@ -59,11 +59,16 @@ describe('Attempts API endpoints (mocked Supabase)', () => {
     jest.doMock('@supabase/supabase-js', () => ({
       createClient: () => ({
         from: () => ({
-          select: () => ({
-            eq: function(){ return this; },
-            order: function(){ return this; },
-            limit: function(){ return Promise.resolve({ data: [{ id: 'abc-123', scenario: 'no-start' }], error: null }); }
-          })
+          select: () => {
+            const query = {
+              eq() { return query; },
+              order() { return query; },
+              limit() {
+                return Promise.resolve({ data: [{ id: 'abc-123', scenario: 'no-start' }], error: null });
+              }
+            };
+            return query;
+          }
         }),
       }),
     }), { virtual: true });
