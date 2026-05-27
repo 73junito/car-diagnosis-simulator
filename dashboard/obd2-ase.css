@@ -1,0 +1,9 @@
+.ase-assessment{font-family:system-ui,Segoe UI,Roboto,Arial;padding:16px}
+.ase-step-list{list-style:none;padding:0}
+.ase-step-list li{padding:8px;border:1px solid #eee;border-radius:6px;margin-bottom:6px;display:flex;align-items:center}
+.ase-step-list li.pass{background:#e8f5e9}
+.ase-step-list li.fail{background:#ffebee}
+.hidden{display:none}
+#ase-completion-state{margin-top:8px;padding:10px;border-radius:6px;border:1px solid #ccc}
+.complete-pass{border-left:4px solid #4caf50}
+.complete-fail{border-left:4px solid #f44336}
