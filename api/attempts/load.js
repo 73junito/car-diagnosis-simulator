@@ -1,6 +1,7 @@
-const { createClient } = require('@supabase/supabase-js');
+const appVersionUtil = require('../_utils/app-version');
 
 module.exports = async (req, res) => {
+  appVersionUtil.setAppVersionHeader(res);
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
 
   try {
@@ -16,7 +17,9 @@ module.exports = async (req, res) => {
       return res.status(503).json({ ok: false, error: 'supabase_unavailable' });
     }
 
-    const client = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY);
+  // Lazy-require supabase so tests don't need the dependency installed
+  const supabase = require('@supabase/supabase-js');
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY);
     let resp = null;
 
     // Build and execute query defensively so mocks or different client shapes work in tests.

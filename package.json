@@ -13,7 +13,8 @@
 		"export:analytics": "npm run export:csv && npm run export:xapi",
 		"test:analytics-api": "node tests/analytics-api.test.js",
 		"test:analytics-routes": "node tests/analytics-routes.test.js",
-		"lint": "eslint . --ext .js"
+		"lint": "eslint . --ext .js",
+		"build": "node scripts/write-version.js && echo \"no build step required for static site\""
 	},
 	"devDependencies": {
 		"acorn": "^8.10.0",
