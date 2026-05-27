@@ -39,6 +39,8 @@
       const submission = { symptoms: (document.getElementById('symptom-text')||{}).value || '', tests: selected, diagnosis: diag };
       const scoreObj = calculateScore(submission, rubric);
       renderScoreSummary(scoreObj);
+      // persist attempt after submission
+      try{ saveAttemptState(scenario); }catch(e){}
     }
   }
 
