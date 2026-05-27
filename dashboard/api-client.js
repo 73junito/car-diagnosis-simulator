@@ -1,3 +1,4 @@
+/* eslint-disable no-empty, no-unused-vars */
 // Simple fetch wrapper to detect API `x-app-version` mismatches.
 // Usage: require('./api-client').initApiClient({ onStale })
 
@@ -5,6 +6,7 @@ function getClientVersion() {
   try {
     return (typeof window !== 'undefined' && (window.APP_VERSION || window.localStorage && window.localStorage.getItem('app_version'))) || null;
   } catch (e) {
+    // swallow errors accessing window/localStorage in test envs
     return null;
   }
 }
@@ -15,7 +17,9 @@ function defaultOnStale(serverVersion, info = {}) {
     if (typeof window !== 'undefined' && window.localStorage) {
       window.localStorage.setItem('__version_reload_request', Date.now().toString());
     }
-  } catch (e) {}
+  } catch (e) {
+    // ignore localStorage errors
+  }
 }
 
 function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {

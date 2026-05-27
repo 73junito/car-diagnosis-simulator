@@ -7,7 +7,7 @@ describe('api-client version mismatch detection', () => {
 
   beforeEach(() => {
     jest.resetModules();
-    document.body.innerHTML = '';
+    document.body.textContent = '';
     // ensure localStorage exists
     if (!global.localStorage) {
       const storage = {};
