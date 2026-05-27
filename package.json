@@ -31,7 +31,9 @@
 		"jest-junit": "^13.5.0",
 		"jest-html-reporter": "^6.0.0",
 		"fast-xml-parser": "^4.1.1",
-		"jest-circus": "^30.4.2"
+		"jest-circus": "^30.4.2",
+		"adm-zip": "^0.5.9",
+		"node-fetch": "^3.4.0"
 	}
 	,
 	"jest": {
