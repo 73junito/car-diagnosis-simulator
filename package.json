@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"test": "jest",
+		"build": "npm run write-version",
 		"write-version": "node scripts/write-version.js",
 		"vercel-build": "npm run write-version",
 		"test:live-session": "node tests/live-session-ui.test.js",
