@@ -115,6 +115,15 @@ jobs:
         run: |
           npm test
 
+      - name: Annotate failing tests
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Jest Tests
+          path: test-results/junit.xml
+          reporter: junit
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload JUnit results
         if: always()
         uses: actions/upload-artifact@v4
