@@ -1,30 +1,25 @@
-const fs = require('fs');
+#!/usr/bin/env node
+const fs = require('fs').promises;
 const path = require('path');
 
-function getVersion() {
-  const sha = process.env.GITHUB_SHA || process.env.CI_COMMIT_SHA || null;
-  if (sha) return sha;
-  // fallback to timestamp
-  return `ts-${Date.now()}`;
-}
-
-function writeVersionFile() {
-  const version = getVersion();
-  const builtAt = new Date().toISOString();
-  const out = { version, builtAt };
-  const outPath = path.join(__dirname, '..', 'public', 'version.json');
+async function main() {
   try {
-    fs.mkdirSync(path.dirname(outPath), { recursive: true });
-    fs.writeFileSync(outPath, JSON.stringify(out, null, 2) + '\n', 'utf8');
-    console.log('WROTE', outPath, out);
+    const version = process.env.APP_VERSION || process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || 'dev';
+    const outDir = path.resolve(__dirname, '..', 'public');
+    const outFile = path.join(outDir, 'version.json');
+
+    await fs.mkdir(outDir, { recursive: true });
+    const payload = { version, written_at: new Date().toISOString() };
+    await fs.writeFile(outFile, JSON.stringify(payload, null, 2), 'utf8');
+    console.log(`Wrote version.json -> ${outFile}`);
   } catch (err) {
-    console.error('Failed to write version file', err);
-    process.exit(1);
+    console.error('Failed to write version.json', err);
+    process.exitCode = 1;
   }
 }
 
 if (require.main === module) {
-  writeVersionFile();
+  main();
 }
 
-module.exports = { getVersion, writeVersionFile };
+module.exports = { main };
