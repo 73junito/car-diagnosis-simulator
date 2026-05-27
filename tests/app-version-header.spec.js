@@ -33,7 +33,7 @@ describe('API app-version header', () => {
     const res = makeRes();
     await load(req, res);
     expect(res.setHeader).toHaveBeenCalledWith('x-app-version', expect.any(String));
-    expect(res.headers['x-app-version']).toBe(process.env.APP_VERSION || process.env.GITHUB_SHA || 'dev');
+    expect(res.headers['x-app-version']).toBe(process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || process.env.APP_VERSION || 'dev');
   });
 
   test('attempts/save sets x-app-version', async () => {
