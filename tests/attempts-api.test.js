@@ -1,6 +1,4 @@
 /** @jest-environment node */
-const fs = require('fs');
-const path = require('path');
 
 describe('Attempts API endpoints (mocked Supabase)', () => {
   let originalEnv;
