@@ -1,3 +1,26 @@
+# Supabase attempts table and RLS notes
+
+This document records the initial migration for the `attempts` table used
+for storing student and ASE workflow attempts in Supabase.
+
+Key points
+- Migration file: `db/migrations/002_create_attempts.sql`
+- Includes an RLS scaffold policy that references `auth.uid()`; this is
+  intentionally a scaffold and should be reviewed before enabling enforcement.
+- No client-side auth gating is implemented in this change.
+- Indexes are added for `user_id`, `scenario`, and `created_at` to support
+  common query patterns.
+
+Deployment notes
+- Apply this migration against your Supabase/Postgres instance using your
+  preferred migration tool (pgcli, psql, Supabase migrations, etc.).
+- Ensure the `pgcrypto` extension is available (or swap `gen_random_uuid()` for
+  `uuid_generate_v4()` if using `uuid-ossp`).
+
+Security
+- The provided RLS policy is an example allowing users to access their own
+  attempts. Adjust policies for instructor roles or system service accounts as
+  needed.
 # Supabase Auth Configuration
 
 This document explains how the repository integrates with Supabase for token verification and the configuration options available for demo and production modes.
