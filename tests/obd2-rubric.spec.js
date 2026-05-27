@@ -4,7 +4,7 @@ const path = require('path');
 
 describe('OBD2 diagnostic rubric', () => {
   beforeEach(() => {
-    document.body.innerHTML = '';
+    while(document.body.firstChild) document.body.removeChild(document.body.firstChild);
   });
 
   test('calculateScore returns expected weighted total and pass/fail', () => {
@@ -35,9 +35,7 @@ describe('OBD2 diagnostic rubric', () => {
 
     // fill inputs to intentionally fail diagnosis
     document.getElementById('symptom-text').value = 'no crank observed';
-    // select wrong tests
-    const checklist = document.getElementById('test-checklist');
-    // check nothing
+    // select wrong tests (none checked)
     // enter wrong diagnosis
     document.getElementById('diagnosis-input').value = 'something else';
     // submit
