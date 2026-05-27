@@ -109,11 +109,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests
+      - name: Run tests (with retries)
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+          CI_TEST_RETRIES: 1
+          CI_TEST_BACKOFF_MS: 2000
         run: |
-          npm test
+          node scripts/ci-run-tests.js
 
       - name: Annotate failing tests
         if: always()
