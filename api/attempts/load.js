@@ -8,13 +8,19 @@ try {
   createClient = null;
 }
 
+function getSingleQueryString(value) {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  return trimmed ? trimmed : null;
+}
+
 module.exports = async (req, res) => {
   appVersionUtil.setAppVersionHeader(res);
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
 
   try {
-    const user_id = req.query.user_id || null;
-    const scenario = req.query.scenario || null;
+    const user_id = getSingleQueryString(req.query.user_id);
+    const scenario = getSingleQueryString(req.query.scenario);
 
     if (!user_id) return res.status(400).json({ ok: false, error: 'validation', message: 'user_id is required' });
     if (!scenario) return res.status(400).json({ ok: false, error: 'validation', message: 'scenario is required' });
