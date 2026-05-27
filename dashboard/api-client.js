@@ -11,7 +11,7 @@ function getClientVersion() {
   }
 }
 
-function defaultOnStale(serverVersion) {
+function defaultOnStale(serverVersion, info) {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       window.localStorage.setItem('__version_reload_request', Date.now().toString());
@@ -49,7 +49,7 @@ function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
         }
 
         // immediate stale notification
-        onStale && onStale(serverVersion);
+        onStale && onStale(serverVersion, { input, init });
 
         if (retryOnce) {
           // attempt one retry
