@@ -1,13 +1,5 @@
 const { setAppVersionHeader } = require('../_utils/app-version');
 
-let createClient = null;
-try {
-  // lazy require so missing dependency doesn't crash non-configured envs
-  ({ createClient } = require('@supabase/supabase-js'));
-} catch (e) {
-  createClient = null;
-}
-
 module.exports = async (req, res) => {
   setAppVersionHeader(res);
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
@@ -16,12 +8,20 @@ module.exports = async (req, res) => {
     const user_id = req.query.user_id || null;
     const scenario = req.query.scenario || null;
 
-    if (!user_id) return res.status(400).json({ ok: false, error: 'validation', message: 'user_id is required' });
+    // `scenario` is required; `user_id` is optional (support demo queries)
     if (!scenario) return res.status(400).json({ ok: false, error: 'validation', message: 'scenario is required' });
 
     const SUPABASE_URL = process.env.SUPABASE_URL || null;
     const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
     const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || null;
+    // Lazy-require supabase so tests can mock the module before we load it
+    let createClient = null;
+    try {
+      ({ createClient } = require('@supabase/supabase-js'));
+    } catch (e) {
+      createClient = null;
+    }
+
     if (!createClient || !SUPABASE_URL || !(SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY)) {
       return res.status(503).json({ ok: false, error: 'supabase_unavailable' });
     }
