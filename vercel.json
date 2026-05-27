@@ -44,5 +44,10 @@
       "source": "/dashboard/obd2-student",
       "destination": "/dashboard/obd2-student.html"
     }
+    ,
+    {
+      "source": "/dashboard/obd2-ase",
+      "destination": "/dashboard/obd2-ase.html"
+    }
   ]
 }
