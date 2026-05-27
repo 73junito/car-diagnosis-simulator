@@ -1,0 +1,9 @@
+.student-workflow{font-family:system-ui,Segoe UI,Arial,sans-serif;padding:18px;max-width:900px;margin:0 auto}
+.student-workflow header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.symptoms textarea{width:100%;height:80px;padding:8px;border-radius:6px;border:1px solid #e6e6e6}
+.test-checklist{list-style:none;padding:8px;border:1px solid #eee;border-radius:6px;background:#fff;max-height:160px;overflow:auto}
+.test-checklist li{padding:8px;border-bottom:1px solid #f6f6f6}
+.diagnosis{margin-top:12px}
+#diagnosis-input{width:100%;padding:8px;border:1px solid #e6e6e6;border-radius:6px;margin-bottom:8px}
+#submit-diagnosis{padding:8px 12px;border-radius:6px;background:#1976d2;color:#fff;border:none;cursor:pointer}
+.feedback{margin-top:8px;padding:8px;border-radius:6px;background:#f8f9fa;border:1px solid #eee}
