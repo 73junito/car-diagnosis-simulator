@@ -12,13 +12,15 @@ module.exports = async (req, res) => {
     }
 
     const SUPABASE_URL = process.env.SUPABASE_URL || null;
+    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || null;
     const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || null;
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    const SUPABASE_KEY = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_ANON_KEY;
+    if (!SUPABASE_URL || !SUPABASE_KEY) {
       // Graceful: indicate remote persistence unavailable
       return res.status(503).json({ ok: false, error: 'supabase_unavailable' });
     }
 
-    const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const client = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // Insert attempt record
     const payload = {
