@@ -28,7 +28,7 @@ describe('ASE procedural assessment', () => {
 
     window.initAseAssessment('no-start');
     const checks = document.querySelectorAll('#ase-step-list input[type=checkbox]');
-    checks.forEach(cb => cb.checked = true, cb.dispatchEvent(new Event('change')));
+    checks.forEach(cb => { cb.checked = true; cb.dispatchEvent(new Event('change')); });
     // click check completion
     document.getElementById('ase-check-complete').click();
     const state = document.getElementById('ase-completion-state');
