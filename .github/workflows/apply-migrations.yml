@@ -166,3 +166,21 @@ jobs:
         with:
           name: flaky-history
           path: test-results/flaky-history.json
+
+      - name: Detect slow tests
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLOW_TEST_MS: 2000
+          SLOW_TEST_TOP: 20
+        run: |
+          node scripts/slow-test-detector.js
+
+      - name: Upload slow-tests report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: slow-tests
+          path: test-results/slow-tests.json
