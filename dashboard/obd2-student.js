@@ -124,6 +124,8 @@
     const score = rubric ? calculateScore({ symptoms, tests, diagnosis }, rubric) : null;
     if(window.attemptAdapter && window.attemptAdapter.saveAttempt) {
       try{ window.attemptAdapter.saveAttempt(scenario, { symptoms, tests, diagnosis, score }); }catch(e){ void e; }
+    } else if(window.attemptStore && window.attemptStore.saveAttempt) {
+      try{ window.attemptStore.saveAttempt(scenario, { symptoms, tests, diagnosis, score }); }catch(e){ void e; }
     }
   }
 

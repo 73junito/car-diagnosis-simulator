@@ -74,6 +74,8 @@
     const completion = document.getElementById('ase-completion-state') ? document.getElementById('ase-completion-state').textContent : null;
     if(window.attemptAdapter && window.attemptAdapter.saveAttempt) {
       try{ window.attemptAdapter.saveAttempt(scenario, { steps: checks, safetyAck: safety, completion }); }catch(e){ void e; }
+    } else if(window.attemptStore && window.attemptStore.saveAttempt){
+      try{ window.attemptStore.saveAttempt(scenario, { steps: checks, safetyAck: safety, completion }); }catch(e){ void e; }
     }
   }
 
