@@ -36,12 +36,4 @@
 		"node-fetch": "^3.3.2",
 		"nock": "^13.3.0"
 		}
-		"jest-junit": "^13.2.0",
-		"fast-xml-parser": "^4.1.1",
-		"jest-circus": "^30.4.2",
-		"adm-zip": "^0.5.9",
-		"node-fetch": "^3.3.2",
-		"nock": "^13.3.0"
-		}
->>>>>>> origin/main
 	}
