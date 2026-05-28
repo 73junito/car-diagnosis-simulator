@@ -51,6 +51,11 @@ function build() {
   const topSlow = slowEntries.slice(0, 20);
   const topSlowLabels = topSlow.map(s => s.Name);
   const topSlowTimes = topSlow.map(s => s.TimeMs);
+  // Build sparkline data for slow tests: presence in recent runs (based on failures list)
+  const sparkDataSlow = topSlow.map(entry => {
+    const testName = entry.Name;
+    return recentRuns.map(r => (r.failures || []).includes(testName) ? 1 : 0);
+  });
 
   const html = `<!doctype html>
 <html>
@@ -98,7 +103,12 @@ function build() {
   </table>
 
   <h2>Slow tests (table)</h2>
-  ${renderTable(slowEntries.slice(0,50), ['Name','TimeMs'])}
+  <table class="table">
+    <thead><tr><th>Test</th><th>TimeMs</th><th>Trend</th></tr></thead>
+    <tbody>
+      ${topSlow.slice(0,50).map((t,i)=>`<tr><td>${t.Name}</td><td>${t.TimeMs}</td><td><canvas id="spark-slow-${i}" width="160" height="40"></canvas></td></tr>`).join('\n')}
+    </tbody>
+  </table>
 
   <h2>Recent runs</h2>
   <ul>
@@ -148,6 +158,17 @@ function build() {
           new Chart(el.getContext('2d'), {
             type: 'bar',
             data: { labels: runLabels, datasets: [{ data: series, backgroundColor: series.map(v=>v? 'rgb(220,53,69)':'rgba(200,200,200,0.15)') }] },
+            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{display:false}} }
+          });
+        });
+        // Render sparklines for slow tests
+        const sparkDataSlow = ${JSON.stringify(sparkDataSlow)};
+        sparkDataSlow.forEach((series, idx) => {
+          const el = document.getElementById(`spark-slow-${idx}`);
+          if (!el) return;
+          new Chart(el.getContext('2d'), {
+            type: 'bar',
+            data: { labels: runLabels, datasets: [{ data: series, backgroundColor: series.map(v=>v? 'rgb(40,167,69)':'rgba(200,200,200,0.15)') }] },
             options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{display:false}} }
           });
         });
