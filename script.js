@@ -997,6 +997,42 @@ function applySystemFilter(system){
   renderFilteredStudents();
 }
 
+// --- Diagnostic card mock telemetry (rotates values every 2-3s) ---
+function startDiagTelemetry(){
+  const rpms = [0, 650, 720];
+  const volts = [11.4, 12.6, 13.9];
+  const cools = [85, 92, 103];
+  const confs = ['Low','Medium','High'];
+  let i = 0;
+  function tick(){
+    try{
+      const elRpm = document.getElementById('diagRpm');
+      const elVolt = document.getElementById('diagVoltage');
+      const elCool = document.getElementById('diagCoolant');
+      const elConf = document.getElementById('diagConfidence');
+      const elDtc = document.getElementById('diagDtc');
+      const elSys = document.getElementById('diagSystem');
+      const elFreeze = document.getElementById('diagFreeze');
+      if (elRpm) elRpm.innerText = String(rpms[i % rpms.length]);
+      if (elVolt) elVolt.innerText = ('' + volts[i % volts.length] + 'V');
+      if (elCool) elCool.innerText = ('' + cools[i % cools.length] + '°F');
+      if (elConf) elConf.innerText = confs[i % confs.length];
+      if (elDtc) elDtc.innerText = 'P0335';
+      if (elSys) elSys.innerText = 'Electrical';
+      if (elFreeze) elFreeze.innerText = 'Available';
+      i++;
+    } catch(e){ /* no-op if elements missing */ }
+    // schedule next tick between 2000-3000ms
+    const ms = 2000 + Math.floor(Math.random() * 1000);
+    window._diagTelemetryTimer = setTimeout(tick, ms);
+  }
+  // start immediately
+  if (window._diagTelemetryTimer) clearTimeout(window._diagTelemetryTimer);
+  tick();
+}
+
+document.addEventListener('DOMContentLoaded', () => { startDiagTelemetry(); });
+
 function clearSystemFilter(){
   activeSystemFilter = null;
   renderFilteredStudents();
