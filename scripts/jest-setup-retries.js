@@ -1,3 +1,4 @@
+/* global jest */
 // Setup file executed by Jest in each worker before tests run.
 // Configures per-test retries based on the `CI_PER_TEST_RETRIES` env var.
 const retries = Number(process.env.CI_PER_TEST_RETRIES || process.env.PER_TEST_RETRIES || 0);
