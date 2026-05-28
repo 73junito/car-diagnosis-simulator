@@ -9,16 +9,19 @@
   <link rel="stylesheet" href="./theme.css">
 </head>
 <body>
-  <header class="tm-topnav" role="banner">
+  <header class="topnav" role="banner">
     <div class="nav-inner">
-      <div class="tm-brand">TorqueMind</div>
-      <nav class="tm-nav" aria-label="Main navigation">
-        <a href="#">Demo</a>
+      <div class="nav-brand">TorqueMind</div>
+      <nav class="nav-links" aria-label="Main navigation">
         <a href="#scenarios">Scenarios</a>
-        <a href="/dashboard/analytics">Instructor Dashboard</a>
-        <a href="/dashboard/analytics" class="tm-badge tm-badge--pill tm-badge--accent">Analytics</a>
-        <a href="https://github.com/73junito/car-diagnosis-simulator">GitHub</a>
+        <a href="#demo-section">Student Mode</a>
+        <a href="/dashboard/analytics">Instructor Tools</a>
+        <a href="/dashboard/analytics">Analytics</a>
+        <a href="/docs">Documentation</a>
       </nav>
+      <div style="margin-left:auto">
+        <a href="/dashboard/student" class="btn primary-cta">Launch Training</a>
+      </div>
     </div>
   </header>
 
@@ -72,15 +75,17 @@
     <section class="tm-hero" aria-labelledby="hero-title">
       <div class="tm-hero-inner">
 
+
         <div class="tm-hero-left">
-          <h1 id="hero-title" class="tm-hero-title">Train the Way You Diagnose.</h1>
-          <p class="tm-hero-subtitle">Evidence-based automotive diagnostic training for CTE programs, instructors, and maintenance teams.</p>
+          <h1 id="hero-title" class="tm-hero-title">Diagnose Real Faults. Train Real Technicians.</h1>
+          <p class="tm-hero-subtitle">Interactive automotive diagnostic training with OBD-II data, ASE workflows, and instructor analytics.</p>
 
           <div class="tm-hero-actions" role="group" aria-label="Primary actions">
-            <a href="/dashboard/student" id="btn-start-training" class="btn btn-primary">Start Diagnostic Training</a>
-            <a href="/dashboard/analytics" id="btn-open-dashboard" class="btn btn-secondary">View Instructor Analytics</a>
-            <a href="/scenarios" id="btn-view-scenarios" class="btn btn-ghost">View Scenarios</a>
+            <a href="/dashboard/student" id="btn-start-training" class="btn primary-cta">Start Diagnostic Training</a>
+            <a href="/dashboard/analytics" id="btn-open-dashboard" class="btn ghost-cta">Open Instructor Dashboard</a>
           </div>
+
+          <div class="trust-line" style="margin-top:10px;color:var(--muted);font-weight:600">Built for CTE Programs • Military Maintenance • Automotive Training</div>
 
           <!-- aria-live toast region for error messages (HERO-006 §4) -->
           <div data-hero-toast aria-live="polite" aria-atomic="true" class="tm-hero-toast"></div>
@@ -95,41 +100,51 @@
         </div>
 
         <div class="tm-hero-right">
-          <div class="tm-diagnostic-card" role="group" aria-label="Diagnostic preview card">
+          <div id="diagCard" class="tm-diagnostic-card" role="group" aria-label="Diagnostic preview card">
             <div class="tm-diagnostic-header">
               <span class="badge badge--accent">Scenario</span>
-              <h3>No-Start Condition</h3>
+              <h3 id="diagTitle">No-Start Condition</h3>
             </div>
 
             <div class="tm-diagnostic-body">
               <div class="tm-diagnostic-row">
                 <span class="tm-diagnostic-key">System</span>
-                <span class="badge badge--pill">Electrical</span>
+                <span id="diagSystem" class="badge badge--pill">Electrical</span>
               </div>
 
               <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">Tools Left</span>
-                <span class="metric">3</span>
+                <span class="tm-diagnostic-key">RPM</span>
+                <span id="diagRpm" class="metric">0</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">Voltage</span>
+                <span id="diagVoltage" class="metric">12.6V</span>
+              </div>
+
+              <div class="tm-diagnostic-row">
+                <span class="tm-diagnostic-key">Coolant</span>
+                <span id="diagCoolant" class="metric">92°F</span>
               </div>
 
               <div class="tm-diagnostic-row">
                 <span class="tm-diagnostic-key">Confidence</span>
-                <span class="badge badge-warn">Medium</span>
+                <span id="diagConfidence" class="badge badge-warn">Medium</span>
               </div>
 
               <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">OBD Code</span>
-                <span class="badge badge-danger">P0335</span>
+                <span class="tm-diagnostic-key">Active DTC</span>
+                <span id="diagDtc" class="badge badge-danger">P0335</span>
               </div>
 
               <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">Score</span>
-                <span class="metric metric-large">82</span>
+                <span class="tm-diagnostic-key">Freeze Frame</span>
+                <span id="diagFreeze" class="metric">Available</span>
               </div>
             </div>
 
             <div class="tm-diagnostic-footer">
-              <p class="tm-diagnostic-next">Recommended Next Step: Verify crankshaft position signal</p>
+              <p id="diagNext" class="tm-diagnostic-next">Recommended Next Step: Verify crankshaft position signal</p>
             </div>
           </div>
         </div>
