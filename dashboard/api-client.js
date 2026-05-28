@@ -42,8 +42,7 @@ function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
           if (!versionSync) {
             versionSync = createVersionSync({ url: '/version.json', interval: 30000, onStale });
           }
-          // fire-and-forget check to update internal state
-          versionSync.checkNow && versionSync.checkNow().catch(() => {});
+          // do not trigger a background check here to avoid extra fetch calls
         } catch (e) {
           // ignore version-sync init errors
         }

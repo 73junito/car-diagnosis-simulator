@@ -69,3 +69,33 @@ function createVersionSync({ url = '/version.json', interval = 60000, onStale = 
 }
 
 module.exports = { createVersionSync };
+
+// Convenience standalone helper used by tests and simple pages
+async function checkVersion() {
+  const vs = createVersionSync();
+  try {
+    const v = await vs.checkNow();
+    if (typeof window === 'undefined') return v;
+    try {
+      const prev = window.APP_VERSION;
+      if (v && prev && prev !== v) {
+        // create a simple reload banner so UI can prompt user
+        try {
+          let banner = document.getElementById('version-sync-banner');
+          if (!banner) {
+            banner = document.createElement('div');
+            banner.id = 'version-sync-banner';
+            banner.textContent = 'A new version is available — please reload.';
+            document.body.appendChild(banner);
+          }
+        } catch (e) { /* ignore DOM errors */ }
+      }
+      if (v) window.APP_VERSION = v;
+    } catch (e) { /* ignore */ }
+    return v;
+  } catch (e) {
+    return null;
+  }
+}
+
+module.exports = { createVersionSync, checkVersion };
