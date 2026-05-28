@@ -42,6 +42,12 @@ function build() {
   const topFlakyLabels = topFlaky.map(t => t.Name);
   const topFlakyCounts = topFlaky.map(t => t.Flakes);
 
+  // Build sparkline data: for each top flaky test, map recent runs to 1/0 based on failure presence
+  const sparkData = topFlaky.map(entry => {
+    const testName = entry.Name;
+    return recentRuns.map(r => (r.failures || []).includes(testName) ? 1 : 0);
+  });
+
   const topSlow = slowEntries.slice(0, 20);
   const topSlowLabels = topSlow.map(s => s.Name);
   const topSlowTimes = topSlow.map(s => s.TimeMs);
@@ -84,7 +90,12 @@ function build() {
   </div>
 
   <h2>Top flaky tests (table)</h2>
-  ${renderTable(flakyEntries.slice(0,50), ['Name','Flakes','Runs','Last'])}
+  <table class="table">
+    <thead><tr><th>Test</th><th>Flakes</th><th>Runs</th><th>Last</th><th>Trend</th></tr></thead>
+    <tbody>
+      ${topFlaky.slice(0,50).map((t,i)=>`<tr><td>${t.Name}</td><td>${t.Flakes}</td><td>${t.Runs}</td><td>${t.Last}</td><td><canvas id="spark-${i}" width="160" height="40"></canvas></td></tr>`).join('\n')}
+    </tbody>
+  </table>
 
   <h2>Slow tests (table)</h2>
   ${renderTable(slowEntries.slice(0,50), ['Name','TimeMs'])}
@@ -127,6 +138,20 @@ function build() {
 
       const sctx = document.getElementById('slowTests').getContext('2d');
       makeBar(sctx, topSlowLabels, topSlowTimes, 'Time (ms)', 'rgb(40,167,69)');
+
+      // Render sparklines for each top flaky test
+      try {
+        const sparkData = ${JSON.stringify(sparkData)};
+        sparkData.forEach((series, idx) => {
+          const el = document.getElementById(`spark-${idx}`);
+          if (!el) return;
+          new Chart(el.getContext('2d'), {
+            type: 'bar',
+            data: { labels: runLabels, datasets: [{ data: series, backgroundColor: series.map(v=>v? 'rgb(220,53,69)':'rgba(200,200,200,0.15)') }] },
+            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{display:false}} }
+          });
+        });
+      } catch (e){ console.error('sparkline render failed', e); }
     });
   </script>
 
