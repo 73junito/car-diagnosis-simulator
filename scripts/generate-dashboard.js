@@ -32,6 +32,20 @@ function build() {
   // Slow tests list
   const slowEntries = (slow.slow || []).map(s => ({ Name: `${s.classname} — ${s.name}`, TimeMs: s.timeMs }));
 
+  // Prepare chart data
+  const runs = flaky.runs || [];
+  const recentRuns = runs.slice(-50);
+  const runLabels = recentRuns.map(r => new Date(r.timestamp).toLocaleString());
+  const runFailures = recentRuns.map(r => (r.failures || []).length);
+
+  const topFlaky = flakyEntries.slice(0, 20);
+  const topFlakyLabels = topFlaky.map(t => t.Name);
+  const topFlakyCounts = topFlaky.map(t => t.Flakes);
+
+  const topSlow = slowEntries.slice(0, 20);
+  const topSlowLabels = topSlow.map(s => s.Name);
+  const topSlowTimes = topSlow.map(s => s.TimeMs);
+
   const html = `<!doctype html>
 <html>
 <head>
@@ -42,19 +56,80 @@ function build() {
     .table{border-collapse:collapse;width:100%}
     .table th,.table td{border:1px solid #ddd;padding:6px}
     h2{margin-top:24px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .card{background:#fff;border:1px solid #eee;padding:12px;border-radius:6px}
+    canvas{max-width:100%;height:300px}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}}
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <h1>Test Health Dashboard</h1>
   <p>Generated: ${new Date().toISOString()}</p>
-  <h2>Top flaky tests</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Failures Over Time</h2>
+      <canvas id="failuresOverTime"></canvas>
+    </div>
+    <div class="card">
+      <h2>Top Flaky Tests</h2>
+      <canvas id="topFlaky"></canvas>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h2>Slow Tests (top)</h2>
+    <canvas id="slowTests"></canvas>
+  </div>
+
+  <h2>Top flaky tests (table)</h2>
   ${renderTable(flakyEntries.slice(0,50), ['Name','Flakes','Runs','Last'])}
-  <h2>Slow tests (above threshold)</h2>
+
+  <h2>Slow tests (table)</h2>
   ${renderTable(slowEntries.slice(0,50), ['Name','TimeMs'])}
+
   <h2>Recent runs</h2>
   <ul>
     ${(flaky.runs || []).slice(-10).reverse().map(r=>`<li>${r.timestamp} — failures: ${r.failures.length}</li>`).join('\n')}
   </ul>
+
+  <script>
+    const runLabels = ${JSON.stringify(runLabels)};
+    const runFailures = ${JSON.stringify(runFailures)};
+    const topFlakyLabels = ${JSON.stringify(topFlakyLabels)};
+    const topFlakyCounts = ${JSON.stringify(topFlakyCounts)};
+    const topSlowLabels = ${JSON.stringify(topSlowLabels)};
+    const topSlowTimes = ${JSON.stringify(topSlowTimes)};
+
+    function makeLine(ctx, labels, data, label){
+      return new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{ label, data, borderColor: 'rgb(220,53,69)', backgroundColor: 'rgba(220,53,69,0.1)', tension:0.2 }] },
+        options: { responsive:true, plugins:{legend:{display:false}} }
+      });
+    }
+
+    function makeBar(ctx, labels, data, label, color='rgb(0,123,255)'){
+      return new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets: [{ label, data, backgroundColor: color }] },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{ticks:{autoSkip:true,maxRotation:45,minRotation:0}}} }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const fctx = document.getElementById('failuresOverTime').getContext('2d');
+      makeLine(fctx, runLabels, runFailures, 'Failures');
+
+      const tctx = document.getElementById('topFlaky').getContext('2d');
+      makeBar(tctx, topFlakyLabels, topFlakyCounts, 'Flake Count', 'rgb(255,159,64)');
+
+      const sctx = document.getElementById('slowTests').getContext('2d');
+      makeBar(sctx, topSlowLabels, topSlowTimes, 'Time (ms)', 'rgb(40,167,69)');
+    });
+  </script>
+
 </body>
 </html>`;
 
