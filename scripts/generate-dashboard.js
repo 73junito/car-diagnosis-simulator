@@ -72,7 +72,22 @@ function build() {
     canvas{max-width:100%;height:300px}
     @media(max-width:800px){.grid{grid-template-columns:1fr}}
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Try to load a local copy first (deployed alongside dashboard.html).
+    // If Chart isn't available after a short delay, load from CDN as a fallback.
+    (function(){
+      var local = 'chart.min.js';
+      document.write('<script src="' + local + '"><\/script>');
+      window.__loadChartFallback = function(){
+        if(typeof Chart === 'undefined'){
+          var s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+          document.head.appendChild(s);
+        }
+      };
+      setTimeout(window.__loadChartFallback, 800);
+    })();
+  </script>
 </head>
 <body>
   <h1>Test Health Dashboard</h1>

@@ -194,6 +194,12 @@ jobs:
         run: |
           node scripts/generate-dashboard.js
 
+      - name: Fetch Chart.js for Pages bundle
+        if: always()
+        run: |
+          mkdir -p test-results
+          curl -fsSL -o test-results/chart.min.js https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js || echo "could not download chart.js"
+
       - name: Upload test dashboard
         if: always()
         uses: actions/upload-artifact@v4
@@ -209,7 +215,7 @@ jobs:
         if: always()
         uses: actions/upload-pages-artifact@v2
         with:
-          path: test-results/dashboard.html
+          path: test-results
 
       - name: Deploy to GitHub Pages
         if: always()
