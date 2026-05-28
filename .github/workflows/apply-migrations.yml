@@ -189,6 +189,19 @@ jobs:
           name: slow-tests
           path: test-results/slow-tests.json
 
+      - name: Slow-test trend alerts
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLOW_TREND_LOOKBACK: 8
+          SLOW_TREND_MIN_HISTORY: 3
+          SLOW_TREND_PERCENT: 0.25
+          SLOW_TREND_MIN_DELTA_MS: 200
+        run: |
+          node scripts/slow-test-trend-alerts.js
+
       - name: Generate test dashboard (artifact)
         if: always()
         run: |
