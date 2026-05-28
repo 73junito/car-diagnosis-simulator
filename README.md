@@ -15,6 +15,8 @@ Features
 Demo
 Visit the live demo: https://car-diagnosis-simulator.vercel.app/
 
+[![Test Dashboard](https://img.shields.io/badge/test-dashboard-live-brightgreen)](https://73junito.github.io/car-diagnosis-simulator/dashboard.html)
+
 Run locally
 ```bash
 cd "d:/Car Diagnosis Simulator/car-diagnosis-sim"
