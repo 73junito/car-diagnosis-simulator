@@ -1,0 +1,247 @@
+name: Apply DB Migrations (PR)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pages: write
+
+jobs:
+  apply-migrations:
+    name: Apply migrations against disposable Postgres
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            sleep 1
+          done
+
+      - name: Install psql client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Apply SQL migrations
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: |
+          echo "Applying migrations to $DATABASE_URL"
+          ls -1 db/migrations || true
+          for f in db/migrations/*.sql; do
+            if [ -f "$f" ]; then
+              echo "--- applying $f ---"
+              psql "$DATABASE_URL" -f "$f"
+            fi
+          done
+
+      - name: Verify sample table access
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: |
+          # Show tables and privileges for quick debugging
+          psql "$DATABASE_URL" -c "\\dt public.*"
+          psql "$DATABASE_URL" -c "SELECT table_schema, table_name, privilege_type, grantee FROM information_schema.role_table_grants WHERE table_schema='public' LIMIT 50;"
+
+      - name: Run grants audit
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+        run: |
+          echo "Running grants audit"
+          psql "$DATABASE_URL" -At -F"," -f db/scripts/grants_audit.sql > /tmp/grants_audit.out || true
+          if [ -s /tmp/grants_audit.out ]; then
+            echo "Missing grants detected:" >&2
+            cat /tmp/grants_audit.out >&2
+            echo "Failing job: missing required Data API grants" >&2
+            exit 1
+          else
+            echo "All required grants appear present (audit returned no rows)."
+          fi
+
+  run-tests:
+    name: Run full test suite
+    needs: apply-migrations
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            sleep 1
+          done
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests (with retries)
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+          CI_TEST_RETRIES: 1
+          CI_TEST_BACKOFF_MS: 2000
+          CI_PER_TEST_RETRIES: 1
+        run: |
+          node scripts/ci-run-tests.js
+
+      - name: Annotate failing tests
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Jest Tests
+          path: test-results/junit.xml
+          reporter: junit
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload JUnit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-results
+          path: test-results/junit.xml
+
+      - name: Upload HTML test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-html-report
+          path: test-results/jest-report.html
+
+      - name: Post PR test summary
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/post-junit-summary.js
+
+      - name: Track flaky tests
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FLAKY_THRESHOLD: 3
+        run: |
+          node scripts/flaky-tracker.js
+
+      - name: Upload flaky history
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flaky-history
+          path: test-results/flaky-history.json
+
+      - name: Detect slow tests
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLOW_TEST_MS: 2000
+          SLOW_TEST_TOP: 20
+        run: |
+          node scripts/slow-test-detector.js
+
+      - name: Upload slow-tests report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: slow-tests
+          path: test-results/slow-tests.json
+
+      - name: Slow-test trend alerts
+        if: always()
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLOW_TREND_LOOKBACK: 8
+          SLOW_TREND_MIN_HISTORY: 3
+          SLOW_TREND_PERCENT: 0.25
+          SLOW_TREND_MIN_DELTA_MS: 200
+        run: |
+          node scripts/slow-test-trend-alerts.js
+
+      - name: Auto-open regression issues
+        if: always()
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_LOOKBACK: 8
+          ISSUE_MIN_OCCURRENCES: 3
+        run: |
+          node scripts/auto-open-regression-issues.js
+
+      - name: Generate test dashboard (artifact)
+        if: always()
+        run: |
+          node scripts/generate-dashboard.js
+
+      - name: Fetch Chart.js for Pages bundle
+        if: always()
+        run: |
+          mkdir -p test-results
+          curl -fsSL -o test-results/chart.min.js https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js || echo "could not download chart.js"
+
+      - name: Upload test dashboard
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-dashboard
+          path: test-results/dashboard.html
+
+      - name: Configure Pages
+        if: always()
+        uses: actions/configure-pages@v3
+
+      - name: Upload Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: test-results
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: actions/deploy-pages@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

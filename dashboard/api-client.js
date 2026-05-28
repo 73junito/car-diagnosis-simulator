@@ -11,20 +11,23 @@ function getClientVersion() {
   }
 }
 
-function defaultOnStale(serverVersion, info = {}) {
+function defaultOnStale(serverVersion, info) {
   try {
-    // Broadcast reload request to other tabs; version-sync will pick this up
     if (typeof window !== 'undefined' && window.localStorage) {
       window.localStorage.setItem('__version_reload_request', Date.now().toString());
     }
-  } catch (e) {
-    // ignore localStorage errors
+  } catch {
+    // Ignore storage errors
   }
 }
 
 function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
   if (typeof window === 'undefined' || !window.fetch) return;
   const originalFetch = window.fetch.bind(window);
+
+  // lazy init version sync (browser-only)
+  const { createVersionSync } = require('./version-sync');
+  let versionSync = null;
 
   window.fetch = async function(input, init) {
     const resp = await originalFetch(input, init);
@@ -34,7 +37,17 @@ function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
 
       const clientVersion = getClientVersion();
       if (clientVersion && serverVersion !== clientVersion) {
-        // signal stale
+        // ensure version-sync is available and trigger a check after this response
+        try {
+          if (!versionSync) {
+            versionSync = createVersionSync({ url: '/version.json', interval: 30000, onStale });
+          }
+          // do not trigger a background check here to avoid extra fetch calls
+        } catch (e) {
+          // ignore version-sync init errors
+        }
+
+        // immediate stale notification
         onStale && onStale(serverVersion, { input, init });
 
         if (retryOnce) {
