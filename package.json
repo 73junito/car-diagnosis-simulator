@@ -4,6 +4,9 @@
 	"private": true,
 	"scripts": {
 		"test": "jest",
+		"build": "npm run write-version",
+		"write-version": "node scripts/write-version.js",
+		"vercel-build": "npm run write-version",
 		"test:live-session": "node tests/live-session-ui.test.js",
 		"validate:scenarios": "node tools/validate-scenarios.js",
 		"validate:obd2": "node tools/validate-obd2.js",
@@ -13,8 +16,7 @@
 		"export:analytics": "npm run export:csv && npm run export:xapi",
 		"test:analytics-api": "node tests/analytics-api.test.js",
 		"test:analytics-routes": "node tests/analytics-routes.test.js",
-		"lint": "eslint . --ext .js",
-		"build": "node scripts/write-version.js && echo \"no build step required for static site\""
+		"lint": "eslint . --ext .js"
 	},
 	"devDependencies": {
 		"acorn": "^8.10.0",
@@ -26,6 +28,12 @@
 		"jest": "^30.4.2",
 		"jest-environment-jsdom": "^30.4.1",
 		"supertest": "^7.2.2",
-		"eslint": "^8.56.0"
+		"eslint": "^8.56.0",
+		"jest-junit": "^13.2.0",
+		"fast-xml-parser": "^4.1.1",
+		"jest-circus": "^30.4.2",
+		"adm-zip": "^0.5.9",
+		"node-fetch": "^3.3.2",
+		"nock": "^13.3.0"
+		}
 	}
-}
