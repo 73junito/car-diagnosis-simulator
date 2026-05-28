@@ -29,34 +29,19 @@
 		"jest-environment-jsdom": "^30.4.1",
 		"supertest": "^7.2.2",
 		"eslint": "^8.56.0",
-		"jest-junit": "^13.5.0",
-		"jest-html-reporter": "^6.0.0",
+		"jest-junit": "^13.2.0",
 		"fast-xml-parser": "^4.1.1",
 		"jest-circus": "^30.4.2",
 		"adm-zip": "^0.5.9",
-		"node-fetch": "^3.4.0"
+		"node-fetch": "^3.3.2",
+		"nock": "^13.3.0"
+		}
+		"jest-junit": "^13.2.0",
+		"fast-xml-parser": "^4.1.1",
+		"jest-circus": "^30.4.2",
+		"adm-zip": "^0.5.9",
+		"node-fetch": "^3.3.2",
+		"nock": "^13.3.0"
+		}
+>>>>>>> origin/main
 	}
-	,
-	"jest": {
-		"testTimeout": 30000,
-		"testRunner": "jest-circus/runner",
-		"setupFilesAfterEnv": ["<rootDir>/scripts/jest-setup-retries.js"],
-		"reporters": [
-			"default",
-			[
-				"jest-junit",
-				{
-					"outputDirectory": "test-results",
-					"outputName": "junit.xml"
-				}
-			],
-			[
-				"jest-html-reporter",
-				{
-					"pageTitle": "Car Diagnosis Simulator — Test Report",
-					"outputPath": "test-results/jest-report.html"
-				}
-			]
-		]
-	}
-}
