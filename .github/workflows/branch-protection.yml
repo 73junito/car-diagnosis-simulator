@@ -21,10 +21,10 @@ jobs:
             "required_status_checks": {
               "strict": true,
               "contexts": [
-                "unit-tests",
-                "api-smoke",
-                "smoke",
-                "db-ssl-validation"
+                "Unit Tests",
+                "CI",
+                "Lint",
+                "API Smoke Test"
               ]
             },
             "enforce_admins": true,
