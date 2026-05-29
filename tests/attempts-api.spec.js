@@ -156,7 +156,7 @@ describe('Attempts API endpoints (mocked Supabase)', () => {
     }), { virtual: true });
 
     const load = require('../api/attempts/load');
-    const req = { method: 'GET', query: { scenario: 'no-start' } };
+    const req = { method: 'GET', query: { scenario: 'no-start', user_id: 'user-1' } };
     const res = { statusCode: 200, body: null, status(code){ this.statusCode = code; return this; }, json(obj){ this.body = obj; } };
 
     await load(req, res);

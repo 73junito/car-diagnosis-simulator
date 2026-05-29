@@ -10,6 +10,7 @@ try {
 
 module.exports = async (req, res) => {
   appVersionUtil.setAppVersionHeader(res);
+  // debug logging removed
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
 
   try {

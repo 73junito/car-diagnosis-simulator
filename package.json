@@ -3,7 +3,7 @@
 	"version": "0.1.1",
 	"private": true,
 	"scripts": {
-		"test": "jest",
+		"test": "jest --config=jest.config.js --ci --reporters=default",
 		"build": "npm run write-version",
 		"write-version": "node scripts/write-version.js",
 		"vercel-build": "npm run write-version",
@@ -36,4 +36,4 @@
 		"node-fetch": "^3.3.2",
 		"nock": "^13.3.0"
 		}
-	}
+}
