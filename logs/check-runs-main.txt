@@ -1,0 +1,12 @@
+{"conclusion":"success","name":"Dependabot","status":"completed"}
+{"conclusion":"success","name":"Dependabot","status":"completed"}
+{"conclusion":"success","name":"Dependabot","status":"completed"}
+{"conclusion":"success","name":"Supabase Preview","status":"completed"}
+{"conclusion":"success","name":"unit-tests","status":"completed"}
+{"conclusion":"success","name":"api-smoke","status":"completed"}
+{"conclusion":"success","name":"Run ESLint","status":"completed"}
+{"conclusion":"success","name":"Jest (jsdom)","status":"completed"}
+{"conclusion":"success","name":"smoke","status":"completed"}
+{"conclusion":"success","name":"build-and-test","status":"completed"}
+{"conclusion":"success","name":"Analyze (CodeQL)","status":"completed"}
+{"conclusion":"success","name":"Analyze (CodeQL)","status":"completed"}

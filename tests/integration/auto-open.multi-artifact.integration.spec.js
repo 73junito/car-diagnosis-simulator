@@ -1,7 +1,7 @@
 /* eslint-disable no-empty, no-unused-vars */
 const path = require('path');
 const fs = require('fs');
-const nock = require('nock');
+let nock;
 
 const owner = '73junito';
 const repo = 'car-diagnosis-simulator';
@@ -12,6 +12,9 @@ function makeSlowJson() {
 }
 
 describe('auto-open multi-artifact integration', () => {
+  beforeAll(() => {
+    nock = require('nock');
+  });
   afterEach(() => {
     nock.cleanAll();
     try { fs.unlinkSync(path.resolve(process.cwd(), 'config', 'test-owners.json')); } catch (e) {}
