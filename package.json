@@ -30,7 +30,7 @@
 		"supertest": "^7.2.2",
 		"eslint": "^8.56.0",
 		"jest-junit": "^17.0.0",
-		"fast-xml-parser": "^5.7.0",
+		"fast-xml-parser": "^5.8.0",
 		"jest-circus": "^30.4.2",
 		"adm-zip": "^0.5.9",
 		"node-fetch": "^3.3.2",
