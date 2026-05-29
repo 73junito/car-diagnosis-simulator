@@ -20,7 +20,7 @@
 	},
 	"devDependencies": {
 		"acorn": "^8.10.0",
-		"@babel/core": "^7.29.0",
+		"@babel/core": "^7.29.7",
 		"@babel/preset-env": "^7.24.0",
 		"ajv": "^8.20.0",
 		"babel-jest": "^30.4.1",
@@ -35,6 +35,6 @@
 		"jest-circus": "^30.4.2",
 		"adm-zip": "^0.5.9",
 		"node-fetch": "^3.3.2",
-		"nock": "^13.3.0"
+		"nock": "^14.0.15"
 		}
 }
