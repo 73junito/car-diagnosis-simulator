@@ -6,6 +6,7 @@ SELECT 'table' AS object_type, table_schema AS object_schema, table_name AS obje
 FROM information_schema.tables t
 WHERE table_schema = 'public'
   AND table_type = 'BASE TABLE'
+  AND EXISTS (SELECT 1 FROM pg_roles r WHERE r.rolname = 'authenticated')
   AND NOT EXISTS (
     SELECT 1 FROM information_schema.role_table_grants g
     WHERE g.table_schema = t.table_schema
@@ -19,6 +20,7 @@ SELECT 'table' AS object_type, table_schema AS object_schema, table_name AS obje
 FROM information_schema.tables t
 WHERE table_schema = 'public'
   AND table_type = 'BASE TABLE'
+  AND EXISTS (SELECT 1 FROM pg_roles r WHERE r.rolname = 'anon')
   AND NOT EXISTS (
     SELECT 1 FROM information_schema.role_table_grants g
     WHERE g.table_schema = t.table_schema
@@ -33,4 +35,5 @@ FROM pg_class c
 JOIN pg_namespace n ON c.relnamespace = n.oid
 WHERE c.relkind = 'S'
   AND n.nspname = 'public'
+  AND EXISTS (SELECT 1 FROM pg_roles r WHERE r.rolname = 'authenticated')
   AND NOT has_sequence_privilege('authenticated', format('%I.%I', n.nspname, c.relname), 'USAGE');
