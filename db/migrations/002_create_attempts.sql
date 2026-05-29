@@ -26,13 +26,25 @@ CREATE INDEX IF NOT EXISTS attempts_created_at_idx ON public.attempts (created_a
 ALTER TABLE public.attempts ENABLE ROW LEVEL SECURITY;
 
 -- Example policy: allow users to access their own attempts.
--- NOTE: This is a scaffold. Supabase `auth` integration and actual
--- policy expressions should be configured when auth is enforced.
-CREATE POLICY "Allow users to access own attempts"
-  ON public.attempts
-  FOR ALL
-  USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+-- NOTE: This is a scaffold. Only create the Supabase-specific policy
+-- when the `auth` schema (and associated helpers) exist to avoid
+-- failing migrations on plain Postgres CI instances.
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = 'auth') THEN
+    EXECUTE $$
+      CREATE POLICY "Allow users to access own attempts"
+        ON public.attempts
+        FOR ALL
+        USING (auth.uid() = user_id)
+        WITH CHECK (auth.uid() = user_id);
+    $$;
+  ELSE
+    -- No-op: auth schema not present (CI/dev plain Postgres). Skip policy.
+    RAISE NOTICE 'Skipping Supabase auth policy creation: auth schema missing';
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
 
 -- Keep a trigger to update `updated_at` on row change
 CREATE OR REPLACE FUNCTION public.set_updated_at()
