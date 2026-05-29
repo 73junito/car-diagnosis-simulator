@@ -7,7 +7,7 @@ function isBrowser() {
   return typeof window !== 'undefined' && typeof fetch === 'function';
 }
 
-function defaultOnStale(remoteVersion) {
+function defaultOnStale() {
   try {
     if (isBrowser() && window.localStorage) {
       window.localStorage.setItem('__version_reload_request', Date.now().toString());

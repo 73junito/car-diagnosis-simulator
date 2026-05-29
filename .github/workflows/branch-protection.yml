@@ -22,9 +22,9 @@ jobs:
               "strict": true,
               "contexts": [
                 "unit-tests",
-                "api-smoke",
-                "smoke",
-                "db-ssl-validation"
+                "build-and-test",
+                "Run ESLint",
+                "api-smoke"
               ]
             },
             "enforce_admins": true,

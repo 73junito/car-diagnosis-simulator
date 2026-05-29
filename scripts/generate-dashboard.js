@@ -9,14 +9,6 @@ function loadJSON(p) {
   }
 }
 
-function renderTable(rows, headers) {
-  let html = '<table class="table">\n<thead><tr>' + headers.map(h=>`<th>${h}</th>`).join('') + '</tr></thead>\n<tbody>\n';
-  for (const r of rows) {
-    html += '<tr>' + headers.map(h => `<td>${r[h] ?? ''}</td>`).join('') + '</tr>\n';
-  }
-  html += '</tbody></table>\n';
-  return html;
-}
 
 function build() {
   const outDir = path.resolve(process.cwd(), 'test-results');
@@ -77,7 +69,7 @@ function build() {
     // If Chart isn't available after a short delay, load from CDN as a fallback.
     (function(){
       var local = 'chart.min.js';
-      document.write('<script src="' + local + '"><\/script>');
+      document.write('<script src="' + local + '"></script>');
       window.__loadChartFallback = function(){
         if(typeof Chart === 'undefined'){
           var s = document.createElement('script');
@@ -113,7 +105,7 @@ function build() {
   <table class="table">
     <thead><tr><th>Test</th><th>Flakes</th><th>Runs</th><th>Last</th><th>Trend</th></tr></thead>
     <tbody>
-      ${topFlaky.slice(0,50).map((t,i)=>`<tr><td>${t.Name}</td><td>${t.Flakes}</td><td>${t.Runs}</td><td>${t.Last}</td><td><canvas id="spark-${i}" width="160" height="40"></canvas></td></tr>`).join('\n')}
+      ${topFlaky.slice(0,50).map(function(t,i){ return '<tr><td>' + t.Name + '</td><td>' + t.Flakes + '</td><td>' + t.Runs + '</td><td>' + t.Last + '</td><td><canvas id="spark-' + i + '" width="160" height="40"></canvas></td></tr>'; }).join('\n')}
     </tbody>
   </table>
 
@@ -121,7 +113,7 @@ function build() {
   <table class="table">
     <thead><tr><th>Test</th><th>TimeMs</th><th>Trend</th></tr></thead>
     <tbody>
-      ${topSlow.slice(0,50).map((t,i)=>`<tr><td>${t.Name}</td><td>${t.TimeMs}</td><td><canvas id="spark-slow-${i}" width="160" height="40"></canvas></td></tr>`).join('\n')}
+      ${topSlow.slice(0,50).map(function(t,i){ return '<tr><td>' + t.Name + '</td><td>' + t.TimeMs + '</td><td><canvas id="spark-slow-' + i + '" width="160" height="40"></canvas></td></tr>'; }).join('\n')}
     </tbody>
   </table>
 
@@ -168,7 +160,7 @@ function build() {
       try {
         const sparkData = ${JSON.stringify(sparkData)};
         sparkData.forEach((series, idx) => {
-          const el = document.getElementById(`spark-${idx}`);
+          const el = document.getElementById('spark-' + idx);
           if (!el) return;
           new Chart(el.getContext('2d'), {
             type: 'bar',
@@ -179,7 +171,7 @@ function build() {
         // Render sparklines for slow tests
         const sparkDataSlow = ${JSON.stringify(sparkDataSlow)};
         sparkDataSlow.forEach((series, idx) => {
-          const el = document.getElementById(`spark-slow-${idx}`);
+          const el = document.getElementById('spark-slow-' + idx);
           if (!el) return;
           new Chart(el.getContext('2d'), {
             type: 'bar',
