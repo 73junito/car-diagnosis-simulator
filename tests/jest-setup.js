@@ -4,6 +4,15 @@
  * Defines browser APIs that jsdom does not implement.
  */
 
+// Polyfill fetch/Request for Node test environment (undici)
+try {
+  // Ensure `undici` polyfill is loaded early for tests that rely on Request/fetch
+  // eslint-disable-next-line global-require
+  require('undici/polyfill-fetch');
+} catch (err) {
+  // If undici is missing, tests will surface the original ReferenceError.
+}
+
 // -----------------------------------------------------------------------------
 // matchMedia
 // -----------------------------------------------------------------------------
