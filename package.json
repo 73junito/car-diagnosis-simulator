@@ -36,8 +36,5 @@
 		"node-fetch": "^3.3.2",
 		"nock": "^13.3.0"
 		},
-	"jest": {
-		"testEnvironment": "jsdom",
-		"setupFilesAfterEnv": ["./scripts/jest-setup-retries.js"]
-	}
+
 }
