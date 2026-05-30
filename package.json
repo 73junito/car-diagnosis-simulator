@@ -1,41 +1,63 @@
 {
-	"name": "car-diagnosis-sim",
-	"version": "0.1.1",
-	"private": true,
-	"scripts": {
-		"test": "node -r ./tests/jest-undici-register.js ./node_modules/jest/bin/jest.js --config=jest.config.js --ci --reporters=default --runInBand",
-		"build": "npm run write-version",
-		"write-version": "node scripts/write-version.js",
-		"vercel-build": "npm run write-version",
-		"test:live-session": "node tests/live-session-ui.test.js",
-		"validate:scenarios": "node tools/validate-scenarios.js",
-		"validate:obd2": "node tools/validate-obd2.js",
-		"test:analytics": "node tests/session-summary.test.js",
-		"export:csv": "node tools/export-csv.js",
-		"export:xapi": "node tools/export-xapi.js",
-		"export:analytics": "npm run export:csv && npm run export:xapi",
-		"test:analytics-api": "node tests/analytics-api.test.js",
-		"test:analytics-routes": "node tests/analytics-routes.test.js",
-		"lint": "eslint . --ext .js"
-	},
-	"devDependencies": {
-		"acorn": "^8.10.0",
-		"@babel/core": "^7.29.7",
-		"@babel/preset-env": "^7.24.0",
-		"ajv": "^8.20.0",
-		"babel-jest": "^30.4.1",
-		"express": "^5.2.1",
-		"jest": "^30.4.2",
-		"jest-environment-jsdom": "^30.4.1",
-		"supertest": "^7.2.2",
-		"eslint": "^8.56.0",
-		"undici": "^6.24.0",
-		"cross-env": "^7.0.3",
-		"jest-junit": "^17.0.0",
-		"fast-xml-parser": "^5.8.0",
-		"jest-circus": "^30.4.2",
-		"adm-zip": "^0.5.9",
-		"node-fetch": "^3.3.2",
-		"nock": "^14.0.15"
-		}
+  "name": "car-diagnosis-sim",
+  "version": "0.1.1",
+  "private": true,
+  "scripts": {
+    "test": "node -r ./tests/jest-undici-register.js ./node_modules/jest/bin/jest.js --config=jest.config.js --ci --reporters=default --runInBand",
+    "build": "npm run write-version",
+    "write-version": "node scripts/write-version.js",
+    "vercel-build": "npm run write-version",
+    "test:live-session": "node tests/live-session-ui.test.js",
+    "validate:scenarios": "node tools/validate-scenarios.js",
+    "validate:obd2": "node tools/validate-obd2.js",
+    "test:analytics": "node tests/session-summary.test.js",
+    "export:csv": "node tools/export-csv.js",
+    "export:xapi": "node tools/export-xapi.js",
+    "export:analytics": "npm run export:csv && npm run export:xapi",
+    "test:analytics-api": "node tests/analytics-api.test.js",
+    "test:analytics-routes": "node tests/analytics-routes.test.js",
+    "lint": "eslint . --ext .js"
+  },
+  "devDependencies": {
+    "acorn": "^8.10.0",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.24.0",
+    "ajv": "^8.20.0",
+    "babel-jest": "^30.4.1",
+    "express": "^5.2.1",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "supertest": "^7.2.2",
+    "eslint": "^8.56.0",
+    "undici": "^6.24.0",
+    "cross-env": "^7.0.3",
+    "jest-junit": "^17.0.0",
+    "fast-xml-parser": "^5.8.0",
+    "jest-circus": "^30.4.2",
+    "adm-zip": "^0.5.9",
+    "node-fetch": "^3.3.2",
+    "nock": "^14.0.15"
+  },
+  "jest": {
+    "testTimeout": 30000,
+    "testRunner": "jest-circus/runner",
+    "setupFilesAfterEnv": ["<rootDir>/scripts/jest-setup-retries.js"],
+    "reporters": [
+      "default",
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "test-results",
+          "outputName": "junit.xml"
+        }
+      ],
+      [
+        "jest-html-reporter",
+        {
+          "pageTitle": "Car Diagnosis Simulator — Test Report",
+          "outputPath": "test-results/jest-report.html"
+        }
+      ]
+    ]
+  }
 }

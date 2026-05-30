@@ -32,13 +32,13 @@ ALTER TABLE public.attempts ENABLE ROW LEVEL SECURITY;
 DO $$
 BEGIN
   IF EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = 'auth') THEN
-    EXECUTE $$
+    EXECUTE $policy$
       CREATE POLICY "Allow users to access own attempts"
         ON public.attempts
         FOR ALL
         USING (auth.uid() = user_id)
         WITH CHECK (auth.uid() = user_id);
-    $$;
+    $policy$;
   ELSE
     -- No-op: auth schema not present (CI/dev plain Postgres). Skip policy.
     RAISE NOTICE 'Skipping Supabase auth policy creation: auth schema missing';
