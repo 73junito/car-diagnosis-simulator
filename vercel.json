@@ -55,6 +55,10 @@
       "destination": "/api/$1"
     },
     {
+      "source": "/version.json",
+      "destination": "/version.json"
+    },
+    {
       "source": "/((?!api/|version\\.json|favicon\\.ico|.*\\..*).*)",
       "destination": "/index.html"
     }
