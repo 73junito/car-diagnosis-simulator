@@ -4,13 +4,43 @@
  * Defines browser APIs that jsdom does not implement.
  */
 
-// Polyfill fetch/Request for Node test environment (undici)
-try {
-  // Ensure `undici` polyfill is loaded early for tests that rely on Request/fetch
-  // eslint-disable-next-line global-require
-  require('undici/polyfill-fetch');
-} catch (err) {
-  // If undici is missing, tests will surface the original ReferenceError.
+// NOTE: `fetch` and `Request` are provided by Node via NODE_OPTIONS preloading
+// (undici/register). Do not re-polyfill here to avoid import-order races.
+// If Node-level preload didn't run for any reason, attempt a safe runtime polyfill
+// here so test files (and modules they require) see `Request`/`fetch`.
+if (typeof globalThis.Request === 'undefined') {
+  try {
+    // Try the modern undici fetch entry
+    require('undici/index-fetch');
+  } catch (e1) {
+    try {
+      // Fallback to require the package root which may export fetch
+      require('undici');
+    } catch (e2) {
+      try {
+        // Last resort: require our local preload that mirrors undici/register
+        require('./jest-undici-register.js');
+      } catch (e3) {
+        // swallow — we'll detect missing Request below
+      }
+    }
+  }
+}
+
+// Ensure jsdom `window` sees the same constructors if present on Node global.
+if (typeof window !== 'undefined') {
+  if (typeof window.Request === 'undefined' && typeof globalThis.Request !== 'undefined') {
+    window.Request = globalThis.Request;
+  }
+  if (typeof window.fetch === 'undefined' && typeof globalThis.fetch !== 'undefined') {
+    window.fetch = globalThis.fetch;
+  }
+  if (typeof window.Headers === 'undefined' && typeof globalThis.Headers !== 'undefined') {
+    window.Headers = globalThis.Headers;
+  }
+  if (typeof window.Response === 'undefined' && typeof globalThis.Response !== 'undefined') {
+    window.Response = globalThis.Response;
+  }
 }
 
 // -----------------------------------------------------------------------------

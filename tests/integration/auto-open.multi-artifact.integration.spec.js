@@ -1,7 +1,7 @@
 /* eslint-disable no-empty, no-unused-vars */
 const path = require('path');
 const fs = require('fs');
-const nock = require('nock');
+let nock;
 
 const owner = '73junito';
 const repo = 'car-diagnosis-simulator';
@@ -12,6 +12,21 @@ function makeSlowJson() {
 }
 
 describe('auto-open multi-artifact integration', () => {
+  beforeAll(() => {
+    // Ensure undici constructors are assigned to globals before requiring nock.
+    try {
+      const u = require('undici');
+      if (u) {
+        if (typeof globalThis.fetch === 'undefined' && typeof u.fetch === 'function') globalThis.fetch = u.fetch;
+        if (typeof globalThis.Request === 'undefined' && typeof u.Request !== 'undefined') globalThis.Request = u.Request;
+        if (typeof globalThis.Headers === 'undefined' && typeof u.Headers !== 'undefined') globalThis.Headers = u.Headers;
+        if (typeof globalThis.Response === 'undefined' && typeof u.Response !== 'undefined') globalThis.Response = u.Response;
+      }
+    } catch (e) {
+      try { require('../../tests/jest-undici-register.js'); } catch (_) {}
+    }
+    nock = require('nock');
+  });
   afterEach(() => {
     nock.cleanAll();
     try { fs.unlinkSync(path.resolve(process.cwd(), 'config', 'test-owners.json')); } catch (e) {}

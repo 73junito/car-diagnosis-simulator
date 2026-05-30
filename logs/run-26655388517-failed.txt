@@ -1,0 +1,1841 @@
+Jest (jsdom)	Run tests	﻿2026-05-29T19:00:47.9740745Z ##[group]Run npm test -- --ci --reporters=default
+Jest (jsdom)	Run tests	2026-05-29T19:00:47.9741221Z [36;1mnpm test -- --ci --reporters=default[0m
+Jest (jsdom)	Run tests	2026-05-29T19:00:47.9771073Z shell: /usr/bin/bash -e {0}
+Jest (jsdom)	Run tests	2026-05-29T19:00:47.9771371Z ##[endgroup]
+Jest (jsdom)	Run tests	2026-05-29T19:00:48.0848499Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:48.0849337Z > car-diagnosis-sim@0.1.1 test
+Jest (jsdom)	Run tests	2026-05-29T19:00:48.0850355Z > jest --config=jest.config.js --ci --reporters=default --ci --reporters=default
+Jest (jsdom)	Run tests	2026-05-29T19:00:48.0851212Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2102185Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2132107Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2151013Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2192423Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2220949Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2226780Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2251774Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2281944Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2311625Z      [90m   |[39m              [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2331211Z      [90m 5 |[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2381968Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2411968Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2440935Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2471627Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2472776Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2501469Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2505578Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2531880Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2570414Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2601618Z       at Object.require (tests/integration/auto-open.expanded.integration.spec.js:4:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2633457Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2634202Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2661524Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2690896Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2721336Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2722051Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2761991Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2791627Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2821629Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2822946Z      [90m   |[39m              [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2851289Z      [90m 5 |[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2881513Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2883078Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2891022Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2891856Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2893036Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2894056Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2894943Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2895783Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2896590Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2897556Z       at Object.require (tests/integration/auto-open.expanded.integration.spec.js:4:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2898770Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3337319Z PASS tests/hero.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3359680Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3360308Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3360842Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3361534Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3362077Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3362464Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3362953Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3363252Z PASS tests/hero.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3363745Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3364010Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3364250Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3364871Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3365379Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3365955Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.3366454Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7457438Z PASS tests/scenario-loader.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7812826Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7841429Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7845466Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7846411Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7847082Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7847594Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7848174Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7848733Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7849724Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7875930Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7876599Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7877184Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7877524Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7878389Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7878964Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7879365Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7879905Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7880232Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7881362Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7881943Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7882358Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7882920Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7883254Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7884019Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7884596Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7885013Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7885539Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7885860Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7886590Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7887126Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7887564Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7888087Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7888399Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7889117Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7889648Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7890066Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7890892Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7891218Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7891956Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7892455Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7892864Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7893400Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7893712Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7894431Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7894956Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7895357Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7895864Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7896168Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7896892Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7897397Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7897798Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7898321Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7898640Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7899372Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7899930Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7900331Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7901074Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7901394Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7902116Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7902638Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7903041Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7904033Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7904547Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7913354Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7913964Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7914401Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7914926Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7915247Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7916010Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7916559Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7916978Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7917503Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7917806Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7918522Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7919043Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7919455Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7919970Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7920277Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7921424Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7921938Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7922339Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7922872Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7923183Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7923949Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7924524Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7924924Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7925435Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7925745Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7926443Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7926969Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7927360Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7927869Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7928189Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7928946Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7929603Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7929994Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7930855Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7931187Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7931923Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7932390Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7932740Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7933219Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7933465Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7934144Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7934623Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7934972Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7935484Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7935747Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7936524Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7937002Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7937345Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7937798Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7938049Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7938704Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7939197Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7939550Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7940062Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7940335Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7941238Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7941727Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7942104Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7942606Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7942875Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7943533Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7944006Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7944358Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7944817Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7945079Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7945757Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7946256Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7946584Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7949765Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7950127Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7951086Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7951657Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7952017Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7952492Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7952941Z PASS tests/scenario-loader.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7953615Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7953927Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7954192Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7955237Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7956116Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7956555Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7957089Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7957333Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7958056Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7958566Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7958942Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7959423Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7959675Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7960389Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7961139Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7961489Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7961942Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7962187Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7962837Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7963308Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7963642Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7964090Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7964348Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7965042Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7965548Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7965888Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7966330Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7966581Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7967217Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7967682Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7968031Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7968488Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7968759Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7969408Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7969882Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7970242Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7970939Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7971212Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7971884Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7972357Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7972712Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7973182Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7973442Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7974125Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7974603Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7974953Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7975410Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7975650Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7976327Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7976772Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7977115Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7977551Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7977801Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7978447Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7978921Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7979248Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7979710Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7979964Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7980811Z       [scenario-loader] start — "nonexistent"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7981285Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7981616Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7982047Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7982283Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7982939Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7983432Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7983779Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7984213Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7984461Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7985116Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7985603Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7985965Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7986401Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7986658Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7987306Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7987779Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7988132Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7988592Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7988843Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7989504Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7989951Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7990293Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7991472Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7992053Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7992689Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7993263Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7993519Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7993846Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7994007Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7994517Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7994858Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7995096Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7995406Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7995556Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7996051Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7996388Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7996624Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7996940Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7997088Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7997577Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7997911Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7998139Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7998449Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7998605Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7999106Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7999456Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.7999685Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8000008Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8000154Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8000861Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8001206Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8001438Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8001753Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8001896Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8002395Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8002747Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8002955Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8003279Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8003427Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8003890Z       [scenario-loader] start — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8004196Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8004394Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8004714Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8004865Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8005348Z       [scenario-loader] success — "startup"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8005692Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8005910Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8006239Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8006385Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8006856Z       [scenario-loader] start — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8007173Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8007389Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8007719Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8007865Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8008384Z       [scenario-loader] success — "demo-default"
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8008737Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8008958Z       at debug (js/scenario-loader.js:195:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.8009289Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9361021Z PASS tests/attempts-api.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9365815Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9366301Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9366610Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9367361Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9368030Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9368517Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9369115Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9369517Z PASS tests/attempts-api.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9370179Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9370770Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9371075Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9371781Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9372392Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9372880Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.9373465Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0397402Z PASS tests/telemetry-storage.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0421545Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0424906Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0425249Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0426127Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0426607Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0426945Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0427357Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0428024Z PASS tests/telemetry-storage.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0428586Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0429002Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0429152Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0429698Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0430141Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0430446Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.0431044Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2150165Z PASS tests/attempt-store.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2155796Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2156224Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2156562Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2157338Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2157981Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2158448Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2159022Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2159456Z PASS tests/attempt-store.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2161772Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2162161Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2162449Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2163215Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2163864Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2164318Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.2164879Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3460343Z PASS tests/analytics.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3474875Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3475206Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3475437Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3475963Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3476387Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3476712Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3477088Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3477347Z PASS tests/analytics.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3477763Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3478013Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3478231Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3478715Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3479122Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3479446Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3479861Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3825708Z PASS tests/session-history-ui.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3834336Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3834857Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3835310Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3836083Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3836723Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3837165Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3837724Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3838194Z PASS tests/session-history-ui.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3838909Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3839275Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3839531Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3840246Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3841091Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3841520Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3842052Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3951640Z PASS tests/telemetry-stream.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.3971424Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4040839Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4081152Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4111409Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4140830Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4201323Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4260856Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4291151Z PASS tests/telemetry-stream.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4321210Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4350827Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4381051Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4411273Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4440987Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4461315Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.4495548Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5294871Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5296283Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5296688Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5297043Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5297527Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5298873Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5300359Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5302003Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5303090Z      [90m   |[39m              [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5303800Z      [90m 5 |[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5304675Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5305932Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5306681Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5307321Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5308519Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5309645Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5310855Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5311779Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5312643Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5313667Z       at Object.require (tests/integration/auto-open.multi-artifact.integration.spec.js:4:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5314424Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5315033Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5316008Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5316482Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5316842Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5317306Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5318000Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5319154Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5320409Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5321743Z      [90m   |[39m              [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5322422Z      [90m 5 |[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5323295Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5324542Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5325372Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5326042Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5327253Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5328374Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5329380Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5330314Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5331568Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5332706Z       at Object.require (tests/integration/auto-open.multi-artifact.integration.spec.js:4:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5333523Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6050098Z PASS tests/obd2-rubric.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6051781Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6052209Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6052531Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6053293Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6053929Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6054401Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6054985Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6055374Z PASS tests/obd2-rubric.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6056043Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6056404Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6056707Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6057437Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6058458Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6058902Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.6059705Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7192898Z PASS tests/obd2-ase.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7198372Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7198790Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7199131Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7199918Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7200799Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7201298Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7201872Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7202268Z PASS tests/obd2-ase.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7203338Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7203694Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7203980Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7204691Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7205292Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7205746Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.7206290Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9054012Z PASS tests/telemetry-export.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9081767Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9111015Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9111535Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9141613Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9170967Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9171623Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9201007Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9231376Z PASS tests/telemetry-export.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9261398Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9261825Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9291276Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9321456Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9350951Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9351576Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.9381140Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0224013Z PASS tests/api-version-mismatch.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0242442Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0243113Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0243418Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0244165Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0244822Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0245263Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0245800Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0246155Z PASS tests/api-version-mismatch.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0246826Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0247113Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0247365Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0248055Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0248635Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0249051Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.0249555Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1065116Z PASS tests/app-version-header.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1091784Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1092462Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1111348Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1131628Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1132265Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1132709Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1133275Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1133546Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1134115Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1134865Z         'appendFile',        'appendFileSync',   'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1135670Z         'accessSync',        'chown',            'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1136411Z         'chmod',             'chmodSync',        'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1137194Z         'closeSync',         'copyFile',         'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1137951Z         'cp',                'cpSync',           'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1138743Z         'createWriteStream', 'exists',           'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1139497Z         'fchown',            'fchownSync',       'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1140245Z         'fchmodSync',        'fdatasync',        'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1141242Z         'fstat',             'fstatSync',        'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1142013Z         'fsyncSync',         'ftruncate',        'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1143415Z         'futimes',           'futimesSync',      'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1148180Z         'lchownSync',        'lchmod',           'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1148993Z         'link',              'linkSync',         'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1149743Z         'lstatSync',         'lutimes',          'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1150690Z         'mkdir',             'mkdirSync',        'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1151488Z         'mkdtempSync',       'open',             'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1152257Z         'openAsBlob',        'readdir',          'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1152991Z         'read',              'readSync',         'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1153730Z         'readvSync',         'readFile',         'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1154487Z         'readlink',          'readlinkSync',     'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1155240Z         'realpathSync',      'rename',           'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1155991Z         'rm',                'rmSync',           'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1156699Z         'rmdirSync',         'stat',             'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1157433Z         'statSync',          'statfsSync',       'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1158210Z         'symlinkSync',       'truncate',         'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1158980Z         'unwatchFile',       'unlink',           'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1159698Z         'utimes',            'utimesSync',       'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1160458Z         'watchFile',         'writeFile',        'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1161424Z         'write',             'writeSync',        'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1162142Z         'writevSync',        'Dirent',           'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1162904Z         'ReadStream',        'WriteStream',      'FileReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1163689Z         'FileWriteStream',   '_toUnixTimestamp', 'Dir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1164437Z         'opendir',           'opendirSync',      'F_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1165026Z         'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1165477Z         ... 4 more items
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1165949Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1166233Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1166582Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1167042Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1167277Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1168568Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1169651Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1170007Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1170636Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1170900Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1171327Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1171895Z         'appendFile',        'appendFileSync',   'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1172502Z         'accessSync',        'chown',            'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1173087Z         'chmod',             'chmodSync',        'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1173679Z         'closeSync',         'copyFile',         'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1174309Z         'cp',                'cpSync',           'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1174975Z         'createWriteStream', 'exists',           'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1175492Z         'fchown',            'fchownSync',       'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1175900Z         'fchmodSync',        'fdatasync',        'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1176297Z         'fstat',             'fstatSync',        'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1176699Z         'fsyncSync',         'ftruncate',        'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1177087Z         'futimes',           'futimesSync',      'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1177469Z         'lchownSync',        'lchmod',           'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1177844Z         'link',              'linkSync',         'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1178216Z         'lstatSync',         'lutimes',          'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1206484Z         'mkdir',             'mkdirSync',        'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1207524Z         'mkdtempSync',       'open',             'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1208206Z         'openAsBlob',        'readdir',          'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1208856Z         'read',              'readSync',         'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1209510Z         'readvSync',         'readFile',         'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1210166Z         'readlink',          'readlinkSync',     'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1211113Z         'realpathSync',      'rename',           'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1211751Z         'rm',                'rmSync',           'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1212351Z         'rmdirSync',         'stat',             'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1212995Z         'statSync',          'statfsSync',       'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1213673Z         'symlinkSync',       'truncate',         'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1214390Z         'unwatchFile',       'unlink',           'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1215050Z         'utimes',            'utimesSync',       'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1215725Z         'watchFile',         'writeFile',        'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1216381Z         'write',             'writeSync',        'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1217000Z         'writevSync',        'Dirent',           'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1217686Z         'ReadStream',        'WriteStream',      'FileReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1218349Z         'FileWriteStream',   '_toUnixTimestamp', 'Dir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1218976Z         'opendir',           'opendirSync',      'F_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1219463Z         'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1219812Z         ... 4 more items
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1220167Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1220349Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1220898Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1221249Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1221424Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1222634Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1223653Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1223907Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1224258Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1224529Z PASS tests/app-version-header.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1225214Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1225420Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1225574Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1226145Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1226578Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1226887Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1227272Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1227416Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1227943Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1228535Z         'appendFile',        'appendFileSync',   'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1229191Z         'accessSync',        'chown',            'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1229846Z         'chmod',             'chmodSync',        'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1230704Z         'closeSync',         'copyFile',         'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1231390Z         'cp',                'cpSync',           'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1232064Z         'createWriteStream', 'exists',           'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1232726Z         'fchown',            'fchownSync',       'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1233371Z         'fchmodSync',        'fdatasync',        'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1234023Z         'fstat',             'fstatSync',        'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1234644Z         'fsyncSync',         'ftruncate',        'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1235295Z         'futimes',           'futimesSync',      'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1235925Z         'lchownSync',        'lchmod',           'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1236557Z         'link',              'linkSync',         'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1237471Z         'lstatSync',         'lutimes',          'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1238292Z         'mkdir',             'mkdirSync',        'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1238935Z         'mkdtempSync',       'open',             'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1239587Z         'openAsBlob',        'readdir',          'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1240195Z         'read',              'readSync',         'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1241029Z         'readvSync',         'readFile',         'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1241695Z         'readlink',          'readlinkSync',     'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1242350Z         'realpathSync',      'rename',           'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1242960Z         'rm',                'rmSync',           'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1243569Z         'rmdirSync',         'stat',             'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1244235Z         'statSync',          'statfsSync',       'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1244921Z         'symlinkSync',       'truncate',         'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1245606Z         'unwatchFile',       'unlink',           'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1246246Z         'utimes',            'utimesSync',       'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1246915Z         'watchFile',         'writeFile',        'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1247574Z         'write',             'writeSync',        'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1248181Z         'writevSync',        'Dirent',           'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1248872Z         'ReadStream',        'WriteStream',      'FileReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1249551Z         'FileWriteStream',   '_toUnixTimestamp', 'Dir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1250181Z         'opendir',           'opendirSync',      'F_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1250928Z         'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1251271Z         ... 4 more items
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1251649Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1251834Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1252077Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1252430Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1252583Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1253752Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1254747Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1255005Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1255343Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1255488Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1255897Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1256465Z         'appendFile',        'appendFileSync',   'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1257130Z         'accessSync',        'chown',            'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1257759Z         'chmod',             'chmodSync',        'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1258398Z         'closeSync',         'copyFile',         'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1259020Z         'cp',                'cpSync',           'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1259703Z         'createWriteStream', 'exists',           'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1260369Z         'fchown',            'fchownSync',       'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1261311Z         'fchmodSync',        'fdatasync',        'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1261934Z         'fstat',             'fstatSync',        'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1262531Z         'fsyncSync',         'ftruncate',        'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1263140Z         'futimes',           'futimesSync',      'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1263715Z         'lchownSync',        'lchmod',           'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1264293Z         'link',              'linkSync',         'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1264920Z         'lstatSync',         'lutimes',          'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1265537Z         'mkdir',             'mkdirSync',        'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1266169Z         'mkdtempSync',       'open',             'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1266805Z         'openAsBlob',        'readdir',          'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1267744Z         'read',              'readSync',         'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1268557Z         'readvSync',         'readFile',         'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1269217Z         'readlink',          'readlinkSync',     'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1269871Z         'realpathSync',      'rename',           'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1270721Z         'rm',                'rmSync',           'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1271305Z         'rmdirSync',         'stat',             'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1271930Z         'statSync',          'statfsSync',       'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1272581Z         'symlinkSync',       'truncate',         'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1273254Z         'unwatchFile',       'unlink',           'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1273885Z         'utimes',            'utimesSync',       'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1274535Z         'watchFile',         'writeFile',        'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1275195Z         'write',             'writeSync',        'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1275814Z         'writevSync',        'Dirent',           'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1276493Z         'ReadStream',        'WriteStream',      'FileReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1277182Z         'FileWriteStream',   '_toUnixTimestamp', 'Dir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1277821Z         'opendir',           'opendirSync',      'F_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1278298Z         'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1278636Z         ... 4 more items
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1278989Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1279168Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1279415Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1279735Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1279880Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1281183Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1282064Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1282312Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.1282647Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2102615Z PASS tests/obd2-student.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2107985Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2108221Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2108498Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2109436Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2109891Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2110161Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2110428Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2110765Z PASS tests/obd2-student.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2112871Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2113001Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2113097Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2113461Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2113748Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2114032Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.2114407Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3415557Z PASS tests/obd2-gauges.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3421159Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3421431Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3422041Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3422686Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3423217Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3423599Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3424071Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3424417Z PASS tests/obd2-gauges.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3425453Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3425643Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3431448Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3432569Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3433221Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3433651Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.3434181Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4049406Z PASS tests/telemetry-history.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4055869Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4056255Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4056752Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4057420Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4058614Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4059095Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4060120Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4061189Z PASS tests/telemetry-history.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4061971Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4062417Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4062716Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4063359Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4063845Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4064212Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4064592Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4292715Z PASS tests/telemetry/supabaseAdapter.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4321827Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4322140Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4331201Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4351581Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4360913Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4399444Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4400063Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4400749Z PASS tests/telemetry/supabaseAdapter.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4401623Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4402004Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4402300Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4403020Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4403636Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4404082Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.4404621Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5205748Z PASS tests/attempt-supabase.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5272655Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5301492Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5331727Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5332618Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5333311Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5333777Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5334337Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5334761Z PASS tests/attempt-supabase.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5335508Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5335880Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5336181Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5336971Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5337583Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5338032Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.5338577Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6040137Z PASS tests/attempt-adapter.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6052101Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6052746Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6053125Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6053875Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6054462Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6054920Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6055461Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6055847Z PASS tests/attempt-adapter.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6056563Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6056922Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6057227Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6057922Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6058537Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6059006Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6059630Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6449297Z PASS tests/obd2-rendering.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6450433Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6450963Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6455376Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6481442Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6481954Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6482286Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6482703Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6482968Z PASS tests/obd2-rendering.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6483601Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6510886Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6511120Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6511748Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6512220Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6512551Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6512975Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6608048Z PASS tests/analytics/fs-mock-ordering.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6671596Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6691454Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6731170Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6761423Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6790851Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6821229Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6841320Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6871736Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6922675Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.6961312Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7044775Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7045524Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7050022Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7053461Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7054360Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7055146Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7055962Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7056786Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7057625Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7058444Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7059237Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7059997Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7061014Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7061768Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7062471Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7063197Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7063863Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7064559Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7065258Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7065948Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7066669Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7067372Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7068117Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7068924Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7069733Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7070727Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7071564Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7101355Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7131354Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7161394Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7162367Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7162921Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7163105Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7163377Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7163749Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7163899Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7165085Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7166060Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7166357Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7166729Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7166871Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7167376Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7167725Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7167976Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7168327Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7168465Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7169408Z       [loadReport sessions] fs keys: [ 'existsSync', 'readFileSync' ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7170066Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7170327Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7170921Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7171072Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7172250Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7173213Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7173483Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7173847Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7173993Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7174470Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7174837Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7175091Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7175439Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7175570Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7176225Z       [loadReport sessions] fs keys: [ 'existsSync', 'readFileSync' ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7176702Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7176943Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7191289Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7221610Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7299873Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7310857Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7311138Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7311404Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7311515Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7311995Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7312372Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7312588Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7312890Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7313211Z PASS tests/analytics/fs-mock-ordering.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7321853Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7322278Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7322669Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7323527Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7324220Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7324716Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7325286Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7325614Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7326227Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7326985Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7327823Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7328636Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7329460Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7330322Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7331665Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7361302Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7391368Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7392571Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7421414Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7426083Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7426973Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7427795Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7428607Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7429426Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7430231Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7431294Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7432099Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7432905Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7433770Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7435102Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7436106Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7436895Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7437705Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7438554Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7439415Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7440218Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7441251Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7442051Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7442809Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7443626Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7444426Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7445090Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7445469Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7445909Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7446461Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7446823Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7448231Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7449429Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7449873Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7450419Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7450952Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7451633Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7452200Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7452652Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7453248Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7453599Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7454402Z       [loadReport sessions] fs keys: [ 'existsSync', 'readFileSync' ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7455114Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7455548Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7456106Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7456417Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7457765Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7459036Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7459523Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7460195Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7460750Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7461462Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7462194Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7462684Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7463220Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7463558Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7464304Z       [loadReport sessions] fs keys: [ 'existsSync', 'readFileSync' ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7464959Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7465385Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7465938Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7466254Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7467680Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7468882Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7469318Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7469858Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7470190Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7471052Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7471631Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7472069Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7472643Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7473168Z PASS tests/student-dashboard-hotspots.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7474073Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7474463Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7474786Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7475543Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7476201Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7476718Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7477874Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7478658Z PASS tests/student-dashboard-hotspots.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7479496Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7479939Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7480264Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7481271Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7481957Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7482478Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7483096Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7903649Z PASS tests/analytics/fs-mock-repro.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.7961913Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8072311Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8072933Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8073693Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8074153Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8074495Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8079001Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8101594Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8121774Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8141969Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8142940Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8143899Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8144851Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8145748Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8146670Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8147537Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8148410Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8149305Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8150153Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8151298Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8152176Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8153042Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8153845Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8154695Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8155541Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8156426Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8157235Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8158098Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8158968Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8159851Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8160910Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8161741Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8162604Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8163509Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8164424Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8165241Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8166079Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8166967Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8167795Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8168651Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8169485Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8170193Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8170803Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8171267Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8171851Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8172225Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8174061Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8175655Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8176141Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8176727Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8177075Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8177787Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8178375Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8178835Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8179405Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8179750Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8180443Z       [loadReport sessions] fs keys: [ 'readFileSync' ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8181337Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8181791Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8182373Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8182722Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8184150Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8185488Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8185967Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8186534Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8186883Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8187576Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8188175Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8188627Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8189194Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8189539Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8190240Z       [loadReport sessions] fs keys: [ 'readFileSync' ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8191086Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8191524Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8192079Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8192404Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8193961Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8195262Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8195737Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8196328Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8196677Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8197356Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8197919Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8198345Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8198894Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8199441Z PASS tests/analytics/fs-mock-repro.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8200434Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8201092Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8201398Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8202155Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8202816Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8203325Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8203950Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8204299Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8204966Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8205779Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8206652Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8207495Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8208301Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8209213Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8210099Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8211240Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8212156Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8212992Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8213836Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8214673Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8215477Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8216260Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8217358Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8218474Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8219281Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8220134Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8221286Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8222089Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8222881Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8223691Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8224486Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8225256Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8226055Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8226905Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8227745Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8228559Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8229398Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8230221Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8231195Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8231974Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8232733Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8233386Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8233757Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8234213Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8234760Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8235101Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8236498Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8237718Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8238161Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8238708Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8239020Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8239681Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8240232Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8240863Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8241473Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8241966Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8242743Z       [loadReport sessions] fs keys: [ 'readFileSync' ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8243325Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8243768Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8244313Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8244650Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8246064Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8247365Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8247824Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8248372Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8248706Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8249356Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8249921Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8250344Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8251065Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8251398Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8252038Z       [loadReport sessions] fs keys: [ 'readFileSync' ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8252587Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8253003Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8253492Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8253812Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8255210Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8256286Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8256691Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8257191Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8257497Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8258462Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8259203Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8259640Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8260168Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8602701Z PASS tests/obd2-live.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8631488Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8660949Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8671136Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8751354Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8760833Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8811447Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8840955Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8881453Z PASS tests/obd2-live.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8882273Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8882574Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8882812Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8883505Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8884066Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8884479Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.8885034Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9041728Z PASS tests/analytics/aggregateSessions.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9079175Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9079621Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9079985Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9081023Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9081734Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9082227Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9082838Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9083161Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9083764Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9084532Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9085346Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9086188Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9087062Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9087899Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9088789Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9089642Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9090464Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9091620Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9092462Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9093284Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9094114Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9094921Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9095727Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9096551Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9097352Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9098172Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9098979Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9099818Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9100901Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9101766Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9102557Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9103319Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9104100Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9104968Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9105829Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9106611Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9107423Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9108533Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9109530Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9110343Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9111352Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9111990Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9112327Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9112719Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9113226Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9113551Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9114933Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9116195Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9116653Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9117245Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9117566Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9118252Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9118865Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9119302Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9119840Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9120139Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9120919Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9121753Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9122599Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9123383Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9124200Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9125067Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9125923Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9126752Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9127618Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9128460Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9129288Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9130106Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9131104Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9131909Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9132924Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9133768Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9134575Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9135389Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9136216Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9137036Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9137851Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9138720Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9139530Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9140257Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9201642Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9269261Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9301457Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9361331Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9405017Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9440398Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9471168Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9521182Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9571507Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9572666Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9572969Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9573517Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9573954Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9574175Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9575282Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9576393Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9576750Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9577200Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9577616Z PASS tests/analytics/aggregateSessions.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9578524Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9578837Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9579080Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9579753Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9580330Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9580973Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9581596Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9610986Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9662047Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9666177Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9691456Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9721267Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9751268Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9781417Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9782486Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9811352Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9841345Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9861203Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9871383Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9901131Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9931342Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9932302Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9961316Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9991329Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:52.9992059Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0021486Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0053672Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0081335Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0091229Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0113852Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0151241Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0231473Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0311628Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0371338Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0372264Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0401370Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0431513Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0461332Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0491337Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0521322Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0527140Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0683035Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0739634Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0761313Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0790908Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0811088Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0841889Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0850931Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0871206Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0900834Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.0961107Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1001382Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1020809Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1081200Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1120974Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1151982Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1233497Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1271378Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1281278Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1301347Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1331345Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1361350Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1421277Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1427132Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1428994Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1429813Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1430867Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1431665Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1432454Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1433197Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1434987Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1435767Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1436428Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1437116Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1437754Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1438388Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1439063Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1439671Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1440294Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1441102Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1441728Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1442370Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1443024Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1443665Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1444308Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1444929Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1445498Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1446054Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1446592Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1447038Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1447222Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1447447Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1447766Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1447920Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1449012Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1449942Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1450206Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1451185Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1451497Z PASS tests/analytics/aggregateStudents.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1452464Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1452652Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1452794Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1453335Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1453743Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1454030Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1454441Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1454745Z PASS tests/analytics/aggregateStudents.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1455290Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1455478Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1455613Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1456156Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1456579Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1456886Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1457285Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1457507Z PASS tests/version-sync.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1457965Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1458164Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1458308Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1458849Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1459275Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1459561Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1459940Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1460175Z PASS tests/version-sync.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1474636Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1474872Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1475014Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1475579Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1476025Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1476351Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1476767Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1477115Z PASS tests/analytics/debug-aggregate-debug.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1477763Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1477953Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1478109Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1478675Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1479157Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1490810Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1491318Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1491495Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1492061Z       before require - readFileSync.mock: true mockReturnValue: []
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1492517Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1492922Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:24:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1493385Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1493541Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1494081Z       after require - readFileSync.mock: true mock.results: []
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1494511Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1494892Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:28:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1495375Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1495530Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1495946Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1496551Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1497199Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1497819Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1498474Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1499141Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1499792Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1500401Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1501253Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1501874Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1502498Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1503149Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1503769Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1504377Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1505303Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1506099Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1506732Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1507378Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1507987Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1508614Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1509271Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1509929Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1539522Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1540267Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1541089Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1541739Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1542445Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1543079Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1543718Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1544339Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1544961Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1545556Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1546127Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1546600Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1546763Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1547016Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1547373Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1547520Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1548686Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1549650Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1549907Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1550263Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1550399Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1551067Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1551427Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1551670Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1552015Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1552154Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1552637Z       after aggregate - readFileSync.mock.results: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1553130Z         {
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1553455Z           type: 'return',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1554378Z           value: '{"sessions":[{"userId":"u1","confidence":0.8},{"userId":"u1","confidence":0.6},{"userId":"u2","confidence":0.5}]}'
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1555273Z         }
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1555574Z       ] res: {
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1555914Z         ok: true,
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1556275Z         totalSessions: 3,
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1556715Z         averageConfidence: 0.633,
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1557179Z         students: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1557687Z           { id: 'u1', sessions: 2, averageConfidence: 0.7 },
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1558351Z           { id: 'u2', sessions: 1, averageConfidence: 0.5 }
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1558844Z         ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1559142Z       }
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1559328Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1559754Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:32:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1560252Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1591146Z PASS tests/analytics/debug-aggregate-debug.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1591935Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1592135Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1592286Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1592857Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1593328Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1593645Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1594044Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1594199Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1594765Z       before require - readFileSync.mock: true mockReturnValue: []
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1595522Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1596096Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:24:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1596622Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1596774Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1597297Z       after require - readFileSync.mock: true mock.results: []
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1597716Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1598100Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:28:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1598596Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1598746Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1599162Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1599731Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1600400Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1601210Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1601847Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1602510Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1603183Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1603837Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1604481Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1605105Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1605701Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1606354Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1606997Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1607574Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1608190Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1608799Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1609406Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1610059Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1610896Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1611538Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1612174Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1612852Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1613460Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1614035Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1614646Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1615236Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1615866Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1616444Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1617033Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1617674Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1618243Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1618828Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1619402Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1619878Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1620063Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1620317Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1631248Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1631463Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1632709Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1633721Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1634019Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1634390Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1634558Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1635052Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1635738Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1636184Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1636529Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1636684Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1637191Z       after aggregate - readFileSync.mock.results: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1637730Z         {
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1638066Z           type: 'return',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1639015Z           value: '{"sessions":[{"userId":"u1","confidence":0.8},{"userId":"u1","confidence":0.6},{"userId":"u2","confidence":0.5}]}'
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1639879Z         }
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1640211Z       ] res: {
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1640697Z         ok: true,
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1641169Z         totalSessions: 3,
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1641633Z         averageConfidence: 0.633,
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1642072Z         students: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1642574Z           { id: 'u1', sessions: 2, averageConfidence: 0.7 },
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1643244Z           { id: 'u2', sessions: 1, averageConfidence: 0.5 }
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1643773Z         ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1644078Z       }
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1644268Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1644631Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:32:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1645145Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1645392Z PASS tests/smooth-scroll.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1645936Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1646133Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1646276Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1646850Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1647318Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1647619Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1648033Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1648270Z PASS tests/smooth-scroll.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1648767Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1648974Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1649124Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1649672Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1650130Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1650438Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.1651083Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2061771Z PASS tests/analytics/fs-mock-hoist-reset.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2078365Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2078789Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2079310Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2080140Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2080990Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2081452Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2081974Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2120944Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2121647Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2144493Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2145446Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2146274Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2147137Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2148032Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2148952Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2149804Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2150964Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2151825Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2152648Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2153472Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2154318Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2155120Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2155931Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2156762Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2157565Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2158723Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2159759Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2160786Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2161626Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2162451Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2163199Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2163894Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2164657Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2165429Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2166072Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2166598Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2167147Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2167732Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2168262Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2168818Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2169358Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2169820Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2170074Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2170394Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2171001Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2171185Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2172379Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2173361Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2173597Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2173954Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2174103Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2174564Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2174943Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2175177Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2175529Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2175840Z PASS tests/analytics/fs-mock-hoist-reset.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2176513Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2176695Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2176840Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2177375Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2177665Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2177864Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2178106Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2178209Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2178477Z       [loadReport sessions] fs keys: [
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2178858Z         'appendFile',        'appendFileSync', 'access',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2179264Z         'accessSync',        'chown',          'chownSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2179642Z         'chmod',             'chmodSync',      'close',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2180038Z         'closeSync',         'copyFile',       'copyFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2180680Z         'cp',                'cpSync',         'createReadStream',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2181334Z         'createWriteStream', 'exists',         'existsSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2181883Z         'fchown',            'fchownSync',     'fchmod',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2182278Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2182668Z         'fstat',             'fstatSync',      'fsync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2183053Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2183446Z         'futimes',           'futimesSync',    'lchown',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2183820Z         'lchownSync',        'lchmod',         'lchmodSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2184181Z         'link',              'linkSync',       'lstat',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2184558Z         'lstatSync',         'lutimes',        'lutimesSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2184942Z         'mkdir',             'mkdirSync',      'mkdtemp',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2185556Z         'mkdtempSync',       'open',           'openSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2186077Z         'openAsBlob',        'readdir',        'readdirSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2186447Z         'read',              'readSync',       'readv',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2186817Z         'readvSync',         'readFile',       'readFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2187206Z         'readlink',          'readlinkSync',   'realpath',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2187598Z         'realpathSync',      'rename',         'renameSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2187962Z         'rm',                'rmSync',         'rmdir',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2188304Z         'rmdirSync',         'stat',           'statfs',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2188670Z         'statSync',          'statfsSync',     'symlink',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2189052Z         'symlinkSync',       'truncate',       'truncateSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2189437Z         'unwatchFile',       'unlink',         'unlinkSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2189807Z         'utimes',            'utimesSync',     'watch',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2190191Z         'watchFile',         'writeFile',      'writeFileSync',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2190858Z         'write',             'writeSync',      'writev',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2191264Z         'writevSync',        'Dirent',         'Stats',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2191648Z         '_toUnixTimestamp',  'F_OK',           'R_OK',
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2192015Z         'W_OK',              'X_OK',           'constants'
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2192308Z       ]
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2192429Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2192590Z       at debug (api/analytics/sessions.js:8:15)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2192804Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2192908Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2193617Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2194204Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2194361Z       at debug (api/analytics/sessions.js:12:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2194573Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2194682Z     console.debug
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2194981Z       [loadReport sessions] readFileSync type: string
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2195219Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2195372Z       at debug (api/analytics/sessions.js:15:13)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2195568Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2432033Z PASS tests/env-setup.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2439512Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2439745Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2439852Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2440255Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2440778Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2440988Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2441253Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2441394Z PASS tests/env-setup.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2441699Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2441819Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2441915Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2442267Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2442549Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2442741Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2443014Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2568001Z PASS tests/telemetry/adapter_ingest.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2601360Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2603869Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2630955Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2631670Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2632177Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2632556Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2633040Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2633368Z PASS tests/telemetry/adapter_ingest.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2634060Z   ● Console
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2634282Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2634453Z     console.log
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2635104Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2635609Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2635959Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2636402Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2981284Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2982706Z Summary of all failing tests
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3001978Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3003052Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3003233Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3003395Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3003620Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3003988Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3004629Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3031643Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3041228Z      [90m   |[39m              [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3041760Z      [90m 5 |[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3042426Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3043461Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3044022Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3044522Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3045585Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3046500Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3047299Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3048065Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3064894Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3081516Z       at Object.require (tests/integration/auto-open.expanded.integration.spec.js:4:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3082119Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3082453Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3083007Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3083197Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3083371Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3083580Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3092671Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3117815Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3137525Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3207124Z      [90m   |[39m              [31m[1m^[22m[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3208068Z      [90m 5 |[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3209140Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3210368Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3211156Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3211714Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3212829Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3213802Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3214633Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3215402Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3216132Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3217110Z       at Object.require (tests/integration/auto-open.multi-artifact.integration.spec.js:4:14)
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3217769Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3217779Z 
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3218080Z Test Suites: 2 failed, 32 passed, 34 total
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3218656Z Tests:       123 passed, 123 total
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3219135Z Snapshots:   0 total
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3219515Z Time:        4.862 s
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3219891Z Ran all test suites.
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3610098Z ##[error]Process completed with exit code 1.
