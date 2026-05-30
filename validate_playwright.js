@@ -10,8 +10,9 @@ const { chromium } = require('playwright');
     }catch(e){/*ignore*/}
   });
 
-  console.log('Opening page (mobile viewport)...');
-  await page.goto('https://car-diagnosis-simulator.vercel.app/', { waitUntil: 'networkidle' });
+  const url = process.env.PREVIEW_URL || 'https://car-diagnosis-simulator.vercel.app/';
+  console.log('Opening page (mobile viewport)...', url);
+  await page.goto(url, { waitUntil: 'networkidle' });
   await page.screenshot({ path:'mobile-home.png', fullPage:true });
   console.log('Saved mobile-home.png');
 
