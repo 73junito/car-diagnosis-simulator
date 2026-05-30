@@ -67,7 +67,7 @@
       "destination": "/dashboard/analytics.html"
     },
     {
-      "source": "^/(?!api/)(.*)$",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
