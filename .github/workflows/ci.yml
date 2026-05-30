@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_SHA: ${{ github.sha }}
-      NODE_OPTIONS: --require=./tests/jest-undici-register.js
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,3 +28,5 @@ jobs:
 
       - name: Run tests
         run: npm test --silent
+        env:
+          NODE_OPTIONS: --require=./tests/jest-undici-register.js
