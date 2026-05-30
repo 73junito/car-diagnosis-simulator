@@ -112,8 +112,13 @@ module.exports = async (req, res) => {
     const query = parsed.query || {};
     // action precedence: explicit query `action`, path segment, or specific filename
     let action = (query.action || '').toString().toLowerCase() || null;
-    const m = (parsed.pathname || '').match(/\/api\/telemetry\/?([^\/\?]+)?/i);
-    if (!action && m && m[1]) action = m[1].toString().toLowerCase();
+    const pathname = parsed.pathname || '';
+    let m = null;
+    if (pathname && pathname.indexOf('/api/telemetry') === 0) {
+      const tail = pathname.substr('/api/telemetry'.length).replace(/^\/+/, '');
+      m = tail || null;
+    }
+    if (!action && m) action = String(m.split(new RegExp('[/?]'))[0] || '').toLowerCase() || null;
 
     // normalize export endpoints by filename
     if (!action) {
