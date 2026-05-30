@@ -13,6 +13,11 @@ function makeSlowJson() {
 
 describe('auto-open multi-artifact integration', () => {
   beforeAll(() => {
+    try {
+      require('undici/index-fetch');
+    } catch (e) {
+      try { require('undici'); } catch (err) { try { require('../../tests/jest-undici-register.js'); } catch (_) {} }
+    }
     nock = require('nock');
   });
   afterEach(() => {
