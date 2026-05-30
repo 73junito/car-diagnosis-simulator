@@ -49,5 +49,14 @@
       "source": "/dashboard/obd2-ase",
       "destination": "/dashboard/obd2-ase.html"
     }
+    ,
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/((?!api/|version\\.json|favicon\\.ico|.*\\..*).*)",
+      "destination": "/index.html"
+    }
   ]
 }
