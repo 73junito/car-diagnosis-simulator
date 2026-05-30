@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check inputs
-        run: echo "Applying branch protection to 'main' with required checks: unit-tests, api-smoke, smoke, db-ssl-validation"
+        run: |
+          echo 'Applying branch protection to "main" with required checks: unit-tests, api-smoke, smoke, db-ssl-validation'
 
       - name: Create payload
         run: |
