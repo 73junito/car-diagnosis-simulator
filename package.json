@@ -6,7 +6,7 @@
 		"test": "node -r ./tests/jest-undici-register.js ./node_modules/jest/bin/jest.js --config=jest.config.js --ci --reporters=default --runInBand",
 		"build": "npm run write-version",
 		"write-version": "node scripts/write-version.js",
-		"vercel-build": "npm run write-version && node scripts/build-vercel-output.js",
+		"vercel-build": "npm run write-version",
 		"test:live-session": "node tests/live-session-ui.test.js",
 		"validate:scenarios": "node tools/validate-scenarios.js",
 		"validate:obd2": "node tools/validate-obd2.js",
