@@ -3,13 +3,12 @@ name: Configure branch protection
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-  administration: write
-
 jobs:
   protect-main:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      administration: write
     steps:
       - name: Check inputs
         run: |
