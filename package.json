@@ -3,7 +3,7 @@
 	"version": "0.1.1",
 	"private": true,
 	"scripts": {
-		"test": "cross-env NODE_OPTIONS=--require=./tests/jest-undici-register.js node ./node_modules/jest/bin/jest.js --config=jest.config.js --ci --reporters=default --runInBand",
+		"test": "node -r ./tests/jest-undici-register.js ./node_modules/jest/bin/jest.js --config=jest.config.js --ci --reporters=default --runInBand",
 		"build": "npm run write-version",
 		"write-version": "node scripts/write-version.js",
 		"vercel-build": "npm run write-version",
