@@ -13,10 +13,9 @@ function makeSlowJson() {
 
 describe('auto-open multi-artifact integration', () => {
   beforeAll(() => {
-    try {
-      require('undici/index-fetch');
-    } catch (e) {
-      try { require('undici'); } catch (err) { try { require('../../tests/jest-undici-register.js'); } catch (_) {} }
+    // Prefer our local preload which mirrors NODE_OPTIONS behavior and sets globals.
+    try { require('../../tests/jest-undici-register.js'); } catch (e) {
+      try { require('undici/index-fetch'); } catch (e2) { try { require('undici'); } catch (_) {} }
     }
     nock = require('nock');
   });
