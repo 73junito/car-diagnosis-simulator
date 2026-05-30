@@ -1,5 +1,39 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "cleanUrls": true,
+  "trailingSlash": false,
+
+  "buildCommand": "npm run build",
+
   "headers": [
+    {
+      "source": "/version.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/dashboard/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=60, stale-while-revalidate=300"
+        }
+      ]
+    },
     {
       "source": "(.*)",
       "headers": [
@@ -10,44 +44,31 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/dashboard/analytics/",
-      "destination": "/dashboard/analytics",
-      "permanent": true
-    }
-  ],
+
   "rewrites": [
+    {
+      "source": "/dashboard/student",
+      "destination": "/dashboard/student.html"
+    },
+    {
+      "source": "/dashboard/obd2",
+      "destination": "/dashboard/obd2.html"
+    },
+    {
+      "source": "/dashboard/obd2-student",
+      "destination": "/dashboard/obd2-student.html"
+    },
+    {
+      "source": "/dashboard/obd2-ase",
+      "destination": "/dashboard/obd2-ase.html"
+    },
     {
       "source": "/dashboard/analytics",
       "destination": "/dashboard/analytics.html"
     },
     {
-      "source": "/dashboard/live-session",
-      "destination": "/dashboard/live-session.html"
-    },
-    {
-      "source": "/dashboard/session-history",
-      "destination": "/dashboard/session-history.html"
-    },
-    {
-      "source": "/dashboard/student",
-      "destination": "/dashboard/student.html"
-    }
-    ,
-    {
-      "source": "/dashboard/obd2",
-      "destination": "/dashboard/obd2.html"
-    }
-    ,
-    {
-      "source": "/dashboard/obd2-student",
-      "destination": "/dashboard/obd2-student.html"
-    }
-    ,
-    {
-      "source": "/dashboard/obd2-ase",
-      "destination": "/dashboard/obd2-ase.html"
+      "source": "^/(?!api/)(.*)$",
+      "destination": "/index.html"
     }
   ]
 }
