@@ -1,0 +1,15 @@
+build-and-test	Run tests	2026-05-29T19:00:51.9908516Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+build-and-test	Run tests	2026-05-29T19:00:51.9910104Z   ● Test suite failed to run
+build-and-test	Run tests	2026-05-29T19:00:51.9921701Z     ReferenceError: Request is not defined
+build-and-test	Run tests	2026-05-29T19:00:53.2508839Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+build-and-test	Run tests	2026-05-29T19:00:53.2559571Z   ● Test suite failed to run
+build-and-test	Run tests	2026-05-29T19:00:53.2599949Z     ReferenceError: Request is not defined
+build-and-test	Run tests	2026-05-29T19:00:55.4669078Z Summary of all failing tests
+build-and-test	Run tests	2026-05-29T19:00:55.4678192Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+build-and-test	Run tests	2026-05-29T19:00:55.4679458Z   ● Test suite failed to run
+build-and-test	Run tests	2026-05-29T19:00:55.4680219Z     ReferenceError: Request is not defined
+build-and-test	Run tests	2026-05-29T19:00:55.4738260Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+build-and-test	Run tests	2026-05-29T19:00:55.4739415Z   ● Test suite failed to run
+build-and-test	Run tests	2026-05-29T19:00:55.4740080Z     ReferenceError: Request is not defined
+build-and-test	Run tests	2026-05-29T19:00:55.4818175Z Test Suites: 2 failed, 32 passed, 34 total
+build-and-test	Run tests	2026-05-29T19:00:55.5280919Z ##[error]Process completed with exit code 1.
