@@ -3,16 +3,16 @@ name: Configure branch protection
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
-  administration: write
-
 jobs:
   protect-main:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      administration: write
     steps:
       - name: Check inputs
-        run: echo "Applying branch protection to 'main' with required checks: unit-tests, api-smoke, smoke, db-ssl-validation"
+        run: |
+          echo 'Applying branch protection to "main" with required checks: unit-tests, api-smoke, smoke, db-ssl-validation'
 
       - name: Create payload
         run: |
