@@ -17,7 +17,7 @@ function defaultOnStale() {
   }
 }
 
-function createVersionSync({ url = '/version.json', interval = 60000, onStale = defaultOnStale } = {}) {
+function createVersionSync({ url = '/api/version', interval = 60000, onStale = defaultOnStale } = {}) {
   if (!isBrowser()) {
     // Provide a no-op interface for non-browser environments (build, tests, server)
     return {
