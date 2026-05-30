@@ -48,6 +48,34 @@
 
   "rewrites": [
     {
+      "source": "/api/telemetry/access",
+      "destination": "/api/telemetry?action=access"
+    },
+    {
+      "source": "/api/telemetry/events",
+      "destination": "/api/telemetry?action=events"
+    },
+    {
+      "source": "/api/telemetry/export.csv",
+      "destination": "/api/telemetry?action=export&format=csv"
+    },
+    {
+      "source": "/api/telemetry/export.json",
+      "destination": "/api/telemetry?action=export&format=json"
+    },
+    {
+      "source": "/api/telemetry/history",
+      "destination": "/api/telemetry?action=history"
+    },
+    {
+      "source": "/api/telemetry/storage",
+      "destination": "/api/telemetry?action=storage"
+    },
+    {
+      "source": "/api/telemetry/stream",
+      "destination": "/api/telemetry?action=stream"
+    },
+    {
       "source": "/dashboard/student",
       "destination": "/dashboard/student.html"
     },
