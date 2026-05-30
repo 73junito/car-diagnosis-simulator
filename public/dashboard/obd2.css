@@ -1,0 +1,32 @@
+.obd2-app{font-family:system-ui,Segoe UI,Arial,sans-serif;padding:18px}
+.obd2-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.obd2-controls label{margin-right:8px}
+.obd2-gauges{display:flex;gap:12px;margin-bottom:16px}
+.gauge{flex:1;padding:12px;border-radius:6px;background:var(--tm-card-bg,#fff);box-shadow:0 1px 2px rgba(0,0,0,.06);text-align:center}
+.gauge::before{content:attr(data-label);display:block;font-size:12px;color:#666;margin-bottom:6px}
+.gauge{font-weight:700;font-size:14px}
+.g-value{font-weight:800;font-size:20px;margin-bottom:8px}
+.g-bar{height:10px;background:#eee;border-radius:6px;overflow:hidden}
+.g-fill{height:100%;width:0%;background:linear-gradient(90deg,#4caf50,#8bc34a);transition:width 600ms ease}
+
+.obd2-dtc{margin-top:10px}
+.dtc-wrapper{display:flex;gap:12px}
+.dtc-list{width:40%;list-style:none;padding:8px;border-radius:6px;background:#fff;border:1px solid #eee}
+.dtc-list li{padding:8px;border-bottom:1px solid #f3f3f3;cursor:pointer}
+.dtc-list li:hover{background:#fafafa}
+.dtc-detail{flex:1;padding:12px;border-radius:6px;background:#fff;border:1px solid #eee}
+.dtc-detail h3{margin:0 0 8px 0}
+.dtc-detail p{margin:0}
+
+.obd2-live{margin-top:16px}
+.live-controls{margin-bottom:8px}
+.live-list{list-style:none;padding:8px;border-radius:6px;background:#fff;border:1px solid #eee;max-height:160px;overflow:auto}
+.live-list li{padding:6px;border-bottom:1px solid #f6f6f6}
+
+.obd2-freeze{margin-top:12px}
+.freeze-wrapper{display:flex;gap:12px}
+.freeze-list{width:40%;list-style:none;padding:8px;border-radius:6px;background:#fff;border:1px solid #eee;max-height:160px;overflow:auto}
+.freeze-list li{padding:6px;border-bottom:1px solid #f6f6f6;cursor:pointer}
+.freeze-detail{flex:1;padding:12px;border-radius:6px;background:#fff;border:1px solid #eee}
+.freeze-detail h3{margin:0 0 8px 0}
+.freeze-detail p{margin:0}

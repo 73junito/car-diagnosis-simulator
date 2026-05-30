@@ -1,0 +1,9 @@
+{
+  "id": "agency",
+  "headline": "Agency Diagnostics — Multi-Module Coverage",
+  "subheadline": "In-depth diagnostics for independent garages and agencies.",
+  "ctaLabel": "Try the Agency Demo",
+  "imageUrl": "/assets/images/hero-agency.webp",
+  "assetUrls": ["/assets/data/scenarios/agency.json"],
+  "meta": { "description": "Agency demo", "audience": "agency", "addedIn": "1.0.0" }
+}

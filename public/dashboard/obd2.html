@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OBD-II Live Dashboard</title>
+  <link rel="stylesheet" href="/dashboard/obd2.css">
+</head>
+<body>
+  <main id="obd2-app" class="obd2-app">
+    <header class="obd2-header">
+      <h1>OBD-II Live Dashboard</h1>
+      <div class="obd2-controls">
+        <label for="scenario-select">Scenario</label>
+        <select id="scenario-select" aria-label="Scenario select"></select>
+      </div>
+    </header>
+
+    <section class="obd2-gauges" aria-live="polite">
+      <div class="gauge" id="gauge-rpm" data-label="RPM">
+        <div class="g-value">--</div>
+        <div class="g-bar"><div class="g-fill" data-role="fill"></div></div>
+      </div>
+
+      <div class="gauge" id="gauge-speed" data-label="Speed">
+        <div class="g-value">--</div>
+        <div class="g-bar"><div class="g-fill" data-role="fill"></div></div>
+      </div>
+
+      <div class="gauge" id="gauge-coolant" data-label="Coolant">
+        <div class="g-value">--</div>
+        <div class="g-bar"><div class="g-fill" data-role="fill"></div></div>
+      </div>
+
+      <div class="gauge" id="gauge-voltage" data-label="Voltage">
+        <div class="g-value">--</div>
+        <div class="g-bar"><div class="g-fill" data-role="fill"></div></div>
+      </div>
+    </section>
+
+    <section class="obd2-dtc">
+      <h2>DTCs</h2>
+      <div class="dtc-wrapper">
+        <ul id="dtc-list" aria-live="polite" class="dtc-list"></ul>
+        <aside id="dtc-detail" class="dtc-detail" aria-live="polite">
+          <h3 id="dtc-detail-code">Select a DTC</h3>
+          <p id="dtc-detail-desc">Click a code to see details.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="obd2-live">
+      <h2>Live Scan Stream</h2>
+      <div class="live-controls">
+        <button id="live-start">Start</button>
+        <button id="live-stop">Stop</button>
+      </div>
+      <ul id="live-list" class="live-list" aria-live="polite"></ul>
+    </section>
+
+    <section class="obd2-freeze">
+      <h2>Freeze-Frame</h2>
+      <div class="freeze-wrapper">
+        <ul id="freeze-list" class="freeze-list"></ul>
+        <aside id="freeze-detail" class="freeze-detail">
+          <h3 id="freeze-detail-title">Select frame</h3>
+          <p id="freeze-desc">Click a frame to see details.</p>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+  <script src="/dashboard/obd2.js"></script>
+</body>
+</html>

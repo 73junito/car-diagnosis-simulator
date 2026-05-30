@@ -1,0 +1,9 @@
+{
+  "id": "enterprise",
+  "headline": "Enterprise Fleet Diagnostics and Compliance",
+  "subheadline": "Designed for large fleets, ISO workflows, and SSO integrations.",
+  "ctaLabel": "Explore Enterprise Features",
+  "imageUrl": "/assets/images/hero-enterprise.webp",
+  "assetUrls": ["/assets/data/scenarios/enterprise.json"],
+  "meta": { "description": "Enterprise demo", "audience": "enterprise", "addedIn": "1.0.0" }
+}

@@ -1,0 +1,6 @@
+.live-list{ list-style:none; padding:0; margin:0; max-height:400px; overflow:auto; }
+.live-list li{ padding:0.4rem; border-bottom:1px solid #eee; font-family:monospace; font-size:0.9rem }
+#live-summary{ display:flex; gap:1rem; justify-content:flex-start; align-items:center; margin:1rem 0 }
+#conn-status.badge-warn{ background:#ffcc00; color:#000 }
+#conn-status.badge-success{ background:#2ecc71; color:#fff }
+#conn-status.badge-danger{ background:#e74c3c; color:#fff }

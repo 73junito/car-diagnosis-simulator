@@ -1,0 +1,9 @@
+{
+  "id": "demo-default",
+  "headline": "Diagnose Any Car Problem in Minutes",
+  "subheadline": "Step-by-step AI-guided diagnostics for learners and instructors.",
+  "ctaLabel": "Start Free Demo",
+  "imageUrl": "/assets/images/hero-default.webp",
+  "assetUrls": ["/assets/data/scenarios/demo-default.json"],
+  "meta": { "description": "Default demo scenario", "audience": "general", "addedIn": "1.0.0" }
+}
