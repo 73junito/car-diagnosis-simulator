@@ -13,9 +13,17 @@ function makeSlowJson() {
 
 describe('auto-open multi-artifact integration', () => {
   beforeAll(() => {
-    // Prefer our local preload which mirrors NODE_OPTIONS behavior and sets globals.
-    try { require('../../tests/jest-undici-register.js'); } catch (e) {
-      try { require('undici/index-fetch'); } catch (e2) { try { require('undici'); } catch (_) {} }
+    // Ensure undici constructors are assigned to globals before requiring nock.
+    try {
+      const u = require('undici');
+      if (u) {
+        if (typeof globalThis.fetch === 'undefined' && typeof u.fetch === 'function') globalThis.fetch = u.fetch;
+        if (typeof globalThis.Request === 'undefined' && typeof u.Request !== 'undefined') globalThis.Request = u.Request;
+        if (typeof globalThis.Headers === 'undefined' && typeof u.Headers !== 'undefined') globalThis.Headers = u.Headers;
+        if (typeof globalThis.Response === 'undefined' && typeof u.Response !== 'undefined') globalThis.Response = u.Response;
+      }
+    } catch (e) {
+      try { require('../../tests/jest-undici-register.js'); } catch (_) {}
     }
     nock = require('nock');
   });
