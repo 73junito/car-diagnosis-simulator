@@ -1,4 +1,6 @@
-api/telemetry/
+api/**
+!api/telemetry.js
+!api/version.js
 node_modules/
 **/*.log
 .vercelignore

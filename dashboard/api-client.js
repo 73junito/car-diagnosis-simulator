@@ -40,7 +40,7 @@ function initApiClient({ onStale = defaultOnStale, retryOnce = true } = {}) {
         // ensure version-sync is available and trigger a check after this response
         try {
           if (!versionSync) {
-            versionSync = createVersionSync({ url: '/version.json', interval: 30000, onStale });
+            versionSync = createVersionSync({ url: '/api/version', interval: 30000, onStale });
           }
           // do not trigger a background check here to avoid extra fetch calls
         } catch (e) {
