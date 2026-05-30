@@ -28,3 +28,5 @@ jobs:
 
       - name: Run tests
         run: npm test --silent
+        env:
+          NODE_OPTIONS: --require=./tests/jest-undici-register.js

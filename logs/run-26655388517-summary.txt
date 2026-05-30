@@ -1,0 +1,21 @@
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2102185Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2132107Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2192423Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2634202Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2661524Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:50.2721336Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5294871Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5296283Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5297043Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5315033Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5316008Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:51.5316842Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.2982706Z Summary of all failing tests
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3001978Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3003052Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3003395Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3082453Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3083007Z   ● Test suite failed to run
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3083371Z     ReferenceError: Request is not defined
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3218080Z Test Suites: 2 failed, 32 passed, 34 total
+Jest (jsdom)	Run tests	2026-05-29T19:00:53.3610098Z ##[error]Process completed with exit code 1.

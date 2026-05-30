@@ -1,0 +1,954 @@
+build-and-test	Run tests	﻿2026-05-29T19:39:00.6773294Z ##[group]Run npm test --silent
+build-and-test	Run tests	2026-05-29T19:39:00.6773624Z [36;1mnpm test --silent[0m
+build-and-test	Run tests	2026-05-29T19:39:00.6800308Z shell: /usr/bin/bash -e {0}
+build-and-test	Run tests	2026-05-29T19:39:00.6800557Z env:
+build-and-test	Run tests	2026-05-29T19:39:00.6800803Z   GITHUB_SHA: 5410c807fbf08cc0b18eaa0d1bc62bf903dbb941
+build-and-test	Run tests	2026-05-29T19:39:00.6801119Z ##[endgroup]
+build-and-test	Run tests	2026-05-29T19:39:03.3137299Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+build-and-test	Run tests	2026-05-29T19:39:03.3177437Z   ● Test suite failed to run
+build-and-test	Run tests	2026-05-29T19:39:03.3206560Z 
+build-and-test	Run tests	2026-05-29T19:39:03.3207018Z     ReferenceError: Request is not defined
+build-and-test	Run tests	2026-05-29T19:39:03.3207396Z 
+build-and-test	Run tests	2026-05-29T19:39:03.3208147Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:03.3237447Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:03.3257550Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:03.3267260Z      [90m   |[39m              [31m[1m^[22m[39m
+build-and-test	Run tests	2026-05-29T19:39:03.3317178Z      [90m 5 |[39m
+build-and-test	Run tests	2026-05-29T19:39:03.3327403Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:03.3367586Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+build-and-test	Run tests	2026-05-29T19:39:03.3376601Z 
+build-and-test	Run tests	2026-05-29T19:39:03.3437335Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+build-and-test	Run tests	2026-05-29T19:39:03.3467100Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+build-and-test	Run tests	2026-05-29T19:39:03.3496921Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+build-and-test	Run tests	2026-05-29T19:39:03.3507226Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+build-and-test	Run tests	2026-05-29T19:39:03.3567253Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+build-and-test	Run tests	2026-05-29T19:39:03.3607261Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+build-and-test	Run tests	2026-05-29T19:39:03.3657394Z       at Object.require (tests/integration/auto-open.expanded.integration.spec.js:4:14)
+build-and-test	Run tests	2026-05-29T19:39:03.3685532Z 
+build-and-test	Run tests	2026-05-29T19:39:03.5622824Z PASS tests/hero.spec.js
+build-and-test	Run tests	2026-05-29T19:39:03.5647061Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:03.5666684Z 
+build-and-test	Run tests	2026-05-29T19:39:03.5696980Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:03.5717148Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:03.5736671Z 
+build-and-test	Run tests	2026-05-29T19:39:03.5757137Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:03.5786581Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2147471Z PASS tests/scenario-loader.spec.js
+build-and-test	Run tests	2026-05-29T19:39:04.2310718Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:04.2336753Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2366926Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:04.2367854Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:04.2386903Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2387643Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2388333Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2388701Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2389614Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2390179Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2390656Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2391185Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2391505Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2392208Z       [scenario-loader] success — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2392747Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2393146Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2393657Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2393960Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2394654Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2395160Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2395564Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2396072Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2396608Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2397319Z       [scenario-loader] success — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2397917Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2398439Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2398996Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2399375Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2400122Z       [scenario-loader] start — "startup"
+build-and-test	Run tests	2026-05-29T19:39:04.2401245Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2401710Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2402261Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2402611Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2403360Z       [scenario-loader] success — "startup"
+build-and-test	Run tests	2026-05-29T19:39:04.2403902Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2404352Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2404885Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2405213Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2405978Z       [scenario-loader] start — "startup"
+build-and-test	Run tests	2026-05-29T19:39:04.2406918Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2407454Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2408041Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2408447Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2409300Z       [scenario-loader] success — "startup"
+build-and-test	Run tests	2026-05-29T19:39:04.2409943Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2410449Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2411070Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2411476Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2412340Z       [scenario-loader] start — "nonexistent"
+build-and-test	Run tests	2026-05-29T19:39:04.2412967Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2413421Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2413985Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2414331Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2415160Z       [scenario-loader] success — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2415741Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2416468Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2417069Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2417416Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2418195Z       [scenario-loader] start — "nonexistent"
+build-and-test	Run tests	2026-05-29T19:39:04.2418758Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2419223Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2419768Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2420107Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2420981Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2421621Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2422101Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2422709Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2423452Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2424317Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2424936Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2425560Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2426412Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2426818Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2427565Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2428076Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2428469Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2428961Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2429247Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2429936Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2430420Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2430801Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2431287Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2431566Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2432236Z       [scenario-loader] success — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2432746Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2433122Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2433617Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2433900Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2434581Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2435064Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2435428Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2435903Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2436422Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2437122Z       [scenario-loader] success — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2437643Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2446939Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2447493Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2447838Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2448579Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2449133Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2449524Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2450012Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2450289Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2450968Z       [scenario-loader] success — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2451467Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2451838Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2452369Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2452646Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2453755Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2454259Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2454676Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2455145Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2455469Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2456389Z       [scenario-loader] success — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2456948Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2457422Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2458004Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2458349Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2459300Z       [scenario-loader] start — "startup"
+build-and-test	Run tests	2026-05-29T19:39:04.2459942Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2460468Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2461082Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2461411Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2468368Z       [scenario-loader] success — "startup"
+build-and-test	Run tests	2026-05-29T19:39:04.2468961Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2469402Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2469951Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2470265Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2471038Z       [scenario-loader] start — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2471699Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2472114Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2472636Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2472953Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:04.2473738Z       [scenario-loader] success — "demo-default"
+build-and-test	Run tests	2026-05-29T19:39:04.2474294Z 
+build-and-test	Run tests	2026-05-29T19:39:04.2474693Z       at debug (js/scenario-loader.js:195:11)
+build-and-test	Run tests	2026-05-29T19:39:04.2480758Z 
+build-and-test	Run tests	2026-05-29T19:39:04.4167846Z PASS tests/attempts-api.spec.js
+build-and-test	Run tests	2026-05-29T19:39:04.4197169Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:04.4226577Z 
+build-and-test	Run tests	2026-05-29T19:39:04.4227113Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:04.4257197Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:04.4286564Z 
+build-and-test	Run tests	2026-05-29T19:39:04.4297101Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:04.4306897Z 
+build-and-test	Run tests	2026-05-29T19:39:04.5547551Z PASS tests/telemetry-storage.spec.js
+build-and-test	Run tests	2026-05-29T19:39:04.5549281Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:04.5551848Z 
+build-and-test	Run tests	2026-05-29T19:39:04.5552409Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:04.5553271Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:04.5554041Z 
+build-and-test	Run tests	2026-05-29T19:39:04.5554529Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:04.5555128Z 
+build-and-test	Run tests	2026-05-29T19:39:04.8073908Z PASS tests/attempt-store.spec.js
+build-and-test	Run tests	2026-05-29T19:39:04.8079768Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:04.8080221Z 
+build-and-test	Run tests	2026-05-29T19:39:04.8080757Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:04.8081557Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:04.8082261Z 
+build-and-test	Run tests	2026-05-29T19:39:04.8082786Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:04.8083426Z 
+build-and-test	Run tests	2026-05-29T19:39:04.9957500Z PASS tests/session-history-ui.spec.js
+build-and-test	Run tests	2026-05-29T19:39:04.9972482Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:04.9991823Z 
+build-and-test	Run tests	2026-05-29T19:39:05.0026856Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:05.0047066Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:05.0056821Z 
+build-and-test	Run tests	2026-05-29T19:39:05.0057449Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:05.0058149Z 
+build-and-test	Run tests	2026-05-29T19:39:05.0204217Z PASS tests/analytics.spec.js
+build-and-test	Run tests	2026-05-29T19:39:05.0210293Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:05.0210665Z 
+build-and-test	Run tests	2026-05-29T19:39:05.0211017Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:05.0211833Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:05.0212478Z 
+build-and-test	Run tests	2026-05-29T19:39:05.0212957Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:05.0213523Z 
+build-and-test	Run tests	2026-05-29T19:39:05.0471299Z PASS tests/telemetry-stream.spec.js
+build-and-test	Run tests	2026-05-29T19:39:05.0507101Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:05.0536540Z 
+build-and-test	Run tests	2026-05-29T19:39:05.0566772Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:05.0567677Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:05.0596603Z 
+build-and-test	Run tests	2026-05-29T19:39:05.0617164Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:05.0626641Z 
+build-and-test	Run tests	2026-05-29T19:39:05.2457788Z PASS tests/obd2-rubric.spec.js
+build-and-test	Run tests	2026-05-29T19:39:05.2492971Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:05.2516624Z 
+build-and-test	Run tests	2026-05-29T19:39:05.2546685Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:05.2547573Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:05.2576630Z 
+build-and-test	Run tests	2026-05-29T19:39:05.2607061Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:05.2607554Z 
+build-and-test	Run tests	2026-05-29T19:39:05.3794377Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+build-and-test	Run tests	2026-05-29T19:39:05.3847220Z   ● Test suite failed to run
+build-and-test	Run tests	2026-05-29T19:39:05.3876387Z 
+build-and-test	Run tests	2026-05-29T19:39:05.3936724Z     ReferenceError: Request is not defined
+build-and-test	Run tests	2026-05-29T19:39:05.3950477Z 
+build-and-test	Run tests	2026-05-29T19:39:05.3997404Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:05.4057837Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:05.4067520Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:05.4087347Z      [90m   |[39m              [31m[1m^[22m[39m
+build-and-test	Run tests	2026-05-29T19:39:05.4146654Z      [90m 5 |[39m
+build-and-test	Run tests	2026-05-29T19:39:05.4167415Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:05.4169043Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+build-and-test	Run tests	2026-05-29T19:39:05.4169986Z 
+build-and-test	Run tests	2026-05-29T19:39:05.4170675Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+build-and-test	Run tests	2026-05-29T19:39:05.4171963Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+build-and-test	Run tests	2026-05-29T19:39:05.4173082Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+build-and-test	Run tests	2026-05-29T19:39:05.4174035Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+build-and-test	Run tests	2026-05-29T19:39:05.4174948Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+build-and-test	Run tests	2026-05-29T19:39:05.4176484Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+build-and-test	Run tests	2026-05-29T19:39:05.4177646Z       at Object.require (tests/integration/auto-open.multi-artifact.integration.spec.js:4:14)
+build-and-test	Run tests	2026-05-29T19:39:05.4178454Z 
+build-and-test	Run tests	2026-05-29T19:39:05.4715857Z PASS tests/obd2-ase.spec.js
+build-and-test	Run tests	2026-05-29T19:39:05.4747580Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:05.4776755Z 
+build-and-test	Run tests	2026-05-29T19:39:05.4806980Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:05.4807689Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:05.4836741Z 
+build-and-test	Run tests	2026-05-29T19:39:05.4848080Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:05.4866920Z 
+build-and-test	Run tests	2026-05-29T19:39:05.5756656Z PASS tests/telemetry-export.spec.js
+build-and-test	Run tests	2026-05-29T19:39:05.5757562Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:05.5836655Z 
+build-and-test	Run tests	2026-05-29T19:39:05.5837120Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:05.5897265Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:05.5945035Z 
+build-and-test	Run tests	2026-05-29T19:39:05.5977325Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:05.6006543Z 
+build-and-test	Run tests	2026-05-29T19:39:05.9266471Z PASS tests/api-version-mismatch.spec.js
+build-and-test	Run tests	2026-05-29T19:39:05.9287262Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:05.9306710Z 
+build-and-test	Run tests	2026-05-29T19:39:05.9346755Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:05.9362252Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:05.9386522Z 
+build-and-test	Run tests	2026-05-29T19:39:05.9386923Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:05.9387373Z 
+build-and-test	Run tests	2026-05-29T19:39:05.9837573Z PASS tests/app-version-header.spec.js
+build-and-test	Run tests	2026-05-29T19:39:05.9847887Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:05.9879548Z 
+build-and-test	Run tests	2026-05-29T19:39:05.9907201Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:05.9937711Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:05.9967233Z 
+build-and-test	Run tests	2026-05-29T19:39:05.9977559Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:05.9978327Z 
+build-and-test	Run tests	2026-05-29T19:39:05.9978946Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:05.9979635Z       [loadReport sessions] fs keys: [
+build-and-test	Run tests	2026-05-29T19:39:05.9980683Z         'appendFile',        'appendFileSync', 'access',
+build-and-test	Run tests	2026-05-29T19:39:05.9982263Z         'accessSync',        'chown',          'chownSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9983171Z         'chmod',             'chmodSync',      'close',
+build-and-test	Run tests	2026-05-29T19:39:05.9984211Z         'closeSync',         'copyFile',       'copyFileSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9985248Z         'cp',                'cpSync',         'createReadStream',
+build-and-test	Run tests	2026-05-29T19:39:05.9986510Z         'createWriteStream', 'exists',         'existsSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9987576Z         'fchown',            'fchownSync',     'fchmod',
+build-and-test	Run tests	2026-05-29T19:39:05.9988580Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9989588Z         'fstat',             'fstatSync',      'fsync',
+build-and-test	Run tests	2026-05-29T19:39:05.9990541Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9991552Z         'futimes',           'futimesSync',    'lchown',
+build-and-test	Run tests	2026-05-29T19:39:05.9992527Z         'lchownSync',        'lchmod',         'lchmodSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9993500Z         'link',              'linkSync',       'lstat',
+build-and-test	Run tests	2026-05-29T19:39:05.9994429Z         'lstatSync',         'lutimes',        'lutimesSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9995439Z         'mkdir',             'mkdirSync',      'mkdtemp',
+build-and-test	Run tests	2026-05-29T19:39:05.9996645Z         'mkdtempSync',       'open',           'openSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9997675Z         'readdir',           'readdirSync',    'read',
+build-and-test	Run tests	2026-05-29T19:39:05.9998582Z         'readSync',          'readv',          'readvSync',
+build-and-test	Run tests	2026-05-29T19:39:05.9999546Z         'readFile',          'readFileSync',   'readlink',
+build-and-test	Run tests	2026-05-29T19:39:06.0000532Z         'readlinkSync',      'realpath',       'realpathSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0001573Z         'rename',            'renameSync',     'rm',
+build-and-test	Run tests	2026-05-29T19:39:06.0002479Z         'rmSync',            'rmdir',          'rmdirSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0003435Z         'stat',              'statfs',         'statSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0004800Z         'statfsSync',        'symlink',        'symlinkSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0005804Z         'truncate',          'truncateSync',   'unwatchFile',
+build-and-test	Run tests	2026-05-29T19:39:06.0007399Z         'unlink',            'unlinkSync',     'utimes',
+build-and-test	Run tests	2026-05-29T19:39:06.0008124Z         'utimesSync',        'watch',          'watchFile',
+build-and-test	Run tests	2026-05-29T19:39:06.0008875Z         'writeFile',         'writeFileSync',  'write',
+build-and-test	Run tests	2026-05-29T19:39:06.0009535Z         'writeSync',         'writev',         'writevSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0010186Z         'Dirent',            'Stats',          'ReadStream',
+build-and-test	Run tests	2026-05-29T19:39:06.0010862Z         'WriteStream',       'FileReadStream', 'FileWriteStream',
+build-and-test	Run tests	2026-05-29T19:39:06.0011560Z         '_toUnixTimestamp',  'Dir',            'opendir',
+build-and-test	Run tests	2026-05-29T19:39:06.0012186Z         'opendirSync',       'F_OK',           'R_OK',
+build-and-test	Run tests	2026-05-29T19:39:06.0012662Z         'W_OK',
+build-and-test	Run tests	2026-05-29T19:39:06.0012992Z         ... 3 more items
+build-and-test	Run tests	2026-05-29T19:39:06.0013349Z       ]
+build-and-test	Run tests	2026-05-29T19:39:06.0013537Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0013794Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:06.0014158Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0014304Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.0015538Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:06.0018501Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0045731Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:06.0046348Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0046528Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.0046970Z       [loadReport sessions] fs keys: [
+build-and-test	Run tests	2026-05-29T19:39:06.0047577Z         'appendFile',        'appendFileSync', 'access',
+build-and-test	Run tests	2026-05-29T19:39:06.0048247Z         'accessSync',        'chown',          'chownSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0048887Z         'chmod',             'chmodSync',      'close',
+build-and-test	Run tests	2026-05-29T19:39:06.0049542Z         'closeSync',         'copyFile',       'copyFileSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0050210Z         'cp',                'cpSync',         'createReadStream',
+build-and-test	Run tests	2026-05-29T19:39:06.0050899Z         'createWriteStream', 'exists',         'existsSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0051854Z         'fchown',            'fchownSync',     'fchmod',
+build-and-test	Run tests	2026-05-29T19:39:06.0052550Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0053197Z         'fstat',             'fstatSync',      'fsync',
+build-and-test	Run tests	2026-05-29T19:39:06.0053880Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0054552Z         'futimes',           'futimesSync',    'lchown',
+build-and-test	Run tests	2026-05-29T19:39:06.0055209Z         'lchownSync',        'lchmod',         'lchmodSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0055822Z         'link',              'linkSync',       'lstat',
+build-and-test	Run tests	2026-05-29T19:39:06.0056705Z         'lstatSync',         'lutimes',        'lutimesSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0057402Z         'mkdir',             'mkdirSync',      'mkdtemp',
+build-and-test	Run tests	2026-05-29T19:39:06.0058050Z         'mkdtempSync',       'open',           'openSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0058668Z         'readdir',           'readdirSync',    'read',
+build-and-test	Run tests	2026-05-29T19:39:06.0059301Z         'readSync',          'readv',          'readvSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0059941Z         'readFile',          'readFileSync',   'readlink',
+build-and-test	Run tests	2026-05-29T19:39:06.0060606Z         'readlinkSync',      'realpath',       'realpathSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0061243Z         'rename',            'renameSync',     'rm',
+build-and-test	Run tests	2026-05-29T19:39:06.0061840Z         'rmSync',            'rmdir',          'rmdirSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0062452Z         'stat',              'statfs',         'statSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0063078Z         'statfsSync',        'symlink',        'symlinkSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0063734Z         'truncate',          'truncateSync',   'unwatchFile',
+build-and-test	Run tests	2026-05-29T19:39:06.0064367Z         'unlink',            'unlinkSync',     'utimes',
+build-and-test	Run tests	2026-05-29T19:39:06.0064979Z         'utimesSync',        'watch',          'watchFile',
+build-and-test	Run tests	2026-05-29T19:39:06.0065600Z         'writeFile',         'writeFileSync',  'write',
+build-and-test	Run tests	2026-05-29T19:39:06.0067778Z         'writeSync',         'writev',         'writevSync',
+build-and-test	Run tests	2026-05-29T19:39:06.0068486Z         'Dirent',            'Stats',          'ReadStream',
+build-and-test	Run tests	2026-05-29T19:39:06.0069224Z         'WriteStream',       'FileReadStream', 'FileWriteStream',
+build-and-test	Run tests	2026-05-29T19:39:06.0069998Z         '_toUnixTimestamp',  'Dir',            'opendir',
+build-and-test	Run tests	2026-05-29T19:39:06.0070745Z         'opendirSync',       'F_OK',           'R_OK',
+build-and-test	Run tests	2026-05-29T19:39:06.0071265Z         'W_OK',
+build-and-test	Run tests	2026-05-29T19:39:06.0071634Z         ... 3 more items
+build-and-test	Run tests	2026-05-29T19:39:06.0071987Z       ]
+build-and-test	Run tests	2026-05-29T19:39:06.0072154Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0072404Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:06.0072753Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0072903Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.0074218Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:06.0075375Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0075661Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:06.0076050Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0907645Z PASS tests/telemetry/supabaseAdapter.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.0927047Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.0956541Z 
+build-and-test	Run tests	2026-05-29T19:39:06.0986685Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.1009198Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.1046850Z 
+build-and-test	Run tests	2026-05-29T19:39:06.1057123Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.1086594Z 
+build-and-test	Run tests	2026-05-29T19:39:06.1264770Z PASS tests/obd2-student.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.1307542Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.1308030Z 
+build-and-test	Run tests	2026-05-29T19:39:06.1336992Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.1377032Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.1406784Z 
+build-and-test	Run tests	2026-05-29T19:39:06.1457844Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.1486574Z 
+build-and-test	Run tests	2026-05-29T19:39:06.3357771Z PASS tests/obd2-gauges.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.3362907Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.3417004Z 
+build-and-test	Run tests	2026-05-29T19:39:06.3447442Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.3477181Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.3506816Z 
+build-and-test	Run tests	2026-05-29T19:39:06.3507379Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.3507889Z 
+build-and-test	Run tests	2026-05-29T19:39:06.4857419Z PASS tests/attempt-supabase.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.4887538Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.4916672Z 
+build-and-test	Run tests	2026-05-29T19:39:06.4942739Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.4943434Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.4943918Z 
+build-and-test	Run tests	2026-05-29T19:39:06.4944244Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.4944660Z 
+build-and-test	Run tests	2026-05-29T19:39:06.5500608Z PASS tests/telemetry-history.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.5506069Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.5506660Z 
+build-and-test	Run tests	2026-05-29T19:39:06.5507030Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.5537114Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.5556618Z 
+build-and-test	Run tests	2026-05-29T19:39:06.5566925Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.5596577Z 
+build-and-test	Run tests	2026-05-29T19:39:06.5890408Z PASS tests/attempt-adapter.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.5891363Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.5891635Z 
+build-and-test	Run tests	2026-05-29T19:39:06.5891982Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.5892573Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.5893045Z 
+build-and-test	Run tests	2026-05-29T19:39:06.5893444Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.5893914Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6747577Z PASS tests/analytics/fs-mock-ordering.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.6867296Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.6889215Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6889661Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.6890377Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.6890872Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6891269Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.6891756Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6892335Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6892811Z       [loadReport sessions] fs keys: [
+build-and-test	Run tests	2026-05-29T19:39:06.6893466Z         'appendFile',        'appendFileSync', 'access',
+build-and-test	Run tests	2026-05-29T19:39:06.6894166Z         'accessSync',        'chown',          'chownSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6894828Z         'chmod',             'chmodSync',      'close',
+build-and-test	Run tests	2026-05-29T19:39:06.6895516Z         'closeSync',         'copyFile',       'copyFileSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6896610Z         'cp',                'cpSync',         'createReadStream',
+build-and-test	Run tests	2026-05-29T19:39:06.6897338Z         'createWriteStream', 'exists',         'existsSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6898012Z         'fchown',            'fchownSync',     'fchmod',
+build-and-test	Run tests	2026-05-29T19:39:06.6898678Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6899338Z         'fstat',             'fstatSync',      'fsync',
+build-and-test	Run tests	2026-05-29T19:39:06.6900006Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6900689Z         'futimes',           'futimesSync',    'lchown',
+build-and-test	Run tests	2026-05-29T19:39:06.6901367Z         'lchownSync',        'lchmod',         'lchmodSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6902006Z         'link',              'linkSync',       'lstat',
+build-and-test	Run tests	2026-05-29T19:39:06.6902654Z         'lstatSync',         'lutimes',        'lutimesSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6903306Z         'mkdir',             'mkdirSync',      'mkdtemp',
+build-and-test	Run tests	2026-05-29T19:39:06.6904011Z         'mkdtempSync',       'open',           'openSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6904654Z         'readdir',           'readdirSync',    'read',
+build-and-test	Run tests	2026-05-29T19:39:06.6905298Z         'readSync',          'readv',          'readvSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6905954Z         'readFile',          'readFileSync',   'readlink',
+build-and-test	Run tests	2026-05-29T19:39:06.6907407Z         'readlinkSync',      'realpath',       'realpathSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6908150Z         'rename',            'renameSync',     'rm',
+build-and-test	Run tests	2026-05-29T19:39:06.6908826Z         'rmSync',            'rmdir',          'rmdirSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6909519Z         'stat',              'statfs',         'statSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6910553Z         'statfsSync',        'symlink',        'symlinkSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6911311Z         'truncate',          'truncateSync',   'unwatchFile',
+build-and-test	Run tests	2026-05-29T19:39:06.6912031Z         'unlink',            'unlinkSync',     'utimes',
+build-and-test	Run tests	2026-05-29T19:39:06.6912728Z         'utimesSync',        'watch',          'watchFile',
+build-and-test	Run tests	2026-05-29T19:39:06.6913428Z         'writeFile',         'writeFileSync',  'write',
+build-and-test	Run tests	2026-05-29T19:39:06.6914084Z         'writeSync',         'writev',         'writevSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6914811Z         'Dirent',            'Stats',          '_toUnixTimestamp',
+build-and-test	Run tests	2026-05-29T19:39:06.6915508Z         'Dir',               'opendir',        'opendirSync',
+build-and-test	Run tests	2026-05-29T19:39:06.6916143Z         'F_OK',              'R_OK',           'W_OK',
+build-and-test	Run tests	2026-05-29T19:39:06.6967353Z         'X_OK',              'constants'
+build-and-test	Run tests	2026-05-29T19:39:06.6967796Z       ]
+build-and-test	Run tests	2026-05-29T19:39:06.6967979Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6968264Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:06.6968650Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6968813Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6970070Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:06.6971220Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6971557Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:06.6971956Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6972117Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6972619Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:06.6973030Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6973300Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:06.6973667Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6973820Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6974404Z       [loadReport sessions] fs keys: [ 'existsSync', 'readFileSync' ]
+build-and-test	Run tests	2026-05-29T19:39:06.6974893Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6975144Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:06.6975517Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6976066Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6977614Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:06.6978679Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6978957Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:06.6979314Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6979473Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6979976Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:06.6980378Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6980633Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:06.6980995Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6981145Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6981726Z       [loadReport sessions] fs keys: [ 'existsSync', 'readFileSync' ]
+build-and-test	Run tests	2026-05-29T19:39:06.6982221Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6982501Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:06.6982879Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6983031Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6984246Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:06.6985339Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6985619Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:06.6985984Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6986139Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.6986906Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:06.6987299Z 
+build-and-test	Run tests	2026-05-29T19:39:06.6987546Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:06.6987912Z 
+build-and-test	Run tests	2026-05-29T19:39:06.7647560Z PASS tests/obd2-rendering.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.7677391Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.7706843Z 
+build-and-test	Run tests	2026-05-29T19:39:06.7726396Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.7737181Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.7755458Z 
+build-and-test	Run tests	2026-05-29T19:39:06.7755877Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.7756653Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8247681Z PASS tests/student-dashboard-hotspots.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.8277435Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.8306598Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8347489Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.8348194Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.8348682Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8349025Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.8349459Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8350069Z PASS tests/analytics/fs-mock-repro.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.8427915Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.8428557Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8429036Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.8429785Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.8430312Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8430685Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.8431150Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8431341Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8431790Z       [loadReport sessions] fs keys: [
+build-and-test	Run tests	2026-05-29T19:39:06.8432430Z         'appendFile',        'appendFileSync', 'access',
+build-and-test	Run tests	2026-05-29T19:39:06.8433124Z         'accessSync',        'chown',          'chownSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8433885Z         'chmod',             'chmodSync',      'close',
+build-and-test	Run tests	2026-05-29T19:39:06.8434645Z         'closeSync',         'copyFile',       'copyFileSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8435503Z         'cp',                'cpSync',         'createReadStream',
+build-and-test	Run tests	2026-05-29T19:39:06.8436745Z         'createWriteStream', 'exists',         'existsSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8437462Z         'fchown',            'fchownSync',     'fchmod',
+build-and-test	Run tests	2026-05-29T19:39:06.8438156Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8438848Z         'fstat',             'fstatSync',      'fsync',
+build-and-test	Run tests	2026-05-29T19:39:06.8439546Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8440242Z         'futimes',           'futimesSync',    'lchown',
+build-and-test	Run tests	2026-05-29T19:39:06.8440932Z         'lchownSync',        'lchmod',         'lchmodSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8441591Z         'link',              'linkSync',       'lstat',
+build-and-test	Run tests	2026-05-29T19:39:06.8442823Z         'lstatSync',         'lutimes',        'lutimesSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8443556Z         'mkdir',             'mkdirSync',      'mkdtemp',
+build-and-test	Run tests	2026-05-29T19:39:06.8444258Z         'mkdtempSync',       'open',           'openSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8444958Z         'readdir',           'readdirSync',    'read',
+build-and-test	Run tests	2026-05-29T19:39:06.8445648Z         'readSync',          'readv',          'readvSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8446665Z         'readFile',          'readFileSync',   'readlink',
+build-and-test	Run tests	2026-05-29T19:39:06.8447438Z         'readlinkSync',      'realpath',       'realpathSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8448136Z         'rename',            'renameSync',     'rm',
+build-and-test	Run tests	2026-05-29T19:39:06.8448813Z         'rmSync',            'rmdir',          'rmdirSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8449543Z         'stat',              'statfs',         'statSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8450313Z         'statfsSync',        'symlink',        'symlinkSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8451051Z         'truncate',          'truncateSync',   'unwatchFile',
+build-and-test	Run tests	2026-05-29T19:39:06.8451726Z         'unlink',            'unlinkSync',     'utimes',
+build-and-test	Run tests	2026-05-29T19:39:06.8452269Z         'utimesSync',        'watch',          'watchFile',
+build-and-test	Run tests	2026-05-29T19:39:06.8452854Z         'writeFile',         'writeFileSync',  'write',
+build-and-test	Run tests	2026-05-29T19:39:06.8453552Z         'writeSync',         'writev',         'writevSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8454301Z         'Dirent',            'Stats',          '_toUnixTimestamp',
+build-and-test	Run tests	2026-05-29T19:39:06.8455059Z         'Dir',               'opendir',        'opendirSync',
+build-and-test	Run tests	2026-05-29T19:39:06.8455817Z         'F_OK',              'R_OK',           'W_OK',
+build-and-test	Run tests	2026-05-29T19:39:06.8467242Z         'X_OK',              'constants'
+build-and-test	Run tests	2026-05-29T19:39:06.8467724Z       ]
+build-and-test	Run tests	2026-05-29T19:39:06.8467933Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8468224Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:06.8468621Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8468785Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8470082Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:06.8471660Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8471966Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:06.8472365Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8472536Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8473096Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:06.8473523Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8473815Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:06.8474228Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8474415Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8474924Z       [loadReport sessions] fs keys: [ 'readFileSync' ]
+build-and-test	Run tests	2026-05-29T19:39:06.8475345Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8475623Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:06.8476006Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8476492Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8477834Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:06.8478962Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8479254Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:06.8479660Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8479826Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8480337Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:06.8480756Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8481030Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:06.8481436Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8481606Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8482147Z       [loadReport sessions] fs keys: [ 'readFileSync' ]
+build-and-test	Run tests	2026-05-29T19:39:06.8482556Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8482833Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:06.8483224Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8483380Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8484716Z       [loadReport sessions] existsSync: undefined path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:06.8485886Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8486530Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:06.8487372Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8487546Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:06.8488080Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:06.8488459Z 
+build-and-test	Run tests	2026-05-29T19:39:06.8488710Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:06.8489140Z 
+build-and-test	Run tests	2026-05-29T19:39:06.9367875Z PASS tests/obd2-live.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.9388097Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.9388356Z 
+build-and-test	Run tests	2026-05-29T19:39:06.9388519Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.9389141Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.9389634Z 
+build-and-test	Run tests	2026-05-29T19:39:06.9389959Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.9390387Z 
+build-and-test	Run tests	2026-05-29T19:39:06.9840278Z PASS tests/analytics/aggregateStudents.spec.js
+build-and-test	Run tests	2026-05-29T19:39:06.9869149Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:06.9877043Z 
+build-and-test	Run tests	2026-05-29T19:39:06.9877436Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:06.9878328Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:06.9880199Z 
+build-and-test	Run tests	2026-05-29T19:39:06.9880747Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:06.9882200Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0039386Z PASS tests/analytics/aggregateSessions.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.0087112Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:07.0087479Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0088948Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:07.0089686Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:07.0117131Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0147586Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:07.0177233Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0187396Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.0188186Z       [loadReport sessions] fs keys: [
+build-and-test	Run tests	2026-05-29T19:39:07.0189190Z         'appendFile',        'appendFileSync', 'access',
+build-and-test	Run tests	2026-05-29T19:39:07.0190271Z         'accessSync',        'chown',          'chownSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0191171Z         'chmod',             'chmodSync',      'close',
+build-and-test	Run tests	2026-05-29T19:39:07.0192152Z         'closeSync',         'copyFile',       'copyFileSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0193228Z         'cp',                'cpSync',         'createReadStream',
+build-and-test	Run tests	2026-05-29T19:39:07.0194826Z         'createWriteStream', 'exists',         'existsSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0195953Z         'fchown',            'fchownSync',     'fchmod',
+build-and-test	Run tests	2026-05-29T19:39:07.0197329Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0198350Z         'fstat',             'fstatSync',      'fsync',
+build-and-test	Run tests	2026-05-29T19:39:07.0199259Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0200366Z         'futimes',           'futimesSync',    'lchown',
+build-and-test	Run tests	2026-05-29T19:39:07.0201384Z         'lchownSync',        'lchmod',         'lchmodSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0202374Z         'link',              'linkSync',       'lstat',
+build-and-test	Run tests	2026-05-29T19:39:07.0203351Z         'lstatSync',         'lutimes',        'lutimesSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0204372Z         'mkdir',             'mkdirSync',      'mkdtemp',
+build-and-test	Run tests	2026-05-29T19:39:07.0205331Z         'mkdtempSync',       'open',           'openSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0206731Z         'readdir',           'readdirSync',    'read',
+build-and-test	Run tests	2026-05-29T19:39:07.0207706Z         'readSync',          'readv',          'readvSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0208813Z         'readFile',          'readFileSync',   'readlink',
+build-and-test	Run tests	2026-05-29T19:39:07.0209848Z         'readlinkSync',      'realpath',       'realpathSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0210939Z         'rename',            'renameSync',     'rm',
+build-and-test	Run tests	2026-05-29T19:39:07.0211904Z         'rmSync',            'rmdir',          'rmdirSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0212813Z         'stat',              'statfs',         'statSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0213730Z         'statfsSync',        'symlink',        'symlinkSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0214720Z         'truncate',          'truncateSync',   'unwatchFile',
+build-and-test	Run tests	2026-05-29T19:39:07.0215709Z         'unlink',            'unlinkSync',     'utimes',
+build-and-test	Run tests	2026-05-29T19:39:07.0217014Z         'utimesSync',        'watch',          'watchFile',
+build-and-test	Run tests	2026-05-29T19:39:07.0218394Z         'writeFile',         'writeFileSync',  'write',
+build-and-test	Run tests	2026-05-29T19:39:07.0219389Z         'writeSync',         'writev',         'writevSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0220476Z         'Dirent',            'Stats',          '_toUnixTimestamp',
+build-and-test	Run tests	2026-05-29T19:39:07.0221476Z         'Dir',               'opendir',        'opendirSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0222572Z         'F_OK',              'R_OK',           'W_OK',
+build-and-test	Run tests	2026-05-29T19:39:07.0223450Z         'X_OK',              'constants'
+build-and-test	Run tests	2026-05-29T19:39:07.0224125Z       ]
+build-and-test	Run tests	2026-05-29T19:39:07.0224572Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0225071Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:07.0225668Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0225977Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.0227854Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:07.0229301Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0229840Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:07.0230452Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0230836Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.0231531Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:07.0232182Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0232674Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:07.0233265Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0233650Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.0234392Z       [loadReport sessions] fs keys: [
+build-and-test	Run tests	2026-05-29T19:39:07.0235371Z         'appendFile',        'appendFileSync', 'access',
+build-and-test	Run tests	2026-05-29T19:39:07.0236621Z         'accessSync',        'chown',          'chownSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0237683Z         'chmod',             'chmodSync',      'close',
+build-and-test	Run tests	2026-05-29T19:39:07.0238684Z         'closeSync',         'copyFile',       'copyFileSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0239728Z         'cp',                'cpSync',         'createReadStream',
+build-and-test	Run tests	2026-05-29T19:39:07.0240725Z         'createWriteStream', 'exists',         'existsSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0241626Z         'fchown',            'fchownSync',     'fchmod',
+build-and-test	Run tests	2026-05-29T19:39:07.0242569Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0243815Z         'fstat',             'fstatSync',      'fsync',
+build-and-test	Run tests	2026-05-29T19:39:07.0244768Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0245768Z         'futimes',           'futimesSync',    'lchown',
+build-and-test	Run tests	2026-05-29T19:39:07.0247319Z         'lchownSync',        'lchmod',         'lchmodSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0257858Z         'link',              'linkSync',       'lstat',
+build-and-test	Run tests	2026-05-29T19:39:07.0258898Z         'lstatSync',         'lutimes',        'lutimesSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0259968Z         'mkdir',             'mkdirSync',      'mkdtemp',
+build-and-test	Run tests	2026-05-29T19:39:07.0261086Z         'mkdtempSync',       'open',           'openSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0262114Z         'readdir',           'readdirSync',    'read',
+build-and-test	Run tests	2026-05-29T19:39:07.0263201Z         'readSync',          'readv',          'readvSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0264148Z         'readFile',          'readFileSync',   'readlink',
+build-and-test	Run tests	2026-05-29T19:39:07.0265193Z         'readlinkSync',      'realpath',       'realpathSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0266525Z         'rename',            'renameSync',     'rm',
+build-and-test	Run tests	2026-05-29T19:39:07.0267505Z         'rmSync',            'rmdir',          'rmdirSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0268455Z         'stat',              'statfs',         'statSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0269350Z         'statfsSync',        'symlink',        'symlinkSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0270476Z         'truncate',          'truncateSync',   'unwatchFile',
+build-and-test	Run tests	2026-05-29T19:39:07.0271401Z         'unlink',            'unlinkSync',     'utimes',
+build-and-test	Run tests	2026-05-29T19:39:07.0272355Z         'utimesSync',        'watch',          'watchFile',
+build-and-test	Run tests	2026-05-29T19:39:07.0273258Z         'writeFile',         'writeFileSync',  'write',
+build-and-test	Run tests	2026-05-29T19:39:07.0274164Z         'writeSync',         'writev',         'writevSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0275102Z         'Dirent',            'Stats',          '_toUnixTimestamp',
+build-and-test	Run tests	2026-05-29T19:39:07.0276513Z         'Dir',               'opendir',        'opendirSync',
+build-and-test	Run tests	2026-05-29T19:39:07.0277527Z         'F_OK',              'R_OK',           'W_OK',
+build-and-test	Run tests	2026-05-29T19:39:07.0278425Z         'X_OK',              'constants'
+build-and-test	Run tests	2026-05-29T19:39:07.0282354Z       ]
+build-and-test	Run tests	2026-05-29T19:39:07.0282870Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0283374Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:07.0283991Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0284374Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.0286047Z       [loadReport sessions] existsSync: false path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:07.0287730Z 
+build-and-test	Run tests	2026-05-29T19:39:07.0288243Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:07.0288825Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1167623Z PASS tests/analytics/debug-aggregate-debug.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.1197689Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:07.1197924Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1198080Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:07.1198708Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:07.1199247Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1199575Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:07.1200000Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1200160Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.1200761Z       before require - readFileSync.mock: true mockReturnValue: []
+build-and-test	Run tests	2026-05-29T19:39:07.1201242Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1201689Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:24:13)
+build-and-test	Run tests	2026-05-29T19:39:07.1202235Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1202383Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.1202944Z       after require - readFileSync.mock: true mock.results: []
+build-and-test	Run tests	2026-05-29T19:39:07.1203392Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1203822Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:28:13)
+build-and-test	Run tests	2026-05-29T19:39:07.1204361Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1204515Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.1204943Z       [loadReport sessions] fs keys: [
+build-and-test	Run tests	2026-05-29T19:39:07.1205543Z         'appendFile',        'appendFileSync', 'access',
+build-and-test	Run tests	2026-05-29T19:39:07.1206541Z         'accessSync',        'chown',          'chownSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1207773Z         'chmod',             'chmodSync',      'close',
+build-and-test	Run tests	2026-05-29T19:39:07.1208555Z         'closeSync',         'copyFile',       'copyFileSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1209372Z         'cp',                'cpSync',         'createReadStream',
+build-and-test	Run tests	2026-05-29T19:39:07.1210073Z         'createWriteStream', 'exists',         'existsSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1210750Z         'fchown',            'fchownSync',     'fchmod',
+build-and-test	Run tests	2026-05-29T19:39:07.1211429Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1212107Z         'fstat',             'fstatSync',      'fsync',
+build-and-test	Run tests	2026-05-29T19:39:07.1212768Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1213454Z         'futimes',           'futimesSync',    'lchown',
+build-and-test	Run tests	2026-05-29T19:39:07.1214121Z         'lchownSync',        'lchmod',         'lchmodSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1214773Z         'link',              'linkSync',       'lstat',
+build-and-test	Run tests	2026-05-29T19:39:07.1215534Z         'lstatSync',         'lutimes',        'lutimesSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1216415Z         'mkdir',             'mkdirSync',      'mkdtemp',
+build-and-test	Run tests	2026-05-29T19:39:07.1217076Z         'mkdtempSync',       'open',           'openSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1217714Z         'readdir',           'readdirSync',    'read',
+build-and-test	Run tests	2026-05-29T19:39:07.1218343Z         'readSync',          'readv',          'readvSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1218973Z         'readFile',          'readFileSync',   'readlink',
+build-and-test	Run tests	2026-05-29T19:39:07.1219677Z         'readlinkSync',      'realpath',       'realpathSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1220333Z         'rename',            'renameSync',     'rm',
+build-and-test	Run tests	2026-05-29T19:39:07.1221088Z         'rmSync',            'rmdir',          'rmdirSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1221730Z         'stat',              'statfs',         'statSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1267055Z         'statfsSync',        'symlink',        'symlinkSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1280945Z         'truncate',          'truncateSync',   'unwatchFile',
+build-and-test	Run tests	2026-05-29T19:39:07.1307491Z         'unlink',            'unlinkSync',     'utimes',
+build-and-test	Run tests	2026-05-29T19:39:07.1337604Z         'utimesSync',        'watch',          'watchFile',
+build-and-test	Run tests	2026-05-29T19:39:07.1347540Z         'writeFile',         'writeFileSync',  'write',
+build-and-test	Run tests	2026-05-29T19:39:07.1348535Z         'writeSync',         'writev',         'writevSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1349678Z         'Dirent',            'Stats',          '_toUnixTimestamp',
+build-and-test	Run tests	2026-05-29T19:39:07.1350747Z         'Dir',               'opendir',        'opendirSync',
+build-and-test	Run tests	2026-05-29T19:39:07.1351709Z         'F_OK',              'R_OK',           'W_OK',
+build-and-test	Run tests	2026-05-29T19:39:07.1352452Z         'X_OK',              'constants'
+build-and-test	Run tests	2026-05-29T19:39:07.1353214Z       ]
+build-and-test	Run tests	2026-05-29T19:39:07.1353935Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1358865Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:07.1359499Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1359881Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.1361413Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:07.1362808Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1363286Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:07.1363875Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1364215Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.1364942Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:07.1365548Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1365992Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:07.1366860Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1367215Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.1367944Z       after aggregate - readFileSync.mock.results: [
+build-and-test	Run tests	2026-05-29T19:39:07.1368692Z         {
+build-and-test	Run tests	2026-05-29T19:39:07.1369238Z           type: 'return',
+build-and-test	Run tests	2026-05-29T19:39:07.1370549Z           value: '{"sessions":[{"userId":"u1","confidence":0.8},{"userId":"u1","confidence":0.6},{"userId":"u2","confidence":0.5}]}'
+build-and-test	Run tests	2026-05-29T19:39:07.1371674Z         }
+build-and-test	Run tests	2026-05-29T19:39:07.1372197Z       ] res: {
+build-and-test	Run tests	2026-05-29T19:39:07.1372745Z         ok: true,
+build-and-test	Run tests	2026-05-29T19:39:07.1373731Z         totalSessions: 3,
+build-and-test	Run tests	2026-05-29T19:39:07.1374420Z         averageConfidence: 0.633,
+build-and-test	Run tests	2026-05-29T19:39:07.1375093Z         students: [
+build-and-test	Run tests	2026-05-29T19:39:07.1375761Z           { id: 'u1', sessions: 2, averageConfidence: 0.7 },
+build-and-test	Run tests	2026-05-29T19:39:07.1376796Z           { id: 'u2', sessions: 1, averageConfidence: 0.5 }
+build-and-test	Run tests	2026-05-29T19:39:07.1377569Z         ]
+build-and-test	Run tests	2026-05-29T19:39:07.1378151Z       }
+build-and-test	Run tests	2026-05-29T19:39:07.1378575Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1379271Z       at Object.debug (tests/analytics/debug-aggregate-debug.spec.js:32:13)
+build-and-test	Run tests	2026-05-29T19:39:07.1380121Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1380690Z PASS tests/version-sync.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.1381738Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:07.1382148Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1382462Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:07.1383270Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:07.1384003Z 
+build-and-test	Run tests	2026-05-29T19:39:07.1384505Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:07.1385130Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2089756Z PASS tests/smooth-scroll.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.2094374Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:07.2094896Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2095131Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:07.2095653Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:07.2096087Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2096921Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:07.2097470Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2641321Z PASS tests/analytics/fs-mock-hoist-reset.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.2667226Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:07.2667705Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2668053Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:07.2668792Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:07.2669273Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2669600Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:07.2669958Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2670056Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.2670330Z       [loadReport sessions] fs keys: [
+build-and-test	Run tests	2026-05-29T19:39:07.2671012Z         'appendFile',        'appendFileSync', 'access',
+build-and-test	Run tests	2026-05-29T19:39:07.2671419Z         'accessSync',        'chown',          'chownSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2671812Z         'chmod',             'chmodSync',      'close',
+build-and-test	Run tests	2026-05-29T19:39:07.2672207Z         'closeSync',         'copyFile',       'copyFileSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2672608Z         'cp',                'cpSync',         'createReadStream',
+build-and-test	Run tests	2026-05-29T19:39:07.2673007Z         'createWriteStream', 'exists',         'existsSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2673392Z         'fchown',            'fchownSync',     'fchmod',
+build-and-test	Run tests	2026-05-29T19:39:07.2673766Z         'fchmodSync',        'fdatasync',      'fdatasyncSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2674136Z         'fstat',             'fstatSync',      'fsync',
+build-and-test	Run tests	2026-05-29T19:39:07.2674516Z         'fsyncSync',         'ftruncate',      'ftruncateSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2674895Z         'futimes',           'futimesSync',    'lchown',
+build-and-test	Run tests	2026-05-29T19:39:07.2675267Z         'lchownSync',        'lchmod',         'lchmodSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2675644Z         'link',              'linkSync',       'lstat',
+build-and-test	Run tests	2026-05-29T19:39:07.2676019Z         'lstatSync',         'lutimes',        'lutimesSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2676741Z         'mkdir',             'mkdirSync',      'mkdtemp',
+build-and-test	Run tests	2026-05-29T19:39:07.2677135Z         'mkdtempSync',       'open',           'openSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2677497Z         'readdir',           'readdirSync',    'read',
+build-and-test	Run tests	2026-05-29T19:39:07.2677863Z         'readSync',          'readv',          'readvSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2678238Z         'readFile',          'readFileSync',   'readlink',
+build-and-test	Run tests	2026-05-29T19:39:07.2678627Z         'readlinkSync',      'realpath',       'realpathSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2678998Z         'rename',            'renameSync',     'rm',
+build-and-test	Run tests	2026-05-29T19:39:07.2679343Z         'rmSync',            'rmdir',          'rmdirSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2679689Z         'stat',              'statfs',         'statSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2680052Z         'statfsSync',        'symlink',        'symlinkSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2680655Z         'truncate',          'truncateSync',   'unwatchFile',
+build-and-test	Run tests	2026-05-29T19:39:07.2681017Z         'unlink',            'unlinkSync',     'utimes',
+build-and-test	Run tests	2026-05-29T19:39:07.2681370Z         'utimesSync',        'watch',          'watchFile',
+build-and-test	Run tests	2026-05-29T19:39:07.2681726Z         'writeFile',         'writeFileSync',  'write',
+build-and-test	Run tests	2026-05-29T19:39:07.2682101Z         'writeSync',         'writev',         'writevSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2682488Z         'Dirent',            'Stats',          '_toUnixTimestamp',
+build-and-test	Run tests	2026-05-29T19:39:07.2682881Z         'Dir',               'opendir',        'opendirSync',
+build-and-test	Run tests	2026-05-29T19:39:07.2683230Z         'F_OK',              'R_OK',           'W_OK',
+build-and-test	Run tests	2026-05-29T19:39:07.2683535Z         'X_OK',              'constants'
+build-and-test	Run tests	2026-05-29T19:39:07.2683784Z       ]
+build-and-test	Run tests	2026-05-29T19:39:07.2683895Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2684042Z       at debug (api/analytics/sessions.js:8:15)
+build-and-test	Run tests	2026-05-29T19:39:07.2684253Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2684343Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.2685056Z       [loadReport sessions] existsSync: true path: /home/runner/work/car-diagnosis-simulator/car-diagnosis-simulator/api/analytics/analytics-report.json
+build-and-test	Run tests	2026-05-29T19:39:07.2685637Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2685794Z       at debug (api/analytics/sessions.js:12:13)
+build-and-test	Run tests	2026-05-29T19:39:07.2686008Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2686093Z     console.debug
+build-and-test	Run tests	2026-05-29T19:39:07.2686550Z       [loadReport sessions] readFileSync type: string
+build-and-test	Run tests	2026-05-29T19:39:07.2686774Z 
+build-and-test	Run tests	2026-05-29T19:39:07.2686915Z       at debug (api/analytics/sessions.js:15:13)
+build-and-test	Run tests	2026-05-29T19:39:07.2687121Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3025933Z PASS tests/env-setup.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.3030125Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:07.3030334Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3030487Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:07.3030962Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:07.3031250Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3031446Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:07.3031963Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3131198Z PASS tests/telemetry/adapter_ingest.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.3134405Z   ● Console
+build-and-test	Run tests	2026-05-29T19:39:07.3134604Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3134754Z     console.log
+build-and-test	Run tests	2026-05-29T19:39:07.3135359Z       Per-test retries disabled (CI_PER_TEST_RETRIES not set or 0).
+build-and-test	Run tests	2026-05-29T19:39:07.3135845Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3136431Z       at Object.log (scripts/jest-setup-retries.js:19:11)
+build-and-test	Run tests	2026-05-29T19:39:07.3136925Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3502520Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3503971Z Summary of all failing tests
+build-and-test	Run tests	2026-05-29T19:39:07.3508837Z FAIL tests/integration/auto-open.expanded.integration.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.3510106Z   ● Test suite failed to run
+build-and-test	Run tests	2026-05-29T19:39:07.3510426Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3511743Z     ReferenceError: Request is not defined
+build-and-test	Run tests	2026-05-29T19:39:07.3512117Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3517339Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3521326Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3527714Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3529964Z      [90m   |[39m              [31m[1m^[22m[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3530572Z      [90m 5 |[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3535574Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3540814Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+build-and-test	Run tests	2026-05-29T19:39:07.3541562Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3544830Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+build-and-test	Run tests	2026-05-29T19:39:07.3549165Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+build-and-test	Run tests	2026-05-29T19:39:07.3552154Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+build-and-test	Run tests	2026-05-29T19:39:07.3555434Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+build-and-test	Run tests	2026-05-29T19:39:07.3558751Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+build-and-test	Run tests	2026-05-29T19:39:07.3564605Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+build-and-test	Run tests	2026-05-29T19:39:07.3565591Z       at Object.require (tests/integration/auto-open.expanded.integration.spec.js:4:14)
+build-and-test	Run tests	2026-05-29T19:39:07.3566448Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3566965Z FAIL tests/integration/auto-open.multi-artifact.integration.spec.js
+build-and-test	Run tests	2026-05-29T19:39:07.3567950Z   ● Test suite failed to run
+build-and-test	Run tests	2026-05-29T19:39:07.3568262Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3569803Z     ReferenceError: Request is not defined
+build-and-test	Run tests	2026-05-29T19:39:07.3570249Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3575127Z     [0m [90m 2 |[39m [36mconst[39m path [33m=[39m require([32m'path'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3578779Z      [90m 3 |[39m [36mconst[39m fs [33m=[39m require([32m'fs'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3583971Z     [31m[1m>[22m[39m[90m 4 |[39m [36mconst[39m nock [33m=[39m require([32m'nock'[39m)[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3585960Z      [90m   |[39m              [31m[1m^[22m[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3587017Z      [90m 5 |[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3591592Z      [90m 6 |[39m [36mconst[39m owner [33m=[39m [32m'73junito'[39m[33m;[39m
+build-and-test	Run tests	2026-05-29T19:39:07.3597413Z      [90m 7 |[39m [36mconst[39m repo [33m=[39m [32m'car-diagnosis-simulator'[39m[33m;[39m[0m
+build-and-test	Run tests	2026-05-29T19:39:07.3598082Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3601478Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/src/utils/fetchUtils.ts:11:35)
+build-and-test	Run tests	2026-05-29T19:39:07.3606041Z       at Object.<anonymous> (node_modules/@mswjs/interceptors/lib/browser/index.cjs:2:31)
+build-and-test	Run tests	2026-05-29T19:39:07.3609936Z       at Object.<anonymous> (node_modules/nock/lib/intercept.js:13:45)
+build-and-test	Run tests	2026-05-29T19:39:07.3613555Z       at Object.<anonymous> (node_modules/nock/lib/recorder.js:8:44)
+build-and-test	Run tests	2026-05-29T19:39:07.3617122Z       at Object.<anonymous> (node_modules/nock/lib/back.js:4:18)
+build-and-test	Run tests	2026-05-29T19:39:07.3620336Z       at Object.<anonymous> (node_modules/nock/index.js:3:14)
+build-and-test	Run tests	2026-05-29T19:39:07.3626412Z       at Object.require (tests/integration/auto-open.multi-artifact.integration.spec.js:4:14)
+build-and-test	Run tests	2026-05-29T19:39:07.3627330Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3627549Z 
+build-and-test	Run tests	2026-05-29T19:39:07.3629210Z Test Suites: 2 failed, 32 passed, 34 total
+build-and-test	Run tests	2026-05-29T19:39:07.3629832Z Tests:       123 passed, 123 total
+build-and-test	Run tests	2026-05-29T19:39:07.3630575Z Snapshots:   0 total
+build-and-test	Run tests	2026-05-29T19:39:07.3631174Z Time:        6.12 s
+build-and-test	Run tests	2026-05-29T19:39:07.3631706Z Ran all test suites.
+build-and-test	Run tests	2026-05-29T19:39:07.4279703Z ##[error]Process completed with exit code 1.
