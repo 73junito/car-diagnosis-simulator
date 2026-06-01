@@ -1,0 +1,18 @@
+node_modules/
+.git/
+.github/
+tests/
+__tests__/
+downloaded-artifacts/
+downloaded-artifacts/**
+docs/
+scripts/*.log
+
+# Exclude non-essential serverless APIs to stay within Hobby plan limits
+api/analytics/**
+api/telemetry/**
+api/attempts/**
+api/auth/**
+
+# Exclude nested project copy if present
+car-diagnosis-sim/**

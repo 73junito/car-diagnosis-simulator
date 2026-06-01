@@ -1,0 +1,62 @@
+{
+  "headers": [
+    {
+      "source": "/version.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://pffdgqpynpbffbcnxmum.supabase.co https://torquemind-api.onrender.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; frame-ancestors 'none';"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/dashboard/analytics/",
+      "destination": "/dashboard/analytics",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/dashboard/analytics",
+      "destination": "/dashboard/analytics.html"
+    },
+    {
+      "source": "/dashboard/live-session",
+      "destination": "/dashboard/live-session.html"
+    },
+    {
+      "source": "/dashboard/session-history",
+      "destination": "/dashboard/session-history.html"
+    },
+    {
+      "source": "/dashboard/student",
+      "destination": "/dashboard/student.html"
+    }
+    ,
+    {
+      "source": "/dashboard/obd2",
+      "destination": "/dashboard/obd2.html"
+    }
+    ,
+    {
+      "source": "/dashboard/obd2-student",
+      "destination": "/dashboard/obd2-student.html"
+    }
+    ,
+    {
+      "source": "/dashboard/obd2-ase",
+      "destination": "/dashboard/obd2-ase.html"
+    }
+  ]
+}
