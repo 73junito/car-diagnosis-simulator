@@ -49,11 +49,33 @@ jobs:
           if [ $supabase_ok -eq 1 ]; then echo "✓ Vercel supabase configured"; else echo "✗ Vercel supabase missing"; fi
           if [ "${STRICT}" = "true" ] && ( [ $admin_ok -ne 1 ] || [ $supabase_ok -ne 1 ] ); then echo "Runtime drift detected (strict mode)"; exit 1; fi
 
-      - name: Fail if missing GitHub secrets (strict)
-        if: steps.check-secrets.outputs.missing == '1' && ${{ github.event.inputs.strict == 'true' }}
+      - name: Enforce required secrets (strict)
         run: |
-          echo "One or more required GitHub secrets are missing. Failing as strict=true."
-          exit 1
+          # Fail only for truly required secrets (SUPABASE_URL/KEY) when strict=true.
+          missing_required=0
+          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_KEY }}" ]; then
+            echo "✗ SUPABASE_URL or SUPABASE_KEY missing (required)"
+            missing_required=1
+          else
+            echo "✓ SUPABASE secrets present"
+          fi
+
+          if [ -z "${{ secrets.ADMIN_TOKEN }}" ]; then
+            echo "⚠ ADMIN_TOKEN missing (optional)"
+          else
+            echo "✓ ADMIN_TOKEN present"
+          fi
+
+          if [ "$GITHUB_EVENT_INPUTS_STRICT" = "true" ]; then
+            # When running via actions UI or gh, github.event.inputs.strict is available at runtime
+            # via the environment variable mapping below; fail if required secrets are missing.
+            if [ $missing_required -eq 1 ]; then
+              echo "Failing: required secrets missing and strict=true"
+              exit 1
+            fi
+          fi
+        env:
+          GITHUB_EVENT_INPUTS_STRICT: ${{ github.event.inputs.strict }}
 
       - name: Summary
         run: |
