@@ -27,8 +27,10 @@ jobs:
           npm ci
 
       - name: Check HARNESS_URL secret
+        env:
+          HARNESS_URL: ${{ secrets.HARNESS_URL }}
         run: |
-          if [ -z "${{ secrets.HARNESS_URL }}" ]; then
+          if [ -z "$HARNESS_URL" ]; then
             echo "Error: HARNESS_URL secret is not set. Add it in Settings → Secrets and variables → Actions."
             exit 1
           fi
@@ -41,12 +43,15 @@ jobs:
           node scripts/harness.js --count 50 --concurrency 3 --rate 10 --export runs/run-scheduled-latest.json --url "$HARNESS_URL"
 
       - name: Fetch Vercel logs (optional)
-        if: ${{ secrets.VERCEL_TOKEN != '' }}
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           HARNESS_URL: ${{ secrets.HARNESS_URL }}
         run: |
-          npx vercel logs "$HARNESS_URL" --since 1h --json --limit 1000 > runs/vercel-raw-scheduled.txt || true
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "VERCEL_TOKEN not set; skipping Vercel logs collection"
+          else
+            npx vercel logs "$HARNESS_URL" --since 1h --json --limit 1000 > runs/vercel-raw-scheduled.txt || true
+          fi
 
       - name: Post-process run export
         run: |
