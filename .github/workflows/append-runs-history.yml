@@ -7,6 +7,9 @@ on:
     paths:
       - 'runs/**'
   workflow_dispatch: {}
+  repository_dispatch:
+    types:
+      - append-history
 
 permissions:
   contents: write
