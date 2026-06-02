@@ -1,5 +1,6 @@
 name: Append Runs History
 
+# Allow manual and API-triggered dispatches (required for REST dispatch)
 on:
   push:
     paths:
