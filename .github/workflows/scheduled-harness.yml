@@ -74,6 +74,8 @@ jobs:
         with:
           name: runs-artifacts
           path: |
+            runs/run-scheduled-latest.json
+            runs/run-scheduled-summary.json
             runs/digest-scheduled.json
             runs/digest-scheduled-extended.json
             runs/plot-ready-scheduled.json
