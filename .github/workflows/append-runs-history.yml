@@ -1,7 +1,7 @@
 name: Append Runs History
 
-# reindex-touch: 2026-06-02T02:20:00Z
-# Allow manual and API-triggered dispatches (required for REST dispatch)
+# workflow-dispatch enabled for programmatic triggers
+# reindex-stamp: 2026-06-01T00:00:00Z (force workflow re-index)
 on:
   push:
     paths:

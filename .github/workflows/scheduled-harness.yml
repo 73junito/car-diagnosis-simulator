@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   run-harness:
@@ -86,3 +87,18 @@ jobs:
             runs/vercel-raw-scheduled.txt
             runs/vercel-filtered-scheduled.json
             runs/vercel-fullfiltered-scheduled.json
+
+      - name: Signal append-runs-history via repository_dispatch
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Triggering repository_dispatch event 'append-history'"
+          ref="${GITHUB_REF#refs/heads/}"
+          payload="{\"event_type\":\"append-history\",\"client_payload\":{\"run_id\":\"${GITHUB_RUN_ID}\",\"ref\":\"$ref\"}}"
+          echo "payload=$payload"
+          curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/dispatches \
+            -d "$payload" || true
