@@ -1,0 +1,82 @@
+name: Env Validate
+
+on:
+  workflow_dispatch:
+    inputs:
+      strict:
+        description: 'Fail on missing items (true/false)'
+        required: false
+        default: 'true'
+      vercel_health_url:
+        description: 'Optional: Vercel /api/health URL to validate runtime'
+        required: false
+        default: ''
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node (for optional runtime checks)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Check GitHub Secrets
+        id: check-secrets
+        run: |
+          missing=0
+          echo "ENV CHECK"
+          if [ -z "${{ secrets.ADMIN_TOKEN }}" ]; then echo "✗ ADMIN_TOKEN missing"; missing=1; else echo "✓ ADMIN_TOKEN present"; fi
+          if [ -z "${{ secrets.SUPABASE_URL }}" ]; then echo "✗ SUPABASE_URL missing"; missing=1; else echo "✓ SUPABASE_URL present"; fi
+          if [ -z "${{ secrets.SUPABASE_KEY }}" ]; then echo "✗ SUPABASE_KEY missing"; missing=1; else echo "✓ SUPABASE_KEY present"; fi
+          echo "missing=$missing" >> $GITHUB_OUTPUT
+
+      - name: Check Vercel /api/health (optional)
+        if: ${{ github.event.inputs.vercel_health_url != '' }}
+        env:
+          HEALTH_URL: ${{ github.event.inputs.vercel_health_url }}
+          STRICT: ${{ github.event.inputs.strict }}
+        run: |
+          echo "Querying $HEALTH_URL"
+          resp=$(curl -fsS "$HEALTH_URL" || true)
+          if [ -z "$resp" ]; then echo "✗ failed to fetch health"; exit 2; fi
+          echo "$resp" | grep -q '"admin":"configured"' && admin_ok=1 || admin_ok=0
+          echo "$resp" | grep -q '"supabase":"configured"' && supabase_ok=1 || supabase_ok=0
+          if [ $admin_ok -eq 1 ]; then echo "✓ Vercel admin configured"; else echo "✗ Vercel admin missing"; fi
+          if [ $supabase_ok -eq 1 ]; then echo "✓ Vercel supabase configured"; else echo "✗ Vercel supabase missing"; fi
+          if [ "${STRICT}" = "true" ] && ( [ $admin_ok -ne 1 ] || [ $supabase_ok -ne 1 ] ); then echo "Runtime drift detected (strict mode)"; exit 1; fi
+
+      - name: Enforce required secrets (strict)
+        run: |
+          # Fail only for truly required secrets (SUPABASE_URL/KEY) when strict=true.
+          missing_required=0
+          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_KEY }}" ]; then
+            echo "✗ SUPABASE_URL or SUPABASE_KEY missing (required)"
+            missing_required=1
+          else
+            echo "✓ SUPABASE secrets present"
+          fi
+
+          if [ -z "${{ secrets.ADMIN_TOKEN }}" ]; then
+            echo "⚠ ADMIN_TOKEN missing (optional)"
+          else
+            echo "✓ ADMIN_TOKEN present"
+          fi
+
+          if [ "$GITHUB_EVENT_INPUTS_STRICT" = "true" ]; then
+            # When running via actions UI or gh, github.event.inputs.strict is available at runtime
+            # via the environment variable mapping below; fail if required secrets are missing.
+            if [ $missing_required -eq 1 ]; then
+              echo "Failing: required secrets missing and strict=true"
+              exit 1
+            fi
+          fi
+        env:
+          GITHUB_EVENT_INPUTS_STRICT: ${{ github.event.inputs.strict }}
+
+      - name: Summary
+        run: |
+          echo "Validation complete. Use 'workflow_dispatch' inputs: vercel_health_url (optional), strict (true/false)."
