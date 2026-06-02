@@ -29,52 +29,38 @@ jobs:
             echo "Created runs/history.csv header (uncommitted)"
           fi
 
-      - id: append-dashboard
-        name: Append dashboard rows (all dashboard-*.csv)
+      - id: append-summary
+        name: Append history row from run-scheduled-summary.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           appended=0
-          for f in runs/dashboard-*.csv; do
-            [ -f "$f" ] || continue
-            row=$(sed -n '2p' "$f" || true)
-            if [ -z "$row" ]; then
-              echo "Skipping $f (no data row)"
-              continue
-            fi
-            # Extract generatedAt (11th column)
-            gen=$(echo "$row" | awk -F',' '{print $11}')
-            if [ -z "$gen" ]; then
-              echo "Skipping $f (missing generatedAt)"
-              continue
-            fi
-            # Avoid duplicates by generatedAt
-            if grep -Fq "$gen" runs/history.csv; then
-              echo "Skipping $f (already recorded: $gen)"
-              continue
-            fi
-            echo "$row,$(basename "$f")" >> runs/history.csv
-            appended=$((appended+1))
-          done
-          echo "appended=$appended" >> "$GITHUB_OUTPUT"
-          if [ "$appended" -gt 0 ]; then
-            echo "Rows appended: $appended (changes left uncommitted for PR creation)"
+          SUMMARY=runs/run-scheduled-summary.json
+          if [ ! -f "$SUMMARY" ]; then
+            echo "No summary file found; skipping history append."
+            echo "appended=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          node -e "const fs=require('fs'); const p=process.env.SUMMARY||'runs/run-scheduled-summary.json'; const s=JSON.parse(fs.readFileSync(p)); const results=s.results||[]; const total=results.length; const accepted=results.filter(r=>r.ok).length; const denied=results.filter(r=>!r.ok).length; const lat=results.map(r=>r.latency||0).filter(n=>typeof n==='number'); const avg=Math.round(lat.length? lat.reduce((a,b)=>a+b,0)/lat.length:0); const sorted=lat.slice().sort((a,b)=>a-b); const pct=(n,k)=>{ if(!n.length) return 0; const i=Math.floor(k*(n.length-1)); return Math.round(n[i]||0); }; const p50=pct(sorted,0.5); const p90=pct(sorted,0.9); const p99=pct(sorted,0.99); const notif=0; const totalLogs=0; const gen=new Date().toISOString(); const acceptRate=(accepted+denied)? (accepted/(accepted+denied)).toFixed(2):'0'; const row=[accepted,denied,acceptRate,total,avg,p50,p90,p99,notif,totalLogs,gen,'run-scheduled-summary.json'].join(','); fs.appendFileSync('runs/history.csv', row+"\n"); console.log('APPENDED:'+row); process.stdout.write('appended=1');" > tmp_out.txt
+          # propagate appended flag to GitHub actions
+          if grep -q '^APPENDED:' tmp_out.txt; then
+            echo "appended=1" >> "$GITHUB_OUTPUT"
           else
-            echo "No new dashboard rows appended."
+            echo "appended=0" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create PR for runs/history.csv updates
-        if: steps.append-dashboard.outputs.appended != '0'
+        if: steps.append-summary.outputs.appended == '1'
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: chore: append runs/history.csv from scheduled harness
           title: chore: update runs/history.csv (scheduled harness)
           body: |-
-            This PR was opened automatically by the scheduled harness run to append new rows to `runs/history.csv`.
+            This PR was opened automatically by the scheduled harness run to append a new row to `runs/history.csv`.
           branch: history/update-${{ github.run_id }}
-          labels: automated, runs-history
+          labels: runs-history
           delete-branch: true
 
       - name: Upload runs artifacts
