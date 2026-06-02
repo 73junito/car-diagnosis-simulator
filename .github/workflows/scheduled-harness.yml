@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   run-harness:
@@ -86,3 +87,15 @@ jobs:
             runs/vercel-raw-scheduled.txt
             runs/vercel-filtered-scheduled.json
             runs/vercel-fullfiltered-scheduled.json
+
+      - name: Dispatch append-runs-history workflow
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Triggering append-runs-history.yml workflow_dispatch"
+          curl -s -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/append-runs-history.yml/dispatches \
+            -d '{"ref":"main"}' || true
