@@ -1,0 +1,93 @@
+name: Append Runs History
+
+on:
+  push:
+    paths:
+      - 'runs/**'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  append-history:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Ensure history file
+        run: |
+          set -e
+          mkdir -p runs
+          if [ ! -f runs/history.csv ]; then
+            echo "accepted,denied,acceptRate,completed,avgDuration,p50,p90,p99,notificationAttempts,totalLogs,generatedAt,source" > runs/history.csv
+            # Leave the new file uncommitted; if appends occur later the
+            # create-pull-request step will commit the header and appended rows
+            echo "Created runs/history.csv header (uncommitted)"
+          fi
+
+      - id: append-dashboard
+        name: Append dashboard rows (all dashboard-*.csv)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          appended=0
+          for f in runs/dashboard-*.csv; do
+            [ -f "$f" ] || continue
+            row=$(sed -n '2p' "$f" || true)
+            if [ -z "$row" ]; then
+              echo "Skipping $f (no data row)"
+              continue
+            fi
+            # Extract generatedAt (11th column)
+            gen=$(echo "$row" | awk -F',' '{print $11}')
+            if [ -z "$gen" ]; then
+              echo "Skipping $f (missing generatedAt)"
+              continue
+            fi
+            # Avoid duplicates by generatedAt
+            if grep -Fq "$gen" runs/history.csv; then
+              echo "Skipping $f (already recorded: $gen)"
+              continue
+            fi
+            echo "$row,$(basename "$f")" >> runs/history.csv
+            appended=$((appended+1))
+          done
+          echo "appended=$appended" >> "$GITHUB_OUTPUT"
+          if [ "$appended" -gt 0 ]; then
+            echo "Rows appended: $appended (changes left uncommitted for PR creation)"
+          else
+            echo "No new dashboard rows appended."
+          fi
+
+      - name: Create PR for runs/history.csv updates
+        if: steps.append-dashboard.outputs.appended != '0'
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: chore: append runs/history.csv from scheduled harness
+          title: chore: update runs/history.csv (scheduled harness)
+          body: |-
+            This PR was opened automatically by the scheduled harness run to append new rows to `runs/history.csv`.
+          branch: history/update-${{ github.run_id }}
+          labels: automated, runs-history
+          delete-branch: true
+
+      - name: Upload runs artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: runs-artifacts
+          path: |
+            runs/digest-tuned-extended.json
+            runs/plot-ready-tuned.json
+            runs/dashboard-*.csv
+            runs/combined-requests-tuned.csv
+            runs/accepted-requests-tuned.csv
+            runs/denied-requests-tuned.csv
+            runs/vercel-raw-tuned.txt
+            runs/vercel-filtered-tuned.json
+            runs/vercel-fullfiltered-tuned.json
