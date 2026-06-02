@@ -4,156 +4,156 @@
       "index": 0,
       "status": 200,
       "ok": true,
-      "latency": 279,
+      "latency": 161,
       "body": {
         "ok": true,
-        "id": "9f76eea9-5fe6-4a46-b740-97e5767117d0"
+        "id": "3707ebc3-41cc-42f9-9361-b228d29c5c0b"
       }
     },
     {
       "index": 1,
       "status": 200,
       "ok": true,
-      "latency": 254,
+      "latency": 126,
       "body": {
         "ok": true,
-        "id": "adbfac27-abb2-42ac-bb59-e9a0f203c6a0"
+        "id": "fe116add-9a97-4b4b-b5a1-5f79cdd1bdf5"
       }
     },
     {
       "index": 2,
       "status": 200,
       "ok": true,
-      "latency": 280,
+      "latency": 145,
       "body": {
         "ok": true,
-        "id": "7e9c1793-88a0-42a5-8319-22dc6312b429"
+        "id": "a91ebeb3-d8ce-4eec-9078-12fee69f2047"
       }
     },
     {
       "index": 3,
       "status": 200,
       "ok": true,
-      "latency": 111,
+      "latency": 29,
       "body": {
         "ok": true,
-        "id": "9457e0e4-0c2b-481b-b266-a1ecc3385961"
+        "id": "f2c39ff9-d210-4708-9a85-91b98dab0e64"
       }
     },
     {
       "index": 4,
       "status": 200,
       "ok": true,
-      "latency": 114,
+      "latency": 32,
       "body": {
         "ok": true,
-        "id": "7588c41f-a5d0-46bb-ad07-2a229317c3dd"
+        "id": "3f6578ba-fa99-4b9d-a3ad-995d76d20c94"
       }
     },
     {
       "index": 5,
       "status": 200,
       "ok": true,
-      "latency": 115,
+      "latency": 25,
       "body": {
         "ok": true,
-        "id": "fc25558a-e860-414f-8be7-b487c1c62dbf"
+        "id": "2abe0a4b-7b47-4f4f-88e7-12cae1c5d988"
       }
     },
     {
       "index": 6,
       "status": 200,
       "ok": true,
-      "latency": 115,
+      "latency": 43,
       "body": {
         "ok": true,
-        "id": "c2e883e8-a6a1-4347-adc8-71067b479898"
+        "id": "5a28532f-b80c-4bdb-8d5d-661c51767fd9"
       }
     },
     {
       "index": 7,
       "status": 200,
       "ok": true,
-      "latency": 117,
+      "latency": 30,
       "body": {
         "ok": true,
-        "id": "7c51e645-1f37-438a-8c29-ea3dcf7b1a29"
+        "id": "c36ff836-c58f-4adb-b615-2ed946f9ac17"
       }
     },
     {
       "index": 8,
       "status": 200,
       "ok": true,
-      "latency": 150,
+      "latency": 31,
       "body": {
         "ok": true,
-        "id": "2ac903f0-db17-41ce-9609-b552f914699a"
+        "id": "630add0a-0b09-4dac-ab97-0d5dd537c7d2"
       }
     },
     {
       "index": 9,
       "status": 200,
       "ok": true,
-      "latency": 120,
+      "latency": 31,
       "body": {
         "ok": true,
-        "id": "97e3e3ac-78b0-4f2e-a725-296371a684cd"
+        "id": "a7bb7556-9743-4ee6-89b1-478972d0a509"
       }
     },
     {
       "index": 10,
       "status": 200,
       "ok": true,
-      "latency": 108,
+      "latency": 41,
       "body": {
         "ok": true,
-        "id": "12785479-0d72-48bd-be56-62858f704a44"
+        "id": "524c78c5-bbb0-4bbe-bff9-8b59ec02a32e"
       }
     },
     {
       "index": 11,
       "status": 200,
       "ok": true,
-      "latency": 112,
+      "latency": 42,
       "body": {
         "ok": true,
-        "id": "c6ad4bcb-48c8-4e13-bb33-d6b3f62e8aba"
+        "id": "85648cbc-46c0-4dfe-9911-6520f5411c64"
       }
     },
     {
       "index": 12,
       "status": 200,
       "ok": true,
-      "latency": 135,
+      "latency": 25,
       "body": {
         "ok": true,
-        "id": "580b30da-adbe-48e3-83e9-e721426f5c3b"
+        "id": "4d37eb6c-3bd4-4dda-bb7c-a155f7f3caf9"
       }
     },
     {
       "index": 13,
-      "status": 429,
-      "ok": false,
-      "latency": 113,
+      "status": 200,
+      "ok": true,
+      "latency": 25,
       "body": {
-        "error": "rate_limited"
+        "ok": true,
+        "id": "5c54d2c8-425d-4b4a-9bf9-20f8679877f4"
       }
     },
     {
       "index": 14,
-      "status": 200,
-      "ok": true,
-      "latency": 108,
+      "status": 429,
+      "ok": false,
+      "latency": 34,
       "body": {
-        "ok": true,
-        "id": "391b656a-7f52-42f4-9646-1fcf83d30a76"
+        "error": "rate_limited"
       }
     },
     {
       "index": 15,
       "status": 429,
       "ok": false,
-      "latency": 109,
+      "latency": 27,
       "body": {
         "error": "rate_limited"
       }
@@ -162,44 +162,44 @@
       "index": 16,
       "status": 429,
       "ok": false,
-      "latency": 107,
+      "latency": 31,
       "body": {
         "error": "rate_limited"
       }
     },
     {
       "index": 17,
-      "status": 429,
-      "ok": false,
-      "latency": 118,
+      "status": 200,
+      "ok": true,
+      "latency": 31,
       "body": {
-        "error": "rate_limited"
+        "ok": true,
+        "id": "16cc4a12-3a95-4ed5-9829-14fb6566d6ef"
       }
     },
     {
       "index": 18,
       "status": 429,
       "ok": false,
-      "latency": 109,
+      "latency": 26,
       "body": {
         "error": "rate_limited"
       }
     },
     {
       "index": 19,
-      "status": 200,
-      "ok": true,
-      "latency": 109,
+      "status": 429,
+      "ok": false,
+      "latency": 32,
       "body": {
-        "ok": true,
-        "id": "cc80ffaf-7af0-44b1-a343-72e9f4e3249b"
+        "error": "rate_limited"
       }
     },
     {
       "index": 20,
       "status": 429,
       "ok": false,
-      "latency": 106,
+      "latency": 47,
       "body": {
         "error": "rate_limited"
       }
@@ -208,7 +208,7 @@
       "index": 21,
       "status": 429,
       "ok": false,
-      "latency": 106,
+      "latency": 30,
       "body": {
         "error": "rate_limited"
       }
@@ -217,7 +217,7 @@
       "index": 22,
       "status": 429,
       "ok": false,
-      "latency": 109,
+      "latency": 26,
       "body": {
         "error": "rate_limited"
       }
@@ -226,7 +226,7 @@
       "index": 23,
       "status": 429,
       "ok": false,
-      "latency": 106,
+      "latency": 33,
       "body": {
         "error": "rate_limited"
       }
@@ -235,7 +235,7 @@
       "index": 24,
       "status": 429,
       "ok": false,
-      "latency": 106,
+      "latency": 37,
       "body": {
         "error": "rate_limited"
       }
@@ -244,7 +244,7 @@
       "index": 25,
       "status": 429,
       "ok": false,
-      "latency": 128,
+      "latency": 28,
       "body": {
         "error": "rate_limited"
       }
@@ -253,7 +253,7 @@
       "index": 26,
       "status": 429,
       "ok": false,
-      "latency": 107,
+      "latency": 26,
       "body": {
         "error": "rate_limited"
       }
@@ -262,7 +262,7 @@
       "index": 27,
       "status": 429,
       "ok": false,
-      "latency": 109,
+      "latency": 32,
       "body": {
         "error": "rate_limited"
       }
@@ -271,7 +271,7 @@
       "index": 28,
       "status": 429,
       "ok": false,
-      "latency": 110,
+      "latency": 33,
       "body": {
         "error": "rate_limited"
       }
@@ -280,7 +280,7 @@
       "index": 29,
       "status": 429,
       "ok": false,
-      "latency": 115,
+      "latency": 31,
       "body": {
         "error": "rate_limited"
       }
@@ -289,7 +289,7 @@
       "index": 30,
       "status": 429,
       "ok": false,
-      "latency": 110,
+      "latency": 31,
       "body": {
         "error": "rate_limited"
       }
@@ -298,7 +298,7 @@
       "index": 31,
       "status": 429,
       "ok": false,
-      "latency": 111,
+      "latency": 28,
       "body": {
         "error": "rate_limited"
       }
@@ -307,7 +307,7 @@
       "index": 32,
       "status": 429,
       "ok": false,
-      "latency": 109,
+      "latency": 28,
       "body": {
         "error": "rate_limited"
       }
@@ -316,7 +316,7 @@
       "index": 33,
       "status": 429,
       "ok": false,
-      "latency": 109,
+      "latency": 26,
       "body": {
         "error": "rate_limited"
       }
@@ -325,7 +325,7 @@
       "index": 34,
       "status": 429,
       "ok": false,
-      "latency": 114,
+      "latency": 41,
       "body": {
         "error": "rate_limited"
       }
@@ -334,7 +334,7 @@
       "index": 35,
       "status": 429,
       "ok": false,
-      "latency": 113,
+      "latency": 25,
       "body": {
         "error": "rate_limited"
       }
@@ -343,7 +343,7 @@
       "index": 36,
       "status": 429,
       "ok": false,
-      "latency": 107,
+      "latency": 46,
       "body": {
         "error": "rate_limited"
       }
@@ -352,7 +352,7 @@
       "index": 37,
       "status": 429,
       "ok": false,
-      "latency": 120,
+      "latency": 35,
       "body": {
         "error": "rate_limited"
       }
@@ -361,7 +361,7 @@
       "index": 38,
       "status": 429,
       "ok": false,
-      "latency": 122,
+      "latency": 28,
       "body": {
         "error": "rate_limited"
       }
@@ -370,7 +370,7 @@
       "index": 39,
       "status": 429,
       "ok": false,
-      "latency": 107,
+      "latency": 29,
       "body": {
         "error": "rate_limited"
       }
@@ -379,7 +379,7 @@
       "index": 40,
       "status": 429,
       "ok": false,
-      "latency": 107,
+      "latency": 32,
       "body": {
         "error": "rate_limited"
       }
@@ -388,7 +388,7 @@
       "index": 41,
       "status": 429,
       "ok": false,
-      "latency": 116,
+      "latency": 28,
       "body": {
         "error": "rate_limited"
       }
@@ -397,7 +397,7 @@
       "index": 42,
       "status": 429,
       "ok": false,
-      "latency": 107,
+      "latency": 31,
       "body": {
         "error": "rate_limited"
       }
@@ -406,7 +406,7 @@
       "index": 43,
       "status": 429,
       "ok": false,
-      "latency": 108,
+      "latency": 79,
       "body": {
         "error": "rate_limited"
       }
@@ -415,7 +415,7 @@
       "index": 44,
       "status": 429,
       "ok": false,
-      "latency": 109,
+      "latency": 25,
       "body": {
         "error": "rate_limited"
       }
@@ -424,7 +424,7 @@
       "index": 45,
       "status": 429,
       "ok": false,
-      "latency": 111,
+      "latency": 30,
       "body": {
         "error": "rate_limited"
       }
@@ -433,7 +433,7 @@
       "index": 46,
       "status": 429,
       "ok": false,
-      "latency": 111,
+      "latency": 26,
       "body": {
         "error": "rate_limited"
       }
@@ -442,7 +442,7 @@
       "index": 47,
       "status": 429,
       "ok": false,
-      "latency": 116,
+      "latency": 491,
       "body": {
         "error": "rate_limited"
       }
@@ -451,7 +451,7 @@
       "index": 48,
       "status": 429,
       "ok": false,
-      "latency": 106,
+      "latency": 26,
       "body": {
         "error": "rate_limited"
       }
@@ -460,7 +460,7 @@
       "index": 49,
       "status": 429,
       "ok": false,
-      "latency": 105,
+      "latency": 25,
       "body": {
         "error": "rate_limited"
       }
