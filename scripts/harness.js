@@ -20,12 +20,17 @@ const count = parseInt(args.count || '10', 10);
 const mode = args.mode || 'normal';
 const verify = args.verify === 'true' || args.verify === '1';
 const outPath = args.export || `runs/run-${Date.now()}.json`;
-const baseUrl = args.url || process.env.TARGET_URL || process.env.PREVIEW_URL;
+let baseUrl = args.url || process.env.TARGET_URL || process.env.PREVIEW_URL;
+if (baseUrl && typeof baseUrl === 'string') baseUrl = baseUrl.trim();
 const concurrency = parseInt(args.concurrency || args.concur || '5', 10);
 const rate = args.rate ? parseFloat(args.rate) : null; // requests per second
 
 if (!baseUrl) {
   console.error('Error: target URL not specified. Use --url or set TARGET_URL/PREVIEW_URL env.');
+  process.exit(2);
+}
+if (!/^https?:\/\//i.test(baseUrl)) {
+  console.error('Error: target URL must include protocol (http:// or https://).');
   process.exit(2);
 }
 
