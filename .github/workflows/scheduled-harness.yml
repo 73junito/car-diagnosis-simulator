@@ -1,0 +1,81 @@
+name: Scheduled Harness Run
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # daily at 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  run-harness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install deps
+        run: |
+          npm ci
+
+      - name: Check HARNESS_URL secret
+        run: |
+          if [ -z "${{ secrets.HARNESS_URL }}" ]; then
+            echo "Error: HARNESS_URL secret is not set. Add it in Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Run harness
+        env:
+          HARNESS_URL: ${{ secrets.HARNESS_URL }}
+        run: |
+          mkdir -p runs
+          node scripts/harness.js --count 50 --concurrency 3 --rate 10 --export runs/run-scheduled-latest.json --url "$HARNESS_URL"
+
+      - name: Fetch Vercel logs (optional)
+        if: ${{ secrets.VERCEL_TOKEN != '' }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          HARNESS_URL: ${{ secrets.HARNESS_URL }}
+        run: |
+          npx vercel logs "$HARNESS_URL" --since 1h --json --limit 1000 > runs/vercel-raw-scheduled.txt || true
+
+      - name: Post-process run export
+        run: |
+          node -e "const fs=require('fs'); const pRun='runs/run-scheduled-latest.json'; if(fs.existsSync(pRun)){ const run=JSON.parse(fs.readFileSync(pRun)); fs.writeFileSync('runs/run-scheduled-summary.json', JSON.stringify({results:run.results||[],count:(run.results||[]).length},null,2)); } else { console.log('no run export found'); }"
+
+      - name: Generate artifacts from logs and run export (if present)
+        run: |
+          node -e "const fs=require('fs'); const raw='runs/vercel-raw-scheduled.txt'; const outDigest='runs/digest-scheduled.json'; const outExt='runs/digest-scheduled-extended.json'; if(fs.existsSync(raw)){ const lines=fs.readFileSync(raw,'utf8').trim().split(/\r?\n/).filter(Boolean); let allowed=0,denied=0,completed=0,totalDuration=0,notifAttempts=0; lines.forEach(line=>{ try{ const obj=JSON.parse(line); if(Array.isArray(obj.logs)){ obj.logs.forEach(l=>{ try{ const m=JSON.parse(l.message); if(m.event==='stateless_decision'){ if(m.allowed) allowed++; else denied++; } if(m.event==='request_completed'){ completed++; totalDuration+=(m.durationMs||0); } if(m.event==='notification_attempt'){ notifAttempts++; } }catch(e){} }); } }catch(e){} }); const digest={lines:lines.length,allowed,denied,completed,avgDuration: completed? (totalDuration/completed):0,notifAttempts}; fs.writeFileSync(outDigest,JSON.stringify(digest,null,2)); let eventCounts={},severityTop={},severityInner={},totalLogs=0,responseStatusDist={}; let map=new Map(); const durations=[]; lines.forEach(line=>{ try{ const obj=JSON.parse(line); severityTop[obj.level || 'unknown']=(severityTop[obj.level || 'unknown']||0)+1; if(obj.responseStatusCode) responseStatusDist[obj.responseStatusCode]=(responseStatusDist[obj.responseStatusCode]||0)+1; if(Array.isArray(obj.logs)){ totalLogs+=obj.logs.length; obj.logs.forEach(l=>{ try{ const m=JSON.parse(l.message); eventCounts[m.event]=(eventCounts[m.event]||0)+1; severityInner[l.level || 'unknown']=(severityInner[l.level || 'unknown']||0)+1; if(m.requestId){ const rid=m.requestId; const rec=map.get(rid) || {requestId:rid,allowed:null,durationMs:null,notificationAttempts:0,timestamp:null,responseStatusCode:null}; if(m.event==='stateless_decision'){ rec.allowed=!!m.allowed; } if(m.event==='request_completed'){ if(typeof m.durationMs==='number') rec.durationMs=m.durationMs; rec.timestamp=(m.ts||rec.timestamp); if(typeof m.durationMs==='number') durations.push(m.durationMs); } if(m.event==='notification_attempt'){ rec.notificationAttempts=(rec.notificationAttempts||0)+1; } map.set(rid,rec); } }catch(e){} }); } if(obj.logs && obj.logs.length){ let rid=null; for(const l of obj.logs){ try{ const m=JSON.parse(l.message); if(m.requestId){ rid=m.requestId; break;} }catch(e){} } if(rid){ const rec=map.get(rid) || {requestId:rid,allowed:null,durationMs:null,notificationAttempts:0,timestamp:null,responseStatusCode:null}; rec.responseStatusCode = obj.responseStatusCode || rec.responseStatusCode; if(obj.timestamp) rec.timestamp = obj.timestamp || rec.timestamp; map.set(rid,rec); } } }catch(e){} }); const arr=Array.from(map.values()); const allowedCount=arr.filter(r=>r.allowed).length; const deniedCount=arr.filter(r=>r.allowed===false).length; const completedCount=arr.filter(r=>r.durationMs!=null).length; const avgDuration= completedCount? (arr.filter(r=>r.durationMs!=null).reduce((s,r)=>s+(r.durationMs||0),0)/completedCount):0; durations.sort((a,b)=>a-b); function pct(p){ if(durations.length===0) return null; const idx=Math.ceil(p/100*durations.length)-1; return durations[Math.max(0,Math.min(durations.length-1,idx))]; } const percentiles={p50:pct(50),p90:pct(90),p99:pct(99)}; const ext={lines:lines.length,allowed:allowedCount,denied:deniedCount,completed:completedCount,avgDuration,notifAttempts:eventCounts['notification_attempt']||0,eventCounts,severityTop,severityInner,responseStatusDist,percentiles,totalLogs}; fs.writeFileSync(outExt,JSON.stringify(ext,null,2)); const acceptedCsv=['requestId,allowed,durationMs,notificationAttempts']; arr.filter(r=>r.allowed).forEach(r=>{ acceptedCsv.push([r.requestId,r.allowed,(r.durationMs==null?'':r.durationMs),r.notificationAttempts||0].join(',')); }); fs.writeFileSync('runs/accepted-requests-scheduled.csv',acceptedCsv.join('\n')); const deniedCsv=['requestId,allowed,durationMs,notificationAttempts,timestamp,responseStatusCode']; arr.filter(r=>r.allowed===false).forEach(r=>{ deniedCsv.push([r.requestId,false,(r.durationMs==null?'':r.durationMs),(r.notificationAttempts||0),(r.timestamp||''),(r.responseStatusCode||'')].join(',')); }); fs.writeFileSync('runs/denied-requests-scheduled.csv',deniedCsv.join('\n')); const combined=['requestId,status,allowed,durationMs,notificationAttempts,timestamp,responseStatusCode']; arr.forEach(r=>{ combined.push([r.requestId,(r.allowed? 'accepted':'denied'),r.allowed,r.durationMs||'',r.notificationAttempts||0,r.timestamp||'',r.responseStatusCode||''].join(',')); }); fs.writeFileSync('runs/combined-requests-scheduled.csv',combined.join('\n')); const plot={totalRequests:lines.length,accepted:allowedCount,denied:deniedCount,acceptRate: lines.length?allowedCount/lines.length:0,completed:completedCount,avgDuration,percentiles,eventCounts,responseStatus:responseStatusDist,notificationAttempts:eventCounts['notification_attempt']||0,totalLogs}; fs.writeFileSync('runs/plot-ready-scheduled.json',JSON.stringify(plot,null,2)); fs.writeFileSync('runs/dashboard-scheduled.csv',[['accepted','denied','acceptRate','completed','avgDuration','p50','p90','p99','notificationAttempts','totalLogs','generatedAt'].join(','),[plot.accepted,plot.denied,plot.acceptRate,plot.completed,plot.avgDuration,plot.percentiles.p50,plot.percentiles.p90,plot.percentiles.p99,plot.notificationAttempts,plot.totalLogs,new Date().toISOString()].join(',')].join('\n')); } else { console.log('No vercel raw logs present; skipping log-derived artifacts'); }"
+
+      - name: Commit runs artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add runs || true
+          git commit -m "chore: add scheduled harness run artifacts" || echo "no changes to commit"
+          git push || true
+
+      - name: Upload runs artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: runs-artifacts
+          path: |
+            runs/digest-scheduled.json
+            runs/digest-scheduled-extended.json
+            runs/plot-ready-scheduled.json
+            runs/dashboard-scheduled.csv
+            runs/combined-requests-scheduled.csv
+            runs/accepted-requests-scheduled.csv
+            runs/denied-requests-scheduled.csv
+            runs/vercel-raw-scheduled.txt
+            runs/vercel-filtered-scheduled.json
+            runs/vercel-fullfiltered-scheduled.json
