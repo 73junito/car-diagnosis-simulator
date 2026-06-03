@@ -20,29 +20,32 @@
     "lint": "eslint . --ext .js"
   },
   "devDependencies": {
-    "acorn": "^8.10.0",
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
+    "@playwright/test": "^1.60.0",
+    "acorn": "^8.10.0",
+    "adm-zip": "^0.5.9",
     "ajv": "^8.20.0",
     "babel-jest": "^30.4.1",
-    "express": "^5.2.1",
-    "jest": "^30.4.2",
-    "jest-environment-jsdom": "^30.4.1",
-    "supertest": "^7.2.2",
-    "eslint": "^8.56.0",
-    "undici": "^6.24.0",
     "cross-env": "^7.0.3",
-    "jest-junit": "^17.0.0",
+    "eslint": "^8.56.0",
+    "express": "^5.2.1",
     "fast-xml-parser": "^5.8.0",
+    "jest": "^30.4.2",
     "jest-circus": "^30.4.2",
-    "adm-zip": "^0.5.9",
+    "jest-environment-jsdom": "^30.4.1",
+    "jest-junit": "^17.0.0",
+    "nock": "^14.0.15",
     "node-fetch": "^3.3.2",
-    "nock": "^14.0.15"
+    "supertest": "^7.2.2",
+    "undici": "^6.24.0"
   },
   "jest": {
     "testTimeout": 30000,
     "testRunner": "jest-circus/runner",
-    "setupFilesAfterEnv": ["<rootDir>/scripts/jest-setup-retries.js"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/scripts/jest-setup-retries.js"
+    ],
     "reporters": [
       "default",
       [
