@@ -203,7 +203,13 @@
           const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = 'No scenarios match your filters.';
           container.appendChild(empty);
         } else {
-          shown.forEach(s => container.appendChild(createCard(s)));
+          shown.forEach(s => {
+            try{
+              container.appendChild(createCard(s));
+            }catch(e){
+              console.error('createCard failed for', s && s.id, e && e.message);
+            }
+          });
         }
         if(countEl) countEl.textContent = `Showing ${shown.length} of ${total} scenarios`;
         // update progress summary and resume button

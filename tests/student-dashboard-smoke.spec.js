@@ -10,7 +10,9 @@ test.describe('Student dashboard smoke', ()=>{
     const page = await context.newPage();
 
     const consoleErrors = [];
+    const consoleMessages = [];
     page.on('console', msg => {
+      consoleMessages.push({ type: msg.type(), text: msg.text() });
       if(msg.type() === 'error') consoleErrors.push(msg.text());
     });
 
@@ -23,12 +25,48 @@ test.describe('Student dashboard smoke', ()=>{
     });
 
     // Desktop: open page served by local static server so absolute paths resolve
-    await page.goto('http://127.0.0.1:3001/dashboard/student.html');
+    // prefer explicit BASE_URL, otherwise default to local server started for tests
+    const base = process.env.BASE_URL || 'http://127.0.0.1:3003';
+    await page.goto(`${base}/dashboard/student.html`);
     await page.waitForLoadState('networkidle');
+
+    // Ensure a clean UI state: clear persisted progress and filter inputs to avoid cross-test leakage
+    await page.evaluate(()=>{
+      try{ localStorage.removeItem('student_progress'); localStorage.removeItem('last_scenario'); }catch(e){}
+      try{ const s=document.getElementById('searchInput'); if(s) { s.value=''; s.dispatchEvent(new Event('input')); } ['filterCategory','filterDifficulty','filterAse'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value='all'; }); }catch(e){}
+    });
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    // debug: log registry length and sample ids
+    await page.evaluate(()=>{ console.log('REGISTRY LENGTH', (window.SCENARIO_REGISTRY||[]).length, JSON.stringify(((window.SCENARIO_REGISTRY||[]).slice(0,10)||[]).map(s=>s.id))); });
 
     // 17 cards render on desktop
     await page.waitForSelector('#scenarioGrid');
+    // debug: output active filters and which IDs are shown
+    await page.evaluate(()=>{
+      try{
+        const filters = (typeof getFilters==='function') ? getFilters() : { q: (document.getElementById('searchInput')||{}).value||'', category: (document.getElementById('filterCategory')||{}).value||'all', difficulty: (document.getElementById('filterDifficulty')||{}).value||'all', ase: (document.getElementById('filterAse')||{}).value||'all' };
+        const registry = (window.SCENARIO_REGISTRY||[]).slice(0,17);
+        const shown = (typeof matchesFilter==='function') ? registry.filter(s=>matchesFilter(s, filters)) : registry.filter(s=>{
+          if(filters.category && filters.category !== 'all'){
+            if(String((s.category||'')).toLowerCase() !== String(filters.category).toLowerCase()) return false;
+          }
+          if(filters.difficulty && filters.difficulty !== 'all'){
+            if(String((s.difficulty||'')).toLowerCase() !== String(filters.difficulty).toLowerCase()) return false;
+          }
+          if(filters.ase && filters.ase !== 'all'){
+            if(String((s.aseArea||'')).toLowerCase() !== String(filters.ase).toLowerCase()) return false;
+          }
+          if(filters.q && filters.q.trim() !== ''){ const q = filters.q.trim().toLowerCase(); const hay = ((s.title||'') + ' ' + (s.shortSymptom||'') + ' ' + (s.id||'')).toLowerCase(); if(!hay.includes(q)) return false; }
+          return true;
+        });
+        console.log('ACTIVE FILTERS', JSON.stringify(filters));
+        console.log('SHOWN IDS', JSON.stringify(shown.map(s=>s.id)));
+      }catch(e){ console.log('filter-debug-error', String(e)); }
+    });
     const cards = await page.$$('#scenarioGrid .sd-card');
+    console.log('INITIAL CARDS COUNT', cards.length);
     expect(cards.length).toBe(17);
 
     // Mobile viewport: no horizontal overflow at 390px
@@ -53,6 +91,12 @@ test.describe('Student dashboard smoke', ()=>{
     const gridChildCount = await page.evaluate(()=>{ const el = document.getElementById('scenarioGrid'); return el ? el.childElementCount : 0; });
     console.log('CARD COUNT after manual renderer:', cardCountAfter);
     console.log('scenarioGrid child count:', gridChildCount);
+      await page.evaluate(()=>{
+        try{
+          const cards = Array.from(document.querySelectorAll('#scenarioGrid .sd-card')).map(c=>({ title: (c.querySelector('.sd-card-title')||{}).textContent, img: (c.querySelector('img')||{}).src }));
+          console.log('DOM CARDS', JSON.stringify(cards));
+        }catch(e){ console.log('dom-cards-error', String(e)); }
+      });
     expect(cardCountAfter).toBeGreaterThan(0);
     const firstCard = await page.$('#scenarioGrid .sd-card');
     expect(firstCard).toBeTruthy();
@@ -88,6 +132,7 @@ test.describe('Student dashboard smoke', ()=>{
 
     // ensure no console errors and no unexpected 404s (now including scenario images)
     if(consoleErrors.length) console.log('Console errors (raw):', consoleErrors.slice(0,20));
+    if(consoleMessages.length) console.log('Console messages (raw):', JSON.stringify(consoleMessages.slice(0,40), null, 2));
     if(badResponses.length) console.log('Bad responses (404 raw):', JSON.stringify(badResponses.slice(0,40), null, 2));
     // filter out unrelated load-resource console messages
     const filteredConsoleErrors = consoleErrors.filter(e => !e.includes('Failed to load resource'));
