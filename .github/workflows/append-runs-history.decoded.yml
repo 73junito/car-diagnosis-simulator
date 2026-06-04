@@ -1,15 +1,11 @@
 name: Append Runs History
 
-# workflow-dispatch enabled for programmatic triggers
-# reindex-stamp: 2026-06-01T00:00:00Z (force workflow re-index)
+# Allow manual and API-triggered dispatches (required for REST dispatch)
 on:
   push:
     paths:
       - 'runs/**'
   workflow_dispatch: {}
-  repository_dispatch:
-    types:
-      - append-history
 
 permissions:
   contents: write
