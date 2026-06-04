@@ -1,0 +1,93 @@
+{
+  "normalized": 17,
+  "placeholderUsed": 0,
+  "missing": 0,
+  "total": 17,
+  "mappings": [
+    {
+      "id": "no-crank",
+      "status": "exists",
+      "file": "no-crank.svg"
+    },
+    {
+      "id": "no-start",
+      "status": "exists",
+      "file": "no-start.svg"
+    },
+    {
+      "id": "overheating",
+      "status": "exists",
+      "file": "overheating.svg"
+    },
+    {
+      "id": "electrical-load",
+      "status": "exists",
+      "file": "electrical-load.svg"
+    },
+    {
+      "id": "misfire",
+      "status": "exists",
+      "file": "misfire.svg"
+    },
+    {
+      "id": "steering-alignment",
+      "status": "exists",
+      "file": "steering-alignment.svg"
+    },
+    {
+      "id": "hvac-cooling",
+      "status": "exists",
+      "file": "hvac-cooling.svg"
+    },
+    {
+      "id": "stalling",
+      "status": "exists",
+      "file": "stalling.svg"
+    },
+    {
+      "id": "misfire-9",
+      "status": "exists",
+      "file": "misfire-9.svg"
+    },
+    {
+      "id": "power-loss",
+      "status": "exists",
+      "file": "power-loss.svg"
+    },
+    {
+      "id": "no-crank-11",
+      "status": "exists",
+      "file": "no-crank-11.svg"
+    },
+    {
+      "id": "intermittent-starting",
+      "status": "exists",
+      "file": "intermittent-starting.svg"
+    },
+    {
+      "id": "charging-system",
+      "status": "exists",
+      "file": "charging-system.svg"
+    },
+    {
+      "id": "can-bus-network",
+      "status": "exists",
+      "file": "can-bus-network.svg"
+    },
+    {
+      "id": "hybrid-ev",
+      "status": "exists",
+      "file": "hybrid-ev.svg"
+    },
+    {
+      "id": "diesel-aftertreatment",
+      "status": "exists",
+      "file": "diesel-aftertreatment.svg"
+    },
+    {
+      "id": "hybrid-ev-17",
+      "status": "exists",
+      "file": "hybrid-ev-17.svg"
+    }
+  ]
+}
