@@ -17,20 +17,24 @@
     "export:analytics": "npm run export:csv && npm run export:xapi",
     "test:analytics-api": "node tests/analytics-api.test.js",
     "test:analytics-routes": "node tests/analytics-routes.test.js",
-    "lint": "eslint . --ext .js"
-    ,"normalize-assets":"node scripts/normalize-scenario-assets.js"
+    "lint": "eslint . --ext .js",
+    "normalize-assets": "node scripts/normalize-scenario-assets.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
     "@playwright/test": "^1.60.0",
+    "@supabase/supabase-js": "^2.107.0",
     "acorn": "^8.10.0",
     "adm-zip": "^0.5.9",
     "ajv": "^8.20.0",
     "babel-jest": "^30.4.1",
+    "cors": "^2.8.6",
     "cross-env": "^7.0.3",
+    "dotenv": "^17.4.2",
     "eslint": "^8.56.0",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
     "fast-xml-parser": "^5.8.0",
     "jest": "^30.4.2",
     "jest-circus": "^30.4.2",
@@ -39,8 +43,8 @@
     "nock": "^14.0.15",
     "node-fetch": "^3.3.2",
     "supertest": "^7.2.2",
-    "undici": "^6.24.0"
-    ,"wait-on": "^7.0.1"
+    "undici": "^6.24.0",
+    "wait-on": "^7.0.1"
   },
   "jest": {
     "testTimeout": 30000,
