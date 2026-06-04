@@ -1,4 +1,5 @@
 const { test, expect } = require('@playwright/test');
+/* global getFilters, matchesFilter */
 // (no local file helper needed when serving via HTTP)
 
 // Allowed 404 patterns (analytics endpoints intentionally excluded)
@@ -32,8 +33,8 @@ test.describe('Student dashboard smoke', ()=>{
 
     // Ensure a clean UI state: clear persisted progress and filter inputs to avoid cross-test leakage
     await page.evaluate(()=>{
-      try{ localStorage.removeItem('student_progress'); localStorage.removeItem('last_scenario'); }catch(e){}
-      try{ const s=document.getElementById('searchInput'); if(s) { s.value=''; s.dispatchEvent(new Event('input')); } ['filterCategory','filterDifficulty','filterAse'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value='all'; }); }catch(e){}
+      try{ localStorage.removeItem('student_progress'); localStorage.removeItem('last_scenario'); }catch(err){ void err; }
+      try{ const s=document.getElementById('searchInput'); if(s) { s.value=''; s.dispatchEvent(new Event('input')); } ['filterCategory','filterDifficulty','filterAse'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value='all'; }); }catch(err){ void err; }
     });
     await page.reload();
     await page.waitForLoadState('networkidle');
