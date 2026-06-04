@@ -9,6 +9,44 @@
 <body>
   <main class="wrapper">
     <h1>Student Scenario Dashboard</h1>
+    <p class="page-subtitle">Select a diagnostic scenario to begin training or assessment.</p>
+
+    <div class="filters" id="scenarioFilters" aria-label="Scenario filters">
+      <div class="filter-item">
+        <label for="searchInput" class="filter-label">Search</label>
+        <input id="searchInput" class="filter-input" type="search" placeholder="Search by scenario name or symptom">
+      </div>
+      <div class="filter-item">
+        <label for="filterCategory" class="filter-label">Category</label>
+        <select id="filterCategory" class="filter-input">
+          <option value="all">All</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label for="filterDifficulty" class="filter-label">Difficulty</label>
+        <select id="filterDifficulty" class="filter-input">
+          <option value="all">All</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+      <div class="filter-item">
+        <label for="filterAse" class="filter-label">ASE Area</label>
+        <select id="filterAse" class="filter-input">
+          <option value="all">All</option>
+        </select>
+      </div>
+      <div class="filter-count" id="filterCount" aria-live="polite">Showing 0 of 0 scenarios</div>
+    </div>
+
+    <div class="progress-controls">
+      <div class="progress-summary" id="progressSummary">Completed: 0 / 17 • In Progress: 0</div>
+      <div class="progress-actions">
+        <button id="btnResume" class="btn btn-primary" style="display:none">Resume Last Scenario</button>
+        <button id="btnReset" class="btn btn-ghost">Reset Progress</button>
+      </div>
+    </div>
 
     <div class="dashboard-map" id="dashboardMap">
       <img id="mapImg" src="/assets/images/dashboard/scenario-dashboard.png" alt="Scenario dashboard map">
@@ -33,6 +71,12 @@
       <button class="hotspot hs-17" data-scenario="hybrid-ev-insulation" aria-label="hybrid-ev-insulation"></button>
     </div>
 
+    <!-- Scenario grid rendered from registry (keeps the screenshot map as visual header) -->
+    <section id="scenarioGridSection" class="scenario-grid-section">
+      <h2 class="visually-hidden">Available Scenarios</h2>
+      <div id="scenarioGrid" class="scenario-grid" aria-live="polite"></div>
+    </section>
+
     <aside id="detail" class="detail hidden" aria-live="polite">
       <button id="backBtn" class="back">Back to dashboard</button>
       <h2 id="detailTitle"></h2>
@@ -48,6 +92,146 @@
   </main>
 
   <script src="/data/scenarios.js"></script>
+  <script src="/data/scenario-registry.js"></script>
+  <script src="/dashboard/student-progress.js"></script>
   <script src="/dashboard/student.js" defer></script>
+  <script>
+    // render full scenario grid on student dashboard using SCENARIO_REGISTRY
+    (function(){
+      function createCard(s){
+        const card = document.createElement('article'); card.className = 'sd-card';
+        card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
+
+        const img = document.createElement('img'); img.className = 'sd-card-img'; img.alt = s.title || '';
+        img.src = s.image;
+
+        const body = document.createElement('div'); body.className = 'sd-card-body';
+        const title = document.createElement('h3'); title.className = 'sd-card-title'; title.textContent = s.title || s.id;
+        const meta = document.createElement('div'); meta.className = 'sd-card-meta'; meta.textContent = `${s.category || ''} • ${s.difficulty || ''}`;
+        const p = document.createElement('p'); p.className = 'sd-card-text'; p.textContent = s.shortSymptom || '';
+
+        body.appendChild(title); body.appendChild(meta); body.appendChild(p);
+
+        const footer = document.createElement('div'); footer.className = 'sd-card-footer';
+        const btn = document.createElement('a'); btn.className = 'btn btn-secondary'; btn.href = s.route || '#'; btn.textContent = 'Start';
+        // status badge
+        const badge = document.createElement('span'); badge.className = 'sd-badge';
+        const progressEntry = (window.studentProgress && window.studentProgress.getProgressFor) ? window.studentProgress.getProgressFor(s.id) : null;
+        if(progressEntry && progressEntry.status){ badge.textContent = progressEntry.status.replace('-', ' '); }
+        else badge.textContent = 'Not Started';
+        badge.classList.add('badge--status');
+        footer.appendChild(badge);
+        footer.appendChild(btn);
+
+        card.appendChild(img); card.appendChild(body); card.appendChild(footer);
+
+        // interactions (use hash navigation in test env to avoid jsdom navigation errors)
+        function activate(){
+          try{
+            if(window.studentProgress && window.studentProgress.setLastScenario){ window.studentProgress.setLastScenario(s.id); }
+            if(window.studentProgress && window.studentProgress.setProgressFor){ window.studentProgress.setProgressFor(s.id,'in-progress'); }
+          }catch(e){}
+          if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) {
+            window.location.hash = btn.getAttribute('href');
+          } else {
+            window.location.href = btn.href;
+          }
+        }
+        card.addEventListener('click', activate);
+        card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); activate(); } });
+
+        return card;
+      }
+
+      function getFilters(){
+        return {
+          q: (document.getElementById('searchInput') || {}).value || '',
+          category: (document.getElementById('filterCategory') || {}).value || 'all',
+          difficulty: (document.getElementById('filterDifficulty') || {}).value || 'all',
+          ase: (document.getElementById('filterAse') || {}).value || 'all'
+        };
+      }
+
+      function populateFilterOptions(registry){
+        const cat = document.getElementById('filterCategory');
+        const ase = document.getElementById('filterAse');
+        if(!cat || !ase) return;
+        const cats = new Set(); const ases = new Set();
+        registry.forEach(s => { if(s.category) cats.add(s.category); if(s.aseArea) ases.add(s.aseArea); });
+        Array.from(cats).sort().forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c.replace(/[-_]/g,' '); cat.appendChild(o); });
+        Array.from(ases).sort().forEach(a => { const o = document.createElement('option'); o.value = a; o.textContent = a; ase.appendChild(o); });
+      }
+
+      function matchesFilter(s, filters){
+        if(!s) return false;
+        if(filters.category && filters.category !== 'all'){
+          if(String((s.category||'')).toLowerCase() !== String(filters.category).toLowerCase()) return false;
+        }
+        if(filters.difficulty && filters.difficulty !== 'all'){
+          if(String((s.difficulty||'')).toLowerCase() !== String(filters.difficulty).toLowerCase()) return false;
+        }
+        if(filters.ase && filters.ase !== 'all'){
+          if(String((s.aseArea||'')).toLowerCase() !== String(filters.ase).toLowerCase()) return false;
+        }
+        if(filters.q && filters.q.trim() !== ''){
+          const q = filters.q.trim().toLowerCase();
+          const hay = ((s.title||'') + ' ' + (s.shortSymptom||'') + ' ' + (s.id||'')).toLowerCase();
+          if(!hay.includes(q)) return false;
+        }
+        return true;
+      }
+
+      function renderGrid(){
+        const container = document.getElementById('scenarioGrid');
+        const countEl = document.getElementById('filterCount');
+        if(!container) return;
+        container.innerHTML = '';
+        const registry = (window.SCENARIO_REGISTRY || []).slice(0,17);
+        // populate filter selects once
+        populateFilterOptions(registry);
+        const filters = getFilters();
+        const total = registry.length;
+        const shown = registry.filter(s => matchesFilter(s, filters));
+        if(shown.length === 0){
+          const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = 'No scenarios match your filters.';
+          container.appendChild(empty);
+        } else {
+          shown.forEach(s => container.appendChild(createCard(s)));
+        }
+        if(countEl) countEl.textContent = `Showing ${shown.length} of ${total} scenarios`;
+        // update progress summary and resume button
+        const summaryEl = document.getElementById('progressSummary');
+        const resumeBtn = document.getElementById('btnResume');
+        const resetBtn = document.getElementById('btnReset');
+        const progress = (window.studentProgress && window.studentProgress.loadProgress) ? window.studentProgress.loadProgress() : {};
+        const completed = Object.values(progress).filter(p=>p.status==='completed').length;
+        const inProgress = Object.values(progress).filter(p=>p.status==='in-progress').length;
+        if(summaryEl) summaryEl.textContent = `Completed: ${completed} / ${total} • In Progress: ${inProgress}`;
+        const last = (window.studentProgress && window.studentProgress.getLastScenario) ? window.studentProgress.getLastScenario() : null;
+        if(resumeBtn){
+          if(last && last.id){ resumeBtn.style.display='inline-block'; resumeBtn.dataset.scenario = last.id; }
+          else resumeBtn.style.display='none';
+        }
+        if(resetBtn){
+          resetBtn.onclick = ()=>{
+            const ok = window.confirm('Reset all progress? This cannot be undone.');
+            if(!ok) return;
+            if(window.studentProgress && window.studentProgress.clearProgress) window.studentProgress.clearProgress();
+            renderGrid();
+          };
+        }
+        if(resumeBtn){ resumeBtn.onclick = ()=>{ const id = resumeBtn.dataset.scenario; const found = (window.SCENARIO_REGISTRY||[]).find(x=>x.id===id); if(found){ if(window.studentProgress && window.studentProgress.setProgressFor) window.studentProgress.setProgressFor(id,'in-progress'); if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID){ window.location.hash = found.route; } else { window.location.href = found.route; } } } }
+      }
+
+      function attachFilterHandlers(){
+        const inputs = ['searchInput','filterCategory','filterDifficulty','filterAse'];
+        inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderGrid); el.addEventListener('change', renderGrid); });
+      }
+
+      // render once registry is available
+      if(window.SCENARIO_REGISTRY){ renderGrid(); attachFilterHandlers(); }
+      else document.addEventListener('DOMContentLoaded', ()=>{ renderGrid(); attachFilterHandlers(); });
+    })();
+  </script>
 </body>
 </html>
