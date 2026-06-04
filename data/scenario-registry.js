@@ -17,6 +17,13 @@
   }
 
   const src = window.scenarios || [];
+  // Helper: resolveScenarioImage ensures a non-empty image path. At runtime, images that 404 will
+  // be replaced by the placeholder via `onerror` handler in the renderer. This function guarantees
+  // the registry always has a string path to an image.
+  function resolveScenarioImage(path) {
+    if (path && typeof path === 'string' && path.trim()) return path;
+    return '/assets/images/scenarios/placeholder-scenario.svg';
+  }
   const seen = new Set();
   const registry = src.map(s => {
     let slug = s.slug || slugify(s.symptomCategory || s.symptoms || s.fault || s.id);
@@ -32,7 +39,7 @@
     const estimatedTime = s.timeLimit ? Math.ceil(s.timeLimit/60) + ' min' : (s.estimatedTime || '10-20 min');
     const aseArea = s.aseArea || '';
     const category = s.symptomCategory || s.primarySystem || '';
-    const image = `/assets/images/scenarios/${slug}.svg`;
+    const image = resolveScenarioImage(`/assets/images/scenarios/${slug}.svg`);
     const routeBase = chooseRoute(s);
     const route = routeBase + encodeURIComponent(slug);
     return {
