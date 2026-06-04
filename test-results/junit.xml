@@ -1,51 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="21" failures="0" errors="0" time="1.092">
-  <testsuite name="Student dashboard filters" errors="0" failures="0" skipped="0" timestamp="2026-06-03T20:32:20" time="0.512" tests="10">
-    <testcase classname="Student dashboard filters initially renders 17 cards" name="Student dashboard filters initially renders 17 cards" time="0.034">
-    </testcase>
-    <testcase classname="Student dashboard filters search filter reduces results correctly" name="Student dashboard filters search filter reduces results correctly" time="0.015">
-    </testcase>
-    <testcase classname="Student dashboard filters category filter updates card count" name="Student dashboard filters category filter updates card count" time="0.011">
-    </testcase>
-    <testcase classname="Student dashboard filters difficulty filter works independently" name="Student dashboard filters difficulty filter works independently" time="0.011">
-    </testcase>
-    <testcase classname="Student dashboard filters combined filters work together" name="Student dashboard filters combined filters work together" time="0.01">
-    </testcase>
-    <testcase classname="Student dashboard filters ASE filter works or gracefully ignores missing ASE metadata" name="Student dashboard filters ASE filter works or gracefully ignores missing ASE metadata" time="0.008">
-    </testcase>
-    <testcase classname="Student dashboard filters result counter updates correctly and empty state appears when 0 results" name="Student dashboard filters result counter updates correctly and empty state appears when 0 results" time="0.008">
-    </testcase>
-    <testcase classname="Student dashboard filters clearing filters restores all 17 cards" name="Student dashboard filters clearing filters restores all 17 cards" time="0.011">
-    </testcase>
-    <testcase classname="Student dashboard filters keyboard accessibility still works after filtering" name="Student dashboard filters keyboard accessibility still works after filtering" time="0.017">
-    </testcase>
-    <testcase classname="Student dashboard filters rapid typing does not duplicate cards or leak DOM nodes" name="Student dashboard filters rapid typing does not duplicate cards or leak DOM nodes" time="0.018">
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="0.971">
+  <testsuite name="scenario asset normalizer" errors="0" failures="0" skipped="0" timestamp="2026-06-04T01:19:03" time="0.502" tests="1">
+    <testcase classname="scenario asset normalizer normalizer runs and report matches registry length" name="scenario asset normalizer normalizer runs and report matches registry length" time="0.072">
     </testcase>
   </testsuite>
-  <testsuite name="Student progress persistence and UI" errors="0" failures="0" skipped="0" timestamp="2026-06-03T20:32:20" time="0.087" tests="7">
-    <testcase classname="Student progress persistence and UI empty localStorage initialization" name="Student progress persistence and UI empty localStorage initialization" time="0.006">
+  <testsuite name="scenario asset normalization" errors="0" failures="0" skipped="0" timestamp="2026-06-04T01:19:04" time="0.048" tests="2">
+    <testcase classname="scenario asset normalization all registry entries have a non-empty image path" name="scenario asset normalization all registry entries have a non-empty image path" time="0">
     </testcase>
-    <testcase classname="Student progress persistence and UI storage write/read" name="Student progress persistence and UI storage write/read" time="0.004">
-    </testcase>
-    <testcase classname="Student progress persistence and UI resume button visibility" name="Student progress persistence and UI resume button visibility" time="0.006">
-    </testcase>
-    <testcase classname="Student progress persistence and UI clicking scenario updates last_scenario and progress entry" name="Student progress persistence and UI clicking scenario updates last_scenario and progress entry" time="0.007">
-    </testcase>
-    <testcase classname="Student progress persistence and UI reset behavior clears storage and rerenders" name="Student progress persistence and UI reset behavior clears storage and rerenders" time="0.007">
-    </testcase>
-    <testcase classname="Student progress persistence and UI badge rendering and progress summary counts" name="Student progress persistence and UI badge rendering and progress summary counts" time="0.006">
-    </testcase>
-    <testcase classname="Student progress persistence and UI corrupted localStorage recovery" name="Student progress persistence and UI corrupted localStorage recovery" time="0.005">
-    </testcase>
-  </testsuite>
-  <testsuite name="Student dashboard grid" errors="0" failures="0" skipped="0" timestamp="2026-06-03T20:32:20" time="0.053" tests="4">
-    <testcase classname="Student dashboard grid renders 17 cards" name="Student dashboard grid renders 17 cards" time="0.001">
-    </testcase>
-    <testcase classname="Student dashboard grid no duplicate scenario IDs in registry" name="Student dashboard grid no duplicate scenario IDs in registry" time="0.001">
-    </testcase>
-    <testcase classname="Student dashboard grid each card has a valid route" name="Student dashboard grid each card has a valid route" time="0.004">
-    </testcase>
-    <testcase classname="Student dashboard grid keyboard activation works (Enter/Space)" name="Student dashboard grid keyboard activation works (Enter/Space)" time="0">
+    <testcase classname="scenario asset normalization placeholder path is present in assets" name="scenario asset normalization placeholder path is present in assets" time="0.001">
     </testcase>
   </testsuite>
 </testsuites>
