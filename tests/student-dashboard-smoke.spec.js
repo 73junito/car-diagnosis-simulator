@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 // (no local file helper needed when serving via HTTP)
 
 // Allowed 404 patterns (analytics endpoints intentionally excluded)
-const allowed404Patterns = ['/analytics', '/telemetry', '/api/analytics', '/api/telemetry', '/assets/images/scenarios'];
+const allowed404Patterns = ['/analytics', '/telemetry', '/api/analytics', '/api/telemetry'];
 
 test.describe('Student dashboard smoke', ()=>{
   test('loads and basic interactions', async ({ browser })=>{
@@ -86,15 +86,15 @@ test.describe('Student dashboard smoke', ()=>{
       expect(storage===null || storage==='{}').toBeTruthy();
     }
 
-    // ensure no console errors and no unexpected 404s
+    // ensure no console errors and no unexpected 404s (now including scenario images)
     if(consoleErrors.length) console.log('Console errors (raw):', consoleErrors.slice(0,20));
     if(badResponses.length) console.log('Bad responses (404 raw):', JSON.stringify(badResponses.slice(0,40), null, 2));
-    const filteredConsoleErrors = consoleErrors.filter(e => !e.includes('Failed to load resource') && !e.includes('/assets/images/scenarios'));
-    const filteredBadResponses = badResponses.filter(b => !b.url.includes('/assets/images/scenarios'));
+    // filter out unrelated load-resource console messages
+    const filteredConsoleErrors = consoleErrors.filter(e => !e.includes('Failed to load resource'));
     if(filteredConsoleErrors.length) console.log('Console errors (filtered):', filteredConsoleErrors.slice(0,20));
-    if(filteredBadResponses.length) console.log('Bad responses (filtered):', JSON.stringify(filteredBadResponses.slice(0,40), null, 2));
+    if(badResponses.length) console.log('Bad responses (filtered):', JSON.stringify(badResponses.slice(0,40), null, 2));
     expect(filteredConsoleErrors).toEqual([]);
-    expect(filteredBadResponses).toEqual([]);
+    expect(badResponses).toEqual([]);
 
     await context.close();
   });
