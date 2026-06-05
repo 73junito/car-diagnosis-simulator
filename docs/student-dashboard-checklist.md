@@ -6,6 +6,11 @@
 - Improve card spacing, responsiveness, and mobile layout
 - Add loading / empty states
 - Improve error handling and user feedback
+ - Convert scenario detail modal to mobile-friendly full-width sheet/card
+ - Prevent background scroll when detail panel is open
+ - Add close/back button that is sticky and easy to tap
+ - Ensure detail content scrolls inside the panel, not the full page
+ - Verify on 390px mobile viewport
 
 ## Phase 2 — Data & Telemetry
 
