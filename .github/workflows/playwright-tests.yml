@@ -1,0 +1,53 @@
+name: Playwright Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  playwright:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Start static server
+        run: |
+          npx http-server -p 3003 -c-1 . > server.log 2>&1 &
+        shell: bash
+
+      - name: Wait for server
+        run: npx wait-on http://127.0.0.1:3003
+
+      - name: Run Playwright tests
+        run: npm run test:playwright --silent
+
+      - name: Upload Playwright report (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: test-results/playwright-report/
+
+      - name: Upload server logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-server-logs
+          path: server.log
