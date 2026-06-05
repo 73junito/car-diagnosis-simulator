@@ -40,6 +40,17 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   // capture post-click screenshot for diagnosis
   await page.screenshot({ path: 'test-results/reset-after-click.png', fullPage: true });
 
+  // dump diagnostic state immediately after click
+  const debugState = await page.evaluate(() => ({
+    searchValue: document.querySelector('#searchInput')?.value,
+    categoryValue: document.querySelector('#filterCategory')?.value,
+    registryLength: (window.SCENARIO_REGISTRY || []).length,
+    cardCount: document.querySelectorAll('#scenarioGrid .sd-card').length,
+    emptyStateVisible: !!document.querySelector('.empty-state'),
+    resetButtons: Array.from(document.querySelectorAll('#resetFiltersBtn')).map(b => ({ outer: b.outerHTML }))
+  }));
+  console.log('reset-debug-state:', JSON.stringify({ debugState, pageErrors, consoleErrors }));
+
   // intermediate assertions: inputs cleared
   await expect(page.locator('#searchInput')).toHaveValue('');
   await expect(page.locator('#filterCategory')).toHaveValue('all');
