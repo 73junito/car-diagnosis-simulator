@@ -82,7 +82,19 @@ function attachTestRenderer() {
     const shown = registry.filter(s => matchesFilter(s, filters));
     if(shown.length === 0){
       const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = 'No scenarios match your filters.';
+      const resetFiltersBtn = document.createElement('button');
+      resetFiltersBtn.id = 'resetFiltersBtn';
+      resetFiltersBtn.className = 'btn btn-primary';
+      resetFiltersBtn.textContent = 'Reset filters';
+      resetFiltersBtn.addEventListener('click', ()=>{
+        try{ document.getElementById('searchInput').value = ''; }catch(e){}
+        try{ document.getElementById('filterCategory').value = 'all'; }catch(e){}
+        try{ document.getElementById('filterDifficulty').value = 'all'; }catch(e){}
+        try{ document.getElementById('filterAse').value = 'all'; }catch(e){}
+        renderGrid();
+      });
       container.appendChild(empty);
+      container.appendChild(resetFiltersBtn);
     } else {
       shown.forEach(s => container.appendChild(createCard(s)));
     }

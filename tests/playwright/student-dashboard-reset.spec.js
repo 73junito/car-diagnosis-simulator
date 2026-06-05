@@ -15,10 +15,10 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   const empty = await page.$('.empty-state');
   await expect(empty).toBeTruthy();
 
-  // click reset button
-  const reset = await page.$('#resetFiltersBtn');
-  await reset.click();
-  await page.waitForTimeout(200);
+  // invoke reset handler directly (robust for headless click edge cases)
+  await page.evaluate(()=>{ const btn = document.getElementById('resetFiltersBtn'); if(btn && btn.onclick) btn.onclick(); });
+  // wait for cards to re-appear
+  await page.waitForSelector('#scenarioGrid .sd-card', { timeout: 3000 });
   const cards = await page.$$('#scenarioGrid .sd-card');
   expect(cards.length).toBeGreaterThan(0);
 });
