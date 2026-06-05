@@ -9,6 +9,8 @@
     "vercel-build": "npm run write-version",
     "start:local-api": "node scripts/local-api.js",
     "test:live-session": "node tests/live-session-ui.test.js",
+    "test:playwright": "npx playwright test tests/playwright --config=playwright.config.js",
+    "test:all": "npm run test && npm run test:playwright",
     "validate:scenarios": "node tools/validate-scenarios.js",
     "validate:obd2": "node tools/validate-obd2.js",
     "test:analytics": "node tests/session-summary.test.js",
