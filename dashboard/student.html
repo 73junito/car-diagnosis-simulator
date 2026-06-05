@@ -102,15 +102,11 @@
         const card = document.createElement('article'); card.className = 'sd-card';
         card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
 
+        const media = document.createElement('div'); media.className = 'sd-card__media';
         const img = document.createElement('img'); img.className = 'sd-card-img'; img.alt = s.title || '';
-        img.src = s.image;
-        // Replace missing images at runtime with placeholder to avoid console 404 noise
-        img.onerror = function onImgError() {
-          if (img.src && img.src.indexOf('placeholder-scenario.svg') === -1) {
-            img.onerror = null;
-            img.src = '/assets/images/scenarios/placeholder-scenario.svg';
-          }
-        };
+        // Use placeholder immediately if no image provided and ensure robust onerror fallback
+        img.src = s.image || '/assets/images/scenarios/placeholder-scenario.svg';
+        img.onerror = () => { img.onerror = null; img.src = '/assets/images/scenarios/placeholder-scenario.svg'; };
 
         const body = document.createElement('div'); body.className = 'sd-card-body';
         const title = document.createElement('h3'); title.className = 'sd-card-title'; title.textContent = s.title || s.id;
@@ -130,7 +126,9 @@
         footer.appendChild(badge);
         footer.appendChild(btn);
 
-        card.appendChild(img); card.appendChild(body); card.appendChild(footer);
+        media.appendChild(img);
+        card.appendChild(media);
+        card.appendChild(body); card.appendChild(footer);
 
         // interactions (use hash navigation in test env to avoid jsdom navigation errors)
         function activate(){

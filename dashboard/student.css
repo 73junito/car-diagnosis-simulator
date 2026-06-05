@@ -43,7 +43,8 @@ body.detail-open{overflow:hidden;height:100vh}
 .sd-card{display:flex;flex-direction:column;background:#fff;border:1px solid rgba(0,0,0,0.06);border-radius:12px;overflow:hidden;transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 4px 14px rgba(12,20,30,0.06);padding:1rem}
 .sd-card:focus{outline:3px solid #3aa;outline-offset:2px}
 .sd-card:hover{transform:translateY(-6px);box-shadow:0 18px 36px rgba(10,20,40,0.12);border-color:rgba(58,170,200,0.12)}
-.sd-card-img{width:100%;height:140px;object-fit:cover;background:#eef}
+.sd-card__media{width:100%;overflow:hidden}
+.sd-card-img{width:100%;height:140px;object-fit:cover;background:#eef;display:block}
 .sd-card-body{padding:12px;flex:1 1 auto;display:flex;flex-direction:column}
 .sd-card-title{margin:0 0 6px;font-size:1rem}
 .sd-card-meta{font-size:0.85rem;color:#666;margin-bottom:8px}
@@ -53,7 +54,21 @@ body.detail-open{overflow:hidden;height:100vh}
 @media (max-width:768px){
 	.sd-card{padding:0.75rem}
 	.scenario-grid, #scenarioGrid{grid-template-columns:1fr;gap:0.75rem;padding:0.75rem}
-	.sd-card-img{height:120px}
+		.sd-card-img{height:120px}
+}
+
+/* Normalize image heights and reduce on mobile */
+.sd-card__media,
+.sd-card-img{
+	max-height:160px;
+	object-fit:cover;
+}
+
+@media (max-width:768px){
+	.sd-card__media,
+	.sd-card-img{
+		max-height:110px;
+	}
 }
 
 /* Mobile friendly detail: full-width sheet */
