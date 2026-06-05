@@ -222,6 +222,7 @@
           resetFiltersBtn.className = 'btn btn-primary';
           resetFiltersBtn.textContent = 'Reset filters';
           resetFiltersBtn.addEventListener('click', () => {
+            console.log('resetFiltersBtn clicked');
             try{
               const s = document.getElementById('searchInput'); if(s) { s.value = ''; s.dispatchEvent(new Event('input', { bubbles: true })); }
               const c = document.getElementById('filterCategory'); if(c) { c.value = 'all'; c.dispatchEvent(new Event('change', { bubbles: true })); }
