@@ -76,4 +76,15 @@ async function run() {
   console.log('Live session UI tests passed.');
 }
 
-run().catch(err => { console.error(err); process.exit(1); });
+module.exports = run;
+
+// When executed under Jest, expose a test wrapper; preserve direct-run behavior
+if (typeof describe === 'function' && typeof test === 'function') {
+  describe('live session UI', () => {
+    test('ui smoke', async () => {
+      await run();
+    });
+  });
+} else if (require.main === module) {
+  run().catch(err => { console.error(err); process.exit(1); });
+}

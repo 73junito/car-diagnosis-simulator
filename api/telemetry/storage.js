@@ -3,19 +3,42 @@
 // Fails gracefully when not configured.
 
 let supabase = null;
-let createClient = null;
-try {
-  // lazy require so missing dependency doesn't crash non-configured envs
-  ({ createClient } = require('@supabase/supabase-js'));
-} catch (e) {
-  createClient = null;
-}
+let _lastConfig = { url: null, key: null };
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+function _getSupabase() {
+  if (supabase) return supabase;
 
-if (createClient && supabaseUrl && supabaseKey) {
-  supabase = createClient(supabaseUrl, supabaseKey);
+  let createClient = null;
+  try {
+    const mod = require('@supabase/supabase-js');
+    createClient = mod && mod.createClient;
+  } catch (e) {
+    createClient = null;
+  }
+
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+
+  // If env config changed since we last created the client, reset cached client
+  if (supabase && (_lastConfig.url !== supabaseUrl || _lastConfig.key !== supabaseKey)) {
+    supabase = null;
+  }
+
+  if (createClient && supabaseUrl && supabaseKey) {
+    if (!supabase) {
+      try {
+        supabase = createClient(supabaseUrl, supabaseKey);
+        _lastConfig.url = supabaseUrl;
+        _lastConfig.key = supabaseKey;
+      } catch (err) {
+        // If creating the real Supabase client fails (eg. `fetch` not defined in test env),
+        // treat as not configured so tests can mock behavior without crashing.
+        supabase = null;
+      }
+    }
+  }
+
+  return supabase;
 }
 
 function _notConfigured() {
@@ -23,7 +46,7 @@ function _notConfigured() {
 }
 
 async function saveTelemetryEvent(event = {}) {
-  if (!supabase) return _notConfigured();
+  if (!_getSupabase()) return _notConfigured();
 
   const row = {
     session_id: event.sessionId || null,
@@ -34,15 +57,17 @@ async function saveTelemetryEvent(event = {}) {
   };
 
   // supabase.from(...).insert(...) returns { data, error }
-  const { data, error } = await supabase.from('telemetry_events').insert(row).select().single();
+  const client = _getSupabase();
+  const { data, error } = await client.from('telemetry_events').insert(row).select().single();
   if (error) return { ok: false, error, data: null };
   return { ok: true, data };
 }
 
 async function listTelemetryEvents({ sessionId, limit = 100 } = {}) {
-  if (!supabase) return { ok: false, error: new Error('Supabase not configured'), data: [] };
+  const client = _getSupabase();
+  if (!client) return { ok: false, error: new Error('Supabase not configured'), data: [] };
 
-  let query = supabase.from('telemetry_events').select('*').order('created_at', { ascending: false }).limit(limit);
+  let query = client.from('telemetry_events').select('*').order('created_at', { ascending: false }).limit(limit);
   if (sessionId) query = query.eq('session_id', sessionId);
 
   const { data, error } = await query;

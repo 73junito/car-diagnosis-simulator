@@ -38,3 +38,9 @@ if (require.main === module) {
 }
 
 module.exports = run;
+
+if (typeof test === 'function') {
+  test('analytics routes integration (script) runs', async () => {
+    await run();
+  }, 30000);
+}

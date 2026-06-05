@@ -71,7 +71,7 @@ if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
 
 // Older Node runtimes used in CI may not expose these globally.
 try {
-  // eslint-disable-next-line global-require
+   
   const { TextDecoder, TextEncoder } = require('util');
 
   if (typeof global.TextDecoder === 'undefined') {

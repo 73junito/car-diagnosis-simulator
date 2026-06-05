@@ -12,11 +12,18 @@ const mockCreateClient = () => ({
   }
 });
 
-try {
-  const modPath = require.resolve('@supabase/supabase-js');
-  require.cache[modPath] = { id: modPath, filename: modPath, loaded: true, exports: { createClient: mockCreateClient } };
-} catch (e) {
-  // continue — tests still valid with demo fallback
+// When running under Jest, use jest.mock to ensure the Supabase client
+// uses our lightweight mock implementation. For direct `node` runs
+// (script-style), preserve the existing require.cache approach.
+if (typeof jest !== 'undefined') {
+  jest.mock('@supabase/supabase-js', () => ({ createClient: mockCreateClient }));
+} else {
+  try {
+    const modPath = require.resolve('@supabase/supabase-js');
+    require.cache[modPath] = { id: modPath, filename: modPath, loaded: true, exports: { createClient: mockCreateClient } };
+  } catch (e) {
+    // continue — tests still valid with demo fallback
+  }
 }
 
 const { app } = require('../torquemind-api/index');
@@ -88,3 +95,14 @@ async function run() {
 if (require.main === module) run().catch(err => { console.error(err); process.exit(1); });
 
 module.exports = run;
+
+// Add a Jest wrapper so this file is recognized as a test suite
+// when executed via Jest (the script-style `run()` remains usable
+// when invoked directly with `node`).
+if (typeof describe === 'function' && typeof test === 'function') {
+  describe('supabase auth config', () => {
+    test('supabase auth flow (smoke)', async () => {
+      await run();
+    });
+  });
+}
