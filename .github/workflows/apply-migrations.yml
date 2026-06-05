@@ -129,7 +129,7 @@ jobs:
         with:
           name: Jest Tests
           path: test-results/junit.xml
-          reporter: junit
+          reporter: java-junit
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload JUnit results
@@ -232,17 +232,17 @@ jobs:
           path: test-results/dashboard.html
 
       - name: Configure Pages
-        if: always()
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v4
 
       - name: Upload Pages artifact
-        if: always()
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: test-results
 
       - name: Deploy to GitHub Pages
-        if: always()
+        if: github.event_name != 'pull_request'
         uses: actions/deploy-pages@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
