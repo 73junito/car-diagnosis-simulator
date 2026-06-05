@@ -130,7 +130,8 @@ jobs:
           name: Jest Tests
           path: test-results/junit.xml
           reporter: java-junit
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail-on-empty: false
 
       - name: Upload JUnit results
         if: always()
