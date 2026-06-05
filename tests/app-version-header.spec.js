@@ -1,4 +1,4 @@
-/* eslint-env jest */
+ 
 
 process.env.APP_VERSION = process.env.APP_VERSION || 'test-version';
 

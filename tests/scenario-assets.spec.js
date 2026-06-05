@@ -1,4 +1,4 @@
-/* eslint-env jest */
+ 
 // Verify scenario registry images resolve to non-empty values and fall back to placeholder
 describe('scenario asset normalization', () => {
   beforeAll(() => {

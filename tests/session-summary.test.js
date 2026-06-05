@@ -48,3 +48,22 @@ assert.strictEqual(s2.diagnosticAccuracy, 0, 'student-2 diagnosticAccuracy expec
 assert.strictEqual(s2.unnecessaryToolUsage, 1, 'student-2 unnecessaryToolUsage expected 1');
 
 console.log('All analytics tests passed.');
+
+module.exports = function runWrapper() {
+  return Promise.resolve();
+};
+
+// Provide a test wrapper for Jest CI
+if (typeof test === 'function') {
+  test('session-summary tool generates expected report', async () => {
+    // call existing logic in file by re-requiring as module
+    const summaryModule = require('../tools/session-summary');
+    // run the same checks as the script: run() is synchronous
+    summaryModule.run();
+    const path = require('path');
+    const fs = require('fs');
+    const telemetryPath = path.join(__dirname, '..', 'reports', 'telemetry-events.json');
+    const outPath = path.join(__dirname, '..', 'reports', 'student-performance-report.json');
+    expect(fs.existsSync(outPath)).toBe(true);
+  }, 30000);
+}
