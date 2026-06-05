@@ -66,6 +66,8 @@ Notes / follow-ups
 - Added Playwright flag `PREVIEW_EMPTY=1` to capture empty-filter screenshots.
 - Added updated screenshots for desktop/mobile empty states.
 
+- Added Jest + Playwright keyboard-flow tests validating Enter/Space open, Escape close, and focus return.
+
 ### Screenshots
 
 Overview (desktop): `docs/screenshots/desktop-home-updated.png`  
