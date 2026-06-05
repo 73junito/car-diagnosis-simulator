@@ -20,28 +20,26 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   // type impossible search
   await page.fill('#searchInput', 'no-match-possible-xyz');
   await page.dispatchEvent('#searchInput', 'input');
-  await page.waitForSelector('.empty-state');
-  const empty = await page.$('.empty-state');
-  await expect(empty).toBeTruthy();
+  await expect(page.locator('.empty-state')).toBeVisible();
 
-  // click the visible reset button to restore defaults (use DOM click to exercise attached listener)
-  await page.evaluate(() => { const b = document.getElementById('resetFiltersBtn'); if(b) b.click(); });
+  // click the visible reset button to restore defaults (use Playwright click)
+  await page.locator('#resetFiltersBtn').click();
 
-  // dump diagnostic state immediately after click
-  const debugState = await page.evaluate(() => ({
-    searchValue: document.querySelector('#searchInput')?.value,
-    categoryValue: document.querySelector('#filterCategory')?.value,
-    registryLength: (window.SCENARIO_REGISTRY || []).length,
-    cardCount: document.querySelectorAll('#scenarioGrid .sd-card').length,
-    emptyStateVisible: !!document.querySelector('.empty-state')
-  }));
-  // emit to node console so trace/CI logs capture it
-  console.log('reset-debug-state:', JSON.stringify({ debugState, pageErrors, consoleErrors }));
+  // intermediate assertions: inputs cleared
+  await expect(page.locator('#searchInput')).toHaveValue('');
+  await expect(page.locator('#filterCategory')).toHaveValue('all');
 
-  // fail if page threw errors during render
+  // ensure no runtime errors or console errors were emitted
   expect(pageErrors).toEqual([]);
+  // filter harmless messages if needed
+  const meaningfulConsoleErrors = consoleErrors.filter(e => !e.includes('favicon'));
+  expect(meaningfulConsoleErrors).toEqual([]);
 
-  // now assert that cards re-appeared (use locator-based wait)
-  const expected = debugState.registryLength || 17;
-  await expect(page.locator('#scenarioGrid .sd-card')).toHaveCount(expected, { timeout: 15000 });
+  // ensure empty-state is gone
+  await expect(page.locator('.empty-state')).toBeHidden();
+
+  // verify registry length and card count match
+  const registryLength = await page.evaluate(() => (window.SCENARIO_REGISTRY || []).length);
+  expect(registryLength).toBeGreaterThan(0);
+  await expect(page.locator('#scenarioGrid .sd-card')).toHaveCount(registryLength, { timeout: 15000 });
 });
