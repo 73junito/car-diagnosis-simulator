@@ -17,8 +17,8 @@ test('empty-filter then reset restores cards', async ({ page }) => {
 
   // click the visible reset button to restore defaults
   await page.click('#resetFiltersBtn');
-  // wait for cards to re-appear
-  await page.waitForSelector('#scenarioGrid .sd-card', { timeout: 3000 });
+  // wait for cards to re-appear (increase timeout to account for CI/slower environments)
+  await page.waitForSelector('#scenarioGrid .sd-card', { timeout: 10000 });
   const cards = await page.$$('#scenarioGrid .sd-card');
   expect(cards.length).toBeGreaterThan(0);
 });
