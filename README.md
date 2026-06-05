@@ -93,3 +93,13 @@ This project uses Supabase (Auth + Postgres) and relies on Row-Level Security (R
 	- To temporarily enable verbose logging for debugging, set `DEBUG_API=true` (for API runtime logs) or `DEBUG_AUTH=true` (for auth middleware). Remove or unset these in production.
 
 If you want, I can (a) paste the exact SQL from the `db/` files here, or (b) apply them to your Supabase project if you provide explicit, ephemeral service-role credentials and consent.
+
+Tests
+-----
+
+Tests are split between unit tests (Jest) and end-to-end tests (Playwright).
+
+- Run unit tests: `npm test`
+- Run Playwright E2E: `npm run test:playwright`
+
+Playwright is configured to only run tests under `tests/playwright` to avoid accidental discovery of Jest tests.

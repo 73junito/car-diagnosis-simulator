@@ -4,6 +4,8 @@ const { devices } = require('@playwright/test');
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 module.exports = {
   testDir: 'tests/playwright',
+  testMatch: ['**/*.spec.js', '**/*.test.js'],
+  forbidOnly: !!process.env.CI,
   timeout: 30 * 1000,
   expect: { timeout: 5000 },
   retries: 0,
