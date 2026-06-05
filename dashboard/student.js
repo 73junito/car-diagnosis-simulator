@@ -8,8 +8,11 @@ window.initStudentDashboard = function(){
   const dtcs = document.getElementById('dtcs');
   const availableTests = document.getElementById('availableTests');
   const backBtn = document.getElementById('backBtn');
+  let lastOpener = null;
+  let onKeydown = null;
 
-  function showDetail(s){
+  function showDetail(s, opener){
+    lastOpener = opener || document.activeElement || null;
     detail.classList.remove('hidden');
     // prevent background scroll when detail is open
     try{ document.body.classList.add('detail-open'); }catch(e){}
@@ -27,13 +30,25 @@ window.initStudentDashboard = function(){
       availableTests.appendChild(ul);
     }
     history.replaceState(null,'',`?scenario=${encodeURIComponent(s.symptomCategory||s.symptoms||s.id)}`);
+    // focus first meaningful control (back button)
+    try{ backBtn.focus(); }catch(e){}
+    // add Escape key handler to close
+    onKeydown = (e)=>{ if(e.key === 'Escape'){ closeDetail(); } };
+    document.addEventListener('keydown', onKeydown);
   }
 
-  backBtn.addEventListener('click', ()=>{
+  function closeDetail(){
     detail.classList.add('hidden');
     try{ document.body.classList.remove('detail-open'); }catch(e){}
     history.replaceState(null,'','/dashboard/student');
-  });
+    if(onKeydown) { document.removeEventListener('keydown', onKeydown); onKeydown = null; }
+    if(lastOpener && typeof lastOpener.focus === 'function'){
+      try{ lastOpener.focus(); }catch(e){}
+    }
+    lastOpener = null;
+  }
+
+  backBtn.addEventListener('click', ()=>{ closeDetail(); });
 
   // Attach hotspot handlers
   document.querySelectorAll('.hotspot').forEach(btn => {
