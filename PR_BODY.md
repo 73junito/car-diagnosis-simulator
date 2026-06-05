@@ -78,3 +78,13 @@ Detail panel (mobile): `docs/screenshots/mobile-detail-open.png`
 
 Empty state (desktop): `docs/screenshots/desktop-empty-filter.png`  
 Empty state (mobile): `docs/screenshots/mobile-empty-filter.png`
+
+### Checklist (student dashboard UX)
+
+- [x] Responsive cards
+- [x] Detail sheet / mobile UX
+- [x] Loading skeleton state
+- [x] Empty state messaging
+- [x] Reset filters (button + tests)
+- [x] Keyboard accessibility (Enter/Space open, Escape close, focus return)
+- [x] Screenshots & tests included
