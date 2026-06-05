@@ -29,6 +29,36 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   console.log('reset-button-box:', JSON.stringify(btnBox));
   await page.screenshot({ path: 'test-results/reset-before-click.png', fullPage: true });
 
+  // hit-test: element at center of the button according to the page
+  const hitTarget = await page.evaluate(() => {
+    const btn = document.getElementById('resetFiltersBtn');
+    if (!btn) return null;
+    const r = btn.getBoundingClientRect();
+    const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    return {
+      buttonTag: btn.tagName,
+      hitTag: el?.tagName,
+      hitId: el?.id || null,
+      hitClass: el?.className || null
+    };
+  });
+  console.log('hit test', JSON.stringify(hitTarget));
+
+  // Playwright actionability checks (trial click) to surface what's blocking
+  try {
+    await page.locator('#resetFiltersBtn').scrollIntoViewIfNeeded();
+    await expect(page.locator('#resetFiltersBtn')).toBeVisible();
+    await expect(page.locator('#resetFiltersBtn')).toBeEnabled();
+    try {
+      await page.locator('#resetFiltersBtn').click({ trial: true });
+      console.log('trial-click: ok');
+    } catch (tErr) {
+      console.log('trial-click-error:', String(tErr));
+    }
+  } catch (vErr) {
+    console.log('pre-click-visibility-error:', String(vErr));
+  }
+
   // click the visible reset button to restore defaults (use Playwright click)
   try {
     await page.locator('#resetFiltersBtn').click();
