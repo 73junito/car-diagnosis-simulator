@@ -2,15 +2,13 @@ const { test, expect } = require('@playwright/test');
 
 test('empty-filter then reset restores cards', async ({ page }) => {
   const BASE = process.env.PREVIEW_URL || 'http://127.0.0.1:3003/dashboard/student';
-  // capture page errors and console.error messages for diagnosis
+  // capture page errors and console.error messages
   const pageErrors = [];
   const consoleErrors = [];
-  const consoleMsgs = [];
   page.on('pageerror', err => {
     pageErrors.push(err && err.message ? err.message : String(err));
   });
   page.on('console', msg => {
-    consoleMsgs.push({ type: msg.type(), text: msg.text() });
     if (msg.type() === 'error') consoleErrors.push(msg.text());
   });
   await page.goto(BASE, { waitUntil: 'networkidle' });
@@ -24,80 +22,11 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   await page.dispatchEvent('#searchInput', 'input');
   await expect(page.locator('.empty-state')).toBeVisible();
 
-  // diagnostic: capture button bounding box and full-page screenshot before click
-  const btnBox = await page.locator('#resetFiltersBtn').boundingBox();
-  console.log('reset-button-box:', JSON.stringify(btnBox));
-  await page.screenshot({ path: 'test-results/reset-before-click.png', fullPage: true });
-
-  // hit-test: element at center of the button according to the page
-  const hitTarget = await page.evaluate(() => {
-    const btn = document.getElementById('resetFiltersBtn');
-    if (!btn) return null;
-    const r = btn.getBoundingClientRect();
-    const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-    return {
-      buttonTag: btn.tagName,
-      hitTag: el?.tagName,
-      hitId: el?.id || null,
-      hitClass: el?.className || null
-    };
-  });
-  console.log('hit test', JSON.stringify(hitTarget));
-
-  // Playwright actionability checks (trial click) to surface what's blocking
-  try {
-    await page.locator('#resetFiltersBtn').scrollIntoViewIfNeeded();
-    await expect(page.locator('#resetFiltersBtn')).toBeVisible();
-    await expect(page.locator('#resetFiltersBtn')).toBeEnabled();
-    try {
-      await page.locator('#resetFiltersBtn').click({ trial: true });
-      console.log('trial-click: ok');
-    } catch (tErr) {
-      console.log('trial-click-error:', String(tErr));
-    }
-  } catch (vErr) {
-    console.log('pre-click-visibility-error:', String(vErr));
-  }
-
-  // click the visible reset button to restore defaults (use Playwright click)
-  try {
-    await page.locator('#resetFiltersBtn').click();
-  } catch (err) {
-    // capture diagnostics on click failure
-    console.log('reset-click-error:', String(err));
-    await page.screenshot({ path: 'test-results/reset-click-failed.png', fullPage: true });
-    throw err;
-  }
-
-  // capture post-click screenshot for diagnosis
-  await page.screenshot({ path: 'test-results/reset-after-click.png', fullPage: true });
-
-  // dump diagnostic state immediately after click
-  let debugState = await page.evaluate(() => ({
-    searchValue: document.querySelector('#searchInput')?.value,
-    categoryValue: document.querySelector('#filterCategory')?.value,
-    registryLength: (window.SCENARIO_REGISTRY || []).length,
-    cardCount: document.querySelectorAll('#scenarioGrid .sd-card').length,
-    emptyStateVisible: !!document.querySelector('.empty-state'),
-    resetButtons: Array.from(document.querySelectorAll('#resetFiltersBtn')).map(b => ({ outer: b.outerHTML }))
-  }));
-  console.log('reset-debug-state (initial):', JSON.stringify({ debugState, pageErrors, consoleErrors, consoleMsgs }));
-
-  // if the handler didn't run (no console log), retry with a forced click
-  const sawHandlerLog = consoleMsgs.some(m => m.text && m.text.includes('resetFiltersBtn clicked'));
-  if (!sawHandlerLog) {
-    console.log('handler not observed after normal click; retrying with force');
-    await page.locator('#resetFiltersBtn').click({ force: true });
-    await page.screenshot({ path: 'test-results/reset-after-force-click.png', fullPage: true });
-    debugState = await page.evaluate(() => ({
-      searchValue: document.querySelector('#searchInput')?.value,
-      categoryValue: document.querySelector('#filterCategory')?.value,
-      registryLength: (window.SCENARIO_REGISTRY || []).length,
-      cardCount: document.querySelectorAll('#scenarioGrid .sd-card').length,
-      emptyStateVisible: !!document.querySelector('.empty-state')
-    }));
-    console.log('reset-debug-state (after-force):', JSON.stringify({ debugState, pageErrors, consoleErrors, consoleMsgs }));
-  }
+  // click the visible reset button to restore defaults
+  await page.locator('#resetFiltersBtn').scrollIntoViewIfNeeded();
+  await expect(page.locator('#resetFiltersBtn')).toBeVisible();
+  await expect(page.locator('#resetFiltersBtn')).toBeEnabled();
+  await page.locator('#resetFiltersBtn').click();
 
   // intermediate assertions: inputs cleared
   await expect(page.locator('#searchInput')).toHaveValue('');
@@ -105,7 +34,6 @@ test('empty-filter then reset restores cards', async ({ page }) => {
 
   // ensure no runtime errors or console errors were emitted
   expect(pageErrors).toEqual([]);
-  // filter harmless messages if needed
   const meaningfulConsoleErrors = consoleErrors.filter(e => !e.includes('favicon'));
   expect(meaningfulConsoleErrors).toEqual([]);
 
