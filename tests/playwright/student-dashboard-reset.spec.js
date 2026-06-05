@@ -22,8 +22,23 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   await page.dispatchEvent('#searchInput', 'input');
   await expect(page.locator('.empty-state')).toBeVisible();
 
+  // diagnostic: capture button bounding box and full-page screenshot before click
+  const btnBox = await page.locator('#resetFiltersBtn').boundingBox();
+  console.log('reset-button-box:', JSON.stringify(btnBox));
+  await page.screenshot({ path: 'test-results/reset-before-click.png', fullPage: true });
+
   // click the visible reset button to restore defaults (use Playwright click)
-  await page.locator('#resetFiltersBtn').click();
+  try {
+    await page.locator('#resetFiltersBtn').click();
+  } catch (err) {
+    // capture diagnostics on click failure
+    console.log('reset-click-error:', String(err));
+    await page.screenshot({ path: 'test-results/reset-click-failed.png', fullPage: true });
+    throw err;
+  }
+
+  // capture post-click screenshot for diagnosis
+  await page.screenshot({ path: 'test-results/reset-after-click.png', fullPage: true });
 
   // intermediate assertions: inputs cleared
   await expect(page.locator('#searchInput')).toHaveValue('');
