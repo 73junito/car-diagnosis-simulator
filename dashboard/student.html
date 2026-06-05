@@ -234,6 +234,7 @@
           });
           empty.appendChild(resetFiltersBtn);
           container.appendChild(empty);
+          try { empty.scrollIntoView({ behavior: 'auto', block: 'center' }); resetFiltersBtn.focus(); } catch(e) { /* ignore */ }
         } else {
           shown.forEach(s => {
             try{
