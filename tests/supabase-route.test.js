@@ -13,6 +13,10 @@ const mockCreateClient = () => ({
   }
 });
 
+// Use Jest's hoisted mock call so the package is replaced before modules load
+try {
+  jest.mock('@supabase/supabase-js', () => ({ createClient: mockCreateClient }));
+} catch (e) {}
 // Inject mock module for '@supabase/supabase-js' so code that calls createClient uses our mock
 try {
   const modPath = require.resolve('@supabase/supabase-js');
@@ -21,14 +25,25 @@ try {
   // If resolution fails, tests will still proceed using fallback header logic
 }
 
+// Prefer Jest's module mocking when available so the package is replaced
+if (typeof jest === 'function' && typeof jest.mock === 'function') {
+  try {
+    jest.mock('@supabase/supabase-js', () => ({ createClient: mockCreateClient }));
+  } catch (e) {
+    // ignore if jest cannot mock here
+  }
+}
+
 // Enable Supabase env so role resolver attempts verification
-process.env.SUPABASE_URL = 'https://example.supabase.co';
-process.env.SUPABASE_ANON_KEY = 'anon';
-
-const { app } = require('../torquemind-api/index');
-const { getRecentEvents } = require('../api/telemetry/events');
-
 async function run() {
+  process.env.SUPABASE_URL = 'https://example.supabase.co';
+  process.env.SUPABASE_ANON_KEY = 'anon';
+
+  // require app and telemetry after mocks/env are set so they pick up the mock
+  const { app } = require('../torquemind-api/index');
+  const { getRecentEvents } = require('../api/telemetry/events');
+
+  async function innerRun() {
   // clear recent events
   let recent = getRecentEvents();
 
@@ -73,6 +88,9 @@ async function run() {
   assert.strictEqual(last.scope, 'live-session');
 
   console.log('Supabase route integration tests passed.');
+  }
+
+  return innerRun();
 }
 
 if (require.main === module) run().catch(err => { console.error(err); process.exit(1); });
