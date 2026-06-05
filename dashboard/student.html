@@ -190,15 +190,30 @@
         const container = document.getElementById('scenarioGrid');
         const countEl = document.getElementById('filterCount');
         if(!container) return;
+        // show lightweight loading skeleton while rendering
         container.innerHTML = '';
+        const skeleton = document.createElement('div'); skeleton.className = 'sd-skeleton-grid';
+        for(let i=0;i<6;i++){
+          const sc = document.createElement('div'); sc.className = 'sd-skeleton-card';
+          const m = document.createElement('div'); m.className = 'sd-skeleton-media';
+          const l1 = document.createElement('div'); l1.className = 'sd-skeleton-line';
+          const l2 = document.createElement('div'); l2.className = 'sd-skeleton-line short';
+          sc.appendChild(m); sc.appendChild(l1); sc.appendChild(l2); skeleton.appendChild(sc);
+        }
+        container.appendChild(skeleton);
+
         const registry = (window.SCENARIO_REGISTRY || []).slice(0,17);
         // populate filter selects once
         populateFilterOptions(registry);
         const filters = getFilters();
         const total = registry.length;
         const shown = registry.filter(s => matchesFilter(s, filters));
+
+        // clear skeleton and render actual content
+        container.innerHTML = '';
         if(shown.length === 0){
-          const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = 'No scenarios match your filters.';
+          const empty = document.createElement('div'); empty.className = 'empty-state';
+          empty.innerHTML = `<strong>No scenarios match your filters.</strong><div style="margin-top:8px;color:#666">Try adjusting your search or filters to broaden results.</div>`;
           container.appendChild(empty);
         } else {
           shown.forEach(s => {

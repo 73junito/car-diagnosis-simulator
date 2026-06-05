@@ -92,6 +92,20 @@ body.detail-open{overflow:hidden;height:100vh}
 .filter-count{margin-left:auto;color:#333;font-weight:600}
 .empty-state{padding:36px;text-align:center;color:var(--muted);background:#fff;border:1px dashed rgba(0,0,0,0.04);border-radius:8px}
 
+/* Loading skeletons for cards */
+.sd-skeleton-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;padding:1rem}
+.sd-skeleton-card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 2px 6px rgba(0,0,0,0.03);display:flex;flex-direction:column;gap:8px}
+.sd-skeleton-media{height:120px;background:linear-gradient(90deg,#f0f0f0,#e8e8e8,#f0f0f0);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
+.sd-skeleton-line{height:12px;background:#f0f0f0;border-radius:6px}
+.sd-skeleton-line.short{width:40%}
+
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+@media (max-width:768px){
+	.sd-skeleton-media{height:90px}
+	.sd-skeleton-grid{grid-template-columns:1fr;gap:0.75rem;padding:0.75rem}
+}
+
 @media (max-width:600px){
 	.filters{flex-direction:column;align-items:stretch}
 	.filter-count{margin-left:0}
