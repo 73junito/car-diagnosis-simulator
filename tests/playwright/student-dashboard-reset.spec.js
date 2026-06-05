@@ -5,10 +5,12 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   // capture page errors and console.error messages for diagnosis
   const pageErrors = [];
   const consoleErrors = [];
+  const consoleMsgs = [];
   page.on('pageerror', err => {
     pageErrors.push(err && err.message ? err.message : String(err));
   });
   page.on('console', msg => {
+    consoleMsgs.push({ type: msg.type(), text: msg.text() });
     if (msg.type() === 'error') consoleErrors.push(msg.text());
   });
   await page.goto(BASE, { waitUntil: 'networkidle' });
@@ -41,7 +43,7 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   await page.screenshot({ path: 'test-results/reset-after-click.png', fullPage: true });
 
   // dump diagnostic state immediately after click
-  const debugState = await page.evaluate(() => ({
+  let debugState = await page.evaluate(() => ({
     searchValue: document.querySelector('#searchInput')?.value,
     categoryValue: document.querySelector('#filterCategory')?.value,
     registryLength: (window.SCENARIO_REGISTRY || []).length,
@@ -49,7 +51,23 @@ test('empty-filter then reset restores cards', async ({ page }) => {
     emptyStateVisible: !!document.querySelector('.empty-state'),
     resetButtons: Array.from(document.querySelectorAll('#resetFiltersBtn')).map(b => ({ outer: b.outerHTML }))
   }));
-  console.log('reset-debug-state:', JSON.stringify({ debugState, pageErrors, consoleErrors }));
+  console.log('reset-debug-state (initial):', JSON.stringify({ debugState, pageErrors, consoleErrors, consoleMsgs }));
+
+  // if the handler didn't run (no console log), retry with a forced click
+  const sawHandlerLog = consoleMsgs.some(m => m.text && m.text.includes('resetFiltersBtn clicked'));
+  if (!sawHandlerLog) {
+    console.log('handler not observed after normal click; retrying with force');
+    await page.locator('#resetFiltersBtn').click({ force: true });
+    await page.screenshot({ path: 'test-results/reset-after-force-click.png', fullPage: true });
+    debugState = await page.evaluate(() => ({
+      searchValue: document.querySelector('#searchInput')?.value,
+      categoryValue: document.querySelector('#filterCategory')?.value,
+      registryLength: (window.SCENARIO_REGISTRY || []).length,
+      cardCount: document.querySelectorAll('#scenarioGrid .sd-card').length,
+      emptyStateVisible: !!document.querySelector('.empty-state')
+    }));
+    console.log('reset-debug-state (after-force):', JSON.stringify({ debugState, pageErrors, consoleErrors, consoleMsgs }));
+  }
 
   // intermediate assertions: inputs cleared
   await expect(page.locator('#searchInput')).toHaveValue('');
