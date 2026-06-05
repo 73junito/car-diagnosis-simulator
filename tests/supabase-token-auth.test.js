@@ -37,3 +37,9 @@ async function run(){
 if (require.main === module) run().catch(err=>{ console.error(err); process.exit(1); });
 
 module.exports = run;
+
+if (typeof test === 'function') {
+  test('supabase token auth scaffold runs', async () => {
+    await run();
+  }, 30000);
+}
