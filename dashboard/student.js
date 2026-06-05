@@ -11,6 +11,8 @@ window.initStudentDashboard = function(){
 
   function showDetail(s){
     detail.classList.remove('hidden');
+    // prevent background scroll when detail is open
+    try{ document.body.classList.add('detail-open'); }catch(e){}
     detailTitle.textContent = s.symptomCategory || s.symptoms || ('Scenario ' + s.id);
     customerComplaint.textContent = s.symptoms || '';
     while(symptomsList.firstChild) symptomsList.removeChild(symptomsList.firstChild);
@@ -27,7 +29,11 @@ window.initStudentDashboard = function(){
     history.replaceState(null,'',`?scenario=${encodeURIComponent(s.symptomCategory||s.symptoms||s.id)}`);
   }
 
-  backBtn.addEventListener('click', ()=>{ detail.classList.add('hidden'); history.replaceState(null,'','/dashboard/student'); });
+  backBtn.addEventListener('click', ()=>{
+    detail.classList.add('hidden');
+    try{ document.body.classList.remove('detail-open'); }catch(e){}
+    history.replaceState(null,'','/dashboard/student');
+  });
 
   // Attach hotspot handlers
   document.querySelectorAll('.hotspot').forEach(btn => {

@@ -28,8 +28,12 @@ h1{margin:0 0 16px}
 .hs-16{top:66%;left:28%;width:20%;height:28%}
 .hs-17{top:66%;left:56%;width:20%;height:28%}
 
-.detail{position:fixed;right:24px;top:80px;width:420px;background:#fff;border:1px solid #ccc;padding:16px;border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+#detail { /* use id selector to target the aside */}
+.detail{position:fixed;right:24px;top:80px;width:420px;background:#fff;border:1px solid #ccc;padding:16px;border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,0.08);overflow:auto;max-height:calc(100vh - 96px);-webkit-overflow-scrolling:touch}
 .detail.hidden{display:none}
+
+/* When detail panel is open, prevent body from scrolling */
+body.detail-open{overflow:hidden;height:100vh}
 .back{display:inline-block;margin-bottom:8px}
 #diagnosis{width:100%}
 
@@ -50,6 +54,13 @@ h1{margin:0 0 16px}
 	.sd-card{padding:0.75rem}
 	.scenario-grid, #scenarioGrid{grid-template-columns:1fr;gap:0.75rem;padding:0.75rem}
 	.sd-card-img{height:120px}
+}
+
+/* Mobile friendly detail: full-width sheet */
+@media (max-width:768px){
+	.detail{left:0;right:0;top:0;bottom:0;width:100%;height:100vh;border-radius:0;padding:1rem;box-shadow:none;max-height:none}
+	.detail #backBtn{position:sticky;top:0;z-index:10;background:transparent;padding:12px 0;margin:-12px 0 8px;border:none;text-align:left}
+	.detail h2{margin-top:8px}
 }
 
 /* Make all cards equal height by letting grid items stretch */
