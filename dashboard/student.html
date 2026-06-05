@@ -221,7 +221,7 @@
           resetFiltersBtn.id = 'resetFiltersBtn';
           resetFiltersBtn.className = 'btn btn-primary';
           resetFiltersBtn.textContent = 'Reset filters';
-          resetFiltersBtn.onclick = () => {
+          resetFiltersBtn.addEventListener('click', () => {
             try{
               const s = document.getElementById('searchInput'); if(s) s.value = '';
               const c = document.getElementById('filterCategory'); if(c) c.value = 'all';
@@ -229,7 +229,7 @@
               const a = document.getElementById('filterAse'); if(a) a.value = 'all';
             }catch(e){}
             renderGrid();
-          };
+          });
           empty.appendChild(resetFiltersBtn);
           container.appendChild(empty);
         } else {
