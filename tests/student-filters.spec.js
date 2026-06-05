@@ -82,7 +82,19 @@ function attachTestRenderer() {
     const shown = registry.filter(s => matchesFilter(s, filters));
     if(shown.length === 0){
       const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = 'No scenarios match your filters.';
+      const resetFiltersBtn = document.createElement('button');
+      resetFiltersBtn.id = 'resetFiltersBtn';
+      resetFiltersBtn.className = 'btn btn-primary';
+      resetFiltersBtn.textContent = 'Reset filters';
+      resetFiltersBtn.addEventListener('click', ()=>{
+        try{ document.getElementById('searchInput').value = ''; }catch(e){}
+        try{ document.getElementById('filterCategory').value = 'all'; }catch(e){}
+        try{ document.getElementById('filterDifficulty').value = 'all'; }catch(e){}
+        try{ document.getElementById('filterAse').value = 'all'; }catch(e){}
+        renderGrid();
+      });
       container.appendChild(empty);
+      container.appendChild(resetFiltersBtn);
     } else {
       shown.forEach(s => container.appendChild(createCard(s)));
     }
@@ -207,6 +219,20 @@ describe('Student dashboard filters', () => {
     expect(grid.querySelectorAll('.sd-card').length).toBe(0);
     expect(grid.querySelectorAll('.empty-state').length).toBe(1);
     expect(document.getElementById('filterCount').textContent).toContain('Showing 0 of 17');
+  });
+
+  test('reset filters button restores all cards after empty state', () => {
+    const search = document.getElementById('searchInput');
+    search.value = 'this-will-never-match-xyz';
+    search.dispatchEvent(new Event('input'));
+    const empty = document.querySelector('.empty-state');
+    expect(empty).toBeTruthy();
+    const btn = document.getElementById('resetFiltersBtn');
+    expect(btn).toBeTruthy();
+    btn.click();
+    const grid = document.getElementById('scenarioGrid');
+    expect(grid.querySelectorAll('.sd-card').length).toBe(17);
+    expect(document.getElementById('filterCount').textContent).toContain('Showing 17 of 17');
   });
 
   test('clearing filters restores all 17 cards', () => {

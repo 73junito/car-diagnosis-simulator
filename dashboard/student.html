@@ -102,15 +102,11 @@
         const card = document.createElement('article'); card.className = 'sd-card';
         card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
 
+        const media = document.createElement('div'); media.className = 'sd-card__media';
         const img = document.createElement('img'); img.className = 'sd-card-img'; img.alt = s.title || '';
-        img.src = s.image;
-        // Replace missing images at runtime with placeholder to avoid console 404 noise
-        img.onerror = function onImgError() {
-          if (img.src && img.src.indexOf('placeholder-scenario.svg') === -1) {
-            img.onerror = null;
-            img.src = '/assets/images/scenarios/placeholder-scenario.svg';
-          }
-        };
+        // Use placeholder immediately if no image provided and ensure robust onerror fallback
+        img.src = s.image || '/assets/images/scenarios/placeholder-scenario.svg';
+        img.onerror = () => { img.onerror = null; img.src = '/assets/images/scenarios/placeholder-scenario.svg'; };
 
         const body = document.createElement('div'); body.className = 'sd-card-body';
         const title = document.createElement('h3'); title.className = 'sd-card-title'; title.textContent = s.title || s.id;
@@ -130,7 +126,9 @@
         footer.appendChild(badge);
         footer.appendChild(btn);
 
-        card.appendChild(img); card.appendChild(body); card.appendChild(footer);
+        media.appendChild(img);
+        card.appendChild(media);
+        card.appendChild(body); card.appendChild(footer);
 
         // interactions (use hash navigation in test env to avoid jsdom navigation errors)
         function activate(){
@@ -138,7 +136,10 @@
             if(window.studentProgress && window.studentProgress.setLastScenario){ window.studentProgress.setLastScenario(s.id); }
             if(window.studentProgress && window.studentProgress.setProgressFor){ window.studentProgress.setProgressFor(s.id,'in-progress'); }
           }catch(e){}
-          if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) {
+          // prefer opening in-panel detail when available for accessibility and previews
+          if(window.showScenarioDetail && typeof window.showScenarioDetail === 'function'){
+            window.showScenarioDetail(s, card);
+          } else if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) {
             window.location.hash = btn.getAttribute('href');
           } else {
             window.location.href = btn.href;
@@ -192,15 +193,44 @@
         const container = document.getElementById('scenarioGrid');
         const countEl = document.getElementById('filterCount');
         if(!container) return;
+        // show lightweight loading skeleton while rendering
         container.innerHTML = '';
+        const skeleton = document.createElement('div'); skeleton.className = 'sd-skeleton-grid';
+        for(let i=0;i<6;i++){
+          const sc = document.createElement('div'); sc.className = 'sd-skeleton-card';
+          const m = document.createElement('div'); m.className = 'sd-skeleton-media';
+          const l1 = document.createElement('div'); l1.className = 'sd-skeleton-line';
+          const l2 = document.createElement('div'); l2.className = 'sd-skeleton-line short';
+          sc.appendChild(m); sc.appendChild(l1); sc.appendChild(l2); skeleton.appendChild(sc);
+        }
+        container.appendChild(skeleton);
+
         const registry = (window.SCENARIO_REGISTRY || []).slice(0,17);
         // populate filter selects once
         populateFilterOptions(registry);
         const filters = getFilters();
         const total = registry.length;
         const shown = registry.filter(s => matchesFilter(s, filters));
+
+        // clear skeleton and render actual content
+        container.innerHTML = '';
         if(shown.length === 0){
-          const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = 'No scenarios match your filters.';
+          const empty = document.createElement('div'); empty.className = 'empty-state';
+          empty.innerHTML = `<strong>No scenarios match your filters.</strong><div style="margin-top:8px;color:#666">Try adjusting your search or filters to broaden results.</div>`;
+          const resetFiltersBtn = document.createElement('button');
+          resetFiltersBtn.id = 'resetFiltersBtn';
+          resetFiltersBtn.className = 'btn btn-primary';
+          resetFiltersBtn.textContent = 'Reset filters';
+          resetFiltersBtn.addEventListener('click', () => {
+            try{
+              const s = document.getElementById('searchInput'); if(s) s.value = '';
+              const c = document.getElementById('filterCategory'); if(c) c.value = 'all';
+              const d = document.getElementById('filterDifficulty'); if(d) d.value = 'all';
+              const a = document.getElementById('filterAse'); if(a) a.value = 'all';
+            }catch(e){}
+            renderGrid();
+          });
+          empty.appendChild(resetFiltersBtn);
           container.appendChild(empty);
         } else {
           shown.forEach(s => {
