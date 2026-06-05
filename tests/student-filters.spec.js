@@ -209,6 +209,20 @@ describe('Student dashboard filters', () => {
     expect(document.getElementById('filterCount').textContent).toContain('Showing 0 of 17');
   });
 
+  test('reset filters button restores all cards after empty state', () => {
+    const search = document.getElementById('searchInput');
+    search.value = 'this-will-never-match-xyz';
+    search.dispatchEvent(new Event('input'));
+    const empty = document.querySelector('.empty-state');
+    expect(empty).toBeTruthy();
+    const btn = document.getElementById('resetFiltersBtn');
+    expect(btn).toBeTruthy();
+    btn.click();
+    const grid = document.getElementById('scenarioGrid');
+    expect(grid.querySelectorAll('.sd-card').length).toBe(17);
+    expect(document.getElementById('filterCount').textContent).toContain('Showing 17 of 17');
+  });
+
   test('clearing filters restores all 17 cards', () => {
     document.getElementById('searchInput').value = '';
     document.getElementById('filterCategory').value = 'all';
