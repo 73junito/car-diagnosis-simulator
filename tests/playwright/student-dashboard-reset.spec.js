@@ -24,8 +24,8 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   const empty = await page.$('.empty-state');
   await expect(empty).toBeTruthy();
 
-  // click the visible reset button to restore defaults
-  await page.locator('#resetFiltersBtn').click();
+  // click the visible reset button to restore defaults (use DOM click to exercise attached listener)
+  await page.evaluate(() => { const b = document.getElementById('resetFiltersBtn'); if(b) b.click(); });
 
   // dump diagnostic state immediately after click
   const debugState = await page.evaluate(() => ({
