@@ -29,3 +29,10 @@ function run() {
 if (require.main === module) run();
 
 module.exports = run;
+
+// Jest wrapper so CI treats this file as a test
+if (typeof test === 'function') {
+  test('analytics api functional checks (script) run', async () => {
+    await run();
+  }, 30000);
+}
