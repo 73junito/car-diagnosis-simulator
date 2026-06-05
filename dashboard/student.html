@@ -223,11 +223,12 @@
           resetFiltersBtn.textContent = 'Reset filters';
           resetFiltersBtn.addEventListener('click', () => {
             try{
-              const s = document.getElementById('searchInput'); if(s) s.value = '';
-              const c = document.getElementById('filterCategory'); if(c) c.value = 'all';
-              const d = document.getElementById('filterDifficulty'); if(d) d.value = 'all';
-              const a = document.getElementById('filterAse'); if(a) a.value = 'all';
-            }catch(e){}
+              const s = document.getElementById('searchInput'); if(s) { s.value = ''; s.dispatchEvent(new Event('input', { bubbles: true })); }
+              const c = document.getElementById('filterCategory'); if(c) { c.value = 'all'; c.dispatchEvent(new Event('change', { bubbles: true })); }
+              const d = document.getElementById('filterDifficulty'); if(d) { d.value = 'all'; d.dispatchEvent(new Event('change', { bubbles: true })); }
+              const a = document.getElementById('filterAse'); if(a) { a.value = 'all'; a.dispatchEvent(new Event('change', { bubbles: true })); }
+            }catch(e){ console.error('resetFiltersBtn handler error', e); }
+            // ensure re-render after inputs updated
             renderGrid();
           });
           empty.appendChild(resetFiltersBtn);
