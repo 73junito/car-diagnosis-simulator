@@ -78,3 +78,10 @@ async function run() {
 if (require.main === module) run().catch(err => { console.error(err); process.exit(1); });
 
 module.exports = run;
+
+// Jest wrapper so CI runs this as a test-suite
+if (typeof test === 'function') {
+  test('supabase-route integration (script) runs', async () => {
+    await run();
+  }, 30000);
+}
