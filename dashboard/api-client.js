@@ -1,4 +1,4 @@
-/* eslint-disable no-empty, no-unused-vars */
+ 
 // Simple fetch wrapper to detect API `x-app-version` mismatches.
 // Usage: require('./api-client').initApiClient({ onStale })
 
