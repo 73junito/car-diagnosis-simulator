@@ -90,6 +90,7 @@ body.detail-open{overflow:hidden;height:100vh}
 .filter-label{font-size:0.85rem;color:#444;margin-bottom:6px}
 .filter-input{padding:8px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);min-width:160px}
 .filter-count{margin-left:auto;color:#333;font-weight:600}
+.filter-actions{display:flex;align-items:flex-end}
 .empty-state{padding:36px;text-align:center;color:var(--muted);background:#fff;border:1px dashed rgba(0,0,0,0.04);border-radius:8px}
 
 /* Loading skeletons for cards */
@@ -109,6 +110,7 @@ body.detail-open{overflow:hidden;height:100vh}
 @media (max-width:600px){
 	.filters{flex-direction:column;align-items:stretch}
 	.filter-count{margin-left:0}
+	.filter-actions{align-items:stretch}
 }
 
 .progress-controls{max-width:1200px;margin:6px auto 18px;display:flex;align-items:center;gap:12px}
