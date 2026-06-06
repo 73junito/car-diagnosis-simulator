@@ -10,8 +10,17 @@ const { chromium } = require('playwright');
     }catch(e){/*ignore*/}
   });
 
-  console.log('Opening page (mobile viewport)...');
-  await page.goto('https://car-diagnosis-simulator.vercel.app/', { waitUntil: 'networkidle' });
+  const previewUrl = process.env.PREVIEW_URL || 'https://car-diagnosis-simulator.vercel.app/';
+  console.log('Opening page (mobile viewport)...', previewUrl);
+  await page.goto(previewUrl, { waitUntil: 'networkidle' });
+  // If requested, apply an intentionally-matching-no-results search to show empty state
+  if(process.env.PREVIEW_EMPTY === '1'){
+    try{
+      await page.fill('#searchInput', '__no-match__');
+      await page.dispatchEvent('#searchInput','input');
+      await page.waitForTimeout(300);
+    }catch(e){/* ignore if element not present */}
+  }
   await page.screenshot({ path:'mobile-home.png', fullPage:true });
   console.log('Saved mobile-home.png');
 

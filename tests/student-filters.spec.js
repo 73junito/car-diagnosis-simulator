@@ -70,6 +70,28 @@ function attachTestRenderer() {
     return true;
   }
 
+  function resetAllFilters(){
+    const search = document.getElementById('searchInput');
+    const category = document.getElementById('filterCategory');
+    const difficulty = document.getElementById('filterDifficulty');
+    const ase = document.getElementById('filterAse');
+    let changed = false;
+    if(search){
+      search.value = '';
+      search.dispatchEvent(new Event('input', { bubbles: true }));
+      search.dispatchEvent(new Event('change', { bubbles: true }));
+      changed = true;
+    }
+    [category, difficulty, ase].forEach((el)=>{
+      if(!el) return;
+      el.value = 'all';
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+      changed = true;
+    });
+    if(!changed) renderGrid();
+  }
+
   function renderGrid(){
     const container = document.getElementById('scenarioGrid');
     const countEl = document.getElementById('filterCount');
@@ -94,6 +116,8 @@ function attachTestRenderer() {
   function attachFilterHandlers(){
     const inputs = ['searchInput','filterCategory','filterDifficulty','filterAse'];
     inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderGrid); el.addEventListener('change', renderGrid); });
+    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    if(resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAllFilters);
   }
 
   window.__testRender = renderGrid;
@@ -207,6 +231,21 @@ describe('Student dashboard filters', () => {
     expect(grid.querySelectorAll('.sd-card').length).toBe(0);
     expect(grid.querySelectorAll('.empty-state').length).toBe(1);
     expect(document.getElementById('filterCount').textContent).toContain('Showing 0 of 17');
+  });
+
+  test('reset filters button restores all cards after empty state', () => {
+    const search = document.getElementById('searchInput');
+    search.value = 'this-will-never-match-xyz';
+    search.dispatchEvent(new Event('input'));
+    const empty = document.querySelector('.empty-state');
+    expect(empty).toBeTruthy();
+    const btn = document.querySelector('#scenarioFilters #resetFiltersBtn');
+    expect(btn).toBeTruthy();
+    expect(document.querySelector('#scenarioGrid #resetFiltersBtn')).toBeNull();
+    btn.click();
+    const grid = document.getElementById('scenarioGrid');
+    expect(grid.querySelectorAll('.sd-card').length).toBe(17);
+    expect(document.getElementById('filterCount').textContent).toContain('Showing 17 of 17');
   });
 
   test('clearing filters restores all 17 cards', () => {
