@@ -58,3 +58,33 @@ Notes / follow-ups
 
 - Optional: add a small ZIP-structure validation helper to fail fast on malformed artifacts. This is a minor polish and can be done in a follow-up PR.
 - Reviewers: focus on `scripts/auto-open-regression-issues.js` parsing and `updateIssueMetadata` atomic update usage.
+
+### Latest UX Additions
+
+- Added loading skeleton before scenario cards render.
+- Improved empty-state messaging when filters return no matches.
+- Added Playwright flag `PREVIEW_EMPTY=1` to capture empty-filter screenshots.
+- Added updated screenshots for desktop/mobile empty states.
+
+- Added Jest + Playwright keyboard-flow tests validating Enter/Space open, Escape close, and focus return.
+
+### Screenshots
+
+Overview (desktop): `docs/screenshots/desktop-home-updated.png`  
+Overview (mobile): `docs/screenshots/mobile-home-updated.png`  
+
+Detail panel (desktop): `docs/screenshots/desktop-detail-open.png`  
+Detail panel (mobile): `docs/screenshots/mobile-detail-open.png`  
+
+Empty state (desktop): `docs/screenshots/desktop-empty-filter.png`  
+Empty state (mobile): `docs/screenshots/mobile-empty-filter.png`
+
+### Checklist (student dashboard UX)
+
+- [x] Responsive cards
+- [x] Detail sheet / mobile UX
+- [x] Loading skeleton state
+- [x] Empty state messaging
+- [x] Reset filters (button + tests)
+- [x] Keyboard accessibility (Enter/Space open, Escape close, focus return)
+- [x] Screenshots & tests included

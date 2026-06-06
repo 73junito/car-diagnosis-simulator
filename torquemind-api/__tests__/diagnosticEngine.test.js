@@ -83,6 +83,8 @@ describe('DiagnosticEngine — object shape', () => {
     expect(typeof Engine.diagnose).toBe('function');
     expect(typeof Engine.applyDiagnosisWithConfidence).toBe('function');
     expect(typeof Engine.applyEvidenceToModel).toBe('function');
+    expect(typeof Engine.isFaultMatch).toBe('function');
+    expect(typeof Engine.evaluateLogicTree).toBe('function');
   });
 
   it('exposes formatToolOutput helper', () => {
@@ -91,6 +93,41 @@ describe('DiagnosticEngine — object shape', () => {
     expect(out).toContain('[SYSTEM: Electrical]');
     expect(out).toContain('BATTERY TEST');
     expect(out).toContain('11V');
+  });
+
+  describe('DiagnosticEngine logic tree helpers', () => {
+    let Engine;
+    beforeEach(() => { Engine = setupEngine(); });
+
+    it('matches normalized and aliased fault names', () => {
+      expect(Engine.isFaultMatch('spark', 'spark plugs')).toBe(true);
+      expect(Engine.isFaultMatch('starter', 'starter fault')).toBe(true);
+      expect(Engine.isFaultMatch('fuel', 'battery')).toBe(false);
+    });
+
+    it('returns incorrect when diagnosis does not match scenario fault', () => {
+      window.evidence.fuel = [{ reading: '0 psi', interpretation: 'PROBLEM', weight: 1.2 }];
+      const result = Engine.evaluateLogicTree({
+        choice: 'fuel',
+        diagnosedSystem: 'fuel',
+        scenario: { fault: 'battery' },
+        evidenceBySystem: window.evidence,
+        selectedSystem: 'fuel',
+      });
+      expect(result.correct).toBe(false);
+      expect(result.faultMatch).toBe(false);
+    });
+
+    it('allows a matching diagnosis with aligned isolation when no system evidence exists', () => {
+      const result = Engine.evaluateLogicTree({
+        choice: 'battery',
+        diagnosedSystem: 'electrical',
+        scenario: { fault: 'battery' },
+        evidenceBySystem: {},
+        selectedSystem: 'electrical',
+      });
+      expect(result.correct).toBe(true);
+    });
   });
 
   it('initialises faultProbabilities as empty object', () => {

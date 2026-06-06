@@ -287,6 +287,90 @@
     return `[SYSTEM: ${systemLabel}]\nTest: ${testName}\nResult: ${value}\nInterpretation: ${interpretation}\nConclusion: ${conclusion}`;
   };
 
+  const PROBLEM_PATTERN = /low|no|problem|leak|slip|misfire|degrad|sticky|clog|<12v|0 psi|weak|fault|fail/i;
+  const FAULT_ALIASES = {
+    spark: 'spark_plugs',
+    sparkplug: 'spark_plugs',
+    sparkplugs: 'spark_plugs',
+    plug: 'spark_plugs',
+    plugs: 'spark_plugs'
+  };
+
+  DiagnosticEngine.normalizeToken = function(value){
+    const token = String(value || '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+    if (!token) return '';
+    return FAULT_ALIASES[token] || token;
+  };
+
+  DiagnosticEngine.isFaultMatch = function(choice, fault){
+    const choiceNorm = DiagnosticEngine.normalizeToken(choice);
+    if (!choiceNorm || fault === undefined || fault === null) return false;
+
+    const faultValues = Array.isArray(fault) ? fault : [fault];
+    return faultValues.some((f) => {
+      const faultNorm = DiagnosticEngine.normalizeToken(f);
+      if (!faultNorm) return false;
+      if (faultNorm === choiceNorm) return true;
+      const parts = faultNorm.split('_').filter(Boolean);
+      if (parts.includes(choiceNorm)) return true;
+      if (choiceNorm.includes('_')) {
+        const choiceParts = choiceNorm.split('_').filter(Boolean);
+        return choiceParts.every((part) => parts.includes(part));
+      }
+      return false;
+    });
+  };
+
+  DiagnosticEngine.evaluateLogicTree = function({ choice, diagnosedSystem, scenario, evidenceBySystem, selectedSystem }){
+    const trace = [];
+    const safeEvidence = (evidenceBySystem && typeof evidenceBySystem === 'object') ? evidenceBySystem : {};
+    const sys = diagnosedSystem || null;
+    const diagnosedEvidence = (sys && Array.isArray(safeEvidence[sys])) ? safeEvidence[sys] : [];
+    const evidenceSum = diagnosedEvidence.reduce((a, c) => a + (c.weight || 0), 0);
+    const totalSum = Object.keys(safeEvidence).reduce((a, k) => a + (safeEvidence[k] || []).reduce((x, y) => x + (y.weight || 0), 0), 0) || 1;
+    const relevance = evidenceSum / totalSum;
+    const problematic = diagnosedEvidence.some((e) => PROBLEM_PATTERN.test((e.reading || '') + ' ' + (e.interpretation || '')));
+    const faultMatch = DiagnosticEngine.isFaultMatch(choice, scenario && scenario.fault);
+    const isolationCorrect = !!selectedSystem && selectedSystem === sys;
+    const hasEvidence = diagnosedEvidence.length > 0;
+    const maxOtherEvidence = Object.keys(safeEvidence)
+      .filter((k) => k !== sys)
+      .reduce((max, k) => {
+        const sum = (safeEvidence[k] || []).reduce((a, c) => a + (c.weight || 0), 0);
+        return Math.max(max, sum);
+      }, 0);
+    const strongerThanOthers = evidenceSum >= (maxOtherEvidence + 0.1);
+
+    trace.push({ node: 'fault_match', passed: faultMatch });
+    if (!faultMatch) {
+      trace.push({ node: 'verdict', passed: false, reason: 'choice does not match expected fault' });
+      return { correct: false, faultMatch, relevance, problematic, isolationCorrect, trace };
+    }
+
+    trace.push({ node: 'has_evidence', passed: hasEvidence });
+    if (!hasEvidence) {
+      const correct = isolationCorrect;
+      trace.push({ node: 'verdict', passed: correct, reason: correct ? 'matched fault with aligned isolation' : 'matched fault without system evidence' });
+      return { correct, faultMatch, relevance, problematic, isolationCorrect, trace };
+    }
+
+    const supportSignals = [
+      { node: 'problematic_evidence', passed: problematic },
+      { node: 'relevance_threshold', passed: relevance >= 0.2 },
+      { node: 'isolation_alignment', passed: isolationCorrect },
+      { node: 'dominant_evidence', passed: strongerThanOthers }
+    ];
+    supportSignals.forEach((s) => trace.push(s));
+    const supportCount = supportSignals.filter((s) => s.passed).length;
+    const correct = supportCount > 0;
+    trace.push({ node: 'verdict', passed: correct, reason: correct ? 'fault match supported by evidence tree' : 'fault match lacks support in evidence tree' });
+    return { correct, faultMatch, relevance, problematic, isolationCorrect, trace };
+  };
+
   DiagnosticEngine.applyEvidenceToModel = function(component, interpretation){
     const fp = DiagnosticEngine.faultProbabilities;
     if (!fp || typeof fp !== 'object') return;
@@ -414,19 +498,14 @@
     let correct = false;
     const sys = (choice === 'battery' || choice === 'starter' || choice === 'alternator') ? 'electrical'
               : (choice === 'fuel' ? 'fuel' : (choice === 'spark' || choice === 'spark_plugs' ? 'ignition' : null));
-
-    if (sys && window.evidence[sys] && window.evidence[sys].length > 0) {
-      const evidenceSum = window.evidence[sys].reduce((a,c)=> a + (c.weight || 0), 0);
-      const totalSum = Object.keys(window.evidence).reduce((a,k)=> a + (window.evidence[k]||[]).reduce((x,y)=> x + (y.weight||0), 0), 0) || 1;
-      const relevance = evidenceSum / totalSum;
-      const problematic = window.evidence[sys].some(e => /low|no|problem|leak|slip|misfire|degrad|sticky|clog|<12v|0 psi/i.test(e.reading + ' ' + e.interpretation));
-      const faultMatch = (s.fault && s.fault.includes(choice));
-      const isolationCorrect = window.selectedSystem === sys;
-      if (faultMatch && (relevance >= 0.2 || isolationCorrect || problematic)) correct = true;
-      else correct = false;
-    } else {
-      correct = (choice === s.fault);
-    }
+    const logicTreeResult = DiagnosticEngine.evaluateLogicTree({
+      choice,
+      diagnosedSystem: sys,
+      scenario: s,
+      evidenceBySystem: window.evidence,
+      selectedSystem: window.selectedSystem
+    });
+    correct = logicTreeResult.correct;
 
     if (correct) {
       window.correctAnswers++;
@@ -459,7 +538,8 @@
         confidence: conf,
         scoreDelta: correct ? (confScore + isolationBonus) : -5,
         final: correct ? 'Correct' : 'Incorrect',
-        scenarioIndex: window.currentIndex || 0
+        scenarioIndex: window.currentIndex || 0,
+        logicTree: logicTreeResult.trace || []
       };
 
       try { window.updateStudentProfile && window.updateStudentProfile(window.lastExplanation.final === 'Correct', window.selectedSystem || 'unspecified', s.fault || null); } catch(e){ /* ignore: profile update failure */ }
