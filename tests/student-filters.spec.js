@@ -70,6 +70,28 @@ function attachTestRenderer() {
     return true;
   }
 
+  function resetAllFilters(){
+    const search = document.getElementById('searchInput');
+    const category = document.getElementById('filterCategory');
+    const difficulty = document.getElementById('filterDifficulty');
+    const ase = document.getElementById('filterAse');
+    let changed = false;
+    if(search){
+      search.value = '';
+      search.dispatchEvent(new Event('input', { bubbles: true }));
+      search.dispatchEvent(new Event('change', { bubbles: true }));
+      changed = true;
+    }
+    [category, difficulty, ase].forEach((el)=>{
+      if(!el) return;
+      el.value = 'all';
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+      changed = true;
+    });
+    if(!changed) renderGrid();
+  }
+
   function renderGrid(){
     const container = document.getElementById('scenarioGrid');
     const countEl = document.getElementById('filterCount');
@@ -82,19 +104,7 @@ function attachTestRenderer() {
     const shown = registry.filter(s => matchesFilter(s, filters));
     if(shown.length === 0){
       const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = 'No scenarios match your filters.';
-      const resetFiltersBtn = document.createElement('button');
-      resetFiltersBtn.id = 'resetFiltersBtn';
-      resetFiltersBtn.className = 'btn btn-primary';
-      resetFiltersBtn.textContent = 'Reset filters';
-      resetFiltersBtn.addEventListener('click', ()=>{
-        try{ document.getElementById('searchInput').value = ''; }catch(e){}
-        try{ document.getElementById('filterCategory').value = 'all'; }catch(e){}
-        try{ document.getElementById('filterDifficulty').value = 'all'; }catch(e){}
-        try{ document.getElementById('filterAse').value = 'all'; }catch(e){}
-        renderGrid();
-      });
       container.appendChild(empty);
-      container.appendChild(resetFiltersBtn);
     } else {
       shown.forEach(s => container.appendChild(createCard(s)));
     }
@@ -106,6 +116,8 @@ function attachTestRenderer() {
   function attachFilterHandlers(){
     const inputs = ['searchInput','filterCategory','filterDifficulty','filterAse'];
     inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderGrid); el.addEventListener('change', renderGrid); });
+    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    if(resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAllFilters);
   }
 
   window.__testRender = renderGrid;
@@ -227,8 +239,9 @@ describe('Student dashboard filters', () => {
     search.dispatchEvent(new Event('input'));
     const empty = document.querySelector('.empty-state');
     expect(empty).toBeTruthy();
-    const btn = document.getElementById('resetFiltersBtn');
+    const btn = document.querySelector('#scenarioFilters #resetFiltersBtn');
     expect(btn).toBeTruthy();
+    expect(document.querySelector('#scenarioGrid #resetFiltersBtn')).toBeNull();
     btn.click();
     const grid = document.getElementById('scenarioGrid');
     expect(grid.querySelectorAll('.sd-card').length).toBe(17);
