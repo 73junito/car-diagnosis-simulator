@@ -9,7 +9,8 @@ module.exports = {
   timeout: 30 * 1000,
   expect: { timeout: 5000 },
   retries: 0,
-  reporter: [['list'], ['html', { outputFolder: 'test-results/playwright-report' }]],
+  // keep HTML report outside of the `test-results` root to avoid folder-clearing collisions
+  reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
   use: {
     headless: true,
     viewport: { width: 1280, height: 800 },
@@ -19,4 +20,11 @@ module.exports = {
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } }
   ]
+  ,
+  webServer: {
+    command: 'npx http-server -p 3003 -c-1 .',
+    url: 'http://127.0.0.1:3003',
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000
+  }
 };

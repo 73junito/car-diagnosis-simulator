@@ -100,6 +100,8 @@
     (function(){
       function createCard(s){
         const card = document.createElement('article'); card.className = 'sd-card';
+        // attach stable id for testing and identity checks
+        try{ card.setAttribute('data-scenario-id', s.id); }catch(e){}
         card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
 
         const media = document.createElement('div'); media.className = 'sd-card__media';
@@ -189,6 +191,9 @@
         return true;
       }
 
+      
+
+      // Internal renderer performs DOM updates. Keep this focused on DOM only.
       function renderGrid(){
         const container = document.getElementById('scenarioGrid');
         const countEl = document.getElementById('filterCount');
@@ -229,7 +234,7 @@
               const a = document.getElementById('filterAse'); if(a) { a.value = 'all'; a.dispatchEvent(new Event('change', { bubbles: true })); }
             }catch(e){ console.error('resetFiltersBtn handler error', e); }
             // ensure re-render after inputs updated
-            renderGrid();
+            renderDashboard();
           });
           empty.appendChild(resetFiltersBtn);
           container.appendChild(empty);
@@ -262,20 +267,37 @@
             const ok = window.confirm('Reset all progress? This cannot be undone.');
             if(!ok) return;
             if(window.studentProgress && window.studentProgress.clearProgress) window.studentProgress.clearProgress();
-            renderGrid();
+            renderDashboard();
           };
         }
         if(resumeBtn){ resumeBtn.onclick = ()=>{ const id = resumeBtn.dataset.scenario; const found = (window.SCENARIO_REGISTRY||[]).find(x=>x.id===id); if(found){ if(window.studentProgress && window.studentProgress.setProgressFor) window.studentProgress.setProgressFor(id,'in-progress'); if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID){ window.location.hash = found.route; } else { window.location.href = found.route; } } } }
       }
 
+      // Single public render entrypoint: normalize state has already been performed by scenario-registry.js
+      function renderDashboard(){
+        // single render entrypoint — perform DOM updates, then signal completion after paint
+        try{
+          renderGrid();
+          if(typeof requestAnimationFrame === 'function'){
+            requestAnimationFrame(()=>{
+              try{ window.dispatchEvent(new Event('grid:rendered')); }catch(e){ console.error('grid:rendered dispatch failed', e); }
+            });
+          } else {
+            setTimeout(()=>{
+              try{ window.dispatchEvent(new Event('grid:rendered')); }catch(e){ console.error('grid:rendered dispatch failed', e); }
+            },0);
+          }
+        }catch(e){ console.error('renderDashboard failed', e); }
+      }
+
       function attachFilterHandlers(){
         const inputs = ['searchInput','filterCategory','filterDifficulty','filterAse'];
-        inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderGrid); el.addEventListener('change', renderGrid); });
+        inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderDashboard); el.addEventListener('change', renderDashboard); });
       }
 
       // render once registry is available
-      if(window.SCENARIO_REGISTRY){ renderGrid(); attachFilterHandlers(); }
-      else document.addEventListener('DOMContentLoaded', ()=>{ renderGrid(); attachFilterHandlers(); });
+      if(window.SCENARIO_REGISTRY){ renderDashboard(); attachFilterHandlers(); }
+      else document.addEventListener('DOMContentLoaded', ()=>{ renderDashboard(); attachFilterHandlers(); });
     })();
   </script>
 </body>
