@@ -5,19 +5,17 @@ try {
 } catch (e) {}
 
 try {
-  // If the runtime already provides WHATWG fetch + constructors, use it.
-  if (typeof globalThis.fetch === 'function' && typeof globalThis.Request !== 'undefined' && typeof globalThis.Response !== 'undefined' && typeof globalThis.Headers !== 'undefined') {
-    // Node >=18/22 may already provide a compatible fetch implementation.
-    return
-  }
-  // Prefer the lightweight index-fetch entry (avoids undici webidl requiring extra globals on older Node)
-  let u = null
-  try { u = require('undici/index-fetch') } catch (_) {
-    try { u = require('undici') } catch (_) {
-      try { u = require('node-fetch') } catch (_) { u = null }
+  // If the runtime already provides WHATWG fetch + constructors, skip polyfills.
+  const haveGlobalFetch = (typeof globalThis.fetch === 'function' && typeof globalThis.Request !== 'undefined' && typeof globalThis.Response !== 'undefined' && typeof globalThis.Headers !== 'undefined')
+  if (!haveGlobalFetch) {
+    // Prefer the lightweight index-fetch entry (avoids undici webidl requiring extra globals on older Node)
+    let u = null
+    try { u = require('undici/index-fetch') } catch (_) {
+      try { u = require('undici') } catch (_) {
+        try { u = require('node-fetch') } catch (_) { u = null }
+      }
     }
-  }
-  if (!u) {
+    if (!u) {
     // Minimal, conservative shims to satisfy import-time checks for libraries
     // that only verify existence of WHATWG globals (e.g., @mswjs/interceptors).
     if (typeof globalThis.fetch !== 'function') {
@@ -58,13 +56,14 @@ try {
     if (typeof globalThis.File === 'undefined') {
       globalThis.File = class File { constructor(parts, name, opts) { this.name = name; this.parts = parts; this.size = Array.isArray(parts) ? parts.reduce((s, p) => s + (p?.length || 0), 0) : 0; this.type = opts && opts.type ? opts.type : '' } }
     }
-  } else {
+    } else {
     // Normalize exports: node-fetch may export the fetch function directly.
     const fetchImpl = u.fetch || u
     globalThis.fetch = fetchImpl
     if (u.Headers) globalThis.Headers = u.Headers
     if (u.Response) globalThis.Response = u.Response
     if (u.Request) globalThis.Request = u.Request
+    }
   }
 
   // Ensure web streams are available (Node 18 has stream/web). Fallback to ponyfill if needed.
