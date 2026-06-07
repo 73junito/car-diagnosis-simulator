@@ -103,6 +103,8 @@
     (function(){
       function createCard(s){
         const card = document.createElement('article'); card.className = 'sd-card';
+        // attach stable id for testing and identity checks
+        try{ card.setAttribute('data-scenario-id', s.id); }catch(e){}
         card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
 
         const media = document.createElement('div'); media.className = 'sd-card__media';
@@ -192,28 +194,9 @@
         return true;
       }
 
-      function resetAllFilters(){
-        const search = document.getElementById('searchInput');
-        const category = document.getElementById('filterCategory');
-        const difficulty = document.getElementById('filterDifficulty');
-        const ase = document.getElementById('filterAse');
-        let changed = false;
-        if(search){
-          search.value = '';
-          search.dispatchEvent(new Event('input', { bubbles: true }));
-          search.dispatchEvent(new Event('change', { bubbles: true }));
-          changed = true;
-        }
-        [category, difficulty, ase].forEach((el)=>{
-          if(!el) return;
-          el.value = 'all';
-          el.dispatchEvent(new Event('input', { bubbles: true }));
-          el.dispatchEvent(new Event('change', { bubbles: true }));
-          changed = true;
-        });
-        if(!changed) renderGrid();
-      }
+      
 
+      // Internal renderer performs DOM updates. Keep this focused on DOM only.
       function renderGrid(){
         const container = document.getElementById('scenarioGrid');
         const countEl = document.getElementById('filterCount');
@@ -242,7 +225,23 @@
         if(shown.length === 0){
           const empty = document.createElement('div'); empty.className = 'empty-state';
           empty.innerHTML = `<strong>No scenarios match your filters.</strong><div style="margin-top:8px;color:#666">Try adjusting your search or filters to broaden results.</div>`;
+          const resetFiltersBtn = document.createElement('button');
+          resetFiltersBtn.id = 'resetFiltersBtn';
+          resetFiltersBtn.className = 'btn btn-primary';
+          resetFiltersBtn.textContent = 'Reset filters';
+          resetFiltersBtn.addEventListener('click', () => {
+            try{
+              const s = document.getElementById('searchInput'); if(s) { s.value = ''; s.dispatchEvent(new Event('input', { bubbles: true })); }
+              const c = document.getElementById('filterCategory'); if(c) { c.value = 'all'; c.dispatchEvent(new Event('change', { bubbles: true })); }
+              const d = document.getElementById('filterDifficulty'); if(d) { d.value = 'all'; d.dispatchEvent(new Event('change', { bubbles: true })); }
+              const a = document.getElementById('filterAse'); if(a) { a.value = 'all'; a.dispatchEvent(new Event('change', { bubbles: true })); }
+            }catch(e){ console.error('resetFiltersBtn handler error', e); }
+            // ensure re-render after inputs updated
+            renderDashboard();
+          });
+          empty.appendChild(resetFiltersBtn);
           container.appendChild(empty);
+          try { empty.scrollIntoView({ behavior: 'auto', block: 'center' }); resetFiltersBtn.focus(); } catch(e) { /* ignore */ }
         } else {
           shown.forEach(s => {
             try{
@@ -271,22 +270,37 @@
             const ok = window.confirm('Reset all progress? This cannot be undone.');
             if(!ok) return;
             if(window.studentProgress && window.studentProgress.clearProgress) window.studentProgress.clearProgress();
-            renderGrid();
+            renderDashboard();
           };
         }
         if(resumeBtn){ resumeBtn.onclick = ()=>{ const id = resumeBtn.dataset.scenario; const found = (window.SCENARIO_REGISTRY||[]).find(x=>x.id===id); if(found){ if(window.studentProgress && window.studentProgress.setProgressFor) window.studentProgress.setProgressFor(id,'in-progress'); if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID){ window.location.hash = found.route; } else { window.location.href = found.route; } } } }
       }
 
+      // Single public render entrypoint: normalize state has already been performed by scenario-registry.js
+      function renderDashboard(){
+        // single render entrypoint — perform DOM updates, then signal completion after paint
+        try{
+          renderGrid();
+          if(typeof requestAnimationFrame === 'function'){
+            requestAnimationFrame(()=>{
+              try{ window.dispatchEvent(new Event('grid:rendered')); }catch(e){ console.error('grid:rendered dispatch failed', e); }
+            });
+          } else {
+            setTimeout(()=>{
+              try{ window.dispatchEvent(new Event('grid:rendered')); }catch(e){ console.error('grid:rendered dispatch failed', e); }
+            },0);
+          }
+        }catch(e){ console.error('renderDashboard failed', e); }
+      }
+
       function attachFilterHandlers(){
         const inputs = ['searchInput','filterCategory','filterDifficulty','filterAse'];
-        inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderGrid); el.addEventListener('change', renderGrid); });
-        const resetFiltersBtn = document.getElementById('resetFiltersBtn');
-        if(resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAllFilters);
+        inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderDashboard); el.addEventListener('change', renderDashboard); });
       }
 
       // render once registry is available
-      if(window.SCENARIO_REGISTRY){ renderGrid(); attachFilterHandlers(); }
-      else document.addEventListener('DOMContentLoaded', ()=>{ renderGrid(); attachFilterHandlers(); });
+      if(window.SCENARIO_REGISTRY){ renderDashboard(); attachFilterHandlers(); }
+      else document.addEventListener('DOMContentLoaded', ()=>{ renderDashboard(); attachFilterHandlers(); });
     })();
   </script>
 </body>

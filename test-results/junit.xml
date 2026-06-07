@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="4" failures="0" errors="0" time="0.907">
+  <testsuite name="DiagnosticEngine unit tests" errors="0" failures="0" skipped="0" timestamp="2026-06-06T23:02:01" time="0.505" tests="4">
+    <testcase classname="DiagnosticEngine unit tests applyEvidenceToModel updates fault probabilities for battery" name="DiagnosticEngine unit tests applyEvidenceToModel updates fault probabilities for battery" time="0.009">
+    </testcase>
+    <testcase classname="DiagnosticEngine unit tests useTool records evidence and sets weight and updates probabilities" name="DiagnosticEngine unit tests useTool records evidence and sets weight and updates probabilities" time="0.004">
+    </testcase>
+    <testcase classname="DiagnosticEngine unit tests applyDiagnosisWithConfidence marks correct and updates score" name="DiagnosticEngine unit tests applyDiagnosisWithConfidence marks correct and updates score" time="0.003">
+    </testcase>
+    <testcase classname="DiagnosticEngine unit tests applyDiagnosisWithConfidence handles incorrect diagnosis without throwing" name="DiagnosticEngine unit tests applyDiagnosisWithConfidence handles incorrect diagnosis without throwing" time="0.003">
+    </testcase>
+  </testsuite>
+</testsuites>

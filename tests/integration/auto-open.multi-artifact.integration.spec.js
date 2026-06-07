@@ -1,4 +1,6 @@
  
+// Ensure deterministic fetch/Request globals for this test file (run before any imports).
+try { require('../../tests/jest-undici-register.js'); } catch (e) {}
 const path = require('path');
 const fs = require('fs');
 let nock;

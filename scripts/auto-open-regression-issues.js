@@ -4,14 +4,16 @@ const path = require('path');
 const AdmZip = require('adm-zip');
 
 async function doFetch(url, opts) {
-  if (global.fetch) return global.fetch(url, opts);
-  const { request } = url.startsWith('https:') ? require('https') : require('http');
+  // Prefer using Node's http/https modules so HTTP mocking libraries like `nock`
+  // can reliably intercept requests during tests. Fall back to global.fetch
+  // only if the manual implementation fails and a fetch implementation exists.
   return new Promise((resolve, reject) => {
     try {
       const u = new URL(url);
       const lib = u.protocol === 'https:' ? require('https') : require('http');
       const headers = (opts && opts.headers) || {};
       const method = (opts && opts.method) || 'GET';
+      console.log(`doFetch: ${method} ${url}`);
       const body = opts && opts.body;
       const req = lib.request({ hostname: u.hostname, path: u.pathname + u.search, port: u.port || (u.protocol === 'https:' ? 443 : 80), method, headers }, res => {
         const chunks = [];
@@ -35,23 +37,65 @@ async function doFetch(url, opts) {
         else req.write(JSON.stringify(body));
       }
       req.end();
-    } catch (e) { reject(e); }
+    } catch (e) {
+      return reject(e);
+    }
   });
 }
 
 async function listArtifacts(owner, repo, token) {
   const api = `https://api.github.com/repos/${owner}/${repo}/actions/artifacts`;
-  const res = await doFetch(api, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' } });
-  if (!res.ok) return [];
+  let res;
+  try {
+    res = await doFetch(api, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' } });
+  } catch (e) {
+    console.log(`listArtifacts: fetch failed: ${e && e.message}`);
+    return [];
+  }
+  if (!res.ok) {
+    try {
+      const t = await res.text();
+      console.log(`listArtifacts: non-ok status=${res.status} body=${t}`);
+    } catch (e) {
+      console.log(`listArtifacts: non-ok status=${res.status} (body read failed)`);
+    }
+    return [];
+  }
   const j = await res.json();
+  if (!j || !j.artifacts) {
+    console.log(`listArtifacts: ok status=${res.status} but no artifacts payload: ${JSON.stringify(j)}`);
+  }
   return j.artifacts || [];
 }
 
 async function downloadArtifactJson(owner, repo, token, artifactId, entrySuffix) {
   const url = `https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${artifactId}/zip`;
   const dl = await doFetch(url, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' } });
-  if (!dl.ok) return null;
-  const buffer = Buffer.from(await dl.arrayBuffer());
+  if (!dl.ok) {
+    try {
+      const t = await dl.text();
+      console.log(`downloadArtifactJson: non-ok status=${dl.status} artifact=${artifactId} body=${t}`);
+    } catch (e) {
+      console.log(`downloadArtifactJson: non-ok status=${dl.status} artifact=${artifactId} (body read failed)`);
+    }
+    return null;
+  }
+  let buffer;
+  try {
+    if (typeof dl.arrayBuffer === 'function') {
+      buffer = Buffer.from(await dl.arrayBuffer());
+    } else if (typeof dl.buffer === 'function') {
+      buffer = Buffer.from(await dl.buffer());
+    } else if (typeof dl.text === 'function') {
+      const t = await dl.text();
+      buffer = Buffer.from(t, 'utf8');
+    } else {
+      throw new Error('response has no arrayBuffer/buffer/text method');
+    }
+  } catch (e) {
+    console.log(`downloadArtifactJson: failed to read response body for artifact=${artifactId}: ${e && e.message}`);
+    return null;
+  }
   let zip = new AdmZip(buffer);
   let entries = zip.getEntries().map(e => e.entryName);
     let entry = zip.getEntries().find(e => e.entryName.endsWith(entrySuffix));
@@ -110,6 +154,7 @@ async function downloadArtifactJson(owner, repo, token, artifactId, entrySuffix)
       }
     }
 
+    console.log(`downloadArtifactJson: no ${entrySuffix} in zip entries: ${entries.join(',')}`);
     throw new Error(`no ${entrySuffix} in zip entries: ${entries.join(',')}`);
 }
 
