@@ -72,7 +72,15 @@ async function listArtifacts(owner, repo, token) {
 async function downloadArtifactJson(owner, repo, token, artifactId, entrySuffix) {
   const url = `https://api.github.com/repos/${owner}/${repo}/actions/artifacts/${artifactId}/zip`;
   const dl = await doFetch(url, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' } });
-  if (!dl.ok) return null;
+  if (!dl.ok) {
+    try {
+      const t = await dl.text();
+      console.log(`downloadArtifactJson: non-ok status=${dl.status} artifact=${artifactId} body=${t}`);
+    } catch (e) {
+      console.log(`downloadArtifactJson: non-ok status=${dl.status} artifact=${artifactId} (body read failed)`);
+    }
+    return null;
+  }
   const buffer = Buffer.from(await dl.arrayBuffer());
   let zip = new AdmZip(buffer);
   let entries = zip.getEntries().map(e => e.entryName);
@@ -132,6 +140,7 @@ async function downloadArtifactJson(owner, repo, token, artifactId, entrySuffix)
       }
     }
 
+    console.log(`downloadArtifactJson: no ${entrySuffix} in zip entries: ${entries.join(',')}`);
     throw new Error(`no ${entrySuffix} in zip entries: ${entries.join(',')}`);
 }
 
