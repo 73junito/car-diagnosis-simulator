@@ -53,7 +53,13 @@ async function doFetch(url, opts) {
 
 async function listArtifacts(owner, repo, token) {
   const api = `https://api.github.com/repos/${owner}/${repo}/actions/artifacts`;
-  const res = await doFetch(api, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' } });
+  let res;
+  try {
+    res = await doFetch(api, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' } });
+  } catch (e) {
+    console.log(`listArtifacts: fetch failed: ${e && e.message}`);
+    return [];
+  }
   if (!res.ok) {
     try {
       const t = await res.text();
