@@ -80,7 +80,22 @@ async function downloadArtifactJson(owner, repo, token, artifactId, entrySuffix)
     }
     return null;
   }
-  const buffer = Buffer.from(await dl.arrayBuffer());
+  let buffer;
+  try {
+    if (typeof dl.arrayBuffer === 'function') {
+      buffer = Buffer.from(await dl.arrayBuffer());
+    } else if (typeof dl.buffer === 'function') {
+      buffer = Buffer.from(await dl.buffer());
+    } else if (typeof dl.text === 'function') {
+      const t = await dl.text();
+      buffer = Buffer.from(t, 'utf8');
+    } else {
+      throw new Error('response has no arrayBuffer/buffer/text method');
+    }
+  } catch (e) {
+    console.log(`downloadArtifactJson: failed to read response body for artifact=${artifactId}: ${e && e.message}`);
+    return null;
+  }
   let zip = new AdmZip(buffer);
   let entries = zip.getEntries().map(e => e.entryName);
     let entry = zip.getEntries().find(e => e.entryName.endsWith(entrySuffix));
