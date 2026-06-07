@@ -5,6 +5,11 @@ try {
 } catch (e) {}
 
 try {
+  // If the runtime already provides WHATWG fetch + constructors, use it.
+  if (typeof globalThis.fetch === 'function' && typeof globalThis.Request !== 'undefined' && typeof globalThis.Response !== 'undefined' && typeof globalThis.Headers !== 'undefined') {
+    // Node >=18/22 may already provide a compatible fetch implementation.
+    return
+  }
   // Prefer the lightweight index-fetch entry (avoids undici webidl requiring extra globals on older Node)
   let u = null
   try { u = require('undici/index-fetch') } catch (_) {
