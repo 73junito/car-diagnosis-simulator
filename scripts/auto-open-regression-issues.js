@@ -38,14 +38,6 @@ async function doFetch(url, opts) {
       }
       req.end();
     } catch (e) {
-      if (global.fetch) {
-        try {
-          // delegate to global fetch if available
-          return resolve(global.fetch(url, opts));
-        } catch (fe) {
-          return reject(fe);
-        }
-      }
       return reject(e);
     }
   });
