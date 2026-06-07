@@ -42,6 +42,9 @@ try {
           this.method = init.method || 'GET'
           this.headers = init.headers || new globalThis.Headers()
         }
+        clone() {
+          return new globalThis.Request(this.url, { method: this.method, headers: this.headers })
+        }
       }
     }
     if (typeof globalThis.Response === 'undefined') {
