@@ -17,14 +17,55 @@ try {
       try { u = require('node-fetch') } catch (_) { u = null }
     }
   }
-  if (!u) throw new Error('No fetch implementation available (undici/index-fetch, undici, node-fetch)')
-
-  // Normalize exports: node-fetch may export the fetch function directly.
-  const fetchImpl = u.fetch || u
-  globalThis.fetch = fetchImpl
-  if (u.Headers) globalThis.Headers = u.Headers
-  if (u.Response) globalThis.Response = u.Response
-  if (u.Request) globalThis.Request = u.Request
+  if (!u) {
+    // Minimal, conservative shims to satisfy import-time checks for libraries
+    // that only verify existence of WHATWG globals (e.g., @mswjs/interceptors).
+    if (typeof globalThis.fetch !== 'function') {
+      globalThis.fetch = function () {
+        return Promise.reject(new Error('fetch is not polyfilled in this environment'))
+      }
+    }
+    if (typeof globalThis.Headers === 'undefined') {
+      globalThis.Headers = class Headers {
+        constructor(init) {
+          this.map = {}
+          if (init && typeof init === 'object') {
+            for (const [k, v] of Object.entries(init)) this.map[k.toLowerCase()] = String(v)
+          }
+        }
+        get(k) { return this.map[k.toLowerCase()] }
+        append(k, v) { this.map[k.toLowerCase()] = (this.map[k.toLowerCase()] || '') + String(v) }
+      }
+    }
+    if (typeof globalThis.Request === 'undefined') {
+      globalThis.Request = class Request {
+        constructor(input, init = {}) {
+          this.url = input && input.url ? input.url : String(input)
+          this.method = init.method || 'GET'
+          this.headers = init.headers || new globalThis.Headers()
+        }
+      }
+    }
+    if (typeof globalThis.Response === 'undefined') {
+      globalThis.Response = class Response {
+        constructor(body = null, init = {}) {
+          this.body = body
+          this.status = init.status || 200
+          this.headers = init.headers || new globalThis.Headers()
+        }
+      }
+    }
+    if (typeof globalThis.File === 'undefined') {
+      globalThis.File = class File { constructor(parts, name, opts) { this.name = name; this.parts = parts; this.size = Array.isArray(parts) ? parts.reduce((s, p) => s + (p?.length || 0), 0) : 0; this.type = opts && opts.type ? opts.type : '' } }
+    }
+  } else {
+    // Normalize exports: node-fetch may export the fetch function directly.
+    const fetchImpl = u.fetch || u
+    globalThis.fetch = fetchImpl
+    if (u.Headers) globalThis.Headers = u.Headers
+    if (u.Response) globalThis.Response = u.Response
+    if (u.Request) globalThis.Request = u.Request
+  }
 
   // Ensure web streams are available (Node 18 has stream/web). Fallback to ponyfill if needed.
   try {
