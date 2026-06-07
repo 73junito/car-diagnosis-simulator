@@ -60,12 +60,14 @@ try {
       globalThis.File = class File { constructor(parts, name, opts) { this.name = name; this.parts = parts; this.size = Array.isArray(parts) ? parts.reduce((s, p) => s + (p?.length || 0), 0) : 0; this.type = opts && opts.type ? opts.type : '' } }
     }
     } else {
-    // Normalize exports: node-fetch may export the fetch function directly.
-    const fetchImpl = u.fetch || u
-    globalThis.fetch = fetchImpl
-    if (u.Headers) globalThis.Headers = u.Headers
-    if (u.Response) globalThis.Response = u.Response
-    if (u.Request) globalThis.Request = u.Request
+      // Normalize constructor exports if available, but DO NOT assign a
+      // global `fetch` here. Avoiding a runtime `fetch` polyfill at process
+      // preload keeps the network stack deterministic for `nock` (Node
+      // http/https interception). Tests that need a full fetch runtime can
+      // opt-in later in `setupFiles` if required.
+      if (u.Headers) globalThis.Headers = u.Headers
+      if (u.Response) globalThis.Response = u.Response
+      if (u.Request) globalThis.Request = u.Request
     }
   }
 
