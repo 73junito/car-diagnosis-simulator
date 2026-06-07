@@ -53,8 +53,19 @@ async function doFetch(url, opts) {
 async function listArtifacts(owner, repo, token) {
   const api = `https://api.github.com/repos/${owner}/${repo}/actions/artifacts`;
   const res = await doFetch(api, { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' } });
-  if (!res.ok) return [];
+  if (!res.ok) {
+    try {
+      const t = await res.text();
+      console.log(`listArtifacts: non-ok status=${res.status} body=${t}`);
+    } catch (e) {
+      console.log(`listArtifacts: non-ok status=${res.status} (body read failed)`);
+    }
+    return [];
+  }
   const j = await res.json();
+  if (!j || !j.artifacts) {
+    console.log(`listArtifacts: ok status=${res.status} but no artifacts payload: ${JSON.stringify(j)}`);
+  }
   return j.artifacts || [];
 }
 
