@@ -13,6 +13,7 @@ async function doFetch(url, opts) {
       const lib = u.protocol === 'https:' ? require('https') : require('http');
       const headers = (opts && opts.headers) || {};
       const method = (opts && opts.method) || 'GET';
+      console.log(`doFetch: ${method} ${url}`);
       const body = opts && opts.body;
       const req = lib.request({ hostname: u.hostname, path: u.pathname + u.search, port: u.port || (u.protocol === 'https:' ? 443 : 80), method, headers }, res => {
         const chunks = [];
