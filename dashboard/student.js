@@ -71,6 +71,8 @@ window.initStudentDashboard = function(){
     const found = (window.scenarios||[]).find(s => (s.symptomCategory===q || (s.slug===q) || (s.symptoms===q) || String(s.id)===q));
     if(found) showDetail(found);
   }
+  // expose helper to open detail programmatically (used by cards and tests)
+  try{ window.showScenarioDetail = function(s, opener){ showDetail(s, opener); }; }catch(e){}
 };
 
 document.addEventListener('DOMContentLoaded', ()=>{ if(window.initStudentDashboard) window.initStudentDashboard(); });

@@ -1,4 +1,5 @@
 /** @type {import('jest').Config} */
+try { console.log('[JEST CONFIG LOADED]') } catch (e) {}
 module.exports = {
   testEnvironment:       'jsdom',
   transform:             { '^.+\\.js$': ['babel-jest', { presets: ['@babel/preset-env'] }] },
@@ -7,7 +8,8 @@ module.exports = {
     '**/tests/**/*.test.js',
     '!**/tests/playwright/**'
   ],
-  setupFiles:            ['<rootDir>/tests/jest-setup.js'],
+  // Ensure undici register runs before any test imports that may require Request/fetch.
+  setupFiles:            ['<rootDir>/tests/jest-undici-register.js', '<rootDir>/tests/jest-setup.js'],
   setupFilesAfterEnv:    ['<rootDir>/scripts/jest-setup-retries.js'],
   clearMocks:            true,
   restoreMocks:          true,
