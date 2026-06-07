@@ -33,7 +33,8 @@
       slug = `${slug}-${suffix}`;
     }
     seen.add(slug);
-    const title = s.title || (s.symptomCategory || s.symptoms || (`Scenario ${s.id}`));
+    // Prefer a human-readable symptom/title over the internal category key
+    const title = s.title || (s.symptoms || s.symptomCategory || (`Scenario ${s.id}`));
     const shortSymptom = (s.symptoms && (s.symptoms.length>120 ? s.symptoms.slice(0,117)+'...' : s.symptoms)) || s.trainingFocus || '';
     const difficulty = (s.difficultyLevel || (typeof s.difficulty==='number' ? (s.difficulty>=4?'advanced':(s.difficulty>=3?'intermediate':'beginner')) : s.difficulty)) || 'intermediate';
     const estimatedTime = s.timeLimit ? Math.ceil(s.timeLimit/60) + ' min' : (s.estimatedTime || '10-20 min');
