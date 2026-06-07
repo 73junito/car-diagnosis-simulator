@@ -3,7 +3,30 @@
 try { require('../../tests/jest-undici-register.js'); } catch (e) {}
 const path = require('path');
 const fs = require('fs');
-let nock;
+const createFetchMock = require('../utils/createFetchMock');
+let mock;
+
+beforeAll(() => {
+  try {
+    if (typeof globalThis.MessagePort === 'undefined') {
+      try {
+        const { MessageChannel, MessagePort } = require('worker_threads');
+        globalThis.MessageChannel = MessageChannel;
+        globalThis.MessagePort = MessagePort;
+      } catch (e) {}
+    }
+  } catch (e) {}
+
+  const { fetch, Request, Headers, Response } = require('undici');
+  globalThis.fetch = fetch;
+  globalThis.Request = Request;
+  globalThis.Headers = Headers;
+  globalThis.Response = Response;
+});
+
+beforeEach(() => {
+  jest.resetModules();
+});
 
 const owner = '73junito';
 const repo = 'car-diagnosis-simulator';
@@ -14,24 +37,9 @@ function makeSlowJson() {
 }
 
 describe('auto-open multi-artifact integration', () => {
-  beforeAll(() => {
-    // Ensure undici constructors are assigned to globals before requiring nock.
-    try {
-      const u = require('undici');
-      if (u) {
-        if (typeof globalThis.fetch === 'undefined' && typeof u.fetch === 'function') globalThis.fetch = u.fetch;
-        if (typeof globalThis.Request === 'undefined' && typeof u.Request !== 'undefined') globalThis.Request = u.Request;
-        if (typeof globalThis.Headers === 'undefined' && typeof u.Headers !== 'undefined') globalThis.Headers = u.Headers;
-        if (typeof globalThis.Response === 'undefined' && typeof u.Response !== 'undefined') globalThis.Response = u.Response;
-      }
-    } catch (e) {
-      try { require('../../tests/jest-undici-register.js'); } catch (_) {}
-    }
-    nock = require('nock');
-  });
   afterEach(() => {
-    nock.cleanAll();
-    try { fs.unlinkSync(path.resolve(process.cwd(), 'config', 'test-owners.json')); } catch (e) {}
+    try { if (mock && mock.restore) mock.restore(); } catch (e) {}
+    try { fs.rmSync(path.resolve(process.cwd(), 'config', 'test-owners.json'), { force: true }); } catch (e) {}
   });
 
   test('aggregates occurrences across multiple artifacts and reopens', async () => {
@@ -40,13 +48,6 @@ describe('auto-open multi-artifact integration', () => {
     const slowJson = makeSlowJson();
 
     // two artifacts exist for slow-tests
-    nock(repoBase)
-      .get(`/repos/${owner}/${repo}/actions/artifacts`)
-      .times(3)
-      .reply(200, { artifacts: [
-        { id: oldId, name: 'slow-tests', created_at: '2026-01-01T00:00:00Z' },
-        { id: newId, name: 'slow-tests', created_at: '2026-02-01T00:00:00Z' }
-      ] });
 
     // both artifact downloads return ZIPs containing the same slow-tests.json
     const AdmZip = require('adm-zip');
@@ -57,31 +58,19 @@ describe('auto-open multi-artifact integration', () => {
     zipNew.addFile('slow-tests.json', Buffer.from(JSON.stringify(slowJson), 'utf8'));
     const bufNew = zipNew.toBuffer();
 
-    const oldScope = nock(repoBase)
-      .get(`/repos/${owner}/${repo}/actions/artifacts/${oldId}/zip`)
-      .reply(200, bufOld, { 'Content-Type': 'application/zip' });
-
-    const newScope = nock(repoBase)
-      .get(`/repos/${owner}/${repo}/actions/artifacts/${newId}/zip`)
-      .reply(200, bufNew, { 'Content-Type': 'application/zip' });
-
     const issueTitle = `Slow test regression: TestClass — multiArtifactTest`;
     const closedIssue = { number: 405, title: issueTitle, state: 'closed', closed_at: null, body: 'Existing body\n<!-- flap_count: 0 -->' };
-    nock(repoBase)
-      .get(`/repos/${owner}/${repo}/issues`)
-      .query(true)
-      .reply(200, [ closedIssue ]);
-
-    // capture metadata PATCH and comment/reopen
-    const patchedBodies = [];
-    nock(repoBase)
-      .patch(`/repos/${owner}/${repo}/issues/${closedIssue.number}`, (body) => { patchedBodies.push(body); return true; })
-      .times(2)
-      .reply(200, { number: closedIssue.number });
-
-    const commentScope = nock(repoBase)
-      .post(`/repos/${owner}/${repo}/issues/${closedIssue.number}/comments`)
-      .reply(201, {});
+    // install fetch mock for artifacts, zips, and issues
+    const mockSetup = createFetchMock({
+      artifacts: [
+        { id: oldId, name: 'slow-tests', created_at: '2026-01-01T00:00:00Z', zipBuffer: bufOld },
+        { id: newId, name: 'slow-tests', created_at: '2026-02-01T00:00:00Z', zipBuffer: bufNew }
+      ],
+      closedIssue
+    });
+    const installed = mockSetup.install();
+    mock = Object.assign(mockSetup, installed);
+    // issues list / patch / comments are handled by the fetch mock; we get patchedBodies/postComments from it
 
     // reopen handled by the body-capturing PATCH above
 
@@ -96,15 +85,19 @@ describe('auto-open multi-artifact integration', () => {
     await mod.run();
 
     // ensure both artifact downloads were used (aggregated)
-    expect(oldScope.isDone()).toBe(true);
-    expect(newScope.isDone()).toBe(true);
+    const listKey = `GET /repos/${owner}/${repo}/actions/artifacts`;
+    const oldZipKey = `GET /repos/${owner}/${repo}/actions/artifacts/${oldId}/zip`;
+    const newZipKey = `GET /repos/${owner}/${repo}/actions/artifacts/${newId}/zip`;
+    expect((mock.calls[listKey] || 0) >= 1).toBe(true);
+    expect((mock.calls[oldZipKey] || 0) >= 1).toBe(true);
+    expect((mock.calls[newZipKey] || 0) >= 1).toBe(true);
 
     // the script should have posted a comment and attempted to reopen the closed issue
-    expect(commentScope.isDone()).toBe(true);
+    expect((mock.postComments || []).length).toBeGreaterThanOrEqual(1);
 
     // ensure flap_count was incremented in one of the PATCH bodies
     const toPayloadString = (p) => (typeof p === 'string' ? p : JSON.stringify(p));
-    const payloadStrings = patchedBodies.map(toPayloadString);
+    const payloadStrings = (mock.patchedBodies || []).map(toPayloadString);
     expect(payloadStrings.some(s => /<!--\s*flap_count:\s*1\s*-->/.test(s))).toBe(true);
   });
 });
