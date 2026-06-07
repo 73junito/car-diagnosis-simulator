@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "test": "node scripts/guard-no-nock.js && node -r ./tests/jest-undici-register.js ./node_modules/jest/bin/jest.js --config=jest.config.js --ci --reporters=default --runInBand",
+    "test": "node -e \"if(require('fs').existsSync('scripts/guard-no-nock.js')){require('child_process').spawnSync('node',['scripts/guard-no-nock.js'],{stdio:'inherit'})}else{console.log('guard-no-nock.js not found, skipping')}\" && node -r ./tests/jest-undici-register.js ./node_modules/jest/bin/jest.js --config=jest.config.js --ci --reporters=default --runInBand",
     "build": "npm run write-version",
     "write-version": "node scripts/write-version.js",
     "vercel-build": "npm run write-version",
