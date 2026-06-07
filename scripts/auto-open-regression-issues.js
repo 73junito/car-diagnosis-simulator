@@ -4,8 +4,9 @@ const path = require('path');
 const AdmZip = require('adm-zip');
 
 async function doFetch(url, opts) {
-  if (global.fetch) return global.fetch(url, opts);
-  const { request } = url.startsWith('https:') ? require('https') : require('http');
+  // Prefer using Node's http/https modules so HTTP mocking libraries like `nock`
+  // can reliably intercept requests during tests. Fall back to global.fetch
+  // only if the manual implementation fails and a fetch implementation exists.
   return new Promise((resolve, reject) => {
     try {
       const u = new URL(url);
@@ -35,7 +36,17 @@ async function doFetch(url, opts) {
         else req.write(JSON.stringify(body));
       }
       req.end();
-    } catch (e) { reject(e); }
+    } catch (e) {
+      if (global.fetch) {
+        try {
+          // delegate to global fetch if available
+          return resolve(global.fetch(url, opts));
+        } catch (fe) {
+          return reject(fe);
+        }
+      }
+      return reject(e);
+    }
   });
 }
 
