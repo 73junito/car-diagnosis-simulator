@@ -60,14 +60,19 @@ try {
       globalThis.File = class File { constructor(parts, name, opts) { this.name = name; this.parts = parts; this.size = Array.isArray(parts) ? parts.reduce((s, p) => s + (p?.length || 0), 0) : 0; this.type = opts && opts.type ? opts.type : '' } }
     }
     } else {
-      // Normalize constructor exports if available, but DO NOT assign a
-      // global `fetch` here. Avoiding a runtime `fetch` polyfill at process
-      // preload keeps the network stack deterministic for `nock` (Node
-      // http/https interception). Tests that need a full fetch runtime can
-      // opt-in later in `setupFiles` if required.
+      // Normalize constructor exports if available and assign a real
+      // `fetch` implementation so Response objects have `arrayBuffer()`.
+      // This makes test network shapes consistent across environments.
       if (u.Headers) globalThis.Headers = u.Headers
       if (u.Response) globalThis.Response = u.Response
       if (u.Request) globalThis.Request = u.Request
+      // Assign fetch: `u` might be the fetch function itself, or an
+      // object with a `fetch` property (undici). Handle both.
+      if (typeof u === 'function') {
+        globalThis.fetch = u
+      } else if (u && typeof u.fetch === 'function') {
+        globalThis.fetch = u.fetch
+      }
     }
   }
 
