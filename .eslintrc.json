@@ -1,9 +1,51 @@
 {
+  "root": true,
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "ignorePatterns": [
+    "playwright-report/**",
+    "**/trace/**",
+    "test-results/**",
+    "dist/**",
+    "build/**",
+    "coverage/**"
+  ],
+  "extends": ["eslint:recommended"],
+  "overrides": [
+    {
+      "files": ["tests/**/*.js", "tests/**/*.cjs", "tests/**/*.mjs"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              { "name": "nock", "message": "Use createFetchMock and the githubClient service boundary instead of nock." },
+              { "name": "http", "message": "Do not import Node http in tests; mock at fetch boundary instead." },
+              { "name": "https", "message": "Do not import Node https in tests; mock at fetch boundary instead." }
+            ]
+          }
+        ],
+        "no-restricted-globals": ["error"]
+      }
+    }
+  ]
+}
+{
   "env": {
     "browser": true,
     "es2021": true,
     "node": true
   },
+  "ignorePatterns": [
+    "playwright-report/**",
+    "**/trace/**",
+    "test-results/**",
+    "dist/**",
+    "build/**",
+    "coverage/**"
+  ],
   "extends": "eslint:recommended",
   "parserOptions": {
     "ecmaVersion": 12,

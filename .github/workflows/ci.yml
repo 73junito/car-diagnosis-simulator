@@ -9,19 +9,34 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['18', '22']
     env:
       GITHUB_SHA: ${{ github.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Enforce no nock in tests
+        run: |
+          if grep -R --line-number -E "require\(['\"]nock['\"]\)|import\s+nock|from\s+['\"]nock['\"]" tests; then
+            echo "ERROR: 'nock' import found in tests. Remove nock and use createFetchMock instead.";
+            exit 1;
+          fi
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Run lint (Node 22)
+        if: matrix.node-version == '22'
+        run: |
+          npm run lint --if-present
 
       - name: Generate deployment version
         run: npm run build

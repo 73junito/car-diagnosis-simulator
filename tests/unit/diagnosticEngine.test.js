@@ -7,7 +7,7 @@ const path = require('path');
 
 function loadScriptIntoWindow(filePath, window) {
   const code = fs.readFileSync(filePath, 'utf8');
-  // eslint-disable-next-line no-new-func
+   
   const fn = new Function('window','document','self','location','history', code + '\n//# sourceURL=' + filePath);
   fn(window, window.document, window, window.location, window.history);
 }
