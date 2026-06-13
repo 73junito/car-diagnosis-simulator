@@ -9,7 +9,7 @@ function loadScriptIntoWindow(filePath, window) {
   const code = fs.readFileSync(filePath, 'utf8');
   // The Function constructor is used intentionally to evaluate the page scripts
   // within the jsdom `window` context for these tests.
-  // eslint-disable-next-line no-new-func
+   
   const fn = new Function('window','document','self','location','history', code + '\n//# sourceURL=' + filePath);
   fn(window, window.document, window, window.location, window.history);
 }
@@ -19,7 +19,7 @@ describe('Student dashboard grid', () => {
   beforeAll(() => {
     html = fs.readFileSync(path.resolve(__dirname, '../dashboard/student.html'), 'utf8');
     // set full document
-    // eslint-disable-next-line no-restricted-syntax
+     
     document.documentElement.innerHTML = html;
     // load scenario data and registry
     loadScriptIntoWindow(path.resolve(__dirname, '../data/scenarios.js'), window);
