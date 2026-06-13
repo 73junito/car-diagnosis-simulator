@@ -7,7 +7,7 @@ const path = require('path');
 
 function loadScriptIntoWindow(filePath, window) {
   const code = fs.readFileSync(filePath, 'utf8');
-  // eslint-disable-next-line no-new-func
+   
   const fn = new Function('window','document','self','location','history', code + '\n//# sourceURL=' + filePath);
   fn(window, window.document, window, window.location, window.history);
 }
@@ -49,7 +49,7 @@ function renderForTests(){
 describe('Student progress persistence and UI', () => {
   beforeEach(() => {
     const html = fs.readFileSync(path.resolve(__dirname, '../dashboard/student.html'), 'utf8');
-    // eslint-disable-next-line no-restricted-syntax
+     
     document.documentElement.innerHTML = html;
     loadScriptIntoWindow(path.resolve(__dirname, '../data/scenarios.js'), window);
     loadScriptIntoWindow(path.resolve(__dirname, '../data/scenario-registry.js'), window);
