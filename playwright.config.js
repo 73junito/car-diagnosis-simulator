@@ -45,7 +45,7 @@ module.exports = {
   webServer: {
     command: 'npx http-server -p 3003 -c-1 .',
     url: 'http://localhost:3003',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
     timeout: 120 * 1000,
   },
 };
