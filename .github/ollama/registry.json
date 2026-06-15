@@ -1,0 +1,24 @@
+{
+  "purposes": {
+    "architecture": "qwen3:30b",
+    "planning": "qwen3:30b",
+    "refactoring": "qwen3:30b",
+    "code_generation": "qwen2.5-coder:7b",
+    "code_review": "qwen2.5-coder:7b",
+    "quick_fix": "qwen2.5-coder:7b",
+    "playwright_debugging": "qwen2.5-coder:7b",
+    "github_actions": "qwen2.5-coder:7b",
+    "ci_debugging": "qwen2.5-coder:7b",
+    "security_review": "qwen3.5:9b",
+    "documentation": "qwen3.5:9b",
+    "summarization": "llama3.1:8b",
+    "embeddings": "qwen3-embedding:8b",
+    "fast_embeddings": "all-minilm:22m"
+  },
+  "fallbacks": {
+    "completion": "llama3.1:8b",
+    "coding": "qwen2.5-coder:7b",
+    "large_context": "qwen3:30b",
+    "embedding": "all-minilm:22m"
+  }
+}
