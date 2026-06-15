@@ -1,6 +1,6 @@
 {
   "purposes": {
-    "architecture": "qwen3:30b",
+    "architecture": "qwen2.5:7b",
     "planning": "qwen3:30b",
     "refactoring": "qwen3:30b",
     "code_generation": "qwen2.5-coder:7b",

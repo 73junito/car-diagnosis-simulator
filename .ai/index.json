@@ -1,6 +1,6 @@
 {
   "model": "all-minilm:22m",
-  "createdAt": "2026-06-15T13:37:27.889Z",
+  "createdAt": "2026-06-15T22:31:58.330Z",
   "records": [
     {
       "file": "core\\checkpoint\\fileStore.js",
