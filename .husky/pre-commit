@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running pre-commit guard: guard-no-nock + lint:tests"
+node scripts/guard-no-nock.js && npm run lint:tests

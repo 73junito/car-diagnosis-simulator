@@ -1,0 +1,314 @@
+{
+  "job:job-list-fail-once:attempts": {
+    "attempt": 3,
+    "status": "retrying",
+    "ts": 1781390597446
+  },
+  "job:job-list-fail-once": {
+    "id": "job-list-fail-once",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:12.685Z",
+    "finishedAt": "2026-06-13T22:43:17.448Z",
+    "result": null,
+    "error": "handlers.run must be a function",
+    "attempt": 3,
+    "maxAttempts": 3
+  },
+  "job:job-list-fail-once:final": {
+    "id": "job-list-fail-once",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:12.685Z",
+    "finishedAt": "2026-06-13T22:43:17.448Z",
+    "result": null,
+    "error": "handlers.run must be a function",
+    "attempt": 3,
+    "maxAttempts": 3
+  },
+  "job:job-zip-fail-once:attempts": {
+    "attempt": 3,
+    "status": "retrying",
+    "ts": 1781390601404
+  },
+  "job:job-zip-fail-once": {
+    "id": "job-zip-fail-once",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:17.462Z",
+    "finishedAt": "2026-06-13T22:43:21.406Z",
+    "result": null,
+    "error": "handlers.run must be a function",
+    "attempt": 3,
+    "maxAttempts": 3
+  },
+  "job:job-zip-fail-once:final": {
+    "id": "job-zip-fail-once",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:17.462Z",
+    "finishedAt": "2026-06-13T22:43:21.406Z",
+    "result": null,
+    "error": "handlers.run must be a function",
+    "attempt": 3,
+    "maxAttempts": 3
+  },
+  "job:job-zip-perm-fail:attempts": {
+    "attempt": 2,
+    "status": "retrying",
+    "ts": 1781390603016
+  },
+  "job:job-zip-perm-fail": {
+    "id": "job-zip-perm-fail",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:21.410Z",
+    "finishedAt": "2026-06-13T22:43:23.018Z",
+    "result": null,
+    "error": "simulated fatal pipeline error",
+    "attempt": 2,
+    "maxAttempts": 2
+  },
+  "job:job-zip-perm-fail:final": {
+    "id": "job-zip-perm-fail",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:21.410Z",
+    "finishedAt": "2026-06-13T22:43:23.018Z",
+    "result": null,
+    "error": "simulated fatal pipeline error",
+    "attempt": 2,
+    "maxAttempts": 2
+  },
+  "job:job-duplicate:attempts": {
+    "attempt": 3,
+    "status": "retrying",
+    "ts": 1781390606818
+  },
+  "job:job-duplicate": {
+    "id": "job-duplicate",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:23.022Z",
+    "finishedAt": "2026-06-13T22:43:26.820Z",
+    "result": null,
+    "error": "handlers.run must be a function",
+    "attempt": 3,
+    "maxAttempts": 3
+  },
+  "job:job-duplicate:final": {
+    "id": "job-duplicate",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:23.022Z",
+    "finishedAt": "2026-06-13T22:43:26.820Z",
+    "result": null,
+    "error": "handlers.run must be a function",
+    "attempt": 3,
+    "maxAttempts": 3
+  },
+  "job:job-1:attempts": {
+    "attempt": 3,
+    "status": "retrying",
+    "ts": 1781390611423
+  },
+  "job:job-1": {
+    "id": "job-1",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:26.917Z",
+    "finishedAt": "2026-06-13T22:43:31.425Z",
+    "result": null,
+    "error": "handlers.run must be a function",
+    "attempt": 3,
+    "maxAttempts": 3
+  },
+  "job:job-1:final": {
+    "id": "job-1",
+    "type": "AUTO_OPEN_ISSUES",
+    "input": {
+      "owner": "73junito",
+      "repo": "car-diagnosis-simulator",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:26.917Z",
+    "finishedAt": "2026-06-13T22:43:31.425Z",
+    "result": null,
+    "error": "handlers.run must be a function",
+    "attempt": 3,
+    "maxAttempts": 3
+  },
+  "job:retry-job-1:attempts": {
+    "attempt": 3,
+    "status": "retrying",
+    "ts": 1781390613451
+  },
+  "job:retry-job-1": {
+    "id": "retry-job-1",
+    "type": "TEST",
+    "input": {
+      "owner": "o",
+      "repo": "r",
+      "token": "[REDACTED]"
+    },
+    "status": "success",
+    "startedAt": "2026-06-13T22:43:31.500Z",
+    "finishedAt": "2026-06-13T22:43:33.453Z",
+    "result": {
+      "ok": true,
+      "processed": true
+    },
+    "error": "transient",
+    "maxAttempts": 5,
+    "retryBaseMs": 10,
+    "attempt": 3
+  },
+  "job:retry-job-1:final": {
+    "id": "retry-job-1",
+    "type": "TEST",
+    "input": {
+      "owner": "o",
+      "repo": "r",
+      "token": "[REDACTED]"
+    },
+    "status": "success",
+    "startedAt": "2026-06-13T22:43:31.500Z",
+    "finishedAt": "2026-06-13T22:43:33.453Z",
+    "result": {
+      "ok": true,
+      "processed": true
+    },
+    "error": "transient",
+    "maxAttempts": 5,
+    "retryBaseMs": 10,
+    "attempt": 3
+  },
+  "job:retry-job-2:attempts": {
+    "attempt": 2,
+    "status": "retrying",
+    "ts": 1781390613830
+  },
+  "job:retry-job-2": {
+    "id": "retry-job-2",
+    "type": "TEST",
+    "input": {
+      "owner": "o",
+      "repo": "r",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:33.456Z",
+    "finishedAt": "2026-06-13T22:43:33.832Z",
+    "result": null,
+    "error": "always-fail",
+    "maxAttempts": 2,
+    "retryBaseMs": 10,
+    "attempt": 2
+  },
+  "job:retry-job-2:final": {
+    "id": "retry-job-2",
+    "type": "TEST",
+    "input": {
+      "owner": "o",
+      "repo": "r",
+      "token": "[REDACTED]"
+    },
+    "status": "failed",
+    "startedAt": "2026-06-13T22:43:33.456Z",
+    "finishedAt": "2026-06-13T22:43:33.832Z",
+    "result": null,
+    "error": "always-fail",
+    "maxAttempts": 2,
+    "retryBaseMs": 10,
+    "attempt": 2
+  },
+  "job:replay-job-1": {
+    "id": "replay-job-1",
+    "type": "TEST",
+    "input": {
+      "owner": "o",
+      "repo": "r",
+      "token": "[REDACTED]"
+    },
+    "status": "success",
+    "startedAt": "2026-06-13T22:43:38.421Z",
+    "finishedAt": "2026-06-13T22:43:38.423Z",
+    "result": {
+      "ok": true,
+      "replayed": true
+    },
+    "error": null,
+    "attempt": 1,
+    "maxAttempts": 2
+  },
+  "job:replay-job-1:attempts": {
+    "attempt": 1,
+    "status": "running",
+    "ts": 1781390618421
+  },
+  "job:replay-job-1:final": {
+    "id": "replay-job-1",
+    "type": "TEST",
+    "input": {
+      "owner": "o",
+      "repo": "r",
+      "token": "[REDACTED]"
+    },
+    "status": "success",
+    "startedAt": "2026-06-13T22:43:38.421Z",
+    "finishedAt": "2026-06-13T22:43:38.423Z",
+    "result": {
+      "ok": true,
+      "replayed": true
+    },
+    "error": null,
+    "attempt": 1,
+    "maxAttempts": 2
+  }
+}

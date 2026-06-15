@@ -1,0 +1,16 @@
+node_modules/
+.git/
+test-results/
+reports/
+.checkpoints/
+playwright-report/
+coverage/
+dist/
+out/
+build/
+*.log
+*.tmp
+*.bak
+junit.xml
+newfile.txt
+test.txt

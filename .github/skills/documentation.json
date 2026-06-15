@@ -1,0 +1,6 @@
+{
+  "skill": "documentation",
+  "model": "llama3.1:8b",
+  "agent": "documentation-writer.md",
+  "prompt": "documentation.md"
+}
