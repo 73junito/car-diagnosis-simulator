@@ -4,6 +4,9 @@ const fs = require("fs");
 const path = require("path");
 const http = require("http");
 const { execFileSync } = require("child_process");
+const {
+  ensureReportHeading
+} = require("./ensure-report-heading");
 
 const root = process.cwd();
 const purpose = process.argv[2] || "architecture";
@@ -237,9 +240,12 @@ async function main() {
     report = diagnosticReport(purpose, chunks, "Ollama returned empty or too-short response.");
   }
 
-  fs.writeFileSync(outPath, report, "utf8");
+  report = ensureReportHeading(report, purpose);
+
+fs.writeFileSync(outPath, report, "utf8");
   console.log(`Report written: ${outPath}`);
 }
 
 main();
+
 
