@@ -1,0 +1,6 @@
+{
+  "skill": "security_review",
+  "model": "qwen3.5:9b",
+  "agent": "security-auditor.md",
+  "prompt": "security-review.md"
+}

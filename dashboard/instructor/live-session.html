@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Live Session - Instructor</title>
+  <link rel="stylesheet" href="../theme.css" />
+  <link rel="stylesheet" href="./live-session.css" />
+</head>
+<body>
+  <main class="container">
+    <header style="display:flex;align-items:center;justify-content:space-between;">
+      <h1>Live Session</h1>
+      <div>
+        <span id="conn-status" class="badge badge-warn">Disconnected</span>
+        <button id="reconnect" class="btn">Reconnect</button>
+        <button id="clear-feed" class="btn btn-ghost">Clear</button>
+      </div>
+    </header>
+
+    <section id="live-summary" class="tm-card">
+      <div><strong>Active sessions:</strong> <span id="active-sessions">0</span></div>
+      <div><strong>Last event:</strong> <span id="last-event">—</span></div>
+    </section>
+
+    <section id="live-feed" class="tm-card">
+      <h2>Event Feed</h2>
+      <ul id="event-list" class="live-list"></ul>
+    </section>
+
+  </main>
+
+  <script src="./live-session.js"></script>
+</body>
+</html>

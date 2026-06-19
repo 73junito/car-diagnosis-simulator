@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "test": "if [ -f scripts/guard-no-nock.js ]; then node scripts/guard-no-nock.js; else echo 'guard-no-nock.js not found, skipping'; fi && node -r ./tests/jest-undici-register.js ./node_modules/jest/bin/jest.js --config=jest.config.js --ci --reporters=default --runInBand",
+    "test": "node scripts/run-tests.js",
     "build": "npm run write-version",
     "write-version": "node scripts/write-version.js",
     "vercel-build": "npm run write-version",
@@ -37,9 +37,11 @@
     "cors": "^2.8.6",
     "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
+    "eslint": "^9.22.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "fast-xml-parser": "^5.8.0",
+    "husky": "^8.0.0",
     "jest": "^30.4.2",
     "jest-circus": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
@@ -47,9 +49,7 @@
     "node-fetch": "^3.3.2",
     "supertest": "^7.2.2",
     "undici": "^8.3.0",
-    "wait-on": "^7.0.1",
-    "eslint": "^9.22.0",
-    "husky": "^8.0.0"
+    "wait-on": "^7.0.1"
   },
   "jest": {
     "testTimeout": 30000,
