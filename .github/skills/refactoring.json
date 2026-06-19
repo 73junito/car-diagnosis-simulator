@@ -1,0 +1,6 @@
+{
+  "skill": "refactoring",
+  "model": "qwen2.5-coder:7b",
+  "agent": "code-reviewer.md",
+  "prompt": "code-review.md"
+}

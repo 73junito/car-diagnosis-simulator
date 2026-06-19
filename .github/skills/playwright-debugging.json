@@ -1,0 +1,6 @@
+{
+  "skill": "playwright_debugging",
+  "model": "qwen2.5-coder:7b",
+  "agent": "playwright-debugger.md",
+  "prompt": "playwright-debugging.md"
+}
