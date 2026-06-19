@@ -1,0 +1,17 @@
+{
+  "architecture": {
+    "agent": "architect",
+    "purpose": "architecture",
+    "prompt": ".github/prompts/architecture.md"
+  },
+  "code_review": {
+    "agent": "code-reviewer",
+    "purpose": "code_review",
+    "prompt": ".github/prompts/code-review.md"
+  },
+  "playwright_debugging": {
+    "agent": "playwright-debugger",
+    "purpose": "playwright_debugging",
+    "prompt": ".github/prompts/playwright-debugging.md"
+  }
+}

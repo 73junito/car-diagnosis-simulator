@@ -1,0 +1,6 @@
+{
+  "skill": "ci_debugging",
+  "model": "qwen2.5-coder:7b",
+  "agent": "github-actions-engineer.md",
+  "prompt": "github-actions.md"
+}

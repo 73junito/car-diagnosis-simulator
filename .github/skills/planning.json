@@ -1,0 +1,6 @@
+{
+  "skill": "planning",
+  "model": "qwen3:30b",
+  "agent": "architect.md",
+  "prompt": "architecture.md"
+}
