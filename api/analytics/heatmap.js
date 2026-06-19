@@ -6,4 +6,11 @@ function buildHeatmap(events = []) {
   }
   return { ok: true, heatmap: counts };
 }
-module.exports = { buildHeatmap };
+
+function handler(req, res) {
+  if (req.method !== 'GET') return res.status(405).json({ ok: false, error: 'Method Not Allowed' });
+  return res.status(200).json(buildHeatmap([]));
+}
+
+module.exports = handler;
+module.exports.buildHeatmap = buildHeatmap;
