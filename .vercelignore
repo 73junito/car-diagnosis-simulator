@@ -16,6 +16,7 @@ api/telemetry/**
 !api/analytics/cohort.js
 !api/analytics/heatmap.js
 !api/telemetry/history.js
+!api/telemetry/events.js
 !api/telemetry/storage.js
 !api/telemetry/replay.js
 api/attempts/**
