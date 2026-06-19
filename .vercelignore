@@ -8,9 +8,14 @@ downloaded-artifacts/**
 docs/
 scripts/*.log
 
-# Exclude non-essential serverless APIs to stay within Hobby plan limits
+# Exclude most non-essential serverless APIs, but include selected analytics/telemetry routes
 api/analytics/**
 api/telemetry/**
+!api/analytics/summary.js
+!api/analytics/cohort.js
+!api/analytics/heatmap.js
+!api/telemetry/history.js
+!api/telemetry/replay.js
 api/attempts/**
 api/auth/**
 
