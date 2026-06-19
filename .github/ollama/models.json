@@ -1,0 +1,66 @@
+{
+  "architecture": {
+    "primary": "qwen3:30b",
+    "fallback": "qwen3.5:9b"
+  },
+
+  "planning": {
+    "primary": "qwen3:30b",
+    "fallback": "qwen3.5:9b"
+  },
+
+  "code_generation": {
+    "primary": "qwen2.5-coder:7b",
+    "fallback": "deepseek-coder:6.7b-instruct"
+  },
+
+  "code_review": {
+    "primary": "qwen2.5-coder:7b",
+    "fallback": "deepseek-coder:6.7b-instruct"
+  },
+
+  "refactoring": {
+    "primary": "qwen2.5-coder:7b",
+    "fallback": "deepseek-coder:6.7b-instruct"
+  },
+
+  "playwright_debugging": {
+    "primary": "qwen2.5-coder:7b",
+    "fallback": "deepseek-coder:6.7b-instruct"
+  },
+
+  "github_actions": {
+    "primary": "qwen2.5-coder:7b",
+    "fallback": "deepseek-coder:6.7b-instruct"
+  },
+
+  "security_review": {
+    "primary": "qwen3.5:9b",
+    "fallback": "qwen3:30b"
+  },
+
+  "documentation": {
+    "primary": "llama3.1:8b",
+    "fallback": "qwen3.5:9b"
+  },
+
+  "summarization": {
+    "primary": "llama3.1:8b",
+    "fallback": "gemma2:2b"
+  },
+
+  "embeddings": {
+    "primary": "qwen3-embedding:8b",
+    "fallback": "all-minilm:22m"
+  },
+
+  "quick_fix": {
+    "primary": "phi3:mini",
+    "fallback": "gemma2:2b"
+  },
+
+  "ci_debugging": {
+    "primary": "qwen2.5-coder:7b",
+    "fallback": "deepseek-coder:6.7b-instruct"
+  }
+}

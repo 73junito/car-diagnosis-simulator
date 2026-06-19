@@ -1,0 +1,6 @@
+{
+  "skill": "quick_fix",
+  "model": "phi3:mini",
+  "agent": "code-reviewer.md",
+  "prompt": "code-review.md"
+}

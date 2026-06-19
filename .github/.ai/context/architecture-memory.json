@@ -1,0 +1,22 @@
+{
+  "project": "Car Diagnosis Simulator",
+  "frontend": [
+    "dashboard/student.html",
+    "dashboard/student.js",
+    "dashboard/student.css"
+  ],
+  "backend": [
+    "api",
+    "services",
+    "core"
+  ],
+  "testing": [
+    "Playwright",
+    "Jest"
+  ],
+  "embeddings": ".ai/index.json",
+  "telemetry": [
+    "lib/telemetry",
+    "api/telemetry"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "skill": "embeddings",
+  "model": "qwen3-embedding:8b",
+  "agent": "documentation-writer.md",
+  "prompt": "documentation.md"
+}
