@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Session History</title>
+  <link rel="stylesheet" href="/style.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+  <main class="container">
+    <h1>Session History</h1>
+
+    <section id="controls">
+      <label>Session filter: <input id="session-filter" placeholder="Enter session id" /></label>
+      <label>Limit: 
+        <select id="limit-select">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
+      </label>
+      <div id="export-controls" style="display:inline-block;margin-left:1em;">
+        <button id="export-json-btn">Export JSON</button>
+        <button id="export-csv-btn">Export CSV</button>
+        <span id="export-status" aria-live="polite" style="margin-left:.5em"></span>
+      </div>
+    </section>
+
+    <section id="status">
+      <div id="loading" aria-live="polite" hidden>Loading…</div>
+      <div id="error" role="alert" hidden></div>
+      <div id="empty" hidden>No events found.</div>
+    </section>
+
+    <section>
+      <table id="session-history-table" class="tm-table">
+        <thead>
+          <tr><th>Timestamp</th><th>Type</th><th>Session</th><th>Payload</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="/dashboard/session-history.js"></script>
+</body>
+</html>

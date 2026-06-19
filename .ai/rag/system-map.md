@@ -1,0 +1,333 @@
+# System Map
+
+Generated: 2026-06-15T23:36:12.951Z
+
+## core/
+
+- checkpoint/
+  - fileStore.js
+  - index.js
+  - store.js
+- diagnosis/
+  - artifactParser.js
+  - graphModel.js
+  - inference.js
+  - ruleEngine.js
+
+## api/
+
+- _utils/
+  - app-version.js
+- analytics/
+  - export.js
+  - sessions.js
+  - students.js
+  - summary.js
+- attempts/
+  - load.js
+  - save.js
+- auth/
+  - role.js
+  - supabase-token.js
+- health.js
+- request-pilot.js
+- telemetry/
+  - access.js
+  - events.js
+  - export.js
+  - history.js
+  - storage.js
+  - stream.js
+
+## dashboard/
+
+- analytics.html
+- analytics.js
+- api-client.js
+- attempt-adapter.js
+- attempt-store.js
+- attempt-supabase.js
+- live-session.css
+- live-session.html
+- live-session.js
+- live-telemetry.js
+- obd2-ase.css
+- obd2-ase.html
+- obd2-ase.js
+- obd2-student.css
+- obd2-student.html
+- obd2-student.js
+- obd2.css
+- obd2.html
+- obd2.js
+- session-history.html
+- session-history.js
+- student-progress.js
+- student.css
+- student.html
+- student.js
+- version-sync.js
+
+## lib/
+
+- telemetry/
+  - index.js
+  - inMemoryAdapter.js
+  - supabaseAdapter.js
+- worker.js
+
+## services/
+
+- githubClient.js
+
+## scripts/
+
+- analyze-run.js
+- auto-open-issues/
+  - index.js
+- auto-open-regression-issues.js
+- ci-run-tests.js
+- correlate-logs.js
+- dispatch_test.ps1
+- flaky-tracker.js
+- generate_placeholder_screenshots.js
+- generate-dashboard.js
+- guard-no-nock.js
+- harness.js
+- jest-setup-retries.js
+- normalize-scenario-assets.js
+- normalized-assets-report.json
+- poll_and_merge_pr15.ps1
+- post-junit-summary.js
+- replay-job.js
+- run-telemetry-test.js
+- slow-test-detector.js
+- slow-test-trend-alerts.js
+- validateEnv.js
+- vercel-env-bootstrap.ps1
+- write-version.js
+
+## tests/
+
+- ai-os/
+  - scheduler.spec.js
+- analytics/
+  - aggregateSessions.spec.js
+  - aggregateStudents.spec.js
+  - debug-aggregate-debug.spec.js
+  - fs-mock-hoist-reset.spec.js
+  - fs-mock-ordering.spec.js
+  - fs-mock-repro.spec.js
+- analytics-api.test.js
+- analytics-routes.test.js
+- analytics.spec.js
+- api-version-mismatch.spec.js
+- app-version-header.spec.js
+- attempt-adapter.spec.js
+- attempt-store.spec.js
+- attempt-supabase.spec.js
+- attempts-api.spec.js
+- attempts-migration.test.js
+- env-setup.spec.js
+- env-setup.test.js
+- hero.spec.js
+- jest-setup.js
+- jest-undici-register.js
+- live-session-ui.test.js
+- obd2-ase.spec.js
+- obd2-gauges.spec.js
+- obd2-live.spec.js
+- obd2-rendering.spec.js
+- obd2-rubric.spec.js
+- obd2-student.spec.js
+- playwright/
+  - student-dashboard-filter.spec.js
+  - student-dashboard-keyboard.spec.js
+  - student-dashboard-reset.spec.js
+  - student-dashboard-smoke.spec.js
+- scenario-asset-normalizer.spec.js
+- scenario-assets.spec.js
+- scenario-loader.spec.js
+- session-history-ui.spec.js
+- session-history-ui.test.js
+- session-summary.test.js
+- smooth-scroll.spec.js
+- student-dashboard-hotspots.spec.js
+- student-dashboard-keyboard.spec.js
+- student-dashboard.spec.js
+- student-dashboard.test.js
+- student-filters.spec.js
+- student-progress.spec.js
+- supabase-auth-config.test.js
+- supabase-route.test.js
+- supabase-token-auth.test.js
+- telemetry/
+  - adapter_ingest.spec.js
+  - supabaseAdapter.spec.js
+- telemetry-access.test.js
+- telemetry-auth-integration.test.js
+- telemetry-export.spec.js
+- telemetry-history.spec.js
+- telemetry-storage.spec.js
+- telemetry-storage.test.js
+- telemetry-stream.spec.js
+- unit/
+  - artifactParser.spec.js
+  - diagnosticEngine.test.js
+  - graphModel.spec.js
+  - inference.spec.js
+  - matchesFilter.test.js
+  - registry-normalization.test.js
+  - replay.spec.js
+  - ruleEngine.spec.js
+  - worker.retry.spec.js
+- utils/
+  - createFetchMock.js
+- version-sync.spec.js
+
+## docs/
+
+- analytics-audit.md
+- analytics-cleanup.md
+- auth-deployment-checklist.md
+- changelog-entry.md
+- ci-contract.md
+- HARNESS.md
+- hero-cta.md
+- MIGRATION_NOTE.md
+- observability.md
+- onboarding/
+  - supabase-performance-tuning.md
+  - telemetry-newhire-checklist.md
+  - telemetry-quickstart.md
+- realtime-telemetry.md
+- render-test-contract.md
+- screenshots/
+  - analytics-dashboard-overview.png
+  - analytics-export-buttons.png
+  - analytics-student-table.png
+  - desktop-detail-open.png
+  - desktop-empty-filter.png
+  - desktop-home-updated.png
+  - desktop-home.png
+  - mobile-detail-open.png
+  - mobile-empty-filter.png
+  - mobile-home-updated.png
+  - mobile-home.png
+- SECRETS.md
+- student-dashboard-checklist.md
+- supabase-auth.md
+- version-sync-cleanup.md
+- version-sync.md
+- WORKFLOW_AND_LOGIC_TREE.md
+
+## .github/
+
+- agents/
+  - architect.md
+  - code-reviewer.md
+  - documentation-writer.md
+  - github-actions-engineer.md
+  - playwright-debugger.md
+  - registry.json
+  - security-auditor.md
+- CONTRIBUTING.md
+- dependabot.yml
+- docs/
+  - architecture-review.md
+- hooks/
+  - analyze-last-commit.js
+  - architecture-review.js
+  - build-embeddings.js
+  - ci-analyze.js
+  - generate-system-map.js
+  - github-actions-investigator.js
+  - ollama-dispatch.js
+  - playwright-debug.js
+  - playwright-investigator.js
+  - pr-review.js
+  - pre-commit.js
+  - pre-push.js
+  - review-current-pr.js
+  - route-task.js
+  - run-agent.js
+  - search-codebase.js
+  - select-agent.js
+  - validate-context.js
+- ISSUES/
+  - HERO-MILESTONE.md
+  - homepage-hero-issues.md
+  - homepage-hero-kanban-by-priority.csv
+  - homepage-hero-kanban-by-priority.json
+  - homepage-hero-kanban.csv
+  - homepage-hero-kanban.json
+- ollama/
+  - health-check.js
+  - models.json
+  - registry.json
+  - select-model.mjs
+- PR_DESCRIPTIONS/
+  - feat-hero-structure.md
+- prompts/
+  - architecture-keywords.json
+  - architecture.md
+  - code-review.md
+  - documentation.md
+  - github-actions.md
+  - playwright-debugging.md
+  - security-review.md
+- PULL_REQUEST_TEMPLATE/
+  - hero.md
+- rag/
+- skills/
+  - architecture.json
+  - ci-debugging.json
+  - code-review.json
+  - documentation.json
+  - embeddings.json
+  - github-actions.json
+  - planning.json
+  - playwright-debugging.json
+  - quick-fix.json
+  - refactoring.json
+  - security-review.json
+  - summarization.json
+- tmp/
+  - contexts_restore.json
+  - contexts_temp.json
+  - contexts.json
+  - current_release_body.md
+  - jest.temp.config.json
+  - merge_release.ps1
+  - merge-pr-15.ps1
+  - ollama-request-1781554289088.json
+  - poll_release_run.ps1
+  - poll-pr-14.ps1
+  - poll-release-25590740017.ps1
+  - release_conclusion.txt
+  - release_run_status.json
+  - restore_contexts.json
+- workflows/
+  - api-smoke.yml
+  - append-runs-history.decoded.yml
+  - append-runs-history.main.yml
+  - append-runs-history.publish.yml
+  - append-runs-history.yml
+  - apply-migrations.yml
+  - branch-protection.yml
+  - ci.yml
+  - codeql-analysis.yml
+  - codeql.yml
+  - db-ssl-validation.yml
+  - env-validate.yml
+  - lint.yml
+  - playwright-tests.yml
+  - release.yml
+  - reusable-node-ci.yml
+  - scheduled-harness.yml
+  - smoke-playwright.yml
+  - smoke.yml
+  - test.yml
+  - unit-tests.yml
+  - vercel-preview.yml
+

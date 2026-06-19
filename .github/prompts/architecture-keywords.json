@@ -1,0 +1,16 @@
+{
+  "architecture": [
+    "dashboard",
+    "analytics",
+    "telemetry",
+    "diagnosis",
+    "worker",
+    "auth",
+    "supabase",
+    "api",
+    "storage",
+    "session",
+    "student",
+    "attempt"
+  ]
+}
