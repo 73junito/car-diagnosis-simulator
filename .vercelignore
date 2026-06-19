@@ -9,8 +9,6 @@ docs/
 scripts/*.log
 
 # Exclude non-essential serverless APIs to stay within Hobby plan limits
-api/analytics/**
-api/telemetry/**
 api/attempts/**
 api/auth/**
 
