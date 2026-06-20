@@ -30,6 +30,14 @@ window.initStudentDashboard = function(){
       availableTests.appendChild(ul);
     }
     history.replaceState(null,'',`?scenario=${encodeURIComponent(s.symptomCategory||s.symptoms||s.id)}`);
+    try {
+      const payload = JSON.stringify({
+        session_id: 'student-dashboard',
+        event_type: 'scenario_started',
+        payload_json: { scenario_id: s.id || s.slug || s.symptomCategory || s.symptoms }
+      });
+      navigator.sendBeacon('/api/telemetry/events', payload);
+    } catch (e) {}
     // focus first meaningful control (back button)
     try{ backBtn.focus(); }catch(e){}
     // add Escape key handler to close
