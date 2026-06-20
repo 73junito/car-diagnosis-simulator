@@ -66,10 +66,8 @@ window.initStudentDashboard = function(){
       const find = (s) => (s.symptomCategory===slug || s.slug===slug || (s.symptoms && s.symptoms===slug) || String(s.id)===slug || (s.symptomCategory && s.symptomCategory.replace(/\s+/g,'-')===slug));
       const registryScenario = (window.SCENARIO_REGISTRY || []).find(r => r.id === slug || String(r.numericId) === slug);
       const scenario = registryScenario ? (registryScenario.raw || registryScenario) : (window.scenarios||[]).find(find);
-      if(scenario){ showDetail(scenario); }
-      else { // fallback: navigate via query param
-        window.location.href = `/dashboard/student?scenario=${encodeURIComponent(slug)}`;
-      }
+      if(scenario){ window.location.href = `/dashboard/student/scenario/?id=${encodeURIComponent(slug)}`; }
+      else { window.location.href = `/dashboard/student/scenario/?id=${encodeURIComponent(slug)}`; }
     });
   });
 
@@ -85,5 +83,6 @@ window.initStudentDashboard = function(){
 };
 
 document.addEventListener('DOMContentLoaded', ()=>{ if(window.initStudentDashboard) window.initStudentDashboard(); });
+
 
 
