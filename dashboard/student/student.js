@@ -30,14 +30,6 @@ window.initStudentDashboard = function(){
       availableTests.appendChild(ul);
     }
     history.replaceState(null,'',`?scenario=${encodeURIComponent(s.symptomCategory||s.symptoms||s.id)}`);
-    try {
-      const payload = JSON.stringify({
-        session_id: 'student-dashboard',
-        event_type: 'scenario_started',
-        payload_json: { scenario_id: s.id || s.slug || s.symptomCategory || s.symptoms }
-      });
-      navigator.sendBeacon('/api/telemetry/events', payload);
-    } catch (e) {}
     // focus first meaningful control (back button)
     try{ backBtn.focus(); }catch(e){}
     // add Escape key handler to close
@@ -64,10 +56,11 @@ window.initStudentDashboard = function(){
       const slug = btn.dataset.scenario;
       // attempt to find scenario by slug/slugified symptomCategory
       const find = (s) => (s.symptomCategory===slug || s.slug===slug || (s.symptoms && s.symptoms===slug) || String(s.id)===slug || (s.symptomCategory && s.symptomCategory.replace(/\s+/g,'-')===slug));
-      const registryScenario = (window.SCENARIO_REGISTRY || []).find(r => r.id === slug || String(r.numericId) === slug);
-      const scenario = registryScenario ? (registryScenario.raw || registryScenario) : (window.scenarios||[]).find(find);
-      if(scenario){ window.location.href = `/dashboard/student/scenario/?id=${encodeURIComponent(slug)}`; }
-      else { window.location.href = `/dashboard/student/scenario/?id=${encodeURIComponent(slug)}`; }
+      const scenario = (window.scenarios||[]).find(find);
+      if(scenario){ showDetail(scenario); }
+      else { // fallback: navigate via query param
+        window.location.href = `/dashboard/student?scenario=${encodeURIComponent(slug)}`;
+      }
     });
   });
 
@@ -83,6 +76,3 @@ window.initStudentDashboard = function(){
 };
 
 document.addEventListener('DOMContentLoaded', ()=>{ if(window.initStudentDashboard) window.initStudentDashboard(); });
-
-
-
