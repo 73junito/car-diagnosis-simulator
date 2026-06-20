@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://car-diagnosis-simulator.vercel.app/</loc>
+  </url>
+  <url>
+    <loc>https://car-diagnosis-simulator.vercel.app/dashboard/student/</loc>
+  </url>
+  <url>
+    <loc>https://car-diagnosis-simulator.vercel.app/dashboard/analytics</loc>
+  </url>
+  <url>
+    <loc>https://car-diagnosis-simulator.vercel.app/dashboard/session-history</loc>
+  </url>
+  <url>
+    <loc>https://car-diagnosis-simulator.vercel.app/docs</loc>
+  </url>
+</urlset>
