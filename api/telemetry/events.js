@@ -20,6 +20,7 @@ function getRecentEvents() { return _recent.slice(); }
 function normalizeEvent(evt = {}) {
   const eventType = evt.event_type || evt.eventType || evt.type;
   return {
+    ...evt,
     id: evt.id || _makeId(),
     type: eventType,
     timestamp: evt.timestamp || evt.created_at || new Date().toISOString(),
@@ -96,3 +97,4 @@ module.exports.setMaxQueueSize = setMaxQueueSize;
 module.exports.getQueueLength = getQueueLength;
 module.exports.getDroppedCount = getDroppedCount;
 module.exports.getRecentEvents = getRecentEvents;
+
