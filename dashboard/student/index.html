@@ -142,13 +142,7 @@
             if(window.studentProgress && window.studentProgress.setProgressFor){ window.studentProgress.setProgressFor(s.id,'in-progress'); }
           }catch(e){}
           // prefer opening in-panel detail when available for accessibility and previews
-          if(window.showScenarioDetail && typeof window.showScenarioDetail === 'function'){
-            window.showScenarioDetail(s, card);
-          } else if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) {
-            window.location.hash = btn.getAttribute('href');
-          } else {
-            window.location.href = btn.href;
-          }
+          window.location.href = `/dashboard/student/scenario/?id=${encodeURIComponent(s.id)}`;
         }
         card.addEventListener('click', activate);
         card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); activate(); } });
@@ -305,5 +299,6 @@
   </script>
 </body>
 </html>
+
 
 

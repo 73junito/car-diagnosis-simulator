@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  background: #050b14;
+  color: #f8fafc;
+  font-family: Arial, sans-serif;
+}
+
+.scenario-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.back {
+  color: #38bdf8;
+  display: inline-block;
+  margin-bottom: 18px;
+}
+
+.scenario-page {
+  display: grid;
+  gap: 18px;
+}
+
+.scenario-hero {
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 22px;
+  background: linear-gradient(135deg, #07111f, #0f172a);
+}
+
+.scenario-label {
+  color: #fde047;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.scenario-card {
+  background: #f8fafc;
+  color: #111827;
+  border-radius: 10px;
+  padding: 22px;
+}
+
+.question-option {
+  display: block;
+  margin: 12px 0;
+}
+
+.note {
+  border-left: 4px solid #fde047;
+  padding-left: 12px;
+  color: #e5e7eb;
+}
