@@ -18,25 +18,21 @@ function getDroppedCount() { return _dropped; }
 function getRecentEvents() { return _recent.slice(); }
 
 function normalizeEvent(evt = {}) {
-  const event_type = evt.event_type || evt.eventType || evt.type;
-  const timestamp = evt.timestamp || evt.created_at || new Date().toISOString();
-
+  const eventType = evt.event_type || evt.eventType || evt.type;
   return {
     id: evt.id || _makeId(),
-    type: event_type,
-    timestamp,
+    type: eventType,
+    timestamp: evt.timestamp || evt.created_at || new Date().toISOString(),
     session_id: evt.session_id || evt.sessionId || null,
     user_id: evt.user_id || evt.userId || null,
-    event_type,
+    event_type: eventType,
     payload_json: evt.payload_json || evt.payload || {},
-    source: evt.source || 'telemetry'
+    source: evt.source || 'telemetry',
   };
 }
 
 function validateEvent(evt) {
-  if (!evt || typeof evt !== 'object') return false;
-  if (!(evt.type || evt.event_type || evt.eventType)) return false;
-  return true;
+  return Boolean(evt && typeof evt === 'object' && evt.event_type);
 }
 
 function addTelemetryEvent(evt) {
@@ -67,7 +63,6 @@ async function handler(req, res) {
       : JSON.parse(req.body || '{}');
 
     const event = addTelemetryEvent(body);
-
     if (!event) {
       return res.status(400).json({ ok: false, error: 'Invalid event' });
     }
@@ -77,14 +72,14 @@ async function handler(req, res) {
       userId: event.user_id,
       eventType: event.event_type,
       payload: event.payload_json,
-      source: event.source
+      source: event.source,
     });
 
     if (!saved.ok) {
       return res.status(200).json({
         ok: false,
         event,
-        message: saved.error && saved.error.message
+        message: saved.error && saved.error.message,
       });
     }
 
