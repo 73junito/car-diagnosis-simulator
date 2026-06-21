@@ -38,4 +38,29 @@ window.SCENARIO_QUESTIONS = {
       topic: "Charging system"
     }
   ]
+,
+  "no-crank": [
+    {
+      question_text: "What is the first test when an engine will not crank and only clicks?",
+      option_a: "Check battery voltage and connections",
+      option_b: "Replace the starter immediately",
+      option_c: "Check fuel pressure",
+      option_d: "Inspect spark plugs",
+      correct_answer: "A",
+      explanation: "A clicking sound during cranking commonly indicates low battery voltage or poor cable connections.",
+      difficulty: "beginner",
+      topic: "Battery testing"
+    },
+    {
+      question_text: "What battery voltage is expected on a fully charged battery at rest?",
+      option_a: "9.6V",
+      option_b: "10.5V",
+      option_c: "12.6V",
+      option_d: "14.8V",
+      correct_answer: "C",
+      explanation: "A healthy fully charged lead-acid battery should measure approximately 12.6 volts.",
+      difficulty: "beginner",
+      topic: "Battery state of charge"
+    }
+  ]
 };
