@@ -1,0 +1,101 @@
+{
+  "scenario_id": "overheating",
+  "questions": [
+    {
+      "question_text": "During a diagnostic check of the engine's cooling system, you notice that the coolant temperature gauge reads above normal after driving for about 10 minutes. Which component should be your first point of inspection?",
+      "option_a": "Thermostat",
+      "option_b": "Radiator fan",
+      "option_c": "Water pump",
+      "option_d": "Cooling system hoses",
+      "correct_answer": "A",
+      "explanation": "The thermostat is a critical component that regulates the flow of coolant through the engine. A stuck closed or partially open thermostat can cause the engine to overheat.",
+      "difficulty": "intermediate",
+      "topic": "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
+      "ase_area": "A7 Heating and Air Conditioning"
+    },
+    {
+      "question_text": "You have just replaced the thermostat in a vehicle with an overheating issue. After driving for 10 minutes, you notice that the engine temperature is still high. What should be your next step?",
+      "option_a": "Check the coolant level",
+      "option_b": "Inspect the water pump operation",
+      "option_c": "Verify radiator airflow",
+      "option_d": "Test the cooling fan",
+      "correct_answer": "B",
+      "explanation": "If the thermostat is functioning correctly, the next step would be to check the water pump for proper operation as it is essential for coolant circulation.",
+      "difficulty": "intermediate",
+      "topic": "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
+      "ase_area": "A7 Heating and Air Conditioning"
+    },
+    {
+      "question_text": "During a diagnostic check of the engine's cooling system, you observe that the coolant temperature gauge reads above normal after driving for about 10 minutes. What is the most likely cause if the radiator appears to be functioning properly?",
+      "option_a": "Faulty thermostat",
+      "option_b": "Clogged air filter",
+      "option_c": "Defective water pump",
+      "option_d": "Low coolant level",
+      "correct_answer": "A",
+      "explanation": "If the radiator is not a factor, the issue could be with the thermostat. A faulty thermostat can prevent proper coolant flow and lead to overheating.",
+      "difficulty": "intermediate",
+      "topic": "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
+      "ase_area": "A7 Heating and Air Conditioning"
+    },
+    {
+      "question_text": "You are performing a diagnostic check on the engine's cooling system. The coolant temperature gauge reads above normal after 10 minutes of driving. What is the most likely cause if you observe that the water pump is not circulating coolant properly?",
+      "option_a": "Thermostat stuck open",
+      "option_b": "Water pump failure",
+      "option_c": "Coolant level too low",
+      "option_d": "Radiator fan not operating",
+      "correct_answer": "B",
+      "explanation": "A failing water pump can prevent proper coolant circulation, leading to engine overheating.",
+      "difficulty": "intermediate",
+      "topic": "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
+      "ase_area": "A7 Heating and Air Conditioning"
+    },
+    {
+      "question_text": "During a diagnostic check of the engine's cooling system, you notice that the coolant temperature gauge reads above normal after driving for about 10 minutes. What is the most likely cause if the radiator fins are dirty or clogged?",
+      "option_a": "Thermostat stuck closed",
+      "option_b": "Radiator airflow issues",
+      "option_c": "Water pump failure",
+      "option_d": "Coolant level too low",
+      "correct_answer": "B",
+      "explanation": "Dirty radiator fins can restrict air flow, leading to poor heat dissipation and engine overheating.",
+      "difficulty": "intermediate",
+      "topic": "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
+      "ase_area": "A7 Heating and Air Conditioning"
+    },
+    {
+      "question_text": "You are performing a diagnostic check on the engine's cooling system. The coolant temperature gauge reads above normal after 10 minutes of driving. What is the most likely cause if you observe that the cooling fan does not turn on when it should?",
+      "option_a": "Thermostat stuck open",
+      "option_b": "Cooling fan relay failure",
+      "option_c": "Water pump failure",
+      "option_d": "Low coolant level",
+      "correct_answer": "B",
+      "explanation": "A faulty cooling fan relay can prevent the fan from operating, leading to poor heat dissipation and engine overheating.",
+      "difficulty": "intermediate",
+      "topic": "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
+      "ase_area": "A7 Heating and Air Conditioning"
+    },
+    {
+      "question_text": "During a diagnostic check of the engine's cooling system, you notice that the coolant temperature gauge reads above normal after driving for about 10 minutes. What is the most likely cause if the thermostat opens too early or not at all?",
+      "option_a": "Thermostat stuck open",
+      "option_b": "Radiator airflow issues",
+      "option_c": "Water pump failure",
+      "option_d": "Coolant level too low",
+      "correct_answer": "A",
+      "explanation": "A thermostat that does not function properly can lead to improper coolant flow, causing the engine to overheat.",
+      "difficulty": "intermediate",
+      "topic": "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
+      "ase_area": "A7 Heating and Air Conditioning"
+    },
+    {
+      "question_text": "You are performing a diagnostic check on the engine's cooling system. The coolant temperature gauge reads above normal after 10 minutes of driving. What is the most likely cause if you observe that the water pump is making unusual noises?",
+      "option_a": "Thermostat stuck open",
+      "option_b": "Cooling fan relay failure",
+      "option_c": "Water pump bearing or impeller issue",
+      "option_d": "Low coolant level",
+      "correct_answer": "C",
+      "explanation": "A water pump with a bearing or impeller issue can cause unusual noises and poor circulation, leading to engine overheating.",
+      "difficulty": "intermediate",
+      "topic": "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
+      "ase_area": "A7 Heating and Air Conditioning"
+    }
+  ]
+}

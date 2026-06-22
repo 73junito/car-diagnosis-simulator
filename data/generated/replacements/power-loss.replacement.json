@@ -1,0 +1,101 @@
+{
+  "scenario_id": "power-loss",
+  "questions": [
+    {
+      "question_text": "During a road test, the vehicle struggles to accelerate uphill. A scan tool shows no fault codes related to engine performance. What is the most likely cause of this issue?",
+      "option_a": "Fuel delivery system malfunction (fuel pump or injectors)",
+      "option_b": "Air intake restriction due to a clogged air filter",
+      "option_c": "Exhaust restriction from a partially blocked catalytic converter",
+      "option_d": "Transmission slipping, causing reduced engine load",
+      "correct_answer": "A",
+      "explanation": "Fuel delivery issues can significantly affect the vehicle's performance. A malfunctioning fuel pump or injectors could lead to insufficient fuel flow during acceleration, especially under load.",
+      "difficulty": "intermediate",
+      "topic": "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
+      "ase_area": "A8 Engine Performance"
+    },
+    {
+      "question_text": "Upon visual inspection of the engine compartment, you notice a loose vacuum hose connected to the throttle body. What is the most likely immediate effect on the vehicle's performance?",
+      "option_a": "Increased fuel consumption due to richer air-fuel mixture",
+      "option_b": "Reduced power output due to air intake restriction",
+      "option_c": "Decreased engine temperature leading to poor combustion",
+      "option_d": "Exhaust backpressure causing reduced engine efficiency",
+      "correct_answer": "B",
+      "explanation": "A loose vacuum hose can cause an air intake restriction, leading to a leaner air-fuel mixture and reduced power output.",
+      "difficulty": "intermediate",
+      "topic": "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
+      "ase_area": "A8 Engine Performance"
+    },
+    {
+      "question_text": "During a diagnostic test, you observe that the manifold absolute pressure (MAP) sensor is reading higher than normal values. What could be causing this issue?",
+      "option_a": "Faulty MAP sensor",
+      "option_b": "Air intake restriction due to a clogged air filter",
+      "option_c": "Exhaust restriction from a partially blocked catalytic converter",
+      "option_d": "Transmission slipping, causing reduced engine load",
+      "correct_answer": "B",
+      "explanation": "A clogged air filter can restrict the airflow into the engine, leading to higher than normal MAP sensor readings.",
+      "difficulty": "intermediate",
+      "topic": "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
+      "ase_area": "A8 Engine Performance"
+    },
+    {
+      "question_text": "You suspect a potential issue with the throttle position sensor (TPS). Which of the following symptoms would you expect to observe during a road test?",
+      "option_a": "Vehicle accelerates smoothly without any issues",
+      "option_b": "Vehicle struggles to accelerate, especially at low RPMs",
+      "option_c": "Engine idles roughly and stalls frequently",
+      "option_d": "Exhaust emissions are significantly higher than normal",
+      "correct_answer": "B",
+      "explanation": "A faulty TPS can cause the engine to misinterpret throttle position signals, leading to improper fuel delivery and reduced acceleration.",
+      "difficulty": "intermediate",
+      "topic": "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
+      "ase_area": "A8 Engine Performance"
+    },
+    {
+      "question_text": "During a pressure test of the fuel system, you notice that the fuel pressure is lower than expected. What could be causing this issue?",
+      "option_a": "Faulty fuel pump or regulator",
+      "option_b": "Air intake restriction due to a clogged air filter",
+      "option_c": "Exhaust restriction from a partially blocked catalytic converter",
+      "option_d": "Transmission slipping, causing reduced engine load",
+      "correct_answer": "A",
+      "explanation": "A malfunctioning fuel pump or regulator can result in lower than normal fuel pressure, affecting the vehicle's performance during acceleration.",
+      "difficulty": "intermediate",
+      "topic": "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
+      "ase_area": "A8 Engine Performance"
+    },
+    {
+      "question_text": "You perform a visual inspection of the exhaust system and notice that one of the mufflers is loose. What immediate effect could this have on the vehicle's performance?",
+      "option_a": "Increased fuel consumption due to richer air-fuel mixture",
+      "option_b": "Reduced power output due to air intake restriction",
+      "option_c": "Decreased engine temperature leading to poor combustion",
+      "option_d": "Exhaust backpressure causing reduced engine efficiency",
+      "correct_answer": "D",
+      "explanation": "A loose muffler can cause exhaust backpressure, reducing the engine's efficiency and power output.",
+      "difficulty": "intermediate",
+      "topic": "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
+      "ase_area": "A8 Engine Performance"
+    },
+    {
+      "question_text": "During a road test, you notice that the vehicle accelerates poorly but does not show any fault codes. What should be your next step in diagnosing this issue?",
+      "option_a": "Check for transmission fluid level and condition",
+      "option_b": "Inspect the fuel pressure at idle and under load",
+      "option_c": "Listen for unusual noises from the engine compartment",
+      "option_d": "Test the operation of the oxygen sensors",
+      "correct_answer": "B",
+      "explanation": "Checking the fuel pressure can help determine if there is a fuel delivery issue affecting the vehicle's performance.",
+      "difficulty": "intermediate",
+      "topic": "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
+      "ase_area": "A8 Engine Performance"
+    },
+    {
+      "question_text": "You suspect a potential issue with the mass airflow (MAF) sensor. Which of the following symptoms would you expect to observe during a road test?",
+      "option_a": "Vehicle accelerates smoothly without any issues",
+      "option_b": "Vehicle struggles to accelerate, especially at low RPMs",
+      "option_c": "Engine idles roughly and stalls frequently",
+      "option_d": "Exhaust emissions are significantly higher than normal",
+      "correct_answer": "B",
+      "explanation": "A faulty MAF sensor can cause the engine to misinterpret airflow signals, leading to improper fuel delivery and reduced acceleration.",
+      "difficulty": "intermediate",
+      "topic": "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
+      "ase_area": "A8 Engine Performance"
+    }
+  ]
+}

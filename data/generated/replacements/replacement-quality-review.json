@@ -1,0 +1,226 @@
+[
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "During a load test on the charging system while driving, what would indicate an issue with the alternator?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "What symptom would you expect to observe if there is a poor ground connection in the electrical system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "During a voltmeter check while driving, what reading would suggest a weak or failing battery?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "What would you expect to see on a scan tool when the headlights are dim and flickering while driving?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "Which of the following would be a likely test result when checking for voltage drop in the wiring harness?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "What would be a plausible reason for dimming headlights while driving?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "During a visual inspection of the electrical system, what would you be looking for to identify potential issues?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "What would be the expected outcome of a battery capacity test if the headlights are dim and flickering?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "During a diagnostic check, you notice the compressor clutch is not engaging. What could be the most likely cause?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "You observe that the low-side pressure is abnormally high. What could this indicate?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "During a visual inspection, you notice ice formation on the evaporator core. What is the most probable cause?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "You suspect a refrigerant leak. Which of the following would be the most effective method to locate it?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "The high-side pressure reading is significantly lower than normal. What does this suggest?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "You find that the condenser is not receiving adequate airflow. What could be causing this?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "The air conditioning system is not cooling properly. Upon checking, you find the compressor clutch engages but the blower fan does not operate. What should be your next step?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "During a diagnostic check of the engine's cooling system, you notice that the coolant temperature gauge reads above normal after driving for about 10 minutes. Which component should be your first point of inspection?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "You have just replaced the thermostat in a vehicle with an overheating issue. After driving for 10 minutes, you notice that the engine temperature is still high. What should be your next step?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "During a diagnostic check of the engine's cooling system, you observe that the coolant temperature gauge reads above normal after driving for about 10 minutes. What is the most likely cause if the radiator appears to be functioning properly?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "You are performing a diagnostic check on the engine's cooling system. The coolant temperature gauge reads above normal after 10 minutes of driving. What is the most likely cause if you observe that the water pump is not circulating coolant properly?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "During a diagnostic check of the engine's cooling system, you notice that the coolant temperature gauge reads above normal after driving for about 10 minutes. What is the most likely cause if the radiator fins are dirty or clogged?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "You are performing a diagnostic check on the engine's cooling system. The coolant temperature gauge reads above normal after 10 minutes of driving. What is the most likely cause if you observe that the cooling fan does not turn on when it should?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "During a diagnostic check of the engine's cooling system, you notice that the coolant temperature gauge reads above normal after driving for about 10 minutes. What is the most likely cause if the thermostat opens too early or not at all?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "You are performing a diagnostic check on the engine's cooling system. The coolant temperature gauge reads above normal after 10 minutes of driving. What is the most likely cause if you observe that the water pump is making unusual noises?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "During a road test, the vehicle struggles to accelerate uphill. A scan tool shows no fault codes related to engine performance. What is the most likely cause of this issue?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "Upon visual inspection of the engine compartment, you notice a loose vacuum hose connected to the throttle body. What is the most likely immediate effect on the vehicle's performance?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "During a diagnostic test, you observe that the manifold absolute pressure (MAP) sensor is reading higher than normal values. What could be causing this issue?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "You suspect a potential issue with the throttle position sensor (TPS). Which of the following symptoms would you expect to observe during a road test?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "During a pressure test of the fuel system, you notice that the fuel pressure is lower than expected. What could be causing this issue?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "You perform a visual inspection of the exhaust system and notice that one of the mufflers is loose. What immediate effect could this have on the vehicle's performance?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "During a road test, you notice that the vehicle accelerates poorly but does not show any fault codes. What should be your next step in diagnosing this issue?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "You suspect a potential issue with the mass airflow (MAF) sensor. Which of the following symptoms would you expect to observe during a road test?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic review."
+  }
+]
