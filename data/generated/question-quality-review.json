@@ -1,0 +1,946 @@
+[
+  {
+    "scenario_id": "no-crank",
+    "question_text": "What could be a reason for the engine not cranking when you turn the key?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank",
+    "question_text": "Which of these could be a cause for no cranking if the battery is not dead?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank",
+    "question_text": "What should you check first if your vehicle does not crank when trying to start it?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank",
+    "question_text": "If you have confirmed that the battery voltage is sufficient, what should be your next step to diagnose a no-crank situation?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank",
+    "question_text": "Which of these would be a less likely cause for no cranking in an older vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank",
+    "question_text": "What could be a reason for no cranking if you have ruled out battery issues?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank",
+    "question_text": "Which diagnostic tool is most useful for checking if a vehicle's starter motor is functioning properly?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank",
+    "question_text": "If a vehicle's starter motor is working but still no cranking occurs, what should be your next step?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-start",
+    "question_text": "What could be the reason for a car not starting when you turn the key?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-start",
+    "question_text": "Which of these could cause a vehicle to fail to start?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-start",
+    "question_text": "If a car does not start, which of these should be checked first?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-start",
+    "question_text": "What might cause a vehicle to fail to start if it has been recently fueled?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-start",
+    "question_text": "Which component failure would most likely result in a car not starting?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-start",
+    "question_text": "What could be a reason for a car not starting if it has been recently serviced?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-start",
+    "question_text": "Which of these would be a likely cause for a car failing to start in cold weather?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-start",
+    "question_text": "If a car does not start, which of these should be checked to ensure the issue is not related to the battery?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "Which of the following is a common cause of overheating in electronic devices?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "What symptom would you expect to see if a device is overheating?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "Which of these components is most likely to overheat in a computer?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: computer"
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "What can be done to prevent overheating in a gaming laptop?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: laptop, gaming laptop"
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "Which of these is a sign that your device might be overheating?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "What is a recommended step when you suspect your device is overheating?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "Which of these is a sign that your device might be overheating?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "overheating",
+    "question_text": "What should you do if your device starts overheating during use?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "What is the unit of electrical power?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "Which of the following best describes an electrical load?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "What does the term 'load factor' refer to in electrical engineering?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "Which type of load would be considered a constant or steady-state load?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: computer"
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "What is the primary function of an electrical load calculation?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: building"
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "Which factor is most critical when designing a circuit for an electrical load?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "What is the effect of a high load factor on an electrical system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "electrical-load",
+    "question_text": "Which of the following is a common method for managing electrical loads to improve system performance?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire",
+    "question_text": "What could be a symptom of misfire in an engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire",
+    "question_text": "Which sensor is most likely to be checked first when diagnosing a misfire issue?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire",
+    "question_text": "What could be a reason for a single cylinder misfire?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire",
+    "question_text": "Which diagnostic tool feature would you use to check for misfire codes?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire",
+    "question_text": "What is a common cause of multiple cylinder misfire?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire",
+    "question_text": "Which of the following would indicate a misfire in an engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire",
+    "question_text": "What could cause a misfire that only occurs under certain driving conditions, such as high speed or heavy load?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire",
+    "question_text": "Which of the following is a potential consequence of misfire in an engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "steering-alignment",
+    "question_text": "What is the primary purpose of performing a steering alignment?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "steering-alignment",
+    "question_text": "Which of the following is NOT a common symptom that may indicate the need for steering alignment?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "steering-alignment",
+    "question_text": "During a steering alignment, which component is NOT typically adjusted?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "steering-alignment",
+    "question_text": "What is the term used to describe the angle between the wheel and the vertical axis, which can affect how the tire contacts the road surface?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "steering-alignment",
+    "question_text": "Which of the following is a potential consequence of improper steering alignment?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "steering-alignment",
+    "question_text": "What tool is commonly used during a steering alignment to measure and adjust the camber angle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "steering-alignment",
+    "question_text": "Which of the following is NOT a benefit of regular steering alignment?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "steering-alignment",
+    "question_text": "What should a technician do if they notice that one tire has significantly more wear than the others during a visual inspection?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "What is the primary function of an evaporator in a cooling system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "Which component in an HVAC system is responsible for removing moisture from the air?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "What is the purpose of a thermostatic expansion valve (TXV) in a refrigeration cycle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "Which of the following is a common sign that an HVAC system's air filter needs to be replaced?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "What is the role of a condenser in an HVAC system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "Which component in an HVAC system is responsible for compressing the refrigerant gas?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "What is the primary purpose of a thermostat in an HVAC system?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: building"
+  },
+  {
+    "scenario_id": "hvac-cooling",
+    "question_text": "Which of the following is a common cause of refrigerant leaks in an HVAC system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "stalling",
+    "question_text": "What is the most common cause of stalling in a car?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "stalling",
+    "question_text": "Which component is crucial for ensuring proper fuel delivery to the engine, preventing stalling?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "stalling",
+    "question_text": "What could be a reason for intermittent stalling in an otherwise well-maintained vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "stalling",
+    "question_text": "Which of these would be a primary concern when diagnosing stalling issues in an older vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "stalling",
+    "question_text": "During a stall diagnosis, you notice the engine is running rich. What could be causing this condition?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "stalling",
+    "question_text": "What is a common sign that your vehicle's fuel pump might be failing, causing stalling?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "stalling",
+    "question_text": "Which diagnostic tool would be most useful in identifying stalling issues related to the ignition system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "stalling",
+    "question_text": "If a vehicle is experiencing stalling when cold but runs fine after warming up, what could be the issue?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire-9",
+    "question_text": "What could be a reason for misfires in an engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire-9",
+    "question_text": "Which of these is a symptom of misfire in an engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire-9",
+    "question_text": "What tool would you use to diagnose a misfire in an engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire-9",
+    "question_text": "Which of the following is a common cause of misfire in modern engines?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire-9",
+    "question_text": "What is the first step in diagnosing a misfire?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire-9",
+    "question_text": "Which diagnostic code would indicate a misfire on an OBD-II scanner?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire-9",
+    "question_text": "What could be the consequence of not addressing a misfire issue?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "misfire-9",
+    "question_text": "Which component is directly responsible for igniting the fuel mixture in a spark-ignition engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "What could be a reason for a sudden power loss in a home?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: home, wi-fi"
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "Which of the following is a common indicator that your home might be experiencing power loss?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: home, wi-fi, appliance, circuit breaker"
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "What should you do first if you experience a power outage in your home?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: home, appliance, circuit breaker, power outage"
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "Why might a circuit breaker trip during a power outage?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: home, wi-fi, circuit breaker, power outage"
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "What could be a sign that your home’s electrical panel needs to be inspected after experiencing power loss?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: home, appliance"
+  },
+  {
+    "scenario_id": "power-loss",
+    "question_text": "Which of these is NOT a reason for power loss in an office building?",
+    "score": 10,
+    "issue_type": "non_automotive_content",
+    "notes": "Contains non-automotive terms: office, building, circuit breaker"
+  },
+  {
+    "scenario_id": "power-loss",
+    "score": 20,
+    "issue_type": "incomplete_question",
+    "notes": "Missing question text, answer option, or correct answer."
+  },
+  {
+    "scenario_id": "no-crank-11",
+    "question_text": "What could be the reason for a vehicle not cranking when attempting to start?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank-11",
+    "question_text": "Which of the following is a common symptom that could indicate a bad starter motor?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank-11",
+    "question_text": "If a technician checks the battery and finds it is fully charged but the vehicle still won't start, what should be the next step?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank-11",
+    "question_text": "What could cause a vehicle to crank but not start?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank-11",
+    "question_text": "Which diagnostic tool would be most useful in determining why a vehicle is not cranking?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank-11",
+    "question_text": "What is the first step in diagnosing a vehicle that won't crank?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank-11",
+    "question_text": "If a vehicle cranks but does not start, which of the following should be checked?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "no-crank-11",
+    "question_text": "What could cause a vehicle to crank over but fail to ignite?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "intermittent-starting",
+    "question_text": "What could be a possible reason for an engine to intermittently start and stop while driving?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "intermittent-starting",
+    "question_text": "Which of the following could be a symptom of an intermittent starting issue in a vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "intermittent-starting",
+    "question_text": "Which diagnostic tool would be most useful in identifying an intermittent starting issue?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "intermittent-starting",
+    "question_text": "What could be a sign of a weak battery causing intermittent starting problems?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "intermittent-starting",
+    "question_text": "Which of these could be a reason for an intermittent starting issue in a vehicle's fuel system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "intermittent-starting",
+    "question_text": "What is a common sign of an issue with the ignition system causing intermittent starting problems?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "intermittent-starting",
+    "question_text": "Which of these could be a sign of an issue with the starter motor causing intermittent starting problems?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "intermittent-starting",
+    "question_text": "What could be a sign of an issue with the fuel injection system causing intermittent starting problems?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "charging-system",
+    "question_text": "What could be a reason for a charging system to stop working suddenly?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "charging-system",
+    "question_text": "Which component in a charging system is responsible for converting AC to DC?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "charging-system",
+    "question_text": "What is the primary function of an alternator in a vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "charging-system",
+    "question_text": "Which of these is a sign that your charging system might be failing?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "charging-system",
+    "question_text": "What tool would you use to check the voltage output of an alternator?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "charging-system",
+    "question_text": "Which component in a charging system helps regulate the battery's charge and prevent overcharging?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "charging-system",
+    "question_text": "What could be a reason for a dimming dashboard when starting the engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "charging-system",
+    "question_text": "Which of these would you check first if a vehicle's battery is not charging properly?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "can-bus-network",
+    "question_text": "What is the primary function of a CAN bus network in an automotive system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "can-bus-network",
+    "question_text": "Which of the following is a characteristic feature of CAN bus communication?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "can-bus-network",
+    "question_text": "What does the term 'bit rate' refer to in CAN bus networks?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "can-bus-network",
+    "question_text": "Which of the following is a common issue that can affect CAN bus communication?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "can-bus-network",
+    "question_text": "What is the purpose of the 'remote frame' in a CAN bus network?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "can-bus-network",
+    "question_text": "Which of the following is true about CAN bus error handling?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "can-bus-network",
+    "question_text": "What is the maximum number of nodes supported by a single CAN bus segment according to ISO 11898-2?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "can-bus-network",
+    "question_text": "Which of the following is NOT a type of CAN bus message frame?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev",
+    "question_text": "What is the primary function of a hybrid electric vehicle (HEV)?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev",
+    "question_text": "Which component in a hybrid vehicle is responsible for converting electrical energy from the battery into mechanical energy?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev",
+    "question_text": "In which mode does an HEV primarily use its electric motor?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev",
+    "question_text": "What is regenerative braking in a hybrid vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev",
+    "question_text": "Which system manages the power distribution between the internal combustion engine and electric motor in a hybrid vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev",
+    "question_text": "What is the role of the battery in a hybrid vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev",
+    "question_text": "Which of the following is NOT a benefit of hybrid vehicles?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev",
+    "question_text": "What technology allows a hybrid vehicle to operate in 'electric-only' mode?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "diesel-aftertreatment",
+    "question_text": "Which of the following is a primary function of a diesel exhaust fluid (DEF) in a selective catalytic reduction (SCR) system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "diesel-aftertreatment",
+    "question_text": "What is the primary component of diesel exhaust fluid (DEF)?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "diesel-aftertreatment",
+    "question_text": "Which of the following sensors is crucial for monitoring the temperature of diesel exhaust fluid (DEF) before it enters the SCR system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "diesel-aftertreatment",
+    "question_text": "In a diesel engine, which component is responsible for injecting diesel exhaust fluid (DEF) into the exhaust stream?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "diesel-aftertreatment",
+    "question_text": "What could be a potential consequence if the diesel exhaust fluid (DEF) level in an SCR system is too low?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "diesel-aftertreatment",
+    "question_text": "Which of the following is a common symptom when there is an issue with the diesel exhaust fluid (DEF) system in a vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "diesel-aftertreatment",
+    "question_text": "What is the typical concentration of urea in diesel exhaust fluid (DEF)?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "diesel-aftertreatment",
+    "question_text": "Which sensor monitors the pressure of diesel exhaust fluid (DEF) in the system?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev-17",
+    "question_text": "What is the primary function of a hybrid electric vehicle (HEV) in terms of energy management?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev-17",
+    "question_text": "Which component is crucial for converting the vehicle's kinetic energy into electrical energy during braking in a hybrid EV?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev-17",
+    "question_text": "In a hybrid EV, what is the role of the electric motor?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev-17",
+    "question_text": "What is the main advantage of using a hybrid electric vehicle (HEV) in urban driving conditions?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev-17",
+    "question_text": "Which of the following is a common type of hybrid electric vehicle (HEV)?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev-17",
+    "question_text": "What is the purpose of the battery management system (BMS) in a hybrid electric vehicle?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev-17",
+    "question_text": "In a hybrid electric vehicle (HEV), what is the role of the internal combustion engine?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  },
+  {
+    "scenario_id": "hybrid-ev-17",
+    "question_text": "Which of the following is a benefit of using regenerative braking in hybrid electric vehicles (HEVs)?",
+    "score": 85,
+    "issue_type": "passed_basic_review",
+    "notes": "Passed basic automotive keyword and structure checks."
+  }
+]
