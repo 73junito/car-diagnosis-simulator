@@ -61,3 +61,4 @@
   // expose for non-module environments
   window.SCENARIO_REGISTRY = registry;
 })();
+
