@@ -119,3 +119,29 @@ body.detail-open{overflow:hidden;height:100vh}
 .sd-badge{display:inline-block;padding:6px 8px;border-radius:6px;margin-right:8px;font-size:0.85rem}
 .sd-badge.badge--status{background:#eef;border:1px solid rgba(0,0,0,0.05)}
 .sd-badge:contains('completed'){background:#e6ffed}
+
+.dashboard-card {
+  margin: 24px 0;
+  padding: 18px;
+  border: 1px solid #d9e2ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.analytics-table th,
+.analytics-table td {
+  border: 1px solid #d9e2ec;
+  padding: 8px;
+  text-align: left;
+}
+
+.analytics-table th {
+  background: #f5f7fa;
+}
+

@@ -86,3 +86,71 @@ document.addEventListener('DOMContentLoaded', ()=>{ if(window.initStudentDashboa
 
 
 
+
+async function loadPerformanceSummary() {
+  const root = document.getElementById("performanceSummary");
+  if (!root) return;
+
+  try {
+    if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+      root.innerHTML = "<p>Performance data unavailable.</p>";
+      return;
+    }
+
+    const url =
+      `${window.SUPABASE_URL}/rest/v1/student_performance_summary` +
+      `?select=scenario_id,attempts,correct_attempts,accuracy_pct,avg_time_seconds` +
+      `&order=accuracy_pct.asc`;
+
+    const res = await fetch(url, {
+      headers: {
+        apikey: window.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const rows = await res.json();
+
+    if (!Array.isArray(rows) || !rows.length) {
+      root.innerHTML = "<p>No performance data available yet.</p>";
+      return;
+    }
+
+    root.innerHTML = `
+      <table class="analytics-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Attempts</th>
+            <th>Correct</th>
+            <th>Accuracy</th>
+            <th>Avg Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td>${r.scenario_id}</td>
+              <td>${r.attempts}</td>
+              <td>${r.correct_attempts}</td>
+              <td>${r.accuracy_pct}%</td>
+              <td>${Math.round(Number(r.avg_time_seconds || 0))}s</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    console.error("Performance summary failed", err);
+    root.innerHTML = "<p>Unable to load performance data.</p>";
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadPerformanceSummary);
+} else {
+  loadPerformanceSummary();
+}
+
