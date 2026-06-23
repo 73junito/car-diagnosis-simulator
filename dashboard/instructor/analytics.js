@@ -234,3 +234,83 @@ window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummar
     return { avgScore, completionRate, weakAreas, topStudent }
   }catch(e){ return null }
 }
+
+async function loadAseReadinessSummary() {
+  const root = document.getElementById("aseReadinessSummary");
+  if (!root) return;
+
+  try {
+    if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+      root.innerHTML = "<p>ASE readiness data unavailable.</p>";
+      return;
+    }
+
+    const url =
+      `${window.SUPABASE_URL}/rest/v1/ase_readiness_summary` +
+      `?select=ase_code,ase_name,attempts,correct_attempts,readiness_pct,avg_time_seconds` +
+      `&order=ase_code.asc`;
+
+    const res = await fetch(url, {
+      headers: {
+        apikey: window.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const rows = await res.json();
+
+    if (!Array.isArray(rows) || !rows.length) {
+      root.innerHTML = "<p>No ASE readiness data available.</p>";
+      return;
+    }
+
+    root.innerHTML = `
+      <table class="analytics-table">
+        <thead>
+          <tr>
+            <th>ASE Area</th>
+            <th>Attempts</th>
+            <th>Correct</th>
+            <th>Readiness</th>
+            <th>Avg Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(row => {
+            const readiness =
+              row.readiness_pct === null || row.readiness_pct === undefined
+                ? "No attempts"
+                : `${Number(row.readiness_pct).toFixed(0)}%`;
+
+            const avgTime =
+              row.avg_time_seconds === null || row.avg_time_seconds === undefined
+                ? "—"
+                : `${Math.round(Number(row.avg_time_seconds))}s`;
+
+            return `
+              <tr>
+                <td><strong>${row.ase_code}</strong> — ${row.ase_name}</td>
+                <td>${row.attempts}</td>
+                <td>${row.correct_attempts}</td>
+                <td>${readiness}</td>
+                <td>${avgTime}</td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    `;
+  } catch (err) {
+    console.error("ASE readiness load failed", err);
+    root.innerHTML = "<p>Unable to load ASE readiness.</p>";
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadAseReadinessSummary);
+} else {
+  loadAseReadinessSummary();
+}
+
