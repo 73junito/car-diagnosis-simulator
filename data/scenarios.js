@@ -7,11 +7,11 @@ const SCENARIO_CATEGORIES = [
   'overheating',
   'electrical-load',
   'misfire',
-  'steering_alignment',
-  'hvac_cooling',
+  'steering-alignment',
+  'hvac-cooling',
   'stalling',
-  'power_loss',
-  'intermittent_starting',
+  'power-loss',
+  'intermittent-starting',
   // recommended expansions (examples)
   'charging-system',
   'battery-drain',
@@ -185,7 +185,7 @@ window.scenarios = [
     difficulty: 2,
     primarySystem: 'chassis',
     secondarySystems: ['suspension'],
-    symptomCategory: 'steering_alignment',
+    symptomCategory: 'steering-alignment',
     trainingFocus: 'wheel alignment and suspension wear diagnostics',
     fault: "alignment",
     tests: {
@@ -200,7 +200,7 @@ window.scenarios = [
     difficulty: 2,
     primarySystem: 'hvac',
     secondarySystems: ['engine'],
-    symptomCategory: 'hvac_cooling',
+    symptomCategory: 'hvac-cooling',
     trainingFocus: 'refrigerant charge and leak detection',
     fault: "refrigerant",
     tests: {
@@ -245,7 +245,7 @@ window.scenarios = [
     difficulty: 4,
     primarySystem: 'transmission',
     secondarySystems: ['engine'],
-    symptomCategory: 'power_loss',
+    symptomCategory: 'power-loss',
     trainingFocus: 'transmission slip and load performance diagnostics',
     fault: "transmission",
     tests: {
@@ -296,7 +296,7 @@ window.scenarios = [
     difficulty: 3,
     primarySystem: 'electrical',
     secondarySystems: ['starter'],
-    symptomCategory: 'intermittent_starting',
+    symptomCategory: 'intermittent-starting',
     trainingFocus: 'differential diagnosis: battery vs starter (current draw & voltage under load)',
     steps: [
       { id: 's12-1', label: 'Visual inspect battery and starter connections', type: 'inspect', allowedTools: ['visual'], timeCost: 30,
@@ -442,4 +442,5 @@ window.scenarios.forEach(validateScenarioMetadata);
 
 // Expose helper for external tools/validation
 window.normalizeScoringWeights = normalizeScoringWeights;
+
 
