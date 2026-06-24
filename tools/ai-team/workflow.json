@@ -1,0 +1,10 @@
+{
+  "name": "adaptive-learning-engine",
+  "input": "prompts/ai-team/adaptive-learning.md",
+  "steps": [
+    { "agent": "architect", "output": "data/ai-team/orchestrator/01-architect.md" },
+    { "agent": "builder", "output": "data/ai-team/orchestrator/02-builder.md" },
+    { "agent": "reviewer", "output": "data/ai-team/orchestrator/03-reviewer.md" }
+  ],
+  "finalReport": "data/ai-team/orchestrator/final-report.md"
+}
