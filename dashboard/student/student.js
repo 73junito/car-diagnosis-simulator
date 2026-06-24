@@ -155,3 +155,57 @@ if (document.readyState === "loading") {
 }
 
 
+
+async function loadStudentTranscriptSummary() {
+  const root = document.getElementById("studentTranscriptSummary");
+  if (!root) return;
+
+  try {
+    if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+      root.innerHTML = "<p>Transcript data unavailable.</p>";
+      return;
+    }
+
+    const url =
+      `${window.SUPABASE_URL}/rest/v1/student_transcript_summary` +
+      `?select=student_id,scenario_count,attempt_count,correct_attempt_count,accuracy_pct,avg_time_seconds,last_activity`;
+
+    const res = await fetch(url, {
+      headers: {
+        apikey: window.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const rows = await res.json();
+    const transcript = Array.isArray(rows) ? rows[0] : null;
+
+    if (!transcript) {
+      root.innerHTML = "<p>No transcript data yet.</p>";
+      return;
+    }
+
+    root.innerHTML = `
+      <div class="transcript-grid">
+        <div><strong>Student</strong><br>${transcript.student_id}</div>
+        <div><strong>Scenarios</strong><br>${transcript.scenario_count}</div>
+        <div><strong>Attempts</strong><br>${transcript.attempt_count}</div>
+        <div><strong>Correct</strong><br>${transcript.correct_attempt_count}</div>
+        <div><strong>Accuracy</strong><br>${transcript.accuracy_pct}%</div>
+        <div><strong>Avg Time</strong><br>${Math.round(Number(transcript.avg_time_seconds || 0))}s</div>
+      </div>
+    `;
+  } catch (err) {
+    console.error("Student transcript failed", err);
+    root.innerHTML = "<p>Unable to load transcript.</p>";
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadStudentTranscriptSummary);
+} else {
+  loadStudentTranscriptSummary();
+}
+
