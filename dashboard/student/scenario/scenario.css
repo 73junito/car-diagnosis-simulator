@@ -52,3 +52,20 @@ body {
   padding-left: 12px;
   color: #e5e7eb;
 }
+
+.torquemind-feedback{
+    margin-top:16px;
+    padding:16px;
+    border-left:4px solid #2563eb;
+    background:#eff6ff;
+    border-radius:8px;
+}
+
+.torquemind-feedback h4{
+    margin-bottom:10px;
+}
+
+.torquemind-body p{
+    margin:8px 0;
+}
+
