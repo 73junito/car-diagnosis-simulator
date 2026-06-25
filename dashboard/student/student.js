@@ -209,3 +209,53 @@ if (document.readyState === "loading") {
   loadStudentTranscriptSummary();
 }
 
+
+async function loadAdaptiveRecommendations() {
+  const root = document.getElementById("adaptiveRecommendations");
+  if (!root) return;
+
+  try {
+    if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+      root.innerHTML = "<p>Recommendations unavailable.</p>";
+      return;
+    }
+
+    const url =
+      `${window.SUPABASE_URL}/rest/v1/student_recommendations` +
+      `?select=student_id,ase_code,scenario_id,reason,priority` +
+      `&student_id=eq.anonymous&order=priority.asc&limit=5`;
+
+    const res = await fetch(url, {
+      headers: {
+        apikey: window.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
+      }
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const rows = await res.json();
+
+    root.innerHTML = rows.length
+      ? `<div class="recommendation-list">${rows.map(row => `
+          <article class="recommendation-item">
+            <div>
+              <strong>${row.scenario_id}</strong>
+              <p>${row.reason}</p>
+              <small>ASE Area: ${row.ase_code}</small>
+            </div>
+            <a class="recommendation-link" href="./scenario/?id=${encodeURIComponent(row.scenario_id)}">Start Practice</a>
+          </article>
+        `).join("")}</div>`
+      : "<p>No recommendations yet.</p>";
+  } catch (err) {
+    console.error("Adaptive recommendations failed", err);
+    root.innerHTML = "<p>Unable to load recommendations.</p>";
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadAdaptiveRecommendations);
+} else {
+  loadAdaptiveRecommendations();
+}
+
