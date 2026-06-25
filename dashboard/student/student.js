@@ -259,3 +259,57 @@ if (document.readyState === "loading") {
   loadAdaptiveRecommendations();
 }
 
+
+async function loadTorqueMindFeedback(payload){
+
+    const panel = document.getElementById("torquemindFeedback");
+    const body  = document.getElementById("torquemindContent");
+
+    if(!panel || !body) return;
+
+    panel.style.display = "block";
+
+    body.innerHTML = "<p>Generating explanation...</p>";
+
+    try{
+
+        const res = await fetch("/api/torquemind-feedback",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify(payload)
+
+        });
+
+        const data = await res.json();
+
+        body.innerHTML = `
+            <h3>Why your answer was incorrect</h3>
+            <p>${data.reasonIncorrect}</p>
+
+            <h3>Correct reasoning</h3>
+            <p>${data.reasonCorrect}</p>
+
+            <h3>ASE Concept</h3>
+            <p>${data.aseConcept}</p>
+
+            <h3>Next Diagnostic Step</h3>
+            <p>${data.nextStep}</p>
+        `;
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        body.innerHTML =
+            "<p>Unable to generate AI explanation.</p>";
+
+    }
+
+}
+
