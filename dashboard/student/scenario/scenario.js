@@ -53,6 +53,51 @@
     }
   }
 
+  async function loadTorqueMindExplanation({ article, title, selected, correct }) {
+    const aiPanel = article.querySelector(".torquemind-feedback");
+    const aiBody = article.querySelector(".torquemind-body");
+
+    if (!aiPanel || !aiBody) return;
+
+    aiPanel.hidden = false;
+    aiBody.textContent = "Generating AI explanation...";
+
+    try {
+      const response = await fetch("/api/torquemind-feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          scenario: title,
+          question: article.dataset.questionText || "",
+          studentAnswer: selected.value,
+          correctAnswer: correct,
+          topic: article.dataset.topic || ""
+        })
+      });
+
+      const ai = await response.json();
+
+      aiBody.innerHTML = `
+        <p><strong>Why your answer was incorrect</strong></p>
+        <p>${escapeHtml(ai.reasonIncorrect || "No explanation returned.")}</p>
+
+        <p><strong>Correct reasoning</strong></p>
+        <p>${escapeHtml(ai.reasonCorrect || "No reasoning returned.")}</p>
+
+        <p><strong>ASE Concept</strong></p>
+        <p>${escapeHtml(ai.aseConcept || "No ASE concept returned.")}</p>
+
+        <p><strong>Next Diagnostic Step</strong></p>
+        <p>${escapeHtml(ai.nextStep || "No next step returned.")}</p>
+      `;
+    } catch (err) {
+      console.error(err);
+      aiBody.innerHTML = "<p>Unable to generate AI explanation.</p>";
+    }
+  }
+
   async function renderScenarioPage() {
     const params = new URLSearchParams(location.search);
     const id = params.get("id") || params.get("scenario");
@@ -104,7 +149,11 @@
         ${
           questions.length
             ? questions.map((q, i) => `
-                <article class="question-card">
+                <article
+                  class="question-card"
+                  data-question-text="${escapeHtml(q.question_text)}"
+                  data-topic="${escapeHtml(q.topic || "")}"
+                >
                   <h3>Question ${i + 1}</h3>
                   <p>${escapeHtml(q.question_text)}</p>
 
@@ -140,12 +189,13 @@
 
                   <p class="answer-feedback" aria-live="polite"></p>
 
-<div class="torquemind-feedback" hidden>
-  <h4>🧠 TorqueMind AI Tutor</h4>
-  <div class="torquemind-body">
-    Generating explanation...
-  </div>
-</div>
+                  <div class="torquemind-feedback" hidden>
+                    <h4>🧠 TorqueMind AI Tutor</h4>
+                    <div class="torquemind-body">
+                      Generating explanation...
+                    </div>
+                  </div>
+
                   <p><strong>Topic:</strong> ${escapeHtml(q.topic)}</p>
                 </article>
               `).join("")
@@ -183,12 +233,18 @@
           is_correct: isCorrect,
           time_seconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000))
         });
+
+        if (!isCorrect) {
+          await loadTorqueMindExplanation({
+            article,
+            title,
+            selected,
+            correct
+          });
+        }
       });
     });
   }
 
   renderScenarioPage();
 })();
-
-
-
