@@ -139,6 +139,13 @@
                   </button>
 
                   <p class="answer-feedback" aria-live="polite"></p>
+
+<div class="torquemind-feedback" hidden>
+  <h4>🧠 TorqueMind AI Tutor</h4>
+  <div class="torquemind-body">
+    Generating explanation...
+  </div>
+</div>
                   <p><strong>Topic:</strong> ${escapeHtml(q.topic)}</p>
                 </article>
               `).join("")
@@ -182,3 +189,5 @@
 
   renderScenarioPage();
 })();
+
+
