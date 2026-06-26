@@ -28,7 +28,7 @@
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "^1.61.1",
     "@supabase/supabase-js": "^2.108.2",
     "acorn": "^8.17.0",
     "adm-zip": "^0.5.9",
