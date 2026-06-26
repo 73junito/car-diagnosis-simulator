@@ -9,3 +9,14 @@ torquemind-api/coverage/
 .env.local
 .env.*.local
 firebase-config.js
+
+.env.local
+
+node_modules
+playwright-report
+test-results
+coverage
+logs
+reports
+.env.local
+
