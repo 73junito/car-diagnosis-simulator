@@ -1,0 +1,31 @@
+.tm-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.5rem;
+    padding:.75rem 1rem;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+    transition:.2s;
+}
+
+.tm-btn-primary{
+    background:var(--tm-primary);
+    color:white;
+}
+
+.tm-btn-secondary{
+    background:var(--tm-surface-2);
+    color:var(--tm-text);
+}
+
+.tm-btn-danger{
+    background:var(--tm-danger);
+    color:white;
+}
+
+.tm-btn:hover{
+    transform:translateY(-1px);
+}
