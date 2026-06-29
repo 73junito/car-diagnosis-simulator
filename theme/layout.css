@@ -1,0 +1,134 @@
+.tm-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(20, 95, 143, 0.12), transparent 32rem),
+    var(--tm-bg);
+}
+
+.tm-topbar {
+  background: var(--tm-primary);
+  color: #fff;
+  border-bottom: 4px solid var(--tm-accent);
+}
+
+.tm-topbar-inner {
+  max-width: var(--tm-max-width);
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tm-brand {
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  font-size: 1.15rem;
+}
+
+.tm-nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tm-nav a {
+  color: #dbeafe;
+  text-decoration: none;
+  font-weight: 650;
+  font-size: 0.92rem;
+}
+
+.tm-nav a:hover,
+.tm-nav a[aria-current="page"] {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.tm-main {
+  max-width: var(--tm-max-width);
+  margin: 0 auto;
+  padding: 32px 24px 56px;
+}
+
+.tm-page-header {
+  margin-bottom: 24px;
+}
+
+.tm-eyebrow {
+  color: var(--tm-primary-2);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.tm-page-title {
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1.05;
+  margin: 8px 0 10px;
+}
+
+.tm-page-subtitle {
+  color: var(--tm-muted);
+  font-size: 1.1rem;
+  max-width: 760px;
+}
+
+.tm-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.tm-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tm-panel {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-soft);
+  padding: 20px;
+}
+
+.tm-panel-title {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+}
+
+.tm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--tm-radius-sm);
+  padding: 10px 14px;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tm-btn-primary {
+  background: var(--tm-primary);
+  color: #fff;
+}
+
+.tm-btn-secondary {
+  background: var(--tm-surface-2);
+  color: var(--tm-text);
+  border-color: var(--tm-border);
+}
+
+@media (max-width: 800px) {
+  .tm-topbar-inner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .tm-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
