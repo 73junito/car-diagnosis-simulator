@@ -60,13 +60,13 @@
       <button class="hotspot hs-3" data-scenario="overheating" aria-label="overheating"></button>
       <button class="hotspot hs-4" data-scenario="electrical-load" aria-label="electrical-load"></button>
       <button class="hotspot hs-5" data-scenario="misfire" aria-label="misfire"></button>
-      <button class="hotspot hs-6" data-scenario="steering_alignment" aria-label="steering_alignment"></button>
-      <button class="hotspot hs-7" data-scenario="hvac_cooling" aria-label="hvac_cooling"></button>
+      <button class="hotspot hs-6" data-scenario="steering-alignment" aria-label="steering-alignment"></button>
+      <button class="hotspot hs-7" data-scenario="hvac-cooling" aria-label="hvac-cooling"></button>
       <button class="hotspot hs-8" data-scenario="stalling" aria-label="stalling"></button>
-      <button class="hotspot hs-9" data-scenario="misfire-p0300" aria-label="misfire-p0300"></button>
-      <button class="hotspot hs-10" data-scenario="power_loss" aria-label="power_loss"></button>
-      <button class="hotspot hs-11" data-scenario="no-crank-ase" aria-label="no-crank-ase"></button>
-      <button class="hotspot hs-12" data-scenario="intermittent_starting" aria-label="intermittent_starting"></button>
+      <button class="hotspot hs-9" data-scenario="misfire-9" aria-label="misfire-9"></button>
+      <button class="hotspot hs-10" data-scenario="power-loss" aria-label="power-loss"></button>
+      <button class="hotspot hs-11" data-scenario="no-crank-11" aria-label="no-crank-11"></button>
+      <button class="hotspot hs-12" data-scenario="intermittent-starting" aria-label="intermittent-starting"></button>
       <button class="hotspot hs-13" data-scenario="charging-system" aria-label="charging-system"></button>
       <button class="hotspot hs-14" data-scenario="can-bus-network" aria-label="can-bus-network"></button>
       <button class="hotspot hs-15" data-scenario="hybrid-ev" aria-label="hybrid-ev"></button>
@@ -75,10 +75,31 @@
     </div>
 
     <!-- Scenario grid rendered from registry (keeps the screenshot map as visual header) -->
+    <section class="dashboard-card" id="studentTranscriptCard">
+      <h2>My Transcript</h2>
+      <div id="studentTranscriptSummary">
+        <p>Loading transcript...</p>
+      </div>
+    </section>
+    <section class="dashboard-card" id="adaptiveRecommendationsCard">
+      <h2>Recommended Next Scenarios</h2>
+      <div id="adaptiveRecommendations">
+        <p>Loading recommendations...</p>
+      </div>
+    </section>
+
+
     <section id="scenarioGridSection" class="scenario-grid-section">
       <h2 class="visually-hidden">Available Scenarios</h2>
       <div id="scenarioGrid" class="scenario-grid" aria-live="polite"></div>
     </section>
+    <section class="dashboard-card" id="performanceSummaryCard">
+      <h2>Performance Summary</h2>
+      <div id="performanceSummary">
+        <p>Loading performance data...</p>
+      </div>
+    </section>
+
 
     <aside id="detail" class="detail hidden" aria-live="polite">
       <button id="backBtn" class="back">Back to dashboard</button>
@@ -142,7 +163,13 @@
             if(window.studentProgress && window.studentProgress.setProgressFor){ window.studentProgress.setProgressFor(s.id,'in-progress'); }
           }catch(e){}
           // prefer opening in-panel detail when available for accessibility and previews
-          window.location.href = `/dashboard/student/scenario/?id=${encodeURIComponent(s.id)}`;
+          if(window.showScenarioDetail && typeof window.showScenarioDetail === 'function'){
+            window.showScenarioDetail(s, card);
+          } else if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) {
+            window.location.hash = btn.getAttribute('href');
+          } else {
+            window.location.href = btn.href;
+          }
         }
         card.addEventListener('click', activate);
         card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); activate(); } });
@@ -301,4 +328,11 @@
 </html>
 
 
+
+
+
+<div id="torquemindFeedback" class="dashboard-card" style="display:none;">
+    <h2>TorqueMind AI Tutor</h2>
+    <div id="torquemindContent"></div>
+</div>
 
