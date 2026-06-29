@@ -4,10 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Student Scenario Dashboard</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="./student.css">
 </head>
 <body>
-  <main class="wrapper">
+  <div data-theme-shell></div>
+  <main class="tm-main wrapper">
     <h1>Student Scenario Dashboard</h1>
     <p class="page-subtitle">Select a diagnostic scenario to begin training or assessment.</p>
 
@@ -118,6 +122,10 @@
   <script src="/data/scenarios.js"></script>
   <script src="/data/scenario-registry.js"></script>
   <script src="/dashboard/student-progress.js"></script>
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+  </script>
   <script src="./student.js" defer></script>
   <script>
     // render full scenario grid on student dashboard using SCENARIO_REGISTRY
