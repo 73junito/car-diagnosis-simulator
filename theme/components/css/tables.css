@@ -1,0 +1,16 @@
+.tm-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.tm-table th,
+.tm-table td{
+    padding:12px;
+    border-bottom:1px solid var(--tm-border);
+    text-align:left;
+}
+
+.tm-table th{
+    background:var(--tm-primary);
+    color:white;
+}

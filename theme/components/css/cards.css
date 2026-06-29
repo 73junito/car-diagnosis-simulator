@@ -1,0 +1,23 @@
+.tm-card{
+    background:var(--tm-surface);
+    border:1px solid var(--tm-border);
+    border-radius:var(--tm-radius);
+    box-shadow:var(--tm-shadow-soft);
+    overflow:hidden;
+}
+
+.tm-card-header{
+    padding:16px 20px;
+    border-bottom:1px solid var(--tm-border);
+    font-weight:700;
+}
+
+.tm-card-body{
+    padding:20px;
+}
+
+.tm-card-footer{
+    padding:16px 20px;
+    border-top:1px solid var(--tm-border);
+    background:var(--tm-surface-2);
+}

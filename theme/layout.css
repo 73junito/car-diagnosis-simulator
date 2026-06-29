@@ -132,3 +132,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+@import "./components/css/cards.css";
+@import "./components/css/buttons.css";
+@import "./components/css/forms.css";
+@import "./components/css/tables.css";
+

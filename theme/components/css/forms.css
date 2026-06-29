@@ -1,0 +1,16 @@
+.tm-input,
+.tm-select,
+.tm-textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid var(--tm-border);
+    border-radius:8px;
+    font:inherit;
+    background:white;
+}
+
+.tm-label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+}
