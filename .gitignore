@@ -20,3 +20,5 @@ logs
 reports
 .env.local
 
+
+.checkpoints/checkpoints.json
