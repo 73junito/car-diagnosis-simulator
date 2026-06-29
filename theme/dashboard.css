@@ -1,0 +1,86 @@
+.tm-dashboard-toolbar {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.tm-field label {
+  display: block;
+  font-weight: 750;
+  margin-bottom: 6px;
+}
+
+.tm-field input,
+.tm-field select,
+.tm-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-sm);
+  padding: 10px 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.tm-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.tm-stat {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  padding: 14px 16px;
+  min-width: 150px;
+}
+
+.tm-stat strong {
+  display: block;
+  font-size: 1.35rem;
+}
+
+.tm-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.tm-scenario-card {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-soft);
+  overflow: hidden;
+}
+
+.tm-scenario-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  background: var(--tm-surface-2);
+}
+
+.tm-scenario-card-body {
+  padding: 14px;
+}
+
+.tm-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: var(--tm-surface-2);
+  color: var(--tm-primary);
+}
+
+@media (max-width: 900px) {
+  .tm-dashboard-toolbar {
+    grid-template-columns: 1fr;
+  }
+}
