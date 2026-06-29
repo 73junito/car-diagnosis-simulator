@@ -1,30 +1,51 @@
-# Student Dashboard Specification
+# Student Dashboard
 
 ## Purpose
-Guide students through diagnostic training with clear progress, scenario recommendations, and feedback.
+The Student Dashboard is the primary landing page for learners. It provides an overview of progress, recommends the next learning activity, and serves as the launch point for diagnostic scenarios.
 
-## Primary Actions
-- Resume last scenario
-- Start recommended scenario
-- Search/filter scenarios
+## Primary Users
+- Students
+- Trainees
+- Self-paced learners
+
+## Primary Goals
+- Resume learning
+- Track progress
+- Launch scenarios
 - Review transcript
-- View performance summary
+- Receive AI recommendations
 
-## Required Sections
-- Hero
-- Progress cards
-- Quick actions
-- Learning path
-- Scenario catalog
-- AI Coach
-- Transcript
-- Performance summary
-- Activity timeline
+## Layout
+1. Shell Header
+2. Hero
+3. Progress Summary
+4. Quick Actions
+5. Learning Path
+6. Scenario Catalog
+7. AI Coach
+8. Transcript
+9. Performance Summary
+10. Activity Timeline
 
-## Completion Criteria
-- Uses shared routes
-- Uses shared theme tokens
-- Uses shared component classes
-- Keyboard accessible
-- Responsive
-- Covered by tests
+## Required Widgets
+- Progress Card
+- Scenario Cards
+- AI Coach Card
+- Transcript Card
+- KPI Cards
+- Timeline
+
+## Accessibility
+- Full keyboard navigation
+- Screen reader compatible
+- WCAG 2.1 AA
+
+## Performance Targets
+- First render < 2 seconds
+- Responsive on desktop, tablet, and mobile
+
+## Future Roadmap
+- Adaptive learning path
+- Live collaboration
+- AI tutoring
+- Gamification
