@@ -218,7 +218,7 @@
     // render full scenario grid on student dashboard using SCENARIO_REGISTRY
     (function(){
       function createCard(s){
-        const card = document.createElement('article'); card.className = 'tm-scenario-v2-card';
+        const card = document.createElement('article'); card.className = 'sd-card tm-scenario-v2-card';
         // attach stable id for testing and identity checks
         try{ card.setAttribute('data-scenario-id', s.id); }catch(e){}
         card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
