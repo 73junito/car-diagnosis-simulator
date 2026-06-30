@@ -218,28 +218,28 @@
     // render full scenario grid on student dashboard using SCENARIO_REGISTRY
     (function(){
       function createCard(s){
-        const card = document.createElement('article'); card.className = 'sd-card';
+        const card = document.createElement('article'); card.className = 'sd-card tm-scenario-v2-card';
         // attach stable id for testing and identity checks
         try{ card.setAttribute('data-scenario-id', s.id); }catch(e){}
         card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
 
-        const media = document.createElement('div'); media.className = 'sd-card__media';
-        const img = document.createElement('img'); img.className = 'sd-card-img'; img.alt = s.title || '';
+        const media = document.createElement('div'); media.className = 'tm-scenario-v2-card__media';
+        const img = document.createElement('img'); img.className = 'tm-scenario-v2-card-img'; img.alt = s.title || '';
         // Use placeholder immediately if no image provided and ensure robust onerror fallback
         img.src = s.image || '/assets/images/scenarios/placeholder-scenario.svg';
         img.onerror = () => { img.onerror = null; img.src = '/assets/images/scenarios/placeholder-scenario.svg'; };
 
-        const body = document.createElement('div'); body.className = 'sd-card-body';
-        const title = document.createElement('h3'); title.className = 'sd-card-title'; title.textContent = s.title || s.id;
-        const meta = document.createElement('div'); meta.className = 'sd-card-meta'; meta.textContent = `${s.category || ''} • ${s.difficulty || ''}`;
-        const p = document.createElement('p'); p.className = 'sd-card-text'; p.textContent = s.shortSymptom || '';
+        const body = document.createElement('div'); body.className = 'tm-scenario-v2-card-body';
+        const title = document.createElement('h3'); title.className = 'tm-scenario-v2-card-title'; title.textContent = s.title || s.id;
+        const meta = document.createElement('div'); meta.className = 'tm-scenario-v2-card-meta'; meta.textContent = `${s.category || ''} • ${s.difficulty || ''}`;
+        const p = document.createElement('p'); p.className = 'tm-scenario-v2-card-text'; p.textContent = s.shortSymptom || '';
 
         body.appendChild(title); body.appendChild(meta); body.appendChild(p);
 
-        const footer = document.createElement('div'); footer.className = 'sd-card-footer';
-        const btn = document.createElement('a'); btn.className = 'btn btn-secondary'; btn.href = s.route || '#'; btn.textContent = 'Start';
+        const footer = document.createElement('div'); footer.className = 'tm-scenario-v2-card-footer';
+        const btn = document.createElement('a'); btn.className = 'tm-btn tm-btn-primary'; btn.href = s.route || '#'; btn.textContent = 'Start';
         // status badge
-        const badge = document.createElement('span'); badge.className = 'sd-badge';
+        const badge = document.createElement('span'); badge.className = 'tm-pill';
         const progressEntry = (window.studentProgress && window.studentProgress.getProgressFor) ? window.studentProgress.getProgressFor(s.id) : null;
         if(progressEntry && progressEntry.status){ badge.textContent = progressEntry.status.replace('-', ' '); }
         else badge.textContent = 'Not Started';
