@@ -138,3 +138,6 @@
 @import "./components/css/forms.css";
 @import "./components/css/tables.css";
 
+
+@import "./dashboard-shell/shell.css";
+
