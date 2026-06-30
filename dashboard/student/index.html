@@ -12,8 +12,44 @@
 <body>
   <div data-theme-shell></div>
   <main class="tm-main wrapper">
-    <h1>Student Scenario Dashboard</h1>
-    <p class="page-subtitle">Select a diagnostic scenario to begin training or assessment.</p>
+    <section class="student-v2-hero">
+  <div>
+    <p class="tm-eyebrow">Student Training</p>
+    <h1>Welcome back</h1>
+    <p>Select your next diagnostic challenge, resume progress, and track your path toward mastery.</p>
+  </div>
+  <div class="student-v2-actions">
+    <button id="v2ResumeBtn" class="tm-btn tm-btn-primary" type="button">Resume Last Scenario</button>
+    <a class="tm-btn tm-btn-secondary" href="#scenarioGridSection">Browse Scenarios</a>
+    <a class="tm-btn tm-btn-secondary" href="#studentTranscriptCard">View Transcript</a>
+  </div>
+</section>
+
+<section class="student-v2-kpis" aria-label="Student progress summary">
+  <article class="student-v2-kpi">
+    <span>Scenarios</span>
+    <strong>17</strong>
+    <small>Total available</small>
+  </article>
+  <article class="student-v2-kpi">
+    <span>Completed</span>
+    <strong id="v2CompletedCount">0</strong>
+    <small>Training progress</small>
+  </article>
+  <article class="student-v2-kpi">
+    <span>In Progress</span>
+    <strong id="v2InProgressCount">0</strong>
+    <small>Resume anytime</small>
+  </article>
+  <article class="student-v2-kpi">
+    <span>Current Focus</span>
+    <strong>Electrical</strong>
+    <small>Recommended path</small>
+  </article>
+</section>
+
+<h1 class="visually-hidden">Student Scenario Dashboard</h1>
+<p class="page-subtitle visually-hidden">Select a diagnostic scenario to begin training or assessment.</p>
 
     <div class="filters" id="scenarioFilters" aria-label="Scenario filters">
       <div class="filter-item">
@@ -343,4 +379,5 @@
     <h2>TorqueMind AI Tutor</h2>
     <div id="torquemindContent"></div>
 </div>
+
 
