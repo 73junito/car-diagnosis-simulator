@@ -508,3 +508,78 @@ body.detail-open{overflow:hidden;height:100vh}
     text-align: left;
   }
 }
+
+.student-v2-timeline-card {
+  border-left: 5px solid var(--tm-primary);
+}
+
+.student-v2-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.student-v2-timeline li {
+  position: relative;
+  padding: 0 0 16px 24px;
+  border-left: 2px solid var(--tm-border);
+}
+
+.student-v2-timeline li:last-child {
+  padding-bottom: 0;
+}
+
+.student-v2-timeline li::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--tm-primary);
+  box-shadow: 0 0 0 4px var(--tm-surface-2);
+}
+
+.student-v2-timeline strong {
+  display: block;
+  color: var(--tm-text);
+}
+
+.student-v2-timeline span {
+  display: block;
+  margin-top: 4px;
+  color: var(--tm-muted);
+}
+
+.scenario-grid {
+  gap: 18px;
+}
+
+.scenario-card,
+.sd-card {
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-soft);
+  background: var(--tm-surface);
+  overflow: hidden;
+}
+
+.scenario-card:hover,
+.sd-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--tm-shadow);
+}
+
+.sd-card-body,
+.scenario-card-body {
+  padding: 14px;
+}
+
+.sd-card-footer,
+.scenario-card-footer {
+  padding: 12px 14px;
+  border-top: 1px solid var(--tm-border);
+  background: var(--tm-surface-2);
+}
+
