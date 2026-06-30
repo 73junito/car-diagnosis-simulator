@@ -117,9 +117,28 @@
     <!-- Scenario grid rendered from registry (keeps the screenshot map as visual header) -->
     <section class="dashboard-card" id="studentTranscriptCard">
       <h2>My Transcript</h2>
-      <div id="studentTranscriptSummary">
-        <p>Loading transcript...</p>
-      </div>
+      <div id="studentTranscriptSummary" class="student-v2-transcript-grid">
+  <article>
+    <span>Completed</span>
+    <strong>0</strong>
+    <small>Scenarios finished</small>
+  </article>
+  <article>
+    <span>Average Score</span>
+    <strong>--</strong>
+    <small>Pending submissions</small>
+  </article>
+  <article>
+    <span>Certificates</span>
+    <strong>0</strong>
+    <small>Earned credentials</small>
+  </article>
+  <article>
+    <span>Training Hours</span>
+    <strong>0.0</strong>
+    <small>Total practice time</small>
+  </article>
+</div>
     </section>
     <section class="dashboard-card" id="adaptiveRecommendationsCard">
       <h2>Recommended Next Scenarios</h2>
@@ -135,9 +154,24 @@
     </section>
     <section class="dashboard-card" id="performanceSummaryCard">
       <h2>Performance Summary</h2>
-      <div id="performanceSummary">
-        <p>Loading performance data...</p>
-      </div>
+      <div id="performanceSummary" class="student-v2-performance">
+  <div class="student-v2-performance-row">
+    <span>Diagnostic accuracy</span>
+    <strong>--</strong>
+  </div>
+  <div class="student-v2-performance-row">
+    <span>Confidence trend</span>
+    <strong>Building</strong>
+  </div>
+  <div class="student-v2-performance-row">
+    <span>Safety steps missed</span>
+    <strong>0</strong>
+  </div>
+  <div class="student-v2-performance-row">
+    <span>Recommended focus</span>
+    <strong>Electrical testing</strong>
+  </div>
+</div>
     </section>
 
 
@@ -379,6 +413,7 @@
     <h2>TorqueMind AI Tutor</h2>
     <div id="torquemindContent"></div>
 </div>
+
 
 
 
