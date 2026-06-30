@@ -1,0 +1,43 @@
+.tm-filter-toolbar{
+  display:grid;
+  grid-template-columns:2fr repeat(3,1fr) auto;
+  gap:14px;
+  align-items:end;
+  background:var(--tm-surface);
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius);
+  box-shadow:var(--tm-shadow-soft);
+  padding:18px;
+}
+
+.tm-filter-toolbar__field label{
+  display:block;
+  margin-bottom:6px;
+  color:var(--tm-muted);
+  font-weight:800;
+  font-size:.78rem;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.tm-filter-toolbar__field input,
+.tm-filter-toolbar__field select{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius-sm);
+  padding:10px 12px;
+  font:inherit;
+  background:#fff;
+}
+
+.tm-filter-toolbar__actions{
+  display:flex;
+  gap:8px;
+}
+
+@media(max-width:900px){
+  .tm-filter-toolbar{
+    grid-template-columns:1fr;
+  }
+}
