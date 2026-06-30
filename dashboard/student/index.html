@@ -12,7 +12,7 @@
 <body>
   <div data-theme-shell></div>
   <main class="tm-main wrapper">
-    <section class="student-v2-hero">
+    <section class="student-v2-hero tm-hero-banner">
   <div>
     <p class="tm-eyebrow">Student Training</p>
     <h1>Welcome back</h1>
@@ -25,23 +25,23 @@
   </div>
 </section>
 
-<section class="student-v2-kpis" aria-label="Student progress summary">
-  <article class="student-v2-kpi">
+<section class="student-v2-kpis tm-dashboard-grid tm-dashboard-grid-4" aria-label="Student progress summary">
+  <article class="student-v2-kpi tm-stat-card">
     <span>Scenarios</span>
     <strong>17</strong>
     <small>Total available</small>
   </article>
-  <article class="student-v2-kpi">
+  <article class="student-v2-kpi tm-stat-card">
     <span>Completed</span>
     <strong id="v2CompletedCount">0</strong>
     <small>Training progress</small>
   </article>
-  <article class="student-v2-kpi">
+  <article class="student-v2-kpi tm-stat-card">
     <span>In Progress</span>
     <strong id="v2InProgressCount">0</strong>
     <small>Resume anytime</small>
   </article>
-  <article class="student-v2-kpi">
+  <article class="student-v2-kpi tm-stat-card">
     <span>Current Focus</span>
     <strong>Electrical</strong>
     <small>Recommended path</small>
@@ -115,9 +115,9 @@
     </div>
 
     <!-- Scenario grid rendered from registry (keeps the screenshot map as visual header) -->
-    <section class="dashboard-card" id="studentTranscriptCard">
+    <section class="dashboard-card tm-transcript-card" id="studentTranscriptCard">
       <h2>My Transcript</h2>
-      <div id="studentTranscriptSummary" class="student-v2-transcript-grid">
+      <div id="studentTranscriptSummary" class="student-v2-transcript-grid tm-transcript-card__grid">
   <article>
     <span>Completed</span>
     <strong>0</strong>
@@ -169,7 +169,7 @@
     </li>
   </ol>
 </section>
-    <section class="dashboard-card" id="performanceSummaryCard">
+    <section class="dashboard-card tm-progress-card" id="performanceSummaryCard">
       <h2>Performance Summary</h2>
       <div id="performanceSummary" class="student-v2-performance">
   <div class="student-v2-performance-row">
@@ -430,6 +430,7 @@
     <h2>TorqueMind AI Tutor</h2>
     <div id="torquemindContent"></div>
 </div>
+
 
 
 
