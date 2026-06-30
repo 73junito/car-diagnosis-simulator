@@ -1,0 +1,43 @@
+.tm-stat-card {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-soft);
+  padding: 18px;
+}
+
+.tm-stat-card__label {
+  display: block;
+  color: var(--tm-muted);
+  font-weight: 800;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.tm-stat-card__value {
+  display: block;
+  margin-top: 6px;
+  color: var(--tm-text);
+  font-size: 1.8rem;
+  font-weight: 850;
+}
+
+.tm-stat-card__hint {
+  display: block;
+  margin-top: 4px;
+  color: var(--tm-muted);
+  font-size: .9rem;
+}
+
+.tm-stat-card--success .tm-stat-card__value {
+  color: var(--tm-success);
+}
+
+.tm-stat-card--warning .tm-stat-card__value {
+  color: var(--tm-warning);
+}
+
+.tm-stat-card--danger .tm-stat-card__value {
+  color: var(--tm-danger);
+}
