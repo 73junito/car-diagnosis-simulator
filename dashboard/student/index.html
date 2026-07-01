@@ -51,18 +51,18 @@
 <h1 class="visually-hidden">Student Scenario Dashboard</h1>
 <p class="page-subtitle visually-hidden">Select a diagnostic scenario to begin training or assessment.</p>
 
-    <div class="filters" id="scenarioFilters" aria-label="Scenario filters">
-      <div class="filter-item">
+    <div class="filters tm-filter-toolbar" id="scenarioFilters" aria-label="Scenario filters">
+      <div class="filter-item tm-filter-toolbar__field">
         <label for="searchInput" class="filter-label">Search</label>
         <input id="searchInput" class="filter-input" type="search" placeholder="Search by scenario name or symptom">
       </div>
-      <div class="filter-item">
+      <div class="filter-item tm-filter-toolbar__field">
         <label for="filterCategory" class="filter-label">Category</label>
         <select id="filterCategory" class="filter-input">
           <option value="all">All</option>
         </select>
       </div>
-      <div class="filter-item">
+      <div class="filter-item tm-filter-toolbar__field">
         <label for="filterDifficulty" class="filter-label">Difficulty</label>
         <select id="filterDifficulty" class="filter-input">
           <option value="all">All</option>
@@ -71,22 +71,22 @@
           <option value="advanced">Advanced</option>
         </select>
       </div>
-      <div class="filter-item">
+      <div class="filter-item tm-filter-toolbar__field">
         <label for="filterAse" class="filter-label">ASE Area</label>
         <select id="filterAse" class="filter-input">
           <option value="all">All</option>
         </select>
       </div>
       <div class="filter-count" id="filterCount" aria-live="polite">Showing 0 of 0 scenarios</div>
-      <div class="filter-actions">
-        <button id="resetFiltersBtn" class="btn btn-primary" type="button">Reset filters</button>
+      <div class="filter-actions tm-filter-toolbar__actions">
+        <button id="resetFiltersBtn" class="tm-btn tm-btn-secondary" type="button">Reset filters</button>
       </div>
     </div>
 
     <div class="progress-controls">
       <div class="progress-summary" id="progressSummary">Completed: 0 / 17 • In Progress: 0</div>
       <div class="progress-actions">
-        <button id="btnResume" class="btn btn-primary" style="display:none">Resume Last Scenario</button>
+        <button id="btnResume" class="tm-btn tm-btn-secondary" style="display:none">Resume Last Scenario</button>
         <button id="btnReset" class="btn btn-ghost">Reset Progress</button>
       </div>
     </div>
@@ -433,6 +433,7 @@
     <h2>TorqueMind AI Tutor</h2>
     <div id="torquemindContent"></div>
 </div>
+
 
 
 
