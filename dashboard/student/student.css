@@ -425,3 +425,30 @@ body.detail-open{overflow:hidden;height:100vh}
 
 
 
+
+.tm-detail-panel {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-lg);
+  box-shadow: var(--tm-shadow);
+}
+
+.tm-detail-panel h2 {
+  color: var(--tm-text);
+  margin-top: 8px;
+}
+
+.tm-detail-panel p,
+.tm-detail-panel li,
+.tm-detail-panel div {
+  color: var(--tm-text);
+}
+
+.tm-detail-panel #dtcs,
+.tm-detail-panel #diagnosticData {
+  background: var(--tm-surface-2);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  padding: 12px;
+  margin-top: 12px;
+}
