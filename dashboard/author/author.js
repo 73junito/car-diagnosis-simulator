@@ -125,6 +125,38 @@
     }
   }
 
+  function seedDemoData() {
+    const demoValues = {
+      title: "No-start after overnight soak",
+      complaint: "Customer states the vehicle cranks but will not start after sitting overnight.",
+      year: "2018",
+      make: "Ford",
+      model: "F-150",
+      engine: "5.0L V8",
+      mileage: "84200",
+      system: "Engine Performance",
+      primaryDtc: "P0335",
+      dtcDescription: "Crankshaft Position Sensor A Circuit",
+      freezeFrame: "RPM 0, ECT 42°F, battery voltage 12.1V during crank.",
+      rpm: "0",
+      voltage: "12.1",
+      coolant: "42°F",
+      fuelTrim: "+18%",
+      initialTest: "Verify crank signal while cranking",
+      expectedFinding: "No RPM signal during crank",
+      rootCause: "Failed crankshaft position sensor",
+      recommendedRepair: "Replace crankshaft position sensor, clear codes, and verify restart.",
+      aseArea: "A8 Engine Performance",
+      safetyCriteria: "Uses safe test procedures and avoids unnecessary part replacement.",
+      diagnosticCriteria: "Uses evidence to isolate the fault before repair.",
+      verificationCriteria: "Confirms repair with restart, code clear, and no returning faults."
+    };
+
+    Object.entries(demoValues).forEach(([key, demoValue]) => {
+      const field = fields[key];
+      if (field && !value(field)) field.value = demoValue;
+    });
+  }
   function renderPreview() {
     const title = value(fields.title);
     const complaint = value(fields.complaint);
@@ -223,5 +255,8 @@
     exportButton.addEventListener("click", exportScenario);
   }
 
+  seedDemoData();
   renderPreview();
+  document.body.dataset.authoringStudioReady = "true";
 })();
+
