@@ -104,13 +104,22 @@
         <article class="tm-panel" id="dtcs">
           <h2>DTCs</h2>
           <p>Add diagnostic trouble codes, freeze-frame clues, and related evidence.</p>
-          <div class="author-placeholder">DTC editor coming next.</div>
+          <form class="author-form" id="dtcForm">
+  <label>Primary DTC <input id="primaryDtc" type="text" placeholder="P0335"></label>
+  <label>DTC Description <input id="dtcDescription" type="text" placeholder="Crankshaft Position Sensor A Circuit"></label>
+  <label>Freeze Frame Summary <textarea id="freezeFrameSummary" rows="3" placeholder="RPM 0, ECT 42°F, battery voltage 12.1V during crank."></textarea></label>
+</form>
         </article>
 
         <article class="tm-panel" id="live-data">
           <h2>Live Data</h2>
           <p>Configure OBD-II PID values and sensor readings for the scenario.</p>
-          <div class="author-placeholder">Live data editor coming next.</div>
+          <form class="author-form" id="liveDataForm">
+  <label>RPM <input id="pidRpm" type="number" min="0" placeholder="0"></label>
+  <label>Battery Voltage <input id="pidVoltage" type="number" step="0.1" min="0" placeholder="12.1"></label>
+  <label>Coolant Temp <input id="pidCoolant" type="text" placeholder="42°F"></label>
+  <label>Fuel Trim <input id="pidFuelTrim" type="text" placeholder="+18%"></label>
+</form>
         </article>
 
         <article class="tm-panel" id="diagnostic-path">
@@ -141,6 +150,7 @@
         <ul>
           <li>Vehicle: <span id="previewVehicle">Not configured</span></li>
           <li>DTCs: <span id="previewDtcs">None added</span></li>
+          <li>Live Data: <span id="previewLiveData">Not configured</span></li>
           <li>ASE: <span id="previewAse">Not mapped</span></li>
         </ul>
       </aside>
@@ -150,4 +160,6 @@
   <script src="./author.js"></script>
 </body>
 </html>
+
+
 

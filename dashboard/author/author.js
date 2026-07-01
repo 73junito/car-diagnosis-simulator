@@ -11,13 +11,22 @@
     model: document.getElementById("vehicleModel"),
     engine: document.getElementById("vehicleEngine"),
     mileage: document.getElementById("vehicleMileage"),
-    system: document.getElementById("vehicleSystem")
+    system: document.getElementById("vehicleSystem"),
+    primaryDtc: document.getElementById("primaryDtc"),
+    dtcDescription: document.getElementById("dtcDescription"),
+    freezeFrame: document.getElementById("freezeFrameSummary"),
+    rpm: document.getElementById("pidRpm"),
+    voltage: document.getElementById("pidVoltage"),
+    coolant: document.getElementById("pidCoolant"),
+    fuelTrim: document.getElementById("pidFuelTrim")
   };
 
   const preview = {
     title: document.getElementById("previewTitle"),
     complaint: document.getElementById("previewComplaint"),
-    vehicle: document.getElementById("previewVehicle")
+    vehicle: document.getElementById("previewVehicle"),
+    dtcs: document.getElementById("previewDtcs"),
+    liveData: document.getElementById("previewLiveData")
   };
 
   function value(field) {
@@ -52,6 +61,23 @@
       if (system) vehicleText += ` • ${system}`;
       preview.vehicle.textContent = vehicleText;
     }
+
+    if (preview.dtcs) {
+      const code = value(fields.primaryDtc);
+      const description = value(fields.dtcDescription);
+      preview.dtcs.textContent = code ? `${code}${description ? ` — ${description}` : ""}` : "None added";
+    }
+
+    if (preview.liveData) {
+      const liveData = [
+        value(fields.rpm) ? `RPM ${value(fields.rpm)}` : "",
+        value(fields.voltage) ? `${value(fields.voltage)}V` : "",
+        value(fields.coolant) ? `ECT ${value(fields.coolant)}` : "",
+        value(fields.fuelTrim) ? `FT ${value(fields.fuelTrim)}` : ""
+      ].filter(Boolean);
+
+      preview.liveData.textContent = liveData.length ? liveData.join(" • ") : "Not configured";
+    }
   }
 
   function setStatus(message) {
@@ -67,7 +93,8 @@
     validateButton.addEventListener("click", () => {
       const hasVehicle = value(fields.year) && value(fields.make) && value(fields.model);
       const hasComplaint = value(fields.title) && value(fields.complaint);
-      setStatus(hasVehicle && hasComplaint ? "Ready" : "Needs Data");
+      const hasEvidence = value(fields.primaryDtc) || value(fields.rpm) || value(fields.voltage);
+      setStatus(hasVehicle && hasComplaint && hasEvidence ? "Ready" : "Needs Data");
     });
   }
 
