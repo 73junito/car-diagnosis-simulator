@@ -18,7 +18,15 @@
     rpm: document.getElementById("pidRpm"),
     voltage: document.getElementById("pidVoltage"),
     coolant: document.getElementById("pidCoolant"),
-    fuelTrim: document.getElementById("pidFuelTrim")
+    fuelTrim: document.getElementById("pidFuelTrim"),
+    initialTest: document.getElementById("initialTestStep"),
+    expectedFinding: document.getElementById("expectedFinding"),
+    rootCause: document.getElementById("rootCause"),
+    recommendedRepair: document.getElementById("recommendedRepair"),
+    aseArea: document.getElementById("aseArea"),
+    safetyCriteria: document.getElementById("safetyCriteria"),
+    diagnosticCriteria: document.getElementById("diagnosticCriteria"),
+    verificationCriteria: document.getElementById("verificationCriteria")
   };
 
   const preview = {
@@ -26,7 +34,8 @@
     complaint: document.getElementById("previewComplaint"),
     vehicle: document.getElementById("previewVehicle"),
     dtcs: document.getElementById("previewDtcs"),
-    liveData: document.getElementById("previewLiveData")
+    liveData: document.getElementById("previewLiveData"),
+    ase: document.getElementById("previewAse")
   };
 
   function value(field) {
@@ -78,6 +87,12 @@
 
       preview.liveData.textContent = liveData.length ? liveData.join(" • ") : "Not configured";
     }
+
+    if (preview.ase) {
+      const ase = value(fields.aseArea);
+      const root = value(fields.rootCause);
+      preview.ase.textContent = ase ? `${ase}${root ? ` • Root cause: ${root}` : ""}` : "Not mapped";
+    }
   }
 
   function setStatus(message) {
@@ -94,7 +109,9 @@
       const hasVehicle = value(fields.year) && value(fields.make) && value(fields.model);
       const hasComplaint = value(fields.title) && value(fields.complaint);
       const hasEvidence = value(fields.primaryDtc) || value(fields.rpm) || value(fields.voltage);
-      setStatus(hasVehicle && hasComplaint && hasEvidence ? "Ready" : "Needs Data");
+      const hasPath = value(fields.initialTest) && value(fields.rootCause) && value(fields.recommendedRepair);
+      const hasRubric = value(fields.aseArea) && value(fields.diagnosticCriteria);
+      setStatus(hasVehicle && hasComplaint && hasEvidence && hasPath && hasRubric ? "Ready" : "Needs Data");
     });
   }
 

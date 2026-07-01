@@ -125,13 +125,35 @@
         <article class="tm-panel" id="diagnostic-path">
           <h2>Diagnostic Path</h2>
           <p>Define expected test sequence, root cause, repair, and verification steps.</p>
-          <div class="author-placeholder">Diagnostic path editor coming next.</div>
+          <form class="author-form" id="diagnosticPathForm">
+  <label>Initial Test Step <input id="initialTestStep" type="text" placeholder="Verify crank signal while cranking"></label>
+  <label>Expected Finding <input id="expectedFinding" type="text" placeholder="No RPM signal during crank"></label>
+  <label>Root Cause <input id="rootCause" type="text" placeholder="Failed crankshaft position sensor"></label>
+  <label>Recommended Repair <textarea id="recommendedRepair" rows="3" placeholder="Replace crankshaft position sensor, clear codes, and verify restart."></textarea></label>
+</form>
         </article>
 
         <article class="tm-panel" id="rubric">
           <h2>Rubric & ASE Objectives</h2>
           <p>Map the scenario to ASE areas and define scoring criteria.</p>
-          <div class="author-placeholder">Rubric editor coming next.</div>
+          <form class="author-form" id="rubricForm">
+  <label>ASE Area
+    <select id="aseArea">
+      <option value="">Select ASE area</option>
+      <option>A1 Engine Repair</option>
+      <option>A2 Automatic Transmission</option>
+      <option>A4 Suspension and Steering</option>
+      <option>A5 Brakes</option>
+      <option>A6 Electrical / Electronic Systems</option>
+      <option>A7 Heating and Air Conditioning</option>
+      <option>A8 Engine Performance</option>
+      <option>L3 Hybrid / Electric Vehicle</option>
+    </select>
+  </label>
+  <label>Safety Criteria <textarea id="safetyCriteria" rows="2" placeholder="Uses safe test procedures and avoids unnecessary part replacement."></textarea></label>
+  <label>Diagnostic Criteria <textarea id="diagnosticCriteria" rows="2" placeholder="Uses evidence to isolate the fault before repair."></textarea></label>
+  <label>Verification Criteria <textarea id="verificationCriteria" rows="2" placeholder="Confirms repair with restart, code clear, and no returning faults."></textarea></label>
+</form>
         </article>
 
         <article class="tm-panel" id="publish">
@@ -160,6 +182,7 @@
   <script src="./author.js"></script>
 </body>
 </html>
+
 
 
 
