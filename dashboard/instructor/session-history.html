@@ -4,13 +4,22 @@
   <meta charset="utf-8">
   <title>Session History</title>
   <link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/theme/tokens.css">
+<link rel="stylesheet" href="/theme/layout.css">
+<link rel="stylesheet" href="/theme/dashboard.css">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
-  <main class="container">
-    <h1>Session History</h1>
+  <main class="container tm-main">
+    <section class="tm-hero-banner">
+  <div>
+    <p class="tm-hero-banner__eyebrow">Instructor Tools</p>
+    <h1 class="tm-hero-banner__title">Session History</h1>
+    <p class="tm-hero-banner__subtitle">Review learner events, export session data, and inspect diagnostic activity.</p>
+  </div>
+</section>
 
-    <section id="controls">
+    <section id="controls" class="tm-panel">
       <label>Session filter: <input id="session-filter" placeholder="Enter session id" /></label>
       <label>Limit: 
         <select id="limit-select">
@@ -21,20 +30,19 @@
         </select>
       </label>
       <div id="export-controls" style="display:inline-block;margin-left:1em;">
-        <button id="export-json-btn">Export JSON</button>
-        <button id="export-csv-btn">Export CSV</button>
+        <button id="export-json-btn" class="tm-btn tm-btn-secondary">Export JSON</button>
+        <button id="export-csv-btn" class="tm-btn tm-btn-secondary">Export CSV</button>
         <span id="export-status" aria-live="polite" style="margin-left:.5em"></span>
       </div>
     </section>
 
-    <section id="status">
+    <section id="status" class="tm-panel">
       <div id="loading" aria-live="polite" hidden>Loading…</div>
       <div id="error" role="alert" hidden></div>
       <div id="empty" hidden>No events found.</div>
     </section>
 
-    <section>
-      <table id="session-history-table" class="tm-table">
+    <section class="tm-panel"><table id="session-history-table" class="tm-table">
         <thead>
           <tr><th>Timestamp</th><th>Type</th><th>Session</th><th>Payload</th></tr>
         </thead>
@@ -46,3 +54,4 @@
   <script src="/dashboard/session-history.js"></script>
 </body>
 </html>
+
