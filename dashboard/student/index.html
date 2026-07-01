@@ -27,22 +27,22 @@
 
 <section class="tm-dashboard-grid tm-dashboard-grid-4" aria-label="Student progress summary">
   <article class="tm-stat-card">
-    <span>Scenarios</span>
+    <span class="tm-timeline__text">Scenarios</span>
     <strong>17</strong>
     <small>Total available</small>
   </article>
   <article class="tm-stat-card">
-    <span>Completed</span>
+    <span class="tm-timeline__text">Completed</span>
     <strong id="v2CompletedCount">0</strong>
     <small>Training progress</small>
   </article>
   <article class="tm-stat-card">
-    <span>In Progress</span>
+    <span class="tm-timeline__text">In Progress</span>
     <strong id="v2InProgressCount">0</strong>
     <small>Resume anytime</small>
   </article>
   <article class="tm-stat-card">
-    <span>Current Focus</span>
+    <span class="tm-timeline__text">Current Focus</span>
     <strong>Electrical</strong>
     <small>Recommended path</small>
   </article>
@@ -51,18 +51,18 @@
 <h1 class="visually-hidden">Student Scenario Dashboard</h1>
 <p class="page-subtitle visually-hidden">Select a diagnostic scenario to begin training or assessment.</p>
 
-    <div class="filters" id="scenarioFilters" aria-label="Scenario filters">
-      <div class="filter-item">
+    <div class="filters tm-filter-toolbar" id="scenarioFilters" aria-label="Scenario filters">
+      <div class="filter-item tm-filter-toolbar__field">
         <label for="searchInput" class="filter-label">Search</label>
         <input id="searchInput" class="filter-input" type="search" placeholder="Search by scenario name or symptom">
       </div>
-      <div class="filter-item">
+      <div class="filter-item tm-filter-toolbar__field">
         <label for="filterCategory" class="filter-label">Category</label>
         <select id="filterCategory" class="filter-input">
           <option value="all">All</option>
         </select>
       </div>
-      <div class="filter-item">
+      <div class="filter-item tm-filter-toolbar__field">
         <label for="filterDifficulty" class="filter-label">Difficulty</label>
         <select id="filterDifficulty" class="filter-input">
           <option value="all">All</option>
@@ -71,22 +71,22 @@
           <option value="advanced">Advanced</option>
         </select>
       </div>
-      <div class="filter-item">
+      <div class="filter-item tm-filter-toolbar__field">
         <label for="filterAse" class="filter-label">ASE Area</label>
         <select id="filterAse" class="filter-input">
           <option value="all">All</option>
         </select>
       </div>
       <div class="filter-count" id="filterCount" aria-live="polite">Showing 0 of 0 scenarios</div>
-      <div class="filter-actions">
-        <button id="resetFiltersBtn" class="btn btn-primary" type="button">Reset filters</button>
+      <div class="filter-actions tm-filter-toolbar__actions">
+        <button id="resetFiltersBtn" class="tm-btn tm-btn-secondary" type="button">Reset filters</button>
       </div>
     </div>
 
     <div class="progress-controls">
       <div class="progress-summary" id="progressSummary">Completed: 0 / 17 • In Progress: 0</div>
       <div class="progress-actions">
-        <button id="btnResume" class="btn btn-primary" style="display:none">Resume Last Scenario</button>
+        <button id="btnResume" class="tm-btn tm-btn-secondary" style="display:none">Resume Last Scenario</button>
         <button id="btnReset" class="btn btn-ghost">Reset Progress</button>
       </div>
     </div>
@@ -119,22 +119,22 @@
       <h2>My Transcript</h2>
       <div id="studentTranscriptSummary" class="tm-transcript-card__grid">
   <article>
-    <span>Completed</span>
+    <span class="tm-timeline__text">Completed</span>
     <strong>0</strong>
     <small>Scenarios finished</small>
   </article>
   <article>
-    <span>Average Score</span>
+    <span class="tm-timeline__text">Average Score</span>
     <strong>--</strong>
     <small>Pending submissions</small>
   </article>
   <article>
-    <span>Certificates</span>
+    <span class="tm-timeline__text">Certificates</span>
     <strong>0</strong>
     <small>Earned credentials</small>
   </article>
   <article>
-    <span>Training Hours</span>
+    <span class="tm-timeline__text">Training Hours</span>
     <strong>0.0</strong>
     <small>Total practice time</small>
   </article>
@@ -181,9 +181,9 @@
     <p class="tm-coach-panel__recommendation"><strong>Recommended next:</strong> Charging System</p>
     <p class="tm-coach-panel__body">Continue electrical diagnostics before moving into CAN network communication faults.</p>
     <ul class="tm-coach-panel__list">
-      <li><strong>Strength:</strong> Symptom recognition</li>
-      <li><strong>Focus area:</strong> Voltage-drop reasoning</li>
-      <li><strong>Daily goal:</strong> Complete one intermediate scenario</li>
+      <li class="tm-timeline__item"><strong class="tm-timeline__title">Strength:</strong> Symptom recognition</li>
+      <li class="tm-timeline__item"><strong class="tm-timeline__title">Focus area:</strong> Voltage-drop reasoning</li>
+      <li class="tm-timeline__item"><strong class="tm-timeline__title">Daily goal:</strong> Complete one intermediate scenario</li>
     </ul>
   </div>
 </section>
@@ -193,20 +193,17 @@
       <h2 class="visually-hidden">Available Scenarios</h2>
       <div id="scenarioGrid" class="scenario-grid" aria-live="polite"></div>
     </section>
-    <section class="dashboard-card student-v2-timeline-card" id="activityTimelineCard">
+    <section class="dashboard-card tm-timeline-card" id="activityTimelineCard">
   <h2>Recent Activity</h2>
-  <ol class="student-v2-timeline">
-    <li>
-      <strong>Progress updated</strong>
-      <span>Student dashboard refreshed with current scenario status.</span>
+  <ol class="tm-timeline">
+    <li class="tm-timeline__item"><strong class="tm-timeline__title">Progress updated</strong>
+      <span class="tm-timeline__text">Student dashboard refreshed with current scenario status.</span>
     </li>
-    <li>
-      <strong>Coach recommendation</strong>
-      <span>Continue electrical diagnostics before advanced network faults.</span>
+    <li class="tm-timeline__item"><strong class="tm-timeline__title">Coach recommendation</strong>
+      <span class="tm-timeline__text">Continue electrical diagnostics before advanced network faults.</span>
     </li>
-    <li>
-      <strong>Next objective</strong>
-      <span>Complete one intermediate scenario and submit a diagnosis.</span>
+    <li class="tm-timeline__item"><strong class="tm-timeline__title">Next objective</strong>
+      <span class="tm-timeline__text">Complete one intermediate scenario and submit a diagnosis.</span>
     </li>
   </ol>
 </section>
@@ -214,27 +211,27 @@
       <h2>Performance Summary</h2>
       <div id="performanceSummary" class="tm-progress-card__content">
   <div class="tm-progress-card__footer">
-    <span>Diagnostic accuracy</span>
+    <span class="tm-timeline__text">Diagnostic accuracy</span>
     <strong>--</strong>
   </div>
   <div class="tm-progress-card__footer">
-    <span>Confidence trend</span>
+    <span class="tm-timeline__text">Confidence trend</span>
     <strong>Building</strong>
   </div>
   <div class="tm-progress-card__footer">
-    <span>Safety steps missed</span>
+    <span class="tm-timeline__text">Safety steps missed</span>
     <strong>0</strong>
   </div>
   <div class="tm-progress-card__footer">
-    <span>Recommended focus</span>
+    <span class="tm-timeline__text">Recommended focus</span>
     <strong>Electrical testing</strong>
   </div>
 </div>
     </section>
 
 
-    <aside id="detail" class="detail hidden" aria-live="polite">
-      <button id="backBtn" class="back">Back to dashboard</button>
+    <aside id="detail" class="detail tm-detail-panel hidden" aria-live="polite">
+      <button id="backBtn" class="back tm-btn tm-btn-secondary">Back to dashboard</button>
       <h2 id="detailTitle"></h2>
       <p id="customerComplaint"></p>
       <ul id="symptomsList"></ul>
