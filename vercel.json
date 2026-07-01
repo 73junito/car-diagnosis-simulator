@@ -39,11 +39,11 @@
   "rewrites": [
     {
       "source": "/docs",
-      "destination": "/docs/index.html"
+      "destination": "/docs.html"
     },
     {
       "source": "/docs/",
-      "destination": "/docs/index.html"
+      "destination": "/docs.html"
     },
     {
       "source": "/dashboard/analytics",
@@ -87,4 +87,5 @@
     }
   ]
 }
+
 
