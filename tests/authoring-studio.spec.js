@@ -3,7 +3,7 @@ const path = require("path");
 const { JSDOM } = require("jsdom");
 
 describe("authoring studio", () => {
-  test("loads demo scenario preview and JSON export scaffold", async () => {
+  test("loads demo scenario preview and JSON export scaffold", () => {
     const htmlPath = path.join(process.cwd(), "dashboard", "author", "index.html");
     const jsPath = path.join(process.cwd(), "dashboard", "author", "author.js");
 
@@ -12,13 +12,11 @@ describe("authoring studio", () => {
 
     const dom = new JSDOM(html, {
       url: "http://localhost/dashboard/author",
-      runScripts: "dangerously",
-      resources: "usable",
+      runScripts: "outside-only",
       pretendToBeVisual: true
     });
 
     dom.window.eval(script);
-    dom.window.document.dispatchEvent(new dom.window.Event("DOMContentLoaded"));
 
     const document = dom.window.document;
 
@@ -38,5 +36,7 @@ describe("authoring studio", () => {
     const checklist = Array.from(document.querySelectorAll("#validationChecklist li"));
     expect(checklist).toHaveLength(5);
     expect(checklist.every((item) => item.dataset.valid === "true")).toBe(true);
+
+    dom.window.close();
   });
 });
