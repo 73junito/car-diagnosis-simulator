@@ -38,6 +38,14 @@
   ],
   "rewrites": [
     {
+      "source": "/dashboard/author",
+      "destination": "/dashboard/author/index.html"
+    },
+    {
+      "source": "/dashboard/author/",
+      "destination": "/dashboard/author/index.html"
+    },
+    {
       "source": "/docs",
       "destination": "/docs.html"
     },
@@ -87,5 +95,6 @@
     }
   ]
 }
+
 
 

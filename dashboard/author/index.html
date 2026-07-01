@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TorqueMind Authoring Studio</title>
+  <link rel="stylesheet" href="/theme/tokens.css" />
+  <link rel="stylesheet" href="/theme/layout.css" />
+  <link rel="stylesheet" href="/theme/dashboard.css" />
+  <link rel="stylesheet" href="./author.css" />
+</head>
+<body>
+  <main class="tm-main">
+    <section class="tm-hero-banner">
+      <div>
+        <p class="tm-hero-banner__eyebrow">Instructor Tools</p>
+        <h1 class="tm-hero-banner__title">Authoring Studio</h1>
+        <p class="tm-hero-banner__subtitle">
+          Build diagnostic scenarios with vehicles, complaints, DTCs, live data, ASE objectives, rubrics, and student previews.
+        </p>
+        <span class="tm-hero-banner__status">v0.6 preview</span>
+      </div>
+      <div class="tm-hero-banner__actions">
+        <a class="tm-btn tm-btn-secondary" href="/docs">Docs</a>
+        <a class="tm-btn tm-btn-secondary" href="/dashboard/instructor/analytics.html">Instructor Analytics</a>
+      </div>
+    </section>
+
+    <section class="tm-dashboard-grid tm-dashboard-grid-4 author-summary" aria-label="Authoring workflow summary">
+      <article class="tm-stat-card">
+        <span class="tm-stat-card__label">Draft</span>
+        <strong class="tm-stat-card__value" id="draftCount">1</strong>
+        <small class="tm-stat-card__hint">Scenario in progress</small>
+      </article>
+
+      <article class="tm-stat-card">
+        <span class="tm-stat-card__label">Required</span>
+        <strong class="tm-stat-card__value" id="requiredCount">7</strong>
+        <small class="tm-stat-card__hint">Sections to complete</small>
+      </article>
+
+      <article class="tm-stat-card">
+        <span class="tm-stat-card__label">Validation</span>
+        <strong class="tm-stat-card__value" id="validationStatus">Draft</strong>
+        <small class="tm-stat-card__hint">Not ready to publish</small>
+      </article>
+
+      <article class="tm-stat-card">
+        <span class="tm-stat-card__label">Preview</span>
+        <strong class="tm-stat-card__value" id="previewStatus">Live</strong>
+        <small class="tm-stat-card__hint">Student view scaffold</small>
+      </article>
+    </section>
+
+    <section class="author-layout">
+      <aside class="tm-panel author-nav" aria-label="Authoring sections">
+        <h2>Scenario Builder</h2>
+        <nav>
+          <a href="#vehicle">Vehicle</a>
+          <a href="#complaint">Complaint</a>
+          <a href="#dtcs">DTCs</a>
+          <a href="#live-data">Live Data</a>
+          <a href="#diagnostic-path">Diagnostic Path</a>
+          <a href="#rubric">Rubric</a>
+          <a href="#publish">Publish</a>
+        </nav>
+      </aside>
+
+      <section class="author-editor" aria-label="Scenario editor">
+        <article class="tm-panel" id="vehicle">
+          <h2>Vehicle</h2>
+          <p>Define year, make, model, trim, engine, mileage, and system focus.</p>
+          <div class="author-placeholder">Vehicle editor coming next.</div>
+        </article>
+
+        <article class="tm-panel" id="complaint">
+          <h2>Complaint</h2>
+          <p>Capture the customer concern, operating conditions, and symptom summary.</p>
+          <div class="author-placeholder">Complaint editor coming next.</div>
+        </article>
+
+        <article class="tm-panel" id="dtcs">
+          <h2>DTCs</h2>
+          <p>Add diagnostic trouble codes, freeze-frame clues, and related evidence.</p>
+          <div class="author-placeholder">DTC editor coming next.</div>
+        </article>
+
+        <article class="tm-panel" id="live-data">
+          <h2>Live Data</h2>
+          <p>Configure OBD-II PID values and sensor readings for the scenario.</p>
+          <div class="author-placeholder">Live data editor coming next.</div>
+        </article>
+
+        <article class="tm-panel" id="diagnostic-path">
+          <h2>Diagnostic Path</h2>
+          <p>Define expected test sequence, root cause, repair, and verification steps.</p>
+          <div class="author-placeholder">Diagnostic path editor coming next.</div>
+        </article>
+
+        <article class="tm-panel" id="rubric">
+          <h2>Rubric & ASE Objectives</h2>
+          <p>Map the scenario to ASE areas and define scoring criteria.</p>
+          <div class="author-placeholder">Rubric editor coming next.</div>
+        </article>
+
+        <article class="tm-panel" id="publish">
+          <h2>Publish</h2>
+          <p>Validate scenario completeness and prepare it for students.</p>
+          <button id="validateScenarioBtn" class="tm-btn tm-btn-primary" type="button">Validate Scenario</button>
+          <button id="saveDraftBtn" class="tm-btn tm-btn-secondary" type="button">Save Draft</button>
+        </article>
+      </section>
+
+      <aside class="tm-panel author-preview" aria-label="Student preview">
+        <h2>Student Preview</h2>
+        <p class="author-preview__eyebrow">Scenario Preview</p>
+        <h3 id="previewTitle">Untitled Diagnostic Scenario</h3>
+        <p id="previewComplaint">Add a customer complaint to preview how students will see the scenario.</p>
+        <ul>
+          <li>Vehicle: <span id="previewVehicle">Not configured</span></li>
+          <li>DTCs: <span id="previewDtcs">None added</span></li>
+          <li>ASE: <span id="previewAse">Not mapped</span></li>
+        </ul>
+      </aside>
+    </section>
+  </main>
+
+  <script src="./author.js"></script>
+</body>
+</html>
