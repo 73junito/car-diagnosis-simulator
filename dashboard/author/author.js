@@ -1,7 +1,10 @@
 (function () {
   const validateButton = document.getElementById("validateScenarioBtn");
   const saveButton = document.getElementById("saveDraftBtn");
+  const exportButton = document.getElementById("exportDraftBtn");
   const validationStatus = document.getElementById("validationStatus");
+  const checklist = document.getElementById("validationChecklist");
+  const jsonPreview = document.getElementById("scenarioJsonPreview");
 
   const fields = {
     title: document.getElementById("scenarioTitle"),
@@ -40,6 +43,86 @@
 
   function value(field) {
     return field && field.value ? field.value.trim() : "";
+  }
+
+  function slugify(text) {
+    return (text || "untitled-scenario")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 80) || "untitled-scenario";
+  }
+
+  function buildScenario() {
+    return {
+      id: slugify(value(fields.title)),
+      status: "draft",
+      title: value(fields.title),
+      vehicle: {
+        year: value(fields.year),
+        make: value(fields.make),
+        model: value(fields.model),
+        engine: value(fields.engine),
+        mileage: value(fields.mileage),
+        system: value(fields.system)
+      },
+      complaint: {
+        customer: value(fields.complaint)
+      },
+      evidence: {
+        dtcs: value(fields.primaryDtc) ? [{
+          code: value(fields.primaryDtc),
+          description: value(fields.dtcDescription)
+        }] : [],
+        freezeFrame: value(fields.freezeFrame),
+        liveData: {
+          rpm: value(fields.rpm),
+          voltage: value(fields.voltage),
+          coolant: value(fields.coolant),
+          fuelTrim: value(fields.fuelTrim)
+        }
+      },
+      diagnosticPath: {
+        initialTest: value(fields.initialTest),
+        expectedFinding: value(fields.expectedFinding),
+        rootCause: value(fields.rootCause),
+        recommendedRepair: value(fields.recommendedRepair)
+      },
+      rubric: {
+        aseArea: value(fields.aseArea),
+        safety: value(fields.safetyCriteria),
+        diagnosis: value(fields.diagnosticCriteria),
+        verification: value(fields.verificationCriteria)
+      }
+    };
+  }
+
+  function getValidationItems() {
+    return [
+      ["Vehicle year, make, and model", value(fields.year) && value(fields.make) && value(fields.model)],
+      ["Scenario title and customer complaint", value(fields.title) && value(fields.complaint)],
+      ["Evidence: DTC or live data", value(fields.primaryDtc) || value(fields.rpm) || value(fields.voltage)],
+      ["Diagnostic path and root cause", value(fields.initialTest) && value(fields.rootCause) && value(fields.recommendedRepair)],
+      ["ASE area and diagnostic rubric", value(fields.aseArea) && value(fields.diagnosticCriteria)]
+    ];
+  }
+
+  function setStatus(message) {
+    if (validationStatus) validationStatus.textContent = message;
+  }
+
+  function renderChecklist(items) {
+    if (!checklist) return;
+
+    checklist.innerHTML = items.map(([label, valid]) => `
+      <li data-valid="${Boolean(valid)}">${valid ? "✓" : "•"} ${label}</li>
+    `).join("");
+  }
+
+  function renderJsonPreview() {
+    if (jsonPreview) {
+      jsonPreview.value = JSON.stringify(buildScenario(), null, 2);
+    }
   }
 
   function renderPreview() {
@@ -93,10 +176,31 @@
       const root = value(fields.rootCause);
       preview.ase.textContent = ase ? `${ase}${root ? ` • Root cause: ${root}` : ""}` : "Not mapped";
     }
+
+    renderChecklist(getValidationItems());
+    renderJsonPreview();
   }
 
-  function setStatus(message) {
-    if (validationStatus) validationStatus.textContent = message;
+  function validateScenario() {
+    const items = getValidationItems();
+    const ready = items.every(([, valid]) => Boolean(valid));
+    setStatus(ready ? "Ready" : "Needs Data");
+    renderChecklist(items);
+    renderJsonPreview();
+    return ready;
+  }
+
+  function exportScenario() {
+    const scenario = buildScenario();
+    const blob = new Blob([JSON.stringify(scenario, null, 2)], {
+      type: "application/json"
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${scenario.id || "scenario-draft"}.json`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    setStatus("Exported");
   }
 
   Object.values(fields).forEach((field) => {
@@ -105,20 +209,18 @@
   });
 
   if (validateButton) {
-    validateButton.addEventListener("click", () => {
-      const hasVehicle = value(fields.year) && value(fields.make) && value(fields.model);
-      const hasComplaint = value(fields.title) && value(fields.complaint);
-      const hasEvidence = value(fields.primaryDtc) || value(fields.rpm) || value(fields.voltage);
-      const hasPath = value(fields.initialTest) && value(fields.rootCause) && value(fields.recommendedRepair);
-      const hasRubric = value(fields.aseArea) && value(fields.diagnosticCriteria);
-      setStatus(hasVehicle && hasComplaint && hasEvidence && hasPath && hasRubric ? "Ready" : "Needs Data");
-    });
+    validateButton.addEventListener("click", validateScenario);
   }
 
   if (saveButton) {
     saveButton.addEventListener("click", () => {
+      renderJsonPreview();
       setStatus("Saved");
     });
+  }
+
+  if (exportButton) {
+    exportButton.addEventListener("click", exportScenario);
   }
 
   renderPreview();
