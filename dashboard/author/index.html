@@ -159,8 +159,18 @@
         <article class="tm-panel" id="publish">
           <h2>Publish</h2>
           <p>Validate scenario completeness and prepare it for students.</p>
-          <button id="validateScenarioBtn" class="tm-btn tm-btn-primary" type="button">Validate Scenario</button>
-          <button id="saveDraftBtn" class="tm-btn tm-btn-secondary" type="button">Save Draft</button>
+          <div class="author-actions">
+  <button id="validateScenarioBtn" class="tm-btn tm-btn-primary" type="button">Validate Scenario</button>
+  <button id="saveDraftBtn" class="tm-btn tm-btn-secondary" type="button">Save Draft</button>
+  <button id="exportDraftBtn" class="tm-btn tm-btn-secondary" type="button">Export JSON</button>
+</div>
+
+<ul id="validationChecklist" class="author-checklist" aria-live="polite"></ul>
+
+<label class="author-json-preview">
+  Scenario JSON Preview
+  <textarea id="scenarioJsonPreview" rows="14" readonly></textarea>
+</label>
         </article>
       </section>
 
@@ -182,6 +192,7 @@
   <script src="./author.js"></script>
 </body>
 </html>
+
 
 
 
