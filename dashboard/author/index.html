@@ -70,13 +70,35 @@
         <article class="tm-panel" id="vehicle">
           <h2>Vehicle</h2>
           <p>Define year, make, model, trim, engine, mileage, and system focus.</p>
-          <div class="author-placeholder">Vehicle editor coming next.</div>
+          <form class="author-form" id="vehicleForm">
+  <label>Year <input id="vehicleYear" type="number" min="1980" max="2035" placeholder="2018"></label>
+  <label>Make <input id="vehicleMake" type="text" placeholder="Ford"></label>
+  <label>Model <input id="vehicleModel" type="text" placeholder="F-150"></label>
+  <label>Engine <input id="vehicleEngine" type="text" placeholder="5.0L V8"></label>
+  <label>Mileage <input id="vehicleMileage" type="number" min="0" placeholder="84200"></label>
+  <label>System Focus
+    <select id="vehicleSystem">
+      <option value="">Select system</option>
+      <option>Electrical</option>
+      <option>Engine Performance</option>
+      <option>HVAC</option>
+      <option>Brakes</option>
+      <option>Hybrid / EV</option>
+      <option>Network / CAN</option>
+    </select>
+  </label>
+</form>
         </article>
 
         <article class="tm-panel" id="complaint">
           <h2>Complaint</h2>
           <p>Capture the customer concern, operating conditions, and symptom summary.</p>
-          <div class="author-placeholder">Complaint editor coming next.</div>
+          <form class="author-form" id="complaintForm">
+  <label>Scenario Title <input id="scenarioTitle" type="text" placeholder="No-start after overnight soak"></label>
+  <label>Customer Complaint <textarea id="customerComplaintInput" rows="4" placeholder="Customer states the vehicle cranks but will not start after sitting overnight."></textarea></label>
+  <label>Observed Symptoms <textarea id="observedSymptoms" rows="3" placeholder="Crank/no-start, intermittent tach signal, stored P0335."></textarea></label>
+  <label>Operating Conditions <input id="operatingConditions" type="text" placeholder="Cold start, ambient temperature below 40°F"></label>
+</form>
         </article>
 
         <article class="tm-panel" id="dtcs">
@@ -128,3 +150,4 @@
   <script src="./author.js"></script>
 </body>
 </html>
+

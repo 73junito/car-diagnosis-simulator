@@ -68,3 +68,32 @@
     position: static;
   }
 }
+
+.author-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.author-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--tm-text);
+  font-weight: 800;
+}
+
+.author-form input,
+.author-form select,
+.author-form textarea {
+  width: 100%;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+  color: var(--tm-text);
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.author-form textarea {
+  resize: vertical;
+}
