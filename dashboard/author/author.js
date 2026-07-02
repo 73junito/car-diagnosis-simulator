@@ -2,6 +2,8 @@
   const validateButton = document.getElementById("validateScenarioBtn");
   const saveButton = document.getElementById("saveDraftBtn");
   const exportButton = document.getElementById("exportDraftBtn");
+  const importButton = document.getElementById("importDraftBtn");
+  const importInput = document.getElementById("importScenarioInput");
   const validationStatus = document.getElementById("validationStatus");
   const checklist = document.getElementById("validationChecklist");
   const jsonPreview = document.getElementById("scenarioJsonPreview");
@@ -222,6 +224,59 @@
     return ready;
   }
 
+  function setField(field, fieldValue) {
+    if (field) field.value = fieldValue || "";
+  }
+
+  function loadScenario(scenario) {
+    if (!scenario || typeof scenario !== "object") return;
+
+    const firstDtc = scenario.evidence && Array.isArray(scenario.evidence.dtcs)
+      ? scenario.evidence.dtcs[0] || {}
+      : {};
+
+    setField(fields.title, scenario.title);
+    setField(fields.year, scenario.vehicle && scenario.vehicle.year);
+    setField(fields.make, scenario.vehicle && scenario.vehicle.make);
+    setField(fields.model, scenario.vehicle && scenario.vehicle.model);
+    setField(fields.engine, scenario.vehicle && scenario.vehicle.engine);
+    setField(fields.mileage, scenario.vehicle && scenario.vehicle.mileage);
+    setField(fields.system, scenario.vehicle && scenario.vehicle.system);
+    setField(fields.complaint, scenario.complaint && scenario.complaint.customer);
+    setField(fields.primaryDtc, firstDtc.code);
+    setField(fields.dtcDescription, firstDtc.description);
+    setField(fields.freezeFrame, scenario.evidence && scenario.evidence.freezeFrame);
+    setField(fields.rpm, scenario.evidence && scenario.evidence.liveData && scenario.evidence.liveData.rpm);
+    setField(fields.voltage, scenario.evidence && scenario.evidence.liveData && scenario.evidence.liveData.voltage);
+    setField(fields.coolant, scenario.evidence && scenario.evidence.liveData && scenario.evidence.liveData.coolant);
+    setField(fields.fuelTrim, scenario.evidence && scenario.evidence.liveData && scenario.evidence.liveData.fuelTrim);
+    setField(fields.initialTest, scenario.diagnosticPath && scenario.diagnosticPath.initialTest);
+    setField(fields.expectedFinding, scenario.diagnosticPath && scenario.diagnosticPath.expectedFinding);
+    setField(fields.rootCause, scenario.diagnosticPath && scenario.diagnosticPath.rootCause);
+    setField(fields.recommendedRepair, scenario.diagnosticPath && scenario.diagnosticPath.recommendedRepair);
+    setField(fields.aseArea, scenario.rubric && scenario.rubric.aseArea);
+    setField(fields.safetyCriteria, scenario.rubric && scenario.rubric.safety);
+    setField(fields.diagnosticCriteria, scenario.rubric && scenario.rubric.diagnosis);
+    setField(fields.verificationCriteria, scenario.rubric && scenario.rubric.verification);
+
+    validateScenario();
+    renderPreview();
+    setStatus("Imported");
+  }
+
+  function importScenarioFile(file) {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      try {
+        loadScenario(JSON.parse(String(reader.result || "{}")));
+      } catch (error) {
+        setStatus("Import Error");
+      }
+    });
+    reader.readAsText(file);
+  }
   function exportScenario() {
     const scenario = buildScenario();
     const blob = new Blob([JSON.stringify(scenario, null, 2)], {
@@ -255,8 +310,23 @@
     exportButton.addEventListener("click", exportScenario);
   }
 
+  if (importButton && importInput) {
+    importButton.addEventListener("click", () => importInput.click());
+    importInput.addEventListener("change", () => {
+      importScenarioFile(importInput.files && importInput.files[0]);
+      importInput.value = "";
+    });
+  }
+
+  window.TorqueMindAuthoring = {
+    buildScenario,
+    loadScenario,
+    validateScenario
+  };
+
   seedDemoData();
   renderPreview();
   document.body.dataset.authoringStudioReady = "true";
 })();
+
 
