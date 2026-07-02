@@ -1,148 +1,164 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TorqueMind Documentation</title>
-  <link rel="stylesheet" href="/theme/tokens.css" />
-  <link rel="stylesheet" href="/theme/layout.css" />
-  <link rel="stylesheet" href="/theme/dashboard.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TorqueMind Documentation</title>
+<link rel="stylesheet" href="/theme/tokens.css">
+<link rel="stylesheet" href="/theme/layout.css">
+<link rel="stylesheet" href="/theme/dashboard.css">
 </head>
 <body>
-  <main class="tm-main">
-    <section class="tm-hero-banner">
-      <div>
-        <p class="tm-hero-banner__eyebrow">Documentation</p>
-        <h1 class="tm-hero-banner__title">TorqueMind Docs</h1>
-        <p class="tm-hero-banner__subtitle">
-          Product, instructor, student, developer, and release documentation for the automotive diagnostic training platform.
-        </p>
-        <span class="tm-hero-banner__status">v0.5.0 baseline</span>
-      </div>
-      <div class="tm-hero-banner__actions">
-        <a class="tm-btn tm-btn-secondary" href="/">Home</a>
-        <a class="tm-btn tm-btn-primary" href="/dashboard/student/">Launch Training</a>
-      </div>
-    </section>
+<main class="tm-main">
 
-    <section class="tm-panel" style="margin-top:24px;">
-      <h2>Overview</h2>
-      <p>
-        TorqueMind is an automotive diagnostic training platform for CTE programs, instructors, and self-paced learners.
-        It combines realistic fault scenarios, OBD-II reasoning, ASE-aligned workflows, student progress tracking, and instructor analytics.
-      </p>
-    </section>
+<section class="tm-hero-banner">
+  <div>
+    <p class="tm-hero-banner__eyebrow">Documentation</p>
+    <h1 class="tm-hero-banner__title">TorqueMind Docs</h1>
+    <p class="tm-hero-banner__subtitle">Product, instructor, student, developer, and release documentation for the automotive diagnostic training platform.</p>
+    <span class="tm-hero-banner__status">v0.6 Authoring Studio</span>
+  </div>
+  <div class="tm-hero-banner__actions">
+    <a class="tm-btn tm-btn-secondary" href="/">Home</a>
+    <a class="tm-btn tm-btn-primary" href="/dashboard/student/">Launch Training</a>
+  </div>
+</section>
 
-    <section class="tm-dashboard-grid tm-dashboard-grid-4" style="margin-top:24px;">
-      <article class="tm-stat-card">
-        <span class="tm-stat-card__label">Student</span>
-        <strong class="tm-stat-card__value">Learn</strong>
-        <small class="tm-stat-card__hint">Scenarios, transcripts, progress, and learning path.</small>
-      </article>
+<section class="tm-panel">
+<h2>Overview</h2>
+<p>TorqueMind is an automotive diagnostic training platform for CTE programs, instructors, and self-paced learners. It combines realistic fault scenarios, OBD-II reasoning, ASE-aligned workflows, student progress tracking, instructor analytics, and scenario authoring.</p>
+  
+</section>
 
-      <article class="tm-stat-card">
-        <span class="tm-stat-card__label">Instructor</span>
-        <strong class="tm-stat-card__value">Teach</strong>
-        <small class="tm-stat-card__hint">Analytics, live sessions, session history, and exports.</small>
-      </article>
+<section class="tm-panel">
+<h2>Authoring Studio</h2>
+<p>The Authoring Studio enables instructors to create complete diagnostic scenarios without editing source code.</p>
+<ol>
+<li>Configure the vehicle.</li>
+<li>Enter the customer complaint.</li>
+<li>Add DTCs and freeze-frame evidence.</li>
+<li>Configure live OBD-II sensor data.</li>
+<li>Define the diagnostic path and root cause.</li>
+<li>Map ASE objectives and rubric criteria.</li>
+<li>Validate the scenario.</li>
+<li>Preview the student experience.</li>
+<li>Export JSON.</li>
+<li>Import JSON for continued editing.</li>
+</ol>
+  
+</section>
 
-      <article class="tm-stat-card">
-        <span class="tm-stat-card__label">Diagnostics</span>
-        <strong class="tm-stat-card__value">ASE</strong>
-        <small class="tm-stat-card__hint">Evidence-based diagnostic workflow and skill tracking.</small>
-      </article>
+<section class="tm-panel">
+<h2>Scenario JSON</h2>
+<p>Exported scenarios include vehicle data, complaint, diagnostic evidence, live data, diagnostic path, ASE rubric, and validation-ready structure. JSON files can be shared, backed up, imported, or version-controlled.</p>
+  
+</section>
 
-      <article class="tm-stat-card">
-        <span class="tm-stat-card__label">Release</span>
-        <strong class="tm-stat-card__value">v0.5.0</strong>
-        <small class="tm-stat-card__hint">UI modernization and shared framework baseline.</small>
-      </article>
-    </section>
+<section class="tm-panel">
+<h2>Instructor Guide</h2>
+<ul>
+<li>Instructor Analytics — review class-level performance and ASE readiness.</li>
+<li>Live Session — monitor active classroom events.</li>
+<li>Session History — review and export learner activity.</li>
+<li>Authoring Studio — create, validate, preview, import, and export scenarios.</li>
+</ul>
+  
+</section>
 
-    <section class="tm-panel" style="margin-top:24px;">
-      <h2>Student Guide</h2>
-      <ol>
-        <li>Open the <a href="/dashboard/student/">Student Dashboard</a>.</li>
-        <li>Review progress, learning path, transcript, and recommended next steps.</li>
-        <li>Use filters to browse available diagnostic scenarios.</li>
-        <li>Open a scenario and review the customer complaint, symptoms, DTCs, and diagnostic data.</li>
-        <li>Work through the diagnostic process and compare your reasoning with the expected path.</li>
-        <li>Return to the dashboard to review performance and next recommended skills.</li>
-      </ol>
-    </section>
+<section class="tm-panel">
+<h2>Student Guide</h2>
+<ol>
+<li>Open the <a href="/dashboard/student/">Student Dashboard</a>.</li>
+<li>Review progress and recommended next steps.</li>
+<li>Select a diagnostic scenario.</li>
+<li>Review vehicle, complaint, symptoms, DTCs, and live data.</li>
+<li>Work through the diagnostic process.</li>
+<li>Compare reasoning with the expected diagnostic path.</li>
+</ol>
+  
+</section>
 
-    <section class="tm-panel" style="margin-top:24px;">
-      <h2>Instructor Guide</h2>
-      <ul>
-        <li><a href="/dashboard/instructor/analytics.html">Instructor Analytics</a> — review class-level performance and ASE readiness.</li>
-        <li><a href="/dashboard/instructor/live-session.html">Live Session</a> — monitor active classroom events in real time.</li>
-        <li><a href="/dashboard/instructor/session-history.html">Session History</a> — review and export historical learner activity.</li>
-      </ul>
-      <p>
-        Instructor tools are designed to help identify learners who need intervention, monitor diagnostic confidence,
-        and support evidence-based teaching decisions.
-      </p>
-    </section>
 
-    <section class="tm-panel" style="margin-top:24px;">
-      <h2>Diagnostic Workflow</h2>
-      <ol>
-        <li>Read the complaint carefully.</li>
-        <li>Identify symptoms and affected systems.</li>
-        <li>Review DTCs and live data.</li>
-        <li>Form a testable diagnostic hypothesis.</li>
-        <li>Verify the fault using available evidence.</li>
-        <li>Explain the root cause and recommended repair path.</li>
-      </ol>
-    </section>
+<section class="tm-panel">
 
-    <section class="tm-panel" style="margin-top:24px;">
-      <h2>Developer Notes</h2>
-      <ul>
-        <li><strong>/theme</strong> contains the shared TorqueMind UI framework.</li>
-        <li><strong>/dashboard/student</strong> contains the Student Dashboard experience.</li>
-        <li><strong>/dashboard/instructor</strong> contains instructor analytics, live session, and history pages.</li>
-        <li><strong>/tests</strong> contains Jest and Playwright coverage.</li>
-        <li><strong>vercel.json</strong> controls production rewrites and headers.</li>
-      </ul>
-    </section>
+<h2>Scenario Validation</h2>
 
-    <section class="tm-panel" style="margin-top:24px;">
-      <h2>Testing and Quality</h2>
-      <p>The v0.5.0 baseline is validated by:</p>
-      <ul>
-        <li>62/62 Jest test suites passing</li>
-        <li>211/211 tests passing</li>
-        <li>Playwright UI and smoke tests passing</li>
-        <li>CodeQL checks passing</li>
-        <li>API smoke tests passing</li>
-        <li>Vercel deployment checks passing</li>
-      </ul>
-    </section>
+<ul>
+<li>✓ Vehicle configured</li>
+<li>✓ Customer complaint entered</li>
+<li>✓ Diagnostic evidence present</li>
+<li>✓ Diagnostic path completed</li>
+<li>✓ ASE rubric configured</li>
+</ul>
 
-    <section class="tm-panel" style="margin-top:24px;">
-      <h2>Release Notes</h2>
-      <h3>v0.5.0 — UI Modernization</h3>
-      <ul>
-        <li>Student Dashboard V3</li>
-        <li>Shared UI component framework</li>
-        <li>Instructor analytics modernization</li>
-        <li>Live session modernization</li>
-        <li>Session history modernization</li>
-        <li>Canonical dashboard routing</li>
-        <li>Homepage legacy cleanup</li>
-      </ul>
-    </section>
+<p>
+Only fully validated scenarios should be published.
+</p>
 
-    <section class="tm-panel" style="margin-top:24px;">
-      <h2>Roadmap</h2>
-      <ul>
-        <li><strong>v0.6.0:</strong> Documentation, homepage polish, accessibility, and SEO.</li>
-        <li><strong>v0.7.0:</strong> Adaptive learning and TorqueMind AI coach improvements.</li>
-        <li><strong>v0.8.0:</strong> Class management, assignments, and reporting.</li>
-        <li><strong>v1.0.0:</strong> Production-ready public release.</li>
-      </ul>
-    </section>
-  </main>
+</section>
+
+<section class="tm-panel">
+<h2>Testing and Quality</h2>
+<ul>
+<li>63/63 Jest test suites passing</li>
+<li>212/212 tests passing</li>
+<li>Playwright E2E and smoke tests passing</li>
+<li>API smoke tests passing</li>
+<li>Auth-aware API smoke tests passing</li>
+<li>CodeQL checks passing</li>
+<li>Vercel deployment checks passing</li>
+</ul>
+  
+</section>
+
+<section class="tm-panel">
+<h2>Release Notes</h2>
+<h3>v0.6 — Authoring Studio</h3>
+<ul>
+<li>Vehicle, complaint, DTC, live data, diagnostic path, and ASE rubric editors</li>
+<li>Scenario validation checklist</li>
+<li>Live student preview</li>
+<li>Scenario JSON export</li>
+<li>Scenario JSON import</li>
+<li>Authoring Studio regression test coverage</li>
+</ul>
+<h3>v0.5 — UI Modernization</h3>
+<ul>
+<li>Student Dashboard V3</li>
+<li>Shared UI framework</li>
+<li>Instructor dashboard modernization</li>
+<li>Canonical dashboard routing</li>
+</ul>
+  
+</section>
+
+
+<section class="tm-panel">
+<h2>Developer Notes</h2>
+
+<ul>
+<li><strong>/dashboard/student</strong> — Student Dashboard</li>
+<li><strong>/dashboard/instructor</strong> — Instructor dashboards</li>
+<li><strong>/dashboard/author</strong> — Authoring Studio</li>
+<li><strong>/theme</strong> — Shared UI framework</li>
+<li><strong>/tests</strong> — Jest and Playwright regression suite</li>
+<li><strong>vercel.json</strong> — Routing, rewrites, and deployment</li>
+</ul>
+
+</section>
+
+<section class="tm-panel">
+<h2>Roadmap</h2>
+<ul>
+<li>v0.7 — AI-assisted authoring, scenario templates, and version history</li>
+<li>v0.8 — Classroom management, assignments, gradebook, and reporting</li>
+<li>v0.9 — Adaptive learning, AI coaching, and instructor recommendations</li>
+<li>v1.0 — Production-ready public release</li>
+</ul>
+</section>
+
+</main>
 </body>
 </html>
+
+
