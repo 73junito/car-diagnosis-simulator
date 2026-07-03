@@ -9,6 +9,9 @@
   const validationStatus = document.getElementById("validationStatus");
   const checklist = document.getElementById("validationChecklist");
   const jsonPreview = document.getElementById("scenarioJsonPreview");
+  const saveToLibraryButton = document.getElementById("saveToLibraryBtn");
+  const librarySearchInput = document.getElementById("librarySearchInput");
+  const scenarioLibraryList = document.getElementById("scenarioLibraryList");
 
   const fields = {
     title: document.getElementById("scenarioTitle"),
@@ -294,6 +297,99 @@
     renderPreview();
     setStatus("Template Loaded");
   }
+
+  const libraryStorageKey = "torquemind.scenarioLibrary";
+
+  function readLibrary() {
+    try {
+      return JSON.parse(localStorage.getItem(libraryStorageKey) || "[]");
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function writeLibrary(items) {
+    localStorage.setItem(libraryStorageKey, JSON.stringify(items));
+  }
+
+  function scenarioSearchText(scenario) {
+    return [
+      scenario.title,
+      scenario.vehicle && scenario.vehicle.year,
+      scenario.vehicle && scenario.vehicle.make,
+      scenario.vehicle && scenario.vehicle.model,
+      scenario.evidence && scenario.evidence.dtcs && scenario.evidence.dtcs[0] && scenario.evidence.dtcs[0].code,
+      scenario.rubric && scenario.rubric.aseArea
+    ].filter(Boolean).join(" ").toLowerCase();
+  }
+
+  function renderLibrary() {
+    if (!scenarioLibraryList) return;
+
+    const query = librarySearchInput ? librarySearchInput.value.trim().toLowerCase() : "";
+    const library = readLibrary();
+    const filtered = query
+      ? library.filter((scenario) => scenarioSearchText(scenario).includes(query))
+      : library;
+
+    scenarioLibraryList.innerHTML = "";
+
+    if (!filtered.length) {
+      const empty = document.createElement("li");
+      empty.textContent = library.length ? "No matching scenarios." : "No saved scenarios yet.";
+      scenarioLibraryList.appendChild(empty);
+      return;
+    }
+
+    filtered.forEach((scenario) => {
+      const item = document.createElement("li");
+      item.dataset.scenarioId = scenario.id;
+
+      const title = document.createElement("strong");
+      title.textContent = scenario.title || "Untitled Scenario";
+
+      const load = document.createElement("button");
+      load.type = "button";
+      load.className = "tm-btn tm-btn-secondary";
+      load.textContent = "Load";
+      load.addEventListener("click", () => {
+        loadScenario(scenario);
+        setStatus("Library Loaded");
+      });
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "tm-btn tm-btn-secondary";
+      remove.textContent = "Delete";
+      remove.addEventListener("click", () => {
+        writeLibrary(readLibrary().filter((saved) => saved.id !== scenario.id));
+        renderLibrary();
+        setStatus("Library Updated");
+      });
+
+      item.appendChild(title);
+      item.appendChild(document.createTextNode(" "));
+      item.appendChild(load);
+      item.appendChild(document.createTextNode(" "));
+      item.appendChild(remove);
+
+      scenarioLibraryList.appendChild(item);
+    });
+  }
+
+  function saveToLibrary() {
+    const scenario = buildScenario();
+    const library = readLibrary().filter((saved) => saved.id !== scenario.id);
+
+    library.unshift({
+      ...scenario,
+      savedAt: new Date().toISOString()
+    });
+
+    writeLibrary(library);
+    renderLibrary();
+    setStatus("Saved to Library");
+  }
   function exportScenario() {
     const scenario = buildScenario();
     const blob = new Blob([JSON.stringify(scenario, null, 2)], {
@@ -314,6 +410,14 @@
 
   if (validateButton) {
     validateButton.addEventListener("click", validateScenario);
+  }
+
+  if (saveToLibraryButton) {
+    saveToLibraryButton.addEventListener("click", saveToLibrary);
+  }
+
+  if (librarySearchInput) {
+    librarySearchInput.addEventListener("input", renderLibrary);
   }
 
   if (saveButton) {
@@ -348,8 +452,10 @@
 
   seedDemoData();
   renderPreview();
+  renderLibrary();
   document.body.dataset.authoringStudioReady = "true";
 })();
+
 
 
 
