@@ -4,6 +4,8 @@
   const exportButton = document.getElementById("exportDraftBtn");
   const importButton = document.getElementById("importDraftBtn");
   const importInput = document.getElementById("importScenarioInput");
+  const templateSelect = document.getElementById("scenarioTemplate");
+  const loadTemplateButton = document.getElementById("loadTemplateBtn");
   const validationStatus = document.getElementById("validationStatus");
   const checklist = document.getElementById("validationChecklist");
   const jsonPreview = document.getElementById("scenarioJsonPreview");
@@ -277,6 +279,21 @@
     });
     reader.readAsText(file);
   }
+
+  function loadSelectedTemplate() {
+    if (!templateSelect || !window.AuthoringTemplates) return;
+
+    const template = window.AuthoringTemplates[templateSelect.value];
+    if (!template) return;
+
+    Object.entries(template).forEach(([key, templateValue]) => {
+      if (fields[key]) fields[key].value = templateValue || "";
+    });
+
+    validateScenario();
+    renderPreview();
+    setStatus("Template Loaded");
+  }
   function exportScenario() {
     const scenario = buildScenario();
     const blob = new Blob([JSON.stringify(scenario, null, 2)], {
@@ -310,6 +327,10 @@
     exportButton.addEventListener("click", exportScenario);
   }
 
+  if (loadTemplateButton) {
+    loadTemplateButton.addEventListener("click", loadSelectedTemplate);
+  }
+
   if (importButton && importInput) {
     importButton.addEventListener("click", () => importInput.click());
     importInput.addEventListener("change", () => {
@@ -321,12 +342,15 @@
   window.TorqueMindAuthoring = {
     buildScenario,
     loadScenario,
-    validateScenario
+    validateScenario,
+    loadSelectedTemplate
   };
 
   seedDemoData();
   renderPreview();
   document.body.dataset.authoringStudioReady = "true";
 })();
+
+
 
 
