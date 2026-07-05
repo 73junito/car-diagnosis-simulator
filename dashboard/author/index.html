@@ -67,6 +67,22 @@
       </aside>
 
       <section class="author-editor" aria-label="Scenario editor">
+        <article class="tm-panel" id="templates">
+          <h2>Scenario Templates</h2>
+          <p>Start from a predefined diagnostic scenario.</p>
+          <form class="author-form" id="templateForm">
+            <label>Template
+              <select id="scenarioTemplate">
+                <option value="">Blank Scenario</option>
+                <option value="no-start">Engine No-Start</option>
+                <option value="misfire">Engine Misfire</option>
+                <option value="charging">Charging System</option>
+              </select>
+            </label>
+            <button id="loadTemplateBtn" class="tm-btn tm-btn-primary" type="button">Load Template</button>
+          </form>
+        </article>
+
         <article class="tm-panel" id="vehicle">
           <h2>Vehicle</h2>
           <p>Define year, make, model, trim, engine, mileage, and system focus.</p>
@@ -194,6 +210,7 @@
   <script src="/dashboard/author/author.js"></script>
 </body>
 </html>
+
 
 
 
