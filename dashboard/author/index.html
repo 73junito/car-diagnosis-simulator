@@ -185,6 +185,16 @@
 
 <ul id="validationChecklist" class="author-checklist" aria-live="polite"></ul>
 
+
+<div class="author-library">
+  <h3>Scenario Library</h3>
+  <p>Save scenarios locally in this browser and reload them later.</p>
+  <div class="author-actions">
+    <button id="saveToLibraryBtn" class="tm-btn tm-btn-primary" type="button">Save to Library</button>
+    <input id="librarySearchInput" type="search" placeholder="Search title, vehicle, DTC, or ASE">
+  </div>
+  <ul id="scenarioLibraryList" class="author-checklist" aria-live="polite"></ul>
+</div>
 <label class="author-json-preview">
   Scenario JSON Preview
   <textarea id="scenarioJsonPreview" rows="14" readonly></textarea>
@@ -210,6 +220,7 @@
   <script src="/dashboard/author/author.js"></script>
 </body>
 </html>
+
 
 
 
