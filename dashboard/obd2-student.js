@@ -93,8 +93,35 @@
     if(state) state.textContent = scoreObj.pass ? `PASS (threshold ${scoreObj.threshold}%)` : `FAIL (threshold ${scoreObj.threshold}%)`;
   }
 
+
+  function getScenarioFromQuery() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("scenario") || params.get("id") || "";
+  }
+
+  function resolveScenarioFromRegistry(id) {
+    const target = String(id || "").toLowerCase();
+    if (!target) return null;
+
+    const registryMatch = (window.SCENARIO_REGISTRY || []).find((item) =>
+      String(item.id || "").toLowerCase() === target ||
+      String(item.numericId || "").toLowerCase() === target
+    );
+
+    if (registryMatch) return registryMatch.raw || registryMatch;
+
+    return (window.scenarios || []).find((scenario) =>
+      String(scenario.slug || "").toLowerCase() === target ||
+      String(scenario.symptomCategory || "").toLowerCase() === target ||
+      String(scenario.id || "").toLowerCase() === target
+    ) || null;
+  }
   window.initObd2StudentWorkflow = function(initialScenario){
-    const scenarios = window.scenarios || [];
+        const queryScenarioId = initialScenario || getScenarioFromQuery();
+    const queryScenario = resolveScenarioFromRegistry(queryScenarioId);
+    const scenarios = queryScenario
+      ? [queryScenario].concat((window.scenarios || []).filter((scenario) => scenario !== queryScenario))
+      : window.scenarios || [];
     const testsAvailable = window.testsAvailable || ['OBD Scan','Battery Test','Compression Test'];
     populateScenarioSelect(scenarios);
     populateTestChecklist(testsAvailable);
@@ -108,7 +135,11 @@
     document.addEventListener('change', (e) => { if(e && e.target && e.target.closest && e.target.closest('#test-checklist')) { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); } });
 
     // set initial
-    const chosen = scenarios.find(s => s.slug===initialScenario) || scenarios[0] || null;
+        const chosen = queryScenario || scenarios.find(s =>
+      s.slug === queryScenarioId ||
+      s.symptomCategory === queryScenarioId ||
+      String(s.id) === String(queryScenarioId)
+    ) || scenarios[0] || null;
     if(chosen){ sel.value = chosen.slug || chosen.id || chosen.name; }
     resetWorkflow();
   };
@@ -161,3 +192,4 @@
   window._obd2Student = { resetWorkflow, submitDiagnosis, populateTestChecklist, calculateScore, renderScoreSummary, saveAttemptState, loadAttemptState, resetAttemptState };
 
 })();
+
