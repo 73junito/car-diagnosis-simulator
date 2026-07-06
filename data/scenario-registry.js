@@ -16,7 +16,11 @@
     return '/dashboard/obd2-student?scenario=';
   }
 
-  const src = window.scenarios || [];
+    const src =
+    window.scenarios ||
+    window.SCENARIOS ||
+    window.TorqueMindScenarios ||
+    [];
   // Helper: resolveScenarioImage ensures a non-empty image path. At runtime, images that 404 will
   // be replaced by the placeholder via `onerror` handler in the renderer. This function guarantees
   // the registry always has a string path to an image.
@@ -61,4 +65,6 @@
   // expose for non-module environments
   window.SCENARIO_REGISTRY = registry;
 })();
+
+
 
