@@ -305,7 +305,7 @@
             window.location.href = btn.href;
           }
         }
-        card.addEventListener('click', activate);
+        card.addEventListener('click', (event) => { if (event.target && event.target.closest && event.target.closest('a')) return; activate(); });
         card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); activate(); } });
 
         return card;
@@ -469,6 +469,7 @@
     <h2>TorqueMind AI Tutor</h2>
     <div id="torquemindContent"></div>
 </div>
+
 
 
 
