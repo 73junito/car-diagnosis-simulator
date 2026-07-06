@@ -1,0 +1,13 @@
+{
+  "status": "ok",
+  "app": "TorqueMind",
+  "tests": "63/63",
+  "assertions": "212/212",
+  "features": [
+    "Authoring Studio",
+    "Scenario Templates",
+    "Scenario Library",
+    "JSON Import",
+    "JSON Export"
+  ]
+}
