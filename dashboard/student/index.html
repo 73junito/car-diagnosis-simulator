@@ -297,7 +297,7 @@
           }catch(e){}
           // prefer opening in-panel detail when available for accessibility and previews
           if(window.showScenarioDetail && typeof window.showScenarioDetail === 'function'){
-            window.showScenarioDetail(s, card);
+            window.showScenarioDetail(s.raw || s, card);
           } else if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) {
             window.location.hash = btn.getAttribute('href');
           } else {
@@ -468,6 +468,7 @@
     <h2>TorqueMind AI Tutor</h2>
     <div id="torquemindContent"></div>
 </div>
+
 
 
 
