@@ -1,330 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="data:,">
-  <title>TorqueMind — Diagnostic Training Platform</title>
-  <link rel="stylesheet" href="./style.css">
-  <link rel="stylesheet" href="./theme.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta
+    name="description"
+    content="TorqueMind automotive diagnostic training for students, instructors, and CTE programs."
+  >
+  <title>TorqueMind - Automotive Diagnostic Training</title>
+
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
+  <link
+    rel="stylesheet"
+    href="/theme/components/training-mode-card/training-mode-card.css"
+  >
 </head>
 <body>
-  <header class="topnav" role="banner">
-    <div class="nav-inner">
-      <div class="nav-brand">TorqueMind</div>
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#scenarios">Scenarios</a>
-        <a href="#demo-section">Student Mode</a>
-        <a href="/dashboard/analytics">Instructor Tools</a>
-        <a href="/dashboard/analytics">Analytics</a>
-        <a href="/docs">Documentation</a>
-      </nav>
-      <div style="margin-left:auto">
-        <a href="/dashboard/student/" class="btn primary-cta">Launch Training</a>
-      </div>
-    </div>
-  </header>
+  <div data-theme-shell></div>
 
-  <h1 style="display:none">TorqueMind</h1>
+  <main class="tm-main tm-home">
+    <a class="tm-skip-link" href="#scenarios">Jump to training modes</a>
 
-  <div id="startOverlay" class="overlay">
-    <!-- hidden by default to keep landing as primary view -->
-    <!-- display this via JS when you want an intro overlay -->
-    <style> #startOverlay{display:none;} </style>
-    <div class="overlay-card card tm-card">
-      <h2>TorqueMind</h2>
-      <p class="muted">Diagnostic Training Platform — practice real-world diagnostic reasoning with evidence-driven scenarios.</p>
-      <h3>How to use</h3>
-      <ol>
-        <li>Read the vehicle problem scenario.</li>
-        <li>Use diagnostic tools to investigate the issue.</li>
-        <li>Select the most likely fault and receive instant feedback.</li>
-        <li>Track scores and progress over multiple scenarios.</li>
-      </ol>
-      <div style="margin-top:12px">
-        <button id="btn-start" class="btn btn-primary">Start Simulation</button>
-        <button id="btn-skip" class="btn btn-ghost">Skip Intro</button>
-      </div>
-    </div>
+    <section
+      id="homeHero"
+      class="tm-home-hero"
+      aria-labelledby="homeTitle"
+    ></section>
 
-    <!-- TRUST / Built-for block -->
-    <div class="card" style="margin-top:28px; text-align:center">
-      <h3>Built for</h3>
-      <div style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
-        <div class="filter-pill">CTE Programs</div>
-        <div class="filter-pill">Automotive Training</div>
-        <div class="filter-pill">Maintenance Teams</div>
-      </div>
-    </div>
+    <section
+      id="scenarios"
+      class="tm-training-mode-section"
+      aria-labelledby="trainingModeTitle"
+    >
+      <p class="tm-eyebrow">Choose your workspace</p>
+      <h2 id="trainingModeTitle">One platform, separate workflows</h2>
+      <p>
+        Each workspace has one responsibility so students, instructors,
+        and authors see only the tools required for their task.
+      </p>
 
-    <!-- FINAL CTA -->
-    <div style="margin-top:24px; text-align:center">
-      <h3>Ready to train real diagnostic skills?</h3>
-      <div style="margin-top:10px"><button id="final-cta" class="btn btn-primary">Start Training</button></div>
-    </div>
-  </div>
-  <!-- ================= TORQUEMIND LANDING ================= -->
-
-  <!-- Clean view container -->
-  <div id="clean-views">
-
-  <!-- ================= TORQUEMIND LANDING ================= -->
-  <div id="landingPage" class="landing">
-
-    <!-- HERO -->
-    <section class="tm-hero" aria-labelledby="hero-title">
-      <div class="tm-hero-inner">
-
-
-        <div class="tm-hero-left">
-          <h1 id="hero-title" class="tm-hero-title">Diagnose Real Faults. Train Real Technicians.</h1>
-          <p class="tm-hero-subtitle">Interactive automotive diagnostic training with OBD-II data, ASE workflows, and instructor analytics.</p>
-
-          <div class="tm-hero-actions" role="group" aria-label="Primary actions">
-            <a href="/dashboard/student/" id="btn-start-training" class="btn primary-cta">Start Diagnostic Training</a>
-            <a href="/dashboard/analytics" id="btn-open-dashboard" class="btn ghost-cta">Open Instructor Dashboard</a>
-          </div>
-
-          <div class="trust-line" style="margin-top:10px;color:var(--muted);font-weight:600">Built for CTE Programs • Military Maintenance • Automotive Training</div>
-
-          <!-- aria-live toast region for error messages (HERO-006 §4) -->
-          <div data-hero-toast aria-live="polite" aria-atomic="true" class="tm-hero-toast"></div>
-
-          <div class="mt-3">
-            <div class="tm-card">
-              <strong>Instructor Analytics:</strong>
-              <div class="mt-1" style="color:var(--tm-muted)">See confidence, ASE weakness trends, and exportable reports.</div>
-              <div class="mt-2"><a href="/dashboard/analytics" class="btn btn-ghost">Open Analytics</a></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tm-hero-right">
-          <div id="diagCard" class="tm-diagnostic-card" role="group" aria-label="Diagnostic preview card">
-            <div class="tm-diagnostic-header">
-              <span class="badge badge--accent">Scenario</span>
-              <h3 id="diagTitle">No-Start Condition</h3>
-            </div>
-
-            <div class="tm-diagnostic-body">
-              <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">System</span>
-                <span id="diagSystem" class="badge badge--pill">Electrical</span>
-              </div>
-
-              <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">RPM</span>
-                <span id="diagRpm" class="metric">0</span>
-              </div>
-
-              <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">Voltage</span>
-                <span id="diagVoltage" class="metric">11.4V</span>
-              </div>
-
-              <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">Coolant</span>
-                <span id="diagCoolant" class="metric">85°C</span>
-              </div>
-
-              <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">Confidence</span>
-                <span id="diagConfidence" class="badge badge-warn">Low</span>
-              </div>
-
-              <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">Active DTC</span>
-                <span id="diagDtc" class="badge badge-danger">P0335</span>
-              </div>
-
-              <div class="tm-diagnostic-row">
-                <span class="tm-diagnostic-key">Freeze Frame</span>
-                <span id="diagFreeze" class="metric">Available</span>
-              </div>
-            </div>
-
-            <div class="tm-diagnostic-footer">
-              <p id="diagNext" class="tm-diagnostic-next">Recommended Next Step: Verify crankshaft position signal</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
+      <div
+        id="trainingModeGrid"
+        class="tm-training-mode-grid"
+      ></div>
     </section>
 
-    <!-- Focus target after successful demo load (HERO-006 §3a).
-         tabindex="-1" allows programmatic focus; no aria-label since the
-         container is empty until a scenario loads. -->
-    <div class="demo-container" tabindex="-1"></div>
+    <section
+      id="homeInstructor"
+      class="tm-home-instructor"
+      aria-labelledby="instructorSectionTitle"
+    ></section>
 
-    <!-- ========================= -->
-    <!--  HOMEPAGE WIREFRAME (scenarios, instructor CTA, features, footer) -->
-    <!-- ========================= -->
-
-    <!-- #scenarios anchor for nav link; #demo-section is the scroll target for the Hero CTA (HERO-002) -->
-    <span id="scenarios"></span>
-    <section id="demo-section" class="tm-section tm-scenarios">
-      <div class="tm-section-inner">
-
-        <h2 class="tm-section-title">Hands-On Diagnostic Scenarios</h2>
-        <p class="tm-section-subtitle">Realistic automotive faults designed for CTE programs and instructor-led training.</p>
-
-        <div class="tm-scenario-grid" id="homeScenarioGrid">
-          <!-- Scenario cards will be rendered here from SCENARIO_REGISTRY -->
-        </div>
-        <script src="/data/scenario-registry.js"></script>
-        <script>
-          (function(){
-            function createCard(s){
-              const card = document.createElement('div'); card.className = 'tm-card tm-scenario-card';
-              const header = document.createElement('div'); header.className = 'tm-card-header';
-              const badge = document.createElement('span'); badge.className = 'badge badge-accent'; badge.textContent = (s.category||'Scenario').toString().replace(/[-_]/g,' ');
-              const h3 = document.createElement('h3'); h3.textContent = (s.title||s.id);
-              header.appendChild(badge); header.appendChild(h3);
-              const body = document.createElement('div'); body.className = 'tm-card-body';
-              const p = document.createElement('p'); p.className = 'tm-card-text'; p.textContent = s.shortSymptom || '';
-              body.appendChild(p);
-              const footer = document.createElement('div'); footer.className = 'tm-card-footer';
-              const a = document.createElement('a'); a.className = 'btn btn-secondary'; a.href = s.route || '#'; a.textContent = 'Start Scenario';
-              footer.appendChild(a);
-              card.appendChild(header); card.appendChild(body); card.appendChild(footer);
-              // accessibility
-              card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', (s.title||s.id));
-              card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) { window.location.hash = a.getAttribute('href'); } else { window.location.href = a.href; } } });
-              card.addEventListener('click', ()=>{ if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) { window.location.hash = a.getAttribute('href'); } else { window.location.href = a.href; } });
-              return card;
-            }
-            const container = document.getElementById('homeScenarioGrid');
-            const list = window.SCENARIO_REGISTRY || [];
-            list.slice(0,17).forEach(s => { container.appendChild(createCard(s)); });
-          })();
-        </script>
-
-      </div>
+    <section class="tm-home-final-cta">
+      <p class="tm-eyebrow">Ready to begin?</p>
+      <h2>Start with a diagnostic scenario.</h2>
+      <a
+        class="tm-btn tm-btn-primary"
+        href="/dashboard/student/"
+      >
+        Launch Student Training
+      </a>
     </section>
+  </main>
 
-    <section class="tm-section tm-instructor-cta">
-      <div class="tm-section-inner tm-instructor-cta-inner">
+  <footer class="tm-footer">
+    <p>© 2026 TorqueMind</p>
+    <nav aria-label="Footer navigation">
+      <a href="/docs">Documentation</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </footer>
 
-        <div class="tm-instructor-cta-text">
-          <h2 class="tm-section-title">Built for Instructors</h2>
-          <p class="tm-section-subtitle">Track student performance, identify weaknesses, and run live diagnostic labs.</p>
-
-            <div class="tm-instructor-actions">
-                <a href="/dashboard/analytics" class="btn btn-primary">Open Instructor Analytics</a>
-                <a href="/dashboard/live-session" class="btn btn-ghost">Live Session</a>
-                <a href="/dashboard/session-history" class="btn btn-ghost">Session History</a>
-                <a href="/docs" class="btn btn-secondary">View Documentation</a>
-          </div>
-        </div>
-
-        <div class="tm-instructor-cta-visual">
-          <div class="tm-card tm-instructor-preview">
-            <h3>Analytics Preview</h3>
-            <p class="tm-card-text">Live scoring, ASE weakness tracking, and scenario analytics.</p>
-
-            <div class="tm-analytics-mini">
-
-              <div class="tm-analytics-row">
-                <span class="tm-label">Avg Score</span>
-                <span class="tm-score-row">
-                  <span class="metric metric-large">82</span>
-                  <span class="tm-delta" aria-hidden="true" style="display:none"></span>
-                </span>
-              </div>
-
-              <div class="tm-analytics-row">
-                <span class="tm-label">Completion Rate</span>
-                <span class="badge badge--accent">94%</span>
-              </div>
-
-              <div class="tm-analytics-row">
-                <span class="tm-label">Weak Areas</span>
-                <span class="badge badge-warn">3</span>
-              </div>
-
-              <div class="tm-top-student" role="button" tabindex="0">
-                <div class="tm-top-student-label">Top Student</div>
-                <div class="tm-top-student-value">
-                  <div class="tm-top-student-avatar" aria-hidden="true">
-                    <img class="tm-top-student-avatar-img" src="" alt="" style="display:none" />
-                    <span class="tm-top-student-initials">AL</span>
-                  </div>
-                  <span class="tm-top-student-name">Ada L.</span>
-                  <span class="badge badge--accent tm-top-student-score">92</span>
-                </div>
-              </div>
-
-              <div class="tm-analytics-bar">
-                <div class="tm-bar-fill" style="width:82%"></div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="tm-section tm-features">
-      <div class="tm-section-inner">
-
-        <h2 class="tm-section-title">Why TorqueMind?</h2>
-
-        <div class="tm-feature-list">
-
-          <div class="tm-feature">
-            <h3>Realistic Faults</h3>
-            <p>Every scenario is based on real-world diagnostic workflows.</p>
-          </div>
-
-          <div class="tm-feature">
-            <h3>Instructor Tools</h3>
-            <p>Analytics, dashboards, and class management built for CTE programs.</p>
-          </div>
-
-          <div class="tm-feature">
-            <h3>Student-Friendly</h3>
-            <p>Guided steps, confidence scoring, and OBD data visualization.</p>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-    <footer class="tm-footer">
-      <div class="tm-footer-inner">
-        <p>© 2026 TorqueMind — Automotive Diagnostic Training</p>
-        <nav class="tm-footer-nav">
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-          <a href="/contact">Contact</a>
-        </nav>
-      </div>
-    </footer>
-
-  <script src="./data/scenarios.js"></script>
-  <script src="./engine/diagnosticEngine.js"></script>
-  <script>
-    window.API_BASE_URL = "https://torquemind-api.onrender.com";
-    // Public Supabase values for live site
-    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
-    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
-  </script>
-  <!-- Lightweight Supabase-free login (no SDK) will use /auth/v1 endpoints directly from script.js -->
-  <script src="./auth.js"></script>
-  <script src="./apiClient.js"></script>
-  <script src="./js/cta-analytics.js"></script>
-  <script src="./script.js"></script>
-  <!-- Hero CTA controller — keyboard accessibility & ARIA (HERO-006) -->
   <script type="module">
-    import { initHeroCta } from './js/hero.js';
-    document.addEventListener('DOMContentLoaded', initHeroCta);
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
   </script>
-<!-- telemetry-dom-ids: diagSystem diagRpm diagVoltage diagCoolant diagConfidence diagDtc diagFreeze -->\n</body>
+  <script src="/modules/home/home-content.js"></script>
+  <script src="/modules/home/home.js"></script>
+</body>
 </html>
-
-
-

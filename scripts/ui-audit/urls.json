@@ -1,0 +1,16 @@
+[
+  { "name": "home", "url": "/" },
+  { "name": "student", "url": "/dashboard/student/" },
+  { "name": "student-scenario", "url": "/dashboard/student/scenario/?id=no-crank" },
+  { "name": "obd2-student", "url": "/dashboard/obd2-student?scenario=no-crank" },
+  { "name": "obd2-ase", "url": "/dashboard/obd2-ase?scenario=no-crank-11" },
+  { "name": "obd2-live", "url": "/dashboard/obd2?scenario=hybrid-ev" },
+  { "name": "author", "url": "/dashboard/author/" },
+  { "name": "analytics", "url": "/dashboard/analytics" },
+  { "name": "live-session", "url": "/dashboard/live-session" },
+  { "name": "session-history", "url": "/dashboard/session-history" },
+  { "name": "docs", "url": "/docs" },
+  { "name": "privacy", "url": "/privacy" },
+  { "name": "terms", "url": "/terms" },
+  { "name": "contact", "url": "/contact" }
+]
