@@ -1,0 +1,95 @@
+{
+  "todo-tree.tree.scanMode": "workspace",
+  "todo-tree.general.tags": [
+    "BUG",
+    "SECURITY",
+    "BLOCKED",
+    "TODO",
+    "TEST",
+    "DOCS",
+    "PERF",
+    "REFACTOR",
+    "RELEASE",
+    "IDEA",
+    "DONE"
+  ],
+  "todo-tree.general.tagGroups": {
+    "PRIORITY": [
+      "BUG",
+      "SECURITY",
+      "BLOCKED"
+    ],
+    "DELIVERY": [
+      "TODO",
+      "TEST",
+      "DOCS",
+      "RELEASE"
+    ],
+    "ENGINEERING": [
+      "PERF",
+      "REFACTOR"
+    ]
+  },
+  "todo-tree.regex.regex": "(//|#|<!--|/\\*|\\*|^|\\s)\\s*($TAGS)(\\([^)]+\\))?\\s*[:\\-]\\s*(.*)",
+  "todo-tree.highlights.defaultHighlight": {
+    "type": "tag-and-comment",
+    "foreground": "#ffffff"
+  },
+  "todo-tree.highlights.customHighlight": {
+    "BUG": {
+      "background": "#d73a49",
+      "icon": "bug"
+    },
+    "SECURITY": {
+      "background": "#b31d28",
+      "icon": "shield"
+    },
+    "BLOCKED": {
+      "background": "#6f42c1",
+      "icon": "stop"
+    },
+    "TODO": {
+      "background": "#0366d6",
+      "icon": "checklist"
+    },
+    "TEST": {
+      "background": "#22863a",
+      "icon": "beaker"
+    },
+    "DOCS": {
+      "background": "#6a737d",
+      "icon": "book"
+    },
+    "PERF": {
+      "background": "#e36209",
+      "icon": "dashboard"
+    },
+    "REFACTOR": {
+      "background": "#005cc5",
+      "icon": "tools"
+    },
+    "RELEASE": {
+      "background": "#2b7489",
+      "icon": "rocket"
+    },
+    "IDEA": {
+      "background": "#ffd33d",
+      "foreground": "#24292e",
+      "icon": "light-bulb"
+    },
+    "DONE": {
+      "background": "#28a745",
+      "icon": "check"
+    }
+  },
+  "todo-tree.filtering.excludeGlobs": [
+    "**/node_modules/**",
+    "**/.git/**",
+    "**/coverage/**",
+    "**/test-results/**",
+    "**/playwright-report/**",
+    "**/downloaded-artifacts/**",
+    "**/runs-artifacts-*/**",
+    "**/.checkpoints/**"
+  ]
+}
