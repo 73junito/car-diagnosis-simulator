@@ -29,7 +29,7 @@
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
     "@playwright/test": "^1.61.1",
-    "@supabase/supabase-js": "^2.110.0",
+    "@supabase/supabase-js": "^2.110.2",
     "acorn": "^8.17.0",
     "adm-zip": "^0.5.18",
     "ajv": "^8.20.0",
@@ -48,7 +48,7 @@
     "jest-junit": "^17.0.0",
     "node-fetch": "^3.3.2",
     "supertest": "^7.2.2",
-    "undici": "^8.6.0",
+    "undici": "^8.7.0",
     "wait-on": "^9.0.10",
     "eslint": "^9.22.0",
     "husky": "^9.1.7"
