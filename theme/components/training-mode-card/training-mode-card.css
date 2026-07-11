@@ -1,0 +1,77 @@
+.tm-home {
+  display: grid;
+  gap: clamp(3rem, 7vw, 6rem);
+}
+
+.tm-home-hero {
+  min-height: min(720px, 78vh);
+  display: grid;
+  align-items: center;
+  padding-block: clamp(4rem, 9vw, 8rem);
+}
+
+.tm-home-hero__content {
+  max-width: 760px;
+}
+
+.tm-home-hero h1 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2.75rem, 7vw, 5.75rem);
+  line-height: 0.98;
+}
+
+.tm-home-hero__description {
+  max-width: 62ch;
+  margin-top: 1.5rem;
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+}
+
+.tm-home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.tm-training-mode-section,
+.tm-home-instructor {
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+
+.tm-training-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.tm-training-mode-card {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  min-height: 280px;
+  padding: 1.75rem;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-lg);
+  background: var(--tm-surface);
+}
+
+.tm-training-mode-card .tm-btn {
+  align-self: end;
+  justify-self: start;
+  margin-top: auto;
+}
+
+.tm-home-instructor {
+  max-width: 860px;
+}
+
+@media (max-width: 900px) {
+  .tm-training-mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tm-training-mode-card {
+    min-height: auto;
+  }
+}
