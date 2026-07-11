@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Student Workspace - TorqueMind</title>
+
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
+  <link rel="stylesheet" href="/dashboard/student/student.css">
+</head>
+<body>
+  <div data-theme-shell></div>
+
+  <main class="tm-main wrapper">
+    <p class="tm-eyebrow">Student Workspace</p>
+    <h1 id="moduleTitle">Recent Activity</h1>
+
+    <nav class="tm-filter-toolbar" aria-label="Student workspace navigation">
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/">Scenarios</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/transcript/">Transcript</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/learning-path/">Learning Path</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/coach/">Coach</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/activity/">Activity</a>
+    </nav>
+
+    <section id="moduleContent" class="dashboard-card"><ol class="tm-timeline">
+  <li class="tm-timeline__item">
+    <strong>Progress updated</strong>
+    <span>Student dashboard refreshed with current scenario status.</span>
+  </li>
+  <li class="tm-timeline__item">
+    <strong>Coach recommendation</strong>
+    <span>Continue electrical diagnostics before advanced network faults.</span>
+  </li>
+</ol></section>
+  </main>
+
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+  </script>
+</body>
+</html>
+

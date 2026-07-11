@@ -21,10 +21,16 @@
   <div class="tm-hero-banner__actions">
     <button id="v2ResumeBtn" class="tm-btn tm-btn-primary" type="button">Resume Last Scenario</button>
     <a class="tm-btn tm-btn-secondary" href="#scenarioGridSection">Browse Scenarios</a>
-    <a class="tm-btn tm-btn-secondary" href="#studentTranscriptCard">View Transcript</a>
+    <a class="tm-btn tm-btn-secondary" href="/dashboard/student/transcript/">View Transcript</a>
   </div>
 </section>
 
+<nav class="tm-filter-toolbar" aria-label="Student tools">
+  <a class="tm-btn tm-btn-secondary" href="/dashboard/student/transcript/">Transcript</a>
+  <a class="tm-btn tm-btn-secondary" href="/dashboard/student/learning-path/">Learning Path</a>
+  <a class="tm-btn tm-btn-secondary" href="/dashboard/student/coach/">Coach</a>
+  <a class="tm-btn tm-btn-secondary" href="/dashboard/student/activity/">Activity</a>
+</nav>
 <section class="tm-dashboard-grid tm-dashboard-grid-4" aria-label="Student progress summary">
   <article class="tm-stat-card">
     <span class="tm-timeline__text">Scenarios</span>
@@ -115,119 +121,17 @@
     </div>
 
     <!-- Scenario grid rendered from registry (keeps the screenshot map as visual header) -->
-    <section class="dashboard-card tm-transcript-card" id="studentTranscriptCard">
-      <h2>My Transcript</h2>
-      <div id="studentTranscriptSummary" class="tm-transcript-card__grid">
-  <article>
-    <span class="tm-timeline__text">Completed</span>
-    <strong>0</strong>
-    <small>Scenarios finished</small>
-  </article>
-  <article>
-    <span class="tm-timeline__text">Average Score</span>
-    <strong>--</strong>
-    <small>Pending submissions</small>
-  </article>
-  <article>
-    <span class="tm-timeline__text">Certificates</span>
-    <strong>0</strong>
-    <small>Earned credentials</small>
-  </article>
-  <article>
-    <span class="tm-timeline__text">Training Hours</span>
-    <strong>0.0</strong>
-    <small>Total practice time</small>
-  </article>
-</div>
-    </section>
-    <section class="tm-learning-path" id="studentLearningPathCard">
-  <h2 class="tm-learning-path__title">Learning Path</h2>
+    
+    
 
-  <div class="tm-learning-path__item">
-    <span class="tm-learning-path__label">Electrical Systems</span>
-    <strong class="tm-learning-path__value">4 / 7</strong>
-    <div class="tm-learning-path__bar" aria-label="Electrical Systems 57% complete">
-      <span class="tm-learning-path__fill" style="width:57%"></span>
-    </div>
-  </div>
-
-  <div class="tm-learning-path__item">
-    <span class="tm-learning-path__label">Engine Performance</span>
-    <strong class="tm-learning-path__value">2 / 5</strong>
-    <div class="tm-learning-path__bar" aria-label="Engine Performance 40% complete">
-      <span class="tm-learning-path__fill" style="width:40%"></span>
-    </div>
-  </div>
-
-  <div class="tm-learning-path__item">
-    <span class="tm-learning-path__label">HVAC & Comfort</span>
-    <strong class="tm-learning-path__value">1 / 2</strong>
-    <div class="tm-learning-path__bar" aria-label="HVAC and Comfort 50% complete">
-      <span class="tm-learning-path__fill" style="width:50%"></span>
-    </div>
-  </div>
-
-  <div class="tm-learning-path__item">
-    <span class="tm-learning-path__label">Hybrid / EV</span>
-    <strong class="tm-learning-path__value">0 / 3</strong>
-    <div class="tm-learning-path__bar" aria-label="Hybrid EV 0% complete">
-      <span class="tm-learning-path__fill" style="width:0%"></span>
-    </div>
-  </div>
-</section>
-<section class="dashboard-card tm-coach-panel" id="adaptiveRecommendationsCard">
-  <h2 class="tm-coach-panel__title">TorqueMind Coach</h2>
-  <div id="adaptiveRecommendations">
-    <p class="tm-coach-panel__recommendation"><strong>Recommended next:</strong> Charging System</p>
-    <p class="tm-coach-panel__body">Continue electrical diagnostics before moving into CAN network communication faults.</p>
-    <ul class="tm-coach-panel__list">
-      <li class="tm-timeline__item"><strong class="tm-timeline__title">Strength:</strong> Symptom recognition</li>
-      <li class="tm-timeline__item"><strong class="tm-timeline__title">Focus area:</strong> Voltage-drop reasoning</li>
-      <li class="tm-timeline__item"><strong class="tm-timeline__title">Daily goal:</strong> Complete one intermediate scenario</li>
-    </ul>
-  </div>
-</section>
 
 
     <section id="scenarioGridSection" class="scenario-grid-section">
       <h2 class="visually-hidden">Available Scenarios</h2>
       <div id="scenarioGrid" class="scenario-grid" aria-live="polite"></div>
     </section>
-    <section class="dashboard-card tm-timeline-card" id="activityTimelineCard">
-  <h2>Recent Activity</h2>
-  <ol class="tm-timeline">
-    <li class="tm-timeline__item"><strong class="tm-timeline__title">Progress updated</strong>
-      <span class="tm-timeline__text">Student dashboard refreshed with current scenario status.</span>
-    </li>
-    <li class="tm-timeline__item"><strong class="tm-timeline__title">Coach recommendation</strong>
-      <span class="tm-timeline__text">Continue electrical diagnostics before advanced network faults.</span>
-    </li>
-    <li class="tm-timeline__item"><strong class="tm-timeline__title">Next objective</strong>
-      <span class="tm-timeline__text">Complete one intermediate scenario and submit a diagnosis.</span>
-    </li>
-  </ol>
-</section>
-    <section class="dashboard-card tm-progress-card" id="performanceSummaryCard">
-      <h2>Performance Summary</h2>
-      <div id="performanceSummary" class="tm-progress-card__content">
-  <div class="tm-progress-card__footer">
-    <span class="tm-timeline__text">Diagnostic accuracy</span>
-    <strong>--</strong>
-  </div>
-  <div class="tm-progress-card__footer">
-    <span class="tm-timeline__text">Confidence trend</span>
-    <strong>Building</strong>
-  </div>
-  <div class="tm-progress-card__footer">
-    <span class="tm-timeline__text">Safety steps missed</span>
-    <strong>0</strong>
-  </div>
-  <div class="tm-progress-card__footer">
-    <span class="tm-timeline__text">Recommended focus</span>
-    <strong>Electrical testing</strong>
-  </div>
-</div>
-    </section>
+    
+    
 
 
     <aside id="detail" class="detail tm-detail-panel hidden" aria-live="polite">
@@ -469,6 +373,7 @@
     <h2>TorqueMind AI Tutor</h2>
     <div id="torquemindContent"></div>
 </div>
+
 
 
 

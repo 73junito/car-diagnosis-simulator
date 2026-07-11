@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Student Workspace - TorqueMind</title>
+
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
+  <link rel="stylesheet" href="/dashboard/student/student.css">
+</head>
+<body>
+  <div data-theme-shell></div>
+
+  <main class="tm-main wrapper">
+    <p class="tm-eyebrow">Student Workspace</p>
+    <h1 id="moduleTitle">TorqueMind Coach</h1>
+
+    <nav class="tm-filter-toolbar" aria-label="Student workspace navigation">
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/">Scenarios</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/transcript/">Transcript</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/learning-path/">Learning Path</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/coach/">Coach</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/activity/">Activity</a>
+    </nav>
+
+    <section id="moduleContent" class="dashboard-card"><div class="tm-coach-panel">
+  <p><strong>Recommended next:</strong> Charging System</p>
+  <p>Continue electrical diagnostics before advancing to network faults.</p>
+  <ul>
+    <li><strong>Strength:</strong> Symptom recognition</li>
+    <li><strong>Focus area:</strong> Voltage-drop reasoning</li>
+    <li><strong>Daily goal:</strong> Complete one intermediate scenario</li>
+  </ul>
+</div></section>
+  </main>
+
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+  </script>
+</body>
+</html>
+
