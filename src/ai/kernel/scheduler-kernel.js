@@ -1,25 +1,31 @@
 /**
- * SchedulerKernel manages AI OS process scheduling.
+ * SchedulerKernel manages schedulable AI processes.
  *
- * Features:
- * - Priority scheduling
- * - Max concurrency
- * - Requeue unfinished work
- * - Completed / failed / paused lifecycle queues
- * - Queue backpressure
+ * Responsibilities:
+ * - priority ordering
+ * - bounded concurrency
+ * - ready queue backpressure
+ * - process lifecycle routing
+ * - paused-process resumption
+ * - runtime event publication
  */
 class SchedulerKernel {
-  constructor({ maxConcurrent = 1, maxQueueDepth = 100 } = {}) {
-    if (maxConcurrent < 1) {
-      throw new Error('maxConcurrent must be at least 1');
+  constructor({
+    maxConcurrent = 1,
+    maxQueueDepth = 100,
+    eventBus = null,
+  } = {}) {
+    if (!Number.isInteger(maxConcurrent) || maxConcurrent < 1) {
+      throw new Error('maxConcurrent must be an integer of at least 1');
     }
 
-    if (maxQueueDepth < 1) {
-      throw new Error('maxQueueDepth must be at least 1');
+    if (!Number.isInteger(maxQueueDepth) || maxQueueDepth < 1) {
+      throw new Error('maxQueueDepth must be an integer of at least 1');
     }
 
     this.maxConcurrent = maxConcurrent;
     this.maxQueueDepth = maxQueueDepth;
+    this.eventBus = eventBus;
 
     this.readyQueue = [];
     this.running = new Map();
@@ -29,24 +35,46 @@ class SchedulerKernel {
   }
 
   enqueue(process) {
-    if (!process || !process.id) {
-      throw new Error('enqueue requires a valid process');
+    if (!process || !process.id || typeof process.runNextStep !== 'function') {
+      throw new Error('enqueue requires a valid schedulable process');
+    }
+
+    if (
+      this.readyQueue.some((item) => item.id === process.id) ||
+      this.running.has(process.id)
+    ) {
+      throw new Error(`Process ${process.id} is already scheduled`);
     }
 
     if (this.readyQueue.length >= this.maxQueueDepth) {
       throw new Error('Backpressure: ready queue is full');
     }
 
-    process.status = process.status === 'paused' ? 'ready' : process.status;
+    if (process.status === 'paused') {
+      process.status = 'ready';
+    }
+
+    if (process.status !== 'ready') {
+      throw new Error(
+        `Process ${process.id} cannot be enqueued from status ${process.status}`
+      );
+    }
+
     this.readyQueue.push(process);
     this.sortReadyQueue();
+
+    this.publish('process.enqueued', {
+      process: process.getStatusSummary
+        ? process.getStatusSummary()
+        : { id: process.id, status: process.status },
+    });
 
     return process;
   }
 
   sortReadyQueue() {
     this.readyQueue.sort((a, b) => {
-      const priorityDelta = b.priority - a.priority;
+      const priorityDelta = Number(b.priority || 0) - Number(a.priority || 0);
 
       if (priorityDelta !== 0) {
         return priorityDelta;
@@ -59,10 +87,17 @@ class SchedulerKernel {
   async tick(context = {}) {
     const jobs = [];
 
-    while (this.running.size < this.maxConcurrent && this.readyQueue.length > 0) {
+    while (
+      this.running.size < this.maxConcurrent &&
+      this.readyQueue.length > 0
+    ) {
       const process = this.readyQueue.shift();
 
-      if (!process || process.status === 'completed' || process.status === 'failed') {
+      if (!process) {
+        continue;
+      }
+
+      if (process.status === 'completed' || process.status === 'failed') {
         continue;
       }
 
@@ -80,28 +115,123 @@ class SchedulerKernel {
     return this.getStats();
   }
 
+  async drain(context = {}, { maxTicks = 1000 } = {}) {
+    if (!Number.isInteger(maxTicks) || maxTicks < 1) {
+      throw new Error('maxTicks must be an integer of at least 1');
+    }
+
+    let ticks = 0;
+
+    while (this.readyQueue.length > 0 || this.running.size > 0) {
+      if (ticks >= maxTicks) {
+        throw new Error(
+          `Scheduler drain exceeded the maximum of ${maxTicks} ticks`
+        );
+      }
+
+      await this.tick(context);
+      ticks += 1;
+    }
+
+    return {
+      ticks,
+      ...this.getStats(),
+    };
+  }
+
   async runProcess(process, context = {}) {
+    this.publish('process.started', {
+      process: this.summarize(process),
+    });
+
     try {
-      await process.runNextStep(context);
+      const result = await process.runNextStep(context);
 
       if (process.status === 'completed') {
         this.completed.push(process);
+
+        this.publish('process.completed', {
+          process: this.summarize(process),
+          result,
+        });
+
         return;
       }
 
       if (process.status === 'paused') {
         this.paused.push(process);
+
+        this.publish('process.paused', {
+          process: this.summarize(process),
+          result,
+        });
+
         return;
       }
 
       if (process.status === 'ready') {
+        // A process must leave the running collection before it can be
+        // re-enqueued. The outer tick cleanup remains idempotent.
+        this.running.delete(process.id);
+
+        this.publish('process.requeued', {
+          process: this.summarize(process),
+          result,
+        });
+
         this.enqueue(process);
       }
     } catch (error) {
       process.status = 'failed';
       process.error = error;
-      this.failed.push(process);
+
+      if (!this.failed.some((item) => item.id === process.id)) {
+        this.failed.push(process);
+      }
+
+      this.publish('process.failed', {
+        process: this.summarize(process),
+        error: {
+          name: error.name,
+          message: error.message,
+        },
+      });
     }
+  }
+
+  resume(processId, { additionalQuota = 0 } = {}) {
+    const index = this.paused.findIndex((process) => process.id === processId);
+
+    if (index === -1) {
+      return null;
+    }
+
+    const [process] = this.paused.splice(index, 1);
+
+    if (typeof process.resume === 'function') {
+      process.resume({ additionalQuota });
+    } else {
+      process.status = 'ready';
+    }
+
+    this.enqueue(process);
+
+    this.publish('process.resumed', {
+      process: this.summarize(process),
+    });
+
+    return process;
+  }
+
+  getProcess(processId) {
+    return (
+      this.running.get(processId) ||
+      this.readyQueue.find((process) => process.id === processId) ||
+      this.completed.find((process) => process.id === processId) ||
+      this.failed.find((process) => process.id === processId) ||
+      this.paused.find((process) => process.id === processId) ||
+      null
+    );
   }
 
   getStats() {
@@ -122,7 +252,29 @@ class SchedulerKernel {
     this.completed = [];
     this.failed = [];
     this.paused = [];
+
+    this.publish('scheduler.reset', {
+      stats: this.getStats(),
+    });
+  }
+
+  summarize(process) {
+    return process && typeof process.getStatusSummary === 'function'
+      ? process.getStatusSummary()
+      : {
+          id: process && process.id,
+          status: process && process.status,
+        };
+  }
+
+  publish(type, payload = {}) {
+    if (!this.eventBus || typeof this.eventBus.publish !== 'function') {
+      return;
+    }
+
+    this.eventBus.publish(type, payload);
   }
 }
 
 module.exports = SchedulerKernel;
+
