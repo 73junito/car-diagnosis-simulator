@@ -1,5 +1,5 @@
-const SchedulerKernel = require('../../ai-os/kernel/scheduler');
-const AgentProcess = require('../../ai-os/kernel/process');
+const SchedulerKernel = require('../../../src/ai/kernel/scheduler-kernel');
+const AgentProcess = require('../../../src/ai/kernel/agent-process');
 
 describe('SchedulerKernel', () => {
   test('runs higher priority processes first', async () => {
@@ -70,6 +70,8 @@ describe('SchedulerKernel', () => {
     await scheduler.tick();
 
     expect(scheduler.completed).toHaveLength(0);
+    expect(scheduler.failed).toHaveLength(0);
+    expect(scheduler.running.size).toBe(0);
     expect(scheduler.readyQueue).toHaveLength(1);
     expect(scheduler.readyQueue[0].id).toBe('worker');
   });
@@ -159,3 +161,4 @@ describe('SchedulerKernel', () => {
     expect(scheduler.readyQueue).toHaveLength(1);
   });
 });
+
