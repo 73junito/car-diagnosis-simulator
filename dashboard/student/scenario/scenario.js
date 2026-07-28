@@ -93,8 +93,11 @@
         <p>${escapeHtml(ai.nextStep || "No next step returned.")}</p>
       `;
     } catch (err) {
-      console.error(err);
-      aiBody.innerHTML = "<p>Unable to generate AI explanation.</p>";
+      console.warn(
+      "AI feedback unavailable:",
+      err && err.message ? err.message : err
+    );
+      aiBody.innerHTML = "<p>AI explanation is currently unavailable.</p>";
     }
   }
 

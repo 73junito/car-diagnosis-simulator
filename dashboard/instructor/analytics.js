@@ -303,7 +303,10 @@ async function loadAseReadinessSummary() {
       </table>
     `;
   } catch (err) {
-    console.error("ASE readiness load failed", err);
+    console.warn(
+      "ASE readiness data unavailable:",
+      err && err.message ? err.message : err
+    );
     root.innerHTML = "<p>Unable to load ASE readiness.</p>";
   }
 }
@@ -313,4 +316,3 @@ if (document.readyState === "loading") {
 } else {
   loadAseReadinessSummary();
 }
-
