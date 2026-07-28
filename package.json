@@ -8,7 +8,6 @@
     "build": "npm run write-version",
     "write-version": "node scripts/write-version.js",
     "vercel-build": "npm run write-version",
-    "start:local-api": "node scripts/local-api.js",
     "test:live-session": "node tests/live-session-ui.test.js",
     "test:playwright": "npx playwright test tests/playwright --config=playwright.config.js",
     "start:test": "npx http-server -p 3003 -c-1 .",
