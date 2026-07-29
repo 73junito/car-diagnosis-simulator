@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rala.local/contracts/offline-mutation.schema.json",
+  "title": "OfflineMutation",
+  "type": "object",
+  "required": ["id", "application", "actorId", "operation", "entityType", "entityId", "payload", "createdAt", "schemaVersion"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "application": {"enum": ["torquemind", "village-strong"]},
+    "actorId": {"type": "string", "minLength": 1},
+    "operation": {"enum": ["create", "update", "delete", "submit"]},
+    "entityType": {"type": "string", "minLength": 1},
+    "entityId": {"type": "string", "minLength": 1},
+    "payload": {"type": "object"},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "baseVersion": {"type": ["string", "integer", "null"]},
+    "idempotencyKey": {"type": "string", "minLength": 1},
+    "schemaVersion": {"type": "string", "const": "1.0"}
+  },
+  "additionalProperties": false
+}

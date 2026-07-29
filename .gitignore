@@ -25,3 +25,14 @@ reports
 .vercel/
 dist/
 production-stress-results.txt
+
+# Local framework installation package
+RALA_Phase1_Starter/
+
+# Local backups
+pwa-backup-*/
+*.bak
+
+# Local screenshots and captures
+screenshoots/
+screenshots/

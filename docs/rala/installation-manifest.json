@@ -1,0 +1,12 @@
+﻿{
+    "framework":  "RALA",
+    "version":  "0.1.0",
+    "application":  "torquemind",
+    "installedAt":  "2026-07-29T22:22:36.2527132Z",
+    "skills":  [
+                   "rala-architecture",
+                   "offline-sync",
+                   "agent-governance",
+                   "torquemind-diagnostics"
+               ]
+}

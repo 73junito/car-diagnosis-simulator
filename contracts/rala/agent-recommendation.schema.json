@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rala.local/contracts/agent-recommendation.schema.json",
+  "title": "AgentRecommendation",
+  "type": "object",
+  "required": ["id", "agent", "application", "recommendationType", "content", "confidence", "evidence", "createdAt", "requiresApproval"],
+  "properties": {
+    "id": {"type": "string", "minLength": 1},
+    "agent": {"type": "string", "minLength": 1},
+    "application": {"enum": ["torquemind", "village-strong"]},
+    "recommendationType": {"type": "string", "minLength": 1},
+    "content": {"type": "object"},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "evidence": {"type": "array", "items": {"type": "string"}},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "requiresApproval": {"type": "boolean"},
+    "skillName": {"type": "string"},
+    "skillVersion": {"type": "string"},
+    "model": {"type": "string"},
+    "policyVersion": {"type": "string"}
+  },
+  "additionalProperties": false
+}
