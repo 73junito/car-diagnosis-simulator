@@ -89,8 +89,18 @@ const additionalRuntimeEntries = [
     optional: false
   },
   {
+    source: "public/android-chrome-192x192.png",
+    destination: "android-chrome-192x192.png",
+    optional: false
+  },
+  {
     source: "public/android-chrome-512x512.png",
     destination: "android-chrome-512x512.png",
+    optional: false
+  },
+  {
+    source: "public/manifest.webmanifest",
+    destination: "manifest.webmanifest",
     optional: false
   },
   {
@@ -150,7 +160,9 @@ const requiredOutputFiles = [
   "favicon-32x32.png",
   "favicon-48x48.png",
   "apple-touch-icon.png",
+  "android-chrome-192x192.png",
   "android-chrome-512x512.png",
+  "manifest.webmanifest",
   "config/routes.js",
   "dashboard/student/index.html",
   "dashboard/student/scenario/index.html",
@@ -473,5 +485,7 @@ try {
   console.error(error instanceof Error ? error.stack : String(error));
   process.exitCode = 1;
 }
+
+
 
 
