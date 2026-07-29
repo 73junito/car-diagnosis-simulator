@@ -22,3 +22,6 @@ reports
 
 
 .checkpoints/checkpoints.json
+.vercel/
+dist/
+production-stress-results.txt

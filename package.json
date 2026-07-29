@@ -5,9 +5,9 @@
   "scripts": {
     "prepare": "husky install",
     "test": "node scripts/run-tests.js",
-    "build": "npm run write-version",
+    "build": "npm run write-version && node scripts/build-static-site.js",
     "write-version": "node scripts/write-version.js",
-    "vercel-build": "npm run write-version",
+    "vercel-build": "npm run build",
     "test:live-session": "node tests/live-session-ui.test.js",
     "test:playwright": "npx playwright test tests/playwright --config=playwright.config.js",
     "start:test": "npx http-server -p 3003 -c-1 .",
