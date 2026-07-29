@@ -24,3 +24,5 @@ api/auth/**
 
 # Exclude nested project copy if present
 car-diagnosis-sim/**
+!api/analytics/students.js
+!api/telemetry/stream.js

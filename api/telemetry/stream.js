@@ -113,4 +113,11 @@ function registerTelemetryRoutes(app, emitter = telemetry.streamEmitter) {
   });
 }
 
-module.exports = { registerTelemetryRoutes, createSseHandler };
+const handler = createSseHandler();
+
+module.exports = handler;
+module.exports.registerTelemetryRoutes = registerTelemetryRoutes;
+module.exports.createSseHandler = createSseHandler;
+module.exports.parseTelemetryEventBody = parseTelemetryEventBody;
+module.exports.validateTelemetryEventBody =
+  validateTelemetryEventBody;
