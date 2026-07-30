@@ -93,6 +93,6 @@
       "source": "/dashboard/obd2-ase",
       "destination": "/dashboard/obd2-ase.html"
     }
-  ],
-  "outputDirectory": "dist"
+  ]
 }
+
