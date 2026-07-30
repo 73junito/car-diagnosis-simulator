@@ -14,6 +14,7 @@ class SchedulerKernel {
     maxConcurrent = 1,
     maxQueueDepth = 100,
     eventBus = null,
+    policyEngine = null,
   } = {}) {
     if (!Number.isInteger(maxConcurrent) || maxConcurrent < 1) {
       throw new Error('maxConcurrent must be an integer of at least 1');
@@ -23,9 +24,17 @@ class SchedulerKernel {
       throw new Error('maxQueueDepth must be an integer of at least 1');
     }
 
+    if (
+      policyEngine !== null &&
+      typeof policyEngine.evaluate !== 'function'
+    ) {
+      throw new Error('policyEngine must provide an evaluate function');
+    }
+
     this.maxConcurrent = maxConcurrent;
     this.maxQueueDepth = maxQueueDepth;
     this.eventBus = eventBus;
+    this.policyEngine = policyEngine;
 
     this.readyQueue = [];
     this.running = new Map();
@@ -140,11 +149,35 @@ class SchedulerKernel {
   }
 
   async runProcess(process, context = {}) {
-    this.publish('process.started', {
-      process: this.summarize(process),
-    });
-
     try {
+      const policyDecision = await this.evaluatePolicy(process, context);
+
+      if (!policyDecision.allowed) {
+        process.status = 'paused';
+        process.metadata = {
+          ...(process.metadata || {}),
+          policyDecision,
+        };
+
+        if (!this.paused.some((item) => item.id === process.id)) {
+          this.paused.push(process);
+        }
+
+        this.publish('process.denied', {
+          process: this.summarize(process),
+          decision: policyDecision,
+        });
+
+        return {
+          denied: true,
+          decision: policyDecision,
+        };
+      }
+
+      this.publish('process.started', {
+        process: this.summarize(process),
+      });
+
       const result = await process.runNextStep(context);
 
       if (process.status === 'completed') {
@@ -197,6 +230,29 @@ class SchedulerKernel {
         },
       });
     }
+  }
+
+  async evaluatePolicy(process, context = {}) {
+    if (
+      !this.policyEngine ||
+      typeof this.policyEngine.evaluate !== 'function'
+    ) {
+      return {
+        allowed: true,
+        reason: 'No policy engine configured',
+        deniedBy: null,
+        evaluations: [],
+      };
+    }
+
+    return this.policyEngine.evaluate({
+      ...context,
+      process,
+      processId: process.id,
+      agentId: process.agentId,
+      capability: process.capability,
+      scheduler: this,
+    });
   }
 
   resume(processId, { additionalQuota = 0 } = {}) {
