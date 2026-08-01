@@ -1,16 +1,92 @@
-const { execSync } = require('child_process')
+import app from '../worker/index.js'
+import { handleFeedback as feedbackHandler } from '../worker/routes/torquemind-feedback.js'
 
-describe('Worker torquemind-feedback route contract', () => {
-  test('index.js parses', () => {
-    execSync('node --check worker/index.js', { stdio: 'inherit' })
+describe('Worker torquemind-feedback route (integration-style)', () => {
+  const validBody = {
+    scenario: 'Engine cranks but will not start.',
+    question: 'What should be checked first?',
+    studentAnswer: 'Replace the starter.',
+    correctAnswer: 'Verify fuel and spark.'
+  }
+
+  beforeEach(() => {
+    global.fetch = jest.fn()
   })
 
-  test('route returns 405 for GET', () => {
-    // We only check syntax here; functional tests run in integration
-    execSync('node --check worker/routes/torquemind-feedback.js', { stdio: 'inherit' })
+  async function post(body, env = {}) {
+    const bodyStr = JSON.stringify(body)
+    // build a lightweight mock context request for direct handler calls
+    if (typeof feedbackHandler === 'function') {
+      const reqMock = {
+        json: async () => JSON.parse(bodyStr),
+        text: async () => bodyStr,
+        body: bodyStr,
+        headers: { get: () => 'application/json' }
+      }
+      const c = { req: reqMock, env, json: (v, s) => ({ status: s || 200, body: v }) }
+      const result = await feedbackHandler(c)
+      if (result && typeof result === 'object' && 'status' in result && 'body' in result) {
+        return { status: result.status, body: result.body, headers: {} }
+      }
+    }
+    const req = new Request('http://localhost/api/torquemind-feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': String(Buffer.byteLength(bodyStr)) },
+      body: bodyStr
+    })
+    return app.fetch(req, { env })
+  }
+
+  test('valid Ollama response -> 200', async () => {
+    const payload = { message: { content: JSON.stringify({ reasonIncorrect: 'A', reasonCorrect: 'B', aseConcept: 'C', nextStep: 'D' }) } }
+    global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify(payload) })
+
+    const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
+    let text
+    if (typeof res.text === 'function') {
+      text = await res.text()
+    } else if (res.body) {
+      if (typeof res.body === 'object') {
+        text = JSON.stringify(res.body)
+      } else {
+        try {
+          text = await res.body.text()
+        } catch (e) {
+          text = String(res.body)
+        }
+      }
+    } else {
+      text = JSON.stringify(res)
+    }
+    // response checked in assertions
+    expect(res.status).toBe(200)
+    const json = JSON.parse(text)
+    expect(json.reasonIncorrect).toBe('A')
   })
 
-  test('route parses JSON and validates required fields', () => {
-    execSync('node --check worker/routes/torquemind-feedback.js', { stdio: 'inherit' })
+  test('unsupported provider -> 503', async () => {
+    const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'openai' })
+    expect(res.status).toBe(503)
+  })
+
+  test('invalid AI JSON -> 503', async () => {
+    global.fetch.mockResolvedValue({ ok: true, text: async () => 'not json' })
+    const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
+    expect(res.status).toBe(503)
+  })
+
+  test('missing required response field -> 503', async () => {
+    const payload = { message: { content: JSON.stringify({ reasonIncorrect: 'A', reasonCorrect: 'B', aseConcept: 'C' }) } }
+    global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify(payload) })
+    const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
+    expect(res.status).toBe(503)
+  })
+
+  test('aborted request -> 504', async () => {
+    const err = new Error('aborted')
+    err.name = 'AbortError'
+    global.fetch.mockRejectedValue(err)
+    const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
+    expect(res.status).toBe(504)
   })
 })
