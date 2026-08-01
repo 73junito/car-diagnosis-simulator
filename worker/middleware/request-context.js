@@ -4,7 +4,14 @@ const SAFE_ID_RE = /^[A-Za-z0-9\-_:]{8,64}$/
 
 export function createRequestContext() {
   return async (c, next) => {
-    let reqId = c.req.headers.get('x-request-id') || ''
+    let reqId = ''
+    try {
+      if (c && c.req && c.req.headers && typeof c.req.headers.get === 'function') {
+        reqId = c.req.headers.get('x-request-id') || ''
+      }
+    } catch (e) {
+      reqId = ''
+    }
     if (!SAFE_ID_RE.test(reqId)) {
       try {
         reqId = randomUUID()
@@ -15,15 +22,15 @@ export function createRequestContext() {
     }
     // attach to context
     c.reqId = reqId
-    // ensure header present on response
-    c.header('x-request-id', reqId)
+    // ensure header present on response if available
+    if (typeof c.header === 'function') c.header('x-request-id', reqId)
     const start = Date.now()
-    c.set('req_start', start)
+    if (typeof c.set === 'function') c.set('req_start', start)
     try {
       await next()
     } finally {
       const end = Date.now()
-      c.set('req_duration_ms', end - start)
+      if (typeof c.set === 'function') c.set('req_duration_ms', end - start)
     }
   }
 }
