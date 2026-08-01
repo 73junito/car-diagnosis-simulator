@@ -53,6 +53,16 @@ export function validateProviderConfig({ provider, url, apiKey, env = {} }) {
     }
   }
 
+  // When using a non-loopback Ollama host (e.g., tunneled hostname), enforce Access credential pairing:
+  // If either access credential is present in the environment for non-loopback hosts, require both.
+  const accessId = env.OLLAMA_ACCESS_CLIENT_ID || ''
+  const accessSecret = env.OLLAMA_ACCESS_CLIENT_SECRET || ''
+  if (!isLocalOrLoopback(hostname) && (accessId || accessSecret)) {
+    if (!accessId || !accessSecret) {
+      throw new Error('When using Cloudflare Access for Ollama, both OLLAMA_ACCESS_CLIENT_ID and OLLAMA_ACCESS_CLIENT_SECRET must be set')
+    }
+  }
+
   return {
     provider,
     host: hostname,
