@@ -56,8 +56,7 @@ export async function handleFeedback(c) {
 
   // observability: start
   const requestId = c.reqId || (c.req && c.reqId) || null
-  const hasApiKey = Boolean(apiKey && String(apiKey).trim())
-  logRequestStart({ requestId, method: c.req?.method || 'POST', route: '/api/torquemind-feedback', provider: diag.provider, model: diag.model, providerHost: diag.host, hasApiKey })
+  logRequestStart({ requestId, method: c.req?.method || 'POST', route: '/api/torquemind-feedback', provider: diag.provider, model: diag.model, providerHost: diag.host })
   const prompt = buildPrompt({ scenario, question, studentAnswer, correctAnswer, topic: topic || 'automotive diagnostics' })
 
   const configuredTimeout = Number.parseInt(c.env.TORQUEMIND_AI_TIMEOUT_MS || '', 10)

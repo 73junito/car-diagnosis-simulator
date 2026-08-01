@@ -12,7 +12,7 @@ function emit(obj) {
   }
 }
 
-export function logRequestStart({ requestId, method, route, provider, model, providerHost, hasApiKey }) {
+export function logRequestStart({ requestId, method, route, provider, model, providerHost }) {
   const out = {
     event: 'torquemind.feedback.started',
     requestId: safeString(requestId),
@@ -21,9 +21,6 @@ export function logRequestStart({ requestId, method, route, provider, model, pro
     provider: safeString(provider),
     model: safeString(model),
     providerHost: safeString(providerHost)
-  }
-  if (typeof hasApiKey === 'boolean') {
-    out.hasApiKey = hasApiKey
   }
   emit(out)
 }
