@@ -102,4 +102,54 @@ Tests are split between unit tests (Jest) and end-to-end tests (Playwright).
 - Run unit tests: `npm test`
 - Run Playwright E2E: `npm run test:playwright`
 
+## Ollama via Cloudflare Tunnel
+
+TorqueMind can use a locally hosted Ollama instance through a Cloudflare Tunnel protected by Cloudflare Access.
+
+### Rollout documentation
+
+- `docs/ollama-tunnel-design.md`
+- `docs/ollama-tunnel-staging-checklist.md`
+- `docs/ollama-cloudflared-access-setup.md`
+- `docs/ollama-cloudflared-windows-service.md`
+
+### Helper scripts
+
+Upload the Cloudflare Access service-token credentials to the staging Worker:
+
+```powershell
+powershell `
+	-NoProfile `
+	-ExecutionPolicy Bypass `
+	-File .\scripts\add-ollama-secrets.ps1
+```
+Verify the Access-protected Ollama tunnel directly:
+
+```powershell
+powershell `
+	-NoProfile `
+	-ExecutionPolicy Bypass `
+	-File .\scripts\verify-ollama-tunnel.ps1 `
+	-TunnelHost "https://ollama.example.com"
+```
+After the tunnel verification returns HTTP 200 for both `/api/tags` and `/api/chat`, build, deploy, and test the staging Worker:
+
+```powershell
+powershell `
+	-NoProfile `
+	-ExecutionPolicy Bypass `
+	-File .\scripts\deploy-and-test-staging.ps1
+```
+Do not activate a placeholder hostname. Update `wrangler.jsonc` only after the real tunnel hostname and Cloudflare Access application are operational.
+
+The staging rollout is complete only when `/api/torquemind-feedback` returns HTTP 200 with:
+
+- `reasonIncorrect`
+- `reasonCorrect`
+- `aseConcept`
+- `nextStep`
+- `x-request-id`
+- rate-limit headers
+
+
 Playwright is configured to only run tests under `tests/playwright` to avoid accidental discovery of Jest tests.
