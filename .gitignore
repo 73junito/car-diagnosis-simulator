@@ -47,3 +47,5 @@ downloaded-artifacts/
 playwright-report/
 test-results/
 .checkpoints/
+.wrangler-dry-run/
+audit/
