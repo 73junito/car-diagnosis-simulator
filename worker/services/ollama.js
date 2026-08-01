@@ -44,8 +44,7 @@ export async function requestOllama({ url, model, prompt, signal }) {
   if (!content) {
     // Avoid logging full payload in production
     if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
-      console.error('Ollama returned payload with no usable content', JSON.stringify(payload).slice(0, 2000))
+        console.error('Ollama returned payload with no usable content', JSON.stringify(payload).slice(0, 2000))
     }
     throw new Error('Ollama returned no tutor content')
   }

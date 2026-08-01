@@ -40,7 +40,6 @@ export async function requestOpenAI({ url, model, prompt, apiKey, signal }) {
 
   if (!content) {
     if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
       console.error('OpenAI-compatible returned payload with no usable content', JSON.stringify(payload).slice(0, 2000))
     }
     throw new Error('OpenAI-compatible returned no tutor content')

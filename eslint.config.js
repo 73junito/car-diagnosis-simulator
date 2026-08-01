@@ -4,7 +4,8 @@ export default [
       ".github/",
       "node_modules/",
       "test-results/",
-      "playwright-report/"
+      "playwright-report/",
+      ".wrangler/"
     ]
   }
 ];
