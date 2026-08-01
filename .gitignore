@@ -36,3 +36,14 @@ pwa-backup-*/
 # Local screenshots and captures
 screenshoots/
 screenshots/
+.vercel
+.env*
+
+# Generated or experimental artifacts to ignore
+.wrangler/
+runs/
+runs-artifacts-*/
+downloaded-artifacts/
+playwright-report/
+test-results/
+.checkpoints/
