@@ -52,7 +52,16 @@
         ]
       },
 
-      "vars": {
+        "migrations": [
+          {
+            "tag": "v1",
+            "new_sqlite_classes": [
+              "TorqueMindRateLimitCounter"
+            ]
+          }
+        ],
+
+        "vars": {
         "USE_DO_RATE_LIMIT": "true",
         "TORQUEMIND_ENVIRONMENT": "staging",
         "TORQUEMIND_RATE_LIMIT_MAX": "10",
