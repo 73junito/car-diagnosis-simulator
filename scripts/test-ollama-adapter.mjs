@@ -13,6 +13,15 @@ try {
     apiKey: process.env.TORQUEMIND_AI_API_KEY,
     timeoutMs: 60000
   })
+  // print safe SHA-256 of the key for comparison with remote logs
+  try {
+    const { createHash } = await import('crypto')
+    const h = createHash('sha256').update(process.env.TORQUEMIND_AI_API_KEY, 'utf8').digest('hex')
+    console.log('Local keyHash:', h)
+  } catch (e) {
+    // ignore
+  }
+
   console.log('Adapter call succeeded, response content:')
   console.log(res)
 } catch (err) {

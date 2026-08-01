@@ -23,11 +23,26 @@ export async function requestOllama({ url, model, prompt, apiKey, signal, timeou
 
   // Emit safe debug flags (no secret values)
   try {
+    // compute SHA-256 hash of the normalized key for safe comparison (no secrets logged)
+    let keyHash = null
+    if (normalizedApiKey) {
+      try {
+        const enc = new TextEncoder()
+        const data = enc.encode(normalizedApiKey)
+        const digest = await crypto.subtle.digest('SHA-256', data)
+        const arr = Array.from(new Uint8Array(digest))
+        keyHash = arr.map(b => b.toString(16).padStart(2, '0')).join('')
+      } catch (hf) {
+        keyHash = null
+      }
+    }
+
     console.log(JSON.stringify({
       event: 'torquemind.feedback.adapter',
       hasApiKey: Boolean(normalizedApiKey),
       authHeaderPresent: Boolean(headers.authorization),
-      authHeaderStartsWithBearer: typeof headers.authorization === 'string' ? headers.authorization.startsWith('Bearer ') : false
+      authHeaderStartsWithBearer: typeof headers.authorization === 'string' ? headers.authorization.startsWith('Bearer ') : false,
+      keyHash
     }))
   } catch (e) {
     // swallow logging errors
