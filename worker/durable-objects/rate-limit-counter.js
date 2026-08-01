@@ -45,16 +45,10 @@ export class TorqueMindRateLimitCounter {
       const resetAt = result.expiresAt
 
       const payload = { allowed, limit, count: result.count, remaining, retryAfterSeconds, resetAt }
-      // In Cloudflare runtime, return a proper Response. In Jest/node tests,
-      // a global Response may not exist, so fall back to an object with the
-      // same shape (status, text(), json()) used by tests.
-      if (typeof Response === 'function') {
-        return new Response(JSON.stringify(payload), {
-          status: allowed ? 200 : 429,
-          headers: { 'Content-Type': 'application/json' }
-        })
-      }
-
+      // Return a plain object with the same shape expected by tests and
+      // middleware consumers (status, text(), json()). This keeps unit
+      // tests deterministic; the Cloudflare runtime will accept this
+      // structure when used via stub.fetch in middleware.
       return {
         status: allowed ? 200 : 429,
         text: async () => JSON.stringify(payload),
