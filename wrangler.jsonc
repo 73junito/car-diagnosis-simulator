@@ -69,8 +69,8 @@
 
         "TORQUEMIND_AI_PROVIDER": "ollama",
         "TORQUEMIND_AI_URL": "https://ollama.com/api/chat",
-        "TORQUEMIND_AI_MODEL": "gpt-oss:120b",
-        "TORQUEMIND_AI_TIMEOUT_MS": "30000",
+        "TORQUEMIND_AI_MODEL": "gpt-oss:20b-cloud",
+        "TORQUEMIND_AI_TIMEOUT_MS": "60000",
 
         "SUPABASE_URL": "https://pffdgqpynpbffbcnxmum.supabase.co",
         "SUPABASE_PUBLISHABLE_KEY": "USE_THE_PUBLISHABLE_KEY_FROM_THE_UPLOADED_FILE"

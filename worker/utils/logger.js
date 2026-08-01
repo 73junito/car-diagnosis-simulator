@@ -38,7 +38,7 @@ export function logRequestCompleted({ requestId, method, route, status, duration
   })
 }
 
-export function logRequestFailed({ requestId, status, errorType, provider, model, providerHost, errorMessage }) {
+export function logRequestFailed({ requestId, status, errorType, provider, model, providerHost, upstreamStatus }) {
   const out = {
     event: 'torquemind.feedback.failed',
     requestId: safeString(requestId),
@@ -48,8 +48,8 @@ export function logRequestFailed({ requestId, status, errorType, provider, model
     model: safeString(model),
     providerHost: safeString(providerHost)
   }
-  if (errorMessage) {
-    out.errorMessage = safeString(errorMessage)
+  if (typeof upstreamStatus === 'number') {
+    out.upstreamStatus = Number(upstreamStatus)
   }
   emit(out)
 }

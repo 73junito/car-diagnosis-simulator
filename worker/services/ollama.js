@@ -31,7 +31,10 @@ export async function requestOllama({ url, model, prompt, apiKey, signal }) {
 
   if (!res.ok) {
     const truncated = String(text).slice(0, 300)
-    throw new Error(`Ollama returned ${res.status}: ${truncated}`)
+    const e = new Error(`Ollama returned ${res.status}`)
+    // attach numeric status for safe logging without including provider body
+    e.status = Number(res.status)
+    throw e
   }
 
   let payload
