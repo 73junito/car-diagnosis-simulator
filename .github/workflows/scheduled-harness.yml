@@ -88,7 +88,6 @@ jobs:
             runs/vercel-filtered-scheduled.json
             runs/vercel-fullfiltered-scheduled.json
 
-<<<<<<< HEAD
       - name: Signal append-runs-history via repository_dispatch
         if: always()
         env:
@@ -144,4 +143,3 @@ jobs:
           branch: history/update-${{ github.run_id }}-fallback
           labels: runs-history
           delete-branch: true
->>>>>>> 43f3b10 (ci: fallback - scheduled harness creates PR to append runs/history.csv)
