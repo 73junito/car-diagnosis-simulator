@@ -37,5 +37,27 @@
   ],
   "vars": {
     "USE_DO_RATE_LIMIT": "false"
+  },
+
+  "env": {
+    "staging": {
+      "name": "car-diagnosis-simulator-staging",
+
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "TORQUEMIND_RATE_LIMITER",
+            "class_name": "TorqueMindRateLimitCounter"
+          }
+        ]
+      },
+
+      "vars": {
+        "USE_DO_RATE_LIMIT": "true",
+        "TORQUEMIND_ENVIRONMENT": "staging",
+        "TORQUEMIND_RATE_LIMIT_MAX": "10",
+        "TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS": "60"
+      }
+    }
   }
 }
