@@ -1,6 +1,7 @@
 const fs = require("fs");
 
-const OLLAMA_URL = "http://localhost:11434/api/generate";
+const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://127.0.0.1:11434';
+const OLLAMA_URL = process.env.OLLAMA_GENERATE_URL || `${OLLAMA_HOST}/api/generate`;
 
 const generatorModels = ["qwen2.5:7b", "llama3.1:8b"];
 const verifierModel = "qwen3:30b";

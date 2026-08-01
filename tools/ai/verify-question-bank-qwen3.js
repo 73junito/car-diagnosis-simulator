@@ -1,7 +1,10 @@
 const fs = require("fs");
 
+const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://127.0.0.1:11434';
+const OLLAMA_URL = process.env.OLLAMA_GENERATE_URL || `${OLLAMA_HOST}/api/generate`;
+
 async function askQwen3(prompt) {
-  const res = await fetch("http://localhost:11434/api/generate", {
+  const res = await fetch(OLLAMA_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

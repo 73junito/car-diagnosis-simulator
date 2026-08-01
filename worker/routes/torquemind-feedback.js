@@ -31,7 +31,7 @@ export async function handleFeedback(c) {
   }
 
   const provider = c.env.TORQUEMIND_AI_PROVIDER || 'ollama'
-  const model = c.env.TORQUEMIND_AI_MODEL || 'qwen3.5:latest'
+  const model = c.env.TORQUEMIND_AI_MODEL || 'gpt-oss:20b'
   const url = c.env.TORQUEMIND_AI_URL || 'http://127.0.0.1:11434/api/chat'
   const apiKey = c.env.TORQUEMIND_AI_API_KEY || ''
 

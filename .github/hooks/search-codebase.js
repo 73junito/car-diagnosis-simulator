@@ -15,8 +15,11 @@ function cosine(a, b) {
   return dot / (Math.sqrt(aa) * Math.sqrt(bb) || 1);
 }
 
+const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://127.0.0.1:11434';
+const OLLAMA_EMBED_URL = process.env.OLLAMA_EMBED_URL || `${OLLAMA_HOST}/api/embed`;
+
 async function embed(text) {
-  const res = await fetch('http://127.0.0.1:11434/api/embed', {
+  const res = await fetch(OLLAMA_EMBED_URL, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ model: MODEL, input: text })

@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const OLLAMA_URL = "http://127.0.0.1:11434/api/generate";
+const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://127.0.0.1:11434';
+const OLLAMA_URL = process.env.OLLAMA_GENERATE_URL || `${OLLAMA_HOST}/api/generate`;
 const REQUEST_TIMEOUT_MS = 10 * 60 * 1000;
 
 const agents = {
