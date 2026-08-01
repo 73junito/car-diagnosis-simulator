@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 import feedbackRoute from "./routes/torquemind-feedback.js";
+import { createRequestContext } from './middleware/request-context.js'
+import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 
 const app = new Hono();
 
@@ -15,6 +17,13 @@ app.get("/api/health", (c) =>
 // Lightweight ping for diagnostics
 app.get('/__ping', (c) => c.json({ ok: true }));
 
+// attach request context middleware for observability
+app.use('/api/torquemind-feedback', createRequestContext())
+// attach rate limiting (in-memory store for dev/tests)
+app.use('/api/torquemind-feedback', createRateLimitMiddleware())
+
 app.route('/api/torquemind-feedback', feedbackRoute);
 
 export default app;
+
+export { TorqueMindRateLimitCounter } from './durable-objects/rate-limit-counter.js'

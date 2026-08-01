@@ -18,4 +18,24 @@
   "assets": {
     "directory": "./dist"
   }
+  ,
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "TORQUEMIND_RATE_LIMITER",
+        "class_name": "TorqueMindRateLimitCounter"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "TorqueMindRateLimitCounter"
+      ]
+    }
+  ],
+  "vars": {
+    "USE_DO_RATE_LIMIT": "false"
+  }
 }
