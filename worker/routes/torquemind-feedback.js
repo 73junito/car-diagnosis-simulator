@@ -70,7 +70,7 @@ export async function handleFeedback(c) {
     try {
     let rawResponse
     if (provider === 'ollama') {
-      rawResponse = await requestOllama({ url, model, prompt, signal: controller.signal })
+      rawResponse = await requestOllama({ url, model, prompt, apiKey: apiKey, signal: controller.signal })
     } else if (provider === 'openai-compatible') {
       const apiKey = c.env.TORQUEMIND_AI_API_KEY || ''
       rawResponse = await requestOpenAI({ url, model, prompt, apiKey, signal: controller.signal })
