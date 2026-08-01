@@ -90,8 +90,9 @@ export async function handleFeedback(c) {
       logRequestFailed({ requestId: rid, status: 504, errorType: 'timeout', provider: diag.provider, model: diag.model, providerHost: diag.host })
       return c.json({ error: 'TorqueMind AI request timed out' }, 504)
     }
-    // categorize errors conservatively
-    logRequestFailed({ requestId: rid, status: 503, errorType: 'provider_error', provider: diag.provider, model: diag.model, providerHost: diag.host })
+    // categorize errors conservatively, include truncated safe error text for diagnosis
+    const safeMessage = err && err.message ? String(err.message).slice(0, 300) : undefined
+    logRequestFailed({ requestId: rid, status: 503, errorType: 'provider_error', provider: diag.provider, model: diag.model, providerHost: diag.host, errorMessage: safeMessage })
     return c.json({ error: 'TorqueMind AI provider error' }, 503)
   } finally {
     clearTimeout(timeout)
