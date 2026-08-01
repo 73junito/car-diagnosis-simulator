@@ -1,4 +1,4 @@
-export async function requestOllama({ url, model, prompt, apiKey, signal }) {
+export async function requestOllama({ url, model, prompt, apiKey, signal, timeoutMs }) {
   const body = {
     model,
     stream: false,
@@ -12,20 +12,22 @@ export async function requestOllama({ url, model, prompt, apiKey, signal }) {
       num_predict: 220
     }
   }
+  // normalize API key defensively: trim and strip any accidental "Bearer " prefix
+  const rawKey = typeof apiKey === 'string' && apiKey.trim() ? apiKey : (typeof process !== 'undefined' && process.env && process.env.TORQUEMIND_AI_API_KEY ? process.env.TORQUEMIND_AI_API_KEY : '')
+  const normalizedApiKey = typeof rawKey === 'string' ? rawKey.trim().replace(/^Bearer\s+/i, '') : ''
 
   const headers = { 'Content-Type': 'application/json' }
-  if (apiKey && typeof apiKey === 'string' && apiKey.trim()) {
-    headers.authorization = `Bearer ${apiKey}`
-  } else if (typeof process !== 'undefined' && process.env && process.env.TORQUEMIND_AI_API_KEY) {
-    headers.authorization = `Bearer ${process.env.TORQUEMIND_AI_API_KEY}`
+  if (normalizedApiKey) {
+    headers.authorization = `Bearer ${normalizedApiKey}`
   }
 
-  const res = await fetch(url, {
+  const fetchOpts = {
     method: 'POST',
     headers,
     body: JSON.stringify(body),
     signal
-  })
+  }
+  const res = await fetch(url, fetchOpts)
 
   const text = await res.text()
 
