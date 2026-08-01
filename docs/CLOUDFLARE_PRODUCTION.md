@@ -28,3 +28,6 @@ Rate limiting
 	- `TORQUEMIND_RATE_LIMIT_MAX=10`
 	- `TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS=60`
 	The middleware hashes client identifiers (no raw IPs in logs) and emits `torquemind.feedback.rate_limited` events when limits are exceeded.
+
+Durable Objects (production)
+- Production deployments use a Durable Object binding `TORQUEMIND_RATE_LIMITER` backed by the `TorqueMindRateLimitCounter` class to enforce cross-isolate rate limits. Enable with the `USE_DO_RATE_LIMIT` env var (set to `true` in production). If the DO binding is missing while `USE_DO_RATE_LIMIT=true`, the worker will return `503` to avoid silently weakening enforcement.

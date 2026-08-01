@@ -25,3 +25,5 @@ app.use('/api/torquemind-feedback', createRateLimitMiddleware())
 app.route('/api/torquemind-feedback', feedbackRoute);
 
 export default app;
+
+export { TorqueMindRateLimitCounter } from './durable-objects/rate-limit-counter.js'

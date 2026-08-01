@@ -64,7 +64,54 @@ export function createRateLimitMiddleware(options = {}) {
       const key = `${route}:${clientHash}`
 
       const now = clock.now()
-      const res = await store.increment(key, windowMs, now)
+      let res
+      let usedDo = false
+
+      // Prefer explicit store from options (used by tests). Otherwise, if DO is configured and enabled, use it.
+      const useDoFlag = (c.env && (String(c.env.USE_DO_RATE_LIMIT) === 'true')) || String(process.env.USE_DO_RATE_LIMIT) === 'true'
+      const doNamespace = c.env && c.env.TORQUEMIND_RATE_LIMITER
+
+      if (!options.store && useDoFlag) {
+        // production path: require DO binding; fail closed if missing
+        if (!doNamespace) {
+          // Fail closed: controlled 503
+          const payload = { error: 'Rate limiter not configured' }
+          if (typeof c.json === 'function') return c.json(payload, 503)
+          return new Response(JSON.stringify(payload), { status: 503, headers: { 'Content-Type': 'application/json' } })
+        }
+
+        try {
+          const id = doNamespace.idFromName(clientHash)
+          const stub = doNamespace.get(id)
+          const req = new Request('https://torquemind.rate/check', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ limit: max, windowSeconds })
+          })
+          const dres = await stub.fetch(req)
+          let body = {}
+          try {
+            if (dres && typeof dres.json === 'function') body = await dres.json()
+            else {
+              const txt = dres && typeof dres.text === 'function' ? await dres.text() : null
+              body = txt ? JSON.parse(txt) : {}
+            }
+          } catch (err) {
+            body = {}
+          }
+          res = { count: (typeof body.count === 'number') ? body.count : ((typeof body.remaining === 'number') ? (max - body.remaining) : 0), expiresAt: body.resetAt || (now + windowMs) }
+          usedDo = true
+        } catch (e) {
+          // DO call failed — fail closed in production
+          try { console.error('DO error', e && (e.stack || e.message || e)) } catch (err) {}
+          try { console.log(JSON.stringify({ event: 'torquemind.feedback.rate_limit.do_unavailable', client: clientHash, requestId: c.reqId || null })) } catch (err) {}
+          const payload = { error: 'Rate limiter unavailable' }
+          if (typeof c.json === 'function') return c.json(payload, 503)
+          return new Response(JSON.stringify(payload), { status: 503, headers: { 'Content-Type': 'application/json' } })
+        }
+      } else {
+        res = await store.increment(key, windowMs, now)
+      }
       const remaining = Math.max(0, max - res.count)
 
       // set rate limit headers, preserve request id if present
@@ -92,7 +139,9 @@ export function createRateLimitMiddleware(options = {}) {
           }))
         } catch (e) {}
 
-        return c.json({ error: 'Too many TorqueMind tutor requests', retryAfterSeconds }, 429)
+        const payload = { error: 'Too many TorqueMind tutor requests', retryAfterSeconds }
+        if (typeof c.json === 'function') return c.json(payload, 429)
+        return new Response(JSON.stringify(payload), { status: 429, headers: { 'Content-Type': 'application/json' } })
       }
 
       // allowed
