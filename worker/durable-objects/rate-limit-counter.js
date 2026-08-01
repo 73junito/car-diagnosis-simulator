@@ -45,11 +45,10 @@ export class TorqueMindRateLimitCounter {
       const resetAt = result.expiresAt
 
       const payload = { allowed, limit, count: result.count, remaining, retryAfterSeconds, resetAt }
-      return {
+      return new Response(JSON.stringify(payload), {
         status: allowed ? 200 : 429,
-        text: async () => JSON.stringify(payload),
-        json: async () => payload
-      }
+        headers: { 'Content-Type': 'application/json' }
+      })
     } catch (err) {
       return new Response(JSON.stringify({ error: 'internal' }), { status: 500 })
     }
