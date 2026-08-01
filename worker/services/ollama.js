@@ -1,4 +1,4 @@
-export async function requestOllama({ url, model, prompt, signal }) {
+export async function requestOllama({ url, model, prompt, apiKey, signal }) {
   const body = {
     model,
     stream: false,
@@ -13,9 +13,16 @@ export async function requestOllama({ url, model, prompt, signal }) {
     }
   }
 
+  const headers = { 'Content-Type': 'application/json' }
+  if (apiKey && typeof apiKey === 'string' && apiKey.trim()) {
+    headers.authorization = `Bearer ${apiKey}`
+  } else if (typeof process !== 'undefined' && process.env && process.env.TORQUEMIND_AI_API_KEY) {
+    headers.authorization = `Bearer ${process.env.TORQUEMIND_AI_API_KEY}`
+  }
+
   const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(body),
     signal
   })
