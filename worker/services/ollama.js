@@ -21,12 +21,25 @@ export async function requestOllama({ url, model, prompt, apiKey, signal, timeou
     headers.authorization = `Bearer ${normalizedApiKey}`
   }
 
+  // Emit safe debug flags (no secret values)
+  try {
+    console.log(JSON.stringify({
+      event: 'torquemind.feedback.adapter',
+      hasApiKey: Boolean(normalizedApiKey),
+      authHeaderPresent: Boolean(headers.authorization),
+      authHeaderStartsWithBearer: typeof headers.authorization === 'string' ? headers.authorization.startsWith('Bearer ') : false
+    }))
+  } catch (e) {
+    // swallow logging errors
+  }
+
   const fetchOpts = {
     method: 'POST',
     headers,
     body: JSON.stringify(body),
     signal
   }
+
   const res = await fetch(url, fetchOpts)
 
   const text = await res.text()
