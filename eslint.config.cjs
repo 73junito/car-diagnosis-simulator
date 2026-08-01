@@ -46,3 +46,26 @@ try {
     }
   ];
 }
+
+// Ensure repository ignore patterns are applied without removing existing rules.
+try {
+  const ignoreObj = {
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'coverage/**',
+      'playwright-report/**',
+      'test-results/**',
+      '.wrangler/**',
+      '.wrangler-dry-run/**',
+      'audit/**'
+    ]
+  };
+
+  if (Array.isArray(module.exports)) {
+    const hasIgnores = module.exports.some(o => o && Object.prototype.hasOwnProperty.call(o, 'ignores'));
+    if (!hasIgnores) module.exports.unshift(ignoreObj);
+  }
+} catch (e) {
+  // ignore any errors manipulating the export
+}
