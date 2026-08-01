@@ -22,3 +22,9 @@ Secrets
 
 Contacts
 - Engineering: torque-dev-team
+
+Rate limiting
+- Add rate-limiting middleware to protect the tutor endpoint. Defaults:
+	- `TORQUEMIND_RATE_LIMIT_MAX=10`
+	- `TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS=60`
+	The middleware hashes client identifiers (no raw IPs in logs) and emits `torquemind.feedback.rate_limited` events when limits are exceeded.

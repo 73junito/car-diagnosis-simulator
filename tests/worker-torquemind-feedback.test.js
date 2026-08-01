@@ -89,4 +89,14 @@ describe('Worker torquemind-feedback route (integration-style)', () => {
     const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
     expect(res.status).toBe(504)
   })
+
+    test('request id header preserved when rate limiting middleware present', async () => {
+      const req = new Request('http://localhost/api/torquemind-feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-request-id': 'test-rid' },
+        body: JSON.stringify({ prompt: 'hi' })
+      })
+      const res = await app.fetch(req)
+      expect(res.headers.get('x-request-id')).toBeTruthy()
+    })
 })
