@@ -5,8 +5,11 @@ const { execSync } = require('child_process');
 const root = process.cwd();
 const outFile = path.join(root, 'reports', 'last-commit-review.md');
 
+const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://127.0.0.1:11434';
+const OLLAMA_GENERATE_URL = process.env.OLLAMA_GENERATE_URL || `${OLLAMA_HOST}/api/generate`;
+
 async function ollamaGenerate(model, prompt) {
-  const res = await fetch('http://127.0.0.1:11434/api/generate', {
+  const res = await fetch(OLLAMA_GENERATE_URL, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ model, prompt, stream: false })

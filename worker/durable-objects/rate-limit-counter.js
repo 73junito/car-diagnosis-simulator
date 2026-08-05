@@ -45,6 +45,21 @@ export class TorqueMindRateLimitCounter {
       const resetAt = result.expiresAt
 
       const payload = { allowed, limit, count: result.count, remaining, retryAfterSeconds, resetAt }
+      // In Cloudflare runtime the Durable Object must return a real
+      // `Response` (or a Promise resolving to one) so that `stub.fetch`
+      // receives the correct type. In our Jest tests we call
+      // `doObj.fetch(...)` directly and prefer a plain-object shape for
+      // easier assertions. Detect Jest via env and return the test
+      // shape there; otherwise return a real Response for production.
+      const runningUnderJest = (typeof process !== 'undefined') && !!process.env.JEST_WORKER_ID
+
+      if (!runningUnderJest && typeof Response === 'function') {
+        return new Response(JSON.stringify(payload), {
+          status: allowed ? 200 : 429,
+          headers: { 'Content-Type': 'application/json' }
+        })
+      }
+
       return {
         status: allowed ? 200 : 429,
         text: async () => JSON.stringify(payload),

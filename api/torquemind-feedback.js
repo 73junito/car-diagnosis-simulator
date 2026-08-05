@@ -1,4 +1,4 @@
-const OLLAMA_URL = "http://127.0.0.1:11434/api/generate";
+const OLLAMA_URL = process.env.TORQUEMIND_AI_URL || 'http://127.0.0.1:11434/api/generate';
 
 module.exports = async (req, res) => {
 
@@ -50,7 +50,7 @@ ${topic}
         "Content-Type":"application/json"
       },
       body:JSON.stringify({
-        model:"qwen3.5:latest",
+        model: process.env.TORQUEMIND_AI_MODEL || 'gpt-oss:20b',
         stream:false,
         prompt,
         options:{
