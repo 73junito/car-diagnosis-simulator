@@ -8,12 +8,47 @@
     try {
       const existing = localStorage.getItem(key);
       if (existing) return existing;
-      const generated = `student-${Date.now()}-${Math.floor(Math.random() * 100000)}`;
+      // Use secure randomness for student id generation
+      const cryptoApi = getCrypto();
+      let randPart = null;
+      if (typeof cryptoApi.randomUUID === 'function') {
+        randPart = cryptoApi.randomUUID();
+      } else {
+        randPart = secureRandomInt(100000).toString(10);
+      }
+      const generated = `student-${Date.now()}-${randPart}`;
       localStorage.setItem(key, generated);
       return generated;
     } catch (_) {
       return "student-anon";
     }
+  }
+
+  function getCrypto() {
+    const cryptoApi = globalThis.crypto;
+    if (!cryptoApi || typeof cryptoApi.getRandomValues !== 'function') {
+      throw new Error('Secure randomness is unavailable');
+    }
+    return cryptoApi;
+  }
+
+  function secureRandomInt(maxExclusive) {
+    if (!Number.isSafeInteger(maxExclusive) || maxExclusive <= 0) {
+      throw new RangeError('maxExclusive must be a positive safe integer');
+    }
+
+    const cryptoApi = getCrypto();
+    const maxUint32 = 0x100000000;
+    const limit = maxUint32 - (maxUint32 % maxExclusive);
+    const values = new Uint32Array(1);
+
+    let value;
+    do {
+      cryptoApi.getRandomValues(values);
+      value = values[0];
+    } while (value >= limit);
+
+    return value % maxExclusive;
   }
 
   function getAttemptStorageKey(moduleId, studentId) {
@@ -86,9 +121,10 @@
   }
 
   function shuffleQuestions(list) {
+    // Fisher–Yates shuffle using secure randomness to avoid Math.random()
     const arr = list.slice();
     for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = secureRandomInt(i + 1);
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;

@@ -1,6 +1,7 @@
 /** @jest-environment jsdom */
 const fs = require('fs');
 const path = require('path');
+const { webcrypto } = require('node:crypto');
 
 function loadScenarioScript() {
   const script = fs.readFileSync(
@@ -43,6 +44,14 @@ async function flush() {
 }
 
 describe('scenario attempt lifecycle', () => {
+  beforeAll(() => {
+    if (!globalThis.crypto?.getRandomValues) {
+      Object.defineProperty(globalThis, 'crypto', {
+        configurable: true,
+        value: webcrypto,
+      });
+    }
+  });
   beforeEach(() => {
     jest.resetModules();
     localStorage.clear();
