@@ -37,5 +37,44 @@
   ],
   "vars": {
     "USE_DO_RATE_LIMIT": "false"
+  },
+
+  "env": {
+    "staging": {
+      "name": "car-diagnosis-simulator-staging",
+
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "TORQUEMIND_RATE_LIMITER",
+            "class_name": "TorqueMindRateLimitCounter"
+          }
+        ]
+      },
+
+        "migrations": [
+          {
+            "tag": "v1",
+            "new_sqlite_classes": [
+              "TorqueMindRateLimitCounter"
+            ]
+          }
+        ],
+
+        "vars": {
+        "USE_DO_RATE_LIMIT": "true",
+        "TORQUEMIND_ENVIRONMENT": "staging",
+        "TORQUEMIND_RATE_LIMIT_MAX": "10",
+        "TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS": "60",
+
+        "TORQUEMIND_AI_PROVIDER": "ollama",
+        "TORQUEMIND_AI_URL": "https://ollama.autolearnpro.com/api/chat",
+        "TORQUEMIND_AI_MODEL": "gpt-oss:20b-cloud",
+        "TORQUEMIND_AI_TIMEOUT_MS": "120000",
+
+        "SUPABASE_URL": "https://pffdgqpynpbffbcnxmum.supabase.co",
+        "SUPABASE_PUBLISHABLE_KEY": "USE_THE_PUBLISHABLE_KEY_FROM_THE_UPLOADED_FILE"
+      }
+    }
   }
 }

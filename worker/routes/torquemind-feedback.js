@@ -31,9 +31,11 @@ export async function handleFeedback(c) {
   }
 
   const provider = c.env.TORQUEMIND_AI_PROVIDER || 'ollama'
-  const model = c.env.TORQUEMIND_AI_MODEL || 'qwen3.5:latest'
+  const model = c.env.TORQUEMIND_AI_MODEL || 'gpt-oss:20b'
   const url = c.env.TORQUEMIND_AI_URL || 'http://127.0.0.1:11434/api/chat'
   const apiKey = c.env.TORQUEMIND_AI_API_KEY || ''
+  const accessClientId = c.env.OLLAMA_ACCESS_CLIENT_ID || ''
+  const accessClientSecret = c.env.OLLAMA_ACCESS_CLIENT_SECRET || ''
 
   // validate provider configuration for production safety
   let diag
@@ -70,7 +72,7 @@ export async function handleFeedback(c) {
     try {
     let rawResponse
     if (provider === 'ollama') {
-      rawResponse = await requestOllama({ url, model, prompt, signal: controller.signal })
+      rawResponse = await requestOllama({ url, model, prompt, apiKey: apiKey, accessClientId, accessClientSecret, signal: controller.signal })
     } else if (provider === 'openai-compatible') {
       const apiKey = c.env.TORQUEMIND_AI_API_KEY || ''
       rawResponse = await requestOpenAI({ url, model, prompt, apiKey, signal: controller.signal })
@@ -90,8 +92,9 @@ export async function handleFeedback(c) {
       logRequestFailed({ requestId: rid, status: 504, errorType: 'timeout', provider: diag.provider, model: diag.model, providerHost: diag.host })
       return c.json({ error: 'TorqueMind AI request timed out' }, 504)
     }
-    // categorize errors conservatively
-    logRequestFailed({ requestId: rid, status: 503, errorType: 'provider_error', provider: diag.provider, model: diag.model, providerHost: diag.host })
+    // categorize errors conservatively, record upstream numeric status when available
+    const upstreamStatus = err && typeof err.status === 'number' ? Number(err.status) : undefined
+    logRequestFailed({ requestId: rid, status: 503, errorType: 'provider_error', provider: diag.provider, model: diag.model, providerHost: diag.host, upstreamStatus })
     return c.json({ error: 'TorqueMind AI provider error' }, 503)
   } finally {
     clearTimeout(timeout)
