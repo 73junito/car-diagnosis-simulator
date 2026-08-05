@@ -41,6 +41,8 @@ window.SCENARIO_QUESTIONS = {
 ,
   "no-crank": [
     {
+      id: "no-crank-battery-check-01",
+      status: "draft",
       question_text: "What is the first test when an engine will not crank and only clicks?",
       option_a: "Check battery voltage and connections",
       option_b: "Replace the starter immediately",
@@ -49,9 +51,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "A",
       explanation: "A clicking sound during cranking commonly indicates low battery voltage or poor cable connections.",
       difficulty: "beginner",
-      topic: "Battery testing"
+      topic: "Battery testing",
+      sources: []
     },
     {
+      id: "no-crank-battery-voltage-01",
+      status: "draft",
       question_text: "What battery voltage is expected on a fully charged battery at rest?",
       option_a: "9.6V",
       option_b: "10.5V",
@@ -60,10 +65,13 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "C",
       explanation: "A healthy fully charged lead-acid battery should measure approximately 12.6 volts.",
       difficulty: "beginner",
-      topic: "Battery state of charge"
+      topic: "Battery state of charge",
+      sources: []
     }
     ,
     {
+      id: "no-crank-battery-load-01",
+      status: "draft",
       question_text: "When performing a battery load test, which result indicates the battery needs replacement?",
       option_a: "Voltage stays above 12.4V under load",
       option_b: "Voltage drops below 9.6V under a rated load",
@@ -72,9 +80,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "A voltage below about 9.6V under a rated load typically indicates a failing battery that should be replaced.",
       difficulty: "intermediate",
-      topic: "Battery load testing"
+      topic: "Battery load testing",
+      sources: []
     },
     {
+      id: "no-crank-voltage-drop-01",
+      status: "draft",
       question_text: "What is the purpose of a voltage-drop test on the starter circuit?",
       option_a: "To measure fuel pressure during cranking",
       option_b: "To verify excessive resistance in wiring or connections",
@@ -83,9 +94,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "Voltage-drop testing helps identify high resistance in cables, terminals, or connections that can prevent adequate starter current.",
       difficulty: "intermediate",
-      topic: "Voltage-drop testing"
+      topic: "Voltage-drop testing",
+      sources: []
     },
     {
+      id: "no-crank-terminal-corrosion-01",
+      status: "draft",
       question_text: "Which terminal condition commonly causes poor starter performance?",
       option_a: "Freshly painted terminals",
       option_b: "Clean, tight clamps",
@@ -94,9 +108,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "C",
       explanation: "Corrosion and loose clamps increase resistance and can prevent sufficient current from reaching the starter.",
       difficulty: "beginner",
-      topic: "Terminal corrosion"
+      topic: "Terminal corrosion",
+      sources: []
     },
     {
+      id: "no-crank-ground-resistance-01",
+      status: "draft",
       question_text: "High ground-path resistance can cause which symptom?",
       option_a: "Excessive engine rpm",
       option_b: "No-start or slow cranking despite good battery voltage",
@@ -105,9 +122,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "A poor ground path raises circuit resistance and may lead to slow or no cranking even if battery voltage appears acceptable.",
       difficulty: "intermediate",
-      topic: "Ground path"
+      topic: "Ground path",
+      sources: []
     },
     {
+      id: "no-crank-starter-relay-01",
+      status: "draft",
       question_text: "What should be checked to verify starter relay operation?",
       option_a: "Fuel injector pulse",
       option_b: "Continuity and control voltage at the relay coil while attempting to crank",
@@ -116,9 +136,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "Checking for control voltage at the relay coil and continuity through relay contacts confirms relay operation.",
       difficulty: "intermediate",
-      topic: "Starter relay"
+      topic: "Starter relay",
+      sources: []
     },
     {
+      id: "no-crank-solenoid-voltage-01",
+      status: "draft",
       question_text: "Measuring solenoid control voltage at the starter while cranking should show what?",
       option_a: "No voltage ever",
       option_b: "Intermittent pulses only when hot",
@@ -127,9 +150,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "C",
       explanation: "The solenoid should receive a near-battery voltage control signal when the starter is commanded, indicating the circuit from ignition switch/relay is functioning.",
       difficulty: "intermediate",
-      topic: "Solenoid control"
+      topic: "Solenoid control",
+      sources: []
     },
     {
+      id: "no-crank-ignition-switch-01",
+      status: "draft",
       question_text: "A missing ignition-switch start signal can be caused by which of the following?",
       option_a: "A fully charged battery",
       option_b: "Worn key cylinder or faulty ignition switch contacts",
@@ -138,9 +164,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "Mechanical wear or internal switch contact failure can prevent the ignition switch from sending a start signal to the starter circuit.",
       difficulty: "intermediate",
-      topic: "Ignition switch"
+      topic: "Ignition switch",
+      sources: []
     },
     {
+      id: "no-crank-park-neutral-01",
+      status: "draft",
       question_text: "Why should the park/neutral safety switch be inspected for vehicles that won't crank?",
       option_a: "It controls fuel mixture",
       option_b: "If open it prevents starter engagement for safety",
@@ -149,9 +178,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "The park/neutral safety switch prevents cranking when the transmission is not in Park or Neutral; a failed switch can block starter activation.",
       difficulty: "beginner",
-      topic: "Safety interlocks"
+      topic: "Safety interlocks",
+      sources: []
     },
     {
+      id: "no-crank-clutch-interlock-01",
+      status: "draft",
       question_text: "On manual-transmission vehicles, what device can prevent the engine from cranking?",
       option_a: "Clutch interlock switch if faulty",
       option_b: "Cruise control module",
@@ -160,9 +192,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "A",
       explanation: "A faulty clutch interlock switch can interrupt the starter circuit and prevent cranking until the switch is working correctly.",
       difficulty: "beginner",
-      topic: "Clutch interlock"
+      topic: "Clutch interlock",
+      sources: []
     },
     {
+      id: "no-crank-starter-current-01",
+      status: "draft",
       question_text: "Starter current draw testing helps diagnose what condition?",
       option_a: "Excessive starter engagement resistance or a seized engine",
       option_b: "Brake fluid level",
@@ -171,9 +206,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "A",
       explanation: "High or low starter current draw compared to specifications indicates internal starter problems or mechanical engine seizure.",
       difficulty: "intermediate",
-      topic: "Starter current draw"
+      topic: "Starter current draw",
+      sources: []
     },
     {
+      id: "no-crank-seized-engine-01",
+      status: "draft",
       question_text: "What is a quick check to help verify the engine is not seized?",
       option_a: "Attempt to rotate engine with starter while monitoring current draw",
       option_b: "Check cabin temperature",
@@ -182,9 +220,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "A",
       explanation: "Observing starter current and whether the crankshaft can be rotated helps determine if the engine is mechanically seized.",
       difficulty: "intermediate",
-      topic: "Seized engine"
+      topic: "Seized engine",
+      sources: []
     },
     {
+      id: "no-crank-immobilizer-01",
+      status: "draft",
       question_text: "A scan tool shows no start authorization; what system is likely preventing crank?",
       option_a: "Immobilizer/security system",
       option_b: "ABS",
@@ -193,9 +234,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "A",
       explanation: "Modern immobilizer or security systems can disable starter authorization and must be checked with a scan tool or security diagnostics.",
       difficulty: "intermediate",
-      topic: "Immobilizer"
+      topic: "Immobilizer",
+      sources: []
     },
     {
+      id: "no-crank-wiring-diagram-01",
+      status: "draft",
       question_text: "Why is interpreting wiring diagrams important when diagnosing no-crank issues?",
       option_a: "To color-match paint",
       option_b: "To identify correct power and ground paths and component interconnections",
@@ -204,9 +248,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "Wiring diagrams help locate connectors, fuses, relays, and paths to test for continuity and voltage in the starter circuit.",
       difficulty: "intermediate",
-      topic: "Wiring diagrams"
+      topic: "Wiring diagrams",
+      sources: []
     },
     {
+      id: "no-crank-starter-pid-01",
+      status: "draft",
       question_text: "Which PID or data parameter is useful as a starter command confirmation on vehicles with serial data?",
       option_a: "Engine oil temperature",
       option_b: "Starter command or starter motor enable PID",
@@ -215,9 +262,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "A starter command PID indicates whether the vehicle's control module is issuing a starter enable signal over the bus when the key is turned.",
       difficulty: "intermediate",
-      topic: "Scan tool data"
+      topic: "Scan tool data",
+      sources: []
     },
     {
+      id: "no-crank-cable-inspect-01",
+      status: "draft",
       question_text: "What should you inspect on battery and starter cables?",
       option_a: "Only the outer insulation color",
       option_b: "Cable condition, corrosion, secure clamps, and any broken strands",
@@ -226,9 +276,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "Cable integrity and clamp security are critical for low resistance; frayed or corroded cables cause starting issues.",
       difficulty: "beginner",
-      topic: "Cable inspection"
+      topic: "Cable inspection",
+      sources: []
     },
     {
+      id: "no-crank-relay-bypass-01",
+      status: "draft",
       question_text: "Why should you avoid bypassing relays or fusing paths during diagnosis without caution?",
       option_a: "It might speed up diagnosis safely",
       option_b: "It can cause damage, create unsafe conditions, or bypass safety interlocks",
@@ -237,9 +290,12 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "B",
       explanation: "Bypassing circuits can disable safety features and may cause damage; always follow safe bypass procedures and manufacturer guidance.",
       difficulty: "intermediate",
-      topic: "Relay bypass"
+      topic: "Relay bypass",
+      sources: []
     },
     {
+      id: "no-crank-post-repair-01",
+      status: "draft",
       question_text: "What is an appropriate post-repair verification step after fixing a no-crank condition?",
       option_a: "Verify starter function, perform a cranking test, and confirm no diagnostic trouble codes remain",
       option_b: "Only wash the vehicle",
@@ -248,7 +304,8 @@ window.SCENARIO_QUESTIONS = {
       correct_answer: "A",
       explanation: "After repair, perform function checks, cranking tests, and scan for any stored faults to ensure the issue is resolved.",
       difficulty: "beginner",
-      topic: "Post-repair verification"
+      topic: "Post-repair verification",
+      sources: []
     }
     ,
     {
@@ -263,4 +320,18 @@ window.SCENARIO_QUESTIONS = {
       topic: "Mechanical starter engagement"
     }
   ]
+};
+
+// Approved sources registry. Questions should reference entries here by `source_id`.
+window.APPROVED_SOURCES = {
+  // Example entry (do not include placeholder page numbers):
+  // "ase-a6-approved-edition": {
+  //   title: "ASE Automobile Study Guide: A6 Electrical/Electronic Systems",
+  //   publisher: "ASE Education Foundation",
+  //   edition: "APPROVED_EDITION",
+  //   publication_year: 2024,
+  //   status: "approved",
+  //   checksum: "",
+  //   license_status: "authorized"
+  // }
 };

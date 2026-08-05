@@ -328,6 +328,7 @@
     }
 
     const questionBank = normalizeQuestionBank(key, await loadScenarioQuestions(key));
+    const approvedQuestionBank = questionBank.filter((q) => String(q.status || '').toLowerCase() === 'approved');
     const studentId = getStudentId();
     const state = readAttemptState(key, studentId);
     const failedHistory = state.history.filter((entry) => !entry.passed);
@@ -337,23 +338,46 @@
         .flatMap((entry) => Array.isArray(entry.questionIds) ? entry.questionIds : []);
 
       const nextAttemptNumber = state.history.length + 1;
-      state.activeAttempt = createAttempt({
-        questionBank,
-        failedAttempts: failedHistory.length,
-        previousQuestionIds,
-        attemptNumber: nextAttemptNumber
-      });
-      writeAttemptState(key, studentId, state);
+      // Only create graded attempts from approved questions. If insufficient approved items exist,
+      // do not create a server-graded attempt and show a clear warning instead.
+      if (approvedQuestionBank.length >= QUESTIONS_PER_ATTEMPT) {
+        state.activeAttempt = createAttempt({
+          questionBank: approvedQuestionBank,
+          failedAttempts: failedHistory.length,
+          previousQuestionIds,
+          attemptNumber: nextAttemptNumber
+        });
+        writeAttemptState(key, studentId, state);
+      } else {
+        state.activeAttempt = null;
+      }
     }
 
-    const questionMap = new Map(questionBank.map((q) => [q.__qid, q]));
+    // If no approved attempt could be created, render a clear warning and list available (draft) questions for development.
+    if (!state.activeAttempt) {
+      const summary = root.querySelector('#attemptSummary');
+      if (summary) {
+        summary.hidden = false;
+        summary.innerHTML = `<p><strong>Question bank warning:</strong> only ${approvedQuestionBank.length} approved questions were found for this module. Add at least ${Math.max(0, QUESTIONS_PER_ATTEMPT - approvedQuestionBank.length)} more approved questions to reliably serve ${QUESTIONS_PER_ATTEMPT} graded items.</p>`;
+      }
+
+      // Render available (draft) questions for authorship/dev visibility but do not allow grading.
+      const draftQuestions = questionBank;
+      root.querySelector('.scenario-card:nth-of-type(4)')?.querySelector('#attemptSummary')?.insertAdjacentHTML('afterend',
+        `<div class="scenario-card"><h3>Available Questions (development)</h3><p>Only approved questions are used for graded attempts.</p><ul>${draftQuestions.map(q=>`<li>${escapeHtml(q.question_text || q.id || '')} <em>status: ${escapeHtml(q.status||'')}</em></li>`).join('')}</ul></div>`
+      );
+
+      return;
+    }
+
+    const questionMap = new Map(approvedQuestionBank.map((q) => [q.__qid, q]));
     const questions = state.activeAttempt.questionIds
       .map((idValue) => questionMap.get(idValue))
       .filter(Boolean);
 
     if (questions.length !== state.activeAttempt.questionIds.length) {
       state.activeAttempt = createAttempt({
-        questionBank,
+        questionBank: approvedQuestionBank,
         failedAttempts: failedHistory.length,
         previousQuestionIds: failedHistory.flatMap((entry) => Array.isArray(entry.questionIds) ? entry.questionIds : []),
         attemptNumber: state.history.length + 1
