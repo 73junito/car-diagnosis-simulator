@@ -1,7 +1,8 @@
 import {
   buildPrompt,
   extractJson,
-  validateTutorResponse
+  validateTutorResponse,
+  normalizeTutorResponse
 } from "../worker/utils/tutor-response.js"
 
 describe("TorqueMind tutor utilities", () => {
@@ -91,6 +92,40 @@ describe("TorqueMind tutor utilities", () => {
     })
   })
 
+  test("validateTutorResponse accepts common alias keys", () => {
+    expect(
+      validateTutorResponse({
+        explanation: "A",
+        reasoning: "B",
+        ase_concept: "C",
+        nextDiagnosticStep: "D"
+      })
+    ).toEqual({
+      reasonIncorrect: "A",
+      reasonCorrect: "B",
+      aseConcept: "C",
+      nextStep: "D"
+    })
+  })
+
+  test("validateTutorResponse accepts nested feedback payload", () => {
+    expect(
+      validateTutorResponse({
+        feedback: {
+          reasonIncorrect: "A",
+          reasonCorrect: "B",
+          aseConcept: "C",
+          nextStep: "D"
+        }
+      })
+    ).toEqual({
+      reasonIncorrect: "A",
+      reasonCorrect: "B",
+      aseConcept: "C",
+      nextStep: "D"
+    })
+  })
+
   test.each([
     ["reasonIncorrect"],
     ["reasonCorrect"],
@@ -131,5 +166,13 @@ describe("TorqueMind tutor utilities", () => {
         nextStep: "D"
       })
     ).toThrow("Tutor response is missing reasonIncorrect")
+  })
+
+  test("normalizeTutorResponse returns fallback payload for malformed output", () => {
+    const out = normalizeTutorResponse({}, "Model returned plain text without JSON")
+    expect(out.reasonIncorrect).toContain("Model returned plain text")
+    expect(out.reasonCorrect.length).toBeGreaterThan(0)
+    expect(out.aseConcept.length).toBeGreaterThan(0)
+    expect(out.nextStep.length).toBeGreaterThan(0)
   })
 })

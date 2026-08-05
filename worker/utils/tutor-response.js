@@ -58,16 +58,31 @@ export function extractJson(text) {
 export function validateTutorResponse(obj) {
   const required = ['reasonIncorrect', 'reasonCorrect', 'aseConcept', 'nextStep']
 
-  if (!obj || typeof obj !== 'object') {
+  const source = obj && typeof obj === 'object' && obj.feedback && typeof obj.feedback === 'object'
+    ? obj.feedback
+    : obj
+
+  const aliases = {
+    reasonIncorrect: ['reasonIncorrect', 'explanation', 'whyIncorrect', 'why_incorrect'],
+    reasonCorrect: ['reasonCorrect', 'reasoning', 'correctReasoning', 'correct_reasoning'],
+    aseConcept: ['aseConcept', 'ase_concept', 'ase'],
+    nextStep: ['nextStep', 'nextDiagnosticStep', 'next_diagnostic_step']
+  }
+
+  if (!source || typeof source !== 'object') {
     throw new Error(`Tutor response is missing ${required[0]}`)
   }
 
   const out = {}
   for (const key of required) {
-    if (!(key in obj)) {
-      throw new Error(`Tutor response is missing ${key}`)
+    const candidates = aliases[key] || [key]
+    let val
+    for (const candidate of candidates) {
+      if (candidate in source) {
+        val = source[candidate]
+        break
+      }
     }
-    const val = obj[key]
     if (typeof val !== 'string') {
       throw new Error(`Tutor response is missing ${key}`)
     }
@@ -81,8 +96,33 @@ export function validateTutorResponse(obj) {
   return out
 }
 
+function plainTextFromFallback(value) {
+  if (!value || typeof value !== 'string') return ''
+  const trimmed = value.trim()
+  if (!trimmed) return ''
+  if (/^<!doctype|<html/i.test(trimmed)) return ''
+  const noFence = trimmed.replace(/```[\s\S]*?```/g, ' ')
+  const noTags = noFence.replace(/<[^>]+>/g, ' ')
+  return noTags.replace(/\s+/g, ' ').trim().slice(0, 500)
+}
+
+export function normalizeTutorResponse(obj, fallbackText = '') {
+  try {
+    return validateTutorResponse(obj)
+  } catch (err) {
+    const fallback = plainTextFromFallback(fallbackText)
+    return {
+      reasonIncorrect: fallback || 'Your selected answer does not align with the expected diagnostic result.',
+      reasonCorrect: 'The correct answer follows evidence-based diagnostic logic and should be confirmed with measured test results.',
+      aseConcept: 'Systematic diagnosis with verification before replacement.',
+      nextStep: 'Perform the next manufacturer-recommended diagnostic test and confirm the fault with scan-tool or meter data.'
+    }
+  }
+}
+
 export default {
   buildPrompt,
   extractJson,
-  validateTutorResponse
+  validateTutorResponse,
+  normalizeTutorResponse
 }

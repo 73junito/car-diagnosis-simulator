@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { buildPrompt, extractJson, validateTutorResponse } from '../utils/tutor-response.js'
+import { buildPrompt, extractJson, normalizeTutorResponse } from '../utils/tutor-response.js'
 import { requestOllama } from '../services/ollama.js'
 import { requestOpenAI } from '../services/openai-compatible.js'
 import { validateProviderConfig, sanitizeDiagnostics, DEFAULTS } from '../config/ai-config.js'
@@ -80,8 +80,13 @@ export async function handleFeedback(c) {
       return c.json({ error: `Unsupported AI provider: ${provider}` }, 503)
     }
 
-    const parsed = extractJson(rawResponse)
-    const tutorResponse = validateTutorResponse(parsed)
+    let parsed = {}
+    try {
+      parsed = extractJson(rawResponse)
+    } catch (err) {
+      parsed = {}
+    }
+    const tutorResponse = normalizeTutorResponse(parsed, rawResponse)
     const duration = typeof c.get === 'function' ? c.get('req_duration_ms') : (c.env && c.env.TORQUE_AI_DIAG && c.env.TORQUE_AI_DIAG.durationMs) || 0
     logRequestCompleted({ requestId, method: c.req?.method || 'POST', route: '/api/torquemind-feedback', status: 200, durationMs: duration, provider: diag.provider, model: diag.model, providerHost: diag.host })
     // include request id in response header (already set by middleware) and return payload
@@ -94,6 +99,10 @@ export async function handleFeedback(c) {
     }
     // categorize errors conservatively, record upstream numeric status when available
     const upstreamStatus = err && typeof err.status === 'number' ? Number(err.status) : undefined
+    if (upstreamStatus === undefined) {
+      const fallbackResponse = normalizeTutorResponse({}, '')
+      return c.json(fallbackResponse, 200)
+    }
     logRequestFailed({ requestId: rid, status: 503, errorType: 'provider_error', provider: diag.provider, model: diag.model, providerHost: diag.host, upstreamStatus })
     return c.json({ error: 'TorqueMind AI provider error' }, 503)
   } finally {

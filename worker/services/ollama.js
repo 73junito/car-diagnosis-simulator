@@ -3,6 +3,7 @@ export async function requestOllama({ url, model, prompt, apiKey, accessClientId
     model,
     stream: false,
     think: false,
+    format: 'json',
     messages: [
       { role: 'system', content: 'You are TorqueMind, an automotive diagnostic tutor. Return only valid JSON.' },
       { role: 'user', content: prompt }
