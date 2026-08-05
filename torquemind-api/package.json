@@ -17,13 +17,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^5.2.1",
-    "pg": "^8.10.0",
-    "express-rate-limit": "^8.5.1"
+    "express-rate-limit": "^8.5.1",
+    "pg": "^8.10.0"
   },
   "devDependencies": {
     "ajv-formats": "^3.0.1",
     "jest": "^30.4.2",
-    "jest-environment-jsdom": "^30.3.0",
+    "jest-environment-jsdom": "^30.4.1",
     "puppeteer": "^24.43.0",
     "supertest": "^6.3.4"
   },
