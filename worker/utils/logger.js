@@ -13,7 +13,7 @@ function emit(obj) {
 }
 
 export function logRequestStart({ requestId, method, route, provider, model, providerHost }) {
-  emit({
+  const out = {
     event: 'torquemind.feedback.started',
     requestId: safeString(requestId),
     method: safeString(method),
@@ -21,7 +21,8 @@ export function logRequestStart({ requestId, method, route, provider, model, pro
     provider: safeString(provider),
     model: safeString(model),
     providerHost: safeString(providerHost)
-  })
+  }
+  emit(out)
 }
 
 export function logRequestCompleted({ requestId, method, route, status, durationMs, provider, model, providerHost }) {
@@ -38,8 +39,8 @@ export function logRequestCompleted({ requestId, method, route, status, duration
   })
 }
 
-export function logRequestFailed({ requestId, status, errorType, provider, model, providerHost }) {
-  emit({
+export function logRequestFailed({ requestId, status, errorType, provider, model, providerHost, upstreamStatus }) {
+  const out = {
     event: 'torquemind.feedback.failed',
     requestId: safeString(requestId),
     status: Number(status) || 0,
@@ -47,5 +48,9 @@ export function logRequestFailed({ requestId, status, errorType, provider, model
     provider: safeString(provider),
     model: safeString(model),
     providerHost: safeString(providerHost)
-  })
+  }
+  if (typeof upstreamStatus === 'number') {
+    out.upstreamStatus = Number(upstreamStatus)
+  }
+  emit(out)
 }

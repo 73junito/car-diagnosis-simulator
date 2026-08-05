@@ -9,6 +9,8 @@ const {
 } = require("./ensure-report-heading");
 
 const root = process.cwd();
+const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://127.0.0.1:11434';
+const OLLAMA_GENERATE_URL = process.env.OLLAMA_GENERATE_URL || `${OLLAMA_HOST}/api/generate`;
 const purpose = process.argv[2] || "architecture";
 
 const indexPath = path.join(root, ".ai", "index.json");
@@ -126,39 +128,40 @@ ${context}
 function callOllama(model, prompt) {
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify({ model, prompt, stream: false });
+    const url = new URL(OLLAMA_GENERATE_URL);
 
     const req = http.request({
-      hostname: "127.0.0.1",
-      port: 11434,
-      path: "/api/generate",
-      method: "POST",
+      hostname: url.hostname,
+      port: url.port || (url.protocol === 'https:' ? 443 : 80),
+      path: url.pathname + url.search,
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Content-Length": Buffer.byteLength(payload)
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
       },
       timeout: 600000
     }, res => {
-      let data = "";
+      let data = '';
 
-      res.on("data", chunk => data += chunk);
-      res.on("end", () => {
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
         try {
           if (res.statusCode < 200 || res.statusCode >= 300) {
             return reject(new Error(`Ollama HTTP ${res.statusCode}: ${data}`));
           }
 
           const parsed = JSON.parse(data);
-          resolve(parsed.response || "");
+          resolve(parsed.response || '');
         } catch (err) {
           reject(err);
         }
       });
     });
 
-    req.on("error", reject);
-    req.on("timeout", () => {
+    req.on('error', reject);
+    req.on('timeout', () => {
       req.destroy();
-      reject(new Error("Ollama request timed out"));
+      reject(new Error('Ollama request timed out'));
     });
 
     req.write(payload);
