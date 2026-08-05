@@ -69,17 +69,27 @@ describe('Worker torquemind-feedback route (integration-style)', () => {
     expect(res.status).toBe(503)
   })
 
-  test('invalid AI JSON -> 503', async () => {
+  test('invalid AI JSON -> 200 fallback payload', async () => {
     global.fetch.mockResolvedValue({ ok: true, text: async () => 'not json' })
     const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
-    expect(res.status).toBe(503)
+    expect(res.status).toBe(200)
+    const body = res.body || {}
+    expect(typeof body.reasonIncorrect).toBe('string')
+    expect(typeof body.reasonCorrect).toBe('string')
+    expect(typeof body.aseConcept).toBe('string')
+    expect(typeof body.nextStep).toBe('string')
   })
 
-  test('missing required response field -> 503', async () => {
+  test('missing required response field -> 200 fallback payload', async () => {
     const payload = { message: { content: JSON.stringify({ reasonIncorrect: 'A', reasonCorrect: 'B', aseConcept: 'C' }) } }
     global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify(payload) })
     const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
-    expect(res.status).toBe(503)
+    expect(res.status).toBe(200)
+    const body = res.body || {}
+    expect(typeof body.reasonIncorrect).toBe('string')
+    expect(typeof body.reasonCorrect).toBe('string')
+    expect(typeof body.aseConcept).toBe('string')
+    expect(typeof body.nextStep).toBe('string')
   })
 
   test('aborted request -> 504', async () => {
