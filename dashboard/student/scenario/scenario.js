@@ -366,14 +366,20 @@
     const state = readAttemptState(key, studentId);
     const failedHistory = state.history.filter((entry) => !entry.passed);
 
-    if (!state.activeAttempt) {
-      const previousQuestionIds = failedHistory
-        .flatMap((entry) => Array.isArray(entry.questionIds) ? entry.questionIds : []);
+    const title =
+      item.title ||
+      scenario.title ||
+      scenario.trainingFocus ||
+      scenario.symptoms ||
+      key;
 
-      const nextAttemptNumber = state.history.length + 1;
-      // Only create graded attempts from approved questions. If insufficient approved items exist,
-      // do not create a server-graded attempt and show a clear warning instead.
+    if (!state.activeAttempt) {
+      // If there are enough approved questions, create a graded attempt
       if (approvedQuestionBank.length >= QUESTIONS_PER_ATTEMPT) {
+        const previousQuestionIds = failedHistory
+          .flatMap((entry) => Array.isArray(entry.questionIds) ? entry.questionIds : []);
+
+        const nextAttemptNumber = state.history.length + 1;
         state.activeAttempt = createAttempt({
           questionBank: approvedQuestionBank,
           failedAttempts: failedHistory.length,
@@ -382,7 +388,112 @@
         });
         writeAttemptState(key, studentId, state);
       } else {
-        state.activeAttempt = null;
+        const missingCount = Math.max(0, QUESTIONS_PER_ATTEMPT - approvedQuestionBank.length);
+
+        root.innerHTML = `
+    <section class="scenario-hero">
+      <div class="scenario-label">
+        Scenario ${escapeHtml(scenario.id || item.numericId || "")}
+      </div>
+      <h1>${escapeHtml(title)}</h1>
+      <p>${escapeHtml(scenario.symptoms || item.shortSymptom || "")}</p>
+      <p class="note">
+        <strong>Topic:</strong>
+        ${escapeHtml(
+          scenario.trainingFocus ||
+          item.category ||
+          "Diagnostic training"
+        )}
+      </p>
+    </section>
+
+    <section class="scenario-card">
+      <h2>Systems Involved</h2>
+      <ul>
+        <li>
+          ${escapeHtml(
+            scenario.primarySystem ||
+            item.category ||
+            "General"
+          )}
+        </li>
+        ${(scenario.secondarySystems || [])
+          .map((system) => `<li>${escapeHtml(system)}</li>`)
+          .join("")}
+      </ul>
+    </section>
+
+    <section class="scenario-card">
+      <h2>Recommended Tools</h2>
+      <ul>
+        ${(scenario.requiredTools || [
+          "Scan Tool",
+          "Visual Inspection"
+        ])
+          .map((tool) => `<li>${escapeHtml(tool)}</li>`)
+          .join("")}
+      </ul>
+    </section>
+
+    <section class="scenario-card">
+      <h2>Questions</h2>
+
+      <div id="attemptSummary" class="attempt-summary">
+        <p>
+          <strong>Question bank unavailable for grading.</strong>
+        </p>
+        <p>
+          This module currently has
+          ${approvedQuestionBank.length}
+          approved questions. It needs
+          ${missingCount}
+          more approved questions before a
+          ${QUESTIONS_PER_ATTEMPT}-question graded attempt can begin.
+        </p>
+      </div>
+
+      ${
+        questionBank.length
+          ? `
+            <details>
+              <summary>
+                View ${questionBank.length} draft question records
+              </summary>
+              <p>
+                Draft questions are visible for development only and
+                are not used for grading.
+              </p>
+              <ul>
+                ${questionBank
+                  .map(
+                    (question) => `
+                      <li>
+                        ${escapeHtml(
+                          question.question_text ||
+                          question.id ||
+                          "Untitled question"
+                        )}
+                        <em>
+                          status:
+                          ${escapeHtml(question.status || "draft")}
+                        </em>
+                      </li>
+                    `
+                  )
+                  .join("")}
+              </ul>
+            </details>
+          `
+          : `
+            <p>
+              No questions have been added for this module.
+            </p>
+          `
+      }
+    </section>
+  `;
+
+        return;
       }
     }
 
@@ -422,7 +533,7 @@
       .map((idValue) => questionMap.get(idValue))
       .filter(Boolean);
 
-    const title = item.title || scenario.title || scenario.trainingFocus || scenario.symptoms || key;
+    
 
     root.innerHTML = `
       <section class="scenario-hero">
