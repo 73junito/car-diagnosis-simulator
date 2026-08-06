@@ -4,7 +4,7 @@ const { chromium } = require("@playwright/test");
 
 const baseUrl =
   process.env.UI_AUDIT_BASE_URL ||
-  "https://car-diagnosis-simulator.vercel.app";
+  "https://app.autolearnpro.com";
 
 const outputDirectory =
   process.env.UI_AUDIT_OUTPUT ||
