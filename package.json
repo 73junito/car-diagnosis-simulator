@@ -20,6 +20,7 @@
     "export:analytics": "npm run export:csv && npm run export:xapi",
     "test:analytics-api": "node tests/analytics-api.test.js",
     "test:analytics-routes": "node tests/analytics-routes.test.js",
+    "test:provenance-db": "node scripts/test-provenance-db.js",
     "lint": "eslint . --ext .js",
     "lint:tests": "eslint tests --ext .js",
     "normalize-assets": "node scripts/normalize-scenario-assets.js"
@@ -48,6 +49,7 @@
     "jest-environment-jsdom": "^30.4.1",
     "jest-junit": "^17.0.0",
     "node-fetch": "^3.3.2",
+    "pg": "^8.22.0",
     "supertest": "^7.2.2",
     "undici": "^8.7.0",
     "wait-on": "^9.1.0"
