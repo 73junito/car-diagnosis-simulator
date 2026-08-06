@@ -1,4 +1,6 @@
 const { isApprovedActiveRecord } = require('./vectorRetriever');
+const { createRetrievalContext } = require('./retrievalContext');
+const { createCandidate } = require('./candidateShape');
 
 function tokenize(text) {
   return String(text || '')
@@ -28,23 +30,28 @@ function bm25Score({ tfMap, dfMap, queryTerms, docLen, avgDocLen, totalDocs, k1 
 }
 
 function toCandidate(rec, score) {
-  return {
-    embeddingId: rec.id || null,
+  return createCandidate({
     chunkId: rec.chunkId || rec.chunk_id || null,
     sourceId: rec.sourceId || null,
-    sourceVersion: rec.sourceVersion || null,
-    section: rec.section || null,
-    locator: rec.locator || null,
-    pageStart: rec.pageStart || null,
-    pageEnd: rec.pageEnd || null,
-    text: rec.text || rec.text_excerpt || null,
-    keywordScore: Number(score.toFixed(6))
-  };
+    score,
+    vectorScore: 0,
+    lexicalScore: score,
+    fusionScore: 0,
+    retrievalMethod: 'keyword',
+    metadata: {
+      embeddingId: rec.id || null,
+      sourceVersion: rec.sourceVersion || null,
+      section: rec.section || null,
+      locator: rec.locator || null,
+      pageStart: rec.pageStart || null,
+      pageEnd: rec.pageEnd || null,
+      text: rec.text || rec.text_excerpt || null
+    }
+  });
 }
 
-async function keywordRetrieve({ query, metadataStore, topK = 20, minScore = 0 }) {
-  if (!query || typeof query !== 'string' || query.trim().length === 0) throw new Error('empty query rejected');
-  if (!metadataStore || typeof metadataStore.all !== 'function') throw new Error('metadataStore required');
+async function retrieve(context) {
+  const { query, metadataStore, topK = 20, minScore = 0 } = context;
 
   const allMeta = await metadataStore.all();
   const approved = allMeta.filter(isApprovedActiveRecord);
@@ -81,18 +88,24 @@ async function keywordRetrieve({ query, metadataStore, topK = 20, minScore = 0 }
     if (!candidate.chunkId) continue;
 
     const prev = byChunk.get(candidate.chunkId);
-    if (!prev || candidate.keywordScore > prev.keywordScore || (candidate.keywordScore === prev.keywordScore && String(candidate.embeddingId).localeCompare(String(prev.embeddingId)) < 0)) {
+    if (!prev || candidate.lexicalScore > prev.lexicalScore || (candidate.lexicalScore === prev.lexicalScore && String(candidate.metadata.embeddingId).localeCompare(String(prev.metadata.embeddingId)) < 0)) {
       byChunk.set(candidate.chunkId, candidate);
     }
   }
 
   return Array.from(byChunk.values())
-    .sort((a, b) => b.keywordScore - a.keywordScore || String(a.embeddingId).localeCompare(String(b.embeddingId)))
+    .sort((a, b) => b.lexicalScore - a.lexicalScore || String(a.metadata.embeddingId).localeCompare(String(b.metadata.embeddingId)))
     .slice(0, topK);
+}
+
+async function keywordRetrieve(options) {
+  const context = createRetrievalContext({ ...options, requireProvider: false });
+  return retrieve(context);
 }
 
 module.exports = {
   tokenize,
   bm25Score,
+  retrieve,
   keywordRetrieve
 };

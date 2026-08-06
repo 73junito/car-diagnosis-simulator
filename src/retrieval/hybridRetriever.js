@@ -1,6 +1,8 @@
 const { vectorRetrieve } = require('./vectorRetriever');
 const { keywordRetrieve } = require('./keywordRetriever');
 const { reciprocalRankFusion } = require('./reciprocalRankFusion');
+const { createRetrievalContext, withContext } = require('./retrievalContext');
+const { identityRankingStrategy } = require('./rankingStrategy');
 
 async function hybridRetrieve({
   query,
@@ -12,17 +14,35 @@ async function hybridRetrieve({
   keywordTopK = 20,
   vectorMinScore = 0,
   keywordMinScore = 0,
-  rrfK = 60
+  rrfK = 60,
+  rankingStrategy = identityRankingStrategy
 }) {
-  if (!query || typeof query !== 'string' || query.trim().length === 0) throw new Error('empty query rejected');
+  const context = createRetrievalContext({ query, provider, vectorStore, metadataStore, topK, minScore: 0, requireVectorStore: true });
+
+  const qRes = await provider.embedTexts([context.query]);
+  const queryEmbedding = qRes && qRes.vectors && qRes.vectors[0];
+  const vectorContext = withContext(context, {
+    queryEmbedding,
+    topK: vectorTopK,
+    minScore: vectorMinScore
+  });
+  const keywordContext = withContext(context, {
+    topK: keywordTopK,
+    minScore: keywordMinScore
+  });
 
   const [vectorRanked, keywordRanked] = await Promise.all([
-    vectorRetrieve({ query, provider, vectorStore, metadataStore, topK: vectorTopK, minScore: vectorMinScore }),
-    keywordRetrieve({ query, metadataStore, topK: keywordTopK, minScore: keywordMinScore })
+    vectorRetrieve(vectorContext),
+    keywordRetrieve(keywordContext)
   ]);
 
-  const fused = reciprocalRankFusion([vectorRanked, keywordRanked], { k: rrfK }).slice(0, topK);
-  if (fused.length === 0) {
+  const fused = reciprocalRankFusion([vectorRanked, keywordRanked], { k: rrfK });
+  const ranked = (rankingStrategy && typeof rankingStrategy.rank === 'function')
+    ? rankingStrategy.rank(fused, context.query, context)
+    : identityRankingStrategy.rank(fused, context.query, context);
+  const finalCandidates = ranked.slice(0, topK);
+
+  if (finalCandidates.length === 0) {
     return {
       status: 'insufficient',
       candidates: [],
@@ -30,21 +50,16 @@ async function hybridRetrieve({
     };
   }
 
-  const candidates = fused.map((x, i) => ({
+  const candidates = finalCandidates.map((x, i) => ({
     citationLabel: `C${i + 1}`,
-    fusedScore: x.fusedScore,
+    score: x.score,
+    fusionScore: x.fusionScore,
     vectorScore: x.vectorScore || 0,
-    keywordScore: x.keywordScore || 0,
+    lexicalScore: x.lexicalScore || 0,
+    retrievalMethod: x.retrievalMethod,
     chunkId: x.chunkId || null,
     sourceId: x.sourceId || null,
-    sourceVersion: x.sourceVersion || null,
-    section: x.section || null,
-    locator: x.locator || null,
-    pageStart: x.pageStart || null,
-    pageEnd: x.pageEnd || null,
-    text: x.text || null,
-    embeddingId: x.embeddingId || null,
-    rankSignals: x.rankSignals || []
+    metadata: x.metadata || {}
   }));
 
   return {

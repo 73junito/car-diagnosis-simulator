@@ -5,6 +5,7 @@ const { vectorRetrieve } = require('../src/retrieval/vectorRetriever');
 const { keywordRetrieve } = require('../src/retrieval/keywordRetriever');
 const { reciprocalRankFusion } = require('../src/retrieval/reciprocalRankFusion');
 const { hybridRetrieve } = require('../src/retrieval/hybridRetriever');
+const { createRetrievalContext } = require('../src/retrieval/retrievalContext');
 
 describe('hybrid retrieval phase 1', () => {
   let provider;
@@ -38,6 +39,9 @@ describe('hybrid retrieval phase 1', () => {
 
     expect(out.length).toBe(1);
     expect(out[0].chunkId).toBe('c1');
+    expect(out[0].retrievalMethod).toBe('vector');
+    expect(out[0]).toHaveProperty('score');
+    expect(out[0]).toHaveProperty('metadata');
   });
 
   test('keyword retriever BM25 prefers stronger lexical match', async () => {
@@ -47,7 +51,8 @@ describe('hybrid retrieval phase 1', () => {
     const out = await keywordRetrieve({ query: 'starter relay', metadataStore, topK: 5, minScore: 0 });
     expect(out.length).toBe(2);
     expect(out[0].chunkId).toBe('kc1');
-    expect(out[0].keywordScore).toBeGreaterThan(out[1].keywordScore);
+    expect(out[0].lexicalScore).toBeGreaterThan(out[1].lexicalScore);
+    expect(out[0].retrievalMethod).toBe('keyword');
   });
 
   test('reciprocal rank fusion combines rankings deterministically', () => {
@@ -63,7 +68,8 @@ describe('hybrid retrieval phase 1', () => {
     const fused = reciprocalRankFusion([vec, kw], { k: 60 });
     expect(fused[0].chunkId).toBe('A');
     expect(fused[1].chunkId).toBe('B');
-    expect(fused[0].fusedScore).toBeCloseTo(fused[1].fusedScore, 6);
+    expect(fused[0].fusionScore).toBeCloseTo(fused[1].fusionScore, 6);
+    expect(fused[0].retrievalMethod).toBe('fusion');
   });
 
   test('hybrid retriever returns fused candidate set with labels', async () => {
@@ -83,6 +89,9 @@ describe('hybrid retrieval phase 1', () => {
     expect(out.candidates[0].citationLabel).toBe('C1');
     expect(out.candidates[1].citationLabel).toBe('C2');
     expect(out.candidates[0].chunkId).toBe('hc1');
+    expect(out.candidates[0]).toHaveProperty('score');
+    expect(out.candidates[0]).toHaveProperty('metadata');
+    expect(out.candidates[0].metadata).toHaveProperty('locator');
   });
 
   test('hybrid retriever fail-closes when no approved evidence found', async () => {
@@ -115,5 +124,22 @@ describe('hybrid retrieval phase 1', () => {
     expect(out.status).toBe('sufficient');
     expect(out.candidates.length).toBe(1);
     expect(out.candidates[0].chunkId).toBe('dup-1');
+  });
+
+  test('RetrievalContext is immutable', () => {
+    const context = createRetrievalContext({
+      query: 'starter relay',
+      provider,
+      vectorStore,
+      metadataStore,
+      topK: 5,
+      minScore: 0
+    });
+
+    expect(Object.isFrozen(context)).toBe(true);
+    expect(() => {
+      context.query = 'changed';
+    }).toThrow(/read only property/i);
+    expect(context.query).toBe('starter relay');
   });
 });

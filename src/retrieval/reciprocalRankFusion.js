@@ -1,3 +1,5 @@
+const { createCandidate } = require('./candidateShape');
+
 function reciprocalRankFusion(lists, { k = 60 } = {}) {
   if (!Array.isArray(lists)) throw new Error('lists must be an array');
 
@@ -17,13 +19,17 @@ function reciprocalRankFusion(lists, { k = 60 } = {}) {
           key,
           fusedScore: 0,
           rankSignals: [],
-          item: item
+          item: item,
+          vectorScore: 0,
+          lexicalScore: 0
         });
       }
 
       const row = byKey.get(key);
       row.fusedScore += contribution;
       row.rankSignals.push(rank);
+      row.vectorScore = Math.max(row.vectorScore, item.vectorScore || 0);
+      row.lexicalScore = Math.max(row.lexicalScore, item.lexicalScore || 0);
 
       // Keep the richer representation if available.
       if ((item.text && !row.item.text) || (item.locator && !row.item.locator)) {
@@ -34,11 +40,21 @@ function reciprocalRankFusion(lists, { k = 60 } = {}) {
 
   return Array.from(byKey.values())
     .map(r => ({
-      ...r.item,
-      fusedScore: Number(r.fusedScore.toFixed(8)),
-      rankSignals: r.rankSignals.slice().sort((a, b) => a - b)
+      ...createCandidate({
+        chunkId: r.item.chunkId,
+        sourceId: r.item.sourceId,
+        score: r.fusedScore,
+        vectorScore: r.vectorScore,
+        lexicalScore: r.lexicalScore,
+        fusionScore: r.fusedScore,
+        retrievalMethod: 'fusion',
+        metadata: {
+          ...(r.item.metadata || {}),
+          rankSignals: r.rankSignals.slice().sort((a, b) => a - b)
+        }
+      })
     }))
-    .sort((a, b) => b.fusedScore - a.fusedScore || String(a.chunkId || a.embeddingId).localeCompare(String(b.chunkId || b.embeddingId)));
+    .sort((a, b) => b.fusionScore - a.fusionScore || String(a.chunkId).localeCompare(String(b.chunkId)));
 }
 
 module.exports = { reciprocalRankFusion };
