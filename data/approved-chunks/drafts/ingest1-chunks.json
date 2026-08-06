@@ -1,0 +1,29 @@
+{
+  "source": {
+    "id": "ingest1",
+    "title": "Ingest 1",
+    "version": 1
+  },
+  "chunks": [
+    {
+      "chunk_id": "ch_47237e04431c0ae453f772e7be7c658c",
+      "source_id": "ingest1",
+      "source_version": 1,
+      "title": "Ingest 1",
+      "section": null,
+      "page_start": null,
+      "page_end": null,
+      "locator": null,
+      "text_excerpt": "Hello world\n\nThis is a test document.",
+      "token_count": 9,
+      "overlap_before_text": "Hello world This is a test document.",
+      "overlap_after_text": "Hello world This is a test document.",
+      "overlap_before_tokens": 400,
+      "overlap_after_tokens": 400,
+      "text_hash": "100e0ce4d9bd13f4c14ac02d5e53460518b6f40b8bf1a8c8367f75ab724afa8e",
+      "status": "draft",
+      "approved": false,
+      "created_at": "1970-01-01T00:00:00.000Z"
+    }
+  ]
+}

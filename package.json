@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
+    "minimist": "^1.2.8",
     "prepare": "husky install",
     "test": "node scripts/run-tests.js",
     "build": "npm run write-version && node scripts/build-static-site.js",

@@ -1,0 +1,22 @@
+{
+  "id": "ingest1",
+  "title": "Ingest 1",
+  "license": "CC-BY",
+  "uploader": null,
+  "source_filename": "doc.txt",
+  "version": 1,
+  "sections": [
+    {
+      "page": null,
+      "chapterTitle": null,
+      "sectionTitle": null,
+      "text": "Hello world"
+    },
+    {
+      "page": null,
+      "chapterTitle": null,
+      "sectionTitle": null,
+      "text": "This is a test document."
+    }
+  ]
+}
