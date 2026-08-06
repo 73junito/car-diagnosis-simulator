@@ -10,15 +10,15 @@
 */
 const fs = require('fs');
 const path = require('path');
-const child = require('child_process');
+const { JSDOM } = require('jsdom');
+const { buildChunksFromManifest, writeChunks } = require('./build-approved-source-chunks');
 
-function stripHtml(html) {
-  return html.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?>[\s\S]*?<\/style>/gi, '')
-    .replace(/<!--([\s\S]*?)-->/g, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+function extractTextFromHtml(html) {
+  const dom = new JSDOM(html);
+  const { document } = dom.window;
+  // remove potentially executable elements
+  document.querySelectorAll('script, style, iframe, object, embed, template, noscript').forEach(e => e.remove());
+  return document.body?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
 }
 
 function usage() {
@@ -39,7 +39,7 @@ if (require.main === module) {
 
   const ext = path.extname(file).toLowerCase();
   let text = fs.readFileSync(file, 'utf8');
-  if (ext === '.html' || ext === '.htm') text = stripHtml(text);
+  if (ext === '.html' || ext === '.htm') text = extractTextFromHtml(text);
 
   // split into sections by form-feed or by large paragraphs
   const rawSections = text.split(/\f|\n\n(?=\S)/g).map((t, i) => ({
@@ -68,19 +68,17 @@ if (require.main === module) {
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
   console.log('Wrote manifest to', manifestPath);
 
-  // produce chunks using the chunker
+  // produce chunks using chunker module directly (no shell)
   const chunksOutDir = path.join('data', 'approved-chunks', 'drafts');
   fs.mkdirSync(chunksOutDir, { recursive: true });
   const chunksPath = path.join(chunksOutDir, `${id}-chunks.json`);
 
-  const runner = path.join(__dirname, 'build-approved-source-chunks.js');
-  const cmd = `node ${JSON.stringify(runner)} ${JSON.stringify(manifestPath)} ${JSON.stringify(chunksPath)} --preview`;
   try {
-    const out = child.execSync(cmd, { stdio: 'pipe' }).toString();
-    console.log(out);
+    const result = buildChunksFromManifest(manifest, { });
+    writeChunks(chunksPath, result);
     console.log('Chunks written to', chunksPath);
   } catch (err) {
-    console.error('Chunker failed:', err.stdout ? err.stdout.toString() : err.message);
+    console.error('Chunker failed:', err.message);
     process.exit(5);
   }
 }

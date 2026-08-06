@@ -121,16 +121,18 @@ function writeIfChanged(filePath, obj) {
   return true;
 }
 
-function chunkSourceManifest(src, outPath, opts) {
+function buildChunksFromManifest(src, opts) {
   validateManifest(src);
   const sections = src.sections || [];
   const grouped = splitAtStructure(sections, opts);
   const chunks = grouped.map(g => buildChunkRecord(src, g, opts));
+  return { source: { id: src.id, title: src.title, version: src.version || 1 }, chunks };
+}
 
-  const out = { source: { id: src.id, title: src.title, version: src.version || 1 }, chunks };
-  const changed = writeIfChanged(outPath, out);
-  console.log(`${changed ? 'Wrote' : 'Left unchanged'} ${chunks.length} chunks to ${outPath}`);
-  return out;
+function writeChunks(outPath, outObj) {
+  const changed = writeIfChanged(outPath, outObj);
+  console.log(`${changed ? 'Wrote' : 'Left unchanged'} ${outObj.chunks.length} chunks to ${outPath}`);
+  return changed;
 }
 
 function previewChunks(outObj) {
@@ -166,7 +168,8 @@ if (require.main === module) {
 
   try {
     const outPath = out || path.join(path.dirname(input), `${inJson.id || inJson.title}-chunks.json`);
-    const result = chunkSourceManifest(inJson, outPath, opts);
+    const result = buildChunksFromManifest(inJson, opts);
+    writeChunks(outPath, result);
     if (argv.preview) {
       console.log('Preview:', JSON.stringify(previewChunks(result), null, 2));
     }
@@ -175,3 +178,5 @@ if (require.main === module) {
     process.exit(3);
   }
 }
+
+module.exports = { buildChunksFromManifest, writeChunks, validateManifest };
