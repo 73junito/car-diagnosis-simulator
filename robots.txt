@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://car-diagnosis-simulator.vercel.app/sitemap.xml
+Sitemap: https://app.autolearnpro.com/sitemap.xml

@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
     }catch(e){/*ignore*/}
   });
 
-  const previewUrl = process.env.PREVIEW_URL || 'https://car-diagnosis-simulator.vercel.app/';
+  const previewUrl = process.env.PREVIEW_URL || 'https://app.autolearnpro.com/';
   console.log('Opening page (mobile viewport)...', previewUrl);
   await page.goto(previewUrl, { waitUntil: 'networkidle' });
   // If requested, apply an intentionally-matching-no-results search to show empty state
