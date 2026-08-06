@@ -138,6 +138,41 @@ describe('scenario attempt lifecycle', () => {
     });
   });
 
+  test('renders module information when approved question bank is insufficient', async () => {
+    // Setup a module with only draft questions
+    window.SCENARIO_QUESTIONS['test-module'] = Array.from({ length: 20 }, (_, index) => ({
+      id: `draft-${index + 1}`,
+      status: 'draft',
+      question_text: `Draft question ${index + 1}`,
+      option_a: 'A',
+      option_b: 'B',
+      option_c: 'C',
+      option_d: 'D',
+      correct_answer: 'A'
+    }));
+
+    window.SCENARIO_REGISTRY.push({
+      id: 'test-module',
+      title: 'Test Module',
+      category: 'Starting System',
+      raw: {
+        id: 'test-module',
+        title: 'Test Module',
+        symptoms: 'Engine does not crank.',
+        requiredTools: ['DVOM']
+      }
+    });
+
+    setScenarioRoute('test-module');
+    loadScenarioScript();
+    await flush();
+
+    const pageText = (document.querySelector('#scenarioPage')?.textContent || '').replace(/\s+/g, ' ');
+    expect(pageText).toContain('Test Module');
+    expect(pageText).toContain('Question bank unavailable for grading');
+    expect(pageText).toContain('0 approved questions');
+  });
+
   test('creates an active attempt with exactly 20 unique questions', async () => {
     setScenarioRoute('scenario-1');
     loadScenarioScript();
