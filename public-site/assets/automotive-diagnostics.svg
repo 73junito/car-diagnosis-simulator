@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <rect width="600" height="400" rx="12" fill="#0b1728" />
+  <g fill="#55a6ff">
+    <circle cx="120" cy="200" r="60" />
+    <rect x="220" y="140" width="240" height="120" rx="12" />
+  </g>
+  <text x="28" y="360" fill="#bac7d6" font-size="18">Automotive diagnostics</text>
+</svg>

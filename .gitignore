@@ -54,3 +54,6 @@ audit/
 .dev.vars
 .dev.vars.*
 !.dev.vars.example
+
+# Playwright authenticated storage (do not commit)
+playwright/.auth/
