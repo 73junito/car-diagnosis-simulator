@@ -5,13 +5,14 @@ const { devices } = require('@playwright/test');
 // Resolve baseURL from env, defaulting to a local preview server
 const baseURL =
   process.env.PLAYWRIGHT_BASE_URL ||
-  'http://127.0.0.1:4173';
+  'http://127.0.0.1:3003';
 
 const isRemoteBaseUrl = /^https?:\/\//i.test(baseURL)
   && !baseURL.includes('127.0.0.1')
   && !baseURL.includes('localhost');
 
 const skipWebServer = process.env.PLAYWRIGHT_SKIP_WEBSERVER === 'true';
+const enablePublicProject = Boolean(process.env.PUBLIC_SITE_BASE_URL);
 
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 module.exports = {
@@ -68,22 +69,26 @@ module.exports = {
       },
       dependencies: ['setup'],
     },
-    {
-      name: 'public-chromium',
-      testMatch: /public-homepage\.spec\.js/,
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: process.env.PUBLIC_SITE_BASE_URL || 'http://127.0.0.1:4174',
-        storageState: undefined,
-      },
-    },
+    ...(enablePublicProject
+      ? [
+          {
+            name: 'public-chromium',
+            testMatch: /public-homepage\.spec\.js/,
+            use: {
+              ...devices['Desktop Chrome'],
+              baseURL: process.env.PUBLIC_SITE_BASE_URL,
+              storageState: undefined,
+            },
+          },
+        ]
+      : []),
   ],
 
   webServer: (isRemoteBaseUrl || skipWebServer)
     ? undefined
     : {
-        command: 'npm run preview',
-        url: 'http://127.0.0.1:4173',
+        command: 'npx http-server -p 3003 -c-1 .',
+        url: 'http://127.0.0.1:3003',
         reuseExistingServer: true,
         timeout: 120 * 1000,
       },
