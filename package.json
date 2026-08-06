@@ -24,7 +24,8 @@
     "test:provenance-db": "node scripts/test-provenance-db.js",
     "lint": "eslint . --ext .js",
     "lint:tests": "eslint tests --ext .js",
-    "normalize-assets": "node scripts/normalize-scenario-assets.js"
+    "normalize-assets": "node scripts/normalize-scenario-assets.js",
+    "evaluate-retrieval": "node scripts/evaluate-retrieval.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

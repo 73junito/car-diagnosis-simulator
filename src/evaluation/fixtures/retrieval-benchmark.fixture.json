@@ -1,0 +1,42 @@
+[
+  {
+    "id": "starter-click-001",
+    "query": "Starter clicks but engine does not crank",
+    "relevantChunkIds": ["chunk-starter-control", "chunk-voltage-drop"],
+    "minimumRelevant": 1,
+    "tags": ["starting-system", "no-crank"],
+    "mockRetrievedChunkIds": ["chunk-starter-control", "chunk-battery-load", "chunk-voltage-drop", "chunk-ignition-switch", "chunk-ground-path"]
+  },
+  {
+    "id": "battery-drain-001",
+    "query": "Battery dies overnight parasitic draw suspected",
+    "relevantChunkIds": ["chunk-parasitic-draw-test"],
+    "minimumRelevant": 1,
+    "tags": ["electrical", "battery"],
+    "mockRetrievedChunkIds": ["chunk-parasitic-draw-test", "chunk-ammeter-setup", "chunk-fuse-pull-method", "chunk-surface-charge"]
+  },
+  {
+    "id": "fuel-trim-lean-001",
+    "query": "Long term fuel trim high positive at idle",
+    "relevantChunkIds": ["chunk-vacuum-leak-smoke-test", "chunk-fuel-pressure-check"],
+    "minimumRelevant": 1,
+    "tags": ["fuel-system", "trim"],
+    "mockRetrievedChunkIds": ["chunk-fuel-pressure-check", "chunk-intake-gasket-leak", "chunk-vacuum-leak-smoke-test", "chunk-maf-cleaning", "chunk-o2-response-check"]
+  },
+  {
+    "id": "misfire-ignition-001",
+    "query": "Single-cylinder misfire under load",
+    "relevantChunkIds": ["chunk-coil-swap-test"],
+    "minimumRelevant": 1,
+    "tags": ["ignition", "misfire"],
+    "mockRetrievedChunkIds": ["chunk-coil-swap-test", "chunk-spark-plug-inspection", "chunk-injector-balance-test"]
+  },
+  {
+    "id": "duplicate-defect-001",
+    "query": "Starter relay chatters intermittently",
+    "relevantChunkIds": ["chunk-starter-relay-voltage-drop"],
+    "minimumRelevant": 1,
+    "tags": ["starting-system"],
+    "mockRetrievedChunkIds": ["chunk-starter-relay-voltage-drop", "chunk-starter-relay-voltage-drop", "chunk-cable-corrosion", "chunk-ground-voltage-drop"]
+  }
+]
