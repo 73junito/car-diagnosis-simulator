@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400">
+  <rect width="600" height="400" rx="12" fill="#13243a" />
+  <g fill="#35d4e5">
+    <rect x="60" y="80" width="480" height="220" rx="10" />
+    <rect x="100" y="120" width="360" height="40" rx="8" fill="#0b1728" />
+  </g>
+  <text x="28" y="360" fill="#bac7d6" font-size="18">Tutor interface</text>
+</svg>
