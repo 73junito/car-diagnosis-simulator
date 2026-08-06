@@ -1,5 +1,6 @@
 // @ts-check
 
+const fs = require('fs');
 const { devices } = require('@playwright/test');
 
 // Resolve baseURL from env, defaulting to a local preview server
@@ -13,6 +14,8 @@ const isRemoteBaseUrl = /^https?:\/\//i.test(baseURL)
 
 const skipWebServer = process.env.PLAYWRIGHT_SKIP_WEBSERVER === 'true';
 const enablePublicProject = Boolean(process.env.PUBLIC_SITE_BASE_URL);
+const authStoragePath = 'playwright/.auth/user.json';
+const authStorageState = fs.existsSync(authStoragePath) ? authStoragePath : undefined;
 
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 module.exports = {
@@ -60,14 +63,16 @@ module.exports = {
     },
     {
       name: 'chromium',
-      testIgnore: /public-homepage\.spec\.js/,
+      testIgnore: [
+        /public-homepage\.spec\.js/,
+        /auth\.setup\.js/,
+      ],
       use: {
         ...devices['Desktop Chrome'],
         baseURL,
-        // Use authenticated storage state produced by the `setup` step
-        storageState: 'playwright/.auth/user.json',
+        // Use auth state when available; default CI/local smoke remains unauthenticated.
+        storageState: authStorageState,
       },
-      dependencies: ['setup'],
     },
     ...(enablePublicProject
       ? [
