@@ -83,4 +83,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { stripHtml };
+// script intended to be run as CLI; no module exports required
