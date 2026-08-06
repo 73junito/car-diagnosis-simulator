@@ -27,6 +27,39 @@
     return (window.SCENARIO_QUESTIONS && window.SCENARIO_QUESTIONS[scenarioId]) || [];
   }
 
+  async function loadApprovedRegistry() {
+    // Try API first, then local in-repo JSON, then window.APPROVED_SOURCES
+    try {
+      if (typeof fetch === 'function') {
+        try {
+          const res = await fetch('/api/approved-sources');
+          if (res.ok) {
+            const json = await res.json();
+            window.APPROVED_SOURCES = json;
+            return json;
+          }
+        } catch (e) {
+          // ignore and fallback to static file
+        }
+
+        try {
+          const res2 = await fetch('/data/approved-sources.json');
+          if (res2.ok) {
+            const json = await res2.json();
+            window.APPROVED_SOURCES = json;
+            return json;
+          }
+        } catch (e) {
+          // ignore – we'll fallback to existing `window.APPROVED_SOURCES` if present
+        }
+      }
+    } catch (_) {
+      // noop
+    }
+
+    return window.APPROVED_SOURCES || {};
+  }
+
   const escapeHtml = (value) => String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
