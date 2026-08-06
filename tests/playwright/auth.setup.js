@@ -6,15 +6,13 @@ const isCi = process.env.CI === 'true';
 
 // If storage state already exists, skip interactive setup to avoid popping a browser.
 test.skip(fs.existsSync(storageState), 'Playwright auth storage exists; skip interactive setup');
+// Never run interactive auth setup in CI.
+test.skip(isCi, 'Interactive authentication is not run in CI.');
 
 // This interactive setup saves an authenticated storage state to
 // `playwright/.auth/user.json`. Run this locally and complete the login manually
 // (or automate via env vars if you prefer). Do NOT commit the resulting JSON.
 test('authenticate and save storage state', async ({ page }) => {
-  if (isCi) {
-    test.skip(true, 'Interactive authentication is not run in CI.');
-  }
-
   const base = process.env.PLAYWRIGHT_BASE_URL || 'https://app.autolearnpro.com';
   await page.goto(base, { waitUntil: 'networkidle' });
 

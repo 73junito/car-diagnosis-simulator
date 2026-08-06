@@ -14,6 +14,7 @@ const isRemoteBaseUrl = /^https?:\/\//i.test(baseURL)
 
 const skipWebServer = process.env.PLAYWRIGHT_SKIP_WEBSERVER === 'true';
 const enablePublicProject = Boolean(process.env.PUBLIC_SITE_BASE_URL);
+const isCi = process.env.CI === 'true';
 const authStoragePath = 'playwright/.auth/user.json';
 const authStorageState = fs.existsSync(authStoragePath) ? authStoragePath : undefined;
 
@@ -57,7 +58,8 @@ module.exports = {
       testMatch: /auth\.setup\.js/,
       retries: 0,
       use: {
-        headless: false,
+        // Headed browsers fail in Linux CI without X server.
+        headless: isCi,
         baseURL,
       },
     },
