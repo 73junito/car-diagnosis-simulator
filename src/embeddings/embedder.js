@@ -7,6 +7,7 @@ function sha256Hex(input) {
 function buildEmbeddingRecord({ chunk, source, model, dimensions, embeddingVersion, vector }) {
   const embeddingHash = sha256Hex(JSON.stringify(vector));
   return {
+    id: crypto.randomUUID(),
     chunkId: chunk.id || chunk.chunk_id || null,
     sourceId: source.id || null,
     sourceVersion: source.version || null,
@@ -20,8 +21,22 @@ function buildEmbeddingRecord({ chunk, source, model, dimensions, embeddingVersi
   };
 }
 
+function isChunkEmbeddable({ source, chunk }) {
+  return (
+    source?.status === 'approved' &&
+    source?.retired !== true &&
+    source?.superseded_by == null &&
+    chunk?.status === 'approved' &&
+    chunk?.approved === true &&
+    chunk?.deleted !== true &&
+    chunk?.superseded_by == null &&
+    typeof chunk?.text_excerpt === 'string' &&
+    chunk.text_excerpt.trim().length > 0
+  );
+}
+
 function eligibleChunks(chunks, source) {
-  return chunks.filter(c => source.status === 'approved' && c.status === 'approved' && c.approved === true);
+  return chunks.filter(c => isChunkEmbeddable({ source, chunk: c }));
 }
 
 async function embedChunks({ provider, storage, source, chunks, options = {} }) {
@@ -64,4 +79,4 @@ async function embedChunks({ provider, storage, source, chunks, options = {} }) 
   return { embedded: records, skipped: eligible.length - toEmbed.length };
 }
 
-module.exports = { buildEmbeddingRecord, eligibleChunks, embedChunks };
+module.exports = { buildEmbeddingRecord, eligibleChunks, embedChunks, isChunkEmbeddable };
