@@ -72,7 +72,21 @@ async function embedChunks({ provider, storage, source, chunks, options = {} }) 
     const chunk = toEmbed[i];
     const vector = res.vectors[i];
     const record = buildEmbeddingRecord({ chunk, source, model, dimensions, embeddingVersion, vector });
-    await storage.upsert(record);
+    // write metadata (append-only) using available API
+    if (storage && typeof storage.insertMetadata === 'function') {
+      await storage.insertMetadata(record);
+    } else if (storage && typeof storage.upsert === 'function') {
+      await storage.upsert(record);
+    } else {
+      throw new Error('no metadata storage available');
+    }
+
+    // write vector to vector store if available (separation of concerns)
+    if (storage && typeof storage.insertVector === 'function') {
+      await storage.insertVector(record.id, vector);
+    } else if (storage && storage.vectorStore && typeof storage.vectorStore.insertVector === 'function') {
+      await storage.vectorStore.insertVector(record.id, vector);
+    }
     records.push(record);
   }
 
