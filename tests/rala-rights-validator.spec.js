@@ -17,6 +17,13 @@ function writeJson(filePath, value) {
   fs.writeFileSync(filePath, JSON.stringify(value, null, 2) + '\n', 'utf8');
 }
 
+function normalizeMessage(value) {
+  return String(value || '')
+    .replace(/\x1b\[[0-9;]*m/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function runValidator(tempManifestPath, tempBatchPath) {
   try {
     const stdout = execFileSync(
@@ -39,16 +46,25 @@ function runValidator(tempManifestPath, tempBatchPath) {
       }
     );
 
-    return { ok: true, rejected: false, exitCode: 0, message: String(stdout || '').trim() };
+    const message = String(stdout || '').trim();
+    return {
+      ok: true,
+      rejected: false,
+      exitCode: 0,
+      message,
+      normalizedMessage: normalizeMessage(message),
+    };
   } catch (error) {
     const exitCode = Number.isInteger(error.status) ? error.status : null;
     const stdout = typeof error.stdout === 'string' ? error.stdout : '';
     const stderr = typeof error.stderr === 'string' ? error.stderr : '';
+    const message = `${stdout}\n${stderr}`.trim();
     return {
       ok: false,
       rejected: true,
       exitCode,
-      message: `${stdout}\n${stderr}`.trim(),
+      message,
+      normalizedMessage: normalizeMessage(message),
     };
   }
 }
@@ -99,7 +115,7 @@ describe('RALA rights validator fail-closed regressions', () => {
     expect(result.ok).toBe(false);
     expect(result.exitCode).not.toBe(0);
     expect(result.rejected).toBe(true);
-    expect(result.message).toMatch(/text_excerpt/i);
+    expect(result.normalizedMessage).toMatch(/text_excerpt/i);
   });
 
   test('rejects restricted non-null citation quote', () => {
@@ -112,7 +128,7 @@ describe('RALA rights validator fail-closed regressions', () => {
     expect(result.ok).toBe(false);
     expect(result.exitCode).not.toBe(0);
     expect(result.rejected).toBe(true);
-    expect(result.message).toMatch(/verbatim quote/i);
+    expect(result.normalizedMessage).toMatch(/verbatim quote/i);
   });
 
   test('rejects license_ok=true while rights review is pending', () => {
@@ -125,7 +141,7 @@ describe('RALA rights validator fail-closed regressions', () => {
     expect(result.ok).toBe(false);
     expect(result.exitCode).not.toBe(0);
     expect(result.rejected).toBe(true);
-    expect(result.message).toMatch(/license_ok=true/i);
+    expect(result.normalizedMessage).toMatch(/license_ok=true/i);
   });
 
   test('rejects unrestricted_ingestion without documented approval', () => {
@@ -141,8 +157,8 @@ describe('RALA rights validator fail-closed regressions', () => {
     expect(result.ok).toBe(false);
     expect(result.exitCode).not.toBe(0);
     expect(result.rejected).toBe(true);
-    expect(result.message).toMatch(/cannot be unrestricted_ingestion/i);
-    expect(result.message).toMatch(/documented approval/i);
+    expect(result.normalizedMessage).toMatch(/cannot be unrestricted_ingestion/i);
+    expect(result.normalizedMessage).toMatch(/documented approval/i);
   });
 
   test('rejects missing rights status', () => {
@@ -154,7 +170,7 @@ describe('RALA rights validator fail-closed regressions', () => {
     expect(result.ok).toBe(false);
     expect(result.exitCode).not.toBe(0);
     expect(result.rejected).toBe(true);
-    expect(result.message).toMatch(/missing ingestion_rights_status/i);
+    expect(result.normalizedMessage).toMatch(/missing ingestion_rights_status/i);
   });
 
   test('rejects unknown rights status', () => {
@@ -166,6 +182,6 @@ describe('RALA rights validator fail-closed regressions', () => {
     expect(result.ok).toBe(false);
     expect(result.exitCode).not.toBe(0);
     expect(result.rejected).toBe(true);
-    expect(result.message).toMatch(/invalid ingestion_rights_status/i);
+    expect(result.normalizedMessage).toMatch(/invalid ingestion_rights_status/i);
   });
 });
