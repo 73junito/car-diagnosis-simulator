@@ -46,6 +46,16 @@ describe('retrieval - Top-K approved evidence', () => {
     expect(res.status).toBe('insufficient');
   });
 
+  test('malformed retrieved metadata is rejected', async () => {
+    const rec = { id: 'bad1', sourceId: 's-bad', sourceStatus: 'approved', chunkStatus: 'approved', text: 'bad' };
+    await mstore.upsert(rec);
+    const v = (await provider.embedTexts(['bad'])).vectors[0];
+    await vstore.insertVector('bad1', v);
+    const res = await retrieveApprovedEvidence({ query: 'bad', provider, vectorStore: vstore, metadataStore: mstore, topK: 1, minScore: 0 });
+    expect(res.status).toBe('insufficient');
+    expect(res.reason).toBe('NO_APPROVED_EVIDENCE_ABOVE_THRESHOLD');
+  });
+
   test('retired source excluded', async () => {
     const rec = { id: 'e4', chunkId: 'c4', sourceId: 's3', sourceStatus: 'approved', sourceRetired: true, chunkStatus: 'approved', text: 'y' };
     await mstore.upsert(rec);
