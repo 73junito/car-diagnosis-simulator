@@ -1,0 +1,51 @@
+{
+  "manifest_name": "rala-approved-source-registry",
+  "review_state": "draft",
+  "purpose": "Approved-source registry for controlled RALA provenance ingestion.",
+  "source_acceptance_rules": [
+    "Only authoritative public/government, manufacturer, or TorqueMind-authored reviewed content.",
+    "No development fixtures, scraped web copies, or unlicensed manuals.",
+    "Each source must include checksum, storage path, license metadata, and review notes.",
+    "Each chunk must include page or section locators and a SHA-256 text hash.",
+    "Pilot data must remain draft until reviewed and explicitly approved."
+  ],
+  "sources": [
+    {
+      "id": "source-id-here",
+      "title": "Source title here",
+      "publisher": "Publisher or agency",
+      "publication_year": 2026,
+      "license": {
+        "name": "license name",
+        "terms": "license terms or review notes"
+      },
+      "original_filename": "source-file.pdf",
+      "storage_path": "/approved-sources/source-file.pdf",
+      "checksum": "sha256-here",
+      "checksum_algorithm": "sha256",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "Populate with reviewed pilot source metadata only.",
+      "authors": [],
+      "chunks": [
+        {
+          "chunk_id": "chunk-id-here",
+          "title": "Section title here",
+          "section": "Section or chapter name",
+          "page_start": 1,
+          "page_end": 2,
+          "locator": "Chapter > Section",
+          "text_excerpt": "Approved excerpt goes here.",
+          "token_count": 0,
+          "overlap_before_tokens": 0,
+          "overlap_after_tokens": 0,
+          "text_hash": "sha256-here",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    }
+  ]
+}
