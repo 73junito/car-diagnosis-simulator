@@ -20,6 +20,7 @@ function writeJson(filePath, value) {
 function normalizeMessage(value) {
   return String(value || '')
     .replace(/\x1b\[[0-9;]*m/g, '')
+    .replace(/\s*\|\s*/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
