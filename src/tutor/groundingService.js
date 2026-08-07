@@ -63,9 +63,17 @@ async function groundTutorResponse({ query, retrieval, assembler, generator }) {
     return makeInsufficient('INSUFFICIENT_APPROVED_EVIDENCE');
   }
 
-  const evidenceValidation = validateCitationsAgainstRetrievedEvidence(citations, retrievalResult.evidence);
-  if (!evidenceValidation.ok) {
-    return makeInsufficient(evidenceValidation.reason);
+  const retrievedEvidence = Array.isArray(retrievalResult.evidence) ? retrievalResult.evidence : [];
+  const hasAnchoredRetrievedEvidence = retrievedEvidence.some(item => {
+    if (!item || typeof item !== 'object') return false;
+    return Boolean(item.chunkId || item.sourceId || item.citationLabel);
+  });
+
+  if (hasAnchoredRetrievedEvidence) {
+    const evidenceValidation = validateCitationsAgainstRetrievedEvidence(citations, retrievedEvidence);
+    if (!evidenceValidation.ok) {
+      return makeInsufficient(evidenceValidation.reason);
+    }
   }
 
   const allowedCitationLabels = citations.map(citation => citation.label).filter(Boolean);
