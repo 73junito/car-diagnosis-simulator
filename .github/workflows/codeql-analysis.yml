@@ -11,12 +11,15 @@ jobs:
     name: Analyze (CodeQL)
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       actions: read
       security-events: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
