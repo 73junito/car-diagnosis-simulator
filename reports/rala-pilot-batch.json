@@ -19,6 +19,16 @@
       "provenance_status": "provisional",
       "question_text": "What is the primary function of a CAN bus network in an automotive system?",
       "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "css_electronics_can_intro:chunk_cf265ac2",
+        "reviewer_name": "rafael",
+        "review_date": "2026-08-07",
+        "decision": "needs_revision_pending_detail",
+        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
+        "remaining_limitations": "Non-OEM source and single-source dependency remain.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pending_detail_capture"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
@@ -54,7 +64,17 @@
       "ase_area": "CI",
       "provenance_status": "provisional",
       "question_text": "What is the primary function of an alternator in a vehicle?",
-      "evidence_status": "pending_source_upgrade",
+      "evidence_status": "pending_human_claim_scope_review",
+      "human_review": {
+        "source_evidence_id": "delco_remy_alternators_overview:chunk_delco_alt_fn",
+        "reviewer_name": "rafael",
+        "review_date": "2026-08-07",
+        "decision": "needs_revision_pending_detail",
+        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
+        "remaining_limitations": "Source supports general alternator claims only unless human reviewer confirms claim-level fit; vehicle-specific specifications remain unresolved without OEM procedures.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pending_claim_scope_detail_capture"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
@@ -65,20 +85,20 @@
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "yourmechanic_bad_alternator_symptoms",
-          "chunk_id": "chunk_31df0f23",
-          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "source_id": "delco_remy_alternators_overview",
+          "chunk_id": "chunk_delco_alt_fn",
+          "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
           "quote": null,
-          "evidence_summary": "TorqueMind summary: The alternator is described as supplying electrical output and charging support.",
+          "evidence_summary": "TorqueMind summary: Delco Remy describes alternator technologies that support vehicle electric-system demand and battery charging performance.",
           "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "yourmechanic_bad_alternator_symptoms",
-          "chunk_id": "chunk_31df0f23",
-          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "source_id": "delco_remy_alternators_overview",
+          "chunk_id": "chunk_delco_alt_fn",
+          "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
           "quote": null,
-          "evidence_summary": "TorqueMind summary: The statement supports the alternator-function answer key rationale.",
+          "evidence_summary": "TorqueMind summary: Delco Remy provisionally supports general electrical-system operation and battery-charging performance.",
           "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
@@ -91,6 +111,16 @@
       "provenance_status": "provisional",
       "question_text": "What is the primary component of diesel exhaust fluid (DEF)?",
       "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "nhtsa_def_bulletin:chunk_c202f9cf",
+        "reviewer_name": "rafael",
+        "review_date": "2026-08-07",
+        "decision": "needs_revision_pending_detail",
+        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
+        "remaining_limitations": "Original publisher ownership chain remains unresolved in rights metadata.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pending_detail_capture"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
@@ -127,6 +157,16 @@
       "provenance_status": "provisional",
       "question_text": "What would be a plausible reason for dimming headlights while driving?",
       "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "yourmechanic_bad_alternator_symptoms:chunk_31df0f23",
+        "reviewer_name": "rafael",
+        "review_date": "2026-08-07",
+        "decision": "needs_revision_pending_detail",
+        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
+        "remaining_limitations": "Non-OEM source remains provisional and should be upgraded to OEM diagnostic references.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pending_detail_capture"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
@@ -162,8 +202,18 @@
       "ase_area": "A7 Heating and Air Conditioning",
       "provenance_status": "provisional",
       "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
-      "evidence_status": "provisional_evidence",
+      "evidence_status": "pending_human_operating_conditions_review",
       "semantic_gate_note": "Approve only when canonical answer-choice text confirms system-pressure testing scope, not low-side-only conclusiveness.",
+      "human_review": {
+        "source_evidence_id": "carrier_r134a_pt_chart:chunk_carrier_r134a_pt + drivequip_low_side_pressure_diagnostics:chunk_5e5a2cf7",
+        "reviewer_name": "rafael",
+        "review_date": "2026-08-07",
+        "decision": "needs_revision_pending_detail",
+        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
+        "remaining_limitations": "Requires human validation of refrigerant type, ambient and vent temperature, engine speed, blower setting, recirculation state, humidity/known limitations, static versus operating pressure, and vehicle/OEM applicability.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pending_hvac_operating_context_capture"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
@@ -174,11 +224,11 @@
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "drivequip_low_side_pressure_diagnostics",
-          "chunk_id": "chunk_5e5a2cf7",
-          "locator": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics > low side pressure and charge",
+          "source_id": "carrier_r134a_pt_chart",
+          "chunk_id": "chunk_carrier_r134a_pt",
+          "locator": "Carrier R-134a Temperature - Pressure Chart > saturation pressure table in psig and bar by temperature",
           "quote": null,
-          "evidence_summary": "TorqueMind summary: Low-side pressure can indicate undercharge but should be interpreted with full-system diagnostics.",
+          "evidence_summary": "TorqueMind summary: PT reference values are provided in Fahrenheit/Celsius with pressure in psig/bar and must be evaluated at known ambient/operating conditions.",
           "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
@@ -187,7 +237,7 @@
           "chunk_id": "chunk_5e5a2cf7",
           "locator": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics > low side pressure and charge",
           "quote": null,
-          "evidence_summary": "TorqueMind summary: The source supports provisional HVAC evidence only, not low-side-only conclusiveness.",
+          "evidence_summary": "TorqueMind summary: Diagnostic guidance remains conditional; low-side pressure alone is insufficient without refrigerant-type and ambient-context checks.",
           "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
