@@ -36,7 +36,7 @@ describe('canonical production domain', () => {
     );
 
     expect(robots).toContain(
-      'Sitemap: https://app.autolearnpro.com/sitemap.xml'
+      'Sitemap: https://autolearnpro.com/sitemap.xml'
     );
   });
 });
