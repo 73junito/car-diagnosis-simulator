@@ -1,0 +1,275 @@
+{
+  "manifest_name": "rala-approved-source-registry",
+  "review_state": "draft",
+  "reviewer": "pending human review",
+  "approval_decision": "pending",
+  "approval_notes": "Provisional pilot evidence only. TorqueMind seed files are not independent authoritative sources, and no human approval has been recorded yet.",
+  "sources": [
+    {
+      "id": "tm_seed_scenario_questions",
+      "title": "TorqueMind scenario_questions seed",
+      "publisher": "TorqueMind",
+      "publication_year": 2026,
+      "publication_date": "2026-08-07",
+      "license": {
+        "name": "TorqueMind reviewed internal content",
+        "terms": "Reviewed internal source material approved for the five-question pilot manifest."
+      },
+      "original_filename": "scenario_questions.sql",
+      "storage_path": "supabase/seed/scenario_questions.sql",
+      "checksum": "ae516cd8e6a0a1328ed0fb7bdc18243e21aa19de5fb83ae9671cf69bdf51a9de",
+      "checksum_algorithm": "sha256",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "Provisional source pending independent authoritative evidence and human review.",
+      "authors": ["TorqueMind"],
+      "chunks": [
+        {
+          "chunk_id": "chunk_cf265ac2",
+          "title": "CAN Bus Basics",
+          "section": "can-bus-network",
+          "locator": "scenario_questions.sql > can-bus-network > CAN Bus Basics",
+          "text_excerpt": "'What is the primary function of a CAN bus network in an automotive system?',\n'To provide power to all electronic components',\n'To enable communication between various ECUs (Electronic Control Units)',\n'To serve as a physical structure for mounting sensors',\n'To store data from vehicle diagnostics',\n'B',\n'CAN bus networks are used to facilitate communication and data exchange among multiple electronic control units in an automotive system.',\n'beginner',\n'CAN Bus Basics',\n'Electrical and Electronics'\n);",
+          "token_count": 0,
+          "text_hash": "d5e44ce76e7ab8b933eb4fcb063ff13604809774dce5cda692318daee429645e",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        },
+        {
+          "chunk_id": "chunk_9b71712d",
+          "title": "Alternator Function",
+          "section": "charging-system",
+          "locator": "scenario_questions.sql > charging-system > Alternator Function",
+          "text_excerpt": "'What is the primary function of an alternator in a vehicle?',\n'To start the engine',\n'To charge the battery and power electrical systems',\n'To regulate the fuel mixture',\n'To cool down the engine',\n'B',\n'The alternator generates electricity to charge the battery and power the vehicle's electrical components.',\n'beginner',\n'Alternator Function',\n'CI'\n);",
+          "token_count": 0,
+          "text_hash": "cce7837acc2a6a56be836520f377d80b8349bfdf74f21a36deb8fa0c9222edbb",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        },
+        {
+          "chunk_id": "chunk_c202f9cf",
+          "title": "DEF Composition",
+          "section": "diesel-aftertreatment",
+          "locator": "scenario_questions.sql > diesel-aftertreatment > DEF Composition",
+          "text_excerpt": "'What is the primary component of diesel exhaust fluid (DEF)?',\n'Ammonium hydroxide',\n'Urea',\n'Nitrogen dioxide',\n'Sulfuric acid',\n'B',\n'DEF is composed of 32.5% urea and 67.5% water, which reacts with NOx in the exhaust to reduce emissions.',\n'beginner',\n'DEF Composition',\n'Diagnosis'\n);",
+          "token_count": 0,
+          "text_hash": "9e3c3c0160340624c406ccda8481dafdd77b6bff651651e69732d337df66e981",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    },
+    {
+      "id": "tm_seed_replacement_scenarios",
+      "title": "TorqueMind replacement_scenarios seed",
+      "publisher": "TorqueMind",
+      "publication_year": 2026,
+      "publication_date": "2026-08-07",
+      "license": {
+        "name": "TorqueMind reviewed internal content",
+        "terms": "Reviewed internal source material approved for the five-question pilot manifest."
+      },
+      "original_filename": "replacement_scenarios.sql",
+      "storage_path": "supabase/seed/replacement_scenarios.sql",
+      "checksum": "2cc63de2cc0e4d419e4b794bd05996a914bfb84e99544a2bc72d5ea4d5c3ea6e",
+      "checksum_algorithm": "sha256",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "Provisional source pending independent authoritative evidence and human review.",
+      "authors": ["TorqueMind"],
+      "chunks": [
+        {
+          "chunk_id": "chunk_08e95a70",
+          "title": "Electrical Load",
+          "section": "electrical-load",
+          "locator": "replacement_scenarios.sql > electrical-load",
+          "text_excerpt": "'What would be a plausible reason for dimming headlights while driving?',\n'A malfunctioning headlight bulb.',\n'An overloaded electrical system with multiple accessories running simultaneously.',\n'A properly functioning alternator and battery.',\n'A well-insulated wiring harness.',\n'B',\n'Dimming headlights can be a sign of an overloaded electrical system, where the alternator cannot keep up with the increased load from multiple accessories running at once.',\n'intermediate',\n'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',\n'A6 Electrical/Electronic Systems'\n);",
+          "token_count": 0,
+          "text_hash": "78ee46f0ddbc8a42825cf93adf0ae1fc284a6e3cdf6a78eb2eade0c9b8294aaf",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        },
+        {
+          "chunk_id": "chunk_09a7a1b9",
+          "title": "Automotive A/C cooling diagnostics",
+          "section": "hvac-cooling",
+          "locator": "replacement_scenarios.sql > hvac-cooling",
+          "text_excerpt": "'You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?',\n'Low-side pressure gauge reading',\n'High-side pressure gauge reading',\n'Blender door position check',\n'Compressor clutch operation test',\n'A',\n'A low refrigerant charge can be confirmed by a low reading on the low-side pressure gauge.',\n'intermediate',\n'Automotive A/C cooling diagnostics',\n'A7 Heating and Air Conditioning'\n);",
+          "token_count": 0,
+          "text_hash": "601f6d49e2f8bdfb9ea7f4dfbbbbd864fb7de7b526d2d77d98518d576ed117b6",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "cf265ac2-5ada-4ae1-850e-18d3e2838268",
+      "scenario_id": "can-bus-network",
+      "question_text": "What is the primary function of a CAN bus network in an automotive system?",
+      "correct_answer": "B",
+      "source_id": "tm_seed_scenario_questions",
+      "chunk_id": "chunk_cf265ac2",
+      "locator": "scenario_questions.sql > can-bus-network > CAN Bus Basics",
+      "review_state": "draft",
+      "reviewer": "pending human review",
+      "approval_decision": "pending",
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "tm_seed_scenario_questions",
+          "chunk_id": "chunk_cf265ac2",
+          "locator": "scenario_questions.sql > can-bus-network > CAN Bus Basics",
+          "quote": "CAN bus networks are used to facilitate communication and data exchange among multiple electronic control units in an automotive system.",
+          "source_hash": "ae516cd8e6a0a1328ed0fb7bdc18243e21aa19de5fb83ae9671cf69bdf51a9de",
+          "chunk_hash": "d5e44ce76e7ab8b933eb4fcb063ff13604809774dce5cda692318daee429645e"
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "tm_seed_scenario_questions",
+          "chunk_id": "chunk_cf265ac2",
+          "locator": "scenario_questions.sql > can-bus-network > CAN Bus Basics",
+          "quote": "CAN bus networks are used to facilitate communication and data exchange among multiple electronic control units in an automotive system.",
+          "source_hash": "ae516cd8e6a0a1328ed0fb7bdc18243e21aa19de5fb83ae9671cf69bdf51a9de",
+          "chunk_hash": "d5e44ce76e7ab8b933eb4fcb063ff13604809774dce5cda692318daee429645e"
+        }
+      ]
+    },
+    {
+      "question_id": "9b71712d-eb90-459e-b6f5-08b60c595664",
+      "scenario_id": "charging-system",
+      "question_text": "What is the primary function of an alternator in a vehicle?",
+      "correct_answer": "B",
+      "source_id": "tm_seed_scenario_questions",
+      "chunk_id": "chunk_9b71712d",
+      "locator": "scenario_questions.sql > charging-system > Alternator Function",
+      "review_state": "draft",
+      "reviewer": "pending human review",
+      "approval_decision": "pending",
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "tm_seed_scenario_questions",
+          "chunk_id": "chunk_9b71712d",
+          "locator": "scenario_questions.sql > charging-system > Alternator Function",
+          "quote": "The alternator generates electricity to charge the battery and power the vehicle's electrical components.",
+          "source_hash": "ae516cd8e6a0a1328ed0fb7bdc18243e21aa19de5fb83ae9671cf69bdf51a9de",
+          "chunk_hash": "cce7837acc2a6a56be836520f377d80b8349bfdf74f21a36deb8fa0c9222edbb"
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "tm_seed_scenario_questions",
+          "chunk_id": "chunk_9b71712d",
+          "locator": "scenario_questions.sql > charging-system > Alternator Function",
+          "quote": "The alternator generates electricity to charge the battery and power the vehicle's electrical components.",
+          "source_hash": "ae516cd8e6a0a1328ed0fb7bdc18243e21aa19de5fb83ae9671cf69bdf51a9de",
+          "chunk_hash": "cce7837acc2a6a56be836520f377d80b8349bfdf74f21a36deb8fa0c9222edbb"
+        }
+      ]
+    },
+    {
+      "question_id": "c202f9cf-c630-4c28-b26e-e7e51cb11779",
+      "scenario_id": "diesel-aftertreatment",
+      "question_text": "What is the primary component of diesel exhaust fluid (DEF)?",
+      "correct_answer": "B",
+      "source_id": "tm_seed_scenario_questions",
+      "chunk_id": "chunk_c202f9cf",
+      "locator": "scenario_questions.sql > diesel-aftertreatment > DEF Composition",
+      "review_state": "draft",
+      "reviewer": "pending human review",
+      "approval_decision": "pending",
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "tm_seed_scenario_questions",
+          "chunk_id": "chunk_c202f9cf",
+          "locator": "scenario_questions.sql > diesel-aftertreatment > DEF Composition",
+          "quote": "DEF is composed of 32.5% urea and 67.5% water, which reacts with NOx in the exhaust to reduce emissions.",
+          "source_hash": "ae516cd8e6a0a1328ed0fb7bdc18243e21aa19de5fb83ae9671cf69bdf51a9de",
+          "chunk_hash": "9e3c3c0160340624c406ccda8481dafdd77b6bff651651e69732d337df66e981"
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "tm_seed_scenario_questions",
+          "chunk_id": "chunk_c202f9cf",
+          "locator": "scenario_questions.sql > diesel-aftertreatment > DEF Composition",
+          "quote": "DEF is composed of 32.5% urea and 67.5% water, which reacts with NOx in the exhaust to reduce emissions.",
+          "source_hash": "ae516cd8e6a0a1328ed0fb7bdc18243e21aa19de5fb83ae9671cf69bdf51a9de",
+          "chunk_hash": "9e3c3c0160340624c406ccda8481dafdd77b6bff651651e69732d337df66e981"
+        }
+      ]
+    },
+    {
+      "question_id": "08e95a70-c9f9-47bd-a248-da110634e9d5",
+      "scenario_id": "electrical-load",
+      "question_text": "What would be a plausible reason for dimming headlights while driving?",
+      "correct_answer": "B",
+      "source_id": "tm_seed_replacement_scenarios",
+      "chunk_id": "chunk_08e95a70",
+      "locator": "replacement_scenarios.sql > electrical-load",
+      "review_state": "draft",
+      "reviewer": "pending human review",
+      "approval_decision": "pending",
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "tm_seed_replacement_scenarios",
+          "chunk_id": "chunk_08e95a70",
+          "locator": "replacement_scenarios.sql > electrical-load",
+          "quote": "Dimming headlights can be a sign of an overloaded electrical system, where the alternator cannot keep up with the increased load from multiple accessories running at once.",
+          "source_hash": "2cc63de2cc0e4d419e4b794bd05996a914bfb84e99544a2bc72d5ea4d5c3ea6e",
+          "chunk_hash": "78ee46f0ddbc8a42825cf93adf0ae1fc284a6e3cdf6a78eb2eade0c9b8294aaf"
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "tm_seed_replacement_scenarios",
+          "chunk_id": "chunk_08e95a70",
+          "locator": "replacement_scenarios.sql > electrical-load",
+          "quote": "Dimming headlights can be a sign of an overloaded electrical system, where the alternator cannot keep up with the increased load from multiple accessories running at once.",
+          "source_hash": "2cc63de2cc0e4d419e4b794bd05996a914bfb84e99544a2bc72d5ea4d5c3ea6e",
+          "chunk_hash": "78ee46f0ddbc8a42825cf93adf0ae1fc284a6e3cdf6a78eb2eade0c9b8294aaf"
+        }
+      ]
+    },
+    {
+      "question_id": "09a7a1b9-6674-4aab-8161-8cbb95c7c606",
+      "scenario_id": "hvac-cooling",
+      "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
+      "correct_answer": "A",
+      "source_id": "tm_seed_replacement_scenarios",
+      "chunk_id": "chunk_09a7a1b9",
+      "locator": "replacement_scenarios.sql > hvac-cooling",
+      "review_state": "draft",
+      "reviewer": "pending human review",
+      "approval_decision": "pending",
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "tm_seed_replacement_scenarios",
+          "chunk_id": "chunk_09a7a1b9",
+          "locator": "replacement_scenarios.sql > hvac-cooling",
+          "quote": "A low refrigerant charge can be confirmed by a low reading on the low-side pressure gauge.",
+          "source_hash": "2cc63de2cc0e4d419e4b794bd05996a914bfb84e99544a2bc72d5ea4d5c3ea6e",
+          "chunk_hash": "601f6d49e2f8bdfb9ea7f4dfbbbbd864fb7de7b526d2d77d98518d576ed117b6"
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "tm_seed_replacement_scenarios",
+          "chunk_id": "chunk_09a7a1b9",
+          "locator": "replacement_scenarios.sql > hvac-cooling",
+          "quote": "A low refrigerant charge can be confirmed by a low reading on the low-side pressure gauge.",
+          "source_hash": "2cc63de2cc0e4d419e4b794bd05996a914bfb84e99544a2bc72d5ea4d5c3ea6e",
+          "chunk_hash": "601f6d49e2f8bdfb9ea7f4dfbbbbd864fb7de7b526d2d77d98518d576ed117b6"
+        }
+      ]
+    }
+  ]
+}
