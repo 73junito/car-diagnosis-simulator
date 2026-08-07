@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://app.autolearnpro.com/sitemap.xml
+Sitemap: https://autolearnpro.com/sitemap.xml
