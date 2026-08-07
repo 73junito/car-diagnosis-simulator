@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
 
-  "name": "car-diagnosis-simulator",
+  "name": "autolearnpro-public",
 
   "main": "worker/index.js",
 
@@ -16,7 +16,7 @@
   },
 
   "assets": {
-    "directory": "./dist"
+    "directory": "./public-site"
   }
   ,
   "durable_objects": {

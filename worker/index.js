@@ -5,8 +5,6 @@ import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 
 const app = new Hono();
 
-app.get("/", (c) => c.text("TorqueMind Worker Online"));
-
 app.get("/api/health", (c) =>
   c.json({
     status: "ok",
@@ -16,6 +14,20 @@ app.get("/api/health", (c) =>
 
 // Lightweight ping for diagnostics
 app.get('/__ping', (c) => c.json({ ok: true }));
+
+app.use('*', async (c, next) => {
+  const path = c.req.path;
+
+  if (path.startsWith('/api/') || path === '/__ping') {
+    return next();
+  }
+
+  if (c.req.method === 'GET' || c.req.method === 'HEAD') {
+    return c.env.ASSETS.fetch(c.req.raw);
+  }
+
+  return next();
+});
 
 // attach request context middleware for observability
 app.use('/api/torquemind-feedback', createRequestContext())
