@@ -130,15 +130,33 @@ alter table public.question_citations enable row level security;
 alter table public.provenance_audit enable row level security;
 
 -- Create minimal auth.uid() compatibility shim for non-Supabase Postgres environments.
-create schema if not exists auth;
-create or replace function auth.uid()
-returns uuid
-language sql
-stable
-security definer
-as $$
-    select (current_setting('auth.uid', true))::uuid;
-$$;
+-- Supabase manages the auth schema itself, so this is best-effort there.
+do $do$
+begin
+    begin
+        execute 'create schema if not exists auth';
+    exception
+        when insufficient_privilege then
+            null;
+    end;
+
+    begin
+        execute $sql$
+            create or replace function auth.uid()
+            returns uuid
+            language sql
+            stable
+            security definer
+            as $fn$
+                select (current_setting('auth.uid', true))::uuid;
+            $fn$;
+        $sql$;
+    exception
+        when insufficient_privilege then
+            null;
+    end;
+end
+$do$;
 
 -- Helper: only allow operations by users with reviewer/admin roles
 -- Assumes a `public.profiles` table with `id` and `role` columns.
