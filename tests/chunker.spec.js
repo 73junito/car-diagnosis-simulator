@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const child = require('child_process');
 
 const runner = path.join(__dirname, '..', 'scripts', 'build-approved-source-chunks.js');
 const ingest = path.join(__dirname, '..', 'scripts', 'ingest-approved-source.js');
@@ -21,7 +20,9 @@ describe('approved source chunker', () => {
     const bad = { title: 'no id' };
     const inPath = path.join(tmp, 'bad.json');
     fs.writeFileSync(inPath, JSON.stringify(bad));
-    expect(() => child.execSync(`node ${runner} ${inPath} ${path.join(tmp,'out.json')}`)).toThrow();
+    const outPath = path.join(tmp, 'out.json');
+    const result = runNodeScript(runner, [inPath, outPath]);
+    expect(result.status).not.toBe(0);
   });
 
   test('deterministic output and idempotent write', () => {
