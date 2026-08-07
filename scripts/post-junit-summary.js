@@ -70,17 +70,36 @@ async function postComment(repo, prNumber, body, token) {
   const listUrl = `${apiBase}/repos/${owner}/${repoName}/issues/${prNumber}/comments`;
   const headers = { Authorization: `token ${token}`, 'User-Agent': 'junit-summary-action' };
   const res = await fetch(listUrl, { headers });
-  const comments = await res.json();
+  if (!res.ok) {
+    console.log(`Skipped PR comment update: GitHub list request failed (${res.status}).`);
+    return false;
+  }
 
-  const existing = comments.find(c => c.body && c.body.includes('<!-- junit-summary -->'));
+  const payload = await res.json();
+  if (!Array.isArray(payload)) {
+    console.log('Skipped PR comment update: GitHub returned a non-array comments payload.');
+    return false;
+  }
+
+  const existing = payload.find(c => c.body && c.body.includes('<!-- junit-summary -->'));
   if (existing) {
     const patchUrl = `${apiBase}/repos/${owner}/${repoName}/issues/comments/${existing.id}`;
-    await fetch(patchUrl, { method: 'PATCH', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ body }) });
+    const patchRes = await fetch(patchUrl, { method: 'PATCH', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ body }) });
+    if (!patchRes.ok) {
+      console.log(`Skipped PR comment update: GitHub PATCH request failed (${patchRes.status}).`);
+      return false;
+    }
     console.log('Updated existing PR comment.');
+    return true;
   } else {
     const postUrl = `${apiBase}/repos/${owner}/${repoName}/issues/${prNumber}/comments`;
-    await fetch(postUrl, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ body }) });
+    const postRes = await fetch(postUrl, { method: 'POST', headers: { ...headers, 'Content-Type': 'application/json' }, body: JSON.stringify({ body }) });
+    if (!postRes.ok) {
+      console.log(`Skipped PR comment update: GitHub POST request failed (${postRes.status}).`);
+      return false;
+    }
     console.log('Posted new PR comment.');
+    return true;
   }
 }
 
