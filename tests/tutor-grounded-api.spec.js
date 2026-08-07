@@ -15,7 +15,7 @@ describe('/api/tutor/grounded', () => {
   test('response schema enforced for grounded response', async () => {
     const { createGroundedHandler } = require('../api/tutor/grounded');
     const handler = createGroundedHandler({
-      retrieval: async () => ({ status: 'sufficient', evidence: [{ id: 1 }] }),
+      retrieval: async () => ({ status: 'sufficient', evidence: [{ citationLabel: 'C1', chunkId: 'chunk-001', sourceId: 'source-001', score: 1 }] }),
       assembler: async () => ({
         status: 'ready',
         citations: [{ label: 'C1', sourceId: 'source-001', chunkId: 'chunk-001', locator: 'L1', title: 'Approved Source', pageStart: 118, pageEnd: 121 }],
@@ -54,7 +54,7 @@ describe('/api/tutor/grounded', () => {
   test('rejects empty query', async () => {
     const { createGroundedHandler } = require('../api/tutor/grounded');
     const handler = createGroundedHandler({
-      retrieval: async () => ({ status: 'sufficient', evidence: [{ id: 1 }] }),
+      retrieval: async () => ({ status: 'sufficient', evidence: [{ citationLabel: 'C1', chunkId: 'chunk-001', sourceId: 'source-001', score: 1 }] }),
       assembler: async () => ({ status: 'ready', citations: [{ label: 'C1', sourceId: 's', chunkId: 'c', locator: 'L' }], promptEvidence: ['[C1] x'] }),
       generator: async () => 'x [C1]'
     });
@@ -66,6 +66,35 @@ describe('/api/tutor/grounded', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.status).toBe('insufficient');
     expect(res.body.reason).toBe('EMPTY_QUERY');
+  });
+
+  test('rejects citations that are not backed by retrieved chunks', async () => {
+    const { createGroundedHandler } = require('../api/tutor/grounded');
+    const handler = createGroundedHandler({
+      retrieval: async () => ({
+        status: 'sufficient',
+        evidence: [
+          { citationLabel: 'C1', chunkId: 'fixture-approved-chunk', sourceId: 'fixture-approved-source', locator: 'Starter Circuit Testing' }
+        ]
+      }),
+      assembler: async () => ({
+        status: 'ready',
+        citations: [
+          { label: 'C1', sourceId: 'fixture-approved-source', chunkId: 'missing-chunk', locator: 'Starter Circuit Testing' }
+        ],
+        promptEvidence: ['[C1] x']
+      }),
+      generator: async () => 'x [C1]'
+    });
+
+    const req = { method: 'POST', body: { query: 'starter no crank' } };
+    const res = makeRes();
+    await handler(req, res);
+
+    expect(res.statusCode).toBe(200);
+    expect(isGroundedResponseShape(res.body)).toBe(true);
+    expect(res.body.status).toBe('insufficient');
+    expect(res.body.reason).toBe('CITATION_NOT_SUPPORTED_BY_RETRIEVED_CHUNKS');
   });
 
   test('method not allowed for non-POST', async () => {

@@ -1,4 +1,5 @@
 const debug = require('util').debuglog ? require('util').debuglog('retriever') : () => {};
+const { validateRetrievedEvidenceRecord } = require('../rala/validators');
 
 function cosineSimilarity(a, b) {
   if (!Array.isArray(a) || !Array.isArray(b)) throw new Error('vectors must be arrays');
@@ -30,6 +31,9 @@ async function retrieveApprovedEvidence({ query, provider, vectorStore, metadata
   // filter approved and active records
   const candidates = [];
   for (const rec of allMeta) {
+    const recordValidation = validateRetrievedEvidenceRecord(rec);
+    if (!recordValidation.ok) continue;
+
     // skip superseded embedding metadata
     if (rec.superseded_by) continue;
     // require approved source and chunk status indicated on metadata (tests will supply these fields)
