@@ -1,6 +1,8 @@
 {
   "pilot_name": "rala-five-question-pilot",
   "review_state": "draft",
+  "rights_review_state": "pending",
+  "ingestion_gate": "blocked_pending_rights_and_human_review",
   "generated_at": "2026-08-07T15:49:06.4850664-05:00",
   "selection_policy": [
     "Prefer one question per scenario when possible",
@@ -16,27 +18,32 @@
       "ase_area": "Electrical and Electronics",
       "provenance_status": "provisional",
       "question_text": "What is the primary function of a CAN bus network in an automotive system?",
+      "evidence_status": "provisional_evidence",
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "tm_seed_scenario_questions",
+          "source_id": "css_electronics_can_intro",
           "chunk_id": "chunk_cf265ac2",
-          "locator": "scenario_questions.sql > can-bus-network > CAN Bus Basics",
-          "quote": "CAN bus networks are used to facilitate communication and data exchange among multiple electronic control units in an automotive system."
+          "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: CAN enables communication between ECUs over a shared in-vehicle network.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "tm_seed_scenario_questions",
+          "source_id": "css_electronics_can_intro",
           "chunk_id": "chunk_cf265ac2",
-          "locator": "scenario_questions.sql > can-bus-network > CAN Bus Basics",
-          "quote": "CAN bus networks are used to facilitate communication and data exchange among multiple electronic control units in an automotive system."
+          "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: This evidence supports selecting the ECU communication option.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     },
@@ -47,27 +54,32 @@
       "ase_area": "CI",
       "provenance_status": "provisional",
       "question_text": "What is the primary function of an alternator in a vehicle?",
+      "evidence_status": "pending_source_upgrade",
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "tm_seed_scenario_questions",
-          "chunk_id": "chunk_9b71712d",
-          "locator": "scenario_questions.sql > charging-system > Alternator Function",
-          "quote": "The alternator generates electricity to charge the battery and power the vehicle's electrical components."
+          "source_id": "yourmechanic_bad_alternator_symptoms",
+          "chunk_id": "chunk_31df0f23",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: The alternator is described as supplying electrical output and charging support.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "tm_seed_scenario_questions",
-          "chunk_id": "chunk_9b71712d",
-          "locator": "scenario_questions.sql > charging-system > Alternator Function",
-          "quote": "The alternator generates electricity to charge the battery and power the vehicle's electrical components."
+          "source_id": "yourmechanic_bad_alternator_symptoms",
+          "chunk_id": "chunk_31df0f23",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: The statement supports the alternator-function answer key rationale.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     },
@@ -78,27 +90,32 @@
       "ase_area": "Diagnosis",
       "provenance_status": "provisional",
       "question_text": "What is the primary component of diesel exhaust fluid (DEF)?",
+      "evidence_status": "provisional_evidence",
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "tm_seed_scenario_questions",
+          "source_id": "nhtsa_def_bulletin",
           "chunk_id": "chunk_c202f9cf",
-          "locator": "scenario_questions.sql > diesel-aftertreatment > DEF Composition",
-          "quote": "DEF is composed of 32.5% urea and 67.5% water, which reacts with NOx in the exhaust to reduce emissions."
+          "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: DEF is represented as 32.5% urea with de-ionized water.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "tm_seed_scenario_questions",
+          "source_id": "nhtsa_def_bulletin",
           "chunk_id": "chunk_c202f9cf",
-          "locator": "scenario_questions.sql > diesel-aftertreatment > DEF Composition",
-          "quote": "DEF is composed of 32.5% urea and 67.5% water, which reacts with NOx in the exhaust to reduce emissions."
+          "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: The cited bulletin supports the composition-focused response.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     },
@@ -109,27 +126,32 @@
       "ase_area": "A6 Electrical/Electronic Systems",
       "provenance_status": "provisional",
       "question_text": "What would be a plausible reason for dimming headlights while driving?",
+      "evidence_status": "provisional_evidence",
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "tm_seed_replacement_scenarios",
-          "chunk_id": "chunk_08e95a70",
-          "locator": "replacement_scenarios.sql > electrical-load",
-          "quote": "Dimming headlights can be a sign of an overloaded electrical system, where the alternator cannot keep up with the increased load from multiple accessories running at once."
+          "source_id": "yourmechanic_bad_alternator_symptoms",
+          "chunk_id": "chunk_31df0f23",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Dimming under added accessory load is described as consistent with inadequate charging output.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "tm_seed_replacement_scenarios",
-          "chunk_id": "chunk_08e95a70",
-          "locator": "replacement_scenarios.sql > electrical-load",
-          "quote": "Dimming headlights can be a sign of an overloaded electrical system, where the alternator cannot keep up with the increased load from multiple accessories running at once."
+          "source_id": "yourmechanic_bad_alternator_symptoms",
+          "chunk_id": "chunk_31df0f23",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: The evidence supports a load-related charging insufficiency diagnosis.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     },
@@ -140,27 +162,33 @@
       "ase_area": "A7 Heating and Air Conditioning",
       "provenance_status": "provisional",
       "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
+      "evidence_status": "provisional_evidence",
+      "semantic_gate_note": "Approve only when canonical answer-choice text confirms system-pressure testing scope, not low-side-only conclusiveness.",
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "tm_seed_replacement_scenarios",
-          "chunk_id": "chunk_09a7a1b9",
-          "locator": "replacement_scenarios.sql > hvac-cooling",
-          "quote": "A low refrigerant charge can be confirmed by a low reading on the low-side pressure gauge."
+          "source_id": "drivequip_low_side_pressure_diagnostics",
+          "chunk_id": "chunk_5e5a2cf7",
+          "locator": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics > low side pressure and charge",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Low-side pressure can indicate undercharge but should be interpreted with full-system diagnostics.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "tm_seed_replacement_scenarios",
-          "chunk_id": "chunk_09a7a1b9",
-          "locator": "replacement_scenarios.sql > hvac-cooling",
-          "quote": "A low refrigerant charge can be confirmed by a low reading on the low-side pressure gauge."
+          "source_id": "drivequip_low_side_pressure_diagnostics",
+          "chunk_id": "chunk_5e5a2cf7",
+          "locator": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics > low side pressure and charge",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: The source supports provisional HVAC evidence only, not low-side-only conclusiveness.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     }
