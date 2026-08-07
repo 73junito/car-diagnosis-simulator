@@ -1,0 +1,168 @@
+{
+  "pilot_name": "rala-five-question-pilot",
+  "review_state": "draft",
+  "generated_at": "",
+  "selection_policy": [
+    "Choose five representative questions from the inventory.",
+    "Prefer distinct scenarios when possible.",
+    "Keep provenance mappings limited to approved sources and chunks.",
+    "Do not use fixtures or unreviewed content."
+  ],
+  "questions": [
+    {
+      "question_id": "",
+      "scenario_id": "",
+      "topic": "",
+      "ase_area": "",
+      "question_text": "",
+      "provenance_status": "missing",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    },
+    {
+      "question_id": "",
+      "scenario_id": "",
+      "topic": "",
+      "ase_area": "",
+      "question_text": "",
+      "provenance_status": "missing",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    },
+    {
+      "question_id": "",
+      "scenario_id": "",
+      "topic": "",
+      "ase_area": "",
+      "question_text": "",
+      "provenance_status": "missing",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    },
+    {
+      "question_id": "",
+      "scenario_id": "",
+      "topic": "",
+      "ase_area": "",
+      "question_text": "",
+      "provenance_status": "missing",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    },
+    {
+      "question_id": "",
+      "scenario_id": "",
+      "topic": "",
+      "ase_area": "",
+      "question_text": "",
+      "provenance_status": "missing",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    }
+  ]
+}

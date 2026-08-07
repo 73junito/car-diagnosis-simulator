@@ -1,0 +1,168 @@
+{
+  "pilot_name": "rala-five-question-pilot",
+  "review_state": "draft",
+  "generated_at": "2026-08-07T15:49:06.4850664-05:00",
+  "selection_policy": [
+    "Prefer one question per scenario when possible",
+    "Preserve traceability to the inventory file",
+    "Fill citations only with approved source chunks",
+    "Do not use fixture data or unreviewed content"
+  ],
+  "questions": [
+    {
+      "question_id": "cf265ac2-5ada-4ae1-850e-18d3e2838268",
+      "scenario_id": "can-bus-network",
+      "topic": "CAN Bus Basics",
+      "ase_area": "Electrical and Electronics",
+      "provenance_status": null,
+      "question_text": "What is the primary function of a CAN bus network in an automotive system?",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    },
+    {
+      "question_id": "9b71712d-eb90-459e-b6f5-08b60c595664",
+      "scenario_id": "charging-system",
+      "topic": "Alternator Function",
+      "ase_area": "CI",
+      "provenance_status": null,
+      "question_text": "What is the primary function of an alternator in a vehicle?",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    },
+    {
+      "question_id": "c202f9cf-c630-4c28-b26e-e7e51cb11779",
+      "scenario_id": "diesel-aftertreatment",
+      "topic": "DEF Composition",
+      "ase_area": "Diagnosis",
+      "provenance_status": null,
+      "question_text": "What is the primary component of diesel exhaust fluid (DEF)?",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    },
+    {
+      "question_id": "08e95a70-c9f9-47bd-a248-da110634e9d5",
+      "scenario_id": "electrical-load",
+      "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
+      "ase_area": "A6 Electrical/Electronic Systems",
+      "provenance_status": null,
+      "question_text": "What would be a plausible reason for dimming headlights while driving?",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    },
+    {
+      "question_id": "09a7a1b9-6674-4aab-8161-8cbb95c7c606",
+      "scenario_id": "hvac-cooling",
+      "topic": "Automotive A/C cooling diagnostics",
+      "ase_area": "A7 Heating and Air Conditioning",
+      "provenance_status": null,
+      "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
+      "provenance_version": 1,
+      "validation_checklist": {
+        "answer_verified": true,
+        "explanation_verified": true,
+        "citation_matches_excerpt": true,
+        "license_ok": true
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "",
+          "chunk_id": "",
+          "locator": "",
+          "quote": ""
+        }
+      ]
+    }
+  ]
+}
