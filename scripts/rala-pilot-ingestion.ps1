@@ -48,6 +48,31 @@ function Assert-FileExists {
   }
 }
 
+function Test-RestrictedChunkOmissionAllowed {
+  param($Source, $Chunk)
+
+  $isBlankExcerpt = [string]::IsNullOrWhiteSpace([string]$Chunk.text_excerpt)
+  if (-not $isBlankExcerpt) { return $false }
+
+  $rightsStatus = [string]$Source.ingestion_rights_status
+  $rightsBasis = [string]$Source.rights_basis
+  $chunkSummary = [string]$Chunk.chunk_summary
+
+  if ($rightsStatus -notin @('metadata_and_link_only', 'limited_quote_review_required', 'permission_required', 'prohibited', 'unknown_blocked')) {
+    return $false
+  }
+
+  if ($rightsBasis -notmatch 'metadata|link|blocked|pending_review|pending review') {
+    return $false
+  }
+
+  if ([string]::IsNullOrWhiteSpace($chunkSummary)) {
+    throw "Chunk in source $($Source.id) cannot omit text_excerpt without a chunk_summary describing the non-retrievable evidence."
+  }
+
+  return $true
+}
+
 Assert-FileExists $InventoryCsvPath
 Assert-FileExists $ManifestPath
 Assert-FileExists $PilotBatchPath
@@ -64,6 +89,9 @@ $InventoryById = @{}
 foreach ($Row in $Inventory) {
   $InventoryById[$Row.id] = $Row
 }
+
+$RetrievableChunkIds = New-Object 'System.Collections.Generic.HashSet[string]'
+$OmittedChunkIds = @{}
 
 foreach ($PilotQuestion in $Batch.questions) {
   if (-not $InventoryById.ContainsKey($PilotQuestion.question_id)) {
@@ -128,11 +156,27 @@ on conflict (id) do update set
 "@.Trim())
 
   foreach ($Chunk in $Source.chunks) {
-    foreach ($RequiredField in 'chunk_id','text_excerpt','token_count','text_hash') {
+    foreach ($RequiredField in 'chunk_id','token_count') {
       if ([string]::IsNullOrWhiteSpace([string]$Chunk.$RequiredField)) {
         throw "Chunk in source $($Source.id) is missing $RequiredField."
       }
     }
+
+    if (Test-RestrictedChunkOmissionAllowed -Source $Source -Chunk $Chunk) {
+      $OmittedChunkIds[[string]$Chunk.chunk_id] = [string]$Source.id
+      $Sql.Add("-- Omitted non-retrievable chunk insert for source_id=$($Source.id), chunk_id=$($Chunk.chunk_id) because rights metadata restricts ingestion to metadata/link-only evidence.")
+      continue
+    }
+
+    if ([string]::IsNullOrWhiteSpace([string]$Chunk.text_excerpt)) {
+      throw "Chunk in source $($Source.id) is missing text_excerpt."
+    }
+
+    if ([string]::IsNullOrWhiteSpace([string]$Chunk.text_hash)) {
+      throw "Chunk in source $($Source.id) is missing text_hash."
+    }
+
+    [void]$RetrievableChunkIds.Add([string]$Chunk.chunk_id)
 
     $Sql.Add(@"
 insert into public.source_chunks (
@@ -204,6 +248,14 @@ on conflict (question_id, provenance_version) do update set
   foreach ($Citation in $PilotQuestion.citations) {
     if ([string]::IsNullOrWhiteSpace($Citation.source_id) -or [string]::IsNullOrWhiteSpace($Citation.chunk_id)) {
       throw "Pilot question $questionId is missing citation source_id or chunk_id."
+    }
+
+    if ($OmittedChunkIds.ContainsKey([string]$Citation.chunk_id)) {
+      throw "Pilot question $questionId cites non-retrievable chunk $($Citation.chunk_id) from source $($Citation.source_id). Metadata/link-only chunks must not be ingested as retrievable citations."
+    }
+
+    if (-not $RetrievableChunkIds.Contains([string]$Citation.chunk_id)) {
+      throw "Pilot question $questionId cites chunk $($Citation.chunk_id) that was not generated as a retrievable source chunk."
     }
 
     $CitationId = New-DeterministicUuid -Seed "qc:${questionId}:$($Citation.source_id):$($Citation.chunk_id):$($Citation.role)"
