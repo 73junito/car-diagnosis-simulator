@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (topStudentRowEl){
           topStudentRowEl.dataset.studentId = sid || ''
           topStudentRowEl.onclick = () => {
-            if (sid) window.location.href = `/dashboard/student?id=${encodeURIComponent(sid)}`
+            if (sid) window.location.href = `/dashboard/student/?id=${encodeURIComponent(sid)}`
             else window.location.href = '/dashboard'
           }
         }

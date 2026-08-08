@@ -28,7 +28,9 @@ test.describe('Student dashboard smoke', ()=>{
     // Desktop: open page served by local static server so absolute paths resolve
     // prefer explicit BASE_URL, otherwise default to local server started for tests
     const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:3003';
-    await page.goto(`${BASE_URL}/dashboard/student`);
+    await page.goto(`${BASE_URL}/dashboard/student`, { waitUntil: 'load' });
+    await page.waitForURL(/\/dashboard\/student\/$/, { timeout: 15000 });
+    await page.goto(`${BASE_URL}/dashboard/student/`);
     await page.waitForLoadState('networkidle');
 
     // Ensure a clean UI state: clear persisted progress and filter inputs to avoid cross-test leakage

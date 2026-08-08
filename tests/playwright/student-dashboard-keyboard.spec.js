@@ -6,7 +6,7 @@ test.describe('student dashboard keyboard accessibility', ()=>{
 
     const BASE =
       process.env.PREVIEW_URL ||
-      'http://127.0.0.1:3003/dashboard/student';
+      'http://127.0.0.1:3003/dashboard/student/';
 
     await page.goto(BASE, { waitUntil: 'networkidle' });
 

@@ -3,8 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="refresh" content="0; url=/dashboard/student/">
   <title>Student Scenario Dashboard</title>
+  <link rel="canonical" href="/dashboard/student/">
   <link rel="stylesheet" href="./student.css">
+  <script>
+    (function () {
+      if (typeof window === 'undefined' || !window.location) {
+        return;
+      }
+
+      const path = window.location.pathname || '';
+      const isLegacyRoute = path === '/dashboard/student' || path.endsWith('/dashboard/student.html');
+
+      if (!isLegacyRoute) {
+        return;
+      }
+
+      const target = '/dashboard/student/' + (window.location.search || '') + (window.location.hash || '');
+      window.location.replace(target);
+    })();
+  </script>
 </head>
 <body>
   <main class="wrapper">

@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test('empty-filter then reset restores cards', async ({ page }) => {
-  const BASE = process.env.PREVIEW_URL || 'http://127.0.0.1:3003/dashboard/student';
+  const BASE = process.env.PREVIEW_URL || 'http://127.0.0.1:3003/dashboard/student/';
 
   const pageErrors = [];
   const consoleErrors = [];
