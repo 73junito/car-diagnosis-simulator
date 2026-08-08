@@ -14,7 +14,7 @@ test.describe('Student dashboard filtering', ()=>{
     page.on('response', resp => { if(resp.status() === 404){ const url = resp.url(); if(!allowed404Patterns.some(p=>url.includes(p))) badResponses.push({url, status: resp.status()}); } });
 
     const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:3003';
-    await page.goto(`${BASE_URL}/dashboard/student`);
+    await page.goto(`${BASE_URL}/dashboard/student/`);
     await page.waitForLoadState('networkidle');
 
     // Ensure a clean UI state

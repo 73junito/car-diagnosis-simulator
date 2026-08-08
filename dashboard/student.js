@@ -40,7 +40,7 @@ window.initStudentDashboard = function(){
   function closeDetail(){
     detail.classList.add('hidden');
     try{ document.body.classList.remove('detail-open'); }catch(e){}
-    history.replaceState(null,'','/dashboard/student');
+    history.replaceState(null,'','/dashboard/student/');
     if(onKeydown) { document.removeEventListener('keydown', onKeydown); onKeydown = null; }
     if(lastOpener && typeof lastOpener.focus === 'function'){
       try{ lastOpener.focus(); }catch(e){}
@@ -59,7 +59,7 @@ window.initStudentDashboard = function(){
       const scenario = (window.scenarios||[]).find(find);
       if(scenario){ showDetail(scenario); }
       else { // fallback: navigate via query param
-        window.location.href = `/dashboard/student?scenario=${encodeURIComponent(slug)}`;
+        window.location.href = `/dashboard/student/?scenario=${encodeURIComponent(slug)}`;
       }
     });
   });
