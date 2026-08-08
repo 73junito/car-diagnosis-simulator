@@ -3,6 +3,13 @@
   "name": "autolearnpro-app",
   "compatibility_date": "2026-08-08",
   "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "app.autolearnpro.com",
+      "zone_name": "autolearnpro.com",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./dist",
     "html_handling": "auto-trailing-slash",
