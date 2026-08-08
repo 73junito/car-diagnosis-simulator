@@ -58,3 +58,7 @@ audit/
 # Playwright authenticated storage (do not commit)
 playwright/.auth/
 data/rala/sources/raw/
+
+# Local RALA ingestion drafts
+/data/approved-sources/drafts/
+/data/approved-chunks/drafts/
