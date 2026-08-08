@@ -311,19 +311,19 @@
       "source_id": "css_electronics_can_intro",
       "chunk_id": "chunk_cf265ac2",
       "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
-      "review_state": "human_review_received_detail_incomplete",
-      "reviewer": "rafael",
-      "approval_decision": "needs_revision_pending_detail",
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
       "evidence_status": "provisional_evidence",
       "human_review": {
         "source_evidence_id": "css_electronics_can_intro:chunk_cf265ac2",
-        "reviewer_name": "rafael",
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Single-source dependency and non-OEM context; should be supplemented by OEM network-diagnostics references in later revisions.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This accurately describes the general purpose of an automotive CAN bus.",
+        "remaining_limitations": "Single-source dependency and non-OEM context; should be supplemented by OEM network-diagnostics references in later revisions. It also does not establish vehicle-specific topology, message identifiers, data rates, wiring, protocols, or diagnostic procedures.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
-        "evidence_gate_result": "pending_detail_capture"
+        "evidence_gate_result": "pass_limited_general_claim"
       },
       "citations": [
         {
@@ -358,19 +358,19 @@
       "source_id": "delco_remy_alternators_overview",
       "chunk_id": "chunk_delco_alt_fn",
       "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
-      "review_state": "human_review_received_detail_incomplete",
-      "reviewer": "rafael",
-      "approval_decision": "needs_revision_pending_detail",
-      "evidence_status": "pending_human_claim_scope_review",
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
+      "evidence_status": "provisional_evidence",
       "human_review": {
         "source_evidence_id": "delco_remy_alternators_overview:chunk_delco_alt_fn",
-        "reviewer_name": "rafael",
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Source supports only general alternator-function claims unless a human reviewer confirms claim-level fit; vehicle-specific specs remain unresolved without OEM procedures.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This accurately states the alternator's general function. Its output supplies the vehicle electrical system and supports battery charging.",
+        "remaining_limitations": "Source supports only general alternator-function claims; vehicle-specific specifications remain unresolved without OEM procedures. Source usage remains metadata-and-link-only with no authorized source-text ingestion.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
-        "evidence_gate_result": "pending_claim_scope_detail_capture"
+        "evidence_gate_result": "pass_limited_general_claim"
       },
       "citations": [
         {
@@ -405,19 +405,19 @@
       "source_id": "nhtsa_def_bulletin",
       "chunk_id": "chunk_c202f9cf",
       "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
-      "review_state": "human_review_received_detail_incomplete",
-      "reviewer": "rafael",
-      "approval_decision": "needs_revision_pending_detail",
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
       "evidence_status": "provisional_evidence",
       "human_review": {
         "source_evidence_id": "nhtsa_def_bulletin:chunk_c202f9cf",
-        "reviewer_name": "rafael",
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Original ownership chain remains unresolved from repository metadata; rights remain non-authorized for ingestion.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This supports the limited composition claim that DEF is a 32.5% urea solution in de-ionized water.",
+        "remaining_limitations": "This general statement does not establish product quality, contamination status, concentration testing, storage requirements, or vehicle-specific diagnostic procedures. Original ownership chain remains unresolved from repository metadata; rights remain non-authorized for ingestion.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
-        "evidence_gate_result": "pending_detail_capture"
+        "evidence_gate_result": "pass_limited_composition_claim"
       },
       "citations": [
         {
@@ -452,19 +452,19 @@
       "source_id": "yourmechanic_bad_alternator_symptoms",
       "chunk_id": "chunk_31df0f23",
       "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
-      "review_state": "human_review_received_detail_incomplete",
-      "reviewer": "rafael",
-      "approval_decision": "needs_revision_pending_detail",
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
       "evidence_status": "provisional_evidence",
       "human_review": {
         "source_evidence_id": "yourmechanic_bad_alternator_symptoms:chunk_31df0f23",
-        "reviewer_name": "rafael",
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Source is non-OEM and should be superseded by OEM diagnostics documentation for production-grade finalization.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "Insufficient charging-system output can reduce system voltage and cause headlights to dim.",
+        "remaining_limitations": "This supports only a plausible-cause claim and does not confirm alternator failure without direct electrical testing and OEM diagnostic procedures. Source is non-OEM and should be superseded by OEM diagnostics documentation for production-grade finalization.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
-        "evidence_gate_result": "pending_detail_capture"
+        "evidence_gate_result": "pass_plausible_cause_only"
       },
       "citations": [
         {
@@ -494,49 +494,26 @@
     {
       "question_id": "09a7a1b9-6674-4aab-8161-8cbb95c7c606",
       "scenario_id": "hvac-cooling",
-      "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
+      "question_text": "What is the most reliable method for verifying whether an automotive A/C system contains the manufacturer-specified refrigerant charge?",
       "correct_answer": "A",
-      "source_id": "carrier_r134a_pt_chart",
-      "chunk_id": "chunk_carrier_r134a_pt",
-      "locator": "Carrier R-134a Temperature - Pressure Chart > saturation pressure table in psig and bar by temperature",
-      "review_state": "human_review_received_detail_incomplete",
-      "reviewer": "rafael",
-      "approval_decision": "needs_revision_pending_detail",
-      "evidence_status": "pending_human_operating_conditions_review",
+      "source_id": null,
+      "chunk_id": null,
+      "locator": null,
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
+      "evidence_status": "provisional_evidence",
       "human_review": {
-        "source_evidence_id": "carrier_r134a_pt_chart:chunk_carrier_r134a_pt + drivequip_low_side_pressure_diagnostics:chunk_5e5a2cf7",
-        "reviewer_name": "rafael",
+        "source_evidence_id": null,
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Requires human validation of refrigerant type, ambient temperature, vent temperature, engine speed, blower setting, recirculation state, humidity/known limitations, static versus operating pressure context, and vehicle/OEM applicability before gate can pass.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "Operating pressures help assess system performance, but pressures alone cannot establish the exact refrigerant quantity. Recovering and weighing the refrigerant provides the appropriate comparison with the manufacturer-specified charge.",
+        "remaining_limitations": "The procedure must use equipment approved for the refrigerant type and follow applicable safety, environmental, equipment-manufacturer, and OEM service requirements. Pressures alone cannot confirm undercharge and still require full operating-context interpretation.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
-        "evidence_gate_result": "pending_hvac_operating_context_capture"
+        "evidence_gate_result": "pending_evidence_source_alignment"
       },
-      "citations": [
-        {
-          "role": "supports-answer",
-          "source_id": "carrier_r134a_pt_chart",
-          "chunk_id": "chunk_carrier_r134a_pt",
-          "locator": "Carrier R-134a Temperature - Pressure Chart > saturation pressure table in psig and bar by temperature",
-          "quote": null,
-          "evidence_summary": "TorqueMind summary: R-134a pressure-temperature values are provided in psig/bar and must be interpreted against measured ambient/operating temperature conditions.",
-          "verbatim_quote_status": "blocked_pending_rights_review",
-          "source_hash": "6b9a805778604a253fb5cbfc6b51b34c966371d073556f8ad3146caa7e5c8682",
-          "chunk_hash": null
-        },
-        {
-          "role": "supports-explanation",
-          "source_id": "drivequip_low_side_pressure_diagnostics",
-          "chunk_id": "chunk_5e5a2cf7",
-          "locator": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics > low side pressure and charge",
-          "quote": null,
-          "evidence_summary": "TorqueMind summary: Diagnostic interpretation requires full-system context; low-side-only readings are insufficient without refrigerant-type and ambient-condition checks.",
-          "verbatim_quote_status": "blocked_pending_rights_review",
-          "source_hash": "7aacbbb7215aa8b72f9f90efe2347735cc8b5b586395ba88d02343085f88bb8c",
-          "chunk_hash": "1c33583abfe2777e42266cb0e54aa48e4f17f286d4e2c3c3e7b8216d412df7fa"
-        }
-      ]
+      "citations": []
     }
   ]
 }

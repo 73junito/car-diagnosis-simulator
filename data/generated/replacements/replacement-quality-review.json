@@ -106,7 +106,7 @@
   },
   {
     "scenario_id": "hvac-cooling",
-    "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
+    "question_text": "What is the most reliable method for verifying whether an automotive A/C system contains the manufacturer-specified refrigerant charge?",
     "score": 85,
     "issue_type": "passed_basic_review",
     "notes": "Passed basic review."

@@ -21,13 +21,13 @@
       "evidence_status": "provisional_evidence",
       "human_review": {
         "source_evidence_id": "css_electronics_can_intro:chunk_cf265ac2",
-        "reviewer_name": "rafael",
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Non-OEM source and single-source dependency remain.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This accurately describes the general purpose of an automotive CAN bus.",
+        "remaining_limitations": "Non-OEM source and single-source dependency remain. It also does not establish vehicle-specific topology, message identifiers, data rates, wiring, protocols, or diagnostic procedures.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
-        "evidence_gate_result": "pending_detail_capture"
+        "evidence_gate_result": "pass_limited_general_claim"
       },
       "provenance_version": 1,
       "validation_checklist": {
@@ -64,16 +64,16 @@
       "ase_area": "CI",
       "provenance_status": "provisional",
       "question_text": "What is the primary function of an alternator in a vehicle?",
-      "evidence_status": "pending_human_claim_scope_review",
+      "evidence_status": "provisional_evidence",
       "human_review": {
         "source_evidence_id": "delco_remy_alternators_overview:chunk_delco_alt_fn",
-        "reviewer_name": "rafael",
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Source supports general alternator claims only unless human reviewer confirms claim-level fit; vehicle-specific specifications remain unresolved without OEM procedures.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This accurately states the alternator's general function. Its output supplies the vehicle electrical system and supports battery charging.",
+        "remaining_limitations": "Source supports only general alternator-function claims; vehicle-specific specifications remain unresolved without OEM procedures. Source usage remains metadata-and-link-only with no authorized source-text ingestion.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
-        "evidence_gate_result": "pending_claim_scope_detail_capture"
+        "evidence_gate_result": "pass_limited_general_claim"
       },
       "provenance_version": 1,
       "validation_checklist": {
@@ -113,13 +113,13 @@
       "evidence_status": "provisional_evidence",
       "human_review": {
         "source_evidence_id": "nhtsa_def_bulletin:chunk_c202f9cf",
-        "reviewer_name": "rafael",
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Original publisher ownership chain remains unresolved in rights metadata.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This supports the limited composition claim that DEF is a 32.5% urea solution in de-ionized water.",
+        "remaining_limitations": "This general statement does not establish product quality, contamination status, concentration testing, storage requirements, or vehicle-specific diagnostic procedures. Original publisher ownership chain remains unresolved in rights metadata, and source ingestion is not authorized.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
-        "evidence_gate_result": "pending_detail_capture"
+        "evidence_gate_result": "pass_limited_composition_claim"
       },
       "provenance_version": 1,
       "validation_checklist": {
@@ -159,13 +159,13 @@
       "evidence_status": "provisional_evidence",
       "human_review": {
         "source_evidence_id": "yourmechanic_bad_alternator_symptoms:chunk_31df0f23",
-        "reviewer_name": "rafael",
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Non-OEM source remains provisional and should be upgraded to OEM diagnostic references.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "Insufficient charging-system output can reduce system voltage and cause headlights to dim.",
+        "remaining_limitations": "This supports only a plausible-cause claim and does not confirm alternator failure without direct electrical testing and OEM diagnostic procedures. Non-OEM source remains provisional and should be upgraded to OEM diagnostic references.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
-        "evidence_gate_result": "pending_detail_capture"
+        "evidence_gate_result": "pass_plausible_cause_only"
       },
       "provenance_version": 1,
       "validation_checklist": {
@@ -201,46 +201,27 @@
       "topic": "Automotive A/C cooling diagnostics",
       "ase_area": "A7 Heating and Air Conditioning",
       "provenance_status": "provisional",
-      "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
-      "evidence_status": "pending_human_operating_conditions_review",
-      "semantic_gate_note": "Approve only when canonical answer-choice text confirms system-pressure testing scope, not low-side-only conclusiveness.",
+      "question_text": "What is the most reliable method for verifying whether an automotive A/C system contains the manufacturer-specified refrigerant charge?",
+      "evidence_status": "provisional_evidence",
+      "semantic_gate_note": "Pending evidence-source alignment: set claim gate to pass only when an approved, rights-compatible source directly supports recover-and-weigh refrigerant charge verification.",
       "human_review": {
-        "source_evidence_id": "carrier_r134a_pt_chart:chunk_carrier_r134a_pt + drivequip_low_side_pressure_diagnostics:chunk_5e5a2cf7",
-        "reviewer_name": "rafael",
+        "source_evidence_id": null,
+        "reviewer_name": "Rafael Rodriguez",
         "review_date": "2026-08-07",
-        "decision": "needs_revision_pending_detail",
-        "supporting_rationale": "Human reviewer response was received but lacked item-specific rationale/detail required for closure.",
-        "remaining_limitations": "Requires human validation of refrigerant type, ambient and vent temperature, engine speed, blower setting, recirculation state, humidity/known limitations, static versus operating pressure, and vehicle/OEM applicability.",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "Operating pressures help assess system performance, but pressures alone cannot establish the exact refrigerant quantity. Recovering and weighing the refrigerant provides the appropriate comparison with the manufacturer-specified charge.",
+        "remaining_limitations": "The procedure must use equipment approved for the refrigerant type and follow applicable safety, environmental, equipment-manufacturer, and OEM service requirements. Pressures alone cannot confirm undercharge and still require full operating-context interpretation.",
         "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
-        "evidence_gate_result": "pending_hvac_operating_context_capture"
+        "evidence_gate_result": "pending_evidence_source_alignment"
       },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
-        "citation_matches_excerpt": true,
+        "citation_matches_excerpt": false,
         "license_ok": false
       },
-      "citations": [
-        {
-          "role": "supports-answer",
-          "source_id": "carrier_r134a_pt_chart",
-          "chunk_id": "chunk_carrier_r134a_pt",
-          "locator": "Carrier R-134a Temperature - Pressure Chart > saturation pressure table in psig and bar by temperature",
-          "quote": null,
-          "evidence_summary": "TorqueMind summary: PT reference values are provided in Fahrenheit/Celsius with pressure in psig/bar and must be evaluated at known ambient/operating conditions.",
-          "verbatim_quote_status": "blocked_pending_rights_review"
-        },
-        {
-          "role": "supports-explanation",
-          "source_id": "drivequip_low_side_pressure_diagnostics",
-          "chunk_id": "chunk_5e5a2cf7",
-          "locator": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics > low side pressure and charge",
-          "quote": null,
-          "evidence_summary": "TorqueMind summary: Diagnostic guidance remains conditional; low-side pressure alone is insufficient without refrigerant-type and ambient-context checks.",
-          "verbatim_quote_status": "blocked_pending_rights_review"
-        }
-      ]
+      "citations": []
     }
   ]
 }
