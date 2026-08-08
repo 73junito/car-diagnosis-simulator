@@ -1,6 +1,8 @@
 {
   "pilot_name": "rala-five-question-pilot",
   "review_state": "draft",
+  "rights_review_state": "pending",
+  "ingestion_gate": "blocked_pending_rights_and_human_review",
   "generated_at": "2026-08-07T15:49:06.4850664-05:00",
   "selection_policy": [
     "Prefer one question per scenario when possible",
@@ -14,29 +16,44 @@
       "scenario_id": "can-bus-network",
       "topic": "CAN Bus Basics",
       "ase_area": "Electrical and Electronics",
-      "provenance_status": null,
+      "provenance_status": "provisional",
       "question_text": "What is the primary function of a CAN bus network in an automotive system?",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "css_electronics_can_intro:chunk_cf265ac2",
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This accurately describes the general purpose of an automotive CAN bus.",
+        "remaining_limitations": "Non-OEM source and single-source dependency remain. It also does not establish vehicle-specific topology, message identifiers, data rates, wiring, protocols, or diagnostic procedures.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pass_limited_general_claim"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
+          "source_id": "css_electronics_can_intro",
+          "chunk_id": "chunk_cf265ac2",
+          "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: CAN enables communication between ECUs over a shared in-vehicle network.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
+          "source_id": "css_electronics_can_intro",
+          "chunk_id": "chunk_cf265ac2",
+          "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: This evidence supports selecting the ECU communication option.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     },
@@ -45,29 +62,44 @@
       "scenario_id": "charging-system",
       "topic": "Alternator Function",
       "ase_area": "CI",
-      "provenance_status": null,
+      "provenance_status": "provisional",
       "question_text": "What is the primary function of an alternator in a vehicle?",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "delco_remy_alternators_overview:chunk_delco_alt_fn",
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This accurately states the alternator's general function. Its output supplies the vehicle electrical system and supports battery charging.",
+        "remaining_limitations": "Source supports only general alternator-function claims; vehicle-specific specifications remain unresolved without OEM procedures. Source usage remains metadata-and-link-only with no authorized source-text ingestion.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pass_limited_general_claim"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
+          "source_id": "delco_remy_alternators_overview",
+          "chunk_id": "chunk_delco_alt_fn",
+          "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Delco Remy describes alternator technologies that support vehicle electric-system demand and battery charging performance.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
+          "source_id": "delco_remy_alternators_overview",
+          "chunk_id": "chunk_delco_alt_fn",
+          "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Delco Remy provisionally supports general electrical-system operation and battery-charging performance.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     },
@@ -76,29 +108,44 @@
       "scenario_id": "diesel-aftertreatment",
       "topic": "DEF Composition",
       "ase_area": "Diagnosis",
-      "provenance_status": null,
+      "provenance_status": "provisional",
       "question_text": "What is the primary component of diesel exhaust fluid (DEF)?",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "nhtsa_def_bulletin:chunk_c202f9cf",
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This supports the limited composition claim that DEF is a 32.5% urea solution in de-ionized water.",
+        "remaining_limitations": "This general statement does not establish product quality, contamination status, concentration testing, storage requirements, or vehicle-specific diagnostic procedures. Original publisher ownership chain remains unresolved in rights metadata, and source ingestion is not authorized.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pass_limited_composition_claim"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
+          "source_id": "nhtsa_def_bulletin",
+          "chunk_id": "chunk_c202f9cf",
+          "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: DEF is represented as 32.5% urea with de-ionized water.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
+          "source_id": "nhtsa_def_bulletin",
+          "chunk_id": "chunk_c202f9cf",
+          "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: The cited bulletin supports the composition-focused response.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     },
@@ -107,29 +154,44 @@
       "scenario_id": "electrical-load",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
       "ase_area": "A6 Electrical/Electronic Systems",
-      "provenance_status": null,
+      "provenance_status": "provisional",
       "question_text": "What would be a plausible reason for dimming headlights while driving?",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "yourmechanic_bad_alternator_symptoms:chunk_31df0f23",
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "Insufficient charging-system output can reduce system voltage and cause headlights to dim.",
+        "remaining_limitations": "This supports only a plausible-cause claim and does not confirm alternator failure without direct electrical testing and OEM diagnostic procedures. Non-OEM source remains provisional and should be upgraded to OEM diagnostic references.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pass_plausible_cause_only"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
         "citation_matches_excerpt": true,
-        "license_ok": true
+        "license_ok": false
       },
       "citations": [
         {
           "role": "supports-answer",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
+          "source_id": "yourmechanic_bad_alternator_symptoms",
+          "chunk_id": "chunk_31df0f23",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Dimming under added accessory load is described as consistent with inadequate charging output.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         },
         {
           "role": "supports-explanation",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
+          "source_id": "yourmechanic_bad_alternator_symptoms",
+          "chunk_id": "chunk_31df0f23",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: The evidence supports a load-related charging insufficiency diagnosis.",
+          "verbatim_quote_status": "blocked_pending_rights_review"
         }
       ]
     },
@@ -138,31 +200,28 @@
       "scenario_id": "hvac-cooling",
       "topic": "Automotive A/C cooling diagnostics",
       "ase_area": "A7 Heating and Air Conditioning",
-      "provenance_status": null,
-      "question_text": "You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?",
+      "provenance_status": "provisional",
+      "question_text": "What is the most reliable method for verifying whether an automotive A/C system contains the manufacturer-specified refrigerant charge?",
+      "evidence_status": "provisional_evidence",
+      "semantic_gate_note": "Pending evidence-source alignment: set claim gate to pass only when an approved, rights-compatible source directly supports recover-and-weigh refrigerant charge verification.",
+      "human_review": {
+        "source_evidence_id": null,
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "Operating pressures help assess system performance, but pressures alone cannot establish the exact refrigerant quantity. Recovering and weighing the refrigerant provides the appropriate comparison with the manufacturer-specified charge.",
+        "remaining_limitations": "The procedure must use equipment approved for the refrigerant type and follow applicable safety, environmental, equipment-manufacturer, and OEM service requirements. Pressures alone cannot confirm undercharge and still require full operating-context interpretation.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citations only; no verbatim quote ingestion.",
+        "evidence_gate_result": "pending_evidence_source_alignment"
+      },
       "provenance_version": 1,
       "validation_checklist": {
         "answer_verified": true,
         "explanation_verified": true,
-        "citation_matches_excerpt": true,
-        "license_ok": true
+        "citation_matches_excerpt": false,
+        "license_ok": false
       },
-      "citations": [
-        {
-          "role": "supports-answer",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
-        },
-        {
-          "role": "supports-explanation",
-          "source_id": "",
-          "chunk_id": "",
-          "locator": "",
-          "quote": ""
-        }
-      ]
+      "citations": []
     }
   ]
 }

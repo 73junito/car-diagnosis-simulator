@@ -57,3 +57,4 @@ audit/
 
 # Playwright authenticated storage (do not commit)
 playwright/.auth/
+data/rala/sources/raw/

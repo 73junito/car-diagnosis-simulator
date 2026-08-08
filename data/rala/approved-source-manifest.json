@@ -1,0 +1,519 @@
+{
+  "manifest_name": "rala-approved-source-registry",
+  "review_state": "draft",
+  "reviewer": "pending human review",
+  "approval_decision": "pending",
+  "approval_notes": "Provisional pilot evidence only. TorqueMind seed files are not independent authoritative sources, and no human approval has been recorded yet.",
+  "rights_policy": {
+    "mode": "fail_closed",
+    "policy_version": "2026-08-07",
+    "ingestion_statuses": [
+      "unrestricted_ingestion",
+      "metadata_and_link_only",
+      "limited_quote_review_required",
+      "permission_required",
+      "prohibited",
+      "unknown_blocked"
+    ],
+    "default_status_for_unclear_rights": "metadata_and_link_only",
+    "verbatim_quote_rule": "blocked_until_rights_review"
+  },
+  "sources": [
+    {
+      "id": "css_electronics_can_intro",
+      "title": "CAN Bus Explained - A Simple Intro",
+      "publisher": "CSS Electronics",
+      "publication_year": 2025,
+      "publication_date": null,
+      "license": {
+        "name": "CSS Electronics website terms",
+        "terms": "Public web article used for educational citation; follow site terms."
+      },
+      "original_filename": "can-bus-simple-intro-tutorial",
+      "storage_path": "https://www.csselectronics.com/pages/can-bus-simple-intro-tutorial",
+      "checksum": "8cdbde7a28ef7e4c5ae2308bf9710c11c9765f7870cbd4bc020b385ac12dbab6",
+      "source_hash": "98a4c886561f0839889c8c314a4de02ce98d2d80087605279b13de6066426650",
+      "checksum_algorithm": "sha256",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "Independent automotive communication source. Human review still pending.",
+      "authority_status": "provisional_evidence",
+      "public_access_status": "publicly_accessible",
+      "copyright_owner": "CSS Electronics",
+      "ingestion_rights_status": "metadata_and_link_only",
+      "redistribution_status": "prohibited_or_unconfirmed",
+      "training_use_status": "not_authorized",
+      "rights_basis": "citation_and_metadata_only_pending_review",
+      "rights_reviewed_by": "pending",
+      "rights_review_date": null,
+      "authors": ["Martin Falch"],
+      "chunks": [
+        {
+          "chunk_id": "chunk_cf265ac2",
+          "title": "What is CAN bus?",
+          "section": "what-is-can-bus",
+          "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
+          "text_excerpt": null,
+          "chunk_summary": "TorqueMind summary: CAN is described as an in-vehicle network that enables ECU-to-ECU communication without a host computer.",
+          "token_count": 0,
+          "text_hash": "0a128d8a45c270744ea159e30d421644581111bd1bb0da14d442e31016c5f99b",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    },
+    {
+      "id": "yourmechanic_bad_alternator_symptoms",
+      "title": "5 Bad Alternator Symptoms to Look For",
+      "publisher": "YourMechanic",
+      "publication_year": 2016,
+      "publication_date": null,
+      "license": {
+        "name": "YourMechanic website terms",
+        "terms": "Public web article used for educational citation; follow site terms."
+      },
+      "original_filename": "symptoms-of-a-bad-or-failing-alternator",
+      "storage_path": "https://www.yourmechanic.com/article/symptoms-of-a-bad-or-failing-alternator",
+      "checksum": "f076b5ee8bf6fcd9c57416da9333f9e34e5f9bc2e1653fa6d340c85be18367d5",
+      "source_hash": "4016ef7e59a6d54b67417e3937deff6d2a6c4eb5d381ff3c2889167478972198",
+      "checksum_algorithm": "sha256",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "Independent alternator symptom source for charging-system evidence. Human review still pending.",
+      "authority_status": "pending_source_upgrade",
+      "public_access_status": "publicly_accessible",
+      "copyright_owner": "YourMechanic",
+      "ingestion_rights_status": "metadata_and_link_only",
+      "redistribution_status": "prohibited_or_unconfirmed",
+      "training_use_status": "not_authorized",
+      "rights_basis": "citation_and_metadata_only_pending_review",
+      "rights_reviewed_by": "pending",
+      "rights_review_date": null,
+      "authors": ["Ed Ruelas"],
+      "chunks": [
+        {
+          "chunk_id": "chunk_31df0f23",
+          "title": "5 Bad Alternator Symptoms to Look For",
+          "section": "dim-lights-and-charging-load",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "text_excerpt": null,
+          "chunk_summary": "TorqueMind summary: The article links alternator output to vehicle electrical demand and describes dim/flickering lights under added load as consistent with insufficient charging output.",
+          "token_count": 0,
+          "text_hash": "f076b5ee8bf6fcd9c57416da9333f9e34e5f9bc2e1653fa6d340c85be18367d5",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    },
+    {
+      "id": "nhtsa_def_bulletin",
+      "title": "Diesel Exhaust Fluid (DEF)",
+      "publisher": "Unknown OEM (NHTSA repository host)",
+      "publication_year": 2013,
+      "publication_date": null,
+      "license": {
+        "name": "U.S. government public information",
+        "terms": "Public government bulletin used for educational citation."
+      },
+      "original_filename": "SB-10051649-7535.pdf",
+      "storage_path": "https://static.nhtsa.gov/odi/tsbs/2013/SB-10051649-7535.pdf",
+      "checksum": "734470172899e608b576a57497822e921dd338e301a6f7003e93c7b4d1703fbb",
+      "source_hash": "c2d46e6cf8ce16d30beced2f8d6292240538b88fe176318703eb5e61f8e73100",
+      "checksum_algorithm": "sha256",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "DEF composition source hosted by NHTSA; original publisher ownership requires explicit rights review.",
+      "authority_status": "provisional_evidence",
+      "public_access_status": "publicly_accessible",
+      "copyright_owner": "Unknown (NHTSA-hosted OEM or third-party source)",
+      "ingestion_rights_status": "metadata_and_link_only",
+      "redistribution_status": "prohibited_or_unconfirmed",
+      "training_use_status": "not_authorized",
+      "rights_basis": "citation_and_metadata_only_pending_review",
+      "rights_reviewed_by": "pending",
+      "rights_review_date": null,
+      "authors": ["Unknown OEM"],
+      "chunks": [
+        {
+          "chunk_id": "chunk_c202f9cf",
+          "title": "Diesel Exhaust Fluid (DEF)",
+          "section": "def-composition",
+          "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
+          "text_excerpt": null,
+          "chunk_summary": "TorqueMind summary: The bulletin describes DEF as a blend of urea solution and de-ionized water with a 32.5/67.5 composition.",
+          "token_count": 0,
+          "text_hash": "20de9048b2e20884804bfcf1289b32a23628aa48cb005c5c4e8894b4ce13e20c",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    },
+    {
+      "id": "drivequip_low_side_pressure_diagnostics",
+      "title": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics",
+      "publisher": "Drive Quip",
+      "publication_year": 2025,
+      "publication_date": null,
+      "license": {
+        "name": "Drive Quip website terms",
+        "terms": "Public web article used for educational citation; follow site terms."
+      },
+      "original_filename": "low-side-pressure-car-ac-typical-ranges-diagnostics",
+      "storage_path": "https://drivequip.com/low-side-pressure-car-ac-typical-ranges-diagnostics/",
+      "checksum": "1c33583abfe2777e42266cb0e54aa48e4f17f286d4e2c3c3e7b8216d412df7fa",
+      "source_hash": "7aacbbb7215aa8b72f9f90efe2347735cc8b5b586395ba88d02343085f88bb8c",
+      "checksum_algorithm": "sha256",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "Independent HVAC pressure source for low-charge evidence. Human review still pending.",
+      "authority_status": "provisional_evidence",
+      "public_access_status": "publicly_accessible",
+      "copyright_owner": "Drive Quip",
+      "ingestion_rights_status": "metadata_and_link_only",
+      "redistribution_status": "prohibited_or_unconfirmed",
+      "training_use_status": "not_authorized",
+      "rights_basis": "citation_and_metadata_only_pending_review",
+      "rights_reviewed_by": "pending",
+      "rights_review_date": null,
+      "authors": ["Drive Quip"],
+      "chunks": [
+        {
+          "chunk_id": "chunk_5e5a2cf7",
+          "title": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics",
+          "section": "low-side-pressure-diagnostics",
+          "locator": "Low Side Pressure for Car AC: Typical Ranges and Diagnostics > low side pressure and charge",
+          "text_excerpt": null,
+          "chunk_summary": "TorqueMind summary: The article states that low-side pressure can indicate undercharge when below expected ambient ranges, while overall diagnosis should consider full system context.",
+          "token_count": 0,
+          "text_hash": "1c33583abfe2777e42266cb0e54aa48e4f17f286d4e2c3c3e7b8216d412df7fa",
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    },
+    {
+      "id": "delco_remy_alternators_overview",
+      "title": "Delco Remy Heavy Duty Alternators",
+      "publisher": "Delco Remy (PHINIA)",
+      "publication_year": null,
+      "publication_date": null,
+      "license": {
+        "name": "Delco Remy website terms",
+        "terms": "Public product/service page used for metadata and citation summary only; follow site terms."
+      },
+      "original_filename": "delcoremy-alternators-overview",
+      "storage_path": "https://www.delcoremy.com/alternators",
+      "checksum": "d6a83b8ac7e02493b9f301cfc84b41eaeb6958f9550baa38d61afd54fb30ca6a",
+      "source_hash": "d6a83b8ac7e02493b9f301cfc84b41eaeb6958f9550baa38d61afd54fb30ca6a",
+      "checksum_algorithm": "sha256",
+      "checksum_verification_status": "retrieved_content_hash_unarchived_metadata_incomplete",
+      "retrieved_request_url": "https://www.delcoremy.com/alternators",
+      "retrieved_final_url": null,
+      "retrieved_at": null,
+      "retrieved_content_type": null,
+      "checksum_note": "SHA-256 covers unarchived response bytes from an earlier retrieval. Exact retrieval timestamp, final URL, and response headers were not captured with those bytes.",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "Candidate authoritative service/OE supplier evidence for alternator role; pending human claim-scope validation.",
+      "authority_status": "authoritative_service_evidence",
+      "public_access_status": "publicly_accessible",
+      "copyright_owner": "PHINIA / Delco Remy",
+      "ingestion_rights_status": "metadata_and_link_only",
+      "redistribution_status": "prohibited_or_unconfirmed",
+      "training_use_status": "not_authorized",
+      "rights_basis": "citation_and_metadata_only_pending_review",
+      "rights_reviewed_by": "pending",
+      "rights_review_date": null,
+      "authors": ["Delco Remy"],
+      "chunks": [
+        {
+          "chunk_id": "chunk_delco_alt_fn",
+          "title": "Delco Remy Heavy Duty Alternators",
+          "section": "alternator-function-and-battery-charge-context",
+          "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
+          "text_excerpt": null,
+          "chunk_summary": "TorqueMind summary: Delco Remy describes alternators as part of the vehicle electric system and references technology that improves battery charge time under electrical demand.",
+          "token_count": 0,
+          "text_hash": null,
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    },
+    {
+      "id": "carrier_r134a_pt_chart",
+      "title": "R-134a Temperature - Pressure Chart",
+      "publisher": "Carrier",
+      "publication_year": null,
+      "publication_date": null,
+      "license": {
+        "name": "Carrier website terms",
+        "terms": "Public technical reference page used for metadata and citation summary only; follow site terms."
+      },
+      "original_filename": "temp-pressure-chart_r134a",
+      "storage_path": "https://www.transcentral.carrier.com/CPGTechPubs/toolbox/temp-pressure-chart_r134a.html",
+      "checksum": "6b9a805778604a253fb5cbfc6b51b34c966371d073556f8ad3146caa7e5c8682",
+      "source_hash": "6b9a805778604a253fb5cbfc6b51b34c966371d073556f8ad3146caa7e5c8682",
+      "checksum_algorithm": "sha256",
+      "checksum_verification_status": "retrieved_content_hash_unarchived_metadata_incomplete",
+      "retrieved_request_url": "https://www.transcentral.carrier.com/CPGTechPubs/toolbox/temp-pressure-chart_r134a.html",
+      "retrieved_final_url": null,
+      "retrieved_at": null,
+      "retrieved_content_type": null,
+      "checksum_note": "SHA-256 covers unarchived response bytes from an earlier retrieval. Exact retrieval timestamp, final URL, and response headers were not captured with those bytes.",
+      "language": "en",
+      "version": 1,
+      "status": "draft",
+      "notes": "Candidate authoritative pressure-temperature reference for R-134a; pending human operating-conditions validation.",
+      "authority_status": "authoritative_reference_table",
+      "public_access_status": "publicly_accessible",
+      "copyright_owner": "Carrier",
+      "ingestion_rights_status": "metadata_and_link_only",
+      "redistribution_status": "prohibited_or_unconfirmed",
+      "training_use_status": "not_authorized",
+      "rights_basis": "citation_and_metadata_only_pending_review",
+      "rights_reviewed_by": "pending",
+      "rights_review_date": null,
+      "authors": ["Carrier"],
+      "chunks": [
+        {
+          "chunk_id": "chunk_carrier_r134a_pt",
+          "title": "R-134a Temperature - Pressure Chart",
+          "section": "r134a-pt-table",
+          "locator": "Carrier R-134a Temperature - Pressure Chart > saturation pressure table in psig and bar by temperature",
+          "text_excerpt": null,
+          "chunk_summary": "TorqueMind summary: Carrier provides an R-134a temperature-pressure table with values in Fahrenheit/Celsius and pressure in psig/bar, including vacuum notation assumptions.",
+          "token_count": 0,
+          "text_hash": null,
+          "language": "en",
+          "status": "draft",
+          "approved": false
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "cf265ac2-5ada-4ae1-850e-18d3e2838268",
+      "scenario_id": "can-bus-network",
+      "question_text": "What is the primary function of a CAN bus network in an automotive system?",
+      "correct_answer": "B",
+      "source_id": "css_electronics_can_intro",
+      "chunk_id": "chunk_cf265ac2",
+      "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "css_electronics_can_intro:chunk_cf265ac2",
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This accurately describes the general purpose of an automotive CAN bus.",
+        "remaining_limitations": "Single-source dependency and non-OEM context; should be supplemented by OEM network-diagnostics references in later revisions. It also does not establish vehicle-specific topology, message identifiers, data rates, wiring, protocols, or diagnostic procedures.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
+        "evidence_gate_result": "pass_limited_general_claim"
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "css_electronics_can_intro",
+          "chunk_id": "chunk_cf265ac2",
+          "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: CAN is used so ECUs can exchange information over a shared in-vehicle network.",
+          "verbatim_quote_status": "blocked_pending_rights_review",
+          "source_hash": "98a4c886561f0839889c8c314a4de02ce98d2d80087605279b13de6066426650",
+          "chunk_hash": "0a128d8a45c270744ea159e30d421644581111bd1bb0da14d442e31016c5f99b"
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "css_electronics_can_intro",
+          "chunk_id": "chunk_cf265ac2",
+          "locator": "CAN Bus Explained - A Simple Intro > What is CAN bus?",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: ECU communication, not power delivery, is the network's primary purpose.",
+          "verbatim_quote_status": "blocked_pending_rights_review",
+          "source_hash": "98a4c886561f0839889c8c314a4de02ce98d2d80087605279b13de6066426650",
+          "chunk_hash": "0a128d8a45c270744ea159e30d421644581111bd1bb0da14d442e31016c5f99b"
+        }
+      ]
+    },
+    {
+      "question_id": "9b71712d-eb90-459e-b6f5-08b60c595664",
+      "scenario_id": "charging-system",
+      "question_text": "What is the primary function of an alternator in a vehicle?",
+      "correct_answer": "B",
+      "source_id": "delco_remy_alternators_overview",
+      "chunk_id": "chunk_delco_alt_fn",
+      "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "delco_remy_alternators_overview:chunk_delco_alt_fn",
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This accurately states the alternator's general function. Its output supplies the vehicle electrical system and supports battery charging.",
+        "remaining_limitations": "Source supports only general alternator-function claims; vehicle-specific specifications remain unresolved without OEM procedures. Source usage remains metadata-and-link-only with no authorized source-text ingestion.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
+        "evidence_gate_result": "pass_limited_general_claim"
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "delco_remy_alternators_overview",
+          "chunk_id": "chunk_delco_alt_fn",
+          "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Delco Remy describes alternator technologies addressing vehicle electric-system demand and improved battery charge performance.",
+          "verbatim_quote_status": "blocked_pending_rights_review",
+          "source_hash": "d6a83b8ac7e02493b9f301cfc84b41eaeb6958f9550baa38d61afd54fb30ca6a",
+          "chunk_hash": null
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "delco_remy_alternators_overview",
+          "chunk_id": "chunk_delco_alt_fn",
+          "locator": "Delco Remy Heavy Duty Alternators > vehicle electric system challenges; remote sense and battery charge time",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Delco Remy provisionally supports general electrical-system and battery-charging claims.",
+          "verbatim_quote_status": "blocked_pending_rights_review",
+          "source_hash": "d6a83b8ac7e02493b9f301cfc84b41eaeb6958f9550baa38d61afd54fb30ca6a",
+          "chunk_hash": null
+        }
+      ]
+    },
+    {
+      "question_id": "c202f9cf-c630-4c28-b26e-e7e51cb11779",
+      "scenario_id": "diesel-aftertreatment",
+      "question_text": "What is the primary component of diesel exhaust fluid (DEF)?",
+      "correct_answer": "B",
+      "source_id": "nhtsa_def_bulletin",
+      "chunk_id": "chunk_c202f9cf",
+      "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "nhtsa_def_bulletin:chunk_c202f9cf",
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "This supports the limited composition claim that DEF is a 32.5% urea solution in de-ionized water.",
+        "remaining_limitations": "This general statement does not establish product quality, contamination status, concentration testing, storage requirements, or vehicle-specific diagnostic procedures. Original ownership chain remains unresolved from repository metadata; rights remain non-authorized for ingestion.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
+        "evidence_gate_result": "pass_limited_composition_claim"
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "nhtsa_def_bulletin",
+          "chunk_id": "chunk_c202f9cf",
+          "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: DEF is represented as a 32.5% urea solution in de-ionized water.",
+          "verbatim_quote_status": "blocked_pending_rights_review",
+          "source_hash": "c2d46e6cf8ce16d30beced2f8d6292240538b88fe176318703eb5e61f8e73100",
+          "chunk_hash": "20de9048b2e20884804bfcf1289b32a23628aa48cb005c5c4e8894b4ce13e20c"
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "nhtsa_def_bulletin",
+          "chunk_id": "chunk_c202f9cf",
+          "locator": "SB-10051649-7535.pdf > Diesel Exhaust Fluid (DEF)",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: The composition statement supports the answer selection for DEF chemistry.",
+          "verbatim_quote_status": "blocked_pending_rights_review",
+          "source_hash": "c2d46e6cf8ce16d30beced2f8d6292240538b88fe176318703eb5e61f8e73100",
+          "chunk_hash": "20de9048b2e20884804bfcf1289b32a23628aa48cb005c5c4e8894b4ce13e20c"
+        }
+      ]
+    },
+    {
+      "question_id": "08e95a70-c9f9-47bd-a248-da110634e9d5",
+      "scenario_id": "electrical-load",
+      "question_text": "What would be a plausible reason for dimming headlights while driving?",
+      "correct_answer": "B",
+      "source_id": "yourmechanic_bad_alternator_symptoms",
+      "chunk_id": "chunk_31df0f23",
+      "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": "yourmechanic_bad_alternator_symptoms:chunk_31df0f23",
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "Insufficient charging-system output can reduce system voltage and cause headlights to dim.",
+        "remaining_limitations": "This supports only a plausible-cause claim and does not confirm alternator failure without direct electrical testing and OEM diagnostic procedures. Source is non-OEM and should be superseded by OEM diagnostics documentation for production-grade finalization.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
+        "evidence_gate_result": "pass_plausible_cause_only"
+      },
+      "citations": [
+        {
+          "role": "supports-answer",
+          "source_id": "yourmechanic_bad_alternator_symptoms",
+          "chunk_id": "chunk_31df0f23",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Dimming or flicker under accessory load is described as consistent with insufficient alternator output.",
+          "verbatim_quote_status": "blocked_pending_rights_review",
+          "source_hash": "4016ef7e59a6d54b67417e3937deff6d2a6c4eb5d381ff3c2889167478972198",
+          "chunk_hash": "f076b5ee8bf6fcd9c57416da9333f9e34e5f9bc2e1653fa6d340c85be18367d5"
+        },
+        {
+          "role": "supports-explanation",
+          "source_id": "yourmechanic_bad_alternator_symptoms",
+          "chunk_id": "chunk_31df0f23",
+          "locator": "5 Bad Alternator Symptoms to Look For > charging system and dim lights",
+          "quote": null,
+          "evidence_summary": "TorqueMind summary: Added electrical demand and dim lighting are linked to charging-system insufficiency.",
+          "verbatim_quote_status": "blocked_pending_rights_review",
+          "source_hash": "4016ef7e59a6d54b67417e3937deff6d2a6c4eb5d381ff3c2889167478972198",
+          "chunk_hash": "f076b5ee8bf6fcd9c57416da9333f9e34e5f9bc2e1653fa6d340c85be18367d5"
+        }
+      ]
+    },
+    {
+      "question_id": "09a7a1b9-6674-4aab-8161-8cbb95c7c606",
+      "scenario_id": "hvac-cooling",
+      "question_text": "What is the most reliable method for verifying whether an automotive A/C system contains the manufacturer-specified refrigerant charge?",
+      "correct_answer": "A",
+      "source_id": null,
+      "chunk_id": null,
+      "locator": null,
+      "review_state": "human_review_completed_with_limitations",
+      "reviewer": "Rafael Rodriguez",
+      "approval_decision": "approve_with_limitations",
+      "evidence_status": "provisional_evidence",
+      "human_review": {
+        "source_evidence_id": null,
+        "reviewer_name": "Rafael Rodriguez",
+        "review_date": "2026-08-07",
+        "decision": "approve_with_limitations",
+        "supporting_rationale": "Operating pressures help assess system performance, but pressures alone cannot establish the exact refrigerant quantity. Recovering and weighing the refrigerant provides the appropriate comparison with the manufacturer-specified charge.",
+        "remaining_limitations": "The procedure must use equipment approved for the refrigerant type and follow applicable safety, environmental, equipment-manufacturer, and OEM service requirements. Pressures alone cannot confirm undercharge and still require full operating-context interpretation.",
+        "rights_status_and_permitted_use": "metadata_and_link_only; summarized citation evidence allowed; no verbatim quote ingestion or redistribution.",
+        "evidence_gate_result": "pending_evidence_source_alignment"
+      },
+      "citations": []
+    }
+  ]
+}

@@ -453,13 +453,13 @@ insert into scenario_questions
 values
 (
   'hvac-cooling',
-  'You suspect that the refrigerant charge is too low. Which of these would you use to confirm this diagnosis?',
-  'Low-side pressure gauge reading',
-  'High-side pressure gauge reading',
-  'Blender door position check',
-  'Compressor clutch operation test',
+  'What is the most reliable method for verifying whether an automotive A/C system contains the manufacturer-specified refrigerant charge?',
+  'Recover and weigh the refrigerant using approved A/C service equipment, then compare the recovered amount with the manufacturer’s specification.',
+  'Check only the low-side pressure.',
+  'Observe compressor-clutch operation.',
+  'Check the blend-door position.',
   'A',
-  'A low refrigerant charge can be confirmed by a low reading on the low-side pressure gauge.',
+  'Operating pressures help assess system performance, but pressures alone cannot establish the exact refrigerant quantity. Recovering and weighing the refrigerant provides the appropriate comparison with the manufacturer-specified charge.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
   'A7 Heating and Air Conditioning'
