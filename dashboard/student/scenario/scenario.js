@@ -292,7 +292,9 @@
     aiBody.textContent = "Generating AI explanation...";
 
     try {
-      const response = await fetch("/api/torquemind-feedback", {
+      const feedbackUrl = window.TorqueMindApi?.resolveApiUrl?.("/api/torquemind-feedback")
+        || "/api/torquemind-feedback";
+      const response = await fetch(feedbackUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

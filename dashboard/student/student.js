@@ -273,7 +273,9 @@ async function loadTorqueMindFeedback(payload){
 
     try{
 
-        const res = await fetch("/api/torquemind-feedback",{
+        const feedbackUrl = window.TorqueMindApi?.resolveApiUrl?.("/api/torquemind-feedback")
+            || "/api/torquemind-feedback";
+        const res = await fetch(feedbackUrl,{
 
             method:"POST",
 
@@ -312,4 +314,3 @@ async function loadTorqueMindFeedback(payload){
     }
 
 }
-

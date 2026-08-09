@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import feedbackRoute from "./routes/torquemind-feedback.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
@@ -15,20 +16,12 @@ app.get("/api/health", (c) =>
 // Lightweight ping for diagnostics
 app.get('/__ping', (c) => c.json({ ok: true }));
 
-app.use('*', async (c, next) => {
-  const path = c.req.path;
-
-  if (path.startsWith('/api/') || path === '/__ping') {
-    return next();
-  }
-
-  if (c.req.method === 'GET' || c.req.method === 'HEAD') {
-    return c.env.ASSETS.fetch(c.req.raw);
-  }
-
-  return next();
-});
-
+app.use('/api/torquemind-feedback/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type'],
+  maxAge: 86400
+}))
 // attach request context middleware for observability
 app.use('/api/torquemind-feedback', createRequestContext())
 // attach rate limiting (in-memory store for dev/tests)
