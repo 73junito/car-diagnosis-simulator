@@ -1,3 +1,4 @@
+/** @jest-environment node */
 import worker from '../worker/index.js'
 
 describe('Worker production routing', () => {

@@ -1,3 +1,4 @@
+/** @jest-environment node */
 import app from '../worker/index.js'
 import { handleFeedback as feedbackHandler } from '../worker/routes/torquemind-feedback.js'
 
