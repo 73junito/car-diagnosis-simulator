@@ -62,29 +62,40 @@ async function run() {
 
     // Helper to run as a given profile id
     async function asProfile(client, profileId, fn) {
-      await client.query(`SET session auth.uid = $1`, [profileId]);
+      await client.query(`SELECT set_config('auth.uid', $1, false)`, [profileId]);
       return fn();
     }
 
-    // 1) Unauthorized user cannot update source status
-    try {
-      await asProfile(appClient, regularId, async () => {
-        await appClient.query("UPDATE public.approved_sources SET status='source-linked' WHERE id='fixture-approved-source'");
-      });
-      fail('Unauthorized update unexpectedly succeeded');
-    } catch (err) {
-      console.log('Unauthorized update correctly failed');
+    // 1) Unauthorized user cannot update source status.
+    // RLS may reject the operation by exposing zero matching rows.
+    const unauthorizedUpdate = await asProfile(appClient, regularId, async () =>
+      appClient.query(
+        "UPDATE public.approved_sources SET status='source-linked' WHERE id='fixture-approved-source' RETURNING id"
+      )
+    );
+    if (unauthorizedUpdate.rowCount !== 0) {
+      fail('Unauthorized update unexpectedly modified a row');
     }
+    console.log('Unauthorized update correctly blocked by RLS');
 
-    // 2) Reviewer cannot jump draft -> approved directly (should fail)
+    // 2) Reviewer cannot jump draft -> approved directly.
+    let invalidTransitionError;
     try {
       await asProfile(appClient, reviewerId, async () => {
-        await appClient.query("UPDATE public.approved_sources SET status='approved' WHERE id='fixture-approved-source'");
+        await appClient.query(
+          "UPDATE public.approved_sources SET status='approved' WHERE id='fixture-approved-source'"
+        );
       });
-      fail('Invalid direct draft->approved update unexpectedly succeeded');
     } catch (err) {
-      console.log('Invalid direct draft->approved update correctly failed');
+      invalidTransitionError = err;
     }
+    if (!invalidTransitionError) {
+      fail('Invalid direct draft->approved update unexpectedly succeeded');
+    }
+    if (!invalidTransitionError.message.includes('Invalid transition to approved; must be validated first')) {
+      fail('Direct approval failed for an unexpected reason', invalidTransitionError);
+    }
+    console.log('Invalid direct draft->approved update correctly failed');
 
     // 3) Valid stepwise transition: draft -> source-linked -> validated -> approved
     await asProfile(appClient, reviewerId, async () => {
@@ -97,22 +108,37 @@ async function run() {
     });
     console.log('Source/chunk approved via valid transitions');
 
-    // 4) Try to approve a question without both citation roles -> should fail
+    // 4) A question cannot be approved without both required citation roles.
+    let missingCitationsError;
     try {
       await asProfile(appClient, reviewerId, async () => {
-        // create a provenance row for a new question
-        const res = await appClient.query("INSERT INTO public.question_provenance (question_id, provenance_version, status, validation_checklist) VALUES ('fixture-no-both-citations', 1, 'validated', jsonb_build_object('answer_verified', true, 'explanation_verified', true, 'citation_matches_excerpt', false, 'license_ok', true)) RETURNING id");
+        const res = await appClient.query(
+          "INSERT INTO public.question_provenance (question_id, provenance_version, status, validation_checklist) VALUES ('fixture-no-both-citations', 1, 'validated', jsonb_build_object('answer_verified', true, 'explanation_verified', true, 'citation_matches_excerpt', false, 'license_ok', true)) RETURNING id"
+        );
         const qpId = res.rows[0].id;
-        // insert only one citation role
-        await appClient.query("INSERT INTO public.question_citations (question_provenance_id, source_id, chunk_id, role) VALUES ($1, 'fixture-approved-source', 'fixture-approved-chunk', 'supports-answer')", [qpId]);
-        // attempt to approve
-        await appClient.query("UPDATE public.question_provenance SET validation_checklist = jsonb_build_object('answer_verified', true, 'explanation_verified', true, 'citation_matches_excerpt', true, 'license_ok', true) WHERE id = $1", [qpId]);
-        await appClient.query("UPDATE public.question_provenance SET status='approved' WHERE id = $1", [qpId]);
+        await appClient.query(
+          "INSERT INTO public.question_citations (question_provenance_id, source_id, chunk_id, role) VALUES ($1, 'fixture-approved-source', 'fixture-approved-chunk', 'supports-answer')",
+          [qpId]
+        );
+        await appClient.query(
+          "UPDATE public.question_provenance SET validation_checklist = jsonb_build_object('answer_verified', true, 'explanation_verified', true, 'citation_matches_excerpt', true, 'license_ok', true) WHERE id = $1",
+          [qpId]
+        );
+        await appClient.query(
+          "UPDATE public.question_provenance SET status='approved' WHERE id = $1",
+          [qpId]
+        );
       });
-      fail('Approval without both citation roles unexpectedly succeeded');
     } catch (err) {
-      console.log('Approval without both citation roles correctly failed');
+      missingCitationsError = err;
     }
+    if (!missingCitationsError) {
+      fail('Approval without both citation roles unexpectedly succeeded');
+    }
+    if (!missingCitationsError.message.includes('Cannot approve: missing required citations')) {
+      fail('Question approval failed for an unexpected reason', missingCitationsError);
+    }
+    console.log('Approval without both citation roles correctly failed');
 
     // 5) Approve a proper question: insert provenance for fixture-approved-question and citations exist from fixtures
     await asProfile(appClient, reviewerId, async () => {
@@ -123,25 +149,36 @@ async function run() {
     });
     console.log('Approved fixture question successfully');
 
-    // 6) provenance_audit update/delete should fail for reviewer/user (no policy)
-    // try update as reviewer
-    try {
-      await asProfile(appClient, reviewerId, async () => {
-        await appClient.query("UPDATE public.provenance_audit SET details = details || jsonb_build_object('test','x') WHERE true LIMIT 1");
-      });
-      fail('provenance_audit update unexpectedly succeeded');
-    } catch (err) {
-      console.log('provenance_audit update correctly failed');
+    // 6) provenance_audit is append-only for reviewer/user roles.
+    const auditTargetResult = await appClient.query(
+      'SELECT audit_id FROM public.provenance_audit ORDER BY created_at, audit_id LIMIT 1'
+    );
+    if (auditTargetResult.rowCount !== 1) {
+      fail('No provenance_audit row exists for append-only checks');
     }
+    const auditId = auditTargetResult.rows[0].audit_id;
 
-    try {
-      await asProfile(appClient, reviewerId, async () => {
-        await appClient.query("DELETE FROM public.provenance_audit WHERE true LIMIT 1");
-      });
-      fail('provenance_audit delete unexpectedly succeeded');
-    } catch (err) {
-      console.log('provenance_audit delete correctly failed');
+    const auditUpdate = await asProfile(appClient, reviewerId, async () =>
+      appClient.query(
+        "UPDATE public.provenance_audit SET details = details || jsonb_build_object('test', 'x') WHERE audit_id = $1 RETURNING audit_id",
+        [auditId]
+      )
+    );
+    if (auditUpdate.rowCount !== 0) {
+      fail('provenance_audit update unexpectedly modified a row');
     }
+    console.log('provenance_audit update correctly blocked by RLS');
+
+    const auditDelete = await asProfile(appClient, reviewerId, async () =>
+      appClient.query(
+        "DELETE FROM public.provenance_audit WHERE audit_id = $1 RETURNING audit_id",
+        [auditId]
+      )
+    );
+    if (auditDelete.rowCount !== 0) {
+      fail('provenance_audit delete unexpectedly removed a row');
+    }
+    console.log('provenance_audit delete correctly blocked by RLS');
 
     await appClient.end();
     await superClient.end();
