@@ -161,6 +161,15 @@ $do$;
 -- Helper: only allow operations by users with reviewer/admin roles
 -- Assumes a `public.profiles` table with `id` and `role` columns.
 
+-- RLS policies require underlying table privileges.
+-- Authorization remains restricted by the policies below.
+grant select, insert, update, delete on table
+    public.approved_sources,
+    public.source_chunks,
+    public.question_provenance,
+    public.question_citations,
+    public.provenance_audit
+to authenticated;
 -- Policies for approved_sources
 create policy approved_sources_select on public.approved_sources
     for select
