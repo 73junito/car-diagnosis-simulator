@@ -48,7 +48,11 @@ const runtimeRootFiles = [
   "sitemap.xml",
   "style.css",
   "theme.css",
-  "version.json"
+  "version.json",
+  "contact.html",
+  "legal-pages.css",
+  "privacy.html",
+  "terms.html"
 ];
 
 /*
