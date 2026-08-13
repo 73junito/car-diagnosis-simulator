@@ -1,5 +1,7 @@
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
+const { execSync } = require('child_process');
 
 const files = [
   'dashboard/student/ARCHITECTURE.md',
@@ -13,10 +15,11 @@ const files = [
   'docs/SYSTEM-ARCHITECTURE.md'
 ];
 
+const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mermaid-verify-'));
 let diagramCount = 0;
-const validationErrors = [];
+const errors = [];
 
-console.log('\nValidating Mermaid Diagram Syntax\n');
+console.log('\nRendering Mermaid Diagrams via mermaid-cli\n');
 
 try {
   for (const file of files) {
@@ -33,52 +36,59 @@ try {
 
     blocks.forEach((block, index) => {
       const mermaidContent = block[1].trim();
-      
-      // Basic Mermaid syntax validation
-      if (!mermaidContent) {
-        validationErrors.push(`${file} block ${index + 1}: Empty diagram`);
+      const fileName = path.basename(file, '.md');
+      const inputFile = path.join(tempDir, `${fileName}-${index}.mmd`);
+      const outputFile = path.join(tempDir, `${fileName}-${index}.svg`);
+
+      // Write the Mermaid diagram to .mmd file
+      fs.writeFileSync(inputFile, mermaidContent);
+
+      // Render using local mmdc (mermaid CLI)
+      try {
+        const mmdcPath = path.join(process.cwd(), 'node_modules', '.bin', 'mmdc');
+        const cmd = `"${mmdcPath}" -i "${inputFile}" -o "${outputFile}"`;
+        execSync(cmd, { stdio: 'pipe', shell: true });
+      } catch (err) {
+        errors.push(`${file} block ${index + 1}: mermaid-cli failed - ${err.message}`);
         return;
       }
 
-      // Check for required keywords based on diagram type
-      const hasGraphKeyword = /^\s*(graph|flowchart|sequenceDiagram|classDiagram|erDiagram|stateDiagram|pie|gantt|gitGraph)/.test(mermaidContent);
-      
-      if (!hasGraphKeyword) {
-        validationErrors.push(`${file} block ${index + 1}: Missing diagram keyword (graph/flowchart/etc)`);
+      // Verify SVG output exists and is non-empty
+      if (!fs.existsSync(outputFile)) {
+        errors.push(`${file} block ${index + 1}: SVG output not created`);
         return;
       }
 
-      // Check for balanced syntax (basic check)
-      const squareBrackets = (mermaidContent.match(/\[/g) || []).length;
-      const squareBracketsClose = (mermaidContent.match(/\]/g) || []).length;
-      
-      if (squareBrackets !== squareBracketsClose) {
-        validationErrors.push(`${file} block ${index + 1}: Unbalanced square brackets`);
+      const svgSize = fs.statSync(outputFile).size;
+      if (svgSize === 0) {
+        errors.push(`${file} block ${index + 1}: SVG output is empty`);
         return;
       }
 
-      // Check for arrow syntax (basic flow diagrams)
-      if (mermaidContent.includes('graph') || mermaidContent.includes('flowchart')) {
-        if (!mermaidContent.match(/--[>-]|==[>-]/)) {
-          // Some simple diagrams might not have arrows, but most should
-          // This is just a warning level check
-        }
+      // Verify SVG contains expected SVG markup
+      const svgContent = fs.readFileSync(outputFile, 'utf8');
+      if (!svgContent.includes('<svg')) {
+        errors.push(`${file} block ${index + 1}: SVG output does not contain valid SVG markup`);
+        return;
       }
 
       diagramCount += 1;
-      console.log(`[OK] ${file} block ${index + 1}`);
+      console.log(`[OK] ${file} block ${index + 1} → ${svgSize} bytes`);
     });
   }
 
-  if (validationErrors.length > 0) {
-    console.error(`\n[FAIL] Found ${validationErrors.length} validation error(s):\n`);
-    validationErrors.forEach(err => console.error(`  - ${err}`));
+  if (errors.length > 0) {
+    console.error(`\n[FAIL] ${errors.length} diagram(s) failed to render:\n`);
+    errors.forEach(err => console.error(`  - ${err}`));
     process.exit(1);
   }
 
-  console.log(`\n[PASS] Validated ${diagramCount} Mermaid diagrams - all syntax is well-formed\n`);
+  console.log(`\n[PASS] Successfully rendered ${diagramCount} Mermaid diagrams to SVG\n`);
   process.exit(0);
 } catch (err) {
   console.error(`\n[FAIL] ${err.message}\n`);
   process.exit(1);
+} finally {
+  // Clean up temp directory
+  fs.rmSync(tempDir, { recursive: true, force: true });
 }
