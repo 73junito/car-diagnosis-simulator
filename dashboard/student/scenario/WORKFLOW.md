@@ -49,44 +49,87 @@ graph LR
 ### 3. Student Response Capture
 - **Input:** Student interaction
 - **Process:**
-  - Listen for answer selection (radio button, checkbox, text input)
+  - Listen for answer selection (radio button)
   - Validate input format matches question type
   - Display user-selected answer clearly
-- **Output:** Selected response
-- **Concept:** Assessment - Captures student reasoning and knowledge
+  - Disable option selection after submission
+- **Output:** Selected response (e.g., "A", "B", "C", "D")
+- **Concept:** Assessment - Captures student response for server grading
 
 ### 4. Response Submission & Server-Side Grading
-- **Input:** Student's selected answer ONLY
-- **Process:**
-  - Browser submits answer to `/api/scenario-submissions/grade`
-  - Server retrieves question and correct answer from secure database
-  - Server compares student answer against database-authoritative correct answer
-  - Server returns grading result (is_correct boolean only)
-  - Correct answer NEVER sent to client and NEVER stored in browser
-- **Output:** Grading result (pass/fail status only, no answer key)
-- **Security Guarantees:**
-  - Correct answer is server-side secret, never exposed to browser
-  - Browser cannot tamper with grading (no client-side calculation)
-  - Answer key never appears in DOM or network responses
 
-### 5. Feedback Display
-- **Input:** Grading result
-- **Process:**
-  - Show if answer was correct or incorrect
-  - Explain correct answer with citations
-  - Provide remedial learning resources if needed
-  - Display score for this question
-- **Output:** Educational feedback
-- **Concept:** Learning - Reinforces correct responses and explains reasoning
+Server-side grading is authoritative. The browser never calculates or determines correctness.
 
-### 6. Scenario Summary
-- **Input:** All responses + all grades
+**Request:**
+```javascript
+POST /api/scenario-submissions/grade
+{
+  attempt_id: "uuid",                              // From URL params
+  scenario_id: "no-crank",                         // Scenario key
+  question_id: "question-uuid",                    // Question ID
+  student_answer: "A|B|C|D",                       // Student's choice
+  delivery_mode: "training|independent_non_proctored_assessment"
+}
+```
+
+**Process:**
+- Browser sends only the student's selected answer
+- Server retrieves question and correct answer from secure database (service role)
+- Server compares student answer against database-authoritative correct answer
+- Server determines `is_correct` and generates explanation if applicable
+- Server records submission in immutable `attempt_answers` table
+- Server returns result without exposing correct answer
+
+**Response (Training Mode):**
+```javascript
+{
+  question_id: "uuid",
+  is_correct: boolean,
+  explanation: "...",  // Educational feedback
+  ai_assistance_available: true,
+  metadata: { delivery_mode: "training", graded_at: "...", server_verified: true }
+}
+```
+
+**Response (Assessment Mode):**
+```javascript
+{
+  question_id: "uuid",
+  is_correct: boolean,
+  explanation: null,   // No feedback in assessment mode
+  ai_assistance_available: false,
+  metadata: { delivery_mode: "independent_non_proctored_assessment", graded_at: "...", server_verified: true }
+}
+```
+
+**Security Guarantees:**
+- Correct answer is server-side secret, NEVER exposed to browser
+- Browser cannot tamper with grading (no client-side calculation)
+- Answer key never appears in DOM, requests, or responses
+- Assessment mode hides all explanations and AI assistance until attempt finalized
+
+### 5. Feedback Display (Mode-Dependent)
+
+**Training Mode:**
+- Show "Correct." or "Incorrect." immediately
+- If incorrect, display educational explanation from server
+- Allow student to retry or move to next question
+- AI assistance available if tutor API is enabled
+
+**Assessment Mode:**
+- Show "Submitted." only (no correctness feedback)
+- No explanations during attempt
+- No AI assistance or tutoring
+- Student proceeds to next question
+- Feedback delayed until attempt completes and server finalizes score
+
+- **Input:** Grading result from `/api/scenario-submissions/grade`
 - **Process:**
-  - Calculate total score across all questions
-  - Show performance breakdown by topic
-  - Display historical attempt comparison
-- **Output:** Summary report
-- **Concept:** Assessment - Provides complete performance snapshot
+  - In training mode: Display correctness and optional explanation
+  - In assessment mode: Display only "Submitted." status
+  - Disable answer modification after submission
+- **Output:** User feedback message
+- **Concept:** Learning (training) vs. Security (assessment)
 
 ## Data Flow
 
@@ -170,26 +213,58 @@ Question → Citation → Source → Chunk → Validation Record
 }
 ```
 
-### POST /api/grade-response
+### POST /api/scenario-submissions/grade
+**Authoritative Server-Side Grading Endpoint**
+
+**Authentication:** Requires Supabase JWT in Authorization header
+
 **Request:**
 ```json
 {
-  "question_id": "no-crank-battery-health-01",
-  "student_response": "A",
-  "session_id": "uuid"
+  "attempt_id": "uuid",
+  "scenario_id": "no-crank",
+  "question_id": "question-uuid",
+  "student_answer": "A|B|C|D",
+  "delivery_mode": "training|independent_non_proctored_assessment"
 }
 ```
 
-**Response:**
+**Response (Training Mode):**
 ```json
 {
-  "success": true,
-  "correct": true,
-  "score": 1,
-  "feedback": "Correct! Your answer aligns with...",
-  "explanation": "..."
+  "question_id": "uuid",
+  "is_correct": true|false,
+  "explanation": "Educational feedback text (null in assessment mode)",
+  "ai_assistance_available": true,
+  "metadata": {
+    "delivery_mode": "training",
+    "graded_at": "ISO-8601-timestamp",
+    "server_verified": true
+  }
 }
 ```
+
+**Response (Assessment Mode):**
+```json
+{
+  "question_id": "uuid",
+  "is_correct": true|false,
+  "explanation": null,
+  "ai_assistance_available": false,
+  "metadata": {
+    "delivery_mode": "independent_non_proctored_assessment",
+    "graded_at": "ISO-8601-timestamp",
+    "server_verified": true
+  }
+}
+```
+
+**Security Properties:**
+- Correct answer is NEVER exposed in request or response
+- Server performs grading from database-authoritative values
+- Assessment mode suppresses explanations and AI assistance
+- All submissions are recorded in immutable `attempt_answers` table for audit trail
+- Score calculated from server-provided `is_correct` values only
 
 ## Concepts
 
