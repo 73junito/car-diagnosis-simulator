@@ -220,7 +220,7 @@ async function run() {
 
     // 7) provenance_audit is append-only for reviewer/user roles.
     const auditTargetResult = await appClient.query(
-      'SELECT audit_id FROM public.provenance_audit ORDER BY created_at, audit_id LIMIT 1'
+      'SELECT audit_id FROM public.provenance_audit ORDER BY performed_at, audit_id LIMIT 1'
     );
     if (auditTargetResult.rowCount !== 1) {
       fail('No provenance_audit row exists for append-only checks');
