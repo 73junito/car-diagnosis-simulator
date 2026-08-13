@@ -1,9 +1,29 @@
-name: Provenance DB Integration
+name: Provenance Database Integration
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "scripts/test-provenance-db.js"
+      - "supabase/migrations/**"
+      - "supabase/tests/**"
+      - ".github/workflows/provenance-db-integration.yml"
+      - "package.json"
+      - "package-lock.json"
+
   push:
-    branches: [ main, fix/scenario-attempt-lifecycle ]
+    branches:
+      - main
+    paths:
+      - "scripts/test-provenance-db.js"
+      - "supabase/migrations/**"
+      - "supabase/tests/**"
+      - ".github/workflows/provenance-db-integration.yml"
+      - "package.json"
+      - "package-lock.json"
+
+  workflow_dispatch:
 
 jobs:
   provenance-db-integration:
@@ -26,7 +46,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: "22"
+          cache: npm
 
       - name: Install dependencies
         run: npm ci

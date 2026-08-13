@@ -140,23 +140,103 @@ async function run() {
     }
     console.log('Approval without both citation roles correctly failed');
 
-    // 5) Approve a proper question: insert provenance for fixture-approved-question and citations exist from fixtures
-    await asProfile(appClient, reviewerId, async () => {
-      // Update the existing fixture-approved-question's validation_checklist to pass
-      await appClient.query("UPDATE public.question_provenance SET validation_checklist = jsonb_build_object('answer_verified', true, 'explanation_verified', true, 'citation_matches_excerpt', true, 'license_ok', true) WHERE question_id='fixture-approved-question'");
-      // Attempt to set approved - should succeed
-      await appClient.query("UPDATE public.question_provenance SET status='approved', approved_at = now() WHERE question_id='fixture-approved-question'");
-    });
-    console.log('Approved fixture question successfully');
-
-    // 6) provenance_audit is append-only for reviewer/user roles.
-    const auditTargetResult = await appClient.query(
-      'SELECT audit_id FROM public.provenance_audit ORDER BY created_at, audit_id LIMIT 1'
+    // 5) Validate that direct draft -> approved is blocked for question_provenance
+    // First, verify the fixture exists and is in draft state
+    const fixtureCheck = await appClient.query(
+      `SELECT id, status FROM public.question_provenance WHERE question_id = 'fixture-approved-question'`
     );
-    if (auditTargetResult.rowCount !== 1) {
-      fail('No provenance_audit row exists for append-only checks');
+    if (fixtureCheck.rowCount !== 1) {
+      fail(`Expected one provenance fixture; found ${fixtureCheck.rowCount}`);
     }
-    const auditId = auditTargetResult.rows[0].audit_id;
+    if (fixtureCheck.rows[0].status !== 'draft') {
+      fail(`Expected fixture status 'draft'; received '${fixtureCheck.rows[0].status}'`);
+    }
+
+    let directApprovalError;
+    try {
+      await asProfile(appClient, reviewerId, async () => {
+        const result = await appClient.query(
+          `UPDATE public.question_provenance SET status='approved' WHERE question_id='fixture-approved-question' RETURNING id`
+        );
+        if (result.rowCount !== 1) {
+          throw new Error(`Expected update to affect one row; affected ${result.rowCount}`);
+        }
+      });
+    } catch (err) {
+      directApprovalError = err;
+    }
+    if (!directApprovalError) {
+      fail('Invalid direct draft->approved on question_provenance unexpectedly succeeded');
+    }
+    if (!directApprovalError.message.includes('draft -> approved') && !directApprovalError.message.includes('must be validated first')) {
+      fail('Question approval failed for an unexpected reason', directApprovalError);
+    }
+    console.log('✓ PASS: direct draft -> approved rejected');
+
+    // 6) Approve proper question via enforced lifecycle: draft -> validated -> approved
+    // CRITICAL: Use single checked-out client to keep transaction on same connection
+    // Connection-scoped transactions are broken if different pools handle BEGIN/COMMIT
+    const txnClient = new Client({ ...cfg, user: 'app_user', password: 'app_pass' });
+    await txnClient.connect();
+
+    try {
+      await txnClient.query(`SELECT set_config('auth.uid', $1, false)`, [reviewerId]);
+
+      await txnClient.query("BEGIN");
+
+      try {
+        // Set validation_checklist for fixture-approved-question
+        await txnClient.query(
+          "UPDATE public.question_provenance SET validation_checklist = jsonb_build_object('answer_verified', true, 'explanation_verified', true, 'citation_matches_excerpt', true, 'license_ok', true) WHERE question_id='fixture-approved-question'"
+        );
+
+        // Transition: draft -> validated
+        const validated = await txnClient.query(
+          "UPDATE public.question_provenance SET status='validated' WHERE question_id='fixture-approved-question' RETURNING status"
+        );
+
+        if (validated.rows[0]?.status !== 'validated') {
+          throw new Error('Fixture did not transition to validated');
+        }
+
+        // Transition: validated -> approved
+        const approved = await txnClient.query(
+          "UPDATE public.question_provenance SET status='approved', approved_at = now() WHERE question_id='fixture-approved-question' RETURNING status, approved_at"
+        );
+
+        if (approved.rows[0]?.status !== 'approved') {
+          throw new Error('Fixture did not transition to approved');
+        }
+
+        await txnClient.query("COMMIT");
+      } catch (error) {
+        await txnClient.query("ROLLBACK");
+        throw error;
+      }
+    } finally {
+      await txnClient.end();
+    }
+    console.log('✓ PASS: draft -> validated -> approved completed');
+
+    // 7) provenance_audit permits reviewer inserts but blocks updates/deletes.
+    const auditInsert = await asProfile(appClient, reviewerId, async () =>
+      appClient.query(
+        `INSERT INTO public.provenance_audit
+           (entity_type, entity_id, action, performed_by, details)
+         VALUES
+           ('question_provenance', 'fixture-approved-question',
+            'integration-test', $1, '{"fixture": true}'::jsonb)
+         RETURNING audit_id`,
+        [reviewerId]
+      )
+    );
+
+    if (auditInsert.rowCount !== 1) {
+      fail(`Expected one provenance_audit fixture; inserted ${auditInsert.rowCount}`);
+    }
+
+    const auditId = auditInsert.rows[0].audit_id;
+    console.log('provenance_audit insert allowed for reviewer');
 
     const auditUpdate = await asProfile(appClient, reviewerId, async () =>
       appClient.query(
