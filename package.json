@@ -25,7 +25,10 @@
     "lint": "eslint . --ext .js",
     "lint:tests": "eslint tests --ext .js",
     "normalize-assets": "node scripts/normalize-scenario-assets.js",
-    "evaluate-retrieval": "node scripts/evaluate-retrieval.js"
+    "evaluate-retrieval": "node scripts/evaluate-retrieval.js",
+    "docs:mermaid:coverage": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-mermaid-coverage.ps1",
+    "docs:mermaid:render": "node scripts/verify-mermaid-rendering.js",
+    "docs:mermaid": "npm run docs:mermaid:coverage && npm run docs:mermaid:render"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
