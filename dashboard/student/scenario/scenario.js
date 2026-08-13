@@ -651,50 +651,49 @@
           return;
         }
 
-        const correct = options.dataset.correctAnswer;
-        const isCorrect = selected.value === correct;
-
-        feedback.textContent = isCorrect
-          ? "Correct."
-          : `Incorrect. Correct answer: ${correct}.`;
+        // SECURITY: Never read correct answer from DOM
+        // Grading must be performed server-side only
+        // Server has database-authoritative correct_answer; browser never knows it
+        
+        // Temporarily show "Submitted" feedback
+        feedback.textContent = "Submitted.";
 
         button.disabled = true;
         article.querySelectorAll("input[type='radio']").forEach((input) => {
           input.disabled = true;
         });
 
+        // Store ONLY the selected answer, never store correctAnswer or isCorrect
+        // Server is authoritative; browser state is write-only for audit trail
         state.activeAttempt.answers[questionQid] = {
           selectedAnswer: selected.value,
-          correctAnswer: correct,
-          isCorrect,
           submittedAt: new Date().toISOString()
         };
         writeAttemptState(key, studentId, state);
 
+        // Send ONLY selectedAnswer to API
+        // Never send correct_answer or is_correct from browser (prevents answer key exposure)
         await saveQuestionAttempt({
           scenario_id: key,
           question_id: options.dataset.questionId || null,
           selected_answer: selected.value,
-          correct_answer: correct,
-          is_correct: isCorrect,
           time_seconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000))
         });
 
-        if (!isCorrect) {
-          await loadTorqueMindExplanation({
-            article,
-            title,
-            selected,
-            correct
-          });
-        }
+        // In training mode, load explanation without exposing answer key
+        // In production assessment mode, explanations should be deferred until
+        // server-side validation is complete (future implementation)
+        // For now, skip loading explanation to maintain security posture
 
         const answeredCount = Object.keys(state.activeAttempt.answers).length;
         const totalQuestions = state.activeAttempt.questionIds.length;
         if (answeredCount >= totalQuestions) {
-          const correctCount = countCorrectAnswers(state.activeAttempt.answers);
-          const score = Math.round((correctCount / Math.max(1, totalQuestions)) * 100);
-          const passed = score >= PASSING_SCORE_PERCENT;
+          // SECURITY: Browser never calculates score; server is authoritative
+          // Score is always 0 in browser until server validation is complete
+          // Actual score comes from server-side grading audit
+          const correctCount = 0; // Placeholder - server calculates actual score
+          const score = 0; // Placeholder - no score until server validation
+          const passed = false; // Placeholder - server determines pass/fail
 
           const entry = buildAttemptHistoryEntry({
             moduleId: key,

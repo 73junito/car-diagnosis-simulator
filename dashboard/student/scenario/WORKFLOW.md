@@ -10,20 +10,17 @@ The Scenario Workflow orchestrates the complete student diagnostic experience: p
 
 ```mermaid
 graph LR
-    Start["📋 Load Scenario"] --> Load["Load Questions<br/>Check Citations<br/>Fail-Closed"]
-    Load -->|Valid Citations| Render["🎯 Render Question Cards"]
-    Load -->|Missing Citations| Empty["⚠️ Empty State<br/>Security Gate"]
-    Render --> Student["👤 Student Reads<br/>& Selects Answer"]
-    Student --> Submit["✍️ Submit Response"]
-    Submit --> Validate["🔍 Validate Response<br/>Check Citations"]
-    Validate -->|Valid| Grade["⭐ Grade Answer<br/>Calculate Score"]
-    Validate -->|Invalid| Reject["❌ Reject Response"]
-    Grade --> Feedback["💬 Generate Feedback"]
-    Feedback --> Next{More Questions?}
+    Start["📋 Load Scenario"] --> Load["Load Questions<br/>Check Citations"]
+    Load -->|Valid| Render["🎯 Render Cards"]
+    Load -->|Invalid| Empty["⚠️ Empty State"]
+    Render --> Student["👤 Student Selects<br/>Answer"]
+    Student --> Submit["✍️ Submit"]
+    Submit --> Grade["⭐ Server Grades<br/>Never expose key"]
+    Grade --> Complete["✅ Answer Recorded"]
+    Complete --> Next{More Questions?}
     Next -->|Yes| Render
-    Next -->|No| Summary["📊 Show Summary<br/>Final Score"]
-    Summary --> End["✅ Complete"]
-    Reject -.->|Return to| Student
+    Next -->|No| Summary["📊 Summary"]
+    Summary --> End["✅ Done"]
 ```
 
 ## Phase Details
@@ -58,15 +55,19 @@ graph LR
 - **Output:** Selected response
 - **Concept:** Assessment - Captures student reasoning and knowledge
 
-### 4. Response Submission & Grading
-- **Input:** Selected response + Question answer key
+### 4. Response Submission & Server-Side Grading
+- **Input:** Student's selected answer ONLY
 - **Process:**
-  - Submit to `/api/grade-response` endpoint
-  - Compare student answer against approved answer key
-  - Calculate points/score
-  - Generate detailed feedback
-- **Output:** Grading result + feedback
-- **Validation:** Verify answer keys are not exposed before submission
+  - Browser submits answer to `/api/scenario-submissions/grade`
+  - Server retrieves question and correct answer from secure database
+  - Server compares student answer against database-authoritative correct answer
+  - Server returns grading result (is_correct boolean only)
+  - Correct answer NEVER sent to client and NEVER stored in browser
+- **Output:** Grading result (pass/fail status only, no answer key)
+- **Security Guarantees:**
+  - Correct answer is server-side secret, never exposed to browser
+  - Browser cannot tamper with grading (no client-side calculation)
+  - Answer key never appears in DOM or network responses
 
 ### 5. Feedback Display
 - **Input:** Grading result
