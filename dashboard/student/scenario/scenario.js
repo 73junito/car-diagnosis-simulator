@@ -282,13 +282,66 @@
     }
   }
 
-  async function loadTorqueMindExplanation({ article, title, selected, correct }) {
+  async function submitAnswerForGrading({
+    attemptId,
+    questionId,
+    scenarioId,
+    selectedAnswer,
+    isAssessmentMode
+  }) {
+    try {
+      const response = await fetch('/api/scenario-submissions/grade', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          attempt_id: attemptId,
+          question_id: questionId,
+          scenario_id: scenarioId,
+          student_answer: selectedAnswer,
+          delivery_mode: isAssessmentMode
+            ? 'independent_non_proctored_assessment'
+            : 'training'
+        })
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || `Server error: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error('Failed to grade answer:', err);
+      throw err;
+    }
+  }
+
+  async function loadTorqueMindExplanation({ article, title, selected, correct, explanation, isAssessmentMode }) {
+    if (isAssessmentMode) {
+      // Never show explanations during assessment
+      return;
+    }
+
     const aiPanel = article.querySelector(".torquemind-feedback");
     const aiBody = article.querySelector(".torquemind-body");
 
     if (!aiPanel || !aiBody) return;
 
     aiPanel.hidden = false;
+    
+    // If server provided an explanation, use it directly
+    if (explanation) {
+      aiBody.innerHTML = `
+        <p><strong>Explanation</strong></p>
+        <p>${escapeHtml(explanation)}</p>
+      `;
+      return;
+    }
+
+    // Fallback: Try to get explanation from tutor API (legacy)
     aiBody.textContent = "Generating AI explanation...";
 
     try {
@@ -345,6 +398,9 @@
   async function renderScenarioPage() {
     const params = new URLSearchParams(location.search);
     const id = params.get("id") || params.get("scenario");
+    const mode = params.get("mode") || "training";
+    const attemptId = params.get("attempt_id");
+    const isAssessmentMode = mode === "assessment";
 
     const registry = window.SCENARIO_REGISTRY || [];
     const item = registry.find(r =>
@@ -582,7 +638,6 @@
                   <div
                     class="question-options"
                     data-question-id="${escapeHtml(q.id || "")}"
-                    data-correct-answer="${escapeHtml(q.correct_answer || "")}"
                   >
                     <label class="question-option">
                       <input type="radio" name="q${i}" value="A" ${checked("A")} ${disabled}>
@@ -609,7 +664,7 @@
                     Submit Answer
                   </button>
 
-                  <p class="answer-feedback" aria-live="polite">${answer ? (answer.isCorrect ? "Correct." : `Incorrect. Correct answer: ${escapeHtml(q.correct_answer || "")}.`) : ""}</p>
+                  <p class="answer-feedback" aria-live="polite">${answer ? (answer.isCorrect ? "Correct." : "Incorrect.") : ""}</p>
 
                   <div class="torquemind-feedback" hidden>
                     <h4>🧠 TorqueMind AI Tutor</h4>
@@ -651,49 +706,78 @@
           return;
         }
 
-        // SECURITY: Never read correct answer from DOM
-        // Grading must be performed server-side only
-        // Server has database-authoritative correct_answer; browser never knows it
-        
-        // Temporarily show "Submitted" feedback
-        feedback.textContent = "Submitted.";
-
         button.disabled = true;
         article.querySelectorAll("input[type='radio']").forEach((input) => {
           input.disabled = true;
         });
 
-        // Store ONLY the selected answer, never store correctAnswer or isCorrect
-        // Server is authoritative; browser state is write-only for audit trail
-        state.activeAttempt.answers[questionQid] = {
-          selectedAnswer: selected.value,
-          submittedAt: new Date().toISOString()
-        };
-        writeAttemptState(key, studentId, state);
+        try {
+          // Call server-side grading endpoint
+          const gradeResult = await submitAnswerForGrading({
+            attemptId: attemptId || "local-attempt",
+            questionId: options.dataset.questionId || questionQid,
+            scenarioId: key,
+            selectedAnswer: selected.value,
+            isAssessmentMode
+          });
 
-        // Send ONLY selectedAnswer to API
-        // Never send correct_answer or is_correct from browser (prevents answer key exposure)
-        await saveQuestionAttempt({
-          scenario_id: key,
-          question_id: options.dataset.questionId || null,
-          selected_answer: selected.value,
-          time_seconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000))
-        });
+          // Store grading result from server
+          state.activeAttempt.answers[questionQid] = {
+            selectedAnswer: selected.value,
+            submittedAt: new Date().toISOString(),
+            isCorrect: gradeResult.is_correct,
+            submissionId: gradeResult.question_id
+          };
+          writeAttemptState(key, studentId, state);
 
-        // In training mode, load explanation without exposing answer key
-        // In production assessment mode, explanations should be deferred until
-        // server-side validation is complete (future implementation)
-        // For now, skip loading explanation to maintain security posture
+          // Show appropriate feedback based on mode
+          if (isAssessmentMode) {
+            // Assessment mode: never show correctness
+            feedback.textContent = "Submitted.";
+          } else {
+            // Training mode: show correctness and explanations
+            feedback.textContent = gradeResult.is_correct
+              ? "Correct."
+              : "Incorrect.";
 
+            // In training mode, load AI explanation if answer is wrong
+            if (!gradeResult.is_correct && gradeResult.explanation) {
+              await loadTorqueMindExplanation({
+                article,
+                title,
+                selected,
+                explanation: gradeResult.explanation,
+                isAssessmentMode: false
+              });
+            }
+          }
+
+          // Save to audit trail (without exposing answer keys)
+          await saveQuestionAttempt({
+            scenario_id: key,
+            question_id: options.dataset.questionId || null,
+            selected_answer: selected.value,
+            time_seconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000))
+          });
+        } catch (err) {
+          console.error("Error submitting answer:", err);
+          feedback.textContent = "Error submitting answer. Please try again.";
+          button.disabled = false;
+          article.querySelectorAll("input[type='radio']").forEach((input) => {
+            input.disabled = false;
+          });
+          return;
+        }
+
+        // Check if all questions answered
         const answeredCount = Object.keys(state.activeAttempt.answers).length;
         const totalQuestions = state.activeAttempt.questionIds.length;
         if (answeredCount >= totalQuestions) {
-          // SECURITY: Browser never calculates score; server is authoritative
-          // Score is always 0 in browser until server validation is complete
-          // Actual score comes from server-side grading audit
-          const correctCount = 0; // Placeholder - server calculates actual score
-          const score = 0; // Placeholder - no score until server validation
-          const passed = false; // Placeholder - server determines pass/fail
+          // Calculate score from server-provided grading results
+          const correctCount = Object.values(state.activeAttempt.answers || {})
+            .filter((a) => a && a.isCorrect).length;
+          const score = Math.round((correctCount / Math.max(1, totalQuestions)) * 100);
+          const passed = score >= PASSING_SCORE_PERCENT;
 
           const entry = buildAttemptHistoryEntry({
             moduleId: key,
