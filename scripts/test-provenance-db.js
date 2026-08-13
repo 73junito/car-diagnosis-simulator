@@ -218,14 +218,25 @@ async function run() {
     }
     console.log('✓ PASS: draft -> validated -> approved completed');
 
-    // 7) provenance_audit is append-only for reviewer/user roles.
-    const auditTargetResult = await appClient.query(
-      'SELECT audit_id FROM public.provenance_audit ORDER BY created_at, audit_id LIMIT 1'
+    // 7) provenance_audit permits reviewer inserts but blocks updates/deletes.
+    const auditInsert = await asProfile(appClient, reviewerId, async () =>
+      appClient.query(
+        `INSERT INTO public.provenance_audit
+           (entity_type, entity_id, action, performed_by, details)
+         VALUES
+           ('question_provenance', 'fixture-approved-question',
+            'integration-test', $1, '{"fixture": true}'::jsonb)
+         RETURNING audit_id`,
+        [reviewerId]
+      )
     );
-    if (auditTargetResult.rowCount !== 1) {
-      fail('No provenance_audit row exists for append-only checks');
+
+    if (auditInsert.rowCount !== 1) {
+      fail(`Expected one provenance_audit fixture; inserted ${auditInsert.rowCount}`);
     }
-    const auditId = auditTargetResult.rows[0].audit_id;
+
+    const auditId = auditInsert.rows[0].audit_id;
+    console.log('provenance_audit insert allowed for reviewer');
 
     const auditUpdate = await asProfile(appClient, reviewerId, async () =>
       appClient.query(
