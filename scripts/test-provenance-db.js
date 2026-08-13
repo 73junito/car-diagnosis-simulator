@@ -141,12 +141,26 @@ async function run() {
     console.log('Approval without both citation roles correctly failed');
 
     // 5) Validate that direct draft -> approved is blocked for question_provenance
+    // First, verify the fixture exists and is in draft state
+    const fixtureCheck = await appClient.query(
+      `SELECT id, status FROM public.question_provenance WHERE question_id = 'fixture-approved-question'`
+    );
+    if (fixtureCheck.rowCount !== 1) {
+      fail(`Expected one provenance fixture; found ${fixtureCheck.rowCount}`);
+    }
+    if (fixtureCheck.rows[0].status !== 'draft') {
+      fail(`Expected fixture status 'draft'; received '${fixtureCheck.rows[0].status}'`);
+    }
+
     let directApprovalError;
     try {
       await asProfile(appClient, reviewerId, async () => {
-        await appClient.query(
-          "UPDATE public.question_provenance SET status='approved' WHERE question_id='fixture-draft-question'"
+        const result = await appClient.query(
+          `UPDATE public.question_provenance SET status='approved' WHERE question_id='fixture-approved-question' RETURNING id`
         );
+        if (result.rowCount !== 1) {
+          throw new Error(`Expected update to affect one row; affected ${result.rowCount}`);
+        }
       });
     } catch (err) {
       directApprovalError = err;
