@@ -30,8 +30,8 @@
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
-    "@cloudflare/workers-types": "^5.20260801.1",
-    "@playwright/test": "^1.62.1",
+    "@cloudflare/workers-types": "^5.20260810.1",
+    "@playwright/test": "^1.62.0",
     "@supabase/supabase-js": "^2.111.0",
     "acorn": "^8.18.0",
     "adm-zip": "^0.6.0",
