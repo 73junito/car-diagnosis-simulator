@@ -125,7 +125,8 @@ describe('Assessment/Training Boundary (Phase 1)', () => {
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({
         error: "AI assistance is not available during official assessment",
-        code: "assessment_mode_tutor_disabled"
+        code: "assessment_mode_tutor_disabled",
+        advisory: "Use POST /api/scenario-submissions/grade for official assessment grading"
       });
     });
 
@@ -153,7 +154,8 @@ describe('Assessment/Training Boundary (Phase 1)', () => {
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith({
         error: "AI assistance is not available during official assessment",
-        code: "assessment_mode_tutor_disabled"
+        code: "assessment_mode_tutor_disabled",
+        advisory: "Use POST /api/scenario-submissions/grade for official assessment grading"
       });
     });
 
