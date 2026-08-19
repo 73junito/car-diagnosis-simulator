@@ -33,7 +33,7 @@
   },
   "vars": {
     "TORQUEMIND_ENVIRONMENT": "production",
-    "SUPABASE_URL": "https://jchfruprqpeypdttvlam.supabase.co",
+    "SUPABASE_URL": "https://pffdgqpynpbffbcnxmum.supabase.co",
     "USE_DO_RATE_LIMIT": "true",
     "TORQUEMIND_RATE_LIMIT_MAX": "10",
     "TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS": "60",
