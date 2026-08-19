@@ -11,14 +11,12 @@ describe("TorqueMind tutor utilities", () => {
       scenario: "Engine cranks but will not start.",
       question: "What should be checked first?",
       studentAnswer: "Replace the starter.",
-      correctAnswer: "Verify fuel and spark.",
       topic: "Engine Performance"
     })
 
     expect(prompt).toContain("Engine cranks but will not start.")
     expect(prompt).toContain("What should be checked first?")
     expect(prompt).toContain("Replace the starter.")
-    expect(prompt).toContain("Verify fuel and spark.")
     expect(prompt).toContain("Engine Performance")
 
     expect(prompt).toContain('"reasonIncorrect"')

@@ -11,8 +11,18 @@ module.exports = async (req, res) => {
     question,
     studentAnswer,
     correctAnswer,
-    topic
+    topic,
+    delivery_mode,
+    ai_assistance_allowed
   } = req.body;
+
+  // GUARDRAIL: Assessment mode must reject tutor requests BEFORE any provider access
+  if (delivery_mode === 'independent_non_proctored_assessment' || ai_assistance_allowed === false) {
+    return res.status(403).json({
+      error: "AI assistance is not available during official assessment",
+      code: "assessment_mode_tutor_disabled"
+    });
+  }
 
   const prompt = `
 You are TorqueMind.
