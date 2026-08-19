@@ -120,6 +120,66 @@ describe('scenario attempt lifecycle', () => {
     };
 
     global.fetch = jest.fn(async (url) => {
+      if (typeof url === 'string' && url.includes('/api/scenario-questions-approved')) {
+        // Handle new sanitized questions endpoint (TTED805 expansion phase)
+        // Extract scenarioId from URL query parameter
+        const urlObj = new URL(url, 'http://localhost');
+        const scenarioId = urlObj.searchParams.get('scenarioId');
+
+        // Use test-provided SCENARIO_QUESTIONS or default approved questions
+        const testQuestionsData = window.SCENARIO_QUESTIONS[scenarioId];
+        if (testQuestionsData && testQuestionsData.length > 0) {
+          // If test provided questions, filter for approved ones
+          const approvedQuestions = testQuestionsData.filter(q => q.status === 'approved');
+          if (approvedQuestions.length === 0) {
+            // Return empty array if no approved questions (tests expect this)
+            return {
+              ok: true,
+              json: async () => ({
+                scenario_id: scenarioId,
+                questions: [],
+                metadata: {
+                  total_approved_questions: 0,
+                  enforcement_level: 'database-authoritative'
+                }
+              })
+            };
+          }
+        }
+
+        // Default: return 20 approved questions
+        const scenarioQuestionsData = Array.from({ length: 20 }, (_, index) => ({
+          id: `q${index + 1}`,
+          status: 'approved',  // CRITICAL: Must match filter in scenario.js line 402
+          question_text: `Approved fixture question ${index + 1}?`,
+          option_a: 'A',
+          option_b: 'B',
+          option_c: 'C',
+          option_d: 'D',
+          difficulty: 'medium',
+          topic: 'diagnostics',
+          ase_area: 'E1',
+          explanation: 'Explanation text',
+          question_provenance: [{
+            status: 'approved',
+            validated_at: new Date().toISOString(),
+            validator_version: '1.0',
+            citation_validation: 'valid'
+          }],
+          citations: []
+        }));
+        return {
+          ok: true,
+          json: async () => ({
+            scenario_id: scenarioId,
+            questions: scenarioQuestionsData,
+            metadata: {
+              total_approved_questions: scenarioQuestionsData.length,
+              enforcement_level: 'database-authoritative'
+            }
+          })
+        };
+      }
       if (typeof url === 'string' && url.includes('/api/attempts/save')) {
         return { ok: true, json: async () => ({ ok: true, id: 'attempt-1' }) };
       }

@@ -24,11 +24,23 @@ export async function handleFeedback(c) {
     return c.json({ error: 'Invalid JSON body' }, 400)
   }
 
-  const { scenario, question, studentAnswer, correctAnswer, topic } = body
+  const { scenario, question, studentAnswer, topic, delivery_mode, ai_assistance_allowed } = body
 
-  if (!scenario || !question || !studentAnswer || !correctAnswer) {
-    return c.json({ error: 'scenario, question, studentAnswer, and correctAnswer are required' }, 400)
+  // GUARDRAIL: Assessment mode must reject tutor requests BEFORE any provider access
+  if (delivery_mode === 'independent_non_proctored_assessment' || ai_assistance_allowed === false) {
+    return c.json({
+      error: "AI assistance is not available during official assessment",
+      code: "assessment_mode_tutor_disabled"
+    }, 403)
   }
+
+  if (!scenario || !question || !studentAnswer) {
+    return c.json({ error: 'scenario, question, and studentAnswer are required' }, 400)
+  }
+
+  // NOTE: correctAnswer is NEVER accepted from client request
+  // Assessment grading is server-side only via /api/scenario-submissions/grade
+  // This prevents answer-key exposure through the AI prompt
 
   const provider = c.env.TORQUEMIND_AI_PROVIDER || 'ollama'
   const model = c.env.TORQUEMIND_AI_MODEL || 'gpt-oss:20b'
@@ -59,7 +71,12 @@ export async function handleFeedback(c) {
   // observability: start
   const requestId = c.reqId || (c.req && c.reqId) || null
   logRequestStart({ requestId, method: c.req?.method || 'POST', route: '/api/torquemind-feedback', provider: diag.provider, model: diag.model, providerHost: diag.host })
-  const prompt = buildPrompt({ scenario, question, studentAnswer, correctAnswer, topic: topic || 'automotive diagnostics' })
+  const prompt = buildPrompt({
+    scenario,
+    question,
+    studentAnswer,
+    topic: topic || 'automotive diagnostics'
+  })
 
   const configuredTimeout = Number.parseInt(c.env.TORQUEMIND_AI_TIMEOUT_MS || '', 10)
   const timeoutMs = Number.isFinite(configuredTimeout)

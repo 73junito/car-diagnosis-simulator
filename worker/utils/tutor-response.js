@@ -1,4 +1,4 @@
-export function buildPrompt({ scenario, question, studentAnswer, correctAnswer, topic = 'automotive diagnostics' }) {
+export function buildPrompt({ scenario, question, studentAnswer, topic = 'automotive diagnostics' }) {
   const header = `You are an ASE-certified automotive tutor. Produce a JSON object with the exact shape described below.`
 
   const schema = `Return exactly one JSON object with the following string fields:\n` +
@@ -8,13 +8,14 @@ export function buildPrompt({ scenario, question, studentAnswer, correctAnswer, 
     `  "nextStep": a concise next diagnostic step or repair suggestion\n` +
     `Do not include any additional keys or commentary outside the JSON.`
 
-  const context = [
+  const contextLines = [
     `Scenario: ${scenario}`,
     `Question: ${question}`,
     `Student Answer: ${studentAnswer}`,
-    `Correct Answer: ${correctAnswer}`,
     `Topic: ${topic}`
-  ].join('\n')
+  ]
+
+  const context = contextLines.join('\n')
 
   return [header, schema, '', context, '', 'Respond with the JSON object only:'].join('\n')
 }

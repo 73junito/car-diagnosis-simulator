@@ -197,27 +197,17 @@
 
   async function loadScenarioQuestions(scenarioId) {
     try {
-      if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-        const url =
-          `${window.SUPABASE_URL}/rest/v1/scenario_questions` +
-          `?scenario_id=eq.${encodeURIComponent(scenarioId)}` +
-          `&select=id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,difficulty,topic,ase_area` +
-          `&order=created_at.asc`;
+      // Always use the API endpoint to prevent answer key exposure
+      const res = await fetch(
+        `/api/scenario-questions-approved?scenarioId=${encodeURIComponent(scenarioId)}`
+      );
 
-        const res = await fetch(url, {
-          headers: {
-            apikey: window.SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
-          }
-        });
-
-        if (res.ok) {
-          const rows = await res.json();
-          if (Array.isArray(rows) && rows.length) return rows;
-        }
+      if (res.ok) {
+        const data = await res.json();
+        return Array.isArray(data.questions) ? data.questions : [];
       }
     } catch (e) {
-      console.warn("Supabase question load failed; falling back to static questions.", e);
+      console.warn("API question load failed; falling back to static questions.", e);
     }
 
     return (window.SCENARIO_QUESTIONS && window.SCENARIO_QUESTIONS[scenarioId]) || [];
@@ -263,24 +253,8 @@
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-  async function saveQuestionAttempt(payload) {
-    try {
-      if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) return;
-
-      await fetch(`${window.SUPABASE_URL}/rest/v1/question_attempts`, {
-        method: "POST",
-        headers: {
-          apikey: window.SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal"
-        },
-        body: JSON.stringify(payload)
-      });
-    } catch (e) {
-      console.warn("Question attempt save failed.", e);
-    }
-  }
+  // Audit trail is recorded server-side by grading endpoint (in attempt_answers table)
+  // Do not insert directly into question_attempts table (will be locked down)
 
   async function submitAnswerForGrading({
     attemptId,
@@ -290,6 +264,12 @@
     isAssessmentMode
   }) {
     try {
+      // Security: In assessment mode, require a real server-created attempt
+      // Never allow "local-attempt" or empty strings in assessment mode
+      if (isAssessmentMode && (!attemptId || attemptId === 'local-attempt')) {
+        throw new Error('Assessment mode requires a server-created attempt ID. This attempt may not be properly initialized for assessment.');
+      }
+
       const response = await fetch('/api/scenario-submissions/grade', {
         method: 'POST',
         credentials: 'include',
@@ -714,7 +694,7 @@
         try {
           // Call server-side grading endpoint
           const gradeResult = await submitAnswerForGrading({
-            attemptId: attemptId || "local-attempt",
+            attemptId: attemptId,
             questionId: options.dataset.questionId || questionQid,
             scenarioId: key,
             selectedAnswer: selected.value,
@@ -725,7 +705,9 @@
           state.activeAttempt.answers[questionQid] = {
             selectedAnswer: selected.value,
             submittedAt: new Date().toISOString(),
-            isCorrect: gradeResult.is_correct,
+            // In assessment mode, is_correct is not returned (no immediate feedback)
+            // In training mode, is_correct is returned for immediate feedback
+            isCorrect: gradeResult.is_correct !== undefined ? gradeResult.is_correct : null,
             submissionId: gradeResult.question_id
           };
           writeAttemptState(key, studentId, state);
@@ -752,13 +734,7 @@
             }
           }
 
-          // Save to audit trail (without exposing answer keys)
-          await saveQuestionAttempt({
-            scenario_id: key,
-            question_id: options.dataset.questionId || null,
-            selected_answer: selected.value,
-            time_seconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000))
-          });
+          // Audit trail is recorded server-side by grading endpoint
         } catch (err) {
           console.error("Error submitting answer:", err);
           feedback.textContent = "Error submitting answer. Please try again.";

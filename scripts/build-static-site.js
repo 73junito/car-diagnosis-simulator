@@ -13,6 +13,7 @@ const output = path.join(root, "dist");
  * JavaScript modules, dynamic imports, or runtime fetch calls.
  */
 const runtimeDirectories = [
+  "assessment",
   "assets",
   "components",
   "config",
@@ -489,7 +490,3 @@ try {
   console.error(error instanceof Error ? error.stack : String(error));
   process.exitCode = 1;
 }
-
-
-
-
