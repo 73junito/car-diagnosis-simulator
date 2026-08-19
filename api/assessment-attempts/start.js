@@ -22,7 +22,7 @@
  */
 
 const { createClient } = require('@supabase/supabase-js');
-const { extractBearerToken, verifySupabaseToken } = require('./_utils/auth-utils');
+const { extractBearerToken, verifySupabaseToken } = require('../_utils/auth-utils');
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -74,20 +74,25 @@ export default async function handler(req, res) {
 
     // 3. Create assessment attempt record
     // This is immutable once created; only modifications allowed are answer submissions
+    // NOTE: Only insert columns that exist in the schema:
+    // id, user_id, scenario, delivery_mode, status, payload_json, created_at
+    // Assessment metadata (ai_assistance_allowed, learner_attestation, etc.) go in payload_json
+    const payload = {
+      ai_assistance_allowed: false,
+      counts_as_official_assessment: true,
+      assessment_version: 'ADF-2026.1',
+      learner_attestation: true,
+      attestation_timestamp: attestation_timestamp || new Date().toISOString(),
+      attestation_verified: true
+    };
     const { data: attempt, error: createError } = await supabase
       .from('attempts')
       .insert({
         user_id: userId,
-        user_email: userEmail,
+        scenario: 'no-crank',
         delivery_mode: 'independent_non_proctored_assessment',
-        ai_assistance_allowed: false,
-        counts_as_official_assessment: true,
-        assessment_version: 'ADF-2026.1',
-        learner_attestation: true,
-        attestation_timestamp: attestation_timestamp || new Date().toISOString(),
-        attestation_verified: true, // Set server-side from JWT verification
-        started_at: new Date().toISOString(),
-        status: 'in_progress'
+        status: 'active',
+        payload_json: payload
       })
       .select()
       .single();

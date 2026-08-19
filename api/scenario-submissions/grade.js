@@ -85,7 +85,7 @@ export default async function handler(req, res) {
     // 4. Verify attempt exists and belongs to authenticated user
     const { data: attempt, error: attemptError } = await supabase
       .from('attempts')
-      .select('id, user_id, delivery_mode, ai_assistance_allowed')
+      .select('id, user_id, scenario, delivery_mode, status, payload_json')
       .eq('id', attempt_id)
       .single();
     if (attemptError || !attempt) {
@@ -95,10 +95,20 @@ export default async function handler(req, res) {
     if (attempt.user_id !== userId) {
       return res.status(403).json({ error: 'Not authorized to grade this attempt' });
     }
+    // Security: Verify attempt is active (not completed or abandoned)
+    if (attempt.status !== 'active') {
+      return res.status(409).json({ error: 'Attempt is not active' });
+    }
+    // Security: Verify attempt scenario matches requested scenario
+    if (attempt.scenario !== scenario_id) {
+      return res.status(400).json({ error: 'Attempt does not belong to this scenario' });
+    }
     // Security: Verify delivery_mode matches
     if (attempt.delivery_mode !== delivery_mode) {
       return res.status(400).json({ error: 'Delivery mode mismatch' });
     }
+    // Extract assessment metadata from payload
+    const ai_assistance_allowed = attempt.payload_json?.ai_assistance_allowed !== true;
     // 5. Grade the answer (server-side only)
     const isCorrect = student_answer === question.correct_answer;
     // 6. Record the submission in attempt_answers table

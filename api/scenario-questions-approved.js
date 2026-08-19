@@ -47,7 +47,6 @@ export default async function handler(req, res) {
       option_b,
       option_c,
       option_d,
-      explanation,
       difficulty,
       topic,
       ase_area,
@@ -79,6 +78,7 @@ export default async function handler(req, res) {
     const { data, error } = await supabase
       .from('scenario_questions')
       .select(selectString)
+      .eq('scenario_id', scenarioId)
       .eq('question_provenance.status', 'approved');
     if (error) {
       console.error('Supabase query error:', error);
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
     // This ensures citations and sources are all approved, and validation passed
     const validatedQuestions = data.filter(question => {
       // Must have approved provenance with valid citation validations
-      if (!question.question_provenance?.[0]?.status === 'approved') {
+      if (question.question_provenance?.[0]?.status !== 'approved') {
         return false;
       }
       // Check that validation exists and passed
@@ -116,7 +116,7 @@ export default async function handler(req, res) {
         return true;
       });
     });
-    // Return with provenance metadata but NOT correct_answer (unless explicitly requested with prof auth)
+    // Return with provenance metadata but NOT correct_answer or explanation (unless explicitly requested with prof auth)
     const questions = validatedQuestions.map(q => {
       const validation = q.question_provenance?.[0]?.citation_validations?.[0];
       const obj = {
@@ -126,7 +126,6 @@ export default async function handler(req, res) {
         option_b: q.option_b,
         option_c: q.option_c,
         option_d: q.option_d,
-        explanation: q.explanation,
         difficulty: q.difficulty,
         topic: q.topic,
         ase_area: q.ase_area,
