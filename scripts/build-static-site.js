@@ -37,6 +37,8 @@ const runtimeDirectories = [
  * contains many development JSON, HTML, JavaScript, image, and text files.
  */
 const runtimeRootFiles = [
+  "_headers",
+  "_redirects",
   "apiClient.js",
   "auth.js",
   "health.json",
