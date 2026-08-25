@@ -92,7 +92,10 @@ const APPROVED_HOSTS = new Set([
   'nhtsa.gov',
   'static.nhtsa.gov',
   'fordservicecontent.com',
-  'fluke.com'
+  'fluke.com',
+  'sae.org',
+  'frontiersin.org',
+  'ijert.org'
 ]);
 /**
  * Normalize and validate a URL as HTTPS from an approved host
@@ -238,7 +241,7 @@ async function validateQuestion(provenance) {
       const approvedExcerpt = normalize(chunk.text_excerpt);
       const excerptMatches = storedQuote === approvedExcerpt;
       evidence.excerpts_comparison.push({
-        chunk_id: chunk.id,
+        chunk_id: chunk.chunk_id,
         stored_quote: citation.quote,
         approved_excerpt: chunk.text_excerpt,
         normalized_match: excerptMatches
@@ -256,7 +259,7 @@ async function validateQuestion(provenance) {
       const canonicalHash = chunk.text_hash;
       const hashMatches = recomputedHash === canonicalHash;
       evidence.calculated_hashes.push({
-        chunk_id: chunk.id,
+        chunk_id: chunk.chunk_id,
         canonical: canonicalHash,
         recomputed: recomputedHash,
         match: hashMatches
@@ -357,11 +360,30 @@ async function main() {
     // Supports both initial validation (validated status) and revalidation of approved records
     // Validator runs against both, updating citation_validations for each run
     // Endpoint serves only where provenance.status = 'approved' AND citation_validations.result = 'valid'
+    const scenarioQuestionResult = await supabase
+      .from('scenario_questions')
+      .select('id')
+      .eq('scenario_id', scenario);
+
+    const scenarioQuestions = requireQuery(
+      scenarioQuestionResult,
+      `Load question identifiers for scenario '${scenario}'`
+    );
+
+    const scenarioQuestionIds = scenarioQuestions.map(
+      question => String(question.id)
+    );
+
+    if (scenarioQuestionIds.length === 0) {
+      console.error(`❌ No questions found for scenario: ${scenario}`);
+      process.exit(1);
+    }
+
     const provResult = await supabase
       .from('question_provenance')
       .select('*')
       .in('status', ['validated', 'approved'])
-      .like('question_id', `${scenario}-%`);
+      .in('question_id', scenarioQuestionIds);
     const provenanceRecords = requireQuery(
       provResult,
       `Load validated/approved questions for scenario '${scenario}'`

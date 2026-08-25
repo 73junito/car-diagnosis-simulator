@@ -1,0 +1,63 @@
+{
+  "policy_version": "1.0.0",
+  "project": "Open Starting and Charging Service Evidence Database",
+  "required_scope": [
+    "starting-system",
+    "charging-system"
+  ],
+  "accepted_rights_classifications": [
+    "PUBLIC_DOMAIN",
+    "CC0",
+    "CC_BY",
+    "CC_BY_SA",
+    "EXPLICIT_WRITTEN_REDISTRIBUTION_PERMISSION"
+  ],
+  "rejected_rights_classifications": [
+    "UNKNOWN",
+    "ALL_RIGHTS_RESERVED",
+    "FREE_TO_VIEW_ONLY",
+    "MANUFACTURER_PROPRIETARY",
+    "NO_REDISTRIBUTION",
+    "NO_DERIVATIVES",
+    "NONCOMMERCIAL_ONLY",
+    "WEBSITE_TERMS_ONLY",
+    "HOSTED_BY_GOVERNMENT_BUT_AUTHORSHIP_UNVERIFIED",
+    "OPEN_SOURCE_CODE_WITH_RESTRICTED_DATA"
+  ],
+  "required_source_fields": [
+    "source_id",
+    "source_title",
+    "source_author",
+    "source_publisher",
+    "source_url",
+    "publication_date",
+    "license_classification",
+    "license_url",
+    "rights_statement",
+    "rights_verified_at",
+    "rights_verified_by",
+    "artifact_sha256"
+  ],
+  "required_evidence_fields": [
+    "source_id",
+    "scenario_id",
+    "evidence_page_or_section",
+    "permitted_excerpt",
+    "excerpt_sha256",
+    "question_id",
+    "citation_role"
+  ],
+  "prohibited_actions": [
+    "Import content from websites that prohibit automated extraction.",
+    "Treat government hosting alone as proof of public-domain status.",
+    "Treat GitHub repository licensing as proof that embedded manuals are licensed.",
+    "Invent source permissions or reviewer identities.",
+    "Set license_ok before rights verification.",
+    "Import placeholder excerpts or fabricated checksums."
+  ],
+  "external_reference_only": [
+    "Fluke Corporation materials without written redistribution permission.",
+    "SAE standards and papers without explicit redistribution permission.",
+    "OEM service manuals without explicit redistribution permission."
+  ]
+}

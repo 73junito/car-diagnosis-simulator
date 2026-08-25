@@ -1,0 +1,162 @@
+{
+  "imported_at": "2026-08-25T19:34:50.498Z",
+  "generation_model": "gpt-oss:20b-cloud",
+  "input_file": "F:\\TorqueMind\\data\\evidence\\generated-questions\\gpt-oss-20b-cloud-approved-citation-questions.json",
+  "imported_question_count": 6,
+  "scenario_counts": {
+    "charging-system": 3,
+    "no-crank": 3
+  },
+  "citation_count": 12,
+  "provenance_status": "source-linked",
+  "technical_reviews_completed": false,
+  "instructional_reviews_completed": false,
+  "citation_validator_completed": false,
+  "gate_4_passed": false,
+  "questions": [
+    {
+      "scenario_id": "charging-system",
+      "question_id": "b9e82aaa-3a4c-4e7e-8e77-d206427f654b",
+      "question": "Which component is primarily responsible for generating electric energy in a modern vehicle?",
+      "question_action": "inserted",
+      "provenance_id": "eb9f8253-d4e7-451d-8a90-1108c70e587d",
+      "provenance_action": "inserted",
+      "provenance_status": "source-linked",
+      "citation_count": 2,
+      "supports_answer_count": 1,
+      "supports_explanation_count": 1,
+      "citation_actions": [
+        {
+          "action": "inserted",
+          "role": "supports-answer",
+          "chunk_id": "frontiers-alternator-primary-source-p7"
+        },
+        {
+          "action": "inserted",
+          "role": "supports-explanation",
+          "chunk_id": "frontiers-alternator-primary-source-p7"
+        }
+      ]
+    },
+    {
+      "scenario_id": "charging-system",
+      "question_id": "5211f0a9-0bc7-4f10-958e-cff9c9f99700",
+      "question": "An automotive alternator typically consists of which of the following components?",
+      "question_action": "inserted",
+      "provenance_id": "997133b6-2794-41b0-b232-bfa3ea2dfaac",
+      "provenance_action": "inserted",
+      "provenance_status": "source-linked",
+      "citation_count": 2,
+      "supports_answer_count": 1,
+      "supports_explanation_count": 1,
+      "citation_actions": [
+        {
+          "action": "inserted",
+          "role": "supports-answer",
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7"
+        },
+        {
+          "action": "inserted",
+          "role": "supports-explanation",
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7"
+        }
+      ]
+    },
+    {
+      "scenario_id": "charging-system",
+      "question_id": "8aad5031-64f6-46db-996f-938aa05e26fb",
+      "question": "Which alternator component converts alternating current into direct current for the vehicle electrical system?",
+      "question_action": "inserted",
+      "provenance_id": "cbe95b81-bd24-4945-a67b-4fd064561de8",
+      "provenance_action": "inserted",
+      "provenance_status": "source-linked",
+      "citation_count": 2,
+      "supports_answer_count": 1,
+      "supports_explanation_count": 1,
+      "citation_actions": [
+        {
+          "action": "inserted",
+          "role": "supports-answer",
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7"
+        },
+        {
+          "action": "inserted",
+          "role": "supports-explanation",
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7"
+        }
+      ]
+    },
+    {
+      "scenario_id": "no-crank",
+      "question_id": "bfb04c9b-c6c1-493e-a7ed-b07d6a29e336",
+      "question": "What is the primary purpose of a starter in an internal combustion engine?",
+      "question_action": "inserted",
+      "provenance_id": "6c213d8c-1e69-4255-9977-f5113d7d7d17",
+      "provenance_action": "inserted",
+      "provenance_status": "source-linked",
+      "citation_count": 2,
+      "supports_answer_count": 1,
+      "supports_explanation_count": 1,
+      "citation_actions": [
+        {
+          "action": "inserted",
+          "role": "supports-answer",
+          "chunk_id": "ijert-starter-engine-rotation-p1"
+        },
+        {
+          "action": "inserted",
+          "role": "supports-explanation",
+          "chunk_id": "ijert-starter-engine-rotation-p1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "no-crank",
+      "question_id": "4260abf2-4cb1-4809-a32b-1075aff67609",
+      "question": "The starter circuit is composed of which two separate circuits?",
+      "question_action": "inserted",
+      "provenance_id": "d3362ed6-2c99-49b8-a59e-1a9207ba3002",
+      "provenance_action": "inserted",
+      "provenance_status": "source-linked",
+      "citation_count": 2,
+      "supports_answer_count": 1,
+      "supports_explanation_count": 1,
+      "citation_actions": [
+        {
+          "action": "inserted",
+          "role": "supports-answer",
+          "chunk_id": "ijert-starter-control-circuits-p1"
+        },
+        {
+          "action": "inserted",
+          "role": "supports-explanation",
+          "chunk_id": "ijert-starter-control-circuits-p1"
+        }
+      ]
+    },
+    {
+      "scenario_id": "no-crank",
+      "question_id": "041d7f01-ed27-4dbf-86d4-431385810509",
+      "question": "In the starter control circuit, what connects battery power at the ignition switch to the magnetic switch?",
+      "question_action": "inserted",
+      "provenance_id": "e3168f43-26b8-4272-96ac-11ebd165196c",
+      "provenance_action": "inserted",
+      "provenance_status": "source-linked",
+      "citation_count": 2,
+      "supports_answer_count": 1,
+      "supports_explanation_count": 1,
+      "citation_actions": [
+        {
+          "action": "inserted",
+          "role": "supports-answer",
+          "chunk_id": "ijert-ignition-switch-battery-control-p1"
+        },
+        {
+          "action": "inserted",
+          "role": "supports-explanation",
+          "chunk_id": "ijert-ignition-switch-battery-control-p1"
+        }
+      ]
+    }
+  ]
+}

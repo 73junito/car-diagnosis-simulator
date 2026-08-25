@@ -1,0 +1,100 @@
+{
+  "manifest_version": "1.0.0",
+  "discovery_method": "scholarly literature search with original publisher license verification",
+  "accepted_license": "CC_BY",
+  "sources": [
+    {
+      "id": "frontiers-automotive-alternator-2023",
+      "title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+      "authors": [
+        "Surath Gajanayake",
+        "S. Bandara",
+        "T. Sugathapala"
+      ],
+      "publisher": "Frontiers in Mechanical Engineering",
+      "publication_year": 2023,
+      "doi": "10.3389/fmech.2022.1090152",
+      "article_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+      "artifact_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/pdf",
+      "artifact_filename": "frontiers-automotive-alternator-2023.pdf",
+      "license_classification": "CC_BY",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_statement_pattern": "Creative Commons Attribution License",
+      "scenarios": [
+        "charging-system"
+      ],
+      "candidate_topics": [
+        "alternator function",
+        "AC generation",
+        "DC diode rectification",
+        "diode rectifier",
+        "voltage regulator"
+      ],
+      "status": "draft",
+      "reviewer_approved": false
+    },
+    {
+      "id": "ijert-starter-performance-testbench-2018",
+      "title": "Survey on Starter Performance Testbench",
+      "authors": [
+        "Gagana Shetty",
+        "Mocica B",
+        "Nidhi M",
+        "Nischitha P",
+        "Raghavendra Y M"
+      ],
+      "publisher": "International Journal of Engineering Research & Technology",
+      "publication_year": 2018,
+      "doi": "10.17577/IJERTCONV6IS13048",
+      "article_url": "https://www.ijert.org/survey-on-starter-performance-testbench",
+      "artifact_url": "https://www.ijert.org/research/survey-on-starter-performance-testbench-IJERTCONV6IS13048.pdf",
+      "artifact_filename": "ijert-starter-performance-testbench-2018.pdf",
+      "license_classification": "CC_BY",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_statement_pattern": "Creative Commons Attribution 4.0",
+      "scenarios": [
+        "no-crank"
+      ],
+      "candidate_topics": [
+        "starter motor",
+        "battery",
+        "ignition switch",
+        "battery cables",
+        "starter control circuit",
+        "starter solenoid"
+      ],
+      "status": "draft",
+      "reviewer_approved": false
+    },
+    {
+      "id": "jurnal-engine-battery-voltage-drop-2026",
+      "title": "Analisis Pengaruh Drop Tegangan Baterai terhadap Waktu Starting pada Engine 4N15 Mitsubishi Triton",
+      "authors": [
+        "Ade Angraini Nasution",
+        "Yusep Sukrawan",
+        "Ridwan Adam Muhamad Noor"
+      ],
+      "publisher": "Jurnal Engine: Energi, Manufaktur, dan Material",
+      "publication_year": 2026,
+      "doi": "10.30588/jeemm.v10i1.2691",
+      "article_url": "https://ejournal.up45.ac.id/index.php/Jurnal_ENGINE/article/view/2691",
+      "artifact_url": null,
+      "artifact_filename": null,
+      "license_classification": "CC_BY",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "license_statement_pattern": "Creative Commons Attribution 4.0",
+      "scenarios": [
+        "no-crank"
+      ],
+      "candidate_topics": [
+        "battery voltage drop",
+        "starting performance",
+        "starter current",
+        "battery condition",
+        "cold-cranking capability"
+      ],
+      "status": "draft",
+      "reviewer_approved": false
+    }
+  ]
+}
