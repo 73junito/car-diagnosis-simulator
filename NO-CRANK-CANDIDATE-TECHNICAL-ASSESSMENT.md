@@ -1,10 +1,10 @@
-# No-Crank Candidate Technical Assessment Pending Human Confirmation
+# No-Crank Human Passage Review — Authoritative State
 
 **Date**: 2026-09-01
-**Status**: AI-assisted candidate assessment (not human approval)
+**Status**: Human passage review complete; source approval and ingestion pending
 **Database writes**: 0
 **Repository documentation updated**: true
-**Ready for question generation**: NO (all passages require human confirmation)
+**Question drafting allowed**: YES for passages 1–4 only; ingestion remains blocked
 
 ---
 
@@ -12,12 +12,12 @@
 
 | Passage ID | Source | Claim | Disposition | Technical | Instructional |
 |---|---|---|---|---|---|
-| discharged-battery-no-crank-p1 | Jump start 3997054 | Battery discharge → no-crank | **RECOMMEND APPROVAL** | ✓ Narrow | ✓ Suitable |
-| low-voltage-starter-p1 | Mechanics 3251129 | Low voltage → starter power loss | **RECOMMEND APPROVAL** | ✓ Narrow | ✓ Suitable |
-| automatic-park-start-p1 | Mechanics 3251129 | Automatic transmission Park instruction | **RECOMMEND APPROVAL** | ✓ Narrow | ✓ Suitable |
-| clutch-interlock-p1 | Mechanics 3251129 | Clutch interlock on many manual vehicles | **RECOMMEND APPROVAL** | ✓ Narrow | ✓ Suitable |
-| jump-start-procedure-p1 | Jump start 3997054 | Complete safe jump-start procedure | **RECOMMEND REJECTION** | ✗ Exceeds | ✗ Not Suitable |
-| park-neutral-switch-diagnosis-p1 | Mechanics 3251129 | Diagnose Park/Neutral safety switch | **RECOMMEND REJECTION** | ✗ Exceeds | ✗ Not Suitable |
+| discharged-battery-no-crank-p1 | Jump start 3997054 | Battery discharge → no-crank | **HUMAN APPROVED** | ✓ Narrow | ✓ Suitable |
+| low-voltage-starter-p1 | Mechanics 3251129 | Low voltage → starter power loss | **HUMAN APPROVED** | ✓ Narrow | ✓ Suitable |
+| automatic-park-start-p1 | Mechanics 3251129 | Automatic transmission Park instruction | **HUMAN APPROVED** | ✓ Narrow | ✓ Suitable |
+| clutch-interlock-p1 | Mechanics 3251129 | Clutch interlock on many manual vehicles | **HUMAN APPROVED** | ✓ Narrow | ✓ Suitable |
+| jump-start-procedure-p1 | Jump start 3997054 | Complete safe jump-start procedure | **HUMAN REJECTED** | ✗ Exceeds | ✗ Not Suitable |
+| park-neutral-switch-diagnosis-p1 | Mechanics 3251129 | Diagnose Park/Neutral safety switch | **HUMAN REJECTED** | ✗ Exceeds | ✗ Not Suitable |
 
 ---
 
@@ -39,7 +39,7 @@
 - Appropriate for step-by-step diagnostic reasoning
 - Defensible within stated scope
 
-**Assessment**: Assessment recommends approval pending human confirmation
+**Human decision**: **APPROVE**
 
 ---
 
@@ -59,7 +59,7 @@
 - Prepares for voltage-testing procedures
 - Establishes starting power as a diagnostic factor
 
-**Assessment**: Assessment recommends approval pending human confirmation
+**Human decision**: **APPROVE**
 
 ---
 
@@ -79,7 +79,7 @@
 - Does not exceed source scope
 - Limits claim to "the cited instructions direct"
 
-**Assessment**: Assessment recommends approval pending human confirmation
+**Human decision**: **APPROVE**
 
 **Important limitation**: This claim does NOT establish how to diagnose a failed Park/Neutral safety switch. It only documents the correct precondition for manual starting attempts.
 
@@ -101,7 +101,7 @@
 - Supports diagnostic reasoning
 - Properly scoped to manual transmissions
 
-**Assessment**: Assessment recommends approval pending human confirmation
+**Human decision**: **APPROVE**
 
 **Important limitation**: This claim does NOT provide a procedure for testing the clutch switch. It only documents the existence of this safety feature on many (not all) manual vehicles.
 
@@ -135,14 +135,14 @@
 **Proposed claim**: "Diagnose a defective Park/Neutral safety switch."
 
 **Technical Assessment**: ✗ **CLAIM EXCEEDS CAPTURED EVIDENCE**
-- The captured revision instructs the operator to select Park (procedural precondition)
+- The captured revision instructs the operator to select Park as a procedural precondition
 - It does NOT provide a diagnostic methodology for a failed Park/Neutral safety switch
 - Diagnostic procedures require test procedures, voltage expectations, circuit continuity methods—not present in the source
 
 **Instructional Assessment**: ✗ **EXCEEDS SOURCE CONTENT**
 - Making this claim would misrepresent what the source teaches
 - Would misrepresent the scope of the captured source material
-- Would create a false causal chain: "Park requirement → ability to diagnose switch"
+- Would create a false causal chain: "Park instruction → ability to diagnose switch"
 
 **Approval**: **TECHNICAL_APPROVED = FALSE**, **INSTRUCTIONAL_APPROVED = FALSE**
 
@@ -173,7 +173,7 @@ If a human reviewer approves any candidate passage, its record must include:
 
 ### For Starting Preconditions (Passages 3–4)
 - ✓ May ask what the cited instructions direct the operator to select before starting
-- ✓ May ask about clutch requirement on manual vehicles
+- ✓ May ask about clutch-interlock behavior on many manual vehicles
 - ✗ Cannot ask about diagnosing Park/Neutral safety-switch failures (rejected)
 - ✗ Cannot ask about testing clutch interlock switches (exceeds source)
 
@@ -181,38 +181,45 @@ If a human reviewer approves any candidate passage, its record must include:
 
 ## Next Steps
 
-1. **Formal Review**: Present these narrow decisions for stakeholder approval
-2. **Question Draft**: Create sample questions only after identified human approval
-3. **Ingestion Simulation**: Run rollback-only simulation only after human approval
+1. **Human Review**: Complete; see NO-CRANK-HUMAN-PASSAGE-ATTESTATION.json
+2. **Question Draft**: Authorized for approved passages 1–4 only
+3. **Source Approval**: Complete license, attribution, and source-level approval gates
 4. **Citation Validation**: Verify all questions include required CC BY-SA attribution
-5. **Deployment**: Only after formal approval of these narrow scopes
+5. **Deployment**: Blocked until source approval, rollback simulation, and deterministic validation pass
 
 ---
 
 ## Status Flags
 
-- `review_status`: **`candidate_assessment_complete_human_review_pending`**
+- `review_status`: **`human_passage_review_complete`**
 - `reviewer_approved`: **`false`** (human approval required before ingestion)
 - `ingestion_allowed`: **`false`** (pending formal review and authorization)
 - `database_writes`: **`0`**
 - `repository_documentation_updated`: **`true`**
 
-**Passages ready for question generation**: 0; four candidates await human confirmation
-**Recommended rejections**: 2 (jump-start procedure, safety-switch diagnosis)
+**Passages authorized for question drafting**: 4; passages 5–6 remain blocked
+**Human-rejected passages**: 2 (jump-start procedure, safety-switch diagnosis)
 
-## Approval boundary
+## Authoritative review boundary
 
-This document records an AI-assisted candidate assessment. It is not a human
-technical-review decision. All passages remain unapproved until an identified
-human reviewer personally confirms the technical and instructional decisions.
+Human passage decisions are recorded in
+NO-CRANK-HUMAN-PASSAGE-ATTESTATION.json.
 
-- `human_technical_approved: false`
-- `human_instructional_approved: false`
-- `reviewer_approved: false`
-- `ingestion_allowed: false`
-- Supabase writes: 0
+- Human reviewer: Rafael Rodriguez
+- Reviewer role: Automotive technical reviewer
+- Human-approved passages: 4
+- Human-rejected passages: 2
+- Question drafting allowed: true for passages 1–4 only
+- Source-level approval complete: false
+- reviewer_approved: false
+- ingestion_allowed: false
+- Database writes: 0
 
-For conservative compliance, any question that adapts expressive Wikibooks
-content will be distributed under CC BY-SA 4.0 with attribution, permanent
-revision URL, license link, and an indication of changes. This is a project
-policy and not a general legal conclusion about every fact-based question.
+Passage approval authorizes narrowly scoped question drafting only. It does not
+authorize source promotion, evidence ingestion, database writes, deployment, a
+complete jump-start procedure, Park/Neutral-switch diagnosis, or clutch-switch
+testing.
+
+For conservative compliance, adapted Wikibooks question content will be
+distributed under CC BY-SA 4.0 with attribution, permanent revision URL,
+license link, and an indication of changes.
