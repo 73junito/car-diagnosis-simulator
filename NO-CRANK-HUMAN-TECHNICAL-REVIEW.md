@@ -1,10 +1,10 @@
-# No-Crank Human Technical Review — Final Decisions
+# No-Crank Candidate Technical Assessment Pending Human Confirmation
 
 **Date**: 2026-09-01  
-**Status**: Technical review complete with narrow approvals  
+**Status**: AI-assisted candidate assessment (not human approval)  
 **Database writes**: 0  
-**Repository writes**: 0  
-**Ready for question generation**: NO (pending formal approval threshold)
+**Repository writes**: 0 (assessment documentation committed)  
+**Ready for question generation**: NO (all passages require human confirmation)
 
 ---
 
@@ -12,18 +12,18 @@
 
 | Passage ID | Source | Claim | Disposition | Technical | Instructional |
 |---|---|---|---|---|---|
-| discharged-battery-no-crank-p1 | Jump start 3997054 | Battery discharge → no-crank | **APPROVE** | ✓ TRUE | ✓ TRUE |
-| low-voltage-starter-p1 | Mechanics 3251129 | Low voltage → starter power loss | **APPROVE** | ✓ TRUE | ✓ TRUE |
-| automatic-park-start-p1 | Mechanics 3251129 | Automatic transmission Park requirement | **APPROVE** | ✓ TRUE | ✓ TRUE |
-| clutch-interlock-p1 | Mechanics 3251129 | Clutch interlock on many manual vehicles | **APPROVE** | ✓ TRUE | ✓ TRUE |
-| jump-start-procedure-p1 | Jump start 3997054 | Complete safe jump-start procedure | **REJECT** | ✗ FALSE | ✗ FALSE |
-| park-neutral-switch-diagnosis-p1 | Mechanics 3251129 | Diagnose Park/Neutral safety switch | **REJECT** | ✗ FALSE | ✗ FALSE |
+| discharged-battery-no-crank-p1 | Jump start 3997054 | Battery discharge → no-crank | **RECOMMEND APPROVAL** | ✓ Narrow | ✓ Suitable |
+| low-voltage-starter-p1 | Mechanics 3251129 | Low voltage → starter power loss | **RECOMMEND APPROVAL** | ✓ Narrow | ✓ Suitable |
+| automatic-park-start-p1 | Mechanics 3251129 | Automatic transmission Park instruction | **RECOMMEND APPROVAL** | ✓ Narrow | ✓ Suitable |
+| clutch-interlock-p1 | Mechanics 3251129 | Clutch interlock on many manual vehicles | **RECOMMEND APPROVAL** | ✓ Narrow | ✓ Suitable |
+| jump-start-procedure-p1 | Jump start 3997054 | Complete safe jump-start procedure | **RECOMMEND REJECTION** | ✗ Exceeds | ✗ Not Suitable |
+| park-neutral-switch-diagnosis-p1 | Mechanics 3251129 | Diagnose Park/Neutral safety switch | **RECOMMEND REJECTION** | ✗ Exceeds | ✗ Not Suitable |
 
 ---
 
 ## Detailed Review
 
-### ✓ APPROVED: Passage 1 — Discharged Battery No-Crank
+### ✓ CANDIDATE PASSAGE 1 — Discharged Battery No-Crank
 
 **Source**: Wikibooks Automobile Repair/Jump start (oldid=3997054, line 6)  
 **Proposed claim**: "A failed or discharged battery can prevent the engine from turning over when starting is attempted."
@@ -39,11 +39,11 @@
 - Appropriate for step-by-step diagnostic reasoning
 - Defensible within stated scope
 
-**Approval**: **TECHNICAL_APPROVED = TRUE**, **INSTRUCTIONAL_APPROVED = TRUE**
+**Assessment**: Assessment recommends approval pending human confirmation
 
 ---
 
-### ✓ APPROVED: Passage 2 — Low Voltage Starter Power Loss
+### ✓ CANDIDATE PASSAGE 2 — Low Voltage Starter Power Loss
 
 **Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 18)  
 **Proposed claim**: "Low battery voltage may leave the battery unable to operate the starter."
@@ -59,11 +59,11 @@
 - Prepares for voltage-testing procedures
 - Establishes starting power as a diagnostic factor
 
-**Approval**: **TECHNICAL_APPROVED = TRUE**, **INSTRUCTIONAL_APPROVED = TRUE**
+**Assessment**: Assessment recommends approval pending human confirmation
 
 ---
 
-### ✓ APPROVED: Passage 3 — Automatic Transmission Park Requirement
+### ✓ CANDIDATE PASSAGE 3: Automatic-Transmission Park Instruction
 
 **Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 4)  
 **Proposed claim**: "The cited instructions direct the operator to place an automatic-transmission vehicle in Park before starting."
@@ -79,13 +79,13 @@
 - Does not exceed source scope
 - Limits claim to "the cited instructions direct"
 
-**Approval**: **TECHNICAL_APPROVED = TRUE**, **INSTRUCTIONAL_APPROVED = TRUE**
+**Assessment**: Assessment recommends approval pending human confirmation
 
 **Important limitation**: This claim does NOT establish how to diagnose a failed Park/Neutral safety switch. It only documents the correct precondition for manual starting attempts.
 
 ---
 
-### ✓ APPROVED: Passage 4 — Clutch Interlock on Manual Vehicles
+### ✓ CANDIDATE PASSAGE 4 — Clutch Interlock on Manual Vehicles
 
 **Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 9)  
 **Proposed claim**: "Many manual-transmission vehicles use a clutch switch that prevents starting unless the clutch is depressed."
@@ -101,13 +101,13 @@
 - Supports diagnostic reasoning
 - Properly scoped to manual transmissions
 
-**Approval**: **TECHNICAL_APPROVED = TRUE**, **INSTRUCTIONAL_APPROVED = TRUE**
+**Assessment**: Assessment recommends approval pending human confirmation
 
 **Important limitation**: This claim does NOT provide a procedure for testing the clutch switch. It only documents the existence of this safety feature on many (not all) manual vehicles.
 
 ---
 
-### ✗ REJECTED: Passage 5 — Complete Safe Jump-Start Procedure
+### ✗ CANDIDATE PASSAGE 5 (Recommended Rejection) — Complete Safe Jump-Start Procedure
 
 **Source**: Wikibooks Automobile Repair/Jump start (oldid=3997054)  
 **Proposed claim**: "Complete safe jump-start procedure."
@@ -129,7 +129,7 @@
 
 ---
 
-### ✗ REJECTED: Passage 6 — Diagnose Park/Neutral Safety Switch
+### ✗ CANDIDATE PASSAGE 6 (Recommended Rejection) — Diagnose Park/Neutral Safety Switch
 
 **Source**: Wikibooks Automobile Mechanics (oldid=3251129)  
 **Proposed claim**: "Diagnose a defective Park/Neutral safety switch."
