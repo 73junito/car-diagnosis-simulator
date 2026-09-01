@@ -29,37 +29,45 @@
 }
 ```
 
+### Branch State at Creation
+- **Branch**: `feat/no-crank-open-evidence`
+- **Tracked files**: ✓ Clean (no uncommitted changes)
+- **Working tree**: ⚠️ Unclean (170 untracked test/diagnostic artifacts present)
+- **Branch head**: `350a29a` (PR #392 merged, documentation corrected)
+- **Status**: Safe to proceed (tracked changes only matter for git operations)
+
 ## 2. Source Research Requirements
 
+**Status**: Classification Complete (See NO-CRANK-SOURCE-RESEARCH.md)
+
+**Verified Approved Sources**:
+1. Wikibooks — Automobile Repair/Jump start (CC BY-SA, oldid=3997054)
+2. Wikibooks — Automobile Mechanics (CC BY-SA, oldid=3251129)
+
+**Verified Rejected Sources**:
+1. NHTSA-hosted Kia no-crank bulletin (copyrighted, prohibited)
+2. NHTSA-hosted Subaru document (manufacturer copyright, requires permission)
+3. Other NHTSA manufacturer documents (require page-level review)
+
 **Acceptance Criteria for Sources**:
-- ✓ Explicit CC BY license (text must state "CC BY" or "Creative Commons Attribution")
-- ✓ Explicit CC BY-SA license
+- ✓ Explicit CC BY license (with attribution, license link, change disclosure)
+- ✓ Explicit CC BY-SA license (with attribution, license link, ShareAlike compliance)
 - ✓ Explicit CC0 (public domain dedication)
-- ✓ Public domain (verified by authoritative source)
+- ✓ Public domain (with authoritative proof)
 - ✓ Written redistribution permission (email/document from copyright holder)
+- ✗ Search engine availability (insufficient on its own)
+- ✗ DOI or CrossRef access (insufficient on its own)
+- ✗ Freely downloadable PDF (insufficient without license statement)
+- ✗ "Available for educational use" (insufficient without reuse right)
+- ✗ Manufacturer documents hosted by NHTSA (does not establish redistribution rights)
 
-**Rejection Criteria** (insufficient on their own):
-- ✗ Google Scholar availability (search engine indexing)
-- ✗ DOI or CrossRef access (publication directory)
-- ✗ Freely downloadable PDF (no license stated)
-- ✗ "Available for educational use" (no reuse right specified)
-- ✗ Expired copyright without explicit public domain statement
-- ✗ Author website with no explicit license
+**CC BY-SA Compliance Requirements**:
+- ✓ Attribution with source, page, and revision ID
+- ✓ License link to creativecommons.org/licenses/by-sa/3.0/
+- ✓ Change disclosure if content is adapted
+- ✓ ShareAlike treatment (no mixing with proprietary corpus without segregation)
+- ✗ Cannot silently blend into closed-source assessment database
 
-## 3. Sources Inventory
-
-### Approved Sources
-(To be populated with verified reuse rights)
-
-| ID | Title | Author | License | Evidence | Status |
-|---|---|---|---|---|---|
-| (pending research) | | | | | |
-
-### Under Review
-(Sources being investigated)
-
-### Rejected Sources
-(Sources that do not meet acceptance criteria)
 
 ## 4. Question Generation Pipeline
 
@@ -70,6 +78,29 @@
 5. Citation record creation
 6. Rollback-only simulation
 7. Human review
+
+## 5. Workstream Status
+
+**Phase 1: Research Framework ✓ COMPLETE**
+- Commit `0216a87`: Research framework and source classification documented
+- Framework-only status: No evidence decisions made, no questions approved
+- Source classification: Based on publisher license verification (NHTSA, Wikibooks, manufacturer bulletins)
+
+**Phase 2: Source Auditing (IN PROGRESS)**
+- Task: Download and review approved Wikibooks pages
+- Content: Battery voltage, starter operation, safety switches, clutch behavior
+- Constraint: Generate questions only from verified excerpts
+
+**Phase 3: Question Generation (PENDING)**
+- Task: Author diagnostic questions from approved sources
+- Constraint: Must include full source attribution and license statement
+- Constraint: CC BY-SA requires explicit attribution chain
+
+**Phase 4: Validation and Deployment (PENDING)**
+- Rollback-only simulation
+- Citation deterministic validation
+- Human quality review
+- API deployment and verification
 
 ## 5. Deployment Checklist
 
@@ -96,6 +127,9 @@
 ## 7. Progress Timeline
 
 - **2026-09-01 16:25:00Z**: Baseline verified (fail-closed, 0 questions)
-- **Pending**: Source research
-- **Pending**: Question generation
-- **Pending**: Deployment
+- **2026-09-01 16:35:00Z**: Branch created, safety checks passed
+- **2026-09-01 16:40:00Z**: Commit `0216a87` — Research framework established (no evidence approval)
+- **2026-09-01**: Source classification complete — Wikibooks approved, NHTSA manufacturer docs rejected
+- **Pending**: Question generation from approved Wikibooks sources
+- **Pending**: Rollback-only simulation
+- **Pending**: Deployment verification

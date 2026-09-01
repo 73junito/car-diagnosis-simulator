@@ -1,8 +1,10 @@
 # No-Crank Evidence Source Research
 
-**Status**: In Progress  
+**Status**: In Progress — Source Classification Phase  
 **Date Started**: 2026-09-01  
-**Acceptance Criteria**: Explicit verified license (CC BY, CC BY-SA, CC0, public domain, or written permission)
+**Acceptance Criteria**: Explicit verified license with documented redistribution rights (CC BY, CC BY-SA, CC0, public domain, or written permission)
+
+**CRITICAL FINDING**: NHTSA hosting does NOT confer public domain status on manufacturer-submitted documents. Kia and Subaru bulletins hosted by NHTSA remain copyrighted and must be rejected.
 
 ## Research Approach
 
@@ -94,59 +96,101 @@ Topics to source:
    - Electrical safety with batteries
    - Tool selection and use
 
-## Found Sources (To Be Verified)
+## Found Sources (Classification Complete)
 
-### Source #1: NHTSA Vehicle Defect Investigation Database
-- **URL**: https://www.nhtsa.gov/
-- **Type**: Government public domain
-- **Content**: Automotive defect investigations, safety recalls
-- **License Status**: Public domain (U.S. government work)
-- **Verification Status**: ⏳ Pending - Need to confirm content suitability for diagnostic training
-- **Notes**: Would provide real-world no-crank complaint data and factory investigation reports
+### Approved Sources (CC BY-SA)
 
-### Source #2: Wikipedia Automotive Articles  
-- **URL**: https://en.wikipedia.org/wiki/Car_battery, etc.
-- **Type**: Community-authored encyclopedia
-- **Content**: Battery, starter, electrical system articles
-- **License Status**: CC BY-SA 3.0 (verify attribution requirements)
-- **Verification Status**: ⏳ Pending - Need to review specific articles
-- **Notes**: Well-sourced technical content with citation requirements
+#### Source #1: Wikibooks — Automobile Repair/Jump start
+- **URL**: https://en.wikibooks.org/wiki/Automobile_Repair/Jump_start
+- **Permanent Revision**: `oldid=3997054`
+- **Type**: Community-authored educational textbook
+- **License**: Creative Commons Attribution-ShareAlike 3.0+ (CC BY-SA)
+- **License Verification**: ✅ Explicit on page footer
+- **Content Suitability**: Battery jump-start procedures, battery voltage discussion
+- **Status**: ✅ APPROVED for question sourcing
+- **Attribution Requirements**: 
+  - Must include: "Wikibooks: Automobile Repair/Jump start"
+  - Must include: Permanent link with revision ID
+  - Must include: CC BY-SA 3.0+ license link
+  - Must include: "Shared under CC BY-SA" attribution
+  - Any adapted content must maintain CC BY-SA license
+- **Notes**: Suitable for basic battery diagnostics and testing procedures
 
-### Source #3: Wikibooks Automotive Repair Manual
-- **URL**: https://en.wikibooks.org/wiki/Automotive_Repair_Manual
-- **Type**: Open collaborative textbook
-- **Content**: Complete automotive repair procedures
-- **License Status**: CC BY-SA 3.0+
-- **Verification Status**: ⏳ Pending - Need to review no-crank sections
-- **Notes**: Specifically designed for educational and training use
+#### Source #2: Wikibooks — Automobile Mechanics
+- **URL**: https://en.wikibooks.org/wiki/Adventist_Youth_Honors_Answer_Book/Vocational/Automobile_Mechanics
+- **Permanent Revision**: `oldid=3251129`
+- **Type**: Community-authored vocational manual
+- **License**: Creative Commons Attribution-ShareAlike 3.0+ (CC BY-SA)
+- **License Verification**: ✅ Explicit on page footer
+- **Content Suitability**: Battery voltage specifications, starter operation, Park/Neutral safety switches, clutch interlock behavior
+- **Status**: ✅ APPROVED for question sourcing
+- **Attribution Requirements**:
+  - Must include: "Wikibooks: Automobile Mechanics"
+  - Must include: Permanent link with revision ID (`oldid=3251129`)
+  - Must include: CC BY-SA 3.0+ license link
+  - Must include: "Shared under CC BY-SA" attribution
+  - Any adapted content must maintain CC BY-SA license
+- **Notes**: Comprehensive technical coverage of no-crank diagnosis topics
 
-## Rejected Sources (Rationale)
+### Rejected Sources (Verified Incompatible)
 
-### Manufacturer Service Bulletins
-- **Status**: ❌ Rejected
-- **Reason**: Proprietary (Ford, GM, Toyota, etc. retain copyright)
-- **Exception**: Some manufacturers release some content under royalty-free terms—requires explicit email verification
+#### Source #1: NHTSA-Hosted Kia No-Crank Service Bulletin
+- **Classification**: `UNKNOWN/unknown_blocked`
+- **Reason**: Manufacturer-submitted copyrighted material (Kia retains all rights)
+- **Evidence**: Explicit copyright notice and prohibition on reproduction without written approval
+- **Decision**: ❌ REJECT — Do not excerpt or download
+- **Notes**: NHTSA hosting does not confer public domain status. NHTSA Terms of Use expressly disclaim non-infringement of third-party rights.
 
-### Generic Online Diagrams
-- **Status**: ❌ Rejected
-- **Reason**: No license information provided
-- **Note**: Search engine availability alone does not establish reuse rights
+#### Source #2: NHTSA-Hosted Subaru Technical Document
+- **Classification**: `UNKNOWN/unknown_blocked`
+- **Reason**: Manufacturer-submitted material pending explicit permission review
+- **Decision**: ❌ REJECT — Do not download pending written permission from Subaru
+- **Notes**: Hosting by NHTSA does not establish redistribution rights
 
-### YouTube DIY Videos
-- **Status**: ❌ Rejected (unless specifically CC-licensed)
-- **Reason**: Standard YouTube videos are copyrighted by creator
-- **Exception**: Creator must explicitly mark as CC BY or CC BY-SA
+#### Source #3: NHTSA NHTSA-Authored Pages
+- **Classification**: Page-level review required
+- **Reason**: NHTSA's own content may be copied, but manufacturer documents hosted by NHTSA are not automatically public domain
+- **Decision**: ⏳ CONDITIONAL — Requires individual review of each page
+- **Notes**: Apply this checklist per page:
+  - Is this NHTSA's own research/writing?
+  - Or is it hosted manufacturer document?
+  - Check for explicit copyright notices
+  - Check NHTSA Terms of Use for page-specific terms
 
-### PDF Repair Manuals
-- **Status**: ❌ Rejected (unless source publishes license)
-- **Reason**: File availability does not equal license permission
-- **Exception**: Only if original publisher explicitly authorizes redistribution
+## CC BY-SA Attribution and Compatibility Requirements
+
+When sourcing questions from CC BY-SA licensed materials, the following obligations apply:
+
+### Required Attribution Elements
+1. **Source Identification**: Full title and author/organization
+2. **License Statement**: "Shared under Creative Commons Attribution-ShareAlike 3.0+"
+3. **License Link**: Direct URL to https://creativecommons.org/licenses/by-sa/3.0/
+4. **Revision Tracking**: Permanent revision ID (e.g., `oldid=3251129`) if applicable
+5. **Change Disclosure**: Document any modifications made to adapted content
+6. **ShareAlike Compliance**: Any derivative content using CC BY-SA source must also be licensed CC BY-SA
+
+### Compatibility with Proprietary Content
+- ⚠️ **WARNING**: CC BY-SA content CANNOT be mixed into proprietary, closed-source corpuses
+- If using CC BY-SA sources, the adapted questions and their container must be:
+  - Licensed CC BY-SA, OR
+  - Clearly segregated with documented CC BY-SA status, OR
+  - Sublicensed under compatible open license
+- Do NOT silently blend CC BY-SA content into proprietary assessment questions without license compliance
+
+### Questions Generated from CC BY-SA Sources
+Each question must include:
+- Source page and permanent revision ID
+- Specific excerpt or section referenced
+- Full attribution in citation field
+- License statement linking to CC BY-SA 3.0+
 
 ## Next Steps
 
-1. Verify top-priority sources for explicit license statements
-2. Download and audit sample content from each source
-3. Create model questions from verified excerpts
-4. Document citation format for each source
-5. Run through citation validation system
-6. Prepare for human review of sourcing decisions
+1. ✅ **Source Classification Complete** — Approved and rejected sources documented
+2. **Download and Audit Approved Sources** — Extract content from Wikibooks pages
+3. **Generate Model Questions** — Create sample questions from approved excerpts
+4. **Test Citation System** — Verify deterministic validation of attribution
+5. **Prepare Question Set** — Final approved question batch with citations
+6. **Rollback Simulation** — Test ingestion with fail-safe verification
+7. **Human Review** — Evidence-based quality and accuracy check
+8. **Deployment** — Push to API and verify fail-closed fallback
