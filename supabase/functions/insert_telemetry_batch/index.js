@@ -1,15 +1,5 @@
-const { createClient } = require('@supabase/supabase-js');
-
-// Requires these env vars to be set in the Edge Function environment:
-// SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
-
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-
-async function respond(res, status, body) {
-  res.statusCode = status;
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify(body));
-}
+'use strict';
+const { authenticate, respond, serverError } = require('../_shared/security.js');
 
 // Basic validation helper
 function validateEvent(ev) {
@@ -23,20 +13,36 @@ module.exports = async function handler(req, res) {
   try {
     if (req.method !== 'POST') return respond(res, 405, { ok: false, error: 'Method Not Allowed' });
 
+    // Authenticate request
+    const context = await authenticate(req, res);
+    if (!context) return;
+
     const body = req.body || (req._body ? req._body : undefined);
     const payload = body || (req.headers['content-type'] && req.headers['content-type'].includes('application/json') ? await new Promise(r => { let d=''; req.on('data',c=>d+=c); req.on('end',()=>r(JSON.parse(d))); }) : null);
     if (!payload || !Array.isArray(payload.events)) return respond(res, 400, { ok: false, error: 'body must be { events: [] }' });
 
+    // Check for oversized batches (max 100 events)
+    if (payload.events.length > 100) return respond(res, 413, { ok: false, error: 'Event batch exceeds maximum of 100' });
+
     const events = payload.events.map(ev => ({ ...ev, created_at: ev.created_at || new Date().toISOString() }));
 
-    // Validate
+    // Check for cross-user telemetry attempts
+    for (const ev of events) {
+      if (ev.user_id && ev.user_id !== context.user.id) {
+        return respond(res, 403, { ok: false, error: 'Cannot submit telemetry for other users' });
+      }
+    }
+
+    // Validate events and enforce user ownership
     for (const ev of events) {
       const v = validateEvent(ev);
       if (v) return respond(res, 400, { ok: false, error: v, event: ev });
+      // Enforce user_id to be the authenticated user
+      ev.user_id = context.user.id;
     }
 
     // Insert telemetry_events in a batch
-    const { data: insertData, error: insertErr } = await supabase.from('telemetry_events').insert(events);
+    const { data: insertData, error: insertErr } = await context.supabase.from('telemetry_events').insert(events);
     if (insertErr) {
       console.error('[insert_telemetry_batch] insert error', insertErr);
       return respond(res, 500, { ok: false, error: insertErr.message || insertErr });
@@ -44,14 +50,14 @@ module.exports = async function handler(req, res) {
 
     // Optionally insert session steps into session_history
     const sessionSteps = events.filter(e => e.session_id && (typeof e.step !== 'undefined'))
-      .map(e => ({ session_id: e.session_id, step: e.step || 0, event: e.payload || {}, created_at: e.created_at }));
+      .map(e => ({ session_id: e.session_id, step: e.step || 0, event: e.payload || {}, created_at: e.created_at, user_id: e.user_id }));
 
     if (sessionSteps.length > 0) {
-      const { error: stepsErr } = await supabase.from('session_history').insert(sessionSteps);
+      const { error: stepsErr } = await context.supabase.from('session_history').insert(sessionSteps);
       if (stepsErr) console.error('[insert_telemetry_batch] session_history insert error', stepsErr);
     }
 
-    return respond(res, 200, { ok: true, inserted: Array.isArray(insertData) ? insertData.length : 0 });
+    return respond(res, 200, { ok: true, inserted: events.length });
   } catch (err) {
     console.error('[insert_telemetry_batch] handler error', err);
     return respond(res, 500, { ok: false, error: err && err.message });
