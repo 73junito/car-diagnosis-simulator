@@ -199,3 +199,20 @@ All four approved passages must include:
 
 **Passages ready for question generation**: 4 approved (battery, voltage, Park, clutch)  
 **Passages rejected**: 2 (jump-start procedure, safety-switch diagnosis)
+
+## Approval boundary
+
+This document records an AI-assisted candidate assessment. It is not a human
+technical-review decision. All passages remain unapproved until an identified
+human reviewer personally confirms the technical and instructional decisions.
+
+- `human_technical_approved: false`
+- `human_instructional_approved: false`
+- `reviewer_approved: false`
+- `ingestion_allowed: false`
+- Supabase writes: 0
+
+For conservative compliance, any question that adapts expressive Wikibooks
+content will be distributed under CC BY-SA 4.0 with attribution, permanent
+revision URL, license link, and an indication of changes. This is a project
+policy and not a general legal conclusion about every fact-based question.
