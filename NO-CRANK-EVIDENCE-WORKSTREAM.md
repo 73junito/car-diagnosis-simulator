@@ -40,7 +40,7 @@
 
 **Status**: Classification Complete (See NO-CRANK-SOURCE-RESEARCH.md)
 
-**Verified Approved Sources**:
+**Verified License-Cleared Candidates**:
 1. Wikibooks — Automobile Repair/Jump start (CC BY-SA, oldid=3997054)
 2. Wikibooks — Automobile Mechanics (CC BY-SA, oldid=3251129)
 
@@ -92,7 +92,7 @@
 - Constraint: Generate questions only from verified excerpts
 
 **Phase 3: Question Generation (PENDING)**
-- Task: Author diagnostic questions from approved sources
+- Task: Author diagnostic questions from license-cleared candidates
 - Constraint: Must include full source attribution and license statement
 - Constraint: CC BY-SA requires explicit attribution chain
 

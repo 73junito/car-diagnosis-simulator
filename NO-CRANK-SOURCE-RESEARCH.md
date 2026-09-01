@@ -98,7 +98,7 @@ Topics to source:
 
 ## Found Sources (Classification Complete)
 
-### Approved Sources (CC BY-SA)
+### License-Cleared Candidates (CC BY-SA)
 
 #### Source #1: Wikibooks — Automobile Repair/Jump start
 - **URL**: https://en.wikibooks.org/wiki/Automobile_Repair/Jump_start
@@ -187,10 +187,16 @@ Each question must include:
 ## Next Steps
 
 1. ✅ **Source Classification Complete** — Approved and rejected sources documented
-2. **Download and Audit Approved Sources** — Extract content from Wikibooks pages
+2. **Download and Audit License-Cleared Candidates** — Extract content from Wikibooks pages
 3. **Generate Model Questions** — Create sample questions from approved excerpts
 4. **Test Citation System** — Verify deterministic validation of attribution
 5. **Prepare Question Set** — Final approved question batch with citations
 6. **Rollback Simulation** — Test ingestion with fail-safe verification
 7. **Human Review** — Evidence-based quality and accuracy check
 8. **Deployment** — Push to API and verify fail-closed fallback
+
+> **Approval boundary:** License clearance establishes that a source may be
+> evaluated under CC BY-SA 4.0. It does not establish technical accuracy,
+> instructional suitability, evidence approval, or permission to ingest the
+> source into Supabase. Both Wikibooks revisions remain candidates with
+> `reviewer_approved: false`.
