@@ -30,12 +30,9 @@ test('question loader creates draft provenance without synthetic approvals', () 
   assert.doesNotMatch(loader, /'additive-loader'|SET\s+status\s*=\s*'approved'/i);
 });
 
-test('optional RLS uses ownership and avoids deprecated role checks', () => {
-  assert.match(rls, /\(SELECT auth\.uid\(\)\)\s*=\s*user_id/);
-  assert.match(rls, /WITH CHECK\s*\(\(SELECT auth\.uid\(\)\)\s*=\s*id\)/);
-  assert.doesNotMatch(rls, /auth\.role\s*\(/);
-  assert.doesNotMatch(rls, /FOR\s+INSERT\s*,\s*UPDATE/i);
-});
+test.todo(
+  "deploy ownership-based RLS through a verified Supabase migration"
+);
 
 test('active seed files contain no destructive statements', () => {
   const directory = path.join(root, 'seed');

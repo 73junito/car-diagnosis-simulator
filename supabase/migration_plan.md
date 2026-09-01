@@ -7,7 +7,7 @@ Migrate from in-memory telemetry to Supabase-backed storage with minimal service
 Assumptions
 -----------
 - `supabase/schema.sql` has been applied to the target project.
-- RLS policies from `supabase/rls.sql` will be applied.
+- Row-level security (RLS) policies are pending implementation in a dedicated security PR. Until then, standard Postgres roles provide access control.
 - The app currently uses `lib/telemetry/inMemoryAdapter.js` and `lib/telemetry/index.js` facade.
 
 High-level strategy
@@ -23,7 +23,7 @@ Step-by-step plan
 1) Prepare Supabase and apply schema
    - Open Supabase project -> SQL Editor
    - Run `supabase/schema.sql`
-   - Run `supabase/rls.sql`
+   - NOTE: RLS policies will be applied in a separate verified migration (pending in a dedicated security PR)
    - Create a test dataset (insert a scenario and a couple of telemetry events)
 
 2) Add Supabase adapter (server-side)
@@ -83,12 +83,13 @@ Operational notes
 
 Commands & snippets
 --------------------
-Apply schema and RLS in psql:
+Apply schema in psql:
 
 ```bash
 psql "postgresql://postgres:<password>@<host>:5432/postgres" -f supabase/schema.sql
-psql "postgresql://postgres:<password>@<host>:5432/postgres" -f supabase/rls.sql
 ```
+
+Note: RLS policies will be applied through a verified Supabase migration in a dedicated security PR (pending).
 
 Smoke test with Node:
 

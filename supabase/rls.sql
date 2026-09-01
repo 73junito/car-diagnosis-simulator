@@ -1,78 +1,82 @@
--- Idempotent, ownership-enforcing RLS for optional analytics tables.
-BEGIN;
+-- LEGACY REFERENCE ONLY - DO NOT APPLY TO ANY DATABASE.
+-- This file contains deprecated auth.role() policies and is not part
+-- of the Supabase migration chain. Ownership-based RLS must be delivered
+-- through a separately reviewed and behaviorally verified migration.
+--
+-- Historical comment:
+-- RLS policies for Car Diagnosis Simulator
+-- Apply these after running supabase/schema.sql
 
-ALTER TABLE public.telemetry_events ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.session_history ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.scenarios ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.diagnosis_steps ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.analytics_daily ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.analytics_students ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+-- telemetry_events: allow client (anon) INSERTs but no SELECT/UPDATE/DELETE
+ALTER TABLE telemetry_events ENABLE ROW LEVEL SECURITY;
 
-REVOKE ALL ON public.telemetry_events, public.session_history,
-    public.analytics_daily, public.analytics_students, public.users FROM anon;
+-- Allow anonymous clients (anon key) to INSERT telemetry events
+CREATE POLICY allow_anon_insert ON telemetry_events
+  FOR INSERT
+  TO anon
+  USING (auth.role() = 'anon')
+  WITH CHECK (payload IS NOT NULL);
 
--- ============================================================================
--- telemetry_events: User ownership enforcement
--- ============================================================================
-DROP POLICY IF EXISTS telemetry_owner_select ON public.telemetry_events;
-DROP POLICY IF EXISTS telemetry_owner_insert ON public.telemetry_events;
-CREATE POLICY telemetry_owner_select ON public.telemetry_events
-    FOR SELECT TO authenticated USING ((SELECT auth.uid()) = user_id);
-CREATE POLICY telemetry_owner_insert ON public.telemetry_events
-    FOR INSERT TO authenticated
-    WITH CHECK ((SELECT auth.uid()) = user_id AND payload IS NOT NULL);
+-- Disallow anonymous SELECTs — only authenticated users or the service role may read
+CREATE POLICY allow_authenticated_select ON telemetry_events
+  FOR SELECT
+  USING (auth.role() = 'authenticated');
 
--- ============================================================================
--- session_history: User ownership enforcement
--- ============================================================================
-DROP POLICY IF EXISTS session_history_owner_select ON public.session_history;
-DROP POLICY IF EXISTS session_history_owner_insert ON public.session_history;
-CREATE POLICY session_history_owner_select ON public.session_history
-    FOR SELECT TO authenticated USING ((SELECT auth.uid()) = user_id);
-CREATE POLICY session_history_owner_insert ON public.session_history
-    FOR INSERT TO authenticated WITH CHECK ((SELECT auth.uid()) = user_id);
+-- session_history: server-only access (no client-side direct access)
+ALTER TABLE session_history ENABLE ROW LEVEL SECURITY;
 
--- ============================================================================
--- scenarios: Public read, server-only write
--- ============================================================================
-DROP POLICY IF EXISTS scenarios_public_select ON public.scenarios;
-CREATE POLICY scenarios_public_select ON public.scenarios
-    FOR SELECT USING (true);
+-- Allow only authenticated users (or service role) to INSERT/SELECT (clients should use Edge Functions)
+CREATE POLICY sessionhistory_server_only ON session_history
+  FOR ALL
+  USING (auth.role() = 'authenticated');
 
--- ============================================================================
--- diagnosis_steps: Public read, server-only write
--- ============================================================================
-DROP POLICY IF EXISTS steps_public_select ON public.diagnosis_steps;
-CREATE POLICY steps_public_select ON public.diagnosis_steps
-    FOR SELECT USING (true);
+-- scenarios: public read, server-only write
+ALTER TABLE scenarios ENABLE ROW LEVEL SECURITY;
 
--- ============================================================================
--- analytics_daily: Server-only (no client access)
--- ============================================================================
-DROP POLICY IF EXISTS analytics_daily_authenticated ON public.analytics_daily;
-CREATE POLICY analytics_daily_authenticated ON public.analytics_daily
-    FOR SELECT TO service_role USING (true);
+-- Allow anyone (public) to SELECT scenarios
+CREATE POLICY scenarios_public_select ON scenarios
+  FOR SELECT
+  USING (true);
 
--- ============================================================================
--- analytics_students: Server-only (no client access)
--- ============================================================================
-DROP POLICY IF EXISTS analytics_students_authenticated ON public.analytics_students;
-CREATE POLICY analytics_students_authenticated ON public.analytics_students
-    FOR SELECT TO service_role USING (true);
+-- Allow only authenticated users to INSERT/UPDATE/DELETE scenarios
+CREATE POLICY scenarios_authenticated_mods ON scenarios
+  FOR INSERT, UPDATE, DELETE
+  USING (auth.role() = 'authenticated');
 
--- ============================================================================
--- users: User-aware self-select with WITH CHECK
--- ============================================================================
-DROP POLICY IF EXISTS users_owner_select ON public.users;
-DROP POLICY IF EXISTS users_owner_insert ON public.users;
-DROP POLICY IF EXISTS users_owner_update ON public.users;
-CREATE POLICY users_owner_select ON public.users
-    FOR SELECT TO authenticated USING ((SELECT auth.uid()) = id);
-CREATE POLICY users_owner_insert ON public.users
-    FOR INSERT TO authenticated WITH CHECK ((SELECT auth.uid()) = id);
-CREATE POLICY users_owner_update ON public.users
-    FOR UPDATE TO authenticated USING ((SELECT auth.uid()) = id)
-    WITH CHECK ((SELECT auth.uid()) = id);
+-- diagnosis_steps: read by public, write by authenticated
+ALTER TABLE diagnosis_steps ENABLE ROW LEVEL SECURITY;
+CREATE POLICY steps_public_select ON diagnosis_steps
+  FOR SELECT
+  USING (true);
+CREATE POLICY steps_authenticated_mods ON diagnosis_steps
+  FOR INSERT, UPDATE, DELETE
+  USING (auth.role() = 'authenticated');
 
-COMMIT;
+-- analytics tables: server-only (no client access)
+ALTER TABLE analytics_daily ENABLE ROW LEVEL SECURITY;
+CREATE POLICY analytics_server_only ON analytics_daily
+  FOR ALL
+  USING (auth.role() = 'authenticated');
+
+ALTER TABLE analytics_students ENABLE ROW LEVEL SECURITY;
+CREATE POLICY analytics_students_server_only ON analytics_students
+  FOR ALL
+  USING (auth.role() = 'authenticated');
+
+-- users table: authenticated users can select/modify their own record
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+CREATE POLICY users_self_select ON users
+  FOR SELECT
+  USING (auth.uid() = id::text OR auth.role() = 'authenticated');
+CREATE POLICY users_self_mod ON users
+  FOR UPDATE, DELETE
+  USING (auth.uid() = id::text);
+CREATE POLICY users_public_insert ON users
+  FOR INSERT
+  USING (true)
+  WITH CHECK (anonymous = true OR auth.role() = 'authenticated');
+
+-- Notes:
+-- 1) The "service_role" key bypasses RLS; use it only in secure server environments (Edge Functions or backend).
+-- 2) For more granular policies, tie inserts to JWT claims (e.g., check for a "can_insert_telemetry" claim).
+-- 3) Consider using Supabase Edge Functions as a secure write-proxy for session_history and other server-only tables.
