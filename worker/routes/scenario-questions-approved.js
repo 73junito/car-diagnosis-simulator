@@ -45,6 +45,7 @@ export async function handleScenarioQuestionsApproved(c) {
       .select(
         `
         id,
+        question_id,
         scenario_id,
         question_text,
         option_a,
@@ -66,6 +67,7 @@ export async function handleScenarioQuestionsApproved(c) {
     if (!questions || questions.length === 0) {
       return c.json({
         scenario_id: scenario_id,
+        questions: [],
         approved_questions: [],
         count: 0
       }, 200)
@@ -80,11 +82,16 @@ export async function handleScenarioQuestionsApproved(c) {
     const approvedQuestions = []
 
     for (const question of questions) {
+      // A UUID-only or unmapped question must fail closed.
+      if (!question.question_id) {
+        continue
+      }
+
       // Check for approved provenance record
       const { data: provenance, error: provenanceError } = await supabase
         .from('question_provenance')
-        .select('id, status')
-        .eq('question_id', question.id.toString()) // Convert UUID to text for matching
+        .select('id, question_id, status')
+        .eq('question_id', question.question_id)
         .eq('status', 'approved')
         .single()
 
@@ -96,7 +103,11 @@ export async function handleScenarioQuestionsApproved(c) {
       // Check for valid citation validation result
       const { data: validation, error: validationError } = await supabase
         .from('citation_validations')
-        .select('id, result')
+        .select(
+          'id, result, validator_version, validation_method, ' +
+          'source_hashes_verified, excerpts_verified, ' +
+          'urls_verified, validated_at'
+        )
         .eq('question_provenance_id', provenance.id)
         .eq('result', 'valid')
         .single()
@@ -159,7 +170,29 @@ export async function handleScenarioQuestionsApproved(c) {
           option_d: question.option_d,
           difficulty: question.difficulty,
           topic: question.topic,
-          ase_area: question.ase_area
+          ase_area: question.ase_area,
+        question_id: question.question_id,
+        question_provenance: {
+          id: provenance.id,
+          question_id: provenance.question_id,
+          status: provenance.status,
+          citation_validation: {
+            valid: validation.result === 'valid',
+            validator_version: validation.validator_version,
+            validation_method: validation.validation_method,
+            source_hashes_verified:
+              validation.source_hashes_verified,
+            excerpts_verified:
+              validation.excerpts_verified,
+            urls_verified:
+              validation.urls_verified,
+            validated_at: validation.validated_at
+          }
+        },
+        citations: citations.map(citation => ({
+          source_id: citation.source_id,
+          chunk_id: citation.chunk_id
+        }))
         })
       }
     }
@@ -167,6 +200,7 @@ export async function handleScenarioQuestionsApproved(c) {
     return c.json(
       {
         scenario_id: scenario_id,
+        questions: approvedQuestions,
         approved_questions: approvedQuestions,
         count: approvedQuestions.length
       },

@@ -6,7 +6,8 @@ module.exports = {
   testMatch: [
     '**/tests/**/*.spec.js',
     '**/tests/**/*.test.js',
-    '!**/tests/playwright/**'
+    '!**/tests/playwright/**',
+    '!**/supabase/tests/**'
   ],
   // Ensure undici register runs before any test imports that may require Request/fetch.
   setupFiles:            ['<rootDir>/tests/jest-undici-register.js', '<rootDir>/tests/jest-setup.js'],

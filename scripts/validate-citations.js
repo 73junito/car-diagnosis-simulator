@@ -27,24 +27,23 @@ if (!process.env.SUPABASE_URL) {
   console.error('❌ Error: Missing SUPABASE_URL environment variable');
   process.exit(1);
 }
-const serviceKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_KEY;
-const anonKey = process.env.SUPABASE_ANON_KEY;
-if (!dryRun && !serviceKey) {
-  console.error('❌ Error: Missing SUPABASE_SERVICE_KEY or SUPABASE_KEY environment variable');
+const serviceKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_SERVICE_KEY ||
+  process.env.SUPABASE_KEY;
+if (!serviceKey) {
+  console.error(
+    '❌ Error: Missing a server-side Supabase service-role key'
+  );
   console.error('   Required for writing validation records to database');
   console.error('   Set one of:');
   console.error('     $env:SUPABASE_SERVICE_KEY = "your-service-role-key"');
   console.error('     $env:SUPABASE_KEY = "your-service-role-key"');
-  console.error('   Or use --dry-run to only query and validate without writing');
   process.exit(1);
 }
 const { createClient } = require('@supabase/supabase-js');
 // Use service key for writing, or anon key for dry-run query-only
-const clientKey = serviceKey || anonKey;
-if (!clientKey) {
-  console.error('❌ Error: Missing SUPABASE_ANON_KEY for read-only access');
-  process.exit(1);
-}
+const clientKey = serviceKey;
 const supabase = createClient(
   process.env.SUPABASE_URL,
   clientKey
@@ -178,11 +177,15 @@ async function validateQuestion(provenance) {
       errors.push('No citations found for this question');
       return {
         question_id: provenance.question_id,
+        question_provenance_id: provenance.id,
+        validator_version: VALIDATOR_VERSION,
+        validation_method: VALIDATION_METHOD,
         result: 'invalid',
         source_hashes_verified: false,
         excerpts_verified: false,
         urls_verified: false,
-        errors
+        errors,
+        validated_at: new Date().toISOString()
       };
     }
     // Verify each citation
@@ -322,6 +325,7 @@ async function validateQuestion(provenance) {
     // to prevent schema mismatch errors. Evidence is not persisted to database.
 
     return {
+      question_id: provenance.question_id,
       question_provenance_id: provenance.id,
       validator_version: VALIDATOR_VERSION,
       validation_method: VALIDATION_METHOD,
@@ -335,6 +339,7 @@ async function validateQuestion(provenance) {
   } catch (error) {
     console.error(`❌ Unexpected error validating question:`, error);
     return {
+      question_id: provenance.question_id,
       question_provenance_id: provenance.id,
       validator_version: VALIDATOR_VERSION,
       validation_method: VALIDATION_METHOD,
@@ -362,17 +367,22 @@ async function main() {
     // Endpoint serves only where provenance.status = 'approved' AND citation_validations.result = 'valid'
     const scenarioQuestionResult = await supabase
       .from('scenario_questions')
-      .select('id')
-      .eq('scenario_id', scenario);
+      .select('question_id')
+      .eq('scenario_id', scenario)
+      .not('question_id', 'is', null);
 
     const scenarioQuestions = requireQuery(
       scenarioQuestionResult,
       `Load question identifiers for scenario '${scenario}'`
     );
 
-    const scenarioQuestionIds = scenarioQuestions.map(
-      question => String(question.id)
-    );
+    const scenarioQuestionIds = scenarioQuestions
+      .map(question => question.question_id)
+      .filter(
+        questionId =>
+          typeof questionId === 'string' &&
+          questionId.length > 0
+      );
 
     if (scenarioQuestionIds.length === 0) {
       console.error(`❌ No questions found for scenario: ${scenario}`);
@@ -421,16 +431,21 @@ async function main() {
     // Upsert validation records
     console.log(`\n💾 Writing validation records...`);
     for (const result of results) {
+      const {
+        question_id: resultQuestionId,
+        ...validationRecord
+      } = result;
+
       const { error: upsertError } = await supabase
         .from('citation_validations')
-        .upsert(result, {
+        .upsert(validationRecord, {
           onConflict: 'question_provenance_id,validator_version'
         });
       if (upsertError) {
-        console.error(`❌ Failed to upsert validation for ${result.question_id}:`, upsertError);
+        console.error(`❌ Failed to upsert validation for ${resultQuestionId}:`, upsertError);
         process.exit(1);
       }
-      console.log(`✓ Upserted: ${result.question_id}`);
+      console.log(`✓ Upserted: ${resultQuestionId}`);
     }
     console.log(`\n✅ Citation validation complete`);
     console.log(`   Records: ${results.length}`);
