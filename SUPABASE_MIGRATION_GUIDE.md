@@ -1,358 +1,209 @@
-# Supabase Migration: citation_validations Table
+# Supabase Migration and Evidence Verification Guide
 
-## Overview
-The citation validator is implemented and tested but requires the `public.citation_validations` table schema to exist in Supabase. This table will store validation results from the citation validator.
+## Current state
 
-## Current Status
-- Migration SQL file: ✅ Created at `supabase/migrations/20260813-create-citation-validations.sql`
-- Citation validator code: ✅ Implemented at `scripts/validate-citations.js`
-- Citation validator dry-run: ✅ Tested (20/20 questions valid)
-- Supabase table: ❌ NOT YET CREATED in database
+The Supabase migrations merged through PR #387 have already been replayed successfully in Supabase Preview.
 
-## Migration Steps
+Verified Preview state:
 
-### Step 1: Verify Table Does Not Exist
+- Project status: `ACTIVE_HEALTHY`
+- Deployment stage: `FUNCTIONS_DEPLOYED`
+- Expected migration versions: 28
+- Safe seed: completed
+- Manual SQL Editor deployment: not required
 
-In the Supabase SQL Editor (https://supabase.com/dashboard/project/pffdgqpynpbffbcnxmum/sql), run:
+The `citation_validations` table exists through the tracked migration chain. Do not recreate it manually and do not add public read policies outside a reviewed security migration.
 
-```sql
-select
-    to_regclass('public.citation_validations') as table_name,
-    exists (
-        select 1
-        from information_schema.tables
-        where table_schema = 'public'
-          and table_name = 'citation_validations'
-    ) as table_exists;
-```
+## Migration source of truth
 
-**Expected result before migration:**
-```
-table_name | table_exists
------------|-------------
-null       | false
-```
+Migration files under `supabase/migrations/` are authoritative.
 
-### Step 2: Apply Migration
+Do not:
 
-Copy and paste the following SQL into the Supabase SQL Editor and execute:
+- paste replacement schemas into the production SQL Editor;
+- mark migrations applied without executing their reviewed SQL;
+- rewrite production migration history;
+- reset or rebase a Supabase branch solely to clear an error;
+- grant `anon` or `authenticated` direct access to answer-bearing tables;
+- populate no-crank validations without policy-approved evidence.
 
-```sql
--- Create citation_validations table for deterministic citation verification
--- This table stores actual validator output, never manufactured evidence.
-create table if not exists public.citation_validations (
-  id uuid primary key default gen_random_uuid(),
-  question_provenance_id uuid not null
-    references public.question_provenance(id) on delete cascade,
-  validator_version text not null,
-  validation_method text not null,
-  source_hashes_verified boolean not null,
-  excerpts_verified boolean not null,
-  urls_verified boolean not null,
-  result text not null check (result in ('valid', 'invalid')),
-  errors jsonb not null default '[]'::jsonb,
-  validated_at timestamptz not null default now(),
-  unique (question_provenance_id, validator_version)
-);
-
--- Enable RLS
-alter table public.citation_validations enable row level security;
-
--- Revoke all access by default
-revoke all on public.citation_validations from anon, authenticated;
-
--- Grant narrowly scoped read access: only valid records where all verification flags are true
-create policy "Read valid citation validations for authenticated users"
-on public.citation_validations
-for select
-to authenticated
-using (
-  result = 'valid'
-  and source_hashes_verified = true
-  and excerpts_verified = true
-  and urls_verified = true
-);
-
--- Grant narrowly scoped read access: only valid records for anon (API server)
-create policy "Read valid citation validations for anon"
-on public.citation_validations
-for select
-to anon
-using (
-  result = 'valid'
-  and source_hashes_verified = true
-  and excerpts_verified = true
-  and urls_verified = true
-);
-
--- Refresh PostgREST schema cache
-notify pgrst, 'reload schema';
-```
-
-### Step 3: Verify Table Creation
-
-Run this verification query in the Supabase SQL Editor:
-
-```sql
-select
-    to_regclass('public.citation_validations') as table_name,
-    count(*) as current_records
-from public.citation_validations;
-```
-
-**Expected result after migration:**
-```
-table_name                      | current_records
---------------------------------|-----------------
-public.citation_validations     | 0
-```
-
-### Step 4: Verify Data API Discovery
-
-Run this PowerShell command to verify the table is discoverable via Supabase REST API:
+## Verify linked-project identity
 
 ```powershell
-$SupabaseUrl = "https://pffdgqpynpbffbcnxmum.supabase.co"
-$PublishableKey = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw"
-$Headers = @{
-    apikey = $PublishableKey
-    Authorization = "Bearer $PublishableKey"
+$ErrorActionPreference = "Stop"
+Set-Location "F:\TorqueMind"
+
+$ExpectedProductionProject = "pffdgqpynpbffbcnxmum"
+
+$LinkedProjectFile = "supabase\.temp\project-ref"
+
+if (-not (Test-Path -LiteralPath $LinkedProjectFile)) {
+    throw "Supabase linked-project file is missing."
 }
-$Response = Invoke-WebRequest `
-    -Uri "$SupabaseUrl/rest/v1/citation_validations?select=id&limit=1" `
-    -Headers $Headers `
-    -UseBasicParsing
-Write-Host "Status: $($Response.StatusCode)"
-Write-Host "Content: $($Response.Content)"
-```
 
-**Expected response:**
-```
-Status: 200
-Content: []
-```
+$LinkedProject = (
+    Get-Content `
+        -LiteralPath $LinkedProjectFile `
+        -Raw
+).Trim()
 
-## After Migration: Citation Validator Population
-
-Once the table exists, populate citation validations using this secure PowerShell sequence:
-
-```powershell
-Set-Location F:\TorqueMind
-
-$env:SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co"
-
-$SecureServiceKey = Read-Host `
-    "Enter Supabase service-role key" `
-    -AsSecureString
-
-$ServiceKeyPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR(
-    $SecureServiceKey
-)
-
-try {
-    $env:SUPABASE_SERVICE_KEY = [
-        Runtime.InteropServices.Marshal
-    ]::PtrToStringBSTR($ServiceKeyPointer)
-
-    # Test with dry-run first (no database writes)
-    Write-Host "Running citation validator dry-run..."
-    node .\scripts\validate-citations.js `
-        --scenario no-crank `
-        --dry-run
-
-    if ($LASTEXITCODE -ne 0) {
-        throw "Citation-validator dry run failed"
-    }
-
-    Write-Host "Dry-run successful. Populating database..."
-    
-    # Populate database with validation records
-    node .\scripts\validate-citations.js `
-        --scenario no-crank
-
-    if ($LASTEXITCODE -ne 0) {
-        throw "Citation-validation population failed"
-    }
-
-    Write-Host "Citation validation population complete!"
-}
-finally {
-    # Securely clear the plaintext key from memory
-    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR(
-        $ServiceKeyPointer
+if ($LinkedProject -ne $ExpectedProductionProject) {
+    throw (
+        "Stop: linked project is $LinkedProject; " +
+        "expected $ExpectedProductionProject."
     )
-
-    Remove-Item Env:SUPABASE_SERVICE_KEY `
-        -ErrorAction SilentlyContinue
 }
 ```
 
-**Key Points:**
-- The `SecureString` is only held in memory briefly
-- Converted to plaintext only for Node.js environment variable
-- Plaintext key is zeroed from memory after use
-- Service key is removed from environment when complete
+## Read-only migration inventory
 
-## Verification
-
-### Step 1: Verify Database Records Created
-
-Run this SQL in the Supabase SQL Editor:
-
-```sql
-select 
-    count(*) as total_validations,
-    sum(case when result = 'valid' then 1 else 0 end) as valid_count,
-    sum(case when result = 'invalid' then 1 else 0 end) as invalid_count
-from public.citation_validations
-where question_provenance_id in (
-    select id from question_provenance where scenario_id = 'no-crank'
-);
 ```
+npx supabase migration list `
+    --linked
 
-**Expected:**
-```
-total_validations | valid_count | invalid_count
-------------------|-------------|---------------
-20                 | 20          | 0
-```
-
-### Step 2: Verify API Access
-
-Check that the API returns validation records (respects RLS policies):
-
-```powershell
-$PublishableKey = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw"
-
-$Headers = @{
-    apikey        = $PublishableKey
-    Authorization = "Bearer $PublishableKey"
+if ($LASTEXITCODE -ne 0) {
+    throw "Could not retrieve linked migration history."
 }
-
-$ValidationResponse = Invoke-RestMethod `
-    -Uri "https://pffdgqpynpbffbcnxmum.supabase.co/rest/v1/citation_validations?select=result,question_provenance_id" `
-    -Headers $Headers
-
-$ValidationResponse |
-    Group-Object result |
-    Select-Object Name, Count |
-    Format-Table -AutoSize
 ```
 
-**Expected Output:**
-```
-Name  Count
-----  -----
-valid    20
-```
-
-### Step 3: Verify Server Endpoint
-
-Start the API server and test the scenario-questions-approved endpoint:
+Compare remote versions with tracked files:
 
 ```powershell
-# Terminal 1: Start the server
-Set-Location F:\TorqueMind\torquemind-api
-$env:SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co"
-$env:SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw"
-$env:PORT = "3003"
-node ./index.js
-
-# Terminal 2: Test the endpoint
-$QuestionResponse = Invoke-RestMethod `
-    "http://127.0.0.1:3003/api/scenario-questions-approved?scenario_id=no-crank"
-
-$Questions = @($QuestionResponse.questions)
-
-$ValidQuestions = @(
-    $Questions | Where-Object {
-        $_.question_provenance.citation_validation.result -eq 'valid'
-    }
+$TrackedVersions = @(
+    git ls-files `
+        "supabase/migrations/*.sql" |
+    ForEach-Object {
+        (
+            [System.IO.Path]::GetFileName($_) `
+                -split "_"
+        )[0]
+    } |
+    Sort-Object -Unique
 )
 
 [PSCustomObject]@{
-    QuestionsReturned = $Questions.Count
-    ValidatedQuestions = $ValidQuestions.Count
-} | Format-List
-
-if ($Questions.Count -ne 20 -or $ValidQuestions.Count -ne 20) {
-    throw "Production gate failed: expected 20 returned and 20 validated"
-}
+    TrackedMigrationCount = $TrackedVersions.Count
+    FirstVersion = $TrackedVersions[0]
+    LastVersion = $TrackedVersions[-1]
+} |
+Format-List
 ```
 
-**Expected Output:**
-```
-QuestionsReturned   : 20
-ValidatedQuestions  : 20
+## Schema verification
+
+Use read-only SQL through an approved administrative channel:
+
+```sql
+select
+    to_regclass(
+        'public.citation_validations'
+    ) as citation_validations_table;
+
+select
+    version,
+    name
+from supabase_migrations.schema_migrations
+order by version;
 ```
 
-### Step 4: Run Production Readiness Tests
+Expected:
 
-Stop the server and run the Playwright E2E tests:
+- `public.citation_validations` exists.
+- All expected migration versions appear.
+- No migration-history mismatch is reported.
+
+## Runtime evidence contract
+
+| Scenario | Approved questions |
+|---|---:|
+| `charging-system` | 3 |
+| `no-crank` | 0 |
+
+The no-crank result is intentionally empty. Do not run the citation validator in write mode for no-crank until new evidence is approved.
+
+## Public API verification
 
 ```powershell
-# Ctrl-C in Terminal 1 to stop server
+$ErrorActionPreference = "Stop"
 
-# Run both fail-closed and production-readiness tests
-npx playwright test `
-    tests/playwright/tted805-no-crank-fail-closed.spec.js `
-    tests/playwright/tted805-no-crank-production-readiness.spec.js `
-    --project=chromium `
-    --reporter=list `
-    --trace=retain-on-failure
+$AppUrl = "https://app.autolearnpro.com"
 
-if ($LASTEXITCODE -ne 0) {
-    throw "TTED 805 Playwright gates failed"
+$ExpectedCounts = @{
+    "charging-system" = 3
+    "no-crank" = 0
+}
+
+foreach ($Scenario in $ExpectedCounts.Keys) {
+    $Uri = (
+        "$AppUrl/api/" +
+        "scenario-questions-approved" +
+        "?scenario_id=$Scenario" +
+        "&cb=" +
+        [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+    )
+
+    $Response = Invoke-WebRequest `
+        -Uri $Uri `
+        -Headers @{
+            "Cache-Control" = "no-cache"
+        } `
+        -SkipHttpErrorCheck
+
+    $Payload = $Response.Content |
+        ConvertFrom-Json
+
+    $Questions = if ($null -ne $Payload.questions) {
+        @($Payload.questions)
+    }
+    elseif ($null -ne $Payload.approved_questions) {
+        @($Payload.approved_questions)
+    }
+    else {
+        @()
+    }
+
+    if ($Response.StatusCode -ne 200) {
+        throw "$Scenario returned HTTP $($Response.StatusCode)."
+    }
+
+    if ($Questions.Count -ne $ExpectedCounts[$Scenario]) {
+        throw (
+            "$Scenario returned $($Questions.Count); " +
+            "expected $($ExpectedCounts[$Scenario])."
+        )
+    }
+
+    if (
+        $Response.Content -match
+        '(?i)"correct_answer"\s*:'
+    ) {
+        throw "$Scenario leaked an answer key."
+    }
 }
 ```
 
-**Expected:**
-- Fail-closed test: PASS (0 questions when no validation)
-- Production-readiness test: PASS (20 questions when validated)
+## Future no-crank evidence workflow
 
-### Step 5: Run Final Validation Pipeline
+Before any database population:
 
-```powershell
-Set-Location F:\TorqueMind
+1. Verify the source license or explicit written reuse permission.
+2. Record the source in draft status.
+3. Create minimal evidence chunks within the permitted license scope.
+4. Verify artifact and excerpt hashes.
+5. Generate questions using only the approved chunks.
+6. Complete technical and instructional human review.
+7. Validate answer and explanation citations.
+8. Simulate all database changes inside a rollback transaction.
+9. Obtain explicit approval.
+10. Apply a reviewed migration or controlled ingestion transaction.
+11. Verify the public API and answer-key security.
 
-# Run Mermaid verification
-npm run docs:mermaid
-if ($LASTEXITCODE -ne 0) {
-    throw "Mermaid verification failed"
-}
+Unverified sources must remain fail-closed and must not be converted into approved instructional evidence.
 
-# Run Jest test suite
-npm test
-if ($LASTEXITCODE -ne 0) {
-    throw "Jest failed"
-}
+## Security boundary
 
-# Run build
-npm run build
-if ($LASTEXITCODE -ne 0) {
-    throw "Build failed"
-}
-```
-
-**Expected Results:**
-```
-Mermaid:        11/11 diagrams rendered
-Jest:           474/474 tests passing
-Build:          Success (exit code 0)
-Playwright:     2/2 tests passing
-```
-
-## Support
-
-If you encounter any issues:
-
-1. **Permission Denied**: Ensure you're using the service-role key with INSERT permissions
-2. **Foreign Key Violation**: The `question_provenance` table must exist with at least 20 'no-crank' questions
-3. **RLS Policy Not Found**: Verify both RLS policies were created in Step 2
-
-## Security Notes
-
-- The RLS policies implement fail-closed security: records are only visible when all verification flags are true
-- The service-role key should NEVER be committed to version control
-- Only SET via interactive prompt: `Read-Host -AsSecureString`
-- The citation validator validates all 20 questions deterministically via SHA-256 hashing
+- Service-role credentials must never be committed.
+- Do not place service-role credentials directly in command history.
+- `citation_validations` and answer-bearing records remain server-side.
+- Client applications must use public API routes that remove answer keys.
+- Ownership-based RLS remains deferred to a dedicated security PR.
