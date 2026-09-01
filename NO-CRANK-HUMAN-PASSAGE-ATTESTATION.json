@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "record_type": "authoritative_human_passage_attestation",
+  "reviewer_name": "Rafael Rodriguez",
+  "reviewer_role": "Automotive technical reviewer",
+  "attestation_method": "direct_user_confirmation",
+  "attestation_statement": "I, Rafael Rodriguez, approve passages 1-4 and reject passages 5-6",
+  "recorded_at_utc": "2026-09-01T12:43:13.4234943-05:00",
+  "approved_passage_count": 4,
+  "rejected_passage_count": 2,
+  "deferred_passage_count": 0,
+  "human_passage_review_complete": true,
+  "question_drafting_allowed": true,
+  "source_approval_complete": false,
+  "reviewer_approved": false,
+  "ingestion_allowed": false,
+  "database_writes": 0,
+  "decisions": [
+    {
+      "passage_id": "discharged-battery-no-crank-p1",
+      "source_id": "wikibooks-automobile-repair-jump-start-3997054",
+      "revision_id": 3997054,
+      "source_sha256": "00bbc462a64a49a1609e6567d5bba9710c0d7d95a12546c48491ea1397c6eb77",
+      "source_text": "When a battery fails or is discharged, such as by inadvertently leaving one's headlights switched on while parked, the car's engine will not \"turn over\" when the ignition key is turned.  Many motorists carry \"jumper cables\" which consist of a pair of heavy gauge wires with large crocodile clips at each end.",
+      "decision": "APPROVE",
+      "human_technical_approved": true,
+      "human_instructional_approved": true,
+      "drafting_scope": "Battery discharge as one possible no-crank cause."
+    },
+    {
+      "passage_id": "low-voltage-starter-p1",
+      "source_id": "wikibooks-automobile-mechanics-3251129",
+      "revision_id": 3251129,
+      "source_sha256": "10a2a5378f50e69f5c3bddacb163057b5281809992398150b3bbdeefe46a4cff",
+      "source_text": "The '''Battery''' provides energy to run the engine's starter.  If the battery's voltage level is low, it may not be able to turn the starter.",
+      "decision": "APPROVE",
+      "human_technical_approved": true,
+      "human_instructional_approved": true,
+      "drafting_scope": "Low battery voltage may prevent starter operation."
+    },
+    {
+      "passage_id": "automatic-park-start-p1",
+      "source_id": "wikibooks-automobile-mechanics-3251129",
+      "revision_id": 3251129,
+      "source_sha256": "10a2a5378f50e69f5c3bddacb163057b5281809992398150b3bbdeefe46a4cff",
+      "source_text": "To start a vehicle with an automatic transmission, sit in the driver's seat and make sure the vehicle is in ''Park''.  Insert the key in the ignition and turn it clockwise as far as it will go.  The engine should crank.  Do not depress the gas pedal.  As soon as the engine starts, release the key.  To turn it off, turn the key counter-clockwise.",
+      "decision": "APPROVE",
+      "human_technical_approved": true,
+      "human_instructional_approved": true,
+      "drafting_scope": "The cited instructions select Park before starting; no switch diagnosis."
+    },
+    {
+      "passage_id": "clutch-interlock-p1",
+      "source_id": "wikibooks-automobile-mechanics-3251129",
+      "revision_id": 3251129,
+      "source_sha256": "10a2a5378f50e69f5c3bddacb163057b5281809992398150b3bbdeefe46a4cff",
+      "source_text": "Make sure the parking brake has been applied.  Inexperienced drivers should also shift the vehicle into neutral so that if the foot slips off the clutch after the engine starts, the car does not move.  Even with the vehicle in neutral, it is still important to depress the clutch, as many autos have a switch in the clutch which prevents the engine from starting unless the clutch is depressed.  Insert the key in the ignition and turn it clockwise as far as it will go.  The engine should crank.  Do not depress the gas pedal, but leave the clutch pedal depressed.  As soon as the engine starts, release the key.  To turn it off, turn the key counter-clockwise.",
+      "decision": "APPROVE",
+      "human_technical_approved": true,
+      "human_instructional_approved": true,
+      "drafting_scope": "Many manual vehicles use a clutch starting interlock; no testing procedure."
+    },
+    {
+      "passage_id": "jump-start-procedure-p1",
+      "source_id": "wikibooks-automobile-repair-jump-start-3997054",
+      "revision_id": 3997054,
+      "source_sha256": "00bbc462a64a49a1609e6567d5bba9710c0d7d95a12546c48491ea1397c6eb77",
+      "source_text": null,
+      "decision": "REJECT",
+      "human_technical_approved": false,
+      "human_instructional_approved": false,
+      "drafting_scope": "BLOCKED: complete jump-start procedures exceed evidence scope."
+    },
+    {
+      "passage_id": "park-neutral-switch-diagnosis-p1",
+      "source_id": "wikibooks-automobile-mechanics-3251129",
+      "revision_id": 3251129,
+      "source_sha256": "10a2a5378f50e69f5c3bddacb163057b5281809992398150b3bbdeefe46a4cff",
+      "source_text": null,
+      "decision": "REJECT",
+      "human_technical_approved": false,
+      "human_instructional_approved": false,
+      "drafting_scope": "BLOCKED: Park/Neutral-switch diagnosis methodology not present in source."
+    }
+  ]
+}
