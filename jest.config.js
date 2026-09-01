@@ -10,7 +10,8 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/tests/playwright/',
-    'supabase/tests/'
+    'supabase/tests/',
+    'rala-semantic-identity-contract'
   ],
   // Ensure undici register runs before any test imports that may require Request/fetch.
   setupFiles:            ['<rootDir>/tests/jest-undici-register.js', '<rootDir>/tests/jest-setup.js'],

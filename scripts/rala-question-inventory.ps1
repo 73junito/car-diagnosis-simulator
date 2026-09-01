@@ -59,7 +59,8 @@ order by ordinal_position;
   if ($HasCorrectAnswer) {
     $InventorySql = @"
 select
-  sq.id,
+  sq.id as scenario_question_uuid,
+  sq.question_id,
   sq.scenario_id,
   sq.topic,
   sq.ase_area,
@@ -68,13 +69,14 @@ select
   sq.correct_answer
 from public.scenario_questions sq
 left join public.question_provenance qp
-  on qp.question_id = sq.id::text
-order by sq.scenario_id, sq.topic, provenance_status, sq.id;
+  on qp.question_id = sq.question_id
+order by sq.scenario_id, sq.topic, provenance_status, sq.question_id;
 "@
   } else {
     $InventorySql = @"
 select
-  sq.id,
+  sq.id as scenario_question_uuid,
+  sq.question_id,
   sq.scenario_id,
   sq.topic,
   sq.ase_area,
@@ -83,8 +85,8 @@ select
   null::text as correct_answer
 from public.scenario_questions sq
 left join public.question_provenance qp
-  on qp.question_id = sq.id::text
-order by sq.scenario_id, sq.topic, provenance_status, sq.id;
+  on qp.question_id = sq.question_id
+order by sq.scenario_id, sq.topic, provenance_status, sq.question_id;
 "@
   }
 

@@ -15,10 +15,19 @@ if ($Inventory.Count -lt $PilotSize) {
   throw "Inventory has fewer than $PilotSize questions."
 }
 
+$MissingSemanticIds = @(
+  $Inventory |
+    Where-Object { [string]::IsNullOrWhiteSpace([string]$_.question_id) }
+)
+
+if ($MissingSemanticIds.Count -gt 0) {
+  throw "Inventory contains $($MissingSemanticIds.Count) question(s) without a semantic question_id."
+}
+
 $Selected = @()
 $SeenScenarios = @{}
 
-foreach ($Row in ($Inventory | Sort-Object scenario_id, topic, id)) {
+foreach ($Row in ($Inventory | Sort-Object scenario_id, topic, question_id)) {
   if ($Selected.Count -ge $PilotSize) { break }
   if (-not $SeenScenarios.ContainsKey($Row.scenario_id)) {
     $SeenScenarios[$Row.scenario_id] = $true
@@ -27,9 +36,9 @@ foreach ($Row in ($Inventory | Sort-Object scenario_id, topic, id)) {
 }
 
 if ($Selected.Count -lt $PilotSize) {
-  foreach ($Row in ($Inventory | Sort-Object topic, id)) {
+  foreach ($Row in ($Inventory | Sort-Object topic, question_id)) {
     if ($Selected.Count -ge $PilotSize) { break }
-    if (-not ($Selected.id -contains $Row.id)) {
+    if (-not ($Selected.question_id -contains $Row.question_id)) {
       $Selected += $Row
     }
   }
@@ -50,7 +59,7 @@ $Batch = [ordered]@{
 
 foreach ($Row in $Selected) {
   $Batch.questions += [ordered]@{
-    question_id = $Row.id
+    question_id = $Row.question_id
     scenario_id = $Row.scenario_id
     topic = $Row.topic
     ase_area = $Row.ase_area
