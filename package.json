@@ -6,6 +6,7 @@
     "minimist": "^1.2.8",
     "prepare": "husky install",
     "test": "node scripts/run-tests.js",
+    "test:supabase-contracts": "node --test supabase/tests/security-contracts.test.js supabase/tests/package-integrity.test.js",
     "build": "npm run write-version && node scripts/build-static-site.js",
     "write-version": "node scripts/write-version.js",
     "vercel-build": "npm run build",
@@ -25,12 +26,16 @@
     "lint": "eslint . --ext .js",
     "lint:tests": "eslint tests --ext .js",
     "normalize-assets": "node scripts/normalize-scenario-assets.js",
-    "evaluate-retrieval": "node scripts/evaluate-retrieval.js"
+    "evaluate-retrieval": "node scripts/evaluate-retrieval.js",
+    "docs:mermaid:coverage": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-mermaid-coverage.ps1",
+    "docs:mermaid:render": "node scripts/verify-mermaid-rendering.js",
+    "docs:mermaid": "npm run docs:mermaid:coverage && npm run docs:mermaid:render"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
-    "@cloudflare/workers-types": "^5.20260823.1",
+    "@cloudflare/workers-types": "^5.20260801.1",
+    "@mermaid-js/mermaid-cli": "^11.16.0",
     "@playwright/test": "^1.62.0",
     "@supabase/supabase-js": "^2.112.4",
     "acorn": "^8.18.0",
@@ -55,7 +60,8 @@
     "pg": "^8.23.0",
     "supertest": "^7.2.2",
     "undici": "^8.10.0",
-    "wait-on": "^9.1.0"
+    "wait-on": "^9.1.0",
+    "wrangler": "4.124.0"
   },
   "dependencies": {
     "hono": "^4.13.4"

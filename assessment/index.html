@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automotive Diagnostic Assessment</title>
+  <link rel="stylesheet" href="/theme.css">
+  <style>
+    .assessment-entry {
+      max-width: 720px;
+      margin: 4rem auto;
+      padding: 2rem;
+    }
+
+    .eyebrow {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+      margin: 0 0 0.5rem;
+    }
+
+    .assessment-entry h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 2rem;
+      color: #1a1a1a;
+    }
+
+    .assessment-notice {
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-left: 4px solid #d97706;
+      background: #fef3c7;
+      border-radius: 0.5rem;
+    }
+
+    .assessment-notice h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 0.75rem;
+      color: #92400e;
+    }
+
+    .assessment-notice p {
+      margin: 0;
+      color: #78350f;
+      line-height: 1.5;
+    }
+
+    #assessmentAttestation {
+      margin: 2rem 0;
+    }
+
+    #assessmentAttestation label {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin: 1rem 0;
+      font-size: 1rem;
+      line-height: 1.6;
+      cursor: pointer;
+    }
+
+    #assessmentAttestation input[type="checkbox"] {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-top: 0.25rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    #beginAssessment {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 0.5rem;
+      background: #173f6d;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 1rem;
+    }
+
+    #beginAssessment:enabled:hover {
+      background-color: #0f2a4a;
+    }
+
+    #beginAssessment:disabled {
+      background-color: #cbd5e1;
+      cursor: not-allowed;
+      color: #64748b;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .loading.active {
+      display: block;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      border: 3px solid #e5e7eb;
+      border-top-color: #173f6d;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      display: none;
+      padding: 1rem;
+      margin: 1rem 0;
+      border: 1px solid #fca5a5;
+      border-radius: 0.5rem;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .error-message.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <main class="assessment-entry">
+    <p class="eyebrow">Independent non-proctored assessment</p>
+    <h1>Automotive Diagnostic Assessment</h1>
+
+    <aside class="assessment-notice" role="note">
+      <h2>Assessment conditions</h2>
+      <p>
+        AI tutoring, hints, cited explanations, and answer feedback are disabled
+        during this attempt. Your answers will be graded after final submission,
+        and your attempt will be recorded with this assessment version.
+      </p>
+    </aside>
+
+    <form id="assessmentAttestation">
+      <label>
+        <input id="attestation" type="checkbox" required>
+        <span>
+          I will complete this assessment independently and understand that my
+          attempt and assessment version will be recorded.
+        </span>
+      </label>
+
+      <button id="beginAssessment" type="submit" disabled>
+        Begin Assessment
+      </button>
+    </form>
+
+    <div id="errorMessage" class="error-message"></div>
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Starting assessment...</p>
+    </div>
+  </main>
+
+  <script type="module" src="/assessment/assessment-entry.js"></script>
+</body>
+</html>

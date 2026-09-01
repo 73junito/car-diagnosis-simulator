@@ -1,3 +1,9 @@
+-- LEGACY REFERENCE ONLY - DO NOT APPLY TO ANY DATABASE.
+-- This file contains deprecated auth.role() policies and is not part
+-- of the Supabase migration chain. Ownership-based RLS must be delivered
+-- through a separately reviewed and behaviorally verified migration.
+--
+-- Historical comment:
 -- RLS policies for Car Diagnosis Simulator
 -- Apply these after running supabase/schema.sql
 

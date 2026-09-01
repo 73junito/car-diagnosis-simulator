@@ -1,4 +1,4 @@
-name: Vercel Preview Build
+name: Static Preview Build
 
 on:
   pull_request:

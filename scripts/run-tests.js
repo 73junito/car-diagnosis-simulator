@@ -24,4 +24,27 @@ const jest = spawnSync(
   { stdio: 'inherit' }
 );
 
-process.exit(jest.status ?? 1);
+if (jest.status !== 0) {
+  console.error('\n❌ Jest tests failed');
+  process.exit(jest.status ?? 1);
+}
+
+console.log('\n✅ Jest tests passed. Running Supabase contract tests...');
+
+const supabase = spawnSync(
+  process.execPath,
+  [
+    '--test',
+    'supabase/tests/security-contracts.test.js',
+    'supabase/tests/package-integrity.test.js'
+  ],
+  { stdio: 'inherit' }
+);
+
+if (supabase.status !== 0) {
+  console.error('\n❌ Supabase contract tests failed');
+  process.exit(supabase.status ?? 1);
+}
+
+console.log('\n✅ All tests passed (Jest + Supabase contracts)');
+process.exit(0);

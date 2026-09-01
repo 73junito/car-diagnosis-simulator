@@ -1,24 +1,17 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-
   "name": "autolearnpro-public",
-
   "main": "worker/index.js",
-
   "compatibility_date": "2026-07-30",
-
   "compatibility_flags": [
     "nodejs_compat"
   ],
-
   "observability": {
     "enabled": true
   },
-
   "assets": {
     "directory": "./public-site"
-  }
-  ,
+  },
   "durable_objects": {
     "bindings": [
       {
@@ -45,11 +38,9 @@
     "TORQUEMIND_AI_MODEL": "gpt-oss:20b-cloud",
     "TORQUEMIND_AI_TIMEOUT_MS": "120000"
   },
-
   "env": {
     "staging": {
       "name": "car-diagnosis-simulator-staging",
-
       "durable_objects": {
         "bindings": [
           {
@@ -58,30 +49,34 @@
           }
         ]
       },
-
-        "migrations": [
-          {
-            "tag": "v1",
-            "new_sqlite_classes": [
-              "TorqueMindRateLimitCounter"
-            ]
-          }
-        ],
-
-        "vars": {
+      "migrations": [
+        {
+          "tag": "v1",
+          "new_sqlite_classes": [
+            "TorqueMindRateLimitCounter"
+          ]
+        }
+      ],
+      "vars": {
         "USE_DO_RATE_LIMIT": "true",
         "TORQUEMIND_ENVIRONMENT": "staging",
         "TORQUEMIND_RATE_LIMIT_MAX": "10",
         "TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS": "60",
-
         "TORQUEMIND_AI_PROVIDER": "ollama",
         "TORQUEMIND_AI_URL": "https://ollama.autolearnpro.com/api/chat",
         "TORQUEMIND_AI_MODEL": "gpt-oss:20b-cloud",
         "TORQUEMIND_AI_TIMEOUT_MS": "120000",
-
-        "SUPABASE_URL": "https://pffdgqpynpbffbcnxmum.supabase.co",
-        "SUPABASE_PUBLISHABLE_KEY": "USE_THE_PUBLISHABLE_KEY_FROM_THE_UPLOADED_FILE"
-      }
+        "SUPABASE_URL": "https://pffdgqpynpbffbcnxmum.supabase.co"
+      },
+      "assets": {
+        "directory": "./dist"
+      },
+      "routes": [
+        {
+          "pattern": "app.autolearnpro.com",
+          "custom_domain": true
+        }
+      ]
     }
   }
 }

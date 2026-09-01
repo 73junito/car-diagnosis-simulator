@@ -11,8 +11,30 @@ module.exports = async (req, res) => {
     question,
     studentAnswer,
     correctAnswer,
-    topic
+    topic,
+    delivery_mode,
+    ai_assistance_allowed,
+    attempt_id
   } = req.body;
+
+  // CRITICAL GUARDRAIL: Assessment mode must ALWAYS reject tutor requests
+  // Note: This endpoint is LEGACY FALLBACK ONLY and should not be used for graded assessments.
+  // The proper grading flow uses /api/scenario-submissions/grade which enforces attempt ownership
+  // and derives assessment mode from the database, not client declarations.
+  if (delivery_mode === 'independent_non_proctored_assessment' || ai_assistance_allowed === false) {
+    return res.status(403).json({
+      error: "AI assistance is not available during official assessment",
+      code: "assessment_mode_tutor_disabled",
+      advisory: "Use POST /api/scenario-submissions/grade for official assessment grading"
+    });
+  }
+
+  // SECURITY: Never accept client-supplied correctAnswer
+  // The correctAnswer field is present only for signature compatibility with legacy training.
+  // Server-side grading is the single source of truth for answer validation.
+  if (!studentAnswer || !question) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
 
   const prompt = `
 You are TorqueMind.

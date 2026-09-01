@@ -1,0 +1,149 @@
+{
+  "generated_at": "2026-08-25T19:23:29.136Z",
+  "generation_model": "gpt-oss:20b-cloud",
+  "approved_source_count": 2,
+  "approved_chunk_count": 5,
+  "question_count": 6,
+  "scenario_counts": {
+    "charging-system": 3,
+    "no-crank": 3
+  },
+  "questions": [
+    {
+      "scenario_slug": "charging-system",
+      "difficulty": "introductory",
+      "question": "Which component is primarily responsible for generating electric energy in a modern vehicle?",
+      "options": {
+        "A": "Alternator",
+        "B": "Battery",
+        "C": "Starter motor",
+        "D": "Fuel injector"
+      },
+      "correct_answer": "A",
+      "explanation": "Alternators are identified as the primary source of electric energy within a vehicle.",
+      "citations": [
+        {
+          "source_id": "frontiers-automotive-alternator-2023",
+          "chunk_id": "frontiers-alternator-primary-source-p7",
+          "role": "supports-answer",
+          "locator": "PDF page 7",
+          "page": 7,
+          "source_title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+          "source_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+          "doi": "10.3389/fmech.2022.1090152",
+          "license": "CC_BY",
+          "license_url": "https://creativecommons.org/licenses/by/4.0/",
+          "text_hash": "27b791a0f6fe72e7d8bb60285400d07908fc58558ddb9148ca898d0129274b30"
+        },
+        {
+          "source_id": "frontiers-automotive-alternator-2023",
+          "chunk_id": "frontiers-alternator-primary-source-p7",
+          "role": "supports-explanation",
+          "locator": "PDF page 7",
+          "page": 7,
+          "source_title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+          "source_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+          "doi": "10.3389/fmech.2022.1090152",
+          "license": "CC_BY",
+          "license_url": "https://creativecommons.org/licenses/by/4.0/",
+          "text_hash": "27b791a0f6fe72e7d8bb60285400d07908fc58558ddb9148ca898d0129274b30"
+        }
+      ],
+      "status": "draft",
+      "human_technical_review_completed": false,
+      "human_instructional_review_completed": false,
+      "approved": false
+    },
+    {
+      "scenario_slug": "charging-system",
+      "difficulty": "introductory",
+      "question": "An automotive alternator typically consists of which of the following components?",
+      "options": {
+        "A": "Rotor, stator, diode rectifier, and voltage regulator",
+        "B": "Battery, alternator, starter",
+        "C": "Fuel pump, spark plug",
+        "D": "Transmission, clutch"
+      },
+      "correct_answer": "A",
+      "explanation": "The alternator is described as a synchronous AC generator with a rotor, stator, diode rectifier, and voltage regulator.",
+      "citations": [
+        {
+          "source_id": "frontiers-automotive-alternator-2023",
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+          "role": "supports-answer",
+          "locator": "PDF page 7",
+          "page": 7,
+          "source_title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+          "source_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+          "doi": "10.3389/fmech.2022.1090152",
+          "license": "CC_BY",
+          "license_url": "https://creativecommons.org/licenses/by/4.0/",
+          "text_hash": "431b84b6b965d8d606fc2452e4cbd00bc6ba707732eb2e2742cc2b182491a8d7"
+        },
+        {
+          "source_id": "frontiers-automotive-alternator-2023",
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+          "role": "supports-explanation",
+          "locator": "PDF page 7",
+          "page": 7,
+          "source_title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+          "source_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+          "doi": "10.3389/fmech.2022.1090152",
+          "license": "CC_BY",
+          "license_url": "https://creativecommons.org/licenses/by/4.0/",
+          "text_hash": "431b84b6b965d8d606fc2452e4cbd00bc6ba707732eb2e2742cc2b182491a8d7"
+        }
+      ],
+      "status": "draft",
+      "human_technical_review_completed": false,
+      "human_instructional_review_completed": false,
+      "approved": false
+    },
+    {
+      "scenario_slug": "charging-system",
+      "difficulty": "introductory",
+      "question": "Which alternator component converts alternating current into direct current for the vehicle electrical system?",
+      "options": {
+        "A": "The diode rectifier.",
+        "B": "The starter motor.",
+        "C": "The ignition switch.",
+        "D": "The flywheel."
+      },
+      "correct_answer": "A",
+      "explanation": "An automotive alternator generates alternating current and uses diode rectification to provide direct current.",
+      "citations": [
+        {
+          "source_id": "frontiers-automotive-alternator-2023",
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+          "role": "supports-answer",
+          "locator": "PDF page 7",
+          "page": 7,
+          "source_title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+          "source_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+          "doi": "10.3389/fmech.2022.1090152",
+          "license": "CC_BY",
+          "license_url": "https://creativecommons.org/licenses/by/4.0/",
+          "text_hash": "431b84b6b965d8d606fc2452e4cbd00bc6ba707732eb2e2742cc2b182491a8d7"
+        },
+        {
+          "source_id": "frontiers-automotive-alternator-2023",
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+          "role": "supports-explanation",
+          "locator": "PDF page 7",
+          "page": 7,
+          "source_title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+          "source_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+          "doi": "10.3389/fmech.2022.1090152",
+          "license": "CC_BY",
+          "license_url": "https://creativecommons.org/licenses/by/4.0/",
+          "text_hash": "431b84b6b965d8d606fc2452e4cbd00bc6ba707732eb2e2742cc2b182491a8d7"
+        }
+      ],
+      "status": "draft",
+      "human_technical_review_completed": false,
+      "human_instructional_review_completed": false,
+      "approved": false
+    }
+  ],
+  "last_updated_at": "2026-08-25T19:26:35.502Z"
+}

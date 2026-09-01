@@ -13,6 +13,7 @@ const output = path.join(root, "dist");
  * JavaScript modules, dynamic imports, or runtime fetch calls.
  */
 const runtimeDirectories = [
+  "assessment",
   "assets",
   "components",
   "config",
@@ -36,6 +37,8 @@ const runtimeDirectories = [
  * contains many development JSON, HTML, JavaScript, image, and text files.
  */
 const runtimeRootFiles = [
+  "_headers",
+  "_redirects",
   "apiClient.js",
   "auth.js",
   "health.json",
@@ -489,7 +492,3 @@ try {
   console.error(error instanceof Error ? error.stack : String(error));
   process.exitCode = 1;
 }
-
-
-
-

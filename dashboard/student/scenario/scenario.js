@@ -197,27 +197,17 @@
 
   async function loadScenarioQuestions(scenarioId) {
     try {
-      if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-        const url =
-          `${window.SUPABASE_URL}/rest/v1/scenario_questions` +
-          `?scenario_id=eq.${encodeURIComponent(scenarioId)}` +
-          `&select=id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,difficulty,topic,ase_area` +
-          `&order=created_at.asc`;
+      // Always use the API endpoint to prevent answer key exposure
+      const res = await fetch(
+        `/api/scenario-questions-approved?scenarioId=${encodeURIComponent(scenarioId)}`
+      );
 
-        const res = await fetch(url, {
-          headers: {
-            apikey: window.SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
-          }
-        });
-
-        if (res.ok) {
-          const rows = await res.json();
-          if (Array.isArray(rows) && rows.length) return rows;
-        }
+      if (res.ok) {
+        const data = await res.json();
+        return Array.isArray(data.questions) ? data.questions : [];
       }
     } catch (e) {
-      console.warn("Supabase question load failed; falling back to static questions.", e);
+      console.warn("API question load failed; falling back to static questions.", e);
     }
 
     return (window.SCENARIO_QUESTIONS && window.SCENARIO_QUESTIONS[scenarioId]) || [];
@@ -263,32 +253,75 @@
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-  async function saveQuestionAttempt(payload) {
-    try {
-      if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) return;
+  // Audit trail is recorded server-side by grading endpoint (in attempt_answers table)
+  // Do not insert directly into question_attempts table (will be locked down)
 
-      await fetch(`${window.SUPABASE_URL}/rest/v1/question_attempts`, {
-        method: "POST",
+  async function submitAnswerForGrading({
+    attemptId,
+    questionId,
+    scenarioId,
+    selectedAnswer,
+    isAssessmentMode
+  }) {
+    try {
+      // Security: In assessment mode, require a real server-created attempt
+      // Never allow "local-attempt" or empty strings in assessment mode
+      if (isAssessmentMode && (!attemptId || attemptId === 'local-attempt')) {
+        throw new Error('Assessment mode requires a server-created attempt ID. This attempt may not be properly initialized for assessment.');
+      }
+
+      const response = await fetch('/api/scenario-submissions/grade', {
+        method: 'POST',
+        credentials: 'include',
         headers: {
-          apikey: window.SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal"
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          attempt_id: attemptId,
+          question_id: questionId,
+          scenario_id: scenarioId,
+          student_answer: selectedAnswer,
+          delivery_mode: isAssessmentMode
+            ? 'independent_non_proctored_assessment'
+            : 'training'
+        })
       });
-    } catch (e) {
-      console.warn("Question attempt save failed.", e);
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.error || `Server error: ${response.status}`);
+      }
+
+      return response.json();
+    } catch (err) {
+      console.error('Failed to grade answer:', err);
+      throw err;
     }
   }
 
-  async function loadTorqueMindExplanation({ article, title, selected, correct }) {
+  async function loadTorqueMindExplanation({ article, title, selected, correct, explanation, isAssessmentMode }) {
+    if (isAssessmentMode) {
+      // Never show explanations during assessment
+      return;
+    }
+
     const aiPanel = article.querySelector(".torquemind-feedback");
     const aiBody = article.querySelector(".torquemind-body");
 
     if (!aiPanel || !aiBody) return;
 
     aiPanel.hidden = false;
+    
+    // If server provided an explanation, use it directly
+    if (explanation) {
+      aiBody.innerHTML = `
+        <p><strong>Explanation</strong></p>
+        <p>${escapeHtml(explanation)}</p>
+      `;
+      return;
+    }
+
+    // Fallback: Try to get explanation from tutor API (legacy)
     aiBody.textContent = "Generating AI explanation...";
 
     try {
@@ -345,6 +378,9 @@
   async function renderScenarioPage() {
     const params = new URLSearchParams(location.search);
     const id = params.get("id") || params.get("scenario");
+    const mode = params.get("mode") || "training";
+    const attemptId = params.get("attempt_id");
+    const isAssessmentMode = mode === "assessment";
 
     const registry = window.SCENARIO_REGISTRY || [];
     const item = registry.find(r =>
@@ -582,7 +618,6 @@
                   <div
                     class="question-options"
                     data-question-id="${escapeHtml(q.id || "")}"
-                    data-correct-answer="${escapeHtml(q.correct_answer || "")}"
                   >
                     <label class="question-option">
                       <input type="radio" name="q${i}" value="A" ${checked("A")} ${disabled}>
@@ -609,7 +644,7 @@
                     Submit Answer
                   </button>
 
-                  <p class="answer-feedback" aria-live="polite">${answer ? (answer.isCorrect ? "Correct." : `Incorrect. Correct answer: ${escapeHtml(q.correct_answer || "")}.`) : ""}</p>
+                  <p class="answer-feedback" aria-live="polite">${answer ? (answer.isCorrect ? "Correct." : "Incorrect.") : ""}</p>
 
                   <div class="torquemind-feedback" hidden>
                     <h4>🧠 TorqueMind AI Tutor</h4>
@@ -651,48 +686,72 @@
           return;
         }
 
-        const correct = options.dataset.correctAnswer;
-        const isCorrect = selected.value === correct;
-
-        feedback.textContent = isCorrect
-          ? "Correct."
-          : `Incorrect. Correct answer: ${correct}.`;
-
         button.disabled = true;
         article.querySelectorAll("input[type='radio']").forEach((input) => {
           input.disabled = true;
         });
 
-        state.activeAttempt.answers[questionQid] = {
-          selectedAnswer: selected.value,
-          correctAnswer: correct,
-          isCorrect,
-          submittedAt: new Date().toISOString()
-        };
-        writeAttemptState(key, studentId, state);
-
-        await saveQuestionAttempt({
-          scenario_id: key,
-          question_id: options.dataset.questionId || null,
-          selected_answer: selected.value,
-          correct_answer: correct,
-          is_correct: isCorrect,
-          time_seconds: Math.max(1, Math.round((Date.now() - startedAt) / 1000))
-        });
-
-        if (!isCorrect) {
-          await loadTorqueMindExplanation({
-            article,
-            title,
-            selected,
-            correct
+        try {
+          // Call server-side grading endpoint
+          const gradeResult = await submitAnswerForGrading({
+            attemptId: attemptId,
+            questionId: options.dataset.questionId || questionQid,
+            scenarioId: key,
+            selectedAnswer: selected.value,
+            isAssessmentMode
           });
+
+          // Store grading result from server
+          state.activeAttempt.answers[questionQid] = {
+            selectedAnswer: selected.value,
+            submittedAt: new Date().toISOString(),
+            // In assessment mode, is_correct is not returned (no immediate feedback)
+            // In training mode, is_correct is returned for immediate feedback
+            isCorrect: gradeResult.is_correct !== undefined ? gradeResult.is_correct : null,
+            submissionId: gradeResult.question_id
+          };
+          writeAttemptState(key, studentId, state);
+
+          // Show appropriate feedback based on mode
+          if (isAssessmentMode) {
+            // Assessment mode: never show correctness
+            feedback.textContent = "Submitted.";
+          } else {
+            // Training mode: show correctness and explanations
+            feedback.textContent = gradeResult.is_correct
+              ? "Correct."
+              : "Incorrect.";
+
+            // In training mode, load AI explanation if answer is wrong
+            if (!gradeResult.is_correct && gradeResult.explanation) {
+              await loadTorqueMindExplanation({
+                article,
+                title,
+                selected,
+                explanation: gradeResult.explanation,
+                isAssessmentMode: false
+              });
+            }
+          }
+
+          // Audit trail is recorded server-side by grading endpoint
+        } catch (err) {
+          console.error("Error submitting answer:", err);
+          feedback.textContent = "Error submitting answer. Please try again.";
+          button.disabled = false;
+          article.querySelectorAll("input[type='radio']").forEach((input) => {
+            input.disabled = false;
+          });
+          return;
         }
 
+        // Check if all questions answered
         const answeredCount = Object.keys(state.activeAttempt.answers).length;
         const totalQuestions = state.activeAttempt.questionIds.length;
         if (answeredCount >= totalQuestions) {
-          const correctCount = countCorrectAnswers(state.activeAttempt.answers);
+          // Calculate score from server-provided grading results
+          const correctCount = Object.values(state.activeAttempt.answers || {})
+            .filter((a) => a && a.isCorrect).length;
           const score = Math.round((correctCount / Math.max(1, totalQuestions)) * 100);
           const passed = score >= PASSING_SCORE_PERCENT;
 

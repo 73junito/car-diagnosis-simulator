@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0",
+  "chunk_count": 2,
+  "chunks": [
+    {
+      "chunk_id": "frontiers-alternator-primary-source-p7",
+      "source_id": "frontiers-automotive-alternator-2023",
+      "source_version": "1",
+      "title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+      "section": "alternator_primary_function",
+      "page_start": 7,
+      "page_end": 7,
+      "locator": "PDF page 7",
+      "text_excerpt": "Alternators are the primary source of electric energy within a vehicle. The electric power demand of a contemporary automobile has rapidly increased along with the increase in use of electrical devices.",
+      "token_count": 31,
+      "text_hash": "27b791a0f6fe72e7d8bb60285400d07908fc58558ddb9148ca898d0129274b30",
+      "status": "draft",
+      "approved": false,
+      "scenario": "charging-system"
+    },
+    {
+      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+      "source_id": "frontiers-automotive-alternator-2023",
+      "source_version": "1",
+      "title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+      "section": "alternator_ac_generation_dc_rectification",
+      "page_start": 7,
+      "page_end": 7,
+      "locator": "PDF page 7",
+      "text_excerpt": "Simply stated, an alternator is a synchronous alternating current (AC) electric generator with direct current (DC) diode recti ﬁcation and pulse-width modulation voltage control ( SAE International, 2011). It consists of a rotor, stator, diode recti ﬁer, and voltage regulator. An automotive alternator has an ef ﬁciency of about 55%",
+      "token_count": 50,
+      "text_hash": "431b84b6b965d8d606fc2452e4cbd00bc6ba707732eb2e2742cc2b182491a8d7",
+      "status": "draft",
+      "approved": false,
+      "scenario": "charging-system"
+    }
+  ]
+}
