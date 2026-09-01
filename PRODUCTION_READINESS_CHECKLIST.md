@@ -1,280 +1,110 @@
 # TTED-805 Production Readiness Checklist
 
-**Purpose**: Explicit verification that all systems work end-to-end before claiming production readiness.
+## Scope
 
-**Do NOT claim production readiness until ALL items below show PASS**
+This checklist verifies the evidence-backed assessment functionality currently authorized for production.
 
----
+It does not declare the entire Gate 4 workstream complete. The no-crank scenario remains intentionally fail-closed until replacement evidence with verified reuse rights is approved.
 
-## ✅ Required Verification Results
+## Authoritative evidence contract
 
-### 1. Supabase Infrastructure
-```
-[ ] citation_validations table exists
-    Query: select to_regclass('public.citation_validations')
-    Expected: public.citation_validations (not null)
+| Scenario | Approved questions | Gate status |
+|---|---:|---|
+| `charging-system` | 3 | Passed |
+| `no-crank` | 0 | Blocked and fail-closed |
+| IJERT | 0 | Excluded and audit-recorded |
 
-[ ] RLS policies created
-    Query: select count(*) from pg_policies where tablename='citation_validations'
-    Expected: 2 policies (authenticated + anon)
+## Supabase infrastructure
 
-[ ] Table is empty at start (before validator runs)
-    Query: select count(*) from public.citation_validations
-    Expected: 0 records
-```
+- Supabase Preview is `ACTIVE_HEALTHY`.
+- Preview deployment reached `FUNCTIONS_DEPLOYED`.
+- All 28 expected migration versions were recognized.
+- Fresh-database migration replay completed.
+- Safe seed completed without inserting assessment questions, answer keys, evidence, or approvals.
+- `citation_validations` remains restricted from direct public access.
+- Ownership-based RLS redesign remains outstanding and must be completed in a dedicated security PR.
 
-### 2. Citation Validator - Dry Run
-```
-[ ] Dry-run completes without writing to database
-    Command: node scripts/validate-citations.js --scenario no-crank --dry-run
-    Expected: Exit code 0
-             Output shows: "20 valid, 0 invalid"
-             Database: Still 0 records (no writes)
-```
+No manual SQL Editor migration is required for the migrations merged through PR #387.
 
-### 3. Citation Validator - Database Population
-```
-[ ] Validator writes 20 valid records to database
-    Command: node scripts/validate-citations.js --scenario no-crank
-    Expected: Exit code 0
-             Output shows: "Inserted 20 citation_validations records"
-    
-[ ] Database records match expected format
-    Query: select id, question_provenance_id, result, source_hashes_verified, 
-                   excerpts_verified, urls_verified
-            from citation_validations
-            where question_provenance_id in (
-              select id from question_provenance where scenario_id='no-crank'
-            )
-            limit 1
-    Expected: All flags = true, result = 'valid'
-```
+## Evidence-policy verification
 
-### 4. API Layer - Data Access
-```
-[ ] 20 validation records exist in database
-    Query: select count(*) from citation_validations
-    Expected: 20
+- Frontiers evidence is retained for `charging-system`.
+- Three charging-system questions remain validated.
+- IJERT PDF and instructional excerpts were removed.
+- IJERT rejection metadata was retained without restricted excerpts.
+- Daimler, GM, Ford, and Fluke sources remain excluded from instructional use.
+- No-crank returns no questions when no policy-compliant evidence is approved.
 
-[ ] API endpoint returns 20 approved questions
-    Command: curl http://127.0.0.1:3003/api/scenario-questions-approved?scenario_id=no-crank
-    Expected: {"questions": [...20 items...], "total": 20}
+## API verification
 
-[ ] Each question has citation_validation attached
-    Command: Verify response structure
-    Expected: question.question_provenance.citation_validation.result = 'valid'
-             for all 20 questions
-```
+- `GET /api/scenario-questions-approved?scenario_id=charging-system` returns HTTP 200.
+- Charging-system response contains exactly 3 questions.
+- `GET /api/scenario-questions-approved?scenario_id=no-crank` returns HTTP 200.
+- No-crank response contains exactly 0 questions.
+- Neither response contains `correct_answer`.
+- No server error details or privileged database fields are exposed.
 
-### 5. Dashboard - UI Layer
-```
-[ ] Dashboard displays all 20 questions
-    Manual: Navigate to /dashboard/student/no-crank
-    Expected: 20 question cards rendered
+## Assessment security
 
-[ ] No answer keys exposed
-    Manual: View page source / network inspector
-    Expected: answer_key fields not visible in API responses
-             Only question text, multiple choice options visible
-```
+- Grading remains server-authoritative.
+- Correct answers are absent from browser state, HTML attributes, and public API payloads.
+- Unauthenticated assessment attempts are rejected.
+- Cross-user access is rejected.
+- Assessment mode does not expose tutor explanations.
+- Training mode follows the approved feedback contract.
 
-### 6. Test Suite - Playwright E2E
-```
-[ ] Fail-closed test passes (0 cards when no validation)
-    Command: npx playwright test tests/playwright/tted805-no-crank-fail-closed.spec.js
-    Expected: PASS
-             Verifies: 0 questions when citation_validations empty
+## Test and build verification
 
-[ ] Production-readiness test passes (20 cards when validated)
-    Command: npx playwright test tests/playwright/tted805-no-crank-production-readiness.spec.js
-    Expected: PASS
-             Verifies: 20 questions when citation_validations populated
-```
+- `npm test` exits successfully.
+- Supabase native contract tests pass.
+- TTED-805 Playwright tests pass.
+- `npm run docs:mermaid` renders all required diagrams.
+- `npm run build` exits successfully.
+- GitHub required checks pass for the exact commit being deployed.
 
-### 7. Test Suite - Jest
-```
-[ ] All Jest tests pass
-    Command: npm test
-    Expected: Exit code 0
-             Test Suites: 101 passed, 101 total
-             Tests:       474 passed, 474 total
-```
+Use exit codes and the current CI report as authoritative. Historical test totals in older reports must not be used as deployment gates.
 
-### 8. Build Pipeline
-```
-[ ] Build completes successfully
-    Command: npm run build
-    Expected: Exit code 0
-             No errors in output
-             dist/ folder created (if applicable)
-```
+## Gate interpretation
 
-### 9. Documentation Verification
-```
-[ ] All Mermaid diagrams render
-    Command: npm run docs:mermaid
-    Expected: Exit code 0
-             All 11 diagrams rendered to SVG
-             Coverage: 9/9 folders verified
-             Rendering: 11/11 diagrams to SVG
-             Summary: [PASS]
-```
+### Charging-system
 
----
+Production readiness passes when:
 
-## 📋 Full Test Sequence
+- exactly 3 approved questions are returned;
+- all required provenance and citation validations are present;
+- no answer keys are exposed; and
+- automated tests pass.
 
-### Prerequisites
-- [ ] Supabase migration applied to database
-- [ ] citation_validations table created and empty
-- [ ] RLS policies configured
-- [ ] Node.js environment ready
+### No-crank
 
-### Step 1: Validator Testing
-```powershell
-# Dry-run (no writes)
-node scripts/validate-citations.js --scenario no-crank --dry-run
-# Expected: PASS, 0 database changes
+Current readiness passes only as a fail-closed security condition when:
 
-# Populate (with writes)
-node scripts/validate-citations.js --scenario no-crank
-# Expected: PASS, 20 records written
-```
+- exactly 0 approved questions are returned;
+- the UI does not manufacture or substitute questions;
+- the API returns no answer keys; and
+- the application clearly handles the unavailable assessment state.
 
-### Step 2: API Verification
-```powershell
-# Start server
-Set-Location torquemind-api
-node index.js
+Zero no-crank questions must not be "fixed" by approving unverified evidence.
 
-# Test endpoint (in another terminal)
-Invoke-RestMethod http://127.0.0.1:3003/api/scenario-questions-approved?scenario_id=no-crank
-# Expected: 20 questions
+## Remaining blockers
 
-# Verify each has citation_validation
-# Expected: All have result='valid'
-```
+- Identify no-crank sources with verified redistribution or reuse rights.
+- Create evidence chunks without exceeding the approved license scope.
+- Generate replacement questions.
+- Complete technical and instructional human review.
+- Validate answer and explanation citations deterministically.
+- Approve and deploy the replacement set through the normal migration and review process.
+- Implement ownership-based RLS through a dedicated security migration.
 
-### Step 3: E2E Tests
-```powershell
-# Both Playwright tests
-npx playwright test `
-  tests/playwright/tted805-no-crank-fail-closed.spec.js `
-  tests/playwright/tted805-no-crank-production-readiness.spec.js `
-  --project=chromium
-# Expected: 2/2 PASS
-```
+## Sign-off
 
-### Step 4: Full Pipeline
-```powershell
-npm run docs:mermaid      # Expected: PASS, 11/11 rendered
-npm test                  # Expected: PASS, 474/474 tests
-npm run build             # Expected: PASS, exit 0
-```
+Production scope approved:
 
----
+- Charging-system evidence path
+- No-crank fail-closed behavior
+- Answer-key security
+- Required CI checks
 
-## 🚩 Failure Scenarios
+Full Gate 4 completion:
 
-### If Citation Validator Fails
-- Check SUPABASE_SERVICE_KEY is set and valid
-- Check table exists: `select to_regclass('public.citation_validations')`
-- Check question_provenance has 20 records for scenario_id='no-crank'
-- Run dry-run first to isolate syntax issues
-
-### If API Returns 0 Questions
-- Check citation_validations has 20 records
-- Check RLS policies are configured (read-only for valid records)
-- Check question_provenance IDs match in both tables
-- Verify SUPABASE_ANON_KEY is set
-
-### If Playwright Tests Fail
-- Check API is running on port 3003
-- Check dashboard can load the scenario
-- Check 20 questions actually render as cards
-- Check network tab shows correct API responses
-
-### If Jest Fails
-- Run specific failing test in isolation
-- Check environment variables are set
-- Check database connection string
-- Check no file system changes broke imports
-
-### If Build Fails
-- Check all files compile (no syntax errors)
-- Check all imports resolve
-- Check package.json dependencies installed
-- Check no uncommitted changes to source
-
----
-
-## ✅ Sign-Off Criteria
-
-**Production readiness is confirmed when:**
-
-```
-✓ citation_validations table exists in Supabase
-✓ Validator dry-run: 20 valid, 0 invalid
-✓ Database writes: 20 evidence records inserted
-✓ API: /api/scenario-questions-approved returns 20 questions
-✓ Dashboard: 20 question cards displayed
-✓ Answer keys: 0 exposed (verified in network inspector)
-✓ Playwright fail-closed: PASS (0 cards initially)
-✓ Playwright production: PASS (20 cards after validation)
-✓ Jest: 474/474 tests passing
-✓ Build: Exit code 0, no errors
-✓ Mermaid: 11/11 diagrams rendered to SVG
-```
-
-**All checks must show PASS before deploying to production**
-
----
-
-## 📊 Expected Outcomes
-
-| Component | Status | Evidence |
-|-----------|--------|----------|
-| Supabase Infrastructure | ✅ | Table created, RLS active |
-| Citation Validator | ✅ | 20/20 valid records |
-| API Layer | ✅ | 20 questions returned |
-| Dashboard UI | ✅ | 20 cards displayed |
-| Security (RLS) | ✅ | 0 answer keys exposed |
-| Playwright Tests | ✅ | 2/2 passing |
-| Jest Suite | ✅ | 474/474 passing |
-| Build Pipeline | ✅ | Exit code 0 |
-| Documentation | ✅ | 11/11 Mermaid diagrams |
-
----
-
-## 🔒 Security Verification
-
-Confirm fail-closed behavior:
-
-```
-Scenario 1: No validation records
-→ API returns: 0 questions
-→ Dashboard shows: 0 cards
-→ Security: PASS (fail-closed)
-
-Scenario 2: With validation records
-→ API returns: 20 questions
-→ Dashboard shows: 20 cards with answer keys: HIDDEN
-→ Security: PASS (no exposure)
-
-Scenario 3: Invalid validation records
-→ API returns: 0 questions (RLS filters them out)
-→ Dashboard shows: 0 cards
-→ Security: PASS (fail-closed)
-```
-
----
-
-## 📅 Timeline
-
-- [ ] Supabase migration applied
-- [ ] Citation validator population completed
-- [ ] All verifications passed
-- [ ] Ready for production deployment
-
-**Date Completed**: _______________
-**Verified By**: _______________
+- Not yet achieved because no-crank has no approved question set
