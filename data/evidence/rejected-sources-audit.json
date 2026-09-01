@@ -1,0 +1,16 @@
+{
+  "source_id": "ijert-starter-performance-testbench-2018",
+  "title": "Survey on Starter Performance Testbench",
+  "author": "Unknown",
+  "publisher": "International Journal of Engineering Research & Technology",
+  "reason_rejected": "Reuse permission could not be independently verified. No license statement was found in extracted PDF text, and publisher verification was inconclusive.",
+  "rejection_classification": "UNKNOWN",
+  "ingestion_rights_status": "unknown_blocked",
+  "pdf_hash": "3b9ea03a8803315700573ac2db3c5b436e752f0aebf327d8df155be8c9354540",
+  "chunks_removed": 3,
+  "questions_removed": 3,
+  "citations_removed": 6,
+  "removed_at": "2026-09-01T01:05:01.857Z",
+  "evidence_action": "Removed all text_excerpt, questions, PDF. No verbatim content redistributed.",
+  "gate4_impact": "no-crank scenario: 0 validated candidates from IJERT"
+}

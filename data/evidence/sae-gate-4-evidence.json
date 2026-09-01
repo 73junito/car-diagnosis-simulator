@@ -1,0 +1,222 @@
+{
+  "manifest_version": "1.0.0",
+  "generated_at_utc": "2026-08-24T02:06:56.4049920Z",
+  "source_policy": {
+    "metadata_only": true,
+    "automatic_approval_permitted": false,
+    "fabricated_checksums_allowed": false,
+    "full_text_copying_permitted": false,
+    "required_review": [
+      "Confirm authorized access to the cited standard.",
+      "Verify that the standard supports the specific assessment claim.",
+      "Confirm applicable reuse permissions.",
+      "Compute SHA-256 from the actual authorized source artifact.",
+      "Create accurately quoted, reviewed source excerpts.",
+      "Map answer and explanation citations individually.",
+      "Complete technical and instructional review."
+    ]
+  },
+  "references": [
+    {
+      "id": "sae-j56-199906",
+      "standard": "J56",
+      "revision": "199906",
+      "title": "Road Vehicles—Alternators with Regulators—Test Methods and General Requirements",
+      "publisher": "SAE International",
+      "source_url": "https://www.sae.org/standards/j56_199906-road-vehicles-alternators-regulators-test-methods-general-requirements",
+      "scenarios": [
+        "charging-system"
+      ],
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-j2669-200601",
+      "standard": "J2669",
+      "revision": "200601",
+      "title": "Voltage Regulators for Automotive-Type Generators",
+      "publisher": "SAE International",
+      "source_url": "https://www.sae.org/standards/j2669_200601-voltage-regulators-automotive-type-generators/",
+      "scenarios": [
+        "charging-system"
+      ],
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-j537-201604",
+      "standard": "J537",
+      "revision": "201604",
+      "title": "Storage Batteries",
+      "publisher": "SAE International",
+      "source_url": "https://www.sae.org/standards/j537_201604-storage-batteries",
+      "scenarios": [
+        "charging-system",
+        "no-crank"
+      ],
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-j541-201307",
+      "standard": "J541",
+      "revision": "201307",
+      "title": "Voltage Drop for Starting Motor Circuits",
+      "publisher": "SAE International",
+      "source_url": "https://www.sae.org/standards/j541_201307-voltage-drop-starting-motor-circuits",
+      "scenarios": [
+        "no-crank"
+      ],
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-j3053-202403",
+      "standard": "J3053",
+      "revision": "202403",
+      "title": "Heavy Duty Truck and Bus Electrical Circuit Performance Requirements for Electric Starter Motors",
+      "publisher": "SAE International",
+      "source_url": "https://www.sae.org/standards/j3053_202403-heavy-duty-truck-bus-electrical-circuit-performance-requirement-12-24-volt-electric-starter-motors",
+      "scenarios": [
+        "no-crank"
+      ],
+      "vehicle_scope": [
+        "heavy-duty truck",
+        "bus"
+      ],
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-j180-202410",
+      "standard": "J180",
+      "revision": "202410",
+      "title": "Electrical Charging Systems for Off-Road Work Machines",
+      "publisher": "SAE International",
+      "source_url": "https://saemobilus.sae.org/standards/j180_202410-electrical-charging-systems-off-road-work-machines",
+      "doi": "10.4271/J180_202410",
+      "scenarios": [
+        "charging-system"
+      ],
+      "vehicle_scope": [
+        "off-road work machines",
+        "heavy equipment"
+      ],
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-j1375-202308",
+      "standard": "J1375",
+      "revision": "202308",
+      "title": "Starter Motor Application Considerations",
+      "publisher": "SAE International",
+      "source_url": "https://saemobilus.sae.org/standards/j1375_202308-starter-motor-application-considerations",
+      "scenarios": [
+        "no-crank"
+      ],
+      "source_type": "recommended-practice",
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-paper-630155",
+      "paper_number": "630155",
+      "title": "Operational Problems and Maintenance of AC Generator (Alternator) Charging Systems",
+      "publisher": "SAE International",
+      "source_url": "https://saemobilus.sae.org/papers/operational-problems-maintenance-ac-generator-alternator-charging-systems-630155",
+      "scenarios": [
+        "charging-system"
+      ],
+      "source_type": "technical-paper",
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-paper-971113",
+      "paper_number": "971113",
+      "title": "Recent Developments in Starting Systems",
+      "publisher": "SAE International",
+      "doi": "10.4271/971113",
+      "source_url": "https://doi.org/10.4271/971113",
+      "scenarios": [
+        "no-crank"
+      ],
+      "source_type": "technical-paper",
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-paper-982768",
+      "paper_number": "982768",
+      "title": "Future Requirements for Alternators",
+      "publisher": "SAE International",
+      "source_url": "https://saemobilus.sae.org/papers/future-requirements-alternators-982768",
+      "scenarios": [
+        "charging-system"
+      ],
+      "source_type": "technical-paper",
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    },
+    {
+      "id": "sae-paper-770180",
+      "paper_number": "770180",
+      "title": "Truck Electrical Systems",
+      "publisher": "SAE International",
+      "source_url": "https://saemobilus.sae.org/papers/truck-electrical-systems-770180",
+      "scenarios": [
+        "charging-system",
+        "no-crank"
+      ],
+      "source_type": "technical-paper",
+      "status": "draft",
+      "license_status": "review_required",
+      "artifact_checksum": null,
+      "artifact_path": null,
+      "full_text_access": false,
+      "reviewer_approved": false
+    }
+  ],
+  "updated_at_utc": "2026-08-25T17:55:23.427Z"
+}

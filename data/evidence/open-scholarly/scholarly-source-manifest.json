@@ -30,41 +30,8 @@
         "diode rectifier",
         "voltage regulator"
       ],
-      "status": "draft",
-      "reviewer_approved": false
-    },
-    {
-      "id": "ijert-starter-performance-testbench-2018",
-      "title": "Survey on Starter Performance Testbench",
-      "authors": [
-        "Gagana Shetty",
-        "Mocica B",
-        "Nidhi M",
-        "Nischitha P",
-        "Raghavendra Y M"
-      ],
-      "publisher": "International Journal of Engineering Research & Technology",
-      "publication_year": 2018,
-      "doi": "10.17577/IJERTCONV6IS13048",
-      "article_url": "https://www.ijert.org/survey-on-starter-performance-testbench",
-      "artifact_url": "https://www.ijert.org/research/survey-on-starter-performance-testbench-IJERTCONV6IS13048.pdf",
-      "artifact_filename": "ijert-starter-performance-testbench-2018.pdf",
-      "license_classification": "CC_BY",
-      "license_url": "https://creativecommons.org/licenses/by/4.0/",
-      "license_statement_pattern": "Creative Commons Attribution 4.0",
-      "scenarios": [
-        "no-crank"
-      ],
-      "candidate_topics": [
-        "starter motor",
-        "battery",
-        "ignition switch",
-        "battery cables",
-        "starter control circuit",
-        "starter solenoid"
-      ],
-      "status": "draft",
-      "reviewer_approved": false
+      "status": "validated",
+      "reviewer_approved": true
     },
     {
       "id": "jurnal-engine-battery-voltage-drop-2026",
