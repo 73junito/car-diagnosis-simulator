@@ -57,7 +57,7 @@ if ($LinkedProject -ne $ExpectedProductionProject) {
 
 ## Read-only migration inventory
 
-```
+```powershell
 npx supabase migration list `
     --linked
 

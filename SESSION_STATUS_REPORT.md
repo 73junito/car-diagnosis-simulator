@@ -71,8 +71,8 @@ This is not full Gate 4 completion. It is a limited pass for charging-system and
 
 ### Immediate
 
-- Correct stale documentation that previously expected 20 no-crank questions.
-- Confirm documentation-only CI passes.
+- Documentation correction is included in PR #392.
+- Documentation-only CI for PR #392 passed.
 - Review local untracked analysis artifacts separately.
 
 ### No-crank evidence

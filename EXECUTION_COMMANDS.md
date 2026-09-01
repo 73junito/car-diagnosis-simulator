@@ -4,8 +4,8 @@
 
 | Scenario | Approved questions | Status |
 |---|---:|---|
-| ``charging-system`` | 3 | Available |
-| ``no-crank`` | 0 | Fail-closed |
+| `charging-system` | 3 | Available |
+| `no-crank` | 0 | Fail-closed |
 | IJERT evidence | 0 | Removed because reuse rights were not verified |
 
 Do not populate or approve no-crank questions until replacement evidence passes source-policy, technical, instructional, citation, and human review.
@@ -56,7 +56,7 @@ $Results = foreach ($Scenario in $ExpectedCounts.Keys) {
 
     $AnswerKeyLeaked = (
         $Response.Content -match
-        ''(?i)"correct_answer"\s*:''
+        '(?i)"correct_answer"\s*:'
     )
 
     [PSCustomObject]@{
@@ -84,7 +84,7 @@ if (@($Results | Where-Object { -not $_.Passed }).Count) {
 
 ## 2. Run repository tests
 
-```
+```powershell
 $ErrorActionPreference = "Stop"
 Set-Location "F:\TorqueMind"
 
@@ -109,7 +109,7 @@ if ($LASTEXITCODE -ne 0) {
 
 ## 3. Run build and documentation checks
 
-```
+```powershell
 npm run docs:mermaid
 
 if ($LASTEXITCODE -ne 0) {
@@ -125,9 +125,9 @@ if ($LASTEXITCODE -ne 0) {
 
 ## Success criteria
 
-- ``charging-system`` returns exactly 3 approved questions.
-- ``no-crank`` returns exactly 0 approved questions.
-- Neither response exposes ``correct_answer``.
+- `charging-system` returns exactly 3 approved questions.
+- `no-crank` returns exactly 0 approved questions.
+- Neither response exposes `correct_answer`.
 - Jest and Supabase contract tests pass.
 - Playwright tests pass.
 - Mermaid rendering passes.

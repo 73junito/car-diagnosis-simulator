@@ -22,7 +22,7 @@ It does not declare the entire Gate 4 workstream complete. The no-crank scenario
 - Fresh-database migration replay completed.
 - Safe seed completed without inserting assessment questions, answer keys, evidence, or approvals.
 - `citation_validations` remains restricted from direct public access.
-- Ownership-based RLS redesign completed in a dedicated security PR.
+- Ownership-based RLS redesign remains outstanding and must be completed in a dedicated security PR.
 
 No manual SQL Editor migration is required for the migrations merged through PR #387.
 
