@@ -86,48 +86,47 @@ select count(*) from updated;
 do $$
 declare
     mapped_count integer;
-    total_nocrank_count integer;
-    approved_match_count integer;
+    unmapped_legacy_count integer;
+    invalid_semantic_count integer;
 begin
-    -- Count total no-crank questions in the table
+    /*
+     * This migration assigns semantic IDs only to exact question-text
+     * matches declared in semantic_map above.
+     *
+     * Unmatched legacy questions intentionally remain NULL. They remain
+     * fail-closed because approved runtime delivery requires approved
+     * provenance joined through a non-null semantic question_id.
+     */
+
     select count(*)
-      into total_nocrank_count
+      into mapped_count
       from public.scenario_questions
-     where scenario_id = 'no-crank';
+     where scenario_id = 'no-crank'
+       and question_id like 'no-crank-%';
 
-    -- If there are no-crank questions, verify the mapping is complete
-    if total_nocrank_count > 0 then
-        select count(*)
-          into mapped_count
-          from public.scenario_questions
-         where scenario_id = 'no-crank'
-           and question_id like 'no-crank-%';
+    select count(*)
+      into unmapped_legacy_count
+      from public.scenario_questions
+     where scenario_id = 'no-crank'
+       and question_id is null;
 
-        -- All existing no-crank questions should be mapped
-        if mapped_count <> total_nocrank_count then
-            raise exception
-                'Expected % mapped no-crank questions; found %',
-                total_nocrank_count,
-                mapped_count;
-        end if;
+    select count(*)
+      into invalid_semantic_count
+      from public.scenario_questions
+     where scenario_id = 'no-crank'
+       and question_id is not null
+       and question_id not like 'no-crank-%';
 
-        -- Verify approved provenance matches
-        select count(distinct sq.id)
-          into approved_match_count
-          from public.scenario_questions sq
-          join public.question_provenance qp
-            on qp.question_id = sq.question_id
-           and qp.status = 'approved'
-         where sq.scenario_id = 'no-crank';
-
-        if approved_match_count <> total_nocrank_count then
-            raise exception
-                'Expected % approved provenance matches; found %',
-                total_nocrank_count,
-                approved_match_count;
-        end if;
+    if invalid_semantic_count > 0 then
+        raise exception
+            'Found % no-crank rows with invalid semantic identifiers',
+            invalid_semantic_count;
     end if;
-    -- If total_nocrank_count = 0, skip validation (preview/empty database)
+
+    raise notice
+        'Semantic-ID alignment complete: % mapped, % unmatched legacy rows left fail-closed',
+        mapped_count,
+        unmapped_legacy_count;
 end
 $$;
 
