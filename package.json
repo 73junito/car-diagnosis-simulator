@@ -6,6 +6,7 @@
     "minimist": "^1.2.8",
     "prepare": "husky install",
     "test": "node scripts/run-tests.js",
+    "test:supabase-contracts": "node --test supabase/tests/security-contracts.test.js supabase/tests/package-integrity.test.js",
     "build": "npm run write-version && node scripts/build-static-site.js",
     "write-version": "node scripts/write-version.js",
     "vercel-build": "npm run build",
