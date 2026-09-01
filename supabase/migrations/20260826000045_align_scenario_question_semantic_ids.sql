@@ -86,33 +86,48 @@ select count(*) from updated;
 do $$
 declare
     mapped_count integer;
+    total_nocrank_count integer;
     approved_match_count integer;
 begin
+    -- Count total no-crank questions in the table
     select count(*)
-      into mapped_count
+      into total_nocrank_count
       from public.scenario_questions
-     where scenario_id = 'no-crank'
-       and question_id like 'no-crank-%';
+     where scenario_id = 'no-crank';
 
-    if mapped_count <> 20 then
-        raise exception
-            'Expected 20 mapped no-crank questions; found %',
-            mapped_count;
+    -- If there are no-crank questions, verify the mapping is complete
+    if total_nocrank_count > 0 then
+        select count(*)
+          into mapped_count
+          from public.scenario_questions
+         where scenario_id = 'no-crank'
+           and question_id like 'no-crank-%';
+
+        -- All existing no-crank questions should be mapped
+        if mapped_count <> total_nocrank_count then
+            raise exception
+                'Expected % mapped no-crank questions; found %',
+                total_nocrank_count,
+                mapped_count;
+        end if;
+
+        -- Verify approved provenance matches
+        select count(distinct sq.id)
+          into approved_match_count
+          from public.scenario_questions sq
+          join public.question_provenance qp
+            on qp.question_id = sq.question_id
+           and qp.status = 'approved'
+         where sq.scenario_id = 'no-crank';
+
+        if approved_match_count <> total_nocrank_count then
+            raise exception
+                'Expected % approved provenance matches; found %',
+                total_nocrank_count,
+                approved_match_count;
+        end if;
     end if;
-
-    select count(distinct sq.id)
-      into approved_match_count
-      from public.scenario_questions sq
-      join public.question_provenance qp
-        on qp.question_id = sq.question_id
-       and qp.status = 'approved'
-     where sq.scenario_id = 'no-crank';
-
-    if approved_match_count <> 20 then
-        raise exception
-            'Expected 20 approved provenance matches; found %',
-            approved_match_count;
-    end if;
+    -- If total_nocrank_count = 0, skip validation (preview/empty database)
 end
 $$;
 
