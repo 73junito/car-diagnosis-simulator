@@ -75,8 +75,8 @@ When (and if) questions are derived from these sources:
 4. Sublicensing restrictions must be respected
 
 ### Derivative Work Implications
-- Questions derived from CC BY-SA sources inherit the CC BY-SA license
-- If used in a proprietary assessment system, the assessment system must also be CC BY-SA
+- The project will conservatively license adapted question content under CC BY-SA 4.0
+- CC BY-SA material must be clearly identified and segregated; broader application licensing requires separate legal review
 - Alternatively, questions and sources must be clearly segregated with CC BY-SA status documented
 
 ## Gates Before Question Generation
@@ -116,7 +116,7 @@ The following gates must be passed before any questions are ingested:
 ## Database and Repository Impact
 
 - **Database writes**: 0 (temporary review only)
-- **Repository writes**: 0 (artifacts remain in temp directory)
+- **Repository evidence writes**: 0; review documentation has been committed
 - **Committed changes**: Terminology correction only (commit `2aa50e2`)
 
 ## Next Steps

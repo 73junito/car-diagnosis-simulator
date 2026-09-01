@@ -1,6 +1,6 @@
 # No-Crank Evidence Source Research
 
-**Status**: In Progress — Source Classification Phase  
+**Status**: LICENSE CLEARED; TECHNICAL AND HUMAN APPROVAL PENDING  
 **Date Started**: 2026-09-01  
 **Acceptance Criteria**: Explicit verified license with documented redistribution rights (CC BY, CC BY-SA, CC0, public domain, or written permission)
 
@@ -107,7 +107,7 @@ Topics to source:
 - **License**: Creative Commons Attribution-ShareAlike 3.0+ (CC BY-SA)
 - **License Verification**: ✅ Explicit on page footer
 - **Content Suitability**: Battery jump-start procedures, battery voltage discussion
-- **Status**: ✅ APPROVED for question sourcing
+- **Status**: LICENSE CLEARED; TECHNICAL AND HUMAN APPROVAL PENDING
 - **Attribution Requirements**: 
   - Must include: "Wikibooks: Automobile Repair/Jump start"
   - Must include: Permanent link with revision ID
@@ -122,8 +122,8 @@ Topics to source:
 - **Type**: Community-authored vocational manual
 - **License**: Creative Commons Attribution-ShareAlike 3.0+ (CC BY-SA)
 - **License Verification**: ✅ Explicit on page footer
-- **Content Suitability**: Battery voltage specifications, starter operation, Park/Neutral safety switches, clutch interlock behavior
-- **Status**: ✅ APPROVED for question sourcing
+- **Content Suitability**: Low battery voltage and starter operation; Park starting instruction; clutch-interlock behavior on many manual vehicles
+- **Status**: LICENSE CLEARED; TECHNICAL AND HUMAN APPROVAL PENDING
 - **Attribution Requirements**:
   - Must include: "Wikibooks: Automobile Mechanics"
   - Must include: Permanent link with revision ID (`oldid=3251129`)
@@ -186,11 +186,11 @@ Each question must include:
 
 ## Next Steps
 
-1. ✅ **Source Classification Complete** — Approved and rejected sources documented
+1. ✅ **Source Classification Complete** — License-cleared candidates and rejected sources documented
 2. **Download and Audit License-Cleared Candidates** — Extract content from Wikibooks pages
-3. **Generate Model Questions** — Create sample questions from approved excerpts
+3. **Generate Model Questions** — Create sample questions only after human approval of selected excerpts
 4. **Test Citation System** — Verify deterministic validation of attribution
-5. **Prepare Question Set** — Final approved question batch with citations
+5. **Prepare Question Set** — Candidate question batch pending review, validation, and approval
 6. **Rollback Simulation** — Test ingestion with fail-safe verification
 7. **Human Review** — Evidence-based quality and accuracy check
 8. **Deployment** — Push to API and verify fail-closed fallback

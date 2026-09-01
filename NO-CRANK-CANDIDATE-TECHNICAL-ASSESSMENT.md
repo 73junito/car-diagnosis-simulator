@@ -1,9 +1,9 @@
 # No-Crank Candidate Technical Assessment Pending Human Confirmation
 
-**Date**: 2026-09-01  
-**Status**: AI-assisted candidate assessment (not human approval)  
-**Database writes**: 0  
-**Repository writes**: 0 (assessment documentation committed)  
+**Date**: 2026-09-01
+**Status**: AI-assisted candidate assessment (not human approval)
+**Database writes**: 0
+**Repository documentation updated**: true
 **Ready for question generation**: NO (all passages require human confirmation)
 
 ---
@@ -25,11 +25,11 @@
 
 ### ✓ CANDIDATE PASSAGE 1 — Discharged Battery No-Crank
 
-**Source**: Wikibooks Automobile Repair/Jump start (oldid=3997054, line 6)  
+**Source**: Wikibooks Automobile Repair/Jump start (oldid=3997054, line 6)
 **Proposed claim**: "A failed or discharged battery can prevent the engine from turning over when starting is attempted."
 
 **Technical Assessment**: ✓ **ACCURATE AND NARROW**
-- Claim is supported by electrical fundamentals: starter motor requires minimum voltage (typically 9.6V for 12V systems)
+- Claim is supported by electrical fundamentals: starter operation depends on sufficient available battery voltage
 - Discharged battery is a legitimate no-crank cause
 - Limitations properly stated: does not claim battery is the ONLY cause
 - Does not overstep into complete jump-start procedures
@@ -45,7 +45,7 @@
 
 ### ✓ CANDIDATE PASSAGE 2 — Low Voltage Starter Power Loss
 
-**Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 18)  
+**Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 18)
 **Proposed claim**: "Low battery voltage may leave the battery unable to operate the starter."
 
 **Technical Assessment**: ✓ **DEFENSIBLE WITH QUALIFICATIONS**
@@ -65,7 +65,7 @@
 
 ### ✓ CANDIDATE PASSAGE 3: Automatic-Transmission Park Instruction
 
-**Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 4)  
+**Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 4)
 **Proposed claim**: "The cited instructions direct the operator to place an automatic-transmission vehicle in Park before starting."
 
 **Technical Assessment**: ✓ **NARROW PRECONDITION**
@@ -87,7 +87,7 @@
 
 ### ✓ CANDIDATE PASSAGE 4 — Clutch Interlock on Manual Vehicles
 
-**Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 9)  
+**Source**: Wikibooks Automobile Mechanics (oldid=3251129, line 9)
 **Proposed claim**: "Many manual-transmission vehicles use a clutch switch that prevents starting unless the clutch is depressed."
 
 **Technical Assessment**: ✓ **ACCURATE WITH QUALIFIER**
@@ -109,7 +109,7 @@
 
 ### ✗ CANDIDATE PASSAGE 5 (Recommended Rejection) — Complete Safe Jump-Start Procedure
 
-**Source**: Wikibooks Automobile Repair/Jump start (oldid=3997054)  
+**Source**: Wikibooks Automobile Repair/Jump start (oldid=3997054)
 **Proposed claim**: "Complete safe jump-start procedure."
 
 **Technical Assessment**: ✗ **EXCEEDS SOURCE SCOPE**
@@ -131,17 +131,17 @@
 
 ### ✗ CANDIDATE PASSAGE 6 (Recommended Rejection) — Diagnose Park/Neutral Safety Switch
 
-**Source**: Wikibooks Automobile Mechanics (oldid=3251129)  
+**Source**: Wikibooks Automobile Mechanics (oldid=3251129)
 **Proposed claim**: "Diagnose a defective Park/Neutral safety switch."
 
 **Technical Assessment**: ✗ **CLAIM EXCEEDS CAPTURED EVIDENCE**
-- The captured revision documents the REQUIREMENT for Park (procedural precondition)
+- The captured revision instructs the operator to select Park (procedural precondition)
 - It does NOT provide a diagnostic methodology for a failed Park/Neutral safety switch
 - Diagnostic procedures require test procedures, voltage expectations, circuit continuity methods—not present in the source
 
 **Instructional Assessment**: ✗ **EXCEEDS SOURCE CONTENT**
 - Making this claim would misrepresent what the source teaches
-- Would violate CC BY-SA requirement to accurately represent source material
+- Would misrepresent the scope of the captured source material
 - Would create a false causal chain: "Park requirement → ability to diagnose switch"
 
 **Approval**: **TECHNICAL_APPROVED = FALSE**, **INSTRUCTIONAL_APPROVED = FALSE**
@@ -150,16 +150,16 @@
 
 ---
 
-## CC BY-SA Compliance for Approved Passages
+## Proposed CC BY-SA Compliance for Candidate Passages
 
-All four approved passages must include:
+If a human reviewer approves any candidate passage, its record must include:
 
 1. **Source attribution**: Full Wikibooks page title and URL
 2. **Revision ID**: Permanent oldid reference (e.g., `oldid=3997054`)
 3. **License statement**: "Shared under Creative Commons Attribution-ShareAlike 4.0"
 4. **License link**: https://creativecommons.org/licenses/by-sa/4.0/
 5. **Change disclosure**: Document any adapted wording
-6. **ShareAlike obligation**: Derived questions must remain CC BY-SA compatible
+6. **ShareAlike obligation**: Adapted question content will be treated as CC BY-SA 4.0 under the project's conservative policy
 
 ---
 
@@ -172,7 +172,7 @@ All four approved passages must include:
 - ✗ Cannot ask about jump-start sequence without additional authoritative source
 
 ### For Starting Preconditions (Passages 3–4)
-- ✓ May ask about Park requirement on automatic transmissions
+- ✓ May ask what the cited instructions direct the operator to select before starting
 - ✓ May ask about clutch requirement on manual vehicles
 - ✗ Cannot ask about diagnosing Park/Neutral safety-switch failures (rejected)
 - ✗ Cannot ask about testing clutch interlock switches (exceeds source)
@@ -182,8 +182,8 @@ All four approved passages must include:
 ## Next Steps
 
 1. **Formal Review**: Present these narrow decisions for stakeholder approval
-2. **Question Draft**: Create sample questions based on approved passages only
-3. **Ingestion Simulation**: Run rollback-only test with approved passages
+2. **Question Draft**: Create sample questions only after identified human approval
+3. **Ingestion Simulation**: Run rollback-only simulation only after human approval
 4. **Citation Validation**: Verify all questions include required CC BY-SA attribution
 5. **Deployment**: Only after formal approval of these narrow scopes
 
@@ -191,14 +191,14 @@ All four approved passages must include:
 
 ## Status Flags
 
-- `review_status`: **`technical_review_complete`**
+- `review_status`: **`candidate_assessment_complete_human_review_pending`**
 - `reviewer_approved`: **`false`** (human approval required before ingestion)
 - `ingestion_allowed`: **`false`** (pending formal review and authorization)
 - `database_writes`: **`0`**
-- `repository_writes`: **`0`**
+- `repository_documentation_updated`: **`true`**
 
-**Passages ready for question generation**: 4 approved (battery, voltage, Park, clutch)  
-**Passages rejected**: 2 (jump-start procedure, safety-switch diagnosis)
+**Passages ready for question generation**: 0; four candidates await human confirmation
+**Recommended rejections**: 2 (jump-start procedure, safety-switch diagnosis)
 
 ## Approval boundary
 
