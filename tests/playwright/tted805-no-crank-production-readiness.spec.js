@@ -1,5 +1,27 @@
 const { test, expect } = require('@playwright/test');
 
+async function fetchMockedApi(page, path) {
+  await page.goto('/', {
+    waitUntil: 'domcontentloaded',
+  });
+
+  return page.evaluate(async (requestPath) => {
+    const requestUrl = new URL(
+      requestPath,
+      window.location.origin
+    );
+
+    const response = await fetch(requestUrl);
+    const text = await response.text();
+
+    return {
+      status: response.status,
+      text: text,
+      json: JSON.parse(text),
+    };
+  }, path);
+}
+
 test.describe('TTED805: Approved Questions API - Production Contracts', () => {
   test('no-crank correctly returns fail-closed state (0 approved questions)', async ({ page }) => {
     // Verify that no-crank scenario has no approved questions
@@ -18,16 +40,13 @@ test.describe('TTED805: Approved Questions API - Production Contracts', () => {
       }
     });
 
-    const response = await page.evaluate(async () => {
-      const resp = await fetch('/api/scenario-questions-approved?scenario_id=no-crank');
-      return {
-        status: resp.status,
-        body: await resp.json()
-      };
-    });
+    const response = await fetchMockedApi(
+      page,
+      '/api/scenario-questions-approved?scenario_id=no-crank'
+    );
 
     expect(response.status).toBe(200);
-    expect(response.body.questions).toHaveLength(0);
+    expect(response.json.questions).toHaveLength(0);
     console.log('✓ no-crank: API correctly returns fail-closed state (0 approved questions)');
   });
 
@@ -54,17 +73,13 @@ test.describe('TTED805: Approved Questions API - Production Contracts', () => {
       }
     });
 
-    const response = await page.evaluate(async () => {
-      const resp = await fetch('/api/scenario-questions-approved?scenario_id=charging-system');
-      return {
-        status: resp.status,
-        body: await resp.json(),
-        text: await resp.clone().text()
-      };
-    });
+    const response = await fetchMockedApi(
+      page,
+      '/api/scenario-questions-approved?scenario_id=charging-system'
+    );
 
     expect(response.status).toBe(200);
-    expect(response.body.questions).toHaveLength(3);
+    expect(response.json.questions).toHaveLength(3);
     
     // Verify no answer keys are exposed (security check)
     expect(response.text).not.toMatch(/['"]\s*correct_answer\s*['"]:/);
@@ -129,17 +144,14 @@ test.describe('TTED805: Approved Questions API - Production Contracts', () => {
       }
     });
 
-    const response = await page.evaluate(async () => {
-      const resp = await fetch('/api/scenario-questions-approved?scenario_id=charging-system');
-      return {
-        status: resp.status,
-        body: await resp.json()
-      };
-    });
+    const response = await fetchMockedApi(
+      page,
+      '/api/scenario-questions-approved?scenario_id=charging-system'
+    );
 
     expect(response.status).toBe(200);
-    expect(response.body.questions).toHaveLength(3);
-    console.log(`✓ charging-system: ${response.body.questions.length} questions available for grading`);
+    expect(response.json.questions).toHaveLength(3);
+    console.log(`✓ charging-system: ${response.json.questions.length} questions available for grading`);
     console.log('  - After Gate 4 approval, these will render in the UI');
   });
 });

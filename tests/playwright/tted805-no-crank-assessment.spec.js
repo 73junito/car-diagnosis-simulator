@@ -1,5 +1,27 @@
 const { test, expect } = require('@playwright/test');
 
+async function fetchMockedApi(page, path) {
+  await page.goto('/', {
+    waitUntil: 'domcontentloaded',
+  });
+
+  return page.evaluate(async (requestPath) => {
+    const requestUrl = new URL(
+      requestPath,
+      window.location.origin
+    );
+
+    const response = await fetch(requestUrl);
+    const text = await response.text();
+
+    return {
+      status: response.status,
+      text: text,
+      json: JSON.parse(text),
+    };
+  }, path);
+}
+
 test.describe('TTED805: No-Crank Assessment Mode', () => {
   test('enforces fail-closed blocking when no approved questions available', async ({ page }) => {
     const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:3003';
@@ -20,15 +42,12 @@ test.describe('TTED805: No-Crank Assessment Mode', () => {
     });
 
     // STEP 2: Verify mocked API contract
-    const apiResponse = await page.evaluate(async () => {
-      const resp = await fetch('/api/scenario-questions-approved?scenario_id=no-crank');
-      return {
-        status: resp.status,
-        body: await resp.json()
-      };
-    });
+    const apiResponse = await fetchMockedApi(
+      page,
+      '/api/scenario-questions-approved?scenario_id=no-crank'
+    );
     expect(apiResponse.status).toBe(200);
-    expect(apiResponse.body.questions).toHaveLength(0);
+    expect(apiResponse.json.questions).toHaveLength(0);
     console.log('✓ API contract verified: no-crank returns 200 with 0 questions (fail-closed)');
 
     // STEP 3: Navigate to assessment entry page

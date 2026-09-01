@@ -1,5 +1,27 @@
 const { test, expect } = require('@playwright/test');
 
+async function fetchMockedApi(page, path) {
+  await page.goto('/', {
+    waitUntil: 'domcontentloaded',
+  });
+
+  return page.evaluate(async (requestPath) => {
+    const requestUrl = new URL(
+      requestPath,
+      window.location.origin
+    );
+
+    const response = await fetch(requestUrl);
+    const text = await response.text();
+
+    return {
+      status: response.status,
+      text: text,
+      json: JSON.parse(text),
+    };
+  }, path);
+}
+
 test.describe('TTED805: Server-Side Grading Integration', () => {
   test('documents validated questions (awaiting Gate 4 approval)', async ({ page, request }) => {
     // Current status: 3 Frontiers-backed questions are validated but not yet approved
@@ -146,30 +168,23 @@ test.describe('TTED805: Server-Side Grading Integration', () => {
     });
     
     // NO-CRANK: Should return 0 questions (fail-closed)
-    const nocrankResponse = await page.evaluate(async () => {
-      const resp = await fetch('/api/scenario-questions-approved?scenario_id=no-crank');
-      return {
-        status: resp.status,
-        body: await resp.json()
-      };
-    });
+    const nocrankResponse = await fetchMockedApi(
+      page,
+      '/api/scenario-questions-approved?scenario_id=no-crank'
+    );
     
     expect(nocrankResponse.status).toBe(200);
-    expect(nocrankResponse.body.questions).toHaveLength(0);
+    expect(nocrankResponse.json.questions).toHaveLength(0);
     console.log('✓ no-crank: Status 200, 0 questions (fail-closed)');
     
     // CHARGING-SYSTEM: Should return 3 questions (Frontiers-backed)
-    const chargingResponse = await page.evaluate(async () => {
-      const resp = await fetch('/api/scenario-questions-approved?scenario_id=charging-system');
-      return {
-        status: resp.status,
-        body: await resp.json(),
-        text: await resp.clone().text()
-      };
-    });
+    const chargingResponse = await fetchMockedApi(
+      page,
+      '/api/scenario-questions-approved?scenario_id=charging-system'
+    );
     
     expect(chargingResponse.status).toBe(200);
-    expect(chargingResponse.body.questions).toHaveLength(3);
+    expect(chargingResponse.json.questions).toHaveLength(3);
     
     // SECURITY: Response should not include answer keys
     expect(chargingResponse.text).not.toMatch(/['"]\s*correct_answer\s*['"]:/);
