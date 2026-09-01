@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('TTED805: No-Crank Assessment Mode', () => {
-  test('enforces answer-key security and server-side grading (3 Frontiers-backed questions)', async ({ page }) => {
+  test('enforces answer-key security and server-side grading', async ({ page }) => {
     const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:3003';
 
     // Track all network requests to verify security properties
@@ -41,12 +41,11 @@ test.describe('TTED805: No-Crank Assessment Mode', () => {
 
     // STEP 1: Navigate to assessment entry page
     // For now, bypass attestation and go directly to scenario with mode=assessment
-    // Note: IJERT rollback reduced available questions from 20 to 3 (Frontiers-backed only)
     await page.goto(`${BASE_URL}/dashboard/student/scenario/?id=no-crank&mode=assessment&attempt_id=test-attempt-123`, 
       { waitUntil: 'domcontentloaded', timeout: 30000 });
 
-    // STEP 2: Wait for questions to load (3 Frontiers-backed, IJERT removed)
-    await expect(page.locator('article.question-card')).toHaveCount(3, { timeout: 10000 });
+    // STEP 2: Wait for questions to load
+    await expect(page.locator('article.question-card')).toHaveCount(20, { timeout: 10000 });
 
     // STEP 3: SECURITY CHECK - Verify NO answer keys in DOM
     const domAnswerKeyCount = await page.locator('[data-correct-answer]').count();
@@ -62,9 +61,9 @@ test.describe('TTED805: No-Crank Assessment Mode', () => {
       'Assessment mode must NOT contain correct_answer string in DOM'
     ).not.toContain('correct_answer');
 
-    // STEP 5: Answer all 3 questions with random selections
+    // STEP 5: Answer all 20 questions with random selections
     const cards = page.locator('article.question-card');
-    const totalQuestions = 3;
+    const totalQuestions = 20;
     
     for (let i = 0; i < totalQuestions; i++) {
       const card = cards.nth(i);
