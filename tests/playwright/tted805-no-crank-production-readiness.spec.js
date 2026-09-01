@@ -1,14 +1,16 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('TTED805: Production-Ready Citation Validation', () => {
-  test('renders 20 deterministically validated questions', async ({ page, request }) => {
-    // Step 1: Verify API returns 20 questions with valid deterministic citations
+  test('renders 3 deterministically validated questions (Frontiers-backed after IJERT rollback)', async ({ page, request }) => {
+    // Step 1: Verify API returns 3 questions with valid deterministic citations
+    // Note: IJERT questions were removed to enforce fail-closed evidence policy.
+    // Only Frontiers-backed questions remain (status: validated).
     const response = await request.get('/api/scenario-questions-approved?scenario_id=no-crank');
 
     expect(response.ok()).toBeTruthy();
 
     const payload = await response.json();
-    expect(payload.questions).toHaveLength(20);
+    expect(payload.questions).toHaveLength(3);
 
     // Each question must have deterministically validated citations
     for (const question of payload.questions) {
@@ -27,11 +29,11 @@ test.describe('TTED805: Production-Ready Citation Validation', () => {
     const serialized = JSON.stringify(payload);
     expect(serialized).not.toMatch(/"correct_answer"|"correctAnswer"/);
 
-    // Step 3: Navigate to dashboard and verify 20 question cards render
+    // Step 3: Navigate to dashboard and verify 3 question cards render
     await page.goto('/dashboard/student/scenario/?id=no-crank&mode=training');
 
-    // All 20 questions must render (not fail-closed)
-    await expect(page.locator('article.question-card')).toHaveCount(20);
+    // All 3 questions must render (not fail-closed)
+    await expect(page.locator('article.question-card')).toHaveCount(3);
 
     // "Question bank unavailable" message should NOT appear
     await expect(
