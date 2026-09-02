@@ -58,8 +58,26 @@ app.use('/api/assessment-attempts/start/*', cors({
 app.post('/api/assessment-attempts/start', handleStartAssessmentAttempt)
 
 export default {
-  fetch(request, env, ctx) {
-    return app.fetch(request, env, ctx)
+  async fetch(request, env, ctx) {
+    // Security: Block access to sensitive work-in-progress data directories
+    // These contain draft questions, unapproved sources, and audit artifacts
+    // that should not be publicly served
+    const url = new URL(request.url);
+    const pathname = url.pathname;
+    
+    const blockedPaths = [
+      '/data/generated/',
+      '/data/evidence/source-audit/',
+      '/data/evidence/generated-questions/'
+    ];
+    
+    for (const blockedPath of blockedPaths) {
+      if (pathname.startsWith(blockedPath)) {
+        return new Response('Not Found', { status: 404 });
+      }
+    }
+    
+    return app.fetch(request, env, ctx);
   }
 };
 
