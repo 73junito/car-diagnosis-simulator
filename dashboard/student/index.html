@@ -356,6 +356,15 @@
       function attachFilterHandlers(){
         const inputs = ['searchInput','filterCategory','filterDifficulty','filterAse'];
         inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderDashboard); el.addEventListener('change', renderDashboard); });
+        const resetBtn = document.getElementById('resetFiltersBtn');
+        if(resetBtn){
+          resetBtn.addEventListener('click', () => {
+            const s = document.getElementById('searchInput'); if(s) { s.value = ''; s.dispatchEvent(new Event('input', { bubbles: true })); }
+            const c = document.getElementById('filterCategory'); if(c) { c.value = 'all'; c.dispatchEvent(new Event('change', { bubbles: true })); }
+            const d = document.getElementById('filterDifficulty'); if(d) { d.value = 'all'; d.dispatchEvent(new Event('change', { bubbles: true })); }
+            const a = document.getElementById('filterAse'); if(a) { a.value = 'all'; a.dispatchEvent(new Event('change', { bubbles: true })); }
+          });
+        }
       }
 
       // render once registry is available
