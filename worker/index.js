@@ -59,22 +59,22 @@ app.post('/api/assessment-attempts/start', handleStartAssessmentAttempt)
 
 export default {
   async fetch(request, env, ctx) {
-    // Security: Block access to sensitive work-in-progress data directories
-    // These contain draft questions, unapproved sources, and audit artifacts
-    // that should not be publicly served
     const url = new URL(request.url);
-    const pathname = url.pathname;
     
-    const blockedPaths = [
+    // Security: Block access to review-only static artifacts
+    // These contain draft questions, unapproved sources, and audit artifacts
+    // CRITICAL: This must execute BEFORE any env.ASSETS.fetch() or Hono routing
+    const blockedAssetPrefixes = [
       '/data/generated/',
       '/data/evidence/source-audit/',
       '/data/evidence/generated-questions/'
     ];
-    
-    for (const blockedPath of blockedPaths) {
-      if (pathname.startsWith(blockedPath)) {
-        return new Response('Not Found', { status: 404 });
-      }
+
+    if (blockedAssetPrefixes.some((prefix) => url.pathname.startsWith(prefix))) {
+      return new Response('Not Found', {
+        status: 404,
+        headers: { 'Cache-Control': 'no-store' }
+      });
     }
     
     return app.fetch(request, env, ctx);
