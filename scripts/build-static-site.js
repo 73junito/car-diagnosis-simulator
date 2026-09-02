@@ -246,6 +246,17 @@ function isBlocked(source) {
     return true;
   }
 
+  // Block sensitive data directories that should not be public
+  if (relative.startsWith("data/generated/")) {
+    return true;
+  }
+  if (relative.startsWith("data/evidence/source-audit/")) {
+    return true;
+  }
+  if (relative.startsWith("data/evidence/generated-questions/")) {
+    return true;
+  }
+
   return segments.some((segment) => blockedPathSegments.has(segment));
 }
 
