@@ -58,6 +58,8 @@
       estimatedTime: estimatedTime,
       aseArea: aseArea,
       route: route,
+      scenario_key: s.scenario_key,
+      symptomCategory: s.symptomCategory,
       raw: s
     };
   });
