@@ -6,7 +6,8 @@ test.describe('TTED805: Fail-Closed Citation Validation', () => {
     // (because citation_validations table is empty or not populated by validator)
 
     // Navigate to scenario - this will fetch questions from API
-    await page.goto('/dashboard/student/scenario/?id=no-crank&mode=training');
+    // Updated: use specific scenario_key instead of ambiguous category ID
+    await page.goto('/dashboard/student/scenario/?scenario=no-crank-clicking&mode=training');
 
     // CRITICAL VERIFY: No question cards render (dashboard correctly implements fail-closed)
     // Questions are filtered at dashboard layer when citation_validation.valid != true

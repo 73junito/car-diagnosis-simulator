@@ -89,6 +89,7 @@ test.describe('TTED805: Approved Questions API - Production Contracts', () => {
 
   test('no-crank scenario UI correctly blocks grading', async ({ page }) => {
     // Verify fail-closed blocking for no-crank only (charging-system will have questions)
+    // Updated: use specific scenario_key instead of ambiguous category ID
     
     const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:3003';
     
@@ -105,7 +106,7 @@ test.describe('TTED805: Approved Questions API - Production Contracts', () => {
       }
     });
 
-    await page.goto(`${BASE_URL}/dashboard/student/scenario/?id=no-crank&mode=training`);
+    await page.goto(`${BASE_URL}/dashboard/student/scenario/?scenario=no-crank-clicking&mode=training`);
 
     // Verify fail-closed state - no question cards render (API returned 0 questions)
     const questionCards = await page.locator('article.question-card').count();
