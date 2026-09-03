@@ -382,13 +382,32 @@
     );
     if (numericMatch) return numericMatch;
 
-    // For string IDs: count matches to prevent ambiguous resolution
-    // If legacyId matches multiple items, return null (ambiguous, reject)
-    // This prevents ?id=no-crank from selecting first duplicate
-    const stringMatches = registry.filter(
+    // For string IDs: check if this is an ambiguous category
+    // Count against the COMPLETE scenarios array to detect true ambiguity
+    // (not just what's in the deduplicated registry)
+    const allScenarios = window.scenarios || [];
+    const categoryMatches = allScenarios.filter(
+      (item) => String(item.symptomCategory) === String(legacyId)
+    );
+
+    // Fail-closed: if category is ambiguous (>1 scenario), reject
+    if (categoryMatches.length > 1) return null;
+
+    // If exactly 1 scenario has this category, return it
+    if (categoryMatches.length === 1) {
+      const match = categoryMatches[0];
+      return registry.find(
+        (item) => String(item.scenario_key) === String(match.scenario_key) ||
+                  String(item.numericId) === String(match.id)
+      );
+    }
+
+    // Fallback: check if legacyId matches a registry slug (backward compat)
+    // This allows ?id=scenario-1 and other slug-based lookups
+    const slugMatches = registry.filter(
       (item) => String(item.id) === String(legacyId)
     );
-    return stringMatches.length === 1 ? stringMatches[0] : null;
+    return slugMatches.length === 1 ? slugMatches[0] : null;
   }
 
   async function renderScenarioPage() {
