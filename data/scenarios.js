@@ -100,6 +100,7 @@ window.DEFAULT_SCENARIO_METADATA = DEFAULT_SCENARIO_METADATA;
 window.scenarios = [
   {
     id: 1,
+    scenario_key: 'no-crank-clicking',
     symptoms: "Engine will not crank. Clicking sound when key is turned.",
     difficulty: 2,
     primarySystem: 'electrical',
@@ -115,6 +116,7 @@ window.scenarios = [
   },
   {
     id: 2,
+    scenario_key: 'no-start',
     symptoms: "Engine cranks but does not start.",
     difficulty: 2,
     primarySystem: 'fuel',
@@ -136,6 +138,7 @@ window.scenarios = [
   },
   {
     id: 3,
+    scenario_key: 'overheating',
     symptoms: "Engine overheats after 10 minutes of driving.",
     difficulty: 3,
     primarySystem: 'cooling',
@@ -151,6 +154,7 @@ window.scenarios = [
   },
   {
     id: 4,
+    scenario_key: 'electrical-load',
     symptoms: "Headlights are dim and flicker while driving.",
     difficulty: 3,
     primarySystem: 'electrical',
@@ -166,6 +170,7 @@ window.scenarios = [
   },
   {
     id: 5,
+    scenario_key: 'misfire-acceleration',
     symptoms: "Engine misfires under acceleration.",
     difficulty: 3,
     primarySystem: 'ignition',
@@ -181,6 +186,7 @@ window.scenarios = [
   },
   {
     id: 6,
+    scenario_key: 'steering-alignment',
     symptoms: "Car pulls to the right while driving.",
     difficulty: 2,
     primarySystem: 'chassis',
@@ -196,6 +202,7 @@ window.scenarios = [
   },
   {
     id: 7,
+    scenario_key: 'hvac-cooling',
     symptoms: "Air conditioning not cooling.",
     difficulty: 2,
     primarySystem: 'hvac',
@@ -211,6 +218,7 @@ window.scenarios = [
   },
   {
     id: 8,
+    scenario_key: 'stalling',
     symptoms: "Engine stalls at idle.",
     difficulty: 3,
     primarySystem: 'air',
@@ -226,6 +234,7 @@ window.scenarios = [
   },
   {
     id: 9,
+    scenario_key: 'misfire-p0300',
     symptoms: "Check engine light is on. Code P0300 detected.",
     difficulty: 3,
     primarySystem: 'engine',
@@ -241,6 +250,7 @@ window.scenarios = [
   },
   {
     id: 10,
+    scenario_key: 'power-loss',
     symptoms: "Vehicle struggles to accelerate uphill.",
     difficulty: 4,
     primarySystem: 'transmission',
@@ -258,6 +268,7 @@ window.scenarios = [
   // New ASE-style procedural scenario (single-fault)
   {
     id: 11,
+    scenario_key: 'no-crank-starter-click',
     symptoms: "Engine will not crank. Starter clicks when key is turned.",
     difficulty: 2,
     primarySystem: 'electrical',
@@ -292,6 +303,7 @@ window.scenarios = [
   // New ASE-style procedural scenario (multi-fault: battery + starter interaction)
   {
     id: 12,
+    scenario_key: 'intermittent-starting',
     symptoms: "Engine cranks slowly, intermittent clicking, sometimes fails to start.",
     difficulty: 3,
     primarySystem: 'electrical',
@@ -331,6 +343,7 @@ window.scenarios = [
   // Example: charging system (ASE A6)
   {
     id: 13,
+    scenario_key: 'charging-system',
     symptoms: "Battery drains while driving, warning lamp for charging appears.",
     difficulty: 3,
     primarySystem: 'electrical',
@@ -352,6 +365,7 @@ window.scenarios = [
   // Example: CAN bus network issue
   {
     id: 14,
+    scenario_key: 'can-bus-network',
     symptoms: "Intermittent module communication errors; multiple U-codes present.",
     difficulty: 4,
     primarySystem: 'network',
@@ -373,6 +387,7 @@ window.scenarios = [
   // Example: hybrid / EV safety-related scenario
   {
     id: 15,
+    scenario_key: 'hybrid-ev-isolation',
     symptoms: "Hybrid system disables on startup; HV battery isolation fault logged.",
     difficulty: 5,
     primarySystem: 'hybrid',
@@ -394,6 +409,7 @@ window.scenarios = [
   // Example: diesel aftertreatment
   {
     id: 16,
+    scenario_key: 'diesel-aftertreatment',
     symptoms: "DPF regeneration incomplete; excessive soot and reduced engine power.",
     difficulty: 4,
     primarySystem: 'exhaust',
@@ -416,6 +432,7 @@ window.scenarios = [
   // Explicit EV / high-voltage safety scenario example
   {
     id: 17,
+    scenario_key: 'hybrid-ev-insulation',
     symptoms: "Hybrid/EV high-voltage insulation fault; vehicle disables on startup.",
     difficulty: 5,
     primarySystem: 'hybrid',
