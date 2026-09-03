@@ -29,12 +29,12 @@ window.initStudentDashboard = function(){
       Object.keys(s.tests).forEach(k => { const li = document.createElement('li'); li.textContent = `${k}: ${JSON.stringify(s.tests[k])}`; ul.appendChild(li); });
       availableTests.appendChild(ul);
     }
-    history.replaceState(null,'',`?scenario=${encodeURIComponent(s.symptomCategory||s.symptoms||s.id)}`);
+    history.replaceState(null,'',`?scenario=${encodeURIComponent(s.scenario_key || s.symptomCategory || s.symptoms || s.id)}`);
     try {
       const payload = JSON.stringify({
         session_id: 'student-dashboard',
         event_type: 'scenario_started',
-        payload_json: { scenario_id: s.id || s.slug || s.symptomCategory || s.symptoms }
+        payload_json: { scenario_id: s.id, scenario_key: s.scenario_key, symptom_category: s.symptomCategory }
       });
       navigator.sendBeacon('/api/telemetry/events', payload);
     } catch (e) {}
@@ -62,20 +62,29 @@ window.initStudentDashboard = function(){
   document.querySelectorAll('.hotspot').forEach(btn => {
     btn.addEventListener('click', ()=>{
       const slug = btn.dataset.scenario;
-      // attempt to find scenario by slug/slugified symptomCategory
-      const find = (s) => (s.symptomCategory===slug || s.slug===slug || (s.symptoms && s.symptoms===slug) || String(s.id)===slug || (s.symptomCategory && s.symptomCategory.replace(/\s+/g,'-')===slug));
-      const registryScenario = (window.SCENARIO_REGISTRY || []).find(r => r.id === slug || String(r.numericId) === slug);
-      const scenario = registryScenario ? (registryScenario.raw || registryScenario) : (window.scenarios||[]).find(find);
-      if(scenario){ window.location.href = `/dashboard/student/scenario/?id=${encodeURIComponent(slug)}`; }
-      else { window.location.href = `/dashboard/student/scenario/?id=${encodeURIComponent(slug)}`; }
+      // Find scenario by scenario_key (preferred), then fallback to other fields
+      const scenario = (window.scenarios||[]).find(s => s.scenario_key === slug || s.symptomCategory === slug || s.slug === slug || (s.symptoms && s.symptoms === slug) || String(s.id) === slug);
+      if(scenario){
+        // Route using unique scenario_key
+        window.location.href = `/dashboard/student/scenario/?scenario=${encodeURIComponent(scenario.scenario_key)}`;
+      } else {
+        // Fallback: attempt to route anyway (will be caught by scenario page)
+        window.location.href = `/dashboard/student/scenario/?scenario=${encodeURIComponent(slug)}`;
+      }
     });
   });
 
   // If query param present, open scenario
   const params = new URLSearchParams(location.search);
-  const q = params.get('scenario');
+  const q = params.get('scenario') || params.get('id');
   if(q && window.scenarios){
-    const found = (window.scenarios||[]).find(s => (s.symptomCategory===q || (s.slug===q) || (s.symptoms===q) || String(s.id)===q));
+    const found = (window.scenarios||[]).find(s => (
+      s.scenario_key === q ||
+      String(s.id) === String(q) ||
+      s.slug === q ||
+      s.symptomCategory === q ||
+      (s.symptoms && s.symptoms === q)
+    ));
     if(found) showDetail(found);
   }
   // expose helper to open detail programmatically (used by cards and tests)

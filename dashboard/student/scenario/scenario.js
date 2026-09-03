@@ -375,30 +375,55 @@
     `;
   }
 
+  function resolveLegacyScenario(registry, legacyId) {
+    // Try numeric ID first (safe because IDs are unique)
+    const numericMatch = registry.find(
+      (item) => String(item.numericId) === String(legacyId)
+    );
+    if (numericMatch) return numericMatch;
+
+    // For string IDs: count matches to prevent ambiguous resolution
+    // If legacyId matches multiple items, return null (ambiguous, reject)
+    // This prevents ?id=no-crank from selecting first duplicate
+    const stringMatches = registry.filter(
+      (item) => String(item.id) === String(legacyId)
+    );
+    return stringMatches.length === 1 ? stringMatches[0] : null;
+  }
+
   async function renderScenarioPage() {
     const params = new URLSearchParams(location.search);
-    const id = params.get("id") || params.get("scenario");
+    const scenarioKey = params.get("scenario");
+    const legacyId = params.get("id");
     const mode = params.get("mode") || "training";
     const attemptId = params.get("attempt_id");
     const isAssessmentMode = mode === "assessment";
 
     const registry = window.SCENARIO_REGISTRY || [];
-    const item = registry.find(r =>
-      r.id === id ||
-      String(r.numericId) === String(id)
-    );
 
-    const scenario = item ? (item.raw || item) : null;
-    const key = item ? item.id : id;
+    // Strict routing: prefer scenario_key (new unambiguous identifier)
+    let item = null;
+    if (scenarioKey) {
+      item = registry.find(r => r.scenario_key === scenarioKey);
+    } else if (legacyId) {
+      item = resolveLegacyScenario(registry, legacyId);
+    }
+
     const root = document.getElementById("scenarioPage");
     const startedAt = Date.now();
 
-    if (!root || !scenario) {
+    if (!root || !item) {
       if (root) root.innerHTML = `<div class="scenario-card"><h1>Scenario not found</h1></div>`;
       return;
     }
 
-    const questionBank = normalizeQuestionBank(key, await loadScenarioQuestions(key));
+    // Use registry item's ID as routing key, but evidence is grouped by category
+    const key = item.id;
+    const evidenceScenarioId = item.symptomCategory || key;
+    const scenario = item.raw || item;
+
+
+    const questionBank = normalizeQuestionBank(key, await loadScenarioQuestions(evidenceScenarioId));
     const approvedQuestionBank = questionBank.filter((q) => String(q.status || '').toLowerCase() === 'approved');
     const studentId = getStudentId();
     const state = readAttemptState(key, studentId);
