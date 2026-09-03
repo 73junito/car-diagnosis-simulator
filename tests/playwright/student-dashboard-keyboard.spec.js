@@ -19,7 +19,7 @@ test.describe('student dashboard keyboard accessibility', ()=>{
     await page.keyboard.press('Enter');
 
     await expect(page).toHaveURL(
-      /\/dashboard\/student\/scenario\/\?id=no-crank/
+      /\/dashboard\/student\/scenario\/\?scenario=no-crank-/
     );
 
     await expect(
