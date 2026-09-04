@@ -36,7 +36,7 @@
     "@babel/preset-env": "^7.24.0",
     "@cloudflare/workers-types": "^5.20260801.1",
     "@mermaid-js/mermaid-cli": "^11.16.0",
-    "@playwright/test": "^1.62.0",
+    "@playwright/test": "^1.62.1",
     "@supabase/supabase-js": "^2.112.4",
     "acorn": "^8.18.0",
     "adm-zip": "^0.6.0",
