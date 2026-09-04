@@ -5,7 +5,13 @@
   <meta http-equiv="refresh" content="0; url=/dashboard/student/">
   <link rel="canonical" href="/dashboard/student/">
   <title>Redirecting to Student Dashboard</title>
-  <script>window.location.replace("/dashboard/student/");</script>
+  <script>
+    window.location.replace(
+      "/dashboard/student/" +
+      window.location.search +
+      window.location.hash
+    );
+  </script>
 </head>
 <body>
   <p>Redirecting to <a href="/dashboard/student/">Student Dashboard</a>…</p>

@@ -10,5 +10,14 @@ test.describe('Student legacy entrypoints', () => {
       await expect(page).toHaveURL(/\/dashboard\/student\/$/);
       await expect(page.locator('article.tm-scenario-v2-card')).toHaveCount(21);
     });
+
+    test(`${legacyPath} preserves scenario query parameter in redirect`, async ({ page }) => {
+      await page.goto(
+        '/dashboard/student.html?scenario=no-crank-clicking'
+      );
+      await expect(page).toHaveURL(
+        /\/dashboard\/student\/\?scenario=no-crank-clicking/
+      );
+    });
   }
 });

@@ -73,14 +73,28 @@ describe('Student dashboard', ()=>{
     expect(grid.children.length).toBeGreaterThan(0);
   });
 
-  test('opens detail when clicking card', ()=>{
-    // clicking a card should either open detail or navigate to the scenario
+  test('card structure and accessibility', ()=>{
+    // verify cards have correct structure and accessibility attributes
     const card = document.querySelector('.sd-card');
     expect(card).toBeTruthy();
-    const link = card.querySelector('a');
-    expect(link).toBeTruthy();
-    // the card should be focusable and clickable
+    
+    // card must be keyboard-navigable
     expect(card.getAttribute('role')).toBe('button');
     expect(card.tabIndex).toBe(0);
+    expect(card.getAttribute('aria-label')).toBeTruthy();
+    
+    // card must have image and link
+    const img = card.querySelector('img.sd-card-img');
+    expect(img).toBeTruthy();
+    const link = card.querySelector('a');
+    expect(link).toBeTruthy();
+    expect(link.href).toBeTruthy();
+    
+    // card must have title and metadata
+    const title = card.querySelector('.sd-card-title');
+    expect(title).toBeTruthy();
+    expect(title.textContent).toBeTruthy();
+    const meta = card.querySelector('.sd-card-meta');
+    expect(meta).toBeTruthy();
   });
 });
