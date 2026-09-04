@@ -6,14 +6,8 @@
     return String(s).toLowerCase().replace(/[_\s]+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-');
   }
 
-  function chooseRoute(s){
-    // Phase 4 routing rules:
-    // - ASE procedural scenarios (contain `steps`) -> /dashboard/obd2-ase?scenario=
-    // - Live diagnostic / high-voltage / hybrid -> /dashboard/obd2?scenario=
-    // - Default student scenarios -> /dashboard/obd2-student?scenario=
-    if(s && Array.isArray(s.steps) && s.steps.length) return '/dashboard/obd2-ase?scenario=';
-    if(s && (s.safetyLevel==='high-voltage' || s.vehicleType==='hybrid' || s.symptomCategory==='hybrid-ev')) return '/dashboard/obd2?scenario=';
-    return '/dashboard/obd2-student?scenario=';
+  function chooseRoute() {
+    return '/dashboard/student/scenario/?scenario=';
   }
 
     const src =
@@ -45,8 +39,11 @@
     const aseArea = s.aseArea || '';
     const category = s.symptomCategory || s.primarySystem || '';
     const image = resolveScenarioImage(`/assets/images/scenarios/${slug}.svg`);
-    const routeBase = chooseRoute(s);
-    const route = routeBase + encodeURIComponent(slug);
+    const routeBase = chooseRoute();
+    const scenarioKey = String(s.scenario_key || '').trim();
+    const route = scenarioKey
+      ? routeBase + encodeURIComponent(scenarioKey)
+      : null;
     return {
       id: slug,
       numericId: s.id,
