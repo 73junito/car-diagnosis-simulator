@@ -12,9 +12,9 @@ test.describe('Student Dashboard - Single Scenario Launcher', () => {
     await expect(page.getByRole('heading', { name: 'Available Scenarios', exact: true }))
       .toBeVisible();
 
-    // SHOULD PASS: 17 cards present
-    const cardCount = await page.locator('article.tm-scenario-v2-card').count();
-    expect(cardCount).toBeGreaterThanOrEqual(17);
+    // SHOULD PASS: exactly 21 cards present (catches duplicate-card regressions)
+    await expect(page.locator('article.tm-scenario-v2-card'))
+      .toHaveCount(21);
 
     // SHOULD FAIL (initially, PASS after map removal): No map image
     await expect(page.locator('img[alt="Scenario dashboard map"]'))

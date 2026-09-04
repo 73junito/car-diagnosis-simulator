@@ -44,13 +44,13 @@ test.describe('Student dashboard smoke', ()=>{
     // debug: log registry length and sample ids
     await page.evaluate(()=>{ console.log('REGISTRY LENGTH', (window.SCENARIO_REGISTRY||[]).length, JSON.stringify(((window.SCENARIO_REGISTRY||[]).slice(0,10)||[]).map(s=>s.id))); });
 
-    // 17 cards render on desktop
+    // 21 cards render on desktop
     await page.waitForSelector('#scenarioGrid');
     // debug: output active filters and which IDs are shown
     await page.evaluate(()=>{
       try{
         const filters = (typeof getFilters==='function') ? getFilters() : { q: (document.getElementById('searchInput')||{}).value||'', category: (document.getElementById('filterCategory')||{}).value||'all', difficulty: (document.getElementById('filterDifficulty')||{}).value||'all', ase: (document.getElementById('filterAse')||{}).value||'all' };
-        const registry = (window.SCENARIO_REGISTRY||[]).slice(0,17);
+        const registry = (window.SCENARIO_REGISTRY||[]).slice(0,21);
         const shown = (typeof matchesFilter==='function') ? registry.filter(s=>matchesFilter(s, filters)) : registry.filter(s=>{
           if(filters.category && filters.category !== 'all'){
             if(String((s.category||'')).toLowerCase() !== String(filters.category).toLowerCase()) return false;
@@ -72,12 +72,12 @@ test.describe('Student dashboard smoke', ()=>{
     await expect(page.locator('#scenarioGrid .sd-card').first()).toBeVisible({ timeout: 15000 });
     const cards = await page.$$('#scenarioGrid .sd-card');
     console.log('INITIAL CARDS COUNT', cards.length);
-    expect(cards.length).toBe(17);
+    expect(cards.length).toBe(21);
 
     // ensure DOM card count matches the shown IDs computed from the registry
     const shownIds = await page.evaluate(()=>{
       const filters = (typeof getFilters==='function') ? getFilters() : { q: (document.getElementById('searchInput')||{}).value||'', category: (document.getElementById('filterCategory')||{}).value||'all', difficulty: (document.getElementById('filterDifficulty')||{}).value||'all', ase: (document.getElementById('filterAse')||{}).value||'all' };
-      const registry = (window.SCENARIO_REGISTRY||[]).slice(0,17);
+      const registry = (window.SCENARIO_REGISTRY||[]).slice(0,21);
       return ((typeof matchesFilter==='function') ? registry.filter(s=>matchesFilter(s, filters)) : registry).map(s=>s.id);
     });
     const domIds = await page.$$eval('#scenarioGrid .sd-card', nodes => nodes.map(n => n.getAttribute('data-scenario-id') || (n.querySelector('.sd-card-title')||{}).textContent));
