@@ -139,14 +139,17 @@ This workstream is **data integrity only**: no new questions, no scenario change
   - **Requires staging credentials**: `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` environment variables
   - Stage 1: Identity (catalog-to-scenario mapping)
   - Stage 2: Question (non-null, unique question_id)
-  - Stage 3: Provenance (question-to-provenance linkage)
+  - Stage 3: Provenance (question-to-provenance linkage, correct reviewer fields)
   - Stage 4: Citation (approved citations with full validation)
-  - Stage 5: Release (fail-closed gate: zero questions render without full chain)
+  - Stage 5: Release (fail-closed gate—**NOT YET VERIFIED**, test is skipped)
   - **Local behavior**: Tests are skipped when credentials are unavailable (no false failures)
-  - **Staging behavior**: All 19 tests run when credentials are injected
-  - Does NOT call RPC functions (functions do not exist yet)
-  - Tests data state directly via Supabase client queries
-  - **Note**: The local suite validates repository safety and skips staging-only evidence checks when credentials are unavailable. Staging credentials are required to execute the 19 evidence-integrity assertions.
+  - **Staging behavior**: Tests run when credentials are injected; some tests are intentionally skipped because they require additional verification work
+  - Tests data state directly via Supabase client queries (no RPC function calls)
+  - **Skipped tests** (not yet verified in this PR):
+    - Release-gate: Requires credentialed API testing to confirm zero questions render
+    - RLS protection: Requires real Supabase anon/public key (hardcoded JWT in test is not valid)
+    - These gaps are labeled explicitly in test code and documented in the unverified gaps section
+  - **Note**: Credential-free local tests validate repository safety. Staging credentials are required to run evidence-integrity assertions. Some staging tests are intentionally skipped pending separate credentialed verification work.
 
 ### Design SQL Files
 
@@ -164,30 +167,23 @@ This workstream is **data integrity only**: no new questions, no scenario change
   - No hardcoded scenario lists or assumptions
   - Can be safely executed read-only against staging/production for auditing
 
-### Migration Files
+### No Deployable Database Functions or Migrations in This PR
 
-- **`supabase/migrations/20260905001000_evidence_mapping_contract_functions.sql`** (NEW)
-  - SQL functions for audit queries (all service-role only)
-  - `count_unmapped_questions()` — questions with NULL question_id
-  - `unmapped_provenance_count()` — provenance without citations
-  - `questions_available_for_assessment()` — count of evidence-backed questions per scenario
-  - `fully_validated_questions_by_scenario()` — fail-closed release gate
-  - `assessment_ready_scenarios()` — which scenarios are ready
-  - `gate4_readiness_matrix()` — comprehensive audit view
-  - `evidence_gap_diagnosis()` — detailed gap report per scenario
+This PR contains **no migration files and no RPC function definitions**. The contract documents what the database state should be when complete, but does not implement remediation SQL.
 
-### RLS Policy Changes
+Future steps (after crosswalk approval) will include:
+- Question-ID backfill migrations (separate PR)
+- Catalog reconciliation (separate PR)
+- Citation validation queries (may be RPC or direct queries, to be decided)
+- Release-gate enforcement (decision pending after evidence chain is complete)
 
-No new policies needed yet (evidence is service-role only). If browser-facing evidence API is added later, RLS policies will restrict to:
-- Published evidence only
-- No answer keys or explanations
-- Fail-closed by default
+**All audit queries in this PR are read-only** and located in `supabase/contracts/` (not `migrations/`), preventing accidental deployment.
 
 ---
 
 ## Staging Verification (Read-Only Design Queries)
 
-The 6 read-only contract queries in **`supabase/contracts/evidence-mapping-contract.sql`** verify evidence-chain completeness:
+The 6 read-only contract queries in **`supabase/contracts/evidence-mapping-contract.sql`** document what stages of evidence readiness should look like when complete:
 
 1. **Query 1** — Count questions with NULL question_id (Stage 2 blocker)
 2. **Query 2** — Verify 1:1 question-to-provenance cardinality
@@ -196,21 +192,12 @@ The 6 read-only contract queries in **`supabase/contracts/evidence-mapping-contr
 5. **Query 5** — Count evidence-backed questions per scenario
 6. **Query 6** — Audit diagnostic: which stages block each scenario
 
-Run these in **staging Supabase SQL Editor** to diagnose evidence readiness **without changing data**:
+These queries can be run **read-only** in staging Supabase SQL Editor to assess current gaps **without changing data**.
 
-```sql
--- Current broken state: zero evidence-backed questions (Stage 2 blocker)
--- Run Query 1 from supabase/contracts/evidence-mapping-contract.sql
-```
-
-Expected result (until Step 1 approved):
-```
-null_count
-----------
-22
-
-(all 22 scenario_questions have NULL question_id)
-```
+Current expected state (until Step 1 crosswalk approved):
+- Query 1: Returns 22 rows (all scenario_questions have NULL question_id)
+- Query 2: Returns 0 rows (no question-to-provenance links exist)
+- Queries 3–6: Show blocked chains due to missing question_id linkage
 
 ---
 
@@ -223,63 +210,90 @@ null_count
 - tests/evidence-mapping-contract-static.spec.js — 9 local artifact validation tests
 
 **This PR does NOT**:
-- ❌ Create migrations or deploy DDL
+- ❌ Create migrations or deploy database DDL
 - ❌ Create RPC functions or stored procedures
 - ❌ Backfill question_id values
 - ❌ Mutate scenario_catalog
 - ❌ Attach citations or validate evidence
-- ❌ Deploy code to production
+- ❌ Include any deployable application or database changes
+
+**Deployment Note**: GitHub Actions automatically deployed this branch code to Cloudflare production Workers for preview/review purposes. However, this PR contains only read-only design documentation and test code—no application logic changes, no database migrations, and no evidence mutations. The assessment endpoint continues to fail-closed (returns zero questions). No production data is at risk from this PR alone.
 
 **This PR does**:
-- ✅ Document approved evidence-mapping design
-- ✅ Define fail-closed contract for assessment release
-- ✅ Establish governance sequence (Steps 1–7)
-- ✅ Provide staging audit queries for monitoring
-- ✅ Add credential-free local validation tests
-- ✅ Create CI gate for stakeholder approval
+- ✅ Document the evidence-mapping design model (not yet approved for implementation)
+- ✅ Define fail-closed contract for assessment release gate
+- ✅ Establish governance sequence (Steps 1–7) with approval gates
+- ✅ Provide read-only staging audit queries for evidence-chain diagnosis
+- ✅ Add credential-free local contract validation tests
+- ✅ Create a CI gate for stakeholder review and explicit approval
 
-**Next Steps (After CI Passes + Stakeholder Approves)**:
-1. **Merge PR #412** as review-only checkpoint
-2. **Execute Step 1**: Create deterministic question-to-provenance crosswalk (separate PR)
-3. **Execute Steps 2–7**: Backfill, reconcile, validate (separate PRs, approved sequentially)
+**This PR is a governance and design reference**, not an approved implementation or enforceable CI gate. It must be reviewed and explicitly approved before any remediation work (Steps 1–7) can proceed.
 
----
-
-## Next Immediate Actions
-
-1. **Run staging audit** (read-only) to confirm current gaps match reported blockers
-2. **Create backfill SQL** for question_ids based on existing provenance matching logic
-3. **Create catalog reconciliation** to add the 3 missing scenarios
-4. **Run citation validator** over all approved provenance
-5. **Commit to branch** and verify CI passes
-6. **Post-merge verification**: Re-run gate4_readiness_matrix() in staging to confirm all scenarios report gate_ready = true
+**Status**: ⏳ Awaiting explicit stakeholder approval of the question-to-provenance crosswalk methodology before proceeding to Step 1
 
 ---
 
-## Success Criteria
+## Blocked Pending Explicit Crosswalk Approval
 
-✅ **Definition of Done**:
-- [ ] `count_unmapped_questions()` returns zero rows
-- [ ] `unmapped_provenance_count()` returns zero rows
-- [ ] `gate4_readiness_matrix()` reports `gate_ready = true` for all 21 scenarios
-- [ ] `questions_available_for_assessment()` reports question counts > 0 for all scenarios
-- [ ] `evidence_gap_diagnosis()` returns zero rows
+All remediation work (Steps 1–7) is **blocked** until stakeholder explicitly approves:
+1. The question-to-provenance crosswalk methodology
+2. The crosswalk artifact itself (CSV showing scenario_questions.id → question_provenance.id mapping)
+3. Each subsequent step before proceeding to the next
+
+Do not create backfill SQL, catalog reconciliation, citation validators, or any production changes until this approval gate is passed.
+
+**Approval process**:
+1. ✅ This PR (Gate 4 contract design) passes CI
+2. ⏳ Stakeholder reviews and explicitly approves the contract and methodology
+3. ⏳ Stakeholder approves the Step 1 crosswalk artifact (separate PR)
+4. ⏳ Only then can Steps 2–7 proceed (one at a time, with approval between each)
+
+**No governance bypass**: Do not merge this PR as if approval is automatic. Do not proceed with Steps 1–7 based on CI passing alone.
+
+---
+
+## Unverified Gaps (Require Credentialed Testing)
+
+The following behavior is **defined in the contract but not yet verified** by this PR:
+
+**Release Gate (Stage 5)**: ⏳ Test is skipped (requires credentialed API testing)
+- Expected: Assessment endpoint returns zero questions when evidence chain is incomplete
+- Verification needed: Run credentialed test against staging with partial vs. complete evidence
+- Status: Deferred to staging audit after Steps 1–5 complete
+
+**RLS Protection (Answer-Key Security)**: ⏳ Test is skipped (requires real Supabase anon/public key)
+- Expected: RLS policy denies anonymous access to correct_answer and explanation columns
+- Current test uses hardcoded JWT string (not a valid publishable key)
+- Verification needed: Real staging credential testing with actual anon key
+- Status: Deferred to staging security audit; not verified by this PR
+
+**Contract Fulfillment (Evidence Stages 1–5)**: ✅ Defined by 6 read-only queries
+- These queries document what database state should be when complete
+- Queries are ready to run in staging to diagnose current gaps
+- Actual fulfillment (backfill, reconciliation, validation) deferred pending approval
+
+## Definition of Success (Post-Approval)
+
+After stakeholder approves Steps 1–7 and remediation completes:
+- [ ] All scenario_questions have non-null question_id values
+- [ ] All question_id values link to exactly one approved question_provenance
+- [ ] All approved provenance have citations to approved sources/chunks
+- [ ] All citations have valid validation records (all flags true)
+- [ ] All 21 active scenarios are represented in scenario_catalog
+- [ ] Release gate query returns evidence-backed questions for all 21 scenarios
+- [ ] RLS testing confirms answer keys are protected from anonymous access
 - [ ] Jest suite passes (103 suites, 507 tests)
 - [ ] Lint passes
-- [ ] All 21 scenarios have catalog entries
-- [ ] All scenario_questions have non-null question_id
-- [ ] All question_id values link to question_provenance
-- [ ] All approved provenance have validated citations
 
 ---
 
 ## Rollback Plan
 
-If evidence mapping breaks a scenario:
-1. Revert the backfill commits
-2. Restore question_id = NULL state
-3. Re-run gate4_readiness_matrix() to confirm zero ready scenarios (fail-closed)
-4. No student impact (questions never rendered)
+If evidence mapping breaks a scenario during remediation (Steps 1–7):
+1. Revert the backfill commits for the affected scenario
+2. Restore question_id = NULL state for those rows
+3. Re-run Query 6 (evidence gap diagnosis) from supabase/contracts/evidence-mapping-contract.sql to confirm zero evidence-backed questions
+4. No student impact (questions never rendered due to fail-closed gate)
 
 ---
 
