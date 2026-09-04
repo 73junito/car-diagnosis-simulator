@@ -17,10 +17,14 @@ const expected = [
   ['can-bus-network', 'Intermittent module communication errors; multiple U-codes present.'],
   ['hybrid-ev-isolation', 'Hybrid system disables on startup; HV battery isolation fault logged.'],
   ['diesel-aftertreatment', 'DPF regeneration incomplete; excessive soot and reduced engine power.'],
-  ['hybrid-ev-insulation', 'Hybrid/EV high-voltage insulation fault; vehicle disables on startup.']
+  ['hybrid-ev-insulation', 'Hybrid/EV high-voltage insulation fault; vehicle disables on startup.'],
+  ['automatic-transmission-delayed-drive', 'Delayed or harsh shift into Drive.'],
+  ['manual-transmission-no-drive', 'Clutch pedal feels normal but vehicle will not move in gear.'],
+  ['differential-speed-whine', 'Whine or howl that changes with vehicle speed.'],
+  ['transaxle-fluid-leak-shift-hesitation', 'Fluid leak with shift hesitation or gear noise.']
 ];
 
-test('renders and wires all 17 scenario cards to unique diagnostic routes', async ({ page }) => {
+test('renders and wires all 21 scenario cards to unique diagnostic routes', async ({ page }) => {
   await page.goto('/dashboard/student/', { waitUntil: 'domcontentloaded' });
 
   const cards = page.locator('article.tm-scenario-v2-card');

@@ -451,6 +451,94 @@ window.scenarios = [
       hv: { system: 'hybrid', reading: 'Insulation resistance low', interpretation: 'FAIL' },
       inverter: { system: 'hybrid', reading: 'Inverter disabled', interpretation: 'FAULT' }
     }
+  },
+  // Automatic transmission engagement concern
+  {
+    id: 18,
+    scenario_key: 'automatic-transmission-delayed-drive',
+    symptoms: 'Delayed or harsh shift into Drive.',
+    difficulty: 3,
+    primarySystem: 'transmission',
+    secondarySystems: ['hydraulic-control', 'transmission-fluid'],
+    symptomCategory: 'automatic-transmission',
+    aseArea: 'A2',
+    vehicleType: 'gasoline',
+    faultType: 'mechanical',
+    diagnosticMode: 'basic',
+    requiredTools: ['Scan Tool', 'DVOM', 'Fluid Service Information'],
+    safetyLevel: 'normal',
+    trainingFocus: 'Correlate engagement quality with fluid condition and transmission control data.',
+    fault: 'low_or_degraded_transmission_fluid',
+    tests: {
+      fluid: { system: 'transmission', reading: 'Fluid level below specified range; fluid is darkened.', interpretation: 'FLUID_CONDITION_CONCERN' },
+      scan: { system: 'transmission-control', reading: 'Delayed engagement observed without an active transmission DTC.', interpretation: 'CORRELATE_WITH_DATA' }
+    }
+  },
+  // Manual transmission no-drive concern
+  {
+    id: 19,
+    scenario_key: 'manual-transmission-no-drive',
+    symptoms: 'Clutch pedal feels normal but vehicle will not move in gear.',
+    difficulty: 3,
+    primarySystem: 'transmission',
+    secondarySystems: ['clutch', 'driveline'],
+    symptomCategory: 'manual-transmission',
+    aseArea: 'A3',
+    vehicleType: 'gasoline',
+    faultType: 'mechanical',
+    diagnosticMode: 'basic',
+    requiredTools: ['Visual Inspection Tools', 'Service Information'],
+    safetyLevel: 'normal',
+    trainingFocus: 'Differentiate clutch engagement concerns from downstream driveline faults.',
+    fault: 'clutch_disc_or_pressure_plate_failure',
+    tests: {
+      clutch: { system: 'clutch', reading: 'Pedal travel appears normal; engine speed rises without vehicle movement.', interpretation: 'CLUTCH_ENGAGEMENT_CONCERN' },
+      driveline: { system: 'driveline', reading: 'No external axle damage observed during visual inspection.', interpretation: 'CONTINUE_SYSTEMATIC_DIAGNOSIS' }
+    }
+  },
+  // Differential speed-related noise concern
+  {
+    id: 20,
+    scenario_key: 'differential-speed-whine',
+    symptoms: 'Whine or howl that changes with vehicle speed.',
+    difficulty: 3,
+    primarySystem: 'driveline',
+    secondarySystems: ['differential', 'wheel-bearings'],
+    symptomCategory: 'differential',
+    aseArea: 'A3',
+    vehicleType: 'gasoline',
+    faultType: 'mechanical',
+    diagnosticMode: 'basic',
+    requiredTools: ['Chassis Ears', 'Service Information', 'Visual Inspection Tools'],
+    safetyLevel: 'normal',
+    trainingFocus: 'Correlate speed-related noise with differential lubricant condition and driveline observations.',
+    fault: 'differential_bearing_wear',
+    tests: {
+      lubricant: { system: 'differential', reading: 'Lubricant level is low with metallic debris present.', interpretation: 'DIFFERENTIAL_INTERNAL_WEAR_CONCERN' },
+      noise: { system: 'driveline', reading: 'Whine changes with road speed rather than engine speed.', interpretation: 'SPEED_RELATED_DRIVELINE_CONCERN' }
+    }
+  },
+  // Transaxle fluid-leak and shift-quality concern
+  {
+    id: 21,
+    scenario_key: 'transaxle-fluid-leak-shift-hesitation',
+    symptoms: 'Fluid leak with shift hesitation or gear noise.',
+    difficulty: 4,
+    primarySystem: 'transmission',
+    secondarySystems: ['transaxle', 'transmission-fluid'],
+    symptomCategory: 'transaxle',
+    aseArea: 'A3',
+    vehicleType: 'gasoline',
+    faultType: 'mechanical',
+    diagnosticMode: 'scan-tool',
+    requiredTools: ['Scan Tool', 'Fluid Service Information', 'Visual Inspection Tools'],
+    safetyLevel: 'normal',
+    trainingFocus: 'Relate external fluid loss to transaxle shift quality and recorded operating data.',
+    fault: 'transaxle_fluid_loss',
+    tests: {
+      leak: { system: 'transaxle', reading: 'Fluid residue is present near the axle-seal area.', interpretation: 'EXTERNAL_FLUID_LEAK_CONCERN' },
+      scan: { system: 'transmission-control', reading: 'Shift hesitation is reported without a current electrical control DTC.', interpretation: 'CORRELATE_FLUID_AND_OPERATIONAL_EVIDENCE' }
+    }
   }
 ];
 

@@ -88,9 +88,6 @@ describe('Drivetrain scenario catalog', () => {
       }
 
       expect(Array.isArray(scenario.secondarySystems)).toBe(true);
-      expect(Object.keys(scenario.tests)).toHaveLength(
-        expect.any(Number)
-      );
       expect(Object.keys(scenario.tests).length).toBeGreaterThanOrEqual(2);
     }
   });
