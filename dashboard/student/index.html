@@ -97,30 +97,7 @@
       </div>
     </div>
 
-    <div class="dashboard-map" id="dashboardMap">
-      <img id="mapImg" src="/assets/images/dashboard/scenario-dashboard.png" alt="Scenario dashboard map">
-
-      <!-- 17 hotspots mapped to scenarios -->
-      <button class="hotspot hs-1" data-scenario="no-crank" aria-label="no-crank"></button>
-      <button class="hotspot hs-2" data-scenario="no-start" aria-label="no-start"></button>
-      <button class="hotspot hs-3" data-scenario="overheating" aria-label="overheating"></button>
-      <button class="hotspot hs-4" data-scenario="electrical-load" aria-label="electrical-load"></button>
-      <button class="hotspot hs-5" data-scenario="misfire" aria-label="misfire"></button>
-      <button class="hotspot hs-6" data-scenario="steering-alignment" aria-label="steering-alignment"></button>
-      <button class="hotspot hs-7" data-scenario="hvac-cooling" aria-label="hvac-cooling"></button>
-      <button class="hotspot hs-8" data-scenario="stalling" aria-label="stalling"></button>
-      <button class="hotspot hs-9" data-scenario="misfire-9" aria-label="misfire-9"></button>
-      <button class="hotspot hs-10" data-scenario="power-loss" aria-label="power-loss"></button>
-      <button class="hotspot hs-11" data-scenario="no-crank-11" aria-label="no-crank-11"></button>
-      <button class="hotspot hs-12" data-scenario="intermittent-starting" aria-label="intermittent-starting"></button>
-      <button class="hotspot hs-13" data-scenario="charging-system" aria-label="charging-system"></button>
-      <button class="hotspot hs-14" data-scenario="can-bus-network" aria-label="can-bus-network"></button>
-      <button class="hotspot hs-15" data-scenario="hybrid-ev" aria-label="hybrid-ev"></button>
-      <button class="hotspot hs-16" data-scenario="diesel-aftertreatment" aria-label="diesel-aftertreatment"></button>
-      <button class="hotspot hs-17" data-scenario="hybrid-ev-17" aria-label="hybrid-ev-17"></button>
-    </div>
-
-    <!-- Scenario grid rendered from registry (keeps the screenshot map as visual header) -->
+    <!-- Scenario grid rendered from registry -->
     
     
 
@@ -211,7 +188,13 @@
           }
         }
         card.addEventListener('click', (event) => { if (event.target && event.target.closest && event.target.closest('a')) return; activate(); });
-        card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); activate(); } });
+        card.addEventListener('keydown', (e)=>{
+          // Allow Enter on links inside the card to follow their default behavior
+          if ((e.key==='Enter' || e.key===' ') && !(e.target && e.target.closest && e.target.closest('a'))) {
+            e.preventDefault();
+            activate();
+          }
+        });
 
         return card;
       }
