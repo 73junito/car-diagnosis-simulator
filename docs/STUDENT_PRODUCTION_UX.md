@@ -13,8 +13,8 @@ flowchart TD
   Dashboard --> Grid["Scenario grid: 21 cards"]
   Grid --> Card["Scenario card"]
 
-  Card -->|Card background| Preview["In-panel scenario preview"]
-  Card -->|Start| Workflow["Canonical diagnostic route"]
+  Card -->|Preview Scenario button| Preview["In-panel scenario preview"]
+  Card -->|Start Diagnostic link| Workflow["Canonical diagnostic route"]
 
   Workflow --> Route["?scenario=unique scenario_key"]
   Route --> Resolver["Resolve exact scenario"]
@@ -53,9 +53,9 @@ flowchart TD
 
 ## Contracts
 
-- The canonical student dashboard is `/dashboard/student/`.
-- Legacy student URLs redirect while preserving query parameters and hashes.
-- Scenarios resolve through a unique `scenario_key`.
-- Training feedback and AI tutoring are mode-dependent.
-- Assessment mode does not expose tutoring, answer explanations, or answer keys during an attempt.
-- Question availability remains fail-closed when approval or citation validation is unavailable.
+- **Canonical student dashboard**: `/dashboard/student/` with 21-card scenario grid.
+- **Legacy student URLs**: `/dashboard/student.html` and `/dashboard/student/student.html` redirect to canonical dashboard while preserving query parameters and hashes.
+- **Diagnostic route**: `/dashboard/student/scenario/?scenario=<scenario_key>&mode=<training|assessment>` resolves via unique `scenario_key`.
+- **Training mode**: Provides learning feedback after each answer and enables optional AI tutor support when enabled.
+- **Assessment mode**: Submitted answers only; no tutoring, explanations, or answer keys exposed during the attempt.
+- **Fail-closed availability**: Question availability remains blocked if approval or citation validation systems are unavailable.
