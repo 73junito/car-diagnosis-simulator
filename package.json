@@ -51,7 +51,7 @@
     "express-rate-limit": "^8.6.2",
     "fast-xml-parser": "^5.11.0",
     "husky": "^9.1.7",
-    "jest": "^30.4.2",
+    "jest": "^30.5.0",
     "jest-circus": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "jest-junit": "^17.0.0",
