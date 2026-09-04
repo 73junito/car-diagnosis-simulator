@@ -185,68 +185,63 @@ No new policies needed yet (evidence is service-role only). If browser-facing ev
 
 ---
 
-## Staging Verification (Read-Only)
+## Staging Verification (Read-Only Design Queries)
 
-To run the audit queries in **staging Supabase SQL Editor** without changing the database:
+The 6 read-only contract queries in **`supabase/contracts/evidence-mapping-contract.sql`** verify evidence-chain completeness:
+
+1. **Query 1** — Count questions with NULL question_id (Stage 2 blocker)
+2. **Query 2** — Verify 1:1 question-to-provenance cardinality
+3. **Query 3** — Check provenance→source→chunk linkage
+4. **Query 4** — Validate all citation flags true (source_hashes_verified, excerpts_verified, urls_verified)
+5. **Query 5** — Count evidence-backed questions per scenario
+6. **Query 6** — Audit diagnostic: which stages block each scenario
+
+Run these in **staging Supabase SQL Editor** to diagnose evidence readiness **without changing data**:
 
 ```sql
--- Current broken state: zero evidence-backed questions
-SELECT * FROM public.gate4_readiness_matrix() ORDER BY scenario_id;
-
--- Detailed gap diagnosis
-SELECT * FROM public.evidence_gap_diagnosis() ORDER BY scenario_id, gap_type;
-
--- Available assessment questions (should be zero)
-SELECT * FROM public.questions_available_for_assessment() ORDER BY scenario_id;
+-- Current broken state: zero evidence-backed questions (Stage 2 blocker)
+-- Run Query 1 from supabase/contracts/evidence-mapping-contract.sql
 ```
 
-Expected result:
+Expected result (until Step 1 approved):
 ```
-scenario_id             | gate_ready | fully_ready
------------------------+------------+-------------
-automatic-transmission | false      | 0
-can-bus-network         | false      | 0
-...
-no-crank                | false      | 0
-charging-system         | false      | 0
-...
+null_count
+----------
+22
+
+(all 22 scenario_questions have NULL question_id)
 ```
 
 ---
 
-## Files Affected (This PR)
+## This PR: Review-Only Gate 4 Contract
 
-### New Files (Contract)
-- `tests/evidence-mapping-contract.spec.js` — Test suite for mapping invariants
-- `supabase/migrations/20260905001000_evidence_mapping_contract_functions.sql` — RPC functions
+**Scope (4 files)**:
+- EVIDENCE_MAPPING_WORKSTREAM.md — This document
+- supabase/contracts/evidence-mapping-contract.sql — 6 read-only design queries
+- tests/evidence-mapping-contract.spec.js — 19 integration test assertions (skip locally, run in staging)
+- tests/evidence-mapping-contract-static.spec.js — 9 local artifact validation tests
 
-### To Be Modified (In the Evidence Mapping PR)
-- `supabase/migrations/20260905001001_backfill_question_ids.sql` (NEW) — Populate question_id column
-- `supabase/migrations/20260905001002_reconcile_scenario_catalog.sql` (NEW) — Add 3 missing scenarios
-- `supabase/migrations/20260905001003_attach_approved_evidence.sql` (NEW) — Link citations to approved provenance
-- Possibly: `db/migrations` or fixture updates
-- Possibly: Test data fixtures in `tests/` to verify the mapping
+**This PR does NOT**:
+- ❌ Create migrations or deploy DDL
+- ❌ Create RPC functions or stored procedures
+- ❌ Backfill question_id values
+- ❌ Mutate scenario_catalog
+- ❌ Attach citations or validate evidence
+- ❌ Deploy code to production
 
-### Configuration Files (if needed)
-- `jest.config.js` — May need to add test file patterns for evidence suite
-- `wrangler.app.jsonc` — No changes (evidence is database only)
+**This PR does**:
+- ✅ Document approved evidence-mapping design
+- ✅ Define fail-closed contract for assessment release
+- ✅ Establish governance sequence (Steps 1–7)
+- ✅ Provide staging audit queries for monitoring
+- ✅ Add credential-free local validation tests
+- ✅ Create CI gate for stakeholder approval
 
----
-
-## Recommended PR Structure
-
-### Branch: `audit/gate4-evidence-mapping`
-- **Commit 1**: Add evidence-mapping contract (test file + SQL RPC functions)
-- **Commit 2**: Backfill question_ids for no-crank and charging-system scenarios
-- **Commit 3**: Reconcile scenario_catalog with live 21 scenarios
-- **Commit 4**: Attach approved citations and run validator
-- **Commit 5**: Verify gate4_readiness_matrix() reports complete mapping
-
-### CI Gates
-- Jest tests must pass (no app code changes)
-- Linting must pass
-- No database writes during PR (data changes via explicit migration only)
-- Post-merge: Manual verification in staging that gate4_readiness_matrix() shows gate_ready = true for all scenarios
+**Next Steps (After CI Passes + Stakeholder Approves)**:
+1. **Merge PR #412** as review-only checkpoint
+2. **Execute Step 1**: Create deterministic question-to-provenance crosswalk (separate PR)
+3. **Execute Steps 2–7**: Backfill, reconcile, validate (separate PRs, approved sequentially)
 
 ---
 

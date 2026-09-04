@@ -71,21 +71,9 @@ describeStaging('Evidence Mapping Contract', () => {
       expect(data.length).toBeGreaterThan(0);
     });
 
-    it('should verify each UI scenario_key has a deliberate catalog mapping', async () => {
-      // NOTE: This test is placeholder pending catalog identity design.
-      // Once the design is decided (do we use scenario_key as catalog identity, or keep category IDs?),
-      // this test will verify the actual mapping.
-      // Currently, catalog uses category-style IDs (18 rows), and UI exposes 21 scenario_keys.
-      // The mapping model (1:1 direct, many-to-1, lookup table, etc.) has not been finalized.
-      expect(true).toBe(true);
-    });
+    it.todo('should verify each UI scenario_key has a deliberate catalog mapping (pending catalog identity design)');
 
-    it('should not expose unmapped UI scenario keys', async () => {
-      // Once catalog identity is decided, this will verify:
-      // For each UI scenario_key in SCENARIO_REGISTRY, there exists a catalog record.
-      // Deferred: catalog design not yet finalized.
-      expect(true).toBe(true);
-    });
+    it.todo('should not expose unmapped UI scenario keys (pending catalog identity decision)');
 
     it('should not have inactive scenarios in production', async () => {
       const { data, error } = await supabase
@@ -94,7 +82,8 @@ describeStaging('Evidence Mapping Contract', () => {
         .eq('active', false);
 
       expect(error).toBeNull();
-      // All production scenarios should be active; draft/deprecated scenarios belong elsewhere
+      // Inactive scenarios should have zero results (all production scenarios must be active)
+      expect(data).toHaveLength(0);
     });
   });
 
@@ -170,36 +159,44 @@ describeStaging('Evidence Mapping Contract', () => {
     });
 
     it('should link each question_id to exactly one approved provenance', async () => {
-      const { data, error } = await supabase
+      // Query questions with non-null question_id
+      const { data: questions, error: qError } = await supabase
         .from('scenario_questions')
-        .select(`
-          id,
-          scenario_id,
-          question_id,
-          question_provenance!inner(id, status)
-        `)
-        .eq('question_provenance.status', 'approved')
-        .not('question_id', 'is', null);
+        .select('id, scenario_id, question_id')
+        .not('question_id', 'is', null)
+        .order('scenario_id, question_id');
 
-      expect(error).toBeNull();
-      // Each question should link to provenance
-      for (const row of data) {
-        expect(row.question_provenance).toBeDefined();
-        expect(Array.isArray(row.question_provenance)).toBe(true);
+      expect(qError).toBeNull();
+      expect(questions.length).toBeGreaterThan(0);
+
+      // For each question, verify exactly one approved provenance exists
+      for (const question of questions) {
+        const { data: provenance, error: pError } = await supabase
+          .from('question_provenance')
+          .select('id, question_id, status, approved_by, approved_at')
+          .eq('question_id', question.question_id)
+          .eq('status', 'approved');
+
+        expect(pError).toBeNull();
+        expect(provenance.length).toBe(1); // Exactly one approved provenance per question
       }
     });
 
-    it('should have provenance records with all required approval fields', async () => {
+    it('should require both reviewer ID and timestamp for approved provenance', async () => {
       const { data, error } = await supabase
         .from('question_provenance')
-        .select('id, question_id, status, approved_by, approved_at')
+        .select('id, question_id, status, approved_by, approved_at, reviewer_id, reviewer_timestamp')
         .eq('status', 'approved');
 
       expect(error).toBeNull();
-      // All approved provenance must have approval metadata
+      // All approved provenance must have complete approval audit trail
       for (const row of data) {
+        // Primary approval fields (required)
         expect(row.approved_by).not.toBeNull();
         expect(row.approved_at).not.toBeNull();
+        // Secondary reviewer tracking (for multi-reviewer audit trail)
+        expect(row.reviewer_id).not.toBeNull();
+        expect(row.reviewer_timestamp).not.toBeNull();
       }
     });
   });
@@ -250,88 +247,46 @@ describeStaging('Evidence Mapping Contract', () => {
    * Assessment availability returns zero unless every required link is complete (fail-closed).
    */
   describe('Release Gate: Evidence Readiness', () => {
-    it('should not render assessment questions until all gates pass', async () => {
-      // This test verifies the fail-closed gate at the API level
-      // When question_id is NULL or provenance is missing, assessment route should return 0 questions
-      // Actual implementation: api/scenario-questions-approved.js (Worker route)
-      
-      // Currently failing because:
-      // - 22 scenario_questions have NULL question_id
-      // - No questions can join to provenance
-      // - Assessment query returns 0 results (fail-closed ✓)
-      
-      expect(true).toBe(true); // Placeholder: actual integration test in separate suite
-    });
+    it.skip('should not render assessment questions until all gates pass (integration test)');
 
-    it('should protect answer keys from exposure (RLS policy test)', async () => {
-      // Using anon client to verify answer keys are not exposed
-      // The anonClient should fail to fetch correct_answer or explanation
-      // (Verify in Worker routes: api/scenario-questions-approved.js)
-      
-      const { data, error } = await supabase
+    it('should prevent anonymous users from accessing answer keys via RLS', async () => {
+      // Create anon client (public key only, no auth)
+      const anonClient = require('@supabase/supabase-js').createClient(
+        supabaseUrl,
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1YmxpY19rZXkifQ.ANON_KEY'
+      );
+
+      const { data, error } = await anonClient
         .from('scenario_questions')
         .select('id, question_text, correct_answer, explanation');
 
-      // If using anon client, these columns should be filtered by RLS
-      // This test is documentation; actual RLS enforcement happens at DB level
-      expect(error === null || error.message.includes('permission')).toBe(true);
+      // RLS policy should deny or redact correct_answer and explanation
+      // Either error with permission denied, or return data without those columns
+      if (error) {
+        expect(error.message.toLowerCase()).toContain('permission');
+      } else if (data && data.length > 0) {
+        // If data returned, these columns should be null or missing
+        expect(data[0].correct_answer).toBeNull();
+        expect(data[0].explanation).toBeNull();
+      }
     });
 
-    it('should provide audit diagnostic when evidence chain is incomplete', async () => {
-      // This test documents the audit queries available in supabase/contracts/evidence-mapping-contract.sql
-      // Queries show which stages are blocking assessment per scenario:
-      // - Stage 2: NULL question_id
-      // - Stage 3: Missing provenance link
-      // - Stage 4: Missing validation
-      
-      // Expected: All 21 scenarios show gaps until contract is fulfilled
-      expect(true).toBe(true); // Placeholder: audit queries documented in contract file
-    });
+    it.skip('should provide audit diagnostic when evidence chain is incomplete (use contract SQL queries)');
   });
 
   /**
    * Data Safety: Protect answer keys and sensitive content
    */
   describe('Answer Key Protection', () => {
-    it('should never expose correct_answer or explanation in assessment routes', async () => {
-      // Assessment questions exposed via api/scenario-questions-approved.js (Worker route)
-      // Route uses service-role to fetch, but explicitly filters output columns
-      // This ensures answer keys are never exposed to browsers
-      
-      // Expected: Route SELECT statement explicitly excludes correct_answer, explanation
-      // Actual validation: code review + API integration tests
-      expect(true).toBe(true);
-    });
-
-    it('should use RLS policies to prevent unauthorized access to answer keys', async () => {
-      // RLS policies on scenario_questions table:
-      // - anon: cannot select
-      // - authenticated: cannot select
-      // - service_role: can select (but code filters output)
-      
-      // Expected: Database-level protection (RLS) + application-level filtering (SELECT)
-      // This is defense-in-depth
-      expect(true).toBe(true);
-    });
+    it.todo('should never expose correct_answer or explanation in assessment routes (API integration test)');
+    it.todo('should use RLS policies to prevent unauthorized access to answer keys (database-level protection)');
   });
 
   /**
    * Atomicity: Evidence approval updates must be transactional
    */
   describe('Evidence Approval Atomicity', () => {
-    it('should support batch approval of questions within a scenario', async () => {
-      // Pseudocode: When a technician approves a batch of questions:
-      // 1. Update question_provenance.status = 'approved' + signatures
-      // 2. Trigger validation re-run for all citations
-      // 3. Update citation_validations with latest result
-      // 4. Return gate_ready status
-      // All in a single transaction; no partial states
-      expect(true).toBe(true); // Placeholder for batch approval RPC
-    });
-
-    it('should prevent partial evidence state during update', async () => {
-      // If validation fails midway, entire approval rolls back
-      expect(true).toBe(true); // Placeholder for rollback test
-    });
+    it.todo('should support batch approval of questions within a scenario (requires RPC function)');
+    it.todo('should prevent partial evidence state during update (transactional rollback)');
   });
 });
