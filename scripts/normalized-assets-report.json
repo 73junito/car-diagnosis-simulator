@@ -1,8 +1,8 @@
 {
-  "normalized": 17,
+  "normalized": 21,
   "placeholderUsed": 0,
   "missing": 0,
-  "total": 17,
+  "total": 21,
   "mappings": [
     {
       "id": "no-crank",
@@ -88,6 +88,26 @@
       "id": "hybrid-ev-17",
       "status": "exists",
       "file": "hybrid-ev-17.svg"
+    },
+    {
+      "id": "automatic-transmission",
+      "status": "exists",
+      "file": "automatic-transmission.svg"
+    },
+    {
+      "id": "manual-transmission",
+      "status": "exists",
+      "file": "manual-transmission.svg"
+    },
+    {
+      "id": "differential",
+      "status": "exists",
+      "file": "differential.svg"
+    },
+    {
+      "id": "transaxle",
+      "status": "exists",
+      "file": "transaxle.svg"
     }
   ]
 }

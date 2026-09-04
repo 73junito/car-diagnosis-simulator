@@ -97,7 +97,7 @@ function attachTestRenderer() {
     const countEl = document.getElementById('filterCount');
     if(!container) return;
     while(container.firstChild){ container.removeChild(container.firstChild); }
-    const registry = (window.SCENARIO_REGISTRY || []).slice(0,17);
+    const registry = (window.SCENARIO_REGISTRY || []);
     populateFilterOptions(registry);
     const filters = getFilters();
     const total = registry.length;
@@ -126,7 +126,7 @@ function attachTestRenderer() {
 
 describe('Student dashboard filters', () => {
   beforeEach(() => {
-    const html = fs.readFileSync(path.resolve(__dirname, '../dashboard/student.html'), 'utf8');
+    const html = fs.readFileSync(path.resolve(__dirname, '../dashboard/student/index.html'), 'utf8');
      
     document.documentElement.innerHTML = html;
     // load scenarios and registry
@@ -139,10 +139,10 @@ describe('Student dashboard filters', () => {
     window.__testAttachFilters();
   });
 
-  test('initially renders 17 cards', () => {
+  test('initially renders 21 cards', () => {
     const grid = document.getElementById('scenarioGrid');
-    expect(grid.querySelectorAll('.sd-card').length).toBe(17);
-    expect(document.getElementById('filterCount').textContent).toContain('Showing 17 of 17');
+    expect(grid.querySelectorAll('.sd-card').length).toBe(21);
+    expect(document.getElementById('filterCount').textContent).toContain('Showing 21 of 21');
   });
 
   test('search filter reduces results correctly', () => {
@@ -160,7 +160,7 @@ describe('Student dashboard filters', () => {
   });
 
   test('category filter updates card count', () => {
-    const reg = window.SCENARIO_REGISTRY.slice(0,17);
+    const reg = window.SCENARIO_REGISTRY;
     const categories = Array.from(new Set(reg.map(s=>s.category).filter(Boolean)));
     if(categories.length===0) return; // nothing to assert
     const cat = categories[0];
@@ -173,7 +173,7 @@ describe('Student dashboard filters', () => {
   });
 
   test('difficulty filter works independently', () => {
-    const reg = window.SCENARIO_REGISTRY.slice(0,17);
+    const reg = window.SCENARIO_REGISTRY;
     const expected = reg.filter(s => String((s.difficulty||'')).toLowerCase()==='advanced').length;
     const sel = document.getElementById('filterDifficulty');
     sel.value = 'advanced';
@@ -187,7 +187,7 @@ describe('Student dashboard filters', () => {
     const selCat = document.getElementById('filterCategory');
     const selDiff = document.getElementById('filterDifficulty');
     // pick values from registry
-    const reg = window.SCENARIO_REGISTRY.slice(0,17);
+    const reg = window.SCENARIO_REGISTRY;
     const candidate = reg.find(s => s.category && s.difficulty && (s.title||'').length>0);
     if(!candidate) return;
     search.value = (candidate.title || '').split(' ')[0];
@@ -208,7 +208,7 @@ describe('Student dashboard filters', () => {
   });
 
   test('ASE filter works or gracefully ignores missing ASE metadata', () => {
-    const reg = window.SCENARIO_REGISTRY.slice(0,17);
+    const reg = window.SCENARIO_REGISTRY;
     const ases = Array.from(new Set(reg.map(s=>s.aseArea).filter(Boolean)));
     const sel = document.getElementById('filterAse');
     if(ases.length===0){
@@ -230,7 +230,7 @@ describe('Student dashboard filters', () => {
     const grid = document.getElementById('scenarioGrid');
     expect(grid.querySelectorAll('.sd-card').length).toBe(0);
     expect(grid.querySelectorAll('.empty-state').length).toBe(1);
-    expect(document.getElementById('filterCount').textContent).toContain('Showing 0 of 17');
+    expect(document.getElementById('filterCount').textContent).toContain('Showing 0 of 21');
   });
 
   test('reset filters button restores all cards after empty state', () => {
@@ -244,18 +244,18 @@ describe('Student dashboard filters', () => {
     expect(document.querySelector('#scenarioGrid #resetFiltersBtn')).toBeNull();
     btn.click();
     const grid = document.getElementById('scenarioGrid');
-    expect(grid.querySelectorAll('.sd-card').length).toBe(17);
-    expect(document.getElementById('filterCount').textContent).toContain('Showing 17 of 17');
+    expect(grid.querySelectorAll('.sd-card').length).toBe(21);
+    expect(document.getElementById('filterCount').textContent).toContain('Showing 21 of 21');
   });
 
-  test('clearing filters restores all 17 cards', () => {
+  test('clearing filters restores all 21 cards', () => {
     document.getElementById('searchInput').value = '';
     document.getElementById('filterCategory').value = 'all';
     document.getElementById('filterDifficulty').value = 'all';
     document.getElementById('filterAse').value = 'all';
     document.getElementById('searchInput').dispatchEvent(new Event('input'));
     const grid = document.getElementById('scenarioGrid');
-    expect(grid.querySelectorAll('.sd-card').length).toBe(17);
+    expect(grid.querySelectorAll('.sd-card').length).toBe(21);
   });
 
   test('keyboard accessibility still works after filtering', () => {
@@ -275,7 +275,7 @@ describe('Student dashboard filters', () => {
     values.forEach(v => { search.value = v; search.dispatchEvent(new Event('input')); });
     const grid = document.getElementById('scenarioGrid');
     // final count should match registry filter (no DOM leak - node count equals expected)
-    const expected = (window.SCENARIO_REGISTRY||[]).slice(0,17).filter(s=>((s.title||'')+' '+(s.shortSymptom||'')).toLowerCase().includes('hybrid')).length;
+    const expected = (window.SCENARIO_REGISTRY||[]).filter(s=>((s.title||'')+' '+(s.shortSymptom||'')).toLowerCase().includes('hybrid')).length;
     expect(grid.querySelectorAll('.sd-card').length).toBe(expected);
   });
 });
