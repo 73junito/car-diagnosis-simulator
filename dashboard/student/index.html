@@ -188,7 +188,13 @@
           }
         }
         card.addEventListener('click', (event) => { if (event.target && event.target.closest && event.target.closest('a')) return; activate(); });
-        card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); activate(); } });
+        card.addEventListener('keydown', (e)=>{
+          // Allow Enter on links inside the card to follow their default behavior
+          if ((e.key==='Enter' || e.key===' ') && !(e.target && e.target.closest && e.target.closest('a'))) {
+            e.preventDefault();
+            activate();
+          }
+        });
 
         return card;
       }

@@ -18,18 +18,14 @@ test.describe('student dashboard keyboard accessibility', ()=>{
     await startButton.focus();
     await expect(startButton).toBeFocused();
 
-    // Press Enter on the button to activate the scenario
+    // Press Enter on the Start link to navigate to the scenario page
+    // (following the canonical diagnostic workflow route)
     await page.keyboard.press('Enter');
 
-    // Scenario opens in-panel, so URL has ?scenario= param on dashboard
+    // Navigate to the scenario page via the canonical diagnostic workflow route
     await expect(page).toHaveURL(
-      /\/dashboard\/student\/\?scenario=/
+      /\/dashboard\/student\/scenario\/\?scenario=/
     );
-
-    // Back to dashboard button should be visible when scenario detail is open
-    await expect(
-      page.getByRole('button', { name: /back to dashboard/i })
-    ).toBeVisible();
   });
 
 });
