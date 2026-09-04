@@ -167,17 +167,11 @@ This workstream is **data integrity only**: no new questions, no scenario change
   - No hardcoded scenario lists or assumptions
   - Can be safely executed read-only against staging/production for auditing
 
-### No Deployable Database Functions or Migrations in This PR
+### Out-of-Scope Future Work
 
-This PR contains **no migration files and no RPC function definitions**. The contract documents what the database state should be when complete, but does not implement remediation SQL.
+No migration, RPC function, stored procedure, backfill, catalog reconciliation, or citation-validation job is included in this PR.
 
-Future steps (after crosswalk approval) will include:
-- Question-ID backfill migrations (separate PR)
-- Catalog reconciliation (separate PR)
-- Citation validation queries (may be RPC or direct queries, to be decided)
-- Release-gate enforcement (decision pending after evidence chain is complete)
-
-**All audit queries in this PR are read-only** and located in `supabase/contracts/` (not `migrations/`), preventing accidental deployment.
+If remediation is approved later, each database-changing step must be proposed and reviewed in a separate PR after explicit stakeholder approval of the deterministic question-to-provenance crosswalk.
 
 ---
 
@@ -209,15 +203,15 @@ Current expected state (until Step 1 crosswalk approved):
 - tests/evidence-mapping-contract.spec.js — 19 integration test assertions (skip locally, run in staging)
 - tests/evidence-mapping-contract-static.spec.js — 9 local artifact validation tests
 
+Cloudflare's repository integration may build and deploy the branch commit to the configured Worker environment. This PR itself contains no Worker-code, migration, seed, or database-write change.
+
 **This PR does NOT**:
 - ❌ Create migrations or deploy database DDL
 - ❌ Create RPC functions or stored procedures
 - ❌ Backfill question_id values
 - ❌ Mutate scenario_catalog
 - ❌ Attach citations or validate evidence
-- ❌ Include any deployable application or database changes
-
-**Deployment Note**: GitHub Actions automatically deployed this branch code to Cloudflare production Workers for preview/review purposes. However, this PR contains only read-only design documentation and test code—no application logic changes, no database migrations, and no evidence mutations. The assessment endpoint continues to fail-closed (returns zero questions). No production data is at risk from this PR alone.
+- ❌ Introduce deployable application or database changes
 
 **This PR does**:
 - ✅ Document the evidence-mapping design model (not yet approved for implementation)
@@ -233,22 +227,14 @@ Current expected state (until Step 1 crosswalk approved):
 
 ---
 
-## Blocked Pending Explicit Crosswalk Approval
+## Governance Hold
 
-All remediation work (Steps 1–7) is **blocked** until stakeholder explicitly approves:
-1. The question-to-provenance crosswalk methodology
-2. The crosswalk artifact itself (CSV showing scenario_questions.id → question_provenance.id mapping)
-3. Each subsequent step before proceeding to the next
+This PR establishes a read-only contract only. No remediation action is authorized until both conditions are met:
 
-Do not create backfill SQL, catalog reconciliation, citation validators, or any production changes until this approval gate is passed.
+1. CI is green.
+2. A stakeholder explicitly approves the deterministic question-to-provenance crosswalk methodology.
 
-**Approval process**:
-1. ✅ This PR (Gate 4 contract design) passes CI
-2. ⏳ Stakeholder reviews and explicitly approves the contract and methodology
-3. ⏳ Stakeholder approves the Step 1 crosswalk artifact (separate PR)
-4. ⏳ Only then can Steps 2–7 proceed (one at a time, with approval between each)
-
-**No governance bypass**: Do not merge this PR as if approval is automatic. Do not proceed with Steps 1–7 based on CI passing alone.
+Until then, do not create or run backfill SQL, reconcile the catalog, attach or validate citations, create RPCs, or apply migrations.
 
 ---
 
