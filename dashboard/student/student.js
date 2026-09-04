@@ -58,22 +58,6 @@ window.initStudentDashboard = function(){
 
   backBtn.addEventListener('click', ()=>{ closeDetail(); });
 
-  // Attach hotspot handlers
-  document.querySelectorAll('.hotspot').forEach(btn => {
-    btn.addEventListener('click', ()=>{
-      const slug = btn.dataset.scenario;
-      // Find scenario by scenario_key (preferred), then fallback to other fields
-      const scenario = (window.scenarios||[]).find(s => s.scenario_key === slug || s.symptomCategory === slug || s.slug === slug || (s.symptoms && s.symptoms === slug) || String(s.id) === slug);
-      if(scenario){
-        // Route using unique scenario_key
-        window.location.href = `/dashboard/student/scenario/?scenario=${encodeURIComponent(scenario.scenario_key)}`;
-      } else {
-        // Fallback: attempt to route anyway (will be caught by scenario page)
-        window.location.href = `/dashboard/student/scenario/?scenario=${encodeURIComponent(slug)}`;
-      }
-    });
-  });
-
   // If query param present, open scenario
   const params = new URLSearchParams(location.search);
   const q = params.get('scenario') || params.get('id');
