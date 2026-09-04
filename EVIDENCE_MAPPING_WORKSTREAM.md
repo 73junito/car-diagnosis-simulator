@@ -125,15 +125,28 @@ This workstream is **data integrity only**: no new questions, no scenario change
 
 ### Test Files
 
+- **`tests/evidence-mapping-contract-static.spec.js`** (NEW)
+  - Local artifact validation: verifies contract safety and documentation **without credentials**
+  - Confirms SQL contract is outside deployable migrations (read-only)
+  - Verifies no CREATE, ALTER, DROP, GRANT, INSERT, UPDATE, DELETE, or TRUNCATE statements in contract
+  - Validates all five stages documented in workstream
+  - Checks that staging credentials requirement is explicit in documentation
+  - **Runs locally**: Does not require `SUPABASE_URL` or `SUPABASE_SERVICE_ROLE_KEY`
+  - Complements the integration tests (below) by validating artifacts independently
+
 - **`tests/evidence-mapping-contract.spec.js`** (NEW)
-  - Test suite validating the 5-stage evidence-to-question contract
+  - Integration test suite validating the 5-stage evidence-to-question contract **against live Supabase**
+  - **Requires staging credentials**: `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` environment variables
   - Stage 1: Identity (catalog-to-scenario mapping)
   - Stage 2: Question (non-null, unique question_id)
   - Stage 3: Provenance (question-to-provenance linkage)
   - Stage 4: Citation (approved citations with full validation)
   - Stage 5: Release (fail-closed gate: zero questions render without full chain)
+  - **Local behavior**: Tests are skipped when credentials are unavailable (no false failures)
+  - **Staging behavior**: All 19 tests run when credentials are injected
   - Does NOT call RPC functions (functions do not exist yet)
   - Tests data state directly via Supabase client queries
+  - **Note**: The local suite validates repository safety and skips staging-only evidence checks when credentials are unavailable. Staging credentials are required to execute the 19 evidence-integrity assertions.
 
 ### Design SQL Files
 
