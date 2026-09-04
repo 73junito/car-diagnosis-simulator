@@ -5,7 +5,7 @@
  * for safe assessment release.
  * 
  * Requirements:
- * 1. All scenario_catalog entries align with live SCENARIO_REGISTRY keys (21 total)
+ * 1. Each UI scenario_key must have a deliberate catalog mapping after the catalog identity model is approved
  * 2. All scenario_questions have stable, non-null question_id values
  * 3. Each question_id links to exactly one question_provenance entry
  * 4. Approved provenance requires: status='approved' + all reviewer signatures + all dates
@@ -291,3 +291,4 @@ describeStaging('Evidence Mapping Contract', () => {
     it.todo('should prevent partial evidence state during update (transactional rollback)');
   });
 });
+

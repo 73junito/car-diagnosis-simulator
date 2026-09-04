@@ -58,7 +58,7 @@ The visual card-image refresh, progress-tracking polish, or any other student UX
 
 ### The Evidence Mapping PR
 
-This workstream is **data integrity only**: no new questions, no scenario changes, no Worker deployments.
+This workstream is **data integrity only**: no new questions, no scenario changes, and no Worker-code changes.
 
 **Critical Safety Requirements**:
 1. No `CREATE FUNCTION` statements in deployable migrations (prevents accidental deployment)
@@ -219,7 +219,7 @@ Cloudflare's repository integration may build and deploy the branch commit to th
 - ✅ Establish governance sequence (Steps 1–7) with approval gates
 - ✅ Provide read-only staging audit queries for evidence-chain diagnosis
 - ✅ Add credential-free local contract validation tests
-- ✅ Create a CI gate for stakeholder review and explicit approval
+- ✅ Support CI review; stakeholder approval remains a human governance decision
 
 **This PR is a governance and design reference**, not an approved implementation or enforceable CI gate. It must be reviewed and explicitly approved before any remediation work (Steps 1–7) can proceed.
 
@@ -289,3 +289,4 @@ If evidence mapping breaks a scenario during remediation (Steps 1–7):
 - `NO-CRANK-HUMAN-PASSAGE-ATTESTATION.json` — Evidence attestation
 - `PRODUCTION_READINESS_CHECKLIST.md` — Release gates
 - `supabase/verification/03_gate4_readiness.sql` — Release gate query
+
