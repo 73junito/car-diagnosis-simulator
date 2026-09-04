@@ -17,7 +17,7 @@ function loadScriptIntoWindow(filePath, window) {
 describe('Student dashboard grid', () => {
   let html;
   beforeAll(() => {
-    html = fs.readFileSync(path.resolve(__dirname, '../dashboard/student.html'), 'utf8');
+    html = fs.readFileSync(path.resolve(__dirname, '../dashboard/student/index.html'), 'utf8');
     // set full document
      
     document.documentElement.innerHTML = html;
@@ -31,7 +31,7 @@ describe('Student dashboard grid', () => {
       // Inline renderer in HTML won't execute when setting innerHTML in jsdom.
       // Populate grid here using the same logic as the page renderer as a fallback.
       const container = document.getElementById('scenarioGrid');
-      const list = (window.SCENARIO_REGISTRY || []).slice(0,17);
+      const list = (window.SCENARIO_REGISTRY || []);
       list.forEach(s => {
         const card = document.createElement('article'); card.className = 'sd-card';
         card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
@@ -51,11 +51,11 @@ describe('Student dashboard grid', () => {
     }
   });
 
-  test('renders 17 cards', () => {
+  test('renders 21 cards', () => {
     const grid = document.getElementById('scenarioGrid');
     expect(grid).toBeTruthy();
     const cards = grid.querySelectorAll('.sd-card');
-    expect(cards.length).toBe(17);
+    expect(cards.length).toBe(21);
   });
 
   test('no duplicate scenario IDs in registry', () => {

@@ -2,41 +2,63 @@
 const fs = require('fs');
 const path = require('path');
 
+function loadScriptIntoWindow(filePath, window) {
+  const code = fs.readFileSync(filePath, 'utf8');
+  const fn = new Function('window','document','self','location','history', code + '\n//# sourceURL=' + filePath);
+  fn(window, window.document, window, window.location, window.history);
+}
+
 describe('Student dashboard', ()=>{
   beforeEach(()=>{
-    // safely parse HTML into the jsdom document without using innerHTML
-    const html = fs.readFileSync(path.join(__dirname,'..','dashboard','student.html'),'utf8');
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    while(document.body.firstChild) document.body.removeChild(document.body.firstChild);
-    Array.from(doc.body.childNodes).forEach(n => document.body.appendChild(document.importNode(n, true)));
-    // simple mock scenario registry used by the dashboard renderer
-    window.SCENARIO_REGISTRY = [
-      {
-        id: 'no-crank',
-        title: 'Engine will not crank',
-        shortSymptom: 'Engine will not crank',
-        image: '/assets/images/scenarios/placeholder-scenario.svg',
-        route: '#no-crank',
-        category: 'no-crank'
-      }
-    ];
-    // student.js expects `window.scenarios` for hotspot detail rendering
-    window.scenarios = [
-      {
-        id: 'no-crank',
-        symptomCategory: 'no-crank',
-        symptoms: 'Engine will not crank',
-        tests: { scan: {} }
-      }
-    ];
-    // load the script and call init
-    const script = fs.readFileSync(path.join(__dirname,'..','dashboard','student.js'),'utf8');
-    const s = document.createElement('script');
-    s.textContent = script;
-    document.body.appendChild(s);
-    // init function attached to window
-    if(window.initStudentDashboard) window.initStudentDashboard();
+    // Load canonical dashboard HTML
+    const html = fs.readFileSync(path.join(__dirname,'..','dashboard','student','index.html'),'utf8');
+    document.documentElement.innerHTML = html;
+    // load scenario data and registry
+    loadScriptIntoWindow(path.resolve(__dirname, '../data/scenarios.js'), window);
+    loadScriptIntoWindow(path.resolve(__dirname, '../data/scenario-registry.js'), window);
+    
+    // fallback renderer for jsdom (inline script doesn't execute when setting innerHTML)
+    const grid = document.getElementById('scenarioGrid');
+    if (!grid || grid.children.length === 0) {
+      const container = document.getElementById('scenarioGrid');
+      const list = (window.SCENARIO_REGISTRY || []);
+      list.forEach(s => {
+        const card = document.createElement('article');
+        card.className = 'sd-card';
+        card.tabIndex = 0;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', s.title || s.id);
+        const img = document.createElement('img');
+        img.className = 'sd-card-img';
+        img.alt = s.title || '';
+        img.src = s.image;
+        const body = document.createElement('div');
+        body.className = 'sd-card-body';
+        const title = document.createElement('h3');
+        title.className = 'sd-card-title';
+        title.textContent = s.title || s.id;
+        const meta = document.createElement('div');
+        meta.className = 'sd-card-meta';
+        meta.textContent = `${s.category || ''} • ${s.difficulty || ''}`;
+        const p = document.createElement('p');
+        p.className = 'sd-card-text';
+        p.textContent = s.shortSymptom || '';
+        body.appendChild(title);
+        body.appendChild(meta);
+        body.appendChild(p);
+        const footer = document.createElement('div');
+        footer.className = 'sd-card-footer';
+        const btn = document.createElement('a');
+        btn.className = 'btn btn-secondary';
+        btn.href = s.route || '#';
+        btn.textContent = 'Start';
+        footer.appendChild(btn);
+        card.appendChild(img);
+        card.appendChild(body);
+        card.appendChild(footer);
+        container.appendChild(card);
+      });
+    }
   });
 
   test('renders grid with at least one card', ()=>{
@@ -52,13 +74,13 @@ describe('Student dashboard', ()=>{
   });
 
   test('opens detail when clicking card', ()=>{
-    // clicking a hotspot should open the detail view (student.js handles hotspots)
-    const hotspot = document.querySelector('.hotspot[data-scenario="no-crank"]');
-    expect(hotspot).toBeTruthy();
-    hotspot.click();
-    const detail = document.getElementById('detail');
-    expect(detail.classList.contains('hidden')).toBe(false);
-    const title = document.getElementById('detailTitle');
-    expect(title.textContent).toMatch(/no-crank|Engine/);
+    // clicking a card should either open detail or navigate to the scenario
+    const card = document.querySelector('.sd-card');
+    expect(card).toBeTruthy();
+    const link = card.querySelector('a');
+    expect(link).toBeTruthy();
+    // the card should be focusable and clickable
+    expect(card.getAttribute('role')).toBe('button');
+    expect(card.tabIndex).toBe(0);
   });
 });

@@ -32,7 +32,7 @@ function renderForTests(){
   }
 
   const container = document.getElementById('scenarioGrid'); while(container.firstChild){ container.removeChild(container.firstChild); }
-  const registry = (window.SCENARIO_REGISTRY||[]).slice(0,17);
+  const registry = (window.SCENARIO_REGISTRY||[]);
   registry.forEach(s => container.appendChild(createCard(s)));
   // update summary
   const progress = window.studentProgress.loadProgress();
@@ -48,7 +48,7 @@ function renderForTests(){
 
 describe('Student progress persistence and UI', () => {
   beforeEach(() => {
-    const html = fs.readFileSync(path.resolve(__dirname, '../dashboard/student.html'), 'utf8');
+    const html = fs.readFileSync(path.resolve(__dirname, '../dashboard/student/index.html'), 'utf8');
      
     document.documentElement.innerHTML = html;
     loadScriptIntoWindow(path.resolve(__dirname, '../data/scenarios.js'), window);
@@ -113,7 +113,7 @@ describe('Student progress persistence and UI', () => {
     const badges = Array.from(document.querySelectorAll('.sd-badge')).map(n=>n.textContent);
     expect(badges).toContain('completed');
     expect(badges).toContain('in-progress');
-    expect(document.getElementById('progressSummary').textContent).toMatch(/Completed: 1 \/ 17/);
+    expect(document.getElementById('progressSummary').textContent).toMatch(/Completed: 1 \/ 21/);
   });
 
   test('corrupted localStorage recovery', () => {
