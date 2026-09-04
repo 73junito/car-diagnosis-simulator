@@ -142,7 +142,6 @@
         const card = document.createElement('article'); card.className = 'sd-card tm-scenario-v2-card';
         // attach stable id for testing and identity checks
         try{ card.setAttribute('data-scenario-id', s.id); }catch(e){}
-        card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label', s.title || s.id);
 
         const media = document.createElement('div'); media.className = 'tm-scenario-v2-card__media';
         const img = document.createElement('img'); img.className = 'tm-scenario-v2-card-img'; img.alt = s.title || '';
@@ -158,7 +157,8 @@
         body.appendChild(title); body.appendChild(meta); body.appendChild(p);
 
         const footer = document.createElement('div'); footer.className = 'tm-scenario-v2-card-footer';
-        const btn = document.createElement('a'); btn.className = 'tm-btn tm-btn-primary'; btn.href = s.route || '#'; btn.textContent = 'Start';
+        const previewBtn = document.createElement('button'); previewBtn.className = 'tm-btn'; previewBtn.textContent = 'Preview Scenario'; previewBtn.type = 'button';
+        const btn = document.createElement('a'); btn.className = 'tm-btn tm-btn-primary'; btn.href = s.route || '#'; btn.textContent = 'Start Diagnostic';
         // status badge
         const badge = document.createElement('span'); badge.className = 'tm-pill';
         const progressEntry = (window.studentProgress && window.studentProgress.getProgressFor) ? window.studentProgress.getProgressFor(s.id) : null;
@@ -166,34 +166,31 @@
         else badge.textContent = 'Not Started';
         badge.classList.add('badge--status');
         footer.appendChild(badge);
+        footer.appendChild(previewBtn);
         footer.appendChild(btn);
 
         media.appendChild(img);
         card.appendChild(media);
         card.appendChild(body); card.appendChild(footer);
 
-        // interactions (use hash navigation in test env to avoid jsdom navigation errors)
-        function activate(){
+        // interactions
+        function preview(){
+          try{
+            if(window.studentProgress && window.studentProgress.setLastScenario){ window.studentProgress.setLastScenario(s.id); }
+          }catch(e){}
+          // show in-panel detail when available for accessibility and previews
+          if(window.showScenarioDetail && typeof window.showScenarioDetail === 'function'){
+            window.showScenarioDetail(s.raw || s, card);
+          }
+        }
+        previewBtn.addEventListener('click', (event) => { event.preventDefault(); preview(); });
+        
+        // Update progress when starting diagnostic
+        btn.addEventListener('click', (event) => {
           try{
             if(window.studentProgress && window.studentProgress.setLastScenario){ window.studentProgress.setLastScenario(s.id); }
             if(window.studentProgress && window.studentProgress.setProgressFor){ window.studentProgress.setProgressFor(s.id,'in-progress'); }
           }catch(e){}
-          // prefer opening in-panel detail when available for accessibility and previews
-          if(window.showScenarioDetail && typeof window.showScenarioDetail === 'function'){
-            window.showScenarioDetail(s.raw || s, card);
-          } else if (typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID) {
-            window.location.hash = btn.getAttribute('href');
-          } else {
-            window.location.href = btn.href;
-          }
-        }
-        card.addEventListener('click', (event) => { if (event.target && event.target.closest && event.target.closest('a')) return; activate(); });
-        card.addEventListener('keydown', (e)=>{
-          // Allow Enter on links inside the card to follow their default behavior
-          if ((e.key==='Enter' || e.key===' ') && !(e.target && e.target.closest && e.target.closest('a'))) {
-            e.preventDefault();
-            activate();
-          }
         });
 
         return card;
