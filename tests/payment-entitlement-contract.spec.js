@@ -62,11 +62,10 @@ describe('Payment & Entitlement Contract (v1 - Fixed-Duration)', () => {
 
     test('should NOT grant access based on PayPal hosted button alone', () => {
       // Arrange
-      const hostedButtonId = 'UTQPPVBUG92T2'; // Training hosted button
       const hasPayPalButton = true; // Button is rendered in browser
       const hasServerEntitlement = false; // No entitlement created yet
 
-      // Act: User clicks PayPal hosted button (UTQPPVBUG92T2 or N3RZVZQ99X592)
+      // Act: User clicks PayPal button
       // PayPal SDK starts checkout -> user completes payment on PayPal
 
       // Assert: Hosted button UI starts checkout but DOES NOT grant access
@@ -83,14 +82,13 @@ describe('Payment & Entitlement Contract (v1 - Fixed-Duration)', () => {
       // Arrange
       const userId = '11111111-1111-1111-1111-111111111111';
       const productId = 'training_access';
-      const hostedButtonId = 'UTQPPVBUG92T2'; // Embedded in client; maps to training_access
 
       // Act: Server-side sequence
       // 1. Client POSTs /api/orders/create { product_id: 'training_access' }
       // 2. Server creates order record with status='pending'
       // 3. Server creates PayPal order via PayPal API
       // 4. Server returns { order_id, paypal_order_id, ...}
-      // 5. Client renders PayPal hosted button using paypal_order_id
+      // 5. Client renders PayPal button using paypal_order_id
       // 6. User clicks hosted button, completes payment on PayPal
       // 7. PayPal sends webhook: PAYMENT.CAPTURE.COMPLETED
 

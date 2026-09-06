@@ -14,7 +14,7 @@ Before any database schema can be finalized, TorqueMind must choose between two 
 **Model:** User purchases one-time access to training for a defined period.
 
 **Characteristics:**
-- Single purchase grants access for N days (default: 365)
+- Single purchase grants access for N days (server-configured)
 - Access expires after N days regardless of usage
 - User can purchase again if access has expired
 - No renewal, no cancellation complexity

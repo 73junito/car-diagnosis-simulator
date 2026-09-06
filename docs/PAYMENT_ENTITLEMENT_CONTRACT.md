@@ -62,7 +62,7 @@ Certification exam attempt purchases are **NOT supported in v1**. Any request fo
 When v2 deploys certification infrastructure separately on `autolearnpro.com`, certification purchases will use the same direct Orders API flow, with the additional requirement of immutable exam-version assignment during webhook processing.
 
 **Non-Production References:**
-Hosted Buttons `UTQPPVBUG92T2` and `N3RZVZQ99X592` are retained as non-production prototypes or marketing links only. They are NOT part of v1 or v2 entitlement workflows.
+Earlier hosting experiments have been deferred. They are NOT part of v1 or v2 entitlement workflows.
 
 **Client Approval Callback Rule:**
 A client-side approval callback (e.g., `onApprove`) NEVER grants access. Access activates only after server verification and webhook processing.
@@ -79,18 +79,17 @@ A client-side approval callback (e.g., `onApprove`) NEVER grants access. Access 
 **Domain:** `app.autolearnpro.com`
 **Model:** Fixed-duration (one purchase = fixed expiration)
 **Launch Configuration:**
-- Price: $29.99 USD (visible in PayPal checkout)
-- Duration: 365 days (server-configurable)
+- Price: Server-configured (visible in PayPal checkout, not hardcoded)
+- Duration: Server-configured days (not hardcoded)
 - PayPal Product ID: Server-configured (not in contract)
-- **Note:** Hosted Button `UTQPPVBUG92T2` is a non-production prototype only. v1 uses direct PayPal Orders API.
+
 **Features:**
 - Practice scenarios with feedback
 - Learning analytics and progress tracking
 - Tutor explanations
 - Adaptive learning engine
 
-**Price:** $29.99 USD (visible in PayPal checkout; server-configured, not client-controlled)
-**PayPal Configuration:** Server-configured environment variables
+**Payment Configuration:** All pricing and duration settings are server-configured via environment variables and database configuration, not client-controlled or hardcoded.
 
 ### 1.2 Certification Exam Attempt (Planned for v2+)
 
@@ -102,8 +101,8 @@ A client-side approval callback (e.g., `onApprove`) NEVER grants access. Access 
 
 **Planned Launch Configuration (v2+):**
 - Domain: `autolearnpro.com` (after separate apex-domain deployment)
-- Price: $49.99 USD (visible in PayPal checkout; server-configured)
-- Validity Period: 30 days (server-configurable)
+- Price: Server-configured (visible in PayPal checkout, not hardcoded)
+- Validity Period: Server-configured days (not hardcoded)
 - PayPal Product ID: Server-configured (not in contract)
 
 **Planned Behavior (v2+):**
@@ -150,12 +149,12 @@ const config = {
   products: {
     training_access: {
       paypalProductId: "...",
-      durationDays: parseInt(process.env.TRAINING_DURATION_DAYS) || 365,
+      durationDays: parseInt(process.env.TRAINING_DURATION_DAYS), // Server-configured, no default
       priceCents: parseInt(process.env.TRAINING_PRICE_CENTS) // Only server knows
     },
     certification_exam_attempt: {
       paypalProductId: "...",
-      validityDays: parseInt(process.env.EXAM_VALIDITY_DAYS) || 30,
+      validityDays: parseInt(process.env.EXAM_VALIDITY_DAYS), // Server-configured, no default
       priceCents: parseInt(process.env.EXAM_PRICE_CENTS) // Only server knows
     }
   },
