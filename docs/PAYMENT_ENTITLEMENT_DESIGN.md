@@ -27,7 +27,7 @@ product, status, creation time, expiration time, and revocation tracking.
 ```
 Order Created → PayPal Approved → Webhook Captured → Entitlement Active
                                                          ↓
-                                              (365 days pass)
+                                      (server-configured duration passes)
                                                          ↓
                                             Entitlement Expired
 ```
@@ -58,7 +58,7 @@ fields for user, payment reference, status, billing cycle, and cycle-specific en
 ```
 Subscription Created → First Payment Approved → First Entitlement Active
                                                        ↓
-                                        (30 days pass, renewal due)
+                                        (server-configured renewal cycle passes)
                                                        ↓
                                   Payment Captured Again → New Entitlement
                                                        ↓
