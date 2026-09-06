@@ -67,9 +67,9 @@ This contract specifies a **test-first, non-deployable conceptual model** for pa
 | Exam Version Assignment | 3 tests | Immutability, separate entitlements, certification-only |
 | Domain Isolation | 4 tests | Training-only features, exam-domain restrictions |
 | Audit Trail | 3 tests | Order creation, capture, webhook processing logged |
-| Integration Workflows | 2 tests | End-to-end training and certification purchase flows |
+| Integration Workflows | 4 tests | v1 training-access workflow, v1 rejects certification as deferred to v2+ |
 
-**Total: 38 test cases** covering all contract requirements
+**Total: 45 test cases** covering all contract requirements
 **⚠️ All tests are assertions on security rules and prohibited behaviors — NOT mocking payment processors**
 
 ### 2. ~~Answer Keys Table~~ → REMOVED
@@ -146,9 +146,8 @@ Access granted
 // Server looks up: price from configuration/database (NOT from client)
 // Server rejects: Any request with amount, price, or currency field
 
-// Current launch prices (must never be hardcoded in browser code):
-// training_access: $29.99 USD / 365 days
-// certification_exam_attempt: $49.99 USD / one attempt
+// Current launch prices are server-configured via environment variables or KV storage
+// Never hardcode in browser code
 ```
 
 ### 2. No Prices in Tests
@@ -168,7 +167,6 @@ const requestBody = { product_id: 'training_access' };
 | `PAYPAL_WEBHOOK_ID` | Server (webhook verification) | Cloudflare secrets | ❌ Never exposed | Secret; verify with PayPal official endpoint |
 | Product pricing | Server config | Cloudflare KV or environment | ✅ Visible in checkout | Server-owned; never trusted from client input |
 | Public client IDs | Browser (checkout) | Public config | ✅ Safe to expose | Use only on intended domain |
-| Hosted button IDs | Browser (checkout) | Public config | ✅ Safe to expose | Training: `UTQPPVBUG92T2` / Certification: `N3RZVZQ99X592` |
 
 ### 4. Webhook Verification (PayPal Official Flow)
 **Do NOT use custom HMAC-SHA256.**
@@ -238,15 +236,16 @@ each webhook event is processed exactly once.
 ### Order Creation
 ```
 POST /api/orders/create
-├─ Input: { product_id: string, quantity: int }
+├─ Input: { product_id: string }
 ├─ Server:
 │  ├─ Validate authentication (user must be logged in)
-│  ├─ Validate product_id (training_access OR certification_exam_access)
-│  ├─ Look up price from database (NOT from client)
+│  ├─ Validate product_id is 'training_access' (v1 only)
+│  ├─ Reject if product_id is 'certification_exam_attempt' with HTTP 409
+│  ├─ Look up price from server config (NOT from client)
 │  ├─ Create PayPal order via REST API (using server secret)
 │  ├─ Store order record with status='pending'
-│  └─ Return: { order_id, amount, currency }
-└─ Database: orders (status='pending')
+│  └─ Return: { order_id, paypal_order_id, status }
+└─ Database: orders (status='pending') — schema deferred
 ```
 
 ### Order Capture
@@ -257,30 +256,30 @@ POST /api/orders/capture
 │  ├─ Verify order exists and belongs to authenticated user
 │  ├─ Verify order status is 'pending'
 │  ├─ Call PayPal /v2/checkout/orders/{id}/capture (using server secret)
-│  ├─ Validate response: status='COMPLETED', amount matches
+│  ├─ Validate response: status='COMPLETED'
 │  ├─ Atomically (transaction):
 │  │  ├─ Update order status → 'captured'
 │  │  ├─ Create entitlement record
-│  │  ├─ For certification: SELECT approved exam_version & create assignment
+│  │  ├─ For certification: assign immutable exam version
 │  │  └─ Log audit entry
-│  └─ Return: { order_id, status, entitlement_id, product_id, exam_version_id? }
-└─ Database: orders (status='captured'), entitlements, exam_version_assignments
+│  └─ Return: { order_id, status, entitlement_id, product_id }
+└─ Database: orders, entitlements — schema deferred
 ```
 
-### Webhook Processing
+### Webhook Processing (Future Implementation)
+**Note:** Webhook processing is a Phase 2A implementation requirement. v1 contract specifies:
 ```
 POST /api/webhooks/paypal
 ├─ Headers: Paypal-Transmission-Id, Paypal-Transmission-Time, Paypal-Transmission-Sig
-├─ Server:
-│  ├─ Verify HMAC-SHA256 signature
-│  ├─ Verify timestamp freshness (within 5 minutes)
-│  ├─ Log webhook_events entry with verified=true
+├─ Server (future implementation):
+│  ├─ Verify signature with PayPal official endpoint
+│  │  (POST https://api.paypal.com/v1/notifications/verify-webhook-signature)
+│  ├─ Preserve raw request body (do NOT re-stringify)
+│  ├─ Deduplicate by PayPal event ID
 │  ├─ On PAYMENT.CAPTURE.COMPLETED:
 │  │  └─ Confirm/update order status to 'captured'
-│  ├─ On PAYMENT.CAPTURE.DENIED or REFUNDED:
-│  │  └─ Mark entitlement as 'revoked' or 'expired'
-│  └─ Mark webhook_events.processed=true
-└─ Database: webhook_events, orders, entitlements (may be updated)
+│  └─ Log audit entry
+└─ Database: webhook_events, orders — schema deferred
 ```
 
 ---
