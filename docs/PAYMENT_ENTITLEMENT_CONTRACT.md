@@ -136,10 +136,10 @@ All configuration is server-owned. Client never sees or supplies these values.
 
 ```javascript
 // Server-side configuration (Cloudflare secrets/KV, NOT in code)
+// v1 scope: training_access only
 const config = {
   // Public client IDs (safe for browser)
   PAYPAL_TRAINING_CLIENT_ID: "...",
-  PAYPAL_CERTIFICATION_CLIENT_ID: "...",
 
   // Secrets (server-side only)
   PAYPAL_CLIENT_SECRET: "...",
@@ -151,12 +151,8 @@ const config = {
       paypalProductId: "...",
       durationDays: parseInt(process.env.TRAINING_DURATION_DAYS), // Server-configured, no default
       priceCents: parseInt(process.env.TRAINING_PRICE_CENTS) // Only server knows
-    },
-    certification_exam_attempt: {
-      paypalProductId: "...",
-      validityDays: parseInt(process.env.EXAM_VALIDITY_DAYS), // Server-configured, no default
-      priceCents: parseInt(process.env.EXAM_PRICE_CENTS) // Only server knows
     }
+    // certification_exam_attempt: DEFERRED TO v2+
   },
 
   // PayPal endpoints
@@ -227,25 +223,20 @@ const config = {
 2. Validate order status is 'pending'
 3. Verify order with PayPal API: `GET /v2/checkout/orders/{paypal_order_id}`
 4. Validate PayPal response: status='APPROVED' or payment captured
-5. If product is `certification_exam_attempt`:
-   - Select immutable exam version for this user
-   - Verify user doesn't already have this version
-6. Atomically:
+5. Atomically:
    - Update order status to 'captured'
    - Create entitlement record with fixed expiration_date
-   - For certification: link exam_version_id to entitlement
    - Create audit log entry
-7. Return entitlement confirmation
+6. Return entitlement confirmation
 
-**Server response:**
+**Server response (v1: training_access only):**
 ```json
 {
   "order_id": "22222222-2222-2222-2222-222222222222",
   "status": "captured",
   "entitlement_id": "33333333-3333-3333-3333-333333333333",
   "product_id": "training_access",
-  "expires_at": "2027-09-05T12:00:00Z",
-  "exam_version_id": null // or UUID for certification_exam_attempt
+  "expires_at": "2027-09-05T12:00:00Z"
 }
 ```
 
@@ -256,8 +247,9 @@ After a server verifies that PayPal captured the order, it must atomically:
 1. Record the verified capture against the matching local order.
 2. Create or return the existing entitlement when the event is retried.
 3. Set the fixed training expiration for `training_access`.
-4. Allocate one eligible immutable exam version for `certification_exam_attempt`.
-5. Write an audit record.
+4. Write an audit record.
+
+**v1 scope:** Training access only. Certification exam version allocation is deferred to v2+.
 
 The implementation proposal must define transaction boundaries, idempotency,
 authorization, retention, and concurrency handling in a separately reviewed
@@ -382,9 +374,9 @@ v1 activates `training_access` purchases on `app.autolearnpro.com` only. Certifi
 
 ## 5. Entitlement Validation Contract
 
-### 4.1 Entitlement Check Endpoint
+### 4.1 Entitlement Check Endpoint (v1: training_access only)
 
-**Endpoint:** `GET /api/entitlements/check/:product_id`
+**Endpoint:** `GET /api/entitlements/check/training_access`
 **Authenticated:** Yes
 
 **Server response:**
@@ -393,8 +385,7 @@ v1 activates `training_access` purchases on `app.autolearnpro.com` only. Certifi
   "has_access": true | false,
   "product_id": "training_access",
   "status": "active" | "expired" | "revoked" | null,
-  "expires_at": "2027-09-05T12:00:00Z",
-  "exam_version_id": "optional, for certification_exam_attempt only"
+  "expires_at": "2027-09-05T12:00:00Z"
 }
 ```
 
@@ -403,6 +394,8 @@ v1 activates `training_access` purchases on `app.autolearnpro.com` only. Certifi
 - `has_access = false` if `status='expired'` (expires_at in past)
 - `has_access = false` if `status='revoked'`
 - `has_access = false` if no entitlement exists
+
+**v2+ note:** Certification entitlement check is deferred and will include `exam_version_id` when implemented.
 
 ### 4.2 Access Control
 
@@ -487,16 +480,14 @@ Implementation details are deferred to Phase 2 schema review.
 
 **File:** `tests/payment-entitlement-contract.spec.js`
 
-**10 sections, 38+ test cases:**
-1. PayPal Payment Links: Browser UI Only (3 tests)
-2. Product Catalog (5 tests)
-3. Order Creation (6 tests)
-4. Order Capture (6 tests)
-5. Webhook Verification (7 tests)
-6. Entitlement Validation (5 tests)
-7. Exam Version Assignment (3 tests)
-8. Domain Isolation (4 tests)
-9. Audit Trail (3 tests)
-10. Integration Workflows (2 tests)
+**45 test assertions:**
+- Product catalog: training_access v1 only, certification deferred to v2+
+- Order creation: training_access only, certification rejected with HTTP 409
+- Order capture: training_access entitlement creation with server-configured expiration
+- Webhook verification: PayPal official endpoint verification, event deduplication
+- Entitlement validation: access control by domain and product
+- Security: no client price override, no HMAC custom verification, server-configured only
+- Error handling: authentication, authorization, malformed requests
+- Domain isolation: training domain ≠ certification domain
 
 **Approach:** Contract-only assertions on security rules and prohibited behaviors (no payment processor mocking)

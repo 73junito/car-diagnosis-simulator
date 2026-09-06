@@ -334,9 +334,9 @@ npm test -- tests/payment-entitlement-contract.spec.js --coverage
 
 ### Test statistics
 - **Total test suites:** 1 (payment-entitlement-contract.spec.js)
-- **Total test cases:** 41
-- **Total assertions:** ~80+
-- **Coverage scope:** API contract, entitlement logic, webhook verification, schema constraints
+- **Total test cases:** 45
+- **Total assertions:** ~90+
+- **Coverage scope:** API contract, entitlement logic, webhook verification, security constraints
 
 ---
 
@@ -347,99 +347,77 @@ npm test -- tests/payment-entitlement-contract.spec.js --coverage
 - [x] Specify payment workflow
 - [x] Define webhook contract
 - [x] Define entitlement model
-- [x] Specify exam version allocation
-- [x] Create SQL schema migration
-- [x] Write Jest test suite (41 tests)
+- [x] Specify exam version allocation (deferred to v2+)
+- [x] Write Jest test suite (45 tests)
 - [x] Document all constraints and safeguards
 
-### Phase 2: Database Schema (Next)
-- [ ] Apply SQL migration to staging database
-- [ ] Verify indexes and constraints
-- [ ] Test RLS policies
-- [ ] Verify cascade deletes
-- [ ] Write schema contract tests (if needed)
-
-### Phase 3: Server Endpoints (After schema)
+### Phase 2A: Training-Access Implementation (Separate Approval)
+- [ ] Schema design and security review (separate workstream)
 - [ ] Implement `POST /api/orders/create`
 - [ ] Implement `POST /api/orders/capture`
-- [ ] Implement `POST /api/webhooks/paypal`
+- [ ] Implement `POST /api/webhooks/paypal` (PayPal official verification)
 - [ ] Implement `GET /api/entitlements/check/training`
-- [ ] Implement `GET /api/entitlements/check/certification`
-- [ ] Add error handling and logging
-- [ ] Write integration tests for each endpoint
+- [ ] Integration testing against PayPal sandbox
+- [ ] Explicit approval before deployment
 
-### Phase 4: Client Integration (After endpoints)
-- [ ] Add PayPal SDK v6 to training site (app.autolearnpro.com)
-- [ ] Add PayPal SDK v6 to certification site (autolearnpro.com)
-- [ ] Render checkout buttons
-- [ ] Handle payment flow errors
-- [ ] Add success/failure pages
-- [ ] Wire entitlement validation to UI access control
-
-### Phase 5: Testing & Validation (Final)
-- [ ] Run full contract test suite
-- [ ] PayPal sandbox testing
-- [ ] End-to-end flow validation (all 41 test cases)
-- [ ] Load testing (concurrent orders, webhook bursts)
-- [ ] Security audit (signature verification, RLS policies)
-- [ ] Disaster recovery (webhook failures, database recovery)
+### Phase 2B: Certification Deferred (Separate Workstream)
+- [ ] Certification exam attempts are deferred to v2+
+- [ ] Requires separate deployment and security review
+- [ ] All v1 certification requests rejected with HTTP 409
 
 ---
 
-## Launch Configuration (Private Mapping)
+## Launch Configuration (Server-Side Only)
 
-**Current prices and durations MUST be recorded in server configuration (never hardcoded in browser code):**
+**Pricing and duration are server-configured (never hardcoded in browser code, contracts, or test suites).**
 
-| PayPal Hosted Button ID | Product | Price | Duration | Status |
-|---|---|---|---|---|
-| `UTQPPVBUG92T2` | Training Access | $29.99 USD | 365 days | ✅ Ready for Phase 5 |
-| `N3RZVZQ99X592` | Certification Exam Attempt | $49.99 USD | one attempt (30 day validity) | ⚠️ Disabled until webhook verification + exam assignment ready |
+All prices, durations, PayPal product IDs, and webhook IDs are:
+- ✅ Visible in PayPal checkout (not secret)
+- ✅ Server-owned and configurable
+- ❌ Never hardcoded in browser code
+- ❌ Never hardcoded in contracts or documentation
+- ❌ Never trusted from client input
+- ✅ Documented in private server configuration (Cloudflare secrets/KV)
+
+**v1 scope:**
+- Training access: prices and duration are server-configured, NOT hardcoded
+- Certification exam attempts: deferred to v2+, NOT available in v1
 
 **Key rules:**
-- ✅ Prices ARE visible in PayPal checkout (not secret)
-- ❌ Prices ARE NEVER hardcoded in browser code, migrations, or entitlement logic
-- ✅ Prices ARE server-owned and configurable
-- ❌ Prices ARE NEVER trusted from client input
-- ✅ Prices ARE documented in private server configuration
 - ✅ Entitlement is created ONLY after server-verified webhook (`PAYMENT.CAPTURE.COMPLETED`)
-- ✅ Exam version is allocated server-side ONLY during order capture (after webhook verification)
+- ✅ Webhook verification uses PayPal's official endpoint (Phase 2A implementation)
+- ❌ Custom HMAC-SHA256 verification is NOT allowed
 
 ---
 
-## Server Configuration (Phase 2)
-
-Phase 2 implementation will establish Cloudflare secrets and environment variables
-to store configuration values for pricing, durations, and payment credentials. No
-examples or templates are provided in this contract specification.
-
----
-
-## Files Delivered
+## Files Delivered (Phase 1 Complete)
 
 | File | Purpose | Status |
 |------|---------|--------|
-| `docs/PAYMENT_ENTITLEMENT_CONTRACT.md` | Full specification | ✅ Created |
-| `supabase/migrations/20260905000000_create_payment_entitlement_schema.sql` | Database schema | ✅ Created |
-| `tests/payment-entitlement-contract.spec.js` | Jest test suite (41 tests) | ✅ Created |
-| `docs/PAYMENT_ENTITLEMENT_BRIEFING.md` | This briefing | ✅ Created |
+| `docs/PAYMENT_ENTITLEMENT_CONTRACT.md` | v1 specification (training-access only) | ✅ Complete |
+| `docs/PAYMENT_ENTITLEMENT_DESIGN.md` | Design rationale (deferred schema) | ✅ Complete |
+| `tests/payment-entitlement-contract.spec.js` | Jest test suite (45 contract tests) | ✅ Complete |
+| `docs/PAYMENT_ENTITLEMENT_BRIEFING.md` | This briefing (executive summary) | ✅ Complete |
 
-**All files are review-ready, non-destructive, and ready for peer feedback.**
+**All files are contract-complete, review-ready, and locked for v1.**
+
+**Schema, configuration, and implementation are deferred to Phase 2A with separate approval.**
 
 ---
 
 ## Peer Review Checklist
 
-Before Phase 2 (database schema application):
+Before Phase 2A approval:
 
-- [ ] Product catalog pricing and domains are correct
+- [ ] Product catalog (training-access v1, certification deferred to v2+) is correct
 - [ ] Payment workflow matches business requirements
-- [ ] Webhook signature verification approach is sound
-- [ ] Entitlement expiration logic is acceptable
-- [ ] Exam version immutability meets certification requirements
-- [ ] Domain isolation is sufficient for compliance
-- [ ] Test cases are comprehensive
-- [ ] Error handling strategy is complete
-- [ ] RLS policies provide adequate data isolation
+- [ ] Webhook verification approach (PayPal official endpoint) is sound
+- [ ] Entitlement expiration logic (server-configured duration) is acceptable
+- [ ] Exam version immutability (deferred to v2+) meets certification requirements
+- [ ] Domain isolation (training ≠ certification) is sufficient for compliance
+- [ ] Test cases (45 assertions) are comprehensive
+- [ ] Error handling strategy (HTTP 409 for certification, etc.) is complete
+- [ ] Security requirements (no HMAC custom verification, etc.) are verified
 - [ ] Audit logging requirements are met
 
 ---
@@ -458,47 +436,54 @@ Before Phase 2 (database schema application):
 
 ---
 
-## Security Considerations
+## Security Contract Requirements (Phase 1)
 
-### Implemented
-- ✅ HMAC-SHA256 webhook signature verification
-- ✅ Timestamp freshness validation (5-minute window)
-- ✅ Server-side price determination (no client override)
+### Contract Assertions (v1 Specification)
+- ✅ Server-side price determination only (no client override)
 - ✅ Client secrets never sent to browser
-- ✅ Row-Level Security (RLS) on all tables
-- ✅ Foreign key constraints with CASCADE delete
-- ✅ Comprehensive audit logging
+- ✅ PayPal webhook verification using official endpoint (Phase 2A to implement)
+- ✅ Raw request body preserved for verification (Phase 2A to implement)
+- ✅ Webhook deduplication by event ID (Phase 2A to implement)
+- ✅ Authentication required for order creation and capture
+- ✅ Order ownership validation (user can only capture their own orders)
+- ✅ Entitlement immutability after creation
+- ✅ Exam version immutability (if/when v2+ is implemented)
+- ✅ Domain isolation: training domain ≠ certification domain
+- ✅ Comprehensive audit trail for orders and entitlements
 
-### To verify during implementation
-- [ ] Webhook endpoint not publicly listed (server-side route only)
-- [ ] Client secret not leaked in client-side bundles
-- [ ] PAYPAL_WEBHOOK_ID protected in Cloudflare secrets
-- [ ] RLS policies tested and enforced
-- [ ] Audit logs cannot be modified/deleted by users
-- [ ] Idempotency keys prevent duplicate processing
+### Phase 2A Implementation Requirements (Separate Review)
 
-### Manual testing required
-- [ ] Attempt PayPal order without authentication
-- [ ] Attempt to capture someone else's order
-- [ ] Attempt to override price in request
-- [ ] Submit malformed webhook signature
-- [ ] Replay old webhook events
+During Phase 2A implementation, the following must be verified:
+- [ ] Webhook endpoint is server-side only (not publicly listed)
+- [ ] PAYPAL_WEBHOOK_ID is protected in Cloudflare secrets
+- [ ] Webhook verification uses PayPal official endpoint
+- [ ] Timestamp freshness validation is enforced
+- [ ] Idempotency keys prevent duplicate entitlement creation
+- [ ] Audit logs preserve immutable order and entitlement records
+- [ ] Row-Level Security (RLS) policies enforce domain and user isolation
+- [ ] Foreign key constraints prevent orphaned records
+
+### Phase 2A Security Testing Checklist
+- [ ] Attempt PayPal order without authentication → rejection
+- [ ] Attempt to capture someone else's order → rejection
+- [ ] Attempt to override price in request → rejection
+- [ ] Submit malformed webhook signature → rejection
+- [ ] Replay old webhook events → deduplication
 - [ ] Verify cross-domain isolation (training ≠ certification)
 
 ---
 
 ## Next Steps
 
-1. **Code review** of test contract with product and engineering teams
-2. **Get approval** on Phase 2 (database schema application)
-3. **Apply SQL migration** to staging Supabase database
-4. **Run test suite** against mock endpoints (Phase 3 placeholders)
-5. **Implement endpoints** per Phase 3 plan
-6. **Perform PayPal sandbox testing** per Phase 5 plan
-7. **Go-live checklist** before production deployment
+1. **Code review** of v1 contract with product and engineering teams
+2. **Get approval** on Phase 2A (training-access implementation and schema design)
+3. **Schema design** in separate workstream with security review
+4. **Implement Phase 2A endpoints** per specification
+5. **Perform PayPal sandbox testing** before Phase 2A deployment
+6. **Defer certification** to v2+ with separate deployment and security review
 
 ---
 
 **End of Briefing Document**
 
-For questions or revisions to this contract, please create a GitHub issue on the `docs/paid-sites-paypal-contract` branch.
+For questions or revisions to this contract, please create a GitHub issue on the current branch.
