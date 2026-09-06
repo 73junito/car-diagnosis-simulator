@@ -59,15 +59,16 @@ This contract specifies a **test-first, non-deployable conceptual model** for pa
 
 | Area | Tests | Assertions |
 |------|-------|-----------|
-| Product Catalog | 3 tests | Product identifier validation, no prices in contract |
-| Order Creation | 5 tests | Server price lookup (NOT hardcoded), rejection of invalid product/auth, no client override |
-| Order Capture | 6 tests | Atomicity, idempotency, ownership validation, entitlement creation |
-| Webhook Verification | 7 tests | PayPal official verification, raw body preservation, idempotency by event ID |
-| Entitlement Validation | 5 tests | Active/expired/revoked states, denial of non-existent entitlements |
-| Exam Version Assignment | 3 tests | Immutability, separate entitlements, certification-only |
-| Domain Isolation | 4 tests | Training-only features, exam-domain restrictions |
-| Audit Trail | 3 tests | Order creation, capture, webhook processing logged |
-| Integration Workflows | 4 tests | v1 training-access workflow, v1 rejects certification as deferred to v2+ |
+| PayPal Payment Links | 3 tests | Browser UI never grants entitlement access |
+| Product Catalog | 4 tests | Product identifier validation, no prices in contract |
+| Order Creation | 6 tests | Authentication, v1 product validation, server-owned price, no client override |
+| Order Capture | 6 tests | Ownership validation, idempotency, verified capture before entitlement |
+| Webhook Verification | 7 tests | PayPal official verification, raw body preservation, event-ID deduplication |
+| Entitlement Validation | 5 tests | Active, expired, revoked, and no-access states |
+| Exam Version Assignment | 3 tests | Deferred v2+ integrity requirements; no v1 assignment |
+| Domain Isolation | 4 tests | Training-only features and certification restrictions |
+| Audit Trail | 3 tests | Required order, capture, and webhook audit events |
+| Integration Workflows | 4 tests | v1 training workflow and explicit v1 certification deferral |
 
 **Total: 45 test cases** covering all contract requirements
 **⚠️ All tests are assertions on security rules and prohibited behaviors — NOT mocking payment processors**
@@ -176,11 +177,11 @@ const requestBody = { product_id: 'training_access' };
 #### Option A: PayPal Webhooks Verification Endpoint (Recommended)
 ```
 1. Receive webhook with headers:
-   - Paypal-Transmission-Id: transmissionId
-   - Paypal-Transmission-Time: timestamp (ISO 8601)
-   - Paypal-Transmission-Sig: signature
-   - Paypal-Cert-Url: https://api.paypal.com/v1/notifications/certs/...
-   - Paypal-Auth-Algo: SHA256withRSA
+   - PayPal-Transmission-Id: transmissionId
+   - PayPal-Transmission-Time: timestamp (ISO 8601)
+   - PayPal-Transmission-Sig: signature
+   - PayPal-Cert-Url: https://api.paypal.com/v1/notifications/certs/...
+   - PayPal-Auth-Algo: SHA256withRSA
 
 2. Extract raw request body (do NOT modify or re-stringify)
 
@@ -204,8 +205,8 @@ const requestBody = { product_id: 'training_access' };
 
 #### Option B: Certificate-Based Verification (Legacy)
 ```
-1. Extract certificate from Paypal-Cert-Url header
-2. Verify RSA signature in Paypal-Transmission-Sig using certificate public key
+1. Extract certificate from PayPal-Cert-Url header
+2. Verify RSA signature in PayPal-Transmission-Sig using certificate public key
 3. Validate timestamp is within 5 minutes
 4. Process only if all checks pass
 ```
@@ -260,7 +261,7 @@ POST /api/orders/capture
 │  ├─ Atomically (transaction):
 │  │  ├─ Update order status → 'captured'
 │  │  ├─ Create entitlement record
-│  │  ├─ For certification: assign immutable exam version
+
 │  │  └─ Log audit entry
 │  └─ Return: { order_id, status, entitlement_id, product_id }
 └─ Database: orders, entitlements — schema deferred
@@ -270,7 +271,7 @@ POST /api/orders/capture
 **Note:** Webhook processing is a Phase 2A implementation requirement. v1 contract specifies:
 ```
 POST /api/webhooks/paypal
-├─ Headers: Paypal-Transmission-Id, Paypal-Transmission-Time, Paypal-Transmission-Sig
+├─ Headers: PayPal-Transmission-Id, PayPal-Transmission-Time, PayPal-Transmission-Sig
 ├─ Server (future implementation):
 │  ├─ Verify signature with PayPal official endpoint
 │  │  (POST https://api.paypal.com/v1/notifications/verify-webhook-signature)
