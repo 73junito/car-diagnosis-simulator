@@ -21,19 +21,19 @@ describe("TorqueMind tutor utilities", () => {
 
     expect(prompt).toContain('"reasonIncorrect"')
     expect(prompt).toContain('"reasonCorrect"')
-    expect(prompt).toContain('"aseConcept"')
+    expect(prompt).toContain('"technicalConcept"')
     expect(prompt).toContain('"nextStep"')
   })
 
   test("extractJson parses plain JSON", () => {
     expect(
       extractJson(
-        '{"reasonIncorrect":"A","reasonCorrect":"B","aseConcept":"C","nextStep":"D"}'
+        '{"reasonIncorrect":"A","reasonCorrect":"B","technicalConcept":"C","nextStep":"D"}'
       )
     ).toEqual({
       reasonIncorrect: "A",
       reasonCorrect: "B",
-      aseConcept: "C",
+      technicalConcept: "C",
       nextStep: "D"
     })
   })
@@ -41,12 +41,12 @@ describe("TorqueMind tutor utilities", () => {
   test("extractJson parses fenced JSON", () => {
     expect(
       extractJson(
-        '```json\n{"reasonIncorrect":"A","reasonCorrect":"B","aseConcept":"C","nextStep":"D"}\n```'
+        '```json\n{"reasonIncorrect":"A","reasonCorrect":"B","technicalConcept":"C","nextStep":"D"}\n```'
       )
     ).toEqual({
       reasonIncorrect: "A",
       reasonCorrect: "B",
-      aseConcept: "C",
+      technicalConcept: "C",
       nextStep: "D"
     })
   })
@@ -54,12 +54,12 @@ describe("TorqueMind tutor utilities", () => {
   test("extractJson parses JSON surrounded by prose", () => {
     expect(
       extractJson(
-        'Here is the result: {"reasonIncorrect":"A","reasonCorrect":"B","aseConcept":"C","nextStep":"D"} End.'
+        'Here is the result: {"reasonIncorrect":"A","reasonCorrect":"B","technicalConcept":"C","nextStep":"D"} End.'
       )
     ).toEqual({
       reasonIncorrect: "A",
       reasonCorrect: "B",
-      aseConcept: "C",
+      technicalConcept: "C",
       nextStep: "D"
     })
   })
@@ -79,13 +79,13 @@ describe("TorqueMind tutor utilities", () => {
       validateTutorResponse({
         reasonIncorrect: " A ",
         reasonCorrect: " B ",
-        aseConcept: " C ",
+        technicalConcept: " C ",
         nextStep: " D "
       })
     ).toEqual({
       reasonIncorrect: "A",
       reasonCorrect: "B",
-      aseConcept: "C",
+      technicalConcept: "C",
       nextStep: "D"
     })
   })
@@ -95,13 +95,13 @@ describe("TorqueMind tutor utilities", () => {
       validateTutorResponse({
         explanation: "A",
         reasoning: "B",
-        ase_concept: "C",
+        technical_concept: "C",
         nextDiagnosticStep: "D"
       })
     ).toEqual({
       reasonIncorrect: "A",
       reasonCorrect: "B",
-      aseConcept: "C",
+      technicalConcept: "C",
       nextStep: "D"
     })
   })
@@ -112,14 +112,14 @@ describe("TorqueMind tutor utilities", () => {
         feedback: {
           reasonIncorrect: "A",
           reasonCorrect: "B",
-          aseConcept: "C",
+          technicalConcept: "C",
           nextStep: "D"
         }
       })
     ).toEqual({
       reasonIncorrect: "A",
       reasonCorrect: "B",
-      aseConcept: "C",
+      technicalConcept: "C",
       nextStep: "D"
     })
   })
@@ -127,13 +127,13 @@ describe("TorqueMind tutor utilities", () => {
   test.each([
     ["reasonIncorrect"],
     ["reasonCorrect"],
-    ["aseConcept"],
+    ["technicalConcept"],
     ["nextStep"]
   ])("validateTutorResponse rejects missing %s", (field) => {
     const value = {
       reasonIncorrect: "A",
       reasonCorrect: "B",
-      aseConcept: "C",
+      technicalConcept: "C",
       nextStep: "D"
     }
 
@@ -149,7 +149,7 @@ describe("TorqueMind tutor utilities", () => {
       validateTutorResponse({
         reasonIncorrect: "",
         reasonCorrect: "B",
-        aseConcept: "C",
+        technicalConcept: "C",
         nextStep: "D"
       })
     ).toThrow("Tutor response is missing reasonIncorrect")
@@ -160,7 +160,7 @@ describe("TorqueMind tutor utilities", () => {
       validateTutorResponse({
         reasonIncorrect: 42,
         reasonCorrect: "B",
-        aseConcept: "C",
+        technicalConcept: "C",
         nextStep: "D"
       })
     ).toThrow("Tutor response is missing reasonIncorrect")
@@ -170,7 +170,7 @@ describe("TorqueMind tutor utilities", () => {
     const out = normalizeTutorResponse({}, "Model returned plain text without JSON")
     expect(out.reasonIncorrect).toContain("Model returned plain text")
     expect(out.reasonCorrect.length).toBeGreaterThan(0)
-    expect(out.aseConcept.length).toBeGreaterThan(0)
+    expect(out.technicalConcept.length).toBeGreaterThan(0)
     expect(out.nextStep.length).toBeGreaterThan(0)
   })
 })
