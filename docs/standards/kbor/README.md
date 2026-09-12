@@ -29,7 +29,7 @@ State (KS)
       └─ CIP Code (47.0604)
         └─ Credential / Program Level
           └─ Course
-            └─ Competency (ASE Domain)
+            └─ Competency (Technical Domain)
               └─ Learning Objective
                 └─ Diagnostic Scenario
                   └─ Assessment Item (Question)
@@ -72,7 +72,7 @@ active BOOLEAN
 No curriculum fields are included in the current schema. This allows us to:
 - Add curriculum metadata as a separate table or JSONB column
 - Link scenarios to CIP competencies without modifying core scenario records
-- Support multiple classification schemes (CIP, ASE domains, NHTSA, etc.)
+- Support multiple classification schemes (CIP, vendor-neutral technical standards, etc.)
 
 ### 4. Integration with Existing Provenance
 
@@ -126,8 +126,8 @@ Review the existing:
 ### 2. Curriculum Metadata Model (After Schema Review)
 
 Define:
-- How are scenarios mapped to ASE domains?
-- How are ASE domains mapped to CIP competencies?
+- How are scenarios mapped to technical competencies?
+- How are technical competencies mapped to CIP competencies?
 - What course structure should KBOR alignment follow?
 - How should learning objectives be stored and linked?
 
