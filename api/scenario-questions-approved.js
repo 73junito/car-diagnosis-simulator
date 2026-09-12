@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       option_d,
       difficulty,
       topic,
-      ase_area,
+      competency_area:competency_areas!scenario_questions_competency_area_id_fkey(competency_code),
       question_provenance(
         id,
         status,
@@ -128,7 +128,7 @@ export default async function handler(req, res) {
         option_d: q.option_d,
         difficulty: q.difficulty,
         topic: q.topic,
-        ase_area: q.ase_area,
+        competency_code: q.competency_area?.competency_code ?? null,
         question_provenance: q.question_provenance?.[0] ? {
           status: q.question_provenance[0].status,
           validated_at: q.question_provenance[0].validated_at,

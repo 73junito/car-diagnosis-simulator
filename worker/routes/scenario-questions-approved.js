@@ -54,7 +54,7 @@ export async function handleScenarioQuestionsApproved(c) {
         option_d,
         difficulty,
         topic,
-        ase_area
+        competency_area:competency_areas!scenario_questions_competency_area_id_fkey(competency_code)
       `
       )
       .eq('scenario_id', scenario_id)
@@ -170,7 +170,7 @@ export async function handleScenarioQuestionsApproved(c) {
           option_d: question.option_d,
           difficulty: question.difficulty,
           topic: question.topic,
-          ase_area: question.ase_area,
+          competency_code: question.competency_area?.competency_code ?? null,
         question_id: question.question_id,
         question_provenance: {
           id: provenance.id,
