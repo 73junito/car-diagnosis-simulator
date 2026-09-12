@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "jurisdiction": {
+    "country": "US",
+    "state": "KS"
+  },
+  "authority": {
+    "name": "Kansas Board of Regents",
+    "abbreviation": "KBOR",
+    "website": "https://kansasregents.gov/workforce_development/program-alignment"
+  },
+  "classificationSystem": {
+    "name": "Classification of Instructional Programs",
+    "abbreviation": "CIP",
+    "website": "https://nces.ed.gov/ipeds/cipcode/"
+  },
+  "programs": [
+    {
+      "cipCode": "47.0604",
+      "programName": "Automotive Technology",
+      "cipTitle": "Automobile/Automotive Mechanics Technology/Technician",
+      "description": "Covers brakes, electrical systems, engine performance, engine repair, suspension/steering, transmissions/drivetrains, and heating/air-conditioning systems",
+      "primary": true,
+      "status": "active",
+      "supportedCourses": [
+        "ASE Brakes (A4)",
+        "ASE Electrical Systems (A6)",
+        "ASE Engine Performance (A8)",
+        "ASE Engine Repair (A1)",
+        "ASE Suspension and Steering (A4)",
+        "ASE Transmission/Transaxle (A2)",
+        "ASE Heating and Air Conditioning (A7)"
+      ],
+      "kborReference": "https://kansasregents.gov/workforce_development/program-alignment/automotive_technology"
+    }
+  ],
+  "extensibilityNote": "Additional CIP programs (e.g., 47.0603 Automotive Collision & Refinishing, 47.0201 HVAC) can be added without schema changes. This registry is intended to grow as AutoLearnPro expands across additional programs and jurisdictions."
+}
