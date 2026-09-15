@@ -39,7 +39,7 @@ describe('Worker torquemind-feedback route (integration-style)', () => {
   }
 
   test('valid Ollama response -> 200', async () => {
-    const payload = { message: { content: JSON.stringify({ reasonIncorrect: 'A', reasonCorrect: 'B', aseConcept: 'C', nextStep: 'D' }) } }
+    const payload = { message: { content: JSON.stringify({ reasonIncorrect: 'A', reasonCorrect: 'B', technicalConcept: 'C', nextStep: 'D' }) } }
     global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify(payload) })
 
     const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
@@ -77,19 +77,19 @@ describe('Worker torquemind-feedback route (integration-style)', () => {
     const body = res.body || {}
     expect(typeof body.reasonIncorrect).toBe('string')
     expect(typeof body.reasonCorrect).toBe('string')
-    expect(typeof body.aseConcept).toBe('string')
+    expect(typeof body.technicalConcept).toBe('string')
     expect(typeof body.nextStep).toBe('string')
   })
 
   test('missing required response field -> 200 fallback payload', async () => {
-    const payload = { message: { content: JSON.stringify({ reasonIncorrect: 'A', reasonCorrect: 'B', aseConcept: 'C' }) } }
+    const payload = { message: { content: JSON.stringify({ reasonIncorrect: 'A', reasonCorrect: 'B', technicalConcept: 'C' }) } }
     global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify(payload) })
     const res = await post(validBody, { TORQUEMIND_AI_PROVIDER: 'ollama' })
     expect(res.status).toBe(200)
     const body = res.body || {}
     expect(typeof body.reasonIncorrect).toBe('string')
     expect(typeof body.reasonCorrect).toBe('string')
-    expect(typeof body.aseConcept).toBe('string')
+    expect(typeof body.technicalConcept).toBe('string')
     expect(typeof body.nextStep).toBe('string')
   })
 

@@ -7,7 +7,7 @@ describe('Ollama adapter', () => {
   })
 
   test('returns message.content when present', async () => {
-    const payload = { message: { content: '{"reasonIncorrect":"A","reasonCorrect":"B","aseConcept":"C","nextStep":"D"}' } }
+    const payload = { message: { content: '{"reasonIncorrect":"A","reasonCorrect":"B","technicalConcept":"C","nextStep":"D"}' } }
     global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify(payload) })
 
     const res = await requestOllama({ url: 'http://example', model: 'm', prompt: 'p' })
@@ -15,7 +15,7 @@ describe('Ollama adapter', () => {
   })
 
   test('falls back to message.thinking', async () => {
-    const payload = { message: { thinking: '{"reasonIncorrect":"A","reasonCorrect":"B","aseConcept":"C","nextStep":"D"}' } }
+    const payload = { message: { thinking: '{"reasonIncorrect":"A","reasonCorrect":"B","technicalConcept":"C","nextStep":"D"}' } }
     global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify(payload) })
 
     const res = await requestOllama({ url: 'http://example', model: 'm', prompt: 'p' })
@@ -23,7 +23,7 @@ describe('Ollama adapter', () => {
   })
 
   test('falls back to legacy response field', async () => {
-    const payload = { response: '{"reasonIncorrect":"A","reasonCorrect":"B","aseConcept":"C","nextStep":"D"}' }
+    const payload = { response: '{"reasonIncorrect":"A","reasonCorrect":"B","technicalConcept":"C","nextStep":"D"}' }
     global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify(payload) })
 
     const res = await requestOllama({ url: 'http://example', model: 'm', prompt: 'p' })

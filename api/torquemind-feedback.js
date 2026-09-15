@@ -44,7 +44,7 @@ Return ONLY valid JSON.
 {
   "reasonIncorrect":"",
   "reasonCorrect":"",
-  "aseConcept":"",
+  "technicalConcept":"",
   "nextStep":""
 }
 

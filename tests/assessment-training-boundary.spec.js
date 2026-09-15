@@ -185,7 +185,7 @@ describe('Assessment/Training Boundary (Phase 1)', () => {
           response: JSON.stringify({
             reasonIncorrect: "Test.",
             reasonCorrect: "Test.",
-            aseConcept: "Test",
+            technicalConcept: "Test",
             nextStep: "Test."
           })
         })
