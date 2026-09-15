@@ -1,12 +1,16 @@
 /**
  * API endpoint: GET /api/scenario-questions-approved
  *
- * Returns scenario questions with strict approval validation:
- * - question_provenance.status = 'approved'
- * - source_chunks.status = 'approved'
- * - approved_sources.status = 'approved'
+ * Returns scenario questions with strict RALA approval validation:
+ * 1. question_provenance.status = 'approved'
+ * 2. citation_validations.result = 'valid'
+ * 3. question_citations exist with valid roles
+ * 4. referenced approved_sources.status = 'approved'
+ * 5. referenced source_chunks.status = 'approved' and approved = true
  *
- * This enforces database-level approval, not client-side heuristics.
+ * Uses explicit queries (not nested relationships) to enforce fail-closed semantics.
+ * Schema: question_provenance -> citation_validations(validator_version, validation_method, result)
+ * Correct_answer and explanation are NEVER sent to clients.
  */
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -27,141 +31,189 @@ export default async function handler(req, res) {
       console.error('Missing Supabase environment variables');
       return res.status(500).json({ error: 'Server configuration incomplete' });
     }
-    // Execute the database query with strict approval validation
-    // This query ensures:
-    // 1. question_provenance.status = 'approved'
-    // 2. citation_validations show validation evidence (result = 'valid')
-    // 3. source_chunks (via citations) have status = 'approved'
-    // 4. approved_sources have status = 'approved'
-    // Use Supabase client to execute parameterized query
     const { createClient } = require('@supabase/supabase-js');
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
-    // For RLS queries via REST API with proper parameter binding
-    // Supabase REST API doesn't support arbitrary SQL, so we use the JS client
-    // NOTE: correct_answer is NEVER sent to clients
-    // Students must never receive answer keys in the browser, even in hidden attributes
-    const selectString = `
-      id,
-      question_text,
-      option_a,
-      option_b,
-      option_c,
-      option_d,
-      difficulty,
-      topic,
-      competency_area:competency_areas!scenario_questions_competency_area_id_fkey(competency_code),
-      question_provenance(
-        id,
-        status,
-        validated_at,
-        citation_validations(
-          validator_version,
-          validation_method,
-          result
-        )
-      ),
-      question_citations(
-        id,
-        source_id,
-        chunk_id,
-        quote,
-        source_chunks(
-          status,
-          text_hash,
-          approved_sources(
-            status,
-            storage_path
-          )
-        )
-      )
-    `;
-    const { data, error } = await supabase
+
+    // 1. Get all questions in the scenario
+    const { data: questions, error: questionsError } = await supabase
       .from('scenario_questions')
-      .select(selectString)
-      .eq('scenario_id', scenarioId)
-      .eq('question_provenance.status', 'approved');
-    if (error) {
-      console.error('Supabase query error:', error);
-      return res.status(500).json({ error: 'Database query failed' });
+      .select(
+        `
+        id,
+        question_id,
+        scenario_id,
+        question_text,
+        option_a,
+        option_b,
+        option_c,
+        option_d,
+        difficulty,
+        topic,
+        competency_area_id
+      `
+      )
+      .eq('scenario_id', scenarioId);
+
+    if (questionsError) {
+      console.error('Database query error:', JSON.stringify(questionsError, null, 2));
+      return res.status(500).json({ error: 'Failed to fetch questions' });
     }
-    if (!data || data.length === 0) {
+
+    if (!questions || questions.length === 0) {
       return res.status(200).json({
         scenario_id: scenarioId,
         questions: [],
-        metadata: {
-          total_approved_questions: 0,
-          note: 'No questions meet approval criteria (all must have approved status in provenance, citations, chunks, and sources)'
-        }
+        count: 0
       });
     }
-    // Filter client-side for additional validation (defense in depth)
-    // This ensures citations and sources are all approved, and validation passed
-    const validatedQuestions = data.filter(question => {
-      // Must have approved provenance with valid citation validations
-      if (question.question_provenance?.[0]?.status !== 'approved') {
-        return false;
+
+    // 1a. Fetch competency codes for all unique competency_area_ids
+    const competencyAreaIds = [...new Set(questions.map(q => q.competency_area_id).filter(Boolean))];
+    let competencyCodeMap = {};
+    if (competencyAreaIds.length > 0) {
+      const { data: competencies, error: competenciesError } = await supabase
+        .from('competency_areas')
+        .select('id, competency_code')
+        .in('id', competencyAreaIds);
+      if (!competenciesError && competencies) {
+        competencies.forEach(c => {
+          competencyCodeMap[c.id] = c.competency_code;
+        });
       }
-      // Check that validation exists and passed
-      const validation = question.question_provenance?.[0]?.citation_validations?.[0];
-      if (!validation || validation.result !== 'valid') {
-        return false;
+    }
+
+    // 2. For each question, check if there's approved provenance with valid citations
+    // Fail-closed: only return questions that have:
+    // - question_provenance with status='approved'
+    // - citation_validations with result='valid' for that provenance
+    // - referenced approved_sources with status='approved'
+    // - referenced source_chunks with status='approved' and approved=true
+    const approvedQuestions = [];
+
+    for (const question of questions) {
+      // A UUID-only or unmapped question must fail closed.
+      if (!question.question_id) {
+        continue;
       }
-      // All citations must be from approved sources
-      if (!Array.isArray(question.question_citations) || question.question_citations.length === 0) {
-        return false;
+
+      // Check for approved provenance record
+      const { data: provenance, error: provenanceError } = await supabase
+        .from('question_provenance')
+        .select('id, question_id, status')
+        .eq('question_id', question.id)
+        .eq('status', 'approved')
+        .single();
+
+      if (provenanceError || !provenance) {
+        // No approved provenance for this question; skip it
+        continue;
       }
-      return question.question_citations.every(citation => {
-        if (citation.source_chunks?.[0]?.status !== 'approved') return false;
-        if (citation.source_chunks?.[0]?.approved_sources?.[0]?.status !== 'approved') return false;
-        return true;
-      });
-    });
-    // Return with provenance metadata but NOT correct_answer or explanation (unless explicitly requested with prof auth)
-    const questions = validatedQuestions.map(q => {
-      const validation = q.question_provenance?.[0]?.citation_validations?.[0];
-      const obj = {
-        id: q.id,
-        question_text: q.question_text,
-        option_a: q.option_a,
-        option_b: q.option_b,
-        option_c: q.option_c,
-        option_d: q.option_d,
-        difficulty: q.difficulty,
-        topic: q.topic,
-        competency_code: q.competency_area?.competency_code ?? null,
-        question_provenance: q.question_provenance?.[0] ? {
-          status: q.question_provenance[0].status,
-          validated_at: q.question_provenance[0].validated_at,
-          validation_status: validation?.result,
-          validator_version: validation?.validator_version
-        } : null,
-        citations: q.question_citations.map(c => ({
+
+      // Check for valid citation validation result
+      // Verify validator_version comes from citation_validations, not question_provenance
+      const { data: validation, error: validationError } = await supabase
+        .from('citation_validations')
+        .select('id, result, validator_version, validation_method, source_hashes_verified, excerpts_verified, urls_verified')
+        .eq('question_provenance_id', provenance.id)
+        .eq('result', 'valid')
+        .single();
+
+      if (validationError || !validation) {
+        // No valid citation validation; skip this question
+        continue;
+      }
+
+      // Retrieve citations for this provenance
+      const { data: citations, error: citationsError } = await supabase
+        .from('question_citations')
+        .select('id, source_id, chunk_id, role, quote')
+        .eq('question_provenance_id', provenance.id);
+
+      if (citationsError || !citations || citations.length === 0) {
+        // No citations found; skip
+        continue;
+      }
+
+      // Verify all citations have required roles (supports-answer, supports-explanation)
+      const roles = new Set(citations.map(c => c.role));
+      if (!roles.has('supports-answer') || !roles.has('supports-explanation')) {
+        continue;
+      }
+
+      // Verify each citation's source is approved
+      let allSourcesApproved = true;
+      for (const citation of citations) {
+        const { data: source, error: sourceError } = await supabase
+          .from('approved_sources')
+          .select('id, status')
+          .eq('id', citation.source_id)
+          .eq('status', 'approved')
+          .single();
+
+        if (sourceError || !source) {
+          allSourcesApproved = false;
+          break;
+        }
+
+        // Verify chunk is approved
+        const { data: chunk, error: chunkError } = await supabase
+          .from('source_chunks')
+          .select('id, status, approved, text_hash')
+          .eq('chunk_id', citation.chunk_id)
+          .eq('status', 'approved')
+          .eq('approved', true)
+          .single();
+
+        if (chunkError || !chunk) {
+          allSourcesApproved = false;
+          break;
+        }
+      }
+
+      if (!allSourcesApproved) {
+        continue;
+      }
+
+      // All gates passed; add to approved questions
+      approvedQuestions.push({
+        id: question.id,
+        scenario_id: question.scenario_id,
+        question_text: question.question_text,
+        option_a: question.option_a,
+        option_b: question.option_b,
+        option_c: question.option_c,
+        option_d: question.option_d,
+        difficulty: question.difficulty,
+        topic: question.topic,
+        competency_code: competencyCodeMap[question.competency_area_id] ?? null,
+        question_id: question.question_id,
+        question_provenance: {
+          id: provenance.id,
+          question_id: provenance.question_id,
+          status: provenance.status,
+          citation_validation: {
+            valid: validation.result === 'valid',
+            validator_version: validation.validator_version,
+            validation_method: validation.validation_method,
+            source_hashes_verified: validation.source_hashes_verified,
+            excerpts_verified: validation.excerpts_verified,
+            urls_verified: validation.urls_verified
+          }
+        },
+        citations: citations.map(c => ({
           id: c.id,
           source_id: c.source_id,
           chunk_id: c.chunk_id,
-          quote: c.quote,
-          text_hash: c.source_chunks?.[0]?.text_hash,
-          source_url: c.source_chunks?.[0]?.approved_sources?.[0]?.storage_path,
-          source_status: c.source_chunks?.[0]?.status
+          role: c.role,
+          quote: c.quote
         }))
-      };
-      // NOTE: correct_answer is NEVER included in the public response
-      // Answer keys are only available via the protected grading endpoint
-      return obj;
-    });
-    res.status(200).json({
+      });
+    }
+
+    return res.status(200).json({
       scenario_id: scenarioId,
-      questions,
-      metadata: {
-        total_approved_questions: questions.length,
-        enforcement_level: 'database-authoritative',
-        validation_gates: [
-          'question_provenance.status = approved',
-          'citation_validations.result = valid',
-          'source_chunks.status = approved',
-          'approved_sources.status = approved'
-        ]
-      }
+      questions: approvedQuestions,
+      count: approvedQuestions.length
     });
   } catch (err) {
     console.error('Error in scenario-questions-approved handler:', err);
