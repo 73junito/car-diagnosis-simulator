@@ -1,6 +1,6 @@
 -- Vendor-neutral competency foundation for TorqueMind.
 -- Additive only: establishes new competency taxonomy and columns.
--- 
+--
 -- This migration establishes:
 -- 1. Competency taxonomy (TorqueMind-owned semantic identifiers)
 -- 2. Program classification mapping (institutional cross-reference)
@@ -32,7 +32,7 @@ create table if not exists public.competency_areas (
     updated_at timestamptz not null default now()
 );
 
-comment on table public.competency_areas is 
+comment on table public.competency_areas is
     'TorqueMind semantic competency taxonomy. '
     'Internal skill/knowledge domains independent of institutional '
     'program classifications.';
@@ -156,7 +156,7 @@ create index if not exists idx_scenario_questions_competency_area_id
 
 -- END OF MIGRATION
 -- =============================================================================
--- 
+--
 -- NEXT STEPS (performed separately in backfill script):
 -- 1. Populate competency_areas with semantic taxonomy (ENGR, HVAC, ELEC, etc.)
 -- 2. Create competency_to_program_map entries for Kansas CIP 47.0604

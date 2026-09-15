@@ -27,7 +27,7 @@ lines.push("delete from scenario_questions;");
 for (const [scenarioId, questions] of Object.entries(bank)) {
   for (const q of questions) {
     validateNoLegacyFields(q, `question in scenario ${scenarioId}`);
-    
+
     lines.push(`
 insert into scenario_questions
 (
@@ -60,4 +60,3 @@ values
 
 fs.writeFileSync(output, lines.join("\n"), "utf8");
 console.log(`Wrote ${output}`);
-

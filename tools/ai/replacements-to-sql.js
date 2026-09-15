@@ -28,7 +28,7 @@ for (const file of files) {
 
   for (const q of data.questions) {
     validateNoLegacyFields(q, `question in ${file}`);
-    
+
     const row = {
       scenario_id: scenario,
       question_text: q.question_text,
@@ -78,4 +78,3 @@ values
 
 fs.writeFileSync(output, lines.join("\n"), "utf8");
 console.log(`Wrote ${output}`);
-
