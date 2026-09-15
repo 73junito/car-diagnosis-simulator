@@ -36,7 +36,7 @@ export async function handleScenarioQuestionsApproved(c) {
       return c.json({ error: 'Server configuration incomplete' }, 500)
     }
 
-    // Execute the database query with strict approval validation
+    // Create Supabase client with service-role key for elevated access
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey)
 
     // 1. Get all questions in the scenario
@@ -54,13 +54,13 @@ export async function handleScenarioQuestionsApproved(c) {
         option_d,
         difficulty,
         topic,
-        competency_area:competency_areas!scenario_questions_competency_area_id_fkey(competency_code)
+        competency_area_id
       `
       )
       .eq('scenario_id', scenario_id)
 
     if (questionsError) {
-      console.error('Database query error:', questionsError)
+      console.error('Database query error:', JSON.stringify(questionsError, null, 2))
       return c.json({ error: 'Failed to fetch questions' }, 500)
     }
 
@@ -71,6 +71,21 @@ export async function handleScenarioQuestionsApproved(c) {
         approved_questions: [],
         count: 0
       }, 200)
+    }
+
+    // 1a. Fetch competency codes for all unique competency_area_ids
+    const competencyAreaIds = [...new Set(questions.map(q => q.competency_area_id).filter(Boolean))]
+    let competencyCodeMap = {}
+    if (competencyAreaIds.length > 0) {
+      const { data: competencies, error: competenciesError } = await supabase
+        .from('competency_areas')
+        .select('id, competency_code')
+        .in('id', competencyAreaIds)
+      if (!competenciesError && competencies) {
+        competencies.forEach(c => {
+          competencyCodeMap[c.id] = c.competency_code
+        })
+      }
     }
 
     // 2. For each question, check if there's approved provenance with valid citations
@@ -91,7 +106,7 @@ export async function handleScenarioQuestionsApproved(c) {
       const { data: provenance, error: provenanceError } = await supabase
         .from('question_provenance')
         .select('id, question_id, status')
-        .eq('question_id', question.question_id)
+        .eq('question_id', question.id)
         .eq('status', 'approved')
         .single()
 
@@ -170,7 +185,7 @@ export async function handleScenarioQuestionsApproved(c) {
           option_d: question.option_d,
           difficulty: question.difficulty,
           topic: question.topic,
-          competency_code: question.competency_area?.competency_code ?? null,
+          competency_code: competencyCodeMap[question.competency_area_id] ?? null,
         question_id: question.question_id,
         question_provenance: {
           id: provenance.id,
