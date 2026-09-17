@@ -80,3 +80,38 @@ jobs:
       - name: Summary
         run: |
           echo "Validation complete. Use 'workflow_dispatch' inputs: vercel_health_url (optional), strict (true/false)."
+
+  validate-staging-precedence:
+    name: Validate staging secret precedence
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify environment SUPABASE_URL resolves to staging
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: node scripts/assert-staging-supabase.js
+
+      - name: Verify production-shaped URL is rejected
+        shell: bash
+        run: |
+          set +e
+          SUPABASE_URL="https://pffdgqpynpbffbcnxmum.supabase.co" \
+            node scripts/assert-staging-supabase.js
+          rc=$?
+          set -e
+
+          if [ "$rc" -eq 0 ]; then
+            echo "FAIL: guard accepted production-shaped URL."
+            exit 1
+          fi
+
+          echo "PASS: guard rejected production-shaped URL."
