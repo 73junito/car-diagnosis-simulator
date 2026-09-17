@@ -13,6 +13,7 @@ on:
 jobs:
   smoke:
     name: api-smoke
+    environment: staging
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -35,6 +36,11 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: package-lock.json
+
+      - name: Verify staging Supabase destination
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: node scripts/assert-staging-supabase.js
 
       - name: Debug workspace
         if: always()
