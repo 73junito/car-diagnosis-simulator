@@ -116,8 +116,10 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+          SMOKE_SEED_FIXTURE: 'true'
           BASE_URL: http://localhost:3000
         run: |
           max_attempts=3

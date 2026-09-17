@@ -4,6 +4,8 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TEST_TEACHER_EMAIL = process.env.TEST_TEACHER_EMAIL;
 const TEST_TEACHER_PASSWORD = process.env.TEST_TEACHER_PASSWORD;
+const SMOKE_SEED_FIXTURE = process.env.SMOKE_SEED_FIXTURE === "true";
+const APPROVED_STAGING_SUPABASE_HOST = "jchfruprqpeypdttvlam.supabase.co";
 const TIMEOUT = 15000;
 
 async function request(path, options = {}, token = null) {
@@ -45,6 +47,109 @@ async function request(path, options = {}, token = null) {
   }
 
   return { status: res.status, ok: res.ok, body };
+}
+
+function assertApprovedStagingDestination(value = SUPABASE_URL) {
+  if (!value) {
+    throw new Error("Fixture seeding refused: Supabase destination is missing.");
+  }
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch {
+    throw new Error("Fixture seeding refused: Supabase destination is invalid.");
+  }
+  if (
+    parsed.protocol !== "https:" ||
+    parsed.hostname !== APPROVED_STAGING_SUPABASE_HOST ||
+    parsed.port ||
+    (parsed.pathname !== "/" && parsed.pathname !== "") ||
+    parsed.username || parsed.password || parsed.search || parsed.hash
+  ) {
+    throw new Error("Fixture seeding refused: Supabase destination is not approved staging.");
+  }
+  return true;
+}
+
+async function ensureTeacherFixture(options = {}) {
+  const {
+    enabled = SMOKE_SEED_FIXTURE,
+    supabaseUrl = SUPABASE_URL,
+    serviceRoleKey = SUPABASE_SERVICE_ROLE_KEY,
+    email = TEST_TEACHER_EMAIL,
+    password = TEST_TEACHER_PASSWORD,
+    fetchImpl = fetch,
+  } = options;
+
+  if (!enabled) return { action: "disabled" };
+  // Fail before any Admin Auth request, including the lookup.
+  assertApprovedStagingDestination(supabaseUrl);
+  if (!serviceRoleKey || !email || !password) {
+    throw new Error("Fixture seeding requested but required fixture credentials are missing.");
+  }
+
+  const baseUrl = new URL(supabaseUrl).origin;
+  const headers = {
+    apikey: serviceRoleKey,
+    Authorization: `Bearer ${serviceRoleKey}`,
+    "Content-Type": "application/json",
+  };
+  // Do not follow redirects with Admin credentials or expose response bodies/errors.
+  async function adminRequest(path, options = {}) {
+    let response;
+    try {
+      response = await fetchImpl(`${baseUrl}/auth/v1/admin/users${path}`, {
+        ...options, headers, redirect: "error",
+        signal: AbortSignal.timeout(TIMEOUT),
+      });
+    } catch {
+      throw new Error("Teacher fixture Admin request failed.");
+    }
+    if (!response.ok) {
+      throw new Error(`Teacher fixture Admin request failed with status ${response.status}.`);
+    }
+    return response;
+  }
+
+  let teacher = null;
+  for (let page = 1; page <= 10; page += 1) {
+    const response = await adminRequest(`?page=${page}&per_page=100`);
+    let body;
+    try {
+      body = await response.json();
+    } catch {
+      throw new Error("Teacher fixture lookup returned invalid JSON.");
+    }
+    if (!body || !Array.isArray(body.users)) {
+      throw new Error("Teacher fixture lookup returned an invalid user list.");
+    }
+    teacher = body.users.find((user) =>
+      user && typeof user.email === "string" &&
+      user.email.toLowerCase() === email.toLowerCase()
+    );
+    if (teacher || body.users.length < 100) break;
+    if (page === 10) {
+      throw new Error("Teacher fixture lookup limit reached; refusing creation without complete lookup.");
+    }
+  }
+
+  if (!teacher) {
+    await adminRequest("", {
+      method: "POST",
+      body: JSON.stringify({ email, password, email_confirm: true }),
+    });
+    console.log("Teacher fixture ensured: created staging test identity.");
+    return { action: "created" };
+  }
+  if (typeof teacher.id !== "string" || !teacher.id) {
+    throw new Error("Teacher fixture lookup returned an invalid user identity.");
+  }
+  await adminRequest(`/${encodeURIComponent(teacher.id)}`, {
+    method: "PUT",
+    body: JSON.stringify({ password, email_confirm: true }),
+  });
+  console.log("Teacher fixture ensured: staging test identity already existed.");
+  return { action: "updated" };
 }
 
 async function signInTeacher() {
@@ -157,6 +262,7 @@ async function ensureProfile(userId) {
 async function main() {
   console.log(`TorqueMind smoke test against ${BASE_URL}`);
 
+  await ensureTeacherFixture();
   const signIn = await signInTeacher();
   const token = signIn && signIn.token;
   let userId = signIn && signIn.user && signIn.user.id;
@@ -287,7 +393,14 @@ async function main() {
   console.log("7/7 SMOKE TEST PASSED");
 }
 
-main().catch((err) => {
-  console.error("Smoke test crashed", err);
-  process.exit(99);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error("Smoke test crashed", err);
+    process.exit(99);
+  });
+}
+
+module.exports = {
+  assertApprovedStagingDestination,
+  ensureTeacherFixture,
+};
