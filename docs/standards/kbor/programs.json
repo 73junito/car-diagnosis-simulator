@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "jurisdiction": {
+    "country": "US",
+    "state": "KS"
+  },
+  "authority": {
+    "name": "Kansas Board of Regents",
+    "abbreviation": "KBOR",
+    "website": "https://kansasregents.gov/workforce_development/program-alignment"
+  },
+  "classificationSystem": {
+    "name": "Classification of Instructional Programs",
+    "abbreviation": "CIP",
+    "website": "https://nces.ed.gov/ipeds/cipcode/"
+  },
+  "programs": [
+    {
+      "cipCode": "47.0604",
+      "programName": "Automotive Technology",
+      "cipTitle": "Automobile/Automotive Mechanics Technology/Technician",
+      "description": "Automotive technology instructional program classification.",
+      "primary": true,
+      "status": "active",
+      "kborReference": "https://kansasregents.gov/workforce_development/program-alignment/automotive_technology"
+    }
+  ],
+  "extensibilityNote": "Additional CIP programs may be added without making the initial Automotive Technology classification the only supported program."
+}
