@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Check inputs
         run: |
-          echo 'Applying branch protection to "main" with required checks: unit-tests, api-smoke, smoke, db-ssl-validation'
+          echo 'Applying branch protection to "main" with required checks: unit-tests, build-and-test, Run ESLint, api-smoke'
 
       - name: Create payload
         run: |
