@@ -350,8 +350,8 @@
         <p><strong>Correct reasoning</strong></p>
         <p>${escapeHtml(ai.reasonCorrect || "No reasoning returned.")}</p>
 
-        <p><strong>ASE Concept</strong></p>
-        <p>${escapeHtml(ai.aseConcept || "No ASE concept returned.")}</p>
+        <p><strong>Technical Concept</strong></p>
+        <p>${escapeHtml(ai.technicalConcept || "No technical concept returned.")}</p>
 
         <p><strong>Next Diagnostic Step</strong></p>
         <p>${escapeHtml(ai.nextStep || "No next step returned.")}</p>

@@ -10,6 +10,15 @@ function esc(value) {
   return String(value).replace(/'/g, "''");
 }
 
+function validateNoLegacyFields(obj, source) {
+  const legacyFields = ['ase_area', 'ase-area', 'supports-ase-concept'];
+  for (const field of legacyFields) {
+    if (obj.hasOwnProperty(field)) {
+      console.warn(`⚠️  WARNING: Legacy field '${field}' detected in ${source}. This should have been removed by the generator. Skipping field during insert.`);
+    }
+  }
+}
+
 const lines = [];
 
 lines.push("-- Generated scenario question seed");
@@ -17,6 +26,8 @@ lines.push("delete from scenario_questions;");
 
 for (const [scenarioId, questions] of Object.entries(bank)) {
   for (const q of questions) {
+    validateNoLegacyFields(q, `question in scenario ${scenarioId}`);
+
     lines.push(`
 insert into scenario_questions
 (
@@ -29,8 +40,7 @@ insert into scenario_questions
   correct_answer,
   explanation,
   difficulty,
-  topic,
-  ase_area
+  topic
 )
 values
 (
@@ -43,8 +53,7 @@ values
   '${esc(q.correct_answer)}',
   '${esc(q.explanation)}',
   '${esc(q.difficulty)}',
-  '${esc(q.topic)}',
-  '${esc(q.ase_area)}'
+  '${esc(q.topic)}'
 );`);
   }
 }

@@ -215,7 +215,7 @@ async function loadAdaptiveRecommendations() {
 
     const url =
       `${window.SUPABASE_URL}/rest/v1/student_recommendations` +
-      `?select=student_id,ase_code,scenario_id,reason,priority` +
+      `?select=student_id,competency_code,scenario_id,reason,priority` +
       `&student_id=eq.anonymous&order=priority.asc&limit=5`;
 
     const res = await fetch(url, {
@@ -234,7 +234,7 @@ async function loadAdaptiveRecommendations() {
             <div>
               <strong>${row.scenario_id}</strong>
               <p>${row.reason}</p>
-              <small>ASE Area: ${row.ase_code}</small>
+              <small>Competency Area: ${row.competency_code}</small>
             </div>
             <a class="recommendation-link" href="./scenario/?id=${encodeURIComponent(row.scenario_id)}">Start Practice</a>
           </article>
@@ -289,8 +289,8 @@ async function loadTorqueMindFeedback(payload){
             <h3>Correct reasoning</h3>
             <p>${data.reasonCorrect}</p>
 
-            <h3>ASE Concept</h3>
-            <p>${data.aseConcept}</p>
+            <h3>Technical Concept</h3>
+            <p>${data.technicalConcept}</p>
 
             <h3>Next Diagnostic Step</h3>
             <p>${data.nextStep}</p>

@@ -1,10 +1,10 @@
 export function buildPrompt({ scenario, question, studentAnswer, topic = 'automotive diagnostics' }) {
-  const header = `You are an ASE-certified automotive tutor. Produce a JSON object with the exact shape described below.`
+  const header = `You are an automotive diagnostics tutor. Produce a JSON object with the exact shape described below.`
 
   const schema = `Return exactly one JSON object with the following string fields:\n` +
     `  "reasonIncorrect": explanation of why the student's answer is incorrect,\n` +
     `  "reasonCorrect": explanation of why the correct answer is correct,\n` +
-    `  "aseConcept": the ASE concept or principle involved,\n` +
+    `  "technicalConcept": the technical concept or diagnostic principle involved,\n` +
     `  "nextStep": a concise next diagnostic step or repair suggestion\n` +
     `Do not include any additional keys or commentary outside the JSON.`
 
@@ -57,7 +57,7 @@ export function extractJson(text) {
 }
 
 export function validateTutorResponse(obj) {
-  const required = ['reasonIncorrect', 'reasonCorrect', 'aseConcept', 'nextStep']
+  const required = ['reasonIncorrect', 'reasonCorrect', 'technicalConcept', 'nextStep']
 
   const source = obj && typeof obj === 'object' && obj.feedback && typeof obj.feedback === 'object'
     ? obj.feedback
@@ -66,7 +66,7 @@ export function validateTutorResponse(obj) {
   const aliases = {
     reasonIncorrect: ['reasonIncorrect', 'explanation', 'whyIncorrect', 'why_incorrect'],
     reasonCorrect: ['reasonCorrect', 'reasoning', 'correctReasoning', 'correct_reasoning'],
-    aseConcept: ['aseConcept', 'ase_concept', 'ase'],
+    technicalConcept: ['technicalConcept', 'technical_concept'],
     nextStep: ['nextStep', 'nextDiagnosticStep', 'next_diagnostic_step']
   }
 
@@ -115,7 +115,7 @@ export function normalizeTutorResponse(obj, fallbackText = '') {
     return {
       reasonIncorrect: fallback || 'Your selected answer does not align with the expected diagnostic result.',
       reasonCorrect: 'The correct answer follows evidence-based diagnostic logic and should be confirmed with measured test results.',
-      aseConcept: 'Systematic diagnosis with verification before replacement.',
+      technicalConcept: 'Systematic diagnosis with verification before replacement.',
       nextStep: 'Perform the next manufacturer-recommended diagnostic test and confirm the fault with scan-tool or meter data.'
     }
   }
