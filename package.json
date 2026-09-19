@@ -36,12 +36,12 @@
     "@babel/preset-env": "^7.24.0",
     "@cloudflare/workers-types": "^5.20260801.1",
     "@mermaid-js/mermaid-cli": "^11.16.0",
-    "@playwright/test": "^1.62.0",
+    "@playwright/test": "^1.63.0",
     "@supabase/supabase-js": "^2.112.4",
     "acorn": "^8.18.0",
-    "adm-zip": "^0.6.0",
+    "adm-zip": "^0.6.1",
     "ajv": "^8.20.0",
-    "babel-jest": "^30.4.1",
+    "babel-jest": "^30.5.1",
     "cors": "^2.8.6",
     "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
@@ -59,11 +59,11 @@
     "node-fetch": "^3.3.2",
     "pg": "^8.23.0",
     "supertest": "^7.2.2",
-    "undici": "^8.10.0",
+    "undici": "^8.10.2",
     "wait-on": "^9.1.0",
-    "wrangler": "4.127.1"
+    "wrangler": "4.131.1"
   },
   "dependencies": {
-    "hono": "^4.13.4"
+    "hono": "^4.13.7"
   }
 }
