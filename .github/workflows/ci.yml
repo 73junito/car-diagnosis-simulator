@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Verify lockfile sync
+        run: npm ci --dry-run
+
       - name: Enforce no nock in tests
         run: |
           if grep -R --line-number -E "require\(['\"]nock['\"]\)|import\s+nock|from\s+['\"]nock['\"]" tests; then
