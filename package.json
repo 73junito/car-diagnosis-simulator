@@ -32,7 +32,7 @@
     "docs:mermaid": "npm run docs:mermaid:coverage && npm run docs:mermaid:render"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
+    "@babel/core": "^8.0.5",
     "@babel/preset-env": "^7.24.0",
     "@cloudflare/workers-types": "^5.20260801.1",
     "@mermaid-js/mermaid-cli": "^11.16.0",
