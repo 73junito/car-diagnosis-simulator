@@ -2,6 +2,9 @@
   "name": "car-diagnosis-sim",
   "version": "0.1.1",
   "private": true,
+  "engines": {
+    "node": ">=22.19.0"
+  },
   "scripts": {
     "minimist": "^1.2.8",
     "prepare": "husky install",

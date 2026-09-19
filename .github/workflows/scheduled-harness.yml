@@ -136,8 +136,8 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: chore: append runs/history.csv from scheduled harness (fallback)
-          title: chore: update runs/history.csv (scheduled harness fallback)
+          commit-message: "chore: append runs/history.csv from scheduled harness (fallback)"
+          title: "chore: update runs/history.csv (scheduled harness fallback)"
           body: |-
             This PR was opened automatically by the scheduled harness run (fallback) to append a new row to `runs/history.csv`.
           branch: history/update-${{ github.run_id }}-fallback
