@@ -22,6 +22,17 @@
     if (path && typeof path === 'string' && path.trim()) return path;
     return '/assets/images/scenarios/placeholder-scenario.svg';
   }
+  // Seven-level analysis-depth contract: the single canonical implementation
+  // lives in data/analysis-levels.js (TorqueMindAnalysisLevels). This registry
+  // consumes that module when it has been loaded (page script order:
+  // analysis-levels.js BEFORE scenario-registry.js). If it is absent the
+  // additive fields are omitted and legacy difficulty behavior is untouched;
+  // band thresholds are never re-implemented here.
+  const levelsApi = window.TorqueMindAnalysisLevels || null;
+  if (!levelsApi) {
+    console.warn('scenario-registry: TorqueMindAnalysisLevels not loaded; analysisLevel/analysisBand fields omitted');
+  }
+
   const seen = new Set();
   const registry = src.map(s => {
     let slug = s.slug || slugify(s.symptomCategory || s.symptoms || s.fault || s.id);
@@ -34,6 +45,9 @@
     // Prefer a human-readable symptom/title over the internal category key
     const title = s.title || (s.symptoms || s.symptomCategory || (`Scenario ${s.id}`));
     const shortSymptom = (s.symptoms && (s.symptoms.length>120 ? s.symptoms.slice(0,117)+'...' : s.symptoms)) || s.trainingFocus || '';
+    // Additive seven-level analysis contract; legacy difficulty mapping below is unchanged.
+    const analysisLevel = levelsApi ? levelsApi.normalizeLevel(s.difficulty) : undefined;
+    const analysisBand = levelsApi ? levelsApi.bandFor(analysisLevel) : undefined;
     const difficulty = (s.difficultyLevel || (typeof s.difficulty==='number' ? (s.difficulty>=4?'advanced':(s.difficulty>=3?'intermediate':'beginner')) : s.difficulty)) || 'intermediate';
     const estimatedTime = s.timeLimit ? Math.ceil(s.timeLimit/60) + ' min' : (s.estimatedTime || '10-20 min');
     const aseArea = s.aseArea || '';
@@ -52,6 +66,8 @@
       image: image,
       shortSymptom: shortSymptom,
       difficulty: difficulty,
+      analysisLevel: analysisLevel,
+      analysisBand: analysisBand,
       estimatedTime: estimatedTime,
       aseArea: aseArea,
       route: route,
