@@ -13,9 +13,9 @@ Features
 - Teacher dashboard with exports, insights, and scenario assignment
 
 Demo
-Visit the live demo: https://car-diagnosis-simulator.vercel.app/
+Visit the live demo: https://app.autolearnpro.com/
 
-[![Test Dashboard](https://img.shields.io/badge/test-dashboard-live-brightgreen)](https://73junito.github.io/car-diagnosis-simulator/dashboard.html)
+[![Test Dashboard](https://img.shields.io/badge/test-dashboard-live-brightgreen)](https://app.autolearnpro.com/dashboard/student/)
 
 Run locally
 ```bash
