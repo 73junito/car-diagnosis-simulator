@@ -70,13 +70,7 @@
       },
       "assets": {
         "directory": "./dist"
-      },
-      "routes": [
-        {
-          "pattern": "app.autolearnpro.com",
-          "custom_domain": true
-        }
-      ]
+      }
     }
   }
 }
