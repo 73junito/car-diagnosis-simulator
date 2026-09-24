@@ -1,4 +1,4 @@
-﻿-- Restore the classroom API persistence contract used by torquemind-api.
+-- Restore the classroom API persistence contract used by torquemind-api.
 -- Staging-first migration; RLS limits authenticated access to owned/user-scoped rows.
 
 create table if not exists public.classes (

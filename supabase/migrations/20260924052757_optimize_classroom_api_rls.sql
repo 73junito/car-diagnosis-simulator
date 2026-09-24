@@ -1,4 +1,4 @@
-﻿create index if not exists classes_owner_id_idx on public.classes(owner_id);
+create index if not exists classes_owner_id_idx on public.classes(owner_id);
 create index if not exists enrollments_class_id_idx on public.enrollments(class_id);
 create index if not exists enrollments_user_id_idx on public.enrollments(user_id);
 create index if not exists replays_user_id_idx on public.replays(user_id);
