@@ -58,14 +58,14 @@ async function ask(model, prompt, outName) {
 }
 
 function generatorPrompt(scenario) {
-  return `Return only valid JSON. Generate 8 ASE-style diagnostic questions for ${scenario}.
+  return `Return only valid JSON. Generate 8 diagnostic questions for ${scenario}.
 Schema:
-{"scenario_id":"${scenario}","questions":[{"question_text":"string","option_a":"string","option_b":"string","option_c":"string","option_d":"string","correct_answer":"A","explanation":"string","difficulty":"beginner","topic":"string","ase_area":"string"}]}`;
+{"scenario_id":"${scenario}","questions":[{"question_text":"string","option_a":"string","option_b":"string","option_c":"string","option_d":"string","correct_answer":"A","explanation":"string","difficulty":"beginner|intermediate|advanced","topic":"string"}]}`;
 }
 
 function verifierPrompt(scenario, drafts) {
   return `Return only valid JSON. Merge, correct, and deduplicate these questions for ${scenario}. Return exactly this shape:
-{"scenario_id":"${scenario}","questions":[{"question_text":"string","option_a":"string","option_b":"string","option_c":"string","option_d":"string","correct_answer":"A","explanation":"string","difficulty":"beginner","topic":"string","ase_area":"string"}]}
+{"scenario_id":"${scenario}","questions":[{"question_text":"string","option_a":"string","option_b":"string","option_c":"string","option_d":"string","correct_answer":"A","explanation":"string","difficulty":"beginner|intermediate|advanced","topic":"string"}]}
 Drafts:
 ${JSON.stringify(drafts).slice(0, 12000)}`;
 }

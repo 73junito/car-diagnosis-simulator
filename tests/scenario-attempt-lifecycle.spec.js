@@ -158,7 +158,7 @@ describe('scenario attempt lifecycle', () => {
           option_d: 'D',
           difficulty: 'medium',
           topic: 'diagnostics',
-          ase_area: 'E1',
+          competency_area_id: 'e1-uuid',
           explanation: 'Explanation text',
           question_provenance: [{
             status: 'approved',
@@ -189,7 +189,7 @@ describe('scenario attempt lifecycle', () => {
           json: async () => ({
             reasonIncorrect: 'incorrect rationale',
             reasonCorrect: 'correct rationale',
-            aseConcept: 'ase concept',
+            technicalConcept: 'technical concept',
             nextStep: 'next step'
           })
         };

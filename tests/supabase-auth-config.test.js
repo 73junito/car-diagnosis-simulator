@@ -89,7 +89,7 @@ async function run() {
   assert.strictEqual(last.role, 'instructor');
   assert.strictEqual(last.source, 'header');
 
-  console.log('Supabase auth config tests passed.');
+
 }
 
 if (require.main === module) run().catch(err => { console.error(err); process.exit(1); });

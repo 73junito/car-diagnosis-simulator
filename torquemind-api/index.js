@@ -184,9 +184,9 @@ app.get('/api/teacher/data', requireRole('teacher'), async (req, res) => {
 
     // fetch users, replays, completions, assignments for that class (empty userIds handled)
     const promises = [];
-    promises.push(client.from('users').select('*').in('id', userIds.length ? userIds : ['']));
-    promises.push(client.from('replays').select('*').in('user_id', userIds.length ? userIds : ['']));
-    promises.push(client.from('completions').select('*').in('user_id', userIds.length ? userIds : ['']));
+    promises.push(userIds.length ? client.from('users').select('*').in('id', userIds) : Promise.resolve({ data: [] }));
+    promises.push(userIds.length ? client.from('replays').select('*').in('user_id', userIds) : Promise.resolve({ data: [] }));
+    promises.push(userIds.length ? client.from('completions').select('*').in('user_id', userIds) : Promise.resolve({ data: [] }));
     promises.push(client.from('assignments').select('*').eq('class_id', classId));
     const [{ data: users }, { data: replays }, { data: completions }, { data: assignments }] = await Promise.all(promises);
 

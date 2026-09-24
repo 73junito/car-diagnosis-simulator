@@ -13,14 +13,15 @@ on:
 jobs:
   smoke:
     name: api-smoke
+    environment: jchfruprqpeypdttvlam_staging
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
+      group: staging-smoke-${{ github.ref }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     env:
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      SUPABASE_URL: ${{ secrets.STAGING_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.STAGING_ANON }}
+      SUPABASE_KEY: ${{ secrets.STAGING_SECRET }}
       TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
       TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
       BASE_URL: http://localhost:3000
@@ -35,6 +36,11 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: package-lock.json
+
+      - name: Verify staging Supabase destination
+        env:
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+        run: node scripts/assert-staging-supabase.js
 
       - name: Debug workspace
         if: always()
@@ -72,9 +78,9 @@ jobs:
       - name: Start API server and wait
         working-directory: torquemind-api
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+          SUPABASE_KEY: ${{ secrets.STAGING_SECRET }}
+          SUPABASE_ANON_KEY: ${{ secrets.STAGING_ANON }}
         run: |
           # start server in background and record pid/log
           nohup npm start >/tmp/torquemind.log 2>&1 &
@@ -107,11 +113,13 @@ jobs:
       - name: Run smoke test (with retries)
         working-directory: torquemind-api
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.STAGING_ANON }}
+          SUPABASE_KEY: ${{ secrets.STAGING_SECRET }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+          SMOKE_SEED_FIXTURE: 'true'
           BASE_URL: http://localhost:3000
         run: |
           max_attempts=3

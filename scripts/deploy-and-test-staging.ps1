@@ -77,7 +77,7 @@ catch {
 } | Format-List
 
 # Check for required fields in response body
-if ($ResponseBody -and ($ResponseBody -match 'reasonIncorrect') -and ($ResponseBody -match 'reasonCorrect') -and ($ResponseBody -match 'aseConcept') -and ($ResponseBody -match 'nextStep')) {
+if ($ResponseBody -and ($ResponseBody -match 'reasonIncorrect') -and ($ResponseBody -match 'reasonCorrect') -and ($ResponseBody -match 'technicalConcept') -and ($ResponseBody -match 'nextStep')) {
     Write-Host "Gate passed: required tutor fields present." -ForegroundColor Green
 } else {
     Write-Warning "Gate failed: one or more required tutor fields missing in response body."

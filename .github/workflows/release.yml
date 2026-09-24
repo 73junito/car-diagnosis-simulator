@@ -69,12 +69,15 @@ jobs:
     name: API smoke
     runs-on: ubuntu-latest
     needs: unit-tests
+    environment: staging
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
       TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
       TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+      SMOKE_SEED_FIXTURE: 'true'
       BASE_URL: http://localhost:3000
     steps:
       - name: Checkout
@@ -91,6 +94,11 @@ jobs:
       - name: Install API dependencies
         working-directory: torquemind-api
         run: npm ci
+
+      - name: Verify staging Supabase destination
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: node scripts/assert-staging-supabase.js
 
       - name: Start API server
         working-directory: torquemind-api
