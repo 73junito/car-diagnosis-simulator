@@ -55,6 +55,8 @@
     const image = resolveScenarioImage(`/assets/images/scenarios/${slug}.svg`);
     const routeBase = chooseRoute();
     const scenarioKey = String(s.scenario_key || '').trim();
+    const contentMap = window.SCENARIO_CONTENT_MAP || {};
+    const questionBankId = contentMap[scenarioKey] || s.symptomCategory || slug;
     const route = scenarioKey
       ? routeBase + encodeURIComponent(scenarioKey)
       : null;
@@ -72,6 +74,7 @@
       aseArea: aseArea,
       route: route,
       scenario_key: s.scenario_key,
+      questionBankId: questionBankId,
       symptomCategory: s.symptomCategory,
       raw: s
     };
