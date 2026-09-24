@@ -19,7 +19,7 @@ jobs:
       cancel-in-progress: true
     runs-on: ubuntu-latest
     env:
-      SUPABASE_URL: ${{ secrets.STAGING }}
+      SUPABASE_URL: ${{ secrets.STAGING_URL }}
       SUPABASE_ANON_KEY: ${{ secrets.STAGING_ANON }}
       SUPABASE_KEY: ${{ secrets.STAGING_SECRET }}
       TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
@@ -39,7 +39,7 @@ jobs:
 
       - name: Verify staging Supabase destination
         env:
-          SUPABASE_URL: ${{ secrets.STAGING }}
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
         run: node scripts/assert-staging-supabase.js
 
       - name: Debug workspace
@@ -78,7 +78,7 @@ jobs:
       - name: Start API server and wait
         working-directory: torquemind-api
         env:
-          SUPABASE_URL: ${{ secrets.STAGING }}
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
           SUPABASE_KEY: ${{ secrets.STAGING_SECRET }}
           SUPABASE_ANON_KEY: ${{ secrets.STAGING_ANON }}
         run: |
@@ -113,7 +113,7 @@ jobs:
       - name: Run smoke test (with retries)
         working-directory: torquemind-api
         env:
-          SUPABASE_URL: ${{ secrets.STAGING }}
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.STAGING_ANON }}
           SUPABASE_KEY: ${{ secrets.STAGING_SECRET }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
