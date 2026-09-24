@@ -1,10 +1,9 @@
 export const ROUTES = Object.freeze({
   HOME: '/',
-  STUDENT_DASHBOARD: '/dashboard/student/',
-  STUDENT_SCENARIO: '/dashboard/student/scenario/',
-  ANALYTICS: '/dashboard/analytics',
-  SESSION_HISTORY: '/dashboard/session-history',
-  DOCS: '/docs'
+  DOCS: '/docs',
+  CONTACT: '/contact.html',
+  PRIVACY: '/privacy.html',
+  TERMS: '/terms.html'
 });
 
 export function route(name) {
