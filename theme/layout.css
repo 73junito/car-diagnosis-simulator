@@ -1,3 +1,20 @@
+@import "./components/css/cards.css";
+@import "./components/css/buttons.css";
+@import "./components/css/forms.css";
+@import "./components/css/tables.css";
+@import "./dashboard-shell/shell.css";
+@import "./components/scenario-card/scenario-card.css";
+@import "./components/stat-card/stat-card.css";
+@import "./components/learning-path/learning-path.css";
+@import "./components/coach-panel/coach-panel.css";
+@import "./components/progress-card/progress-card.css";
+@import "./components/transcript-card/transcript-card.css";
+@import "./components/filter-toolbar/filter-toolbar.css";
+@import "./components/hero-banner/hero-banner.css";
+@import "./components/timeline/timeline.css";
+
+/* Base TorqueMind layout follows */
+
 .tm-shell {
   min-height: 100vh;
   background:
@@ -132,39 +149,4 @@
     grid-template-columns: 1fr;
   }
 }
-
-@import "./components/css/cards.css";
-@import "./components/css/buttons.css";
-@import "./components/css/forms.css";
-@import "./components/css/tables.css";
-
-
-@import "./dashboard-shell/shell.css";
-
-
-@import "./components/scenario-card/scenario-card.css";
-
-
-@import "./components/stat-card/stat-card.css";
-
-
-@import "./components/learning-path/learning-path.css";
-
-
-@import "./components/coach-panel/coach-panel.css";
-
-
-@import "./components/progress-card/progress-card.css";
-
-
-@import "./components/transcript-card/transcript-card.css";
-
-
-@import "./components/filter-toolbar/filter-toolbar.css";
-
-
-@import "./components/hero-banner/hero-banner.css";
-
-
-@import "./components/timeline/timeline.css";
 
