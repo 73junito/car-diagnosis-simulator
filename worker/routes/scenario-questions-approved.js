@@ -103,12 +103,16 @@ export async function handleScenarioQuestionsApproved(c) {
       }
 
       // Check for approved provenance record
-      const { data: provenance, error: provenanceError } = await supabase
+      const provenanceKeys = [...new Set([question.question_id, String(question.id)].filter(Boolean))]
+      const { data: provenanceRows, error: provenanceError } = await supabase
         .from('question_provenance')
         .select('id, question_id, status')
-        .eq('question_id', question.id)
+        .in('question_id', provenanceKeys)
         .eq('status', 'approved')
-        .single()
+
+      const provenance = (provenanceRows || []).find(
+        row => row.question_id === question.question_id
+      ) || (provenanceRows || [])[0]
 
       if (provenanceError || !provenance) {
         // No approved provenance for this question; skip it
@@ -135,11 +139,16 @@ export async function handleScenarioQuestionsApproved(c) {
       // Check that all citations reference approved sources and chunks
       const { data: citations, error: citationsError } = await supabase
         .from('question_citations')
-        .select('source_id, chunk_id')
+        .select('id, source_id, chunk_id, role, quote')
         .eq('question_provenance_id', provenance.id)
 
       if (citationsError || !citations || citations.length === 0) {
         // No citations or error retrieving them; skip this question
+        continue
+      }
+
+      const roles = new Set(citations.map(citation => citation.role))
+      if (!roles.has('supports-answer') || !roles.has('supports-explanation')) {
         continue
       }
 
@@ -162,9 +171,10 @@ export async function handleScenarioQuestionsApproved(c) {
         // Verify chunk is approved
         const { data: chunk, error: chunkError } = await supabase
           .from('source_chunks')
-          .select('chunk_id, status')
+          .select('chunk_id, status, approved')
           .eq('chunk_id', citation.chunk_id)
           .eq('status', 'approved')
+          .eq('approved', true)
           .single()
 
         if (chunkError || !chunk) {
