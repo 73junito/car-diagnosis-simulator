@@ -33,6 +33,7 @@
     "docs:mermaid:coverage": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-mermaid-coverage.ps1",
     "docs:mermaid:render": "node scripts/verify-mermaid-rendering.js",
     "docs:mermaid": "npm run docs:mermaid:coverage && npm run docs:mermaid:render",
+    "audit:scenario-questions": "node scripts/scenario-question-readiness-report.js",
     "cloudflare:app:build": "npm run build",
     "cloudflare:app:deploy": "npm run cloudflare:app:build && wrangler deploy --config wrangler.app.jsonc",
     "cloudflare:app:preview": "npm run cloudflare:app:build && wrangler preview --config wrangler.app.jsonc"

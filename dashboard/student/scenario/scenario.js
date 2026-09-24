@@ -442,7 +442,7 @@
 
     // Use registry item's ID as routing key, but evidence is grouped by category
     const key = item.id;
-    const evidenceScenarioId = item.symptomCategory || key;
+    const evidenceScenarioId = item.questionBankId || item.symptomCategory || key;
     const scenario = item.raw || item;
 
 
