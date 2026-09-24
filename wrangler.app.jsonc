@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "autolearnpro-app",
   "main": "worker/index.js",
+  "build": {
+    "command": "npm run build"
+  },
   "compatibility_date": "2026-08-08",
   "workers_dev": true,
   "routes": [
