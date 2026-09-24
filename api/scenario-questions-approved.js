@@ -97,12 +97,16 @@ export default async function handler(req, res) {
       }
 
       // Check for approved provenance record
-      const { data: provenance, error: provenanceError } = await supabase
+      const provenanceKeys = [...new Set([question.question_id, String(question.id)].filter(Boolean))];
+      const { data: provenanceRows, error: provenanceError } = await supabase
         .from('question_provenance')
         .select('id, question_id, status')
-        .eq('question_id', question.id)
-        .eq('status', 'approved')
-        .single();
+        .in('question_id', provenanceKeys)
+        .eq('status', 'approved');
+
+      const provenance = (provenanceRows || []).find(
+        row => row.question_id === question.question_id
+      ) || (provenanceRows || [])[0];
 
       if (provenanceError || !provenance) {
         // No approved provenance for this question; skip it

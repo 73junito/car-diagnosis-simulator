@@ -204,7 +204,11 @@
 
       if (res.ok) {
         const data = await res.json();
-        return Array.isArray(data.questions) ? data.questions : [];
+        const approved = Array.isArray(data.questions) ? data.questions : [];
+        if (approved.length > 0) {
+          return approved;
+        }
+        console.warn("No approved API questions are available; showing local draft records without grading.");
       }
     } catch (e) {
       console.warn("API question load failed; falling back to static questions.", e);
@@ -443,7 +447,7 @@
 
 
     const questionBank = normalizeQuestionBank(key, await loadScenarioQuestions(evidenceScenarioId));
-    const approvedQuestionBank = questionBank.filter((q) => String(q.status || '').toLowerCase() === 'approved');
+    const approvedQuestionBank = questionBank.filter((q) => String(q.status || q.question_provenance?.status || '').toLowerCase() === 'approved');
     const studentId = getStudentId();
     const state = readAttemptState(key, studentId);
     const failedHistory = state.history.filter((entry) => !entry.passed);
