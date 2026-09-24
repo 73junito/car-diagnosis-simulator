@@ -16,10 +16,10 @@ permissions:
 jobs:
   smoke:
     name: smoke
-    environment: staging
+    environment: jchfruprqpeypdttvlam_staging
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
+      group: staging-smoke-${{ github.ref }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -34,7 +34,7 @@ jobs:
 
       - name: Verify staging Supabase destination
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
         run: node scripts/assert-staging-supabase.js
 
       - name: Debug workspace
@@ -73,9 +73,9 @@ jobs:
       - name: Start API server
         working-directory: torquemind-api
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+          SUPABASE_KEY: ${{ secrets.STAGING_SECRET }}
+          SUPABASE_ANON_KEY: ${{ secrets.STAGING_ANON }}
         run: |
           nohup npm start >/tmp/torquemind.log 2>&1 &
           echo "Server starting..."
@@ -104,10 +104,10 @@ jobs:
       - name: Run auth-aware smoke test
         working-directory: torquemind-api
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.STAGING_ANON }}
+          SUPABASE_KEY: ${{ secrets.STAGING_SECRET }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
           SMOKE_SEED_FIXTURE: 'true'
