@@ -16,7 +16,7 @@ jobs:
     environment: jchfruprqpeypdttvlam_staging
     concurrency:
       group: staging-smoke-${{ github.ref }}
-      cancel-in-progress: true
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     env:
       SUPABASE_URL: ${{ secrets.STAGING_URL }}
