@@ -186,6 +186,42 @@
       "artifact_sha256": null,
       "approved_chunks": 0,
       "may_generate_questions": false
+    },
+    {
+      "candidate_id": "army-da-pam-750-33-1976",
+      "title": "Charging System Troubleshooting (The Easy Way)",
+      "issuer": "Headquarters, Department of the Army",
+      "publication_date": "1976-12-15",
+      "archive_url": "https://archive.org/details/PAM750-33",
+      "artifact_url": "https://archive.org/download/PAM750-33/PAM750-33.pdf",
+      "publication_identifier": "DA Pamphlet 750-33; GPO stock 008-020-00623-8",
+      "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "rights_basis": "Archive item carries a Public Domain Mark, but Archive disclaims rights metadata guarantees. Scanned title page identifies Headquarters, Department of the Army; final page states By Order of the Secretary of the Army. Verify original artifact, any contractor/third-party inclusions, and publication rights before approval.",
+      "rights_decision": "strong-government-work-lead-pending-artifact-and-project-review",
+      "technical_decision": "pending; 1976 military 24 V and specific 25–300 A systems, so only broad diagnostic reasoning may transfer to contemporary passenger vehicles",
+      "observed_scope": [
+        "battery voltage checks, p. 8",
+        "25 A and 60 A wheeled-vehicle charging tests, pp. 10–17",
+        "100 A internally and externally rectified wheeled-vehicle tests, pp. 18–28",
+        "tracked-vehicle and 300 A military systems, pp. 29–59"
+      ],
+      "candidate_claims_for_review": [
+        {
+          "locator": "Introduction, inside front cover",
+          "claim": "Battery, generator/alternator, connections and regulator form interdependent parts of a charging system.",
+          "caveat": "General concept only; specific architecture varies."
+        },
+        {
+          "locator": "Chapter 2, p. 8",
+          "claim": "Battery voltage and indicator observations help select follow-up charging circuit checks.",
+          "caveat": "Vehicle-specific switch, gauge and nominal 24 V values must not be generalized."
+        }
+      ],
+      "artifact_sha256": null,
+      "evidence_decision": "candidate-only",
+      "approved_chunks": 0,
+      "may_generate_questions": false,
+      "verification_gap": "Download and hash exact PDF; inspect scan front/back and image credits; establish public-domain basis beyond uploader label; verify page-specific technical applicability. Do not ingest archive OCR as evidence without matching it against the scanned artifact."
     }
   ],
   "topic_gap_map": [
@@ -208,7 +244,8 @@
     {
       "topic": "charging-system output and load testing",
       "candidate_sources": [
-        "navy-navedtra-14264a-ch8"
+        "navy-navedtra-14264a-ch8",
+        "army-da-pam-750-33-1976"
       ],
       "status": "pending"
     },
