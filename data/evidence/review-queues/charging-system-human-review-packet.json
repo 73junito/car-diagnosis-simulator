@@ -1,0 +1,196 @@
+{
+  "scenario_id": "charging-system",
+  "review_stage": "human-technical-and-instructional-review",
+  "generated_at": "2026-09-25",
+  "source_basis": {
+    "source_id": "frontiers-automotive-alternator-2023",
+    "publisher": "Frontiers in Mechanical Engineering",
+    "approved_chunks": [
+      "frontiers-alternator-primary-source-p7",
+      "frontiers-alternator-ac-dc-rectification-p7"
+    ]
+  },
+  "governance": {
+    "citation_validation_complete": true,
+    "technical_review_complete": false,
+    "instructional_review_complete": false,
+    "approval_complete": false,
+    "evidence_needed_drafts_blocked": true,
+    "reviewer_identity_required": true,
+    "reviewer_timestamp_required": true,
+    "technical_reviewer": {
+      "profile_uuid": "9d924a87-361e-417d-9094-44de9df1fc0d",
+      "role": "developer_reviewer",
+      "environment": "staging",
+      "identity_type": "independent development audit identity"
+    },
+    "instructional_reviewer": {
+      "profile_uuid": null,
+      "role": "pending independent instructional reviewer"
+    },
+    "note": "This packet prepares human review only. It does not authorize automatic approval."
+  },
+  "review_criteria": {
+    "technical": [
+      "The keyed answer is technically correct within the approved evidence.",
+      "The explanation does not add claims beyond the approved evidence.",
+      "Terminology is accurate and unambiguous.",
+      "Distractors are technically plausible enough to assess understanding without being misleading.",
+      "The question does not duplicate another retained item."
+    ],
+    "instructional": [
+      "The stem asks one clear question.",
+      "There is one best answer.",
+      "Distractors are parallel in form and appropriate for the stated difficulty.",
+      "The item measures the stated topic rather than test-taking tricks.",
+      "The explanation is concise and useful to a learner.",
+      "The item is suitable for the intended post-secondary automotive learning context."
+    ]
+  },
+  "questions": [
+    {
+      "question_id": "47c057ce-2e41-4ba6-b96e-6c3311417724",
+      "topic": "Alternator AC-to-DC Rectification",
+      "difficulty": "beginner",
+      "question": "Which alternator component converts alternating current into direct current for the vehicle electrical system?",
+      "options": {
+        "A": "The diode rectifier.",
+        "B": "The starter motor.",
+        "C": "The ignition switch.",
+        "D": "The flywheel."
+      },
+      "correct_answer": "A",
+      "explanation": "An automotive alternator generates alternating current and uses diode rectification to provide direct current.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "review": {
+        "technical_decision": "pending",
+        "instructional_decision": "pending",
+        "technical_comments": "",
+        "instructional_comments": ""
+      }
+    },
+    {
+      "question_id": "49dad565-9f85-476a-b87b-cbc31ce5bb68",
+      "topic": "Alternator Function",
+      "difficulty": "beginner",
+      "question": "Which component is primarily responsible for generating electric energy in a modern vehicle?",
+      "options": {
+        "A": "Alternator",
+        "B": "Battery",
+        "C": "Starter motor",
+        "D": "Fuel injector"
+      },
+      "correct_answer": "A",
+      "explanation": "Alternators are identified as the primary source of electric energy within a vehicle.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-primary-source-p7",
+        "locator": "PDF page 7"
+      },
+      "review": {
+        "technical_decision": "pending",
+        "instructional_decision": "pending",
+        "technical_comments": "",
+        "instructional_comments": ""
+      }
+    },
+    {
+      "question_id": "ba2541c8-f70b-4730-a7c3-c2c5113511e2",
+      "topic": "Charging System Components",
+      "difficulty": "beginner",
+      "question": "An automotive alternator typically consists of which of the following components?",
+      "options": {
+        "A": "Rotor, stator, diode rectifier, and voltage regulator",
+        "B": "Battery, alternator, starter",
+        "C": "Fuel pump, spark plug",
+        "D": "Transmission, clutch"
+      },
+      "correct_answer": "A",
+      "explanation": "The alternator is described as a synchronous AC generator with a rotor, stator, diode rectifier, and voltage regulator.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "review": {
+        "technical_decision": "pending",
+        "instructional_decision": "pending",
+        "technical_comments": "",
+        "instructional_comments": ""
+      }
+    },
+    {
+      "question_id": "charging-system-ai-draft-0f3a2f20daca",
+      "topic": "alternator fundamentals",
+      "difficulty": "advanced",
+      "question": "Which voltage control technique is employed by an automotive alternator?",
+      "options": {
+        "A": "Pulse-width modulation (PWM) voltage control",
+        "B": "Linear control",
+        "C": "Feedback control",
+        "D": "Open-loop control"
+      },
+      "correct_answer": "A",
+      "explanation": "The cited evidence describes pulse-width modulation voltage control as part of automotive alternator operation.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "review": {
+        "technical_decision": "pending",
+        "instructional_decision": "pending",
+        "technical_comments": "",
+        "instructional_comments": ""
+      }
+    },
+    {
+      "question_id": "charging-system-ai-draft-4cfd549ec9be",
+      "topic": "alternator fundamentals",
+      "difficulty": "advanced",
+      "question": "What is the approximate efficiency of a typical automotive alternator?",
+      "options": {
+        "A": "45%",
+        "B": "55%",
+        "C": "65%",
+        "D": "75%"
+      },
+      "correct_answer": "B",
+      "explanation": "The cited evidence states that an automotive alternator has an efficiency of about 55%.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "review": {
+        "technical_decision": "pending",
+        "instructional_decision": "pending",
+        "technical_comments": "",
+        "instructional_comments": ""
+      }
+    },
+    {
+      "question_id": "charging-system-ai-draft-e67fed5cd983",
+      "topic": "alternator fundamentals",
+      "difficulty": "intermediate",
+      "question": "An automotive alternator is best described as which type of generator?",
+      "options": {
+        "A": "DC generator",
+        "B": "Synchronous AC generator",
+        "C": "Induction generator",
+        "D": "Permanent magnet generator"
+      },
+      "correct_answer": "B",
+      "explanation": "The cited evidence describes an alternator as a synchronous alternating current (AC) electric generator.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "review": {
+        "technical_decision": "pending",
+        "instructional_decision": "pending",
+        "technical_comments": "",
+        "instructional_comments": ""
+      }
+    }
+  ]
+}
