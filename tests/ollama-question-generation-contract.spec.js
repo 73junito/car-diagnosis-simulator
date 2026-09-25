@@ -8,6 +8,14 @@ describe('Ollama question generation contract', () => {
     path.join(root, 'scripts', 'generate-scenario-question-drafts.js'),
     'utf8'
   );
+  const agent = fs.readFileSync(
+    path.join(root, 'scripts', 'agents', 'automotive-question-agent.js'),
+    'utf8'
+  );
+  const worker = fs.readFileSync(
+    path.join(root, 'scripts', 'workers', 'ollama-question-worker.js'),
+    'utf8'
+  );
   const workflow = fs.readFileSync(
     path.join(root, '.github', 'workflows', 'generate-scenario-question-drafts.yml'),
     'utf8'
@@ -27,10 +35,13 @@ describe('Ollama question generation contract', () => {
   test('generation is evidence-bound and draft-only', () => {
     expect(generator).toContain('source.reviewer_approved === true');
     expect(generator).toContain("source.status === 'validated'");
-    expect(generator).toContain("status: 'draft'");
-    expect(generator).toContain('approved: false');
-    expect(generator).toContain('human_technical_review_completed: false');
-    expect(generator).toContain('human_instructional_review_completed: false');
+    expect(generator).toContain('runOllamaQuestionWorker');
+    expect(generator).toContain('selectDrafts');
+    expect(agent).toContain("status: 'draft'");
+    expect(agent).toContain('approved: false');
+    expect(agent).toContain('human_technical_review_completed: false');
+    expect(agent).toContain('human_instructional_review_completed: false');
+    expect(worker).toContain('buildQuestionMessages');
     expect(generator).toContain('No rights-verified, reviewer-approved evidence chunks');
   });
 
