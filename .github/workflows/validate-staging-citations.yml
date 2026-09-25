@@ -1,0 +1,66 @@
+name: Validate staging citations
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario_id:
+        description: Scenario ID to validate
+        required: true
+        default: charging-system
+        type: string
+      dry_run:
+        description: Validate without writing citation_validations
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Deterministic citation validation
+    runs-on: ubuntu-latest
+    environment: jchfruprqpeypdttvlam_staging
+    timeout-minutes: 10
+    env:
+      SUPABASE_URL: ${{ secrets.STAGING_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "${{ inputs.scenario_id }}" =~ ^[a-z0-9-]+$ ]]; then
+            echo "Invalid scenario_id"
+            exit 1
+          fi
+          test -n "$SUPABASE_URL"
+          test -n "$SUPABASE_SERVICE_ROLE_KEY"
+
+      - name: Run deterministic citation validator
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=(--scenario="${{ inputs.scenario_id }}")
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            args+=(--dry-run)
+          fi
+          node scripts/validate-citations.js "${args[@]}"
+
+      - name: Governance notice
+        run: |
+          echo "Citation validation does not approve questions."
+          echo "Human technical and instructional review remain separate gates."
