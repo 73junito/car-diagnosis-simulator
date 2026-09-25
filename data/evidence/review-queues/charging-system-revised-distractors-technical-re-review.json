@@ -1,0 +1,44 @@
+{
+  "scenario_id": "charging-system",
+  "review_stage": "development-technical-re-review",
+  "reviewed_at": "2026-09-25",
+  "basis": {
+    "revision_record": "data/evidence/review-queues/charging-system-technical-revisions.json",
+    "question_packet": "data/evidence/review-queues/charging-system-human-review-packet.json",
+    "source_id": "frontiers-automotive-alternator-2023",
+    "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+    "locator": "PDF page 7"
+  },
+  "scope": "Two revised distractors from PR #478; the four earlier pass decisions are not reopened.",
+  "summary": {
+    "pass": 0,
+    "revise": 2,
+    "reject": 0
+  },
+  "decisions": [
+    {
+      "question_id": "charging-system-ai-draft-0f3a2f20daca",
+      "option": "C",
+      "revised_distractor": "DC diode rectification",
+      "decision": "revise",
+      "reason": "The stem asks for a voltage-control technique. DC diode rectification is an AC-to-DC conversion function, not a voltage-control technique. The approved evidence lists rectification and PWM voltage control separately. Although this option no longer overlaps the key, its different category makes it implausible for the stem and weakens the technical distractor criterion.",
+      "remediation": "Replace option C with a technically plausible voltage-control technique that is distinct from PWM in the intended context, or rewrite the stem and all options to compare the alternator functions stated by the evidence. Recheck the remaining options for overlap with PWM."
+    },
+    {
+      "question_id": "charging-system-ai-draft-e67fed5cd983",
+      "option": "D",
+      "revised_distractor": "Voltage regulator",
+      "decision": "revise",
+      "reason": "The stem asks for a type of generator. A voltage regulator is an alternator component, not a generator type. The approved evidence explicitly distinguishes the synchronous AC generator from its regulator component. The option is non-overlapping but not a technically plausible generator-type distractor.",
+      "remediation": "Use a distinct generator classification as option D if the evidence and technical reviewer can establish one best answer, or rewrite the stem and options as a component-identification item. Recheck the other generator classifications and DC-output ambiguity."
+    }
+  ],
+  "governance": {
+    "technical_review_complete_for_these_questions": false,
+    "instructional_review_complete": false,
+    "approval_complete": false,
+    "question_status": "validated",
+    "database_change_requested": false,
+    "note": "This record documents re-review decisions only. It does not claim a staging database write, reviewer attribution, instructional decision, or approval."
+  }
+}
