@@ -4,6 +4,16 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    ignore:
+      # Babel 8 currently requires an @babel/core 8 migration while Jest's
+      # babel-preset-current-node-syntax dependency still declares Babel 7 peers.
+      # Keep Dependabot on Babel 7 until that toolchain is compatible.
+      - dependency-name: "@babel/preset-env"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "@babel/core"
+        update-types:
+          - "version-update:semver-major"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
