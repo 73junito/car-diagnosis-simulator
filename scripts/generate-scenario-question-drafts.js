@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { parseModelJson } = require('./lib/parse-model-json');
+const { findDuplicate } = require('./lib/question-duplicate-guard');
 
 const root = path.resolve(__dirname, '..');
 const args = Object.fromEntries(
@@ -61,6 +62,30 @@ const eligibleChunks = (evidence.chunks || []).filter((chunk) =>
 if (eligibleChunks.length === 0) {
   fail(`No rights-verified, reviewer-approved evidence chunks are available for ${scenarioId}.`);
 }
+
+const retainedCandidates = args.retained
+  ? [path.resolve(root, args.retained)]
+  : [
+      path.resolve(root, `data/evidence/review-queues/${scenarioId}-complete-items-revision.json`),
+      path.resolve(root, `data/evidence/review-queues/${scenarioId}-human-review-packet.json`)
+    ];
+const retainedPath = retainedCandidates.find((candidate) => fs.existsSync(candidate));
+if (!retainedPath) fail(`A retained-question snapshot is required for ${scenarioId}; pass --retained=<path>.`);
+const retainedPacket = JSON.parse(fs.readFileSync(retainedPath, 'utf8'));
+if (retainedPacket.scenario_id !== scenarioId || !Array.isArray(retainedPacket.questions)) {
+  fail('Retained-question snapshot does not match the requested scenario or has no questions array.');
+}
+const retainedQuestions = retainedPacket.questions.map((item) => ({
+  question_id: item.question_id,
+  question: item.question || item.question_text,
+  options: item.options,
+  correct_answer: item.correct_answer,
+  explanation: item.explanation
+}));
+if (retainedQuestions.some((item) => !item.question_id || !item.question ||
+    !item.options || !item.options[item.correct_answer])) {
+  fail('Retained-question snapshot has an incomplete question record.');
+}
 function compactSource(source) {
   return {
     id: source.id,
@@ -98,7 +123,7 @@ const systemPrompt = [
 ].join(' ');
 
 const userPrompt = JSON.stringify({
-  task: 'Create distinct multiple-choice draft questions for the requested scenario.',
+  task: 'Create multiple-choice draft questions for learning targets absent from retained_questions. Treat target_count as a maximum; return fewer when no distinct item is supported.',
   scenario_id: scenarioId,
   target_count: targetCount,
   constraints: {
@@ -129,7 +154,8 @@ const userPrompt = JSON.stringify({
       ]
     }]
   },
-  evidence: evidenceBundle
+  evidence: evidenceBundle,
+  retained_questions: retainedQuestions
 }, null, 2);
 
 if (dryRun) {
@@ -139,7 +165,9 @@ if (dryRun) {
     target_count: targetCount,
     eligible_source_count: approvedSources.size,
     eligible_chunk_count: eligibleChunks.length,
-    evidence_chunk_ids: eligibleChunks.map((chunk) => chunk.chunk_id)
+    evidence_chunk_ids: eligibleChunks.map((chunk) => chunk.chunk_id),
+    retained_question_count: retainedQuestions.length,
+    retained_snapshot: path.relative(root, retainedPath)
   }, null, 2) + '\n');
   process.exit(0);
 }
@@ -236,15 +264,21 @@ function validateQuestion(question, index) {
 
   const seen = new Set();
   const questions = [];
+  const skippedDuplicates = [];
   for (let index = 0; index < candidates.length && questions.length < targetCount; index += 1) {
     const validated = validateQuestion(candidates[index], index);
     const key = normalizeStem(validated.question);
     if (seen.has(key)) continue;
     seen.add(key);
+    const duplicate = findDuplicate(validated, [...retainedQuestions, ...questions]);
+    if (duplicate) {
+      skippedDuplicates.push({ question_id: validated.question_id, ...duplicate });
+      continue;
+    }
     questions.push(validated);
   }
 
-  if (questions.length === 0) throw new Error('No unique valid question drafts remained after validation.');
+  if (questions.length === 0) throw new Error(`No distinct draft questions remained; filtered ${skippedDuplicates.length} duplicate(s).`);
 
   const result = {
     generator: {
@@ -253,7 +287,9 @@ function validateQuestion(question, index) {
       generated_at: new Date().toISOString(),
       scenario_id: scenarioId,
       requested_count: targetCount,
-      returned_count: questions.length
+      returned_count: questions.length,
+      skipped_duplicate_count: skippedDuplicates.length,
+      retained_snapshot: path.relative(root, retainedPath)
     },
     governance: {
       evidence_only: true,
@@ -263,7 +299,8 @@ function validateQuestion(question, index) {
       requires_human_instructional_review: true
     },
     evidence: evidenceBundle.map(({ text_excerpt, ...metadata }) => metadata),
-    questions
+    questions,
+    skipped_duplicates: skippedDuplicates
   };
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
