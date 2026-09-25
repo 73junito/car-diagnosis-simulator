@@ -1,0 +1,122 @@
+{
+  "scenario_id": "charging-system",
+  "stage": "source-intake-research-pending-rights-and-technical-review",
+  "researched_at": "2026-09-24",
+  "context": {
+    "retained_complete_items": 6,
+    "target_items": 20,
+    "approved_evidence_sources_in_staging": 1,
+    "approved_evidence_chunks_in_staging": 2,
+    "approved_source_id": "frontiers-automotive-alternator-2023",
+    "formal_bulk_question_review_deferred_until_20": true
+  },
+  "policy": "data/evidence/open-evidence-source-policy.json",
+  "findings": [
+    {
+      "candidate_id": "navy-navedtra-14264a-ch8",
+      "title": "Construction Mechanic Basic, Chapter 8: Automotive Electrical Circuits and Wiring",
+      "issuer": "U.S. Navy, Center for Seabees and Facilities Engineering (issuer attribution requires artifact confirmation)",
+      "canonical_url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+      "publication_date": "2010-10 (manual attribution; confirm in PDF)",
+      "observed_scope": [
+        "charging-circuit components",
+        "alternator and regulator operation",
+        "charging-system load testing",
+        "low-output follow-up tests",
+        "battery and connection checks"
+      ],
+      "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "rights_decision": "pending",
+      "technical_decision": "pending",
+      "evidence_decision": "candidate-only",
+      "verification_gap": "Official hosting and NAVEDTRA identifier establish a strong provenance lead, but the PDF fetch returned 403 in research tools. Inspect front matter, credited authors/contributors, third-party figures, revision, and distribution/rights notices; verify government employee authorship before classifying PUBLIC_DOMAIN. Do not treat distribution statement alone as copyright clearance.",
+      "artifact_sha256": null,
+      "approved_chunks": 0,
+      "may_generate_questions": false
+    },
+    {
+      "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+      "title": "4.6: Electrical and Hydraulic Health—Reading and Responding to Signals",
+      "author": "Peter Maokosy",
+      "publisher": "Coalinga College / Workforce LibreTexts",
+      "canonical_url": "https://workforce.libretexts.org/Courses/Coalinga_College/Tractor_Operations_(AG14)/04:_Controls_and_Instruments/4.06:_Electrical_and_Hydraulic_Health-_Reading_and_Responding_to_Signals",
+      "publication_date": "2026-05-12 (page modified date)",
+      "license_classification_candidate": "CC_BY",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "rights_basis": "Page footer explicitly states CC BY 4.0 and names author; use text only. Separately credited AI-generated figures are outside the proposed evidence excerpt.",
+      "rights_decision": "license-observed-pending-artifact-and-project-review",
+      "technical_decision": "pending; tractor operator context, not a vehicle-specific service procedure",
+      "observed_scope": [
+        "low charging indication as a possible fault prompt",
+        "dimming lights and slow cranking as non-specific symptoms",
+        "corroded terminals and connection cleaning"
+      ],
+      "evidence_decision": "candidate-only",
+      "artifact_sha256": null,
+      "approved_chunks": 0,
+      "may_generate_questions": false
+    },
+    {
+      "candidate_id": "wikiversity-charging-system-outcomes-2019",
+      "title": "Automotive Technology/Charging System Diagnosis and Repair",
+      "canonical_url": "https://en.wikiversity.org/wiki/Automotive_Technology/Charging_System_Diagnosis_and_Repair",
+      "rights_classification_candidate": "CC_BY_SA",
+      "rights_basis": "Page footer identifies Creative Commons Attribution-ShareAlike.",
+      "evidence_decision": "not-suitable-for-technical-claim-excerpts",
+      "reason": "The page lists competencies but supplies no diagnostic procedure, measurements, or explanation that could substantiate a question answer.",
+      "may_generate_questions": false
+    }
+  ],
+  "topic_gap_map": [
+    {
+      "topic": "warning light and diagnostic symptoms",
+      "candidate_sources": [
+        "coalinga-tractor-electrical-hydraulic-health-2026",
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending; avoid claiming a unique fault from a symptom"
+    },
+    {
+      "topic": "terminal corrosion and connection checks",
+      "candidate_sources": [
+        "coalinga-tractor-electrical-hydraulic-health-2026",
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending"
+    },
+    {
+      "topic": "charging-system output and load testing",
+      "candidate_sources": [
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending"
+    },
+    {
+      "topic": "regulator/alternator/circuit differentiation",
+      "candidate_sources": [
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending; model-specific caveat"
+    },
+    {
+      "topic": "circuit voltage-drop testing",
+      "candidate_sources": [
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending; verify exact procedure and vehicle applicability"
+    }
+  ],
+  "required_before_source_approval": [
+    "Obtain original artifact from canonical publisher and calculate SHA-256; capture title, issuer, publication date and revision from artifact.",
+    "Review every proposed excerpt and figure for third-party rights; document license or government employee authorship rather than infer from hosting.",
+    "Record actual human rights reviewer and time in the approved-source workflow; do not create a surrogate identity.",
+    "Make source-specific excerpts with page/section and excerpt SHA-256; technically review each teaching claim and applicability.",
+    "Ingest only reviewed source and chunks into staging, verify database state, and keep production unchanged until separately authorized."
+  ],
+  "governance": {
+    "rights_approval_complete": false,
+    "technical_review_complete": false,
+    "database_ingestion_complete": false,
+    "question_generation_unblocked": false
+  }
+}
