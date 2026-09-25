@@ -198,7 +198,7 @@
       "rights_classification_candidate": "PUBLIC_DOMAIN",
       "rights_basis": "Archive item carries a Public Domain Mark, but Archive disclaims rights metadata guarantees. Scanned title page identifies Headquarters, Department of the Army; final page states By Order of the Secretary of the Army. Verify original artifact, any contractor/third-party inclusions, and publication rights before approval.",
       "rights_decision": "strong-government-work-lead-pending-artifact-and-project-review",
-      "technical_decision": "pending; 1976 military 24 V and specific 25–300 A systems, so only broad diagnostic reasoning may transfer to contemporary passenger vehicles",
+      "technical_decision": "Pending. PDF p. 10 (printed 8) uses a 23–26 V battery expectation and military master/instrument switches. PDF p. 12 (printed 10) tests a 25 A wheeled-vehicle generator's reverse-current relay and 0–4 ohm armature/field range. PDF p. 20 (printed 18) tests a 100 A internally rectified wheeled-vehicle alternator with lettered military connector pins and 55–75 ohm range. These values and procedures must not become generic contemporary passenger-car guidance.",
       "observed_scope": [
         "battery voltage checks, p. 8",
         "25 A and 60 A wheeled-vehicle charging tests, pp. 10–17",
@@ -217,11 +217,49 @@
           "caveat": "Vehicle-specific switch, gauge and nominal 24 V values must not be generalized."
         }
       ],
-      "artifact_sha256": null,
+      "artifact_sha256": "cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1",
       "evidence_decision": "candidate-only",
       "approved_chunks": 0,
       "may_generate_questions": false,
-      "verification_gap": "Download and hash exact PDF; inspect scan front/back and image credits; establish public-domain basis beyond uploader label; verify page-specific technical applicability. Do not ingest archive OCR as evidence without matching it against the scanned artifact."
+      "verification_gap": "Exact PDF captured and SHA-256 recorded. Army publisher/order and GPO stock strongly indicate an official U.S. government publication, but confirm authorship/illustration provenance and derivative scan terms before rights approval. Archive Public Domain Mark alone is insufficient. Verify each selected OCR excerpt against scanned page and obtain human rights/technical review before approved chunks or Ollama intake.",
+      "artifact_observation": {
+        "supplied_url": "https://dn760107.eu.archive.org/0/items/PAM750-33/PAM750-33.pdf",
+        "byte_size": 539802842,
+        "pdf_pages": 70,
+        "scan_identifier": "DA Pamphlet 750-33",
+        "scan_date": "15 December 1976",
+        "scan_publisher": "Headquarters, Department of the Army",
+        "gpo_stock": "008-020-00623-8",
+        "digitization": "Google scan of University of Michigan copy",
+        "embedded_pdf_title_mismatch": "PDF metadata says DA PAM 70-53; scanned cover and contents say DA Pamphlet 750-33",
+        "pdf_creation_date_note": "2013-07-27 is the derivative PDF creation date, not publication",
+        "page_mapping": "PDF page 10 is printed page 8; PDF page 12 is printed page 10; PDF page 20 is printed page 18",
+        "inspected_pdf_pages": [
+          1,
+          2,
+          3,
+          10,
+          12,
+          20,
+          69,
+          70
+        ],
+        "rights_observation": "Inspected front/back and sample test pages show Army headquarters attribution, GPO sale stock, Secretary of the Army order, and Google/University of Michigan digitization marks. No license or individual author/illustrator credit observed on those pages; full third-party provenance and legal classification remain for rights reviewer."
+      },
+      "excluded_for_generic_questions": [
+        {
+          "locator": "Chapter 2, printed p. 8 (PDF p. 10)",
+          "reason": "23–26 V expectation and switch/gauge procedure are specific to the military electrical system."
+        },
+        {
+          "locator": "Chapter 3, printed p. 10 (PDF p. 12)",
+          "reason": "Reverse-current relay, gooseneck connector and 0–4 ohm limit are specific to the described 25 A system."
+        },
+        {
+          "locator": "Chapter 5, printed p. 18 (PDF p. 20)",
+          "reason": "55–75 ohm limit and lettered connector pins apply only to the identified 100 A setup."
+        }
+      ]
     }
   ],
   "topic_gap_map": [
