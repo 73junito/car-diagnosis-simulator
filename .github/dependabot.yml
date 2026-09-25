@@ -4,6 +4,12 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    groups:
+      jest-toolchain:
+        patterns:
+          - "jest"
+          - "jest-*"
+          - "@jest/*"
     ignore:
       # Babel 8 currently requires an @babel/core 8 migration while Jest's
       # babel-preset-current-node-syntax dependency still declares Babel 7 peers.
@@ -18,3 +24,21 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    groups:
+      pages-actions:
+        patterns:
+          - "actions/configure-pages"
+          - "actions/deploy-pages"
+          - "actions/upload-pages-artifact"
+      codeql-actions:
+        patterns:
+          - "github/codeql-action/*"
+      pull-request-actions:
+        patterns:
+          - "peter-evans/create-pull-request"
+    ignore:
+      # Checkout is pinned in security-sensitive workflows. A broad major
+      # migration should be reviewed as a dedicated supply-chain change.
+      - dependency-name: "actions/checkout"
+        update-types:
+          - "version-update:semver-major"

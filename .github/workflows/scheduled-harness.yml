@@ -133,7 +133,7 @@ jobs:
 
       - name: Create PR for appended history (fallback)
         if: steps.append-summary-pr.outputs.appended == '1'
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: append runs/history.csv from scheduled harness (fallback)"

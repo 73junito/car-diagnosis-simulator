@@ -16,6 +16,9 @@ permissions:
 jobs:
   smoke:
     name: smoke
+    # Dependabot pull requests do not receive staging environment secrets.
+    # Other non-secret CI still validates dependency PRs.
+    if: github.actor != 'dependabot[bot]'
     environment: jchfruprqpeypdttvlam_staging
     concurrency:
       group: staging-smoke-${{ github.ref }}
