@@ -60,7 +60,7 @@
     "husky": "^9.1.7",
     "jest": "^30.5.2",
     "jest-circus": "^30.5.1",
-    "jest-environment-jsdom": "^30.4.1",
+    "jest-environment-jsdom": "^30.5.2",
     "jest-junit": "^17.0.0",
     "minimist": "^1.2.8",
     "node-fetch": "^3.3.2",
