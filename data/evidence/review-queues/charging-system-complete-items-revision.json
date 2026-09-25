@@ -1,0 +1,144 @@
+{
+  "scenario_id": "charging-system",
+  "stage": "revised-content-pending-citation-and-technical-re-review",
+  "revised_at": "2026-09-25",
+  "source_basis": {
+    "source_id": "frontiers-automotive-alternator-2023",
+    "publisher": "Frontiers in Mechanical Engineering",
+    "approved_chunks": [
+      "frontiers-alternator-primary-source-p7",
+      "frontiers-alternator-ac-dc-rectification-p7"
+    ]
+  },
+  "revision_reason": "Whole-item revisions address the two REVISE decisions recorded in PR #479. Options now match the categories asked by their stems.",
+  "governance": {
+    "content_complete": true,
+    "citation_revalidation_required_for_revised_items": true,
+    "technical_re_review_required_for_revised_items": true,
+    "instructional_review_complete": false,
+    "approval_complete": false,
+    "note": "The four unchanged items retain their prior technical pass decisions; this packet does not itself validate or approve the two revised items."
+  },
+  "questions": [
+    {
+      "question_id": "47c057ce-2e41-4ba6-b96e-6c3311417724",
+      "topic": "Alternator AC-to-DC Rectification",
+      "difficulty": "beginner",
+      "question": "Which alternator component converts alternating current into direct current for the vehicle electrical system?",
+      "options": {
+        "A": "The diode rectifier.",
+        "B": "The starter motor.",
+        "C": "The ignition switch.",
+        "D": "The flywheel."
+      },
+      "correct_answer": "A",
+      "explanation": "An automotive alternator generates alternating current and uses diode rectification to provide direct current.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "content_revision": "unchanged",
+      "technical_review": "pass"
+    },
+    {
+      "question_id": "49dad565-9f85-476a-b87b-cbc31ce5bb68",
+      "topic": "Alternator Function",
+      "difficulty": "beginner",
+      "question": "Which component is primarily responsible for generating electric energy in a modern vehicle?",
+      "options": {
+        "A": "Alternator",
+        "B": "Battery",
+        "C": "Starter motor",
+        "D": "Fuel injector"
+      },
+      "correct_answer": "A",
+      "explanation": "Alternators are identified as the primary source of electric energy within a vehicle.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-primary-source-p7",
+        "locator": "PDF page 7"
+      },
+      "content_revision": "unchanged",
+      "technical_review": "pass"
+    },
+    {
+      "question_id": "ba2541c8-f70b-4730-a7c3-c2c5113511e2",
+      "topic": "Charging System Components",
+      "difficulty": "beginner",
+      "question": "An automotive alternator typically consists of which of the following components?",
+      "options": {
+        "A": "Rotor, stator, diode rectifier, and voltage regulator",
+        "B": "Battery, alternator, starter",
+        "C": "Fuel pump, spark plug",
+        "D": "Transmission, clutch"
+      },
+      "correct_answer": "A",
+      "explanation": "The alternator is described as a synchronous AC generator with a rotor, stator, diode rectifier, and voltage regulator.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "content_revision": "unchanged",
+      "technical_review": "pass"
+    },
+    {
+      "question_id": "charging-system-ai-draft-0f3a2f20daca",
+      "topic": "alternator fundamentals",
+      "difficulty": "intermediate",
+      "question": "The cited description assigns two different functions to an automotive alternator. Which option matches each process to its function?",
+      "options": {
+        "A": "Diode rectification converts AC to DC; pulse-width modulation controls voltage.",
+        "B": "Pulse-width modulation converts AC to DC; diode rectification controls voltage.",
+        "C": "Diode rectification generates AC; pulse-width modulation converts AC to DC.",
+        "D": "Pulse-width modulation generates AC; diode rectification controls rotor speed."
+      },
+      "correct_answer": "A",
+      "explanation": "The source describes DC diode rectification and pulse-width modulation voltage control as separate processes. Rectification provides DC from AC, while PWM is the voltage-control method.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "content_revision": "revised",
+      "technical_review": "pending_re_review"
+    },
+    {
+      "question_id": "charging-system-ai-draft-4cfd549ec9be",
+      "topic": "alternator fundamentals",
+      "difficulty": "advanced",
+      "question": "What is the approximate efficiency of a typical automotive alternator?",
+      "options": {
+        "A": "45%",
+        "B": "55%",
+        "C": "65%",
+        "D": "75%"
+      },
+      "correct_answer": "B",
+      "explanation": "The cited evidence states that an automotive alternator has an efficiency of about 55%.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "content_revision": "unchanged",
+      "technical_review": "pass"
+    },
+    {
+      "question_id": "charging-system-ai-draft-e67fed5cd983",
+      "topic": "alternator fundamentals",
+      "difficulty": "intermediate",
+      "question": "According to the cited description, how is an automotive alternator classified as a generator before its output is rectified?",
+      "options": {
+        "A": "Commutated DC generator",
+        "B": "Synchronous AC generator",
+        "C": "Asynchronous induction generator",
+        "D": "Permanent-magnet DC generator"
+      },
+      "correct_answer": "B",
+      "explanation": "The source classifies the alternator as a synchronous AC generator and separately describes diode rectification of its output to DC.",
+      "evidence": {
+        "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+        "locator": "PDF page 7"
+      },
+      "content_revision": "revised",
+      "technical_review": "pending_re_review"
+    }
+  ]
+}
