@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "environment": "torquemind-staging",
+  "table": "public.literature_catalog",
+  "purpose": "Discovery metadata for individual works before evidence approval; no source text or model context.",
+  "reuse_statuses": {
+    "unverified": "Rights not decided; metadata only.",
+    "link_only": "May point to source; no excerpt or model ingestion.",
+    "approved_excerpts": "Rights reviewed and linked to public.approved_sources; only separately approved chunks may be used.",
+    "blocked": "Do not ingest or reuse content under current terms."
+  },
+  "approval_requirements": [
+    "Accepted license classification from open-evidence-source-policy.json",
+    "Exact artifact SHA-256",
+    "License URL and rights statement",
+    "Real reviewer identity and review timestamp",
+    "Foreign key to independently approved public.approved_sources"
+  ],
+  "security": "Staging table has RLS enabled and no anon/authenticated access policies; service-role-only access.",
+  "sample_records": [
+    {
+      "title": "NAVEDTRA 14264A Chapter 8",
+      "status": "unverified"
+    },
+    {
+      "title": "OpenStax College Physics 23.5",
+      "status": "blocked"
+    },
+    {
+      "title": "Automotive Textbook A6 Charging System",
+      "status": "link_only"
+    }
+  ],
+  "deployment": {
+    "staging": "applied and verified 2026-09-25",
+    "production": "not applied",
+    "source_text_ingested": false,
+    "approved_excerpts_created": false
+  },
+  "notes": "Catalog is distinct from the existing approved_sources and source_chunks evidence tables. A catalog status alone never authorizes question generation."
+}
