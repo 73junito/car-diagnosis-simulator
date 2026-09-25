@@ -1,0 +1,176 @@
+{
+  "scenario_id": "charging-system",
+  "created_at": "2026-09-25",
+  "origin": {
+    "workflow_run": "https://github.com/73junito/car-diagnosis-simulator/actions/runs/36095766492",
+    "model": "gpt-oss:20b",
+    "agent_version": "automotive-question-agent-v1",
+    "requested": 14,
+    "returned": 4
+  },
+  "scope": "Content screening only; no citation validation, technical sign-off, instructional review, approval, or database write.",
+  "summary": {
+    "retained_complete_items": 6,
+    "new_content_complete_items": 0,
+    "revise_candidates": 1,
+    "duplicates": 3,
+    "target_complete_items": 20
+  },
+  "evidence_limit": "Only two approved chunks from one reviewer-approved source were eligible. Four returned drafts do not supply fourteen distinct, review-ready targets.",
+  "items": [
+    {
+      "question": {
+        "scenario_slug": "charging-system",
+        "question_id": "charging-system-ai-draft-fe157dc57e67",
+        "difficulty": "introductory",
+        "question": "Which trend has contributed to the rapid increase in electric power demand in contemporary automobiles?",
+        "options": {
+          "A": "Increased use of electrical devices",
+          "B": "Decreased engine efficiency",
+          "C": "Larger vehicle size",
+          "D": "Higher fuel consumption"
+        },
+        "correct_answer": "A",
+        "explanation": "The cited evidence states that the electric power demand of a contemporary automobile has rapidly increased along with the increase in use of electrical devices.",
+        "citations": [
+          {
+            "source_id": "frontiers-automotive-alternator-2023",
+            "chunk_id": "frontiers-alternator-primary-source-p7",
+            "role": "supports-answer"
+          },
+          {
+            "source_id": "frontiers-automotive-alternator-2023",
+            "chunk_id": "frontiers-alternator-primary-source-p7",
+            "role": "supports-explanation"
+          }
+        ],
+        "status": "draft",
+        "human_technical_review_completed": false,
+        "human_instructional_review_completed": false,
+        "approved": false
+      },
+      "screening": {
+        "decision": "revise",
+        "reason": "The source links increased electrical-device use with demand, but the current stem and distractors do not rule out other contributing trends. Reframe as the trend explicitly stated by the cited article, then review the entire item."
+      }
+    },
+    {
+      "question": {
+        "scenario_slug": "charging-system",
+        "question_id": "charging-system-ai-draft-3618c431e164",
+        "difficulty": "introductory",
+        "question": "Before rectification, what type of current does an automotive alternator produce?",
+        "options": {
+          "A": "Alternating current (AC)",
+          "B": "Direct current (DC)",
+          "C": "Pulsating direct current",
+          "D": "Static direct current"
+        },
+        "correct_answer": "A",
+        "explanation": "An automotive alternator is described as a synchronous alternating current (AC) electric generator before its output is rectified.",
+        "citations": [
+          {
+            "source_id": "frontiers-automotive-alternator-2023",
+            "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+            "role": "supports-answer"
+          },
+          {
+            "source_id": "frontiers-automotive-alternator-2023",
+            "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+            "role": "supports-explanation"
+          }
+        ],
+        "status": "draft",
+        "human_technical_review_completed": false,
+        "human_instructional_review_completed": false,
+        "approved": false
+      },
+      "screening": {
+        "decision": "duplicate",
+        "duplicate_of": [
+          "charging-system-ai-draft-e67fed5cd983",
+          "47c057ce-2e41-4ba6-b96e-6c3311417724"
+        ],
+        "reason": "Internal AC generation before rectification overlaps the retained generator-classification and rectifier learning targets."
+      }
+    },
+    {
+      "question": {
+        "scenario_slug": "charging-system",
+        "question_id": "charging-system-ai-draft-2571c976a535",
+        "difficulty": "introductory",
+        "question": "Which technique is used to control the output voltage of an automotive alternator?",
+        "options": {
+          "A": "Pulse‑width modulation",
+          "B": "Linear regulation",
+          "C": "Voltage divider",
+          "D": "Current limiting"
+        },
+        "correct_answer": "A",
+        "explanation": "The alternator uses pulse‑width modulation voltage control to maintain a stable output voltage.",
+        "citations": [
+          {
+            "source_id": "frontiers-automotive-alternator-2023",
+            "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+            "role": "supports-answer"
+          },
+          {
+            "source_id": "frontiers-automotive-alternator-2023",
+            "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+            "role": "supports-explanation"
+          }
+        ],
+        "status": "draft",
+        "human_technical_review_completed": false,
+        "human_instructional_review_completed": false,
+        "approved": false
+      },
+      "screening": {
+        "decision": "duplicate",
+        "duplicate_of": [
+          "charging-system-ai-draft-0f3a2f20daca"
+        ],
+        "reason": "PWM voltage control is already tested by the revised retained item; a paraphrase passed the lexical duplicate filter."
+      }
+    },
+    {
+      "question": {
+        "scenario_slug": "charging-system",
+        "question_id": "charging-system-ai-draft-54ac499191d8",
+        "difficulty": "introductory",
+        "question": "Which of the following is NOT a component of an automotive alternator?",
+        "options": {
+          "A": "Rotor",
+          "B": "Stator",
+          "C": "Diode rectifier",
+          "D": "Battery"
+        },
+        "correct_answer": "D",
+        "explanation": "An automotive alternator consists of a rotor, stator, diode rectifier, and voltage regulator; a battery is not part of the alternator itself.",
+        "citations": [
+          {
+            "source_id": "frontiers-automotive-alternator-2023",
+            "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+            "role": "supports-answer"
+          },
+          {
+            "source_id": "frontiers-automotive-alternator-2023",
+            "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+            "role": "supports-explanation"
+          }
+        ],
+        "status": "draft",
+        "human_technical_review_completed": false,
+        "human_instructional_review_completed": false,
+        "approved": false
+      },
+      "screening": {
+        "decision": "duplicate",
+        "duplicate_of": [
+          "ba2541c8-f70b-4730-a7c3-c2c5113511e2"
+        ],
+        "reason": "The reverse-form component question repeats the retained alternator-component learning target."
+      }
+    }
+  ]
+}
