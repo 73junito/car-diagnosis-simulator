@@ -87,6 +87,30 @@
       "evidence_decision": "not-suitable-for-technical-claim-excerpts",
       "reason": "The page lists competencies but supplies no diagnostic procedure, measurements, or explanation that could substantiate a question answer.",
       "may_generate_questions": false
+    },
+    {
+      "candidate_id": "openstax-college-physics-electric-generators",
+      "title": "College Physics, section 23.5: Electric Generators",
+      "authors": [
+        "Paul Peter Urone",
+        "Roger Hinrichs"
+      ],
+      "publisher": "OpenStax / Rice University",
+      "canonical_url": "https://openstax.org/books/college-physics/pages/23-5-electric-generators",
+      "publication_date": "2012-06-21 (book)",
+      "observed_scope": [
+        "electromagnetic induction in generators",
+        "generator AC waveform",
+        "mechanical commutation to pulsed DC"
+      ],
+      "license_classification_candidate": "CONFLICTING_NOT_ELIGIBLE_FOR_OLLAMA_INTAKE",
+      "rights_basis": "Book preface says CC BY 4.0, but current section reuse notice says noncommercial/CC BY-NC-SA and expressly requires prior written permission for ingestion into generative AI offerings. College Physics 2e separately identifies CC BY-NC-SA 4.0. Treat conflict and AI-use restriction as blocking under project policy.",
+      "rights_decision": "blocked-pending-explicit-written-permission-or-publisher-clarification",
+      "evidence_decision": "external-reference-only",
+      "technical_decision": "physics reference only; no automotive charging diagnosis",
+      "artifact_sha256": null,
+      "approved_chunks": 0,
+      "may_generate_questions": false
     }
   ],
   "topic_gap_map": [
@@ -133,6 +157,13 @@
         "bccampus-flinn-alternator-2021"
       ],
       "status": "pending; compare with retained questions to avoid duplication"
+    },
+    {
+      "topic": "generator induction fundamentals",
+      "candidate_sources": [
+        "openstax-college-physics-electric-generators"
+      ],
+      "status": "external reference only; excluded from Ollama context under current rights notice"
     }
   ],
   "required_before_source_approval": [
