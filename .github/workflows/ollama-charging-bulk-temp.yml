@@ -1,0 +1,49 @@
+name: Temporary Ollama charging bulk draft
+
+on:
+  push:
+    branches:
+      - feat/ollama-question-agent-worker
+    paths:
+      - .github/workflows/ollama-charging-bulk-temp.yml
+
+permissions:
+  contents: read
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    environment: ollama
+    timeout-minutes: 10
+    env:
+      OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
+      OLLAMA_API_URL: https://ollama.com/api/chat
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Load latest merged retained set
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$OLLAMA_API_KEY" || { echo "Ollama environment secret unavailable"; exit 1; }
+          git fetch --depth=1 origin main
+          git show origin/main:data/evidence/review-queues/charging-system-complete-items-revision.json > "$RUNNER_TEMP/charging-retained.json"
+          node -e 'const x=require(process.argv[1]); if(x.questions.length!==6) process.exit(1); console.log("Retained questions:", x.questions.length)' "$RUNNER_TEMP/charging-retained.json"
+      - name: Generate up to fourteen distinct drafts
+        shell: bash
+        run: |
+          node scripts/generate-scenario-question-drafts.js \
+            --scenario=charging-system \
+            --target=14 \
+            --model=gpt-oss:20b \
+            --retained="$RUNNER_TEMP/charging-retained.json" \
+            --output="$RUNNER_TEMP/charging-remaining-drafts.json"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: charging-remaining-drafts
+          path: ${{ runner.temp }}/charging-remaining-drafts.json
+          if-no-files-found: warn
+          retention-days: 2
