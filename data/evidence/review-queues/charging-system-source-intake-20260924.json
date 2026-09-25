@@ -203,5 +203,42 @@
     "technical_review_complete": false,
     "database_ingestion_complete": false,
     "question_generation_unblocked": false
-  }
+  },
+  "discovery_leads": [
+    {
+      "name": "Automotive Textbook, A6 Electrical and Electronic Systems",
+      "url": "https://www.automotivetextbook.com/a6/",
+      "status": "discovery-only",
+      "observation": "Lists Drew Kleyweg's 2018 Charging System and a Charging System Service and Diagnostics heading, but neither is linked to a downloadable chapter on the observed A6 page; no per-chapter reuse license established.",
+      "next_step": "Obtain exact chapter artifact and its own copyright/license notice or explicit written permission before evidence intake."
+    },
+    {
+      "name": "Saskatchewan Polytechnic Automotive OER directory",
+      "url": "https://www.saskoer.ca/oerdiscipline/chapter/automotive/",
+      "status": "discovery-only",
+      "observation": "Directory's own CC BY 4.0 license does not cover linked resources. It describes Automotive Textbook as having various open licenses; its 2025 automotive handbook is CC BY-NC-SA and unsuitable under current policy. No immediately applicable licensed charging-diagnosis chapter established."
+    },
+    {
+      "name": "BCcampus Automotive OER directory",
+      "url": "https://opentextbc.ca/oerdiscipline/chapter/automotive/",
+      "status": "discovery-only",
+      "observation": "Lists CC BY Diesel Drivetrain Systems, which does not address the charging-system gap. Directory license does not transfer to linked course."
+    },
+    {
+      "name": "McMaster/eCampusOntario Automotive and Vehicle Engineering Technology guide",
+      "url": "https://ecampusontario.pressbooks.pub/mcmasteroerdiscipline/chapter/automotive-vehicle-engineering-technology/",
+      "status": "discovery-only",
+      "observation": "Listed books address programming, fluid mechanics, and mathematics; no charging-diagnosis evidence. Guide itself is CC BY-NC-SA."
+    },
+    {
+      "name": "OER Commons and UNESCO-UNEVOC TVET",
+      "status": "search-index-only",
+      "observation": "Individual artifact author, license and technical scope must be verified before adding any candidate."
+    },
+    {
+      "name": "SAE Mobilus and Open Library",
+      "status": "external-reference-discovery-only",
+      "observation": "Subscription/access and catalog records do not grant app redistribution or model-ingestion rights for individual works."
+    }
+  ]
 }
