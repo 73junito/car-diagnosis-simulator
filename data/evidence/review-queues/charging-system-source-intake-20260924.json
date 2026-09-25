@@ -57,6 +57,28 @@
       "may_generate_questions": false
     },
     {
+      "candidate_id": "bccampus-flinn-alternator-2021",
+      "title": "3.2: The Alternator",
+      "author": "Chad Flinn",
+      "publisher": "BCcampus / Workforce LibreTexts",
+      "canonical_url": "https://workforce.libretexts.org/Bookshelves/Electronics_Technology/Trigonometry_and_Single_Phase_AC_Generation_for_Electricians_(Flinn)/03:_AC_Generation/3.02:_The_Alternator",
+      "publication_date": "2021-08-23 (page modified date)",
+      "license_classification_candidate": "CC_BY",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "rights_basis": "Page footer explicitly states CC BY 4.0, author, and BCcampus source; use text only pending figure provenance.",
+      "rights_decision": "license-observed-pending-artifact-and-project-review",
+      "technical_decision": "pending; general alternator physics, not vehicle diagnosis",
+      "observed_scope": [
+        "stationary armature and rotating field distinction",
+        "slip rings and brushes",
+        "field-strength control of alternator voltage"
+      ],
+      "evidence_decision": "candidate-only",
+      "artifact_sha256": null,
+      "approved_chunks": 0,
+      "may_generate_questions": false
+    },
+    {
       "candidate_id": "wikiversity-charging-system-outcomes-2019",
       "title": "Automotive Technology/Charging System Diagnosis and Repair",
       "canonical_url": "https://en.wikiversity.org/wiki/Automotive_Technology/Charging_System_Diagnosis_and_Repair",
@@ -104,6 +126,13 @@
         "navy-navedtra-14264a-ch8"
       ],
       "status": "pending; verify exact procedure and vehicle applicability"
+    },
+    {
+      "topic": "rotor excitation, slip rings, brushes and field-strength voltage control",
+      "candidate_sources": [
+        "bccampus-flinn-alternator-2021"
+      ],
+      "status": "pending; compare with retained questions to avoid duplication"
     }
   ],
   "required_before_source_approval": [
