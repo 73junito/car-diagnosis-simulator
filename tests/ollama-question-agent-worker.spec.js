@@ -19,10 +19,13 @@ describe('dedicated Ollama question agent and worker', () => {
     const messages = buildQuestionMessages({
       scenarioId: 'charging-system', targetCount: 3, evidenceBundle: evidence, retainedQuestions: retained
     });
-    expect(AGENT_VERSION).toBe('automotive-question-agent-v1');
+    expect(AGENT_VERSION).toBe('automotive-question-agent-v2');
     expect(messages.map((message) => message.role)).toEqual(['system', 'user']);
     expect(messages[0].content).toContain('A component is not a generator type');
     expect(messages[0].content).toContain('Do not repeat a retained learning target');
+    expect(messages[0].content).toContain('Google Scholar search-result URL is not a canonical citation');
+    expect(messages[0].content).toContain('Never invent, guess, alter, or substitute a citation');
+    expect(messages[0].content).toContain('omit the question rather than infer');
     const request = JSON.parse(messages[1].content);
     expect(request.retained_questions).toHaveLength(6);
     expect(request.evidence).toEqual(evidence);

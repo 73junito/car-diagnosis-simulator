@@ -43,6 +43,10 @@ describe('Ollama question generation contract', () => {
     expect(agent).toContain('human_instructional_review_completed: false');
     expect(worker).toContain('buildQuestionMessages');
     expect(generator).toContain('No rights-verified, reviewer-approved evidence chunks');
+    expect(agent).toContain('Google Scholar search-result URL is not a canonical citation');
+    expect(agent).toContain('Never invent, guess, alter, or substitute a citation');
+    expect(agent).toContain('Preserve the canonical publisher, DOI, institutional-repository, or authoritative source record');
+    expect(agent).toContain('omit the question rather than infer');
   });
 
   test('charging-system has eligible reviewed evidence in dry-run mode', () => {

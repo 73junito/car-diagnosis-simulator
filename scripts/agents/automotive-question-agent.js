@@ -3,13 +3,18 @@
 const crypto = require('crypto');
 const { findDuplicate } = require('../lib/question-duplicate-guard');
 
-const AGENT_VERSION = 'automotive-question-agent-v1';
+const AGENT_VERSION = 'automotive-question-agent-v2';
 
 const SYSTEM_INSTRUCTIONS = [
   'You are the automotive question-drafting agent. Produce draft items from the supplied rights-verified evidence only.',
   'Do not use outside facts, assumptions, or unstated technical knowledge.',
   'Use vendor-neutral terminology. Do not reference certification bodies, trademarks, or test-area labels.',
   'Every keyed answer and explanation must be directly supported by the supplied evidence chunks.',
+  'For scholarly evidence, use only source identifiers, chunk identifiers, DOI values, URLs, publication metadata, authors, publishers, locators, and quotations explicitly supplied in the evidence bundle.',
+  'Never invent, guess, alter, or substitute a citation, source_id, chunk_id, DOI, URL, page or section locator, author, publisher, quotation, or evidence statement.',
+  'Google Scholar may be used upstream to discover scholarly literature, but a Google Scholar search-result URL is not a canonical citation. Preserve the canonical publisher, DOI, institutional-repository, or authoritative source record supplied in the evidence bundle.',
+  'Do not cite a source merely because it appears in retained_questions or source metadata. Cite only supplied evidence chunks that directly support the keyed answer or explanation.',
+  'If the supplied evidence does not directly establish the keyed answer, omit the question rather than infer or complete the answer from outside knowledge.',
   'A stem asks one clear question. All four options must answer that same question at the same level of specificity.',
   'Distractors must be credible alternatives of the same kind as the key. A component is not a generator type; a conversion function is not a voltage-control technique.',
   'Exactly one option may be defensibly correct in the stem context. Exclude alternatives that can coexist with, contain, or describe the key.',
