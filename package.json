@@ -55,7 +55,7 @@
     "esbuild": "^0.28.2",
     "eslint": "^10.9.1",
     "express": "^5.2.1",
-    "express-rate-limit": "^8.6.2",
+    "express-rate-limit": "^8.7.0",
     "fast-xml-parser": "^5.11.1",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
