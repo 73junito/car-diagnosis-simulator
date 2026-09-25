@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { parseModelJson } = require('./lib/parse-model-json');
+const { findDuplicate } = require('./lib/question-duplicate-guard');
 
 const root = path.resolve(__dirname, '..');
 const args = Object.fromEntries(
@@ -61,6 +62,30 @@ const eligibleChunks = (evidence.chunks || []).filter((chunk) =>
 if (eligibleChunks.length === 0) {
   fail(`No rights-verified, reviewer-approved evidence chunks are available for ${scenarioId}.`);
 }
+
+const retainedCandidates = args.retained
+  ? [path.resolve(root, args.retained)]
+  : [
+      path.resolve(root, `data/evidence/review-queues/${scenarioId}-complete-items-revision.json`),
+      path.resolve(root, `data/evidence/review-queues/${scenarioId}-human-review-packet.json`)
+    ];
+const retainedPath = retainedCandidates.find((candidate) => fs.existsSync(candidate));
+if (!retainedPath) fail(`A retained-question snapshot is required for ${scenarioId}; pass --retained=<path>.`);
+const retainedPacket = JSON.parse(fs.readFileSync(retainedPath, 'utf8'));
+if (retainedPacket.scenario_id !== scenarioId || !Array.isArray(retainedPacket.questions)) {
+  fail('Retained-question snapshot does not match the requested scenario or has no questions array.');
+}
+const retainedQuestions = retainedPacket.questions.map((item) => ({
+  question_id: item.question_id,
+  question: item.question || item.question_text,
+  options: item.options,
+  correct_answer: item.correct_answer,
+  explanation: item.explanation
+}));
+if (retainedQuestions.some((item) => !item.question_id || !item.question ||
+    !item.options || !item.options[item.correct_answer])) {
+  fail('Retained-question snapshot has an incomplete question record.');
+}
 function compactSource(source) {
   return {
     id: source.id,
@@ -88,12 +113,17 @@ const systemPrompt = [
   'You draft automotive diagnostic training questions from supplied evidence only.',
   'Do not use outside facts, assumptions, or unstated technical knowledge.',
   'Use vendor-neutral terminology and do not reference third-party certification bodies, trademarks, or test-area labels.',
-  'Every question and explanation must be directly supported by one or more supplied evidence chunks.',
+  'Every keyed answer and explanation must be directly supported by one or more supplied evidence chunks.',
+  'Write a complete item: the stem asks one clear question and all four options answer that same question at the same level of specificity.',
+  'Distractors must be credible alternatives of the same kind as the keyed answer, not a component when the stem asks for a generator type or a function when it asks for a control technique.',
+  'Exactly one option may be defensibly correct. Reject a distractor if it can coexist with, include, or describe the keyed answer in the context of the stem.',
+  'Do not invent unsupported technical claims to make an option sound plausible. If the evidence cannot support an unambiguous item with three credible distractors, omit the item; fewer drafts are acceptable.',
+  'Before returning JSON, silently check each complete item for answer-category alignment, conceptual overlap, evidence support, and duplicate learning targets. Repair or omit failures.',
   'Return JSON only. Drafts are never approved automatically.'
 ].join(' ');
 
 const userPrompt = JSON.stringify({
-  task: 'Create distinct multiple-choice draft questions for the requested scenario.',
+  task: 'Create multiple-choice draft questions for learning targets absent from retained_questions. Treat target_count as a maximum; return fewer when no distinct item is supported.',
   scenario_id: scenarioId,
   target_count: targetCount,
   constraints: {
@@ -103,7 +133,13 @@ const userPrompt = JSON.stringify({
     require_supports_answer_citation: true,
     require_supports_explanation_citation: true,
     no_external_knowledge: true,
-    avoid_duplicate_stems: true
+    avoid_duplicate_stems: true,
+    avoid_duplicate_learning_targets: true,
+    distractors_same_answer_category_as_key: true,
+    distractors_mutually_exclusive_with_key_in_stem_context: true,
+    distractors_technically_plausible_without_unsupported_claims: true,
+    review_whole_item_before_returning: true,
+    return_fewer_than_target_if_quality_rules_cannot_be_met: true
   },
   output_schema: {
     questions: [{
@@ -118,7 +154,8 @@ const userPrompt = JSON.stringify({
       ]
     }]
   },
-  evidence: evidenceBundle
+  evidence: evidenceBundle,
+  retained_questions: retainedQuestions
 }, null, 2);
 
 if (dryRun) {
@@ -128,7 +165,9 @@ if (dryRun) {
     target_count: targetCount,
     eligible_source_count: approvedSources.size,
     eligible_chunk_count: eligibleChunks.length,
-    evidence_chunk_ids: eligibleChunks.map((chunk) => chunk.chunk_id)
+    evidence_chunk_ids: eligibleChunks.map((chunk) => chunk.chunk_id),
+    retained_question_count: retainedQuestions.length,
+    retained_snapshot: path.relative(root, retainedPath)
   }, null, 2) + '\n');
   process.exit(0);
 }
@@ -178,6 +217,15 @@ function validateQuestion(question, index) {
   if (!['A', 'B', 'C', 'D'].includes(question.correct_answer)) {
     throw new Error(`Question ${index + 1} has an invalid correct answer.`);
   }
+  const normalizedOptions = ['A', 'B', 'C', 'D'].map((key) =>
+    String(options[key]).trim().toLowerCase().replace(/\s+/g, ' ')
+  );
+  if (new Set(normalizedOptions).size !== 4) {
+    throw new Error(`Question ${index + 1} repeats an answer option.`);
+  }
+  if (!String(question.explanation || '').trim()) {
+    throw new Error(`Question ${index + 1} is missing an explanation.`);
+  }
 
   const citations = Array.isArray(question.citations) ? question.citations : [];
   const roles = new Set(citations.map((citation) => citation.role));
@@ -216,15 +264,21 @@ function validateQuestion(question, index) {
 
   const seen = new Set();
   const questions = [];
+  const skippedDuplicates = [];
   for (let index = 0; index < candidates.length && questions.length < targetCount; index += 1) {
     const validated = validateQuestion(candidates[index], index);
     const key = normalizeStem(validated.question);
     if (seen.has(key)) continue;
     seen.add(key);
+    const duplicate = findDuplicate(validated, [...retainedQuestions, ...questions]);
+    if (duplicate) {
+      skippedDuplicates.push({ question_id: validated.question_id, ...duplicate });
+      continue;
+    }
     questions.push(validated);
   }
 
-  if (questions.length === 0) throw new Error('No unique valid question drafts remained after validation.');
+  if (questions.length === 0) throw new Error(`No distinct draft questions remained; filtered ${skippedDuplicates.length} duplicate(s).`);
 
   const result = {
     generator: {
@@ -233,7 +287,9 @@ function validateQuestion(question, index) {
       generated_at: new Date().toISOString(),
       scenario_id: scenarioId,
       requested_count: targetCount,
-      returned_count: questions.length
+      returned_count: questions.length,
+      skipped_duplicate_count: skippedDuplicates.length,
+      retained_snapshot: path.relative(root, retainedPath)
     },
     governance: {
       evidence_only: true,
@@ -243,7 +299,8 @@ function validateQuestion(question, index) {
       requires_human_instructional_review: true
     },
     evidence: evidenceBundle.map(({ text_excerpt, ...metadata }) => metadata),
-    questions
+    questions,
+    skipped_duplicates: skippedDuplicates
   };
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
