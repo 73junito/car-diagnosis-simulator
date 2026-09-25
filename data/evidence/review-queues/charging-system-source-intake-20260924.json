@@ -1,0 +1,383 @@
+{
+  "scenario_id": "charging-system",
+  "stage": "source-intake-research-pending-rights-and-technical-review",
+  "researched_at": "2026-09-25",
+  "context": {
+    "retained_complete_items": 6,
+    "target_items": 20,
+    "approved_evidence_sources_in_staging": 1,
+    "approved_evidence_chunks_in_staging": 2,
+    "approved_source_id": "frontiers-automotive-alternator-2023",
+    "formal_bulk_question_review_deferred_until_20": true
+  },
+  "policy": "data/evidence/open-evidence-source-policy.json",
+  "findings": [
+    {
+      "candidate_id": "navy-navedtra-14264a-ch8",
+      "title": "Construction Mechanic Basic, Chapter 8: Automotive Electrical Circuits and Wiring",
+      "issuer": "U.S. Navy / Center for Seabees and Facilities Engineering (chapter text attribution; government employee authorship not established by the chapter)",
+      "canonical_url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+      "publication_date": "not stated in supplied chapter; PDF creation metadata 2014-06-10 is not a publication date",
+      "observed_scope": [
+        "charging-circuit components (8-4)",
+        "alternator and regulator operation (8-14–8-17)",
+        "charging output and regulator tests (8-19–8-20)",
+        "voltage drop and connection checks (8-21)",
+        "battery and component testing (8-5–8-19)"
+      ],
+      "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "rights_decision": "pending",
+      "technical_decision": "candidate passages located; technical review pending. Procedures and voltage ranges require vehicle/manufacturer applicability checks. Regulator bypass is hazardous and should not become a generic learner instruction.",
+      "evidence_decision": "candidate-only",
+      "verification_gap": "Official course-list attribution and the chapter's Navy markings establish provenance; Navy copyright policy describes official-duty employee work, but chapter authorship and third-party text/figure provenance remain unverified. Obtain written publication-level confirmation or source documentation before classifying PUBLIC_DOMAIN. No excerpt may enter Ollama until rights clearance and technical review.",
+      "artifact_sha256": "91f3bc899204099374ff6e2a25ad6865199a9d3b259068af0605255f3800945d",
+      "approved_chunks": 0,
+      "may_generate_questions": false,
+      "artifact_observation": {
+        "supplied_filename": "Automotive Electrical Circuits and Wiring.pdf",
+        "byte_size": 7402807,
+        "pdf_pages": 77,
+        "printed_pages": "8-1 through 8-77",
+        "navaid": "NAVEDTRA 14264A",
+        "reviewed_sections": [
+          {
+            "section": "1.0.0",
+            "printed_pages": "8-4 onward",
+            "scope": "charging components and battery"
+          },
+          {
+            "section": "1.2.0–1.2.5",
+            "printed_pages": "8-14–8-19",
+            "scope": "alternator construction, regulator, maintenance, component testing"
+          },
+          {
+            "section": "1.3.0–1.3.4",
+            "printed_pages": "8-19–8-21",
+            "scope": "output, regulator, bypass and circuit resistance tests"
+          }
+        ],
+        "rights_observation": "No copyright, license, individual author or employee-authorship statement found in supplied chapter. References on page 8-76 list third-party textbooks for further study; figures need individual provenance review."
+      },
+      "provenance_review": {
+        "checked_at": "2026-09-25",
+        "official_catalog_observation": "Navy Reserve FY25 course list identifies NAVEDTRA 14264A as Construction Mechanic Basic; supplied chapter identifies the Navy and CSFE.",
+        "rights_rule": "SECNAVINST 5870.9 states works prepared by U.S. government officers or employees as official duties lack copyright protection. This does not prove the chapter's individual contributors or third-party inclusions.",
+        "artifact_rights_notice": "No chapter-level license, author employment declaration, or figure rights notice found in supplied chapter.",
+        "decision": "pending-authorship-and-figure-clearance"
+      },
+      "candidate_claims_for_review": [
+        {
+          "locator": "§1.0.0, printed 8-4",
+          "claim": "Identify the battery, alternator, regulator, switch and indicator as charging circuit components.",
+          "caveat": "General architecture; modern integrated controls vary."
+        },
+        {
+          "locator": "§1.2.1–1.2.3, printed 8-14–8-17",
+          "claim": "Explain stator AC generation, diode rectification, and field-current regulation.",
+          "caveat": "No figure reuse until individual figure provenance is cleared."
+        },
+        {
+          "locator": "§1.2.4, printed 8-17",
+          "claim": "Use manufacturer specification when evaluating charging voltage at the battery.",
+          "caveat": "Avoid making one voltage threshold universal."
+        },
+        {
+          "locator": "§1.3.1–1.3.2, printed 8-19–8-20",
+          "claim": "Contrast output/load testing with regulator voltage testing and follow-up checks.",
+          "caveat": "Historical vehicle examples and fixed 13.5–14.5 V range are not universal; require vehicle-specific technical review."
+        },
+        {
+          "locator": "§1.3.4, printed 8-21",
+          "claim": "A voltage drop check can identify high resistance between alternator output and battery or along the ground return.",
+          "caveat": "Use vehicle-specific load and limit; do not present chapter's 0.7 V as universal."
+        }
+      ],
+      "excluded_for_generic_questions": [
+        {
+          "locator": "§1.3.3, printed 8-20–8-21",
+          "reason": "Regulator bypass/field jump procedure risks component damage and does not generalize to modern control systems."
+        },
+        {
+          "locator": "§1.2.5, printed 8-18–8-19",
+          "reason": "Bench disassembly and diode test require component-specific process and safety review."
+        }
+      ],
+      "rights_confirmation_route": {
+        "recipient": "Center for Seabees and Facilities Engineering (CSFE) via official Contact Us page",
+        "url": "https://www.netc.navy.mil/Commands/Center-for-Seabees-and-Facilities-Engineering/Contact-Us/",
+        "request": "Please confirm whether the text and figures in NAVEDTRA 14264A, Construction Mechanic Basic, Chapter 8, Automotive Electrical Circuits and Wiring (official PDF at the canonical URL), were prepared entirely by U.S. government employees within official duties, and identify any third-party material or reuse restrictions. We plan to store short attributed text excerpts and page locators in a commercial-capable automotive training application's evidence database and provide excerpts as context to a local question-drafting model. Please also confirm whether a newer revision supersedes the chapter for these purposes.",
+        "sent": false
+      }
+    },
+    {
+      "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+      "title": "4.6: Electrical and Hydraulic Health—Reading and Responding to Signals",
+      "author": "Peter Maokosy",
+      "publisher": "Coalinga College / Workforce LibreTexts",
+      "canonical_url": "https://workforce.libretexts.org/Courses/Coalinga_College/Tractor_Operations_(AG14)/04:_Controls_and_Instruments/4.06:_Electrical_and_Hydraulic_Health-_Reading_and_Responding_to_Signals",
+      "publication_date": "2026-05-12 (page modified date)",
+      "license_classification_candidate": "CC_BY",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "rights_basis": "Page footer explicitly states CC BY 4.0 and names author; use text only. Separately credited AI-generated figures are outside the proposed evidence excerpt.",
+      "rights_decision": "license-observed-pending-artifact-and-project-review",
+      "technical_decision": "pending; tractor operator context, not a vehicle-specific service procedure",
+      "observed_scope": [
+        "low charging indication as a possible fault prompt",
+        "dimming lights and slow cranking as non-specific symptoms",
+        "corroded terminals and connection cleaning"
+      ],
+      "evidence_decision": "candidate-only",
+      "artifact_sha256": null,
+      "approved_chunks": 0,
+      "may_generate_questions": false
+    },
+    {
+      "candidate_id": "bccampus-flinn-alternator-2021",
+      "title": "3.2: The Alternator",
+      "author": "Chad Flinn",
+      "publisher": "BCcampus / Workforce LibreTexts",
+      "canonical_url": "https://workforce.libretexts.org/Bookshelves/Electronics_Technology/Trigonometry_and_Single_Phase_AC_Generation_for_Electricians_(Flinn)/03:_AC_Generation/3.02:_The_Alternator",
+      "publication_date": "2021-08-23 (page modified date)",
+      "license_classification_candidate": "CC_BY",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "rights_basis": "Page footer explicitly states CC BY 4.0, author, and BCcampus source; use text only pending figure provenance.",
+      "rights_decision": "license-observed-pending-artifact-and-project-review",
+      "technical_decision": "pending; general alternator physics, not vehicle diagnosis",
+      "observed_scope": [
+        "stationary armature and rotating field distinction",
+        "slip rings and brushes",
+        "field-strength control of alternator voltage"
+      ],
+      "evidence_decision": "candidate-only",
+      "artifact_sha256": null,
+      "approved_chunks": 0,
+      "may_generate_questions": false
+    },
+    {
+      "candidate_id": "wikiversity-charging-system-outcomes-2019",
+      "title": "Automotive Technology/Charging System Diagnosis and Repair",
+      "canonical_url": "https://en.wikiversity.org/wiki/Automotive_Technology/Charging_System_Diagnosis_and_Repair",
+      "rights_classification_candidate": "CC_BY_SA",
+      "rights_basis": "Page footer identifies Creative Commons Attribution-ShareAlike.",
+      "evidence_decision": "not-suitable-for-technical-claim-excerpts",
+      "reason": "The page lists competencies but supplies no diagnostic procedure, measurements, or explanation that could substantiate a question answer.",
+      "may_generate_questions": false
+    },
+    {
+      "candidate_id": "openstax-college-physics-electric-generators",
+      "title": "College Physics, section 23.5: Electric Generators",
+      "authors": [
+        "Paul Peter Urone",
+        "Roger Hinrichs"
+      ],
+      "publisher": "OpenStax / Rice University",
+      "canonical_url": "https://openstax.org/books/college-physics/pages/23-5-electric-generators",
+      "publication_date": "2012-06-21 (book)",
+      "observed_scope": [
+        "electromagnetic induction in generators",
+        "generator AC waveform",
+        "mechanical commutation to pulsed DC"
+      ],
+      "license_classification_candidate": "CONFLICTING_NOT_ELIGIBLE_FOR_OLLAMA_INTAKE",
+      "rights_basis": "Book preface says CC BY 4.0, but current section reuse notice says noncommercial/CC BY-NC-SA and expressly requires prior written permission for ingestion into generative AI offerings. College Physics 2e separately identifies CC BY-NC-SA 4.0. Treat conflict and AI-use restriction as blocking under project policy.",
+      "rights_decision": "blocked-pending-explicit-written-permission-or-publisher-clarification",
+      "evidence_decision": "external-reference-only",
+      "technical_decision": "physics reference only; no automotive charging diagnosis",
+      "artifact_sha256": null,
+      "approved_chunks": 0,
+      "may_generate_questions": false
+    },
+    {
+      "candidate_id": "army-da-pam-750-33-1976",
+      "title": "Charging System Troubleshooting (The Easy Way)",
+      "issuer": "Headquarters, Department of the Army",
+      "publication_date": "1976-12-15",
+      "archive_url": "https://archive.org/details/PAM750-33",
+      "artifact_url": "https://archive.org/download/PAM750-33/PAM750-33.pdf",
+      "publication_identifier": "DA Pamphlet 750-33; GPO stock 008-020-00623-8",
+      "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "rights_basis": "Archive item carries a Public Domain Mark, but Archive disclaims rights metadata guarantees. Scanned title page identifies Headquarters, Department of the Army; final page states By Order of the Secretary of the Army. Verify original artifact, any contractor/third-party inclusions, and publication rights before approval.",
+      "rights_decision": "strong-government-work-lead-pending-artifact-and-project-review",
+      "technical_decision": "Pending. PDF p. 10 (printed 8) uses a 23–26 V battery expectation and military master/instrument switches. PDF p. 12 (printed 10) tests a 25 A wheeled-vehicle generator's reverse-current relay and 0–4 ohm armature/field range. PDF p. 20 (printed 18) tests a 100 A internally rectified wheeled-vehicle alternator with lettered military connector pins and 55–75 ohm range. These values and procedures must not become generic contemporary passenger-car guidance.",
+      "observed_scope": [
+        "battery voltage checks, p. 8",
+        "25 A and 60 A wheeled-vehicle charging tests, pp. 10–17",
+        "100 A internally and externally rectified wheeled-vehicle tests, pp. 18–28",
+        "tracked-vehicle and 300 A military systems, pp. 29–59"
+      ],
+      "candidate_claims_for_review": [
+        {
+          "locator": "Introduction, inside front cover",
+          "claim": "Battery, generator/alternator, connections and regulator form interdependent parts of a charging system.",
+          "caveat": "General concept only; specific architecture varies."
+        },
+        {
+          "locator": "Chapter 2, p. 8",
+          "claim": "Battery voltage and indicator observations help select follow-up charging circuit checks.",
+          "caveat": "Vehicle-specific switch, gauge and nominal 24 V values must not be generalized."
+        }
+      ],
+      "artifact_sha256": "cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1",
+      "evidence_decision": "candidate-only",
+      "approved_chunks": 0,
+      "may_generate_questions": false,
+      "verification_gap": "Exact PDF captured and SHA-256 recorded. Army publisher/order and GPO stock strongly indicate an official U.S. government publication, but confirm authorship/illustration provenance and derivative scan terms before rights approval. Archive Public Domain Mark alone is insufficient. Verify each selected OCR excerpt against scanned page and obtain human rights/technical review before approved chunks or Ollama intake.",
+      "artifact_observation": {
+        "supplied_url": "https://dn760107.eu.archive.org/0/items/PAM750-33/PAM750-33.pdf",
+        "byte_size": 539802842,
+        "pdf_pages": 70,
+        "scan_identifier": "DA Pamphlet 750-33",
+        "scan_date": "15 December 1976",
+        "scan_publisher": "Headquarters, Department of the Army",
+        "gpo_stock": "008-020-00623-8",
+        "digitization": "Google scan of University of Michigan copy",
+        "embedded_pdf_title_mismatch": "PDF metadata says DA PAM 70-53; scanned cover and contents say DA Pamphlet 750-33",
+        "pdf_creation_date_note": "2013-07-27 is the derivative PDF creation date, not publication",
+        "page_mapping": "PDF page 10 is printed page 8; PDF page 12 is printed page 10; PDF page 20 is printed page 18",
+        "inspected_pdf_pages": [
+          1,
+          2,
+          3,
+          10,
+          12,
+          20,
+          69,
+          70
+        ],
+        "rights_observation": "Inspected front/back and sample test pages show Army headquarters attribution, GPO sale stock, Secretary of the Army order, and Google/University of Michigan digitization marks. No license or individual author/illustrator credit observed on those pages; full third-party provenance and legal classification remain for rights reviewer."
+      },
+      "excluded_for_generic_questions": [
+        {
+          "locator": "Chapter 2, printed p. 8 (PDF p. 10)",
+          "reason": "23–26 V expectation and switch/gauge procedure are specific to the military electrical system."
+        },
+        {
+          "locator": "Chapter 3, printed p. 10 (PDF p. 12)",
+          "reason": "Reverse-current relay, gooseneck connector and 0–4 ohm limit are specific to the described 25 A system."
+        },
+        {
+          "locator": "Chapter 5, printed p. 18 (PDF p. 20)",
+          "reason": "55–75 ohm limit and lettered connector pins apply only to the identified 100 A setup."
+        }
+      ]
+    }
+  ],
+  "topic_gap_map": [
+    {
+      "topic": "warning light and diagnostic symptoms",
+      "candidate_sources": [
+        "coalinga-tractor-electrical-hydraulic-health-2026",
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending; avoid claiming a unique fault from a symptom"
+    },
+    {
+      "topic": "terminal corrosion and connection checks",
+      "candidate_sources": [
+        "coalinga-tractor-electrical-hydraulic-health-2026",
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending"
+    },
+    {
+      "topic": "charging-system output and load testing",
+      "candidate_sources": [
+        "navy-navedtra-14264a-ch8",
+        "army-da-pam-750-33-1976"
+      ],
+      "status": "pending"
+    },
+    {
+      "topic": "regulator/alternator/circuit differentiation",
+      "candidate_sources": [
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending; model-specific caveat"
+    },
+    {
+      "topic": "circuit voltage-drop testing",
+      "candidate_sources": [
+        "navy-navedtra-14264a-ch8"
+      ],
+      "status": "pending; verify exact procedure and vehicle applicability"
+    },
+    {
+      "topic": "rotor excitation, slip rings, brushes and field-strength voltage control",
+      "candidate_sources": [
+        "bccampus-flinn-alternator-2021"
+      ],
+      "status": "pending; compare with retained questions to avoid duplication"
+    },
+    {
+      "topic": "generator induction fundamentals",
+      "candidate_sources": [
+        "openstax-college-physics-electric-generators"
+      ],
+      "status": "external reference only; excluded from Ollama context under current rights notice"
+    }
+  ],
+  "required_before_source_approval": [
+    "Navy chapter artifact captured and SHA-256 calculated; confirm publication date/revision and issuer against complete manual front matter. Obtain original canonical copy if byte identity matters.",
+    "Review every proposed excerpt and figure for third-party rights; document license or government employee authorship rather than infer from hosting.",
+    "Record actual human rights reviewer and time in the approved-source workflow; do not create a surrogate identity.",
+    "Make source-specific excerpts with page/section and excerpt SHA-256; technically review each teaching claim and applicability.",
+    "Ingest only reviewed source and chunks into staging, verify database state, and keep production unchanged until separately authorized."
+  ],
+  "governance": {
+    "rights_approval_complete": false,
+    "technical_review_complete": false,
+    "database_ingestion_complete": false,
+    "question_generation_unblocked": false
+  },
+  "discovery_leads": [
+    {
+      "name": "Automotive Textbook, A6 Electrical and Electronic Systems",
+      "url": "https://www.automotivetextbook.com/a6/",
+      "status": "discovery-only",
+      "observation": "Lists Drew Kleyweg's 2018 Charging System and a Charging System Service and Diagnostics heading, but neither is linked to a downloadable chapter on the observed A6 page; no per-chapter reuse license established.",
+      "next_step": "Obtain exact chapter artifact and its own copyright/license notice or explicit written permission before evidence intake."
+    },
+    {
+      "name": "Saskatchewan Polytechnic Automotive OER directory",
+      "url": "https://www.saskoer.ca/oerdiscipline/chapter/automotive/",
+      "status": "discovery-only",
+      "observation": "Directory's own CC BY 4.0 license does not cover linked resources. It describes Automotive Textbook as having various open licenses; its 2025 automotive handbook is CC BY-NC-SA and unsuitable under current policy. No immediately applicable licensed charging-diagnosis chapter established."
+    },
+    {
+      "name": "BCcampus Automotive OER directory",
+      "url": "https://opentextbc.ca/oerdiscipline/chapter/automotive/",
+      "status": "discovery-only",
+      "observation": "Lists CC BY Diesel Drivetrain Systems, which does not address the charging-system gap. Directory license does not transfer to linked course."
+    },
+    {
+      "name": "McMaster/eCampusOntario Automotive and Vehicle Engineering Technology guide",
+      "url": "https://ecampusontario.pressbooks.pub/mcmasteroerdiscipline/chapter/automotive-vehicle-engineering-technology/",
+      "status": "discovery-only",
+      "observation": "Listed books address programming, fluid mechanics, and mathematics; no charging-diagnosis evidence. Guide itself is CC BY-NC-SA."
+    },
+    {
+      "name": "OER Commons and UNESCO-UNEVOC TVET",
+      "status": "search-index-only",
+      "observation": "Individual artifact author, license and technical scope must be verified before adding any candidate."
+    },
+    {
+      "name": "SAE Mobilus and Open Library",
+      "status": "external-reference-discovery-only",
+      "observation": "Subscription/access and catalog records do not grant app redistribution or model-ingestion rights for individual works."
+    },
+    {
+      "name": "SAE Mobilus charging-system technical papers",
+      "url": "https://saemobilus.sae.org/papers/operational-problems-maintenance-ac-generator-alternator-charging-systems-630155",
+      "status": "external-reference-only",
+      "observation": "Paper 630155 is a relevant 1963 technical paper but displayed as locked. SAE's Mobilus announcement prohibits SAE Content entry into any AI tool and AI derivatives without express written permission. SAE Gold Open Access articles may carry CC BY, CC BY-NC or CC BY-NC-ND individually; no exact CC BY charging paper verified here, and the AI policy requires clarification for model use.",
+      "next_step": "Use citation/link metadata only. Obtain explicit written permission or a clearly licensed exact artifact plus resolution of the platform AI restriction before excerpts or Ollama input."
+    },
+    {
+      "name": "Internet Archive advanced search",
+      "url": "https://archive.org/advancedsearch.php",
+      "status": "discovery-only",
+      "observation": "Internet Archive explicitly does not guarantee copyright status or uploader-provided item rights metadata. Search did not establish an exact charging-diagnosis work with independently verified reuse rights. OEM/manual uploads are not licensed merely by archive availability.",
+      "next_step": "For any found item, verify original publisher/author, exact edition and source artifact, item license authority and third-party content, then hash and technically review; no automatic ingestion."
+    }
+  ]
+}
