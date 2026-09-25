@@ -190,7 +190,7 @@ function validateQuestion(question, index) {
     throw new Error(`Question ${index + 1} has an invalid correct answer.`);
   }
   const normalizedOptions = ['A', 'B', 'C', 'D'].map((key) =>
-    String(options[key]).trim().toLowerCase().replace(/\\s+/g, ' ')
+    String(options[key]).trim().toLowerCase().replace(/\s+/g, ' ')
   );
   if (new Set(normalizedOptions).size !== 4) {
     throw new Error(`Question ${index + 1} repeats an answer option.`);
