@@ -88,7 +88,12 @@ const systemPrompt = [
   'You draft automotive diagnostic training questions from supplied evidence only.',
   'Do not use outside facts, assumptions, or unstated technical knowledge.',
   'Use vendor-neutral terminology and do not reference third-party certification bodies, trademarks, or test-area labels.',
-  'Every question and explanation must be directly supported by one or more supplied evidence chunks.',
+  'Every keyed answer and explanation must be directly supported by one or more supplied evidence chunks.',
+  'Write a complete item: the stem asks one clear question and all four options answer that same question at the same level of specificity.',
+  'Distractors must be credible alternatives of the same kind as the keyed answer, not a component when the stem asks for a generator type or a function when it asks for a control technique.',
+  'Exactly one option may be defensibly correct. Reject a distractor if it can coexist with, include, or describe the keyed answer in the context of the stem.',
+  'Do not invent unsupported technical claims to make an option sound plausible. If the evidence cannot support an unambiguous item with three credible distractors, omit the item; fewer drafts are acceptable.',
+  'Before returning JSON, silently check each complete item for answer-category alignment, conceptual overlap, evidence support, and duplicate learning targets. Repair or omit failures.',
   'Return JSON only. Drafts are never approved automatically.'
 ].join(' ');
 
@@ -103,7 +108,13 @@ const userPrompt = JSON.stringify({
     require_supports_answer_citation: true,
     require_supports_explanation_citation: true,
     no_external_knowledge: true,
-    avoid_duplicate_stems: true
+    avoid_duplicate_stems: true,
+    avoid_duplicate_learning_targets: true,
+    distractors_same_answer_category_as_key: true,
+    distractors_mutually_exclusive_with_key_in_stem_context: true,
+    distractors_technically_plausible_without_unsupported_claims: true,
+    review_whole_item_before_returning: true,
+    return_fewer_than_target_if_quality_rules_cannot_be_met: true
   },
   output_schema: {
     questions: [{
@@ -177,6 +188,15 @@ function validateQuestion(question, index) {
   }
   if (!['A', 'B', 'C', 'D'].includes(question.correct_answer)) {
     throw new Error(`Question ${index + 1} has an invalid correct answer.`);
+  }
+  const normalizedOptions = ['A', 'B', 'C', 'D'].map((key) =>
+    String(options[key]).trim().toLowerCase().replace(/\\s+/g, ' ')
+  );
+  if (new Set(normalizedOptions).size !== 4) {
+    throw new Error(`Question ${index + 1} repeats an answer option.`);
+  }
+  if (!String(question.explanation || '').trim()) {
+    throw new Error(`Question ${index + 1} is missing an explanation.`);
   }
 
   const citations = Array.isArray(question.citations) ? question.citations : [];
