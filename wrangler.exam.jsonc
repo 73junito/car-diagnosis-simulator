@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "autolearnpro-exam",
+  "compatibility_date": "2026-09-25",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "exam.autolearnpro.com",
+      "zone_name": "autolearnpro.com",
+      "custom_domain": true
+    }
+  ],
+  "assets": {
+    "directory": "./exam-site",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
