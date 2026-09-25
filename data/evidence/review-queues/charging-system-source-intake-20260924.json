@@ -101,7 +101,13 @@
           "locator": "§1.2.5, printed 8-18–8-19",
           "reason": "Bench disassembly and diode test require component-specific process and safety review."
         }
-      ]
+      ],
+      "rights_confirmation_route": {
+        "recipient": "Center for Seabees and Facilities Engineering (CSFE) via official Contact Us page",
+        "url": "https://www.netc.navy.mil/Commands/Center-for-Seabees-and-Facilities-Engineering/Contact-Us/",
+        "request": "Please confirm whether the text and figures in NAVEDTRA 14264A, Construction Mechanic Basic, Chapter 8, Automotive Electrical Circuits and Wiring (official PDF at the canonical URL), were prepared entirely by U.S. government employees within official duties, and identify any third-party material or reuse restrictions. We plan to store short attributed text excerpts and page locators in a commercial-capable automotive training application's evidence database and provide excerpts as context to a local question-drafting model. Please also confirm whether a newer revision supersedes the chapter for these purposes.",
+        "sent": false
+      }
     },
     {
       "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
