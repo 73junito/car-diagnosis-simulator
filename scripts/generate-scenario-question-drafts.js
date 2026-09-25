@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { parseModelJson } = require('./lib/parse-model-json');
 
 const root = path.resolve(__dirname, '..');
 const args = Object.fromEntries(
@@ -159,11 +160,7 @@ async function callOllama() {
   const text = payload?.message?.content || payload?.response || '';
   if (!text) throw new Error('Ollama API returned no usable content.');
 
-  try {
-    return JSON.parse(text);
-  } catch {
-    throw new Error('Ollama response was not valid JSON.');
-  }
+  return parseModelJson(text);
 }
 
 function normalizeStem(value) {
