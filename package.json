@@ -68,7 +68,7 @@
     "supertest": "^7.2.2",
     "undici": "^8.10.2",
     "wait-on": "^9.1.0",
-    "wrangler": "4.131.1"
+    "wrangler": "^4.138.0"
   },
   "dependencies": {
     "hono": "^4.13.7"

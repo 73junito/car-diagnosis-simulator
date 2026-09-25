@@ -1,0 +1,85 @@
+name: Generate scenario question drafts
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario_id:
+        description: Scenario question-bank ID
+        required: true
+        default: charging-system
+        type: string
+      target_count:
+        description: Number of draft questions to request (1-20)
+        required: true
+        default: '8'
+        type: string
+      model:
+        description: Ollama Cloud model
+        required: true
+        default: gpt-oss:20b
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Evidence-bound draft generation
+    runs-on: ubuntu-latest
+    environment: ollama
+    timeout-minutes: 10
+    env:
+      OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
+      OLLAMA_API_URL: https://ollama.com/api/chat
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate generation inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "${{ inputs.scenario_id }}" =~ ^[a-z0-9-]+$ ]]; then
+            echo "Invalid scenario_id"
+            exit 1
+          fi
+          if [[ ! "${{ inputs.target_count }}" =~ ^([1-9]|1[0-9]|20)$ ]]; then
+            echo "target_count must be 1-20"
+            exit 1
+          fi
+          if [[ -z "$OLLAMA_API_KEY" ]]; then
+            echo "Environment secret API_GITHUB is not configured"
+            exit 1
+          fi
+
+      - name: Verify evidence eligibility
+        shell: bash
+        run: |
+          node scripts/generate-scenario-question-drafts.js             --scenario="${{ inputs.scenario_id }}"             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --dry-run=true
+
+      - name: Generate draft questions
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/question-drafts"
+          node scripts/generate-scenario-question-drafts.js             --scenario="${{ inputs.scenario_id }}"             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --output="$RUNNER_TEMP/question-drafts/generated-question-drafts.json"
+
+      - name: Upload draft artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "question-drafts-${{ inputs.scenario_id }}-${{ github.run_id }}"
+          path: ${{ runner.temp }}/question-drafts/generated-question-drafts.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Governance notice
+        shell: bash
+        run: |
+          echo "Generated content is draft-only."
+          echo "No database write or automatic approval occurred."
+          echo "Human technical and instructional review remain required."
