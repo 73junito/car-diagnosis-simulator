@@ -1,4 +1,4 @@
-name: Generate scenario question drafts
+name: Ollama question agent worker
 
 on:
   workflow_dispatch:
@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   generate:
-    name: Evidence-bound draft generation
+    name: Private evidence-bound question generation
     runs-on: ubuntu-latest
     environment: ollama
     timeout-minutes: 10
@@ -63,7 +63,7 @@ jobs:
         run: |
           node scripts/generate-scenario-question-drafts.js             --scenario="${{ inputs.scenario_id }}"             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --dry-run=true
 
-      - name: Generate draft questions
+      - name: Run dedicated Ollama question agent worker
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/question-drafts"
