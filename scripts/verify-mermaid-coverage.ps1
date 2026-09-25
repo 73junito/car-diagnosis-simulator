@@ -11,7 +11,8 @@ $MermaidRequirements = @(
     @{ Area = "Database Schema"; File = "supabase/DATABASE-ARCHITECTURE.md"; Concepts = @("question_provenance", "citation_validations", "approved_sources", "source_chunks") },
     @{ Area = "Database Migrations"; File = "db/migrations/MIGRATION-FLOW.md"; Concepts = @("Migration", "PostgreSQL", "RLS", "CI", "Rollback") },
     @{ Area = "Playwright Tests"; File = "tests/playwright/TEST-FLOWS.md"; Concepts = @("Fail-Closed", "Production", "Training", "Assessment", "Security") },
-    @{ Area = "System Architecture"; File = "docs/SYSTEM-ARCHITECTURE.md"; Concepts = @("Student", "Instructor", "Dashboard", "API", "Database", "Citations") }
+    @{ Area = "System Architecture"; File = "docs/SYSTEM-ARCHITECTURE.md"; Concepts = @("Student", "Instructor", "Dashboard", "API", "Database", "Citations") },
+    @{ Area = "Academic Pathways"; File = "docs/ACADEMIC-PATHWAYS.md"; Concepts = @("Undergraduate", "Graduate", "47.0604", "15.0803", "Lesson Plan", "Applied Research") }
 )
 
 Write-Host ""

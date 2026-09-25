@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "academicLevel": "undergraduate",
+  "cipCode": "47.0604",
+  "courses": [
+    {"id":"electrical-1","academicLevel":"undergraduate","cipCode":"47.0604","title":"Electrical 1","status":"active"},
+    {"id":"brakes-1","academicLevel":"undergraduate","cipCode":"47.0604","title":"Brakes 1","status":"planned"},
+    {"id":"engine-performance-1","academicLevel":"undergraduate","cipCode":"47.0604","title":"Engine Performance 1","status":"planned"},
+    {"id":"suspension-steering-1","academicLevel":"undergraduate","cipCode":"47.0604","title":"Suspension & Steering 1","status":"planned"}
+  ]
+}

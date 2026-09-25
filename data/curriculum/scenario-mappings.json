@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "scenarioMappings": [
+    {
+      "scenarioId": "charging-system",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "courseId": "electrical-1",
+      "competencyId": "ug-electrical-evidence-diagnosis",
+      "lessonPlanId": "ug-electrical-charging-system",
+      "status": "active"
+    },
+    {
+      "scenarioId": "electrical-load",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "courseId": "electrical-1",
+      "competencyId": "ug-electrical-evidence-diagnosis",
+      "lessonPlanId": "ug-electrical-charging-system",
+      "status": "active"
+    }
+  ]
+}

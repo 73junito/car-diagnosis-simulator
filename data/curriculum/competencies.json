@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "competencies": [
+    {"id":"ug-electrical-evidence-diagnosis","academicLevel":"undergraduate","courseId":"electrical-1","statement":"Use observed electrical symptoms and appropriate measurements to plan a vehicle-specific diagnostic check.","status":"draft"},
+    {"id":"ug-brakes-evidence-diagnosis","academicLevel":"undergraduate","courseId":"brakes-1","statement":"Use inspection findings and measurements to diagnose brake-system concerns and verify corrective action.","status":"planned"},
+    {"id":"ug-engine-performance-analysis","academicLevel":"undergraduate","courseId":"engine-performance-1","statement":"Interpret operating data and test results to diagnose engine-performance concerns and verify repairs.","status":"planned"},
+    {"id":"ug-suspension-steering-analysis","academicLevel":"undergraduate","courseId":"suspension-steering-1","statement":"Use inspection, geometry, and component evidence to diagnose suspension and steering concerns.","status":"planned"},
+    {"id":"grad-advanced-diagnostic-analysis","academicLevel":"graduate","courseId":"advanced-diagnostic-analysis","statement":"Evaluate complex vehicle-system evidence, uncertainty, competing hypotheses, and verification strategies.","status":"planned"},
+    {"id":"grad-vehicle-systems-testing","academicLevel":"graduate","courseId":"vehicle-systems-testing","statement":"Design and evaluate advanced vehicle-system tests using appropriate instrumentation, controls, and technical evidence.","status":"planned"},
+    {"id":"grad-curriculum-assessment-design","academicLevel":"graduate","courseId":"curriculum-assessment-design","statement":"Design aligned technical curriculum, authentic assessments, rubrics, and feedback systems using measurable outcomes.","status":"planned"},
+    {"id":"grad-applied-research","academicLevel":"graduate","courseId":"applied-research","statement":"Design and evaluate applied technical-education or diagnostic investigations using transparent scholarly evidence.","status":"planned"},
+    {"id":"grad-technical-instructional-leadership","academicLevel":"graduate","courseId":"technical-instructional-leadership","statement":"Use evidence-informed leadership practices to improve technical programs, instruction, learner support, and faculty practice.","status":"planned"}
+  ]
+}

@@ -414,6 +414,27 @@
     return slugMatches.length === 1 ? slugMatches[0] : null;
   }
 
+  function renderCurriculum(scenarioId) {
+    const mapping = window.SCENARIO_CURRICULUM && window.SCENARIO_CURRICULUM[scenarioId];
+    if (!mapping) return '';
+    const objectives = mapping.learningObjectives
+      .map((objective) => `<li>${escapeHtml(objective)}</li>`)
+      .join('');
+    return `
+      <section class="scenario-card" aria-label="Curriculum alignment">
+        <h2>Curriculum alignment</h2>
+        <p><strong>Academic level:</strong> ${escapeHtml(mapping.academicLevel)}</p>
+        <p><strong>Program:</strong> ${escapeHtml(mapping.program)} (CIP ${escapeHtml(mapping.cipCode)})</p>
+        <p><strong>KBOR common course:</strong> ${escapeHtml(mapping.course)}</p>
+        <p><strong>Draft competency:</strong> ${escapeHtml(mapping.competency)}</p>
+        <p><strong>Draft learning objectives:</strong></p>
+        <ul>${objectives}</ul>
+        <p class="note">${escapeHtml(mapping.alignmentStatus)}.
+          <a href="${escapeHtml(mapping.programReference)}">View KBOR program information</a>.
+        </p>
+      </section>`;
+  }
+
   async function renderScenarioPage() {
     const params = new URLSearchParams(location.search);
     const scenarioKey = params.get("scenario");
@@ -492,6 +513,8 @@
         )}
       </p>
     </section>
+
+    ${renderCurriculum(evidenceScenarioId)}
 
     <section class="scenario-card">
       <h2>Systems Involved</h2>
@@ -593,7 +616,7 @@
 
       // Render available (draft) questions for authorship/dev visibility but do not allow grading.
       const draftQuestions = questionBank;
-      root.querySelector('.scenario-card:nth-of-type(4)')?.querySelector('#attemptSummary')?.insertAdjacentHTML('afterend',
+      root.querySelector('#attemptSummary')?.insertAdjacentHTML('afterend',
         `<div class="scenario-card"><h3>Available Questions (development)</h3><p>Only approved questions are used for graded attempts.</p><ul>${draftQuestions.map(q=>`<li>${escapeHtml(q.question_text || q.id || '')} <em>status: ${escapeHtml(q.status||'')}</em></li>`).join('')}</ul></div>`
       );
 
@@ -628,6 +651,8 @@
         <p>${escapeHtml(scenario.symptoms || item.shortSymptom || "")}</p>
         <p class="note"><strong>Topic:</strong> ${escapeHtml(scenario.trainingFocus || item.category || "Diagnostic training")}</p>
       </section>
+
+      ${renderCurriculum(evidenceScenarioId)}
 
       <section class="scenario-card">
         <h2>Systems Involved</h2>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Academic Pathways | AutoLearnPro Exam</title>
+  <meta name="description" content="Explore AutoLearnPro undergraduate and graduate academic pathways and lesson plans.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="/" aria-label="AutoLearnPro Exam home"><span class="brand-mark" aria-hidden="true">A<span>+</span></span><span>AutoLearnPro <small>EXAM</small></span></a>
+      <nav aria-label="Primary"><a href="/">Exam home</a><a href="#undergraduate">Undergraduate</a><a href="#graduate">Graduate</a></nav>
+      <a class="header-link" href="https://app.autolearnpro.com/">Training app <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+  <main id="main">
+    <section class="pathway-hero">
+      <div class="shell">
+        <p class="eyebrow"><span class="line"></span>ACADEMIC PATHWAYS / LESSON PLANS</p>
+        <h1>Choose an <em>undergraduate</em> or <em>graduate</em> pathway.</h1>
+        <p class="intro">AutoLearnPro organizes learning by academic level first, then program, course, competency, lesson sequence, scenario, assessment, and evidence.</p>
+        <div class="pathway-jump"><a class="button primary" href="#undergraduate">Undergraduate pathway ↓</a><a class="button secondary-button" href="#graduate">Graduate pathway ↓</a></div>
+      </div>
+    </section>
+    <section class="section pathway-section" id="undergraduate" aria-label="Undergraduate pathway">
+      <div class="shell" id="undergraduate-content">
+        <div class="pathway-loading" aria-live="polite">Loading undergraduate curriculum…</div>
+      </div>
+    </section>
+    <section class="section pathway-section alternate" id="graduate" aria-label="Graduate pathway">
+      <div class="shell" id="graduate-content">
+        <div class="pathway-loading" aria-live="polite">Loading graduate curriculum…</div>
+      </div>
+    </section>
+    <section class="section architecture-section" aria-labelledby="architecture-title">
+      <div class="shell">
+        <p class="eyebrow">PATHWAY ARCHITECTURE</p><h2 id="architecture-title">One model, two academic levels.</h2>
+        <div class="mermaid-wrap"><pre class="mermaid">flowchart TD
+  A[Academic Pathways] --> U[Undergraduate]
+  A --> G[Graduate]
+
+  U --> U47[CIP 47.0604<br/>Automobile / Automotive Mechanics<br/>Technology / Technician]
+  U47 --> UC[Course]
+  UC --> UK[Competency]
+  UK --> UL[Lesson Plan]
+  UL --> US[Diagnostic Scenario]
+  US --> UQ[Assessment Item]
+  UQ --> UE[Evidence and Provenance]
+
+  G --> G15[CIP 15.0803<br/>Automotive Engineering<br/>Technology / Technician]
+  G15 --> GA[Advanced Diagnostic Analysis]
+  G15 --> GT[Vehicle Systems and Testing]
+  G15 --> GC[Curriculum and Assessment Design]
+  G15 --> GR[Applied Research]
+  G15 --> GL[Technical Instructional Leadership]</pre></div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="shell footer-inner"><div><a class="footer-brand" href="/">AutoLearnPro</a><p>Automotive learning, built with evidence.</p></div><div class="footer-links"><a href="/">Exam home</a><a href="https://autolearnpro.com/">Public site</a><a href="https://app.autolearnpro.com/">Training app</a></div><p class="fine-print">Pathway labels describe AutoLearnPro's academic organization. Verified authority references, AutoLearnPro-authored curriculum, and evidence provenance remain explicitly separated.</p></div></footer>
+  <script type="module" src="/learning-path/pathways.js"></script>
+  <script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,securityLevel:'strict',theme:'neutral'});</script>
+</body>
+</html>

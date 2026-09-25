@@ -1,6 +1,18 @@
 {
-  "policy_version": "1.0.0",
+  "policy_version": "1.1.0",
   "project": "Open Starting and Charging Service Evidence Database",
+  "scholarly_discovery_policy": {
+    "primary_discovery_source": "Google Scholar",
+    "primary_discovery_url": "https://scholar.google.com/",
+    "canonical_citation_target": "original_publisher_or_doi",
+    "rule": "Use Google Scholar as the primary scholarly discovery and cross-checking source. Cite and ingest the original publisher, DOI, repository, or authoritative full-text record rather than a Google Scholar results URL whenever available.",
+    "fallback_sources": [
+      "Crossref",
+      "PubMed or other discipline-specific scholarly indexes when applicable",
+      "Publisher databases",
+      "Institutional repositories"
+    ]
+  },
   "required_scope": [
     "starting-system",
     "charging-system"

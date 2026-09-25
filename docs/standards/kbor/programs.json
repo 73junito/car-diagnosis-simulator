@@ -16,6 +16,7 @@
   },
   "programs": [
     {
+      "academicLevel": "undergraduate",
       "cipCode": "47.0604",
       "programName": "Automotive Technology",
       "cipTitle": "Automobile/Automotive Mechanics Technology/Technician",
@@ -23,6 +24,16 @@
       "primary": true,
       "status": "active",
       "kborReference": "https://kansasregents.gov/workforce_development/program-alignment/automotive_technology"
+    },
+    {
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "programName": "Automotive Engineering Technology",
+      "cipTitle": "Automotive Engineering Technology/Technician",
+      "description": "Advanced automotive engineering technology instructional classification used for graduate-pathway organization.",
+      "primary": false,
+      "status": "planned",
+      "kborReference": null
     }
   ],
   "extensibilityNote": "Additional CIP programs may be added without making the initial Automotive Technology classification the only supported program."
