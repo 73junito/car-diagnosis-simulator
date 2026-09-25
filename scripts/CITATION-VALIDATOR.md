@@ -6,6 +6,14 @@
 
 The Citation Validator is a deterministic, evidence-based tool that validates every citation in the approved question bank. It proves that each quote is authentic, properly sourced, and correctly attributed by recomputing cryptographic hashes and comparing them against canonical source data.
 
+## Scholarly Source Selection
+
+For scholarly literature, **Google Scholar is the primary discovery and cross-checking source**. Scholar is used to locate relevant peer-reviewed papers, theses, conference papers, and authoritative scholarly records.
+
+The canonical citation target remains the original publication record whenever available: publisher page, DOI, institutional repository, or other authoritative full-text source. A Google Scholar result URL is not treated as the canonical evidence artifact.
+
+Discovery does not bypass provenance controls. Any source used as approved evidence must still satisfy the project's rights classification, source approval, chunk approval, URL/path, excerpt, and SHA-256 validation requirements.
+
 ## Validation Flow
 
 ```mermaid

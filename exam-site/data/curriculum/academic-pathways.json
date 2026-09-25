@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "pathways": [
+    {
+      "id": "undergraduate",
+      "academicLevel": "undergraduate",
+      "programId": "automotive-technology",
+      "cipCode": "47.0604",
+      "programName": "Automotive Technology",
+      "cipTitle": "Automobile/Automotive Mechanics Technology/Technician",
+      "status": "active"
+    },
+    {
+      "id": "graduate",
+      "academicLevel": "graduate",
+      "programId": "automotive-engineering-technology",
+      "cipCode": "15.0803",
+      "programName": "Automotive Engineering Technology",
+      "cipTitle": "Automotive Engineering Technology/Technician",
+      "status": "planned"
+    }
+  ]
+}

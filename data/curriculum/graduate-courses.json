@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "academicLevel": "graduate",
+  "cipCode": "15.0803",
+  "courses": [
+    {"id":"advanced-diagnostic-analysis","academicLevel":"graduate","cipCode":"15.0803","title":"Advanced Diagnostic Analysis","status":"planned"},
+    {"id":"vehicle-systems-testing","academicLevel":"graduate","cipCode":"15.0803","title":"Vehicle Systems and Testing","status":"planned"},
+    {"id":"curriculum-assessment-design","academicLevel":"graduate","cipCode":"15.0803","title":"Curriculum & Assessment Design","status":"planned"},
+    {"id":"applied-research","academicLevel":"graduate","cipCode":"15.0803","title":"Applied Research","status":"planned"},
+    {"id":"technical-instructional-leadership","academicLevel":"graduate","cipCode":"15.0803","title":"Technical Instructional Leadership","status":"planned"}
+  ]
+}

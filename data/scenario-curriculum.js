@@ -2,6 +2,7 @@
 // competency and objectives are AutoLearnPro drafts pending curriculum review.
 (function () {
   const electrical = Object.freeze({
+    academicLevel: 'undergraduate',
     program: 'Automotive Technology',
     cipCode: '47.0604',
     course: 'Electrical 1',

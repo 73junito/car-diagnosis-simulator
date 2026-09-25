@@ -25,16 +25,23 @@ This classification establishes the curriculum context for diagnostic scenarios,
 ```
 State (KS)
   └─ Authority (Kansas Board of Regents)
-    └─ Program (Automotive Technology)
-      └─ CIP Code (47.0604)
-        └─ Credential / Program Level
-          └─ Course
-            └─ Competency (Technical Domain)
-              └─ Learning Objective
-                └─ Diagnostic Scenario
-                  └─ Assessment Item (Question)
-                    └─ Evidence
-                      └─ Provenance (Citation)
+    └─ Academic Pathway
+      ├─ Undergraduate
+      │ └─ CIP 47.0604 — Automobile/Automotive Mechanics Technology/Technician
+      │   └─ Course
+      │     └─ Competency (Technical Domain)
+      │       └─ Learning Objective / Lesson Plan
+      │         └─ Diagnostic Scenario
+      │           └─ Assessment Item (Question)
+      │             └─ Evidence
+      │               └─ Provenance (Citation)
+      └─ Graduate
+        └─ CIP 15.0803 — Automotive Engineering Technology/Technician
+          ├─ Advanced Diagnostic Analysis
+          ├─ Vehicle Systems and Testing
+          ├─ Curriculum and Assessment Design
+          ├─ Applied Research
+          └─ Technical Instructional Leadership
 ```
 
 ## Design Principles

@@ -423,6 +423,7 @@
     return `
       <section class="scenario-card" aria-label="Curriculum alignment">
         <h2>Curriculum alignment</h2>
+        <p><strong>Academic level:</strong> ${escapeHtml(mapping.academicLevel)}</p>
         <p><strong>Program:</strong> ${escapeHtml(mapping.program)} (CIP ${escapeHtml(mapping.cipCode)})</p>
         <p><strong>KBOR common course:</strong> ${escapeHtml(mapping.course)}</p>
         <p><strong>Draft competency:</strong> ${escapeHtml(mapping.competency)}</p>
