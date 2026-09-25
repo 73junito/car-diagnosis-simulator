@@ -18,6 +18,16 @@
     "evidence_needed_drafts_blocked": true,
     "reviewer_identity_required": true,
     "reviewer_timestamp_required": true,
+    "technical_reviewer": {
+      "profile_uuid": "9d924a87-361e-417d-9094-44de9df1fc0d",
+      "role": "developer_reviewer",
+      "environment": "staging",
+      "identity_type": "independent development audit identity"
+    },
+    "instructional_reviewer": {
+      "profile_uuid": null,
+      "role": "pending independent instructional reviewer"
+    },
     "note": "This packet prepares human review only. It does not authorize automatic approval."
   },
   "review_criteria": {

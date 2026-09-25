@@ -49,4 +49,6 @@ Record one decision per question: `pass`, `revise`, or `reject`.
 
 Only questions that receive `pass` from both human reviews may have the reviewer UUID/timestamp fields populated. Questions requiring revision must remain `validated` with the human-review checklist values false until they are revised and revalidated.
 
-The SQL file at `supabase/drafts/charging-system-human-review-completion.sql` is a template only. It must not be executed until real reviewer identities are known and all six questions have actually passed both reviews.
+The staging technical-review identity is the independent `developer_reviewer` profile `9d924a87-361e-417d-9094-44de9df1fc0d`. It is separate from the teacher profile and is used only for development-stage technical-review attribution.
+
+The instructional reviewer must remain a separate identity. The SQL file at `supabase/drafts/charging-system-human-review-completion.sql` is a template only and must not be executed until an independent instructional reviewer UUID is known and all six questions have actually passed both reviews.

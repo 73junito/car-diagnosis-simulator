@@ -3,8 +3,9 @@
 -- This is intentionally stored under supabase/drafts, not migrations.
 --
 -- Required before use:
---   1. Replace TECHNICAL_REVIEWER_UUID with the authenticated technical reviewer's profile UUID.
---   2. Replace INSTRUCTIONAL_REVIEWER_UUID with the authenticated instructional reviewer's profile UUID.
+--   1. Staging technical reviewer is the independent developer_reviewer profile
+--      9d924a87-361e-417d-9094-44de9df1fc0d.
+--   2. Replace INSTRUCTIONAL_REVIEWER_UUID with the actual independent instructional reviewer's profile UUID.
 --   3. Confirm each of the six questions passed BOTH review checklists.
 --   4. Do not promote provenance here. Approval is a separate Gate 4 action.
 --
@@ -23,7 +24,7 @@ with reviewed(question_id) as (
 )
 update public.question_provenance qp
 set
-  technical_reviewer_id = 'TECHNICAL_REVIEWER_UUID'::uuid,
+  technical_reviewer_id = '9d924a87-361e-417d-9094-44de9df1fc0d'::uuid,
   technical_reviewed_at = now(),
   instructional_reviewer_id = 'INSTRUCTIONAL_REVIEWER_UUID'::uuid,
   instructional_reviewed_at = now(),

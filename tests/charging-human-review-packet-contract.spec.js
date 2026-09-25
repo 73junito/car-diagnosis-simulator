@@ -27,8 +27,9 @@ describe('charging-system human review packet contract', () => {
     expect(packet.governance.approval_complete).toBe(false);
   });
 
-  test('completion template requires real reviewer identities', () => {
-    expect(sql).toContain('TECHNICAL_REVIEWER_UUID');
+  test('completion template uses the independent staging developer reviewer', () => {
+    expect(sql).toContain('9d924a87-361e-417d-9094-44de9df1fc0d');
+    expect(sql).not.toContain('TECHNICAL_REVIEWER_UUID');
     expect(sql).toContain('INSTRUCTIONAL_REVIEWER_UUID');
     expect(sql).toContain('technical_reviewer_id');
     expect(sql).toContain('instructional_reviewer_id');
