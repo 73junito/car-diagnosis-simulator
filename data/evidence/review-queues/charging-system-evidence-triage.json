@@ -1,0 +1,62 @@
+{
+  "scenario_id": "charging-system",
+  "generated_at": "2026-09-25",
+  "approved_source_id": "frontiers-automotive-alternator-2023",
+  "approved_chunks": [
+    "frontiers-alternator-primary-source-p7",
+    "frontiers-alternator-ac-dc-rectification-p7"
+  ],
+  "evidence_linked": [
+    {
+      "question_id": "ba2541c8-f70b-4730-a7c3-c2c5113511e2",
+      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+      "note": "Alternator components."
+    },
+    {
+      "question_id": "5b432ab1-efd1-4ef6-8937-30749e78f892",
+      "chunk_id": "frontiers-alternator-primary-source-p7",
+      "note": "Primary vehicle electrical-energy source."
+    },
+    {
+      "question_id": "47c057ce-2e41-4ba6-b96e-6c3311417724",
+      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+      "note": "DC diode rectification; duplicate-content review required."
+    },
+    {
+      "question_id": "f52216b1-cb9c-4162-9a23-f2100aa30381",
+      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+      "note": "DC diode rectification; duplicate-content review required."
+    },
+    {
+      "question_id": "49dad565-9f85-476a-b87b-cbc31ce5bb68",
+      "chunk_id": "frontiers-alternator-primary-source-p7",
+      "note": "Primary vehicle electrical-energy source."
+    }
+  ],
+  "evidence_needed": [
+    {
+      "question_id": "f6ba3fc5-25bd-4504-b758-47f4a25eb792",
+      "need": "Sudden charging-system failure causes."
+    },
+    {
+      "question_id": "0172e15b-6cc4-4a2f-bca2-17ffb768c9e8",
+      "need": "Dim dashboard lights and charging-system conditions."
+    },
+    {
+      "question_id": "021c7ff9-0a84-41ab-ac17-a43ed7ab48e7",
+      "need": "Battery-terminal inspection and cleaning."
+    },
+    {
+      "question_id": "835b46ac-92fc-41d3-91ea-b9c2dd053573",
+      "need": "Voltage regulation, battery-charge control, and overcharge prevention."
+    },
+    {
+      "question_id": "ded7d121-0fba-4081-91e3-4742dd1b00fa",
+      "need": "Charging-system failure symptoms."
+    },
+    {
+      "question_id": "7bc5e4c2-93d4-4366-b56f-b8e0a09186ef",
+      "need": "Voltage-drop testing procedure and tool selection."
+    }
+  ]
+}
