@@ -296,6 +296,13 @@
       "status": "external-reference-only",
       "observation": "Paper 630155 is a relevant 1963 technical paper but displayed as locked. SAE's Mobilus announcement prohibits SAE Content entry into any AI tool and AI derivatives without express written permission. SAE Gold Open Access articles may carry CC BY, CC BY-NC or CC BY-NC-ND individually; no exact CC BY charging paper verified here, and the AI policy requires clarification for model use.",
       "next_step": "Use citation/link metadata only. Obtain explicit written permission or a clearly licensed exact artifact plus resolution of the platform AI restriction before excerpts or Ollama input."
+    },
+    {
+      "name": "Internet Archive advanced search",
+      "url": "https://archive.org/advancedsearch.php",
+      "status": "discovery-only",
+      "observation": "Internet Archive explicitly does not guarantee copyright status or uploader-provided item rights metadata. Search did not establish an exact charging-diagnosis work with independently verified reuse rights. OEM/manual uploads are not licensed merely by archive availability.",
+      "next_step": "For any found item, verify original publisher/author, exact edition and source artifact, item license authority and third-party content, then hash and technically review; no automatic ingestion."
     }
   ]
 }
