@@ -289,6 +289,13 @@
       "name": "SAE Mobilus and Open Library",
       "status": "external-reference-discovery-only",
       "observation": "Subscription/access and catalog records do not grant app redistribution or model-ingestion rights for individual works."
+    },
+    {
+      "name": "SAE Mobilus charging-system technical papers",
+      "url": "https://saemobilus.sae.org/papers/operational-problems-maintenance-ac-generator-alternator-charging-systems-630155",
+      "status": "external-reference-only",
+      "observation": "Paper 630155 is a relevant 1963 technical paper but displayed as locked. SAE's Mobilus announcement prohibits SAE Content entry into any AI tool and AI derivatives without express written permission. SAE Gold Open Access articles may carry CC BY, CC BY-NC or CC BY-NC-ND individually; no exact CC BY charging paper verified here, and the AI policy requires clarification for model use.",
+      "next_step": "Use citation/link metadata only. Obtain explicit written permission or a clearly licensed exact artifact plus resolution of the platform AI restriction before excerpts or Ollama input."
     }
   ]
 }
