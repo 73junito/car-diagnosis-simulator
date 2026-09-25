@@ -126,7 +126,7 @@ jobs:
 
       - name: Annotate failing tests
         if: always()
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v3
         with:
           name: Jest Tests
           path: test-results/junit.xml
