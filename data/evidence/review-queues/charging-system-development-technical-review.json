@@ -1,0 +1,52 @@
+{
+  "scenario_id": "charging-system",
+  "review_stage": "development-technical-review",
+  "reviewed_at": "2026-09-25",
+  "reviewer": {
+    "profile_uuid": "9d924a87-361e-417d-9094-44de9df1fc0d",
+    "role": "developer_reviewer",
+    "environment": "staging"
+  },
+  "constraints": [
+    "Review decisions are bounded to the approved Frontiers evidence already linked to each question.",
+    "No question is approved by this review.",
+    "Instructional review remains separate and incomplete."
+  ],
+  "summary": {
+    "pass": 4,
+    "revise": 2,
+    "reject": 0
+  },
+  "decisions": [
+    {
+      "question_id": "47c057ce-2e41-4ba6-b96e-6c3311417724",
+      "decision": "pass",
+      "reason": "The approved evidence directly supports diode rectification as the AC-to-DC function and supports the keyed answer and explanation."
+    },
+    {
+      "question_id": "49dad565-9f85-476a-b87b-cbc31ce5bb68",
+      "decision": "pass",
+      "reason": "The approved evidence directly states that alternators are the primary source of electric energy within a vehicle."
+    },
+    {
+      "question_id": "ba2541c8-f70b-4730-a7c3-c2c5113511e2",
+      "decision": "pass",
+      "reason": "The approved evidence directly lists rotor, stator, diode rectifier, and voltage regulator as alternator components."
+    },
+    {
+      "question_id": "charging-system-ai-draft-0f3a2f20daca",
+      "decision": "revise",
+      "reason": "The approved evidence supports PWM voltage control as the keyed answer, but it does not establish that the distractor 'Feedback control' is mutually exclusive with PWM. Replace the ambiguous distractor and re-run validation/technical review."
+    },
+    {
+      "question_id": "charging-system-ai-draft-4cfd549ec9be",
+      "decision": "pass",
+      "reason": "The approved evidence directly states that an automotive alternator has an efficiency of about 55%."
+    },
+    {
+      "question_id": "charging-system-ai-draft-e67fed5cd983",
+      "decision": "revise",
+      "reason": "The approved evidence supports 'synchronous AC generator' as the keyed answer, but it does not establish that 'Permanent magnet generator' is mutually exclusive with that classification. Replace it with a non-overlapping distractor and re-run validation/technical review."
+    }
+  ]
+}
