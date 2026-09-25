@@ -1,0 +1,43 @@
+name: Temporary Ollama API_GITHUB smoke test
+
+on:
+  push:
+    branches:
+      - fix/ollama-question-distractor-instructions
+    paths:
+      - .github/workflows/ollama-api-github-smoke.yml
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    environment: ollama
+    timeout-minutes: 10
+    env:
+      OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
+      OLLAMA_API_URL: https://ollama.com/api/chat
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Verify secret exists without printing it
+        shell: bash
+        run: |
+          test -n "$OLLAMA_API_KEY" || { echo "API_GITHUB is unavailable"; exit 1; }
+      - name: Generate one evidence-bound draft
+        shell: bash
+        run: |
+          node scripts/generate-scenario-question-drafts.js \
+            --scenario=charging-system \
+            --target=1 \
+            --model=gpt-oss:20b \
+            --output="$RUNNER_TEMP/ollama-smoke.json"
+          node -e 'const x=require(process.argv[1]); if(x.questions.length<1 || x.questions.some(q=>q.status!=="draft" || q.approved!==false)) process.exit(1); console.log("Draft output and governance verified:",x.questions.length)' "$RUNNER_TEMP/ollama-smoke.json"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ollama-api-github-smoke
+          path: ${{ runner.temp }}/ollama-smoke.json
+          retention-days: 1
