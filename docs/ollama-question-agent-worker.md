@@ -15,6 +15,13 @@ development question generation. It reads the `ollama` GitHub Environment secret
 
 The agent receives both approved evidence excerpts and retained questions. It must
 return fewer items when the evidence cannot support distinct, unambiguous questions.
+For scholarly material, Google Scholar is an upstream discovery mechanism only; the
+agent must preserve the canonical publisher, DOI, institutional-repository, or other
+authoritative source record supplied in the evidence bundle. It must not invent,
+guess, alter, or substitute citation metadata, source/chunk identifiers, locators,
+authors, publishers, quotations, or evidence statements. If the supplied evidence
+does not directly establish the keyed answer, the item must be omitted rather than
+completed from outside knowledge.
 The local duplicate guard rejects near-identical stems and overlapping keyed answers
 against retained items and newly accepted drafts. A missing retained snapshot stops
 generation. The default snapshot for a scenario is its
