@@ -1,0 +1,55 @@
+{
+  "scenario_id": "charging-system",
+  "review_type": "ai-assisted-evidence-fit-and-duplication-review",
+  "reviewed_at": "2026-09-25",
+  "limitations": [
+    "This review does not complete human technical review.",
+    "This review does not complete human instructional review.",
+    "This review does not approve any question.",
+    "This review is limited to claims supported by the currently approved Frontiers evidence chunks."
+  ],
+  "keep_source_linked": [
+    {
+      "question_id": "charging-system-ai-draft-e67fed5cd983",
+      "decision": "keep",
+      "reason": "Directly supported: synchronous AC generator."
+    },
+    {
+      "question_id": "ba2541c8-f70b-4730-a7c3-c2c5113511e2",
+      "decision": "keep",
+      "reason": "Directly supported: rotor, stator, diode rectifier, voltage regulator."
+    },
+    {
+      "question_id": "charging-system-ai-draft-4cfd549ec9be",
+      "decision": "keep",
+      "reason": "Directly supported: approximately 55% efficiency."
+    },
+    {
+      "question_id": "47c057ce-2e41-4ba6-b96e-6c3311417724",
+      "decision": "keep",
+      "reason": "Directly supported: DC diode rectification; retained as canonical AC-to-DC item."
+    },
+    {
+      "question_id": "49dad565-9f85-476a-b87b-cbc31ce5bb68",
+      "decision": "keep",
+      "reason": "Directly supported: alternator is primary source of vehicle electrical energy; retained as canonical primary-source item."
+    },
+    {
+      "question_id": "charging-system-ai-draft-0f3a2f20daca",
+      "decision": "keep",
+      "reason": "Directly supported: PWM voltage control."
+    }
+  ],
+  "retire": [
+    {
+      "question_id": "f52216b1-cb9c-4162-9a23-f2100aa30381",
+      "decision": "retire",
+      "reason": "Near-duplicate of 47c057ce-2e41-4ba6-b96e-6c3311417724; same AC-to-DC concept and evidence."
+    },
+    {
+      "question_id": "5b432ab1-efd1-4ef6-8937-30749e78f892",
+      "decision": "retire",
+      "reason": "Answer/explanation add battery-charging claims not stated in approved evidence and overlap 49dad565-9f85-476a-b87b-cbc31ce5bb68."
+    }
+  ]
+}
