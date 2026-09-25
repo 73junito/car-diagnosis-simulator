@@ -1,0 +1,32 @@
+{
+  "scenario_id": "charging-system",
+  "revision_stage": "technical-review-remediation",
+  "revised_at": "2026-09-25",
+  "source_basis": {
+    "source_id": "frontiers-automotive-alternator-2023",
+    "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+    "locator": "PDF page 7"
+  },
+  "governance": {
+    "technical_review_complete": false,
+    "instructional_review_complete": false,
+    "approval_complete": false,
+    "requires_technical_re_review": true
+  },
+  "revisions": [
+    {
+      "question_id": "charging-system-ai-draft-0f3a2f20daca",
+      "prior_distractor": "Feedback control",
+      "revised_distractor": "DC diode rectification",
+      "option": "C",
+      "reason": "The prior distractor could overlap conceptually with PWM control. The replacement is a distinct alternator function explicitly present in the approved evidence."
+    },
+    {
+      "question_id": "charging-system-ai-draft-e67fed5cd983",
+      "prior_distractor": "Permanent magnet generator",
+      "revised_distractor": "Voltage regulator",
+      "option": "D",
+      "reason": "The prior distractor could overlap with a synchronous-generator classification. The replacement is a distinct alternator component explicitly present in the approved evidence."
+    }
+  ]
+}
