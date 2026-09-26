@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryType": "evidence-source-state",
+  "purpose": "Canonical, independently tracked evidence lifecycle state. Each gate is an explicit boolean with its own provenance and is never inferred from another gate.",
+  "stateModel": [
+    { "field": "ingested", "meaning": "Artifact captured and hashed. Says nothing about rights." },
+    { "field": "rights_cleared", "meaning": "A human reviewer classified reuse rights for this exact artifact." },
+    { "field": "technically_reviewed", "meaning": "A human reviewer assessed technical applicability and scope." },
+    { "field": "chunk_approved", "meaning": "Specific excerpts are approved for model context in public.source_chunks." },
+    { "field": "lesson_mapped", "meaning": "Approved chunks are mapped to a curriculum learning objective." }
+  ],
+  "invariants": [
+    "No gate may be inferred from another gate. Each requires its own recorded reviewer and timestamp.",
+    "rights_cleared requires a real reviewer identity. Never synthesise or auto-promote a reviewer.",
+    "chunk_approved is authoritative only in public.source_chunks; this registry is a mirror for audit.",
+    "Candidate rights classifications are recorded as candidates and never as decisions.",
+    "Presence in staging is never evidence of rights clearance."
+  ],
+  "sources": [
+    {
+      "source_id": "frontiers-automotive-alternator-2023",
+      "artifact_filename": "frontiers-automotive-alternator-2023.pdf",
+      "artifact_sha256": null,
+      "artifact_sha256_status": "not_recorded",
+      "title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+      "authors": ["Surath Gajanayake", "S. Bandara", "T. Sugathapala"],
+      "publisher": "Frontiers in Mechanical Engineering",
+      "publication_year": 2023,
+      "doi": "10.3389/fmech.2022.1090152",
+      "canonical_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+      "rights_classification": "CC_BY",
+      "rights_classification_source": "scholarly-source-manifest.json license_classification with license_url and license statement pattern",
+      "rights_decision": "pending",
+      "rights_verified_by": null,
+      "rights_verified_at": null,
+      "technical_review_status": "pending",
+      "technically_reviewed_by": null,
+      "technically_reviewed_at": null,
+      "ingested": true,
+      "rights_cleared": false,
+      "technically_reviewed": false,
+      "chunk_approved": false,
+      "lesson_mapped": false,
+      "candidate_chunk_ids": [
+        "frontiers-alternator-primary-source-p7",
+        "frontiers-alternator-ac-dc-rectification-p7"
+      ],
+      "approved_chunk_ids": [],
+      "open_questions": [
+        "reviewer_approved=true in scholarly-source-manifest.json carries no reviewer identity or timestamp and must not be read as a rights decision",
+        "artifact sha256 is not recorded in the manifest; record it before chunk approval"
+      ]
+    },
+    {
+      "source_id": "navy-navedtra-14264a-ch8",
+      "artifact_filename": null,
+      "artifact_sha256": "91f3bc899204099374ff6e2a25ad6865199a9d3b259068af0605255f3800945d",
+      "artifact_sha256_status": "recorded_in_intake",
+      "title": "Construction Mechanic Basic, Chapter 8: Automotive Electrical Circuits and Wiring",
+      "issuer": "U.S. Navy / Center for Seabees and Facilities Engineering",
+      "canonical_url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+      "publication_date": "not stated in supplied chapter; PDF creation metadata 2014-06-10 is not a publication date",
+      "rights_classification": "PUBLIC_DOMAIN",
+      "rights_classification_source": "source-intake candidate classification (NOT a decision)",
+      "rights_decision": "pending",
+      "rights_verified_by": null,
+      "rights_verified_at": null,
+      "technical_review_status": "pending",
+      "technically_reviewed_by": null,
+      "technically_reviewed_at": null,
+      "ingested": true,
+      "rights_cleared": false,
+      "technically_reviewed": false,
+      "chunk_approved": false,
+      "lesson_mapped": false,
+      "candidate_chunk_ids": [],
+      "approved_chunk_ids": [],
+      "observed_scope": [
+        "charging-circuit components (8-4)",
+        "alternator and regulator operation (8-14-8-17)",
+        "charging output and regulator tests (8-19-8-20)",
+        "voltage drop and connection checks (8-21)",
+        "battery and component testing (8-5-8-19)"
+      ],
+      "open_questions": [
+        "Chapter authorship and third-party text/figure provenance are unverified; government hosting alone is not proof of public-domain status",
+        "Procedures and voltage ranges require vehicle/manufacturer applicability checks",
+        "Regulator bypass is hazardous and must not become generic learner instruction"
+      ]
+    }
+  ],
+  "referenced_but_unregistered_sources": [
+    "coalinga-tractor-electrical-hydraulic-health-2026",
+    "army-da-pam-750-33-1976",
+    "bccampus-flinn-alternator-2021",
+    "openstax-college-physics-electric-generators"
+  ]
+}

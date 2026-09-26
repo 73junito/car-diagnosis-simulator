@@ -91,3 +91,89 @@ describe('Evidence approval contract', () => {
     }
   });
 });
+
+describe('Evidence source-state registry', () => {
+  const registryFile = path.join(root, 'data', 'evidence', 'source-state-registry.json');
+  const GATES = [
+    'ingested',
+    'rights_cleared',
+    'technically_reviewed',
+    'chunk_approved',
+    'lesson_mapped'
+  ];
+
+  test('declares the five independent lifecycle gates for every source', () => {
+    const registry = readJson(registryFile);
+    expect(registry.schemaVersion).toBe('1.0.0');
+    expect(registry.sources.length).toBeGreaterThan(0);
+
+    for (const source of registry.sources) {
+      for (const gate of GATES) {
+        expect(typeof source[gate]).toBe('boolean');
+      }
+    }
+  });
+
+  test('keeps the Frontiers CC BY source separate from the Navy candidate artifact', () => {
+    const registry = readJson(registryFile);
+    const frontiers = registry.sources.find((s) => s.source_id === 'frontiers-automotive-alternator-2023');
+    const navy = registry.sources.find((s) => s.source_id === 'navy-navedtra-14264a-ch8');
+
+    expect(frontiers).toBeTruthy();
+    expect(navy).toBeTruthy();
+    expect(frontiers.source_id).not.toBe(navy.source_id);
+
+    // Distinct rights provenance: CC BY license vs an undecided candidate.
+    expect(frontiers.rights_classification).toBe('CC_BY');
+    expect(frontiers.rights_decision).toBe('pending');
+    expect(navy.rights_classification).toBe('PUBLIC_DOMAIN');
+    expect(navy.rights_decision).toBe('pending');
+    expect(navy.rights_classification_source).toMatch(/candidate/i);
+
+    // The Navy artifact is hashed in intake; the Frontiers manifest is not.
+    expect(navy.artifact_sha256).toMatch(/^[0-9a-f]{64}$/);
+  });
+
+  test('no gate is true while the underlying decision is still pending', () => {
+    const registry = readJson(registryFile);
+    for (const source of registry.sources) {
+      if (source.rights_decision === 'pending') {
+        expect(source.rights_cleared).toBe(false);
+        expect(source.chunk_approved).toBe(false);
+        expect(source.lesson_mapped).toBe(false);
+      }
+    }
+  });
+
+  test('no reviewer-gated gate is true without a recorded reviewer identity', () => {
+    const registry = readJson(registryFile);
+    for (const source of registry.sources) {
+      if (source.rights_cleared === true) {
+        expect(typeof source.rights_verified_by).toBe('string');
+        expect(source.rights_verified_by.length).toBeGreaterThan(0);
+        expect(source.rights_verified_at).toBeTruthy();
+      }
+      if (source.technically_reviewed === true) {
+        expect(typeof source.technically_reviewed_by).toBe('string');
+        expect(source.technically_reviewed_by.length).toBeGreaterThan(0);
+        expect(source.technically_reviewed_at).toBeTruthy();
+      }
+    }
+  });
+
+  test('no chunk is claimed as approved in the registry', () => {
+    const registry = readJson(registryFile);
+    for (const source of registry.sources) {
+      expect(source.chunk_approved).toBe(false);
+      expect(source.approved_chunk_ids).toEqual([]);
+    }
+  });
+
+  test('candidate chunks are recorded as candidates, not approvals', () => {
+    const registry = readJson(registryFile);
+    const frontiers = registry.sources.find((s) => s.source_id === 'frontiers-automotive-alternator-2023');
+    expect(frontiers.candidate_chunk_ids.length).toBe(2);
+    expect(frontiers.approved_chunk_ids).toEqual([]);
+  });
+});
+
