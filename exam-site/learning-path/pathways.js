@@ -1,5 +1,19 @@
 const DATA_ROOT = "/data/curriculum";
 
+// Server-side curriculum read API (same contract as the static JSON below).
+// The exam worker serves assets only, so the API is fetched cross-origin
+// from the app worker, which holds SUPABASE_SERVICE_ROLE_KEY.
+const API_URL = "https://app.autolearnpro.com/api/curriculum";
+const API_TIMEOUT_MS = 5000;
+const EXPECTED_SCHEMA_VERSION = "1.0.0";
+const API_COLLECTIONS = [
+  "pathways",
+  "courses",
+  "competencies",
+  "lessonPlans",
+  "scenarioMappings"
+];
+
 const files = {
   pathways: "academic-pathways.json",
   undergraduateCourses: "undergraduate-courses.json",
@@ -19,6 +33,36 @@ async function loadJson(file) {
   const response = await fetch(`${DATA_ROOT}/${file}`, { cache: "no-store" });
   if (!response.ok) throw new Error(`Failed to load ${file}: ${response.status}`);
   return response.json();
+}
+
+function validateApiPayload(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    throw new Error("Curriculum API payload is not an object");
+  }
+  if (payload.schemaVersion !== EXPECTED_SCHEMA_VERSION) {
+    throw new Error(`Unsupported curriculum schemaVersion: ${payload.schemaVersion}`);
+  }
+  for (const collection of API_COLLECTIONS) {
+    if (!Array.isArray(payload[collection])) {
+      throw new Error(`Curriculum API payload is missing collection: ${collection}`);
+    }
+  }
+  const levels = new Set(
+    payload.pathways.map((pathway) => pathway && pathway.academicLevel)
+  );
+  if (!levels.has("undergraduate") || !levels.has("graduate")) {
+    throw new Error("Required academic pathways are missing from the curriculum API payload");
+  }
+  return payload;
+}
+
+async function loadFromApi() {
+  const response = await fetch(API_URL, {
+    cache: "no-store",
+    signal: AbortSignal.timeout(API_TIMEOUT_MS)
+  });
+  if (!response.ok) throw new Error(`Curriculum API returned ${response.status}`);
+  return validateApiPayload(await response.json());
 }
 
 function lessonForCourse(lessonPlans, courseId) {
@@ -84,43 +128,78 @@ function renderError(error) {
   }
   console.error("Academic pathway load failed", error);
 }
+function modelFromApi(payload) {
+  const coursesForLevel = (level) =>
+    payload.courses.filter((course) => course && course.academicLevel === level);
+  return {
+    pathways: payload.pathways,
+    undergraduateCourses: coursesForLevel("undergraduate"),
+    graduateCourses: coursesForLevel("graduate"),
+    competencies: payload.competencies,
+    lessonPlans: payload.lessonPlans
+  };
+}
+
+async function loadStaticModel() {
+  const [pathwayData, undergradData, gradData, competencyData, lessonData] = await Promise.all([
+    loadJson(files.pathways),
+    loadJson(files.undergraduateCourses),
+    loadJson(files.graduateCourses),
+    loadJson(files.competencies),
+    loadJson(files.lessonPlans)
+  ]);
+  return {
+    pathways: pathwayData.pathways,
+    undergraduateCourses: undergradData.courses,
+    graduateCourses: gradData.courses,
+    competencies: competencyData.competencies,
+    lessonPlans: lessonData.lessonPlans
+  };
+}
+
 async function init() {
+  let model;
+  let source = "api";
   try {
-    const [pathwayData, undergradData, gradData, competencyData, lessonData] = await Promise.all([
-      loadJson(files.pathways),
-      loadJson(files.undergraduateCourses),
-      loadJson(files.graduateCourses),
-      loadJson(files.competencies),
-      loadJson(files.lessonPlans)
-    ]);
-
-    const undergraduate = pathwayData.pathways.find((item) => item.academicLevel === "undergraduate");
-    const graduate = pathwayData.pathways.find((item) => item.academicLevel === "graduate");
-
-    if (!undergraduate || !graduate) {
-      throw new Error("Required academic pathways are missing");
+    model = modelFromApi(await loadFromApi());
+  } catch (apiError) {
+    console.warn("Curriculum API unavailable; falling back to static curriculum JSON", apiError);
+    source = "static";
+    try {
+      model = await loadStaticModel();
+    } catch (staticError) {
+      renderError(staticError);
+      return;
     }
-
-    renderPathway(
-      "undergraduate-content",
-      undergraduate,
-      undergradData.courses,
-      competencyData.competencies,
-      lessonData.lessonPlans,
-      "course-grid"
-    );
-
-    renderPathway(
-      "graduate-content",
-      graduate,
-      gradData.courses,
-      competencyData.competencies,
-      lessonData.lessonPlans,
-      "graduate-grid"
-    );
-  } catch (error) {
-    renderError(error);
   }
+
+  const undergraduate = model.pathways.find((item) => item && item.academicLevel === "undergraduate");
+  const graduate = model.pathways.find((item) => item && item.academicLevel === "graduate");
+
+  if (!undergraduate || !graduate) {
+    renderError(new Error("Required academic pathways are missing"));
+    return;
+  }
+
+  document.documentElement.dataset.curriculumSource = source;
+
+  renderPathway(
+    "undergraduate-content",
+    undergraduate,
+    model.undergraduateCourses,
+    model.competencies,
+    model.lessonPlans,
+    "course-grid"
+  );
+
+  renderPathway(
+    "graduate-content",
+    graduate,
+    model.graduateCourses,
+    model.competencies,
+    model.lessonPlans,
+    "graduate-grid"
+  );
 }
 
 init();

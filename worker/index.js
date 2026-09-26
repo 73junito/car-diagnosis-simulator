@@ -60,8 +60,13 @@ app.post('/api/assessment-attempts/start', handleStartAssessmentAttempt)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
+// The exam site (exam.autolearnpro.com) consumes it cross-origin; the
+// static JSON remains the fallback source.
 app.use('/api/curriculum/*', cors({
-  origin: 'https://app.autolearnpro.com',
+  origin: [
+    'https://app.autolearnpro.com',
+    'https://exam.autolearnpro.com'
+  ],
   allowMethods: ['GET', 'OPTIONS'],
   allowHeaders: ['Content-Type'],
   maxAge: 86400

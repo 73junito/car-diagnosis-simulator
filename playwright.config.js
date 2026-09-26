@@ -93,10 +93,20 @@ module.exports = {
 
   webServer: (isRemoteBaseUrl || skipWebServer)
     ? undefined
-    : {
-        command: 'npx http-server -p 3003 -c-1 .',
-        url: 'http://127.0.0.1:3003',
-        reuseExistingServer: true,
-        timeout: 120 * 1000,
-      },
+    : [
+        {
+          command: 'npx http-server -p 3003 -c-1 .',
+          url: 'http://127.0.0.1:3003',
+          reuseExistingServer: true,
+          timeout: 120 * 1000,
+        },
+        {
+          // Exam site (learning path) uses root-absolute asset paths, so it
+          // needs a server rooted at exam-site/ rather than the repo root.
+          command: 'npx http-server -p 3012 -c-1 exam-site',
+          url: 'http://127.0.0.1:3012',
+          reuseExistingServer: true,
+          timeout: 120 * 1000,
+        },
+      ],
 };
