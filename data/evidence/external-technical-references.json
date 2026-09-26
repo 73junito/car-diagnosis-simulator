@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryType": "external-technical-reference",
+  "purpose": "Citation-only technical corroboration for proprietary or reuse-unverified automotive vendor material. These records may identify source locations and supported factual claims but may not supply reusable excerpts, figures, RAG chunks, or Ollama context.",
+  "rules": {
+    "evidence_role": "external-technical-reference",
+    "citation_allowed": true,
+    "ollama_eligible": false,
+    "reusable_chunks_allowed": false,
+    "transcript_ingestion_allowed": false,
+    "figures_reuse_allowed": false,
+    "rule": "Reference title, publisher, canonical URL, page/section/step locator, and a project-authored paraphrase of the supported technical claim. Do not store vendor paragraph text as evidence content unless a separate rights review grants reuse."
+  },
+  "sources": [
+    {
+      "source_id": "bosch-alternator-technical-poster-2020",
+      "vendor": "Robert Bosch GmbH",
+      "title": "Alternator - Compact alternator",
+      "canonical_url": "https://www.boschaftermarket.com/xrm/media/images/parts/starters_and_alternators/pdf_43/en/poster_bosch_three_phase_alternator.pdf",
+      "publication_or_revision": "2020",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "PDF p. 1, Basic design of a claw-pole alternator with collector rings",
+          "supports_claim": "A conventional alternator includes a rotor/excitation winding, stator winding, brushes/collector rings, and rectifier diodes."
+        },
+        {
+          "locator": "PDF p. 1, Three-phase current rectification",
+          "supports_claim": "Three-phase alternator output is rectified before being supplied as direct-current vehicle-system output."
+        }
+      ]
+    },
+    {
+      "source_id": "bosch-ford-smart-charge-2020",
+      "vendor": "Robert Bosch GmbH",
+      "title": "Alternators for Ford Smart Charge charging systems",
+      "canonical_url": "https://www.boschaftermarket.com/ch/media/haendlerportal/pdf/technische_informationen/starter_und_generatoren/bosch_technische_info_rm_alternator_nr-1.pdf",
+      "publication_or_revision": "Issue 1, July 2020",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "PDF p. 2, opening paragraphs",
+          "supports_claim": "A managed charging system can command alternator output from operating parameters rather than behave as a fixed-output charging source."
+        },
+        {
+          "locator": "PDF p. 2, diagnostic checks",
+          "supports_claim": "Charging-system diagnosis should inspect battery condition, connections, wiring, communication, and measured system behavior before replacing an alternator."
+        }
+      ]
+    },
+    {
+      "source_id": "hella-checking-alternator",
+      "vendor": "HELLA",
+      "title": "Checking the alternator",
+      "canonical_url": "https://www.hella.com/techworld/us/technical/car-electronics-and-electrics/starting-and-charging-system/checking-the-alternator/",
+      "publication_or_revision": "current web technical article",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "Section 2, Design and function of the alternator",
+          "supports_claim": "Alternator operation links the rotor magnetic field, stator generation, rectification, regulation, battery charging, and vehicle electrical loads."
+        },
+        {
+          "locator": "Sections 3-5, Symptoms / Causes of failure / Testing the alternator",
+          "supports_claim": "Charging symptoms can arise from battery, connection, belt-drive, regulator, rectifier, or alternator faults, so diagnosis should not equate a symptom with a failed alternator."
+        }
+      ]
+    },
+    {
+      "source_id": "hella-alternator-regulator",
+      "vendor": "HELLA",
+      "title": "Checking an alternator regulator",
+      "canonical_url": "https://www.hella.com/techworld/en/technical/car-electronics-and-electrics/starting-and-charging-system/checking-an-alternator-regulator/",
+      "publication_or_revision": "current web technical article",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "Section 3, Energy efficiency - Use of modern regulators in the car charging system",
+          "supports_claim": "Modern regulators can participate in battery monitoring, load control, fault diagnosis, engine-management support, and LIN-based charging control."
+        },
+        {
+          "locator": "Installation instructions, Important note",
+          "supports_claim": "Vehicle-manufacturer maintenance and repair information remains the authority for vehicle-specific procedures and limits."
+        }
+      ]
+    },
+    {
+      "source_id": "denso-alternator-fault-diagnosis-2026",
+      "vendor": "DENSO",
+      "title": "DENSO TechTip: Diagnosing Alternator Faults the Right Way",
+      "canonical_url": "https://www.denso-am.eu/news/denso-techtip-diagnosing-alternator-faults-the-right-way",
+      "publication_or_revision": "2026-05-20",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "Introduction and Start with the Warning Lamp",
+          "supports_claim": "Alternator-related symptoms overlap with other faults, so diagnosis should begin with the observed symptom and supporting checks rather than random part replacement."
+        },
+        {
+          "locator": "No Charge? Check the Basics First",
+          "supports_claim": "Battery condition, fusible links, wiring faults, and electrical load can contribute to a no-charge complaint and should be evaluated before condemning an alternator."
+        }
+      ]
+    },
+    {
+      "source_id": "delco-remy-alternator-troubleshooting-2026",
+      "vendor": "Delco Remy / PHINIA",
+      "title": "Tech Tip: Troubleshooting the Alternator Charging System",
+      "canonical_url": "https://www.delcoremy.com/the-latest/2026/may-2026/tech-tip-troubleshooting-the-alternator-charging",
+      "publication_or_revision": "2026-05-12",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "Five-step troubleshooting sequence, Steps 1-5",
+          "supports_claim": "A structured charging-system diagnosis checks visual/mechanical condition, batteries, system voltage, alternator output, and applicable service information in sequence."
+        }
+      ]
+    },
+    {
+      "source_id": "valeo-alternator-fundamentals-training",
+      "vendor": "Valeo Service",
+      "title": "Alternator Fundamentals",
+      "canonical_url": "https://www.valeoservice.com/en-com/electrical-systems-training",
+      "publication_or_revision": "current training catalog",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "Electrical Systems Training > Alternator Fundamentals",
+          "supports_claim": "Valeo provides supplier-authored alternator-fundamentals training that can be cited as an external corroborating authority, but its content is not ingested under this registry."
+        }
+      ]
+    }
+  ]
+}
