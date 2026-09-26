@@ -81,3 +81,19 @@ Every electrical circuit must declare one or more voltage systems. Conventional 
 The voltage-domain renderer distinguishes 12 V, 24 V, 48 V, traction, and other explicitly declared voltage systems visually while keeping the written nominal voltage visible. Visual treatment never substitutes for the voltage label.
 
 For electrified vehicles with multiple electrical domains, each component and conductor references the voltage system to which it belongs.
+
+## Reusable circuit templates
+
+Reusable training circuits live under `data/circuit-templates/`. A template is a complete, validated training definition rather than a page-specific drawing. Each template must declare:
+
+- `templateId`, `templateVersion`, `templateRole`, and `systemKind`
+- explicit voltage system(s)
+- standardized component `symbolId` values
+- per-terminal `symbolTerminalId` mappings
+- standardized connection `styleId` and `voltageSystemId`
+- operating states and conceptual current-flow groups
+- fault catalog and test points
+- layout and external-label metadata
+- the generic-training / vehicle-specific evidence boundary
+
+The first reusable template is `automotive-12v-starting-system`. It models a protected start-command path, starter-solenoid actuator and main switching contact, starter motor, and engine/chassis return in a conventional **12 V nominal** training system. Exact vehicle wiring, protection strategy, terminal designations, procedures, and specifications remain vehicle-specific.

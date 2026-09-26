@@ -1,0 +1,189 @@
+{
+  "schemaVersion": "1.0.0",
+  "templateId": "automotive-12v-starting-system",
+  "templateVersion": "1.0.0",
+  "templateRole": "reusable-training-circuit-template",
+  "systemKind": "starting",
+  "circuitId": "training-starting-system-001",
+  "title": "Generic 12 V Starting-System Training Circuit",
+  "status": "project-authored-training-model",
+  "powertrainType": "conventional-12v",
+  "voltageSystems": [
+    {
+      "id": "LV12",
+      "systemType": "low-voltage",
+      "nominalVoltage": 12,
+      "unit": "V DC",
+      "displayLabel": "12 V nominal"
+    }
+  ],
+  "vehicleApplicability": {
+    "mode": "generic-training-only",
+    "vehicleSpecific": false,
+    "notice": "This template teaches general starting-system relationships only. Vehicle-specific service information is required for actual wiring, protection strategy, pinouts, specifications, procedures, and limits."
+  },
+  "curriculum": {
+    "lessonPlanId": "ug-electrical-starting-system",
+    "supportsObjectiveIds": ["ug-electrical-lo-starting-1"],
+    "assessmentUse": "training-only"
+  },
+  "components": [
+    {
+      "id": "BAT1",
+      "type": "battery",
+      "name": "Battery",
+      "symbolId": "electrical.battery",
+      "voltageSystemId": "LV12",
+      "terminals": [
+        {"id":"BAT1_POS","name":"Positive","symbolTerminalId":"positive"},
+        {"id":"BAT1_NEG","name":"Negative","symbolTerminalId":"negative"}
+      ]
+    },
+    {
+      "id": "FUSE1",
+      "type": "fuse",
+      "name": "Start-Control Protection",
+      "symbolId": "electrical.fuse",
+      "voltageSystemId": "LV12",
+      "terminals": [
+        {"id":"FUSE1_IN","name":"Input","symbolTerminalId":"in"},
+        {"id":"FUSE1_OUT","name":"Output","symbolTerminalId":"out"}
+      ],
+      "internalConnections": [["FUSE1_IN","FUSE1_OUT"]]
+    },
+    {
+      "id": "SW1",
+      "type": "switch",
+      "name": "Start Command Switch",
+      "symbolId": "electrical.switch-no",
+      "voltageSystemId": "LV12",
+      "terminals": [
+        {"id":"SW1_IN","name":"Input","symbolTerminalId":"a"},
+        {"id":"SW1_OUT","name":"Start output","symbolTerminalId":"b"}
+      ],
+      "internalConnections": [["SW1_IN","SW1_OUT"]]
+    },
+    {
+      "id": "SOL_COIL",
+      "type": "actuator",
+      "name": "Starter Solenoid Coil",
+      "symbolId": "electrical.solenoid",
+      "voltageSystemId": "LV12",
+      "terminals": [
+        {"id":"SOL_COIL_PWR","name":"Control input","symbolTerminalId":"a"},
+        {"id":"SOL_COIL_GND","name":"Ground","symbolTerminalId":"b"}
+      ],
+      "internalConnections": [["SOL_COIL_PWR","SOL_COIL_GND"]]
+    },
+    {
+      "id": "SOL_CONTACT",
+      "type": "relay",
+      "name": "Starter Solenoid Main Contact",
+      "symbolId": "electrical.relay-contact-no",
+      "voltageSystemId": "LV12",
+      "terminals": [
+        {"id":"SOL_CONTACT_BAT","name":"Battery feed","symbolTerminalId":"common"},
+        {"id":"SOL_CONTACT_MOTOR","name":"Motor feed","symbolTerminalId":"switched"}
+      ],
+      "internalConnections": [["SOL_CONTACT_BAT","SOL_CONTACT_MOTOR"]]
+    },
+    {
+      "id": "MTR1",
+      "type": "motor",
+      "name": "Starter Motor",
+      "symbolId": "electrical.motor",
+      "voltageSystemId": "LV12",
+      "terminals": [
+        {"id":"MTR1_PWR","name":"Power","symbolTerminalId":"a"},
+        {"id":"MTR1_GND","name":"Ground","symbolTerminalId":"b"}
+      ],
+      "internalConnections": [["MTR1_PWR","MTR1_GND"]]
+    },
+    {
+      "id": "GND1",
+      "type": "ground",
+      "name": "Engine / Chassis Ground",
+      "symbolId": "electrical.ground",
+      "voltageSystemId": "LV12",
+      "terminals": [
+        {"id":"GND1_MAIN","name":"Ground","symbolTerminalId":"ground"}
+      ]
+    }
+  ],
+  "connections": [
+    {"id":"W_BAT_FUSE","from":"BAT1_POS","to":"FUSE1_IN","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_SWITCH","from":"FUSE1_OUT","to":"SW1_IN","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_SWITCH_SOL","from":"SW1_OUT","to":"SOL_COIL_PWR","type":"control","styleId":"electrical.control","voltageSystemId":"LV12"},
+    {"id":"W_SOL_COIL_GND","from":"SOL_COIL_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_BAT_CONTACT","from":"BAT1_POS","to":"SOL_CONTACT_BAT","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_CONTACT_MOTOR","from":"SOL_CONTACT_MOTOR","to":"MTR1_PWR","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_MOTOR_GND","from":"MTR1_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_BAT_GND","from":"BAT1_NEG","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"}
+  ],
+  "testPoints": [
+    {"id":"TP_BAT_POS","terminalId":"BAT1_POS","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_START_CMD","terminalId":"SW1_OUT","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_SOLENOID_OUT","terminalId":"SOL_CONTACT_MOTOR","measurementTypes":["voltage","voltage_drop"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_MOTOR_GND","terminalId":"MTR1_GND","measurementTypes":["voltage_drop","continuity"],"vehicleSpecificValueRequired":true}
+  ],
+  "faultCatalog": [
+    {"id":"FAULT_OPEN_CONTROL","type":"open_circuit","targetConnectionId":"W_SWITCH_SOL","label":"Open start-control circuit"},
+    {"id":"FAULT_OPEN_POWER","type":"open_circuit","targetConnectionId":"W_CONTACT_MOTOR","label":"Open starter-motor power path"},
+    {"id":"FAULT_HIGH_RES_GROUND","type":"high_resistance","targetConnectionId":"W_MOTOR_GND","label":"High resistance in starter ground path"},
+    {"id":"FAULT_HIGH_RES_POWER","type":"high_resistance","targetConnectionId":"W_CONTACT_MOTOR","label":"High resistance in starter power path"}
+  ],
+  "operatingStates": [
+    {
+      "id":"key-off",
+      "label":"Key off",
+      "activeFlows":{"power":[],"ground":[],"control":[]},
+      "note":"Key off: no starting-system operating current is shown."
+    },
+    {
+      "id":"key-on",
+      "label":"Key on / run",
+      "activeFlows":{"power":[],"ground":[],"control":[]},
+      "note":"Key on / run: the starting circuit remains inactive until a start command is requested."
+    },
+    {
+      "id":"crank",
+      "label":"Crank request",
+      "activeFlows":{
+        "power":[["W_BAT_FUSE","forward"],["W_FUSE_SWITCH","forward"],["W_BAT_CONTACT","forward"],["W_CONTACT_MOTOR","forward"]],
+        "ground":[["W_SOL_COIL_GND","forward"],["W_MOTOR_GND","forward"],["W_BAT_GND","reverse"]],
+        "control":[["W_SWITCH_SOL","forward"]]
+      },
+      "note":"Crank request: the protected control path energizes the starter-solenoid actuator. The solenoid main contact is represented closed so battery current can reach the starter motor, with return current shown through the ground path."
+    }
+  ],
+  "layout": {
+    "renderer":"svg",
+    "positions":{
+      "BAT1":{"x":95,"y":210},
+      "FUSE1":{"x":280,"y":90},
+      "SW1":{"x":470,"y":90},
+      "SOL_COIL":{"x":680,"y":90},
+      "SOL_CONTACT":{"x":355,"y":330},
+      "MTR1":{"x":650,"y":330},
+      "GND1":{"x":500,"y":520}
+    }
+  },
+  "labels": {
+    "BAT1":{"x":20,"y":300,"width":150,"height":50,"title":"Battery","subtitle":"12 V nominal source"},
+    "FUSE1":{"x":205,"y":0,"width":150,"height":46,"title":"Control protection","subtitle":"generic fuse"},
+    "SW1":{"x":400,"y":0,"width":150,"height":46,"title":"Start command","subtitle":"normally open"},
+    "SOL_COIL":{"x":610,"y":0,"width":160,"height":46,"title":"Solenoid coil","subtitle":"control actuator"},
+    "SOL_CONTACT":{"x":260,"y":405,"width":190,"height":50,"title":"Solenoid main contact","subtitle":"high-current switching"},
+    "MTR1":{"x":585,"y":405,"width":150,"height":50,"title":"Starter motor","subtitle":"cranking load"},
+    "GND1":{"x":415,"y":575,"width":170,"height":50,"title":"Engine / chassis ground","subtitle":"return reference"}
+  },
+  "provenance": {
+    "sourceRole":"project-authored-training-model",
+    "technicalClaims":"general-system-relationships-only",
+    "vehicleSpecificClaims":false,
+    "scoredAssessmentApproved":false,
+    "authorityRegistry":"data/compliance/authority-registry.json",
+    "complianceStatus":"training-model-not-compliance-certification",
+    "rule":"This model may illustrate verified concepts but may not establish or override a regulatory, standards, or vehicle-specific requirement."
+  }
+}

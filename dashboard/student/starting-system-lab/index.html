@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>12 V Starting-System Lab</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
+  <link rel="stylesheet" href="./starting-system-lab.css">
+</head>
+<body>
+  <main class="lab-shell">
+    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
+    <header>
+      <p class="eyebrow">Reusable circuit-template preview</p>
+      <h1>Interactive 12 V Starting-System Lab</h1>
+      <p>Trace the protected start-command path and the separate high-current starter-motor path using the standardized electrical symbol, connection, and voltage-domain libraries.</p>
+      <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
+    </header>
+
+    <section class="learning-strip" aria-label="Learning objective">
+      <strong>Learning goal</strong>
+      <span>Explain how a start command energizes a starter-solenoid actuator and permits battery current to reach the starter motor.</span>
+    </section>
+
+    <section class="toolbar" aria-label="Starting-system controls">
+      <div class="control-group">
+        <label for="stateSelect">Operating state</label>
+        <select id="stateSelect"></select>
+      </div>
+      <div class="control-group">
+        <label for="faultSelect">Training fault</label>
+        <select id="faultSelect"><option value="">No injected fault</option></select>
+      </div>
+      <div class="button-row">
+        <button id="showSystemFlow" type="button">Show system flow</button>
+        <button id="traceControl" type="button">Trace start control</button>
+        <button id="tracePower" type="button">Trace motor power</button>
+        <button id="traceGround" type="button">Trace ground return</button>
+        <button id="resetView" type="button">Reset</button>
+      </div>
+    </section>
+
+    <section class="legend" aria-label="Schematic legend">
+      <span><i class="legend-line power"></i> Power path</span>
+      <span><i class="legend-line ground"></i> Ground return</span>
+      <span><i class="legend-line control"></i> Start-control path</span>
+      <span><i class="legend-line fault"></i> Faulted / degraded</span>
+      <span><i class="legend-dot test"></i> Test point</span>
+      <span class="legend-note">Line styles are training conventions. The declared system voltage is explicit and no manufacturer wire color is implied.</span>
+    </section>
+
+    <section class="workspace">
+      <div class="diagram-card">
+        <div class="diagram-heading">
+          <div>
+            <p class="eyebrow">Conventional current flow</p>
+            <h2>Generic 12 V starting-system schematic</h2>
+          </div>
+          <div id="stateBadge" class="state-badge">Crank request</div>
+        </div>
+        <div class="diagram-scroll" aria-label="Scrollable starting-system schematic">
+          <svg id="circuitSvg" viewBox="0 0 920 660" role="img" aria-labelledby="diagramTitle diagramDesc">
+            <title id="diagramTitle">Generic 12 V starting-system training schematic</title>
+            <desc id="diagramDesc">Interactive starting-system diagram rendered from a reusable circuit template and the standardized electrical symbol library.</desc>
+          </svg>
+        </div>
+        <p class="flow-note" id="flowNote">Animated arrows show conceptual conventional-current direction, not measured current magnitude.</p>
+      </div>
+
+      <aside class="inspector" aria-live="polite">
+        <h2>Component inspector</h2>
+        <div id="inspectorContent">
+          <p>Select a symbol or test point to inspect its role in the reusable training template.</p>
+        </div>
+        <div class="guided-card">
+          <p class="eyebrow">Guided practice</p>
+          <ol id="guidedSteps">
+            <li class="active">Identify the 12 V nominal battery source.</li>
+            <li>Trace the protected start-command path.</li>
+            <li>Identify the solenoid coil and main switching contact.</li>
+            <li>Trace the high-current path to the starter motor.</li>
+            <li>Inject a fault and compare the affected path.</li>
+          </ol>
+        </div>
+      </aside>
+    </section>
+
+    <section class="boundary">
+      <h2>Evidence boundary</h2>
+      <p>This project-authored template teaches general circuit relationships only. Exact starter architecture, cable routing, protection, terminal designations, voltage-drop limits, procedures, and specifications must come from authoritative vehicle-specific service information.</p>
+    </section>
+  </main>
+
+  <script src="/src/circuits/contracts.js"></script>
+  <script src="/src/circuits/engine.js"></script>
+  <script src="/src/circuits/template-contracts.js"></script>
+  <script src="/src/circuits/voltage-domains.js"></script>
+  <script src="/src/connections/contracts.js"></script>
+  <script src="/src/connections/index.js"></script>
+  <script src="/src/symbols/contracts.js"></script>
+  <script src="/src/symbols/registry.js"></script>
+  <script src="/src/symbols/svg-renderer.js"></script>
+  <script src="/src/symbols/index.js"></script>
+  <script src="./starting-system-lab.js"></script>
+</body>
+</html>
