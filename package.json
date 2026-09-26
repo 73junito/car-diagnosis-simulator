@@ -51,7 +51,8 @@
     "cloudflare:exam:preview": "npm run exam:prepare && wrangler dev --config wrangler.exam.jsonc",
     "cloudflare:app:build": "npm run build",
     "cloudflare:app:deploy": "npm run cloudflare:app:build && wrangler deploy --config wrangler.app.jsonc",
-    "cloudflare:app:preview": "npm run cloudflare:app:build && wrangler preview --config wrangler.app.jsonc"
+    "cloudflare:app:preview": "npm run cloudflare:app:build && wrangler preview --config wrangler.app.jsonc",
+    "validate:symbol-library": "node scripts/verify-symbol-library.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

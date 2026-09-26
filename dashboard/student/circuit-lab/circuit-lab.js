@@ -9,12 +9,36 @@
   const validation = engine.validateCircuit(circuit);
   if (!validation.valid) throw new Error(validation.errors.join("; "));
 
+  const symbolLibrary = await window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols");
+  const symbolRenderer = window.TorqueMindSymbolRenderer;
+
   const svg = document.getElementById("circuitSvg");
   const inspector = document.getElementById("inspectorContent");
   const faultSelect = document.getElementById("faultSelect");
   const stateSelect = document.getElementById("stateSelect");
   const stateBadge = document.getElementById("stateBadge");
+  const voltageProfile = document.getElementById("voltageProfile");
   const guidedSteps = [...document.querySelectorAll("#guidedSteps li")];
+
+  const powertrainLabels = Object.freeze({
+    "conventional-12v": "Conventional automotive",
+    hybrid: "Hybrid",
+    "plug-in-hybrid": "Plug-in hybrid",
+    "battery-electric": "Battery electric",
+    "fuel-cell": "Fuel cell",
+    other: "Other"
+  });
+
+  for (const system of circuit.voltageSystems) {
+    const chip = document.createElement("span");
+    chip.className = "voltage-chip";
+    const systemLabel = document.createElement("small");
+    systemLabel.textContent = powertrainLabels[circuit.powertrainType] || circuit.powertrainType;
+    const voltageLabel = document.createElement("span");
+    voltageLabel.textContent = system.displayLabel;
+    chip.append(systemLabel, voltageLabel);
+    voltageProfile.append(chip);
+  }
 
   let activeFault = "";
   let operatingState = stateSelect.value;
@@ -27,15 +51,6 @@
   for (const component of circuit.components) {
     for (const terminal of component.terminals) terminalOwner.set(terminal.id, component.id);
   }
-
-  const anchors = {
-    BAT1_POS: { dx: 62, dy: -18 }, BAT1_NEG: { dx: 62, dy: 18 },
-    FUSE1_IN: { dx: -64, dy: 0 }, FUSE1_OUT: { dx: 64, dy: 0 },
-    ALT1_BPLUS: { dx: -62, dy: -18 }, ALT1_CTRL: { dx: -62, dy: 20 }, ALT1_GND: { dx: 0, dy: 62 },
-    REG1_ALT: { dx: 0, dy: -45 }, REG1_CTRL: { dx: -62, dy: 0 },
-    LOAD1_PWR: { dx: -58, dy: -18 }, LOAD1_GND: { dx: -58, dy: 18 },
-    GND1_MAIN: { dx: 0, dy: -48 }
-  };
 
   const stateLabels = {
     "key-off": "Key off",
@@ -125,11 +140,32 @@
     svg.append(defs);
   }
 
+  const terminalSymbolIds = Object.freeze({
+    BAT1_POS: "positive",
+    BAT1_NEG: "negative",
+    FUSE1_IN: "in",
+    FUSE1_OUT: "out",
+    ALT1_BPLUS: "output",
+    ALT1_CTRL: "control",
+    ALT1_GND: "ground",
+    REG1_ALT: "output",
+    REG1_CTRL: "input",
+    LOAD1_PWR: "a",
+    LOAD1_GND: "b",
+    GND1_MAIN: "ground"
+  });
+
   function pointForTerminal(terminalId) {
     const owner = terminalOwner.get(terminalId);
     const pos = circuit.layout.positions[owner];
-    const anchor = anchors[terminalId] || { dx: 0, dy: 0 };
-    return { x: pos.x + anchor.dx, y: pos.y + anchor.dy };
+    const symbol = symbolLibrary.registry.get(componentSymbolIds[owner]);
+    const symbolTerminalId = terminalSymbolIds[terminalId];
+    const terminal = symbol?.terminals?.find((item) => item.id === symbolTerminalId);
+    if (!terminal) throw new Error(`Missing standardized terminal mapping for ${terminalId}`);
+    return {
+      x: pos.x - 50 + terminal.x,
+      y: pos.y - 50 + terminal.y
+    };
   }
 
   function routePath(connection) {
@@ -201,57 +237,67 @@
     }
   }
 
-  function addLabel(group, x, y, title, subtitle) {
-    group.append(el("text", { x, y, class: "symbol-label" }, title));
-    if (subtitle) group.append(el("text", { x, y: y + 18, class: "symbol-sub" }, subtitle));
+  const componentSymbolIds = Object.freeze({
+    BAT1: "electrical.battery",
+    FUSE1: "electrical.fuse",
+    ALT1: "electrical.alternator",
+    REG1: "electrical.voltage-regulator",
+    LOAD1: "electrical.lamp",
+    GND1: "electrical.ground"
+  });
+
+  const externalLabels = Object.freeze({
+    BAT1: { x: 4, y: 320, width: 140, height: 50, title: "Battery", subtitle: "electrical source", anchor: { x: 90, y: 292 } },
+    FUSE1: { x: 206, y: 0, width: 168, height: 44, title: "Main protection", subtitle: "fusible link", anchor: { x: 290, y: 58 } },
+    ALT1: { x: 610, y: 30, width: 176, height: 52, title: "Alternator", subtitle: "generator / rectifier", anchor: { x: 598, y: 90 } },
+    REG1: { x: 610, y: 254, width: 180, height: 52, title: "Voltage regulator", subtitle: "control", anchor: { x: 598, y: 280 } },
+    LOAD1: { x: 840, y: 94, width: 134, height: 52, title: "Electrical loads", subtitle: "generic load symbol", anchor: { x: 814, y: 120 } },
+    GND1: { x: 432, y: 550, width: 176, height: 52, title: "Chassis ground", subtitle: "return reference", anchor: { x: 520, y: 498 } }
+  });
+
+  function renderLibrarySymbol(group, component, pos) {
+    const symbolId = componentSymbolIds[component.id];
+    const symbol = symbolLibrary.registry.get(symbolId);
+    if (!symbol) throw new Error(`Missing standardized symbol: ${symbolId}`);
+    symbolRenderer.renderSymbol(group, symbol, {
+      x: pos.x - 50,
+      y: pos.y - 50,
+      scale: 1,
+      className: "component-library-symbol",
+      role: "presentation",
+      ariaLabel: symbol.name
+    });
   }
 
-  function symbolBattery(group, x, y) {
-    group.append(el("line", { x1:x-14, y1:y-32, x2:x-14, y2:y+32, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x+14, y1:y-21, x2:x+14, y2:y+21, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x-62, y1:y-18, x2:x-14, y2:y-18, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x+14, y1:y+18, x2:x+62, y2:y+18, class:"symbol-stroke" }));
-    group.append(el("text", { x:x-34, y:y-27, class:"symbol-sub" }, "+"));
-    group.append(el("text", { x:x+34, y:y+32, class:"symbol-sub" }, "−"));
-    addLabel(group, x, y+60, "Battery", "electrical source");
-  }
-
-  function symbolFuse(group, x, y) {
-    group.append(el("line", { x1:x-64, y1:y, x2:x-34, y2:y, class:"symbol-stroke" }));
-    group.append(el("rect", { x:x-34, y:y-16, width:68, height:32, rx:4, class:"symbol-fill" }));
-    group.append(el("path", { d:`M ${x-24} ${y+7} L ${x-8} ${y-7} L ${x+8} ${y+7} L ${x+24} ${y-7}`, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x+34, y1:y, x2:x+64, y2:y, class:"symbol-stroke" }));
-    addLabel(group, x, y+44, "Main protection", "fusible link");
-  }
-
-  function symbolAlternator(group, x, y) {
-    group.append(el("circle", { cx:x, cy:y, r:54, class:"symbol-fill" }));
-    group.append(el("path", { d:`M ${x-30} ${y} C ${x-20} ${y-22}, ${x-8} ${y-22}, ${x} ${y} S ${x+20} ${y+22}, ${x+30} ${y}`, class:"symbol-stroke" }));
-    group.append(el("text", { x, y:y-16, class:"symbol-sub" }, "AC"));
-    addLabel(group, x, y+78, "Alternator", "generator / rectifier");
-  }
-
-  function symbolRegulator(group, x, y) {
-    group.append(el("rect", { x:x-58, y:y-38, width:116, height:76, rx:8, class:"symbol-fill" }));
-    group.append(el("path", { d:`M ${x-35} ${y+12} H ${x-20} L ${x-10} ${y-12} L ${x+2} ${y+12} L ${x+14} ${y-12} L ${x+25} ${y+12} H ${x+35}`, class:"symbol-stroke" }));
-    addLabel(group, x, y+62, "Voltage regulator", "control");
-  }
-
-  function symbolLoad(group, x, y) {
-    group.append(el("circle", { cx:x, cy:y, r:43, class:"symbol-fill" }));
-    group.append(el("line", { x1:x-28, y1:y-28, x2:x+28, y2:y+28, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x+28, y1:y-28, x2:x-28, y2:y+28, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x-58, y1:y-18, x2:x-43, y2:y-18, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x-58, y1:y+18, x2:x-43, y2:y+18, class:"symbol-stroke" }));
-    addLabel(group, x, y+68, "Electrical loads", "generic load symbol");
-  }
-
-  function symbolGround(group, x, y) {
-    group.append(el("line", { x1:x, y1:y-48, x2:x, y2:y-4, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x-38, y1:y, x2:x+38, y2:y, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x-26, y1:y+12, x2:x+26, y2:y+12, class:"symbol-stroke" }));
-    group.append(el("line", { x1:x-14, y1:y+24, x2:x+14, y2:y+24, class:"symbol-stroke" }));
-    addLabel(group, x, y+50, "Chassis ground", "return reference");
+  function renderExternalLabel(component) {
+    const label = externalLabels[component.id];
+    if (!label) return;
+    const group = el("g", {
+      class: [
+        "component-label",
+        selectedComponentId === component.id ? "selected" : "",
+        componentFaulted(component.id) ? "faulted" : ""
+      ].filter(Boolean).join(" "),
+      "data-label-for": component.id,
+      "aria-hidden": "true"
+    });
+    const centerX = label.x + label.width / 2;
+    const centerY = label.y + label.height / 2;
+    group.append(el("path", {
+      d: `M ${label.anchor.x} ${label.anchor.y} L ${centerX} ${centerY}`,
+      class: "label-leader"
+    }));
+    group.append(el("rect", {
+      x: label.x, y: label.y, width: label.width, height: label.height,
+      rx: 8, class: "label-chip"
+    }));
+    group.append(el("text", {
+      x: centerX, y: label.y + 20, class: "label-title"
+    }, label.title));
+    group.append(el("text", {
+      x: centerX, y: label.y + 38, class: "label-subtitle"
+    }, label.subtitle));
+    svg.append(group);
   }
 
   function isComponentEnergized(id) {
@@ -269,15 +315,6 @@
   }
 
   function renderComponents() {
-    const renderers = {
-      battery: symbolBattery,
-      fusible_link: symbolFuse,
-      alternator: symbolAlternator,
-      regulator: symbolRegulator,
-      load: symbolLoad,
-      ground: symbolGround
-    };
-
     for (const component of circuit.components) {
       const pos = circuit.layout.positions[component.id];
       const group = el("g", {
@@ -297,7 +334,7 @@
         x: pos.x - 78, y: pos.y - 72, width: 156, height: 156,
         class: "hit-target", rx: 12
       }));
-      (renderers[component.type] || symbolRegulator)(group, pos.x, pos.y);
+      renderLibrarySymbol(group, component, pos);
       group.addEventListener("click", () => inspect(component.id));
       group.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -307,6 +344,10 @@
       });
       svg.append(group);
     }
+  }
+
+  function renderExternalLabels() {
+    for (const component of circuit.components) renderExternalLabel(component);
   }
 
   function renderTestPoints() {
@@ -330,6 +371,7 @@
     addDefs();
     renderWires();
     renderComponents();
+    renderExternalLabels();
     renderTestPoints();
     stateBadge.textContent = stateLabels[operatingState];
   }
@@ -345,6 +387,9 @@
   function updateSelectedVisual() {
     svg.querySelectorAll(".component").forEach((node) => {
       node.classList.toggle("selected", node.dataset.componentId === selectedComponentId);
+    });
+    svg.querySelectorAll(".component-label").forEach((node) => {
+      node.classList.toggle("selected", node.dataset.labelFor === selectedComponentId);
     });
   }
 

@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Standardized Schematic Symbol Library</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="./symbol-library.css">
+</head>
+<body>
+  <main class="library-shell">
+    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
+    <header class="library-header">
+      <p class="eyebrow">Engineering library preview</p>
+      <h1>Standardized Schematic Symbol Library</h1>
+      <p>Visual inspection of project-authored electrical, hydraulic, pneumatic, mechanical, and thermal symbols before they are integrated into training schematics.</p>
+    </header>
+
+    <section class="notice" aria-label="Standards boundary">
+      <strong>Review boundary</strong>
+      <span>These are project-authored, reference-aligned training symbols. They are not reproduced IEC/ISO artwork and are not a standards-conformance certification.</span>
+    </section>
+
+    <section class="toolbar" aria-label="Library controls">
+      <label>
+        Domain
+        <select id="domainFilter">
+          <option value="">All domains</option>
+        </select>
+      </label>
+      <label>
+        Search
+        <input id="searchInput" type="search" placeholder="battery, valve, pump, fan…">
+      </label>
+      <div class="summary" id="summary">Loading library…</div>
+    </section>
+
+    <section id="catalog" class="catalog" aria-live="polite"></section>
+  </main>
+
+  <script src="/src/symbols/contracts.js"></script>
+  <script src="/src/symbols/registry.js"></script>
+  <script src="/src/symbols/svg-renderer.js"></script>
+  <script src="/src/symbols/index.js"></script>
+  <script src="./symbol-library.js"></script>
+</body>
+</html>

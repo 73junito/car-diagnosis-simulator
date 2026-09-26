@@ -1,0 +1,14 @@
+﻿{
+  "schemaVersion":"1.0.0",
+  "coordinateSystem":{"width":100,"height":100,"origin":"top-left","units":"logical"},
+  "status":"project-authored-reference-aligned",
+  "copyrightPolicy":"Do not copy proprietary standards artwork. Geometry in this library is project-authored and must be technically reviewed before any standards-conformance claim.",
+  "domains":[
+    {"id":"electrical","file":"electrical.json","referenceFamilies":["IEC 60617:2026 DB","ISO 14617-1:2025"]},
+    {"id":"hydraulic","file":"hydraulic.json","referenceFamilies":["ISO 1219-1:2012","ISO 1219-1:2012/Amd 1:2016","ISO 14617-1:2025"]},
+    {"id":"pneumatic","file":"pneumatic.json","referenceFamilies":["ISO 1219-1:2012","ISO 1219-1:2012/Amd 1:2016","ISO 14617-1:2025"]},
+    {"id":"mechanical","file":"mechanical.json","referenceFamilies":["ISO 14617-1:2025"]},
+    {"id":"thermal","file":"thermal.json","referenceFamilies":["ISO 14617-1:2025"]}
+  ]
+}
+
