@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "templateId": "automotive-12v-relay-controlled-load",
+  "templateVersion": "1.0.0",
+  "templateRole": "reusable-training-circuit-template",
+  "systemKind": "relay-controlled-load",
+  "circuitId": "training-relay-load-001",
+  "title": "Generic 12 V Relay-Controlled Load Training Circuit",
+  "status": "project-authored-training-model",
+  "powertrainType": "conventional-12v",
+  "voltageSystems": [
+    {"id":"LV12","systemType":"low-voltage","nominalVoltage":12,"unit":"V DC","displayLabel":"12 V nominal"}
+  ],
+  "vehicleApplicability": {
+    "mode": "generic-training-only",
+    "vehicleSpecific": false,
+    "notice": "This template teaches general relay-controlled load relationships only. Vehicle-specific service information is required for actual wiring, relay strategy, protection, pinouts, specifications, procedures, and limits."
+  },
+  "curriculum": {
+    "lessonPlanId": "ug-electrical-relay-controlled-load",
+    "supportsObjectiveIds": ["ug-electrical-lo-relay-1"],
+    "assessmentUse": "training-only"
+  },
+  "components": [
+    {
+      "id":"BAT1","type":"battery","name":"Battery","symbolId":"electrical.battery","voltageSystemId":"LV12",
+      "terminals":[
+        {"id":"BAT1_POS","name":"Positive","symbolTerminalId":"positive"},
+        {"id":"BAT1_NEG","name":"Negative","symbolTerminalId":"negative"}
+      ]
+    },
+    {
+      "id":"FUSE_CTRL","type":"fuse","name":"Control-Circuit Protection","symbolId":"electrical.fuse","voltageSystemId":"LV12",
+      "terminals":[
+        {"id":"FUSE_CTRL_IN","name":"Input","symbolTerminalId":"in"},
+        {"id":"FUSE_CTRL_OUT","name":"Output","symbolTerminalId":"out"}
+      ],
+      "internalConnections":[["FUSE_CTRL_IN","FUSE_CTRL_OUT"]]
+    },
+    {
+      "id":"SW1","type":"switch","name":"Control Command Switch","symbolId":"electrical.switch-no","voltageSystemId":"LV12",
+      "terminals":[
+        {"id":"SW1_IN","name":"Input","symbolTerminalId":"a"},
+        {"id":"SW1_OUT","name":"Command output","symbolTerminalId":"b"}
+      ],
+      "internalConnections":[["SW1_IN","SW1_OUT"]]
+    },
+    {
+      "id":"RELAY_COIL","type":"relay","name":"Relay Coil","symbolId":"electrical.relay-coil","voltageSystemId":"LV12",
+      "terminals":[
+        {"id":"RELAY_COIL_PWR","name":"Coil power","symbolTerminalId":"a"},
+        {"id":"RELAY_COIL_GND","name":"Coil ground","symbolTerminalId":"b"}
+      ],
+      "internalConnections":[["RELAY_COIL_PWR","RELAY_COIL_GND"]]
+    },
+    {
+      "id":"FUSE_LOAD","type":"fuse","name":"Load-Circuit Protection","symbolId":"electrical.fuse","voltageSystemId":"LV12",
+      "terminals":[
+        {"id":"FUSE_LOAD_IN","name":"Input","symbolTerminalId":"in"},
+        {"id":"FUSE_LOAD_OUT","name":"Output","symbolTerminalId":"out"}
+      ],
+      "internalConnections":[["FUSE_LOAD_IN","FUSE_LOAD_OUT"]]
+    },
+    {
+      "id":"RELAY_CONTACT","type":"relay","name":"Relay Normally Open Contact","symbolId":"electrical.relay-contact-no","voltageSystemId":"LV12",
+      "terminals":[
+        {"id":"RELAY_CONTACT_COM","name":"Common","symbolTerminalId":"common"},
+        {"id":"RELAY_CONTACT_OUT","name":"Switched output","symbolTerminalId":"switched"}
+      ],
+      "internalConnections":[["RELAY_CONTACT_COM","RELAY_CONTACT_OUT"]]
+    },
+    {
+      "id":"LOAD1","type":"load","name":"Generic Electrical Load","symbolId":"electrical.lamp","voltageSystemId":"LV12",
+      "terminals":[
+        {"id":"LOAD1_PWR","name":"Power","symbolTerminalId":"a"},
+        {"id":"LOAD1_GND","name":"Ground","symbolTerminalId":"b"}
+      ],
+      "internalConnections":[["LOAD1_PWR","LOAD1_GND"]]
+    },
+    {
+      "id":"GND1","type":"ground","name":"Chassis Ground","symbolId":"electrical.ground","voltageSystemId":"LV12",
+      "terminals":[{"id":"GND1_MAIN","name":"Ground","symbolTerminalId":"ground"}]
+    }
+  ],
+  "connections": [
+    {"id":"W_BAT_CTRL_FUSE","from":"BAT1_POS","to":"FUSE_CTRL_IN","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_CTRL_FUSE_SWITCH","from":"FUSE_CTRL_OUT","to":"SW1_IN","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_SWITCH_COIL","from":"SW1_OUT","to":"RELAY_COIL_PWR","type":"control","styleId":"electrical.control","voltageSystemId":"LV12"},
+    {"id":"W_COIL_GND","from":"RELAY_COIL_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_BAT_LOAD_FUSE","from":"BAT1_POS","to":"FUSE_LOAD_IN","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_LOAD_FUSE_CONTACT","from":"FUSE_LOAD_OUT","to":"RELAY_CONTACT_COM","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_CONTACT_LOAD","from":"RELAY_CONTACT_OUT","to":"LOAD1_PWR","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_LOAD_GND","from":"LOAD1_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_BAT_GND","from":"BAT1_NEG","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"}
+  ],
+  "testPoints": [
+    {"id":"TP_BAT_FEED","terminalId":"BAT1_POS","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_RELAY_CONTROL","terminalId":"RELAY_COIL_PWR","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_RELAY_OUTPUT","terminalId":"RELAY_CONTACT_OUT","measurementTypes":["voltage","voltage_drop"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_LOAD_POWER","terminalId":"LOAD1_PWR","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_LOAD_GROUND","terminalId":"LOAD1_GND","measurementTypes":["voltage_drop","continuity"],"vehicleSpecificValueRequired":true}
+  ],
+  "faultCatalog": [
+    {"id":"FAULT_OPEN_CONTROL_FEED","type":"open_circuit","targetConnectionId":"W_SWITCH_COIL","label":"Open relay control feed"},
+    {"id":"FAULT_OPEN_COIL_GROUND","type":"open_circuit","targetConnectionId":"W_COIL_GND","label":"Open relay-coil ground"},
+    {"id":"FAULT_OPEN_RELAY_OUTPUT","type":"open_circuit","targetConnectionId":"W_CONTACT_LOAD","label":"Open relay switched output"},
+    {"id":"FAULT_HIGH_RES_LOAD_POWER","type":"high_resistance","targetConnectionId":"W_CONTACT_LOAD","label":"High resistance in load power path"},
+    {"id":"FAULT_HIGH_RES_LOAD_GROUND","type":"high_resistance","targetConnectionId":"W_LOAD_GND","label":"High resistance in load ground path"}
+  ],
+  "operatingStates": [
+    {
+      "id":"key-off","label":"Key off",
+      "activeFlows":{"power":[],"ground":[],"control":[]},
+      "note":"Key off: neither the relay control branch nor the load branch is shown operating."
+    },
+    {
+      "id":"key-on-command-off","label":"Key on / command off",
+      "activeFlows":{"power":[],"ground":[],"control":[]},
+      "note":"Key on with command off: the relay coil is not energized, the normally open relay contact remains represented open, and the load is inactive."
+    },
+    {
+      "id":"command-on","label":"Command on / relay energized",
+      "activeFlows":{
+        "power":[
+          ["W_BAT_CTRL_FUSE","forward"],
+          ["W_CTRL_FUSE_SWITCH","forward"],
+          ["W_BAT_LOAD_FUSE","forward"],
+          ["W_LOAD_FUSE_CONTACT","forward"],
+          ["W_CONTACT_LOAD","forward"]
+        ],
+        "ground":[
+          ["W_COIL_GND","forward"],
+          ["W_LOAD_GND","forward"],
+          ["W_BAT_GND","reverse"]
+        ],
+        "control":[["W_SWITCH_COIL","forward"]]
+      },
+      "note":"Command on: the protected control branch energizes the relay coil. The normally open relay contact is represented closed, allowing the separately protected load branch to supply the electrical load."
+    }
+  ],
+  "layout": {
+    "renderer":"svg",
+    "positions":{
+      "BAT1":{"x":90,"y":240},
+      "FUSE_CTRL":{"x":255,"y":85},
+      "SW1":{"x":430,"y":85},
+      "RELAY_COIL":{"x":620,"y":85},
+      "FUSE_LOAD":{"x":260,"y":330},
+      "RELAY_CONTACT":{"x":475,"y":330},
+      "LOAD1":{"x":700,"y":330},
+      "GND1":{"x":500,"y":535}
+    }
+  },
+  "labels": {
+    "BAT1":{"x":15,"y":325,"width":150,"height":50,"title":"Battery","subtitle":"12 V nominal source"},
+    "FUSE_CTRL":{"x":180,"y":0,"width":150,"height":46,"title":"Control protection","subtitle":"control branch"},
+    "SW1":{"x":355,"y":0,"width":150,"height":46,"title":"Control command","subtitle":"normally open"},
+    "RELAY_COIL":{"x":545,"y":0,"width":150,"height":46,"title":"Relay coil","subtitle":"control side"},
+    "FUSE_LOAD":{"x":185,"y":405,"width":150,"height":50,"title":"Load protection","subtitle":"load branch"},
+    "RELAY_CONTACT":{"x":385,"y":405,"width":180,"height":50,"title":"Relay contact","subtitle":"normally open"},
+    "LOAD1":{"x":635,"y":405,"width":140,"height":50,"title":"Electrical load","subtitle":"generic load"},
+    "GND1":{"x":420,"y":585,"width":160,"height":50,"title":"Chassis ground","subtitle":"return reference"}
+  },
+  "provenance": {
+    "sourceRole":"project-authored-training-model",
+    "technicalClaims":"general-system-relationships-only",
+    "vehicleSpecificClaims":false,
+    "scoredAssessmentApproved":false,
+    "authorityRegistry":"data/compliance/authority-registry.json",
+    "complianceStatus":"training-model-not-compliance-certification",
+    "rule":"This model may illustrate verified concepts but may not establish or override a regulatory, standards, or vehicle-specific requirement."
+  }
+}
