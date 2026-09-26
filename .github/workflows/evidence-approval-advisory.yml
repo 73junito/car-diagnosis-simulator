@@ -1,0 +1,60 @@
+name: Evidence Approval Advisory
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+# ADVISORY ONLY — deliberately non-blocking.
+#
+# Runs the evidence approval contract guard and reports evidence-approval drift
+# (for example review-queue records claiming chunk approval the canonical
+# source_chunks record does not grant).
+#
+# `continue-on-error: true` is intentional while known conflicts are being
+# reconciled by human rights review. When the guard reports 0 conflicts, flip
+# continue-on-error to false to make it a required check — do not add a second
+# workflow for that transition.
+jobs:
+  evidence-approval-advisory:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          submodules: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run evidence approval contract guard (advisory)
+        id: evidence
+        continue-on-error: true
+        run: npm run validate:evidence-approval
+
+      - name: Summarise evidence approval state
+        if: always()
+        run: |
+          {
+            echo "### Evidence approval advisory"
+            echo ""
+            echo "This job is advisory. A failure reports evidence-approval drift;"
+            echo "it does not block unrelated work."
+            echo ""
+            echo "- Canonical authority: \`public.source_chunks.approved\`"
+            echo "- Guard: \`npm run validate:evidence-approval\`"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -5,7 +5,9 @@ const fs = require("fs");
 const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
 const policy = readJson("data/curriculum/content-policy.json");
 const lessons = readJson("data/curriculum/lesson-plans.json").lessonPlans;
-const plans = readJson("data/curriculum/lesson-content.json").lessonContentPlans;
+const contentDoc = readJson("data/curriculum/lesson-content.json");
+const plans = contentDoc.lessonContentPlans;
+const programArchitecture = readJson("data/curriculum/program-architecture.json");
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -15,18 +17,60 @@ const purposes = new Set(policy.instructionalPurposes);
 const visualTypes = new Map(policy.visualTypes.map((item) => [item.type, item]));
 const lessonsById = new Map(lessons.map((item) => [item.id, item]));
 const plansByLesson = new Map(plans.map((item) => [item.lessonPlanId, item]));
+const expectedProgramMappings = new Map();
+
+for (const program of programArchitecture.programs || []) {
+  for (const course of program.courses || []) {
+    if (!course.existingLessonPlanId) continue;
+    expectedProgramMappings.set(course.existingLessonPlanId, {
+      programId: program.id,
+      relationship: "course",
+      programCourseId: course.id,
+      programCourseTitle: course.title,
+      mappingType: course.mappingType || "direct-course-alignment"
+    });
+  }
+
+  for (const supplemental of program.supplementalGraduateContent || []) {
+    expectedProgramMappings.set(supplemental.existingLessonPlanId, {
+      programId: program.id,
+      relationship: "supplemental",
+      classification: supplemental.classification,
+      title: supplemental.title
+    });
+  }
+}
 
 assert(policy.schemaVersion === "1.0.0", "Unsupported content policy schemaVersion");
+assert(contentDoc.schemaVersion === "1.2.0", "Expanded lesson content must use schemaVersion 1.2.0");
 assert(policy.coreRules.length >= 20, "Content policy must contain the full core rule set");
 assert(policy.visualTypes.length === 7, "Content policy must define exactly seven visual types");
 assert(policy.lessonStructure.length >= 10, "Canonical lesson structure is incomplete");
 assert(plans.length === lessons.length, "Every lesson plan must have exactly one content plan");
+assert(expectedProgramMappings.size === lessons.length,
+  "Program architecture must classify every existing lesson exactly once");
 for (const lesson of lessons) {
   const plan = plansByLesson.get(lesson.id);
   assert(plan, `Missing content plan for ${lesson.id}`);
   assert(plan.status === lesson.status, `Status mismatch for ${lesson.id}`);
-  assert(Array.isArray(plan.learningObjectives) && plan.learningObjectives.length > 0,
-    `Learning objectives missing for ${lesson.id}`);
+
+  const expectedProgramMapping = expectedProgramMappings.get(lesson.id);
+  assert(expectedProgramMapping, `Canonical program architecture does not classify ${lesson.id}`);
+  assert(plan.programMapping && typeof plan.programMapping === "object",
+    `Program mapping missing for ${lesson.id}`);
+  assert(JSON.stringify(plan.programMapping) === JSON.stringify(expectedProgramMapping),
+    `Program mapping mismatch for ${lesson.id}`);
+
+  assert(typeof plan.lessonSummary === "string" && plan.lessonSummary.length > 40,
+    `Expanded lesson summary missing for ${lesson.id}`);
+  assert(Number.isInteger(plan.estimatedMinutes) && plan.estimatedMinutes >= 60,
+    `Estimated instructional time missing for ${lesson.id}`);
+  assert(Array.isArray(plan.prerequisites) && plan.prerequisites.length >= 2,
+    `Prerequisites are incomplete for ${lesson.id}`);
+  assert(Array.isArray(plan.learningObjectives) && plan.learningObjectives.length >= 3,
+    `Expanded lesson ${lesson.id} must define at least three learning objectives`);
+  assert(Array.isArray(plan.keyConcepts) && plan.keyConcepts.length >= 4,
+    `Key concepts are incomplete for ${lesson.id}`);
 
   const objectiveIds = new Set();
   for (const objective of plan.learningObjectives) {
@@ -41,8 +85,13 @@ for (const lesson of lessons) {
   assert(JSON.stringify(plan.structure) === expectedStructure ||
     (Array.isArray(plan.structureExceptions) && plan.structureExceptions.length > 0),
     `Lesson ${lesson.id} must use canonical structure or document an exception`);
-  assert(Array.isArray(plan.contentBlocks) && plan.contentBlocks.length > 0,
-    `Content blocks missing for ${lesson.id}`);
+  assert(Array.isArray(plan.contentBlocks) && plan.contentBlocks.length >= policy.lessonStructure.length,
+    `Expanded lesson ${lesson.id} must cover the full instructional progression`);
+  const blockTypes = new Set(plan.contentBlocks.map((item) => item.type));
+  for (const requiredType of policy.lessonStructure) {
+    assert(blockTypes.has(requiredType),
+      `Lesson ${lesson.id} is missing required content block type ${requiredType}`);
+  }
   for (const block of plan.contentBlocks) {
     assert(block.id && block.type, `Content block identity missing in ${lesson.id}`);
     assert(purposes.has(block.instructionalPurpose),
@@ -55,8 +104,8 @@ for (const lesson of lessons) {
     }
   }
 
-  assert(Array.isArray(plan.visuals) && plan.visuals.length > 0,
-    `At least one purposeful visual is required for ${lesson.id}`);
+  assert(Array.isArray(plan.visuals) && plan.visuals.length >= 3,
+    `Expanded lesson ${lesson.id} must define at least three purposeful visuals`);
   for (const visual of plan.visuals) {
     const visualPolicy = visualTypes.get(visual.type);
     assert(visualPolicy, `Unsupported visual type ${visual.type} in ${lesson.id}`);
@@ -76,6 +125,12 @@ for (const lesson of lessons) {
     }
   }
 
+  assert(Array.isArray(plan.practiceTasks) && plan.practiceTasks.length >= 3,
+    `Practice tasks are incomplete for ${lesson.id}`);
+  assert(Array.isArray(plan.assessmentPlan) && plan.assessmentPlan.length >= 3,
+    `Assessment plan is incomplete for ${lesson.id}`);
+  assert(Array.isArray(plan.evidenceFocus) && plan.evidenceFocus.length >= 3,
+    `Evidence focus is incomplete for ${lesson.id}`);
   assert(typeof plan.evidenceExpectation === "string" && plan.evidenceExpectation.length > 20,
     `Evidence expectation missing for ${lesson.id}`);
   assert(typeof plan.assessmentBoundary === "string" && plan.assessmentBoundary.length > 20,

@@ -1,9 +1,23 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.2.0",
   "lessonContentPlans": [
     {
       "lessonPlanId": "ug-electrical-charging-system",
       "status": "active",
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-120",
+        "programCourseTitle": "Electrical I",
+        "mappingType": "direct-course-alignment"
+      },
+      "lessonSummary": "Build from charging-system relationships to evidence-based diagnostic decisions using symptoms, measurements, and vehicle-specific verification procedures.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "Electrical safety fundamentals",
+        "Basic circuit concepts",
+        "Digital multimeter fundamentals"
+      ],
       "learningObjectives": [
         {
           "id": "ug-electrical-lo-1",
@@ -12,58 +26,140 @@
         },
         {
           "id": "ug-electrical-lo-2",
-          "statement": "Interpret observed charging-system symptoms and measurements to select an appropriate vehicle-specific next diagnostic check.",
+          "statement": "Interpret charging-system symptoms and measurements as evidence rather than as proof of a component failure.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-electrical-lo-3",
+          "statement": "Select and justify a vehicle-specific next diagnostic check using the available evidence.",
           "cognitiveLevel": "diagnostic-reasoning"
         }
       ],
+      "keyConcepts": [
+        "energy storage and generation",
+        "alternating-to-direct-current conversion",
+        "voltage regulation",
+        "system load",
+        "measurement context",
+        "evidence-to-decision reasoning"
+      ],
       "contentBlocks": [
         {
-          "id": "system-concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "charging-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system-understanding, evidence-interpretation, and diagnostic-reasoning outcomes.",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-1",
+            "ug-electrical-lo-2",
+            "ug-electrical-lo-3"
+          ]
+        },
+        {
+          "id": "charging-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Prerequisite check",
+          "description": "Activate prior knowledge of circuit behavior, meter use, polarity, and electrical safety.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-1"
           ]
         },
         {
-          "id": "worked-evidence-example",
+          "id": "charging-system-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Charging-system relationships",
+          "description": "Explain how generation, rectification, regulation, storage, and loads interact as one system.",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-1"
+          ]
+        },
+        {
+          "id": "charging-evidence-model",
+          "type": "concept-explanation",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Symptoms are evidence",
+          "description": "Distinguish warning indicators, low-voltage symptoms, and measurements from final diagnostic conclusions.",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-2"
+          ]
+        },
+        {
+          "id": "charging-worked-example",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked diagnostic example",
+          "description": "Trace a concern through evidence collection, interpretation, and selection of a next check.",
           "supportsObjectiveIds": [
-            "ug-electrical-lo-2"
+            "ug-electrical-lo-2",
+            "ug-electrical-lo-3"
           ]
         },
         {
-          "id": "guided-diagnostic-practice",
+          "id": "charging-guided-practice",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Guided evidence sorting",
+          "description": "Classify observations as symptoms, measurements, hypotheses, or verification evidence.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-2"
           ]
         },
         {
-          "id": "independent-charging-scenario",
+          "id": "charging-independent-scenario",
           "type": "independent-scenario",
           "instructionalPurpose": "diagnose",
+          "title": "Independent charging concern",
+          "description": "Build and defend a diagnostic plan for a charging-system complaint without being given the answer path.",
           "supportsObjectiveIds": [
-            "ug-electrical-lo-2"
+            "ug-electrical-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "charging-reasoning-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Reasoning check",
+          "description": "Check system relationships, evidence interpretation, and next-step justification.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-1",
-            "ug-electrical-lo-2"
+            "ug-electrical-lo-2",
+            "ug-electrical-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "charging-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow the learner to revise the diagnostic decision.",
           "supportsObjectiveIds": [
-            "ug-electrical-lo-2"
+            "ug-electrical-lo-2",
+            "ug-electrical-lo-3"
+          ]
+        },
+        {
+          "id": "charging-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence and source boundary",
+          "description": "Identify which claims are general principles and which checks require vehicle-specific authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-3"
+          ]
+        },
+        {
+          "id": "charging-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Diagnostic decision summary",
+          "description": "Summarize the progression from system understanding to evidence-supported verification.",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-1",
+            "ug-electrical-lo-2",
+            "ug-electrical-lo-3"
           ]
         }
       ],
@@ -72,6 +168,8 @@
           "id": "charging-relationships",
           "type": "concept-diagram",
           "instructionalPurpose": "explain",
+          "title": "Charging-system relationship map",
+          "purpose": "Show battery, generation, rectification, regulation, and load relationships.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-1"
           ],
@@ -82,8 +180,11 @@
           "id": "charging-diagnostic-flow",
           "type": "flowchart",
           "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-check flow",
+          "purpose": "Show a diagnostic process without implying a universal vehicle-specific procedure.",
           "supportsObjectiveIds": [
-            "ug-electrical-lo-2"
+            "ug-electrical-lo-2",
+            "ug-electrical-lo-3"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
@@ -92,6 +193,8 @@
           "id": "charging-evidence-table",
           "type": "table",
           "instructionalPurpose": "compare",
+          "title": "Evidence interpretation table",
+          "purpose": "Compare observation type, possible meaning, limitation, and appropriate next evidence.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-2"
           ],
@@ -102,6 +205,8 @@
           "id": "charging-measurement-bars",
           "type": "bar-chart",
           "instructionalPurpose": "interpret-evidence",
+          "title": "Measurement comparison example",
+          "purpose": "Compare sample measurements across operating conditions as an interpretation exercise.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-2"
           ],
@@ -112,16 +217,36 @@
           "id": "charging-workflow-summary",
           "type": "infographic",
           "instructionalPurpose": "summarize",
+          "title": "Charging diagnosis at a glance",
+          "purpose": "Summarize system, evidence, decision, and verification relationships.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-1",
-            "ug-electrical-lo-2"
+            "ug-electrical-lo-2",
+            "ug-electrical-lo-3"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims and vehicle-specific checks require approved provenance; vehicle-specific specifications must not be invented.",
-      "assessmentBoundary": "Training checks may coach and remediate; scored items require separate approval and must not expose answer-revealing training metadata.",
+      "practiceTasks": [
+        "Identify component roles from a system diagram",
+        "Sort evidence from conclusions",
+        "Choose the next information needed in a guided case",
+        "Write a short justification for an independent diagnostic check"
+      ],
+      "assessmentPlan": [
+        "Low-stakes component/function check",
+        "Evidence interpretation check",
+        "Independent diagnostic-reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "General charging-system principles",
+        "Measurement context",
+        "Vehicle-specific service procedure boundary"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
@@ -140,77 +265,237 @@
     {
       "lessonPlanId": "ug-brakes-foundations",
       "status": "planned",
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-110",
+        "programCourseTitle": "Brakes I",
+        "mappingType": "direct-course-alignment"
+      },
+      "lessonSummary": "Develop a structured brake-system diagnostic process that connects inspection findings, measurements, specifications, likely causes, and corrective-action verification.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "Brake-system safety",
+        "Basic hydraulic principles",
+        "Inspection and measurement fundamentals"
+      ],
       "learningObjectives": [
         {
           "id": "ug-brakes-lo-1",
-          "statement": "Interpret brake-system inspection and measurement evidence to select a verification step.",
+          "statement": "Explain how friction, hydraulic force, mechanical actuation, and system condition influence brake performance.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-brakes-lo-2",
+          "statement": "Interpret inspection findings and measurements by comparing them with appropriate specifications and operating context.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-brakes-lo-3",
+          "statement": "Build and justify a diagnostic and verification plan for a brake-system concern.",
           "cognitiveLevel": "diagnostic-reasoning"
         }
       ],
+      "keyConcepts": [
+        "friction and force transfer",
+        "hydraulic operation",
+        "wear and condition evidence",
+        "measurement versus specification",
+        "cause versus symptom",
+        "verification after corrective action"
+      ],
       "contentBlocks": [
         {
-          "id": "concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "brakes-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview system, evidence, and diagnostic outcomes.",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1",
+            "ug-brakes-lo-2",
+            "ug-brakes-lo-3"
+          ]
+        },
+        {
+          "id": "brakes-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Prerequisite check",
+          "description": "Review brake safety, hydraulic force transfer, and basic measurement practice.",
           "supportsObjectiveIds": [
             "ug-brakes-lo-1"
           ]
         },
         {
-          "id": "worked-example",
+          "id": "brakes-system-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Brake-system operation",
+          "description": "Connect driver input, force transfer, friction interfaces, and stopping response.",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1"
+          ]
+        },
+        {
+          "id": "brakes-inspection-evidence",
+          "type": "concept-explanation",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Inspection and measurement evidence",
+          "description": "Distinguish condition observations, measured values, specifications, and diagnostic conclusions.",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-2"
+          ]
+        },
+        {
+          "id": "brakes-worked-example",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked brake concern",
+          "description": "Follow an example from complaint through inspection, measurement, comparison, and verification planning.",
           "supportsObjectiveIds": [
-            "ug-brakes-lo-1"
+            "ug-brakes-lo-2",
+            "ug-brakes-lo-3"
           ]
         },
         {
-          "id": "guided-practice",
+          "id": "brakes-guided-practice",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Evidence comparison practice",
+          "description": "Compare sample findings with supplied specifications and identify what additional evidence is needed.",
           "supportsObjectiveIds": [
-            "ug-brakes-lo-1"
+            "ug-brakes-lo-2"
           ]
         },
         {
-          "id": "independent-task",
+          "id": "brakes-independent-scenario",
           "type": "independent-scenario",
           "instructionalPurpose": "diagnose",
+          "title": "Independent brake scenario",
+          "description": "Create a diagnostic plan from a symptom set and inspection evidence.",
           "supportsObjectiveIds": [
-            "ug-brakes-lo-1"
+            "ug-brakes-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "brakes-reasoning-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Brake reasoning check",
+          "description": "Assess system understanding, evidence interpretation, and verification logic.",
           "supportsObjectiveIds": [
-            "ug-brakes-lo-1"
+            "ug-brakes-lo-1",
+            "ug-brakes-lo-2",
+            "ug-brakes-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "brakes-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Address common confusion between wear evidence, causal evidence, and proof of repair.",
           "supportsObjectiveIds": [
-            "ug-brakes-lo-1"
+            "ug-brakes-lo-2",
+            "ug-brakes-lo-3"
+          ]
+        },
+        {
+          "id": "brakes-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Specifications and source boundary",
+          "description": "Reinforce that service limits and procedures require authoritative vehicle-specific information.",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-2",
+            "ug-brakes-lo-3"
+          ]
+        },
+        {
+          "id": "brakes-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Brake diagnostic summary",
+          "description": "Summarize inspection, measurement, comparison, diagnosis, and verification.",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1",
+            "ug-brakes-lo-2",
+            "ug-brakes-lo-3"
           ]
         }
       ],
       "visuals": [
         {
-          "id": "primary-visual",
-          "type": "flowchart",
-          "instructionalPurpose": "sequence",
+          "id": "brakes-force-path",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Brake force-path diagram",
+          "purpose": "Show how driver input becomes hydraulic/mechanical force and friction at the wheel.",
           "supportsObjectiveIds": [
             "ug-brakes-lo-1"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
+        },
+        {
+          "id": "brakes-diagnostic-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Brake evidence workflow",
+          "purpose": "Sequence concern definition, safety inspection, measurement, comparison, diagnosis, and verification.",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-2",
+            "ug-brakes-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "brakes-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Brake evidence table",
+          "purpose": "Compare symptom, observation, measurement, interpretation, and next evidence.",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "brakes-measurement-bars",
+          "type": "bar-chart",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Measurement comparison",
+          "purpose": "Compare sample measured conditions against supplied reference values.",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
-      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "practiceTasks": [
+        "Map brake force transfer",
+        "Classify inspection versus measurement evidence",
+        "Compare supplied measurements with specifications",
+        "Create a verification plan for an independent scenario"
+      ],
+      "assessmentPlan": [
+        "Low-stakes system operation check",
+        "Measurement interpretation exercise",
+        "Independent brake diagnostic plan",
+        "Feedback and revision"
+      ],
+      "evidenceFocus": [
+        "Inspection findings",
+        "Measured condition",
+        "Authoritative specifications",
+        "Post-repair verification"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
@@ -229,77 +514,236 @@
     {
       "lessonPlanId": "ug-engine-performance-foundations",
       "status": "planned",
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-130",
+        "programCourseTitle": "Engine Performance I",
+        "mappingType": "direct-course-alignment"
+      },
+      "lessonSummary": "Use operating data, symptoms, test evidence, and competing hypotheses to make disciplined engine-performance diagnostic decisions.",
+      "estimatedMinutes": 210,
+      "prerequisites": [
+        "Four-stroke engine fundamentals",
+        "Basic electrical/electronic concepts",
+        "Scan-data and measurement fundamentals"
+      ],
       "learningObjectives": [
         {
           "id": "ug-engine-performance-lo-1",
-          "statement": "Interpret operating data and test evidence to compare plausible engine-performance hypotheses.",
+          "statement": "Explain how air, fuel, ignition, mechanical condition, and control inputs interact in engine operation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-engine-performance-lo-2",
+          "statement": "Interpret operating data and test results in context without treating a single data point as a diagnosis.",
           "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-engine-performance-lo-3",
+          "statement": "Compare plausible hypotheses and select a test that best discriminates among them.",
+          "cognitiveLevel": "diagnostic-reasoning"
         }
+      ],
+      "keyConcepts": [
+        "system interaction",
+        "operating context",
+        "data patterns",
+        "hypothesis formation",
+        "discriminating tests",
+        "repair verification"
       ],
       "contentBlocks": [
         {
-          "id": "concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "performance-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview system interaction, data interpretation, and hypothesis-testing outcomes.",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1",
+            "ug-engine-performance-lo-2",
+            "ug-engine-performance-lo-3"
+          ]
+        },
+        {
+          "id": "performance-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Prerequisite check",
+          "description": "Review engine fundamentals and the difference between sensor data, measurements, and conclusions.",
           "supportsObjectiveIds": [
             "ug-engine-performance-lo-1"
           ]
         },
         {
-          "id": "worked-example",
+          "id": "performance-system-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Engine-performance system model",
+          "description": "Connect air, fuel, ignition, mechanical condition, control strategy, and feedback.",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1"
+          ]
+        },
+        {
+          "id": "performance-data-context",
+          "type": "concept-explanation",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Reading data in context",
+          "description": "Explain why load, temperature, speed, and operating state matter when interpreting data.",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-2"
+          ]
+        },
+        {
+          "id": "performance-worked-example",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked hypothesis comparison",
+          "description": "Compare multiple explanations for a concern and select evidence that distinguishes them.",
           "supportsObjectiveIds": [
-            "ug-engine-performance-lo-1"
+            "ug-engine-performance-lo-2",
+            "ug-engine-performance-lo-3"
           ]
         },
         {
-          "id": "guided-practice",
+          "id": "performance-guided-practice",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Guided data interpretation",
+          "description": "Interpret a small data set and identify unsupported conclusions.",
           "supportsObjectiveIds": [
-            "ug-engine-performance-lo-1"
+            "ug-engine-performance-lo-2"
           ]
         },
         {
-          "id": "independent-task",
+          "id": "performance-independent-scenario",
           "type": "independent-scenario",
-          "instructionalPurpose": "practice",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent performance concern",
+          "description": "Form competing hypotheses, select a discriminating test, and justify the choice.",
           "supportsObjectiveIds": [
-            "ug-engine-performance-lo-1"
+            "ug-engine-performance-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "performance-reasoning-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Performance reasoning check",
+          "description": "Assess interaction knowledge, data interpretation, and hypothesis-testing logic.",
           "supportsObjectiveIds": [
-            "ug-engine-performance-lo-1"
+            "ug-engine-performance-lo-1",
+            "ug-engine-performance-lo-2",
+            "ug-engine-performance-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "performance-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Correct data-to-diagnosis shortcuts and require a revised evidence-based decision.",
           "supportsObjectiveIds": [
-            "ug-engine-performance-lo-1"
+            "ug-engine-performance-lo-2",
+            "ug-engine-performance-lo-3"
+          ]
+        },
+        {
+          "id": "performance-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence and specification boundary",
+          "description": "Identify when manufacturer procedures, operating ranges, and test criteria are required.",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-2",
+            "ug-engine-performance-lo-3"
+          ]
+        },
+        {
+          "id": "performance-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Engine-performance summary",
+          "description": "Summarize the cycle of data, hypotheses, testing, interpretation, and verification.",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1",
+            "ug-engine-performance-lo-2",
+            "ug-engine-performance-lo-3"
           ]
         }
       ],
       "visuals": [
         {
-          "id": "primary-visual",
-          "type": "table",
-          "instructionalPurpose": "compare",
+          "id": "performance-system-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Engine-performance interaction map",
+          "purpose": "Show how air, fuel, ignition, mechanical condition, and controls interact.",
           "supportsObjectiveIds": [
             "ug-engine-performance-lo-1"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
+        },
+        {
+          "id": "performance-hypothesis-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Hypothesis-testing flow",
+          "purpose": "Sequence concern definition, evidence review, hypothesis comparison, test selection, and verification.",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "performance-data-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Operating-data comparison table",
+          "purpose": "Compare data patterns across operating states and candidate explanations.",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "performance-data-bars",
+          "type": "bar-chart",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Relative data comparison",
+          "purpose": "Use sample normalized values to practice pattern interpretation without presenting universal specifications.",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
-      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "practiceTasks": [
+        "Identify system interactions",
+        "Interpret data within an operating context",
+        "Separate evidence from hypotheses",
+        "Choose a discriminating test for competing explanations"
+      ],
+      "assessmentPlan": [
+        "System-interaction check",
+        "Data interpretation task",
+        "Independent hypothesis-and-test scenario",
+        "Feedback and revised reasoning"
+      ],
+      "evidenceFocus": [
+        "Operating context",
+        "Pattern interpretation",
+        "Competing hypotheses",
+        "Vehicle-specific test criteria"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
@@ -318,77 +762,237 @@
     {
       "lessonPlanId": "ug-suspension-steering-foundations",
       "status": "planned",
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-140",
+        "programCourseTitle": "Suspension & Steering I",
+        "mappingType": "direct-course-alignment"
+      },
+      "lessonSummary": "Connect steering and suspension relationships, inspection evidence, geometry measurements, and operating symptoms into a defensible diagnostic and verification plan.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "Steering and suspension safety",
+        "Basic chassis geometry",
+        "Inspection and measurement fundamentals"
+      ],
       "learningObjectives": [
         {
           "id": "ug-suspension-steering-lo-1",
-          "statement": "Interpret inspection and geometry evidence to support a suspension or steering diagnostic decision.",
+          "statement": "Explain how steering, suspension, tires, ride height, and alignment geometry influence vehicle response.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-suspension-steering-lo-2",
+          "statement": "Interpret inspection and geometry evidence in relation to the reported handling or tire-wear concern.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-suspension-steering-lo-3",
+          "statement": "Select and justify the next diagnostic or verification step for a suspension or steering concern.",
           "cognitiveLevel": "diagnostic-reasoning"
         }
       ],
+      "keyConcepts": [
+        "component relationships",
+        "ride height and geometry",
+        "tire evidence",
+        "inspection evidence",
+        "measurement context",
+        "cause versus effect"
+      ],
       "contentBlocks": [
         {
-          "id": "concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "suspension-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview relationship, evidence, and diagnostic outcomes.",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1",
+            "ug-suspension-steering-lo-2",
+            "ug-suspension-steering-lo-3"
+          ]
+        },
+        {
+          "id": "suspension-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Prerequisite check",
+          "description": "Review chassis safety, steering/suspension roles, and geometry terminology.",
           "supportsObjectiveIds": [
             "ug-suspension-steering-lo-1"
           ]
         },
         {
-          "id": "worked-example",
+          "id": "suspension-system-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Chassis relationship model",
+          "description": "Connect steering input, suspension position, tire contact, and alignment geometry.",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1"
+          ]
+        },
+        {
+          "id": "suspension-evidence-model",
+          "type": "concept-explanation",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Reading chassis evidence",
+          "description": "Distinguish visual inspection, tire-wear patterns, measurements, symptoms, and conclusions.",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-2"
+          ]
+        },
+        {
+          "id": "suspension-worked-example",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked handling concern",
+          "description": "Trace an example through inspection, geometry evidence, hypotheses, and verification planning.",
           "supportsObjectiveIds": [
-            "ug-suspension-steering-lo-1"
+            "ug-suspension-steering-lo-2",
+            "ug-suspension-steering-lo-3"
           ]
         },
         {
-          "id": "guided-practice",
+          "id": "suspension-guided-practice",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Guided geometry interpretation",
+          "description": "Compare sample evidence and identify what supports or weakens a proposed cause.",
           "supportsObjectiveIds": [
-            "ug-suspension-steering-lo-1"
+            "ug-suspension-steering-lo-2"
           ]
         },
         {
-          "id": "independent-task",
+          "id": "suspension-independent-scenario",
           "type": "independent-scenario",
           "instructionalPurpose": "diagnose",
+          "title": "Independent chassis concern",
+          "description": "Build a diagnostic plan for a handling, steering, or tire-wear concern.",
           "supportsObjectiveIds": [
-            "ug-suspension-steering-lo-1"
+            "ug-suspension-steering-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "suspension-reasoning-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Chassis reasoning check",
+          "description": "Assess system relationships, evidence interpretation, and next-step logic.",
           "supportsObjectiveIds": [
-            "ug-suspension-steering-lo-1"
+            "ug-suspension-steering-lo-1",
+            "ug-suspension-steering-lo-2",
+            "ug-suspension-steering-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "suspension-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Correct unsupported geometry conclusions and require a revised diagnostic decision.",
           "supportsObjectiveIds": [
-            "ug-suspension-steering-lo-1"
+            "ug-suspension-steering-lo-2",
+            "ug-suspension-steering-lo-3"
+          ]
+        },
+        {
+          "id": "suspension-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Specifications and procedures",
+          "description": "Reinforce the need for vehicle-specific geometry values, inspection criteria, and procedures.",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-2",
+            "ug-suspension-steering-lo-3"
+          ]
+        },
+        {
+          "id": "suspension-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Chassis diagnostic summary",
+          "description": "Summarize relationships among symptoms, inspection, measurement, diagnosis, and verification.",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1",
+            "ug-suspension-steering-lo-2",
+            "ug-suspension-steering-lo-3"
           ]
         }
       ],
       "visuals": [
         {
-          "id": "primary-visual",
+          "id": "suspension-relationship-map",
           "type": "concept-diagram",
           "instructionalPurpose": "explain",
+          "title": "Steering and suspension relationship map",
+          "purpose": "Show component, geometry, tire-contact, and vehicle-response relationships.",
           "supportsObjectiveIds": [
             "ug-suspension-steering-lo-1"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
+        },
+        {
+          "id": "suspension-diagnostic-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Chassis evidence workflow",
+          "purpose": "Sequence concern definition, inspection, measurement, interpretation, diagnosis, and verification.",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-2",
+            "ug-suspension-steering-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "suspension-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Chassis evidence table",
+          "purpose": "Compare symptom, observed condition, geometry evidence, limitations, and next evidence.",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "suspension-timeline",
+          "type": "timeline",
+          "instructionalPurpose": "sequence",
+          "title": "Condition-to-verification timeline",
+          "purpose": "Show how inspection and measurements progress from initial concern through verification.",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
-      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "practiceTasks": [
+        "Map chassis component relationships",
+        "Interpret supplied geometry and tire evidence",
+        "Identify unsupported causal claims",
+        "Build and defend a diagnostic sequence"
+      ],
+      "assessmentPlan": [
+        "System-relationship check",
+        "Geometry evidence interpretation",
+        "Independent chassis scenario",
+        "Feedback and revised verification plan"
+      ],
+      "evidenceFocus": [
+        "Inspection evidence",
+        "Geometry measurements",
+        "Tire/handling symptoms",
+        "Vehicle-specific alignment criteria"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
@@ -407,77 +1011,239 @@
     {
       "lessonPlanId": "grad-diagnostic-evidence-analysis",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "course",
+        "programCourseId": "AET-580",
+        "programCourseTitle": "AI, Data Analytics & Intelligent Diagnostics",
+        "mappingType": "partial-alignment"
+      },
+      "lessonSummary": "Evaluate complex diagnostic evidence by comparing competing hypotheses, measurement uncertainty, source quality, and verification strategies.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Undergraduate diagnostic reasoning",
+        "Measurement fundamentals",
+        "Technical source evaluation"
+      ],
       "learningObjectives": [
         {
           "id": "grad-diagnostic-lo-1",
-          "statement": "Evaluate competing diagnostic hypotheses using technical evidence, measurement uncertainty, and a defensible verification strategy.",
+          "statement": "Frame a complex diagnostic problem as competing, testable hypotheses rather than a single assumed cause.",
+          "cognitiveLevel": "analysis"
+        },
+        {
+          "id": "grad-diagnostic-lo-2",
+          "statement": "Evaluate technical evidence and measurement uncertainty for relevance, quality, and discriminating value.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "grad-diagnostic-lo-3",
+          "statement": "Design and defend an efficient verification strategy that could falsify or strengthen competing hypotheses.",
           "cognitiveLevel": "diagnostic-reasoning"
         }
       ],
+      "keyConcepts": [
+        "problem framing",
+        "competing hypotheses",
+        "measurement uncertainty",
+        "evidence quality",
+        "discriminating evidence",
+        "verification strategy",
+        "defensible conclusion"
+      ],
       "contentBlocks": [
         {
-          "id": "concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "grad-diagnostic-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Advanced diagnostic outcomes",
+          "description": "Define expectations for hypothesis framing, uncertainty analysis, and defensible verification.",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1",
+            "grad-diagnostic-lo-2",
+            "grad-diagnostic-lo-3"
+          ]
+        },
+        {
+          "id": "grad-diagnostic-prior",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Prior diagnostic reasoning",
+          "description": "Activate prior understanding of diagnostic testing, measurement, and evidence interpretation.",
           "supportsObjectiveIds": [
             "grad-diagnostic-lo-1"
           ]
         },
         {
-          "id": "worked-example",
+          "id": "grad-diagnostic-framework",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Competing-hypothesis framework",
+          "description": "Model diagnostic reasoning as explicit hypotheses, predictions, evidence, and revision.",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1"
+          ]
+        },
+        {
+          "id": "grad-diagnostic-uncertainty",
+          "type": "concept-explanation",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Evidence and uncertainty",
+          "description": "Examine repeatability, measurement limitations, source quality, and ambiguity in technical evidence.",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-2"
+          ]
+        },
+        {
+          "id": "grad-diagnostic-worked",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked complex case",
+          "description": "Compare hypotheses using a staged evidence set and explain why some tests discriminate better than others.",
           "supportsObjectiveIds": [
-            "grad-diagnostic-lo-1"
+            "grad-diagnostic-lo-1",
+            "grad-diagnostic-lo-2",
+            "grad-diagnostic-lo-3"
           ]
         },
         {
-          "id": "guided-practice",
+          "id": "grad-diagnostic-guided",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Guided evidence weighting",
+          "description": "Rank evidence by relevance and discriminating value while noting uncertainty.",
           "supportsObjectiveIds": [
-            "grad-diagnostic-lo-1"
+            "grad-diagnostic-lo-2"
           ]
         },
         {
-          "id": "independent-task",
+          "id": "grad-diagnostic-independent",
           "type": "independent-scenario",
           "instructionalPurpose": "diagnose",
+          "title": "Independent advanced diagnosis",
+          "description": "Develop competing hypotheses, a test strategy, and a defended conclusion for a complex case.",
           "supportsObjectiveIds": [
-            "grad-diagnostic-lo-1"
+            "grad-diagnostic-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "grad-diagnostic-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Advanced reasoning check",
+          "description": "Assess hypothesis quality, uncertainty interpretation, and verification design.",
           "supportsObjectiveIds": [
-            "grad-diagnostic-lo-1"
+            "grad-diagnostic-lo-1",
+            "grad-diagnostic-lo-2",
+            "grad-diagnostic-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "grad-diagnostic-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Critique and revision",
+          "description": "Provide critique focused on unsupported inference, weak discrimination, and unaddressed uncertainty.",
           "supportsObjectiveIds": [
-            "grad-diagnostic-lo-1"
+            "grad-diagnostic-lo-2",
+            "grad-diagnostic-lo-3"
+          ]
+        },
+        {
+          "id": "grad-diagnostic-evidence",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Technical evidence record",
+          "description": "Document the source, role, limitation, and use of each major piece of evidence.",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-2",
+            "grad-diagnostic-lo-3"
+          ]
+        },
+        {
+          "id": "grad-diagnostic-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "reflect",
+          "title": "Defend the conclusion",
+          "description": "Summarize how the final conclusion follows from the evidence and what uncertainty remains.",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1",
+            "grad-diagnostic-lo-2",
+            "grad-diagnostic-lo-3"
           ]
         }
       ],
       "visuals": [
         {
-          "id": "primary-visual",
-          "type": "flowchart",
-          "instructionalPurpose": "sequence",
+          "id": "grad-diagnostic-hypothesis-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Competing-hypothesis map",
+          "purpose": "Show relationships among observations, hypotheses, predictions, tests, and conclusions.",
           "supportsObjectiveIds": [
             "grad-diagnostic-lo-1"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
+        },
+        {
+          "id": "grad-diagnostic-decision-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Advanced verification flow",
+          "purpose": "Model evidence-driven branching and hypothesis revision.",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1",
+            "grad-diagnostic-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-diagnostic-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence-weighting matrix",
+          "purpose": "Compare source quality, relevance, uncertainty, and discriminating value.",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-diagnostic-uncertainty-bars",
+          "type": "bar-chart",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Uncertainty comparison",
+          "purpose": "Compare illustrative uncertainty ranges or confidence in alternative measurements.",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
-      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "practiceTasks": [
+        "Rewrite an assumed diagnosis as competing hypotheses",
+        "Rate evidence quality and uncertainty",
+        "Select a discriminating test",
+        "Defend a verification strategy in writing"
+      ],
+      "assessmentPlan": [
+        "Hypothesis-framing critique",
+        "Evidence-quality analysis",
+        "Independent complex diagnostic case",
+        "Written defense and revision"
+      ],
+      "evidenceFocus": [
+        "Technical source quality",
+        "Measurement uncertainty",
+        "Discriminating evidence",
+        "Traceable diagnostic argument"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
@@ -496,77 +1262,241 @@
     {
       "lessonPlanId": "grad-vehicle-systems-testing",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "course",
+        "programCourseId": "AET-530",
+        "programCourseTitle": "Instrumentation & Experimental Methods",
+        "mappingType": "partial-alignment"
+      },
+      "lessonSummary": "Design controlled vehicle-system tests by defining objectives, selecting instrumentation, controlling variables, analyzing uncertainty, and reporting reproducible findings.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Diagnostic instrumentation",
+        "Basic statistics",
+        "Measurement uncertainty fundamentals"
+      ],
       "learningObjectives": [
         {
           "id": "grad-testing-lo-1",
-          "statement": "Design and interpret a controlled vehicle-systems test using appropriate instrumentation and uncertainty analysis.",
+          "statement": "Define a testable vehicle-system question with measurable variables and acceptance criteria.",
           "cognitiveLevel": "application"
+        },
+        {
+          "id": "grad-testing-lo-2",
+          "statement": "Design a controlled measurement plan using appropriate instrumentation, controls, and repeatable procedures.",
+          "cognitiveLevel": "analysis"
+        },
+        {
+          "id": "grad-testing-lo-3",
+          "statement": "Analyze results and uncertainty to determine what the test supports, does not support, and should be tested next.",
+          "cognitiveLevel": "evaluation"
         }
+      ],
+      "keyConcepts": [
+        "test objective",
+        "variables and controls",
+        "instrument selection",
+        "repeatability",
+        "measurement uncertainty",
+        "data integrity",
+        "technical reporting"
       ],
       "contentBlocks": [
         {
-          "id": "concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "grad-testing-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Testing outcomes",
+          "description": "Define expectations for experimental design, measurement, and interpretation.",
           "supportsObjectiveIds": [
-            "grad-testing-lo-1"
+            "grad-testing-lo-1",
+            "grad-testing-lo-2",
+            "grad-testing-lo-3"
           ]
         },
         {
-          "id": "worked-example",
+          "id": "grad-testing-prior",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Measurement readiness",
+          "description": "Review instrumentation limits, units, uncertainty, and safe data collection.",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-2"
+          ]
+        },
+        {
+          "id": "grad-testing-design",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Controlled test design",
+          "description": "Explain variables, controls, repeatability, criteria, and data integrity.",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1",
+            "grad-testing-lo-2"
+          ]
+        },
+        {
+          "id": "grad-testing-instrumentation",
+          "type": "concept-explanation",
+          "instructionalPurpose": "compare",
+          "title": "Instrumentation tradeoffs",
+          "description": "Compare instrument capability, resolution, sampling needs, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-2"
+          ]
+        },
+        {
+          "id": "grad-testing-worked",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked systems test",
+          "description": "Walk through objective definition, instrument choice, data collection, uncertainty, and conclusion.",
           "supportsObjectiveIds": [
-            "grad-testing-lo-1"
+            "grad-testing-lo-1",
+            "grad-testing-lo-2",
+            "grad-testing-lo-3"
           ]
         },
         {
-          "id": "guided-practice",
+          "id": "grad-testing-guided",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Test-plan critique",
+          "description": "Identify uncontrolled variables and weak measurement choices in a sample test design.",
           "supportsObjectiveIds": [
-            "grad-testing-lo-1"
+            "grad-testing-lo-2"
           ]
         },
         {
-          "id": "independent-task",
+          "id": "grad-testing-independent",
           "type": "independent-scenario",
           "instructionalPurpose": "practice",
+          "title": "Independent test design",
+          "description": "Design a reproducible vehicle-system test and define how results will be interpreted.",
           "supportsObjectiveIds": [
-            "grad-testing-lo-1"
+            "grad-testing-lo-1",
+            "grad-testing-lo-2",
+            "grad-testing-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "grad-testing-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Test-design check",
+          "description": "Assess controls, instrumentation, uncertainty, and interpretation boundaries.",
           "supportsObjectiveIds": [
-            "grad-testing-lo-1"
+            "grad-testing-lo-1",
+            "grad-testing-lo-2",
+            "grad-testing-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "grad-testing-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Design revision",
+          "description": "Revise a test plan after feedback on validity, repeatability, and uncertainty.",
           "supportsObjectiveIds": [
-            "grad-testing-lo-1"
+            "grad-testing-lo-2",
+            "grad-testing-lo-3"
+          ]
+        },
+        {
+          "id": "grad-testing-evidence",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Methods and evidence record",
+          "description": "Record procedures, instrument assumptions, data transformations, and source references.",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-2",
+            "grad-testing-lo-3"
+          ]
+        },
+        {
+          "id": "grad-testing-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "reflect",
+          "title": "Reproducible findings",
+          "description": "Summarize what the test supports and the limits of generalization.",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-3"
           ]
         }
       ],
       "visuals": [
         {
-          "id": "primary-visual",
+          "id": "grad-testing-design-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Controlled-test model",
+          "purpose": "Show relationships among question, variables, controls, instrumentation, data, and inference.",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1",
+            "grad-testing-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-testing-process",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Vehicle-system test workflow",
+          "purpose": "Sequence objective, setup, control, collection, analysis, and reporting.",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1",
+            "grad-testing-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-testing-instrument-table",
           "type": "table",
           "instructionalPurpose": "compare",
+          "title": "Instrumentation comparison",
+          "purpose": "Compare measurement capabilities and limitations for a planned test.",
           "supportsObjectiveIds": [
-            "grad-testing-lo-1"
+            "grad-testing-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-testing-results-bars",
+          "type": "bar-chart",
+          "instructionalPurpose": "interpret-evidence",
+          "title": "Replicate comparison",
+          "purpose": "Compare repeated illustrative measurements and associated variability.",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-3"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
-      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "practiceTasks": [
+        "Define variables and criteria",
+        "Critique an instrumentation choice",
+        "Identify uncontrolled variables",
+        "Design and defend a reproducible test plan"
+      ],
+      "assessmentPlan": [
+        "Test-objective check",
+        "Instrumentation/control critique",
+        "Independent experimental design",
+        "Technical report with uncertainty statement"
+      ],
+      "evidenceFocus": [
+        "Methods transparency",
+        "Instrument limitations",
+        "Repeatability",
+        "Uncertainty-aware interpretation"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
@@ -585,77 +1515,243 @@
     {
       "lessonPlanId": "grad-curriculum-assessment-design",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "supplemental",
+        "classification": "education-track-supplemental",
+        "title": "Curriculum & Assessment Design"
+      },
+      "lessonSummary": "Design technical curriculum and assessment systems in which outcomes, learning activities, authentic tasks, rubrics, feedback, and evidence all align.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Learning-objective fundamentals",
+        "Basic assessment concepts",
+        "Technical-task analysis"
+      ],
       "learningObjectives": [
         {
           "id": "grad-curriculum-lo-1",
-          "statement": "Design an authentic technical learning task whose assessment method aligns with the stated competency and cognitive level.",
+          "statement": "Translate a technical competency into measurable learning outcomes at an appropriate cognitive level.",
           "cognitiveLevel": "application"
+        },
+        {
+          "id": "grad-curriculum-lo-2",
+          "statement": "Design authentic learning and assessment tasks that generate evidence aligned with the intended outcome.",
+          "cognitiveLevel": "analysis"
+        },
+        {
+          "id": "grad-curriculum-lo-3",
+          "statement": "Evaluate alignment among outcomes, instruction, assessment criteria, feedback, and evidence of learning.",
+          "cognitiveLevel": "evaluation"
         }
+      ],
+      "keyConcepts": [
+        "constructive alignment",
+        "measurable outcomes",
+        "authentic assessment",
+        "rubric criteria",
+        "feedback loops",
+        "valid evidence of learning",
+        "assessment fairness"
       ],
       "contentBlocks": [
         {
-          "id": "concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "grad-curriculum-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Curriculum-design outcomes",
+          "description": "Define expectations for outcome writing, task design, and alignment evaluation.",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-2",
+            "grad-curriculum-lo-3"
+          ]
+        },
+        {
+          "id": "grad-curriculum-prior",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Prior curriculum knowledge",
+          "description": "Review competency statements, cognitive levels, and assessment terminology.",
           "supportsObjectiveIds": [
             "grad-curriculum-lo-1"
           ]
         },
         {
-          "id": "worked-example",
+          "id": "grad-curriculum-alignment",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Alignment model",
+          "description": "Connect competencies, objectives, instruction, practice, assessment, feedback, and evidence.",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-3"
+          ]
+        },
+        {
+          "id": "grad-curriculum-authenticity",
+          "type": "concept-explanation",
+          "instructionalPurpose": "compare",
+          "title": "Authentic task design",
+          "description": "Distinguish recall checks from performance tasks and diagnostic-reasoning assessments.",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-2"
+          ]
+        },
+        {
+          "id": "grad-curriculum-worked",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked curriculum map",
+          "description": "Transform a technical competency into outcomes, activities, an assessment task, and rubric evidence.",
           "supportsObjectiveIds": [
-            "grad-curriculum-lo-1"
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-2",
+            "grad-curriculum-lo-3"
           ]
         },
         {
-          "id": "guided-practice",
+          "id": "grad-curriculum-guided",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Alignment critique",
+          "description": "Identify misalignment in a sample lesson and redesign the weak element.",
           "supportsObjectiveIds": [
-            "grad-curriculum-lo-1"
+            "grad-curriculum-lo-3"
           ]
         },
         {
-          "id": "independent-task",
+          "id": "grad-curriculum-independent",
           "type": "independent-scenario",
           "instructionalPurpose": "practice",
+          "title": "Independent curriculum design",
+          "description": "Create a compact aligned lesson-and-assessment plan for a technical competency.",
           "supportsObjectiveIds": [
-            "grad-curriculum-lo-1"
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-2",
+            "grad-curriculum-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "grad-curriculum-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Alignment reasoning check",
+          "description": "Assess outcome quality, task authenticity, rubric alignment, and evidence sufficiency.",
           "supportsObjectiveIds": [
-            "grad-curriculum-lo-1"
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-2",
+            "grad-curriculum-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "grad-curriculum-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Design revision",
+          "description": "Revise outcomes or assessments after feedback about alignment and evidence quality.",
           "supportsObjectiveIds": [
-            "grad-curriculum-lo-1"
+            "grad-curriculum-lo-2",
+            "grad-curriculum-lo-3"
+          ]
+        },
+        {
+          "id": "grad-curriculum-evidence",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Design rationale",
+          "description": "Document the rationale linking the competency, outcome, task, criteria, and evidence.",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-3"
+          ]
+        },
+        {
+          "id": "grad-curriculum-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "reflect",
+          "title": "Alignment summary",
+          "description": "Summarize the design decisions and remaining limitations.",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-2",
+            "grad-curriculum-lo-3"
           ]
         }
       ],
       "visuals": [
         {
-          "id": "primary-visual",
+          "id": "grad-curriculum-alignment-map",
           "type": "concept-diagram",
           "instructionalPurpose": "explain",
+          "title": "Curriculum alignment map",
+          "purpose": "Show competency-to-objective-to-learning-to-assessment-to-evidence relationships.",
           "supportsObjectiveIds": [
-            "grad-curriculum-lo-1"
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-curriculum-design-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Curriculum design workflow",
+          "purpose": "Sequence analysis, outcome design, instruction, assessment, feedback, and evaluation.",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-curriculum-task-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Assessment-method comparison",
+          "purpose": "Compare recall, application, performance, and reasoning tasks against intended outcomes.",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-curriculum-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Alignment at a glance",
+          "purpose": "Summarize the complete aligned curriculum-design cycle.",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1",
+            "grad-curriculum-lo-2",
+            "grad-curriculum-lo-3"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
-      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "practiceTasks": [
+        "Rewrite an unmeasurable objective",
+        "Match assessment methods to cognitive levels",
+        "Critique a misaligned rubric",
+        "Build a compact curriculum alignment map"
+      ],
+      "assessmentPlan": [
+        "Outcome-writing check",
+        "Alignment critique",
+        "Independent authentic assessment design",
+        "Design rationale and revision"
+      ],
+      "evidenceFocus": [
+        "Alignment evidence",
+        "Assessment validity",
+        "Transparent criteria",
+        "Feedback as instructional evidence"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
@@ -674,77 +1770,241 @@
     {
       "lessonPlanId": "grad-applied-research-literature",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "course",
+        "programCourseId": "AET-590",
+        "programCourseTitle": "Graduate Capstone / Applied Research",
+        "mappingType": "partial-alignment"
+      },
+      "lessonSummary": "Develop a transparent applied-research evidence workflow from question formulation and scholarly discovery through canonical source resolution, appraisal, claim mapping, and provenance.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Research-question fundamentals",
+        "Basic source evaluation",
+        "Academic citation fundamentals"
+      ],
       "learningObjectives": [
         {
           "id": "grad-research-lo-1",
-          "statement": "Locate, resolve, evaluate, and document canonical scholarly or publisher evidence for an applied automotive research claim.",
+          "statement": "Formulate a focused applied research question with concepts that can guide scholarly discovery.",
+          "cognitiveLevel": "application"
+        },
+        {
+          "id": "grad-research-lo-2",
+          "statement": "Use scholarly discovery to locate candidate evidence and resolve each useful record to a canonical DOI, publisher, government, or institutional source when available.",
           "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "grad-research-lo-3",
+          "statement": "Evaluate relevance, methods, limitations, and provenance before mapping evidence to a specific claim.",
+          "cognitiveLevel": "evaluation"
         }
+      ],
+      "keyConcepts": [
+        "research-question scope",
+        "scholarly discovery",
+        "canonical source resolution",
+        "method appraisal",
+        "claim-evidence fit",
+        "provenance",
+        "citation integrity"
       ],
       "contentBlocks": [
         {
-          "id": "concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "grad-research-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Research-evidence outcomes",
+          "description": "Define expectations for discovery, canonical resolution, appraisal, and provenance.",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1",
+            "grad-research-lo-2",
+            "grad-research-lo-3"
+          ]
+        },
+        {
+          "id": "grad-research-prior",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Prior research knowledge",
+          "description": "Review research questions, keywords, source types, and citation components.",
           "supportsObjectiveIds": [
             "grad-research-lo-1"
           ]
         },
         {
-          "id": "worked-example",
+          "id": "grad-research-question",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Question-to-search model",
+          "description": "Translate an applied problem into searchable concepts and inclusion boundaries.",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1"
+          ]
+        },
+        {
+          "id": "grad-research-source-chain",
+          "type": "concept-explanation",
+          "instructionalPurpose": "sequence",
+          "title": "Discovery to canonical source",
+          "description": "Distinguish discovery tools from canonical evidence records and document the resolution path.",
+          "supportsObjectiveIds": [
+            "grad-research-lo-2"
+          ]
+        },
+        {
+          "id": "grad-research-worked",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked evidence trace",
+          "description": "Follow a candidate scholarly record through source resolution, appraisal, claim mapping, and provenance documentation.",
           "supportsObjectiveIds": [
-            "grad-research-lo-1"
+            "grad-research-lo-2",
+            "grad-research-lo-3"
           ]
         },
         {
-          "id": "guided-practice",
+          "id": "grad-research-guided",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Guided source appraisal",
+          "description": "Compare candidate sources for relevance, method quality, limitations, and claim fit.",
           "supportsObjectiveIds": [
-            "grad-research-lo-1"
+            "grad-research-lo-3"
           ]
         },
         {
-          "id": "independent-task",
+          "id": "grad-research-independent",
           "type": "independent-scenario",
           "instructionalPurpose": "practice",
+          "title": "Independent evidence search",
+          "description": "Build a small evidence set for an applied question and document the canonical source trail.",
           "supportsObjectiveIds": [
-            "grad-research-lo-1"
+            "grad-research-lo-1",
+            "grad-research-lo-2",
+            "grad-research-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "grad-research-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Research reasoning check",
+          "description": "Assess source resolution, appraisal, claim-evidence fit, and provenance decisions.",
           "supportsObjectiveIds": [
-            "grad-research-lo-1"
+            "grad-research-lo-2",
+            "grad-research-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "grad-research-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Evidence-set revision",
+          "description": "Correct weak source choices, unsupported claims, or incomplete provenance.",
           "supportsObjectiveIds": [
-            "grad-research-lo-1"
+            "grad-research-lo-2",
+            "grad-research-lo-3"
+          ]
+        },
+        {
+          "id": "grad-research-evidence",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Provenance record",
+          "description": "Document discovery route, canonical location, citation, appraisal notes, and supported claim.",
+          "supportsObjectiveIds": [
+            "grad-research-lo-2",
+            "grad-research-lo-3"
+          ]
+        },
+        {
+          "id": "grad-research-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "reflect",
+          "title": "Evidence workflow summary",
+          "description": "Summarize the defensible chain from question to evidence-supported claim.",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1",
+            "grad-research-lo-2",
+            "grad-research-lo-3"
           ]
         }
       ],
       "visuals": [
         {
-          "id": "primary-visual",
+          "id": "grad-research-workflow",
           "type": "flowchart",
           "instructionalPurpose": "sequence",
+          "title": "Research evidence workflow",
+          "purpose": "Show question, scholarly discovery, canonical resolution, appraisal, claim mapping, and provenance.",
           "supportsObjectiveIds": [
-            "grad-research-lo-1"
+            "grad-research-lo-1",
+            "grad-research-lo-2",
+            "grad-research-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-research-source-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Source-resolution map",
+          "purpose": "Distinguish discovery indexes from canonical publishers, repositories, and primary sources.",
+          "supportsObjectiveIds": [
+            "grad-research-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-research-appraisal-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence appraisal table",
+          "purpose": "Compare relevance, methods, limitations, source authority, and claim fit.",
+          "supportsObjectiveIds": [
+            "grad-research-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-research-provenance-timeline",
+          "type": "timeline",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence provenance timeline",
+          "purpose": "Show the trace from discovery through retrieval, appraisal, use, and citation validation.",
+          "supportsObjectiveIds": [
+            "grad-research-lo-2",
+            "grad-research-lo-3"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
-      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "practiceTasks": [
+        "Decompose a research question into searchable concepts",
+        "Resolve a discovery record to a canonical source",
+        "Compare methods and limitations",
+        "Map evidence to a narrowly stated claim"
+      ],
+      "assessmentPlan": [
+        "Research-question check",
+        "Canonical-source resolution exercise",
+        "Independent evidence appraisal",
+        "Provenance-complete claim-evidence map"
+      ],
+      "evidenceFocus": [
+        "Canonical source identity",
+        "Methods and limitations",
+        "Claim-evidence fit",
+        "Transparent provenance"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
@@ -763,77 +2023,256 @@
     {
       "lessonPlanId": "grad-technical-instructional-leadership",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "supplemental",
+        "classification": "education-track-supplemental",
+        "title": "Technical Instructional Leadership"
+      },
+      "lessonSummary": "Use evidence, stakeholder perspectives, implementation planning, and outcome evaluation to lead improvement in technical programs and instruction.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Technical-program experience",
+        "Basic leadership concepts",
+        "Program evaluation fundamentals"
+      ],
       "learningObjectives": [
         {
           "id": "grad-leadership-lo-1",
-          "statement": "Use evidence and stakeholder input to design and evaluate a technical program improvement process.",
+          "statement": "Diagnose a technical-program or instructional challenge using evidence, stakeholder perspectives, and system context.",
+          "cognitiveLevel": "analysis"
+        },
+        {
+          "id": "grad-leadership-lo-2",
+          "statement": "Design an improvement strategy that distinguishes technical fixes from adaptive or organizational work.",
           "cognitiveLevel": "application"
+        },
+        {
+          "id": "grad-leadership-lo-3",
+          "statement": "Define implementation, communication, and evaluation measures that can show whether the improvement is producing the intended outcome.",
+          "cognitiveLevel": "evaluation"
         }
+      ],
+      "keyConcepts": [
+        "system diagnosis",
+        "stakeholder analysis",
+        "technical versus adaptive work",
+        "implementation planning",
+        "communication",
+        "productive feedback",
+        "program evaluation"
       ],
       "contentBlocks": [
         {
-          "id": "concept",
-          "type": "concept-explanation",
-          "instructionalPurpose": "explain",
+          "id": "grad-leadership-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Leadership outcomes",
+          "description": "Define expectations for diagnosis, improvement design, implementation, and evaluation.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-2",
+            "grad-leadership-lo-3"
+          ]
+        },
+        {
+          "id": "grad-leadership-prior",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Prior leadership knowledge",
+          "description": "Review system context, stakeholder roles, and evidence used in program decisions.",
           "supportsObjectiveIds": [
             "grad-leadership-lo-1"
           ]
         },
         {
-          "id": "worked-example",
+          "id": "grad-leadership-diagnosis",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Diagnose before acting",
+          "description": "Frame program challenges through evidence, system conditions, stakeholder perspectives, and perceived losses.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1"
+          ]
+        },
+        {
+          "id": "grad-leadership-change",
+          "type": "concept-explanation",
+          "instructionalPurpose": "compare",
+          "title": "Technical and adaptive work",
+          "description": "Compare problems that can be solved by expertise with those requiring learning, behavior, or cultural change.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-2"
+          ]
+        },
+        {
+          "id": "grad-leadership-worked",
           "type": "worked-example",
           "instructionalPurpose": "demonstrate",
+          "title": "Worked program-improvement case",
+          "description": "Trace a technical-program challenge through diagnosis, stakeholder engagement, strategy design, implementation, and evaluation.",
           "supportsObjectiveIds": [
-            "grad-leadership-lo-1"
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-2",
+            "grad-leadership-lo-3"
           ]
         },
         {
-          "id": "guided-practice",
+          "id": "grad-leadership-guided",
           "type": "guided-practice",
           "instructionalPurpose": "practice",
+          "title": "Stakeholder and risk analysis",
+          "description": "Identify stakeholders, likely concerns, evidence needs, and implementation risks for a sample change.",
           "supportsObjectiveIds": [
-            "grad-leadership-lo-1"
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-2"
           ]
         },
         {
-          "id": "independent-task",
+          "id": "grad-leadership-independent",
           "type": "independent-scenario",
           "instructionalPurpose": "practice",
+          "title": "Independent improvement plan",
+          "description": "Design an evidence-informed improvement plan for a technical instructional context.",
           "supportsObjectiveIds": [
-            "grad-leadership-lo-1"
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-2",
+            "grad-leadership-lo-3"
           ]
         },
         {
-          "id": "reasoning-check",
+          "id": "grad-leadership-check",
           "type": "knowledge-or-reasoning-check",
           "instructionalPurpose": "assess",
+          "title": "Leadership reasoning check",
+          "description": "Assess diagnosis quality, strategy fit, stakeholder logic, and evaluation design.",
           "supportsObjectiveIds": [
-            "grad-leadership-lo-1"
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-2",
+            "grad-leadership-lo-3"
           ]
         },
         {
-          "id": "feedback-retry",
+          "id": "grad-leadership-feedback",
           "type": "feedback-and-retry",
           "instructionalPurpose": "remediate",
+          "title": "Plan revision",
+          "description": "Revise the improvement plan after feedback on diagnosis, feasibility, communication, or outcome measures.",
           "supportsObjectiveIds": [
-            "grad-leadership-lo-1"
+            "grad-leadership-lo-2",
+            "grad-leadership-lo-3"
+          ]
+        },
+        {
+          "id": "grad-leadership-evidence",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence and decision record",
+          "description": "Document evidence used, stakeholder input, decisions, assumptions, and evaluation measures.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-3"
+          ]
+        },
+        {
+          "id": "grad-leadership-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "reflect",
+          "title": "Leadership reflection",
+          "description": "Summarize the logic of the intervention, what will be monitored, and what would trigger revision.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-2",
+            "grad-leadership-lo-3"
           ]
         }
       ],
       "visuals": [
         {
-          "id": "primary-visual",
-          "type": "timeline",
-          "instructionalPurpose": "sequence",
+          "id": "grad-leadership-system-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Program-system map",
+          "purpose": "Show relationships among learners, instructors, leaders, curriculum, resources, policy, and outcomes.",
           "supportsObjectiveIds": [
             "grad-leadership-lo-1"
           ],
           "accessibilityTextRequired": true,
           "status": "planned"
+        },
+        {
+          "id": "grad-leadership-change-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Improvement process",
+          "purpose": "Sequence diagnosis, stakeholder engagement, strategy, implementation, monitoring, and revision.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-2",
+            "grad-leadership-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-leadership-stakeholder-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Stakeholder analysis table",
+          "purpose": "Compare roles, concerns, influence, evidence needs, and engagement strategies.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-leadership-implementation-timeline",
+          "type": "timeline",
+          "instructionalPurpose": "sequence",
+          "title": "Implementation timeline",
+          "purpose": "Show staged communication, implementation, monitoring, and evaluation milestones.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "grad-leadership-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence-informed leadership cycle",
+          "purpose": "Summarize diagnose, engage, design, implement, evaluate, and adapt.",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1",
+            "grad-leadership-lo-2",
+            "grad-leadership-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
         }
       ],
-      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
-      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "practiceTasks": [
+        "Diagnose a program challenge from mixed evidence",
+        "Classify technical versus adaptive elements",
+        "Build a stakeholder-engagement plan",
+        "Define measurable implementation and outcome indicators"
+      ],
+      "assessmentPlan": [
+        "System-diagnosis critique",
+        "Stakeholder strategy exercise",
+        "Independent program-improvement plan",
+        "Evaluation rationale and reflective revision"
+      ],
+      "evidenceFocus": [
+        "Program evidence",
+        "Stakeholder input",
+        "Implementation assumptions",
+        "Outcome and process measures"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
       "structure": [
         "learning-objective",
         "prior-knowledge",
