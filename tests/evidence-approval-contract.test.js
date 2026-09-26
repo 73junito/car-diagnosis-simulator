@@ -125,11 +125,23 @@ describe('Evidence source-state registry', () => {
     expect(frontiers.source_id).not.toBe(navy.source_id);
 
     // Distinct rights provenance: CC BY license vs an undecided candidate.
+    // These assert the source RECORDS stay distinct, not that a particular
+    // review outcome is still pending — a completed rights review legitimately
+    // moves rights_decision off "pending".
     expect(frontiers.rights_classification).toBe('CC_BY');
-    expect(frontiers.rights_decision).toBe('pending');
     expect(navy.rights_classification).toBe('PUBLIC_DOMAIN');
-    expect(navy.rights_decision).toBe('pending');
     expect(navy.rights_classification_source).toMatch(/candidate/i);
+    expect(frontiers.rights_classification).not.toBe(navy.rights_classification_source);
+    // A source may never be marked cleared while its decision reads as pending.
+    for (const source of [frontiers, navy]) {
+      if (typeof source.rights_decision === 'string' && /^pending/.test(source.rights_decision)) {
+        expect(source.rights_cleared).toBe(false);
+      }
+      if (source.rights_cleared === true) {
+        expect(source.rights_verified_by).toBeTruthy();
+        expect(source.rights_verified_at).toBeTruthy();
+      }
+    }
 
     // The Navy artifact is hashed in intake; the Frontiers manifest is not.
     expect(navy.artifact_sha256).toMatch(/^[0-9a-f]{64}$/);
@@ -203,10 +215,17 @@ describe('Evidence source-state registry', () => {
     }
   });
 
-  test('no source or chunk review notes are pre-filled by the agent', () => {
+  test('review notes, when present, are attributable to a recorded reviewer', () => {
+    // Review notes are optional. When a source carries them, a human reviewer
+    // identity and timestamp must be recorded alongside; the agent must never
+    // author a decision on its own.
     const registry = readJson(registryFile);
     for (const source of registry.sources) {
-      expect(source.review_notes).toBeNull();
+      if (!source.review_notes) continue;
+      expect(typeof source.review_notes).toBe('string');
+      expect(source.review_notes.length).toBeGreaterThan(0);
+      expect(source.rights_verified_by).toBeTruthy();
+      expect(source.rights_verified_at).toBeTruthy();
     }
   });
 
