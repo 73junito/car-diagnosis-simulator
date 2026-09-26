@@ -1,5 +1,5 @@
 {
-  "policy_version": "1.1.0",
+  "policy_version": "1.2.0",
   "project": "Open Starting and Charging Service Evidence Database",
   "scholarly_discovery_policy": {
     "primary_discovery_source": "Google Scholar",
@@ -70,6 +70,7 @@
   "external_reference_only": [
     "Fluke Corporation materials without written redistribution permission.",
     "SAE standards and papers without explicit redistribution permission.",
-    "OEM service manuals without explicit redistribution permission."
+    "OEM service manuals without explicit redistribution permission.",
+    "Automotive manufacturer and supplier technical materials without explicit redistribution or model-ingestion permission; citation-only references may retain bibliographic metadata, page/section locators, and project-authored factual paraphrases without storing proprietary excerpts or figures."
   ]
 }
