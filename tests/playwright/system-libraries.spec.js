@@ -9,7 +9,7 @@ test.describe("standardized system libraries", () => {
 
     await page.goto("/dashboard/student/symbol-library/");
     await expect(page.getByRole("heading", { name: "Standardized Schematic Libraries" })).toBeVisible();
-    await expect(page.locator(".symbol-card")).toHaveCount(65);
+    await expect(page.locator(".symbol-card")).toHaveCount(66);
     await expect(page.locator(".connection-card")).toHaveCount(11);
     await expect(page.locator(".voltage-card")).toHaveCount(4);
     await expect(page.locator(".voltage-card.voltage-domain-traction")).toContainText("example only");

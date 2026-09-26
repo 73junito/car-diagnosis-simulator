@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>12 V PWM Actuator Lab</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
+  <link rel="stylesheet" href="./actuator-lab.css">
+</head>
+<body>
+<main class="lab-shell">
+  <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
+  <header>
+    <p class="eyebrow">Reusable circuit-template preview</p>
+    <h1>Interactive 12 V PWM-Controlled Actuator Lab</h1>
+    <p>Separate actuator power, PWM command, and ground/return while avoiding vehicle-specific duty-cycle or frequency assumptions.</p>
+    <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
+  </header>
+  <section class="learning-strip"><strong>Learning goal</strong><span>Explain why actuator power and PWM command are different circuit functions and diagnose faults on each path independently.</span></section>
+  <section class="toolbar">
+    <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
+    <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
+    <div class="button-row">
+      <button id="showSystemFlow" type="button">Show system flow</button>
+      <button id="tracePower" type="button">Trace actuator power</button>
+      <button id="tracePwm" type="button">Trace PWM command</button>
+      <button id="traceGround" type="button">Trace ground return</button>
+      <button id="resetView" type="button">Reset</button>
+    </div>
+  </section>
+  <section class="legend">
+    <span><i class="legend-line power"></i> 12 V power</span>
+    <span><i class="legend-line control"></i> PWM command</span>
+    <span><i class="legend-line ground"></i> Ground return</span>
+    <span><i class="legend-line fault"></i> Faulted / degraded</span>
+    <span><i class="legend-dot test"></i> Test point</span>
+    <span class="legend-note">Low-duty and high-duty states are qualitative training examples only; no universal percentage or frequency is implied.</span>
+  </section>
+  <section class="workspace">
+    <div class="diagram-card">
+      <div class="diagram-heading"><div><p class="eyebrow">Powered actuator architecture</p><h2>Generic 12 V PWM actuator schematic</h2></div><div id="stateBadge" class="state-badge">PWM command — low-duty example</div></div>
+      <div class="diagram-scroll"><svg id="circuitSvg" viewBox="0 0 820 650" role="img" aria-labelledby="diagramTitle diagramDesc"><title id="diagramTitle">Generic 12 V PWM actuator training schematic</title><desc id="diagramDesc">Interactive actuator circuit with separate power, PWM command, ground, test points, and faults.</desc></svg></div>
+      <p class="flow-note" id="flowNote"></p>
+    </div>
+    <aside class="inspector" aria-live="polite"><h2>Component inspector</h2><div id="inspectorContent"><p>Select a symbol or test point to inspect its role.</p></div></aside>
+  </section>
+  <section class="boundary"><h2>Evidence boundary</h2><p>This is a generic project-authored training circuit. Actual actuator architecture, duty cycle, frequency, current, pinout, wiring, diagnostic limits, and procedures require authoritative vehicle-specific service information.</p></section>
+</main>
+<script src="/src/circuits/contracts.js"></script>
+<script src="/src/circuits/engine.js"></script>
+<script src="/src/circuits/template-contracts.js"></script>
+<script src="/src/circuits/voltage-domains.js"></script>
+<script src="/src/connections/contracts.js"></script>
+<script src="/src/connections/index.js"></script>
+<script src="/src/symbols/contracts.js"></script>
+<script src="/src/symbols/registry.js"></script>
+<script src="/src/symbols/svg-renderer.js"></script>
+<script src="/src/symbols/index.js"></script>
+<script src="./actuator-lab.js"></script>
+</body></html>
