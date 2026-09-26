@@ -17,7 +17,28 @@
   const faultSelect = document.getElementById("faultSelect");
   const stateSelect = document.getElementById("stateSelect");
   const stateBadge = document.getElementById("stateBadge");
+  const voltageProfile = document.getElementById("voltageProfile");
   const guidedSteps = [...document.querySelectorAll("#guidedSteps li")];
+
+  const powertrainLabels = Object.freeze({
+    "conventional-12v": "Conventional automotive",
+    hybrid: "Hybrid",
+    "plug-in-hybrid": "Plug-in hybrid",
+    "battery-electric": "Battery electric",
+    "fuel-cell": "Fuel cell",
+    other: "Other"
+  });
+
+  for (const system of circuit.voltageSystems) {
+    const chip = document.createElement("span");
+    chip.className = "voltage-chip";
+    const systemLabel = document.createElement("small");
+    systemLabel.textContent = powertrainLabels[circuit.powertrainType] || circuit.powertrainType;
+    const voltageLabel = document.createElement("span");
+    voltageLabel.textContent = system.displayLabel;
+    chip.append(systemLabel, voltageLabel);
+    voltageProfile.append(chip);
+  }
 
   let activeFault = "";
   let operatingState = stateSelect.value;

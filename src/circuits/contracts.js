@@ -16,7 +16,13 @@ const CONNECTION_TYPES = Object.freeze([
 const FAULT_TYPES = Object.freeze([
   "open_circuit", "high_resistance", "short_to_ground", "short_to_power"
 ]);
+const POWERTRAIN_TYPES = Object.freeze([
+  "conventional-12v", "hybrid", "plug-in-hybrid", "battery-electric", "fuel-cell", "other"
+]);
+const VOLTAGE_SYSTEM_TYPES = Object.freeze([
+  "low-voltage", "traction", "starter-generator", "accessory", "other"
+]);
 
-const api = { COMPONENT_TYPES, CONNECTION_TYPES, FAULT_TYPES };
+const api = { COMPONENT_TYPES, CONNECTION_TYPES, FAULT_TYPES, POWERTRAIN_TYPES, VOLTAGE_SYSTEM_TYPES };
 if (typeof module !== "undefined" && module.exports) module.exports = api;
 if (typeof window !== "undefined") window.TorqueMindCircuitContracts = api;

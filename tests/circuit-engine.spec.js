@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 const fs = require("fs");
 const path = require("path");
@@ -44,6 +44,35 @@ describe("deterministic circuit engine", () => {
     expect(points[0].vehicleSpecificValueRequired).toBe(true);
     expect(points[0]).not.toHaveProperty("expectedVoltage");
     expect(points[0]).not.toHaveProperty("expectedValue");
+  });
+
+  test("training model declares its automotive voltage architecture", () => {
+    expect(circuit.powertrainType).toBe("conventional-12v");
+    expect(circuit.voltageSystems).toEqual([
+      expect.objectContaining({
+        id: "LV12",
+        systemType: "low-voltage",
+        nominalVoltage: 12,
+        unit: "V DC",
+        displayLabel: "12 V nominal"
+      })
+    ]);
+    expect(circuit.components.every((component) => component.voltageSystemId === "LV12")).toBe(true);
+  });
+
+  test("conventional and electrified circuits cannot omit required voltage declarations", () => {
+    const invalidConventional = JSON.parse(JSON.stringify(circuit));
+    invalidConventional.voltageSystems[0].nominalVoltage = 24;
+    expect(engine.validateCircuit(invalidConventional).errors).toContain(
+      "conventional-12v circuits must declare a 12 V nominal voltage system"
+    );
+
+    const invalidEv = JSON.parse(JSON.stringify(circuit));
+    invalidEv.powertrainType = "battery-electric";
+    invalidEv.voltageSystems = [];
+    expect(engine.validateCircuit(invalidEv).errors).toContain(
+      "voltageSystems must contain at least one declared voltage system"
+    );
   });
 
   test("training model is explicitly non-vehicle-specific and non-scored", () => {

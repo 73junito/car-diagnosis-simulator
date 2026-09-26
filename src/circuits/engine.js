@@ -9,9 +9,24 @@
     const errors = [];
     if (!circuit || typeof circuit !== "object") return { valid: false, errors: ["circuit must be an object"] };
     if (!circuit.circuitId) errors.push("circuitId is required");
+    if (!contracts.POWERTRAIN_TYPES.includes(circuit.powertrainType)) errors.push(`unsupported or missing powertrainType: ${circuit.powertrainType}`);
+    if (!Array.isArray(circuit.voltageSystems) || circuit.voltageSystems.length === 0) errors.push("voltageSystems must contain at least one declared voltage system");
     if (!Array.isArray(circuit.components)) errors.push("components must be an array");
     if (!Array.isArray(circuit.connections)) errors.push("connections must be an array");
     if (errors.length) return { valid: false, errors };
+
+    const voltageSystemIds = new Set();
+    for (const system of circuit.voltageSystems) {
+      if (!system.id || voltageSystemIds.has(system.id)) errors.push(`invalid or duplicate voltage system id: ${system.id}`);
+      voltageSystemIds.add(system.id);
+      if (!contracts.VOLTAGE_SYSTEM_TYPES.includes(system.systemType)) errors.push(`unsupported voltage system type: ${system.systemType}`);
+      if (!(Number.isFinite(system.nominalVoltage) && system.nominalVoltage > 0)) errors.push(`voltage system ${system.id} requires a positive nominalVoltage`);
+      if (system.unit !== "V DC") errors.push(`voltage system ${system.id} unit must be V DC`);
+      if (!system.displayLabel || typeof system.displayLabel !== "string") errors.push(`voltage system ${system.id} requires displayLabel`);
+    }
+    if (circuit.powertrainType === "conventional-12v" && !circuit.voltageSystems.some((system) => system.nominalVoltage === 12)) {
+      errors.push("conventional-12v circuits must declare a 12 V nominal voltage system");
+    }
 
     const componentIds = new Set();
     const terminalOwners = new Map();
@@ -20,6 +35,7 @@
       if (!component.id || componentIds.has(component.id)) errors.push(`invalid or duplicate component id: ${component.id}`);
       componentIds.add(component.id);
       if (!contracts.COMPONENT_TYPES.includes(component.type)) errors.push(`unsupported component type: ${component.type}`);
+      if (!component.voltageSystemId || !voltageSystemIds.has(component.voltageSystemId)) errors.push(`component ${component.id} requires a valid voltageSystemId`);
       if (!Array.isArray(component.terminals) || component.terminals.length === 0) errors.push(`component ${component.id} requires terminals`);
       for (const terminal of component.terminals || []) {
         if (!terminal.id || terminalOwners.has(terminal.id)) errors.push(`invalid or duplicate terminal id: ${terminal.id}`);

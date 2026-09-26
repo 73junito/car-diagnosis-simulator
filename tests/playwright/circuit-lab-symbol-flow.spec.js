@@ -9,6 +9,8 @@ test.describe('Interactive circuit lab symbol flow', () => {
 
     await page.goto('/dashboard/student/circuit-lab/');
     await expect(page.getByRole('heading', { name: 'Interactive Charging-System Circuit Lab' })).toBeVisible();
+    await expect(page.locator('#voltageProfile')).toContainText('Conventional automotive');
+    await expect(page.locator('#voltageProfile')).toContainText('12 V nominal');
 
     await expect(page.locator('[data-component-id="BAT1"]')).toBeVisible();
     await expect(page.locator('[data-component-id="ALT1"]')).toBeVisible();

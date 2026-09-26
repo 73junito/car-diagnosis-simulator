@@ -17,6 +17,9 @@ body { margin: 0; }
 .eyebrow { margin: 0 0 6px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; font-size: .72rem; color: #53627a; }
 header h1 { margin: 0 0 8px; font-size: clamp(2rem,4vw,3rem); }
 header p { max-width: 850px; line-height: 1.6; }
+.voltage-profile { display:inline-flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.voltage-chip { display:inline-flex; align-items:center; gap:6px; padding:7px 10px; border-radius:999px; background:#edf3f8; border:1px solid #cbd5e1; color:#24364b; font-size:.8rem; font-weight:800; }
+.voltage-chip small { color:#5d6b7f; font-weight:700; }
 .learning-strip { display:flex; gap:14px; align-items:center; margin:22px 0 12px; padding:14px 16px; background:#eef3f8; border:1px solid #cfd9e6; border-radius:12px; }
 .learning-strip strong { white-space:nowrap; }
 .toolbar { display:grid; grid-template-columns:minmax(190px,1fr) minmax(220px,1fr) auto; gap:14px; align-items:end; margin:14px 0 10px; padding:16px; background:var(--panel); border:1px solid var(--border); border-radius:14px; }
