@@ -1,6 +1,6 @@
 {
   "domain": "electrical",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "status": "project-authored-reference-aligned",
   "standardReferences": [
     "IEC 60617:2026 DB",
@@ -2047,6 +2047,132 @@
           },
           "className": "symbol-text",
           "text": "PWM"
+        }
+      ]
+    },
+    {
+      "id": "electrical.network-module",
+      "domain": "electrical",
+      "name": "Network control module",
+      "aliases": [
+        "CAN module",
+        "LIN module",
+        "network node"
+      ],
+      "tags": [
+        "network",
+        "CAN",
+        "LIN",
+        "module"
+      ],
+      "terminals": [
+        {
+          "id": "power",
+          "x": 10,
+          "y": 20
+        },
+        {
+          "id": "ground",
+          "x": 10,
+          "y": 80
+        },
+        {
+          "id": "can_h",
+          "x": 90,
+          "y": 30
+        },
+        {
+          "id": "can_l",
+          "x": 90,
+          "y": 50
+        },
+        {
+          "id": "lin",
+          "x": 90,
+          "y": 75
+        }
+      ],
+      "primitives": [
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 24,
+            "y": 16,
+            "width": 52,
+            "height": 68,
+            "rx": 7
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 50,
+            "y": 38,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "NET"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 50,
+            "y": 58,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "BUS"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 20,
+            "x2": 24,
+            "y2": 20
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 80,
+            "x2": 24,
+            "y2": 80
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 30,
+            "x2": 90,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 75,
+            "x2": 90,
+            "y2": 75
+          },
+          "className": "symbol-stroke"
         }
       ]
     }

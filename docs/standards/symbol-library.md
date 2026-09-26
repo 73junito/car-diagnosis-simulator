@@ -8,13 +8,13 @@ This library is the canonical source for reusable TorqueMind/AutoLearnPro schema
 
 | Domain | Symbols | Reference family |
 | --- | ---: | --- |
-| Electrical | 30 | IEC 60617:2026 DB; ISO 14617-1:2025 |
+| Electrical | 31 | IEC 60617:2026 DB; ISO 14617-1:2025 |
 | Hydraulic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Pneumatic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Mechanical | 8 | ISO 14617-1:2025 |
 | Thermal | 6 | ISO 14617-1:2025 |
 
-Current catalog: **66 symbols**.
+Current catalog: **67 symbols**.
 
 ## Canonical representation
 
@@ -123,3 +123,13 @@ A dedicated three-wire actuator symbol exposes explicit `power`, `control`, and 
 The operating states use qualitative **low-duty training example** and **high-duty training example** labels. No universal duty-cycle percentage, frequency, current, or response characteristic is asserted. Vehicle-specific values remain intentionally omitted.
 
 The template includes open-circuit, high-resistance, short-to-ground, and short-to-power faults for both load and PWM control paths.
+
+### 12 V CAN/LIN network template
+
+The reusable template `automotive-12v-can-lin-network` models a generic conventional **12 V nominal** vehicle network with one gateway/controller, two generic CAN nodes, and one LIN sub-node.
+
+A dedicated `electrical.network-module` symbol exposes explicit `power`, `ground`, `can_h`, `can_l`, and `lin` terminals so network conductors remain distinct from module power and ground paths.
+
+The template intentionally uses qualitative communication states. It does not assign universal CAN/LIN voltage levels, resistance targets, termination values, baud rates, wake thresholds, or manufacturer pinouts.
+
+Network fault coverage includes opens, shorts to ground, shorts to power, and a first-class `short_between_lines` fault used to model a CAN-H/CAN-L line-to-line short as an explicit unintended graph edge.
