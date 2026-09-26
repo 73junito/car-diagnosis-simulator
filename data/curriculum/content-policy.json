@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "policyId": "curriculum-content-policy",
+  "status": "active",
+  "instructionalPurposes": [
+    "introduce",
+    "explain",
+    "demonstrate",
+    "compare",
+    "sequence",
+    "practice",
+    "diagnose",
+    "interpret-evidence",
+    "assess",
+    "remediate",
+    "summarize",
+    "reflect"
+  ],
+  "visualTypes": [
+    {"type":"concept-diagram","purpose":"Show relationships among components, systems, causes, or ideas."},
+    {"type":"flowchart","purpose":"Show diagnostic sequences, decisions, procedures, or workflows."},
+    {"type":"table","purpose":"Compare specifications, symptoms, evidence, tools, causes, or procedures."},
+    {"type":"bar-chart","purpose":"Compare quantities, performance, frequencies, results, or measurements."},
+    {"type":"timeline","purpose":"Show sequence over time, system events, maintenance intervals, or test progression."},
+    {"type":"infographic","purpose":"Combine concise text, icons, numbers, and relationships into one instructional summary."},
+    {"type":"pie-chart","purpose":"Show meaningful parts of a whole only when that relationship is instructionally necessary.","requiresWholePartRationale":true}
+  ],
+  "lessonStructure": [
+    "learning-objective",
+    "prior-knowledge",
+    "concept-explanation",
+    "visual-or-model",
+    "worked-example",
+    "guided-practice",
+    "independent-scenario",
+    "knowledge-or-reasoning-check",
+    "feedback-and-retry",
+    "evidence-reference",
+    "lesson-summary"
+  ],
+  "coreRules": [
+    {"id":"objective-mapping","rule":"Every content block and visual must map to at least one learning objective."},
+    {"id":"teach-before-assess","rule":"Concepts, terminology, processes, and evidence patterns must be taught before they are assessed."},
+    {"id":"cognitive-levels","rule":"Knowledge, procedural application, evidence interpretation, and diagnostic reasoning must be distinguished."},
+    {"id":"simple-to-complex","rule":"Lessons should progress from system understanding to guided interpretation to independent application."},
+    {"id":"authentic-context","rule":"Examples and activities should use realistic symptoms, measurements, tools, documentation, and diagnostic decisions."},
+    {"id":"evidence-supported","rule":"Technical instructional claims must be supported by an approved source with provenance preserved."},
+    {"id":"no-invented-specifications","rule":"Vehicle-specific values, procedures, service limits, and specifications must come from an appropriate authoritative source."},
+    {"id":"general-vs-vehicle-specific","rule":"General principles must be distinguished from vehicle-specific procedures and specifications."},
+    {"id":"purposeful-visuals","rule":"Visuals must explain, compare, sequence, summarize, or support a learning or diagnostic decision."},
+    {"id":"cognitive-load","rule":"Lessons should avoid introducing unnecessary simultaneous concepts, measurements, procedures, and terminology."},
+    {"id":"define-terminology","rule":"Unfamiliar technical terminology must be defined at first instructional use."},
+    {"id":"worked-before-independent","rule":"Worked examples should precede comparable independent problems or diagnostic tasks."},
+    {"id":"low-stakes-checks","rule":"Lessons should include low-stakes checks before learners advance to more complex tasks."},
+    {"id":"reasoned-feedback","rule":"Feedback must explain why a response or decision is correct or incorrect."},
+    {"id":"misconception-feedback","rule":"Wrong-answer feedback should address the misconception represented by the response when known."},
+    {"id":"answerable-from-evidence","rule":"Assessment items must be answerable from taught content or evidence supplied to the learner."},
+    {"id":"difficulty-alignment","rule":"Assessment difficulty must align with the learning objective and taught cognitive level."},
+    {"id":"multiple-representations","rule":"Multiple representations should be used only when each adds instructional value."},
+    {"id":"accessibility","rule":"Visual and interactive content must include equivalent text, keyboard access, clear headings, and must not rely on color alone."},
+    {"id":"consistent-structure","rule":"Lessons must follow the canonical lesson structure unless a documented instructional rationale justifies an exception."}
+  ],
+  "governanceRules": [
+    "Curriculum classification and academic level remain separate fields.",
+    "Draft curriculum remains labeled draft until reviewed.",
+    "Approved instructional content and approved assessment content remain separate states.",
+    "No scored item becomes available solely because it exists in storage.",
+    "Every scored assessment item requires provenance, review status, and curriculum mapping.",
+    "Training may include richer coaching and feedback than scored assessment.",
+    "Scored assessment must not expose answer-revealing training metadata.",
+    "Content changes must be versioned so historical attempts can resolve the curriculum and item versions used."
+  ]
+}
