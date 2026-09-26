@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.0.0",
+  "authorityReferences": [
+    {
+      "id": "kbor-automotive-technology",
+      "authority": "Kansas Board of Regents",
+      "url": "https://kansasregents.gov/workforce_development/program-alignment/automotive_technology",
+      "verifiedFacts": [
+        "CIP 47.0604",
+        "A.A.S. maximum 68 credit hours",
+        "Minimum 15 credit hours of general education",
+        "Common courses total 12 credit hours",
+        "Brakes I, Electrical I, Engine Performance I, and Suspension and Steering I are 3-credit common courses"
+      ]
+    },
+    {
+      "id": "nces-cip-15-0803",
+      "authority": "National Center for Education Statistics",
+      "url": "https://nces.ed.gov/ipeds/cipcode/cipdetail.aspx?cipid=90576&y=56",
+      "verifiedFacts": [
+        "CIP 15.0803",
+        "Automotive Engineering Technology/Technician"
+      ]
+    }
+  ],
+  "programs": [
+    {
+      "id": "undergraduate-automotive-technology-aas",
+      "academicLevel": "undergraduate",
+      "credential": "Associate of Applied Science",
+      "programName": "Automotive Technology",
+      "cipCode": "47.0604",
+      "cipTitle": "Automobile/Automotive Mechanics Technology/Technician",
+      "totalCredits": 68,
+      "status": "proposed-with-verified-kansas-core",
+      "authorityReferenceIds": ["kbor-automotive-technology"],
+      "creditBuckets": [
+        {"id":"general-education","title":"General Education","credits":15},
+        {"id":"automotive-technology","title":"Automotive Technology","credits":53}
+      ],
+      "courses": [
+        {"id":"ENG-101","title":"Technical Communication","credits":3,"bucket":"general-education","status":"proposed","prerequisites":[]},
+        {"id":"MAT-101","title":"Technical Mathematics","credits":3,"bucket":"general-education","status":"proposed","prerequisites":[]},
+        {"id":"COM-101","title":"Professional Communication","credits":3,"bucket":"general-education","status":"proposed","prerequisites":[]},
+        {"id":"SCI-101","title":"Applied Physical Science","credits":3,"bucket":"general-education","status":"proposed","prerequisites":[]},
+        {"id":"HUM-SOC-101","title":"Humanities or Social Science","credits":3,"bucket":"general-education","status":"proposed","prerequisites":[]},
+
+        {"id":"AUT-101","title":"Automotive Fundamentals & Safety","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":[]},
+        {"id":"AUT-110","title":"Brakes I","credits":3,"bucket":"automotive-technology","status":"verified-kansas-common-course","prerequisites":["AUT-101"],"existingCourseId":"brakes-1","existingLessonPlanId":"ug-brakes-foundations"},
+        {"id":"AUT-120","title":"Electrical I","credits":3,"bucket":"automotive-technology","status":"verified-kansas-common-course","prerequisites":["AUT-101"],"existingCourseId":"electrical-1","existingLessonPlanId":"ug-electrical-charging-system"},
+        {"id":"AUT-130","title":"Engine Performance I","credits":3,"bucket":"automotive-technology","status":"verified-kansas-common-course","prerequisites":["AUT-120"],"existingCourseId":"engine-performance-1","existingLessonPlanId":"ug-engine-performance-foundations"},
+        {"id":"AUT-140","title":"Suspension & Steering I","credits":3,"bucket":"automotive-technology","status":"verified-kansas-common-course","prerequisites":["AUT-101"],"existingCourseId":"suspension-steering-1","existingLessonPlanId":"ug-suspension-steering-foundations"},
+
+        {"id":"AUT-201","title":"Engine Repair","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-101"]},
+        {"id":"AUT-210","title":"Advanced Electrical & Electronics","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-120"]},
+        {"id":"AUT-220","title":"Computerized Diagnostics & OBD-II","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-130","AUT-210"]},
+        {"id":"AUT-225","title":"Advanced Diagnostic Strategy","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-220"]},
+        {"id":"AUT-230","title":"Manual & Automatic Transmissions","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-101"]},
+        {"id":"AUT-240","title":"Heating & Air Conditioning","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-120"]},
+        {"id":"AUT-250","title":"Hybrid & Electric Vehicle Technology","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-210","AUT-220"]},
+        {"id":"AUT-260","title":"ADAS & Vehicle Networking","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-210","AUT-220"]},
+        {"id":"AUT-270","title":"AI-Assisted Automotive Diagnostics","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-220","AUT-225"]},
+        {"id":"AUT-280","title":"Automotive Data & Telematics","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-220","AUT-260"]},
+        {"id":"AUT-285","title":"Automotive Service Management","credits":2,"bucket":"automotive-technology","status":"proposed","prerequisites":[]},
+        {"id":"AUT-290","title":"Automotive Technology Capstone","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-225","AUT-270","AUT-280","AUT-285"]},
+        {"id":"AUT-295","title":"Automotive Work-Based Learning","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-290"]}
+      ]
+    },
+    {
+      "id": "graduate-automotive-engineering-technology",
+      "academicLevel": "graduate",
+      "credential": "Master of Applied Automotive Engineering Technology",
+      "programName": "Automotive Engineering Technology",
+      "cipCode": "15.0803",
+      "cipTitle": "Automotive Engineering Technology/Technician",
+      "totalCredits": 30,
+      "status": "proposed",
+      "authorityReferenceIds": ["nces-cip-15-0803"],
+      "creditBuckets": [
+        {"id":"engineering-technology-core","title":"Core Engineering Technology","credits":12},
+        {"id":"automotive-systems","title":"Automotive Systems","credits":9},
+        {"id":"intelligent-vehicle-technology","title":"Intelligent Vehicle Technology","credits":6},
+        {"id":"capstone-applied-research","title":"Capstone / Applied Research","credits":3}
+      ],
+      "courses": [
+        {"id":"AET-501","title":"Advanced Engineering Technology","credits":3,"bucket":"engineering-technology-core","status":"proposed","prerequisites":[]},
+        {"id":"AET-510","title":"Engineering Mathematics & Modeling","credits":3,"bucket":"engineering-technology-core","status":"proposed","prerequisites":[]},
+        {"id":"AET-520","title":"Systems Engineering & Design","credits":3,"bucket":"engineering-technology-core","status":"proposed","prerequisites":["AET-501","AET-510"]},
+        {"id":"AET-530","title":"Instrumentation & Experimental Methods","credits":3,"bucket":"engineering-technology-core","status":"proposed","prerequisites":["AET-520"],"existingLessonPlanId":"grad-vehicle-systems-testing","mappingType":"partial-alignment"},
+
+        {"id":"AET-540","title":"Advanced Vehicle Powertrain Systems","credits":3,"bucket":"automotive-systems","status":"proposed","prerequisites":["AET-520"]},
+        {"id":"AET-550","title":"Electric & Hybrid Vehicle Systems","credits":3,"bucket":"automotive-systems","status":"proposed","prerequisites":["AET-540"]},
+        {"id":"AET-560","title":"Automotive Electronics & Controls","credits":3,"bucket":"automotive-systems","status":"proposed","prerequisites":["AET-530"]},
+
+        {"id":"AET-570","title":"ADAS & Vehicle Networking","credits":3,"bucket":"intelligent-vehicle-technology","status":"proposed","prerequisites":["AET-560"]},
+        {"id":"AET-580","title":"AI, Data Analytics & Intelligent Diagnostics","credits":3,"bucket":"intelligent-vehicle-technology","status":"proposed","prerequisites":["AET-560"],"existingLessonPlanId":"grad-diagnostic-evidence-analysis","mappingType":"partial-alignment"},
+
+        {"id":"AET-590","title":"Graduate Capstone / Applied Research","credits":3,"bucket":"capstone-applied-research","status":"proposed","prerequisites":["AET-570","AET-580"],"existingLessonPlanId":"grad-applied-research-literature","mappingType":"partial-alignment"}
+      ],
+      "supplementalGraduateContent": [
+        {
+          "existingCourseId": "curriculum-assessment-design",
+          "existingLessonPlanId": "grad-curriculum-assessment-design",
+          "title": "Curriculum & Assessment Design",
+          "classification": "education-track-supplemental",
+          "reason": "Valuable graduate technical-education content, but not part of the proposed Automotive Engineering Technology 30-credit core."
+        },
+        {
+          "existingCourseId": "technical-instructional-leadership",
+          "existingLessonPlanId": "grad-technical-instructional-leadership",
+          "title": "Technical Instructional Leadership",
+          "classification": "education-track-supplemental",
+          "reason": "Valuable graduate leadership content, but not part of the proposed Automotive Engineering Technology 30-credit core."
+        }
+      ]
+    }
+  ]
+}
