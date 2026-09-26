@@ -4,9 +4,7 @@
 .wire.fault-short{stroke:var(--fault);stroke-width:6;stroke-dasharray:2 4;animation:none}
 
 /* Network-lab readability overrides. */
-#circuitSvg .component .hit-target{fill:transparent;stroke:none}
 #circuitSvg .component .symbol-text{font-size:13px;font-weight:800;fill:#0f172a}
-#circuitSvg .component-label .label-chip{fill:#fff;stroke:#94a3b8;stroke-width:2.5}
 #circuitSvg .component-label .label-title{font-size:17px}
 #circuitSvg .component-label .label-subtitle{font-size:13px}
 #circuitSvg .test-point circle{fill:#fff;stroke:#5b3fb0;stroke-width:3}
