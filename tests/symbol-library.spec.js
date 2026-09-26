@@ -20,7 +20,7 @@ describe("standardized symbol library", () => {
     expect(manifest.domains.map((entry) => entry.id)).toEqual([
       "electrical", "hydraulic", "pneumatic", "mechanical", "thermal"
     ]);
-    expect(symbols).toHaveLength(66);
+    expect(symbols).toHaveLength(67);
   });
 
   test("all definitions satisfy the core symbol contract", () => {
@@ -30,7 +30,7 @@ describe("standardized symbol library", () => {
   test("registry supports domain listing and aliases/tags search", () => {
     const registry = new SymbolRegistry().registerMany(symbols);
     expect(registry.list("hydraulic")).toHaveLength(11);
-    expect(registry.list("electrical")).toHaveLength(30);
+    expect(registry.list("electrical")).toHaveLength(31);
     expect(registry.search("air tank", "pneumatic").map((symbol) => symbol.id)).toContain("pneumatic.receiver");
     expect(registry.search("charging", "electrical").map((symbol) => symbol.id)).toContain("electrical.alternator");
   });

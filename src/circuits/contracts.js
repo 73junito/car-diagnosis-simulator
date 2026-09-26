@@ -2,7 +2,7 @@
 
 /** @typedef {"battery"|"alternator"|"regulator"|"fusible_link"|"fuse"|"relay"|"switch"|"motor"|"lamp"|"resistor"|"sensor"|"actuator"|"module"|"connector"|"splice"|"junction"|"ground"|"load"|"test_point"|"bus"} CircuitComponentType */
 /** @typedef {"hardwire"|"power_feed"|"ground_reference"|"control"|"CAN"|"LIN"|"PWM"|"analog_signal"|"digital_signal"} ConnectionType */
-/** @typedef {"open_circuit"|"high_resistance"|"short_to_ground"|"short_to_power"} CircuitFaultType */
+/** @typedef {"open_circuit"|"high_resistance"|"short_to_ground"|"short_to_power"|"short_between_lines"} CircuitFaultType */
 
 const COMPONENT_TYPES = Object.freeze([
   "battery", "alternator", "regulator", "fusible_link", "fuse", "relay",
@@ -14,7 +14,7 @@ const CONNECTION_TYPES = Object.freeze([
   "PWM", "analog_signal", "digital_signal"
 ]);
 const FAULT_TYPES = Object.freeze([
-  "open_circuit", "high_resistance", "short_to_ground", "short_to_power"
+  "open_circuit", "high_resistance", "short_to_ground", "short_to_power", "short_between_lines"
 ]);
 const POWERTRAIN_TYPES = Object.freeze([
   "conventional-12v", "hybrid", "plug-in-hybrid", "battery-electric", "fuel-cell", "other"

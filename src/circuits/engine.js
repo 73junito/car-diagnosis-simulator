@@ -58,7 +58,7 @@
       if (!fault.id) errors.push("fault id is required");
       if (!contracts.FAULT_TYPES.includes(fault.type)) errors.push(`unsupported fault type: ${fault.type}`);
       if (!connectionIds.has(fault.targetConnectionId)) errors.push(`fault ${fault.id} references unknown targetConnectionId ${fault.targetConnectionId}`);
-      if (fault.type === "short_to_ground" || fault.type === "short_to_power") {
+      if (fault.type === "short_to_ground" || fault.type === "short_to_power" || fault.type === "short_between_lines") {
         if (!terminalOwners.has(fault.targetTerminalId)) errors.push(`fault ${fault.id} requires a valid targetTerminalId`);
         if (!terminalOwners.has(fault.shortTargetTerminalId)) errors.push(`fault ${fault.id} requires a valid shortTargetTerminalId`);
       }
@@ -99,7 +99,7 @@
       }
     }
 
-    for (const fault of faults.filter((item) => item.type === "short_to_ground" || item.type === "short_to_power")) {
+    for (const fault of faults.filter((item) => item.type === "short_to_ground" || item.type === "short_to_power" || item.type === "short_between_lines")) {
       const from = fault.targetTerminalId;
       const to = fault.shortTargetTerminalId;
       const edge = {

@@ -1,0 +1,78 @@
+{
+  "schemaVersion":"1.0.0",
+  "templateId":"automotive-12v-can-lin-network",
+  "templateVersion":"1.0.0",
+  "templateRole":"reusable-training-circuit-template",
+  "systemKind":"vehicle-network",
+  "circuitId":"training-can-lin-network-001",
+  "title":"Generic 12 V CAN/LIN Network Training Circuit",
+  "status":"project-authored-training-model",
+  "powertrainType":"conventional-12v",
+  "voltageSystems":[{"id":"LV12","systemType":"low-voltage","nominalVoltage":12,"unit":"V DC","displayLabel":"12 V nominal"}],
+  "vehicleApplicability":{
+    "mode":"generic-training-only",
+    "vehicleSpecific":false,
+    "notice":"This template teaches generic CAN/LIN topology and fault relationships only. Actual bus voltage, resistance, termination, baud rate, wake strategy, pinout, wiring, procedures, and limits are vehicle-specific."
+  },
+  "curriculum":{"lessonPlanId":"ug-electrical-can-lin-network","supportsObjectiveIds":["ug-electrical-lo-network-1"],"assessmentUse":"training-only"},
+  "components":[
+    {"id":"BAT1","type":"battery","name":"Battery","symbolId":"electrical.battery","voltageSystemId":"LV12","terminals":[{"id":"BAT1_POS","name":"Positive","symbolTerminalId":"positive"},{"id":"BAT1_NEG","name":"Negative","symbolTerminalId":"negative"}]},
+    {"id":"FUSE1","type":"fuse","name":"Network-Module Protection","symbolId":"electrical.fuse","voltageSystemId":"LV12","terminals":[{"id":"FUSE1_IN","name":"Input","symbolTerminalId":"in"},{"id":"FUSE1_OUT","name":"Output","symbolTerminalId":"out"}],"internalConnections":[["FUSE1_IN","FUSE1_OUT"]]},
+    {"id":"GW1","type":"module","name":"Gateway / Network Controller","symbolId":"electrical.network-module","voltageSystemId":"LV12","terminals":[{"id":"GW1_PWR","name":"Power","symbolTerminalId":"power"},{"id":"GW1_GND","name":"Ground","symbolTerminalId":"ground"},{"id":"GW1_CAN_H","name":"CAN-H","symbolTerminalId":"can_h"},{"id":"GW1_CAN_L","name":"CAN-L","symbolTerminalId":"can_l"},{"id":"GW1_LIN","name":"LIN","symbolTerminalId":"lin"}]},
+    {"id":"CAN_A","type":"module","name":"CAN Node A","symbolId":"electrical.network-module","voltageSystemId":"LV12","terminals":[{"id":"CAN_A_PWR","name":"Power","symbolTerminalId":"power"},{"id":"CAN_A_GND","name":"Ground","symbolTerminalId":"ground"},{"id":"CAN_A_CAN_H","name":"CAN-H","symbolTerminalId":"can_h"},{"id":"CAN_A_CAN_L","name":"CAN-L","symbolTerminalId":"can_l"},{"id":"CAN_A_LIN","name":"Unused LIN terminal","symbolTerminalId":"lin"}]},
+    {"id":"CAN_B","type":"module","name":"CAN Node B","symbolId":"electrical.network-module","voltageSystemId":"LV12","terminals":[{"id":"CAN_B_PWR","name":"Power","symbolTerminalId":"power"},{"id":"CAN_B_GND","name":"Ground","symbolTerminalId":"ground"},{"id":"CAN_B_CAN_H","name":"CAN-H","symbolTerminalId":"can_h"},{"id":"CAN_B_CAN_L","name":"CAN-L","symbolTerminalId":"can_l"},{"id":"CAN_B_LIN","name":"Unused LIN terminal","symbolTerminalId":"lin"}]},
+    {"id":"LIN_A","type":"module","name":"LIN Sub-Node","symbolId":"electrical.network-module","voltageSystemId":"LV12","terminals":[{"id":"LIN_A_PWR","name":"Power","symbolTerminalId":"power"},{"id":"LIN_A_GND","name":"Ground","symbolTerminalId":"ground"},{"id":"LIN_A_CAN_H","name":"Unused CAN-H terminal","symbolTerminalId":"can_h"},{"id":"LIN_A_CAN_L","name":"Unused CAN-L terminal","symbolTerminalId":"can_l"},{"id":"LIN_A_LIN","name":"LIN","symbolTerminalId":"lin"}]},
+    {"id":"GND1","type":"ground","name":"Chassis Ground","symbolId":"electrical.ground","voltageSystemId":"LV12","terminals":[{"id":"GND1_MAIN","name":"Ground","symbolTerminalId":"ground"}]}
+  ],
+  "connections":[
+    {"id":"W_BAT_FUSE","from":"BAT1_POS","to":"FUSE1_IN","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_GW","from":"FUSE1_OUT","to":"GW1_PWR","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_CAN_A","from":"FUSE1_OUT","to":"CAN_A_PWR","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_CAN_B","from":"FUSE1_OUT","to":"CAN_B_PWR","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_LIN_A","from":"FUSE1_OUT","to":"LIN_A_PWR","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_GW_GND","from":"GW1_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_CAN_A_GND","from":"CAN_A_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_CAN_B_GND","from":"CAN_B_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_LIN_A_GND","from":"LIN_A_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_BAT_GND","from":"BAT1_NEG","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_CAN_H_GW_A","from":"GW1_CAN_H","to":"CAN_A_CAN_H","type":"CAN","styleId":"electrical.can-bus","voltageSystemId":"LV12"},
+    {"id":"W_CAN_H_A_B","from":"CAN_A_CAN_H","to":"CAN_B_CAN_H","type":"CAN","styleId":"electrical.can-bus","voltageSystemId":"LV12"},
+    {"id":"W_CAN_L_GW_A","from":"GW1_CAN_L","to":"CAN_A_CAN_L","type":"CAN","styleId":"electrical.can-bus","voltageSystemId":"LV12"},
+    {"id":"W_CAN_L_A_B","from":"CAN_A_CAN_L","to":"CAN_B_CAN_L","type":"CAN","styleId":"electrical.can-bus","voltageSystemId":"LV12"},
+    {"id":"W_LIN_GW_A","from":"GW1_LIN","to":"LIN_A_LIN","type":"LIN","styleId":"electrical.lin-bus","voltageSystemId":"LV12"}
+  ],
+  "testPoints":[
+    {"id":"TP_CAN_H","terminalId":"CAN_A_CAN_H","measurementTypes":["signal"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_CAN_L","terminalId":"CAN_A_CAN_L","measurementTypes":["signal"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_LIN","terminalId":"LIN_A_LIN","measurementTypes":["signal"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_MODULE_POWER","terminalId":"CAN_A_PWR","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_MODULE_GROUND","terminalId":"CAN_A_GND","measurementTypes":["voltage_drop","continuity"],"vehicleSpecificValueRequired":true}
+  ],
+  "faultCatalog":[
+    {"id":"FAULT_OPEN_CAN_H","type":"open_circuit","targetConnectionId":"W_CAN_H_A_B","label":"Open CAN-H conductor"},
+    {"id":"FAULT_OPEN_MODULE_POWER","type":"open_circuit","targetConnectionId":"W_FUSE_CAN_B","label":"Open CAN node power feed"},
+    {"id":"FAULT_OPEN_MODULE_GROUND","type":"open_circuit","targetConnectionId":"W_CAN_B_GND","label":"Open CAN node ground"},
+    {"id":"FAULT_CAN_H_SHORT_GROUND","type":"short_to_ground","targetConnectionId":"W_CAN_H_GW_A","targetTerminalId":"CAN_A_CAN_H","shortTargetTerminalId":"GND1_MAIN","label":"CAN-H short to ground"},
+    {"id":"FAULT_CAN_H_SHORT_POWER","type":"short_to_power","targetConnectionId":"W_CAN_H_GW_A","targetTerminalId":"CAN_A_CAN_H","shortTargetTerminalId":"BAT1_POS","label":"CAN-H short to power"},
+    {"id":"FAULT_CAN_LINES_SHORTED","type":"short_between_lines","targetConnectionId":"W_CAN_H_GW_A","targetTerminalId":"CAN_A_CAN_H","shortTargetTerminalId":"CAN_A_CAN_L","label":"CAN-H and CAN-L shorted together"},
+    {"id":"FAULT_OPEN_LIN","type":"open_circuit","targetConnectionId":"W_LIN_GW_A","label":"Open LIN conductor"},
+    {"id":"FAULT_LIN_SHORT_GROUND","type":"short_to_ground","targetConnectionId":"W_LIN_GW_A","targetTerminalId":"LIN_A_LIN","shortTargetTerminalId":"GND1_MAIN","label":"LIN short to ground"}
+  ],
+  "operatingStates":[
+    {"id":"key-off","label":"Key off","activeFlows":{"power":[],"ground":[],"can":[],"lin":[]},"note":"Key off: module power, CAN activity, and LIN activity are shown inactive."},
+    {"id":"network-awake","label":"Network awake / communication idle","activeFlows":{"power":[["W_BAT_FUSE","forward"],["W_FUSE_GW","forward"],["W_FUSE_CAN_A","forward"],["W_FUSE_CAN_B","forward"],["W_FUSE_LIN_A","forward"]],"ground":[["W_GW_GND","forward"],["W_CAN_A_GND","forward"],["W_CAN_B_GND","forward"],["W_LIN_A_GND","forward"],["W_BAT_GND","reverse"]],"can":[],"lin":[]},"note":"Network awake: modules have generic 12 V power and ground available while communication activity is not emphasized."},
+    {"id":"can-active","label":"CAN communication active","activeFlows":{"power":[["W_BAT_FUSE","forward"],["W_FUSE_GW","forward"],["W_FUSE_CAN_A","forward"],["W_FUSE_CAN_B","forward"],["W_FUSE_LIN_A","forward"]],"ground":[["W_GW_GND","forward"],["W_CAN_A_GND","forward"],["W_CAN_B_GND","forward"],["W_LIN_A_GND","forward"],["W_BAT_GND","reverse"]],"can":[["W_CAN_H_GW_A","forward"],["W_CAN_H_A_B","forward"],["W_CAN_L_GW_A","forward"],["W_CAN_L_A_B","forward"]],"lin":[]},"note":"CAN active: paired CAN conductors are highlighted conceptually. No universal bus voltage, resistance, termination, or baud rate is implied."},
+    {"id":"can-lin-active","label":"CAN + LIN communication active","activeFlows":{"power":[["W_BAT_FUSE","forward"],["W_FUSE_GW","forward"],["W_FUSE_CAN_A","forward"],["W_FUSE_CAN_B","forward"],["W_FUSE_LIN_A","forward"]],"ground":[["W_GW_GND","forward"],["W_CAN_A_GND","forward"],["W_CAN_B_GND","forward"],["W_LIN_A_GND","forward"],["W_BAT_GND","reverse"]],"can":[["W_CAN_H_GW_A","forward"],["W_CAN_H_A_B","forward"],["W_CAN_L_GW_A","forward"],["W_CAN_L_A_B","forward"]],"lin":[["W_LIN_GW_A","forward"]]},"note":"CAN and LIN active: the main paired CAN network and a single-wire LIN sub-network are shown communicating conceptually using generic training values."}
+  ],
+  "layout":{"renderer":"svg","positions":{"BAT1":{"x":70,"y":280},"FUSE1":{"x":220,"y":90},"GW1":{"x":350,"y":250},"CAN_A":{"x":550,"y":170},"CAN_B":{"x":740,"y":170},"LIN_A":{"x":550,"y":390},"GND1":{"x":400,"y":555}}},
+  "labels":{
+    "BAT1":{"x":10,"y":355,"width":130,"height":48,"title":"Battery","subtitle":"12 V nominal source"},
+    "FUSE1":{"x":145,"y":5,"width":150,"height":46,"title":"Module protection","subtitle":"generic power branch"},
+    "GW1":{"x":265,"y":325,"width":170,"height":50,"title":"Gateway / controller","subtitle":"CAN + LIN node"},
+    "CAN_A":{"x":475,"y":60,"width":150,"height":48,"title":"CAN node A","subtitle":"generic network node"},
+    "CAN_B":{"x":665,"y":60,"width":150,"height":48,"title":"CAN node B","subtitle":"generic network node"},
+    "LIN_A":{"x":475,"y":455,"width":150,"height":48,"title":"LIN sub-node","subtitle":"single-wire branch"},
+    "GND1":{"x":315,"y":600,"width":170,"height":44,"title":"Chassis ground","subtitle":"common return"}
+  },
+  "provenance":{"sourceRole":"project-authored-training-model","technicalClaims":"general-system-relationships-only","vehicleSpecificClaims":false,"scoredAssessmentApproved":false,"authorityRegistry":"data/compliance/authority-registry.json","complianceStatus":"training-model-not-compliance-certification","rule":"This model illustrates generic network topology only and may not establish or override vehicle-specific bus voltage, resistance, termination, baud rate, wake strategy, pinout, wiring, procedure, or diagnostic limit."}
+}
