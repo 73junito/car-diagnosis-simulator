@@ -1,6 +1,6 @@
 {
   "domain": "electrical",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "status": "project-authored-reference-aligned",
   "standardReferences": [
     "IEC 60617:2026 DB",
@@ -1958,6 +1958,97 @@
         }
       ],
       "domain": "electrical"
+    },
+    {
+      "id": "electrical.actuator-three-wire",
+      "domain": "electrical",
+      "name": "Three-wire actuator",
+      "aliases": [
+        "powered actuator",
+        "PWM actuator"
+      ],
+      "tags": [
+        "actuator",
+        "PWM",
+        "control"
+      ],
+      "terminals": [
+        {
+          "id": "power",
+          "x": 10,
+          "y": 30
+        },
+        {
+          "id": "ground",
+          "x": 10,
+          "y": 70
+        },
+        {
+          "id": "control",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 26,
+            "y": 22,
+            "width": 48,
+            "height": 56,
+            "rx": 8
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "path",
+          "attrs": {
+            "d": "M35 58 C39 40 45 40 49 58 C53 40 59 40 63 58"
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 30,
+            "x2": 26,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 70,
+            "x2": 26,
+            "y2": 70
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 74,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 50,
+            "y": 18,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "PWM"
+        }
+      ]
     }
   ]
 }

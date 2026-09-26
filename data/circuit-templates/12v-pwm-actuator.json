@@ -1,0 +1,64 @@
+{
+  "schemaVersion":"1.0.0",
+  "templateId":"automotive-12v-pwm-actuator",
+  "templateVersion":"1.0.0",
+  "templateRole":"reusable-training-circuit-template",
+  "systemKind":"pwm-actuator",
+  "circuitId":"training-pwm-actuator-001",
+  "title":"Generic 12 V PWM-Controlled Actuator Training Circuit",
+  "status":"project-authored-training-model",
+  "powertrainType":"conventional-12v",
+  "voltageSystems":[{"id":"LV12","systemType":"low-voltage","nominalVoltage":12,"unit":"V DC","displayLabel":"12 V nominal"}],
+  "vehicleApplicability":{
+    "mode":"generic-training-only",
+    "vehicleSpecific":false,
+    "notice":"This template teaches a generic powered actuator with a separate PWM command path. Actual actuator architecture, duty cycle, frequency, current, pinout, protection, wiring, procedures, and limits are vehicle-specific."
+  },
+  "curriculum":{"lessonPlanId":"ug-electrical-pwm-actuator","supportsObjectiveIds":["ug-electrical-lo-actuator-1"],"assessmentUse":"training-only"},
+  "components":[
+    {"id":"BAT1","type":"battery","name":"Battery","symbolId":"electrical.battery","voltageSystemId":"LV12","terminals":[{"id":"BAT1_POS","name":"Positive","symbolTerminalId":"positive"},{"id":"BAT1_NEG","name":"Negative","symbolTerminalId":"negative"}]},
+    {"id":"FUSE1","type":"fuse","name":"Actuator-Circuit Protection","symbolId":"electrical.fuse","voltageSystemId":"LV12","terminals":[{"id":"FUSE1_IN","name":"Input","symbolTerminalId":"in"},{"id":"FUSE1_OUT","name":"Output","symbolTerminalId":"out"}],"internalConnections":[["FUSE1_IN","FUSE1_OUT"]]},
+    {"id":"ECM1","type":"module","name":"Electronic Control Module","symbolId":"electrical.module-controller","voltageSystemId":"LV12","terminals":[{"id":"ECM1_PWR","name":"Module power","symbolTerminalId":"power"},{"id":"ECM1_GND","name":"Module ground","symbolTerminalId":"ground"},{"id":"ECM1_PWM","name":"PWM command output","symbolTerminalId":"signal"}]},
+    {"id":"ACT1","type":"actuator","name":"Generic Three-Wire Actuator","symbolId":"electrical.actuator-three-wire","voltageSystemId":"LV12","terminals":[{"id":"ACT1_PWR","name":"Actuator power","symbolTerminalId":"power"},{"id":"ACT1_GND","name":"Actuator ground","symbolTerminalId":"ground"},{"id":"ACT1_PWM","name":"PWM command","symbolTerminalId":"control"}]},
+    {"id":"GND1","type":"ground","name":"Chassis Ground","symbolId":"electrical.ground","voltageSystemId":"LV12","terminals":[{"id":"GND1_MAIN","name":"Ground","symbolTerminalId":"ground"}]}
+  ],
+  "connections":[
+    {"id":"W_BAT_FUSE","from":"BAT1_POS","to":"FUSE1_IN","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_ACT","from":"FUSE1_OUT","to":"ACT1_PWR","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_BAT_ECM","from":"BAT1_POS","to":"ECM1_PWR","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_ECM_PWM","from":"ECM1_PWM","to":"ACT1_PWM","type":"PWM","styleId":"electrical.pwm","voltageSystemId":"LV12"},
+    {"id":"W_ACT_GND","from":"ACT1_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_ECM_GND","from":"ECM1_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_BAT_GND","from":"BAT1_NEG","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"}
+  ],
+  "testPoints":[
+    {"id":"TP_ACT_POWER","terminalId":"ACT1_PWR","measurementTypes":["voltage","voltage_drop"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_PWM","terminalId":"ACT1_PWM","measurementTypes":["signal","duty_cycle","frequency"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_ACT_GROUND","terminalId":"ACT1_GND","measurementTypes":["voltage_drop","continuity"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_ECM_PWM","terminalId":"ECM1_PWM","measurementTypes":["signal","duty_cycle","frequency"],"vehicleSpecificValueRequired":true}
+  ],
+  "faultCatalog":[
+    {"id":"FAULT_OPEN_ACT_POWER","type":"open_circuit","targetConnectionId":"W_FUSE_ACT","label":"Open actuator power feed"},
+    {"id":"FAULT_OPEN_PWM","type":"open_circuit","targetConnectionId":"W_ECM_PWM","label":"Open PWM command circuit"},
+    {"id":"FAULT_OPEN_ACT_GROUND","type":"open_circuit","targetConnectionId":"W_ACT_GND","label":"Open actuator ground"},
+    {"id":"FAULT_HIGH_RES_ACT_POWER","type":"high_resistance","targetConnectionId":"W_FUSE_ACT","label":"High resistance in actuator power path"},
+    {"id":"FAULT_HIGH_RES_ACT_GROUND","type":"high_resistance","targetConnectionId":"W_ACT_GND","label":"High resistance in actuator ground path"},
+    {"id":"FAULT_PWM_SHORT_GROUND","type":"short_to_ground","targetConnectionId":"W_ECM_PWM","targetTerminalId":"ACT1_PWM","shortTargetTerminalId":"GND1_MAIN","label":"PWM command short to ground"},
+    {"id":"FAULT_PWM_SHORT_POWER","type":"short_to_power","targetConnectionId":"W_ECM_PWM","targetTerminalId":"ACT1_PWM","shortTargetTerminalId":"BAT1_POS","label":"PWM command short to power"}
+  ],
+  "operatingStates":[
+    {"id":"key-off","label":"Key off","activeFlows":{"power":[],"ground":[],"control":[]},"note":"Key off: actuator and controller command paths are shown inactive."},
+    {"id":"actuator-inactive","label":"Key on / actuator inactive","activeFlows":{"power":[["W_BAT_FUSE","forward"],["W_FUSE_ACT","forward"],["W_BAT_ECM","forward"]],"ground":[["W_ACT_GND","forward"],["W_ECM_GND","forward"],["W_BAT_GND","reverse"]],"control":[]},"note":"Key on with actuator inactive: power and ground are available while no PWM command is shown."},
+    {"id":"pwm-low-example","label":"PWM command — low-duty example","trainingDutyCycleLabel":"Low-duty training example","activeFlows":{"power":[["W_BAT_FUSE","forward"],["W_FUSE_ACT","forward"],["W_BAT_ECM","forward"]],"ground":[["W_ACT_GND","forward"],["W_ECM_GND","forward"],["W_BAT_GND","reverse"]],"control":[["W_ECM_PWM","forward"]]},"note":"PWM low-duty example: a conceptual command is present. No vehicle-specific duty-cycle percentage or frequency is implied."},
+    {"id":"pwm-high-example","label":"PWM command — high-duty example","trainingDutyCycleLabel":"High-duty training example","activeFlows":{"power":[["W_BAT_FUSE","forward"],["W_FUSE_ACT","forward"],["W_BAT_ECM","forward"]],"ground":[["W_ACT_GND","forward"],["W_ECM_GND","forward"],["W_BAT_GND","reverse"]],"control":[["W_ECM_PWM","forward"]]},"note":"PWM high-duty example: a stronger conceptual command is represented without assigning a universal percentage or frequency."}
+  ],
+  "layout":{"renderer":"svg","positions":{"BAT1":{"x":85,"y":270},"FUSE1":{"x":260,"y":120},"ECM1":{"x":650,"y":150},"ACT1":{"x":480,"y":350},"GND1":{"x":420,"y":545}}},
+  "labels":{
+    "BAT1":{"x":15,"y":350,"width":140,"height":48,"title":"Battery","subtitle":"12 V nominal source"},
+    "FUSE1":{"x":185,"y":30,"width":150,"height":46,"title":"Actuator protection","subtitle":"power branch"},
+    "ECM1":{"x":575,"y":30,"width":160,"height":48,"title":"Controller","subtitle":"PWM command source"},
+    "ACT1":{"x":385,"y":420,"width":190,"height":50,"title":"Three-wire actuator","subtitle":"power / PWM / ground"},
+    "GND1":{"x":335,"y":595,"width":170,"height":48,"title":"Chassis ground","subtitle":"return reference"}
+  },
+  "provenance":{"sourceRole":"project-authored-training-model","technicalClaims":"general-system-relationships-only","vehicleSpecificClaims":false,"scoredAssessmentApproved":false,"authorityRegistry":"data/compliance/authority-registry.json","complianceStatus":"training-model-not-compliance-certification","rule":"This model may illustrate generic PWM actuator relationships but may not establish or override vehicle-specific duty cycle, frequency, current, voltage, pinout, wiring, procedure, or diagnostic limit."}
+}

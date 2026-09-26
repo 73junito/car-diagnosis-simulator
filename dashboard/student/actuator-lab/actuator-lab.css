@@ -1,0 +1,2 @@
+.wire.fault-short{stroke:var(--fault);stroke-width:6;stroke-dasharray:2 4;animation:none}
+@media (max-width:620px){#circuitSvg{width:760px;min-width:760px;}}

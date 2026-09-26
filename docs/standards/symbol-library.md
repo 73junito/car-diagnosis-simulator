@@ -8,13 +8,13 @@ This library is the canonical source for reusable TorqueMind/AutoLearnPro schema
 
 | Domain | Symbols | Reference family |
 | --- | ---: | --- |
-| Electrical | 29 | IEC 60617:2026 DB; ISO 14617-1:2025 |
+| Electrical | 30 | IEC 60617:2026 DB; ISO 14617-1:2025 |
 | Hydraulic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Pneumatic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Mechanical | 8 | ISO 14617-1:2025 |
 | Thermal | 6 | ISO 14617-1:2025 |
 
-Current catalog: **65 symbols**.
+Current catalog: **66 symbols**.
 
 ## Canonical representation
 
@@ -113,3 +113,13 @@ The reusable template `automotive-12v-three-wire-sensor` models a conventional *
 The controller and reference-supply components remain part of the 12 V vehicle domain, while the sensor supply and analog signal are explicitly associated with the 5 V training-reference domain. The 5 V value is a training example only and is not a universal sensor specification.
 
 The template separates sensor supply, analog signal, and sensor ground/reference paths and includes open-circuit, high-resistance, short-to-ground, and short-to-reference faults. Short faults are represented as explicit unintended adjacency edges in the circuit engine rather than display-only annotations.
+
+### 12 V PWM-controlled actuator template
+
+The reusable template `automotive-12v-pwm-actuator` models a conventional **12 V nominal** actuator circuit with separate actuator power, PWM command, and ground/return paths.
+
+A dedicated three-wire actuator symbol exposes explicit `power`, `control`, and `ground` terminals so the schematic does not overload a two-terminal solenoid or motor symbol. The controller''s PWM output is represented independently from the actuator power feed.
+
+The operating states use qualitative **low-duty training example** and **high-duty training example** labels. No universal duty-cycle percentage, frequency, current, or response characteristic is asserted. Vehicle-specific values remain intentionally omitted.
+
+The template includes open-circuit, high-resistance, short-to-ground, and short-to-power faults for both load and PWM control paths.
