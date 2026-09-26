@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "1.0.0",
+  "circuitId": "training-charging-system-001",
+  "title": "Generic Charging-System Training Circuit",
+  "status": "project-authored-training-model",
+  "vehicleApplicability": {
+    "mode": "generic-training-only",
+    "vehicleSpecific": false,
+    "notice": "This circuit teaches general relationships only. Vehicle-specific service information is required for actual pinouts, specifications, procedures, and limits."
+  },
+  "curriculum": {
+    "lessonPlanId": "ug-electrical-charging-system",
+    "supportsObjectiveIds": ["ug-electrical-lo-1"],
+    "assessmentUse": "training-only"
+  },
+  "components": [
+    {"id":"BAT1","type":"battery","name":"Battery","terminals":[{"id":"BAT1_POS","name":"Positive"},{"id":"BAT1_NEG","name":"Negative"}]},
+    {"id":"FUSE1","type":"fusible_link","name":"Main Charging Protection","terminals":[{"id":"FUSE1_IN","name":"Input"},{"id":"FUSE1_OUT","name":"Output"}],"internalConnections":[["FUSE1_IN","FUSE1_OUT"]]},
+    {"id":"ALT1","type":"alternator","name":"Alternator Assembly","terminals":[{"id":"ALT1_BPLUS","name":"B+"},{"id":"ALT1_GND","name":"Ground"},{"id":"ALT1_CTRL","name":"Control"}]},
+    {"id":"REG1","type":"regulator","name":"Voltage Regulation","terminals":[{"id":"REG1_ALT","name":"Alternator"},{"id":"REG1_CTRL","name":"Control"}]},
+    {"id":"LOAD1","type":"load","name":"Vehicle Electrical Loads","terminals":[{"id":"LOAD1_PWR","name":"Power"},{"id":"LOAD1_GND","name":"Ground"}]},
+    {"id":"GND1","type":"ground","name":"Chassis Ground","terminals":[{"id":"GND1_MAIN","name":"Ground"}]}
+  ],
+  "connections": [
+    {"id":"W_BAT_FUSE","from":"BAT1_POS","to":"FUSE1_IN","type":"power_feed"},
+    {"id":"W_FUSE_ALT","from":"FUSE1_OUT","to":"ALT1_BPLUS","type":"power_feed"},
+    {"id":"W_FUSE_LOAD","from":"FUSE1_OUT","to":"LOAD1_PWR","type":"power_feed"},
+    {"id":"W_ALT_GND","from":"ALT1_GND","to":"GND1_MAIN","type":"ground_reference"},
+    {"id":"W_BAT_GND","from":"BAT1_NEG","to":"GND1_MAIN","type":"ground_reference"},
+    {"id":"W_LOAD_GND","from":"LOAD1_GND","to":"GND1_MAIN","type":"ground_reference"},
+    {"id":"W_ALT_REG","from":"ALT1_CTRL","to":"REG1_ALT","type":"control"},
+    {"id":"W_REG_CTRL","from":"REG1_CTRL","to":"BAT1_POS","type":"control"}
+  ],
+  "testPoints": [
+    {"id":"TP_BAT_POS","terminalId":"BAT1_POS","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_ALT_BPLUS","terminalId":"ALT1_BPLUS","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_MAIN_GND","terminalId":"GND1_MAIN","measurementTypes":["voltage_drop","continuity"],"vehicleSpecificValueRequired":true}
+  ],
+  "faultCatalog": [
+    {"id":"FAULT_OPEN_CHARGE_FEED","type":"open_circuit","targetConnectionId":"W_FUSE_ALT","label":"Open charging feed"},
+    {"id":"FAULT_HIGH_RES_GROUND","type":"high_resistance","targetConnectionId":"W_ALT_GND","label":"High resistance in alternator ground path"},
+    {"id":"FAULT_OPEN_PROTECTION","type":"open_circuit","targetConnectionId":"W_BAT_FUSE","label":"Open main charging protection path"}
+  ],
+  "layout": {
+    "renderer":"svg",
+    "positions":{
+      "BAT1":{"x":90,"y":220},
+      "FUSE1":{"x":290,"y":120},
+      "ALT1":{"x":520,"y":90},
+      "REG1":{"x":520,"y":280},
+      "LOAD1":{"x":760,"y":120},
+      "GND1":{"x":520,"y":450}
+    }
+  },
+  "provenance": {
+    "sourceRole":"project-authored-training-model",
+    "technicalClaims":"general-system-relationships-only",
+    "vehicleSpecificClaims":false,
+    "scoredAssessmentApproved":false
+  }
+}

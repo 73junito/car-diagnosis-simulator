@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Interactive Circuit Lab</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="./circuit-lab.css">
+</head>
+<body>
+  <main class="lab-shell">
+    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
+    <header>
+      <p class="eyebrow">Training preview</p>
+      <h1>Interactive Charging-System Circuit Lab</h1>
+      <p>This project-authored schematic teaches general circuit relationships. It is not vehicle-specific service information.</p>
+    </header>
+
+    <section class="toolbar" aria-label="Circuit controls">
+      <label for="faultSelect">Training fault</label>
+      <select id="faultSelect"><option value="">No injected fault</option></select>
+      <button id="tracePower" type="button">Trace battery → alternator</button>
+      <button id="traceGround" type="button">Trace alternator → ground</button>
+      <button id="resetView" type="button">Reset highlight</button>
+    </section>
+
+    <section class="workspace">
+      <div class="diagram-card">
+        <svg id="circuitSvg" viewBox="0 0 900 560" role="img" aria-labelledby="diagramTitle diagramDesc">
+          <title id="diagramTitle">Generic charging-system training circuit</title>
+          <desc id="diagramDesc">Interactive diagram showing a battery, charging protection, alternator, regulator, electrical loads, and chassis ground.</desc>
+        </svg>
+      </div>
+      <aside class="inspector" aria-live="polite">
+        <h2>Inspector</h2>
+        <div id="inspectorContent">Select a component to inspect its terminals, connected components, and available test points.</div>
+      </aside>
+    </section>
+
+    <section class="boundary">
+      <h2>Evidence boundary</h2>
+      <p>No vehicle-specific pin numbers, voltage limits, procedures, or manufacturer wiring diagrams are represented here. Vehicle-specific authoritative service information is required before those details may be shown.</p>
+    </section>
+  </main>
+
+  <script src="/src/circuits/contracts.js"></script>
+  <script src="/src/circuits/engine.js"></script>
+  <script src="./circuit-lab.js"></script>
+</body>
+</html>
