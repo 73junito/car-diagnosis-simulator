@@ -1,0 +1,853 @@
+{
+  "schemaVersion": "1.0.0",
+  "lessonContentPlans": [
+    {
+      "lessonPlanId": "ug-electrical-charging-system",
+      "status": "active",
+      "learningObjectives": [
+        {
+          "id": "ug-electrical-lo-1",
+          "statement": "Explain the functional relationship among the battery, alternator, rectifier, voltage regulation, and vehicle electrical loads.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-electrical-lo-2",
+          "statement": "Interpret observed charging-system symptoms and measurements to select an appropriate vehicle-specific next diagnostic check.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "system-concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-1"
+          ]
+        },
+        {
+          "id": "worked-evidence-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-2"
+          ]
+        },
+        {
+          "id": "guided-diagnostic-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-2"
+          ]
+        },
+        {
+          "id": "independent-charging-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-2"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-1",
+            "ug-electrical-lo-2"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-2"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "charging-relationships",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "charging-diagnostic-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "charging-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "charging-measurement-bars",
+          "type": "bar-chart",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "charging-workflow-summary",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "supportsObjectiveIds": [
+            "ug-electrical-lo-1",
+            "ug-electrical-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims and vehicle-specific checks require approved provenance; vehicle-specific specifications must not be invented.",
+      "assessmentBoundary": "Training checks may coach and remediate; scored items require separate approval and must not expose answer-revealing training metadata.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-brakes-foundations",
+      "status": "planned",
+      "learningObjectives": [
+        {
+          "id": "ug-brakes-lo-1",
+          "statement": "Interpret brake-system inspection and measurement evidence to select a verification step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1"
+          ]
+        },
+        {
+          "id": "worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1"
+          ]
+        },
+        {
+          "id": "guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1"
+          ]
+        },
+        {
+          "id": "independent-task",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "primary-visual",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "supportsObjectiveIds": [
+            "ug-brakes-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
+      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-engine-performance-foundations",
+      "status": "planned",
+      "learningObjectives": [
+        {
+          "id": "ug-engine-performance-lo-1",
+          "statement": "Interpret operating data and test evidence to compare plausible engine-performance hypotheses.",
+          "cognitiveLevel": "evidence-interpretation"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1"
+          ]
+        },
+        {
+          "id": "worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1"
+          ]
+        },
+        {
+          "id": "guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1"
+          ]
+        },
+        {
+          "id": "independent-task",
+          "type": "independent-scenario",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "primary-visual",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "supportsObjectiveIds": [
+            "ug-engine-performance-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
+      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-suspension-steering-foundations",
+      "status": "planned",
+      "learningObjectives": [
+        {
+          "id": "ug-suspension-steering-lo-1",
+          "statement": "Interpret inspection and geometry evidence to support a suspension or steering diagnostic decision.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1"
+          ]
+        },
+        {
+          "id": "worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1"
+          ]
+        },
+        {
+          "id": "guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1"
+          ]
+        },
+        {
+          "id": "independent-task",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "primary-visual",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-suspension-steering-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
+      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-diagnostic-evidence-analysis",
+      "status": "planned",
+      "learningObjectives": [
+        {
+          "id": "grad-diagnostic-lo-1",
+          "statement": "Evaluate competing diagnostic hypotheses using technical evidence, measurement uncertainty, and a defensible verification strategy.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1"
+          ]
+        },
+        {
+          "id": "worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1"
+          ]
+        },
+        {
+          "id": "guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1"
+          ]
+        },
+        {
+          "id": "independent-task",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "primary-visual",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "supportsObjectiveIds": [
+            "grad-diagnostic-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
+      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-vehicle-systems-testing",
+      "status": "planned",
+      "learningObjectives": [
+        {
+          "id": "grad-testing-lo-1",
+          "statement": "Design and interpret a controlled vehicle-systems test using appropriate instrumentation and uncertainty analysis.",
+          "cognitiveLevel": "application"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1"
+          ]
+        },
+        {
+          "id": "worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1"
+          ]
+        },
+        {
+          "id": "guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1"
+          ]
+        },
+        {
+          "id": "independent-task",
+          "type": "independent-scenario",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "primary-visual",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "supportsObjectiveIds": [
+            "grad-testing-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
+      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-curriculum-assessment-design",
+      "status": "planned",
+      "learningObjectives": [
+        {
+          "id": "grad-curriculum-lo-1",
+          "statement": "Design an authentic technical learning task whose assessment method aligns with the stated competency and cognitive level.",
+          "cognitiveLevel": "application"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1"
+          ]
+        },
+        {
+          "id": "worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1"
+          ]
+        },
+        {
+          "id": "guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1"
+          ]
+        },
+        {
+          "id": "independent-task",
+          "type": "independent-scenario",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "primary-visual",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "grad-curriculum-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
+      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-applied-research-literature",
+      "status": "planned",
+      "learningObjectives": [
+        {
+          "id": "grad-research-lo-1",
+          "statement": "Locate, resolve, evaluate, and document canonical scholarly or publisher evidence for an applied automotive research claim.",
+          "cognitiveLevel": "evidence-interpretation"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1"
+          ]
+        },
+        {
+          "id": "worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1"
+          ]
+        },
+        {
+          "id": "guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1"
+          ]
+        },
+        {
+          "id": "independent-task",
+          "type": "independent-scenario",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "primary-visual",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "supportsObjectiveIds": [
+            "grad-research-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
+      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-technical-instructional-leadership",
+      "status": "planned",
+      "learningObjectives": [
+        {
+          "id": "grad-leadership-lo-1",
+          "statement": "Use evidence and stakeholder input to design and evaluate a technical program improvement process.",
+          "cognitiveLevel": "application"
+        }
+      ],
+      "contentBlocks": [
+        {
+          "id": "concept",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1"
+          ]
+        },
+        {
+          "id": "worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1"
+          ]
+        },
+        {
+          "id": "guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1"
+          ]
+        },
+        {
+          "id": "independent-task",
+          "type": "independent-scenario",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1"
+          ]
+        },
+        {
+          "id": "reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1"
+          ]
+        },
+        {
+          "id": "feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "primary-visual",
+          "type": "timeline",
+          "instructionalPurpose": "sequence",
+          "supportsObjectiveIds": [
+            "grad-leadership-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance; vehicle-specific procedures or specifications require an appropriate authoritative source.",
+      "assessmentBoundary": "Instructional and scored-assessment approval states remain separate; scored use requires provenance, review status, and curriculum mapping.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    }
+  ]
+}
