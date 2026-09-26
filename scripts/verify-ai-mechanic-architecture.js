@@ -23,6 +23,7 @@ for (const required of [
   "ollama-provider",
   "vehicle-identity-resolver",
   "tool-gateway",
+  "deterministic-circuit-engine",
   "evidence-retrieval",
   "evidence-gate",
   "diagnostic-engine",
@@ -33,7 +34,7 @@ for (const required of [
 }
 
 const externalIds = new Set(architecture.externalTools.map((item) => item.id));
-for (const required of ["nhtsa-vpic", "nhtsa-recalls", "nhtsa-complaints"]) {
+for (const required of ["nhtsa-vpic", "nhtsa-recalls", "nhtsa-complaints", "circuit-engine"]) {
   assert(externalIds.has(required), "Missing external tool boundary " + required);
 }
 
@@ -49,6 +50,11 @@ assert(architecture.responseModes.training && architecture.responseModes.technic
   "Training and technician response modes must be distinct");
 assert(architecture.implementationOrder[0] === "vehicle-identity",
   "Vehicle identity must be the first implementation dependency");
+assert(architecture.implementationOrder.includes("deterministic-circuit-engine"),
+  "Implementation order must include the deterministic circuit engine before model orchestration");
+const circuitTool = architecture.externalTools.find((item) => item.id === "circuit-engine");
+assert(circuitTool && circuitTool.access === "read-only",
+  "Circuit engine must remain a read-only AI tool boundary");
 
 console.log(
   "[PASS] AI Mechanic architecture verified: " +

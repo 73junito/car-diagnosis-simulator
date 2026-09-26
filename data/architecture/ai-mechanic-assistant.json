@@ -9,7 +9,8 @@
     "Diagnostic decisions fail closed when evidence is insufficient.",
     "Technician verification remains required.",
     "Training and technician response policies are distinct.",
-    "Only privacy-minimized diagnostic context is sent to model providers."
+    "Only privacy-minimized diagnostic context is sent to model providers.",
+    "Electrical topology, path continuity, fault overlays, and test-point availability come from the deterministic circuit engine rather than the language model."
   ],
   "runtimeOwnership": {
     "canonicalProductAiRoot": "src/ai/",
@@ -24,6 +25,7 @@
     {"id":"ollama-provider","role":"Language interpretation, synthesis, explanation, and response drafting only"},
     {"id":"vehicle-identity-resolver","role":"Resolve VIN and entered metadata into a normalized vehicle identity with unresolved fields"},
     {"id":"tool-gateway","role":"Route approved automotive tools through typed adapters and normalizers"},
+    {"id":"deterministic-circuit-engine","role":"Read-only electrical topology, path, fault-overlay, component-neighbor, and test-point analysis from project circuit definitions"},
     {"id":"evidence-retrieval","role":"Hybrid retrieval and reranking from approved knowledge"},
     {"id":"evidence-gate","role":"Authority, relevance, vehicle match, currency, and sufficiency checks"},
     {"id":"diagnostic-engine","role":"Deterministic diagnostic state, hypotheses, tests, evidence, and verification"},
@@ -56,7 +58,8 @@
     },
     {"id":"vehicle-database","sourceType":"vehicle-configuration","normalizesTo":"ToolResult"},
     {"id":"dtc-obd2","sourceType":"diagnostic-code-data","normalizesTo":"ToolResult"},
-    {"id":"parts-data","sourceType":"parts-fitment","normalizesTo":"ToolResult"}
+    {"id":"parts-data","sourceType":"parts-fitment","normalizesTo":"ToolResult"},
+    {"id":"circuit-engine","sourceType":"deterministic-circuit","normalizesTo":"ToolResult","access":"read-only","notes":"Uses src/circuits/engine.js as electrical truth; the model may explain normalized results but may not alter topology or infer continuity."}
   ],
   "rag": {
     "ingestion": [
@@ -113,6 +116,7 @@
   "implementationOrder": [
     "vehicle-identity",
     "tool-gateway",
+    "deterministic-circuit-engine",
     "evidence-model",
     "provenance",
     "retrieval",

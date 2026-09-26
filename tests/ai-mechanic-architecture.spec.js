@@ -7,7 +7,14 @@ const {
   buildModelContext,
   getResponsePolicy,
   Provenance,
+  CircuitToolAdapter,
 } = require('../src/ai');
+
+const fs = require('fs');
+const path = require('path');
+const genericChargingCircuit = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../data/circuits/generic-charging-system.json'), 'utf8')
+);
 
 describe('AI Mechanic Assistant architecture contracts', () => {
   test('fails closed when evidence is missing or unapproved', () => {
@@ -107,6 +114,27 @@ describe('AI Mechanic Assistant architecture contracts', () => {
     expect(result.tool).toBe('nhtsa-recalls');
     expect(result.normalizedData).toEqual({ recalls: [] });
     expect(result.rawPayload).toBeUndefined();
+  });
+
+  test('circuit engine is exposed through a read-only normalized tool adapter', async () => {
+    const gateway = new ToolGateway();
+    gateway.register(CircuitToolAdapter);
+    const original = JSON.stringify(genericChargingCircuit);
+
+    const result = await gateway.execute('circuit-engine', {
+      operation: 'trace-path',
+      startTerminalId: 'BAT1_POS',
+      endTerminalId: 'ALT1_BPLUS',
+      faults: ['FAULT_OPEN_CHARGE_FEED'],
+    }, {
+      circuit: genericChargingCircuit,
+      retrievedAt: '2026-09-26T00:00:00Z',
+    });
+
+    expect(result.sourceType).toBe('deterministic-circuit');
+    expect(result.vehicleMatch).toBe('generic');
+    expect(result.normalizedData.found).toBe(false);
+    expect(JSON.stringify(genericChargingCircuit)).toBe(original);
   });
 
   test('vehicle identity resolver supports cache-first VIN decoding', async () => {

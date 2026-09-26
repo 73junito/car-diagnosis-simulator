@@ -20,6 +20,7 @@ flowchart TD
     LLM["Ollama Provider<br/>Language • Interpretation • Synthesis"]
     VEHID["Vehicle Identity Resolver"]
     TOOLGW["Automotive Tool Gateway"]
+    CIRCUIT["Deterministic Circuit Engine<br/>Read-only topology • Paths • Fault overlays • Test points"]
     VPIC["NHTSA vPIC"]
     RECALL["NHTSA Recalls"]
     COMPLAINT["NHTSA Complaints"]
@@ -51,6 +52,7 @@ flowchart TD
     TOOLGW --> VEHDB
     TOOLGW --> DTC
     TOOLGW --> PARTS
+    TOOLGW --> CIRCUIT
 
     DOCS --> INGEST
     INGEST --> KB
@@ -62,6 +64,7 @@ flowchart TD
     VEHDB --> EVIDENCE
     DTC --> EVIDENCE
     PARTS --> EVIDENCE
+    CIRCUIT --> EVIDENCE
     RETRIEVE --> EVIDENCE
 
     EVIDENCE --> DIAG
@@ -102,7 +105,8 @@ flowchart LR
 5. The model does not receive raw account identity. Raw VIN is excluded from model context by default.
 6. Diagnostic decisions remain structured objects; prose is generated after evidence/safety evaluation.
 7. Training and technician response policies are separate.
-8. Technician verification is required before a diagnostic recommendation is treated as final.
+8. Electrical topology, continuity/path results, fault overlays, and available test points come from the deterministic circuit engine. The LLM receives normalized read-only results and cannot mutate circuit truth.
+9. Technician verification is required before a diagnostic recommendation is treated as final.
 
 ## NHTSA boundary
 
@@ -117,9 +121,10 @@ The vPIC API is rate controlled; a cache and, where appropriate, the downloadabl
 
 1. Vehicle identity resolver
 2. Tool gateway and normalized result contracts
-3. Evidence and provenance model
-4. RAG ingestion/retrieval split
-5. Diagnostic session/state engine
-6. Ollama orchestration on top of the contracts
-7. Safety/verification gate
-8. Response/report UI
+3. Deterministic circuit-engine read-only adapter
+4. Evidence and provenance model
+5. RAG ingestion/retrieval split
+6. Diagnostic session/state engine
+7. Ollama orchestration on top of the contracts
+8. Safety/verification gate
+9. Response/report UI
