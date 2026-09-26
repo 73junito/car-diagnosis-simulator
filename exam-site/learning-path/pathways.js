@@ -4,7 +4,10 @@ const DATA_ROOT = "/data/curriculum";
 // The exam worker serves assets only, so the API is fetched cross-origin
 // from the app worker, which holds SUPABASE_SERVICE_ROLE_KEY.
 const API_URL = "https://app.autolearnpro.com/api/curriculum";
-const API_TIMEOUT_MS = 5000;
+// Abort budget for the API request before falling back to static JSON.
+// Overridable only to let the browser suite exercise the timeout branch
+// without a real 5s wait; it never changes the request target or validation.
+const API_TIMEOUT_MS = Number(globalThis.TORQUEMIND_CURRICULUM_API_TIMEOUT_MS) || 5000;
 const EXPECTED_SCHEMA_VERSION = "1.0.0";
 const API_COLLECTIONS = [
   "pathways",
