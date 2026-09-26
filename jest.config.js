@@ -10,7 +10,10 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/tests/playwright/',
-    'supabase/tests/'
+    // Anchored to a path-segment boundary: Jest matches absolute, forward-slash
+    // normalized paths, so an unanchored 'supabase/tests/' would also ignore any
+    // checkout directory ending in '-supabase' plus its own tests/ folder.
+    '^(.*)/supabase/tests/'
   ],
   // Ensure undici register runs before any test imports that may require Request/fetch.
   setupFiles:            ['<rootDir>/tests/jest-undici-register.js', '<rootDir>/tests/jest-setup.js'],
