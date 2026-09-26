@@ -176,4 +176,3 @@ describe('Evidence source-state registry', () => {
     expect(frontiers.approved_chunk_ids).toEqual([]);
   });
 });
-
