@@ -56,6 +56,9 @@
     "sourceRole":"project-authored-training-model",
     "technicalClaims":"general-system-relationships-only",
     "vehicleSpecificClaims":false,
-    "scoredAssessmentApproved":false
+    "scoredAssessmentApproved":false,
+    "authorityRegistry":"data/compliance/authority-registry.json",
+    "complianceStatus":"training-model-not-compliance-certification",
+    "rule":"This model may illustrate verified concepts but may not establish or override a regulatory, standards, or vehicle-specific requirement."
   }
 }

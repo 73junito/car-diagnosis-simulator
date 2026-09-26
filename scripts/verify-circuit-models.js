@@ -25,6 +25,12 @@ for (const file of fs.readdirSync(directory).filter((name) => name.endsWith(".js
     if (circuit.provenance?.scoredAssessmentApproved !== false) {
       errors.push(`${file}: generic circuit must not be scored-assessment approved`);
     }
+    if (circuit.provenance?.authorityRegistry !== "data/compliance/authority-registry.json") {
+      errors.push(`${file}: generic circuit must reference the canonical compliance authority registry`);
+    }
+    if (circuit.provenance?.complianceStatus !== "training-model-not-compliance-certification") {
+      errors.push(`${file}: generic circuit must not represent itself as a compliance certification`);
+    }
 
     const serialized = JSON.stringify(circuit);
     const prohibited = [
