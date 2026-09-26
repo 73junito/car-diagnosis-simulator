@@ -35,6 +35,7 @@
     "docs:mermaid": "npm run docs:mermaid:coverage && npm run docs:mermaid:render",
     "validate:academic-pathways": "node scripts/verify-academic-pathways.js",
     "validate:curriculum-content": "node scripts/verify-curriculum-content-policy.js",
+    "validate:evidence-approval": "node scripts/verify-evidence-approval-contract.js",
     "validate:curriculum-schema": "node scripts/verify-curriculum-migration-contract.js",
     "validate:curriculum-api": "node scripts/verify-curriculum-api-contract.js",
     "exam:curriculum:sync": "node scripts/sync-exam-curriculum.js",
