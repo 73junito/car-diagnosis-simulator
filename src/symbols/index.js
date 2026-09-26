@@ -1,4 +1,5 @@
-﻿"use strict";
+(function () {
+"use strict";
 
 const contracts = typeof require === "function" ? require("./contracts") : window.TorqueMindSymbolContracts;
 const registryApi = typeof require === "function" ? require("./registry") : window.TorqueMindSymbolRegistry;
@@ -35,3 +36,4 @@ async function loadCatalogs(baseUrl = "/data/symbols") {
 const api = { normalizeCatalog, createRegistryFromCatalogs, loadCatalogs, STANDARD_REFERENCES: contracts.STANDARD_REFERENCES };
 if (typeof module !== "undefined" && module.exports) module.exports = api;
 if (typeof window !== "undefined") window.TorqueMindSymbolLibrary = api;
+})();

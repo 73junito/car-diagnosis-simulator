@@ -1,4 +1,5 @@
-﻿"use strict";
+(function () {
+"use strict";
 
 const SYMBOL_DOMAINS = Object.freeze(["electrical", "hydraulic", "pneumatic", "mechanical", "thermal"]);
 const SYMBOL_STATUSES = Object.freeze(["project-authored", "reference-aligned", "deprecated"]);
@@ -29,4 +30,4 @@ function validateSymbolDefinition(symbol) {
 const api = { SYMBOL_DOMAINS, SYMBOL_STATUSES, PRIMITIVE_TYPES, STANDARD_REFERENCES, validateSymbolDefinition };
 if (typeof module !== "undefined" && module.exports) module.exports = api;
 if (typeof window !== "undefined") window.TorqueMindSymbolContracts = api;
-
+})();

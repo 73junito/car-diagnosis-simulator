@@ -1,4 +1,5 @@
-﻿"use strict";
+(function () {
+"use strict";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -38,3 +39,4 @@ function renderSymbol(svg, symbol, options = {}) {
 const api = { SVG_NS, createSvgElement, renderSymbol };
 if (typeof module !== "undefined" && module.exports) module.exports = api;
 if (typeof window !== "undefined") window.TorqueMindSymbolRenderer = api;
+})();

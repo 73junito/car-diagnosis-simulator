@@ -1,4 +1,5 @@
-﻿"use strict";
+(function () {
+"use strict";
 
 const contracts = typeof require === "function" ? require("./contracts") : window.TorqueMindSymbolContracts;
 
@@ -45,3 +46,4 @@ class SymbolRegistry {
 const api = { SymbolRegistry };
 if (typeof module !== "undefined" && module.exports) module.exports = api;
 if (typeof window !== "undefined") window.TorqueMindSymbolRegistry = api;
+})();
