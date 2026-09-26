@@ -18,6 +18,7 @@ test.describe('Expanded lesson plans', () => {
     await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(4);
     await expect(page.locator('#graduate-plan-list .expanded-plan')).toHaveCount(5);
     await expect(page.locator('.expanded-plan')).toHaveCount(9);
+    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(9);
 
     await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(27);
     await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(99);
@@ -37,6 +38,7 @@ test.describe('Expanded lesson plans', () => {
       .toBeVisible();
     await expect(plan.getByText('Electrical safety fundamentals')).toBeVisible();
     await expect(plan.getByText('evidence-to-decision reasoning')).toBeVisible();
+    await expect(plan.getByText(/AUT-120 · Electrical I · Direct Course Alignment/)).toBeVisible();
 
     await plan.getByText('Instructional sequence').click();
     await expect(plan.locator('.instruction-block-list > li')).toHaveCount(11);

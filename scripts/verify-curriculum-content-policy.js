@@ -5,7 +5,9 @@ const fs = require("fs");
 const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
 const policy = readJson("data/curriculum/content-policy.json");
 const lessons = readJson("data/curriculum/lesson-plans.json").lessonPlans;
-const plans = readJson("data/curriculum/lesson-content.json").lessonContentPlans;
+const contentDoc = readJson("data/curriculum/lesson-content.json");
+const plans = contentDoc.lessonContentPlans;
+const programArchitecture = readJson("data/curriculum/program-architecture.json");
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -15,16 +17,50 @@ const purposes = new Set(policy.instructionalPurposes);
 const visualTypes = new Map(policy.visualTypes.map((item) => [item.type, item]));
 const lessonsById = new Map(lessons.map((item) => [item.id, item]));
 const plansByLesson = new Map(plans.map((item) => [item.lessonPlanId, item]));
+const expectedProgramMappings = new Map();
+
+for (const program of programArchitecture.programs || []) {
+  for (const course of program.courses || []) {
+    if (!course.existingLessonPlanId) continue;
+    expectedProgramMappings.set(course.existingLessonPlanId, {
+      programId: program.id,
+      relationship: "course",
+      programCourseId: course.id,
+      programCourseTitle: course.title,
+      mappingType: course.mappingType || "direct-course-alignment"
+    });
+  }
+
+  for (const supplemental of program.supplementalGraduateContent || []) {
+    expectedProgramMappings.set(supplemental.existingLessonPlanId, {
+      programId: program.id,
+      relationship: "supplemental",
+      classification: supplemental.classification,
+      title: supplemental.title
+    });
+  }
+}
 
 assert(policy.schemaVersion === "1.0.0", "Unsupported content policy schemaVersion");
+assert(contentDoc.schemaVersion === "1.2.0", "Expanded lesson content must use schemaVersion 1.2.0");
 assert(policy.coreRules.length >= 20, "Content policy must contain the full core rule set");
 assert(policy.visualTypes.length === 7, "Content policy must define exactly seven visual types");
 assert(policy.lessonStructure.length >= 10, "Canonical lesson structure is incomplete");
 assert(plans.length === lessons.length, "Every lesson plan must have exactly one content plan");
+assert(expectedProgramMappings.size === lessons.length,
+  "Program architecture must classify every existing lesson exactly once");
 for (const lesson of lessons) {
   const plan = plansByLesson.get(lesson.id);
   assert(plan, `Missing content plan for ${lesson.id}`);
   assert(plan.status === lesson.status, `Status mismatch for ${lesson.id}`);
+
+  const expectedProgramMapping = expectedProgramMappings.get(lesson.id);
+  assert(expectedProgramMapping, `Canonical program architecture does not classify ${lesson.id}`);
+  assert(plan.programMapping && typeof plan.programMapping === "object",
+    `Program mapping missing for ${lesson.id}`);
+  assert(JSON.stringify(plan.programMapping) === JSON.stringify(expectedProgramMapping),
+    `Program mapping mismatch for ${lesson.id}`);
+
   assert(typeof plan.lessonSummary === "string" && plan.lessonSummary.length > 40,
     `Expanded lesson summary missing for ${lesson.id}`);
   assert(Number.isInteger(plan.estimatedMinutes) && plan.estimatedMinutes >= 60,

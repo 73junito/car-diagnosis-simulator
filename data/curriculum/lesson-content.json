@@ -1,9 +1,16 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "lessonContentPlans": [
     {
       "lessonPlanId": "ug-electrical-charging-system",
       "status": "active",
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-120",
+        "programCourseTitle": "Electrical I",
+        "mappingType": "direct-course-alignment"
+      },
       "lessonSummary": "Build from charging-system relationships to evidence-based diagnostic decisions using symptoms, measurements, and vehicle-specific verification procedures.",
       "estimatedMinutes": 180,
       "prerequisites": [
@@ -258,6 +265,13 @@
     {
       "lessonPlanId": "ug-brakes-foundations",
       "status": "planned",
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-110",
+        "programCourseTitle": "Brakes I",
+        "mappingType": "direct-course-alignment"
+      },
       "lessonSummary": "Develop a structured brake-system diagnostic process that connects inspection findings, measurements, specifications, likely causes, and corrective-action verification.",
       "estimatedMinutes": 180,
       "prerequisites": [
@@ -500,6 +514,13 @@
     {
       "lessonPlanId": "ug-engine-performance-foundations",
       "status": "planned",
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-130",
+        "programCourseTitle": "Engine Performance I",
+        "mappingType": "direct-course-alignment"
+      },
       "lessonSummary": "Use operating data, symptoms, test evidence, and competing hypotheses to make disciplined engine-performance diagnostic decisions.",
       "estimatedMinutes": 210,
       "prerequisites": [
@@ -741,6 +762,13 @@
     {
       "lessonPlanId": "ug-suspension-steering-foundations",
       "status": "planned",
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-140",
+        "programCourseTitle": "Suspension & Steering I",
+        "mappingType": "direct-course-alignment"
+      },
       "lessonSummary": "Connect steering and suspension relationships, inspection evidence, geometry measurements, and operating symptoms into a defensible diagnostic and verification plan.",
       "estimatedMinutes": 180,
       "prerequisites": [
@@ -983,6 +1011,13 @@
     {
       "lessonPlanId": "grad-diagnostic-evidence-analysis",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "course",
+        "programCourseId": "AET-580",
+        "programCourseTitle": "AI, Data Analytics & Intelligent Diagnostics",
+        "mappingType": "partial-alignment"
+      },
       "lessonSummary": "Evaluate complex diagnostic evidence by comparing competing hypotheses, measurement uncertainty, source quality, and verification strategies.",
       "estimatedMinutes": 240,
       "prerequisites": [
@@ -1227,6 +1262,13 @@
     {
       "lessonPlanId": "grad-vehicle-systems-testing",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "course",
+        "programCourseId": "AET-530",
+        "programCourseTitle": "Instrumentation & Experimental Methods",
+        "mappingType": "partial-alignment"
+      },
       "lessonSummary": "Design controlled vehicle-system tests by defining objectives, selecting instrumentation, controlling variables, analyzing uncertainty, and reporting reproducible findings.",
       "estimatedMinutes": 240,
       "prerequisites": [
@@ -1473,6 +1515,12 @@
     {
       "lessonPlanId": "grad-curriculum-assessment-design",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "supplemental",
+        "classification": "education-track-supplemental",
+        "title": "Curriculum & Assessment Design"
+      },
       "lessonSummary": "Design technical curriculum and assessment systems in which outcomes, learning activities, authentic tasks, rubrics, feedback, and evidence all align.",
       "estimatedMinutes": 240,
       "prerequisites": [
@@ -1722,6 +1770,13 @@
     {
       "lessonPlanId": "grad-applied-research-literature",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "course",
+        "programCourseId": "AET-590",
+        "programCourseTitle": "Graduate Capstone / Applied Research",
+        "mappingType": "partial-alignment"
+      },
       "lessonSummary": "Develop a transparent applied-research evidence workflow from question formulation and scholarly discovery through canonical source resolution, appraisal, claim mapping, and provenance.",
       "estimatedMinutes": 240,
       "prerequisites": [
@@ -1968,6 +2023,12 @@
     {
       "lessonPlanId": "grad-technical-instructional-leadership",
       "status": "planned",
+      "programMapping": {
+        "programId": "graduate-automotive-engineering-technology",
+        "relationship": "supplemental",
+        "classification": "education-track-supplemental",
+        "title": "Technical Instructional Leadership"
+      },
       "lessonSummary": "Use evidence, stakeholder perspectives, implementation planning, and outcome evaluation to lead improvement in technical programs and instruction.",
       "estimatedMinutes": 240,
       "prerequisites": [

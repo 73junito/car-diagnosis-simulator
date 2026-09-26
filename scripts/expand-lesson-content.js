@@ -4,8 +4,40 @@ const fs = require("fs");
 
 const policy = JSON.parse(fs.readFileSync("data/curriculum/content-policy.json", "utf8"));
 const lessonPlans = JSON.parse(fs.readFileSync("data/curriculum/lesson-plans.json", "utf8")).lessonPlans;
+const programArchitecture = JSON.parse(
+  fs.readFileSync("data/curriculum/program-architecture.json", "utf8")
+);
 const statusById = new Map(lessonPlans.map((lesson) => [lesson.id, lesson.status]));
 
+function buildProgramMappings() {
+  const mappings = new Map();
+
+  for (const program of programArchitecture.programs || []) {
+    for (const course of program.courses || []) {
+      if (!course.existingLessonPlanId) continue;
+      mappings.set(course.existingLessonPlanId, {
+        programId: program.id,
+        relationship: "course",
+        programCourseId: course.id,
+        programCourseTitle: course.title,
+        mappingType: course.mappingType || "direct-course-alignment"
+      });
+    }
+
+    for (const supplemental of program.supplementalGraduateContent || []) {
+      mappings.set(supplemental.existingLessonPlanId, {
+        programId: program.id,
+        relationship: "supplemental",
+        classification: supplemental.classification,
+        title: supplemental.title
+      });
+    }
+  }
+
+  return mappings;
+}
+
+const programMappingByLesson = buildProgramMappings();
 const commonStructure = [...policy.lessonStructure];
 const evidenceExpectation =
   "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.";
@@ -29,9 +61,15 @@ function visual(id, type, instructionalPurpose, title, purpose, supportsObjectiv
 }
 
 function plan(config) {
+  const programMapping = programMappingByLesson.get(config.id);
+  if (!programMapping) {
+    throw new Error(`Missing canonical program mapping for ${config.id}`);
+  }
+
   return {
     lessonPlanId: config.id,
     status: statusById.get(config.id),
+    programMapping,
     lessonSummary: config.summary,
     estimatedMinutes: config.minutes,
     prerequisites: config.prerequisites,
@@ -372,7 +410,7 @@ for (const item of plans) {
   }
 }
 
-const output = { schemaVersion: "1.1.0", lessonContentPlans: plans };
+const output = { schemaVersion: "1.2.0", lessonContentPlans: plans };
 fs.writeFileSync("data/curriculum/lesson-content.json", JSON.stringify(output, null, 2) + "\n");
 
 console.log(

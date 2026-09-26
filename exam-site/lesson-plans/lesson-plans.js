@@ -49,6 +49,15 @@ function renderVisuals(visuals) {
     </article>`
   ).join("");
 }
+
+function renderProgramMapping(mapping) {
+  if (mapping.relationship === "course") {
+    return `Program mapping: ${escapeHtml(mapping.programCourseId)} · ${escapeHtml(mapping.programCourseTitle)} · ${escapeHtml(titleCase(mapping.mappingType))}`;
+  }
+
+  return `Program mapping: ${escapeHtml(titleCase(mapping.classification))} · ${escapeHtml(mapping.title)}`;
+}
+
 function renderPlan(plan, lesson, course) {
   return `
     <article class="expanded-plan" id="${escapeHtml(plan.lessonPlanId)}">
@@ -57,6 +66,7 @@ function renderPlan(plan, lesson, course) {
           <p class="eyebrow">${escapeHtml(course.title)} · ${escapeHtml(String(plan.estimatedMinutes))} MIN</p>
           <h3>${escapeHtml(lesson.title)}</h3>
           <p>${escapeHtml(plan.lessonSummary)}</p>
+          <p class="program-context">${renderProgramMapping(plan.programMapping)}</p>
         </div>
         <span class="pathway-status${plan.status === "active" ? "" : " planned"}">${escapeHtml(plan.status.toUpperCase())}</span>
       </div>
