@@ -15,7 +15,8 @@ const files = [
   "lesson-plans.json",
   "scenario-mappings.json",
   "content-policy.json",
-  "lesson-content.json"
+  "lesson-content.json",
+  "program-architecture.json"
 ];
 
 fs.mkdirSync(targetDir, { recursive: true });
