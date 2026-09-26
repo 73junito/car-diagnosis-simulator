@@ -34,6 +34,7 @@
     "docs:mermaid:render": "node scripts/verify-mermaid-rendering.js",
     "docs:mermaid": "npm run docs:mermaid:coverage && npm run docs:mermaid:render",
     "validate:academic-pathways": "node scripts/verify-academic-pathways.js",
+    "validate:ai-mechanic-architecture": "node scripts/verify-ai-mechanic-architecture.js",
     "validate:curriculum-content": "node scripts/verify-curriculum-content-policy.js",
     "validate:curriculum-schema": "node scripts/verify-curriculum-migration-contract.js",
     "validate:curriculum-api": "node scripts/verify-curriculum-api-contract.js",

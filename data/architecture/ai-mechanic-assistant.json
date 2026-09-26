@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "1.0.0",
+  "architectureId": "ai-mechanic-assistant",
+  "status": "canonical-contract-not-yet-fully-wired",
+  "principles": [
+    "The language model is not the source of truth.",
+    "Vehicle facts and technical claims must come from normalized tools or approved evidence.",
+    "Vehicle-specific procedures and specifications require appropriate primary authoritative evidence.",
+    "Diagnostic decisions fail closed when evidence is insufficient.",
+    "Technician verification remains required.",
+    "Training and technician response policies are distinct.",
+    "Only privacy-minimized diagnostic context is sent to model providers."
+  ],
+  "runtimeOwnership": {
+    "canonicalProductAiRoot": "src/ai/",
+    "diagnosticContractsRoot": "src/ai/diagnostics/",
+    "providerEdge": "worker/services/ollama.js"
+  },
+  "components": [
+    {"id":"ui","role":"Technician / student interface"},
+    {"id":"application-api","role":"Authentication, authorization, session boundary"},
+    {"id":"diagnostic-session-store","role":"Durable vehicle, complaint, evidence, test, decision, and verification state"},
+    {"id":"ai-orchestrator","role":"Intent, context, capability, and tool routing"},
+    {"id":"ollama-provider","role":"Language interpretation, synthesis, explanation, and response drafting only"},
+    {"id":"vehicle-identity-resolver","role":"Resolve VIN and entered metadata into a normalized vehicle identity with unresolved fields"},
+    {"id":"tool-gateway","role":"Route approved automotive tools through typed adapters and normalizers"},
+    {"id":"evidence-retrieval","role":"Hybrid retrieval and reranking from approved knowledge"},
+    {"id":"evidence-gate","role":"Authority, relevance, vehicle match, currency, and sufficiency checks"},
+    {"id":"diagnostic-engine","role":"Deterministic diagnostic state, hypotheses, tests, evidence, and verification"},
+    {"id":"safety-verification-gate","role":"Require technician verification and fail closed on unsafe or unsupported output"},
+    {"id":"response-composer","role":"Render evidence-supported structured decisions into mode-appropriate language"},
+    {"id":"audit-provenance","role":"Trace claim to evidence, source, retrieval, and decision"}
+  ],
+  "externalTools": [
+    {
+      "id":"nhtsa-vpic",
+      "sourceType":"vehicle-identity",
+      "canonicalBase":"https://vpic.nhtsa.dot.gov/api/",
+      "normalizesTo":"VehicleIdentity",
+      "cachePolicy":"cache-first-with-expiry",
+      "notes":"vPIC API is rate controlled; standalone database may be used for VIN decoding resilience."
+    },
+    {
+      "id":"nhtsa-recalls",
+      "sourceType":"safety-recall",
+      "canonicalBase":"https://api.nhtsa.gov/recalls/",
+      "normalizesTo":"ToolResult",
+      "cachePolicy":"cache-first-daily-refresh"
+    },
+    {
+      "id":"nhtsa-complaints",
+      "sourceType":"consumer-complaint",
+      "canonicalBase":"https://api.nhtsa.gov/complaints/",
+      "normalizesTo":"ToolResult",
+      "cachePolicy":"cache-first-daily-refresh"
+    },
+    {"id":"vehicle-database","sourceType":"vehicle-configuration","normalizesTo":"ToolResult"},
+    {"id":"dtc-obd2","sourceType":"diagnostic-code-data","normalizesTo":"ToolResult"},
+    {"id":"parts-data","sourceType":"parts-fitment","normalizesTo":"ToolResult"}
+  ],
+  "rag": {
+    "ingestion": [
+      "rights-review",
+      "artifact-hash",
+      "normalization",
+      "chunking",
+      "metadata",
+      "embedding",
+      "indexing"
+    ],
+    "retrieval": [
+      "query-normalization",
+      "vehicle-context-filter",
+      "hybrid-search",
+      "reranking",
+      "evidence-package"
+    ],
+    "rule":"Unapproved documents must not become retrievable model context."
+  },
+  "provenanceRequiredFields": [
+    "source_id",
+    "source_type",
+    "canonical_url",
+    "publisher",
+    "retrieved_at",
+    "rights_status",
+    "artifact_sha256",
+    "chunk_id",
+    "claim_id",
+    "review_status"
+  ],
+  "evidenceStates": ["supported","partially-supported","conflicting","insufficient"],
+  "vehicleMatchStates": ["exact","partial","generic","unknown"],
+  "sourceAuthorityStates": ["primary","secondary","instructional"],
+  "privacyBoundaries": [
+    "Do not send account identity to the model provider.",
+    "Do not send raw VIN to the model provider unless a separately approved use case requires it.",
+    "Keep diagnostic technical data separate from account, telemetry, and training analytics identities."
+  ],
+  "responseModes": {
+    "training": ["hints","explanations","guided-questions","retry","instructional-feedback"],
+    "technician": ["concise-evidence","recommended-next-check","source-boundary","verification-required"]
+  },
+  "diagnosticDecisionFields": [
+    "hypothesis",
+    "supportingEvidenceIds",
+    "conflictingEvidenceIds",
+    "missingEvidence",
+    "recommendedNextCheck",
+    "vehicleSpecificProcedureRequired",
+    "verificationRequired"
+  ],
+  "implementationOrder": [
+    "vehicle-identity",
+    "tool-gateway",
+    "evidence-model",
+    "provenance",
+    "retrieval",
+    "diagnostic-state-engine",
+    "ollama-orchestration",
+    "safety-verification",
+    "report-ui"
+  ]
+}
