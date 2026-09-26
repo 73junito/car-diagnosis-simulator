@@ -20,8 +20,8 @@
     {
       "source_id": "frontiers-automotive-alternator-2023",
       "artifact_filename": "frontiers-automotive-alternator-2023.pdf",
-      "artifact_sha256": null,
-      "artifact_sha256_status": "not_recorded",
+      "artifact_sha256": "c69d8328e2ae4abba58ec13be8f7ca02c169a57d75c4701fe1cfaa0163fa68b8",
+      "artifact_sha256_status": "recorded_human_review",
       "title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
       "authors": ["Surath Gajanayake", "S. Bandara", "T. Sugathapala"],
       "publisher": "Frontiers in Mechanical Engineering",
@@ -30,14 +30,14 @@
       "canonical_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
       "rights_classification": "CC_BY",
       "rights_classification_source": "scholarly-source-manifest.json license_classification with license_url and license statement pattern",
-      "rights_decision": "pending",
-      "rights_verified_by": null,
-      "rights_verified_at": null,
+      "rights_decision": "cleared-text-only-cc-by-4.0",
+      "rights_verified_by": "Rafael Rodriguez",
+      "rights_verified_at": "2026-09-26T12:16:05.3639796-05:00",
       "technical_review_status": "pending",
       "technically_reviewed_by": null,
       "technically_reviewed_at": null,
       "ingested": true,
-      "rights_cleared": false,
+      "rights_cleared": true,
       "technically_reviewed": false,
       "chunk_approved": false,
       "lesson_mapped": false,
@@ -46,7 +46,7 @@
         "frontiers-alternator-ac-dc-rectification-p7"
       ],
       "approved_chunk_ids": [],
-      "review_notes": null,
+      "review_notes": "Human rights review confirmed that the exact Frontiers article identified by DOI 10.3389/fmech.2022.1090152 is published under the Creative Commons Attribution License. Rights clearance is limited to attributed textual material from this exact hashed artifact. Figures, images, tables, or separately credited third-party material are not cleared by this decision and require separate review. This rights decision does not constitute technical review or chunk approval.",
       "chunk_decisions": [
         {
           "chunk_id": "frontiers-alternator-primary-source-p7",
@@ -66,8 +66,7 @@
         }
       ],
       "open_questions": [
-        "reviewer_approved=true in scholarly-source-manifest.json carries no reviewer identity or timestamp and must not be read as a rights decision",
-        "artifact sha256 is not recorded in the manifest; record it before chunk approval"
+        "reviewer_approved=true in scholarly-source-manifest.json carries no reviewer identity or timestamp and must not be read as a rights decision"
       ]
     },
     {
@@ -81,9 +80,9 @@
       "publication_date": "not stated in supplied chapter; PDF creation metadata 2014-06-10 is not a publication date",
       "rights_classification": "PUBLIC_DOMAIN",
       "rights_classification_source": "source-intake candidate classification (NOT a decision)",
-      "rights_decision": "pending",
-      "rights_verified_by": null,
-      "rights_verified_at": null,
+      "rights_decision": "pending-authorship-and-third-party-clearance",
+      "rights_verified_by": "Rafael Rodriguez",
+      "rights_verified_at": "2026-09-26T12:16:05.3639796-05:00",
       "technical_review_status": "pending",
       "technically_reviewed_by": null,
       "technically_reviewed_at": null,
@@ -94,7 +93,7 @@
       "lesson_mapped": false,
       "candidate_chunk_ids": [],
       "approved_chunk_ids": [],
-      "review_notes": null,
+      "review_notes": "Human rights review confirmed that Department of the Navy policy can place works prepared by federal officers or employees within official duties outside copyright protection, but the supplied NAVEDTRA 14264A Chapter 8 artifact does not establish the employment/authorship status of all contributors or the provenance of all included figures and third-party material. Government publication or hosting alone is insufficient to clear the complete artifact for reuse. Rights remain pending until authorship and third-party-material provenance are resolved.",
       "chunk_decisions": [],
       "observed_scope": [
         "charging-circuit components (8-4)",
