@@ -1,6 +1,6 @@
 {
   "domain": "electrical",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "project-authored-reference-aligned",
   "standardReferences": [
     "IEC 60617:2026 DB",
@@ -683,6 +683,1281 @@
           "className": "symbol-stroke"
         }
       ]
+    },
+    {
+      "id": "electrical.circuit-breaker",
+      "name": "Circuit breaker",
+      "aliases": [
+        "breaker"
+      ],
+      "tags": [
+        "protection",
+        "resettable"
+      ],
+      "terminals": [
+        {
+          "id": "in",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "out",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 28,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 28,
+            "y": 34,
+            "width": 44,
+            "height": 32,
+            "rx": 4
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "path",
+          "attrs": {
+            "d": "M35 57 L44 43 L56 57 L65 43"
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 72,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.switch-nc",
+      "name": "Normally closed switch",
+      "aliases": [
+        "NC switch"
+      ],
+      "tags": [
+        "switching",
+        "control"
+      ],
+      "terminals": [
+        {
+          "id": "a",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "b",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 35,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 35,
+            "cy": 50,
+            "r": 3
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 70,
+            "cy": 50,
+            "r": 3
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 38,
+            "y1": 50,
+            "x2": 67,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 73,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.relay-contact-no",
+      "name": "Relay contact — normally open",
+      "aliases": [
+        "relay NO",
+        "NO contact"
+      ],
+      "tags": [
+        "relay",
+        "switching"
+      ],
+      "terminals": [
+        {
+          "id": "common",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "switched",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 35,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 35,
+            "cy": 50,
+            "r": 3
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 70,
+            "cy": 50,
+            "r": 3
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 38,
+            "y1": 47,
+            "x2": 65,
+            "y2": 32
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 73,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 50,
+            "y1": 20,
+            "x2": 50,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.relay-contact-nc",
+      "name": "Relay contact — normally closed",
+      "aliases": [
+        "relay NC",
+        "NC contact"
+      ],
+      "tags": [
+        "relay",
+        "switching"
+      ],
+      "terminals": [
+        {
+          "id": "common",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "switched",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 35,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 35,
+            "cy": 50,
+            "r": 3
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 70,
+            "cy": 50,
+            "r": 3
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 38,
+            "y1": 50,
+            "x2": 67,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 73,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 50,
+            "y1": 20,
+            "x2": 50,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.diode",
+      "name": "Diode",
+      "aliases": [
+        "rectifier diode"
+      ],
+      "tags": [
+        "semiconductor",
+        "rectification"
+      ],
+      "terminals": [
+        {
+          "id": "anode",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "cathode",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 35,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "polygon",
+          "attrs": {
+            "points": "35,32 35,68 65,50"
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 65,
+            "y1": 30,
+            "x2": 65,
+            "y2": 70
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 65,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.led",
+      "name": "Light-emitting diode",
+      "aliases": [
+        "LED"
+      ],
+      "tags": [
+        "semiconductor",
+        "indicator"
+      ],
+      "terminals": [
+        {
+          "id": "anode",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "cathode",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 35,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "polygon",
+          "attrs": {
+            "points": "35,32 35,68 65,50"
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 65,
+            "y1": 30,
+            "x2": 65,
+            "y2": 70
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 65,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 58,
+            "y1": 25,
+            "x2": 72,
+            "y2": 12
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 68,
+            "y1": 30,
+            "x2": 82,
+            "y2": 17
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.capacitor",
+      "name": "Capacitor",
+      "aliases": [
+        "condenser"
+      ],
+      "tags": [
+        "passive",
+        "storage"
+      ],
+      "terminals": [
+        {
+          "id": "a",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "b",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 42,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 42,
+            "y1": 28,
+            "x2": 42,
+            "y2": 72
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 58,
+            "y1": 28,
+            "x2": 58,
+            "y2": 72
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 58,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.inductor",
+      "name": "Inductor / coil",
+      "aliases": [
+        "inductor",
+        "coil"
+      ],
+      "tags": [
+        "passive",
+        "magnetic"
+      ],
+      "terminals": [
+        {
+          "id": "a",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "b",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 24,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "path",
+          "attrs": {
+            "d": "M24 50 C28 34 36 34 40 50 C44 34 52 34 56 50 C60 34 68 34 72 50"
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 72,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.solenoid",
+      "name": "Solenoid",
+      "aliases": [
+        "electromagnetic actuator"
+      ],
+      "tags": [
+        "actuator",
+        "coil"
+      ],
+      "terminals": [
+        {
+          "id": "a",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "b",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 25,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 25,
+            "y": 30,
+            "width": 50,
+            "height": 40,
+            "rx": 5
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "path",
+          "attrs": {
+            "d": "M34 58 C38 40 44 40 48 58 C52 40 58 40 62 58 C66 40 70 40 72 52"
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 75,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.connector-pin",
+      "name": "Connector pin",
+      "aliases": [
+        "terminal pin",
+        "connector terminal"
+      ],
+      "tags": [
+        "connector",
+        "terminal"
+      ],
+      "terminals": [
+        {
+          "id": "wire",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "pin",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 52,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 62,
+            "cy": 50,
+            "r": 10
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 72,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.splice",
+      "name": "Wire splice",
+      "aliases": [
+        "splice"
+      ],
+      "tags": [
+        "connection",
+        "junction"
+      ],
+      "terminals": [
+        {
+          "id": "left",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "right",
+          "x": 90,
+          "y": 50
+        },
+        {
+          "id": "branch",
+          "x": 50,
+          "y": 90
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 50,
+            "y1": 50,
+            "x2": 50,
+            "y2": 90
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 50,
+            "cy": 50,
+            "r": 5
+          },
+          "className": "symbol-solid"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.junction",
+      "name": "Electrical junction",
+      "aliases": [
+        "junction point",
+        "node"
+      ],
+      "tags": [
+        "connection",
+        "node"
+      ],
+      "terminals": [
+        {
+          "id": "left",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "right",
+          "x": 90,
+          "y": 50
+        },
+        {
+          "id": "top",
+          "x": 50,
+          "y": 10
+        },
+        {
+          "id": "bottom",
+          "x": 50,
+          "y": 90
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 50,
+            "y1": 10,
+            "x2": 50,
+            "y2": 90
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 50,
+            "cy": 50,
+            "r": 6
+          },
+          "className": "symbol-solid"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.module-controller",
+      "name": "Electronic control module",
+      "aliases": [
+        "controller",
+        "ECU",
+        "module"
+      ],
+      "tags": [
+        "controller",
+        "module"
+      ],
+      "terminals": [
+        {
+          "id": "power",
+          "x": 10,
+          "y": 30
+        },
+        {
+          "id": "ground",
+          "x": 10,
+          "y": 70
+        },
+        {
+          "id": "signal",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 24,
+            "y": 18,
+            "width": 52,
+            "height": 64,
+            "rx": 5
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 50,
+            "y": 56,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "ECU"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 30,
+            "x2": 24,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 70,
+            "x2": 24,
+            "y2": 70
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.sensor-generic",
+      "name": "Generic electrical sensor",
+      "aliases": [
+        "sensor",
+        "transducer"
+      ],
+      "tags": [
+        "sensor",
+        "signal"
+      ],
+      "terminals": [
+        {
+          "id": "power",
+          "x": 10,
+          "y": 30
+        },
+        {
+          "id": "ground",
+          "x": 10,
+          "y": 70
+        },
+        {
+          "id": "signal",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 27,
+            "y": 25,
+            "width": 46,
+            "height": 50,
+            "rx": 8
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 50,
+            "y": 58,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "S"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 30,
+            "x2": 27,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 70,
+            "x2": 27,
+            "y2": 70
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 73,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.variable-resistor",
+      "name": "Variable resistor",
+      "aliases": [
+        "rheostat",
+        "variable resistance"
+      ],
+      "tags": [
+        "passive",
+        "adjustable"
+      ],
+      "terminals": [
+        {
+          "id": "a",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "b",
+          "x": 90,
+          "y": 50
+        },
+        {
+          "id": "wiper",
+          "x": 50,
+          "y": 10
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 24,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "path",
+          "attrs": {
+            "d": "M24 50 L31 38 L40 62 L49 38 L58 62 L67 38 L76 50"
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 50,
+            "y1": 10,
+            "x2": 50,
+            "y2": 32
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "path",
+          "attrs": {
+            "d": "M44 26 L50 32 L56 26"
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.potentiometer",
+      "name": "Potentiometer",
+      "aliases": [
+        "pot"
+      ],
+      "tags": [
+        "passive",
+        "adjustable",
+        "sensor"
+      ],
+      "terminals": [
+        {
+          "id": "a",
+          "x": 10,
+          "y": 55
+        },
+        {
+          "id": "b",
+          "x": 90,
+          "y": 55
+        },
+        {
+          "id": "wiper",
+          "x": 50,
+          "y": 10
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 55,
+            "x2": 24,
+            "y2": 55
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 24,
+            "y": 43,
+            "width": 52,
+            "height": 24,
+            "rx": 2
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 55,
+            "x2": 90,
+            "y2": 55
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 50,
+            "y1": 10,
+            "x2": 50,
+            "y2": 38
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "path",
+          "attrs": {
+            "d": "M44 32 L50 38 L56 32"
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.voltmeter",
+      "name": "Voltmeter",
+      "aliases": [
+        "voltage meter",
+        "DVOM voltage"
+      ],
+      "tags": [
+        "measurement",
+        "diagnostics"
+      ],
+      "terminals": [
+        {
+          "id": "positive",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "negative",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 24,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 50,
+            "cy": 50,
+            "r": 26
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 50,
+            "y": 58,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "V"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
+    },
+    {
+      "id": "electrical.ammeter",
+      "name": "Ammeter",
+      "aliases": [
+        "current meter",
+        "DVOM current"
+      ],
+      "tags": [
+        "measurement",
+        "diagnostics"
+      ],
+      "terminals": [
+        {
+          "id": "in",
+          "x": 10,
+          "y": 50
+        },
+        {
+          "id": "out",
+          "x": 90,
+          "y": 50
+        }
+      ],
+      "primitives": [
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 50,
+            "x2": 24,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "circle",
+          "attrs": {
+            "cx": 50,
+            "cy": 50,
+            "r": 26
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 50,
+            "y": 58,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "A"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 50,
+            "x2": 90,
+            "y2": 50
+          },
+          "className": "symbol-stroke"
+        }
+      ],
+      "domain": "electrical"
     }
   ]
 }

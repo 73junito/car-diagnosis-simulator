@@ -11,6 +11,8 @@
 
   const symbolLibrary = await window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols");
   const symbolRenderer = window.TorqueMindSymbolRenderer;
+  const connectionLibrary = await window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections");
+  const voltageDomains = window.TorqueMindVoltageDomains;
 
   const svg = document.getElementById("circuitSvg");
   const inspector = document.getElementById("inspectorContent");
@@ -20,22 +22,17 @@
   const voltageProfile = document.getElementById("voltageProfile");
   const guidedSteps = [...document.querySelectorAll("#guidedSteps li")];
 
-  const powertrainLabels = Object.freeze({
-    "conventional-12v": "Conventional automotive",
-    hybrid: "Hybrid",
-    "plug-in-hybrid": "Plug-in hybrid",
-    "battery-electric": "Battery electric",
-    "fuel-cell": "Fuel cell",
-    other: "Other"
-  });
+  const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
+  const voltageDomainById = new Map(voltageArchitecture.map((domain) => [domain.id, domain]));
 
-  for (const system of circuit.voltageSystems) {
+  for (const domain of voltageArchitecture) {
     const chip = document.createElement("span");
-    chip.className = "voltage-chip";
+    chip.className = `voltage-chip voltage-domain-${domain.domainClass}`;
+    chip.dataset.voltageSystemId = domain.id;
     const systemLabel = document.createElement("small");
-    systemLabel.textContent = powertrainLabels[circuit.powertrainType] || circuit.powertrainType;
+    systemLabel.textContent = domain.powertrainLabel;
     const voltageLabel = document.createElement("span");
-    voltageLabel.textContent = system.displayLabel;
+    voltageLabel.textContent = domain.label;
     chip.append(systemLabel, voltageLabel);
     voltageProfile.append(chip);
   }
@@ -212,19 +209,27 @@
 
     for (const connection of circuit.connections) {
       const state = flow.get(connection.id);
+      const style = connectionLibrary.registry.get(connection.styleId);
+      if (!style) throw new Error(`Missing connection style: ${connection.styleId}`);
+      const voltageDomain = voltageDomainById.get(connection.voltageSystemId);
+      if (!voltageDomain) throw new Error(`Missing voltage domain: ${connection.voltageSystemId}`);
       const path = el("path", {
         d: routePath(connection),
         class: [
           "wire",
+          `wire-role-${style.strokeRole}`,
+          `voltage-domain-${voltageDomain.domainClass}`,
           connection.type.replaceAll("_", "-"),
-          connection.type === "control" ? "control" : "",
           state && flowAllowed(connection.id) ? `flow-${state.kind}` : "",
           state?.direction === "reverse" ? "reverse" : "",
           fault?.targetConnectionId === connection.id && fault.type === "open_circuit" ? "fault-open" : "",
           fault?.targetConnectionId === connection.id && fault.type === "high_resistance" ? "fault-degraded" : "",
           operatingState === "key-off" && connection.type !== "power_feed" ? "inactive" : ""
         ].filter(Boolean).join(" "),
-        "data-connection-id": connection.id
+        style: `--wire-width:${style.strokeWidth};--wire-dash:${style.dashPattern || "none"}`,
+        "data-connection-id": connection.id,
+        "data-style-id": connection.styleId,
+        "data-voltage-system-id": connection.voltageSystemId
       });
 
       if (state && flowAllowed(connection.id)) {

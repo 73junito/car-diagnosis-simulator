@@ -45,10 +45,19 @@ header p { max-width: 850px; line-height: 1.6; }
 .state-badge { font-size:.76rem; font-weight:800; padding:8px 10px; border-radius:999px; background:#e8eef7; white-space:nowrap; }
 .diagram-scroll { overflow:hidden; border-radius:12px; }
 #circuitSvg { display:block; width:100%; min-height:560px; border-radius:12px; background:linear-gradient(#fbfcfe,#f7f9fc); }
-.wire { fill:none; stroke:var(--wire); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; transition:stroke .2s,opacity .2s,stroke-width .2s; }
-.wire.power-feed { stroke:#a8b0bd; }
-.wire.ground-reference { stroke:#747d8b; }
-.wire.control { stroke:var(--control); stroke-dasharray:8 8; opacity:.7; }
+.wire { fill:none; stroke:var(--wire); stroke-width:var(--wire-width,4); stroke-dasharray:var(--wire-dash,none); stroke-linecap:round; stroke-linejoin:round; transition:stroke .2s,opacity .2s,stroke-width .2s; }
+.wire-role-power,.wire-role-switched-power { stroke:#a8b0bd; }
+.wire-role-ground { stroke:#747d8b; }
+.wire-role-control { stroke:var(--control); opacity:.7; }
+.wire-role-signal { stroke:#52667a; }
+.wire-role-network { stroke:#5e548e; }
+.wire-role-shield { stroke:#7a7f87; }
+.wire-role-traction { stroke:#7f1d1d; }
+.voltage-chip.voltage-domain-lv-12 { border-style:solid; }
+.voltage-chip.voltage-domain-lv-24 { border-style:dashed; }
+.voltage-chip.voltage-domain-lv-48 { border-style:double; border-width:3px; }
+.voltage-chip.voltage-domain-traction { border-width:3px; font-weight:900; }
+.voltage-chip.voltage-domain-declared-voltage { border-style:dotted; border-width:2px; }
 .wire.inactive { opacity:.28; }
 .wire.flow-power { stroke:var(--power); stroke-width:6; stroke-dasharray:12 9; animation:flow-forward .75s linear infinite; }
 .wire.flow-power.reverse { animation-name:flow-reverse; }
