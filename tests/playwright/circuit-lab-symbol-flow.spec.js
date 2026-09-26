@@ -13,6 +13,10 @@ test.describe('Interactive circuit lab symbol flow', () => {
     await expect(page.locator('[data-component-id="BAT1"]')).toBeVisible();
     await expect(page.locator('[data-component-id="ALT1"]')).toBeVisible();
     await expect(page.locator('[data-component-id="GND1"]')).toBeVisible();
+    await expect(page.locator('.component .tm-symbol')).toHaveCount(6);
+    await expect(page.locator('[data-component-id="BAT1"] [data-symbol-id="electrical.battery"]')).toBeVisible();
+    await expect(page.locator('[data-component-id="REG1"] [data-symbol-id="electrical.voltage-regulator"]')).toBeVisible();
+    await expect(page.locator('.component-label')).toHaveCount(6);
     await expect(page.locator('.test-point')).toHaveCount(3);
 
     await expect(page.locator('.wire.flow-power')).toHaveCount(3);

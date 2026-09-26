@@ -35,11 +35,13 @@ header p { max-width: 850px; line-height: 1.6; }
 .legend-line.fault { border-color:var(--fault); border-top-style:dashed; }
 .legend-dot { width:11px; height:11px; border-radius:50%; display:inline-block; background:#fff; border:3px solid #6a4bc3; }
 .workspace { display:grid; grid-template-columns:minmax(0,2.25fr) minmax(290px,.75fr); gap:18px; align-items:start; }
+.workspace > * { min-width:0; }
 .diagram-card,.inspector,.boundary { background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:18px; box-shadow:0 10px 28px rgba(22,35,55,.06); }
 .diagram-heading { display:flex; justify-content:space-between; gap:16px; align-items:start; margin-bottom:8px; }
 .diagram-heading h2 { margin:0; font-size:1.35rem; }
 .state-badge { font-size:.76rem; font-weight:800; padding:8px 10px; border-radius:999px; background:#e8eef7; white-space:nowrap; }
-#circuitSvg { width:100%; min-height:560px; border-radius:12px; background:linear-gradient(#fbfcfe,#f7f9fc); }
+.diagram-scroll { overflow:hidden; border-radius:12px; }
+#circuitSvg { display:block; width:100%; min-height:560px; border-radius:12px; background:linear-gradient(#fbfcfe,#f7f9fc); }
 .wire { fill:none; stroke:var(--wire); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; transition:stroke .2s,opacity .2s,stroke-width .2s; }
 .wire.power-feed { stroke:#a8b0bd; }
 .wire.ground-reference { stroke:#747d8b; }
@@ -57,12 +59,24 @@ header p { max-width: 850px; line-height: 1.6; }
 .component { cursor:pointer; outline:none; }
 .component .symbol-stroke { fill:none; stroke:#1e293b; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
 .component .symbol-fill { fill:#fff; stroke:#1e293b; stroke-width:3; }
-.component .symbol-label { pointer-events:none; font-size:14px; font-weight:800; text-anchor:middle; fill:#172033; }
-.component .symbol-sub { pointer-events:none; font-size:11px; text-anchor:middle; fill:#66758c; }
+.component .symbol-solid { fill:#1e293b; stroke:#1e293b; stroke-width:2; }
+.component .symbol-text { fill:#1e293b; font-size:24px; font-weight:800; text-anchor:middle; }
+.component-label { pointer-events:none; }
+.component-label .label-leader { fill:none; stroke:#64748b; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.component-label .label-chip { fill:#fff; stroke:#cbd5e1; stroke-width:2; }
+.component-label .label-title { font-size:16px; font-weight:800; text-anchor:middle; fill:#0f172a; }
+.component-label .label-subtitle { font-size:12px; font-weight:600; text-anchor:middle; fill:#475569; }
+.component-label.selected .label-chip { stroke:#4d3fa7; stroke-width:3; }
+.component-label.faulted .label-chip { fill:#fff7ed; stroke:var(--fault); stroke-width:3; }
+.component-label.faulted .label-title { fill:#9a3412; }
+.component-label.faulted .label-subtitle { fill:#c2410c; }
+.component-label.faulted .label-leader { stroke:var(--fault); }
 .component:hover .symbol-stroke,.component:hover .symbol-fill,.component:focus-visible .symbol-stroke,.component:focus-visible .symbol-fill { stroke:#4d3fa7; }
 .component.selected .symbol-stroke,.component.selected .symbol-fill { stroke:#4d3fa7; stroke-width:5; }
 .component.energized .symbol-stroke,.component.energized .symbol-fill { stroke:var(--power); }
+.component.energized .symbol-solid { fill:var(--power); stroke:var(--power); }
 .component.faulted .symbol-stroke,.component.faulted .symbol-fill { stroke:var(--fault); }
+.component.faulted .symbol-solid { fill:var(--fault); stroke:var(--fault); }
 .test-point { cursor:pointer; }
 .test-point circle { fill:#fff; stroke:#6a4bc3; stroke-width:4; }
 .test-point text { font-size:10px; font-weight:800; fill:#5c46a3; }
@@ -95,7 +109,10 @@ header p { max-width: 850px; line-height: 1.6; }
   .button-row button { flex:1 1 100%; }
   .learning-strip { align-items:flex-start; flex-direction:column; gap:4px; }
   .diagram-heading { flex-direction:column; }
-  #circuitSvg { min-height:430px; }
+  .diagram-scroll { overflow-x:auto; overflow-y:hidden; overscroll-behavior-inline:contain; -webkit-overflow-scrolling:touch; }
+  #circuitSvg { width:760px; min-width:760px; min-height:496px; }
+  .component-label .label-title { font-size:17px; }
+  .component-label .label-subtitle { font-size:13px; }
   .legend { gap:10px 14px; }
 }
 @media (prefers-reduced-motion:reduce) {

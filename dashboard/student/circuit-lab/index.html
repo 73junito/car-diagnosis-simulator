@@ -60,10 +60,12 @@
           </div>
           <div id="stateBadge" class="state-badge">Engine running / charging</div>
         </div>
-        <svg id="circuitSvg" viewBox="0 0 980 640" role="img" aria-labelledby="diagramTitle diagramDesc">
-          <title id="diagramTitle">Generic charging-system training schematic</title>
-          <desc id="diagramDesc">Interactive symbol-based diagram showing a battery, circuit protection, alternator, regulator, electrical loads, chassis ground, test points, and animated conventional current flow.</desc>
-        </svg>
+        <div class="diagram-scroll" aria-label="Scrollable circuit schematic">
+          <svg id="circuitSvg" viewBox="0 0 980 640" role="img" aria-labelledby="diagramTitle diagramDesc">
+            <title id="diagramTitle">Generic charging-system training schematic</title>
+            <desc id="diagramDesc">Interactive charging-system diagram rendered from the standardized electrical symbol library, with external labels, test points, faults, and animated conventional current flow.</desc>
+          </svg>
+        </div>
         <p class="flow-note" id="flowNote">Animated arrows show conventional current direction. They are conceptual training aids, not measured current magnitude.</p>
       </div>
 
@@ -93,6 +95,10 @@
 
   <script src="/src/circuits/contracts.js"></script>
   <script src="/src/circuits/engine.js"></script>
+  <script src="/src/symbols/contracts.js"></script>
+  <script src="/src/symbols/registry.js"></script>
+  <script src="/src/symbols/svg-renderer.js"></script>
+  <script src="/src/symbols/index.js"></script>
   <script src="./circuit-lab.js"></script>
 </body>
 </html>

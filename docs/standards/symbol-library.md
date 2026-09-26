@@ -1,4 +1,4 @@
-# Standardized Schematic Symbol Library
+﻿# Standardized Schematic Symbol Library
 
 ## Purpose
 
@@ -8,13 +8,13 @@ This library is the canonical source for reusable TorqueMind/AutoLearnPro schema
 
 | Domain | Initial symbols | Reference family |
 | --- | ---: | --- |
-| Electrical | 10 | IEC 60617:2026 DB; ISO 14617-1:2025 |
+| Electrical | 11 | IEC 60617:2026 DB; ISO 14617-1:2025 |
 | Hydraulic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Pneumatic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Mechanical | 8 | ISO 14617-1:2025 |
 | Thermal | 6 | ISO 14617-1:2025 |
 
-Total initial catalog: **46 symbols**.
+Total initial catalog: **47 symbols**.
 
 ## Canonical representation
 
