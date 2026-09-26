@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>12 V Relay-Controlled Load Lab</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
+  <link rel="stylesheet" href="./relay-load-lab.css">
+</head>
+<body>
+  <main class="lab-shell">
+    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
+    <header>
+      <p class="eyebrow">Reusable circuit-template preview</p>
+      <h1>Interactive 12 V Relay-Controlled Load Lab</h1>
+      <p>Compare the relay control side with the separately protected load side, trace conventional current, and inject faults without assuming vehicle-specific wiring or limits.</p>
+      <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
+    </header>
+
+    <section class="learning-strip">
+      <strong>Learning goal</strong>
+      <span>Explain how a low-current control branch energizes a relay coil so the relay contact can switch a separate load-current branch.</span>
+    </section>
+
+    <section class="toolbar" aria-label="Relay circuit controls">
+      <div class="control-group">
+        <label for="stateSelect">Operating state</label>
+        <select id="stateSelect"></select>
+      </div>
+      <div class="control-group">
+        <label for="faultSelect">Training fault</label>
+        <select id="faultSelect"><option value="">No injected fault</option></select>
+      </div>
+      <div class="button-row">
+        <button id="showSystemFlow" type="button">Show system flow</button>
+        <button id="traceControl" type="button">Trace relay control</button>
+        <button id="tracePower" type="button">Trace load power</button>
+        <button id="traceGround" type="button">Trace ground return</button>
+        <button id="resetView" type="button">Reset</button>
+      </div>
+    </section>
+
+    <section class="legend">
+      <span><i class="legend-line power"></i> Power path</span>
+      <span><i class="legend-line ground"></i> Ground return</span>
+      <span><i class="legend-line control"></i> Relay control</span>
+      <span><i class="legend-line fault"></i> Faulted / degraded</span>
+      <span><i class="legend-dot test"></i> Test point</span>
+      <span class="legend-note">Line styles are training conventions; voltage is declared separately and no manufacturer wire color is implied.</span>
+    </section>
+
+    <section class="workspace">
+      <div class="diagram-card">
+        <div class="diagram-heading">
+          <div>
+            <p class="eyebrow">Control side vs load side</p>
+            <h2>Generic 12 V relay-controlled load schematic</h2>
+          </div>
+          <div id="stateBadge" class="state-badge">Command on / relay energized</div>
+        </div>
+        <div class="diagram-scroll">
+          <svg id="circuitSvg" viewBox="0 0 900 660" role="img" aria-labelledby="diagramTitle diagramDesc">
+            <title id="diagramTitle">Generic relay-controlled load training schematic</title>
+            <desc id="diagramDesc">Interactive 12 V relay circuit rendered from a reusable circuit template and standardized electrical libraries.</desc>
+          </svg>
+        </div>
+        <p class="flow-note" id="flowNote"></p>
+      </div>
+
+      <aside class="inspector" aria-live="polite">
+        <h2>Component inspector</h2>
+        <div id="inspectorContent"><p>Select a symbol or test point to inspect its role.</p></div>
+        <div class="guided-card">
+          <p class="eyebrow">Guided practice</p>
+          <ol id="guidedSteps">
+            <li class="active">Identify the battery and the two protected branches.</li>
+            <li>Trace the control switch to the relay coil.</li>
+            <li>Distinguish the relay coil from the relay contact.</li>
+            <li>Trace the load-current path through the relay contact.</li>
+            <li>Inject a fault and identify whether it affects control or load current.</li>
+          </ol>
+        </div>
+      </aside>
+    </section>
+
+    <section class="boundary">
+      <h2>Evidence boundary</h2>
+      <p>This project-authored template teaches general relay-circuit relationships only. Actual relay strategy, terminal designations, cable routing, protection, current limits, voltage-drop limits, and procedures require authoritative vehicle-specific service information.</p>
+    </section>
+  </main>
+
+  <script src="/src/circuits/contracts.js"></script>
+  <script src="/src/circuits/engine.js"></script>
+  <script src="/src/circuits/template-contracts.js"></script>
+  <script src="/src/circuits/voltage-domains.js"></script>
+  <script src="/src/connections/contracts.js"></script>
+  <script src="/src/connections/index.js"></script>
+  <script src="/src/symbols/contracts.js"></script>
+  <script src="/src/symbols/registry.js"></script>
+  <script src="/src/symbols/svg-renderer.js"></script>
+  <script src="/src/symbols/index.js"></script>
+  <script src="./relay-load-lab.js"></script>
+</body>
+</html>

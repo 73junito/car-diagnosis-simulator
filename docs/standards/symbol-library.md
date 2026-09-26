@@ -97,3 +97,11 @@ Reusable training circuits live under `data/circuit-templates/`. A template is a
 - the generic-training / vehicle-specific evidence boundary
 
 The first reusable template is `automotive-12v-starting-system`. It models a protected start-command path, starter-solenoid actuator and main switching contact, starter motor, and engine/chassis return in a conventional **12 V nominal** training system. Exact vehicle wiring, protection strategy, terminal designations, procedures, and specifications remain vehicle-specific.
+
+### 12 V relay-controlled load template
+
+The reusable template `automotive-12v-relay-controlled-load` separates a protected control branch from a separately protected load branch. The control switch energizes a relay coil; the relay''s normally open contact then permits current through the load branch.
+
+The template declares 12 V nominal explicitly and uses standardized symbol, terminal, connection-style, and voltage-system identifiers. It is intentionally generic so it can support later training examples for lamps, pumps, horns, fans, and similar loads without implying manufacturer-specific wiring.
+
+Faults are modeled independently on the control and load sides so learners can distinguish loss of relay command from loss or degradation of switched load current.
