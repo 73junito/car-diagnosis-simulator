@@ -2,4 +2,16 @@
 .wire.flow-can{stroke:#405d7a;stroke-width:5;stroke-dasharray:10 4 2 4;animation:flow-forward .9s linear infinite}
 .wire.flow-lin{stroke:#6c5a7a;stroke-width:5;stroke-dasharray:6 5;animation:flow-forward .9s linear infinite}
 .wire.fault-short{stroke:var(--fault);stroke-width:6;stroke-dasharray:2 4;animation:none}
-@media (prefers-reduced-motion:reduce){.wire.flow-can,.wire.flow-lin{animation:none}}@media(max-width:620px){#circuitSvg{width:820px;min-width:820px;}}
+
+/* Network-lab readability overrides. */
+#circuitSvg .component .hit-target{fill:transparent;stroke:none}
+#circuitSvg .component .symbol-text{font-size:13px;font-weight:800;fill:#0f172a}
+#circuitSvg .component-label .label-chip{fill:#fff;stroke:#94a3b8;stroke-width:2.5}
+#circuitSvg .component-label .label-title{font-size:17px}
+#circuitSvg .component-label .label-subtitle{font-size:13px}
+#circuitSvg .test-point circle{fill:#fff;stroke:#5b3fb0;stroke-width:3}
+#circuitSvg .test-point .tp-badge{fill:#fff;stroke:#5b3fb0;stroke-width:2}
+#circuitSvg .test-point .tp-label{font-size:11px;font-weight:900;fill:#3f2a82;text-anchor:middle;dominant-baseline:middle}
+
+@media (prefers-reduced-motion:reduce){.wire.flow-can,.wire.flow-lin{animation:none}}
+@media(max-width:620px){#circuitSvg{width:820px;min-width:820px;}}

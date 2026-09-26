@@ -2122,7 +2122,7 @@
             "text-anchor": "middle"
           },
           "className": "symbol-text",
-          "text": "CAN/LIN"
+          "text": "BUS"
         },
         {
           "type": "line",
