@@ -4,7 +4,7 @@
 
 ## Overview
 
-TorqueMind uses Supabase (PostgreSQL 14) as its primary data store with Row-Level Security (RLS) policies that enforce fail-closed authorization. The database schema is designed to separate concerns: question approval, citation validation, and student attempts into distinct tables with explicit trust boundaries.
+TorqueMind uses Supabase PostgreSQL as its primary data store with Row-Level Security (RLS) policies that enforce fail-closed authorization. The database schema is designed to separate concerns: question approval, citation validation, and student attempts into distinct tables with explicit trust boundaries.
 
 ## Schema Architecture
 
@@ -41,6 +41,30 @@ graph TB
     style SR fill:#ccffcc
     style SS fill:#ccffcc
 ```
+
+## Curriculum Architecture
+
+The curriculum schema extends the existing semantic competency and scenario catalog rather than duplicating them. Academic level and CIP classification are stored as separate fields and constrained through foreign keys so one is never inferred from the other.
+
+```mermaid
+flowchart TD
+  CP[curriculum_pathways] --> PR[curriculum_programs]
+  PR --> CC[curriculum_courses]
+  CC --> CO[curriculum_competencies]
+  CA[competency_areas] --> CO
+  CO --> LP[curriculum_lesson_plans]
+  LP --> LS[curriculum_lesson_steps]
+  LP --> LE[curriculum_lesson_evidence]
+  SC[source_chunks] --> LE
+  CAT[scenario_catalog] --> SM[scenario_curriculum_mappings]
+  CC --> SM
+  CO --> SM
+  LP --> SM
+```
+
+During the schema phase these curriculum tables are **service-role only**. RLS is enabled, `anon` and `authenticated` table privileges are revoked, and no browser-facing policies are created. A later API/UI phase can add narrowly scoped read access after staging validation.
+
+`curriculum_lesson_evidence` references existing `source_chunks`; it does not duplicate source metadata or permit a lesson to bypass the evidence-approval pipeline. The table is intentionally empty until approved evidence-to-lesson mappings are reviewed.
 
 ## Core Tables
 
