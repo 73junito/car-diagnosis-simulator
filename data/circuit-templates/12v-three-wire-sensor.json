@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0.0",
+  "templateId": "automotive-12v-three-wire-sensor",
+  "templateVersion": "1.0.0",
+  "templateRole": "reusable-training-circuit-template",
+  "systemKind": "powered-sensor",
+  "circuitId": "training-three-wire-sensor-001",
+  "title": "Generic 12 V Three-Wire Sensor Training Circuit",
+  "status": "project-authored-training-model",
+  "powertrainType": "conventional-12v",
+  "voltageSystems": [
+    {"id":"LV12","systemType":"low-voltage","nominalVoltage":12,"unit":"V DC","displayLabel":"12 V nominal"},
+    {"id":"SENSOR5","systemType":"accessory","nominalVoltage":5,"unit":"V DC","displayLabel":"5 V nominal training reference"}
+  ],
+  "vehicleApplicability": {
+    "mode":"generic-training-only",
+    "vehicleSpecific":false,
+    "notice":"This template teaches a common powered-sensor architecture using a 5 V nominal training reference. Actual sensor supply voltage, pinout, signal range, ground strategy, specifications, procedures, and limits are vehicle-specific."
+  },
+  "curriculum":{"lessonPlanId":"ug-electrical-powered-sensor","supportsObjectiveIds":["ug-electrical-lo-sensor-1"],"assessmentUse":"training-only"},
+  "components":[
+    {"id":"BAT1","type":"battery","name":"Battery","symbolId":"electrical.battery","voltageSystemId":"LV12","terminals":[{"id":"BAT1_POS","name":"Positive","symbolTerminalId":"positive"},{"id":"BAT1_NEG","name":"Negative","symbolTerminalId":"negative"}]},
+    {"id":"FUSE1","type":"fuse","name":"Controller Protection","symbolId":"electrical.fuse","voltageSystemId":"LV12","terminals":[{"id":"FUSE1_IN","name":"Input","symbolTerminalId":"in"},{"id":"FUSE1_OUT","name":"Output","symbolTerminalId":"out"}],"internalConnections":[["FUSE1_IN","FUSE1_OUT"]]},
+    {"id":"ECM1","type":"module","name":"Electronic Control Module","symbolId":"electrical.module-controller","voltageSystemId":"LV12","terminals":[{"id":"ECM1_PWR","name":"Module power","symbolTerminalId":"power"},{"id":"ECM1_GND","name":"Module ground","symbolTerminalId":"ground"},{"id":"ECM1_SIGNAL","name":"Sensor signal input","symbolTerminalId":"signal"}]},
+    {"id":"REF1","type":"regulator","name":"Sensor Reference Supply","symbolId":"electrical.voltage-regulator","voltageSystemId":"LV12","terminals":[{"id":"REF1_IN","name":"12 V input","symbolTerminalId":"input"},{"id":"REF1_OUT","name":"5 V training reference output","symbolTerminalId":"output"}],"internalConnections":[["REF1_IN","REF1_OUT"]]},
+    {"id":"SENSOR1","type":"sensor","name":"Generic Three-Wire Sensor","symbolId":"electrical.sensor-generic","voltageSystemId":"SENSOR5","terminals":[{"id":"SENSOR1_PWR","name":"Reference supply","symbolTerminalId":"power"},{"id":"SENSOR1_GND","name":"Sensor ground/reference","symbolTerminalId":"ground"},{"id":"SENSOR1_SIGNAL","name":"Signal output","symbolTerminalId":"signal"}]},
+    {"id":"GND1","type":"ground","name":"Chassis / Reference Ground","symbolId":"electrical.ground","voltageSystemId":"LV12","terminals":[{"id":"GND1_MAIN","name":"Ground","symbolTerminalId":"ground"}]}
+  ],
+  "connections":[
+    {"id":"W_BAT_FUSE","from":"BAT1_POS","to":"FUSE1_IN","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_ECM","from":"FUSE1_OUT","to":"ECM1_PWR","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_REF","from":"FUSE1_OUT","to":"REF1_IN","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_ECM_GND","from":"ECM1_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_REF_SENSOR_PWR","from":"REF1_OUT","to":"SENSOR1_PWR","type":"power_feed","styleId":"electrical.power","voltageSystemId":"SENSOR5"},
+    {"id":"W_SENSOR_SIGNAL","from":"SENSOR1_SIGNAL","to":"ECM1_SIGNAL","type":"analog_signal","styleId":"electrical.analog-signal","voltageSystemId":"SENSOR5"},
+    {"id":"W_SENSOR_GND","from":"SENSOR1_GND","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"SENSOR5"},
+    {"id":"W_BAT_GND","from":"BAT1_NEG","to":"GND1_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"}
+  ],
+  "testPoints":[
+    {"id":"TP_SENSOR_SUPPLY","terminalId":"SENSOR1_PWR","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_SENSOR_SIGNAL","terminalId":"SENSOR1_SIGNAL","measurementTypes":["voltage","signal"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_SENSOR_GROUND","terminalId":"SENSOR1_GND","measurementTypes":["voltage_drop","continuity"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_ECM_SIGNAL","terminalId":"ECM1_SIGNAL","measurementTypes":["voltage","signal"],"vehicleSpecificValueRequired":true}
+  ],
+  "faultCatalog":[
+    {"id":"FAULT_OPEN_SENSOR_POWER","type":"open_circuit","targetConnectionId":"W_REF_SENSOR_PWR","label":"Open sensor reference supply"},
+    {"id":"FAULT_OPEN_SENSOR_GROUND","type":"open_circuit","targetConnectionId":"W_SENSOR_GND","label":"Open sensor ground/reference"},
+    {"id":"FAULT_OPEN_SIGNAL","type":"open_circuit","targetConnectionId":"W_SENSOR_SIGNAL","label":"Open sensor signal circuit"},
+    {"id":"FAULT_HIGH_RES_SENSOR_GROUND","type":"high_resistance","targetConnectionId":"W_SENSOR_GND","label":"High resistance in sensor ground/reference"},
+    {"id":"FAULT_SIGNAL_SHORT_GROUND","type":"short_to_ground","targetConnectionId":"W_SENSOR_SIGNAL","targetTerminalId":"SENSOR1_SIGNAL","shortTargetTerminalId":"GND1_MAIN","label":"Sensor signal short to ground"},
+    {"id":"FAULT_SIGNAL_SHORT_POWER","type":"short_to_power","targetConnectionId":"W_SENSOR_SIGNAL","targetTerminalId":"SENSOR1_SIGNAL","shortTargetTerminalId":"REF1_OUT","label":"Sensor signal short to 5 V reference"}
+  ],
+  "operatingStates":[
+    {"id":"key-off","label":"Key off","activeFlows":{"power":[],"ground":[],"control":[],"signal":[]},"note":"Key off: controller and sensor-reference supply are shown inactive."},
+    {"id":"key-on-powered","label":"Key on / sensor powered","activeFlows":{"power":[["W_BAT_FUSE","forward"],["W_FUSE_ECM","forward"],["W_FUSE_REF","forward"],["W_REF_SENSOR_PWR","forward"]],"ground":[["W_ECM_GND","forward"],["W_SENSOR_GND","forward"],["W_BAT_GND","reverse"]],"control":[],"signal":[]},"note":"Key on: the controller is powered from the 12 V system and the sensor receives the separate 5 V nominal training reference."},
+    {"id":"active-signal","label":"Sensor active / signal present","activeFlows":{"power":[["W_BAT_FUSE","forward"],["W_FUSE_ECM","forward"],["W_FUSE_REF","forward"],["W_REF_SENSOR_PWR","forward"]],"ground":[["W_ECM_GND","forward"],["W_SENSOR_GND","forward"],["W_BAT_GND","reverse"]],"control":[],"signal":[["W_SENSOR_SIGNAL","forward"]]},"note":"Sensor active: the powered sensor returns an analog training signal to the controller while supply and ground/reference paths remain present."}
+  ],
+  "layout":{"renderer":"svg","positions":{"BAT1":{"x":80,"y":260},"FUSE1":{"x":235,"y":120},"ECM1":{"x":670,"y":165},"REF1":{"x":420,"y":115},"SENSOR1":{"x":470,"y":350},"GND1":{"x":420,"y":545}}},
+  "labels":{
+    "BAT1":{"x":10,"y":340,"width":140,"height":48,"title":"Battery","subtitle":"12 V nominal source"},
+    "FUSE1":{"x":160,"y":25,"width":150,"height":46,"title":"Controller protection","subtitle":"12 V branch"},
+    "REF1":{"x":335,"y":25,"width":170,"height":46,"title":"Sensor reference supply","subtitle":"5 V nominal example"},
+    "ECM1":{"x":600,"y":25,"width":160,"height":48,"title":"Controller","subtitle":"power / ground / signal"},
+    "SENSOR1":{"x":385,"y":420,"width":170,"height":50,"title":"Three-wire sensor","subtitle":"supply / signal / ground"},
+    "GND1":{"x":335,"y":595,"width":170,"height":48,"title":"Reference ground","subtitle":"common return"}
+  },
+  "provenance":{"sourceRole":"project-authored-training-model","technicalClaims":"general-system-relationships-only","vehicleSpecificClaims":false,"scoredAssessmentApproved":false,"authorityRegistry":"data/compliance/authority-registry.json","complianceStatus":"training-model-not-compliance-certification","rule":"This model may illustrate a common training architecture but may not establish or override vehicle-specific sensor voltage, signal range, pinout, wiring, procedure, or diagnostic limit."}
+}

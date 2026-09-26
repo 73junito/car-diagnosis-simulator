@@ -105,3 +105,11 @@ The reusable template `automotive-12v-relay-controlled-load` separates a protect
 The template declares 12 V nominal explicitly and uses standardized symbol, terminal, connection-style, and voltage-system identifiers. It is intentionally generic so it can support later training examples for lamps, pumps, horns, fans, and similar loads without implying manufacturer-specific wiring.
 
 Faults are modeled independently on the control and load sides so learners can distinguish loss of relay command from loss or degradation of switched load current.
+
+### 12 V three-wire powered sensor template
+
+The reusable template `automotive-12v-three-wire-sensor` models a conventional **12 V nominal** vehicle electrical system with a separate **5 V nominal training reference** for a common three-wire powered-sensor example.
+
+The controller and reference-supply components remain part of the 12 V vehicle domain, while the sensor supply and analog signal are explicitly associated with the 5 V training-reference domain. The 5 V value is a training example only and is not a universal sensor specification.
+
+The template separates sensor supply, analog signal, and sensor ground/reference paths and includes open-circuit, high-resistance, short-to-ground, and short-to-reference faults. Short faults are represented as explicit unintended adjacency edges in the circuit engine rather than display-only annotations.
