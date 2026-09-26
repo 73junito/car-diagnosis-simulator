@@ -4,6 +4,7 @@ import feedbackRoute from "./routes/torquemind-feedback.js";
 import { handleScenarioQuestionsApproved } from "./routes/scenario-questions-approved.js";
 import { handleGradeScenarioSubmission } from "./routes/scenario-submissions-grade.js";
 import { handleStartAssessmentAttempt } from "./routes/assessment-attempts-start.js";
+import { handleCurriculumRead } from "./routes/curriculum-read.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 
@@ -56,6 +57,16 @@ app.use('/api/assessment-attempts/start/*', cors({
   maxAge: 86400
 }))
 app.post('/api/assessment-attempts/start', handleStartAssessmentAttempt)
+
+// Curriculum read API: server-side service-role read boundary for the
+// curriculum tables. Response mirrors the static data/curriculum contract.
+app.use('/api/curriculum/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type'],
+  maxAge: 86400
+}))
+app.all('/api/curriculum', handleCurriculumRead)
 
 export default {
   fetch(request, env, ctx) {
