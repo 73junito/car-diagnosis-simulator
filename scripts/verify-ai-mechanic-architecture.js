@@ -23,6 +23,7 @@ for (const required of [
   "ollama-provider",
   "vehicle-identity-resolver",
   "tool-gateway",
+  "compliance-authority-registry",
   "deterministic-circuit-engine",
   "evidence-retrieval",
   "evidence-gate",
@@ -50,6 +51,13 @@ assert(architecture.responseModes.training && architecture.responseModes.technic
   "Training and technician response modes must be distinct");
 assert(architecture.implementationOrder[0] === "vehicle-identity",
   "Vehicle identity must be the first implementation dependency");
+assert(architecture.implementationOrder.includes("compliance-authority-registry"),
+  "Implementation order must include the compliance authority registry");
+assert(
+  architecture.implementationOrder.indexOf("compliance-authority-registry") <
+  architecture.implementationOrder.indexOf("deterministic-circuit-engine"),
+  "Compliance authority resolution must precede deterministic circuit interpretation"
+);
 assert(architecture.implementationOrder.includes("deterministic-circuit-engine"),
   "Implementation order must include the deterministic circuit engine before model orchestration");
 const circuitTool = architecture.externalTools.find((item) => item.id === "circuit-engine");

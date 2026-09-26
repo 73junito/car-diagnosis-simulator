@@ -40,6 +40,7 @@
     "validate:evidence-approval": "node scripts/verify-evidence-approval-contract.js",
     "validate:external-technical-references": "node scripts/verify-external-technical-references.js",
     "validate:circuits": "node scripts/verify-circuit-models.js",
+    "validate:compliance-authority": "node scripts/verify-compliance-authority.js",
     "validate:curriculum-schema": "node scripts/verify-curriculum-migration-contract.js",
     "validate:curriculum-api": "node scripts/verify-curriculum-api-contract.js",
     "exam:curriculum:sync": "node scripts/sync-exam-curriculum.js",

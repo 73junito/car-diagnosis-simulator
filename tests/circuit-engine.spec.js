@@ -50,5 +50,7 @@ describe("deterministic circuit engine", () => {
     expect(circuit.vehicleApplicability.vehicleSpecific).toBe(false);
     expect(circuit.curriculum.assessmentUse).toBe("training-only");
     expect(circuit.provenance.scoredAssessmentApproved).toBe(false);
+    expect(circuit.provenance.authorityRegistry).toBe("data/compliance/authority-registry.json");
+    expect(circuit.provenance.complianceStatus).toBe("training-model-not-compliance-certification");
   });
 });
