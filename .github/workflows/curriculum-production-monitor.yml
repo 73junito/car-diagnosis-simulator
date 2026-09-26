@@ -1,0 +1,72 @@
+name: Curriculum production monitor
+
+on:
+  schedule:
+    - cron: '17 * * * *' # hourly, offset from the top of the hour
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: curriculum-production-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    name: Verify live curriculum contract and API-backed page
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify production twice before failing
+        shell: bash
+        run: |
+          set -uo pipefail
+
+          run_checks() {
+            local contract_status=0
+            local browser_status=0
+
+            node scripts/verify-curriculum-api-contract.js --url https://app.autolearnpro.com/api/curriculum \
+              || contract_status=$?
+            node scripts/verify-learning-path-production.js \
+              || browser_status=$?
+
+            if [ "$contract_status" -eq 0 ] && [ "$browser_status" -eq 0 ]; then
+              return 0
+            fi
+
+            echo "::warning::Production curriculum check failed: contract=$contract_status browser=$browser_status"
+            return 1
+          }
+
+          if run_checks; then
+            exit 0
+          fi
+
+          echo "First strike detected; retrying in 5 minutes."
+          sleep 300
+
+          if run_checks; then
+            echo "Second attempt passed; treating the first failure as transient."
+            exit 0
+          fi
+
+          echo "::error::Production curriculum monitor failed twice consecutively."
+          exit 1
