@@ -1,0 +1,5 @@
+.legend-line.signal{border-color:#52667a;border-top-style:dotted}
+.wire.flow-signal{stroke:#52667a;stroke-width:5;stroke-dasharray:3 5;animation:flow-forward .9s linear infinite}
+.wire.fault-short{stroke:var(--fault);stroke-width:6;stroke-dasharray:2 4;animation:none}
+@media (prefers-reduced-motion:reduce){.wire.flow-signal{animation:none}}
+@media (max-width:620px){#circuitSvg{width:760px;min-width:760px;}}

@@ -53,6 +53,16 @@
       if (!/^electrical\.[a-z0-9-]+$/.test(connection.styleId || "")) errors.push(`connection ${connection.id} requires a valid styleId`);
       if (!connection.voltageSystemId || !voltageSystemIds.has(connection.voltageSystemId)) errors.push(`connection ${connection.id} requires a valid voltageSystemId`);
     }
+
+    for (const fault of circuit.faultCatalog || []) {
+      if (!fault.id) errors.push("fault id is required");
+      if (!contracts.FAULT_TYPES.includes(fault.type)) errors.push(`unsupported fault type: ${fault.type}`);
+      if (!connectionIds.has(fault.targetConnectionId)) errors.push(`fault ${fault.id} references unknown targetConnectionId ${fault.targetConnectionId}`);
+      if (fault.type === "short_to_ground" || fault.type === "short_to_power") {
+        if (!terminalOwners.has(fault.targetTerminalId)) errors.push(`fault ${fault.id} requires a valid targetTerminalId`);
+        if (!terminalOwners.has(fault.shortTargetTerminalId)) errors.push(`fault ${fault.id} requires a valid shortTargetTerminalId`);
+      }
+    }
     return { valid: errors.length === 0, errors };
   }
 
@@ -87,6 +97,23 @@
         adjacency.get(from).push({ terminalId: to, edge });
         adjacency.get(to).push({ terminalId: from, edge });
       }
+    }
+
+    for (const fault of faults.filter((item) => item.type === "short_to_ground" || item.type === "short_to_power")) {
+      const from = fault.targetTerminalId;
+      const to = fault.shortTargetTerminalId;
+      const edge = {
+        id: `fault:${fault.id}`,
+        type: fault.type,
+        internal: false,
+        degraded: false,
+        fault: true,
+        faultId: fault.id
+      };
+      if (!adjacency.has(from)) adjacency.set(from, []);
+      if (!adjacency.has(to)) adjacency.set(to, []);
+      adjacency.get(from).push({ terminalId: to, edge });
+      adjacency.get(to).push({ terminalId: from, edge });
     }
     return adjacency;
   }

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>12 V Three-Wire Sensor Lab</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
+  <link rel="stylesheet" href="./sensor-lab.css">
+</head>
+<body>
+  <main class="lab-shell">
+    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
+    <header>
+      <p class="eyebrow">Reusable circuit-template preview</p>
+      <h1>Interactive 12 V Three-Wire Sensor Lab</h1>
+      <p>Trace controller power, a clearly labeled 5 V nominal training reference, sensor signal, and reference ground without assuming vehicle-specific signal ranges or pinouts.</p>
+      <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltages"></div>
+    </header>
+
+    <section class="learning-strip">
+      <strong>Learning goal</strong>
+      <span>Differentiate sensor supply, analog signal, and sensor ground/reference paths and observe how different faults affect each path.</span>
+    </section>
+
+    <section class="toolbar" aria-label="Sensor circuit controls">
+      <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
+      <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
+      <div class="button-row">
+        <button id="showSystemFlow" type="button">Show system flow</button>
+        <button id="tracePower" type="button">Trace sensor supply</button>
+        <button id="traceSignal" type="button">Trace sensor signal</button>
+        <button id="traceGround" type="button">Trace ground/reference</button>
+        <button id="resetView" type="button">Reset</button>
+      </div>
+    </section>
+
+    <section class="legend">
+      <span><i class="legend-line power"></i> Power / reference supply</span>
+      <span><i class="legend-line signal"></i> Analog signal</span>
+      <span><i class="legend-line ground"></i> Ground / reference</span>
+      <span><i class="legend-line fault"></i> Faulted / degraded</span>
+      <span><i class="legend-dot test"></i> Test point</span>
+      <span class="legend-note">The 5 V reference is a generic training example. Actual sensor supply and signal specifications must come from vehicle-specific service information.</span>
+    </section>
+
+    <section class="workspace">
+      <div class="diagram-card">
+        <div class="diagram-heading">
+          <div><p class="eyebrow">Powered sensor architecture</p><h2>Generic three-wire sensor schematic</h2></div>
+          <div id="stateBadge" class="state-badge">Sensor active / signal present</div>
+        </div>
+        <div class="diagram-scroll">
+          <svg id="circuitSvg" viewBox="0 0 850 660" role="img" aria-labelledby="diagramTitle diagramDesc">
+            <title id="diagramTitle">Generic 12 V three-wire powered sensor training schematic</title>
+            <desc id="diagramDesc">Interactive powered-sensor circuit with explicit 12 V vehicle supply and 5 V nominal training reference, analog signal, ground, test points, and faults.</desc>
+          </svg>
+        </div>
+        <p class="flow-note" id="flowNote"></p>
+      </div>
+
+      <aside class="inspector" aria-live="polite">
+        <h2>Component inspector</h2>
+        <div id="inspectorContent"><p>Select a symbol or test point to inspect its role.</p></div>
+        <div class="guided-card">
+          <p class="eyebrow">Guided practice</p>
+          <ol>
+            <li>Identify the 12 V vehicle supply and the 5 V training reference.</li>
+            <li>Trace reference supply from the regulator to the sensor.</li>
+            <li>Trace the analog signal from sensor to controller.</li>
+            <li>Trace the sensor ground/reference path.</li>
+            <li>Compare open, high-resistance, and short-circuit faults.</li>
+          </ol>
+        </div>
+      </aside>
+    </section>
+
+    <section class="boundary">
+      <h2>Evidence boundary</h2>
+      <p>The 5 V reference shown here is a common training example, not a universal sensor specification. Actual sensor type, supply voltage, signal range, pinout, ground strategy, diagnostic limits, and procedures require authoritative vehicle-specific service information.</p>
+    </section>
+  </main>
+
+  <script src="/src/circuits/contracts.js"></script>
+  <script src="/src/circuits/engine.js"></script>
+  <script src="/src/circuits/template-contracts.js"></script>
+  <script src="/src/circuits/voltage-domains.js"></script>
+  <script src="/src/connections/contracts.js"></script>
+  <script src="/src/connections/index.js"></script>
+  <script src="/src/symbols/contracts.js"></script>
+  <script src="/src/symbols/registry.js"></script>
+  <script src="/src/symbols/svg-renderer.js"></script>
+  <script src="/src/symbols/index.js"></script>
+  <script src="./sensor-lab.js"></script>
+</body>
+</html>
