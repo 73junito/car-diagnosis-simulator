@@ -1,22 +1,103 @@
-:root { font-family: Inter, system-ui, sans-serif; background: #f6f7f9; color: #172033; }
+:root {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f6f8;
+  color: #172033;
+  --power: #c62828;
+  --power-soft: #ffebee;
+  --ground: #20252d;
+  --control: #1565c0;
+  --fault: #ef6c00;
+  --wire: #8792a5;
+  --panel: #ffffff;
+  --border: #d8dee8;
+}
 body { margin: 0; }
-.lab-shell { max-width: 1180px; margin: 0 auto; padding: 28px 20px 56px; }
+.lab-shell { max-width: 1280px; margin: 0 auto; padding: 28px 20px 56px; }
 .back { display: inline-block; margin-bottom: 18px; }
-.eyebrow { text-transform: uppercase; letter-spacing: .08em; font-weight: 700; font-size: .78rem; }
-header h1 { margin-bottom: 8px; }
-.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 24px 0; padding: 14px; background: white; border: 1px solid #d9dee8; border-radius: 12px; }
-.toolbar button, .toolbar select { font: inherit; padding: 9px 12px; }
-.workspace { display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 18px; }
-.diagram-card, .inspector, .boundary { background: white; border: 1px solid #d9dee8; border-radius: 14px; padding: 18px; }
-#circuitSvg { width: 100%; min-height: 520px; }
-.wire { fill: none; stroke: #61708a; stroke-width: 4; }
-.wire.control { stroke-dasharray: 9 7; }
-.wire.highlight { stroke: #111827; stroke-width: 7; }
-.wire.degraded { stroke-dasharray: 5 5; }
-.component { cursor: pointer; }
-.component rect { fill: #fff; stroke: #24324a; stroke-width: 2; rx: 10; }
-.component text { pointer-events: none; font-size: 14px; font-weight: 600; text-anchor: middle; }
-.component.selected rect { stroke-width: 5; }
-.boundary { margin-top: 18px; }
-.inspector code { overflow-wrap: anywhere; }
-@media (max-width: 800px) { .workspace { grid-template-columns: 1fr; } #circuitSvg { min-height: 430px; } }
+.eyebrow { margin: 0 0 6px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; font-size: .72rem; color: #53627a; }
+header h1 { margin: 0 0 8px; font-size: clamp(2rem,4vw,3rem); }
+header p { max-width: 850px; line-height: 1.6; }
+.learning-strip { display:flex; gap:14px; align-items:center; margin:22px 0 12px; padding:14px 16px; background:#eef3f8; border:1px solid #cfd9e6; border-radius:12px; }
+.learning-strip strong { white-space:nowrap; }
+.toolbar { display:grid; grid-template-columns:minmax(190px,1fr) minmax(220px,1fr) auto; gap:14px; align-items:end; margin:14px 0 10px; padding:16px; background:var(--panel); border:1px solid var(--border); border-radius:14px; }
+.control-group { display:grid; gap:6px; }
+.control-group label { font-size:.78rem; font-weight:800; color:#394960; }
+.toolbar button,.toolbar select { font:inherit; min-height:42px; padding:9px 12px; border:1px solid #b9c3d0; border-radius:8px; background:#fff; }
+.toolbar button { cursor:pointer; font-weight:750; }
+.toolbar button:hover,.toolbar button:focus-visible { background:#eef3f8; outline:2px solid #7d8fa8; outline-offset:2px; }
+.button-row { display:flex; flex-wrap:wrap; gap:8px; }
+.legend { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center; margin:10px 0 18px; padding:10px 14px; font-size:.78rem; background:#fff; border:1px solid var(--border); border-radius:12px; }
+.legend span { display:inline-flex; align-items:center; gap:7px; }
+.legend-line { width:28px; height:0; border-top:4px solid var(--wire); display:inline-block; }
+.legend-line.power { border-color:var(--power); }
+.legend-line.ground { border-color:var(--ground); }
+.legend-line.control { border-color:var(--control); border-top-style:dashed; }
+.legend-line.fault { border-color:var(--fault); border-top-style:dashed; }
+.legend-dot { width:11px; height:11px; border-radius:50%; display:inline-block; background:#fff; border:3px solid #6a4bc3; }
+.workspace { display:grid; grid-template-columns:minmax(0,2.25fr) minmax(290px,.75fr); gap:18px; align-items:start; }
+.diagram-card,.inspector,.boundary { background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:18px; box-shadow:0 10px 28px rgba(22,35,55,.06); }
+.diagram-heading { display:flex; justify-content:space-between; gap:16px; align-items:start; margin-bottom:8px; }
+.diagram-heading h2 { margin:0; font-size:1.35rem; }
+.state-badge { font-size:.76rem; font-weight:800; padding:8px 10px; border-radius:999px; background:#e8eef7; white-space:nowrap; }
+#circuitSvg { width:100%; min-height:560px; border-radius:12px; background:linear-gradient(#fbfcfe,#f7f9fc); }
+.wire { fill:none; stroke:var(--wire); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; transition:stroke .2s,opacity .2s,stroke-width .2s; }
+.wire.power-feed { stroke:#a8b0bd; }
+.wire.ground-reference { stroke:#747d8b; }
+.wire.control { stroke:var(--control); stroke-dasharray:8 8; opacity:.7; }
+.wire.inactive { opacity:.28; }
+.wire.flow-power { stroke:var(--power); stroke-width:6; stroke-dasharray:12 9; animation:flow-forward .75s linear infinite; }
+.wire.flow-power.reverse { animation-name:flow-reverse; }
+.wire.flow-ground { stroke:var(--ground); stroke-width:6; stroke-dasharray:12 9; animation:flow-forward .75s linear infinite; }
+.wire.flow-ground.reverse { animation-name:flow-reverse; }
+.wire.flow-control { stroke:var(--control); stroke-width:5; stroke-dasharray:8 8; animation:flow-forward .9s linear infinite; }
+.wire.fault-open { stroke:var(--fault); stroke-width:6; stroke-dasharray:18 16; animation:none; }
+.wire.fault-degraded { stroke:var(--fault); stroke-width:6; stroke-dasharray:5 7; animation:flow-forward 1.5s linear infinite; }
+@keyframes flow-forward { to { stroke-dashoffset:-42; } }
+@keyframes flow-reverse { to { stroke-dashoffset:42; } }
+.component { cursor:pointer; outline:none; }
+.component .symbol-stroke { fill:none; stroke:#1e293b; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+.component .symbol-fill { fill:#fff; stroke:#1e293b; stroke-width:3; }
+.component .symbol-label { pointer-events:none; font-size:14px; font-weight:800; text-anchor:middle; fill:#172033; }
+.component .symbol-sub { pointer-events:none; font-size:11px; text-anchor:middle; fill:#66758c; }
+.component:hover .symbol-stroke,.component:hover .symbol-fill,.component:focus-visible .symbol-stroke,.component:focus-visible .symbol-fill { stroke:#4d3fa7; }
+.component.selected .symbol-stroke,.component.selected .symbol-fill { stroke:#4d3fa7; stroke-width:5; }
+.component.energized .symbol-stroke,.component.energized .symbol-fill { stroke:var(--power); }
+.component.faulted .symbol-stroke,.component.faulted .symbol-fill { stroke:var(--fault); }
+.test-point { cursor:pointer; }
+.test-point circle { fill:#fff; stroke:#6a4bc3; stroke-width:4; }
+.test-point text { font-size:10px; font-weight:800; fill:#5c46a3; }
+.terminal-label { font-size:10px; font-weight:700; fill:#4b596d; }
+.flow-note { margin:6px 4px 0; color:#66758c; font-size:.76rem; }
+.inspector { position:sticky; top:16px; }
+.inspector h2 { margin-top:0; }
+.inspector h3 { margin-bottom:6px; }
+.inspector p { line-height:1.5; }
+.inspector dl { display:grid; grid-template-columns:auto 1fr; gap:6px 10px; font-size:.83rem; }
+.inspector dt { font-weight:800; color:#4e5d72; }
+.inspector dd { margin:0; }
+.guided-card { margin-top:22px; padding-top:18px; border-top:1px solid var(--border); }
+.guided-card ol { padding-left:22px; margin-bottom:0; }
+.guided-card li { padding:5px 0; color:#69768a; }
+.guided-card li.active { color:#172033; font-weight:800; }
+.guided-card li.complete { color:#2e6b4f; }
+.boundary { margin-top:18px; }
+.boundary h2 { margin-top:0; }
+@media (max-width:980px) {
+  .toolbar { grid-template-columns:1fr 1fr; }
+  .button-row { grid-column:1/-1; }
+  .workspace { grid-template-columns:1fr; }
+  .inspector { position:static; }
+}
+@media (max-width:620px) {
+  .lab-shell { padding:20px 12px 40px; }
+  .toolbar { grid-template-columns:1fr; }
+  .button-row { grid-column:auto; }
+  .button-row button { flex:1 1 100%; }
+  .learning-strip { align-items:flex-start; flex-direction:column; gap:4px; }
+  .diagram-heading { flex-direction:column; }
+  #circuitSvg { min-height:430px; }
+  .legend { gap:10px 14px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .wire.flow-power,.wire.flow-ground,.wire.flow-control,.wire.fault-degraded { animation:none; }
+}

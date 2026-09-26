@@ -14,27 +14,74 @@
     <header>
       <p class="eyebrow">Training preview</p>
       <h1>Interactive Charging-System Circuit Lab</h1>
-      <p>This project-authored schematic teaches general circuit relationships. It is not vehicle-specific service information.</p>
+      <p>Follow conventional current flow through a project-authored training schematic, inspect electrical symbols, and observe how faults interrupt or degrade a circuit.</p>
     </header>
 
+    <section class="learning-strip" aria-label="Learning objective">
+      <strong>Learning goal</strong>
+      <span>Trace the relationship among the battery, circuit protection, alternator, regulator, electrical loads, and ground.</span>
+    </section>
+
     <section class="toolbar" aria-label="Circuit controls">
-      <label for="faultSelect">Training fault</label>
-      <select id="faultSelect"><option value="">No injected fault</option></select>
-      <button id="tracePower" type="button">Trace battery → alternator</button>
-      <button id="traceGround" type="button">Trace alternator → ground</button>
-      <button id="resetView" type="button">Reset highlight</button>
+      <div class="control-group">
+        <label for="stateSelect">Operating state</label>
+        <select id="stateSelect">
+          <option value="key-off">Key off</option>
+          <option value="key-on">Key on</option>
+          <option value="engine-running" selected>Engine running / charging</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="faultSelect">Training fault</label>
+        <select id="faultSelect"><option value="">No injected fault</option></select>
+      </div>
+      <div class="button-row">
+        <button id="showSystemFlow" type="button">Show system flow</button>
+        <button id="tracePower" type="button">Trace B+ path</button>
+        <button id="traceGround" type="button">Trace ground return</button>
+        <button id="resetView" type="button">Reset</button>
+      </div>
+    </section>
+
+    <section class="legend" aria-label="Schematic legend">
+      <span><i class="legend-line power"></i> Power / charging path</span>
+      <span><i class="legend-line ground"></i> Ground return</span>
+      <span><i class="legend-line control"></i> Control path</span>
+      <span><i class="legend-line fault"></i> Faulted / degraded</span>
+      <span><i class="legend-dot test"></i> Test point</span>
     </section>
 
     <section class="workspace">
       <div class="diagram-card">
-        <svg id="circuitSvg" viewBox="0 0 900 560" role="img" aria-labelledby="diagramTitle diagramDesc">
-          <title id="diagramTitle">Generic charging-system training circuit</title>
-          <desc id="diagramDesc">Interactive diagram showing a battery, charging protection, alternator, regulator, electrical loads, and chassis ground.</desc>
+        <div class="diagram-heading">
+          <div>
+            <p class="eyebrow">Conventional current flow</p>
+            <h2>Generic charging-system schematic</h2>
+          </div>
+          <div id="stateBadge" class="state-badge">Engine running / charging</div>
+        </div>
+        <svg id="circuitSvg" viewBox="0 0 980 640" role="img" aria-labelledby="diagramTitle diagramDesc">
+          <title id="diagramTitle">Generic charging-system training schematic</title>
+          <desc id="diagramDesc">Interactive symbol-based diagram showing a battery, circuit protection, alternator, regulator, electrical loads, chassis ground, test points, and animated conventional current flow.</desc>
         </svg>
+        <p class="flow-note" id="flowNote">Animated arrows show conventional current direction. They are conceptual training aids, not measured current magnitude.</p>
       </div>
+
       <aside class="inspector" aria-live="polite">
-        <h2>Inspector</h2>
-        <div id="inspectorContent">Select a component to inspect its terminals, connected components, and available test points.</div>
+        <h2>Component inspector</h2>
+        <div id="inspectorContent">
+          <p>Select an electrical symbol to inspect its role, terminals, connections, and available test points.</p>
+        </div>
+        <div class="guided-card">
+          <p class="eyebrow">Guided practice</p>
+          <ol id="guidedSteps">
+            <li class="active">Identify the battery as the electrical source.</li>
+            <li>Locate the main charging protection.</li>
+            <li>Trace the B+ connection between battery and alternator.</li>
+            <li>Trace the alternator ground return.</li>
+            <li>Inject an open charging-feed fault and trace the path again.</li>
+          </ol>
+        </div>
       </aside>
     </section>
 
