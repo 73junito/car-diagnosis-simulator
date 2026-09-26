@@ -32,7 +32,26 @@ const readJson = (relative) =>
 
 const CHUNK_FILE = 'data/evidence/open-scholarly/scholarly-evidence-chunks.json';
 const MANIFEST_FILE = 'data/evidence/open-scholarly/scholarly-source-manifest.json';
+const REGISTRY_FILE = 'data/evidence/source-state-registry.json';
 const REVIEW_DIR = 'data/evidence/review-queues';
+
+// The five independent lifecycle gates. None may be inferred from another.
+const GATES = ['ingested', 'rights_cleared', 'technically_reviewed', 'chunk_approved', 'lesson_mapped'];
+// Gates that require a recorded human reviewer identity before they can be true.
+const REVIEWER_GATED_GATES = [
+  ['rights_cleared', 'rights_verified_by', 'rights_verified_at'],
+  ['technically_reviewed', 'technically_reviewed_by', 'technically_reviewed_at']
+];
+
+// The three representable per-chunk review states. `approved` is the
+// machine-friendly boolean validated against `decision`; a denied chunk must
+// stay representable so "not reviewed yet" is distinguishable from
+// "reviewed and rejected".
+const CHUNK_DECISIONS = {
+  pending: false,
+  approved: true,
+  denied: false
+};
 
 const errors = [];
 const warnings = [];
@@ -144,7 +163,183 @@ if (fs.existsSync(path.join(root, REVIEW_DIR))) {
 }
 
 // ---------------------------------------------------------------------------
-// 3. A declared license must carry a reference
+// 3. Source-state registry: independent gates, separated artifacts
+// ---------------------------------------------------------------------------
+const registry = readJson(REGISTRY_FILE);
+assert(registry.schemaVersion === '1.0.0', 'source-state-registry schemaVersion must be 1.0.0');
+assert(Array.isArray(registry.sources), 'source-state-registry must contain a sources array');
+
+const registryById = new Map();
+for (const source of registry.sources) {
+  assert(typeof source.source_id === 'string' && source.source_id.length > 0,
+    'every registry source requires a source_id');
+  assert(!registryById.has(source.source_id), `duplicate registry source_id ${source.source_id}`);
+  registryById.set(source.source_id, source);
+
+  // Every gate must be an explicit boolean, never inferred or absent.
+  for (const gate of GATES) {
+    assert(
+      typeof source[gate] === 'boolean',
+      `source ${source.source_id} must declare boolean gate "${gate}"`
+    );
+  }
+
+  // A reviewer-gated gate may not be true without a recorded human identity.
+  for (const [gate, byField, atField] of REVIEWER_GATED_GATES) {
+    if (source[gate] !== true) continue;
+    assert(
+      typeof source[byField] === 'string' && source[byField].length > 0,
+      `source ${source.source_id}: ${gate}=true requires a real ${byField}`
+    );
+    assert(
+      typeof source[atField] === 'string' && source[atField].length > 0,
+      `source ${source.source_id}: ${gate}=true requires ${atField}`
+    );
+  }
+
+  // chunk_approved must agree with the canonical chunk record.
+  if (source.chunk_approved === true) {
+    const claimed = source.approved_chunk_ids || [];
+    assert(Array.isArray(claimed), `source ${source.source_id}: approved_chunk_ids must be an array`);
+    for (const chunkId of claimed) {
+      const canonical = canonicalById.get(chunkId);
+      assert(
+        canonical && canonical.approved === true,
+        `source ${source.source_id} claims approved chunk ${chunkId} but the canonical record does not approve it`
+      );
+    }
+  }
+
+  // A pending rights decision must never be paired with a cleared gate.
+  if (source.rights_decision === 'pending') {
+    assert(
+      source.rights_cleared !== true,
+      `source ${source.source_id}: rights_cleared=true contradicts rights_decision="pending"`
+    );
+  }
+
+  // ---- Per-chunk review decisions -------------------------------------
+  const decisions = source.chunk_decisions;
+  assert(Array.isArray(decisions), `source ${source.source_id}: chunk_decisions must be an array`);
+  if (!Array.isArray(decisions)) continue;
+
+  const decidedIds = [];
+  const approvedFromDecisions = [];
+
+  for (const decision of decisions) {
+    const chunkId = decision.chunk_id;
+    assert(typeof chunkId === 'string' && chunkId.length > 0,
+      `source ${source.source_id}: every chunk decision requires a chunk_id`);
+
+    const canonical = canonicalById.get(chunkId);
+    assert(
+      canonical && canonical.source_id === source.source_id,
+      `chunk decision ${chunkId} does not belong to source ${source.source_id}`
+    );
+
+    assert(
+      Object.prototype.hasOwnProperty.call(CHUNK_DECISIONS, decision.decision),
+      `chunk decision ${chunkId} has invalid decision "${decision.decision}"; ` +
+      `expected one of ${Object.keys(CHUNK_DECISIONS).join(', ')}`
+    );
+    if (!Object.prototype.hasOwnProperty.call(CHUNK_DECISIONS, decision.decision)) continue;
+
+    // decision=approved -> approved=true ; pending/denied -> approved=false
+    assert(
+      decision.approved === CHUNK_DECISIONS[decision.decision],
+      `chunk decision ${chunkId}: decision="${decision.decision}" requires approved=` +
+      `${CHUNK_DECISIONS[decision.decision]} but found ${JSON.stringify(decision.approved)}`
+    );
+
+    if (decision.approved !== true) {
+      decidedIds.push(chunkId);
+      continue;
+    }
+
+    approvedFromDecisions.push(chunkId);
+    decidedIds.push(chunkId);
+
+    // ---- Gate ordering: enforcement, not just detection ----------------
+    // An approved chunk requires every upstream gate to be cleared, with a
+    // recorded human identity at source level AND at chunk level.
+    assert(source.rights_cleared === true,
+      `chunk ${chunkId} approved=true requires source ${source.source_id} rights_cleared=true`);
+    assert(source.technically_reviewed === true,
+      `chunk ${chunkId} approved=true requires source ${source.source_id} technically_reviewed=true`);
+
+    for (const [byField, atField] of REVIEWER_GATED_GATES) {
+      assert(
+        typeof source[byField] === 'string' && source[byField].length > 0,
+        `chunk ${chunkId} approved=true requires source ${source.source_id} ${byField}`
+      );
+      assert(
+        typeof source[atField] === 'string' && source[atField].length > 0,
+        `chunk ${chunkId} approved=true requires source ${source.source_id} ${atField}`
+      );
+    }
+
+    assert(
+      typeof decision.reviewed_by === 'string' && decision.reviewed_by.length > 0,
+      `chunk ${chunkId} approved=true requires a real chunk-level reviewed_by`
+    );
+    assert(
+      typeof decision.reviewed_at === 'string' && decision.reviewed_at.length > 0,
+      `chunk ${chunkId} approved=true requires reviewed_at`
+    );
+
+    // And the canonical record must independently agree.
+    assert(
+      canonical && canonical.approved === true,
+      `chunk ${chunkId} approved=true but the canonical source_chunks record does not approve it`
+    );
+  }
+
+  assert(
+    new Set(decidedIds).size === decidedIds.length,
+    `source ${source.source_id}: duplicate chunk decisions`
+  );
+
+  // approved_chunk_ids must be EXACTLY the set of approved chunk decisions.
+  const declaredApproved = (source.approved_chunk_ids || []).slice().sort();
+  const expectedApproved = approvedFromDecisions.slice().sort();
+  assert(
+    JSON.stringify(declaredApproved) === JSON.stringify(expectedApproved),
+    `source ${source.source_id}: approved_chunk_ids ${JSON.stringify(declaredApproved)} must equal ` +
+    `the set of chunk_decisions with approved=true ${JSON.stringify(expectedApproved)}`
+  );
+
+  // Source-level chunk_approved is true only if at least one chunk is approved.
+  if (approvedFromDecisions.length > 0) {
+    assert(source.chunk_approved === true,
+      `source ${source.source_id} has approved chunk decisions but chunk_approved is not true`);
+  } else {
+    assert(source.chunk_approved !== true,
+      `source ${source.source_id}: chunk_approved=true requires at least one chunk decision with approved=true`);
+  }
+}
+
+// The Frontiers article and the Navy chapter are distinct artifacts and must
+// never share a source record, rights classification, or approval state.
+const frontiers = registryById.get('frontiers-automotive-alternator-2023');
+const navy = registryById.get('navy-navedtra-14264a-ch8');
+assert(frontiers, 'registry must contain the Frontiers CC BY source record');
+assert(navy, 'registry must contain the Navy candidate source record');
+if (frontiers && navy) {
+  assert(frontiers.source_id !== navy.source_id, 'Frontiers and Navy must be separate source records');
+  assert(
+    frontiers.rights_classification !== navy.rights_classification ||
+      frontiers.rights_classification_source !== navy.rights_classification_source,
+    'Frontiers and Navy must not share an identical rights classification provenance'
+  );
+  const frontiersSha = frontiers.artifact_sha256;
+  const navySha = navy.artifact_sha256;
+  if (frontiersSha && navySha) {
+    assert(frontiersSha !== navySha, 'Frontiers and Navy artifacts must not share a sha256');
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 4. A declared license must carry a reference
 // ---------------------------------------------------------------------------
 for (const source of manifest.sources || []) {
   const hasLicense =
@@ -154,11 +349,25 @@ for (const source of manifest.sources || []) {
     source.license_url || source.license_classification === 'unknown',
     `source ${source.id} declares license "${source.license_classification}" but no license reference`
   );
+  if (source.reviewer_approved === true) {
+    warnings.push(
+      `manifest source ${source.id} sets reviewer_approved=true with no reviewer identity or timestamp; ` +
+      'this is not a rights decision and must not be read as one'
+    );
+  }
 }
 
 // ---------------------------------------------------------------------------
-// 4. Fail closed
+// 5. Fail closed
 // ---------------------------------------------------------------------------
+// Report EVERY problem class before exiting. Exiting on the first class would
+// hide registry violations (for example chunk_approved=true claiming a chunk
+// the canonical record does not approve) behind an earlier shadow-approval
+// conflict, so an operator could "fix" one and never see the other.
+for (const warning of warnings) {
+  console.warn(`  [warn] ${warning}`);
+}
+
 if (conflicts.length > 0) {
   console.error('[FAIL] Evidence approval contract: shadow approval detected');
   for (const conflict of conflicts) {
@@ -171,16 +380,14 @@ if (conflicts.length > 0) {
     `      ${conflicts.length} conflict(s). Review-queue records are non-authoritative and cannot grant approval.`
   );
   console.error('      Human rights review must set canonical chunk state; the agent must not auto-promote.');
-  process.exit(1);
-}
-
-for (const warning of warnings) {
-  console.warn(`  [warn] ${warning}`);
 }
 
 if (errors.length > 0) {
-  for (const error of errors) console.error(`  - ${error}`);
   console.error('[FAIL] Evidence approval contract violated');
+  for (const error of errors) console.error(`  - ${error}`);
+}
+
+if (conflicts.length > 0 || errors.length > 0) {
   process.exit(1);
 }
 
