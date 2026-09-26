@@ -25,8 +25,16 @@ for (const lesson of lessons) {
   const plan = plansByLesson.get(lesson.id);
   assert(plan, `Missing content plan for ${lesson.id}`);
   assert(plan.status === lesson.status, `Status mismatch for ${lesson.id}`);
-  assert(Array.isArray(plan.learningObjectives) && plan.learningObjectives.length > 0,
-    `Learning objectives missing for ${lesson.id}`);
+  assert(typeof plan.lessonSummary === "string" && plan.lessonSummary.length > 40,
+    `Expanded lesson summary missing for ${lesson.id}`);
+  assert(Number.isInteger(plan.estimatedMinutes) && plan.estimatedMinutes >= 60,
+    `Estimated instructional time missing for ${lesson.id}`);
+  assert(Array.isArray(plan.prerequisites) && plan.prerequisites.length >= 2,
+    `Prerequisites are incomplete for ${lesson.id}`);
+  assert(Array.isArray(plan.learningObjectives) && plan.learningObjectives.length >= 3,
+    `Expanded lesson ${lesson.id} must define at least three learning objectives`);
+  assert(Array.isArray(plan.keyConcepts) && plan.keyConcepts.length >= 4,
+    `Key concepts are incomplete for ${lesson.id}`);
 
   const objectiveIds = new Set();
   for (const objective of plan.learningObjectives) {
@@ -41,8 +49,13 @@ for (const lesson of lessons) {
   assert(JSON.stringify(plan.structure) === expectedStructure ||
     (Array.isArray(plan.structureExceptions) && plan.structureExceptions.length > 0),
     `Lesson ${lesson.id} must use canonical structure or document an exception`);
-  assert(Array.isArray(plan.contentBlocks) && plan.contentBlocks.length > 0,
-    `Content blocks missing for ${lesson.id}`);
+  assert(Array.isArray(plan.contentBlocks) && plan.contentBlocks.length >= policy.lessonStructure.length,
+    `Expanded lesson ${lesson.id} must cover the full instructional progression`);
+  const blockTypes = new Set(plan.contentBlocks.map((item) => item.type));
+  for (const requiredType of policy.lessonStructure) {
+    assert(blockTypes.has(requiredType),
+      `Lesson ${lesson.id} is missing required content block type ${requiredType}`);
+  }
   for (const block of plan.contentBlocks) {
     assert(block.id && block.type, `Content block identity missing in ${lesson.id}`);
     assert(purposes.has(block.instructionalPurpose),
@@ -55,8 +68,8 @@ for (const lesson of lessons) {
     }
   }
 
-  assert(Array.isArray(plan.visuals) && plan.visuals.length > 0,
-    `At least one purposeful visual is required for ${lesson.id}`);
+  assert(Array.isArray(plan.visuals) && plan.visuals.length >= 3,
+    `Expanded lesson ${lesson.id} must define at least three purposeful visuals`);
   for (const visual of plan.visuals) {
     const visualPolicy = visualTypes.get(visual.type);
     assert(visualPolicy, `Unsupported visual type ${visual.type} in ${lesson.id}`);
@@ -76,6 +89,12 @@ for (const lesson of lessons) {
     }
   }
 
+  assert(Array.isArray(plan.practiceTasks) && plan.practiceTasks.length >= 3,
+    `Practice tasks are incomplete for ${lesson.id}`);
+  assert(Array.isArray(plan.assessmentPlan) && plan.assessmentPlan.length >= 3,
+    `Assessment plan is incomplete for ${lesson.id}`);
+  assert(Array.isArray(plan.evidenceFocus) && plan.evidenceFocus.length >= 3,
+    `Evidence focus is incomplete for ${lesson.id}`);
   assert(typeof plan.evidenceExpectation === "string" && plan.evidenceExpectation.length > 20,
     `Evidence expectation missing for ${lesson.id}`);
   assert(typeof plan.assessmentBoundary === "string" && plan.assessmentBoundary.length > 20,
