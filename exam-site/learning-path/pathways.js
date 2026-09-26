@@ -89,6 +89,7 @@ function renderCourses(courses, competencies, lessonPlans, gridClass) {
           <summary>Lesson plan</summary>
           <p><strong>${escapeHtml(lesson?.title || "Planned lesson")}</strong></p>
           <ol class="compact-sequence">${steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}</ol>
+          ${lesson?.id ? `<a class="lesson-detail-link" href="/lesson-plans/#${escapeHtml(lesson.id)}">View expanded lesson plan <span aria-hidden="true">→</span></a>` : ""}
         </details>
       </article>`;
   }).join("");
