@@ -46,6 +46,25 @@
         "frontiers-alternator-ac-dc-rectification-p7"
       ],
       "approved_chunk_ids": [],
+      "review_notes": null,
+      "chunk_decisions": [
+        {
+          "chunk_id": "frontiers-alternator-primary-source-p7",
+          "decision": "pending",
+          "approved": false,
+          "reviewed_by": null,
+          "reviewed_at": null,
+          "review_notes": null
+        },
+        {
+          "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+          "decision": "pending",
+          "approved": false,
+          "reviewed_by": null,
+          "reviewed_at": null,
+          "review_notes": null
+        }
+      ],
       "open_questions": [
         "reviewer_approved=true in scholarly-source-manifest.json carries no reviewer identity or timestamp and must not be read as a rights decision",
         "artifact sha256 is not recorded in the manifest; record it before chunk approval"
@@ -75,6 +94,8 @@
       "lesson_mapped": false,
       "candidate_chunk_ids": [],
       "approved_chunk_ids": [],
+      "review_notes": null,
+      "chunk_decisions": [],
       "observed_scope": [
         "charging-circuit components (8-4)",
         "alternator and regulator operation (8-14-8-17)",

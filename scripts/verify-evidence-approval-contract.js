@@ -43,6 +43,16 @@ const REVIEWER_GATED_GATES = [
   ['technically_reviewed', 'technically_reviewed_by', 'technically_reviewed_at']
 ];
 
+// The three representable per-chunk review states. `approved` is the
+// machine-friendly boolean validated against `decision`; a denied chunk must
+// stay representable so "not reviewed yet" is distinguishable from
+// "reviewed and rejected".
+const CHUNK_DECISIONS = {
+  pending: false,
+  approved: true,
+  denied: false
+};
+
 const errors = [];
 const warnings = [];
 const conflicts = [];
@@ -206,6 +216,105 @@ for (const source of registry.sources) {
       source.rights_cleared !== true,
       `source ${source.source_id}: rights_cleared=true contradicts rights_decision="pending"`
     );
+  }
+
+  // ---- Per-chunk review decisions -------------------------------------
+  const decisions = source.chunk_decisions;
+  assert(Array.isArray(decisions), `source ${source.source_id}: chunk_decisions must be an array`);
+  if (!Array.isArray(decisions)) continue;
+
+  const decidedIds = [];
+  const approvedFromDecisions = [];
+
+  for (const decision of decisions) {
+    const chunkId = decision.chunk_id;
+    assert(typeof chunkId === 'string' && chunkId.length > 0,
+      `source ${source.source_id}: every chunk decision requires a chunk_id`);
+
+    const canonical = canonicalById.get(chunkId);
+    assert(
+      canonical && canonical.source_id === source.source_id,
+      `chunk decision ${chunkId} does not belong to source ${source.source_id}`
+    );
+
+    assert(
+      Object.prototype.hasOwnProperty.call(CHUNK_DECISIONS, decision.decision),
+      `chunk decision ${chunkId} has invalid decision "${decision.decision}"; ` +
+      `expected one of ${Object.keys(CHUNK_DECISIONS).join(', ')}`
+    );
+    if (!Object.prototype.hasOwnProperty.call(CHUNK_DECISIONS, decision.decision)) continue;
+
+    // decision=approved -> approved=true ; pending/denied -> approved=false
+    assert(
+      decision.approved === CHUNK_DECISIONS[decision.decision],
+      `chunk decision ${chunkId}: decision="${decision.decision}" requires approved=` +
+      `${CHUNK_DECISIONS[decision.decision]} but found ${JSON.stringify(decision.approved)}`
+    );
+
+    if (decision.approved !== true) {
+      decidedIds.push(chunkId);
+      continue;
+    }
+
+    approvedFromDecisions.push(chunkId);
+    decidedIds.push(chunkId);
+
+    // ---- Gate ordering: enforcement, not just detection ----------------
+    // An approved chunk requires every upstream gate to be cleared, with a
+    // recorded human identity at source level AND at chunk level.
+    assert(source.rights_cleared === true,
+      `chunk ${chunkId} approved=true requires source ${source.source_id} rights_cleared=true`);
+    assert(source.technically_reviewed === true,
+      `chunk ${chunkId} approved=true requires source ${source.source_id} technically_reviewed=true`);
+
+    for (const [byField, atField] of REVIEWER_GATED_GATES) {
+      assert(
+        typeof source[byField] === 'string' && source[byField].length > 0,
+        `chunk ${chunkId} approved=true requires source ${source.source_id} ${byField}`
+      );
+      assert(
+        typeof source[atField] === 'string' && source[atField].length > 0,
+        `chunk ${chunkId} approved=true requires source ${source.source_id} ${atField}`
+      );
+    }
+
+    assert(
+      typeof decision.reviewed_by === 'string' && decision.reviewed_by.length > 0,
+      `chunk ${chunkId} approved=true requires a real chunk-level reviewed_by`
+    );
+    assert(
+      typeof decision.reviewed_at === 'string' && decision.reviewed_at.length > 0,
+      `chunk ${chunkId} approved=true requires reviewed_at`
+    );
+
+    // And the canonical record must independently agree.
+    assert(
+      canonical && canonical.approved === true,
+      `chunk ${chunkId} approved=true but the canonical source_chunks record does not approve it`
+    );
+  }
+
+  assert(
+    new Set(decidedIds).size === decidedIds.length,
+    `source ${source.source_id}: duplicate chunk decisions`
+  );
+
+  // approved_chunk_ids must be EXACTLY the set of approved chunk decisions.
+  const declaredApproved = (source.approved_chunk_ids || []).slice().sort();
+  const expectedApproved = approvedFromDecisions.slice().sort();
+  assert(
+    JSON.stringify(declaredApproved) === JSON.stringify(expectedApproved),
+    `source ${source.source_id}: approved_chunk_ids ${JSON.stringify(declaredApproved)} must equal ` +
+    `the set of chunk_decisions with approved=true ${JSON.stringify(expectedApproved)}`
+  );
+
+  // Source-level chunk_approved is true only if at least one chunk is approved.
+  if (approvedFromDecisions.length > 0) {
+    assert(source.chunk_approved === true,
+      `source ${source.source_id} has approved chunk decisions but chunk_approved is not true`);
+  } else {
+    assert(source.chunk_approved !== true,
+      `source ${source.source_id}: chunk_approved=true requires at least one chunk decision with approved=true`);
   }
 }
 

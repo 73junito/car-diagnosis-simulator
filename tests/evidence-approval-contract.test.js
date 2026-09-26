@@ -20,6 +20,7 @@ const chunkFile = path.join(root, 'data', 'evidence', 'open-scholarly', 'scholar
 const manifestFile = path.join(root, 'data', 'evidence', 'open-scholarly', 'scholarly-source-manifest.json');
 
 const readJson = (file) => JSON.parse(require('fs').readFileSync(file, 'utf8'));
+const readFileSync = (file, encoding) => require('fs').readFileSync(file, encoding);
 
 function runGuard() {
   try {
@@ -174,5 +175,74 @@ describe('Evidence source-state registry', () => {
     const frontiers = registry.sources.find((s) => s.source_id === 'frontiers-automotive-alternator-2023');
     expect(frontiers.candidate_chunk_ids.length).toBe(2);
     expect(frontiers.approved_chunk_ids).toEqual([]);
+  });
+
+  test('every candidate chunk has a pending chunk decision', () => {
+    const registry = readJson(registryFile);
+    for (const source of registry.sources) {
+      for (const decision of source.chunk_decisions) {
+        expect(decision.decision).toBe('pending');
+        expect(decision.approved).toBe(false);
+        expect(decision.reviewed_by).toBeNull();
+        expect(decision.reviewed_at).toBeNull();
+        expect(decision.review_notes).toBeNull();
+      }
+    }
+  });
+
+  test('chunk decisions use one of the three representable review states', () => {
+    const registry = readJson(registryFile);
+    const allowed = ['pending', 'approved', 'denied'];
+    for (const source of registry.sources) {
+      for (const decision of source.chunk_decisions) {
+        expect(allowed).toContain(decision.decision);
+        // approved is derived from decision and must always agree with it.
+        const expected = decision.decision === 'approved';
+        expect(decision.approved).toBe(expected);
+      }
+    }
+  });
+
+  test('no source or chunk review notes are pre-filled by the agent', () => {
+    const registry = readJson(registryFile);
+    for (const source of registry.sources) {
+      expect(source.review_notes).toBeNull();
+    }
+  });
+
+  test('the guard enforces gate ordering for any approved chunk', () => {
+    // No chunk is approved, so the enforcement path must not fire on real data.
+    const registry = readJson(registryFile);
+    for (const source of registry.sources) {
+      for (const decision of source.chunk_decisions) {
+        if (decision.approved === true) {
+          expect(source.rights_cleared).toBe(true);
+          expect(source.technically_reviewed).toBe(true);
+          expect(decision.reviewed_by).toBeTruthy();
+          expect(decision.reviewed_at).toBeTruthy();
+        }
+      }
+    }
+
+    // And the rule exists in the guard source itself.
+    const guardSource = readFileSync(
+      path.join(root, 'scripts', 'verify-evidence-approval-contract.js'),
+      'utf8'
+    );
+    expect(guardSource).toMatch(/approved=true requires source .* rights_cleared=true/);
+    expect(guardSource).toMatch(/approved=true requires source .* technically_reviewed=true/);
+    expect(guardSource).toMatch(/requires a real chunk-level reviewed_by/);
+    expect(guardSource).toMatch(/must equal/);
+    expect(guardSource).toMatch(/does not belong to source/);
+  });
+
+  test('the guard supports a denied decision distinct from pending', () => {
+    const guardSource = readFileSync(
+      path.join(root, 'scripts', 'verify-evidence-approval-contract.js'),
+      'utf8'
+    );
+    expect(guardSource).toMatch(/pending:\s*false/);
+    expect(guardSource).toMatch(/approved:\s*true/);
+    expect(guardSource).toMatch(/denied:\s*false/);
   });
 });
