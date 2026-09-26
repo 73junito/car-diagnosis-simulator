@@ -37,6 +37,30 @@ body { margin:0; }
 .tm-symbol .symbol-fluid { fill:none; stroke:#2563eb; stroke-width:3; }
 .tm-symbol .symbol-text { fill:#111827; font-size:24px; font-weight:800; text-anchor:middle; }
 .empty-state { padding:36px; text-align:center; color:#66758c; }
+.reference-section { margin-top:26px; }
+.reference-note { margin:0 0 16px; color:var(--muted); line-height:1.5; }
+.connection-grid,.voltage-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+.connection-card,.voltage-card { border:1px solid #dbe1ea; border-radius:12px; background:#fbfcfe; padding:14px; min-width:0; }
+.connection-card h3 { margin:10px 0 4px; font-size:1rem; }
+.connection-swatch { display:grid; place-items:center; min-height:76px; border:1px solid #edf0f4; border-radius:10px; background:#fff; overflow:hidden; }
+.connection-swatch svg { width:100%; height:72px; }
+.connection-line { fill:none; stroke:#586579; stroke-linecap:round; }
+.connection-role-power,.connection-role-switched-power { stroke:#a8b0bd; }
+.connection-role-ground { stroke:#747d8b; }
+.connection-role-control { stroke:#1565c0; }
+.connection-role-signal { stroke:#52667a; }
+.connection-role-network { stroke:#5e548e; }
+.connection-role-shield { stroke:#7a7f87; }
+.connection-role-traction { stroke:#7f1d1d; }
+.voltage-card { display:grid; gap:7px; border-width:2px; }
+.voltage-card small { color:var(--muted); font-weight:800; }
+.voltage-card strong { font-size:1.1rem; }
+.voltage-card span { color:var(--muted); font-size:.8rem; line-height:1.45; }
+.voltage-domain-lv-12 { border-style:solid; }
+.voltage-domain-lv-24 { border-style:dashed; }
+.voltage-domain-lv-48 { border-style:double; border-width:4px; }
+.voltage-domain-traction { border-width:4px; }
+.voltage-domain-declared-voltage { border-style:dotted; }
 @media (max-width:720px) {
   .library-shell { padding:20px 12px 40px; }
   .toolbar { grid-template-columns:1fr; }

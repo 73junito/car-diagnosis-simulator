@@ -124,49 +124,65 @@
       "id": "W_BAT_FUSE",
       "from": "BAT1_POS",
       "to": "FUSE1_IN",
-      "type": "power_feed"
+      "type": "power_feed",
+      "styleId": "electrical.power",
+      "voltageSystemId": "LV12"
     },
     {
       "id": "W_FUSE_ALT",
       "from": "FUSE1_OUT",
       "to": "ALT1_BPLUS",
-      "type": "power_feed"
+      "type": "power_feed",
+      "styleId": "electrical.power",
+      "voltageSystemId": "LV12"
     },
     {
       "id": "W_FUSE_LOAD",
       "from": "FUSE1_OUT",
       "to": "LOAD1_PWR",
-      "type": "power_feed"
+      "type": "power_feed",
+      "styleId": "electrical.power",
+      "voltageSystemId": "LV12"
     },
     {
       "id": "W_ALT_GND",
       "from": "ALT1_GND",
       "to": "GND1_MAIN",
-      "type": "ground_reference"
+      "type": "ground_reference",
+      "styleId": "electrical.ground-return",
+      "voltageSystemId": "LV12"
     },
     {
       "id": "W_BAT_GND",
       "from": "BAT1_NEG",
       "to": "GND1_MAIN",
-      "type": "ground_reference"
+      "type": "ground_reference",
+      "styleId": "electrical.ground-return",
+      "voltageSystemId": "LV12"
     },
     {
       "id": "W_LOAD_GND",
       "from": "LOAD1_GND",
       "to": "GND1_MAIN",
-      "type": "ground_reference"
+      "type": "ground_reference",
+      "styleId": "electrical.ground-return",
+      "voltageSystemId": "LV12"
     },
     {
       "id": "W_ALT_REG",
       "from": "ALT1_CTRL",
       "to": "REG1_ALT",
-      "type": "control"
+      "type": "control",
+      "styleId": "electrical.control",
+      "voltageSystemId": "LV12"
     },
     {
       "id": "W_REG_CTRL",
       "from": "REG1_CTRL",
       "to": "BAT1_POS",
-      "type": "control"
+      "type": "control",
+      "styleId": "electrical.control",
+      "voltageSystemId": "LV12"
     }
   ],
   "testPoints": [

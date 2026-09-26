@@ -50,6 +50,8 @@
       if (!terminalOwners.has(connection.from)) errors.push(`connection ${connection.id} has unknown from terminal ${connection.from}`);
       if (!terminalOwners.has(connection.to)) errors.push(`connection ${connection.id} has unknown to terminal ${connection.to}`);
       if (!contracts.CONNECTION_TYPES.includes(connection.type)) errors.push(`unsupported connection type: ${connection.type}`);
+      if (!/^electrical\.[a-z0-9-]+$/.test(connection.styleId || "")) errors.push(`connection ${connection.id} requires a valid styleId`);
+      if (!connection.voltageSystemId || !voltageSystemIds.has(connection.voltageSystemId)) errors.push(`connection ${connection.id} requires a valid voltageSystemId`);
     }
     return { valid: errors.length === 0, errors };
   }

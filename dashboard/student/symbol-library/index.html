@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Standardized Schematic Symbol Library</title>
+  <title>Standardized Schematic Libraries</title>
   <link rel="stylesheet" href="../student.css">
   <link rel="stylesheet" href="./symbol-library.css">
 </head>
@@ -13,8 +13,8 @@
     <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
     <header class="library-header">
       <p class="eyebrow">Engineering library preview</p>
-      <h1>Standardized Schematic Symbol Library</h1>
-      <p>Visual inspection of project-authored electrical, hydraulic, pneumatic, mechanical, and thermal symbols before they are integrated into training schematics.</p>
+      <h1>Standardized Schematic Libraries</h1>
+      <p>Visual inspection of project-authored component symbols, electrical connection styles, and voltage-domain rules before they are integrated into training schematics.</p>
     </header>
 
     <section class="notice" aria-label="Standards boundary">
@@ -37,8 +37,29 @@
     </section>
 
     <section id="catalog" class="catalog" aria-live="polite"></section>
+
+    <section class="domain-section reference-section" aria-labelledby="connectionStylesHeading">
+      <div class="domain-heading">
+        <h2 id="connectionStylesHeading">Electrical connection styles</h2>
+        <small id="connectionCount">Loading…</small>
+      </div>
+      <p class="reference-note">Line styles describe training semantics only. They do not represent manufacturer wire-color codes.</p>
+      <div id="connectionStyles" class="connection-grid"></div>
+    </section>
+
+    <section class="domain-section reference-section" aria-labelledby="voltageDomainsHeading">
+      <div class="domain-heading">
+        <h2 id="voltageDomainsHeading">Voltage-domain rules</h2>
+        <small>Explicit voltage required</small>
+      </div>
+      <p class="reference-note">Every automotive circuit declares its actual nominal voltage system(s). Electrified vehicles may contain multiple declared voltage domains.</p>
+      <div id="voltageExamples" class="voltage-grid"></div>
+    </section>
   </main>
 
+  <script src="/src/circuits/voltage-domains.js"></script>
+  <script src="/src/connections/contracts.js"></script>
+  <script src="/src/connections/index.js"></script>
   <script src="/src/symbols/contracts.js"></script>
   <script src="/src/symbols/registry.js"></script>
   <script src="/src/symbols/svg-renderer.js"></script>

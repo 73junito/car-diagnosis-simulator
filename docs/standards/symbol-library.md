@@ -6,15 +6,15 @@ This library is the canonical source for reusable TorqueMind/AutoLearnPro schema
 
 ## Current catalog
 
-| Domain | Initial symbols | Reference family |
+| Domain | Symbols | Reference family |
 | --- | ---: | --- |
-| Electrical | 11 | IEC 60617:2026 DB; ISO 14617-1:2025 |
+| Electrical | 29 | IEC 60617:2026 DB; ISO 14617-1:2025 |
 | Hydraulic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Pneumatic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Mechanical | 8 | ISO 14617-1:2025 |
 | Thermal | 6 | ISO 14617-1:2025 |
 
-Total initial catalog: **47 symbols**.
+Current catalog: **65 symbols**.
 
 ## Canonical representation
 
@@ -64,4 +64,20 @@ The exporter records the active CadQuery and ezdxf versions in `export-manifest.
 
 New simulators should request a symbol by library ID rather than embed custom symbol geometry. If a needed symbol does not exist, add and validate it in this library first, then consume it from the simulator.
 
-The existing Circuit Lab should be migrated to this library only after the library branch is reviewed and accepted.
+The production Circuit Lab consumes this library directly. New labs must use the same library-first integration rule.
+
+## Electrical connection styles
+
+Electrical conductors are defined separately from component geometry in `data/connections/electrical.json`. Each connection style has a stable identifier, semantic connection type, visual role, line width, dash pattern, and an explicit rule for whether a voltage system must be declared.
+
+The current catalog includes power, switched power, ground return, control, analog signal, digital signal, CAN, LIN, PWM, shield/drain, and traction-power styles. These are TorqueMind training conventions and do not represent manufacturer wire-color codes.
+
+Circuit definitions reference connection styles by `styleId` and reference their declared electrical domain by `voltageSystemId`.
+
+## Voltage-domain rules
+
+Every electrical circuit must declare one or more voltage systems. Conventional 12 V circuits must explicitly declare a 12 V nominal system. Hybrid, plug-in hybrid, battery-electric, fuel-cell, 24 V, 48 V, and other architectures must state their actual nominal voltage system or systems rather than inheriting a default.
+
+The voltage-domain renderer distinguishes 12 V, 24 V, 48 V, traction, and other explicitly declared voltage systems visually while keeping the written nominal voltage visible. Visual treatment never substitutes for the voltage label.
+
+For electrified vehicles with multiple electrical domains, each component and conductor references the voltage system to which it belongs.

@@ -26,22 +26,55 @@ if (typeof jest !== 'undefined') {
   }
 }
 
-const { app } = require('../torquemind-api/index');
-const { getRecentEvents } = require('../api/telemetry/events');
+function saveEnv(keys) {
+  return Object.fromEntries(keys.map((key) => [
+    key,
+    Object.prototype.hasOwnProperty.call(process.env, key)
+      ? { present: true, value: process.env[key] }
+      : { present: false, value: undefined }
+  ]));
+}
+
+function restoreEnv(snapshot) {
+  for (const [key, state] of Object.entries(snapshot)) {
+    if (state.present) process.env[key] = state.value;
+    else delete process.env[key];
+  }
+}
+
+function captureEventIds(getRecentEvents) {
+  return new Set(getRecentEvents().map((event) => event.id));
+}
+
+function getNewAccessAttempt(getRecentEvents, beforeIds) {
+  return getRecentEvents().find((event) =>
+    event.type === 'access_attempt' && !beforeIds.has(event.id)
+  );
+}
 
 async function run() {
-  // Case: strict supabase mode but envs missing -> deny (fail-closed)
-  process.env.TORQUEMIND_AUTH_MODE = 'supabase';
-  delete process.env.SUPABASE_URL;
-  delete process.env.SUPABASE_ANON_KEY;
+  const envSnapshot = saveEnv([
+    'TORQUEMIND_AUTH_MODE',
+    'SUPABASE_URL',
+    'SUPABASE_ANON_KEY'
+  ]);
 
-  let recent = getRecentEvents();
+  try {
+    // Case: strict supabase mode but envs missing -> deny (fail-closed)
+    process.env.TORQUEMIND_AUTH_MODE = 'supabase';
+    delete process.env.SUPABASE_URL;
+    delete process.env.SUPABASE_ANON_KEY;
+
+    if (typeof jest !== 'undefined') jest.resetModules();
+    const { app } = require('../torquemind-api/index');
+    const { getRecentEvents } = require('../api/telemetry/events');
+
+    let beforeIds = captureEventIds(getRecentEvents);
   await request(app)
     .get('/dashboard/live-session')
     .set('Authorization', 'Bearer instructor-token')
     .expect(401);
-  recent = getRecentEvents();
-  let last = recent[recent.length - 1];
+  let last = getNewAccessAttempt(getRecentEvents, beforeIds);
   assert.ok(last && last.type === 'access_attempt');
   assert.strictEqual(last.role, 'anonymous');
   assert.strictEqual(last.source, 'supabase');
@@ -51,23 +84,23 @@ async function run() {
   process.env.SUPABASE_URL = 'https://example.supabase.co';
   process.env.SUPABASE_ANON_KEY = 'anon';
 
+  beforeIds = captureEventIds(getRecentEvents);
   await request(app)
     .get('/dashboard/live-session')
     .set('Authorization', 'Bearer invalid-token')
     .expect(401);
-  recent = getRecentEvents();
-  last = recent[recent.length - 1];
+  last = getNewAccessAttempt(getRecentEvents, beforeIds);
   assert.ok(last && last.type === 'access_attempt');
   assert.strictEqual(last.role, 'anonymous');
   assert.strictEqual(last.source, 'supabase');
 
   // Case: supabase mode with valid instructor token -> allow
+  beforeIds = captureEventIds(getRecentEvents);
   await request(app)
     .get('/dashboard/live-session')
     .set('Authorization', 'Bearer instructor-token')
     .expect(200);
-  recent = getRecentEvents();
-  last = recent[recent.length - 1];
+  last = getNewAccessAttempt(getRecentEvents, beforeIds);
   assert.ok(last && last.type === 'access_attempt');
   assert.strictEqual(last.userId, 'u-instructor');
   assert.strictEqual(last.role, 'instructor');
@@ -79,17 +112,18 @@ async function run() {
   delete process.env.SUPABASE_URL;
   delete process.env.SUPABASE_ANON_KEY;
 
+  beforeIds = captureEventIds(getRecentEvents);
   await request(app)
     .get('/dashboard/live-session')
     .set('x-torquemind-role', 'instructor')
     .expect(200);
-  recent = getRecentEvents();
-  last = recent[recent.length - 1];
+  last = getNewAccessAttempt(getRecentEvents, beforeIds);
   assert.ok(last && last.type === 'access_attempt');
   assert.strictEqual(last.role, 'instructor');
   assert.strictEqual(last.source, 'header');
-
-
+  } finally {
+    restoreEnv(envSnapshot);
+  }
 }
 
 if (require.main === module) run().catch(err => { console.error(err); process.exit(1); });
