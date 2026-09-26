@@ -238,6 +238,22 @@ describe('GET /api/curriculum CORS', () => {
     expect(response.headers.get('Access-Control-Allow-Methods')).toContain('GET');
   });
 
+  test('allows preflight from the exam site origin', async () => {
+    const response = await fetchCurriculum(SERVICE_ENV, {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'https://exam.autolearnpro.com',
+        'Access-Control-Request-Method': 'GET',
+        'Access-Control-Request-Headers': 'Content-Type'
+      }
+    });
+
+    expect(response.status).toBe(204);
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe(
+      'https://exam.autolearnpro.com'
+    );
+  });
+
   test('does not allow arbitrary origins', async () => {
     const response = await fetchCurriculum(SERVICE_ENV, {
       method: 'OPTIONS',
@@ -282,10 +298,20 @@ describe('Curriculum read API design contracts', () => {
     }
   });
 
-  test('worker registers /api/curriculum with app-origin CORS', () => {
+  test('worker registers /api/curriculum with a strict CORS allowlist', () => {
     expect(indexSource).toMatch(/app\.all\(\s*['"]\/api\/curriculum['"]/);
     expect(indexSource).toMatch(/app\.use\(\s*['"]\/api\/curriculum\/\*['"]/);
-    expect(indexSource).toMatch(/origin:\s*['"]https:\/\/app\.autolearnpro\.com['"]/);
+
+    const curriculumCors = indexSource.match(
+      /app\.use\(\s*['"]\/api\/curriculum\/\*['"][\s\S]{0,400}/
+    );
+    expect(curriculumCors).not.toBeNull();
+    // Allowlist only: the training app and the exam site (static-JSON fallback host).
+    expect(curriculumCors[0]).toContain('https://app.autolearnpro.com');
+    expect(curriculumCors[0]).toContain('https://exam.autolearnpro.com');
+    const originLine = curriculumCors[0].match(/origin:\s*(\[[^\]]*\]|['"][^'"]*['"])/);
+    expect(originLine).not.toBeNull();
+    expect(originLine[1]).not.toContain('*');
   });
 });
 
