@@ -10,6 +10,7 @@ on:
       - "scripts/verify-engineering-artifacts.js"
       - "tests/ngspice-relay-model.test.js"
       - "tests/sensor-model-artifacts.test.js"
+      - "tests/pwm-actuator-model-artifacts.test.js"
       - "package.json"
       - ".github/workflows/ngspice-validation.yml"
   push:
@@ -51,5 +52,8 @@ jobs:
       - name: Run ngspice sensor cross-validation
         run: npm run validate:sensor-model
 
-      - name: Run ngspice and sensor artifact unit tests
-        run: npx jest tests/ngspice-relay-model.test.js tests/sensor-model-artifacts.test.js --runInBand
+      - name: Run ngspice PWM actuator cross-validation
+        run: npm run validate:pwm-actuator-model
+
+      - name: Run ngspice and engineering artifact unit tests
+        run: npx jest tests/ngspice-relay-model.test.js tests/sensor-model-artifacts.test.js tests/pwm-actuator-model-artifacts.test.js --runInBand

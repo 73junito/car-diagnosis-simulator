@@ -1,0 +1,16 @@
+* AutoLearnPro PWM actuator training model
+* Project-authored model values only; not a vehicle specification.
+* 12 V, 30% duty, 10 ms period.
+VPWM pwm 0 PULSE(0 12 0 1n 1n 3m 10m)
+VFAULT fault_pwm 0 DC 0
+
+.control
+tran 10u 120m
+meas tran tm_healthy_pwm AVG v(pwm) from=20m to=120m
+meas tran tm_fault_pwm AVG v(fault_pwm) from=20m to=120m
+print tm_healthy_pwm
+print tm_fault_pwm
+quit
+.endc
+
+.end

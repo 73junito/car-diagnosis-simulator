@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "pwm-actuator-open-command-unavailable-v1",
+  "modelId": "pwm-actuator-open-command-boundary",
+  "evidenceRole": "project_authored_training_model",
+  "generator": {
+    "tool": "python-contract-boundary",
+    "version": "1.0.0"
+  },
+  "domain": {
+    "system": "low-voltage-pwm-actuator",
+    "voltageClass": "12V-training-example",
+    "applicability": "generic project-authored PWM command model only"
+  },
+  "quantity": {
+    "quantityType": "voltage",
+    "unit": "V"
+  },
+  "baseline": {
+    "value": 3.6,
+    "label": "healthy PWM average model"
+  },
+  "observed": null,
+  "comparison": {
+    "status": "unavailable",
+    "interpretation": "not_available",
+    "authoritativeSpecification": false,
+    "reason": "The actuator-side PWM path is open; fault-side command voltage is intentionally unavailable and actuator response is not inferred."
+  },
+  "provenance": {
+    "method": "explicit unsupported/open-path boundary from project-authored actuator training profile",
+    "sourceType": "project_model",
+    "reproducible": true
+  }
+}

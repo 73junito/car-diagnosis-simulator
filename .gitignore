@@ -68,3 +68,4 @@ data/engineering/generated/*.csv
 data/engineering/generated/*.png
 data/engineering/generated/relay-load-high-resistance-ngspice.json
 data/engineering/generated/sensor-signal-short-ground-ngspice.json
+data/engineering/generated/pwm-actuator-short-ground-ngspice.json

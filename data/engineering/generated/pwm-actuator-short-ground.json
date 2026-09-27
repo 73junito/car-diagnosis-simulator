@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "pwm-actuator-short-ground-v1",
+  "modelId": "pwm-actuator-short-ground-training-model",
+  "evidenceRole": "project_authored_training_model",
+  "generator": {
+    "tool": "python-numpy-pandas-matplotlib",
+    "version": "1.0.0"
+  },
+  "domain": {
+    "system": "low-voltage-pwm-actuator",
+    "voltageClass": "12V-training-example",
+    "applicability": "generic project-authored PWM command model only"
+  },
+  "quantity": {
+    "quantityType": "voltage",
+    "unit": "V"
+  },
+  "baseline": {
+    "value": 3.6,
+    "label": "healthy PWM average model"
+  },
+  "observed": {
+    "value": 0,
+    "label": "PWM short-to-ground model"
+  },
+  "comparison": {
+    "status": "changed",
+    "delta": -3.6,
+    "interpretation": "numeric_delta_only",
+    "authoritativeSpecification": false,
+    "reason": "Project-authored PWM average training-model delta; not a vehicle specification or actuator-response model."
+  },
+  "provenance": {
+    "method": "ideal PWM average Vavg = supply voltage × duty cycle with idealized command short-to-ground",
+    "sourceType": "project_model",
+    "reproducible": true
+  }
+}
