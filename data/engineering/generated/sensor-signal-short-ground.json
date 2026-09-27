@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "sensor-signal-short-ground-v1",
+  "modelId": "sensor-linear-transfer-short-ground-training-model",
+  "evidenceRole": "project_authored_training_model",
+  "generator": {
+    "tool": "python-numpy-pandas-matplotlib",
+    "version": "1.0.0"
+  },
+  "domain": {
+    "system": "low-voltage-three-wire-sensor",
+    "voltageClass": "5V-reference-training-example",
+    "applicability": "generic project-authored sensor training model only"
+  },
+  "quantity": {
+    "quantityType": "voltage",
+    "unit": "V"
+  },
+  "baseline": {
+    "value": 2.5,
+    "label": "healthy modeled signal"
+  },
+  "observed": {
+    "value": 0,
+    "label": "signal short-to-ground model"
+  },
+  "comparison": {
+    "status": "changed",
+    "delta": -2.5,
+    "interpretation": "numeric_delta_only",
+    "authoritativeSpecification": false,
+    "reason": "Project-authored idealized sensor training-model delta; not a vehicle specification."
+  },
+  "provenance": {
+    "method": "linear 0.5-4.5 V training transfer at 50 percent input with idealized signal short-to-ground",
+    "sourceType": "project_model",
+    "reproducible": true
+  }
+}
