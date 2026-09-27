@@ -24,6 +24,8 @@
   const flowNote=document.getElementById("flowNote");
   const voltageProfile=document.getElementById("voltageProfile");
   const symbolRenderer=window.TorqueMindSymbolRenderer;
+  const engineering=window.TorqueMindEngineering;
+  const calculator=engineering.calculator;
 
   const voltageArchitecture=window.TorqueMindVoltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById=new Map(voltageArchitecture.map((domain)=>[domain.id,domain]));
@@ -75,6 +77,93 @@
     INV1:"Generic traction inverter between the traction battery and motor. Internal switching behavior is intentionally not modeled.",
     MOTOR1:"Generic traction motor shown only as the conceptual traction-system load."
   };
+
+  const engineeringUi={
+    status:document.getElementById("multiVoltageEngineeringStatus"),
+    domainSelect:document.getElementById("engineeringDomainSelect"),
+    currentInput:document.getElementById("domainCurrentInput"),
+    voltage:document.getElementById("engDomainVoltage"),
+    voltageLabel:document.getElementById("engDomainVoltageLabel"),
+    current:document.getElementById("engDomainCurrent"),
+    power:document.getElementById("engDomainPower"),
+    role:document.getElementById("engDomainRole"),
+    boundary:document.getElementById("engDomainBoundary"),
+    formula:document.getElementById("multiVoltageEngineeringFormula")
+  };
+
+  function enteredCurrent(){
+    const raw=engineeringUi.currentInput.value.trim();
+    if(!raw) return null;
+    const value=Number(raw);
+    return Number.isFinite(value)&&value>0 ? value : null;
+  }
+
+  function selectedDomain(){
+    return circuit.voltageSystems.find((domain)=>domain.id===engineeringUi.domainSelect.value)||circuit.voltageSystems[0];
+  }
+
+  function domainIsActive(domainId){
+    const flows=currentState().activeFlows||{};
+    if(domainId==="LV12") return Boolean((flows.lvPower||[]).length||(flows.lvGround||[]).length||(flows.control||[]).length);
+    if(domainId==="TR400") return Boolean((flows.traction||[]).length||(flows.tractionReturn||[]).length);
+    return false;
+  }
+
+  function selectedDomainFault(){
+    const fault=currentFault();
+    if(!fault) return null;
+    const connection=circuit.connections.find((item)=>item.id===fault.targetConnectionId);
+    return connection?.voltageSystemId===engineeringUi.domainSelect.value ? fault : null;
+  }
+
+  function renderEngineering(){
+    const domain=selectedDomain();
+    const current=enteredCurrent();
+    const power=current ? calculator.calculatePower({voltage:domain.nominalVoltage,current}) : null;
+    const domainFault=selectedDomainFault();
+    const active=domainIsActive(domain.id);
+
+    engineeringUi.voltage.textContent=`${domain.nominalVoltage} V`;
+    engineeringUi.voltageLabel.textContent=domain.id==="TR400" ? "Traction training example" : "Low-voltage domain";
+    engineeringUi.current.textContent=current ? `${Number(current.toFixed(2))} A` : "—";
+    engineeringUi.power.textContent=power
+      ? (power.value>=1000 ? `${(power.value/1000).toFixed(3)} kW` : `${Number(power.value.toFixed(2))} W`)
+      : "—";
+    engineeringUi.role.textContent=domain.id;
+    engineeringUi.boundary.textContent=domain.id==="TR400"
+      ? "400 V is a declared training example, not a universal traction voltage"
+      : "Declared 12 V training domain";
+
+    if(domainFault?.type==="open_circuit"){
+      engineeringUi.status.textContent="Selected-domain path open — entered current is not inferred from the fault";
+      engineeringUi.status.className="engineering-status fault";
+    } else if(domainFault?.type==="high_resistance"){
+      engineeringUi.status.textContent="Selected-domain path degraded — no fault current or power inferred";
+      engineeringUi.status.className="engineering-status fault";
+    } else if(!active){
+      engineeringUi.status.textContent=current
+        ? "Domain inactive in this state — entered current is calculation input only"
+        : "Domain inactive; current not entered";
+      engineeringUi.status.className="engineering-status inactive";
+    } else if(!current){
+      engineeringUi.status.textContent="Current not entered";
+      engineeringUi.status.className="engineering-status";
+    } else {
+      engineeringUi.status.textContent="Calculated from declared voltage and entered current";
+      engineeringUi.status.className="engineering-status";
+    }
+
+    const voltageBoundary=domain.id==="TR400"
+      ? "The 400 V value belongs only to this project-authored training example."
+      : "The 12 V value is the declared low-voltage architecture for this training template.";
+    const calculation=current
+      ? `P = ${domain.nominalVoltage} V × ${Number(current.toFixed(2))} A = ${power.value.toFixed(2)} W.`
+      : "Enter a positive current to calculate power.";
+    const faultText=domainFault
+      ? " The injected fault does not create a measured current, voltage, power, converter-efficiency, or motor-output value."
+      : "";
+    engineeringUi.formula.textContent=`${voltageBoundary} ${calculation} This calculation does not imply DC/DC conversion ratio, efficiency, inverter switching behavior, traction-motor torque, or vehicle-specific operating limits.${faultText}`;
+  }
 
   function el(name,attrs={},text=""){
     const node=document.createElementNS(NS,name);
@@ -331,6 +420,7 @@
     renderComponents();
     renderLabels();
     renderTestPoints();
+    renderEngineering();
     stateBadge.textContent=currentState().label;
     flowNote.textContent=currentState().note+" Animated arrows are conceptual and do not represent measured current, switching frequency, torque, or service limits.";
   }
@@ -380,6 +470,9 @@
 
   stateSelect.addEventListener("change",()=>{operatingState=stateSelect.value;flowMode="system";render();});
   faultSelect.addEventListener("change",()=>{activeFault=faultSelect.value;render();});
+  engineeringUi.domainSelect.addEventListener("change",renderEngineering);
+  engineeringUi.currentInput.addEventListener("input",renderEngineering);
+  engineeringUi.currentInput.addEventListener("change",renderEngineering);
   document.getElementById("showSystemFlow").addEventListener("click",()=>{flowMode="system";render();});
   document.getElementById("traceLv").addEventListener("click",()=>{flowMode="lv";render();});
   document.getElementById("traceControl").addEventListener("click",()=>{flowMode="control";render();});

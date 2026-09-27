@@ -52,6 +52,39 @@
     <span class="legend-note">The traction voltage shown is a training example only; actual electrified-vehicle architectures vary.</span>
   </section>
 
+  <section class="engineering-panel" aria-labelledby="multiVoltageEngineeringHeading">
+    <div class="engineering-heading">
+      <div>
+        <p class="eyebrow">Declared-domain engineering</p>
+        <h2 id="multiVoltageEngineeringHeading">Voltage-domain power relationship</h2>
+        <p>Select a declared training domain and enter a current only when you intentionally want to evaluate P = V × I. No current is assumed from the operating state.</p>
+      </div>
+      <span class="engineering-status" id="multiVoltageEngineeringStatus">Current not entered</span>
+    </div>
+
+    <div class="reference-controls">
+      <div class="control-group">
+        <label for="engineeringDomainSelect">Declared voltage domain</label>
+        <select id="engineeringDomainSelect">
+          <option value="LV12">12 V low-voltage domain</option>
+          <option value="TR400">400 V traction training example</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label for="domainCurrentInput">Entered current (A)</label>
+        <input id="domainCurrentInput" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="Enter current">
+      </div>
+    </div>
+
+    <div class="engineering-grid">
+      <article class="engineering-card"><span class="value-role declared">Declared system value</span><strong id="engDomainVoltage">12 V</strong><small id="engDomainVoltageLabel">Low-voltage domain</small></article>
+      <article class="engineering-card"><span class="value-role measured">Entered value</span><strong id="engDomainCurrent">—</strong><small>Current is never inferred</small></article>
+      <article class="engineering-card result"><span class="value-role calculated">Calculated value</span><strong id="engDomainPower">—</strong><small>Electrical power from P = V × I</small></article>
+      <article class="engineering-card"><span class="value-role boundary">Evidence boundary</span><strong id="engDomainRole">LV12</strong><small id="engDomainBoundary">Declared 12 V training domain</small></article>
+    </div>
+    <p class="engineering-formula" id="multiVoltageEngineeringFormula"></p>
+  </section>
+
   <section class="workspace">
     <div class="diagram-card">
       <div class="diagram-heading">
@@ -89,6 +122,11 @@
 <script src="/src/symbols/registry.js"></script>
 <script src="/src/symbols/svg-renderer.js"></script>
 <script src="/src/symbols/index.js"></script>
+<script src="/src/engineering/contracts.js"></script>
+<script src="/src/engineering/profiles.js"></script>
+<script src="/src/engineering/calculator.js"></script>
+<script src="/src/engineering/specifications.js"></script>
+<script src="/src/engineering/index.js"></script>
 <script src="./multivoltage-lab.js"></script>
 </body>
 </html>
