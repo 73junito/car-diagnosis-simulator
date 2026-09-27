@@ -1,0 +1,73 @@
+# Engineering Parameter Foundation
+
+## Purpose
+
+The engineering-parameter layer separates circuit topology from numerical engineering values. Symbols and reusable circuit templates define what a component is and how it is connected; engineering profiles define optional values used for training calculations, measurements, or sourced specifications.
+
+This prevents a reusable symbol such as a battery, sensor, relay, motor, or wire from silently inheriting one universal automotive value.
+
+## Value roles
+
+Every engineering quantity declares exactly one `valueRole`:
+
+- `declared_system_value` — an architecture value explicitly declared by the circuit, such as a nominal voltage domain.
+- `generic_training_example` — a project-authored example used to teach a relationship. It is not a diagnostic specification.
+- `calculated_value` — a deterministic result derived from named inputs and a stored formula.
+- `authoritative_specification` — a specification that must carry a source identifier.
+- `measured_value` — an observed value supplied by a learner, instrument, simulator, or data source.
+
+The user interface must not present these roles as interchangeable.
+
+## Quantities and units
+
+The initial quantity contract supports voltage, current, resistance, power, energy, capacity, frequency, duty cycle, temperature, conductor length, conductor area, resistivity, voltage drop, and power loss.
+
+Values may be represented as either:
+
+- one scalar `value`; or
+- a `range` with `min`, optional `nominal`, and `max`.
+
+A quantity may also carry a percentage or absolute tolerance.
+
+## Component profiles
+
+The initial profile types are:
+
+`battery`, `conductor`, `fuse`, `switch`, `relay`, `resistive_load`, `motor`, `solenoid`, `sensor`, `actuator`, `controller`, `connector`, `network_bus`, `converter`, and `inverter`.
+
+Signal-aware profiles may declare:
+
+`analog_voltage`, `resistive`, `digital`, `pwm`, `frequency`, `can`, or `lin`.
+
+Battery profiles may declare chemistry independently from electrical quantities. The initial chemistry vocabulary includes flooded lead-acid, AGM, EFB, gel, lithium-ion, and other.
+
+## Calculation engine
+
+The initial deterministic calculation engine provides:
+
+- Ohm's law: `I = V / R`, `V = I × R`, `R = V / I`
+- electrical power: `P = V × I`
+- conductor resistance: `R = ρ × L / A`
+- voltage drop: `Vdrop = I × R`
+- conductor power loss: `Ploss = I² × R`
+- load voltage after a modeled drop: `Vload = Vsource − Vdrop`
+
+The engine does not silently assume conductor material, resistivity, wire length, cross-sectional area, temperature, battery state, or component specification. Those inputs must be explicitly supplied.
+
+Every result returned by the calculation engine is marked `calculated_value` and includes formula/input provenance.
+
+## Training-example catalog
+
+`data/engineering/training-examples.json` contains project-authored examples used to validate and demonstrate the contracts.
+
+The catalog is deliberately not a specification database. Its validator requires every stored quantity to remain `generic_training_example`.
+
+## Evidence rule
+
+A generic example must never become a diagnostic limit merely because it is present in the application.
+
+Vehicle-specific limits used for diagnosis, grading, or assessment require an authoritative specification record with source provenance. Calculated values remain calculations, and measured values remain measurements.
+
+## Next integration phase
+
+After this foundation is merged, existing labs can optionally attach engineering profiles without changing their circuit topology. The Circuit Composer can then use the same contracts to assign values, run calculations, compare healthy and faulted conditions, and preserve the distinction between examples, calculations, measurements, and sourced specifications.
