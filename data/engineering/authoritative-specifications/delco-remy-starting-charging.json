@@ -1,0 +1,324 @@
+{
+    "schemaVersion":  "1.0.0",
+    "catalogRole":  "authoritative-specifications",
+    "manufacturer":  "Delco Remy / PHINIA",
+    "rightsMode":  "citation-only-structured-facts",
+    "sourceRegistryPath":  "data/evidence/external-technical-references.json",
+    "notice":  "These structured values are source-specific authoritative specifications. They are not universal vehicle limits and must be applied only when the stated source applicability matches the training scenario.",
+    "specifications":  [
+                           {
+                               "id":  "delco-starter-cable-test-load-12v",
+                               "parameter":  "starter_cable_test_current",
+                               "comparison":  "exact",
+                               "quantity":  {
+                                                "quantityType":  "current",
+                                                "unit":  "A",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  500,
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF pp. 12-13, Section 3-7 Battery Cable Test with Single-Battery Location"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "starting",
+                                                     "systemVoltage":  12,
+                                                     "testMethod":  "carbon-pile battery-cable voltage-drop test"
+                                                 },
+                               "notes":  "Use as the specified test load for the cited Delco Remy heavy-duty 12 V battery-cable procedure."
+                           },
+                           {
+                               "id":  "delco-starter-cable-test-load-24v",
+                               "parameter":  "starter_cable_test_current",
+                               "comparison":  "exact",
+                               "quantity":  {
+                                                "quantityType":  "current",
+                                                "unit":  "A",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  250,
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF pp. 12-13, Section 3-7 Battery Cable Test with Single-Battery Location"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "starting",
+                                                     "systemVoltage":  24,
+                                                     "testMethod":  "carbon-pile battery-cable voltage-drop test"
+                                                 },
+                               "notes":  "Use as the specified test load for the cited Delco Remy heavy-duty 24 V battery-cable procedure."
+                           },
+                           {
+                               "id":  "delco-starter-total-drop-12v-37-42mt",
+                               "parameter":  "starter_cable_total_voltage_drop",
+                               "comparison":  "maximum",
+                               "quantity":  {
+                                                "quantityType":  "voltage_drop",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  0.5,
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF pp. 12-13, Section 3-7 Battery Cable Test with Single-Battery Location"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "starting",
+                                                     "systemVoltage":  12,
+                                                     "starterFamilies":  [
+                                                                             "37MT",
+                                                                             "40MT",
+                                                                             "41MT",
+                                                                             "42MT"
+                                                                         ],
+                                                     "testMethod":  "carbon-pile battery-cable voltage-drop test"
+                                                 },
+                               "notes":  "Maximum combined positive-plus-negative cable voltage loss for the listed 12 V starter families in the cited procedure."
+                           },
+                           {
+                               "id":  "delco-starter-total-drop-12v-50mt",
+                               "parameter":  "starter_cable_total_voltage_drop",
+                               "comparison":  "maximum",
+                               "quantity":  {
+                                                "quantityType":  "voltage_drop",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  0.4,
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF pp. 12-13, Section 3-7 Battery Cable Test with Single-Battery Location"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "starting",
+                                                     "systemVoltage":  12,
+                                                     "starterFamilies":  [
+                                                                             "50MT"
+                                                                         ],
+                                                     "testMethod":  "carbon-pile battery-cable voltage-drop test"
+                                                 },
+                               "notes":  "Maximum combined positive-plus-negative cable voltage loss for a 12 V 50MT in the cited procedure."
+                           },
+                           {
+                               "id":  "delco-starter-total-drop-24v-37-50mt",
+                               "parameter":  "starter_cable_total_voltage_drop",
+                               "comparison":  "maximum",
+                               "quantity":  {
+                                                "quantityType":  "voltage_drop",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  1,
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF pp. 12-13, Section 3-7 Battery Cable Test with Single-Battery Location"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "starting",
+                                                     "systemVoltage":  24,
+                                                     "starterFamilies":  [
+                                                                             "37MT",
+                                                                             "40MT",
+                                                                             "41MT",
+                                                                             "42MT",
+                                                                             "50MT"
+                                                                         ],
+                                                     "testMethod":  "carbon-pile battery-cable voltage-drop test"
+                                                 },
+                               "notes":  "Maximum combined positive-plus-negative cable voltage loss for the listed 24 V starter families in the cited procedure."
+                           },
+                           {
+                               "id":  "delco-hd-starter-main-cable-drop-2025",
+                               "parameter":  "starter_cable_total_voltage_drop",
+                               "comparison":  "maximum",
+                               "quantity":  {
+                                                "quantityType":  "voltage_drop",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  0.5,
+                                                "source":  {
+                                                               "id":  "delco-remy-heavy-duty-troubleshooting-guide-2025",
+                                                               "locator":  "PDF p. 2, Perform Starter Main Cables Voltage Drop Test, steps 1-10"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "starting",
+                                                     "testMethod":  "500 A carbon-pile starter main-cable voltage-drop test"
+                                                 },
+                               "notes":  "General limit from the cited heavy-duty troubleshooting procedure; do not substitute it for a model-family-specific limit when one is available."
+                           },
+                           {
+                               "id":  "delco-hd-ims-start-enable-good-threshold-2025",
+                               "parameter":  "ims_start_enable_voltage",
+                               "comparison":  "greater_than",
+                               "quantity":  {
+                                                "quantityType":  "voltage",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  9,
+                                                "source":  {
+                                                               "id":  "delco-remy-heavy-duty-troubleshooting-guide-2025",
+                                                               "locator":  "PDF p. 2, Perform Starter Control Circuit Test, steps 1-4"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "starting-control",
+                                                     "testMethod":  "IMS start-enable voltage measurement during cranking"
+                                                 },
+                               "notes":  "The cited guide treats a reading above this threshold during cranking as good; this is not a universal control-circuit threshold."
+                           },
+                           {
+                               "id":  "delco-diagnostic-voltmeter-resolution",
+                               "parameter":  "voltmeter_resolution",
+                               "comparison":  "exact",
+                               "quantity":  {
+                                                "quantityType":  "voltage",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  0.01,
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF p. 3, Section 1-6 Equipment Required"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "instrumentation",
+                                                     "testMethod":  "Delco Remy heavy-duty diagnostic procedures"
+                                                 },
+                               "notes":  "Meter capability called for by the cited diagnostic procedure."
+                           },
+                           {
+                               "id":  "delco-diagnostic-voltmeter-range-12v",
+                               "parameter":  "voltmeter_range",
+                               "comparison":  "exact",
+                               "quantity":  {
+                                                "quantityType":  "voltage",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "range":  {
+                                                              "min":  0,
+                                                              "max":  16
+                                                          },
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF p. 3, Section 1-15 Voltmeter Selection"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "instrumentation",
+                                                     "systemVoltage":  12,
+                                                     "testMethod":  "Delco Remy heavy-duty diagnostic procedures"
+                                                 },
+                               "notes":  "Specified meter range for 12 V vehicles in the cited procedure."
+                           },
+                           {
+                               "id":  "delco-diagnostic-voltmeter-range-24v",
+                               "parameter":  "voltmeter_range",
+                               "comparison":  "exact",
+                               "quantity":  {
+                                                "quantityType":  "voltage",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "range":  {
+                                                              "min":  0,
+                                                              "max":  32
+                                                          },
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF p. 3, Section 1-15 Voltmeter Selection"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "instrumentation",
+                                                     "systemVoltage":  24,
+                                                     "testMethod":  "Delco Remy heavy-duty diagnostic procedures"
+                                                 },
+                               "notes":  "Specified meter range for 24 V vehicles in the cited procedure."
+                           },
+                           {
+                               "id":  "delco-slow-cranking-duration-warning",
+                               "parameter":  "continuous_cranking_warning_threshold",
+                               "comparison":  "greater_than",
+                               "quantity":  {
+                                                "quantityType":  "duration",
+                                                "unit":  "s",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  30,
+                                                "source":  {
+                                                               "id":  "delco-remy-diagnostic-procedures-manual",
+                                                               "locator":  "PDF p. 3, Section 1-10 Subcircuits, Cranking Circuit"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "starting",
+                                                     "testMethod":  "heavy-duty cranking-system diagnosis"
+                                                 },
+                               "notes":  "The cited manual warns that slow cranking beyond this duration can lead to starter damage; store as a warning threshold, not a universal duty-cycle specification."
+                           },
+                           {
+                               "id":  "delco-charging-cable-new-vehicle-design-drop-12v",
+                               "parameter":  "charging_cable_voltage_drop",
+                               "comparison":  "design_basis",
+                               "quantity":  {
+                                                "quantityType":  "voltage_drop",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  0.3,
+                                                "source":  {
+                                                               "id":  "delco-remy-charging-cable-requirements-2024",
+                                                               "locator":  "PDF p. 1, Notes above AWG 12 Volt Cables table"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "charging",
+                                                     "systemVoltage":  12,
+                                                     "testMethod":  "charging-cable sizing table"
+                                                 },
+                               "notes":  "Voltage-drop design basis used for the cited new-vehicle 12 V charging-cable sizing table."
+                           },
+                           {
+                               "id":  "delco-charging-cable-life-max-drop-12v",
+                               "parameter":  "charging_cable_voltage_drop",
+                               "comparison":  "maximum",
+                               "quantity":  {
+                                                "quantityType":  "voltage_drop",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  0.5,
+                                                "source":  {
+                                                               "id":  "delco-remy-charging-cable-requirements-2024",
+                                                               "locator":  "PDF p. 1, Notes above AWG 12 Volt Cables table"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "charging",
+                                                     "systemVoltage":  12,
+                                                     "testMethod":  "charging-cable sizing table"
+                                                 },
+                               "notes":  "Maximum voltage-drop basis stated for the life of the vehicle in the cited 12 V cable-sizing guidance."
+                           },
+                           {
+                               "id":  "delco-charging-3wire-number2-lead-max-drop-12v",
+                               "parameter":  "charging_number2_lead_voltage_drop",
+                               "comparison":  "maximum",
+                               "quantity":  {
+                                                "quantityType":  "voltage_drop",
+                                                "unit":  "V",
+                                                "valueRole":  "authoritative_specification",
+                                                "value":  0.2,
+                                                "source":  {
+                                                               "id":  "delco-remy-charging-cable-requirements-2024",
+                                                               "locator":  "PDF p. 1, Notes above AWG 12 Volt Cables table"
+                                                           }
+                                            },
+                               "applicability":  {
+                                                     "system":  "charging",
+                                                     "systemVoltage":  12,
+                                                     "testMethod":  "3-wire charging-system cable requirement",
+                                                     "wiringConfiguration":  "3-wire",
+                                                     "conductor":  "#2 lead"
+                                                 },
+                               "notes":  "Maximum drop for the #2 lead in the cited 3-wire charging-system guidance."
+                           }
+                       ]
+}

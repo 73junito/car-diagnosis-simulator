@@ -24,7 +24,8 @@ const QUANTITY_TYPES = Object.freeze([
   "resistivity",
   "voltage_drop",
   "power_loss",
-  "normalized_input"
+  "normalized_input",
+  "duration"
 ]);
 
 const UNITS_BY_QUANTITY = Object.freeze({
@@ -42,7 +43,8 @@ const UNITS_BY_QUANTITY = Object.freeze({
   resistivity: ["ohm_m"],
   voltage_drop: ["V"],
   power_loss: ["W"],
-  normalized_input: ["percent"]
+  normalized_input: ["percent"],
+  duration: ["s"]
 });
 
 const TOLERANCE_TYPES = Object.freeze(["percent", "absolute"]);
@@ -114,6 +116,8 @@ function validateEngineeringQuantity(quantity) {
   if (quantity.valueRole === "authoritative_specification") {
     if (!quantity.source || typeof quantity.source !== "object" || !quantity.source.id) {
       errors.push("authoritative_specification requires source.id");
+    } else if (!quantity.source.locator || typeof quantity.source.locator !== "string") {
+      errors.push("authoritative_specification requires source.locator");
     }
   }
 

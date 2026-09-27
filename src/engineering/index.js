@@ -4,8 +4,9 @@
 const contracts = typeof require === "function" ? require("./contracts") : window.TorqueMindEngineeringContracts;
 const profiles = typeof require === "function" ? require("./profiles") : window.TorqueMindEngineeringProfiles;
 const calculator = typeof require === "function" ? require("./calculator") : window.TorqueMindEngineeringCalculator;
+const specifications = typeof require === "function" ? require("./specifications") : window.TorqueMindEngineeringSpecifications;
 
-const api = { contracts, profiles, calculator };
+const api = { contracts, profiles, calculator, specifications };
 
 if (typeof module !== "undefined" && module.exports) module.exports = api;
 if (typeof window !== "undefined") window.TorqueMindEngineering = api;

@@ -171,6 +171,82 @@
           "supports_claim": "Valeo provides supplier-authored alternator-fundamentals training that can be cited as an external corroborating authority, but its content is not ingested under this registry."
         }
       ]
+    },
+    {
+      "source_id": "delco-remy-diagnostic-procedures-manual",
+      "vendor": "Delco Remy / PHINIA",
+      "title": "Diagnostic Procedures Manual for Starters and Alternators",
+      "canonical_url": "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_web.pdf.aspx",
+      "publication_or_revision": "current Delco Remy PDF",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "PDF pp. 12-13, Section 3-7 Battery Cable Test with Single-Battery Location",
+          "supports_claim": "The heavy-duty battery-cable procedure specifies 500 A for a 12 V test, 250 A for a 24 V test, and starter-family-specific maximum total cable voltage loss."
+        },
+        {
+          "locator": "PDF p. 3, Section 1-6 Equipment Required",
+          "supports_claim": "The diagnostic procedure calls for a separate DC voltmeter capable of reading 0.01 V increments."
+        },
+        {
+          "locator": "PDF p. 3, Section 1-15 Voltmeter Selection",
+          "supports_claim": "The diagnostic procedure identifies 0-16 V and 0-32 V voltmeter ranges for 12 V and 24 V vehicles respectively."
+        },
+        {
+          "locator": "PDF p. 3, Section 1-10 Subcircuits, Cranking Circuit",
+          "supports_claim": "The manual warns that prolonged slow cranking can lead to starter damage when cranking exceeds 30 seconds."
+        }
+      ]
+    },
+    {
+      "source_id": "delco-remy-heavy-duty-troubleshooting-guide-2025",
+      "vendor": "Delco Remy / PHINIA",
+      "title": "Heavy Duty Troubleshooting Guide: Starting and Charging System Testing",
+      "canonical_url": "https://www.delcoremy.com/getmedia/ae3ecdd8-8714-4e43-a82f-11a97d01f7dd/Heavy-Duty-Troubleshooting-Guide-Flyer-12-16.pdf.aspx",
+      "publication_or_revision": "08 | 2025",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "PDF p. 2, Perform Starter Main Cables Voltage Drop Test, steps 1-10",
+          "supports_claim": "The guide uses a 500 A carbon-pile load and treats total starter-cable voltage drop of 0.5 V or less as acceptable for that procedure."
+        },
+        {
+          "locator": "PDF p. 2, Perform Starter Control Circuit Test, steps 1-4",
+          "supports_claim": "The guide treats a measured start-enable voltage above 9 V during cranking as good and directs correction of voltage drop when it is below 9 V."
+        }
+      ]
+    },
+    {
+      "source_id": "delco-remy-charging-cable-requirements-2024",
+      "vendor": "Delco Remy / PHINIA",
+      "title": "Minimum Required Charging Cable Gauge",
+      "canonical_url": "https://www.delcoremy.com/getmedia/f0e170a4-f150-4a30-91a1-858401b9f1ea/Delco-Remy-Charging-Cable-Flyer-8-14.pdf.aspx",
+      "publication_or_revision": "04 | 2024",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "PDF p. 1, Notes above AWG 12 Volt Cables table",
+          "supports_claim": "The 12 V cable-sizing table is based on 0.3 V drop for a new vehicle, allows up to 0.5 V over vehicle life, and limits the #2 lead on a 3-wire system to 0.2 V maximum drop."
+        }
+      ]
     }
   ]
 }

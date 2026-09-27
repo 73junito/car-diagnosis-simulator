@@ -11,6 +11,7 @@ test.describe("engineering parameter foundation", () => {
     await page.addScriptTag({ url: "/src/engineering/contracts.js" });
     await page.addScriptTag({ url: "/src/engineering/profiles.js" });
     await page.addScriptTag({ url: "/src/engineering/calculator.js" });
+    await page.addScriptTag({ url: "/src/engineering/specifications.js" });
     await page.addScriptTag({ url: "/src/engineering/index.js" });
 
     const result = await page.evaluate(async () => {
@@ -24,6 +25,14 @@ test.describe("engineering parameter foundation", () => {
       });
       const response = await fetch("/data/engineering/training-examples.json");
       const catalog = await response.json();
+      const authoritativeResponse = await fetch("/data/engineering/authoritative-specifications/delco-remy-starting-charging.json");
+      const authoritative = await authoritativeResponse.json();
+      const selected50Mt = window.TorqueMindEngineering.specifications.selectMostSpecificSpecification(authoritative,{
+        system:"starting",
+        systemVoltage:12,
+        starterFamily:"50MT",
+        parameter:"starter_cable_total_voltage_drop"
+      });
 
       return {
         current,
@@ -31,7 +40,10 @@ test.describe("engineering parameter foundation", () => {
         valueRoles: window.TorqueMindEngineering.contracts.VALUE_ROLES,
         profileTypes: window.TorqueMindEngineering.profiles.PROFILE_TYPES,
         catalogRole: catalog.catalogRole,
-        profileCount: catalog.profiles.length
+        profileCount: catalog.profiles.length,
+        authoritativeRole: authoritative.catalogRole,
+        authoritativeCount: authoritative.specifications.length,
+        selected50Mt
       };
     });
 
@@ -42,6 +54,10 @@ test.describe("engineering parameter foundation", () => {
     expect(result.profileTypes).toContain("conductor");
     expect(result.catalogRole).toBe("generic-training-examples");
     expect(result.profileCount).toBe(3);
+    expect(result.authoritativeRole).toBe("authoritative-specifications");
+    expect(result.authoritativeCount).toBe(14);
+    expect(result.selected50Mt.id).toBe("delco-starter-total-drop-12v-50mt");
+    expect(result.selected50Mt.quantity.value).toBe(0.4);
     expect(errors).toEqual([]);
   });
 });
