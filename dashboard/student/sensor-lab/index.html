@@ -45,6 +45,51 @@
       <span class="legend-note">The 5 V reference is a generic training example. Actual sensor supply and signal specifications must come from vehicle-specific service information.</span>
     </section>
 
+    <section class="engineering-panel" aria-labelledby="sensorEngineeringHeading">
+      <div class="engineering-heading">
+        <div>
+          <p class="eyebrow">Signal engineering example</p>
+          <h2 id="sensorEngineeringHeading">Analog sensor transfer relationship</h2>
+          <p>The transfer values below are generic training examples, not vehicle specifications.</p>
+        </div>
+        <span class="engineering-status" id="sensorEngineeringStatus">Healthy training example</span>
+      </div>
+
+      <div class="sensor-input-control">
+        <label for="sensorInput">
+          Training physical input
+          <strong id="sensorInputValue">50%</strong>
+        </label>
+        <input id="sensorInput" type="range" min="0" max="100" step="1" value="50">
+        <div class="sensor-input-scale"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
+
+      <div class="engineering-grid">
+        <article class="engineering-card">
+          <span class="value-role declared">Declared system value</span>
+          <strong id="engSensorReference">5 V</strong>
+          <small>Sensor training reference</small>
+        </article>
+        <article class="engineering-card">
+          <span class="value-role example">Generic training example</span>
+          <strong id="engSignalRange">0.5–4.5 V</strong>
+          <small>Analog transfer range</small>
+        </article>
+        <article class="engineering-card result">
+          <span class="value-role calculated">Calculated value</span>
+          <strong id="engIdealSignal">2.5 V</strong>
+          <small>Ideal sensor transfer output</small>
+        </article>
+        <article class="engineering-card result">
+          <span class="value-role calculated">Controller-observed</span>
+          <strong id="engObservedSignal">2.5 V</strong>
+          <small id="engObservedSignalLabel">Signal at controller input</small>
+        </article>
+      </div>
+
+      <p class="engineering-formula" id="sensorEngineeringFormula"></p>
+    </section>
+
     <section class="workspace">
       <div class="diagram-card">
         <div class="diagram-heading">
@@ -92,6 +137,10 @@
   <script src="/src/symbols/registry.js"></script>
   <script src="/src/symbols/svg-renderer.js"></script>
   <script src="/src/symbols/index.js"></script>
+  <script src="/src/engineering/contracts.js"></script>
+  <script src="/src/engineering/profiles.js"></script>
+  <script src="/src/engineering/calculator.js"></script>
+  <script src="/src/engineering/index.js"></script>
   <script src="./sensor-lab.js"></script>
 </body>
 </html>

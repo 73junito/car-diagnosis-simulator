@@ -88,3 +88,35 @@ The circuit''s 12 V nominal architecture remains a `declared_system_value`; the 
 The healthy example calculates the full series loop from both modeled conductors. When a high-resistance load-power or load-ground fault is selected, the added example resistance is inserted into the same series model and every dependent value is recalculated.
 
 For an open circuit or an operating state in which the relay-controlled load path is not closed, the lab reports zero load current and zero load power but intentionally does not infer open-circuit voltage distribution. Vehicle-specific diagnostic voltage locations and limits remain outside the generic training model.
+
+## Sensor signal-engineering integration
+
+The 12 V three-wire sensor lab is the second consumer of the engineering-parameter foundation and the first signal-engineering integration.
+
+Its lab-specific profile lives at `data/engineering/labs/sensor-training.json`. The profile keeps the reusable circuit topology separate from numerical training examples.
+
+The circuit template continues to declare:
+
+- `LV12`: 12 V nominal vehicle-system domain
+- `SENSOR5`: 5 V nominal training reference
+
+The sensor engineering profile adds only generic training examples:
+
+- normalized training input: 0–100 percent
+- analog signal transfer range: 0.5–4.5 V
+
+The reusable engineering calculator now provides a linear transfer function:
+
+`output = min + (input% / 100) × (max − min)`
+
+Every transfer result is marked `calculated_value` and carries formula/input provenance.
+
+Fault behavior is intentionally conservative:
+
+- signal short to ground: controller-observed training signal is forced to ground reference;
+- signal short to reference: controller-observed training signal is forced to the declared SENSOR5 reference;
+- open signal: ideal sensor transfer can still be shown, but the controller-observed signal is unavailable;
+- open sensor power or open sensor ground: sensor output is not inferred;
+- high resistance in the sensor ground/reference: a numeric signal is not invented because the result depends on sensor and circuit design.
+
+The student can change the normalized training input with a 0–100 percent slider and see the calculated transfer update immediately. The generic transfer relationship remains visibly distinct from the controller-observed signal under faults.
