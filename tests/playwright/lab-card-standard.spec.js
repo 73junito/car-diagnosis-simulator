@@ -30,5 +30,26 @@ test.describe("shared lab component-card standard", () => {
       expect(labelFill).toBe("rgb(255, 255, 255)");
       expect(labelStroke).toBe("rgb(148, 163, 184)");
     });
+
+    test(`${route} uses the shared readable schematic-label standard`, async ({ page }) => {
+      await page.goto(route);
+
+      const title = page.locator(".component-label .label-title").first();
+      const subtitle = page.locator(".component-label .label-subtitle").first();
+      await expect(title).toBeVisible();
+      await expect(subtitle).toBeVisible();
+
+      expect(await title.evaluate((el) => getComputedStyle(el).fontSize)).toBe("18px");
+      expect(await subtitle.evaluate((el) => getComputedStyle(el).fontSize)).toBe("14px");
+
+      const testPointCount = await page.locator(".test-point").count();
+      expect(testPointCount).toBeGreaterThan(0);
+      await expect(page.locator(".tp-label")).toHaveCount(testPointCount);
+      await expect(page.locator(".tp-badge")).toHaveCount(testPointCount);
+
+      const labels = await page.locator(".tp-label").allTextContents();
+      expect(labels).toEqual(Array.from({ length:testPointCount }, (_, index) => `TP${index+1}`));
+      expect(await page.locator(".tp-label").first().evaluate((el) => getComputedStyle(el).fontSize)).toBe("12.5px");
+    });
   }
 });

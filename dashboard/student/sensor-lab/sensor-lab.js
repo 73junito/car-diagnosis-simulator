@@ -350,14 +350,24 @@
     }
   }
   function renderTestPoints() {
-    for (const point of circuit.testPoints) {
+    const offsets = {
+      TP_SENSOR_SUPPLY:[28,-24],
+      TP_SENSOR_SIGNAL:[32,-18],
+      TP_SENSOR_GROUND:[-30,24],
+      TP_ECM_SIGNAL:[30,-18]
+    };
+    circuit.testPoints.forEach((point,index) => {
       const p = pointForTerminal(point.terminalId);
-      const group=el("g",{class:"test-point",role:"button",tabindex:"0","aria-label":`Test point ${point.id}`,"data-test-point-id":point.id});
-      group.append(el("circle",{cx:p.x,cy:p.y,r:8}));
-      group.append(el("text",{x:p.x+11,y:p.y-10},"TP"));
+      const [dx,dy] = offsets[point.id] || [28,-22];
+      const bx = p.x + dx, by = p.y + dy;
+      const group=el("g",{class:"test-point",role:"button",tabindex:"0","aria-label":`Test point ${index+1}: ${point.id}`,"data-test-point-id":point.id});
+      group.append(el("circle",{cx:p.x,cy:p.y,r:6}));
+      group.append(el("line",{x1:p.x,y1:p.y,x2:bx,y2:by,class:"label-leader"}));
+      group.append(el("rect",{x:bx-18,y:by-11,width:36,height:22,rx:7,class:"tp-badge"}));
+      group.append(el("text",{x:bx,y:by+1,class:"tp-label"},`TP${index+1}`));
       group.addEventListener("click",()=>inspectTestPoint(point));
       svg.append(group);
-    }
+    });
   }
   function render() {
     svg.querySelectorAll("*:not(title):not(desc)").forEach((n)=>n.remove());

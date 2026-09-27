@@ -77,8 +77,8 @@ header p { max-width: 850px; line-height: 1.6; }
 .component-label { pointer-events:none; }
 .component-label .label-leader { fill:none; stroke:#64748b; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .component-label .label-chip { fill:#fff; stroke:#94a3b8; stroke-width:2.5; }
-.component-label .label-title { font-size:16px; font-weight:800; text-anchor:middle; fill:#0f172a; }
-.component-label .label-subtitle { font-size:12px; font-weight:600; text-anchor:middle; fill:#475569; }
+.component-label .label-title { font-size:18px; font-weight:800; text-anchor:middle; fill:#0f172a; }
+.component-label .label-subtitle { font-size:14px; font-weight:650; text-anchor:middle; fill:#475569; }
 .component-label.selected .label-chip { stroke:#4d3fa7; stroke-width:3; }
 .component-label.faulted .label-chip { fill:#fff7ed; stroke:var(--fault); stroke-width:3; }
 .component-label.faulted .label-title { fill:#9a3412; }
@@ -92,8 +92,10 @@ header p { max-width: 850px; line-height: 1.6; }
 .component.faulted .symbol-solid { fill:var(--fault); stroke:var(--fault); }
 .test-point { cursor:pointer; }
 .test-point circle { fill:#fff; stroke:#6a4bc3; stroke-width:4; }
-.test-point text { font-size:10px; font-weight:800; fill:#5c46a3; }
-.terminal-label { font-size:10px; font-weight:700; fill:#4b596d; }
+.test-point .tp-badge { fill:#fff; stroke:#6a4bc3; stroke-width:2.5; }
+.test-point .tp-label { font-size:12.5px; font-weight:900; fill:#4d3fa7; text-anchor:middle; dominant-baseline:middle; }
+.test-point .label-leader { fill:none; stroke:#6a4bc3; stroke-width:2; stroke-linecap:round; }
+.terminal-label { font-size:12px; font-weight:700; fill:#4b596d; }
 .flow-note { margin:6px 4px 0; color:#66758c; font-size:.76rem; }
 .inspector { position:sticky; top:16px; }
 .inspector h2 { margin-top:0; }
