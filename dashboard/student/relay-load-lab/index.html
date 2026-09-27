@@ -51,6 +51,60 @@
       <span class="legend-note">Line styles are training conventions; voltage is declared separately and no manufacturer wire color is implied.</span>
     </section>
 
+    <section class="engineering-panel" aria-labelledby="engineeringHeading">
+      <div class="engineering-heading">
+        <div>
+          <p class="eyebrow">Engineering example</p>
+          <h2 id="engineeringHeading">Calculated load-circuit behavior</h2>
+          <p>These numbers are training inputs and calculated results, not vehicle specifications.</p>
+        </div>
+        <span class="engineering-status" id="engineeringStatus">Healthy training example</span>
+      </div>
+      <div class="engineering-grid">
+        <article class="engineering-card">
+          <span class="value-role declared">Declared system value</span>
+          <strong id="engSourceVoltage">12 V</strong>
+          <small>Nominal circuit voltage</small>
+        </article>
+        <article class="engineering-card">
+          <span class="value-role example">Generic training example</span>
+          <strong id="engLoadResistance">6 Ω</strong>
+          <small>Load resistance</small>
+        </article>
+        <article class="engineering-card">
+          <span class="value-role example">Generic training example</span>
+          <strong id="engPathResistance">—</strong>
+          <small id="engPathResistanceLabel">Calculated conductor resistance</small>
+        </article>
+        <article class="engineering-card result">
+          <span class="value-role calculated">Calculated value</span>
+          <strong id="engCurrent">—</strong>
+          <small>Load-circuit current</small>
+        </article>
+        <article class="engineering-card result">
+          <span class="value-role calculated">Calculated value</span>
+          <strong id="engVoltageDrop">—</strong>
+          <small>Total conductor voltage drop</small>
+        </article>
+        <article class="engineering-card result">
+          <span class="value-role calculated">Calculated value</span>
+          <strong id="engLoadVoltage">—</strong>
+          <small>Voltage across example load</small>
+        </article>
+        <article class="engineering-card result">
+          <span class="value-role calculated">Calculated value</span>
+          <strong id="engLoadPower">—</strong>
+          <small>Load power</small>
+        </article>
+        <article class="engineering-card result">
+          <span class="value-role calculated">Calculated value</span>
+          <strong id="engConductorLoss">—</strong>
+          <small>Conductor/fault power loss</small>
+        </article>
+      </div>
+      <p class="engineering-formula" id="engineeringFormula"></p>
+    </section>
+
     <section class="workspace">
       <div class="diagram-card">
         <div class="diagram-heading">
@@ -101,6 +155,10 @@
   <script src="/src/symbols/registry.js"></script>
   <script src="/src/symbols/svg-renderer.js"></script>
   <script src="/src/symbols/index.js"></script>
+  <script src="/src/engineering/contracts.js"></script>
+  <script src="/src/engineering/profiles.js"></script>
+  <script src="/src/engineering/calculator.js"></script>
+  <script src="/src/engineering/index.js"></script>
   <script src="./relay-load-lab.js"></script>
 </body>
 </html>
