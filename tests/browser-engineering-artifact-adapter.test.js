@@ -97,4 +97,54 @@ describe("browser engineering artifact adapter", () => {
     expect(observed.value).toBe(0);
     expect(observed.artifact.artifactId).toBe("sensor-signal-short-ground-v1");
   });
+
+  test("compares a project-authored scenario to an authoritative reference without changing evidence roles", () => {
+    const startingArtifact = {
+      ...artifact,
+      artifactId: "starting-cable-drop-within-candidate-v1",
+      evidenceRole: "project_authored_training_model",
+      quantity: { quantityType: "voltage_drop", unit: "V" },
+      observed: { value: 0.35 },
+      comparison: { status:"changed", interpretation:"numeric_delta_only", authoritativeSpecification:false }
+    };
+    const reference = {
+      comparison: "maximum",
+      applicability: { systemVoltage: 12 },
+      quantity: {
+        quantityType: "voltage_drop",
+        unit: "V",
+        valueRole: "authoritative_specification",
+        value: 0.4,
+        source: { id:"source-record", locator:"test locator" }
+      }
+    };
+    const result = artifacts.compareObservedToAuthoritativeReference(
+      startingArtifact,
+      reference,
+      { nominalVoltage:12, applicable:true }
+    );
+    expect(result.status).toBe("within_reference");
+    expect(result.scenarioRole).toBe("project_authored_training_model");
+    expect(result.basisRole).toBe("authoritative_specification");
+  });
+
+  test("keeps unavailable observed artifacts non-comparable", () => {
+    const openArtifact = {
+      ...artifact,
+      artifactId: "starting-cable-open-unavailable-v1",
+      quantity: { quantityType:"voltage_drop", unit:"V" },
+      observed: null,
+      comparison: { status:"unavailable", interpretation:"not_available", authoritativeSpecification:false }
+    };
+    const reference = {
+      comparison:"maximum",
+      applicability:{systemVoltage:12},
+      quantity:{
+        quantityType:"voltage_drop",unit:"V",valueRole:"authoritative_specification",value:0.4,
+        source:{id:"source-record",locator:"test locator"}
+      }
+    };
+    expect(artifacts.compareObservedToAuthoritativeReference(openArtifact, reference, {nominalVoltage:12}).status)
+      .toBe("not_comparable");
+  });
 });

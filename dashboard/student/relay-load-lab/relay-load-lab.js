@@ -31,7 +31,18 @@
   const calculator = engineering.calculator;
   const measurements = engineering.measurements;
   const comparisons = engineering.comparisons;
+  const artifacts = engineering.artifacts;
   const profileValidator = engineering.profiles.validateEngineeringProfile;
+  const artifactRegistry = await artifacts.loadRegistry();
+  const relayArtifactContext = {
+    operatingState:"command-on",
+    sourceVoltage:12,
+    addedResistanceOhm:1.5
+  };
+  const relayArtifactByFault = new Map([
+    ["FAULT_HIGH_RES_LOAD_POWER", await artifacts.resolveArtifact(artifactRegistry, "relay.high-resistance.load-power", relayArtifactContext)],
+    ["FAULT_HIGH_RES_LOAD_GROUND", await artifacts.resolveArtifact(artifactRegistry, "relay.high-resistance.load-ground", relayArtifactContext)]
+  ]);
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((d) => [d.id, d]));
 
@@ -189,15 +200,32 @@
   function renderEngineering() {
     const values = calculateEngineeringState();
     const healthyValues = calculateEngineeringState("");
+    const artifactResult = relayArtifactByFault.get(activeFault) || null;
+    let artifactBacked = false;
+    let baselineCurrent = healthyValues.current;
+    let observedCurrent = values.active ? values.current : null;
+
+    if (artifactResult?.status === "ready" && operatingState === "command-on" && values.active && healthyValues.active) {
+      const artifactBaseline = artifacts.quantityFromArtifact(artifactResult.artifact, "baseline");
+      const artifactObserved = artifacts.quantityFromArtifact(artifactResult.artifact, "observed");
+      if (Number(healthyValues.current.value.toFixed(3)) !== artifactBaseline.value ||
+          Number(values.current.value.toFixed(3)) !== artifactObserved.value) {
+        throw new Error("Relay artifact values do not match the current browser training calculation.");
+      }
+      baselineCurrent = artifactBaseline;
+      observedCurrent = artifactObserved;
+      artifactBacked = true;
+    }
+
     const comparison = !activeFault
       ? comparisons.baselineOnly({basisRole:"generic_training_example"})
-      : values.active && healthyValues.active
-        ? comparisons.compareQuantities(healthyValues.current, values.current, {basisRole:"generic_training_example"})
+      : observedCurrent && healthyValues.active
+        ? comparisons.compareQuantities(baselineCurrent, observedCurrent, {basisRole:"generic_training_example"})
         : comparisons.unavailable({basisRole:"generic_training_example",reason:"Faulted load current is unavailable or intentionally not inferred."});
 
     engineeringUi.comparison.className = "engineering-comparison";
     if (comparison.status === "changed") {
-      engineeringUi.comparison.textContent = `Training-model comparison: healthy ${healthyValues.current.value.toFixed(3)} A → fault ${values.current.value.toFixed(3)} A (Δ ${comparison.delta>=0?"+":""}${comparison.delta.toFixed(3)} A). Numeric delta only; not a vehicle specification.`;
+      engineeringUi.comparison.textContent = `Training-model comparison: healthy ${baselineCurrent.value.toFixed(3)} A → fault ${observedCurrent.value.toFixed(3)} A (Δ ${comparison.delta>=0?"+":""}${comparison.delta.toFixed(3)} A). Numeric delta only; not a vehicle specification.`;
       engineeringUi.comparison.classList.add("changed");
     } else if (comparison.status === "unavailable") {
       engineeringUi.comparison.textContent = comparison.reason;
@@ -207,6 +235,7 @@
     } else {
       engineeringUi.comparison.textContent = "Healthy training baseline selected; no fault comparison active.";
     }
+
     const measuredRaw = engineeringUi.measuredCurrent.value.trim();
     if (!measuredRaw) {
       engineeringUi.measuredResult.textContent = "No measurement entered";
@@ -218,20 +247,23 @@
           quantityType:"current", unit:"A", value:measuredValue,
           labId:"relay-load-lab", measurementId:"load-current"
         });
-        engineeringUi.measuredResult.textContent = values.active
-          ? `Recorded ${Number(measured.value.toFixed(3))} A; Δ vs training calculation ${measurements.deltaBetween(measured, values.current)>=0?"+":""}${measurements.deltaBetween(measured, values.current).toFixed(3)} A`
+        engineeringUi.measuredResult.textContent = observedCurrent
+          ? `Recorded ${Number(measured.value.toFixed(3))} A; Δ vs training calculation ${measurements.deltaBetween(measured, observedCurrent)>=0?"+":""}${measurements.deltaBetween(measured, observedCurrent).toFixed(3)} A`
           : `Recorded ${Number(measured.value.toFixed(3))} A; training path is inactive/interrupted`;
       } else {
         engineeringUi.measuredResult.textContent = "Enter a finite current value";
       }
       engineeringUi.measuredResult.className = "measurement-result";
     }
+
     engineeringUi.sourceVoltage.textContent = formatEngineering(sourceVoltage,"V",1);
     engineeringUi.loadResistance.textContent = formatEngineering(loadResistance,"Ω",2);
     engineeringUi.pathResistance.textContent = formatEngineering(values.pathResistance,"Ω",4);
 
     if (values.addedFaultResistance > 0) {
-      engineeringUi.status.textContent = "High-resistance training fault active";
+      engineeringUi.status.textContent = artifactBacked
+        ? "High-resistance training fault — validated artifact active"
+        : "High-resistance training fault active";
       engineeringUi.status.className = "engineering-status degraded";
       engineeringUi.pathResistanceLabel.textContent = `Conductor path + ${formatEngineering(values.addedFaultResistance,"Ω",2)} fault resistance`;
     } else if (!values.active) {
@@ -254,12 +286,12 @@
       return;
     }
 
-    engineeringUi.current.textContent = formatEngineering(values.current.value,"A",3);
+    engineeringUi.current.textContent = formatEngineering(observedCurrent.value,"A",3);
     engineeringUi.voltageDrop.textContent = formatEngineering(values.voltageDrop.value,"V",3);
     engineeringUi.loadVoltage.textContent = formatEngineering(values.loadVoltage.value,"V",3);
     engineeringUi.loadPower.textContent = formatEngineering(values.loadPower.value,"W",3);
     engineeringUi.conductorLoss.textContent = formatEngineering(values.conductorLoss.value,"W",3);
-    engineeringUi.formula.textContent = `Series model: I = V ÷ (Rload + Rpath). Calculated values carry provenance from the declared ${formatEngineering(sourceVoltage,"V",1)} system value and the generic training-example resistance inputs.`;
+    engineeringUi.formula.textContent = `Series model: I = V ÷ (Rload + Rpath). Calculated values carry provenance from the declared ${formatEngineering(sourceVoltage,"V",1)} system value and the generic training-example resistance inputs.${artifactBacked ? " Validated engineering artifact supplies the displayed healthy/fault current pair for this exact +1.5 Ω model context." : ""}`;
   }
 
   function el(name, attrs={}, text="") {
