@@ -1,6 +1,10 @@
 (function () {
 "use strict";
 
+const contracts = typeof require === "function"
+  ? require("./contracts")
+  : window.TorqueMindEngineeringContracts;
+
 const DEFAULT_REGISTRY_URL = "/data/engineering/browser-artifact-registry.json";
 const GENERATED_PREFIX = "/data/engineering/generated/";
 
@@ -30,6 +34,18 @@ function validateArtifactForEntry(artifact, entry) {
   if (expected.authoritativeSpecification !== undefined &&
       artifact.comparison?.authoritativeSpecification !== expected.authoritativeSpecification) {
     errors.push("authoritativeSpecification does not match registry");
+  }
+  if (expected.comparisonStatus && artifact.comparison?.status !== expected.comparisonStatus) {
+    errors.push("comparison status does not match registry");
+  }
+  if (expected.interpretation && artifact.comparison?.interpretation !== expected.interpretation) {
+    errors.push("comparison interpretation does not match registry");
+  }
+  if (expected.observedAvailable === true && !Number.isFinite(artifact.observed?.value)) {
+    errors.push("registry requires a finite observed artifact value");
+  }
+  if (expected.observedAvailable === false && artifact.observed !== null) {
+    errors.push("registry requires observed artifact value to remain unavailable");
   }
   return errors;
 }
@@ -80,6 +96,73 @@ function quantityFromArtifact(artifact, field) {
   };
 }
 
+function compareObservedToAuthoritativeReference(artifact, reference, options = {}) {
+  if (!artifact || artifact.evidenceRole !== "project_authored_training_model" ||
+      artifact.comparison?.authoritativeSpecification !== false) {
+    throw new Error("Only non-authoritative project training artifacts may be compared through this scenario path");
+  }
+  if (options.applicable === false) {
+    return { status:"not_comparable", comparable:false, basisRole:"authoritative_specification", scenarioRole:artifact.evidenceRole, reason:options.reason || "Reference applicability does not match this scenario." };
+  }
+  if (options.openCircuit === true || artifact.observed === null) {
+    return {
+      status:"not_comparable",
+      comparable:false,
+      basisRole:"authoritative_specification",
+      scenarioRole:artifact.evidenceRole,
+      reason:artifact.comparison?.reason || options.reason || "Modeled scenario is not numerically comparable."
+    };
+  }
+
+  const scenario = quantityFromArtifact(artifact, "observed");
+  const referenceErrors = contracts.validateEngineeringQuantity(reference?.quantity);
+  if (referenceErrors.length) return { status:"invalid", comparable:false, errors:referenceErrors };
+  if (reference.quantity.valueRole !== "authoritative_specification") {
+    throw new Error("Scenario comparison requires an authoritative specification reference");
+  }
+  if (scenario.quantityType !== reference.quantity.quantityType || scenario.unit !== reference.quantity.unit) {
+    return { status:"not_comparable", comparable:false, reason:"quantity type and unit must match" };
+  }
+  if (Number.isFinite(options.nominalVoltage) &&
+      Number.isFinite(reference?.applicability?.systemVoltage) &&
+      options.nominalVoltage !== reference.applicability.systemVoltage) {
+    return { status:"not_comparable", comparable:false, reason:"scenario voltage domain does not match source reference system voltage" };
+  }
+
+  const difference = scenario.value - reference.quantity.value;
+  let status;
+  switch (reference.comparison) {
+    case "maximum":
+      status = scenario.value <= reference.quantity.value ? "within_reference" : "exceeds_reference";
+      break;
+    case "minimum":
+      status = scenario.value >= reference.quantity.value ? "within_reference" : "below_reference";
+      break;
+    case "greater_than":
+      status = scenario.value > reference.quantity.value ? "within_reference" : "does_not_meet_reference";
+      break;
+    case "less_than":
+      status = scenario.value < reference.quantity.value ? "within_reference" : "does_not_meet_reference";
+      break;
+    case "design_basis":
+      status = "reference_only";
+      break;
+    default:
+      return { status:"not_comparable", comparable:false, reason:"reference comparison is not supported for scenario interpretation" };
+  }
+
+  return {
+    status,
+    comparable:true,
+    difference,
+    observedValue:scenario.value,
+    referenceValue:reference.quantity.value,
+    basisRole:"authoritative_specification",
+    scenarioRole:artifact.evidenceRole,
+    artifactId:artifact.artifactId
+  };
+}
+
 const api = {
   DEFAULT_REGISTRY_URL,
   validateRegistryEntry,
@@ -87,7 +170,8 @@ const api = {
   contextMatches,
   loadRegistry,
   resolveArtifact,
-  quantityFromArtifact
+  quantityFromArtifact,
+  compareObservedToAuthoritativeReference
 };
 
 if (typeof module !== "undefined" && module.exports) module.exports = api;

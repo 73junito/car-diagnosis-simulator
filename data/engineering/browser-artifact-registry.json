@@ -7,30 +7,134 @@
       "path": "/data/engineering/generated/sensor-signal-short-ground.json",
       "labId": "sensor-lab",
       "faultId": "FAULT_SIGNAL_SHORT_GROUND",
-      "context": {
-        "normalizedInputPercent": 50
-      },
+      "context": { "normalizedInputPercent": 50 },
       "expected": {
         "artifactId": "sensor-signal-short-ground-v1",
         "evidenceRole": "project_authored_training_model",
         "quantityType": "voltage",
         "unit": "V",
-        "authoritativeSpecification": false
+        "authoritativeSpecification": false,
+        "comparisonStatus": "changed",
+        "interpretation": "numeric_delta_only",
+        "observedAvailable": true
       }
-    },    {
+    },
+    {
       "key": "actuator.short-ground.nominal30",
       "path": "/data/engineering/generated/pwm-actuator-short-ground.json",
       "labId": "actuator-lab",
       "faultId": "FAULT_PWM_SHORT_GROUND",
-      "context": {
-        "dutyCyclePercent": 30
-      },
+      "context": { "dutyCyclePercent": 30 },
       "expected": {
         "artifactId": "pwm-actuator-short-ground-v1",
         "evidenceRole": "project_authored_training_model",
         "quantityType": "voltage",
         "unit": "V",
-        "authoritativeSpecification": false
+        "authoritativeSpecification": false,
+        "comparisonStatus": "changed",
+        "interpretation": "numeric_delta_only",
+        "observedAvailable": true
+      }
+    },
+    {
+      "key": "relay.high-resistance.load-power",
+      "path": "/data/engineering/generated/relay-load-high-resistance.json",
+      "labId": "relay-load-lab",
+      "faultId": "FAULT_HIGH_RES_LOAD_POWER",
+      "context": {
+        "operatingState": "command-on",
+        "sourceVoltage": 12,
+        "addedResistanceOhm": 1.5
+      },
+      "expected": {
+        "artifactId": "relay-load-high-resistance-v1",
+        "evidenceRole": "project_authored_training_model",
+        "quantityType": "current",
+        "unit": "A",
+        "authoritativeSpecification": false,
+        "comparisonStatus": "changed",
+        "interpretation": "numeric_delta_only",
+        "observedAvailable": true
+      }
+    },
+    {
+      "key": "relay.high-resistance.load-ground",
+      "path": "/data/engineering/generated/relay-load-high-resistance.json",
+      "labId": "relay-load-lab",
+      "faultId": "FAULT_HIGH_RES_LOAD_GROUND",
+      "context": {
+        "operatingState": "command-on",
+        "sourceVoltage": 12,
+        "addedResistanceOhm": 1.5
+      },
+      "expected": {
+        "artifactId": "relay-load-high-resistance-v1",
+        "evidenceRole": "project_authored_training_model",
+        "quantityType": "current",
+        "unit": "A",
+        "authoritativeSpecification": false,
+        "comparisonStatus": "changed",
+        "interpretation": "numeric_delta_only",
+        "observedAvailable": true
+      }
+    },
+    {
+      "key": "starting.cable-drop.within-candidate",
+      "path": "/data/engineering/generated/starting-cable-drop-within-candidate.json",
+      "labId": "starting-system-lab",
+      "context": {
+        "systemVoltage": 12,
+        "testCurrentA": 500,
+        "scenarioId": "within"
+      },
+      "expected": {
+        "artifactId": "starting-cable-drop-within-candidate-v1",
+        "evidenceRole": "project_authored_training_model",
+        "quantityType": "voltage_drop",
+        "unit": "V",
+        "authoritativeSpecification": false,
+        "comparisonStatus": "changed",
+        "interpretation": "numeric_delta_only",
+        "observedAvailable": true
+      }
+    },
+    {
+      "key": "starting.cable-drop.exceeds-candidate",
+      "path": "/data/engineering/generated/starting-cable-drop-exceeds-candidate.json",
+      "labId": "starting-system-lab",
+      "context": {
+        "systemVoltage": 12,
+        "testCurrentA": 500,
+        "scenarioId": "exceeds"
+      },
+      "expected": {
+        "artifactId": "starting-cable-drop-exceeds-candidate-v1",
+        "evidenceRole": "project_authored_training_model",
+        "quantityType": "voltage_drop",
+        "unit": "V",
+        "authoritativeSpecification": false,
+        "comparisonStatus": "changed",
+        "interpretation": "numeric_delta_only",
+        "observedAvailable": true
+      }
+    },
+    {
+      "key": "starting.cable-drop.open-unavailable",
+      "path": "/data/engineering/generated/starting-cable-open-unavailable.json",
+      "labId": "starting-system-lab",
+      "context": {
+        "systemVoltage": 12,
+        "scenarioId": "open"
+      },
+      "expected": {
+        "artifactId": "starting-cable-open-unavailable-v1",
+        "evidenceRole": "project_authored_training_model",
+        "quantityType": "voltage_drop",
+        "unit": "V",
+        "authoritativeSpecification": false,
+        "comparisonStatus": "unavailable",
+        "interpretation": "not_available",
+        "observedAvailable": false
       }
     }
   ]

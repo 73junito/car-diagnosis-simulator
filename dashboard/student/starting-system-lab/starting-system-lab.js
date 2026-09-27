@@ -35,6 +35,25 @@
   const calculator = engineering.calculator;
   const measurements = engineering.measurements;
   const comparisons = engineering.comparisons;
+  const artifacts = engineering.artifacts;
+  const artifactRegistry = await artifacts.loadRegistry();
+  const startingArtifactByScenario = new Map([
+    ["within", await artifacts.resolveArtifact(
+      artifactRegistry,
+      "starting.cable-drop.within-candidate",
+      {systemVoltage:12,testCurrentA:500,scenarioId:"within"}
+    )],
+    ["exceeds", await artifacts.resolveArtifact(
+      artifactRegistry,
+      "starting.cable-drop.exceeds-candidate",
+      {systemVoltage:12,testCurrentA:500,scenarioId:"exceeds"}
+    )],
+    ["open", await artifacts.resolveArtifact(
+      artifactRegistry,
+      "starting.cable-drop.open-unavailable",
+      {systemVoltage:12,scenarioId:"open"}
+    )]
+  ]);
 
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((domain) => [domain.id, domain]));
@@ -90,6 +109,8 @@
     status:document.getElementById("startingEngineeringStatus"),
     batterySelect:document.getElementById("batteryReferenceSelect"),
     starterSelect:document.getElementById("starterFamilySelect"),
+    modelScenario:document.getElementById("startingModelScenario"),
+    modelScenarioResult:document.getElementById("startingModelScenarioResult"),
     cca:document.getElementById("engBatteryCca"),
     ca:document.getElementById("engBatteryCa"),
     rc:document.getElementById("engBatteryRc"),
@@ -116,6 +137,14 @@
     const family=engineeringUi.starterSelect.value;
     const testCurrent=specifications.selectMostSpecificSpecification(delcoCatalog,{system:"starting",systemVoltage:12,parameter:"starter_cable_test_current"});
     const dropLimit=specifications.selectMostSpecificSpecification(delcoCatalog,{system:"starting",systemVoltage:12,starterFamily:family,parameter:"starter_cable_total_voltage_drop"});
+    const referenceApplicability=dropLimit
+      ? specifications.evaluateSpecificationApplicability(dropLimit,{
+          system:"starting",
+          systemVoltage:12,
+          starterFamily:family,
+          testMethod:"carbon-pile battery-cable voltage-drop test"
+        })
+      : {applicable:false,reason:"No applicable authoritative reference is selected."};
     const p=battery?.engineeringProfile?.parameters || {};
     const resistance=(testCurrent && dropLimit)
       ? calculator.solveOhmsLaw({voltage:dropLimit.quantity.value,current:testCurrent.quantity.value})
@@ -130,60 +159,99 @@
     engineeringUi.resistance.textContent=resistance ? `${(resistance.value*1000).toFixed(3)} mΩ` : "—";
 
     const fault=faultObject();
+    const scenarioId=engineeringUi.modelScenario.value;
+    const scenarioResult=startingArtifactByScenario.get(scenarioId) || null;
+    let scenarioComparison=null;
+    engineeringUi.modelScenarioResult.className="measurement-result";
+    if(!scenarioId){
+      engineeringUi.modelScenarioResult.textContent="No modeled scenario selected";
+    } else if(scenarioResult?.status!=="ready"){
+      engineeringUi.modelScenarioResult.textContent="Selected modeled scenario is unavailable";
+    } else {
+      const artifact=scenarioResult.artifact;
+      if(scenarioId!=="open" && testCurrent?.quantity.value!==500){
+        throw new Error("Starting artifact requires the selected 500 A source-backed test current.");
+      }
+      scenarioComparison=dropLimit
+        ? artifacts.compareObservedToAuthoritativeReference(artifact,dropLimit,{
+            applicable:referenceApplicability.applicable,
+            reason:referenceApplicability.reason,
+            openCircuit:scenarioId==="open" || fault?.type==="open_circuit",
+            nominalVoltage:12
+          })
+        : null;
+      engineeringUi.modelScenarioResult.textContent=artifact.observed
+        ? `Training-model scenario: ${artifact.observed.value.toFixed(3)} V from ${artifact.artifactId}. This is not a measurement.`
+        : `Training-model scenario: numeric cable drop unavailable from ${artifact.artifactId}. This is not a measurement.`;
+    }
+
     const measuredRaw=engineeringUi.measuredDrop.value.trim();
     engineeringUi.measuredResult.className="measurement-result";
     engineeringUi.comparison.className="engineering-comparison";
-    if(!measuredRaw){
-      engineeringUi.measuredResult.textContent="No measurement entered";
-      engineeringUi.comparison.textContent=fault?.type==="open_circuit"
-        ? "Open circuit active; source-backed cable-drop comparison is not applicable."
-        : "Enter a cable-drop measurement to compare with the selected source reference.";
-      if(fault?.type==="open_circuit")engineeringUi.comparison.classList.add("not-comparable");
-    } else {
+
+    if(measuredRaw){
       const measuredValue=Number(measuredRaw);
       if(Number.isFinite(measuredValue) && measuredValue>=0){
         const measured=measurements.createMeasuredQuantity({
           quantityType:"voltage_drop",unit:"V",value:measuredValue,
-          labId:"starting-system-lab",measurementId:"starter-total-cable-drop"
+          labId:"starting-system-lab",measurementId:"starter-total-cable-drop",
+          voltageSystemId:"LV12",nominalVoltage:12
         });
         if(dropLimit){
           const comparison=comparisons.compareMeasuredToReference(measured,dropLimit,{
+            applicable:referenceApplicability.applicable,
             openCircuit:fault?.type==="open_circuit",
-            reason:"Selected source comparison is not applied to an open circuit."
+            reason:fault?.type==="open_circuit"
+              ? "Selected source comparison is not applied to an open circuit."
+              : referenceApplicability.reason
           });
           if(comparison.status==="within_reference"){
             engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V — within selected ${family} source reference`;
             engineeringUi.measuredResult.className="measurement-result within";
-            engineeringUi.comparison.textContent=`Authoritative comparison: ${measured.value.toFixed(3)} V is within the selected ${dropLimit.quantity.value.toFixed(3)} V maximum for ${family}.`;
+            engineeringUi.comparison.textContent=`Authoritative measurement comparison: ${measured.value.toFixed(3)} V is within the selected ${dropLimit.quantity.value.toFixed(3)} V maximum for ${family}.`;
             engineeringUi.comparison.classList.add("within");
           } else if(comparison.status==="exceeds_reference"){
             engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V — exceeds selected ${family} source reference`;
             engineeringUi.measuredResult.className="measurement-result exceeds";
-            engineeringUi.comparison.textContent=`Authoritative comparison: ${measured.value.toFixed(3)} V exceeds the selected ${dropLimit.quantity.value.toFixed(3)} V maximum for ${family}.`;
+            engineeringUi.comparison.textContent=`Authoritative measurement comparison: ${measured.value.toFixed(3)} V exceeds the selected ${dropLimit.quantity.value.toFixed(3)} V maximum for ${family}.`;
             engineeringUi.comparison.classList.add("exceeds");
-          } else if(comparison.status==="not_comparable"){
-            engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; selected source comparison not applied to an open circuit`;
-            engineeringUi.comparison.textContent=comparison.reason;
-            engineeringUi.comparison.classList.add("not-comparable");
           } else {
-            engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; source comparison unavailable`;
-            engineeringUi.comparison.textContent="Source comparison unavailable for the selected condition.";
-            engineeringUi.comparison.classList.add("unavailable");
+            engineeringUi.measuredResult.textContent=fault?.type==="open_circuit"
+              ? `Recorded ${measured.value.toFixed(3)} V; selected source comparison not applied to an open circuit`
+              : `Recorded ${measured.value.toFixed(3)} V; source comparison not applicable`;
+            engineeringUi.comparison.textContent=comparison.reason || "Source comparison unavailable for the selected condition.";
+            engineeringUi.comparison.classList.add("not-comparable");
           }
-        } else {
-          engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; no source reference selected`;
-          engineeringUi.comparison.textContent="No applicable authoritative reference is selected.";
-          engineeringUi.comparison.classList.add("unavailable");
         }
       } else {
         engineeringUi.measuredResult.textContent="Enter a non-negative finite voltage-drop value";
       }
+    } else {
+      engineeringUi.measuredResult.textContent="No measurement entered";
+      if(scenarioId && scenarioComparison){
+        if(scenarioComparison.status==="within_reference"){
+          engineeringUi.comparison.textContent=`Training-model scenario comparison: ${scenarioComparison.observedValue.toFixed(3)} V is within the selected ${dropLimit.quantity.value.toFixed(3)} V authoritative maximum for ${family}. Model evidence remains project-authored; the source record supplies the limit.`;
+          engineeringUi.comparison.classList.add("within");
+        } else if(scenarioComparison.status==="exceeds_reference"){
+          engineeringUi.comparison.textContent=`Training-model scenario comparison: ${scenarioComparison.observedValue.toFixed(3)} V exceeds the selected ${dropLimit.quantity.value.toFixed(3)} V authoritative maximum for ${family}. Model evidence remains project-authored; the source record supplies the limit.`;
+          engineeringUi.comparison.classList.add("exceeds");
+        } else {
+          engineeringUi.comparison.textContent=scenarioComparison.reason || "Training-model scenario is not comparable to the selected source reference.";
+          engineeringUi.comparison.classList.add("not-comparable");
+        }
+      } else {
+        engineeringUi.comparison.textContent=fault?.type==="open_circuit"
+          ? "Open circuit active; source-backed cable-drop comparison is not applicable."
+          : "Enter a cable-drop measurement or choose a validated training-model scenario.";
+        if(fault?.type==="open_circuit") engineeringUi.comparison.classList.add("not-comparable");
+      }
     }
+
     if (fault?.type==="open_circuit") {
       engineeringUi.status.textContent="Open circuit — numeric cable-drop comparison not inferred";
       engineeringUi.status.className="engineering-status fault";
     } else if (fault?.type==="high_resistance") {
-      engineeringUi.status.textContent="High-resistance path — compare measured drop to the cited procedure";
+      engineeringUi.status.textContent="High-resistance path — compare measured or modeled drop to the cited procedure";
       engineeringUi.status.className="engineering-status fault";
     } else {
       engineeringUi.status.textContent="Reference values loaded";
@@ -194,7 +262,8 @@
     const starterText=dropLimit && testCurrent
       ? `${family}: ${dropLimit.quantity.value.toFixed(3)} V max total cable loss at ${testCurrent.quantity.value} A`
       : "No starter-family specification";
-    engineeringUi.formula.textContent=`${batteryText}. ${starterText}. Calculated equivalent cable resistance = Vdrop ÷ I = ${resistance ? (resistance.value*1000).toFixed(3)+" mΩ" : "—"}. Battery ratings and starter limits are independent source records; this lab does not assert product compatibility.`;
+    const scenarioText=scenarioId ? " Selected model scenario remains project-authored and separate from the source-backed limit." : "";
+    engineeringUi.formula.textContent=`${batteryText}. ${starterText}. Calculated equivalent cable resistance = Vdrop ÷ I = ${resistance ? (resistance.value*1000).toFixed(3)+" mΩ" : "—"}. Battery ratings and starter limits are independent source records; this lab does not assert product compatibility.${scenarioText}`;
   }
 
   function el(name, attrs = {}, text = "") {
@@ -439,6 +508,7 @@
   faultSelect.addEventListener("change", () => { activeFault = faultSelect.value; updateGuide(activeFault ? 5 : guideProgress); render(); });
   engineeringUi.batterySelect.addEventListener("change", renderEngineering);
   engineeringUi.starterSelect.addEventListener("change", renderEngineering);
+  engineeringUi.modelScenario.addEventListener("change", renderEngineering);
   engineeringUi.measuredDrop.addEventListener("input", renderEngineering);
   engineeringUi.measuredDrop.addEventListener("change", renderEngineering);
   document.getElementById("showSystemFlow").addEventListener("click", () => { activeFlowMode = "system"; render(); });
@@ -450,6 +520,7 @@
     stateSelect.value = "crank";
     activeFault = "";
     faultSelect.value = "";
+    engineeringUi.modelScenario.value = "";
     selectedComponentId = "";
     activeFlowMode = "system";
     guideProgress = 0;

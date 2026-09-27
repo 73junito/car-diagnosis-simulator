@@ -76,8 +76,18 @@
             <option value="42MT">42MT</option>
           </select>
         </div>
+        <div class="control-group">
+          <label for="startingModelScenario">Validated training-model scenario</label>
+          <select id="startingModelScenario">
+            <option value="">No modeled scenario</option>
+            <option value="within">0.350 V modeled cable drop</option>
+            <option value="exceeds">0.450 V modeled cable drop</option>
+            <option value="open">Open circuit — numeric drop unavailable</option>
+          </select>
+        </div>
       </div>
 
+      <div id="startingModelScenarioResult" class="measurement-result">No modeled scenario selected</div>
       <div class="measurement-entry">
         <label for="measuredStarterDrop"><span class="measurement-role">Measured value</span>Student-entered total cable voltage drop (V)</label>
         <input id="measuredStarterDrop" type="number" min="0" step="0.001" inputmode="decimal" placeholder="Enter measured drop">
@@ -155,6 +165,7 @@
   <script src="/src/engineering/specifications.js"></script>
 <script src="/src/engineering/measurements.js"></script>
 <script src="/src/engineering/comparisons.js"></script>
+  <script src="/src/engineering/artifacts.js"></script>
   <script src="/src/engineering/index.js"></script>
   <script src="./starting-system-lab.js"></script>
 </body>

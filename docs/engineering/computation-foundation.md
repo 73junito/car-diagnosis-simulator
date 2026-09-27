@@ -210,16 +210,22 @@ The guard does not infer conversion ratios, DC/DC efficiency, traction current, 
 
 The browser runtime now has a shared artifact adapter and registry. The registry maps a lab/fault/use case to a specific committed engineering artifact and fixed model context, while the adapter validates artifact identity, evidence role, quantity type, unit, and authority flag before exposing values to a lab.
 
-The first migrated cases are deliberately narrow:
+The migrated browser cases now include:
 
 - sensor short-to-ground at the nominal 50% training input;
-- PWM actuator short-to-ground at the nominal 30% duty-cycle state.
+- PWM actuator short-to-ground at the nominal 30% duty-cycle state;
+- relay/load high-resistance faults using the committed 1.989 A healthy / 1.593 A fault artifact when the existing 12 V, command-on, +1.5 ohm browser model still reproduces those values at displayed precision;
+- starting-system 0.350 V, 0.450 V, and open/unavailable cable-drop training scenarios.
 
-At those exact registered states the labs consume the committed validated artifact values. If the learner changes the control away from the registered model context, the artifact is not applied and the existing calculator/fault-behavior path remains in control.
+For sensor and actuator, if the learner changes the control away from the registered model context, the artifact is not applied and the existing calculator/fault-behavior path remains in control.
 
-This prevents a fixed generated artifact from being silently reused outside the conditions that produced it.
+For relay/load, the browser calculation remains an independent runtime check. The artifact is used only when the current lab configuration still rounds to the committed healthy/fault current pair.
 
-The adapter also fails closed if an artifact is replaced with a different artifact ID, evidence role, quantity type/unit, or authoritative-specification flag.
+Starting-system modeled scenarios remain visibly separate from measured evidence. The model selector never populates or relabels the student measurement. A dedicated scenario-to-reference path keeps the artifact role as `project_authored_training_model` while the selected source record remains `authoritative_specification`.
+
+The starting source comparison also preserves strict applicability, including system, 12 V domain, starter family, and the source-declared carbon-pile battery-cable voltage-drop test method. The open artifact keeps `observed: null` and remains `not_comparable`.
+
+The adapter fails closed if an artifact is replaced with a different artifact ID, evidence role, quantity type/unit, authority flag, expected comparison status, interpretation, or observed-value availability.
 
 Run:
 
@@ -229,4 +235,4 @@ npm run validate:browser-engineering-artifacts
 
 ## Next boundary
 
-After the adapter is proven in these two fixed-context cases, migrate the relay/load model and then source-backed starting-system scenarios through the same registry without weakening their existing applicability and evidence boundaries.
+With the validated engineering artifacts now flowing into sensor, actuator, relay/load, and starting-system browser labs, the next architectural phase should move from fixed model artifacts toward reusable virtual measurement instruments while retaining explicit provenance, domain isolation, applicability, and unavailable-state handling.
