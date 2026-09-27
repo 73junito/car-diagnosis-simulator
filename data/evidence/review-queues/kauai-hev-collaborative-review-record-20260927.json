@@ -1,0 +1,264 @@
+{
+  "record_id": "kauai-hev-collaborative-review-record-20260927",
+  "source_id": "kauai-cc-dol-auto-green-tech-package",
+  "review_session": {
+    "date": "2026-09-27",
+    "reviewed_with": "Rafael Rodriguez",
+    "review_mode": "collaborative conceptual-and-safety-boundary review",
+    "participant_acknowledgement": "agreed to each recorded wording direction during the review session",
+    "approval_effect": "none"
+  },
+  "gate_state": {
+    "rights_cleared": false,
+    "technically_reviewed": false,
+    "safety_reviewed": false,
+    "chunk_approved": false,
+    "lesson_mapped": false,
+    "question_generation_allowed": false,
+    "creates_chunks": false,
+    "ingests_content": false
+  },
+  "scope": {
+    "purpose": "Preserve collaboratively agreed project-authored concepts and blocked boundaries without opening any evidence approval gate.",
+    "source_files_reviewed": [
+      {
+        "review_id": "kauai-amt171-hv-safety",
+        "sha256": "82e328b622879afb5aaebd0e5defc149e140a8920883eb3c80276d63c82ce2e9"
+      },      {
+        "review_id": "kauai-amt171-dc-dc",
+        "sha256": "7ed292b6b2c405b17f6652358bf0645a89c8bedb6e739f1a0ef927c4f3c4f75e"
+      },
+      {
+        "review_id": "kauai-amt171-power-inverter",
+        "sha256": "f3bcbc505282a8d9319c21c06a48e1dd8530ebf086bf47ce522d7e12da8ab3b4"
+      },
+      {
+        "review_id": "kauai-amt172-inverter-battery-cooling",
+        "sha256": "1e568a60b319e5c5e71182cb03150e1c2dbb64e7663c27c9b40a5c583a8ada1c"
+      },
+      {
+        "review_id": "kauai-amt172-12v-subsystem",
+        "sha256": "084754b45bcbd0dad77326a3f950add6699be532c841457869ee3e2ca5de16f8"
+      },
+      {
+        "review_id": "kauai-amt173-energy-management-battery",
+        "sha256": "4a6caac6cfd119bf92b548546de6e0aadf50ac231788c5336ce55b57f507102f"
+      }
+    ]
+  },
+  "agreed_project_authored_concepts": [
+    {
+      "topic": "high-voltage-glove-selection",
+      "wording": "Electrical-insulating glove selection must be based on maximum system voltage, applicable safety requirements, glove rating, inspection status, and the vehicle-specific service procedure."
+    },    {
+      "topic": "high-voltage-conductor-identification",
+      "wording": "Use cable markings, routing, connectors, system documentation, and applicable vehicle-specific service information to identify high-voltage conductors; do not rely on color alone."
+    },
+    {
+      "topic": "body-position-and-current-path-risk",
+      "wording": "Body position and minimizing possible current paths can reduce exposure risk, but these practices do not replace de-energization, isolation, verification of absence of voltage, appropriate PPE, rated test equipment, and vehicle-specific service procedures."
+    },
+    {
+      "topic": "ground-referenced-test-equipment",
+      "wording": "Test equipment can create an unintended current path when its reference or ground connection is not electrically isolated from earth ground; isolation characteristics, voltage rating, measurement category, probe configuration, and vehicle-specific procedure must be verified before connection."
+    },
+    {
+      "topic": "multimeter-selection",
+      "wording": "A digital multimeter must be selected for the expected voltage, measurement category, transient exposure, lead and probe rating, and test environment."
+    },
+    {
+      "topic": "insulation-resistance-testing",
+      "wording": "Teach the purpose and limitations of insulation-resistance testing while keeping test voltage, connection points, component isolation, and acceptance criteria vehicle- or component-specific."
+    },    {
+      "topic": "service-disconnect-identification",
+      "wording": "Use applicable vehicle-specific service information to identify a high-voltage service disconnect or isolation point, required access conditions, and the approved disable and enable procedure."
+    },
+    {
+      "topic": "electrical-insulating-glove-use",
+      "wording": "Electrical-insulating gloves must be correctly rated, inspected, maintained, stored, and used according to applicable safety requirements and manufacturer instructions."
+    },
+    {
+      "topic": "dc-dc-purpose",
+      "wording": "A DC-DC converter transfers electrical energy between DC voltage domains by changing voltage level as required by the vehicle architecture."
+    },
+    {
+      "topic": "buck-and-boost",
+      "wording": "Step-down conversion reduces a DC voltage level and step-up conversion raises it; actual vehicle modules may combine these functions or use other topologies."
+    },
+    {
+      "topic": "dc-dc-architecture-comparison",
+      "wording": "Compare how a DC-DC converter supports low-voltage systems in electrified vehicles with conventional low-voltage supply architectures without assuming the same components are replaced on every vehicle."
+    },
+    {
+      "topic": "dc-dc-switching-concepts",
+      "wording": "Explain switching devices, energy-storage elements, rectification or synchronous switching, and filtering conceptually; exact topology and switching strategy remain design-specific."
+    },    {
+      "topic": "dc-dc-safety",
+      "wording": "Identify converter hazards and use vehicle-specific service information to determine required isolation, PPE, equipment ratings, verification steps, and access restrictions."
+    },
+    {
+      "topic": "dc-dc-schematic-reading",
+      "wording": "Use the applicable wiring diagram or schematic to identify the low-voltage output circuit, including relevant power paths, grounds, protection devices, connectors, and connected loads."
+    },
+    {
+      "topic": "dc-dc-output-testing",
+      "wording": "Use vehicle-specific service information to locate approved test points and expected operating range before measuring converter low-voltage output."
+    },
+    {
+      "topic": "power-inverter-purpose",
+      "wording": "A vehicle power inverter converts electrical energy between DC and AC forms as required by the propulsion system while controlling electrical characteristics delivered to or received from an electric machine."
+    },
+    {
+      "topic": "inverter-switching-and-pwm",
+      "wording": "Power-electronic switching devices are controlled in timed patterns to regulate energy flow and produce required electrical waveforms; PWM is one common control method."
+    },
+    {
+      "topic": "motor-control",
+      "wording": "The inverter regulates electrical parameters such as voltage, current, frequency, and phase according to the propulsion system control strategy, influencing motor torque, speed, and direction."
+    },    {
+      "topic": "boost-conversion",
+      "wording": "Some electrified-vehicle power-electronics systems use boost conversion to raise DC bus voltage above source voltage; presence, topology, and control strategy are architecture-specific."
+    },
+    {
+      "topic": "regenerative-braking",
+      "wording": "During regenerative braking, the electric machine can operate as a generator and return electrical energy through the power-electronics system toward the energy-storage system under vehicle control."
+    },
+    {
+      "topic": "thermal-management",
+      "wording": "Power-electronics and battery systems require thermal management; cooling and heating methods depend on vehicle design and may use air, liquid, refrigerant-assisted, electrical heating, or combined strategies."
+    },
+    {
+      "topic": "temperature-protective-control",
+      "wording": "Temperature data can influence power output, cooling operation, charging, propulsion behavior, derating, or protective shutdown strategies, with thresholds remaining system-specific."
+    },
+    {
+      "topic": "low-voltage-support",
+      "wording": "An electrified vehicle can use a DC-DC converter to support the low-voltage bus and maintain the auxiliary battery subject to operating state and control strategy."
+    },
+    {
+      "topic": "low-voltage-diagnostics",
+      "wording": "Compare measured voltage and current behavior with vehicle-specific documented expectations while considering auxiliary-battery condition, converter command state, electrical load, and system faults."
+    },    {
+      "topic": "isolation-monitoring",
+      "wording": "High-voltage systems are designed to maintain electrical isolation from the vehicle chassis, and isolation faults must be diagnosed using vehicle-specific information, approved equipment, and documented procedures."
+    },
+    {
+      "topic": "auxiliary-battery-effects",
+      "wording": "A weak or unstable low-voltage supply can contribute to abnormal wake-up behavior, communication faults, contactor-control problems, misleading symptoms, or failure to enter the expected operating state."
+    },
+    {
+      "topic": "precharge-and-contactors",
+      "wording": "High-voltage systems may use controlled precharge to limit inrush current before main contactors fully connect the high-voltage source to the DC bus; sequence and limits are vehicle-specific."
+    },
+    {
+      "topic": "battery-monitoring",
+      "wording": "Battery-management systems monitor pack and, where applicable, module or cell-group voltages to evaluate operating condition, detect abnormal imbalance, support state estimation, and protect the energy-storage system."
+    },
+    {
+      "topic": "energy-management",
+      "wording": "Vehicle energy-management systems coordinate propulsion demand, available battery power, charging opportunities, thermal conditions, and protection limits to determine how electrical energy is stored, converted, and used."
+    },
+    {
+      "topic": "battery-diagnostic-interpretation",
+      "wording": "Combine fault codes, live data, voltage and temperature trends, operating conditions, system commands, and applicable service information; do not treat one measurement or fault code as sufficient evidence of battery failure."
+    },    {
+      "topic": "soc-soh-estimation",
+      "wording": "State of charge and state of health are calculated or estimated system quantities derived from multiple inputs and operating history rather than direct measurements from a single voltage reading."
+    },
+    {
+      "topic": "cell-imbalance",
+      "wording": "Evaluate cell or cell-group voltage differences in the context of architecture, operating state, temperature, and load instead of applying one universal allowable difference."
+    },
+    {
+      "topic": "capacity-fade",
+      "wording": "Reduced usable capacity is evidence of degradation but should be evaluated with battery-management estimates, operating conditions, diagnostic data, and manufacturer criteria before determining failure."
+    },
+    {
+      "topic": "thermal-runaway",
+      "wording": "Distinguish normal thermal-management activity, abnormal overheating, fault conditions, and confirmed thermal-runaway events using battery- and vehicle-specific information."
+    },
+    {
+      "topic": "dtc-interpretation",
+      "wording": "A battery-related diagnostic trouble code identifies a detected condition or diagnostic path, not necessarily the failed component."
+    },
+    {
+      "topic": "repair-versus-replacement",
+      "wording": "A confirmed battery-related fault does not automatically justify complete pack replacement; repair level depends on battery design, evidence, manufacturer information, safety restrictions, authorization, and applicable warranty or recycling requirements."
+    },    {
+      "topic": "battery-identification",
+      "wording": "Use labels, component identifiers, vehicle documentation, and manufacturer information to identify battery type, chemistry, configuration, and relevant service information."
+    },
+    {
+      "topic": "specification-versus-live-data",
+      "wording": "Identification and specification data describe documented design information while live diagnostic data describe current measured or calculated operating condition; do not treat catalog or label specifications as live diagnostic evidence."
+    },
+    {
+      "topic": "commanded-measured-calculated",
+      "wording": "Distinguish commanded values, measured values, and calculated or estimated values when interpreting battery-system data."
+    },
+    {
+      "topic": "trend-analysis",
+      "wording": "Evaluate battery-system data over time and under known operating conditions because trends can reveal patterns that a single snapshot may not show."
+    },
+    {
+      "topic": "data-plausibility",
+      "wording": "Cross-check unusual values against related signals, operating conditions, and expected relationships before treating them as confirmed faults."
+    },
+    {
+      "topic": "cross-system-fault-correlation",
+      "wording": "Diagnose related low-voltage, communication, thermal-management, charging, propulsion-control, and high-voltage faults together when evidence suggests a shared cause or dependency."
+    },    {
+      "topic": "evidence-preservation",
+      "wording": "Capture fault codes, freeze-frame or event data, live parameters, operating conditions, battery state information, and related system status before clearing codes, disconnecting components, or performing resets."
+    },
+    {
+      "topic": "post-repair-verification",
+      "wording": "Repeat relevant checks under applicable documented operating conditions and record before-and-after evidence to confirm that the original fault condition has been corrected."
+    },
+    {
+      "topic": "diagnostic-documentation",
+      "wording": "Record the original concern, relevant evidence, tests performed, results obtained, alternative causes considered, basis for the repair decision, and evidence used to verify the result."
+    },
+    {
+      "topic": "diagnostic-uncertainty",
+      "wording": "Classify conclusions as supported, not supported, or not yet determined when evidence is incomplete, unavailable, contradictory, or not comparable."
+    }
+  ],
+  "blocked_universalizations": [
+    "universal glove-class suitability",
+    "cable color as sole high-voltage identification",
+    "one-hand rule as a substitute for isolation and verification",
+    "generic meter category or insulation-test procedure",
+    "universal service-disconnect procedure",
+    "fixed DC-DC, inverter, battery, thermal, or precharge values",
+    "universal SOC, SOH, imbalance, capacity, isolation, or replacement thresholds",
+    "manufacturer-specific algorithms or procedures presented as universal",
+    "diagnosis or replacement based on one DTC, one measurement, one snapshot, or one catalog value"
+  ],  "supporting_reference_boundary": {
+    "attached_reference_documents_reviewed_in_session": [
+      "202312_LGES_Commercial_EV_Catalog_en.pdf",
+      "E06-009 - Lithium-ion Batteries for EVs - US.pdf",
+      "BMW-EV-Battery-Information-EN.pdf.asset.1744821108566.pdf.pdf"
+    ],
+    "status": "supporting-only-not-registered-by-this-record",
+    "rules": [
+      "Manufacturer-specific values remain manufacturer-specific.",
+      "Catalog or label specifications are not converted into universal diagnostic thresholds.",
+      "Secondary educational material does not override vehicle-specific service information.",
+      "No attached reference is ingested, chunked, rights-cleared, technically approved, or lesson-mapped by this record."
+    ]
+  },
+  "diagnostic_principles": [
+    "Request -> Measure -> Compare -> Correlate -> Verify",
+    "Preserve -> Observe -> Correlate -> Test -> Verify",
+    "Reproduce -> Repair -> Recheck -> Correlate -> Document",
+    "A single clue can justify another test; it does not automatically prove root cause.",
+    "Unsupported evidence remains unavailable, not comparable, or not yet determined rather than being inferred."
+  ],
+  "next_gate_requirements": [
+    "Named human rights reviewer and timestamp for package-scope and third-party-material decision.",
+    "Named human technical reviewer and timestamp for technical currency and applicability.",
+    "Named human safety reviewer and timestamp for safety-sensitive learner use.",
+    "Only after required gates are complete may candidate evidence chunks be created or approved."
+  ]
+}
