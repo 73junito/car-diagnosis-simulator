@@ -27,6 +27,7 @@
   const engineering=window.TorqueMindEngineering;
   const calculator=engineering.calculator;
   const measurements=engineering.measurements;
+  const comparisons=engineering.comparisons;
 
   const voltageArchitecture=window.TorqueMindVoltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById=new Map(voltageArchitecture.map((domain)=>[domain.id,domain]));
@@ -89,6 +90,7 @@
     power:document.getElementById("engDomainPower"),
     role:document.getElementById("engDomainRole"),
     boundary:document.getElementById("engDomainBoundary"),
+    comparison:document.getElementById("multiVoltageComparisonSummary"),
     formula:document.getElementById("multiVoltageEngineeringFormula")
   };
 
@@ -139,21 +141,31 @@
       ? "400 V is a declared training example, not a universal traction voltage"
       : "Declared 12 V training domain";
 
+    engineeringUi.comparison.className="engineering-comparison";
     if(domainFault?.type==="open_circuit"){
+      const comparison=comparisons.unavailable({basisRole:"declared_system_value",reason:"Selected-domain path is open; no fault current or power is inferred, so numeric healthy-vs-fault comparison is unavailable."});
+      engineeringUi.comparison.textContent=comparison.reason;
+      engineeringUi.comparison.classList.add("unavailable");
       engineeringUi.status.textContent="Selected-domain path open — entered current is not inferred from the fault";
       engineeringUi.status.className="engineering-status fault";
     } else if(domainFault?.type==="high_resistance"){
+      engineeringUi.comparison.textContent="Selected-domain path is degraded; no fault current or power is inferred, so numeric comparison is unavailable.";
+      engineeringUi.comparison.classList.add("unavailable");
       engineeringUi.status.textContent="Selected-domain path degraded — no fault current or power inferred";
       engineeringUi.status.className="engineering-status fault";
     } else if(!active){
+      engineeringUi.comparison.textContent="Selected domain is inactive in this operating state; entered current remains calculation input only and is not treated as a fault measurement.";
+      engineeringUi.comparison.classList.add("not-comparable");
       engineeringUi.status.textContent=current
         ? "Domain inactive in this state — entered current is calculation input only"
         : "Domain inactive; current not entered";
       engineeringUi.status.className="engineering-status inactive";
     } else if(!current){
+      engineeringUi.comparison.textContent="Declared-domain baseline active; no fault-derived numeric comparison is active.";
       engineeringUi.status.textContent="Current not entered";
       engineeringUi.status.className="engineering-status";
     } else {
+      engineeringUi.comparison.textContent="Declared-domain calculation uses measured current input only; no fault-derived numeric comparison is active.";
       engineeringUi.status.textContent="Calculated from declared voltage and entered current";
       engineeringUi.status.className="engineering-status";
     }

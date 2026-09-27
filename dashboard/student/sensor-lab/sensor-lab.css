@@ -13,3 +13,9 @@
 .engineering-formula{margin:14px 0 0;padding-top:12px;border-top:1px solid #d8e0ea;color:#455468;font-size:.92rem}
 @media(max-width:900px){.engineering-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.engineering-heading{display:block}.engineering-status{margin-top:10px}}
 @media(max-width:620px){#circuitSvg{width:760px;min-width:760px}.engineering-grid{grid-template-columns:1fr}}
+
+.engineering-comparison{margin:0 0 16px;padding:10px 12px;border:1px solid #cbd5e1;border-left-width:4px;border-radius:10px;background:#fff;color:#455468;font-weight:700}
+.engineering-comparison.changed{border-left-color:#8a4b08;background:#fffaf0;color:#70400a}
+.engineering-comparison.unavailable,.engineering-comparison.not-comparable{border-left-color:#64748b;background:#f8fafc;color:#475569}
+.engineering-comparison.within{border-left-color:#1b5e20;background:#f1f8f2;color:#1b5e20}
+.engineering-comparison.exceeds{border-left-color:#b42318;background:#fff1f0;color:#8f1d14}

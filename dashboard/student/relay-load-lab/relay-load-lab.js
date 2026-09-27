@@ -30,6 +30,7 @@
   const engineering = window.TorqueMindEngineering;
   const calculator = engineering.calculator;
   const measurements = engineering.measurements;
+  const comparisons = engineering.comparisons;
   const profileValidator = engineering.profiles.validateEngineeringProfile;
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((d) => [d.id, d]));
@@ -99,6 +100,7 @@
     conductorLoss: document.getElementById("engConductorLoss"),
     measuredCurrent: document.getElementById("measuredRelayCurrent"),
     measuredResult: document.getElementById("relayMeasurementResult"),
+    comparison: document.getElementById("relayComparisonSummary"),
     formula: document.getElementById("engineeringFormula")
   };
 
@@ -123,22 +125,22 @@
     return `${Number(value.toFixed(digits))} ${unit}`;
   }
 
-  function engineeringFaultResistance() {
-    const entry = engineeringProfile.faultEngineering.find((item) => item.faultId === activeFault);
+  function engineeringFaultResistance(faultId = activeFault) {
+    const entry = engineeringProfile.faultEngineering.find((item) => item.faultId === faultId);
     return entry ? entry.addedResistance.value : 0;
   }
 
-  function loadCircuitIsClosed() {
+  function loadCircuitIsClosed(faultId = activeFault) {
     if (operatingState !== "command-on") return false;
-    const fault = faultObj();
+    const fault = faultId ? engine.getFault(circuit, faultId) : null;
     if (!fault) return true;
     return fault.type !== "open_circuit";
   }
 
-  function calculateEngineeringState() {
-    const addedFaultResistance = engineeringFaultResistance();
+  function calculateEngineeringState(faultId = activeFault) {
+    const addedFaultResistance = engineeringFaultResistance(faultId);
     const pathResistance = basePathResistance + addedFaultResistance;
-    const closed = loadCircuitIsClosed();
+    const closed = loadCircuitIsClosed(faultId);
 
     if (!closed) {
       return {
@@ -186,6 +188,25 @@
 
   function renderEngineering() {
     const values = calculateEngineeringState();
+    const healthyValues = calculateEngineeringState("");
+    const comparison = !activeFault
+      ? comparisons.baselineOnly({basisRole:"generic_training_example"})
+      : values.active && healthyValues.active
+        ? comparisons.compareQuantities(healthyValues.current, values.current, {basisRole:"generic_training_example"})
+        : comparisons.unavailable({basisRole:"generic_training_example",reason:"Faulted load current is unavailable or intentionally not inferred."});
+
+    engineeringUi.comparison.className = "engineering-comparison";
+    if (comparison.status === "changed") {
+      engineeringUi.comparison.textContent = `Training-model comparison: healthy ${healthyValues.current.value.toFixed(3)} A → fault ${values.current.value.toFixed(3)} A (Δ ${comparison.delta>=0?"+":""}${comparison.delta.toFixed(3)} A). Numeric delta only; not a vehicle specification.`;
+      engineeringUi.comparison.classList.add("changed");
+    } else if (comparison.status === "unavailable") {
+      engineeringUi.comparison.textContent = comparison.reason;
+      engineeringUi.comparison.classList.add("unavailable");
+    } else if (comparison.status === "unchanged") {
+      engineeringUi.comparison.textContent = "Training-model comparison: no numeric change from the healthy baseline.";
+    } else {
+      engineeringUi.comparison.textContent = "Healthy training baseline selected; no fault comparison active.";
+    }
     const measuredRaw = engineeringUi.measuredCurrent.value.trim();
     if (!measuredRaw) {
       engineeringUi.measuredResult.textContent = "No measurement entered";

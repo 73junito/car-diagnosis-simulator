@@ -18,7 +18,7 @@
  const stateSelect=document.getElementById("stateSelect"), faultSelect=document.getElementById("faultSelect");
  const stateBadge=document.getElementById("stateBadge"), flowNote=document.getElementById("flowNote"), voltageProfile=document.getElementById("voltageProfile");
  const symbolRenderer=window.TorqueMindSymbolRenderer, voltageDomains=window.TorqueMindVoltageDomains;
- const engineering=window.TorqueMindEngineering, calculator=engineering.calculator, measurements=engineering.measurements;
+ const engineering=window.TorqueMindEngineering, calculator=engineering.calculator, measurements=engineering.measurements, comparisons=engineering.comparisons;
  const actuatorProfile=engineeringProfile.actuatorProfile.engineeringProfile;
  const engineeringErrors=engineering.profiles.validateEngineeringProfile(actuatorProfile);
  if(engineeringErrors.length) throw new Error(engineeringErrors.join("; "));
@@ -54,6 +54,7 @@
   ground:document.getElementById("engGroundAvailability"),
   measuredAverage:document.getElementById("measuredActuatorAverage"),
   measuredResult:document.getElementById("actuatorMeasurementResult"),
+  comparison:document.getElementById("actuatorComparisonSummary"),
   formula:document.getElementById("actuatorEngineeringFormula")
  };
  const supplyVoltage=circuit.voltageSystems.find(system=>system.id==="LV12").nominalVoltage;
@@ -91,6 +92,24 @@
  }
  function renderEngineering(){
   const result=engineeringState();
+  engineeringUi.comparison.className="engineering-comparison";
+  if(!activeFault){
+   engineeringUi.comparison.textContent="Healthy training baseline selected; no fault comparison active.";
+  } else if(result.observed===null){
+   const comparison=comparisons.unavailable({basisRole:"generic_training_example",reason:"Faulted actuator-side command is unavailable or intentionally not inferred."});
+   engineeringUi.comparison.textContent=comparison.reason;
+   engineeringUi.comparison.classList.add("unavailable");
+  } else {
+   const observedQuantity={
+    quantityType:"voltage",unit:"V",valueRole:"calculated_value",value:result.observed,
+    calculation:{formula:"training_fault_behavior",inputs:[activeFault]}
+   };
+   const comparison=comparisons.compareQuantities(result.ideal,observedQuantity,{basisRole:"generic_training_example"});
+   engineeringUi.comparison.textContent=comparison.status==="changed"
+    ? `Training-model comparison: healthy ${result.ideal.value.toFixed(3)} V avg → fault ${result.observed.toFixed(3)} V avg (Δ ${comparison.delta>=0?"+":""}${comparison.delta.toFixed(3)} V). Numeric delta only.`
+    : "Training-model comparison: fault behavior does not change the modeled PWM average.";
+   if(comparison.status==="changed")engineeringUi.comparison.classList.add("changed");
+  }
   const measuredRaw=engineeringUi.measuredAverage.value.trim();
   if(!measuredRaw){
    engineeringUi.measuredResult.textContent="No measurement entered";
