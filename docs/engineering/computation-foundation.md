@@ -183,6 +183,29 @@ This produces the intended charging behavior:
 
 Catalog discovery remains intentionally broad. Strict applicability is enforced only when a source record is actually used for interpretation.
 
+## Multi-voltage domain isolation
+
+The comparison layer now supports explicit electrical-domain identity.
+
+When engineering quantities declare `electricalDomain.voltageSystemId`, healthy-vs-observed comparison requires matching voltage-system IDs. A low-voltage quantity from `LV12` cannot be numerically compared with a traction-domain quantity from `TR400` merely because both use volts.
+
+Measured quantities may also carry:
+
+- `measurement.context.voltageSystemId`;
+- `measurement.context.nominalVoltage`.
+
+When an authoritative reference declares `applicability.systemVoltage`, a measurement with a different declared nominal voltage is `not_comparable`.
+
+This preserves:
+
+- LV12 ↔ LV12 comparison;
+- rejection of LV12 ↔ TR400 comparison;
+- rejection of a 400 V-domain measurement against a 12 V charging reference;
+- same-domain reference comparison behavior;
+- existing legacy quantities that do not yet declare domain metadata.
+
+The guard does not infer conversion ratios, DC/DC efficiency, traction current, motor output, or cross-domain equivalence.
+
 ## Next boundary
 
-After charging applicability is protected, the next engineering phase should validate multi-voltage domain isolation so low-voltage and higher-voltage model outputs cannot be compared across incompatible electrical domains.
+With relay/load, sensor, PWM, starting, charging applicability, and multi-voltage isolation protected, the next architectural step should be a shared browser artifact adapter so validated engineering artifacts can feed labs without duplicating hard-coded model values.
