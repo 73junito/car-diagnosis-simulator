@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "relay-load-high-resistance-v1",
+  "modelId": "relay-high-resistance-training-model",
+  "evidenceRole": "project_authored_training_model",
+  "generator": {
+    "tool": "python-numpy-scipy-pandas-matplotlib",
+    "version": "1.0.0"
+  },
+  "domain": {
+    "system": "low-voltage-relay-load",
+    "voltageClass": "12V-training-example",
+    "applicability": "generic project-authored training model only"
+  },
+  "quantity": {
+    "quantityType": "current",
+    "unit": "A"
+  },
+  "baseline": {
+    "value": 1.989,
+    "label": "healthy model"
+  },
+  "observed": {
+    "value": 1.593,
+    "label": "high-resistance model"
+  },
+  "comparison": {
+    "status": "changed",
+    "delta": -0.396,
+    "interpretation": "numeric_delta_only",
+    "authoritativeSpecification": false,
+    "reason": "Project-authored training-model delta; not a vehicle specification."
+  },
+  "provenance": {
+    "method": "Ohm's law with deterministic project-authored resistance values",
+    "sourceType": "project_model",
+    "reproducible": true
+  }
+}
