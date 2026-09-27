@@ -120,3 +120,32 @@ Fault behavior is intentionally conservative:
 - high resistance in the sensor ground/reference: a numeric signal is not invented because the result depends on sensor and circuit design.
 
 The student can change the normalized training input with a 0–100 percent slider and see the calculated transfer update immediately. The generic transfer relationship remains visibly distinct from the controller-observed signal under faults.
+
+## PWM actuator engineering integration
+
+The 12 V PWM actuator lab is the third consumer of the engineering-parameter foundation and the first commanded-output engineering integration.
+
+Its lab-specific profile lives at `data/engineering/labs/actuator-training.json`. The reusable circuit topology continues to declare the 12 V nominal architecture, while the profile supplies only generic training-example duty-cycle values.
+
+The reusable engineering calculator now provides:
+
+`Vavg = Vhigh × (duty% / 100)`
+
+This is a mathematical PWM average representation only. It does not define actuator position, speed, force, flow, current, frequency, or what every meter or oscilloscope will report.
+
+Training state presets are:
+
+- low-duty example: 30 percent
+- high-duty example: 70 percent
+
+The student may also move the duty-cycle input through 0–100 percent.
+
+Fault behavior remains conservative:
+
+- PWM open: ideal controller command remains calculable, actuator-side command is unavailable;
+- PWM short to ground: actuator-side command is idealized to ground;
+- PWM short to power: actuator-side command is idealized to the declared 12 V supply;
+- actuator power or ground open: command math remains visible, but actuator response is not inferred;
+- high-resistance actuator power or ground: path is marked degraded, but voltage drop and actuator response are not invented without a component/load model.
+
+The UI separates commanded duty cycle, ideal mathematical average, actuator-side observed command representation, actuator power availability, and actuator ground availability.

@@ -150,6 +150,21 @@ function calculateLinearTransfer({ inputPercent, outputMin, outputMax, quantityT
   );
 }
 
+function calculatePwmAverage({ highVoltage, dutyCyclePercent }) {
+  requireFinite("highVoltage", highVoltage);
+  requireFinite("dutyCyclePercent", dutyCyclePercent);
+  if (dutyCyclePercent < 0 || dutyCyclePercent > 100) {
+    throw new Error("dutyCyclePercent must be between 0 and 100");
+  }
+  return calculatedQuantity(
+    "voltage",
+    "V",
+    highVoltage * (dutyCyclePercent / 100),
+    "Vavg = Vhigh × (duty% / 100)",
+    ["highVoltage", "dutyCyclePercent"]
+  );
+}
+
 const api = {
   calculatedQuantity,
   solveOhmsLaw,
@@ -158,7 +173,8 @@ const api = {
   calculateVoltageDrop,
   calculatePowerLoss,
   calculateLoadVoltage,
-  calculateLinearTransfer
+  calculateLinearTransfer,
+  calculatePwmAverage
 };
 
 if (typeof module !== "undefined" && module.exports) module.exports = api;

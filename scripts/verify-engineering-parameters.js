@@ -48,10 +48,8 @@ if (fs.existsSync(labsDir)) {
     if (!lab.profileId) errors.push(`${file}: profileId is required`);
     if (!lab.circuitTemplateId) errors.push(`${file}: circuitTemplateId is required`);
 
-    const namedProfiles = [
-      ["loadProfile", lab.loadProfile],
-      ["sensorProfile", lab.sensorProfile]
-    ].filter(([, entry]) => entry?.engineeringProfile);
+    const namedProfiles = Object.entries(lab)
+      .filter(([name, entry]) => name.endsWith("Profile") && entry?.engineeringProfile);
 
     if (namedProfiles.length === 0 && !(lab.conductorProfiles || []).length) {
       errors.push(`${file}: at least one engineering profile is required`);
@@ -67,6 +65,17 @@ if (fs.existsSync(labsDir)) {
         `${file}.conductorProfiles[${index}]`,
         entry.engineeringProfile
       );
+    }
+
+    for (const [index, entry] of (lab.stateEngineering || []).entries()) {
+      if (!entry.stateId) errors.push(`${file}.stateEngineering[${index}] requires stateId`);
+      for (const [name, quantity] of Object.entries(entry).filter(([name]) => name !== "stateId")) {
+        const quantityErrors = validateEngineeringQuantity(quantity);
+        errors.push(...quantityErrors.map((error) => `${file}.stateEngineering[${index}].${name}: ${error}`));
+        if (quantity?.valueRole !== "generic_training_example") {
+          errors.push(`${file}.stateEngineering[${index}].${name} must remain generic_training_example`);
+        }
+      }
     }
 
     for (const [index, entry] of (lab.faultEngineering || []).entries()) {
