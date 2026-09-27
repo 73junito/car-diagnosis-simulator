@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "starting-cable-drop-within-candidate-v1",
+  "modelId": "starting-cable-drop-0p35-training-model",
+  "evidenceRole": "project_authored_training_model",
+  "generator": {
+    "tool": "python-numpy-pandas-matplotlib",
+    "version": "1.0.0"
+  },
+  "domain": {
+    "system": "starting-cable-voltage-drop",
+    "voltageClass": "12V-source-applicable-training-example",
+    "applicability": "project-authored cable-resistance model evaluated at the selected 500 A source-backed test current"
+  },
+  "quantity": {
+    "quantityType": "voltage_drop",
+    "unit": "V"
+  },
+  "baseline": {
+    "value": 0,
+    "label": "ideal zero-drop conductor model"
+  },
+  "observed": {
+    "value": 0.35,
+    "label": "modeled total cable drop"
+  },
+  "comparison": {
+    "status": "changed",
+    "delta": 0.35,
+    "interpretation": "numeric_delta_only",
+    "authoritativeSpecification": false,
+    "reason": "Project-authored cable-resistance model output; authoritative interpretation must be performed separately against an applicable source record."
+  },
+  "provenance": {
+    "method": "Ohm's law V=IR using 500 A and project-authored cable resistance 0.0007000 ohm",
+    "sourceType": "project_model",
+    "reproducible": true,
+    "sourceId": "delco-remy-diagnostic-procedures-manual"
+  }
+}
