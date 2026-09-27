@@ -9,6 +9,7 @@ on:
       - "data/engineering/**"
       - "scripts/verify-engineering-artifacts.js"
       - "tests/ngspice-relay-model.test.js"
+      - "tests/sensor-model-artifacts.test.js"
       - "package.json"
       - ".github/workflows/ngspice-validation.yml"
   push:
@@ -19,6 +20,7 @@ on:
       - "data/engineering/**"
       - "scripts/verify-engineering-artifacts.js"
       - "tests/ngspice-relay-model.test.js"
+      - "tests/sensor-model-artifacts.test.js"
       - "package.json"
       - ".github/workflows/ngspice-validation.yml"
 
@@ -46,5 +48,8 @@ jobs:
       - name: Run ngspice relay/load cross-validation
         run: npm run validate:ngspice-relay
 
-      - name: Run ngspice adapter unit tests
-        run: npx jest tests/ngspice-relay-model.test.js --runInBand
+      - name: Run ngspice sensor cross-validation
+        run: npm run validate:sensor-model
+
+      - name: Run ngspice and sensor artifact unit tests
+        run: npx jest tests/ngspice-relay-model.test.js tests/sensor-model-artifacts.test.js --runInBand
