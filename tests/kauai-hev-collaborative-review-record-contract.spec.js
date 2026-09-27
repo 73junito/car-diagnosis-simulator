@@ -75,7 +75,7 @@ describe('Kauai HEV collaborative review record contract', () => {
         reviewer_id: 'rafael-rodriguez',
         decision: 'pending-third-party-and-licensor-authority-verification',
         user_selection: 'Option 2',
-        status: 'pending-third-party',
+        status: 'framework-reference-only',
         rights_cleared: false,
         release_effect: 'none'
       })
@@ -88,6 +88,26 @@ describe('Kauai HEV collaborative review record contract', () => {
     );
     expect(record.gate_state.rights_cleared).toBe(false);
     expect(record.gate_state.chunk_approved).toBe(false);
+    expect(record.gate_state.question_generation_allowed).toBe(false);
+  });
+  test('enforces framework-reference-only use with original expression', () => {
+    expect(record.rights_review_decision.framework_policy).toEqual(
+      expect.objectContaining({
+        classification: 'framework-reference-only / original-expression-required',
+        direct_content_reuse: 'blocked-unless-separately-cleared'
+      })
+    );
+    expect(record.rights_review_decision.framework_policy.permitted_use).toEqual(
+      expect.arrayContaining([
+        'study course organization, module sequence, topic categories, learning progression, and general instructional framework',
+        'use those structural ideas as inspiration for independently authored AutoLearnPro curriculum'
+      ])
+    );
+    expect(record.rights_review_decision.framework_policy.prohibited_without_separate_clearance).toContain(
+      'ingesting or chunking Kauai source text as reusable instructional content'
+    );
+    expect(record.gate_state.rights_cleared).toBe(false);
+    expect(record.gate_state.ingests_content).toBe(false);
     expect(record.gate_state.question_generation_allowed).toBe(false);
   });
 });
