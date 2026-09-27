@@ -201,6 +201,7 @@ const requiredOutputFiles = [
   "src/engineering/calculator.js",
   "src/engineering/specifications.js",
   "src/engineering/measurements.js",
+  "src/engineering/comparisons.js",
   "src/engineering/index.js",
   "data/engineering/training-examples.json",
   "data/engineering/authoritative-specifications/delco-remy-starting-charging.json",

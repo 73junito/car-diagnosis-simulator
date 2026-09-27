@@ -13,6 +13,7 @@ test.describe("engineering parameter foundation", () => {
     await page.addScriptTag({ url: "/src/engineering/calculator.js" });
     await page.addScriptTag({ url: "/src/engineering/specifications.js" });
     await page.addScriptTag({ url: "/src/engineering/measurements.js" });
+    await page.addScriptTag({ url: "/src/engineering/comparisons.js" });
     await page.addScriptTag({ url: "/src/engineering/index.js" });
 
     const result = await page.evaluate(async () => {
@@ -32,6 +33,11 @@ test.describe("engineering parameter foundation", () => {
         quantityType:"voltage",unit:"V",value:12.2,
         labId:"foundation-test",measurementId:"sample-voltage"
       });
+      const comparison = window.TorqueMindEngineering.comparisons.compareQuantities(
+        current,
+        window.TorqueMindEngineering.calculator.solveOhmsLaw({voltage:12,resistance:7.5}),
+        {basisRole:"generic_training_example"}
+      );
       const selected50Mt = window.TorqueMindEngineering.specifications.selectMostSpecificSpecification(authoritative,{
         system:"starting",
         systemVoltage:12,
@@ -49,6 +55,7 @@ test.describe("engineering parameter foundation", () => {
         authoritativeRole: authoritative.catalogRole,
         authoritativeCount: authoritative.specifications.length,
         measured,
+        comparison,
         selected50Mt
       };
     });
@@ -64,6 +71,8 @@ test.describe("engineering parameter foundation", () => {
     expect(result.authoritativeCount).toBe(14);
     expect(result.measured.valueRole).toBe("measured_value");
     expect(result.measured.measurement.entryMethod).toBe("student_entry");
+    expect(result.comparison.status).toBe("changed");
+    expect(result.comparison.interpretation).toBe("numeric_delta_only");
     expect(result.selected50Mt.id).toBe("delco-starter-total-drop-12v-50mt");
     expect(result.selected50Mt.quantity.value).toBe(0.4);
     expect(errors).toEqual([]);

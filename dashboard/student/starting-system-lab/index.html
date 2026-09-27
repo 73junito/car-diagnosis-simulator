@@ -83,6 +83,7 @@
         <input id="measuredStarterDrop" type="number" min="0" step="0.001" inputmode="decimal" placeholder="Enter measured drop">
         <div id="startingMeasurementResult" class="measurement-result">No measurement entered</div>
       </div>
+      <div id="startingComparisonSummary" class="engineering-comparison">Enter a cable-drop measurement to compare with the selected source reference.</div>
       <div class="engineering-grid">
         <article class="engineering-card"><span class="value-role declared">Declared system value</span><strong>12 V</strong><small>Generic lab architecture</small></article>
         <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engBatteryCca">—</strong><small id="engBatteryCcaLabel">Battery CCA</small></article>
@@ -153,6 +154,7 @@
   <script src="/src/engineering/calculator.js"></script>
   <script src="/src/engineering/specifications.js"></script>
 <script src="/src/engineering/measurements.js"></script>
+<script src="/src/engineering/comparisons.js"></script>
   <script src="/src/engineering/index.js"></script>
   <script src="./starting-system-lab.js"></script>
 </body>

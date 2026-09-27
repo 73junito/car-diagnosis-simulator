@@ -30,6 +30,7 @@
   const engineering = window.TorqueMindEngineering;
   const calculator = engineering.calculator;
   const measurements = engineering.measurements;
+  const comparisons = engineering.comparisons;
   const profileValidator = engineering.profiles.validateEngineeringProfile;
 
   const sensorProfile = engineeringProfile.sensorProfile.engineeringProfile;
@@ -93,6 +94,7 @@
     observedLabel: document.getElementById("engObservedSignalLabel"),
     measuredSignal: document.getElementById("measuredSensorSignal"),
     measuredResult: document.getElementById("sensorMeasurementResult"),
+    comparison: document.getElementById("sensorComparisonSummary"),
     formula: document.getElementById("sensorEngineeringFormula")
   };
 
@@ -186,6 +188,24 @@
 
   function renderEngineering() {
     const result = calculateSignalState();
+    engineeringUi.comparison.className = "engineering-comparison";
+    if (!activeFault) {
+      engineeringUi.comparison.textContent = "Healthy training baseline selected; no fault comparison active.";
+    } else if (!result.transfer || result.observed === null) {
+      const comparison = comparisons.unavailable({basisRole:"generic_training_example",reason:"Faulted controller signal is unavailable or intentionally not inferred."});
+      engineeringUi.comparison.textContent = comparison.reason;
+      engineeringUi.comparison.classList.add("unavailable");
+    } else {
+      const observedQuantity = {
+        quantityType:"voltage",unit:"V",valueRole:"calculated_value",value:result.observed,
+        calculation:{formula:"training_fault_behavior",inputs:[activeFault]}
+      };
+      const comparison = comparisons.compareQuantities(result.transfer, observedQuantity, {basisRole:"generic_training_example"});
+      engineeringUi.comparison.textContent = comparison.status === "changed"
+        ? `Training-model comparison: healthy ${result.transfer.value.toFixed(3)} V → fault ${result.observed.toFixed(3)} V (Δ ${comparison.delta>=0?"+":""}${comparison.delta.toFixed(3)} V). Numeric delta only.`
+        : "Training-model comparison: fault behavior does not change the modeled signal value.";
+      if (comparison.status === "changed") engineeringUi.comparison.classList.add("changed");
+    }
     const measuredRaw = engineeringUi.measuredSignal.value.trim();
     if (!measuredRaw) {
       engineeringUi.measuredResult.textContent = "No measurement entered";

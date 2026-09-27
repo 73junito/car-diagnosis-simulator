@@ -271,3 +271,31 @@ Current lab integration:
 - Multi-voltage: entered domain current becomes a measured-value input to P = V x I.
 
 The network lab is intentionally unchanged because no numeric network measurement model has yet been defined; this phase does not invent one.
+
+
+## Healthy-vs-fault comparison engine
+
+The engineering foundation now exposes a reusable comparison layer in `src/engineering/comparisons.js`.
+
+The comparison engine preserves evidence roles rather than collapsing all values into a single diagnostic score. Supported outcomes include:
+
+- `baseline`: no fault comparison is active;
+- `changed`: a comparable modeled value differs from its baseline;
+- `unchanged`: a comparable modeled value is numerically unchanged;
+- `unavailable`: the fault value is intentionally not inferred;
+- `not_comparable`: the selected reference or domain does not apply;
+- `within_reference` / `exceeds_reference` and related statuses only when an authoritative reference defines compatible comparison semantics;
+- `reference_only`: a design-basis reference remains informational rather than pass/fail.
+
+Project-authored training models use numeric delta only. A changed training-model value is not a vehicle specification and is not automatically a diagnosis.
+
+Current integrations:
+
+- Relay/load: compares healthy calculated current with the project-authored high-resistance fault model. Open paths remain unavailable rather than becoming a fabricated numeric fault current.
+- Sensor: compares the healthy training transfer with explicitly modeled signal-short behavior. Open or unsupported degraded-ground behavior remains unavailable.
+- PWM actuator: compares the ideal training PWM average with explicitly modeled short-to-ground/power behavior. Open command paths remain unavailable.
+- Starting system: measured total cable drop is classified against the selected source-specific Delco Remy maximum only when applicability matches; open-circuit comparison remains disabled.
+- Charging system: source-backed charging references remain baseline/reference values. Open paths remain unavailable and the alternator-ground fault remains not comparable to a charging-cable reference.
+- Multi-voltage: domain faults remain domain-aware. Open/high-resistance faults do not create inferred current or power; cross-domain faults do not create false comparisons.
+
+The engine does not assign overall health scores, infer vehicle fitness, or convert generic training deltas into manufacturer diagnostic limits.

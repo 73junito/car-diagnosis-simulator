@@ -34,6 +34,7 @@
   const specifications = engineering.specifications;
   const calculator = engineering.calculator;
   const measurements = engineering.measurements;
+  const comparisons = engineering.comparisons;
 
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((domain) => [domain.id, domain]));
@@ -98,6 +99,7 @@
     resistance:document.getElementById("engCableResistanceLimit"),
     measuredDrop:document.getElementById("measuredStarterDrop"),
     measuredResult:document.getElementById("startingMeasurementResult"),
+    comparison:document.getElementById("startingComparisonSummary"),
     formula:document.getElementById("startingEngineeringFormula")
   };
 
@@ -130,8 +132,13 @@
     const fault=faultObject();
     const measuredRaw=engineeringUi.measuredDrop.value.trim();
     engineeringUi.measuredResult.className="measurement-result";
+    engineeringUi.comparison.className="engineering-comparison";
     if(!measuredRaw){
       engineeringUi.measuredResult.textContent="No measurement entered";
+      engineeringUi.comparison.textContent=fault?.type==="open_circuit"
+        ? "Open circuit active; source-backed cable-drop comparison is not applicable."
+        : "Enter a cable-drop measurement to compare with the selected source reference.";
+      if(fault?.type==="open_circuit")engineeringUi.comparison.classList.add("not-comparable");
     } else {
       const measuredValue=Number(measuredRaw);
       if(Number.isFinite(measuredValue) && measuredValue>=0){
@@ -139,21 +146,34 @@
           quantityType:"voltage_drop",unit:"V",value:measuredValue,
           labId:"starting-system-lab",measurementId:"starter-total-cable-drop"
         });
-        if(fault?.type==="open_circuit"){
-          engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; selected source comparison not applied to an open circuit`;
-        } else if(dropLimit){
-          const comparison=measurements.compareMeasurementToReference(measured,dropLimit);
+        if(dropLimit){
+          const comparison=comparisons.compareMeasuredToReference(measured,dropLimit,{
+            openCircuit:fault?.type==="open_circuit",
+            reason:"Selected source comparison is not applied to an open circuit."
+          });
           if(comparison.status==="within_reference"){
             engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V — within selected ${family} source reference`;
             engineeringUi.measuredResult.className="measurement-result within";
+            engineeringUi.comparison.textContent=`Authoritative comparison: ${measured.value.toFixed(3)} V is within the selected ${dropLimit.quantity.value.toFixed(3)} V maximum for ${family}.`;
+            engineeringUi.comparison.classList.add("within");
           } else if(comparison.status==="exceeds_reference"){
             engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V — exceeds selected ${family} source reference`;
             engineeringUi.measuredResult.className="measurement-result exceeds";
+            engineeringUi.comparison.textContent=`Authoritative comparison: ${measured.value.toFixed(3)} V exceeds the selected ${dropLimit.quantity.value.toFixed(3)} V maximum for ${family}.`;
+            engineeringUi.comparison.classList.add("exceeds");
+          } else if(comparison.status==="not_comparable"){
+            engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; selected source comparison not applied to an open circuit`;
+            engineeringUi.comparison.textContent=comparison.reason;
+            engineeringUi.comparison.classList.add("not-comparable");
           } else {
             engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; source comparison unavailable`;
+            engineeringUi.comparison.textContent="Source comparison unavailable for the selected condition.";
+            engineeringUi.comparison.classList.add("unavailable");
           }
         } else {
           engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; no source reference selected`;
+          engineeringUi.comparison.textContent="No applicable authoritative reference is selected.";
+          engineeringUi.comparison.classList.add("unavailable");
         }
       } else {
         engineeringUi.measuredResult.textContent="Enter a non-negative finite voltage-drop value";

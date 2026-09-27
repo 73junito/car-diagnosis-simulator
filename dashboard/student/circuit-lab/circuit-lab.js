@@ -21,6 +21,7 @@
   const engineering = window.TorqueMindEngineering;
   const calculator = engineering.calculator;
   const measurements = engineering.measurements;
+  const comparisons = engineering.comparisons;
 
   const svg = document.getElementById("circuitSvg");
   const inspector = document.getElementById("inspectorContent");
@@ -80,6 +81,7 @@
     dropLabel: document.getElementById("engChargingDropLabel"),
     current: document.getElementById("engChargingCurrent"),
     resistance: document.getElementById("engChargingResistance"),
+    comparison: document.getElementById("chargingComparisonSummary"),
     formula: document.getElementById("chargingEngineeringFormula")
   };
 
@@ -120,16 +122,26 @@
     engineeringUi.current.textContent = current ? `${Number(current.value.toFixed(2))} A` : "—";
     engineeringUi.resistance.textContent = resistance ? `${(resistance.value * 1000).toFixed(3)} mΩ` : "—";
 
+    engineeringUi.comparison.className = "engineering-comparison";
     if (!reference) {
+      engineeringUi.comparison.textContent = "No charging reference is selected.";
+      engineeringUi.comparison.classList.add("unavailable");
       engineeringUi.status.textContent = "No charging reference selected";
       engineeringUi.status.className = "engineering-status inactive";
     } else if (fault?.type === "open_circuit") {
+      const comparison = comparisons.unavailable({basisRole:"authoritative_specification",reason:"Open path active; no fault voltage-drop value is inferred, so healthy-vs-fault numeric comparison is unavailable."});
+      engineeringUi.comparison.textContent = comparison.reason;
+      engineeringUi.comparison.classList.add("unavailable");
       engineeringUi.status.textContent = "Open path — no fault voltage drop inferred";
       engineeringUi.status.className = "engineering-status fault";
     } else if (fault?.id === "FAULT_HIGH_RES_GROUND") {
+      engineeringUi.comparison.textContent = "Not comparable: the selected charging-cable reference does not establish a numeric limit for the injected alternator-ground path.";
+      engineeringUi.comparison.classList.add("not-comparable");
       engineeringUi.status.textContent = "Ground path degraded — selected cable reference may not apply";
       engineeringUi.status.className = "engineering-status fault";
     } else {
+      const comparison = comparisons.baselineOnly({basisRole:"authoritative_specification",reason:"Source-backed charging reference loaded; no modeled fault measurement is active."});
+      engineeringUi.comparison.textContent = comparison.reason;
       engineeringUi.status.textContent = "Reference loaded";
       engineeringUi.status.className = "engineering-status";
     }
