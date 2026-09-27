@@ -239,12 +239,12 @@
             "ug-electrical-lo-3"
           ],
           "teachingPoints": [
-            "The learner receives a charging-system concern with operating-context notes but no preselected failed component.",
-            "The learner identifies what is known, what is only suspected, and what measurement or source information is still required.",
-            "The learner chooses a next check that can reduce uncertainty and states which result would support or weaken the working hypothesis.",
-            "The learner stops short of a final component diagnosis until the evidence supports it."
+            "The learner receives a charging-system concern and a lesson-safe evidence packet with no preselected failed component or keyed interpretation.",
+            "The learner separates known observations from unknown information and identifies which evidence is still required.",
+            "The learner forms at least two plausible hypotheses and chooses a next check that can reduce uncertainty between them.",
+            "The learner states what result would support or weaken each working hypothesis and stops short of a final component diagnosis until the evidence supports it."
           ],
-          "learnerAction": "Use either the charging-system or electrical-load mapped scenario. Write a diagnostic plan containing concern, known evidence, two plausible hypotheses, next discriminating check, required source/applicability information, and verification step.",
+          "learnerAction": "Choose either the charging-system or electrical-load evidence packet. Write a diagnostic plan containing the concern, known evidence, important unknowns, two plausible hypotheses, the next discriminating check, required source/applicability information, predicted evidence outcomes, and a verification step.",
           "evidenceReferences": [
             {
               "type": "scenario-mapping",
@@ -257,7 +257,87 @@
               "objectiveId": "ug-electrical-lo-3"
             }
           ],
-          "sourceBoundary": "Project-authored measurements may be used for practice, but pass/fail interpretation requires a matching authoritative reference."
+          "sourceBoundary": "Scenario measurements are project-authored training evidence, not vehicle specifications. No pass/fail meaning or failed component is supplied. Apply an authoritative reference only when its voltage domain, test points, operating/load condition, wiring context, and procedure match.",
+          "independentCases": [
+            {
+              "scenarioId": "charging-system",
+              "title": "Charging warning during operation",
+              "evidenceRole": "project-authored-training-evidence",
+              "concern": "A charging warning indicator appears during operation and the battery state of charge decreases over repeated use.",
+              "operatingContext": [
+                "Generic 12 V project-authored training circuit",
+                "Alternator represented as operating",
+                "Accessory electrical load applied",
+                "Vehicle-specific diagnostic procedure and limits intentionally not supplied"
+              ],
+              "observations": [
+                {
+                  "testPoint": "TP_BAT_POS",
+                  "measurementType": "system voltage",
+                  "value": "12.2 V DC",
+                  "meaning": "raw observation only"
+                },
+                {
+                  "testPoint": "TP_ALT_BPLUS",
+                  "measurementType": "system voltage",
+                  "value": "12.4 V DC",
+                  "meaning": "raw observation only"
+                },
+                {
+                  "testPoint": "ALT1_BPLUS to BAT1_POS",
+                  "measurementType": "voltage difference",
+                  "value": "0.20 V DC",
+                  "meaning": "project-authored comparison value; source applicability must be established before interpretation"
+                }
+              ],
+              "unknownsToResolve": [
+                "battery condition and state of charge",
+                "vehicle-specific charging strategy and expected behavior",
+                "charging-path wiring configuration and conductor identity",
+                "applicable operating/load test procedure"
+              ],
+              "studentPrompt": "Identify what these observations do and do not establish. Form two plausible hypotheses and select the next check that best separates them."
+            },
+            {
+              "scenarioId": "electrical-load",
+              "title": "Electrical load with dim and flickering lamps",
+              "evidenceRole": "project-authored-training-evidence",
+              "concern": "Exterior lamps dim and flicker as accessory electrical load increases.",
+              "operatingContext": [
+                "Generic 12 V project-authored training circuit",
+                "Alternator represented as operating",
+                "Accessory load increased for the training case",
+                "Vehicle-specific diagnostic procedure and limits intentionally not supplied"
+              ],
+              "observations": [
+                {
+                  "testPoint": "TP_BAT_POS",
+                  "measurementType": "system voltage",
+                  "value": "12.1 V DC",
+                  "meaning": "raw observation only"
+                },
+                {
+                  "testPoint": "TP_LOAD_PWR",
+                  "measurementType": "load-feed voltage",
+                  "value": "11.7 V DC",
+                  "meaning": "raw observation only"
+                },
+                {
+                  "testPoint": "TP_MAIN_GND",
+                  "measurementType": "ground-path voltage drop",
+                  "value": "0.25 V DC",
+                  "meaning": "project-authored observation; no pass/fail status assigned"
+                }
+              ],
+              "unknownsToResolve": [
+                "load current and operating condition required by an applicable procedure",
+                "vehicle-specific charging strategy and expected behavior",
+                "condition of power and ground connections",
+                "applicable source limits for the exact test path"
+              ],
+              "studentPrompt": "Use the raw measurements to decide what remains uncertain. Form two plausible hypotheses and choose a measurement or inspection that would discriminate between them."
+            }
+          ]
         },
         {
           "id": "charging-reasoning-check",

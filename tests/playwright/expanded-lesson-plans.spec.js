@@ -56,6 +56,13 @@ test.describe('Expanded lesson plans', () => {
     await expect(plan.getByText(/Do not apply the cited 0\.200 V 3-wire #2-lead maximum until the source applicability is verified/)).toBeVisible();
     await expect(plan.getByText(/Design Basis/).first()).toBeVisible();
     await expect(plan.getByText(/rights-cleared; technical\/chunk approval pending/).first()).toBeVisible();
+    await expect(plan.locator('.independent-case')).toHaveCount(2);
+    await expect(plan.getByRole('heading', { name: 'Charging warning during operation' })).toBeVisible();
+    await expect(plan.getByRole('heading', { name: 'Electrical load with dim and flickering lamps' })).toBeVisible();
+    await expect(plan.getByText('TP_LOAD_PWR')).toBeVisible();
+    await expect(plan.getByText('11.7 V DC')).toBeVisible();
+    await expect(plan.getByText(/Vehicle-specific diagnostic procedure and limits intentionally not supplied/).first()).toBeVisible();
+    await expect(plan.getByText(/No pass\/fail meaning or failed component is supplied/)).toBeVisible();
 
     await plan.getByText('Planned visuals').click();
     await expect(plan.locator('.lesson-visual-grid > article')).toHaveCount(5);

@@ -11,7 +11,9 @@
   "curriculum": {
     "lessonPlanId": "ug-electrical-charging-system",
     "supportsObjectiveIds": [
-      "ug-electrical-lo-1"
+      "ug-electrical-lo-1",
+      "ug-electrical-lo-2",
+      "ug-electrical-lo-3"
     ],
     "assessmentUse": "training-only"
   },
@@ -208,6 +210,14 @@
       "measurementTypes": [
         "voltage_drop",
         "continuity"
+      ],
+      "vehicleSpecificValueRequired": true
+    },
+    {
+      "id": "TP_LOAD_PWR",
+      "terminalId": "LOAD1_PWR",
+      "measurementTypes": [
+        "voltage"
       ],
       "vehicleSpecificValueRequired": true
     }
