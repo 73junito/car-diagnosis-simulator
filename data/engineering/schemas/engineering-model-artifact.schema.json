@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autolearnpro.com/schemas/engineering-model-artifact.schema.json",
+  "title": "Engineering Model Artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion","artifactId","modelId","evidenceRole","generator","domain","quantity","baseline","observed","comparison","provenance"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "artifactId": { "type": "string", "minLength": 1 },
+    "modelId": { "type": "string", "minLength": 1 },
+    "evidenceRole": { "enum": ["project_authored_training_model","authoritative_specification","measured_value","model_prediction"] },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tool","version"],
+      "properties": {
+        "tool": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+    "domain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system","voltageClass"],
+      "properties": {
+        "system": { "type": "string", "minLength": 1 },
+        "voltageClass": { "type": "string", "minLength": 1 },
+        "applicability": { "type": "string" }
+      }
+    },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quantityType","unit"],
+      "properties": {
+        "quantityType": { "type": "string", "minLength": 1 },
+        "unit": { "type": "string", "minLength": 1 }
+      }
+    },
+    "baseline": { "$ref": "#/$defs/value" },
+    "observed": {
+      "oneOf": [
+        { "$ref": "#/$defs/value" },
+        { "type": "null" }
+      ]
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status","authoritativeSpecification"],
+      "properties": {
+        "status": { "enum": ["baseline","changed","unchanged","unavailable","not_comparable","within_reference","exceeds_reference","below_reference","does_not_meet_reference","reference_only"] },
+        "delta": { "type": "number" },
+        "interpretation": { "enum": ["numeric_delta_only","authoritative_reference","not_available","not_comparable","reference_only"] },
+        "authoritativeSpecification": { "type": "boolean" },
+        "reason": { "type": "string" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method","sourceType","reproducible"],
+      "properties": {
+        "method": { "type": "string", "minLength": 1 },
+        "sourceType": { "enum": ["project_model","external_source","measurement","machine_learning"] },
+        "reproducible": { "type": "boolean" },
+        "sourceId": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value"],
+      "properties": {
+        "value": { "type": "number" },
+        "label": { "type": "string" }
+      }
+    }
+  }
+}
