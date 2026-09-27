@@ -12,6 +12,7 @@ test.describe("engineering parameter foundation", () => {
     await page.addScriptTag({ url: "/src/engineering/profiles.js" });
     await page.addScriptTag({ url: "/src/engineering/calculator.js" });
     await page.addScriptTag({ url: "/src/engineering/specifications.js" });
+    await page.addScriptTag({ url: "/src/engineering/measurements.js" });
     await page.addScriptTag({ url: "/src/engineering/index.js" });
 
     const result = await page.evaluate(async () => {
@@ -27,6 +28,10 @@ test.describe("engineering parameter foundation", () => {
       const catalog = await response.json();
       const authoritativeResponse = await fetch("/data/engineering/authoritative-specifications/delco-remy-starting-charging.json");
       const authoritative = await authoritativeResponse.json();
+      const measured = window.TorqueMindEngineering.measurements.createMeasuredQuantity({
+        quantityType:"voltage",unit:"V",value:12.2,
+        labId:"foundation-test",measurementId:"sample-voltage"
+      });
       const selected50Mt = window.TorqueMindEngineering.specifications.selectMostSpecificSpecification(authoritative,{
         system:"starting",
         systemVoltage:12,
@@ -43,6 +48,7 @@ test.describe("engineering parameter foundation", () => {
         profileCount: catalog.profiles.length,
         authoritativeRole: authoritative.catalogRole,
         authoritativeCount: authoritative.specifications.length,
+        measured,
         selected50Mt
       };
     });
@@ -56,6 +62,8 @@ test.describe("engineering parameter foundation", () => {
     expect(result.profileCount).toBe(3);
     expect(result.authoritativeRole).toBe("authoritative-specifications");
     expect(result.authoritativeCount).toBe(14);
+    expect(result.measured.valueRole).toBe("measured_value");
+    expect(result.measured.measurement.entryMethod).toBe("student_entry");
     expect(result.selected50Mt.id).toBe("delco-starter-total-drop-12v-50mt");
     expect(result.selected50Mt.quantity.value).toBe(0.4);
     expect(errors).toEqual([]);

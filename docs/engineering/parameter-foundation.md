@@ -236,3 +236,38 @@ Fault/state handling remains conservative:
 - a fault in the other voltage domain does not masquerade as a fault in the selected domain.
 
 Traction-domain test points remain conceptual-only training locations and do not provide probing or service procedures.
+
+## Measured-value and student-entry layer
+
+The engineering foundation now treats learner-entered measurements as a distinct evidence role rather than raw UI numbers.
+
+A `measured_value` requires:
+
+- quantity type and unit;
+- finite numeric value;
+- `measurement.entryMethod` of `student_entry`, `instrument_entry`, or `instructor_entry`;
+- `measurement.context.labId`;
+- `measurement.context.measurementId`;
+- optional test-point identity and note.
+
+The reusable `src/engineering/measurements.js` module creates measured quantities, computes numeric deltas against compatible calculated quantities, and compares measurements with authoritative references only when quantity type/unit and reference comparison semantics permit it.
+
+Comparison rules are deliberately narrow:
+
+- project-authored relay, sensor, and actuator examples report only numeric delta from the training calculation; no pass/fail diagnosis is inferred;
+- the starting-system lab may report within/exceeds only against the selected Delco Remy source-specific maximum, and does not apply that comparison to an injected open circuit;
+- charging and multi-voltage current entries are now measured-value objects before downstream calculations;
+- a design-basis reference remains reference-only rather than being converted into a pass/fail threshold.
+
+The measured-value layer does not convert learner entries into authoritative specifications, vehicle-specific limits, or generic training examples.
+
+Current lab integration:
+
+- Relay/load: student-entered load current vs calculated training current.
+- Sensor: student-entered controller signal voltage vs calculated ideal training transfer.
+- PWM actuator: student-entered PWM average voltage vs calculated ideal mathematical average.
+- Starting system: student-entered total cable voltage drop vs the selected source-backed starter-family maximum when applicable.
+- Charging system: measured/test current becomes a measured-value input to the source-reference resistance calculation.
+- Multi-voltage: entered domain current becomes a measured-value input to P = V x I.
+
+The network lab is intentionally unchanged because no numeric network measurement model has yet been defined; this phase does not invent one.

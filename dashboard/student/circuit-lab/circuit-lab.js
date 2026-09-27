@@ -20,6 +20,7 @@
   const voltageDomains = window.TorqueMindVoltageDomains;
   const engineering = window.TorqueMindEngineering;
   const calculator = engineering.calculator;
+  const measurements = engineering.measurements;
 
   const svg = document.getElementById("circuitSvg");
   const inspector = document.getElementById("inspectorContent");
@@ -96,7 +97,11 @@
     const raw = engineeringUi.currentInput.value.trim();
     if (!raw) return null;
     const value = Number(raw);
-    return Number.isFinite(value) && value > 0 ? value : null;
+    if (!Number.isFinite(value) || value <= 0) return null;
+    return measurements.createMeasuredQuantity({
+      quantityType:"current", unit:"A", value,
+      labId:"circuit-lab", measurementId:"charging-current"
+    });
   }
 
   function renderEngineering() {
@@ -105,14 +110,14 @@
     const fault = faultObject();
     const dropValue = reference?.quantity?.value;
     const resistance = reference && current
-      ? calculator.solveOhmsLaw({ voltage: dropValue, current })
+      ? calculator.solveOhmsLaw({ voltage: dropValue, current:current.value })
       : null;
 
     engineeringUi.drop.textContent = reference ? `${dropValue.toFixed(3)} V` : "—";
     engineeringUi.dropLabel.textContent = reference
       ? chargingReferenceLabels[reference.id] || reference.parameter
       : "No source reference";
-    engineeringUi.current.textContent = current ? `${Number(current.toFixed(2))} A` : "—";
+    engineeringUi.current.textContent = current ? `${Number(current.value.toFixed(2))} A` : "—";
     engineeringUi.resistance.textContent = resistance ? `${(resistance.value * 1000).toFixed(3)} mΩ` : "—";
 
     if (!reference) {
@@ -134,7 +139,7 @@
       : reference?.applicability?.testMethod || "charging-cable guidance";
     const comparison = reference?.comparison === "design_basis" ? "design basis" : "maximum";
     const calculationText = resistance
-      ? `Entered current ${Number(current.toFixed(2))} A gives R = ${dropValue.toFixed(3)} V ÷ ${Number(current.toFixed(2))} A = ${(resistance.value * 1000).toFixed(3)} mΩ.`
+      ? `Measured-value entry ${Number(current.value.toFixed(2))} A gives R = ${dropValue.toFixed(3)} V ÷ ${Number(current.value.toFixed(2))} A = ${(resistance.value * 1000).toFixed(3)} mΩ.`
       : "Enter a positive current value to calculate equivalent resistance from the selected source-backed voltage-drop reference.";
     const faultText = fault?.type === "open_circuit"
       ? " The injected open circuit does not receive a fabricated voltage-drop value."

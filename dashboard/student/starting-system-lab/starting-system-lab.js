@@ -33,6 +33,7 @@
   const engineering = window.TorqueMindEngineering;
   const specifications = engineering.specifications;
   const calculator = engineering.calculator;
+  const measurements = engineering.measurements;
 
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((domain) => [domain.id, domain]));
@@ -95,6 +96,8 @@
     testCurrent:document.getElementById("engStarterTestCurrent"),
     dropLimit:document.getElementById("engStarterDropLimit"),
     resistance:document.getElementById("engCableResistanceLimit"),
+    measuredDrop:document.getElementById("measuredStarterDrop"),
+    measuredResult:document.getElementById("startingMeasurementResult"),
     formula:document.getElementById("startingEngineeringFormula")
   };
 
@@ -125,6 +128,37 @@
     engineeringUi.resistance.textContent=resistance ? `${(resistance.value*1000).toFixed(3)} mΩ` : "—";
 
     const fault=faultObject();
+    const measuredRaw=engineeringUi.measuredDrop.value.trim();
+    engineeringUi.measuredResult.className="measurement-result";
+    if(!measuredRaw){
+      engineeringUi.measuredResult.textContent="No measurement entered";
+    } else {
+      const measuredValue=Number(measuredRaw);
+      if(Number.isFinite(measuredValue) && measuredValue>=0){
+        const measured=measurements.createMeasuredQuantity({
+          quantityType:"voltage_drop",unit:"V",value:measuredValue,
+          labId:"starting-system-lab",measurementId:"starter-total-cable-drop"
+        });
+        if(fault?.type==="open_circuit"){
+          engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; selected source comparison not applied to an open circuit`;
+        } else if(dropLimit){
+          const comparison=measurements.compareMeasurementToReference(measured,dropLimit);
+          if(comparison.status==="within_reference"){
+            engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V — within selected ${family} source reference`;
+            engineeringUi.measuredResult.className="measurement-result within";
+          } else if(comparison.status==="exceeds_reference"){
+            engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V — exceeds selected ${family} source reference`;
+            engineeringUi.measuredResult.className="measurement-result exceeds";
+          } else {
+            engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; source comparison unavailable`;
+          }
+        } else {
+          engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; no source reference selected`;
+        }
+      } else {
+        engineeringUi.measuredResult.textContent="Enter a non-negative finite voltage-drop value";
+      }
+    }
     if (fault?.type==="open_circuit") {
       engineeringUi.status.textContent="Open circuit — numeric cable-drop comparison not inferred";
       engineeringUi.status.className="engineering-status fault";
@@ -385,6 +419,8 @@
   faultSelect.addEventListener("change", () => { activeFault = faultSelect.value; updateGuide(activeFault ? 5 : guideProgress); render(); });
   engineeringUi.batterySelect.addEventListener("change", renderEngineering);
   engineeringUi.starterSelect.addEventListener("change", renderEngineering);
+  engineeringUi.measuredDrop.addEventListener("input", renderEngineering);
+  engineeringUi.measuredDrop.addEventListener("change", renderEngineering);
   document.getElementById("showSystemFlow").addEventListener("click", () => { activeFlowMode = "system"; render(); });
   document.getElementById("traceControl").addEventListener("click", () => { activeFlowMode = "control"; updateGuide(2); render(); });
   document.getElementById("tracePower").addEventListener("click", () => { activeFlowMode = "power"; updateGuide(4); render(); });

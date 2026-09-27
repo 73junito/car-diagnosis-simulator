@@ -18,7 +18,7 @@
  const stateSelect=document.getElementById("stateSelect"), faultSelect=document.getElementById("faultSelect");
  const stateBadge=document.getElementById("stateBadge"), flowNote=document.getElementById("flowNote"), voltageProfile=document.getElementById("voltageProfile");
  const symbolRenderer=window.TorqueMindSymbolRenderer, voltageDomains=window.TorqueMindVoltageDomains;
- const engineering=window.TorqueMindEngineering, calculator=engineering.calculator;
+ const engineering=window.TorqueMindEngineering, calculator=engineering.calculator, measurements=engineering.measurements;
  const actuatorProfile=engineeringProfile.actuatorProfile.engineeringProfile;
  const engineeringErrors=engineering.profiles.validateEngineeringProfile(actuatorProfile);
  if(engineeringErrors.length) throw new Error(engineeringErrors.join("; "));
@@ -52,6 +52,8 @@
   observedLabel:document.getElementById("engObservedCommandLabel"),
   power:document.getElementById("engPowerAvailability"),
   ground:document.getElementById("engGroundAvailability"),
+  measuredAverage:document.getElementById("measuredActuatorAverage"),
+  measuredResult:document.getElementById("actuatorMeasurementResult"),
   formula:document.getElementById("actuatorEngineeringFormula")
  };
  const supplyVoltage=circuit.voltageSystems.find(system=>system.id==="LV12").nominalVoltage;
@@ -89,6 +91,24 @@
  }
  function renderEngineering(){
   const result=engineeringState();
+  const measuredRaw=engineeringUi.measuredAverage.value.trim();
+  if(!measuredRaw){
+   engineeringUi.measuredResult.textContent="No measurement entered";
+   engineeringUi.measuredResult.className="measurement-result";
+  } else {
+   const measuredValue=Number(measuredRaw);
+   if(Number.isFinite(measuredValue)){
+    const measured=measurements.createMeasuredQuantity({
+     quantityType:"voltage",unit:"V",value:measuredValue,
+     labId:"actuator-lab",measurementId:"pwm-average"
+    });
+    const delta=measurements.deltaBetween(measured,result.ideal);
+    engineeringUi.measuredResult.textContent=`Recorded ${formatVoltage(measured.value)}; Δ vs training ideal ${delta>=0?"+":""}${delta.toFixed(3)} V`;
+   } else {
+    engineeringUi.measuredResult.textContent="Enter a finite voltage value";
+   }
+   engineeringUi.measuredResult.className="measurement-result";
+  }
   engineeringUi.dutyInputValue.textContent=`${dutyCycle}%`;
   engineeringUi.supply.textContent=`${supplyVoltage} V`;
   engineeringUi.duty.textContent=`${dutyCycle}%`;
@@ -173,6 +193,8 @@
  const updateDutyFromControl=()=>{dutyCycle=Number(engineeringUi.dutyInput.value);renderEngineering();};
  engineeringUi.dutyInput.addEventListener("input",updateDutyFromControl);
  engineeringUi.dutyInput.addEventListener("change",updateDutyFromControl);
+ engineeringUi.measuredAverage.addEventListener("input",renderEngineering);
+ engineeringUi.measuredAverage.addEventListener("change",renderEngineering);
  document.getElementById("showSystemFlow").addEventListener("click",()=>{flowMode="system";render();});
  document.getElementById("tracePower").addEventListener("click",()=>{flowMode="power";render();});
  document.getElementById("tracePwm").addEventListener("click",()=>{flowMode="control";render();});

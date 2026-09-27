@@ -26,6 +26,7 @@
   const symbolRenderer=window.TorqueMindSymbolRenderer;
   const engineering=window.TorqueMindEngineering;
   const calculator=engineering.calculator;
+  const measurements=engineering.measurements;
 
   const voltageArchitecture=window.TorqueMindVoltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById=new Map(voltageArchitecture.map((domain)=>[domain.id,domain]));
@@ -95,7 +96,11 @@
     const raw=engineeringUi.currentInput.value.trim();
     if(!raw) return null;
     const value=Number(raw);
-    return Number.isFinite(value)&&value>0 ? value : null;
+    if(!Number.isFinite(value)||value<=0) return null;
+    return measurements.createMeasuredQuantity({
+      quantityType:"current",unit:"A",value,
+      labId:"multivoltage-lab",measurementId:"domain-current"
+    });
   }
 
   function selectedDomain(){
@@ -119,13 +124,13 @@
   function renderEngineering(){
     const domain=selectedDomain();
     const current=enteredCurrent();
-    const power=current ? calculator.calculatePower({voltage:domain.nominalVoltage,current}) : null;
+    const power=current ? calculator.calculatePower({voltage:domain.nominalVoltage,current:current.value}) : null;
     const domainFault=selectedDomainFault();
     const active=domainIsActive(domain.id);
 
     engineeringUi.voltage.textContent=`${domain.nominalVoltage} V`;
     engineeringUi.voltageLabel.textContent=domain.id==="TR400" ? "Traction training example" : "Low-voltage domain";
-    engineeringUi.current.textContent=current ? `${Number(current.toFixed(2))} A` : "—";
+    engineeringUi.current.textContent=current ? `${Number(current.value.toFixed(2))} A` : "—";
     engineeringUi.power.textContent=power
       ? (power.value>=1000 ? `${(power.value/1000).toFixed(3)} kW` : `${Number(power.value.toFixed(2))} W`)
       : "—";
@@ -157,7 +162,7 @@
       ? "The 400 V value belongs only to this project-authored training example."
       : "The 12 V value is the declared low-voltage architecture for this training template.";
     const calculation=current
-      ? `P = ${domain.nominalVoltage} V × ${Number(current.toFixed(2))} A = ${power.value.toFixed(2)} W.`
+      ? `P = ${domain.nominalVoltage} V × measured ${Number(current.value.toFixed(2))} A = ${power.value.toFixed(2)} W.`
       : "Enter a positive current to calculate power.";
     const faultText=domainFault
       ? " The injected fault does not create a measured current, voltage, power, converter-efficiency, or motor-output value."
