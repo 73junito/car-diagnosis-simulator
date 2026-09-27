@@ -31,7 +31,14 @@
   const calculator = engineering.calculator;
   const measurements = engineering.measurements;
   const comparisons = engineering.comparisons;
+  const artifacts = engineering.artifacts;
   const profileValidator = engineering.profiles.validateEngineeringProfile;
+  const artifactRegistry = await artifacts.loadRegistry();
+  const nominalShortGroundArtifact = await artifacts.resolveArtifact(
+    artifactRegistry,
+    "sensor.short-ground.nominal50",
+    { normalizedInputPercent:50 }
+  );
 
   const sensorProfile = engineeringProfile.sensorProfile.engineeringProfile;
   const engineeringErrors = profileValidator(sensorProfile);
@@ -148,12 +155,23 @@
     }
 
     if (behavior.mode === "controller_signal_forced_ground") {
+      let observed = 0;
+      let artifactBacked = false;
+      if (sensorInputPercent === 50 && nominalShortGroundArtifact.status === "ready") {
+        const baseline = artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact, "baseline");
+        const faulted = artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact, "observed");
+        if (Math.abs(baseline.value - transfer.value) > 1e-9) {
+          throw new Error("Sensor artifact baseline does not match the current nominal transfer.");
+        }
+        observed = faulted.value;
+        artifactBacked = true;
+      }
       return {
         transfer,
-        observed:0,
+        observed,
         status:"Signal short-to-ground training fault",
         statusClass:"fault",
-        note:behavior.reason
+        note:behavior.reason + (artifactBacked ? " Validated engineering artifact applied for the 50% nominal training state." : "")
       };
     }
 

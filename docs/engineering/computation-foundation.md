@@ -206,6 +206,27 @@ This preserves:
 
 The guard does not infer conversion ratios, DC/DC efficiency, traction current, motor output, or cross-domain equivalence.
 
+## Browser engineering artifact adapter
+
+The browser runtime now has a shared artifact adapter and registry. The registry maps a lab/fault/use case to a specific committed engineering artifact and fixed model context, while the adapter validates artifact identity, evidence role, quantity type, unit, and authority flag before exposing values to a lab.
+
+The first migrated cases are deliberately narrow:
+
+- sensor short-to-ground at the nominal 50% training input;
+- PWM actuator short-to-ground at the nominal 30% duty-cycle state.
+
+At those exact registered states the labs consume the committed validated artifact values. If the learner changes the control away from the registered model context, the artifact is not applied and the existing calculator/fault-behavior path remains in control.
+
+This prevents a fixed generated artifact from being silently reused outside the conditions that produced it.
+
+The adapter also fails closed if an artifact is replaced with a different artifact ID, evidence role, quantity type/unit, or authoritative-specification flag.
+
+Run:
+
+```text
+npm run validate:browser-engineering-artifacts
+```
+
 ## Next boundary
 
-With relay/load, sensor, PWM, starting, charging applicability, and multi-voltage isolation protected, the next architectural step should be a shared browser artifact adapter so validated engineering artifacts can feed labs without duplicating hard-coded model values.
+After the adapter is proven in these two fixed-context cases, migrate the relay/load model and then source-backed starting-system scenarios through the same registry without weakening their existing applicability and evidence boundaries.

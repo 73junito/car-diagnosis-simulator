@@ -7,8 +7,9 @@ const calculator = typeof require === "function" ? require("./calculator") : win
 const specifications = typeof require === "function" ? require("./specifications") : window.TorqueMindEngineeringSpecifications;
 const measurements = typeof require === "function" ? require("./measurements") : window.TorqueMindEngineeringMeasurements;
 const comparisons = typeof require === "function" ? require("./comparisons") : window.TorqueMindEngineeringComparisons;
+const artifacts = typeof require === "function" ? require("./artifacts") : window.TorqueMindEngineeringArtifacts;
 
-const api = { contracts, profiles, calculator, specifications, measurements, comparisons };
+const api = { contracts, profiles, calculator, specifications, measurements, comparisons, artifacts };
 
 if (typeof module !== "undefined" && module.exports) module.exports = api;
 if (typeof window !== "undefined") window.TorqueMindEngineering = api;
