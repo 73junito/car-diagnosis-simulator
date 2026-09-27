@@ -49,6 +49,33 @@ function renderEvidenceReferences(references = []) {
     </div>`;
 }
 
+function renderIndependentCases(cases = []) {
+  if (!cases.length) return "";
+  return `
+    <div class="independent-case-grid">
+      ${cases.map((caseItem) => `
+        <article class="independent-case">
+          <span class="case-role">${escapeHtml(titleCase(caseItem.evidenceRole))}</span>
+          <h5>${escapeHtml(caseItem.title)}</h5>
+          <p><strong>Concern:</strong> ${escapeHtml(caseItem.concern)}</p>
+          <div><strong>Operating context</strong>${list(caseItem.operatingContext || [], "case-context")}</div>
+          <div class="case-observations">
+            <strong>Raw observations</strong>
+            <ul>
+              ${(caseItem.observations || []).map((observation) => `
+                <li>
+                  <code>${escapeHtml(observation.testPoint)}</code>
+                  <span>${escapeHtml(observation.measurementType)} · ${escapeHtml(observation.value)}</span>
+                  <small>${escapeHtml(observation.meaning)}</small>
+                </li>`).join("")}
+            </ul>
+          </div>
+          <div><strong>Unknowns to resolve</strong>${list(caseItem.unknownsToResolve || [], "case-unknowns")}</div>
+          <p class="learner-action"><strong>Student prompt:</strong> ${escapeHtml(caseItem.studentPrompt)}</p>
+        </article>`).join("")}
+    </div>`;
+}
+
 function renderBlocks(blocks) {
   return blocks.map((block, index) => `
     <li>
@@ -59,6 +86,7 @@ function renderBlocks(blocks) {
         <small>${escapeHtml(titleCase(block.instructionalPurpose))}</small>
         ${block.teachingPoints?.length ? `<ul class="lesson-teaching-points">${block.teachingPoints.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul>` : ""}
         ${block.learnerAction ? `<p class="learner-action"><strong>Learner task:</strong> ${escapeHtml(block.learnerAction)}</p>` : ""}
+        ${renderIndependentCases(block.independentCases)}
         ${block.sourceBoundary ? `<p class="source-boundary"><strong>Boundary:</strong> ${escapeHtml(block.sourceBoundary)}</p>` : ""}
         ${renderEvidenceReferences(block.evidenceReferences)}
       </div>
