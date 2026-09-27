@@ -247,6 +247,30 @@
           "supports_claim": "The 12 V cable-sizing table is based on 0.3 V drop for a new vehicle, allows up to 0.5 V over vehicle life, and limits the #2 lead on a 3-wire system to 0.2 V maximum drop."
         }
       ]
+    },
+    {
+      "source_id": "delco-remy-alternator-battery-relationship-2016",
+      "vendor": "Delco Remy / PHINIA",
+      "title": "Tech Tip: Relationship Between Alternator and Batteries",
+      "canonical_url": "https://www.delcoremy.com/the-latest/2016/june/tech-tip-relationship-between-alternator-and-batt",
+      "publication_or_revision": "2016-06-10",
+      "rights_status": "external-reference-only-reuse-license-not-established",
+      "evidence_role": "external-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {
+          "locator": "Tech Tip overview",
+          "supports_claim": "The charging system is treated as an interdependent alternator-battery-cable system, with the alternator maintaining battery charge."
+        },
+        {
+          "locator": "Cross-check: Delco Remy Tech Tip: Voltage Drop Test, 2024-03-14",
+          "supports_claim": "The alternator replenishes the battery and provides power for vehicle loads through the charging cables and connections."
+        }
+      ]
     }
   ]
 }

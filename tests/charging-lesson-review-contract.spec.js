@@ -1,0 +1,59 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+const root = path.resolve(__dirname, '..');
+const lessonDoc = JSON.parse(fs.readFileSync(path.join(root, 'data', 'curriculum', 'lesson-content.json'), 'utf8'));
+const externalRefs = JSON.parse(fs.readFileSync(path.join(root, 'data', 'evidence', 'external-technical-references.json'), 'utf8'));
+
+describe('Charging lesson review corrections', () => {
+  const plan = lessonDoc.lessonContentPlans.find((item) => item.lessonPlanId === 'ug-electrical-charging-system');
+
+  test('uses component-parallel wording and explicit voltage-domain context', () => {
+    expect(plan.learningObjectives[0].statement).toBe(
+      'Explain the functional relationship among the battery, alternator, diode rectifier, voltage regulator, and vehicle electrical loads.'
+    );
+
+    const blocks = Object.fromEntries(plan.contentBlocks.map((block) => [block.id, block]));
+    expect(blocks['charging-objectives'].teachingPoints).toContain(
+      'Use a source reference only when its applicability matches the system, voltage domain, test method, and measurement context.'
+    );
+    expect(blocks['charging-prior-knowledge'].teachingPoints).toContain(
+      'A measured number has meaning only when the operating condition, test location, voltage domain, and units are known.'
+    );
+    expect(blocks['charging-evidence-model'].teachingPoints).toContain(
+      'A measurement is evidence only when the test point, operating state, voltage domain, units, and applicable reference are known.'
+    );
+  });
+
+  test('supports the battery relationship with a citation-only external technical reference', () => {
+    const block = plan.contentBlocks.find((item) => item.id === 'charging-system-model');
+    expect(block.teachingPoints.some((point) => /alternator-battery-cable system/.test(point))).toBe(true);
+    expect(block.evidenceReferences).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'external-technical-reference',
+          id: 'delco-remy-alternator-battery-relationship-2016'
+        })
+      ])
+    );
+
+    const source = externalRefs.sources.find((item) => item.source_id === 'delco-remy-alternator-battery-relationship-2016');
+    expect(source).toBeTruthy();
+    expect(source.evidence_role).toBe('external-technical-reference');
+    expect(source.citation_allowed).toBe(true);
+    expect(source.reusable_chunks_allowed).toBe(false);
+    expect(source.ollama_eligible).toBe(false);
+  });
+
+  test('maps independent diagnostic scenarios to the diagnostic-reasoning objective', () => {
+    const block = plan.contentBlocks.find((item) => item.id === 'charging-independent-scenario');
+    expect(block.supportsObjectiveIds).toEqual(['ug-electrical-lo-3']);
+    const scenarioRefs = block.evidenceReferences.filter((ref) => ref.type === 'scenario-mapping');
+    expect(scenarioRefs).toHaveLength(2);
+    for (const ref of scenarioRefs) {
+      expect(ref.objectiveId).toBe('ug-electrical-lo-3');
+    }
+  });
+});
