@@ -92,6 +92,24 @@ The generated ngspice JSON artifact is intentionally not committed because simul
 
 ngspice remains a computation tool, not an evidence authority. Its output retains `project_authored_training_model`, `numeric_delta_only`, and `authoritativeSpecification: false`.
 
+## Sensor model cross-validation
+
+The sensor model extends the same contract to a different electrical behavior class:
+
+- healthy generic transfer: 2.500 V at 50% normalized input;
+- signal short-to-ground: 0.000 V modeled controller signal;
+- numeric delta: -2.500 V;
+- high-resistance sensor ground: unavailable by design because the actual response depends on sensor and circuit design.
+
+Run:
+
+```text
+python engineering/python/generate_sensor_model.py
+npm run validate:sensor-model
+```
+
+The numeric short-to-ground case is independently cross-validated with ngspice to within 0.001 V. The degraded-ground case deliberately has no SPICE numeric result because the training profile does not define enough component behavior to justify one.
+
 ## Next boundary
 
-Future SPICE models may expand to sensor, PWM/load, and voltage-drop circuits only through the same artifact adapter and semantic validation path. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.
+Future SPICE models may expand to PWM/load and voltage-drop circuits only through the same artifact adapter and semantic validation path. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.

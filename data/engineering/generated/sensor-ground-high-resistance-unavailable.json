@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "sensor-ground-high-resistance-unavailable-v1",
+  "modelId": "sensor-ground-high-resistance-boundary",
+  "evidenceRole": "project_authored_training_model",
+  "generator": {
+    "tool": "python-contract-boundary",
+    "version": "1.0.0"
+  },
+  "domain": {
+    "system": "low-voltage-three-wire-sensor",
+    "voltageClass": "5V-reference-training-example",
+    "applicability": "generic project-authored sensor training model only"
+  },
+  "quantity": {
+    "quantityType": "voltage",
+    "unit": "V"
+  },
+  "baseline": {
+    "value": 2.5,
+    "label": "healthy modeled signal"
+  },
+  "observed": null,
+  "comparison": {
+    "status": "unavailable",
+    "interpretation": "not_available",
+    "authoritativeSpecification": false,
+    "reason": "High-resistance sensor-ground behavior depends on sensor and circuit design; a numeric fault voltage is intentionally not inferred."
+  },
+  "provenance": {
+    "method": "explicit unsupported-behavior boundary from project-authored sensor training profile",
+    "sourceType": "project_model",
+    "reproducible": true
+  }
+}
