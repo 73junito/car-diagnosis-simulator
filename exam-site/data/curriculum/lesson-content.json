@@ -2633,7 +2633,7 @@
         "mappingType": "direct-course-alignment"
       },
       "lessonSummary": "Introduce electrified-vehicle architecture through energy flow, voltage-domain separation, safety boundaries, and evidence-based diagnostic reasoning. Learners practice distinguishing observations from conclusions and selecting a documented, vehicle-specific next diagnostic action.",
-      "estimatedMinutes": 240,
+      "estimatedMinutes": 1680,
       "prerequisites": [
         "Basic electrical circuit concepts",
         "Digital multimeter fundamentals",
@@ -3015,7 +3015,390 @@
         "evidence-reference",
         "lesson-summary"
       ],
-      "structureExceptions": []
+      "structureExceptions": [],
+      "courseModules": [
+        {
+          "id": "aut250-m1-battery-systems",
+          "sequence": 1,
+          "title": "Battery Systems, Monitoring, and State Estimation",
+          "estimatedMinutes": 240,
+          "authorship": "project-authored",
+          "moduleObjectives": [
+            "Explain how cells, modules, sensing, switching, protection, and control functions interact within an electrified-vehicle energy-storage system.",
+            "Differentiate directly measured battery data from calculated or estimated states such as state of charge and state of health.",
+            "Interpret battery voltage, current, temperature, isolation-related information, and event history as correlated evidence rather than isolated failure proof.",
+            "Develop a vehicle-specific battery diagnostic plan that preserves evidence and avoids unsupported replacement decisions."
+          ],
+          "lessons": [
+            {
+              "id": "aut250-m1-l1",
+              "title": "Energy-storage architecture",
+              "text": "An electrified-vehicle battery system is an interacting electrical, thermal, sensing, switching, protection, and control system. Cells provide electrochemical energy storage; modules and pack structures organize that storage; sensing circuits observe selected operating conditions; switching and protection devices control connection of stored energy to vehicle systems; and control logic uses measured and calculated information to manage operation. The exact arrangement varies by vehicle, so a general architecture model must never be mistaken for a manufacturer-specific wiring diagram or service procedure.",
+              "learnerAction": "Create a functional block diagram that separates energy storage, sensing, switching, protection, control, and thermal functions.",
+              "evidenceBoundary": "Do not assign universal pack voltage, cell count, module layout, contactor arrangement, fuse rating, or service-disconnect design."
+            },
+            {
+              "id": "aut250-m1-l2",
+              "title": "Measured data and calculated states",
+              "text": "Battery diagnosis requires separating direct observations from calculated states. Voltage, current, and temperature may be measured through sensors, while state of charge, state of health, available power, remaining energy, and related indicators may be estimated from models that combine several inputs over time. A calculated state can be useful evidence, but it is not equivalent to a direct measurement and should be interpreted with the operating context and applicable service information.",
+              "learnerAction": "Classify a mixed battery data set as measured, calculated, commanded, historical, or inferred.",
+              "evidenceBoundary": "No universal state-of-charge, state-of-health, imbalance, capacity, temperature, or replacement threshold is established."
+            },
+            {
+              "id": "aut250-m1-l3",
+              "title": "Battery evidence correlation",
+              "text": "A strong battery diagnosis compares multiple compatible evidence sources. A single unusual voltage, temperature, or estimate may reflect operating state, load, temperature, calibration, sensor behavior, communication quality, or a developing battery condition. Diagnostic reasoning should therefore compare related values, operating conditions, event timing, fault information, and vehicle-specific criteria before identifying a cause.",
+              "learnerAction": "Build an evidence table that lists each observation, its possible interpretations, missing context, and the next information needed.",
+              "evidenceBoundary": "One data point, one fault code, or one snapshot must not be treated as proof of cell, module, sensor, or pack failure."
+            }
+          ],
+          "practice": [
+            "Compare direct measurements with calculated battery-state values.",
+            "Trace how a sensor concern could affect a calculated battery-state estimate.",
+            "Write a battery diagnostic next-step plan that identifies required service information before physical testing."
+          ],
+          "assessments": [
+            "Battery architecture concept check",
+            "Measured-versus-estimated data classification exercise",
+            "Battery evidence-correlation case",
+            "Written diagnostic justification with uncertainty statement"
+          ],
+          "visuals": [
+            {
+              "type": "concept-diagram",
+              "title": "Battery-system functional architecture"
+            },
+            {
+              "type": "table",
+              "title": "Measured, calculated, commanded, and inferred battery data"
+            },
+            {
+              "type": "flowchart",
+              "title": "Battery evidence-to-next-check reasoning"
+            }
+          ],
+          "safetyAndEvidenceBoundary": "Battery access, isolation, measurement, PPE, wait times, test equipment, acceptance limits, and replacement criteria are vehicle-specific and require approved authoritative service information."
+        },
+        {
+          "id": "aut250-m2-power-electronics",
+          "sequence": 2,
+          "title": "Power Electronics, Electric Machines, and Energy Conversion",
+          "estimatedMinutes": 240,
+          "authorship": "project-authored",
+          "moduleObjectives": [
+            "Explain the functional roles of inverters, DC-DC converters, switching devices, capacitive energy storage, and electric machines.",
+            "Trace conceptual energy flow during propulsion, regeneration, and low-voltage support.",
+            "Relate commanded operation, measured electrical data, machine state, and thermal information to diagnostic hypotheses.",
+            "Select a vehicle-specific diagnostic category without assuming one universal power-electronics topology."
+          ],
+          "lessons": [
+            {
+              "id": "aut250-m2-l1",
+              "title": "Power conversion functions",
+              "text": "Power-electronic assemblies manage electrical energy between voltage domains and between direct-current and alternating-current systems. A traction inverter can control energy transfer between a DC energy source and an electric machine, while a DC-DC converter can support a lower-voltage electrical system from a higher-voltage source. Some vehicles combine these functions; others separate them. Diagnosis begins with identifying the actual architecture before interpreting values or selecting tests.",
+              "learnerAction": "Trace conceptual energy paths for propulsion, regeneration, and low-voltage support.",
+              "evidenceBoundary": "Do not assume a fixed inverter arrangement, converter direction, nominal voltage, switching frequency, or internal circuit topology."
+            },
+            {
+              "id": "aut250-m2-l2",
+              "title": "Electric-machine operation",
+              "text": "An electric machine can produce torque when electrical energy is converted to mechanical output and can support regenerative operation when mechanical energy is converted back to electrical energy under permitted conditions. The control system coordinates requested torque, current, speed, position, voltage, and thermal limits. Diagnostic interpretation should compare what was requested, what the system reports, and what the system actually produced.",
+              "learnerAction": "Compare commanded torque, machine speed, current, and operating mode in a project-authored scenario.",
+              "evidenceBoundary": "Machine type, phase configuration, sensor design, control method, and allowable operating limits are design-specific."
+            },
+            {
+              "id": "aut250-m2-l3",
+              "title": "Power-electronics diagnostic evidence",
+              "text": "A power-electronics fault may be influenced by electrical supply, control commands, communication, thermal conditions, isolation status, machine behavior, or internal protection. Because several systems interact, a diagnostic code naming an inverter or converter function should be treated as a starting point for a documented diagnostic path rather than an automatic component replacement instruction.",
+              "learnerAction": "Develop competing hypotheses for a reduced-propulsion concern and identify evidence that would distinguish among them.",
+              "evidenceBoundary": "No single DTC, current value, temperature, or commanded state is sufficient by itself to justify inverter, converter, or electric-machine replacement."
+            }
+          ],
+          "practice": [
+            "Trace propulsion and regenerative energy conversion.",
+            "Compare requested and reported power-electronics states.",
+            "Create a hypothesis table for a power-limited operating concern."
+          ],
+          "assessments": [
+            "Energy-conversion reasoning check",
+            "Power-electronics architecture interpretation",
+            "Commanded-versus-measured data exercise",
+            "Diagnostic hypothesis comparison"
+          ],
+          "visuals": [
+            {
+              "type": "concept-diagram",
+              "title": "DC source, inverter, electric machine, and low-voltage support"
+            },
+            {
+              "type": "flowchart",
+              "title": "Commanded state to measured response"
+            },
+            {
+              "type": "table",
+              "title": "Power-electronics evidence categories"
+            }
+          ],
+          "safetyAndEvidenceBoundary": "Opening, probing, discharging, insulation testing, or measuring power-electronic assemblies requires the applicable vehicle procedure, verified electrical state, and suitable equipment."
+        },
+        {
+          "id": "aut250-m3-charging",
+          "sequence": 3,
+          "title": "Charging Systems, Energy Transfer, and Charge-Readiness Diagnosis",
+          "estimatedMinutes": 240,
+          "authorship": "project-authored",
+          "moduleObjectives": [
+            "Explain the functional difference between external charging equipment, vehicle charge interfaces, onboard conversion functions, and battery charging control.",
+            "Trace the information and energy conditions required before charging can begin or continue.",
+            "Interpret charge-readiness concerns using vehicle state, external supply information, communication evidence, battery conditions, and thermal context.",
+            "Develop a safe diagnostic plan that separates infrastructure, interface, vehicle, and battery-side evidence."
+          ],
+          "lessons": [
+            {
+              "id": "aut250-m3-l1",
+              "title": "Charging-system boundaries",
+              "text": "Charging is a coordinated energy-transfer process involving an external energy source, a connection interface, vehicle control logic, power-conversion functions, battery conditions, and safety interlocks. Depending on the architecture, energy conversion may occur primarily onboard the vehicle or in external equipment. A useful diagnostic model separates the infrastructure side, interface side, vehicle-conversion side, and battery side before drawing conclusions.",
+              "learnerAction": "Label the major functional boundaries in a generic charging path.",
+              "evidenceBoundary": "Connector standard, pilot signaling, voltage, current, frequency, phase, communication protocol, and charger topology must be verified for the specific vehicle and equipment."
+            },
+            {
+              "id": "aut250-m3-l2",
+              "title": "Charge-readiness conditions",
+              "text": "A vehicle may evaluate connection status, supply availability, interlock state, battery temperature, battery state, isolation-related information, module communication, scheduled-charge settings, and other conditions before enabling energy transfer. A 'will not charge' complaint therefore does not identify which side of the system is responsible. Diagnosis should first establish whether the vehicle recognizes the connection, whether prerequisites are satisfied, and where the expected sequence stops.",
+              "learnerAction": "Construct a readiness sequence from connection detection through energy-transfer authorization.",
+              "evidenceBoundary": "No universal enable sequence, timeout, handshake value, or pass/fail voltage is prescribed."
+            },
+            {
+              "id": "aut250-m3-l3",
+              "title": "Charging concern isolation",
+              "text": "Charging diagnosis becomes more efficient when evidence is grouped by boundary. Infrastructure evidence describes the external source and equipment; interface evidence describes connection and communication; vehicle evidence describes control and conversion; battery evidence describes acceptance conditions; and thermal evidence describes temperature-related limits. Correlating these categories helps avoid replacing vehicle components for an external-supply problem or blaming external equipment for a vehicle-side inhibition.",
+              "learnerAction": "Sort a mixed charging complaint into infrastructure, interface, vehicle, battery, and thermal evidence categories.",
+              "evidenceBoundary": "Do not infer charger, port, converter, battery, or external-equipment failure from one symptom or one unsuccessful charging attempt."
+            }
+          ],
+          "practice": [
+            "Map a generic charging energy and information path.",
+            "Classify a no-charge concern by system boundary.",
+            "Write a test-order rationale that begins with nonintrusive evidence."
+          ],
+          "assessments": [
+            "Charging architecture concept check",
+            "Charge-readiness sequence exercise",
+            "Boundary-isolation scenario",
+            "Evidence-based no-charge diagnostic plan"
+          ],
+          "visuals": [
+            {
+              "type": "flowchart",
+              "title": "Charge-readiness sequence"
+            },
+            {
+              "type": "concept-diagram",
+              "title": "Infrastructure-to-battery charging boundaries"
+            },
+            {
+              "type": "table",
+              "title": "Charging evidence by system boundary"
+            }
+          ],
+          "safetyAndEvidenceBoundary": "Charging equipment ratings, connector handling, energized measurements, isolation checks, and internal charger tests require applicable product and vehicle procedures."
+        },
+        {
+          "id": "aut250-m4-thermal",
+          "sequence": 4,
+          "title": "Thermal Management, Protection, and Performance Limiting",
+          "estimatedMinutes": 240,
+          "authorship": "project-authored",
+          "moduleObjectives": [
+            "Explain why temperature management is integrated with battery, power-electronics, electric-machine, cabin, and charging operation.",
+            "Differentiate measured temperature, commanded thermal actions, calculated limits, and observed performance changes.",
+            "Correlate thermal evidence with operating state before identifying a component fault.",
+            "Develop a diagnostic plan for a thermal-related derate or charging limitation."
+          ],
+          "lessons": [
+            {
+              "id": "aut250-m4-l1",
+              "title": "Thermal-management functions",
+              "text": "Electrified vehicles may use liquid, air, refrigerant, or combined thermal strategies to manage batteries, power electronics, electric machines, cabin comfort, and charging performance. Thermal systems can share components or exchange heat across subsystems. Diagnosis therefore requires understanding which thermal path supports the affected function and what operating state existed when the concern occurred.",
+              "learnerAction": "Build a system map connecting battery, power electronics, electric machine, cabin, and ambient conditions.",
+              "evidenceBoundary": "Coolant routing, refrigerant architecture, pump arrangement, valve strategy, target temperatures, and service procedures are vehicle-specific."
+            },
+            {
+              "id": "aut250-m4-l2",
+              "title": "Temperature and protection logic",
+              "text": "Temperature information may influence available propulsion power, regenerative capability, charging rate, component protection, and system shutdown decisions. The important diagnostic question is not simply whether a temperature is high or low, but whether the value is plausible, whether the vehicle responded as designed, and whether the applicable limits for that operating state were reached.",
+              "learnerAction": "Compare sensor readings, commanded cooling actions, and observed performance in a thermal-limiting scenario.",
+              "evidenceBoundary": "No universal temperature threshold, derate point, fan command, pump speed, or charging limit is established."
+            },
+            {
+              "id": "aut250-m4-l3",
+              "title": "Thermal diagnostic reasoning",
+              "text": "A thermal concern can result from heat generation, inadequate heat transfer, restricted flow, sensor error, actuator performance, control logic, ambient conditions, or another subsystem that changes thermal load. Effective diagnosis compares temperature trends, operating state, command-response relationships, and service information rather than replacing the component named in a protection code.",
+              "learnerAction": "Create a cause-and-evidence matrix for a repeated reduced-power event after sustained load.",
+              "evidenceBoundary": "Thermal protection codes and temperature readings must be interpreted with vehicle-specific thresholds, sensor locations, and operating conditions."
+            }
+          ],
+          "practice": [
+            "Map thermal dependencies across vehicle systems.",
+            "Differentiate temperature measurement from protection response.",
+            "Analyze a trend-based derate scenario."
+          ],
+          "assessments": [
+            "Thermal-system relationship check",
+            "Command-response interpretation",
+            "Temperature-trend reasoning task",
+            "Thermal derate diagnostic plan"
+          ],
+          "visuals": [
+            {
+              "type": "concept-diagram",
+              "title": "Cross-system thermal relationships"
+            },
+            {
+              "type": "timeline",
+              "title": "Temperature, command, and performance trend"
+            },
+            {
+              "type": "table",
+              "title": "Thermal evidence and alternative explanations"
+            }
+          ],
+          "safetyAndEvidenceBoundary": "Refrigerant, coolant, high-voltage heaters, electric compressors, pumps, and other thermal components require system-specific service precautions and approved procedures."
+        },
+        {
+          "id": "aut250-m5-low-voltage",
+          "sequence": 5,
+          "title": "Low-Voltage Dependencies, Wake-Up, Communication, and Readiness",
+          "estimatedMinutes": 240,
+          "authorship": "project-authored",
+          "moduleObjectives": [
+            "Explain how low-voltage electrical power supports control modules, communication, contactor control, wake-up, and readiness functions in electrified vehicles.",
+            "Recognize how a low-voltage supply concern can create secondary communication and propulsion-system symptoms.",
+            "Correlate supply voltage, wake-up state, network communication, module status, and stored faults before escalating to high-voltage diagnosis.",
+            "Develop a diagnostic sequence that checks foundational dependencies before component replacement."
+          ],
+          "lessons": [
+            {
+              "id": "aut250-m5-l1",
+              "title": "Low-voltage system as a control dependency",
+              "text": "Although propulsion energy may come from a high-voltage energy-storage system, many control, sensing, communication, and switching functions depend on the low-voltage system. A weak supply, poor connection, unstable ground path, or failed support function can prevent modules from waking, communicating, or commanding high-voltage connection even when the propulsion battery itself is serviceable.",
+              "learnerAction": "Trace the control dependency from low-voltage supply to module wake-up, communication, and propulsion readiness.",
+              "evidenceBoundary": "Nominal voltage, minimum wake-up voltage, converter support strategy, grounding layout, and readiness criteria must come from applicable vehicle information."
+            },
+            {
+              "id": "aut250-m5-l2",
+              "title": "Communication faults as secondary evidence",
+              "text": "Multiple communication faults appearing together may indicate a shared power, ground, wake-up, network, or timing dependency. The presence of many codes does not necessarily mean many independent module failures. Diagnostic reasoning should identify which modules were online, which were missing, what common dependencies they share, and whether the fault timing aligns with a supply or wake-up event.",
+              "learnerAction": "Group a set of communication codes by possible shared dependency instead of by module name.",
+              "evidenceBoundary": "Network topology, termination, biasing, wake-up logic, message timing, and diagnostic criteria are vehicle-specific."
+            },
+            {
+              "id": "aut250-m5-l3",
+              "title": "Readiness-first diagnostic strategy",
+              "text": "Before escalating to intrusive high-voltage testing, a technician can often gather valuable evidence from low-voltage condition, module communication, readiness indicators, stored event information, and vehicle state. A readiness-first strategy reduces unnecessary access to energized systems and helps identify foundational conditions that can explain several symptoms at once.",
+              "learnerAction": "Write a nonintrusive first-pass diagnostic sequence for a vehicle that will not enter propulsion-ready state.",
+              "evidenceBoundary": "The sequence defines diagnostic categories, not a universal test order or numeric acceptance criteria."
+            }
+          ],
+          "practice": [
+            "Trace low-voltage dependencies for propulsion readiness.",
+            "Group communication faults by common power, ground, wake-up, or network dependencies.",
+            "Build a nonintrusive evidence-preservation checklist."
+          ],
+          "assessments": [
+            "Low-voltage dependency concept check",
+            "Communication-code clustering exercise",
+            "Readiness-state reasoning scenario",
+            "Foundational-dependency diagnostic plan"
+          ],
+          "visuals": [
+            {
+              "type": "concept-diagram",
+              "title": "Low-voltage control dependency map"
+            },
+            {
+              "type": "flowchart",
+              "title": "Wake-up, communication, and readiness sequence"
+            },
+            {
+              "type": "table",
+              "title": "Shared-dependency evidence matrix"
+            }
+          ],
+          "safetyAndEvidenceBoundary": "Low-voltage checks do not establish that a high-voltage system is de-energized. High-voltage state must be verified only by the applicable service procedure."
+        },
+        {
+          "id": "aut250-m6-diagnostic-reasoning",
+          "sequence": 6,
+          "title": "Advanced Diagnostic Reasoning, Verification, and Documentation",
+          "estimatedMinutes": 240,
+          "authorship": "project-authored",
+          "moduleObjectives": [
+            "Apply a repeatable Request → Measure → Compare → Correlate → Verify diagnostic model to electrified-vehicle concerns.",
+            "Develop competing hypotheses and select tests that meaningfully distinguish among them.",
+            "Identify when evidence is insufficient to support a repair decision and document uncertainty.",
+            "Verify corrective action across the original concern, system state, fault information, and relevant operating conditions."
+          ],
+          "lessons": [
+            {
+              "id": "aut250-m6-l1",
+              "title": "Request, measure, compare, correlate, verify",
+              "text": "Advanced diagnosis is a controlled evidence process. First define what the vehicle or control system is requesting. Then measure or observe the actual response. Compare that response with applicable authoritative information. Correlate the result with other systems and operating conditions. Finally, verify the conclusion with a test or post-repair condition that could reasonably show whether the identified cause was correct.",
+              "learnerAction": "Apply the five-stage reasoning model to a mixed propulsion, charging, and thermal complaint.",
+              "evidenceBoundary": "The reasoning model is general; every measurement procedure, comparison value, and acceptance criterion remains vehicle-specific."
+            },
+            {
+              "id": "aut250-m6-l2",
+              "title": "Competing hypotheses and discriminating tests",
+              "text": "A diagnostic plan is stronger when it considers more than one plausible explanation. The technician should ask which evidence would be expected if each hypothesis were true and choose a next check that separates those possibilities efficiently and safely. This prevents confirmation bias and reduces the tendency to replace the first component mentioned by a code or symptom.",
+              "learnerAction": "Create three plausible hypotheses and identify one discriminating evidence check for each.",
+              "evidenceBoundary": "Hypotheses must remain provisional until supported by compatible evidence and verification."
+            },
+            {
+              "id": "aut250-m6-l3",
+              "title": "Verification and documentation",
+              "text": "A repair decision is not complete when a part is installed or a code is cleared. Verification should address the original customer concern, relevant system state, fault information, operating conditions, and any related functions affected by the repair. Documentation should preserve the evidence used, the reasoning that connected evidence to the decision, unresolved limitations, and the verification result.",
+              "learnerAction": "Complete a diagnostic record containing concern, evidence, hypotheses, decision, repair or action, and verification.",
+              "evidenceBoundary": "Clearing codes, observing a single normal reading, or completing one short drive does not automatically establish a successful repair unless it matches the applicable verification criteria."
+            }
+          ],
+          "practice": [
+            "Apply Request → Measure → Compare → Correlate → Verify to a complex scenario.",
+            "Build and rank competing hypotheses by evidentiary support without declaring a cause prematurely.",
+            "Design a verification plan that reproduces the relevant operating condition."
+          ],
+          "assessments": [
+            "Diagnostic-process sequencing check",
+            "Competing-hypothesis exercise",
+            "Independent multi-system diagnostic case",
+            "Verification and documentation portfolio item"
+          ],
+          "visuals": [
+            {
+              "type": "flowchart",
+              "title": "Request → Measure → Compare → Correlate → Verify"
+            },
+            {
+              "type": "table",
+              "title": "Competing hypotheses and discriminating evidence"
+            },
+            {
+              "type": "infographic",
+              "title": "Evidence-supported repair and verification cycle"
+            }
+          ],
+          "safetyAndEvidenceBoundary": "Diagnostic reasoning does not authorize physical access. Any test involving energized circuits, disabled safety systems, exposed conductors, service disconnects, or high-voltage components requires the applicable approved procedure."
+        }
+      ],
+      "courseModuleSequence": [
+        "aut250-m1-battery-systems",
+        "aut250-m2-power-electronics",
+        "aut250-m3-charging",
+        "aut250-m4-thermal",
+        "aut250-m5-low-voltage",
+        "aut250-m6-diagnostic-reasoning"
+      ],
+      "courseCompletionExpectation": "Learners complete the foundation lesson and all six project-authored modules, then demonstrate evidence-based reasoning in an integrated electrified-vehicle diagnostic case. Scored certification-style or high-stakes assessment remains outside this course-content approval state until separately reviewed and approved."
     }
   ]
 }
