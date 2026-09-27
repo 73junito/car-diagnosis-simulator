@@ -53,6 +53,40 @@
       <span class="legend-note">Line patterns are training conventions; voltage is declared separately and does not imply manufacturer wire color.</span>
     </section>
 
+    <section class="engineering-panel" aria-labelledby="chargingEngineeringHeading">
+      <div class="engineering-heading">
+        <div>
+          <p class="eyebrow">Source-backed charging reference</p>
+          <h2 id="chargingEngineeringHeading">Charging-cable voltage-drop reference</h2>
+          <p>Delco Remy source values are shown only within their stated applicability. Enter current only when you have a measured or intentionally chosen test value.</p>
+        </div>
+        <span class="engineering-status" id="chargingEngineeringStatus">Reference loaded</span>
+      </div>
+
+      <div class="reference-controls">
+        <div class="control-group">
+          <label for="chargingReferenceSelect">Charging reference</label>
+          <select id="chargingReferenceSelect">
+            <option value="delco-charging-cable-new-vehicle-design-drop-12v">New-vehicle cable design basis</option>
+            <option value="delco-charging-cable-life-max-drop-12v">Vehicle-life cable maximum</option>
+            <option value="delco-charging-3wire-number2-lead-max-drop-12v">3-wire #2 lead maximum</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="chargingCurrentInput">Measured / test current (A)</label>
+          <input id="chargingCurrentInput" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="Enter current">
+        </div>
+      </div>
+
+      <div class="engineering-grid">
+        <article class="engineering-card"><span class="value-role declared">Declared system value</span><strong>12 V</strong><small>Generic lab architecture</small></article>
+        <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engChargingDrop">0.300 V</strong><small id="engChargingDropLabel">New-vehicle design basis</small></article>
+        <article class="engineering-card"><span class="value-role measured">Entered measurement</span><strong id="engChargingCurrent">—</strong><small>Current used for calculation</small></article>
+        <article class="engineering-card result"><span class="value-role calculated">Calculated value</span><strong id="engChargingResistance">—</strong><small>Equivalent path resistance at entered current</small></article>
+      </div>
+      <p class="engineering-formula" id="chargingEngineeringFormula"></p>
+    </section>
+
     <section class="workspace">
       <div class="diagram-card">
         <div class="diagram-heading">
@@ -91,7 +125,7 @@
 
     <section class="boundary">
       <h2>Evidence boundary</h2>
-      <p>No vehicle-specific pin numbers, voltage limits, procedures, or manufacturer wiring diagrams are represented here. Vehicle-specific authoritative service information is required before those details may be shown.</p>
+      <p>The charging-cable references above are source-specific Delco Remy values and are not universal charging-system limits. The current field is user-entered and no current is assumed. Open circuits and unrelated ground-path faults do not receive fabricated numeric voltage-drop results. Vehicle-specific authoritative service information is still required for actual charging voltage, alternator output, wiring, procedures, and component limits.</p>
     </section>
   </main>
 
@@ -104,6 +138,11 @@
   <script src="/src/symbols/registry.js"></script>
   <script src="/src/symbols/svg-renderer.js"></script>
   <script src="/src/symbols/index.js"></script>
+  <script src="/src/engineering/contracts.js"></script>
+  <script src="/src/engineering/profiles.js"></script>
+  <script src="/src/engineering/calculator.js"></script>
+  <script src="/src/engineering/specifications.js"></script>
+  <script src="/src/engineering/index.js"></script>
   <script src="./circuit-lab.js"></script>
 </body>
 </html>

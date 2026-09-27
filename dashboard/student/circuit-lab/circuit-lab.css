@@ -133,3 +133,20 @@ header p { max-width: 850px; line-height: 1.6; }
 @media (prefers-reduced-motion:reduce) {
   .wire.flow-power,.wire.flow-ground,.wire.flow-control,.wire.fault-degraded { animation:none; }
 }
+
+
+.engineering-panel{margin:18px 0;padding:18px;border:1px solid #cbd5e1;border-radius:14px;background:#f8fafc}
+.engineering-heading{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:14px}
+.engineering-heading h2{margin:2px 0 6px}.engineering-heading p{margin:0}
+.engineering-status{display:inline-flex;align-items:center;min-height:32px;padding:6px 10px;border-radius:999px;background:#e8f5e9;color:#1b5e20;font-weight:800;white-space:nowrap}
+.engineering-status.fault{background:#fff3e0;color:#8a4b08}.engineering-status.inactive{background:#eef2f7;color:#475569}
+.reference-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 16px}
+.reference-controls input{min-height:42px;border:1px solid #b8c2d1;border-radius:10px;padding:8px 10px;font:inherit;background:#fff}
+.engineering-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.engineering-card{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:14px;min-height:112px}
+.engineering-card.result{border-width:2px}.engineering-card strong{display:block;margin:9px 0 4px;font-size:1.5rem;line-height:1.1}.engineering-card small{display:block;color:#52606d}
+.value-role{display:inline-flex;padding:3px 7px;border-radius:999px;font-size:.72rem;font-weight:800;line-height:1.2}
+.value-role.declared{background:#e8eef8;color:#294c7a}.value-role.authoritative{background:#ede9fe;color:#5b21b6}.value-role.measured{background:#e0f2fe;color:#075985}.value-role.calculated{background:#e8f5e9;color:#1b5e20}
+.engineering-formula{margin:14px 0 0;padding-top:12px;border-top:1px solid #d8e0ea;color:#455468;font-size:.92rem}
+@media(max-width:900px){.engineering-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.engineering-heading{display:block}.engineering-status{margin-top:10px}}
+@media(max-width:620px){.engineering-grid,.reference-controls{grid-template-columns:1fr}}

@@ -185,3 +185,27 @@ The lab derives one cross-source-independent engineering calculation from the De
 `Rmax = Vdrop,max / Itest`
 
 For example, the cited 12 V 50MT procedure uses 0.400 V maximum total cable loss at 500 A, yielding a calculated equivalent total cable resistance of 0.800 mOhm. The battery selector does not participate in that calculation and does not imply battery/starter compatibility.
+
+## Charging-system source-backed engineering integration
+
+The existing Interactive Charging-System Circuit Lab now consumes the Delco Remy authoritative charging-cable references without introducing a universal charging voltage or assumed alternator current.
+
+Available source-backed references are:
+
+- 0.300 V new-vehicle charging-cable design basis
+- 0.500 V vehicle-life charging-cable maximum
+- 0.200 V maximum for the #2 lead in the cited 3-wire guidance
+
+The lab begins with no charging current value. A student may enter a measured or intentionally chosen test current; only then does the engineering calculator derive equivalent resistance:
+
+`R = Vdrop / I`
+
+For example, an entered 100 A with the 0.300 V design basis yields 3.000 mOhm. This is a calculated reference relationship, not an assumed alternator output or a predicted fault measurement.
+
+Fault handling remains conservative:
+
+- open charging feed or open main protection: no numeric fault voltage drop is inferred;
+- high-resistance alternator ground: the lab explicitly warns that the selected charging-cable reference may not apply to the ground path;
+- changing operating state does not create charging voltage, current, or resistance values.
+
+The existing generic 12 V charging-system topology remains project-authored training content. Source-backed values stay separate from the topology and remain scoped to their Delco Remy applicability.

@@ -3,9 +3,14 @@
 (async function initCircuitLab() {
   const NS = "http://www.w3.org/2000/svg";
   const engine = window.TorqueMindCircuitEngine;
-  const response = await fetch("/data/circuits/generic-charging-system.json");
+  const [response, delcoResponse] = await Promise.all([
+    fetch("/data/circuits/generic-charging-system.json"),
+    fetch("/data/engineering/authoritative-specifications/delco-remy-starting-charging.json")
+  ]);
   if (!response.ok) throw new Error("Unable to load training circuit.");
+  if (!delcoResponse.ok) throw new Error("Unable to load charging engineering references.");
   const circuit = await response.json();
+  const delcoCatalog = await delcoResponse.json();
   const validation = engine.validateCircuit(circuit);
   if (!validation.valid) throw new Error(validation.errors.join("; "));
 
@@ -13,6 +18,8 @@
   const symbolRenderer = window.TorqueMindSymbolRenderer;
   const connectionLibrary = await window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections");
   const voltageDomains = window.TorqueMindVoltageDomains;
+  const engineering = window.TorqueMindEngineering;
+  const calculator = engineering.calculator;
 
   const svg = document.getElementById("circuitSvg");
   const inspector = document.getElementById("inspectorContent");
@@ -63,6 +70,81 @@
     load: "A simplified symbol representing vehicle electrical loads consuming electrical energy.",
     ground: "Common chassis return reference for the generic circuit."
   };
+
+  const engineeringUi = {
+    status: document.getElementById("chargingEngineeringStatus"),
+    referenceSelect: document.getElementById("chargingReferenceSelect"),
+    currentInput: document.getElementById("chargingCurrentInput"),
+    drop: document.getElementById("engChargingDrop"),
+    dropLabel: document.getElementById("engChargingDropLabel"),
+    current: document.getElementById("engChargingCurrent"),
+    resistance: document.getElementById("engChargingResistance"),
+    formula: document.getElementById("chargingEngineeringFormula")
+  };
+
+  const chargingReferenceLabels = Object.freeze({
+    "delco-charging-cable-new-vehicle-design-drop-12v": "New-vehicle design basis",
+    "delco-charging-cable-life-max-drop-12v": "Vehicle-life maximum",
+    "delco-charging-3wire-number2-lead-max-drop-12v": "3-wire #2 lead maximum"
+  });
+
+  function selectedChargingReference() {
+    return delcoCatalog.specifications.find((entry) => entry.id === engineeringUi.referenceSelect.value) || null;
+  }
+
+  function enteredCurrent() {
+    const raw = engineeringUi.currentInput.value.trim();
+    if (!raw) return null;
+    const value = Number(raw);
+    return Number.isFinite(value) && value > 0 ? value : null;
+  }
+
+  function renderEngineering() {
+    const reference = selectedChargingReference();
+    const current = enteredCurrent();
+    const fault = faultObject();
+    const dropValue = reference?.quantity?.value;
+    const resistance = reference && current
+      ? calculator.solveOhmsLaw({ voltage: dropValue, current })
+      : null;
+
+    engineeringUi.drop.textContent = reference ? `${dropValue.toFixed(3)} V` : "—";
+    engineeringUi.dropLabel.textContent = reference
+      ? chargingReferenceLabels[reference.id] || reference.parameter
+      : "No source reference";
+    engineeringUi.current.textContent = current ? `${Number(current.toFixed(2))} A` : "—";
+    engineeringUi.resistance.textContent = resistance ? `${(resistance.value * 1000).toFixed(3)} mΩ` : "—";
+
+    if (!reference) {
+      engineeringUi.status.textContent = "No charging reference selected";
+      engineeringUi.status.className = "engineering-status inactive";
+    } else if (fault?.type === "open_circuit") {
+      engineeringUi.status.textContent = "Open path — no fault voltage drop inferred";
+      engineeringUi.status.className = "engineering-status fault";
+    } else if (fault?.id === "FAULT_HIGH_RES_GROUND") {
+      engineeringUi.status.textContent = "Ground path degraded — selected cable reference may not apply";
+      engineeringUi.status.className = "engineering-status fault";
+    } else {
+      engineeringUi.status.textContent = "Reference loaded";
+      engineeringUi.status.className = "engineering-status";
+    }
+
+    const scope = reference?.applicability?.wiringConfiguration
+      ? `${reference.applicability.wiringConfiguration}, ${reference.applicability.conductor || "specified conductor"}`
+      : reference?.applicability?.testMethod || "charging-cable guidance";
+    const comparison = reference?.comparison === "design_basis" ? "design basis" : "maximum";
+    const calculationText = resistance
+      ? `Entered current ${Number(current.toFixed(2))} A gives R = ${dropValue.toFixed(3)} V ÷ ${Number(current.toFixed(2))} A = ${(resistance.value * 1000).toFixed(3)} mΩ.`
+      : "Enter a positive current value to calculate equivalent resistance from the selected source-backed voltage-drop reference.";
+    const faultText = fault?.type === "open_circuit"
+      ? " The injected open circuit does not receive a fabricated voltage-drop value."
+      : fault?.id === "FAULT_HIGH_RES_GROUND"
+        ? " The injected alternator-ground fault is a different path; do not apply this charging-cable reference to it without matching source applicability."
+        : "";
+    engineeringUi.formula.textContent = reference
+      ? `${chargingReferenceLabels[reference.id]}: ${dropValue.toFixed(3)} V ${comparison}; scope: ${scope}. ${calculationText}${faultText}`
+      : "No source-backed charging reference is available.";
+  }
 
   const systemFlows = {
     "key-off": {
@@ -384,6 +466,7 @@
     renderComponents();
     renderExternalLabels();
     renderTestPoints();
+    renderEngineering();
     stateBadge.textContent = stateLabels[operatingState];
   }
 
@@ -517,6 +600,10 @@
     if (activeFault === "FAULT_OPEN_CHARGE_FEED") updateGuide(4);
     render();
   });
+
+  engineeringUi.referenceSelect.addEventListener("change", renderEngineering);
+  engineeringUi.currentInput.addEventListener("input", renderEngineering);
+  engineeringUi.currentInput.addEventListener("change", renderEngineering);
 
   stateSelect.addEventListener("change", () => {
     operatingState = stateSelect.value;
