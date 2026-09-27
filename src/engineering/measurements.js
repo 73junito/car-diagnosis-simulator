@@ -15,7 +15,9 @@ function createMeasuredQuantity({
   measurementId,
   entryMethod = "student_entry",
   testPointId = null,
-  note = null
+  note = null,
+  voltageSystemId = null,
+  nominalVoltage = null
 }) {
   const quantity = {
     quantityType,
@@ -31,6 +33,13 @@ function createMeasuredQuantity({
     }
   };
   if (testPointId) quantity.measurement.context.testPointId = testPointId;
+  if (voltageSystemId) quantity.measurement.context.voltageSystemId = voltageSystemId;
+  if (nominalVoltage !== null && nominalVoltage !== undefined) {
+    if (!Number.isFinite(nominalVoltage) || nominalVoltage <= 0) {
+      throw new Error("nominalVoltage must be a positive finite number when provided");
+    }
+    quantity.measurement.context.nominalVoltage = nominalVoltage;
+  }
   if (note) quantity.measurement.note = note;
 
   const errors = contracts.validateEngineeringQuantity(quantity);
@@ -46,6 +55,17 @@ function compareMeasurementToReference(measured, reference) {
   if (errors.length) return { status: "invalid", errors };
   if (measured.quantityType !== reference.quantity.quantityType || measured.unit !== reference.quantity.unit) {
     return { status: "not_comparable", reason: "quantity type and unit must match" };
+  }
+
+  const measuredNominalVoltage = measured.measurement?.context?.nominalVoltage;
+  const referenceNominalVoltage = reference?.applicability?.systemVoltage;
+  if (Number.isFinite(measuredNominalVoltage) &&
+      Number.isFinite(referenceNominalVoltage) &&
+      measuredNominalVoltage !== referenceNominalVoltage) {
+    return {
+      status: "not_comparable",
+      reason: "measurement voltage domain does not match source reference system voltage"
+    };
   }
 
   const measuredValue = measured.value;
@@ -72,6 +92,11 @@ function deltaBetween(measured, expected) {
   if (measuredErrors.length || expectedErrors.length) throw new Error([...measuredErrors, ...expectedErrors].join("; "));
   if (measured.quantityType !== expected.quantityType || measured.unit !== expected.unit) {
     throw new Error("measurement and expected quantity must share quantity type and unit");
+  }
+  const measuredDomain = measured.measurement?.context?.voltageSystemId || null;
+  const expectedDomain = expected.electricalDomain?.voltageSystemId || null;
+  if (measuredDomain && expectedDomain && measuredDomain !== expectedDomain) {
+    throw new Error("measurement and expected quantity must share electrical voltage domain");
   }
   return measured.value - expected.value;
 }
