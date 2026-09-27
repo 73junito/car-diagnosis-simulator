@@ -11,6 +11,7 @@
  *   - a review record claiming approval for a chunk whose canonical record is
  *     not approved is an approval_state_conflict and must fail closed.
  */
+const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
@@ -35,6 +36,34 @@ function runGuard() {
   }
 }
 
+function withShadowApprovalFixtures(callback) {
+  const reviewDir = path.join(root, 'data', 'evidence', 'review-queues');
+  const fixtureNames = [
+    'zz-test-shadow-approval-a.json',
+    'zz-test-shadow-approval-b.json'
+  ];
+  const fixturePaths = fixtureNames.map((name) => path.join(reviewDir, name));
+  const payload = {
+    source_basis: {
+      approved_chunks: [
+        'frontiers-alternator-primary-source-p7',
+        'frontiers-alternator-ac-dc-rectification-p7'
+      ]
+    }
+  };
+
+  try {
+    for (const fixturePath of fixturePaths) {
+      fs.writeFileSync(fixturePath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
+    }
+    return callback();
+  } finally {
+    for (const fixturePath of fixturePaths) {
+      fs.rmSync(fixturePath, { force: true });
+    }
+  }
+}
+
 describe('Evidence approval contract', () => {
   test('canonical chunk records are well formed', () => {
     const doc = readJson(chunkFile);
@@ -46,33 +75,43 @@ describe('Evidence approval contract', () => {
     }
   });
 
-  test('the guard fails closed when review queues claim unapproved chunks are approved', () => {
+  test('the clean repository has no shadow-approval conflicts', () => {
     const result = runGuard();
-
-    // The repository currently contains shadow approval, so the guard MUST fail.
-    // If this ever passes silently, the detector has regressed.
-    expect(result.status).toBe(1);
-    expect(result.stderr).toContain('shadow approval detected');
-    expect(result.stderr).toContain('approval_state_conflict');
-    expect(result.stderr).toMatch(/canonical status="draft" approved=false/);
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain('0 shadow-approval conflicts');
+    expect(result.stderr).toBe('');
   });
 
-  test('every conflict names a chunk that the canonical record does not approve', () => {
-    const result = runGuard();
-    const doc = readJson(chunkFile);
-    const unapproved = new Set(doc.chunks.filter((c) => c.approved !== true).map((c) => c.chunk_id));
-
-    const reported = [...result.stderr.matchAll(/chunk "([^"]+)":/g)].map((m) => m[1]);
-    expect(reported.length).toBeGreaterThan(0);
-    for (const chunkId of reported) {
-      expect(unapproved.has(chunkId)).toBe(true);
-    }
+  test('the guard fails closed when synthetic review queues claim unapproved chunks are approved', () => {
+    withShadowApprovalFixtures(() => {
+      const result = runGuard();
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain('shadow approval detected');
+      expect(result.stderr).toContain('approval_state_conflict');
+      expect(result.stderr).toMatch(/canonical status="draft" approved=false/);
+    });
   });
 
-  test('conflicts are reported across more than one review record', () => {
-    const result = runGuard();
-    const records = [...result.stderr.matchAll(/(review-queues\/[\w.-]+\.json)/g)].map((m) => m[1]);
-    expect(new Set(records).size).toBeGreaterThan(1);
+  test('every synthetic conflict names a chunk that the canonical record does not approve', () => {
+    withShadowApprovalFixtures(() => {
+      const result = runGuard();
+      const doc = readJson(chunkFile);
+      const unapproved = new Set(doc.chunks.filter((c) => c.approved !== true).map((c) => c.chunk_id));
+
+      const reported = [...result.stderr.matchAll(/chunk "([^"]+)":/g)].map((m) => m[1]);
+      expect(reported.length).toBeGreaterThan(0);
+      for (const chunkId of reported) {
+        expect(unapproved.has(chunkId)).toBe(true);
+      }
+    });
+  });
+
+  test('synthetic conflicts are reported across more than one review record', () => {
+    withShadowApprovalFixtures(() => {
+      const result = runGuard();
+      const records = [...result.stderr.matchAll(/(review-queues\/[\w.-]+\.json)/g)].map((m) => m[1]);
+      expect(new Set(records).size).toBeGreaterThan(1);
+    });
   });
 
   test('the guard never mutates canonical evidence state', () => {
