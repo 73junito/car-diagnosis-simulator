@@ -100,6 +100,14 @@ describe('Charging lesson review corrections', () => {
     }
   });
 
+  test('reasoning check does not assess pending scholarly chunks as approved authority', () => {
+    const block = plan.contentBlocks.find((item) => item.id === 'charging-reasoning-check');
+    expect(block.teachingPoints[0]).toBe(
+      'Check 1: explain the functional relationship among the battery, alternator, diode rectifier, voltage regulator, and vehicle electrical loads using the lesson system model and identify which parts require vehicle-specific verification.'
+    );
+    expect(JSON.stringify(block)).not.toMatch(/pending Frontiers technical-review chunks/i);
+  });
+
   test('generic charging circuit supports the full lesson and exposes the load-feed test point', () => {
     expect(chargingCircuit.curriculum.supportsObjectiveIds).toEqual([
       'ug-electrical-lo-1',
