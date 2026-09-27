@@ -31,11 +31,37 @@ function renderObjectives(objectives) {
   ).join("");
 }
 
+function renderEvidenceReferences(references = []) {
+  if (!references.length) return "";
+  return `
+    <div class="lesson-evidence-refs">
+      <strong>Evidence references</strong>
+      <ul>${references.map((ref) => {
+        const details = [
+          ref.value,
+          ref.comparisonRole ? titleCase(ref.comparisonRole) : "",
+          ref.applicability,
+          ref.locator,
+          ref.approval
+        ].filter(Boolean).join(" · ");
+        return `<li><code>${escapeHtml(ref.id || ref.sourceId || ref.type)}</code>${details ? `<span>${escapeHtml(details)}</span>` : ""}</li>`;
+      }).join("")}</ul>
+    </div>`;
+}
+
 function renderBlocks(blocks) {
   return blocks.map((block, index) => `
     <li>
       <span>${String(index + 1).padStart(2, "0")}</span>
-      <div><strong>${escapeHtml(block.title)}</strong><p>${escapeHtml(block.description)}</p><small>${escapeHtml(titleCase(block.instructionalPurpose))}</small></div>
+      <div>
+        <strong>${escapeHtml(block.title)}</strong>
+        <p>${escapeHtml(block.description)}</p>
+        <small>${escapeHtml(titleCase(block.instructionalPurpose))}</small>
+        ${block.teachingPoints?.length ? `<ul class="lesson-teaching-points">${block.teachingPoints.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}</ul>` : ""}
+        ${block.learnerAction ? `<p class="learner-action"><strong>Learner task:</strong> ${escapeHtml(block.learnerAction)}</p>` : ""}
+        ${block.sourceBoundary ? `<p class="source-boundary"><strong>Boundary:</strong> ${escapeHtml(block.sourceBoundary)}</p>` : ""}
+        ${renderEvidenceReferences(block.evidenceReferences)}
+      </div>
     </li>`
   ).join("");
 }
@@ -46,6 +72,9 @@ function renderVisuals(visuals) {
       <span>${escapeHtml(titleCase(visual.type))}</span>
       <h4>${escapeHtml(visual.title)}</h4>
       <p>${escapeHtml(visual.purpose)}</p>
+      ${visual.content?.length ? `<ul class="visual-content">${visual.content.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : ""}
+      ${visual.altText ? `<p class="visual-alt"><strong>Accessibility:</strong> ${escapeHtml(visual.altText)}</p>` : ""}
+      ${visual.sourceScope ? `<p class="source-boundary"><strong>Source scope:</strong> ${escapeHtml(visual.sourceScope)}</p>` : ""}
     </article>`
   ).join("");
 }
@@ -67,6 +96,7 @@ function renderPlan(plan, lesson, course) {
           <h3>${escapeHtml(lesson.title)}</h3>
           <p>${escapeHtml(plan.lessonSummary)}</p>
           <p class="program-context">${renderProgramMapping(plan.programMapping)}</p>
+          ${plan.contentStatus ? `<div class="lesson-readiness"><span>${escapeHtml(titleCase(plan.contentStatus))}</span><span>${escapeHtml(titleCase(plan.evidenceApprovalStatus || "evidence status not recorded"))}</span></div>` : ""}
         </div>
         <span class="pathway-status${plan.status === "active" ? "" : " planned"}">${escapeHtml(plan.status.toUpperCase())}</span>
       </div>
@@ -106,6 +136,14 @@ function renderPlan(plan, lesson, course) {
           ${list(plan.evidenceFocus)}
           <p><strong>Evidence expectation:</strong> ${escapeHtml(plan.evidenceExpectation)}</p>
           <p><strong>Assessment boundary:</strong> ${escapeHtml(plan.assessmentBoundary)}</p>
+          ${plan.evidenceReview ? `
+            <div class="lesson-review-state">
+              <p><strong>Lesson content status:</strong> ${escapeHtml(titleCase(plan.contentStatus))}</p>
+              <p><strong>Evidence approval:</strong> ${escapeHtml(titleCase(plan.evidenceApprovalStatus))}</p>
+              <p><strong>Review note:</strong> ${escapeHtml(plan.evidenceReview.reviewNote)}</p>
+              <p><strong>Pending technical-review chunks:</strong></p>
+              ${list(plan.evidenceReview.pendingTechnicalReviewChunkIds || [], "pending-chunk-list")}
+            </div>` : ""}
         </div>
       </details>
     </article>`;
