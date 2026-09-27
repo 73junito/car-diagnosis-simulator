@@ -1,0 +1,19 @@
+* AutoLearnPro relay/load high-resistance training model
+* Project-authored model values only; not a vehicle specification.
+VHEALTHY healthy 0 DC 12
+RHEALTHY healthy 0 6.03318250377
+
+VFAULT fault_in 0 DC 12
+RFAULTBASE fault_in fault_mid 6.03318250377
+RFAULTADD fault_mid 0 1.5
+
+.control
+op
+let tm_healthy = abs(i(vhealthy))
+let tm_fault = abs(i(vfault))
+print tm_healthy
+print tm_fault
+quit
+.endc
+
+.end
