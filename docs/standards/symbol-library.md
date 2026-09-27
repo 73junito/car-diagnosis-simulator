@@ -8,13 +8,13 @@ This library is the canonical source for reusable TorqueMind/AutoLearnPro schema
 
 | Domain | Symbols | Reference family |
 | --- | ---: | --- |
-| Electrical | 31 | IEC 60617:2026 DB; ISO 14617-1:2025 |
+| Electrical | 33 | IEC 60617:2026 DB; ISO 14617-1:2025 |
 | Hydraulic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Pneumatic | 11 | ISO 1219-1:2012 + Amd 1:2016; ISO 14617-1:2025 |
 | Mechanical | 8 | ISO 14617-1:2025 |
 | Thermal | 6 | ISO 14617-1:2025 |
 
-Current catalog: **67 symbols**.
+Current catalog: **69 symbols**.
 
 ## Canonical representation
 
@@ -70,7 +70,7 @@ The production Circuit Lab consumes this library directly. New labs must use the
 
 Electrical conductors are defined separately from component geometry in `data/connections/electrical.json`. Each connection style has a stable identifier, semantic connection type, visual role, line width, dash pattern, and an explicit rule for whether a voltage system must be declared.
 
-The current catalog includes power, switched power, ground return, control, analog signal, digital signal, CAN, LIN, PWM, shield/drain, and traction-power styles. These are TorqueMind training conventions and do not represent manufacturer wire-color codes.
+The current catalog includes power, switched power, ground return, control, analog signal, digital signal, CAN, LIN, PWM, shield/drain, traction-power, and traction-return styles. These are TorqueMind training conventions and do not represent manufacturer wire-color codes.
 
 Circuit definitions reference connection styles by `styleId` and reference their declared electrical domain by `voltageSystemId`.
 
@@ -80,7 +80,7 @@ Every electrical circuit must declare one or more voltage systems. Conventional 
 
 The voltage-domain renderer distinguishes 12 V, 24 V, 48 V, traction, and other explicitly declared voltage systems visually while keeping the written nominal voltage visible. Visual treatment never substitutes for the voltage label.
 
-For electrified vehicles with multiple electrical domains, each component and conductor references the voltage system to which it belongs.
+For electrified vehicles with multiple electrical domains, each conductor references its declared voltage system. Components normally reference their primary voltage domain; explicitly cross-domain training components such as a DC/DC converter may additionally declare the voltage systems they bridge.
 
 ## Reusable circuit templates
 
@@ -133,3 +133,18 @@ A dedicated `electrical.network-module` symbol exposes explicit `power`, `ground
 The template intentionally uses qualitative communication states. It does not assign universal CAN/LIN voltage levels, resistance targets, termination values, baud rates, wake thresholds, or manufacturer pinouts.
 
 Network fault coverage includes opens, shorts to ground, shorts to power, and a first-class `short_between_lines` fault used to model a CAN-H/CAN-L line-to-line short as an explicit unintended graph edge.
+
+### Electrified multi-voltage training template
+
+The reusable template `automotive-electrified-multivoltage` models a generic electrified-vehicle training architecture with two explicitly declared electrical domains:
+
+- `LV12`: **12 V nominal — low-voltage domain**
+- `TR400`: **400 V nominal — training example traction domain**
+
+The 400 V value is an example only and is not a universal hybrid or EV specification. The template uses the project-specific `electrified-training` powertrain label so the example does not claim to represent one specific BEV, hybrid, plug-in hybrid, or fuel-cell architecture.
+
+A project-authored `electrical.dc-dc-converter` symbol exposes separate traction-side and low-voltage-side terminals. The component is explicitly marked as cross-domain while each connected conductor retains its own `voltageSystemId`. A project-authored `electrical.traction-inverter` symbol separates DC traction input, generic motor output, and low-voltage control.
+
+The connection catalog includes a dedicated `electrical.traction-return` style so traction return conductors are not visually or semantically treated as chassis ground.
+
+The lab is conceptual training only. It intentionally does not model high-voltage service probing, PPE selection, isolation procedures, contactor/interlock sequencing, bypass procedures, switching frequency, phase behavior, current limits, resistance limits, torque, or manufacturer-specific diagnostic values.

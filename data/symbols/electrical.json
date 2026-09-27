@@ -1,6 +1,6 @@
 {
   "domain": "electrical",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "status": "project-authored-reference-aligned",
   "standardReferences": [
     "IEC 60617:2026 DB",
@@ -2171,6 +2171,248 @@
             "y1": 75,
             "x2": 90,
             "y2": 75
+          },
+          "className": "symbol-stroke"
+        }
+      ]
+    },
+    {
+      "id": "electrical.dc-dc-converter",
+      "domain": "electrical",
+      "name": "DC/DC converter",
+      "aliases": [
+        "voltage converter",
+        "traction DC/DC converter"
+      ],
+      "tags": [
+        "converter",
+        "multi-voltage",
+        "traction",
+        "low-voltage"
+      ],
+      "terminals": [
+        {
+          "id": "hv_pos",
+          "x": 10,
+          "y": 30
+        },
+        {
+          "id": "hv_neg",
+          "x": 10,
+          "y": 70
+        },
+        {
+          "id": "lv_pos",
+          "x": 90,
+          "y": 30
+        },
+        {
+          "id": "lv_neg",
+          "x": 90,
+          "y": 70
+        }
+      ],
+      "primitives": [
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 24,
+            "y": 18,
+            "width": 52,
+            "height": 64,
+            "rx": 7
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 50,
+            "y1": 18,
+            "x2": 50,
+            "y2": 82
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 37,
+            "y": 53,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "HV"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 63,
+            "y": 53,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "LV"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 30,
+            "x2": 24,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 70,
+            "x2": 24,
+            "y2": 70
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 30,
+            "x2": 90,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 70,
+            "x2": 90,
+            "y2": 70
+          },
+          "className": "symbol-stroke"
+        }
+      ]
+    },
+    {
+      "id": "electrical.traction-inverter",
+      "domain": "electrical",
+      "name": "Traction inverter",
+      "aliases": [
+        "motor inverter",
+        "traction power electronics"
+      ],
+      "tags": [
+        "inverter",
+        "traction",
+        "motor",
+        "power electronics"
+      ],
+      "terminals": [
+        {
+          "id": "dc_pos",
+          "x": 10,
+          "y": 30
+        },
+        {
+          "id": "dc_neg",
+          "x": 10,
+          "y": 70
+        },
+        {
+          "id": "motor_a",
+          "x": 90,
+          "y": 35
+        },
+        {
+          "id": "motor_b",
+          "x": 90,
+          "y": 65
+        },
+        {
+          "id": "control",
+          "x": 50,
+          "y": 90
+        }
+      ],
+      "primitives": [
+        {
+          "type": "rect",
+          "attrs": {
+            "x": 24,
+            "y": 18,
+            "width": 52,
+            "height": 64,
+            "rx": 7
+          },
+          "className": "symbol-fill"
+        },
+        {
+          "type": "text",
+          "attrs": {
+            "x": 50,
+            "y": 42,
+            "text-anchor": "middle"
+          },
+          "className": "symbol-text",
+          "text": "INV"
+        },
+        {
+          "type": "path",
+          "attrs": {
+            "d": "M34 62 Q42 50 50 62 Q58 74 66 62"
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 30,
+            "x2": 24,
+            "y2": 30
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 10,
+            "y1": 70,
+            "x2": 24,
+            "y2": 70
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 35,
+            "x2": 90,
+            "y2": 35
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 76,
+            "y1": 65,
+            "x2": 90,
+            "y2": 65
+          },
+          "className": "symbol-stroke"
+        },
+        {
+          "type": "line",
+          "attrs": {
+            "x1": 50,
+            "y1": 82,
+            "x2": 50,
+            "y2": 90
           },
           "className": "symbol-stroke"
         }

@@ -1,0 +1,81 @@
+{
+  "schemaVersion":"1.0.0",
+  "templateId":"automotive-electrified-multivoltage",
+  "templateVersion":"1.0.0",
+  "templateRole":"reusable-training-circuit-template",
+  "systemKind":"electrified-multivoltage",
+  "circuitId":"training-electrified-multivoltage-001",
+  "title":"Generic Electrified Multi-Voltage Training Circuit",
+  "status":"project-authored-training-model",
+  "powertrainType":"electrified-training",
+  "voltageSystems":[
+    {"id":"LV12","systemType":"low-voltage","nominalVoltage":12,"unit":"V DC","displayLabel":"12 V nominal — low-voltage domain"},
+    {"id":"TR400","systemType":"traction","nominalVoltage":400,"unit":"V DC","displayLabel":"400 V nominal — training example traction domain"}
+  ],
+  "vehicleApplicability":{
+    "mode":"generic-training-only",
+    "vehicleSpecific":false,
+    "notice":"This template teaches separation and relationships between low-voltage and traction-voltage domains. The 400 V traction value is an example only. Actual traction voltage, isolation strategy, interlocks, contactors, inverter topology, converter operation, wiring, procedures, and limits are vehicle-specific."
+  },
+  "curriculum":{"lessonPlanId":"ug-electrical-multivoltage-domains","supportsObjectiveIds":["ug-electrical-lo-multivoltage-1"],"assessmentUse":"training-only"},
+  "components":[
+    {"id":"BAT12","type":"battery","name":"12 V Battery","symbolId":"electrical.battery","voltageSystemId":"LV12","terminals":[{"id":"BAT12_POS","name":"12 V positive","symbolTerminalId":"positive"},{"id":"BAT12_NEG","name":"12 V negative","symbolTerminalId":"negative"}]},
+    {"id":"FUSE12","type":"fuse","name":"Low-Voltage Protection","symbolId":"electrical.fuse","voltageSystemId":"LV12","terminals":[{"id":"FUSE12_IN","name":"Input","symbolTerminalId":"in"},{"id":"FUSE12_OUT","name":"Output","symbolTerminalId":"out"}],"internalConnections":[["FUSE12_IN","FUSE12_OUT"]]},
+    {"id":"CTRL1","type":"module","name":"Low-Voltage Control Module","symbolId":"electrical.module-controller","voltageSystemId":"LV12","terminals":[{"id":"CTRL1_PWR","name":"Module power","symbolTerminalId":"power"},{"id":"CTRL1_GND","name":"Module ground","symbolTerminalId":"ground"},{"id":"CTRL1_CMD","name":"Traction command","symbolTerminalId":"signal"}]},
+    {"id":"LVGND","type":"ground","name":"Low-Voltage Chassis Ground","symbolId":"electrical.ground","voltageSystemId":"LV12","terminals":[{"id":"LVGND_MAIN","name":"Low-voltage ground","symbolTerminalId":"ground"}]},
+    {"id":"HVBAT","type":"battery","name":"Traction Battery — Training Example","symbolId":"electrical.battery","voltageSystemId":"TR400","terminals":[{"id":"HVBAT_POS","name":"Traction positive","symbolTerminalId":"positive"},{"id":"HVBAT_NEG","name":"Traction negative","symbolTerminalId":"negative"}]},
+    {"id":"DCDC1","type":"regulator","name":"DC/DC Converter","symbolId":"electrical.dc-dc-converter","voltageSystemId":"TR400","voltageSystemIds":["TR400","LV12"],"crossDomain":true,"terminals":[{"id":"DCDC_HV_POS","name":"Traction-side positive","symbolTerminalId":"hv_pos"},{"id":"DCDC_HV_NEG","name":"Traction-side negative","symbolTerminalId":"hv_neg"},{"id":"DCDC_LV_POS","name":"Low-voltage positive output","symbolTerminalId":"lv_pos"},{"id":"DCDC_LV_NEG","name":"Low-voltage negative output","symbolTerminalId":"lv_neg"}]},
+    {"id":"INV1","type":"module","name":"Traction Inverter","symbolId":"electrical.traction-inverter","voltageSystemId":"TR400","terminals":[{"id":"INV_DC_POS","name":"DC positive","symbolTerminalId":"dc_pos"},{"id":"INV_DC_NEG","name":"DC negative","symbolTerminalId":"dc_neg"},{"id":"INV_MOTOR_A","name":"Traction output A","symbolTerminalId":"motor_a"},{"id":"INV_MOTOR_B","name":"Traction output B","symbolTerminalId":"motor_b"},{"id":"INV_CONTROL","name":"Low-voltage command","symbolTerminalId":"control"}]},
+    {"id":"MOTOR1","type":"motor","name":"Generic Traction Motor","symbolId":"electrical.motor","voltageSystemId":"TR400","terminals":[{"id":"MOTOR1_A","name":"Traction input A","symbolTerminalId":"a"},{"id":"MOTOR1_B","name":"Traction input B","symbolTerminalId":"b"}]}
+  ],
+  "connections":[
+    {"id":"W_LV_BAT_FUSE","from":"BAT12_POS","to":"FUSE12_IN","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_FUSE_CTRL","from":"FUSE12_OUT","to":"CTRL1_PWR","type":"power_feed","styleId":"electrical.switched-power","voltageSystemId":"LV12"},
+    {"id":"W_CTRL_GND","from":"CTRL1_GND","to":"LVGND_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_LV_BAT_GND","from":"BAT12_NEG","to":"LVGND_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_DCDC_LV_POS","from":"DCDC_LV_POS","to":"BAT12_POS","type":"power_feed","styleId":"electrical.power","voltageSystemId":"LV12"},
+    {"id":"W_DCDC_LV_NEG","from":"DCDC_LV_NEG","to":"LVGND_MAIN","type":"ground_reference","styleId":"electrical.ground-return","voltageSystemId":"LV12"},
+    {"id":"W_CTRL_INV","from":"CTRL1_CMD","to":"INV_CONTROL","type":"control","styleId":"electrical.control","voltageSystemId":"LV12"},
+    {"id":"W_HV_INV_POS","from":"HVBAT_POS","to":"INV_DC_POS","type":"power_feed","styleId":"electrical.traction-power","voltageSystemId":"TR400"},
+    {"id":"W_HV_INV_NEG","from":"HVBAT_NEG","to":"INV_DC_NEG","type":"hardwire","styleId":"electrical.traction-return","voltageSystemId":"TR400"},
+    {"id":"W_HV_DCDC_POS","from":"HVBAT_POS","to":"DCDC_HV_POS","type":"power_feed","styleId":"electrical.traction-power","voltageSystemId":"TR400"},
+    {"id":"W_HV_DCDC_NEG","from":"HVBAT_NEG","to":"DCDC_HV_NEG","type":"hardwire","styleId":"electrical.traction-return","voltageSystemId":"TR400"},
+    {"id":"W_INV_MOTOR_A","from":"INV_MOTOR_A","to":"MOTOR1_A","type":"power_feed","styleId":"electrical.traction-power","voltageSystemId":"TR400"},
+    {"id":"W_INV_MOTOR_B","from":"INV_MOTOR_B","to":"MOTOR1_B","type":"power_feed","styleId":"electrical.traction-power","voltageSystemId":"TR400"}
+  ],
+  "testPoints":[
+    {"id":"TP_LV_BUS","terminalId":"BAT12_POS","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_CONTROL_CMD","terminalId":"CTRL1_CMD","measurementTypes":["signal"],"vehicleSpecificValueRequired":true},
+    {"id":"TP_TRACTION_POS","terminalId":"HVBAT_POS","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true,"trainingSafetyBoundary":"conceptual-only"},
+    {"id":"TP_TRACTION_RETURN","terminalId":"HVBAT_NEG","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true,"trainingSafetyBoundary":"conceptual-only"},
+    {"id":"TP_DCDC_LV_OUT","terminalId":"DCDC_LV_POS","measurementTypes":["voltage"],"vehicleSpecificValueRequired":true}
+  ],
+  "faultCatalog":[
+    {"id":"FAULT_OPEN_LV_MODULE_POWER","type":"open_circuit","targetConnectionId":"W_FUSE_CTRL","label":"Open low-voltage module power"},
+    {"id":"FAULT_OPEN_LV_GROUND","type":"open_circuit","targetConnectionId":"W_CTRL_GND","label":"Open low-voltage module ground"},
+    {"id":"FAULT_HIGH_RES_LV_FEED","type":"high_resistance","targetConnectionId":"W_LV_BAT_FUSE","label":"High resistance in low-voltage feed"},
+    {"id":"FAULT_OPEN_CONTROL","type":"open_circuit","targetConnectionId":"W_CTRL_INV","label":"Open low-voltage traction command"},
+    {"id":"FAULT_OPEN_TRACTION_FEED","type":"open_circuit","targetConnectionId":"W_HV_INV_POS","label":"Open traction feed to inverter"},
+    {"id":"FAULT_HIGH_RES_TRACTION_RETURN","type":"high_resistance","targetConnectionId":"W_HV_INV_NEG","label":"High resistance in traction return"},
+    {"id":"FAULT_OPEN_DCDC_TRACTION_INPUT","type":"open_circuit","targetConnectionId":"W_HV_DCDC_POS","label":"Open traction-side feed to DC/DC converter"}
+  ],
+  "operatingStates":[
+    {"id":"key-off","label":"Key off / domains inactive","activeFlows":{"lvPower":[],"lvGround":[],"control":[],"traction":[],"tractionReturn":[]},"note":"Both voltage domains are shown inactive."},
+    {"id":"lv-awake","label":"Low-voltage system awake","activeFlows":{"lvPower":[["W_LV_BAT_FUSE","forward"],["W_FUSE_CTRL","forward"]],"lvGround":[["W_CTRL_GND","forward"],["W_LV_BAT_GND","reverse"]],"control":[],"traction":[],"tractionReturn":[]},"note":"The 12 V low-voltage domain powers the generic control module while the traction domain is not shown active."},
+    {"id":"dcdc-support","label":"DC/DC support relationship active","activeFlows":{"lvPower":[["W_DCDC_LV_POS","forward"],["W_LV_BAT_FUSE","forward"],["W_FUSE_CTRL","forward"]],"lvGround":[["W_DCDC_LV_NEG","forward"],["W_CTRL_GND","forward"],["W_LV_BAT_GND","reverse"]],"control":[],"traction":[["W_HV_DCDC_POS","forward"]],"tractionReturn":[["W_HV_DCDC_NEG","reverse"]]},"note":"The training example shows traction-domain energy reaching the DC/DC converter and a separate low-voltage output supporting the 12 V domain. Conversion values are not modeled."},
+    {"id":"traction-ready","label":"Traction system ready — conceptual","activeFlows":{"lvPower":[["W_LV_BAT_FUSE","forward"],["W_FUSE_CTRL","forward"]],"lvGround":[["W_CTRL_GND","forward"],["W_LV_BAT_GND","reverse"]],"control":[["W_CTRL_INV","forward"]],"traction":[["W_HV_INV_POS","forward"]],"tractionReturn":[["W_HV_INV_NEG","reverse"]]},"note":"Low-voltage control and traction-domain supply are shown as separate functions. This state is conceptual and does not model contactor or interlock sequencing."},
+    {"id":"traction-drive-example","label":"Traction drive — training example","activeFlows":{"lvPower":[["W_LV_BAT_FUSE","forward"],["W_FUSE_CTRL","forward"]],"lvGround":[["W_CTRL_GND","forward"],["W_LV_BAT_GND","reverse"]],"control":[["W_CTRL_INV","forward"]],"traction":[["W_HV_INV_POS","forward"],["W_INV_MOTOR_A","forward"],["W_INV_MOTOR_B","forward"]],"tractionReturn":[["W_HV_INV_NEG","reverse"]]},"note":"The traction battery, inverter, and motor relationship is highlighted conceptually. Motor phase behavior, switching, current, frequency, and torque are intentionally not modeled."}
+  ],
+  "layout":{"renderer":"svg","positions":{"BAT12":{"x":85,"y":175},"FUSE12":{"x":245,"y":95},"CTRL1":{"x":420,"y":145},"LVGND":{"x":300,"y":335},"DCDC1":{"x":420,"y":355},"HVBAT":{"x":85,"y":500},"INV1":{"x":610,"y":415},"MOTOR1":{"x":780,"y":415}}},
+  "labels":{
+    "BAT12":{"x":15,"y":235,"width":140,"height":48,"title":"12 V battery","subtitle":"low-voltage domain"},
+    "FUSE12":{"x":170,"y":10,"width":150,"height":46,"title":"LV protection","subtitle":"12 V branch"},
+    "CTRL1":{"x":335,"y":45,"width":170,"height":48,"title":"LV control module","subtitle":"12 V control domain"},
+    "LVGND":{"x":210,"y":380,"width":180,"height":48,"title":"LV chassis ground","subtitle":"12 V return only"},
+    "DCDC1":{"x":325,"y":445,"width":190,"height":50,"title":"DC/DC converter","subtitle":"cross-domain relationship"},
+    "HVBAT":{"x":10,"y":555,"width":160,"height":52,"title":"Traction battery","subtitle":"400 V example only"},
+    "INV1":{"x":520,"y":500,"width":180,"height":50,"title":"Traction inverter","subtitle":"generic power electronics"},
+    "MOTOR1":{"x":710,"y":500,"width":140,"height":50,"title":"Traction motor","subtitle":"conceptual load"}
+  },
+  "provenance":{"sourceRole":"project-authored-training-model","technicalClaims":"general-domain-relationships-only","vehicleSpecificClaims":false,"scoredAssessmentApproved":false,"authorityRegistry":"data/compliance/authority-registry.json","complianceStatus":"training-model-not-compliance-certification","rule":"This model illustrates generic low-voltage and traction-domain relationships only. It does not authorize high-voltage service work or establish vehicle-specific safety procedures, isolation requirements, interlock values, voltages, currents, resistance limits, switching behavior, or diagnostic procedures."}
+}

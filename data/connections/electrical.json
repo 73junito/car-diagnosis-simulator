@@ -1,19 +1,116 @@
 {
   "domain": "electrical",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "project-authored-training-convention",
   "notice": "Visual styles identify circuit semantics in TorqueMind training diagrams. They do not represent manufacturer wire-color codes.",
   "styles": [
-    {"id":"electrical.power","name":"Power feed","semanticType":"power_feed","strokeRole":"power","strokeWidth":4,"dashPattern":null,"voltageSystemRequired":true},
-    {"id":"electrical.switched-power","name":"Switched power","semanticType":"power_feed","strokeRole":"switched-power","strokeWidth":4,"dashPattern":"14 6","voltageSystemRequired":true},
-    {"id":"electrical.ground-return","name":"Ground return","semanticType":"ground_reference","strokeRole":"ground","strokeWidth":4,"dashPattern":null,"voltageSystemRequired":true},
-    {"id":"electrical.control","name":"Control circuit","semanticType":"control","strokeRole":"control","strokeWidth":4,"dashPattern":"8 8","voltageSystemRequired":true},
-    {"id":"electrical.analog-signal","name":"Analog signal","semanticType":"analog_signal","strokeRole":"signal","strokeWidth":3,"dashPattern":"3 5","voltageSystemRequired":true},
-    {"id":"electrical.digital-signal","name":"Digital signal","semanticType":"digital_signal","strokeRole":"signal","strokeWidth":3,"dashPattern":"8 4 2 4","voltageSystemRequired":true},
-    {"id":"electrical.can-bus","name":"CAN network","semanticType":"CAN","strokeRole":"network","strokeWidth":4,"dashPattern":"10 4 2 4","voltageSystemRequired":true},
-    {"id":"electrical.lin-bus","name":"LIN network","semanticType":"LIN","strokeRole":"network","strokeWidth":3,"dashPattern":"6 5","voltageSystemRequired":true},
-    {"id":"electrical.pwm","name":"PWM control","semanticType":"PWM","strokeRole":"control","strokeWidth":4,"dashPattern":"12 3 3 3","voltageSystemRequired":true},
-    {"id":"electrical.shield-drain","name":"Shield / drain","semanticType":"hardwire","strokeRole":"shield","strokeWidth":3,"dashPattern":"2 5","voltageSystemRequired":false},
-    {"id":"electrical.traction-power","name":"Traction power","semanticType":"power_feed","strokeRole":"traction","strokeWidth":7,"dashPattern":null,"voltageSystemRequired":true}
+    {
+      "id": "electrical.power",
+      "name": "Power feed",
+      "semanticType": "power_feed",
+      "strokeRole": "power",
+      "strokeWidth": 4,
+      "dashPattern": null,
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.switched-power",
+      "name": "Switched power",
+      "semanticType": "power_feed",
+      "strokeRole": "switched-power",
+      "strokeWidth": 4,
+      "dashPattern": "14 6",
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.ground-return",
+      "name": "Ground return",
+      "semanticType": "ground_reference",
+      "strokeRole": "ground",
+      "strokeWidth": 4,
+      "dashPattern": null,
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.control",
+      "name": "Control circuit",
+      "semanticType": "control",
+      "strokeRole": "control",
+      "strokeWidth": 4,
+      "dashPattern": "8 8",
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.analog-signal",
+      "name": "Analog signal",
+      "semanticType": "analog_signal",
+      "strokeRole": "signal",
+      "strokeWidth": 3,
+      "dashPattern": "3 5",
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.digital-signal",
+      "name": "Digital signal",
+      "semanticType": "digital_signal",
+      "strokeRole": "signal",
+      "strokeWidth": 3,
+      "dashPattern": "8 4 2 4",
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.can-bus",
+      "name": "CAN network",
+      "semanticType": "CAN",
+      "strokeRole": "network",
+      "strokeWidth": 4,
+      "dashPattern": "10 4 2 4",
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.lin-bus",
+      "name": "LIN network",
+      "semanticType": "LIN",
+      "strokeRole": "network",
+      "strokeWidth": 3,
+      "dashPattern": "6 5",
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.pwm",
+      "name": "PWM control",
+      "semanticType": "PWM",
+      "strokeRole": "control",
+      "strokeWidth": 4,
+      "dashPattern": "12 3 3 3",
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.shield-drain",
+      "name": "Shield / drain",
+      "semanticType": "hardwire",
+      "strokeRole": "shield",
+      "strokeWidth": 3,
+      "dashPattern": "2 5",
+      "voltageSystemRequired": false
+    },
+    {
+      "id": "electrical.traction-power",
+      "name": "Traction power",
+      "semanticType": "power_feed",
+      "strokeRole": "traction",
+      "strokeWidth": 7,
+      "dashPattern": null,
+      "voltageSystemRequired": true
+    },
+    {
+      "id": "electrical.traction-return",
+      "name": "Traction return",
+      "semanticType": "hardwire",
+      "strokeRole": "traction",
+      "strokeWidth": 7,
+      "dashPattern": "10 5",
+      "voltageSystemRequired": true
+    }
   ]
 }

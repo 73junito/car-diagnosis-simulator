@@ -17,7 +17,7 @@ const FAULT_TYPES = Object.freeze([
   "open_circuit", "high_resistance", "short_to_ground", "short_to_power", "short_between_lines"
 ]);
 const POWERTRAIN_TYPES = Object.freeze([
-  "conventional-12v", "hybrid", "plug-in-hybrid", "battery-electric", "fuel-cell", "other"
+  "conventional-12v", "hybrid", "plug-in-hybrid", "battery-electric", "fuel-cell", "electrified-training", "other"
 ]);
 const VOLTAGE_SYSTEM_TYPES = Object.freeze([
   "low-voltage", "traction", "starter-generator", "accessory", "other"

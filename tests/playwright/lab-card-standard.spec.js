@@ -8,7 +8,8 @@ const labs = [
   "/dashboard/student/relay-load-lab/",
   "/dashboard/student/sensor-lab/",
   "/dashboard/student/actuator-lab/",
-  "/dashboard/student/network-lab/"
+  "/dashboard/student/network-lab/",
+  "/dashboard/student/multivoltage-lab/"
 ];
 
 test.describe("shared lab component-card standard", () => {

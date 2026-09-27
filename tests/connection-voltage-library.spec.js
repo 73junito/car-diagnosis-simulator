@@ -16,12 +16,13 @@ const circuit = JSON.parse(
 
 describe("connection styles and voltage domains", () => {
   test("electrical connection catalog contains the standardized style set", () => {
-    expect(connectionCatalog.styles).toHaveLength(11);
+    expect(connectionCatalog.styles).toHaveLength(12);
     for (const style of connectionCatalog.styles) expect(validateConnectionStyle(style)).toEqual([]);
     const registry = new ConnectionStyleRegistry(connectionCatalog.styles);
     expect(registry.get("electrical.power").semanticType).toBe("power_feed");
     expect(registry.get("electrical.can-bus").semanticType).toBe("CAN");
     expect(registry.get("electrical.traction-power").strokeRole).toBe("traction");
+    expect(registry.get("electrical.traction-return").semanticType).toBe("hardwire");
   });
 
   test("current charging circuit resolves every declared connection style", () => {

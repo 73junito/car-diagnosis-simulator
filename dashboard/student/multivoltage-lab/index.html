@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Electrified Multi-Voltage Lab</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
+  <link rel="stylesheet" href="./multivoltage-lab.css">
+</head>
+<body>
+<main class="lab-shell">
+  <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
+  <header>
+    <p class="eyebrow">Reusable circuit-template preview</p>
+    <h1>Interactive Electrified Multi-Voltage Lab</h1>
+    <p>Compare a 12 V low-voltage domain with a separately declared traction-voltage training domain and trace how generic control, conversion, and traction relationships remain distinct.</p>
+    <div id="voltageProfile" class="voltage-profile" aria-label="Declared electrical voltage domains"></div>
+  </header>
+
+  <section class="learning-strip">
+    <strong>Learning goal</strong>
+    <span>Explain voltage-domain separation, identify the conceptual role of the DC/DC converter and inverter, and distinguish low-voltage control paths from traction-power paths.</span>
+  </section>
+
+  <section class="safety-boundary" aria-label="Training safety boundary">
+    <strong>Conceptual training only.</strong>
+    <span>The traction domain is not a service-procedure simulator. Do not use this lab as instructions for probing, isolation, PPE selection, interlock bypass, or vehicle-specific high-voltage work.</span>
+  </section>
+
+  <section class="toolbar" aria-label="Multi-voltage circuit controls">
+    <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
+    <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
+    <div class="button-row">
+      <button id="showSystemFlow" type="button">Show system</button>
+      <button id="traceLv" type="button">Trace 12 V</button>
+      <button id="traceControl" type="button">Trace control</button>
+      <button id="traceDcdc" type="button">Trace DC/DC relationship</button>
+      <button id="traceTraction" type="button">Trace traction domain</button>
+      <button id="resetView" type="button">Reset</button>
+    </div>
+  </section>
+
+  <section class="legend">
+    <span><i class="legend-line lv-power"></i> 12 V power</span>
+    <span><i class="legend-line lv-ground"></i> 12 V ground/return</span>
+    <span><i class="legend-line control"></i> Low-voltage control</span>
+    <span><i class="legend-line traction"></i> Traction power</span>
+    <span><i class="legend-line traction-return"></i> Traction return</span>
+    <span><i class="legend-line fault"></i> Faulted / degraded</span>
+    <span class="legend-note">The traction voltage shown is a training example only; actual electrified-vehicle architectures vary.</span>
+  </section>
+
+  <section class="workspace">
+    <div class="diagram-card">
+      <div class="diagram-heading">
+        <div><p class="eyebrow">Voltage-domain separation</p><h2>Generic electrified multi-voltage training architecture</h2></div>
+        <div id="stateBadge" class="state-badge">Traction drive — training example</div>
+      </div>
+      <div class="diagram-scroll">
+        <svg id="circuitSvg" viewBox="0 0 900 670" role="img" aria-labelledby="diagramTitle diagramDesc">
+          <title id="diagramTitle">Generic electrified multi-voltage training architecture</title>
+          <desc id="diagramDesc">Interactive training diagram showing a 12 V low-voltage domain, a 400 V nominal example traction domain, a DC/DC converter, inverter, and traction motor.</desc>
+        </svg>
+      </div>
+      <p class="flow-note" id="flowNote"></p>
+    </div>
+
+    <aside class="inspector" aria-live="polite">
+      <h2>Component inspector</h2>
+      <div id="inspectorContent"><p>Select a component or test point to inspect its role and voltage domain.</p></div>
+    </aside>
+  </section>
+
+  <section class="boundary">
+    <h2>Evidence boundary</h2>
+    <p>The 400 V traction domain is a generic training example, not a universal hybrid/EV value. Actual traction voltage, isolation strategy, contactors, interlocks, inverter topology, converter behavior, wiring, diagnostic limits, safety procedures, and service methods require authoritative vehicle-specific information and appropriate qualified-person procedures.</p>
+  </section>
+</main>
+
+<script src="/src/circuits/contracts.js"></script>
+<script src="/src/circuits/engine.js"></script>
+<script src="/src/circuits/template-contracts.js"></script>
+<script src="/src/circuits/voltage-domains.js"></script>
+<script src="/src/connections/contracts.js"></script>
+<script src="/src/connections/index.js"></script>
+<script src="/src/symbols/contracts.js"></script>
+<script src="/src/symbols/registry.js"></script>
+<script src="/src/symbols/svg-renderer.js"></script>
+<script src="/src/symbols/index.js"></script>
+<script src="./multivoltage-lab.js"></script>
+</body>
+</html>
