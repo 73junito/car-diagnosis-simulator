@@ -7,6 +7,7 @@ const POWERTRAIN_LABELS = Object.freeze({
   "plug-in-hybrid": "Plug-in hybrid",
   "battery-electric": "Battery electric",
   "fuel-cell": "Fuel cell",
+  "electrified-training": "Electrified vehicle training",
   other: "Other"
 });
 
