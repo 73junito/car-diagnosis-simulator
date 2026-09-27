@@ -156,9 +156,9 @@
         "license": "Creative Commons Attribution 4.0 International",
         "license_url": "https://creativecommons.org/licenses/by/4.0/"
       },
-      "rights_decision": "pending-human-package-scope-and-third-party-review",
-      "rights_verified_by": null,
-      "rights_verified_at": null,
+      "rights_decision": "pending-third-party-and-licensor-authority-verification",
+      "rights_verified_by": "Rafael Rodriguez",
+      "rights_verified_at": "2026-09-27T18:04:02-05:00",
       "technical_review_status": "pending",
       "technically_reviewed_by": null,
       "technically_reviewed_at": null,
@@ -282,11 +282,11 @@
       "open_questions": [
         "Confirm the package licensor identity and that Kauaʻi Community College or the package publisher had authority to apply CC BY 4.0 to the selected lesson-plan text.",
         "Confirm whether any third-party text, standards-derived task language, URLs, or externally authored material inside selected DOCX files is excluded from the package license.",
-        "Record a named human rights reviewer and timestamp before setting rights_cleared=true.",
         "Perform technical review for current HEV/EV applicability and safety before any excerpt becomes a candidate chunk.",
         "Do not ingest exams, answer keys, or MASTER assessment files as learner-facing source material."
       ],
-      "candidate_observations": "Candidate source registration only. The root package contains CC BY 4.0 license text and a CC BY image, and current Kauaʻi Community College catalog pages corroborate the AMT 171/172/173 HEV sequence. No selected DOCX contains embedded media. Do not infer package-wide or third-party-material clearance from the root license alone. File-level creator metadata is only 'Auto104'. No content has been copied into project evidence chunks, RAG/Ollama context, or lesson text."
+      "candidate_observations": "Candidate source registration only. The root package contains CC BY 4.0 license text and a CC BY image, and current Kauaʻi Community College catalog pages corroborate the AMT 171/172/173 HEV sequence. No selected DOCX contains embedded media. Do not infer package-wide or third-party-material clearance from the root license alone. File-level creator metadata is only 'Auto104'. No content has been copied into project evidence chunks, RAG/Ollama context, or lesson text.",
+      "review_notes": "Human rights review selected the conservative pending decision: the package-level CC BY 4.0 license is strong candidate evidence of intended reuse permission, but the current record does not establish the licensor's authority over every selected lesson-plan statement or any separately controlled third-party material. Rights therefore remain uncleared pending licensor-authority and third-party-material verification. This decision does not constitute technical review, safety review, chunk approval, ingestion approval, or lesson mapping."
     }
   ],
   "referenced_but_unregistered_sources": [

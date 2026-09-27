@@ -21,13 +21,14 @@
     "rights_status": "candidate-only-pending-human-package-scope-and-third-party-review"
   },
   "reviewer_fields": {
-    "rights_reviewer": null,
-    "rights_reviewed_at": null,
+    "rights_reviewer": "Rafael Rodriguez",
+    "rights_reviewed_at": "2026-09-27T18:04:02-05:00",
     "technical_reviewer": null,
     "technical_reviewed_at": null,
     "safety_reviewer": null,
     "safety_reviewed_at": null,
-    "overall_decision": "pending"
+    "overall_decision": "pending",
+    "rights_decision": "pending-third-party-and-licensor-authority-verification"
   },
   "files": [
     {
