@@ -39,13 +39,19 @@ test.describe('Expanded lesson plans', () => {
     await expect(plan.getByText('Electrical safety fundamentals')).toBeVisible();
     await expect(plan.getByText('evidence-to-decision reasoning')).toBeVisible();
     await expect(plan.getByText(/AUT-120 · Electrical I · Direct Course Alignment/)).toBeVisible();
+    await expect(plan.locator('.eyebrow')).toHaveText('Electrical I · 180 MIN');
+    await expect(plan.getByText(/battery, alternator, diode rectifier, voltage regulator, and vehicle electrical loads/)).toBeVisible();
 
     await expect(plan.locator('.lesson-readiness span').filter({ hasText: 'Complete Review Ready' })).toBeVisible();
     await expect(plan.locator('.lesson-readiness span').filter({ hasText: 'Pending Human Technical And Chunk Review' })).toBeVisible();
 
     await plan.getByText('Instructional sequence').click();
     await expect(plan.locator('.instruction-block-list > li')).toHaveCount(11);
-    await expect(plan.locator('.lesson-teaching-points > li')).toHaveCount(43);
+    await expect(plan.locator('.lesson-teaching-points > li')).toHaveCount(44);
+    await expect(plan.getByText(/system, voltage domain, test method, and measurement context/)).toBeVisible();
+    await expect(plan.getByText(/operating condition, test location, voltage domain, and units/)).toBeVisible();
+    await expect(plan.getByText(/alternator-battery-cable system/)).toBeVisible();
+    await expect(plan.getByText(/citation-only external reference; no reusable vendor excerpt stored/)).toBeVisible();
     await expect(plan.getByText(/0\.350 V training measurement is above the design basis/)).toBeVisible();
     await expect(plan.getByText(/Do not apply the 0\.200 V reference when wiring configuration or conductor identity is unknown/)).toBeVisible();
     await expect(plan.getByText(/rights-cleared; technical\/chunk approval pending/).first()).toBeVisible();

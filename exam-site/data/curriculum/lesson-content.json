@@ -21,7 +21,7 @@
       "learningObjectives": [
         {
           "id": "ug-electrical-lo-1",
-          "statement": "Explain the functional relationship among the battery, alternator, rectifier, voltage regulation, and vehicle electrical loads.",
+          "statement": "Explain the functional relationship among the battery, alternator, diode rectifier, voltage regulator, and vehicle electrical loads.",
           "cognitiveLevel": "knowledge"
         },
         {
@@ -58,7 +58,7 @@
           "teachingPoints": [
             "Explain the charging-system relationships used in this lesson model.",
             "Separate symptoms, observations, measurements, hypotheses, and conclusions.",
-            "Use a source reference only when its applicability matches the system and test context.",
+            "Use a source reference only when its applicability matches the system, voltage domain, test method, and measurement context.",
             "Select a next diagnostic check without treating one symptom or one measurement as proof of component failure."
           ],
           "learnerAction": "Identify which learning objective requires evidence interpretation rather than recall."
@@ -75,7 +75,7 @@
           "teachingPoints": [
             "Identify source, load, conductor, ground, and test-point roles in a basic electrical circuit.",
             "Review meter polarity and the difference between system-voltage and voltage-drop measurements.",
-            "A measured number has meaning only when operating condition and test location are known."
+            "A measured number has meaning only when the operating condition, test location, voltage domain, and units are known."
           ],
           "learnerAction": "Label each sample statement as circuit knowledge, measurement context, or diagnostic conclusion."
         },
@@ -91,7 +91,8 @@
           "teachingPoints": [
             "The cited Frontiers article identifies the alternator as the primary source of electric energy within a vehicle.",
             "The same source describes an automotive alternator as a synchronous AC generator using diode rectification and identifies rotor, stator, diode rectifier, and voltage regulator as core elements.",
-            "Battery, alternator output, and vehicle loads are shown here as an instructional system model; vehicle-specific topology and control strategy must be verified separately."
+            "Delco Remy describes the charging system as an alternator-battery-cable system: the alternator replenishes the battery and provides power for vehicle loads through the charging path, while the battery remains part of the same operating system.",
+            "Vehicle-specific topology, charging control strategy, and operating limits must still be verified from applicable service information."
           ],
           "learnerAction": "Trace the simplified energy path from alternator generation through rectification to the vehicle electrical system, then identify where vehicle-specific evidence is required.",
           "evidenceReferences": [
@@ -108,6 +109,12 @@
               "sourceId": "frontiers-automotive-alternator-2023",
               "locator": "PDF page 7",
               "approval": "rights-cleared; technical/chunk approval pending"
+            },
+            {
+              "type": "external-technical-reference",
+              "id": "delco-remy-alternator-battery-relationship-2016",
+              "locator": "Tech Tip: Relationship Between Alternator and Batteries; corroborated by Delco Remy Voltage Drop Test, March 14, 2024",
+              "approval": "citation-only external reference; no reusable vendor excerpt stored"
             }
           ],
           "sourceBoundary": "Do not convert this general model into a universal wiring diagram, voltage target, charging strategy, or component test procedure."
@@ -123,7 +130,7 @@
           ],
           "teachingPoints": [
             "A symptom is evidence that a condition exists; it is not proof of which component caused it.",
-            "A measurement is evidence only when the test point, operating state, units, and applicable reference are known.",
+            "A measurement is evidence only when the test point, operating state, voltage domain, units, and applicable reference are known.",
             "A source-backed value may be a design basis, maximum, minimum, or reference-only value; those roles are not interchangeable.",
             "A diagnostic conclusion should follow from compatible evidence and a verification step."
           ],
@@ -234,12 +241,12 @@
             {
               "type": "scenario-mapping",
               "id": "charging-system",
-              "objectiveId": "ug-electrical-lo-2"
+              "objectiveId": "ug-electrical-lo-3"
             },
             {
               "type": "scenario-mapping",
               "id": "electrical-load",
-              "objectiveId": "ug-electrical-lo-2"
+              "objectiveId": "ug-electrical-lo-3"
             }
           ],
           "sourceBoundary": "Project-authored measurements may be used for practice, but pass/fail interpretation requires a matching authoritative reference."

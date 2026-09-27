@@ -92,7 +92,7 @@ function renderPlan(plan, lesson, course) {
     <article class="expanded-plan" id="${escapeHtml(plan.lessonPlanId)}">
       <div class="expanded-plan-head">
         <div>
-          <p class="eyebrow">${escapeHtml(course.title)} · ${escapeHtml(String(plan.estimatedMinutes))} MIN</p>
+          <p class="eyebrow">${escapeHtml(plan.programMapping?.programCourseTitle || course.title)} · ${escapeHtml(String(plan.estimatedMinutes))} MIN</p>
           <h3>${escapeHtml(lesson.title)}</h3>
           <p>${escapeHtml(plan.lessonSummary)}</p>
           <p class="program-context">${renderProgramMapping(plan.programMapping)}</p>
