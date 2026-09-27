@@ -216,7 +216,9 @@
             engineeringUi.comparison.textContent=`Authoritative measurement comparison: ${measured.value.toFixed(3)} V exceeds the selected ${dropLimit.quantity.value.toFixed(3)} V maximum for ${family}.`;
             engineeringUi.comparison.classList.add("exceeds");
           } else {
-            engineeringUi.measuredResult.textContent=`Recorded ${measured.value.toFixed(3)} V; source comparison not applicable`;
+            engineeringUi.measuredResult.textContent=fault?.type==="open_circuit"
+              ? `Recorded ${measured.value.toFixed(3)} V; selected source comparison not applied to an open circuit`
+              : `Recorded ${measured.value.toFixed(3)} V; source comparison not applicable`;
             engineeringUi.comparison.textContent=comparison.reason || "Source comparison unavailable for the selected condition.";
             engineeringUi.comparison.classList.add("not-comparable");
           }

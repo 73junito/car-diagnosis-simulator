@@ -261,9 +261,7 @@
     engineeringUi.pathResistance.textContent = formatEngineering(values.pathResistance,"Ω",4);
 
     if (values.addedFaultResistance > 0) {
-      engineeringUi.status.textContent = artifactBacked
-        ? "High-resistance training fault — validated artifact active"
-        : "High-resistance training fault active";
+      engineeringUi.status.textContent = "High-resistance training fault active";
       engineeringUi.status.className = "engineering-status degraded";
       engineeringUi.pathResistanceLabel.textContent = `Conductor path + ${formatEngineering(values.addedFaultResistance,"Ω",2)} fault resistance`;
     } else if (!values.active) {
