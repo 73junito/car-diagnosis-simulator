@@ -24,7 +24,8 @@
       {
         "review_id": "kauai-amt171-hv-safety",
         "sha256": "82e328b622879afb5aaebd0e5defc149e140a8920883eb3c80276d63c82ce2e9"
-      },      {
+      },
+      {
         "review_id": "kauai-amt171-dc-dc",
         "sha256": "7ed292b6b2c405b17f6652358bf0645a89c8bedb6e739f1a0ef927c4f3c4f75e"
       },
@@ -50,7 +51,8 @@
     {
       "topic": "high-voltage-glove-selection",
       "wording": "Electrical-insulating glove selection must be based on maximum system voltage, applicable safety requirements, glove rating, inspection status, and the vehicle-specific service procedure."
-    },    {
+    },
+    {
       "topic": "high-voltage-conductor-identification",
       "wording": "Use cable markings, routing, connectors, system documentation, and applicable vehicle-specific service information to identify high-voltage conductors; do not rely on color alone."
     },
@@ -69,7 +71,8 @@
     {
       "topic": "insulation-resistance-testing",
       "wording": "Teach the purpose and limitations of insulation-resistance testing while keeping test voltage, connection points, component isolation, and acceptance criteria vehicle- or component-specific."
-    },    {
+    },
+    {
       "topic": "service-disconnect-identification",
       "wording": "Use applicable vehicle-specific service information to identify a high-voltage service disconnect or isolation point, required access conditions, and the approved disable and enable procedure."
     },
@@ -92,7 +95,8 @@
     {
       "topic": "dc-dc-switching-concepts",
       "wording": "Explain switching devices, energy-storage elements, rectification or synchronous switching, and filtering conceptually; exact topology and switching strategy remain design-specific."
-    },    {
+    },
+    {
       "topic": "dc-dc-safety",
       "wording": "Identify converter hazards and use vehicle-specific service information to determine required isolation, PPE, equipment ratings, verification steps, and access restrictions."
     },
@@ -115,7 +119,8 @@
     {
       "topic": "motor-control",
       "wording": "The inverter regulates electrical parameters such as voltage, current, frequency, and phase according to the propulsion system control strategy, influencing motor torque, speed, and direction."
-    },    {
+    },
+    {
       "topic": "boost-conversion",
       "wording": "Some electrified-vehicle power-electronics systems use boost conversion to raise DC bus voltage above source voltage; presence, topology, and control strategy are architecture-specific."
     },
@@ -138,7 +143,8 @@
     {
       "topic": "low-voltage-diagnostics",
       "wording": "Compare measured voltage and current behavior with vehicle-specific documented expectations while considering auxiliary-battery condition, converter command state, electrical load, and system faults."
-    },    {
+    },
+    {
       "topic": "isolation-monitoring",
       "wording": "High-voltage systems are designed to maintain electrical isolation from the vehicle chassis, and isolation faults must be diagnosed using vehicle-specific information, approved equipment, and documented procedures."
     },
@@ -161,7 +167,8 @@
     {
       "topic": "battery-diagnostic-interpretation",
       "wording": "Combine fault codes, live data, voltage and temperature trends, operating conditions, system commands, and applicable service information; do not treat one measurement or fault code as sufficient evidence of battery failure."
-    },    {
+    },
+    {
       "topic": "soc-soh-estimation",
       "wording": "State of charge and state of health are calculated or estimated system quantities derived from multiple inputs and operating history rather than direct measurements from a single voltage reading."
     },
@@ -184,7 +191,8 @@
     {
       "topic": "repair-versus-replacement",
       "wording": "A confirmed battery-related fault does not automatically justify complete pack replacement; repair level depends on battery design, evidence, manufacturer information, safety restrictions, authorization, and applicable warranty or recycling requirements."
-    },    {
+    },
+    {
       "topic": "battery-identification",
       "wording": "Use labels, component identifiers, vehicle documentation, and manufacturer information to identify battery type, chemistry, configuration, and relevant service information."
     },
@@ -207,7 +215,8 @@
     {
       "topic": "cross-system-fault-correlation",
       "wording": "Diagnose related low-voltage, communication, thermal-management, charging, propulsion-control, and high-voltage faults together when evidence suggests a shared cause or dependency."
-    },    {
+    },
+    {
       "topic": "evidence-preservation",
       "wording": "Capture fault codes, freeze-frame or event data, live parameters, operating conditions, battery state information, and related system status before clearing codes, disconnecting components, or performing resets."
     },
@@ -234,7 +243,8 @@
     "universal SOC, SOH, imbalance, capacity, isolation, or replacement thresholds",
     "manufacturer-specific algorithms or procedures presented as universal",
     "diagnosis or replacement based on one DTC, one measurement, one snapshot, or one catalog value"
-  ],  "supporting_reference_boundary": {
+  ],
+  "supporting_reference_boundary": {
     "attached_reference_documents_reviewed_in_session": [
       "202312_LGES_Commercial_EV_Catalog_en.pdf",
       "E06-009 - Lithium-ion Batteries for EVs - US.pdf",
@@ -260,5 +270,13 @@
     "Named human technical reviewer and timestamp for technical currency and applicability.",
     "Named human safety reviewer and timestamp for safety-sensitive learner use.",
     "Only after required gates are complete may candidate evidence chunks be created or approved."
-  ]
+  ],
+  "rights_review_decision": {
+    "reviewer": "Rafael Rodriguez",
+    "reviewed_at": "2026-09-27T18:04:02-05:00",
+    "decision": "pending-third-party-and-licensor-authority-verification",
+    "user_selection": "Option 2",
+    "rights_cleared": false,
+    "notes": "Package-level CC BY 4.0 license remains candidate evidence only until licensor authority and third-party-material provenance are verified."
+  }
 }

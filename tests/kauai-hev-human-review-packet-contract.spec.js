@@ -17,7 +17,9 @@ describe('Kauai HEV human review packet contract', () => {
     expect(packet.policy.ingests_content).toBe(false);
     expect(packet.policy.question_generation_allowed).toBe(false);
     expect(packet.policy.lesson_mapping_status).toBe('proposed-only');
-    expect(packet.reviewer_fields.rights_reviewer).toBeNull();
+    expect(packet.reviewer_fields.rights_reviewer).toBe('Rafael Rodriguez');
+    expect(packet.reviewer_fields.rights_reviewed_at).toBeTruthy();
+    expect(packet.reviewer_fields.rights_decision).toBe('pending-third-party-and-licensor-authority-verification');
     expect(packet.reviewer_fields.technical_reviewer).toBeNull();
     expect(packet.reviewer_fields.safety_reviewer).toBeNull();
     expect(packet.reviewer_fields.overall_decision).toBe('pending');
