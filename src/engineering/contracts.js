@@ -121,6 +121,27 @@ function validateEngineeringQuantity(quantity) {
     }
   }
 
+  if (quantity.valueRole === "measured_value") {
+    const measurement = quantity.measurement;
+    if (!measurement || typeof measurement !== "object") {
+      errors.push("measured_value requires measurement provenance");
+    } else {
+      if (!["student_entry", "instrument_entry", "instructor_entry"].includes(measurement.entryMethod)) {
+        errors.push("measured_value requires supported measurement.entryMethod");
+      }
+      if (!measurement.context || typeof measurement.context !== "object") {
+        errors.push("measured_value requires measurement.context");
+      } else {
+        if (!measurement.context.labId || typeof measurement.context.labId !== "string") {
+          errors.push("measured_value requires measurement.context.labId");
+        }
+        if (!measurement.context.measurementId || typeof measurement.context.measurementId !== "string") {
+          errors.push("measured_value requires measurement.context.measurementId");
+        }
+      }
+    }
+  }
+
   return errors;
 }
 

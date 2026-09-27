@@ -29,6 +29,7 @@
   const symbolRenderer = window.TorqueMindSymbolRenderer;
   const engineering = window.TorqueMindEngineering;
   const calculator = engineering.calculator;
+  const measurements = engineering.measurements;
   const profileValidator = engineering.profiles.validateEngineeringProfile;
 
   const sensorProfile = engineeringProfile.sensorProfile.engineeringProfile;
@@ -90,6 +91,8 @@
     idealSignal: document.getElementById("engIdealSignal"),
     observedSignal: document.getElementById("engObservedSignal"),
     observedLabel: document.getElementById("engObservedSignalLabel"),
+    measuredSignal: document.getElementById("measuredSensorSignal"),
+    measuredResult: document.getElementById("sensorMeasurementResult"),
     formula: document.getElementById("sensorEngineeringFormula")
   };
 
@@ -183,6 +186,28 @@
 
   function renderEngineering() {
     const result = calculateSignalState();
+    const measuredRaw = engineeringUi.measuredSignal.value.trim();
+    if (!measuredRaw) {
+      engineeringUi.measuredResult.textContent = "No measurement entered";
+      engineeringUi.measuredResult.className = "measurement-result";
+    } else {
+      const measuredValue = Number(measuredRaw);
+      if (Number.isFinite(measuredValue)) {
+        const measured = measurements.createMeasuredQuantity({
+          quantityType:"voltage", unit:"V", value:measuredValue,
+          labId:"sensor-lab", measurementId:"controller-signal"
+        });
+        if (result.transfer) {
+          const delta = measurements.deltaBetween(measured, result.transfer);
+          engineeringUi.measuredResult.textContent = `Recorded ${formatSignal(measured.value)}; Δ vs training ideal ${delta>=0?"+":""}${delta.toFixed(3)} V`;
+        } else {
+          engineeringUi.measuredResult.textContent = `Recorded ${formatSignal(measured.value)}; training ideal unavailable in this fault state`;
+        }
+      } else {
+        engineeringUi.measuredResult.textContent = "Enter a finite voltage value";
+      }
+      engineeringUi.measuredResult.className = "measurement-result";
+    }
     engineeringUi.inputValue.textContent = `${sensorInputPercent}%`;
     engineeringUi.reference.textContent = formatSignal(sensorReferenceVoltage);
     engineeringUi.signalRange.textContent = `${signalRange.min}–${signalRange.max} V`;
@@ -398,6 +423,8 @@
   stateSelect.addEventListener("change",()=>{operatingState=stateSelect.value;flowMode="system";render();});
   faultSelect.addEventListener("change",()=>{activeFault=faultSelect.value;render();});
   engineeringUi.input.addEventListener("input",()=>{sensorInputPercent=Number(engineeringUi.input.value);renderEngineering();});
+  engineeringUi.measuredSignal.addEventListener("input",renderEngineering);
+  engineeringUi.measuredSignal.addEventListener("change",renderEngineering);
   document.getElementById("showSystemFlow").addEventListener("click",()=>{flowMode="system";render();});
   document.getElementById("tracePower").addEventListener("click",()=>{flowMode="power";render();});
   document.getElementById("traceSignal").addEventListener("click",()=>{flowMode="signal";render();});

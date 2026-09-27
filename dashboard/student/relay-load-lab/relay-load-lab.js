@@ -29,6 +29,7 @@
   const symbolRenderer = window.TorqueMindSymbolRenderer;
   const engineering = window.TorqueMindEngineering;
   const calculator = engineering.calculator;
+  const measurements = engineering.measurements;
   const profileValidator = engineering.profiles.validateEngineeringProfile;
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((d) => [d.id, d]));
@@ -96,6 +97,8 @@
     loadVoltage: document.getElementById("engLoadVoltage"),
     loadPower: document.getElementById("engLoadPower"),
     conductorLoss: document.getElementById("engConductorLoss"),
+    measuredCurrent: document.getElementById("measuredRelayCurrent"),
+    measuredResult: document.getElementById("relayMeasurementResult"),
     formula: document.getElementById("engineeringFormula")
   };
 
@@ -183,6 +186,25 @@
 
   function renderEngineering() {
     const values = calculateEngineeringState();
+    const measuredRaw = engineeringUi.measuredCurrent.value.trim();
+    if (!measuredRaw) {
+      engineeringUi.measuredResult.textContent = "No measurement entered";
+      engineeringUi.measuredResult.className = "measurement-result";
+    } else {
+      const measuredValue = Number(measuredRaw);
+      if (Number.isFinite(measuredValue)) {
+        const measured = measurements.createMeasuredQuantity({
+          quantityType:"current", unit:"A", value:measuredValue,
+          labId:"relay-load-lab", measurementId:"load-current"
+        });
+        engineeringUi.measuredResult.textContent = values.active
+          ? `Recorded ${Number(measured.value.toFixed(3))} A; Δ vs training calculation ${measurements.deltaBetween(measured, values.current)>=0?"+":""}${measurements.deltaBetween(measured, values.current).toFixed(3)} A`
+          : `Recorded ${Number(measured.value.toFixed(3))} A; training path is inactive/interrupted`;
+      } else {
+        engineeringUi.measuredResult.textContent = "Enter a finite current value";
+      }
+      engineeringUi.measuredResult.className = "measurement-result";
+    }
     engineeringUi.sourceVoltage.textContent = formatEngineering(sourceVoltage,"V",1);
     engineeringUi.loadResistance.textContent = formatEngineering(loadResistance,"Ω",2);
     engineeringUi.pathResistance.textContent = formatEngineering(values.pathResistance,"Ω",4);
@@ -406,6 +428,8 @@
 
   stateSelect.addEventListener("change",()=>{operatingState=stateSelect.value;flowMode="system";render();});
   faultSelect.addEventListener("change",()=>{activeFault=faultSelect.value;render();});
+  engineeringUi.measuredCurrent.addEventListener("input",renderEngineering);
+  engineeringUi.measuredCurrent.addEventListener("change",renderEngineering);
   document.getElementById("showSystemFlow").addEventListener("click",()=>{flowMode="system";render();});
   document.getElementById("traceControl").addEventListener("click",()=>{flowMode="control";render();});
   document.getElementById("tracePower").addEventListener("click",()=>{flowMode="power";render();});
