@@ -228,6 +228,26 @@ describe('Evidence source-state registry', () => {
     expect(frontiers.approved_chunk_ids).toEqual([]);
   });
 
+  test('Kauai DOL HEV package remains candidate-only until human rights and technical review', () => {
+    const registry = readJson(registryFile);
+    const source = registry.sources.find((s) => s.source_id === 'kauai-cc-dol-auto-green-tech-package');
+
+    expect(source).toBeTruthy();
+    expect(source.artifact_sha256).toBe('526b0ee09127a9372d7c884fd12d03780c0bef5a09ca4798d54a50b5c883d609');
+    expect(source.rights_classification).toBe('CC_BY_4_0_CANDIDATE');
+    expect(source.rights_decision).toBe('pending-human-package-scope-and-third-party-review');
+    expect(source.selected_files).toHaveLength(6);
+    expect(source.selected_files.every((item) => item.embedded_media_count === 0)).toBe(true);
+    expect(source.ingested).toBe(false);
+    expect(source.rights_cleared).toBe(false);
+    expect(source.technically_reviewed).toBe(false);
+    expect(source.chunk_approved).toBe(false);
+    expect(source.lesson_mapped).toBe(false);
+    expect(source.approved_chunk_ids).toEqual([]);
+    expect(source.rights_verified_by).toBeNull();
+    expect(source.rights_verified_at).toBeNull();
+  });
+
   test('every candidate chunk has a pending chunk decision', () => {
     const registry = readJson(registryFile);
     for (const source of registry.sources) {

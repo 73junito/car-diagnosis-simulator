@@ -3,11 +3,26 @@
   "registryType": "evidence-source-state",
   "purpose": "Canonical, independently tracked evidence lifecycle state. Each gate is an explicit boolean with its own provenance and is never inferred from another gate.",
   "stateModel": [
-    { "field": "ingested", "meaning": "Artifact captured and hashed. Says nothing about rights." },
-    { "field": "rights_cleared", "meaning": "A human reviewer classified reuse rights for this exact artifact." },
-    { "field": "technically_reviewed", "meaning": "A human reviewer assessed technical applicability and scope." },
-    { "field": "chunk_approved", "meaning": "Specific excerpts are approved for model context in public.source_chunks." },
-    { "field": "lesson_mapped", "meaning": "Approved chunks are mapped to a curriculum learning objective." }
+    {
+      "field": "ingested",
+      "meaning": "Artifact captured and hashed. Says nothing about rights."
+    },
+    {
+      "field": "rights_cleared",
+      "meaning": "A human reviewer classified reuse rights for this exact artifact."
+    },
+    {
+      "field": "technically_reviewed",
+      "meaning": "A human reviewer assessed technical applicability and scope."
+    },
+    {
+      "field": "chunk_approved",
+      "meaning": "Specific excerpts are approved for model context in public.source_chunks."
+    },
+    {
+      "field": "lesson_mapped",
+      "meaning": "Approved chunks are mapped to a curriculum learning objective."
+    }
   ],
   "invariants": [
     "No gate may be inferred from another gate. Each requires its own recorded reviewer and timestamp.",
@@ -23,7 +38,11 @@
       "artifact_sha256": "c69d8328e2ae4abba58ec13be8f7ca02c169a57d75c4701fe1cfaa0163fa68b8",
       "artifact_sha256_status": "recorded_human_review",
       "title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
-      "authors": ["Surath Gajanayake", "S. Bandara", "T. Sugathapala"],
+      "authors": [
+        "Surath Gajanayake",
+        "S. Bandara",
+        "T. Sugathapala"
+      ],
       "publisher": "Frontiers in Mechanical Engineering",
       "publication_year": 2023,
       "doi": "10.3389/fmech.2022.1090152",
@@ -107,6 +126,167 @@
         "Procedures and voltage ranges require vehicle/manufacturer applicability checks",
         "Regulator bypass is hazardous and must not become generic learner instruction"
       ]
+    },
+    {
+      "source_id": "kauai-cc-dol-auto-green-tech-package",
+      "artifact_filename": "DOL Auto Green Tech (1).zip",
+      "artifact_sha256": "526b0ee09127a9372d7c884fd12d03780c0bef5a09ca4798d54a50b5c883d609",
+      "artifact_byte_size": 5052670,
+      "artifact_sha256_status": "recorded-read-only-local-inventory",
+      "artifact_location_observed": "F:\\Openstax\\DOL Auto Green Tech (1).zip",
+      "title": "DOL Auto Green Tech curriculum package",
+      "institution": "Kauaʻi Community College",
+      "institution_provenance": {
+        "local_package_observation": "Non-credit syllabus files inside the package identify KAUAI COMMUNITY COLLEGE.",
+        "current_catalog_url": "https://catalog.kauai.hawaii.edu/automotive-mechanics-technology-amt",
+        "current_program_url": "https://www.kauai.hawaii.edu/automotive-technology",
+        "corroborated_courses": [
+          "AMT 171",
+          "AMT 172",
+          "AMT 173"
+        ],
+        "corroboration_note": "Current Kauaʻi Community College catalog/program pages independently match the archived HEV I/II/III course sequence and subject scope. This corroborates provenance but is not itself the reuse license."
+      },
+      "rights_classification": "CC_BY_4_0_CANDIDATE",
+      "rights_classification_source": "Root License.txt is the full Creative Commons Attribution 4.0 International license; root CC BY.png also observed.",
+      "license_artifact": {
+        "path": "License.txt",
+        "sha256": "477f7356d8ebd51420a8e2bdb28f6bda3cc600793d396f3c478d03e0dedcbd39",
+        "byte_size": 18915,
+        "license": "Creative Commons Attribution 4.0 International",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "rights_decision": "pending-human-package-scope-and-third-party-review",
+      "rights_verified_by": null,
+      "rights_verified_at": null,
+      "technical_review_status": "pending",
+      "technically_reviewed_by": null,
+      "technically_reviewed_at": null,
+      "ingested": false,
+      "rights_cleared": false,
+      "technically_reviewed": false,
+      "chunk_approved": false,
+      "lesson_mapped": false,
+      "candidate_chunk_ids": [],
+      "approved_chunk_ids": [],
+      "selected_files": [
+        {
+          "path": "Certificates/HEV I - Intro to HEV Technology Certificate of Training/AMT 171/171.2 High Voltage Electrical Safety/171.2a High Voltage Electrical Safety LP.docx",
+          "sha256": "82e328b622879afb5aaebd0e5defc149e140a8920883eb3c80276d63c82ce2e9",
+          "byte_size": 13648,
+          "embedded_media_count": 0,
+          "observed_scope": [
+            "high-voltage electrical safety",
+            "voltage levels",
+            "DMM and insulation-test equipment",
+            "PPE and electrical-isolation gloves"
+          ],
+          "proposed_curriculum_alignment": [
+            "AUT 250 Hybrid & Electric Vehicle Technology",
+            "AET 550 Electric & Hybrid Vehicle Systems"
+          ]
+        },
+        {
+          "path": "Certificates/HEV I - Intro to HEV Technology Certificate of Training/AMT 171/171.4 Familiarization of HV Systems/171.4b Power Inverter System/171.4b Power Inverter System LP.docx",
+          "sha256": "f3bcbc505282a8d9319c21c06a48e1dd8530ebf086bf47ce522d7e12da8ab3b4",
+          "byte_size": 13446,
+          "embedded_media_count": 0,
+          "observed_scope": [
+            "power inverter topology",
+            "transistors",
+            "PWM",
+            "motor control",
+            "boost conversion",
+            "regenerative braking"
+          ],
+          "proposed_curriculum_alignment": [
+            "AUT 250 Hybrid & Electric Vehicle Technology",
+            "AET 550 Electric & Hybrid Vehicle Systems",
+            "AET 560 Automotive Electronics & Controls"
+          ]
+        },
+        {
+          "path": "Certificates/HEV I - Intro to HEV Technology Certificate of Training/AMT 171/171.4 Familiarization of HV Systems/171.4c DC-DC Converters/171.4c DC-DC Converters LP.docx",
+          "sha256": "7ed292b6b2c405b17f6652358bf0645a89c8bedb6e739f1a0ef927c4f3c4f75e",
+          "byte_size": 12901,
+          "embedded_media_count": 0,
+          "observed_scope": [
+            "buck/boost converters",
+            "switching converter circuits",
+            "PWM switching",
+            "transformer windings",
+            "full-wave rectification",
+            "12-V output checks"
+          ],
+          "proposed_curriculum_alignment": [
+            "AUT 250 Hybrid & Electric Vehicle Technology",
+            "AUT 210 Advanced Electrical & Electronics",
+            "AET 550 Electric & Hybrid Vehicle Systems"
+          ]
+        },
+        {
+          "path": "Certificates/HEV II - Preventive Maitenance and Repair Certificate of Training/AMT 172/172.4 Invert Batt Pack cooling/172.4 Power Inverter and Battery Pack Lesson Plan.docx",
+          "sha256": "1e568a60b319e5c5e71182cb03150e1c2dbb64e7663c27c9b40a5c583a8ada1c",
+          "byte_size": 14505,
+          "embedded_media_count": 0,
+          "observed_scope": [
+            "power-inverter cooling",
+            "battery-pack thermal systems",
+            "airflow and temperature sensing",
+            "cooling-system testing"
+          ],
+          "proposed_curriculum_alignment": [
+            "AUT 250 Hybrid & Electric Vehicle Technology",
+            "AET 550 Electric & Hybrid Vehicle Systems"
+          ]
+        },
+        {
+          "path": "Certificates/HEV II - Preventive Maitenance and Repair Certificate of Training/AMT 172/172.6 12V subsystems/172.6 12 V Sub-system and DC-DC Converter Lesson Plan.docx",
+          "sha256": "084754b45bcbd0dad77326a3f950add6699be532c841457869ee3e2ca5de16f8",
+          "byte_size": 14702,
+          "embedded_media_count": 0,
+          "observed_scope": [
+            "DC-DC converter operation",
+            "12-V auxiliary battery charging",
+            "12-V subsystem testing",
+            "high-voltage cable integrity and isolation"
+          ],
+          "proposed_curriculum_alignment": [
+            "AUT 250 Hybrid & Electric Vehicle Technology",
+            "AUT 210 Advanced Electrical & Electronics",
+            "AET 550 Electric & Hybrid Vehicle Systems"
+          ]
+        },
+        {
+          "path": "Certificates/HEV III - Diagnostic and Repair Certificate of Training/AMT 173/173.6 Energy Management and Battery Pack/173.6 Energy Management and Battery Pack Lesson Plan.docx",
+          "sha256": "4a6caac6cfd119bf92b548546de6e0aadf50ac231788c5336ce55b57f507102f",
+          "byte_size": 14045,
+          "embedded_media_count": 0,
+          "observed_scope": [
+            "precharge circuits",
+            "battery contactors",
+            "battery thermal systems",
+            "terminal-voltage sensing",
+            "isolation faults",
+            "battery diagnostics"
+          ],
+          "proposed_curriculum_alignment": [
+            "AUT 250 Hybrid & Electric Vehicle Technology",
+            "AUT 220 Computerized Diagnostics & OBD-II",
+            "AET 550 Electric & Hybrid Vehicle Systems",
+            "AET 580 AI, Data Analytics & Intelligent Diagnostics"
+          ]
+        }
+      ],
+      "chunk_decisions": [],
+      "open_questions": [
+        "Confirm the package licensor identity and that Kauaʻi Community College or the package publisher had authority to apply CC BY 4.0 to the selected lesson-plan text.",
+        "Confirm whether any third-party text, standards-derived task language, URLs, or externally authored material inside selected DOCX files is excluded from the package license.",
+        "Record a named human rights reviewer and timestamp before setting rights_cleared=true.",
+        "Perform technical review for current HEV/EV applicability and safety before any excerpt becomes a candidate chunk.",
+        "Do not ingest exams, answer keys, or MASTER assessment files as learner-facing source material."
+      ],
+      "candidate_observations": "Candidate source registration only. The root package contains CC BY 4.0 license text and a CC BY image, and current Kauaʻi Community College catalog pages corroborate the AMT 171/172/173 HEV sequence. No selected DOCX contains embedded media. Do not infer package-wide or third-party-material clearance from the root license alone. File-level creator metadata is only 'Auto104'. No content has been copied into project evidence chunks, RAG/Ollama context, or lesson text."
     }
   ],
   "referenced_but_unregistered_sources": [
