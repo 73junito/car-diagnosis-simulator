@@ -76,6 +76,44 @@ function findApplicableSpecifications(catalog, filters = {}) {
   });
 }
 
+function evaluateSpecificationApplicability(entry, context = {}) {
+  const app = entry?.applicability || {};
+  const reasons = [];
+
+  function requireMatch(field, label = field) {
+    if (app[field] === undefined) return;
+    if (context[field] === undefined || context[field] === null || context[field] === "") {
+      reasons.push(`${label} context is required by the selected source reference`);
+      return;
+    }
+    if (context[field] !== app[field]) {
+      reasons.push(`${label} does not match the selected source reference`);
+    }
+  }
+
+  requireMatch("system");
+  requireMatch("systemVoltage", "system voltage");
+  requireMatch("testMethod", "test method");
+  requireMatch("wiringConfiguration", "wiring configuration");
+  requireMatch("conductor");
+
+  if (Array.isArray(app.starterFamilies) && app.starterFamilies.length) {
+    if (!context.starterFamily) {
+      reasons.push("starter family context is required by the selected source reference");
+    } else if (!app.starterFamilies.includes(context.starterFamily)) {
+      reasons.push("starter family does not match the selected source reference");
+    }
+  }
+
+  return {
+    applicable: reasons.length === 0,
+    reasons,
+    reason: reasons.length
+      ? reasons.join("; ")
+      : "Context matches the selected source reference applicability."
+  };
+}
+
 function specificityScore(entry) {
   const app = entry?.applicability || {};
   let score = 0;
@@ -108,6 +146,7 @@ const api = {
   validateApplicability,
   validateAuthoritativeSpecification,
   findApplicableSpecifications,
+  evaluateSpecificationApplicability,
   specificityScore,
   selectMostSpecificSpecification,
   findProductProfile
