@@ -47,11 +47,14 @@ test.describe('Expanded lesson plans', () => {
 
     await plan.getByText('Instructional sequence').click();
     await expect(plan.locator('.instruction-block-list > li')).toHaveCount(11);
-    await expect(plan.locator('.lesson-teaching-points > li')).toHaveCount(44);
+    await expect(plan.locator('.lesson-teaching-points > li')).toHaveCount(45);
     await expect(plan.getByText(/system, voltage domain, test method, and measurement context/)).toBeVisible();
     await expect(plan.getByText(/operating condition, test location, voltage domain, and units/)).toBeVisible();
     await expect(plan.getByText(/alternator-battery-cable system/)).toBeVisible();
-    await expect(plan.getByText(/citation-only external reference; no reusable vendor excerpt stored/)).toBeVisible();
+    await expect(plan.getByText('citation-only external reference; no reusable vendor excerpt stored', { exact: true })).toBeVisible();
+    await expect(plan.getByText(/citation-only external technical reference; no reusable vendor excerpt, figure, or chunk is stored/)).toBeVisible();
+    await expect(plan.getByText(/vehicle-specific service information/)).toBeVisible();
+    await expect(plan.getByText(/verify the final conclusion using the applicable vehicle-specific procedure and authoritative information/)).toBeVisible();
     await expect(plan.getByText(/0\.350 V hypothetical voltage-drop observation is above the 0\.300 V design basis but below the 0\.500 V maximum/)).toBeVisible();
     await expect(plan.getByText(/Do not apply the cited 0\.200 V 3-wire #2-lead maximum until the source applicability is verified/)).toBeVisible();
     await expect(plan.getByText(/Design Basis/).first()).toBeVisible();
