@@ -62,3 +62,7 @@ data/rala/sources/raw/
 # Local RALA ingestion drafts
 /data/approved-sources/drafts/
 /data/approved-chunks/drafts/
+
+# Derived engineering computation outputs (JSON artifacts remain versioned)
+data/engineering/generated/*.csv
+data/engineering/generated/*.png
