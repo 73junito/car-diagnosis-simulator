@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "1.0.0",
+  "catalogRole": "generic-training-examples",
+  "notice": "These values are project-authored training examples. They are not vehicle-specific specifications and must not be used as diagnostic limits.",
+  "profiles": [
+    {
+      "id": "example-12v-resistive-load",
+      "name": "12 V / 6 ohm resistive-load example",
+      "engineeringProfile": {
+        "profileType": "resistive_load",
+        "parameters": {
+          "voltage": {
+            "quantityType": "voltage",
+            "unit": "V",
+            "valueRole": "generic_training_example",
+            "value": 12
+          },
+          "resistance": {
+            "quantityType": "resistance",
+            "unit": "ohm",
+            "valueRole": "generic_training_example",
+            "value": 6
+          }
+        }
+      }
+    },
+    {
+      "id": "example-conductor",
+      "name": "Generic conductor calculation example",
+      "engineeringProfile": {
+        "profileType": "conductor",
+        "material": "copper-training-example",
+        "parameters": {
+          "resistivity": {
+            "quantityType": "resistivity",
+            "unit": "ohm_m",
+            "valueRole": "generic_training_example",
+            "value": 1.72e-8
+          },
+          "length": {
+            "quantityType": "length",
+            "unit": "m",
+            "valueRole": "generic_training_example",
+            "value": 3
+          },
+          "area": {
+            "quantityType": "area",
+            "unit": "mm2",
+            "valueRole": "generic_training_example",
+            "value": 2.5
+          }
+        }
+      }
+    },
+    {
+      "id": "example-lead-acid-battery",
+      "name": "Generic flooded lead-acid battery example",
+      "engineeringProfile": {
+        "profileType": "battery",
+        "chemistry": "lead_acid_flooded",
+        "parameters": {
+          "nominalVoltage": {
+            "quantityType": "voltage",
+            "unit": "V",
+            "valueRole": "generic_training_example",
+            "value": 12
+          },
+          "capacity": {
+            "quantityType": "capacity",
+            "unit": "Ah",
+            "valueRole": "generic_training_example",
+            "value": 70
+          },
+          "crankingCurrent": {
+            "quantityType": "current",
+            "unit": "A",
+            "valueRole": "generic_training_example",
+            "value": 650
+          }
+        }
+      }
+    }
+  ]
+}
