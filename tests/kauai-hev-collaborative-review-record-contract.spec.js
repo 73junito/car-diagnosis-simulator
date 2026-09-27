@@ -68,4 +68,26 @@ describe('Kauai HEV collaborative review record contract', () => {
       'No attached reference is ingested, chunked, rights-cleared, technically approved, or lesson-mapped by this record.'
     );
   });
+  test('records Option 2 as rights-pending without opening release gates', () => {
+    expect(record.rights_review_decision).toEqual(
+      expect.objectContaining({
+        reviewer: 'Rafael Rodriguez',
+        reviewer_id: 'rafael-rodriguez',
+        decision: 'pending-third-party-and-licensor-authority-verification',
+        user_selection: 'Option 2',
+        status: 'pending-third-party',
+        rights_cleared: false,
+        release_effect: 'none'
+      })
+    );
+    expect(record.rights_review_decision.required_before_clearance).toEqual(
+      expect.arrayContaining([
+        'verify licensor authority for the package-level license statement',
+        'verify third-party-material provenance and reuse rights'
+      ])
+    );
+    expect(record.gate_state.rights_cleared).toBe(false);
+    expect(record.gate_state.chunk_approved).toBe(false);
+    expect(record.gate_state.question_generation_allowed).toBe(false);
+  });
 });
