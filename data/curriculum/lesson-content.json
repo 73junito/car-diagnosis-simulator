@@ -148,13 +148,13 @@
             "ug-electrical-lo-3"
           ],
           "teachingPoints": [
-            "Start with the stated context before comparing a number: 12 V charging system, charging-cable sizing-table context.",
-            "The source-backed 0.300 V value is a design basis, not a pass/fail limit.",
-            "The source-backed 0.500 V value is the cited maximum for the same stated 12 V charging-cable context.",
-            "A project-authored 0.350 V training measurement is above the design basis but within the cited maximum; this does not prove alternator failure.",
-            "The next step is to preserve context and obtain evidence that can discriminate among plausible causes using vehicle-appropriate procedures."
+            "Start with source applicability before comparing a number: the cited Delco values come from a 12 V charging-cable sizing table, not from a universal diagnostic voltage-drop test procedure.",
+            "The source-backed 0.300 V value is the design basis used for the cited new-vehicle cable-sizing table; it is not a universal pass/fail threshold.",
+            "The source-backed 0.500 V value is the maximum voltage-drop basis stated for vehicle life within that same cited 12 V cable-sizing context.",
+            "A project-authored 0.350 V hypothetical voltage-drop observation is above the 0.300 V design basis but below the 0.500 V maximum. That comparison describes its position within the cited reference range; it does not identify a failed component.",
+            "Before turning that comparison into a diagnostic decision, verify that the cable path, voltage domain, operating/load condition, test points, and vehicle-specific procedure make the observation legitimately comparable."
           ],
-          "learnerAction": "Explain why 0.350 V can be above a design basis yet still within a maximum, and state what additional evidence is needed before naming a failed component.",
+          "learnerAction": "Explain why 0.350 V is above the cited design basis but below the cited maximum, identify what context must be verified before treating it as comparable evidence, and state what additional evidence is needed before naming a failed component.",
           "evidenceReferences": [
             {
               "type": "authoritative-specification",
@@ -174,17 +174,25 @@
               "type": "project-authored-training-example",
               "id": "charging-lesson-drop-example-0p350",
               "value": "0.350 V",
-              "role": "instructional measurement only"
+              "role": "hypothetical instructional observation only"
             }
           ],
-          "sourceBoundary": "The 0.350 V value is a project-authored training measurement, not a vehicle specification. Delco values apply only to their cited charging-cable context.",
+          "sourceBoundary": "The 0.350 V value is a project-authored hypothetical training observation, not a vehicle specification or prescribed test result. The Delco 0.300 V and 0.500 V values come from a 12 V charging-cable sizing table and must not be presented as a universal diagnostic procedure.",
           "instructionalExample": {
-            "context": "12 V charging-cable sizing-table example",
-            "measurement": "0.350 V",
+            "context": "12 V charging-cable sizing-table reasoning example",
+            "observation": "0.350 V hypothetical project-authored voltage-drop value",
             "interpretation": [
-              "0.300 V design basis -> reference-only comparison",
-              "0.500 V maximum -> within the cited maximum",
-              "No failed component is identified from this comparison alone"
+              "0.300 V -> cited new-vehicle cable-sizing design basis",
+              "0.500 V -> cited vehicle-life maximum voltage-drop basis",
+              "0.350 V -> above the design basis and below the cited maximum",
+              "No component failure or diagnostic test outcome is established from this comparison alone"
+            ],
+            "requiredContextBeforeDiagnosticUse": [
+              "cable path or conductor under evaluation",
+              "voltage domain",
+              "operating and load condition",
+              "measurement test points",
+              "applicable vehicle-specific diagnostic procedure"
             ]
           }
         },
@@ -198,11 +206,11 @@
             "ug-electrical-lo-2"
           ],
           "teachingPoints": [
-            "Case A: 0.180 V is measured, but conductor identity is unknown. Do not apply the cited 0.200 V 3-wire #2-lead maximum until wiring configuration and conductor identity are verified.",
-            "Case B: a 0.550 V project-authored training measurement in the cited 12 V charging-cable sizing-table context exceeds the 0.500 V maximum. This supports a cable-path concern in that context but does not prove alternator failure.",
-            "Case C: a charging concern is reported and no measurement has been collected. Identify operating context and gather discriminating evidence before naming a cause."
+            "Case A: 0.180 V is observed, but conductor identity and wiring configuration are unknown. Do not apply the cited 0.200 V 3-wire #2-lead maximum until the source applicability is verified.",
+            "Case B: a project-authored 0.550 V hypothetical observation is considered within the cited 12 V charging-cable sizing-table context. Because it is above the cited 0.500 V maximum basis, it is outside that source-scoped reference; this alone does not identify which conductor, connection, or component is responsible.",
+            "Case C: a charging concern is reported and no measurement has been collected. Identify the operating context, test target, and applicable procedure before gathering discriminating evidence or naming a cause."
           ],
-          "learnerAction": "For each case choose comparable, not comparable, or more evidence required, then justify the choice from source applicability.",
+          "learnerAction": "For each case choose comparable, not comparable, or more evidence required. Justify the choice using source applicability, identify any missing measurement context, and avoid converting a reference comparison directly into a component diagnosis.",
           "evidenceReferences": [
             {
               "type": "authoritative-specification",
@@ -219,7 +227,7 @@
               "applicability": "12 V charging-cable sizing-table context"
             }
           ],
-          "sourceBoundary": "Do not apply the 0.200 V reference when wiring configuration or conductor identity is unknown."
+          "sourceBoundary": "The 0.200 V and 0.500 V values retain their cited source scope. They do not establish a universal charging-system test procedure, and an out-of-reference value does not by itself identify a failed component."
         },
         {
           "id": "charging-independent-scenario",
