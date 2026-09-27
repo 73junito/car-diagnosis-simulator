@@ -2,13 +2,18 @@
 
 (async function initStartingSystemLab() {
   const NS = "http://www.w3.org/2000/svg";
-  const [templateResponse, symbolLibrary, connectionLibrary] = await Promise.all([
+  const [templateResponse, interstateResponse, delcoResponse, symbolLibrary, connectionLibrary] = await Promise.all([
     fetch("/data/circuit-templates/12v-starting-system.json"),
+    fetch("/data/engineering/authoritative-specifications/interstate-batteries-2021.json"),
+    fetch("/data/engineering/authoritative-specifications/delco-remy-starting-charging.json"),
     window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),
     window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections")
   ]);
   if (!templateResponse.ok) throw new Error("Unable to load starting-system template.");
+  if (!interstateResponse.ok || !delcoResponse.ok) throw new Error("Unable to load starting-system engineering references.");
   const circuit = await templateResponse.json();
+  const interstateCatalog = await interstateResponse.json();
+  const delcoCatalog = await delcoResponse.json();
   const engine = window.TorqueMindCircuitEngine;
   const templateValidation = window.TorqueMindCircuitTemplateContracts.validateCircuitTemplate(
     circuit, engine, symbolLibrary.registry, connectionLibrary.registry
@@ -25,6 +30,9 @@
   const guidedSteps = [...document.querySelectorAll("#guidedSteps li")];
   const voltageDomains = window.TorqueMindVoltageDomains;
   const symbolRenderer = window.TorqueMindSymbolRenderer;
+  const engineering = window.TorqueMindEngineering;
+  const specifications = engineering.specifications;
+  const calculator = engineering.calculator;
 
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((domain) => [domain.id, domain]));
@@ -75,6 +83,65 @@
     MTR1: "The starter motor, represented as the high-current cranking load.",
     GND1: "The engine/chassis return reference for the generic training circuit."
   });
+
+  const engineeringUi = {
+    status:document.getElementById("startingEngineeringStatus"),
+    batterySelect:document.getElementById("batteryReferenceSelect"),
+    starterSelect:document.getElementById("starterFamilySelect"),
+    cca:document.getElementById("engBatteryCca"),
+    ca:document.getElementById("engBatteryCa"),
+    rc:document.getElementById("engBatteryRc"),
+    ah:document.getElementById("engBatteryAh"),
+    testCurrent:document.getElementById("engStarterTestCurrent"),
+    dropLimit:document.getElementById("engStarterDropLimit"),
+    resistance:document.getElementById("engCableResistanceLimit"),
+    formula:document.getElementById("startingEngineeringFormula")
+  };
+
+  for (const profile of interstateCatalog.productProfiles) {
+    const option=document.createElement("option");
+    option.value=profile.partNumber;
+    option.textContent=`${profile.partNumber} — ${profile.groupSize}`;
+    if (profile.partNumber==="31P-HD") option.selected=true;
+    engineeringUi.batterySelect.append(option);
+  }
+
+  function renderEngineering() {
+    const battery=specifications.findProductProfile(interstateCatalog,{partNumber:engineeringUi.batterySelect.value,systemVoltage:12});
+    const family=engineeringUi.starterSelect.value;
+    const testCurrent=specifications.selectMostSpecificSpecification(delcoCatalog,{system:"starting",systemVoltage:12,parameter:"starter_cable_test_current"});
+    const dropLimit=specifications.selectMostSpecificSpecification(delcoCatalog,{system:"starting",systemVoltage:12,starterFamily:family,parameter:"starter_cable_total_voltage_drop"});
+    const p=battery?.engineeringProfile?.parameters || {};
+    const resistance=(testCurrent && dropLimit)
+      ? calculator.solveOhmsLaw({voltage:dropLimit.quantity.value,current:testCurrent.quantity.value})
+      : null;
+
+    engineeringUi.cca.textContent=p.coldCrankingCurrent ? `${p.coldCrankingCurrent.value} A` : "—";
+    engineeringUi.ca.textContent=p.crankingCurrent32F ? `${p.crankingCurrent32F.value} A` : "—";
+    engineeringUi.rc.textContent=p.reserveCapacity ? `${p.reserveCapacity.value} min` : "—";
+    engineeringUi.ah.textContent=p.capacity20Hr ? `${p.capacity20Hr.value} Ah` : "—";
+    engineeringUi.testCurrent.textContent=testCurrent ? `${testCurrent.quantity.value} A` : "—";
+    engineeringUi.dropLimit.textContent=dropLimit ? `${dropLimit.quantity.value.toFixed(3)} V max` : "—";
+    engineeringUi.resistance.textContent=resistance ? `${(resistance.value*1000).toFixed(3)} mΩ` : "—";
+
+    const fault=faultObject();
+    if (fault?.type==="open_circuit") {
+      engineeringUi.status.textContent="Open circuit — numeric cable-drop comparison not inferred";
+      engineeringUi.status.className="engineering-status fault";
+    } else if (fault?.type==="high_resistance") {
+      engineeringUi.status.textContent="High-resistance path — compare measured drop to the cited procedure";
+      engineeringUi.status.className="engineering-status fault";
+    } else {
+      engineeringUi.status.textContent="Reference values loaded";
+      engineeringUi.status.className="engineering-status";
+    }
+
+    const batteryText=battery ? `${battery.partNumber}: ${p.coldCrankingCurrent?.value ?? "—"} A CCA` : "No battery selected";
+    const starterText=dropLimit && testCurrent
+      ? `${family}: ${dropLimit.quantity.value.toFixed(3)} V max total cable loss at ${testCurrent.quantity.value} A`
+      : "No starter-family specification";
+    engineeringUi.formula.textContent=`${batteryText}. ${starterText}. Calculated equivalent cable resistance = Vdrop ÷ I = ${resistance ? (resistance.value*1000).toFixed(3)+" mΩ" : "—"}. Battery ratings and starter limits are independent source records; this lab does not assert product compatibility.`;
+  }
 
   function el(name, attrs = {}, text = "") {
     const node = document.createElementNS(NS, name);
@@ -264,6 +331,7 @@
     renderComponents();
     renderLabels();
     renderTestPoints();
+    renderEngineering();
     const state = stateDefinition();
     stateBadge.textContent = state.label;
     flowNote.textContent = state.note + " Animated arrows are conceptual and do not represent measured magnitude.";
@@ -315,6 +383,8 @@
 
   stateSelect.addEventListener("change", () => { operatingState = stateSelect.value; activeFlowMode = "system"; render(); });
   faultSelect.addEventListener("change", () => { activeFault = faultSelect.value; updateGuide(activeFault ? 5 : guideProgress); render(); });
+  engineeringUi.batterySelect.addEventListener("change", renderEngineering);
+  engineeringUi.starterSelect.addEventListener("change", renderEngineering);
   document.getElementById("showSystemFlow").addEventListener("click", () => { activeFlowMode = "system"; render(); });
   document.getElementById("traceControl").addEventListener("click", () => { activeFlowMode = "control"; updateGuide(2); render(); });
   document.getElementById("tracePower").addEventListener("click", () => { activeFlowMode = "power"; updateGuide(4); render(); });

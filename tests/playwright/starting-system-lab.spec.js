@@ -43,6 +43,37 @@ test.describe("12 V starting-system template lab", () => {
     await expect(page.locator('[data-connection-id="W_MOTOR_GND"]')).toHaveClass(/flow-ground/);
   });
 
+  test("source-backed engineering panel resolves battery and starter references", async ({ page }) => {
+    await page.goto("/dashboard/student/starting-system-lab/");
+    await expect(page.locator("#batteryReferenceSelect")).toHaveValue("31P-HD");
+    await expect(page.locator("#starterFamilySelect")).toHaveValue("50MT");
+    await expect(page.locator("#engBatteryCca")).toHaveText("925 A");
+    await expect(page.locator("#engBatteryCa")).toHaveText("1110 A");
+    await expect(page.locator("#engBatteryRc")).toHaveText("180 min");
+    await expect(page.locator("#engBatteryAh")).toHaveText("104 Ah");
+    await expect(page.locator("#engStarterTestCurrent")).toHaveText("500 A");
+    await expect(page.locator("#engStarterDropLimit")).toHaveText("0.400 V max");
+    await expect(page.locator("#engCableResistanceLimit")).toHaveText("0.800 mΩ");
+
+    await page.locator("#starterFamilySelect").selectOption("37MT");
+    await expect(page.locator("#engStarterDropLimit")).toHaveText("0.500 V max");
+    await expect(page.locator("#engCableResistanceLimit")).toHaveText("1.000 mΩ");
+
+    await page.locator("#batteryReferenceSelect").selectOption("31P-AGM71");
+    await expect(page.locator("#engBatteryCa")).toHaveText("1155 A");
+    await expect(page.locator("#engBatteryRc")).toHaveText("200 min");
+    await expect(page.locator("#engBatteryAh")).toHaveText("100 Ah");
+  });
+
+  test("starting engineering panel keeps fault behavior conservative", async ({ page }) => {
+    await page.goto("/dashboard/student/starting-system-lab/");
+    await page.locator("#faultSelect").selectOption("FAULT_HIGH_RES_POWER");
+    await expect(page.locator("#startingEngineeringStatus")).toContainText("High-resistance path");
+    await page.locator("#faultSelect").selectOption("FAULT_OPEN_POWER");
+    await expect(page.locator("#startingEngineeringStatus")).toContainText("Open circuit");
+    await expect(page.locator("#startingEngineeringFormula")).toContainText("does not assert product compatibility");
+  });
+
   test("student dashboard exposes the starting-system lab", async ({ page }) => {
     await page.goto("/dashboard/student/");
     await expect(page.getByRole("link", { name: "12 V Starting Lab" })).toHaveAttribute(

@@ -203,6 +203,7 @@ const requiredOutputFiles = [
   "src/engineering/index.js",
   "data/engineering/training-examples.json",
   "data/engineering/authoritative-specifications/delco-remy-starting-charging.json",
+  "data/engineering/authoritative-specifications/interstate-batteries-2021.json",
   "data/engineering/labs/relay-load-training.json",
   "data/engineering/labs/sensor-training.json",
   "data/engineering/labs/actuator-training.json",

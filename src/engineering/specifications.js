@@ -93,13 +93,24 @@ function selectMostSpecificSpecification(catalog, filters = {}) {
   return [...candidates].sort((a, b) => specificityScore(b) - specificityScore(a))[0];
 }
 
+function findProductProfile(catalog, filters = {}) {
+  const profiles = Array.isArray(catalog?.productProfiles) ? catalog.productProfiles : [];
+  return profiles.find(entry => {
+    if (filters.partNumber && entry.partNumber !== filters.partNumber) return false;
+    if (filters.groupSize && entry.groupSize !== filters.groupSize) return false;
+    if (filters.systemVoltage !== undefined && entry.systemVoltage !== filters.systemVoltage) return false;
+    return true;
+  }) || null;
+}
+
 const api = {
   COMPARISONS,
   validateApplicability,
   validateAuthoritativeSpecification,
   findApplicableSpecifications,
   specificityScore,
-  selectMostSpecificSpecification
+  selectMostSpecificSpecification,
+  findProductProfile
 };
 
 if (typeof module !== "undefined" && module.exports) module.exports = api;
