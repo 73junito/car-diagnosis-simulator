@@ -209,3 +209,30 @@ Fault handling remains conservative:
 - changing operating state does not create charging voltage, current, or resistance values.
 
 The existing generic 12 V charging-system topology remains project-authored training content. Source-backed values stay separate from the topology and remain scoped to their Delco Remy applicability.
+
+## Multi-voltage declared-domain engineering integration
+
+The existing electrified multi-voltage lab now exposes a domain-aware engineering panel for the two values already declared by the project-authored template:
+
+- LV12: 12 V nominal low-voltage domain
+- TR400: 400 V nominal traction-domain training example
+
+No new traction-voltage specification is introduced. The 400 V value remains explicitly limited to this training example and is not treated as a universal hybrid/EV architecture.
+
+The current field is blank by default. When a learner intentionally enters a positive current, the lab calculates only electrical power for the selected declared domain:
+
+`P = V × I`
+
+Examples:
+- 12 V × 10 A = 120 W
+- 400 V × 10 A = 4.000 kW
+
+The entered current is never inferred from an operating state or fault. The power calculation does not imply DC/DC conversion ratio or efficiency, inverter switching behavior, traction-motor torque, phase current, battery capability, or vehicle-specific operating limits.
+
+Fault/state handling remains conservative:
+- inactive selected domain: entered current is labeled as calculation input only;
+- open selected-domain path: no current or power is inferred from the fault;
+- high-resistance selected-domain path: no fault current or power is inferred;
+- a fault in the other voltage domain does not masquerade as a fault in the selected domain.
+
+Traction-domain test points remain conceptual-only training locations and do not provide probing or service procedures.
