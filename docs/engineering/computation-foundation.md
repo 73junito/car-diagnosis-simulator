@@ -110,6 +110,29 @@ npm run validate:sensor-model
 
 The numeric short-to-ground case is independently cross-validated with ngspice to within 0.001 V. The degraded-ground case deliberately has no SPICE numeric result because the training profile does not define enough component behavior to justify one.
 
+## PWM actuator model cross-validation
+
+The actuator model validates a transient PWM command representation without inferring physical actuator response.
+
+At the default training state:
+
+- supply: 12 V;
+- duty cycle: 30%;
+- ideal mathematical average: 3.600 V;
+- PWM short-to-ground: 0.000 V average;
+- delta: -3.600 V.
+
+Run:
+
+```text
+python engineering/python/generate_pwm_actuator_model.py
+npm run validate:pwm-actuator-model
+```
+
+ngspice performs a transient pulse simulation and measures average command voltage over repeated cycles. The normalized result must agree with the Python mathematical model within 0.001 V.
+
+An open PWM command remains `unavailable`. The model does not infer actuator position, speed, force, flow, current, frequency response, or mechanical behavior from PWM average voltage.
+
 ## Next boundary
 
-Future SPICE models may expand to PWM/load and voltage-drop circuits only through the same artifact adapter and semantic validation path. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.
+Future SPICE models may expand to voltage-drop/starting and charging applicability cases only through the same artifact adapter and semantic validation path. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.
