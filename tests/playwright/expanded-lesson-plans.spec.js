@@ -40,7 +40,7 @@ test.describe('Expanded lesson plans', () => {
     await expect(plan.getByText('evidence-to-decision reasoning')).toBeVisible();
     await expect(plan.getByText(/AUT-120 · Electrical I · Direct Course Alignment/)).toBeVisible();
     await expect(plan.locator('.eyebrow')).toHaveText('Electrical I · 180 MIN');
-    await expect(plan.getByText(/battery, alternator, diode rectifier, voltage regulator, and vehicle electrical loads/)).toBeVisible();
+    await expect(plan.locator('.objective-list').getByText(/battery, alternator, diode rectifier, voltage regulator, and vehicle electrical loads/)).toBeVisible();
 
     await expect(plan.locator('.lesson-readiness span').filter({ hasText: 'Complete Review Ready' })).toBeVisible();
     await expect(plan.locator('.lesson-readiness span').filter({ hasText: 'Pending Human Technical And Chunk Review' })).toBeVisible();
