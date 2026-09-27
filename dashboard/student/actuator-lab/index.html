@@ -38,6 +38,57 @@
     <span><i class="legend-dot test"></i> Test point</span>
     <span class="legend-note">Low-duty and high-duty states are qualitative training examples only; no universal percentage or frequency is implied.</span>
   </section>
+  <section class="engineering-panel" aria-labelledby="actuatorEngineeringHeading">
+    <div class="engineering-heading">
+      <div>
+        <p class="eyebrow">PWM engineering example</p>
+        <h2 id="actuatorEngineeringHeading">Commanded and observed PWM behavior</h2>
+        <p>Duty-cycle values are generic training examples. They do not define actuator position, speed, force, flow, current, or frequency.</p>
+      </div>
+      <span class="engineering-status" id="actuatorEngineeringStatus">Healthy training example</span>
+    </div>
+
+    <div class="pwm-input-control">
+      <label for="dutyInput">Training duty-cycle command <strong id="dutyInputValue">30%</strong></label>
+      <input id="dutyInput" type="range" min="0" max="100" step="1" value="30">
+      <div class="pwm-input-scale"><span>0%</span><span>50%</span><span>100%</span></div>
+    </div>
+
+    <div class="engineering-grid">
+      <article class="engineering-card">
+        <span class="value-role declared">Declared system value</span>
+        <strong id="engActuatorSupply">12 V</strong>
+        <small>Actuator/PWM high-level source</small>
+      </article>
+      <article class="engineering-card">
+        <span class="value-role example">Generic training example</span>
+        <strong id="engDutyCycle">30%</strong>
+        <small>Commanded duty cycle</small>
+      </article>
+      <article class="engineering-card result">
+        <span class="value-role calculated">Calculated value</span>
+        <strong id="engIdealAverage">3.6 V</strong>
+        <small>Ideal mathematical PWM average</small>
+      </article>
+      <article class="engineering-card result">
+        <span class="value-role calculated">Actuator-side observed</span>
+        <strong id="engObservedCommand">3.6 V avg</strong>
+        <small id="engObservedCommandLabel">PWM command representation</small>
+      </article>
+      <article class="engineering-card">
+        <span class="value-role example">Circuit availability</span>
+        <strong id="engPowerAvailability">Available</strong>
+        <small>Actuator power path</small>
+      </article>
+      <article class="engineering-card">
+        <span class="value-role example">Circuit availability</span>
+        <strong id="engGroundAvailability">Available</strong>
+        <small>Actuator ground path</small>
+      </article>
+    </div>
+    <p class="engineering-formula" id="actuatorEngineeringFormula"></p>
+  </section>
+
   <section class="workspace">
     <div class="diagram-card">
       <div class="diagram-heading"><div><p class="eyebrow">Powered actuator architecture</p><h2>Generic 12 V PWM actuator schematic</h2></div><div id="stateBadge" class="state-badge">PWM command — low-duty example</div></div>
@@ -58,5 +109,9 @@
 <script src="/src/symbols/registry.js"></script>
 <script src="/src/symbols/svg-renderer.js"></script>
 <script src="/src/symbols/index.js"></script>
+<script src="/src/engineering/contracts.js"></script>
+<script src="/src/engineering/profiles.js"></script>
+<script src="/src/engineering/calculator.js"></script>
+<script src="/src/engineering/index.js"></script>
 <script src="./actuator-lab.js"></script>
 </body></html>

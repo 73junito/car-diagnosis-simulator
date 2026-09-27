@@ -203,6 +203,7 @@ const requiredOutputFiles = [
   "data/engineering/training-examples.json",
   "data/engineering/labs/relay-load-training.json",
   "data/engineering/labs/sensor-training.json",
+  "data/engineering/labs/actuator-training.json",
   "dashboard/obd2.html",
   "dashboard/obd2-student.html",
   "data/scenarios.js",

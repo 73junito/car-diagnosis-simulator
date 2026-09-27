@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileId": "actuator-engineering-training-001",
+  "profileRole": "lab-engineering-training-profile",
+  "circuitTemplateId": "automotive-12v-pwm-actuator",
+  "notice": "All stored duty-cycle values are project-authored generic training examples. The 12 V supply is declared by the circuit template. Duty cycle does not imply actuator position, speed, force, flow, current, or frequency.",
+  "actuatorProfile": {
+    "targetComponentId": "ACT1",
+    "engineeringProfile": {
+      "profileType": "actuator",
+      "signalType": "pwm",
+      "parameters": {
+        "dutyCycle": {
+          "quantityType": "duty_cycle",
+          "unit": "percent",
+          "valueRole": "generic_training_example",
+          "range": {
+            "min": 0,
+            "nominal": 30,
+            "max": 100
+          }
+        }
+      }
+    }
+  },
+  "stateEngineering": [
+    {
+      "stateId": "pwm-low-example",
+      "dutyCycle": {
+        "quantityType": "duty_cycle",
+        "unit": "percent",
+        "valueRole": "generic_training_example",
+        "value": 30
+      }
+    },
+    {
+      "stateId": "pwm-high-example",
+      "dutyCycle": {
+        "quantityType": "duty_cycle",
+        "unit": "percent",
+        "valueRole": "generic_training_example",
+        "value": 70
+      }
+    }
+  ],
+  "faultBehavior": [
+    {
+      "faultId": "FAULT_OPEN_ACT_POWER",
+      "mode": "actuator_power_unavailable",
+      "reason": "PWM command may still be present, but the actuator power path is open; actuator response is not inferred."
+    },
+    {
+      "faultId": "FAULT_OPEN_PWM",
+      "mode": "actuator_command_unavailable",
+      "reason": "Controller command may be calculated, but the actuator-side PWM path is open."
+    },
+    {
+      "faultId": "FAULT_OPEN_ACT_GROUND",
+      "mode": "actuator_ground_unavailable",
+      "reason": "PWM command may still be present, but the actuator ground path is open; actuator response is not inferred."
+    },
+    {
+      "faultId": "FAULT_HIGH_RES_ACT_POWER",
+      "mode": "actuator_power_degraded",
+      "reason": "The actuator power path is degraded. No voltage drop or actuator response is invented without a component/load model."
+    },
+    {
+      "faultId": "FAULT_HIGH_RES_ACT_GROUND",
+      "mode": "actuator_ground_degraded",
+      "reason": "The actuator ground path is degraded. No voltage drop or actuator response is invented without a component/load model."
+    },
+    {
+      "faultId": "FAULT_PWM_SHORT_GROUND",
+      "mode": "actuator_command_forced_ground",
+      "reason": "Idealized training short forces the actuator-side command line to ground."
+    },
+    {
+      "faultId": "FAULT_PWM_SHORT_POWER",
+      "mode": "actuator_command_forced_power",
+      "reason": "Idealized training short forces the actuator-side command line to the declared 12 V supply."
+    }
+  ]
+}
