@@ -34,6 +34,12 @@ function validateApplicability(applicability) {
       (typeof applicability.testMethod !== "string" || !applicability.testMethod.trim())) {
     errors.push("applicability.testMethod must be a non-empty string when provided");
   }
+  for (const field of ["wiringConfiguration", "conductor"]) {
+    if (applicability[field] !== undefined &&
+        (typeof applicability[field] !== "string" || !applicability[field].trim())) {
+      errors.push(`applicability.${field} must be a non-empty string when provided`);
+    }
+  }
   return errors;
 }
 
