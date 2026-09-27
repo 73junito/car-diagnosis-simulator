@@ -66,3 +66,4 @@ data/rala/sources/raw/
 # Derived engineering computation outputs (JSON artifacts remain versioned)
 data/engineering/generated/*.csv
 data/engineering/generated/*.png
+data/engineering/generated/relay-load-high-resistance-ngspice.json
