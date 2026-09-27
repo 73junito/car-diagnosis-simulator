@@ -170,7 +170,9 @@
  function inspectTestPoint(tp){inspector.replaceChildren();const h=document.createElement("h3"),p=document.createElement("p");h.textContent=tp.id;p.textContent=`Available conceptual measurements: ${tp.measurementTypes.join(", ")}. Vehicle-specific values and limits are intentionally omitted.`;inspector.append(h,p);}
  stateSelect.addEventListener("change",()=>{operatingState=stateSelect.value;dutyCycle=stateDuty.get(operatingState)??0;engineeringUi.dutyInput.value=String(dutyCycle);flowMode="system";render();});
  faultSelect.addEventListener("change",()=>{activeFault=faultSelect.value;render();});
- engineeringUi.dutyInput.addEventListener("input",()=>{dutyCycle=Number(engineeringUi.dutyInput.value);renderEngineering();});
+ const updateDutyFromControl=()=>{dutyCycle=Number(engineeringUi.dutyInput.value);renderEngineering();};
+ engineeringUi.dutyInput.addEventListener("input",updateDutyFromControl);
+ engineeringUi.dutyInput.addEventListener("change",updateDutyFromControl);
  document.getElementById("showSystemFlow").addEventListener("click",()=>{flowMode="system";render();});
  document.getElementById("tracePower").addEventListener("click",()=>{flowMode="power";render();});
  document.getElementById("tracePwm").addEventListener("click",()=>{flowMode="control";render();});
