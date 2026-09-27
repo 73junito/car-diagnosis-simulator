@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileId": "sensor-engineering-training-001",
+  "profileRole": "lab-engineering-training-profile",
+  "circuitTemplateId": "automotive-12v-three-wire-sensor",
+  "notice": "All stored sensor transfer values are project-authored generic training examples. The 5 V reference is declared by the circuit template. These values are not vehicle-specific specifications or diagnostic limits.",
+  "sensorProfile": {
+    "targetComponentId": "SENSOR1",
+    "engineeringProfile": {
+      "profileType": "sensor",
+      "signalType": "analog_voltage",
+      "parameters": {
+        "normalizedInput": {
+          "quantityType": "normalized_input",
+          "unit": "percent",
+          "valueRole": "generic_training_example",
+          "range": {
+            "min": 0,
+            "nominal": 50,
+            "max": 100
+          }
+        },
+        "signalRange": {
+          "quantityType": "voltage",
+          "unit": "V",
+          "valueRole": "generic_training_example",
+          "range": {
+            "min": 0.5,
+            "nominal": 2.5,
+            "max": 4.5
+          }
+        }
+      }
+    }
+  },
+  "faultBehavior": [
+    {
+      "faultId": "FAULT_OPEN_SENSOR_POWER",
+      "mode": "sensor_output_unavailable",
+      "reason": "Reference supply path is open; output behavior is not inferred."
+    },
+    {
+      "faultId": "FAULT_OPEN_SENSOR_GROUND",
+      "mode": "sensor_output_unavailable",
+      "reason": "Sensor ground/reference path is open; output behavior is not inferred."
+    },
+    {
+      "faultId": "FAULT_OPEN_SIGNAL",
+      "mode": "controller_signal_unavailable",
+      "reason": "Ideal sensor transfer may still be calculated, but the controller signal path is open."
+    },
+    {
+      "faultId": "FAULT_HIGH_RES_SENSOR_GROUND",
+      "mode": "sensor_output_not_inferred",
+      "reason": "High-resistance sensor-ground behavior depends on sensor and circuit design, so a numeric signal is not invented."
+    },
+    {
+      "faultId": "FAULT_SIGNAL_SHORT_GROUND",
+      "mode": "controller_signal_forced_ground",
+      "reason": "Idealized training short forces the controller-observed signal to the ground reference."
+    },
+    {
+      "faultId": "FAULT_SIGNAL_SHORT_POWER",
+      "mode": "controller_signal_forced_reference",
+      "referenceVoltageSystemId": "SENSOR5",
+      "reason": "Idealized training short forces the controller-observed signal to the declared sensor reference."
+    }
+  ]
+}

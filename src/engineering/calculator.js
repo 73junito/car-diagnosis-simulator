@@ -133,6 +133,23 @@ function calculateLoadVoltage({ sourceVoltage, voltageDrop }) {
   );
 }
 
+function calculateLinearTransfer({ inputPercent, outputMin, outputMax, quantityType = "voltage", unit = "V" }) {
+  requireFinite("inputPercent", inputPercent);
+  requireFinite("outputMin", outputMin);
+  requireFinite("outputMax", outputMax);
+  if (inputPercent < 0 || inputPercent > 100) throw new Error("inputPercent must be between 0 and 100");
+  if (outputMin > outputMax) throw new Error("outputMin cannot exceed outputMax");
+
+  const fraction = inputPercent / 100;
+  return calculatedQuantity(
+    quantityType,
+    unit,
+    outputMin + fraction * (outputMax - outputMin),
+    "output = min + (input% / 100) × (max − min)",
+    ["inputPercent", "outputMin", "outputMax"]
+  );
+}
+
 const api = {
   calculatedQuantity,
   solveOhmsLaw,
@@ -140,7 +157,8 @@ const api = {
   calculateConductorResistance,
   calculateVoltageDrop,
   calculatePowerLoss,
-  calculateLoadVoltage
+  calculateLoadVoltage,
+  calculateLinearTransfer
 };
 
 if (typeof module !== "undefined" && module.exports) module.exports = api;

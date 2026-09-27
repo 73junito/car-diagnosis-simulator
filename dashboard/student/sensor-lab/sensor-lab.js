@@ -2,13 +2,16 @@
 
 (async function initSensorLab() {
   const NS = "http://www.w3.org/2000/svg";
-  const [templateResponse, symbolLibrary, connectionLibrary] = await Promise.all([
+  const [templateResponse, engineeringResponse, symbolLibrary, connectionLibrary] = await Promise.all([
     fetch("/data/circuit-templates/12v-three-wire-sensor.json"),
+    fetch("/data/engineering/labs/sensor-training.json"),
     window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),
     window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections")
   ]);
   if (!templateResponse.ok) throw new Error("Unable to load sensor template.");
+  if (!engineeringResponse.ok) throw new Error("Unable to load sensor engineering profile.");
   const circuit = await templateResponse.json();
+  const engineeringProfile = await engineeringResponse.json();
   const engine = window.TorqueMindCircuitEngine;
   const validation = window.TorqueMindCircuitTemplateContracts.validateCircuitTemplate(
     circuit, engine, symbolLibrary.registry, connectionLibrary.registry
@@ -24,6 +27,13 @@
   const flowNote = document.getElementById("flowNote");
   const voltageDomains = window.TorqueMindVoltageDomains;
   const symbolRenderer = window.TorqueMindSymbolRenderer;
+  const engineering = window.TorqueMindEngineering;
+  const calculator = engineering.calculator;
+  const profileValidator = engineering.profiles.validateEngineeringProfile;
+
+  const sensorProfile = engineeringProfile.sensorProfile.engineeringProfile;
+  const engineeringErrors = profileValidator(sensorProfile);
+  if (engineeringErrors.length) throw new Error(engineeringErrors.join("; "));
 
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((d) => [d.id, d]));
@@ -70,6 +80,125 @@
     SENSOR1:"Generic three-wire powered sensor with supply, signal, and ground/reference.",
     GND1:"Common return/reference point in this generic training circuit."
   };
+
+  const engineeringUi = {
+    status: document.getElementById("sensorEngineeringStatus"),
+    input: document.getElementById("sensorInput"),
+    inputValue: document.getElementById("sensorInputValue"),
+    reference: document.getElementById("engSensorReference"),
+    signalRange: document.getElementById("engSignalRange"),
+    idealSignal: document.getElementById("engIdealSignal"),
+    observedSignal: document.getElementById("engObservedSignal"),
+    observedLabel: document.getElementById("engObservedSignalLabel"),
+    formula: document.getElementById("sensorEngineeringFormula")
+  };
+
+  const inputRange = sensorProfile.parameters.normalizedInput.range;
+  const signalRange = sensorProfile.parameters.signalRange.range;
+  const sensorReferenceVoltage = circuit.voltageSystems.find((system) => system.id === "SENSOR5").nominalVoltage;
+  let sensorInputPercent = inputRange.nominal;
+
+  engineeringUi.input.min = String(inputRange.min);
+  engineeringUi.input.max = String(inputRange.max);
+  engineeringUi.input.value = String(sensorInputPercent);
+
+  function formatSignal(value) {
+    return `${Number(value.toFixed(3))} V`;
+  }
+
+  function currentFaultBehavior() {
+    return engineeringProfile.faultBehavior.find((item) => item.faultId === activeFault) || null;
+  }
+
+  function calculateSignalState() {
+    const transfer = calculator.calculateLinearTransfer({
+      inputPercent: sensorInputPercent,
+      outputMin: signalRange.min,
+      outputMax: signalRange.max,
+      quantityType: "voltage",
+      unit: "V"
+    });
+
+    const behavior = currentFaultBehavior();
+    const activeSignalState = operatingState === "active-signal";
+
+    if (!activeSignalState) {
+      return {
+        transfer,
+        observed:null,
+        status:"Signal state inactive",
+        statusClass:"inactive",
+        note:"The transfer relationship remains visible, but controller-observed signal is not evaluated until the active-signal state is selected."
+      };
+    }
+
+    if (!behavior) {
+      return {
+        transfer,
+        observed:transfer.value,
+        status:"Healthy training example",
+        statusClass:"",
+        note:"The controller-observed signal follows the generic linear transfer example."
+      };
+    }
+
+    if (behavior.mode === "controller_signal_forced_ground") {
+      return {
+        transfer,
+        observed:0,
+        status:"Signal short-to-ground training fault",
+        statusClass:"fault",
+        note:behavior.reason
+      };
+    }
+
+    if (behavior.mode === "controller_signal_forced_reference") {
+      return {
+        transfer,
+        observed:sensorReferenceVoltage,
+        status:"Signal short-to-reference training fault",
+        statusClass:"fault",
+        note:behavior.reason
+      };
+    }
+
+    if (behavior.mode === "controller_signal_unavailable") {
+      return {
+        transfer,
+        observed:null,
+        status:"Signal path open",
+        statusClass:"fault",
+        note:behavior.reason
+      };
+    }
+
+    return {
+      transfer:null,
+      observed:null,
+      status:"Sensor output not inferred",
+      statusClass:"fault",
+      note:behavior.reason
+    };
+  }
+
+  function renderEngineering() {
+    const result = calculateSignalState();
+    engineeringUi.inputValue.textContent = `${sensorInputPercent}%`;
+    engineeringUi.reference.textContent = formatSignal(sensorReferenceVoltage);
+    engineeringUi.signalRange.textContent = `${signalRange.min}–${signalRange.max} V`;
+    engineeringUi.status.textContent = result.status;
+    engineeringUi.status.className = ["engineering-status", result.statusClass].filter(Boolean).join(" ");
+
+    engineeringUi.idealSignal.textContent = result.transfer ? formatSignal(result.transfer.value) : "—";
+    engineeringUi.observedSignal.textContent = result.observed === null ? "—" : formatSignal(result.observed);
+    engineeringUi.observedLabel.textContent = result.observed === null ? "Controller signal not inferred / unavailable" : "Signal at controller input";
+
+    if (result.transfer) {
+      engineeringUi.formula.textContent = `Linear training example: output = ${signalRange.min} V + (${sensorInputPercent}% ÷ 100) × (${signalRange.max} V − ${signalRange.min} V). ${result.note}`;
+    } else {
+      engineeringUi.formula.textContent = result.note;
+    }
+  }
 
   function el(name, attrs={}, text="") {
     const node = document.createElementNS(NS, name);
@@ -221,18 +350,28 @@
     }
   }
   function renderTestPoints() {
-    for (const point of circuit.testPoints) {
+    const offsets = {
+      TP_SENSOR_SUPPLY:[28,-24],
+      TP_SENSOR_SIGNAL:[32,-18],
+      TP_SENSOR_GROUND:[-30,24],
+      TP_ECM_SIGNAL:[30,-18]
+    };
+    circuit.testPoints.forEach((point,index) => {
       const p = pointForTerminal(point.terminalId);
-      const group=el("g",{class:"test-point",role:"button",tabindex:"0","aria-label":`Test point ${point.id}`,"data-test-point-id":point.id});
-      group.append(el("circle",{cx:p.x,cy:p.y,r:8}));
-      group.append(el("text",{x:p.x+11,y:p.y-10},"TP"));
+      const [dx,dy] = offsets[point.id] || [28,-22];
+      const bx = p.x + dx, by = p.y + dy;
+      const group=el("g",{class:"test-point",role:"button",tabindex:"0","aria-label":`Test point ${index+1}: ${point.id}`,"data-test-point-id":point.id});
+      group.append(el("circle",{cx:p.x,cy:p.y,r:6}));
+      group.append(el("line",{x1:p.x,y1:p.y,x2:bx,y2:by,class:"label-leader"}));
+      group.append(el("rect",{x:bx-18,y:by-11,width:36,height:22,rx:7,class:"tp-badge"}));
+      group.append(el("text",{x:bx,y:by+1,class:"tp-label"},`TP${index+1}`));
       group.addEventListener("click",()=>inspectTestPoint(point));
       svg.append(group);
-    }
+    });
   }
   function render() {
     svg.querySelectorAll("*:not(title):not(desc)").forEach((n)=>n.remove());
-    addDefs(); renderWires(); renderComponents(); renderLabels(); renderTestPoints();
+    addDefs(); renderWires(); renderComponents(); renderLabels(); renderTestPoints(); renderEngineering();
     stateBadge.textContent = stateDef().label;
     flowNote.textContent = stateDef().note + " Animated arrows are conceptual and do not represent measured magnitude.";
   }
@@ -258,12 +397,13 @@
 
   stateSelect.addEventListener("change",()=>{operatingState=stateSelect.value;flowMode="system";render();});
   faultSelect.addEventListener("change",()=>{activeFault=faultSelect.value;render();});
+  engineeringUi.input.addEventListener("input",()=>{sensorInputPercent=Number(engineeringUi.input.value);renderEngineering();});
   document.getElementById("showSystemFlow").addEventListener("click",()=>{flowMode="system";render();});
   document.getElementById("tracePower").addEventListener("click",()=>{flowMode="power";render();});
   document.getElementById("traceSignal").addEventListener("click",()=>{flowMode="signal";render();});
   document.getElementById("traceGround").addEventListener("click",()=>{flowMode="ground";render();});
   document.getElementById("resetView").addEventListener("click",()=>{
-    operatingState="active-signal";stateSelect.value="active-signal";activeFault="";faultSelect.value="";selectedComponentId="";flowMode="system";
+    operatingState="active-signal";stateSelect.value="active-signal";activeFault="";faultSelect.value="";selectedComponentId="";flowMode="system";sensorInputPercent=inputRange.nominal;engineeringUi.input.value=String(sensorInputPercent);
     inspector.innerHTML="<p>Select a symbol or test point to inspect its role.</p>";render();
   });
   render();

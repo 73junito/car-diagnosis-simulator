@@ -23,7 +23,8 @@ const QUANTITY_TYPES = Object.freeze([
   "area",
   "resistivity",
   "voltage_drop",
-  "power_loss"
+  "power_loss",
+  "normalized_input"
 ]);
 
 const UNITS_BY_QUANTITY = Object.freeze({
@@ -40,7 +41,8 @@ const UNITS_BY_QUANTITY = Object.freeze({
   area: ["m2", "mm2"],
   resistivity: ["ohm_m"],
   voltage_drop: ["V"],
-  power_loss: ["W"]
+  power_loss: ["W"],
+  normalized_input: ["percent"]
 });
 
 const TOLERANCE_TYPES = Object.freeze(["percent", "absolute"]);

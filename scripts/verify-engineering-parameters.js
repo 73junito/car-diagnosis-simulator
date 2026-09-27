@@ -48,10 +48,17 @@ if (fs.existsSync(labsDir)) {
     if (!lab.profileId) errors.push(`${file}: profileId is required`);
     if (!lab.circuitTemplateId) errors.push(`${file}: circuitTemplateId is required`);
 
-    if (lab.loadProfile?.engineeringProfile) {
-      requireGenericExampleQuantities(`${file}.loadProfile`, lab.loadProfile.engineeringProfile);
-    } else {
-      errors.push(`${file}: loadProfile.engineeringProfile is required`);
+    const namedProfiles = [
+      ["loadProfile", lab.loadProfile],
+      ["sensorProfile", lab.sensorProfile]
+    ].filter(([, entry]) => entry?.engineeringProfile);
+
+    if (namedProfiles.length === 0 && !(lab.conductorProfiles || []).length) {
+      errors.push(`${file}: at least one engineering profile is required`);
+    }
+
+    for (const [name, entry] of namedProfiles) {
+      requireGenericExampleQuantities(`${file}.${name}`, entry.engineeringProfile);
     }
 
     for (const [index, entry] of (lab.conductorProfiles || []).entries()) {
