@@ -151,7 +151,7 @@
             "Start with source applicability before comparing a number: the cited Delco values come from a 12 V charging-cable sizing table, not from a universal diagnostic voltage-drop test procedure.",
             "The source-backed 0.300 V value is the design basis used for the cited new-vehicle cable-sizing table; it is not a universal pass/fail threshold.",
             "The source-backed 0.500 V value is the maximum voltage-drop basis stated for vehicle life within that same cited 12 V cable-sizing context.",
-            "A project-authored 0.350 V hypothetical voltage-drop observation is above the 0.300 V design basis but below the 0.500 V maximum. That comparison describes its position within the cited reference range; it does not identify a failed component.",
+            "A project-authored 0.350 V hypothetical voltage-drop observation is above the 0.300 V design basis but below the 0.500 V maximum. That comparison describes its position relative to the two cited source values; it does not identify a failed component.",
             "Before turning that comparison into a diagnostic decision, verify that the cable path, voltage domain, operating/load condition, test points, and vehicle-specific procedure make the observation legitimately comparable."
           ],
           "learnerAction": "Explain why 0.350 V is above the cited design basis but below the cited maximum, identify what context must be verified before treating it as comparable evidence, and state what additional evidence is needed before naming a failed component.",
@@ -207,7 +207,7 @@
           ],
           "teachingPoints": [
             "Case A: 0.180 V is observed, but conductor identity and wiring configuration are unknown. Do not apply the cited 0.200 V 3-wire #2-lead maximum until the source applicability is verified.",
-            "Case B: a project-authored 0.550 V hypothetical observation is considered within the cited 12 V charging-cable sizing-table context. Because it is above the cited 0.500 V maximum basis, it is outside that source-scoped reference; this alone does not identify which conductor, connection, or component is responsible.",
+            "Case B: a project-authored 0.550 V hypothetical observation is considered within the cited 12 V charging-cable sizing-table context. Because it is above the cited 0.500 V maximum for that source-scoped charging-cable context, it is outside that source-scoped reference; this alone does not identify which conductor, connection, or component is responsible.",
             "Case C: a charging concern is reported and no measurement has been collected. Identify the operating context, test target, and applicable procedure before gathering discriminating evidence or naming a cause."
           ],
           "learnerAction": "For each case choose comparable, not comparable, or more evidence required. Justify the choice using source applicability, identify any missing measurement context, and avoid converting a reference comparison directly into a component diagnosis.",
