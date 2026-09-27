@@ -2615,6 +2615,407 @@
         "lesson-summary"
       ],
       "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-hev-foundations",
+      "status": "planned",
+      "authorship": {
+        "type": "project-authored",
+        "owner": "AutoLearnPro",
+        "originalityStatement": "Course text, objectives, lesson sequence, practice, and assessment language are independently authored for AutoLearnPro. External syllabi may inform only broad structural inspiration and are not copied or ingested as lesson content.",
+        "frameworkReferencePolicy": "framework-reference-only / original-expression-required"
+      },
+      "programMapping": {
+        "programId": "undergraduate-automotive-technology-aas",
+        "relationship": "course",
+        "programCourseId": "AUT-250",
+        "programCourseTitle": "Hybrid & Electric Vehicle Technology",
+        "mappingType": "direct-course-alignment"
+      },
+      "lessonSummary": "Introduce electrified-vehicle architecture through energy flow, voltage-domain separation, safety boundaries, and evidence-based diagnostic reasoning. Learners practice distinguishing observations from conclusions and selecting a documented, vehicle-specific next diagnostic action.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Basic electrical circuit concepts",
+        "Digital multimeter fundamentals",
+        "Electrical safety fundamentals",
+        "Introductory diagnostic reasoning"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-hev-lo-1",
+          "statement": "Describe how an electrified vehicle can store, convert, distribute, and recover electrical energy across propulsion and low-voltage systems.",
+          "cognitiveLevel": "understanding"
+        },
+        {
+          "id": "ug-hev-lo-2",
+          "statement": "Distinguish high-voltage and low-voltage system domains, identify their functional relationships, and explain why service boundaries and access controls must be verified from applicable vehicle information.",
+          "cognitiveLevel": "application"
+        },
+        {
+          "id": "ug-hev-lo-3",
+          "statement": "Interpret fault codes, live data, measurements, operating state, and documented service information as related evidence rather than as isolated proof of a failed component.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-hev-lo-4",
+          "statement": "Select and justify a safe, vehicle-specific next diagnostic check while documenting what evidence supports the decision and what remains uncertain.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "energy storage and conversion",
+        "propulsion and auxiliary voltage domains",
+        "power electronics",
+        "DC-DC conversion",
+        "inverter and electric-machine interaction",
+        "regenerative energy flow",
+        "battery monitoring",
+        "thermal management",
+        "isolation and access boundaries",
+        "diagnostic evidence correlation",
+        "vehicle-specific service information",
+        "uncertainty and verification"
+      ],
+      "contentBlocks": [
+        {
+          "id": "hev-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Establish the system-understanding, safety-boundary, evidence-interpretation, and diagnostic-reasoning outcomes for the lesson.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1",
+            "ug-hev-lo-2",
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "teachingPoints": [
+            "Treat the vehicle as an interacting energy and control system rather than a collection of isolated components.",
+            "Separate general system concepts from vehicle-specific procedures, values, limits, and access requirements.",
+            "Use multiple compatible evidence sources before forming a diagnostic conclusion.",
+            "Document uncertainty when the available evidence does not support a final conclusion."
+          ],
+          "learnerAction": "Classify each lesson target as system understanding, safety reasoning, evidence interpretation, or diagnostic decision-making."
+        },
+        {
+          "id": "hev-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Electrical and diagnostic foundations",
+          "description": "Activate prior knowledge of circuits, voltage domains, measurement context, and evidence-based diagnosis.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1",
+            "ug-hev-lo-3"
+          ],
+          "teachingPoints": [
+            "Review source, load, conductor, protection, switching, and ground-reference concepts.",
+            "Distinguish measured values from commanded or calculated values.",
+            "A diagnostic code identifies a detected condition or diagnostic path; it does not by itself prove which component failed.",
+            "A measurement has meaning only when its test point, operating state, units, voltage domain, and applicable reference are known."
+          ],
+          "learnerAction": "Sort sample information into measured, commanded, calculated, observed, documented, or inferred evidence."
+        },
+        {
+          "id": "hev-energy-flow-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Electrified-vehicle energy-flow model",
+          "description": "Use a project-authored conceptual model to trace energy among the energy-storage system, power electronics, electric machine, low-voltage system, thermal-management functions, and vehicle loads.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1"
+          ],
+          "teachingPoints": [
+            "An energy-storage system supplies electrical energy to the propulsion system according to vehicle operating state and control strategy.",
+            "Power-electronic devices can change voltage level or electrical form to support propulsion and auxiliary functions.",
+            "An electric machine can consume electrical energy for propulsion and, under applicable operating conditions, return electrical energy during regenerative operation.",
+            "Low-voltage systems remain essential for control, communication, wake-up, contactor control, and conventional vehicle loads.",
+            "Thermal-management functions influence operating capability and protection across multiple electrified-vehicle systems."
+          ],
+          "learnerAction": "Trace one propulsion energy path and one regenerative energy path, then mark where the low-voltage system supports control rather than propulsion power.",
+          "sourceBoundary": "This is a general instructional model. Actual architecture, component naming, routing, control strategy, and operating limits are vehicle-specific."
+        },
+        {
+          "id": "hev-voltage-domain-boundaries",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Voltage domains and service boundaries",
+          "description": "Explain why high-voltage and low-voltage circuits must be identified using documentation, component information, routing, connectors, and verified service information rather than a single visual cue.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-2"
+          ],
+          "teachingPoints": [
+            "Voltage-domain identification should be based on multiple indicators and applicable service information.",
+            "Color, connector appearance, or physical location alone is not sufficient evidence of circuit identity or electrical state.",
+            "Isolation, access restrictions, protective equipment, test-equipment suitability, and verification steps depend on the system and the documented service procedure.",
+            "A general classroom rule must never replace the approved vehicle-specific disable, isolation, verification, or re-enable procedure."
+          ],
+          "learnerAction": "Review a generic system map and identify which questions must be answered from vehicle-specific service information before any physical diagnostic access is considered.",
+          "sourceBoundary": "No universal high-voltage disable sequence, wait time, test voltage, glove class, measurement category, connector procedure, or acceptance threshold is prescribed by this lesson."
+        },
+        {
+          "id": "hev-power-electronics",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Power conversion and control",
+          "description": "Explain the functional roles of DC-DC conversion and inverter control without assuming one universal vehicle topology.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1"
+          ],
+          "teachingPoints": [
+            "A DC-DC converter transfers electrical energy between DC voltage domains by changing voltage level as required by the vehicle architecture.",
+            "An inverter manages electrical energy between a DC source and an AC electric machine as required by propulsion-system control.",
+            "Switching devices are controlled in timed patterns to regulate electrical energy and machine operation.",
+            "Some architectures integrate multiple power-electronic functions in one assembly while others distribute them among separate modules."
+          ],
+          "learnerAction": "Match each functional description to energy conversion, voltage conversion, machine control, or low-voltage support without naming a manufacturer-specific component.",
+          "sourceBoundary": "Topology, switching strategy, voltage range, test points, and diagnostic values remain design-specific."
+        },
+        {
+          "id": "hev-battery-and-thermal",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Battery monitoring and thermal context",
+          "description": "Connect battery monitoring, state estimation, temperature information, and thermal-management behavior to diagnostic interpretation.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1",
+            "ug-hev-lo-3"
+          ],
+          "teachingPoints": [
+            "Battery-management functions can monitor voltage, temperature, current, operating history, and other inputs to support protection and state estimation.",
+            "State of charge and state of health are calculated or estimated quantities rather than direct measurements from one voltage reading.",
+            "Temperature can affect available power, charging, propulsion behavior, cooling operation, derating, or protective strategies.",
+            "A single cell-group difference, temperature value, or state estimate should not be treated as a universal failure threshold without applicable manufacturer criteria."
+          ],
+          "learnerAction": "Identify which sample battery data items are direct measurements, calculated estimates, operating context, or diagnostic conclusions.",
+          "sourceBoundary": "No universal state-of-charge, state-of-health, imbalance, temperature, isolation, or replacement threshold is established."
+        },
+        {
+          "id": "hev-evidence-reasoning",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "From concern to evidence-supported next step",
+          "description": "Demonstrate how to move from an operating concern to a justified diagnostic next step without prematurely naming a failed component.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "teachingPoints": [
+            "Start with the reported concern and confirm the actual operating condition before interpreting data.",
+            "Preserve available fault codes, event information, live data, and operating-state evidence before resets or code clearing.",
+            "Correlate low-voltage condition, communication status, propulsion-system state, thermal information, and relevant fault information when they may share a dependency.",
+            "Use applicable service information to determine which next test is valid for the identified vehicle and operating state.",
+            "Classify the conclusion as supported, not supported, or not yet determined based on the evidence available."
+          ],
+          "learnerAction": "Given a project-authored scenario with a no-ready concern, low auxiliary voltage, and several communication codes, explain why battery-pack replacement is not justified and identify the additional categories of evidence required before selecting a repair.",
+          "instructionalExample": {
+            "concern": "Vehicle does not enter the expected propulsion-ready state.",
+            "providedEvidence": [
+              "auxiliary-system voltage is below the expected vehicle-specific condition for the current operating state",
+              "multiple modules report communication-related faults",
+              "no confirmed high-voltage component failure evidence is provided"
+            ],
+            "reasoningTasks": [
+              "separate symptoms from causes",
+              "identify possible shared dependencies",
+              "state what vehicle-specific information is required",
+              "select a safe next diagnostic category rather than a component replacement",
+              "document unresolved uncertainty"
+            ]
+          },
+          "sourceBoundary": "The scenario is project-authored and contains no universal diagnostic voltage, threshold, or prescribed component replacement decision."
+        },
+        {
+          "id": "hev-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Guided evidence correlation",
+          "description": "Practice correlating mixed evidence while maintaining system and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-2",
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "teachingPoints": [
+            "Case A: a fault code points to an isolation-monitoring diagnostic path, but the operating state and test history are unknown.",
+            "Case B: one battery data value appears unusual, but temperature, load, comparison data, and manufacturer criteria are unavailable.",
+            "Case C: a low-voltage supply concern appears at the same time as wake-up and communication faults.",
+            "For each case, identify what is known, what is inferred, what remains unknown, and which documentation is needed before a valid next test can be selected."
+          ],
+          "learnerAction": "Complete a four-column evidence table: known evidence, possible interpretation, missing context, and justified next diagnostic category."
+        },
+        {
+          "id": "hev-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "practice",
+          "title": "Independent electrified-vehicle diagnostic scenario",
+          "description": "Apply the lesson model to a project-authored scenario involving energy flow, voltage-domain reasoning, and mixed diagnostic evidence.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1",
+            "ug-hev-lo-2",
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "learnerAction": "Produce a short diagnostic plan that traces relevant energy flow, identifies the affected voltage domains, lists evidence to preserve, identifies required service-information checks, and justifies one safe next diagnostic category.",
+          "sourceBoundary": "The scenario must remain conceptual until vehicle-specific service information and reviewed technical evidence are supplied."
+        },
+        {
+          "id": "hev-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Architecture and diagnostic reasoning check",
+          "description": "Assess whether the learner can distinguish system function, safety boundary, evidence type, and justified next action.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1",
+            "ug-hev-lo-2",
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "assessmentPrompts": [
+            "Explain why a diagnostic code does not automatically identify a failed component.",
+            "Differentiate a measured battery value from a calculated state estimate.",
+            "Explain why a general high-voltage safety concept cannot replace a vehicle-specific service procedure.",
+            "Given mixed evidence, identify which additional evidence would most directly reduce diagnostic uncertainty."
+          ]
+        },
+        {
+          "id": "hev-feedback-retry",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Revise the diagnostic reasoning chain",
+          "description": "Use feedback to correct unsupported conclusions, missing context, or unsafe generalizations.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-2",
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "learnerAction": "Revise a diagnostic plan so every conclusion is linked to evidence and every physical test depends on applicable vehicle-specific service information."
+        },
+        {
+          "id": "hev-evidence-record",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Diagnostic evidence record",
+          "description": "Document concern, operating state, evidence collected, evidence source, interpretations, uncertainties, selected next action, and verification plan.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "learnerAction": "Complete an evidence record that clearly separates observation, documentation, hypothesis, conclusion, and verification."
+        },
+        {
+          "id": "hev-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "reflect",
+          "title": "System, safety, evidence, verification",
+          "description": "Summarize the lesson as a repeatable reasoning cycle for electrified-vehicle diagnosis.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1",
+            "ug-hev-lo-2",
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "teachingPoints": [
+            "Trace energy flow before isolating a component.",
+            "Identify the voltage domain and service boundary before selecting a test.",
+            "Correlate multiple evidence sources before naming a cause.",
+            "Use vehicle-specific information for procedures, values, access requirements, and acceptance criteria.",
+            "Verify the result and document the reasoning chain."
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "hev-energy-flow-diagram",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Electrified-vehicle energy-flow diagram",
+          "purpose": "Show conceptual relationships among energy storage, power conversion, propulsion, regeneration, low-voltage support, and thermal management.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "hev-diagnostic-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-based diagnostic flow",
+          "purpose": "Show concern, preserve evidence, identify system and voltage domain, consult service information, correlate evidence, select next check, verify, and document.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-2",
+            "ug-hev-lo-3",
+            "ug-hev-lo-4"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "hev-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence classification table",
+          "purpose": "Compare observed, measured, commanded, calculated, documented, inferred, and verified information.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "hev-system-interaction-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Electrified-vehicle system interaction summary",
+          "purpose": "Summarize propulsion energy flow, low-voltage support, control dependencies, thermal context, and diagnostic evidence relationships.",
+          "supportsObjectiveIds": [
+            "ug-hev-lo-1",
+            "ug-hev-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Trace conceptual propulsion and regenerative energy flow",
+        "Classify high-voltage and low-voltage system roles",
+        "Separate diagnostic observations from conclusions",
+        "Correlate low-voltage, communication, battery, and propulsion evidence",
+        "Write a vehicle-specific next-step justification without inventing procedures or values"
+      ],
+      "assessmentPlan": [
+        "System architecture concept check",
+        "Voltage-domain and safety-boundary reasoning exercise",
+        "Guided mixed-evidence interpretation",
+        "Independent diagnostic-plan scenario",
+        "Evidence and uncertainty documentation check"
+      ],
+      "evidenceFocus": [
+        "Vehicle operating state",
+        "Fault-code context",
+        "Measured versus commanded versus calculated data",
+        "Voltage-domain identification",
+        "Applicable service information",
+        "Cross-system evidence correlation",
+        "Post-repair verification"
+      ],
+      "evidenceExpectation": "Technical claims that depend on a specific design, value, limit, procedure, test point, PPE requirement, or acceptance criterion require approved authoritative evidence for that vehicle or component context. Unsupported specifics must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment items remain a separate approval state and require provenance, technical review, curriculum mapping, and secure delivery.",
+      "rightsBoundary": "This lesson is independently authored AutoLearnPro content. External syllabus structures may inform broad organization only; source prose, assignments, diagrams, tables, and distinctive expressive content are not reused unless separately cleared.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
     }
   ]
 }

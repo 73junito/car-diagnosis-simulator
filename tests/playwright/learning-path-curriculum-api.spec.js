@@ -177,7 +177,7 @@ function trackStaticReads(page) {
 }
 
 async function expectCoreRendering(page) {
-  await expect(page.locator('#undergraduate-content .course-grid article')).toHaveCount(4);
+  await expect(page.locator('#undergraduate-content .course-grid article')).toHaveCount(5);
   await expect(page.locator('#graduate-content .graduate-grid article')).toHaveCount(5);
 
   const body = await page.locator('body').innerText();
