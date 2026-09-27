@@ -61,6 +61,8 @@ describe('Charging lesson review corrections', () => {
   test('keeps cable-sizing references separate from diagnostic test procedures', () => {
     const worked = plan.contentBlocks.find((item) => item.id === 'charging-worked-example');
     expect(worked.teachingPoints[0]).toMatch(/charging-cable sizing table, not from a universal diagnostic voltage-drop test procedure/);
+    expect(worked.teachingPoints[3]).toMatch(/relative to the two cited source values/);
+    expect(worked.teachingPoints[3]).not.toMatch(/reference range/);
     expect(worked.sourceBoundary).toMatch(/not a vehicle specification or prescribed test result/);
     expect(worked.instructionalExample.requiredContextBeforeDiagnosticUse).toEqual(
       expect.arrayContaining([
@@ -75,6 +77,8 @@ describe('Charging lesson review corrections', () => {
 
   test('guided practice treats out-of-reference values as path evidence, not component diagnoses', () => {
     const guided = plan.contentBlocks.find((item) => item.id === 'charging-guided-practice');
+    expect(guided.teachingPoints[1]).toMatch(/0\.500 V maximum for that source-scoped charging-cable context/);
+    expect(guided.teachingPoints[1]).not.toMatch(/0\.500 V maximum basis/);
     expect(guided.teachingPoints[1]).toMatch(/outside that source-scoped reference/);
     expect(guided.teachingPoints[1]).toMatch(/does not identify which conductor, connection, or component is responsible/);
     expect(guided.sourceBoundary).toMatch(/does not by itself identify a failed component/);
