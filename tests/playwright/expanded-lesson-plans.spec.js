@@ -52,8 +52,9 @@ test.describe('Expanded lesson plans', () => {
     await expect(plan.getByText(/operating condition, test location, voltage domain, and units/)).toBeVisible();
     await expect(plan.getByText(/alternator-battery-cable system/)).toBeVisible();
     await expect(plan.getByText(/citation-only external reference; no reusable vendor excerpt stored/)).toBeVisible();
-    await expect(plan.getByText(/0\.350 V training measurement is above the design basis/)).toBeVisible();
-    await expect(plan.getByText(/Do not apply the 0\.200 V reference when wiring configuration or conductor identity is unknown/)).toBeVisible();
+    await expect(plan.getByText(/0\.350 V hypothetical voltage-drop observation is above the 0\.300 V design basis but below the 0\.500 V maximum/)).toBeVisible();
+    await expect(plan.getByText(/Do not apply the cited 0\.200 V 3-wire #2-lead maximum until the source applicability is verified/)).toBeVisible();
+    await expect(plan.getByText(/Design Basis/).first()).toBeVisible();
     await expect(plan.getByText(/rights-cleared; technical\/chunk approval pending/).first()).toBeVisible();
 
     await plan.getByText('Planned visuals').click();

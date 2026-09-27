@@ -8,7 +8,7 @@ const escapeHtml = (value) => String(value ?? "")
   .replace(/'/g, "&#39;");
 
 const titleCase = (value) => String(value ?? "")
-  .split("-")
+  .split(/[-_]/)
   .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
   .join(" ");
 
