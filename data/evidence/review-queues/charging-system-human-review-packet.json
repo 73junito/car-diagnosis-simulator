@@ -5,10 +5,11 @@
   "source_basis": {
     "source_id": "frontiers-automotive-alternator-2023",
     "publisher": "Frontiers in Mechanical Engineering",
-    "approved_chunks": [
+    "candidate_chunks": [
       "frontiers-alternator-primary-source-p7",
       "frontiers-alternator-ac-dc-rectification-p7"
-    ]
+    ],
+    "chunk_status": "rights-cleared; technical review and canonical chunk approval pending"
   },
   "governance": {
     "citation_validation_complete": true,
@@ -32,8 +33,8 @@
   },
   "review_criteria": {
     "technical": [
-      "The keyed answer is technically correct within the approved evidence.",
-      "The explanation does not add claims beyond the approved evidence.",
+      "The keyed answer is technically correct within the cited candidate evidence under review.",
+      "The explanation does not add claims beyond the cited candidate evidence under review.",
       "Terminology is accurate and unambiguous.",
       "Distractors are technically plausible enough to assess understanding without being misleading.",
       "The question does not duplicate another retained item."

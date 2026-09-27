@@ -54,7 +54,14 @@
             "ug-electrical-lo-1",
             "ug-electrical-lo-2",
             "ug-electrical-lo-3"
-          ]
+          ],
+          "teachingPoints": [
+            "Explain the charging-system relationships used in this lesson model.",
+            "Separate symptoms, observations, measurements, hypotheses, and conclusions.",
+            "Use a source reference only when its applicability matches the system and test context.",
+            "Select a next diagnostic check without treating one symptom or one measurement as proof of component failure."
+          ],
+          "learnerAction": "Identify which learning objective requires evidence interpretation rather than recall."
         },
         {
           "id": "charging-prior-knowledge",
@@ -64,7 +71,13 @@
           "description": "Activate prior knowledge of circuit behavior, meter use, polarity, and electrical safety.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-1"
-          ]
+          ],
+          "teachingPoints": [
+            "Identify source, load, conductor, ground, and test-point roles in a basic electrical circuit.",
+            "Review meter polarity and the difference between system-voltage and voltage-drop measurements.",
+            "A measured number has meaning only when operating condition and test location are known."
+          ],
+          "learnerAction": "Label each sample statement as circuit knowledge, measurement context, or diagnostic conclusion."
         },
         {
           "id": "charging-system-model",
@@ -74,7 +87,30 @@
           "description": "Explain how generation, rectification, regulation, storage, and loads interact as one system.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-1"
-          ]
+          ],
+          "teachingPoints": [
+            "The cited Frontiers article identifies the alternator as the primary source of electric energy within a vehicle.",
+            "The same source describes an automotive alternator as a synchronous AC generator using diode rectification and identifies rotor, stator, diode rectifier, and voltage regulator as core elements.",
+            "Battery, alternator output, and vehicle loads are shown here as an instructional system model; vehicle-specific topology and control strategy must be verified separately."
+          ],
+          "learnerAction": "Trace the simplified energy path from alternator generation through rectification to the vehicle electrical system, then identify where vehicle-specific evidence is required.",
+          "evidenceReferences": [
+            {
+              "type": "candidate-scholarly-chunk",
+              "id": "frontiers-alternator-primary-source-p7",
+              "sourceId": "frontiers-automotive-alternator-2023",
+              "locator": "PDF page 7",
+              "approval": "rights-cleared; technical/chunk approval pending"
+            },
+            {
+              "type": "candidate-scholarly-chunk",
+              "id": "frontiers-alternator-ac-dc-rectification-p7",
+              "sourceId": "frontiers-automotive-alternator-2023",
+              "locator": "PDF page 7",
+              "approval": "rights-cleared; technical/chunk approval pending"
+            }
+          ],
+          "sourceBoundary": "Do not convert this general model into a universal wiring diagram, voltage target, charging strategy, or component test procedure."
         },
         {
           "id": "charging-evidence-model",
@@ -84,7 +120,15 @@
           "description": "Distinguish warning indicators, low-voltage symptoms, and measurements from final diagnostic conclusions.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-2"
-          ]
+          ],
+          "teachingPoints": [
+            "A symptom is evidence that a condition exists; it is not proof of which component caused it.",
+            "A measurement is evidence only when the test point, operating state, units, and applicable reference are known.",
+            "A source-backed value may be a design basis, maximum, minimum, or reference-only value; those roles are not interchangeable.",
+            "A diagnostic conclusion should follow from compatible evidence and a verification step."
+          ],
+          "learnerAction": "Sort sample cards into symptom, measurement, source reference, hypothesis, or conclusion.",
+          "sourceBoundary": "This block teaches evidence reasoning and does not assign universal charging-system symptoms to a specific failed component."
         },
         {
           "id": "charging-worked-example",
@@ -95,7 +139,47 @@
           "supportsObjectiveIds": [
             "ug-electrical-lo-2",
             "ug-electrical-lo-3"
-          ]
+          ],
+          "teachingPoints": [
+            "Start with the stated context before comparing a number: 12 V charging system, charging-cable sizing-table context.",
+            "The source-backed 0.300 V value is a design basis, not a pass/fail limit.",
+            "The source-backed 0.500 V value is the cited maximum for the same stated 12 V charging-cable context.",
+            "A project-authored 0.350 V training measurement is above the design basis but within the cited maximum; this does not prove alternator failure.",
+            "The next step is to preserve context and obtain evidence that can discriminate among plausible causes using vehicle-appropriate procedures."
+          ],
+          "learnerAction": "Explain why 0.350 V can be above a design basis yet still within a maximum, and state what additional evidence is needed before naming a failed component.",
+          "evidenceReferences": [
+            {
+              "type": "authoritative-specification",
+              "id": "delco-charging-cable-new-vehicle-design-drop-12v",
+              "value": "0.300 V",
+              "comparisonRole": "design_basis",
+              "locator": "Delco Remy charging-cable requirements, PDF p. 1"
+            },
+            {
+              "type": "authoritative-specification",
+              "id": "delco-charging-cable-life-max-drop-12v",
+              "value": "0.500 V",
+              "comparisonRole": "maximum",
+              "locator": "Delco Remy charging-cable requirements, PDF p. 1"
+            },
+            {
+              "type": "project-authored-training-example",
+              "id": "charging-lesson-drop-example-0p350",
+              "value": "0.350 V",
+              "role": "instructional measurement only"
+            }
+          ],
+          "sourceBoundary": "The 0.350 V value is a project-authored training measurement, not a vehicle specification. Delco values apply only to their cited charging-cable context.",
+          "instructionalExample": {
+            "context": "12 V charging-cable sizing-table example",
+            "measurement": "0.350 V",
+            "interpretation": [
+              "0.300 V design basis -> reference-only comparison",
+              "0.500 V maximum -> within the cited maximum",
+              "No failed component is identified from this comparison alone"
+            ]
+          }
         },
         {
           "id": "charging-guided-practice",
@@ -105,7 +189,30 @@
           "description": "Classify observations as symptoms, measurements, hypotheses, or verification evidence.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-2"
-          ]
+          ],
+          "teachingPoints": [
+            "Case A: 0.180 V is measured, but conductor identity is unknown. Do not apply the cited 0.200 V 3-wire #2-lead maximum until wiring configuration and conductor identity are verified.",
+            "Case B: a 0.550 V project-authored training measurement in the cited 12 V charging-cable sizing-table context exceeds the 0.500 V maximum. This supports a cable-path concern in that context but does not prove alternator failure.",
+            "Case C: a charging concern is reported and no measurement has been collected. Identify operating context and gather discriminating evidence before naming a cause."
+          ],
+          "learnerAction": "For each case choose comparable, not comparable, or more evidence required, then justify the choice from source applicability.",
+          "evidenceReferences": [
+            {
+              "type": "authoritative-specification",
+              "id": "delco-charging-3wire-number2-lead-max-drop-12v",
+              "value": "0.200 V",
+              "comparisonRole": "maximum",
+              "applicability": "12 V, 3-wire charging system, #2 lead"
+            },
+            {
+              "type": "authoritative-specification",
+              "id": "delco-charging-cable-life-max-drop-12v",
+              "value": "0.500 V",
+              "comparisonRole": "maximum",
+              "applicability": "12 V charging-cable sizing-table context"
+            }
+          ],
+          "sourceBoundary": "Do not apply the 0.200 V reference when wiring configuration or conductor identity is unknown."
         },
         {
           "id": "charging-independent-scenario",
@@ -115,7 +222,27 @@
           "description": "Build and defend a diagnostic plan for a charging-system complaint without being given the answer path.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-3"
-          ]
+          ],
+          "teachingPoints": [
+            "The learner receives a charging-system concern with operating-context notes but no preselected failed component.",
+            "The learner identifies what is known, what is only suspected, and what measurement or source information is still required.",
+            "The learner chooses a next check that can reduce uncertainty and states which result would support or weaken the working hypothesis.",
+            "The learner stops short of a final component diagnosis until the evidence supports it."
+          ],
+          "learnerAction": "Use either the charging-system or electrical-load mapped scenario. Write a diagnostic plan containing concern, known evidence, two plausible hypotheses, next discriminating check, required source/applicability information, and verification step.",
+          "evidenceReferences": [
+            {
+              "type": "scenario-mapping",
+              "id": "charging-system",
+              "objectiveId": "ug-electrical-lo-2"
+            },
+            {
+              "type": "scenario-mapping",
+              "id": "electrical-load",
+              "objectiveId": "ug-electrical-lo-2"
+            }
+          ],
+          "sourceBoundary": "Project-authored measurements may be used for practice, but pass/fail interpretation requires a matching authoritative reference."
         },
         {
           "id": "charging-reasoning-check",
@@ -127,7 +254,14 @@
             "ug-electrical-lo-1",
             "ug-electrical-lo-2",
             "ug-electrical-lo-3"
-          ]
+          ],
+          "teachingPoints": [
+            "Check 1: identify the alternator elements supported by the pending Frontiers technical-review chunks.",
+            "Check 2: explain why a design-basis value is not automatically a failure threshold.",
+            "Check 3: decide whether a 3-wire #2-lead limit can be used when conductor identity is unknown.",
+            "Check 4: distinguish a symptom, measurement, hypothesis, and verified conclusion."
+          ],
+          "learnerAction": "Answer each check in one or two sentences and name the evidence role used."
         },
         {
           "id": "charging-feedback",
@@ -138,7 +272,14 @@
           "supportsObjectiveIds": [
             "ug-electrical-lo-2",
             "ug-electrical-lo-3"
-          ]
+          ],
+          "teachingPoints": [
+            "If a learner names a failed component from a symptom alone, return to the evidence-versus-conclusion distinction.",
+            "If a learner treats 0.300 V as a universal maximum, point out that the source marks it as a design basis.",
+            "If a learner applies the 0.200 V limit without confirming 3-wire/#2-lead applicability, require a context correction before retry.",
+            "If a learner treats a project-authored measurement as a source specification, require the evidence roles to be separated."
+          ],
+          "learnerAction": "Revise one incorrect diagnostic statement so it names the evidence, its limitation, and the next verification step."
         },
         {
           "id": "charging-evidence-reference",
@@ -148,6 +289,26 @@
           "description": "Identify which claims are general principles and which checks require vehicle-specific authoritative information.",
           "supportsObjectiveIds": [
             "ug-electrical-lo-3"
+          ],
+          "teachingPoints": [
+            "Frontiers source: rights-cleared textual reuse under CC BY 4.0 for the exact hashed article; technical review and chunk approval remain pending.",
+            "Delco charging references: use only with their stored system-voltage, test-method, wiring, conductor, and comparison-role applicability.",
+            "Project-authored training measurements: useful for reasoning practice but never promoted to authoritative vehicle specifications.",
+            "Vehicle-specific service procedures and limits require an appropriate authoritative source before use on a real vehicle."
+          ],
+          "learnerAction": "For every technical statement in the worked example, identify whether it comes from a scholarly source, authoritative specification, or project-authored training example.",
+          "evidenceReferences": [
+            {
+              "type": "source-state",
+              "id": "frontiers-automotive-alternator-2023",
+              "rightsStatus": "cleared-text-only-cc-by-4.0",
+              "technicalReviewStatus": "pending",
+              "chunkApprovalStatus": "pending"
+            },
+            {
+              "type": "authoritative-catalog",
+              "id": "delco-remy-starting-charging"
+            }
           ]
         },
         {
@@ -160,7 +321,15 @@
             "ug-electrical-lo-1",
             "ug-electrical-lo-2",
             "ug-electrical-lo-3"
-          ]
+          ],
+          "teachingPoints": [
+            "Understand the system relationship before interpreting a measurement.",
+            "Treat symptoms and measurements as evidence, not automatic diagnoses.",
+            "Match every numeric comparison to an applicable source and comparison role.",
+            "Keep project-authored training values separate from authoritative specifications.",
+            "Choose the next check to reduce uncertainty, then verify the final conclusion."
+          ],
+          "learnerAction": "Write a five-sentence diagnostic summary moving from concern to evidence, source comparison, next check, and verification without naming a failed component prematurely."
         }
       ],
       "visuals": [
@@ -174,7 +343,14 @@
             "ug-electrical-lo-1"
           ],
           "accessibilityTextRequired": true,
-          "status": "planned"
+          "status": "content-ready",
+          "altText": "Simplified lesson model showing alternator generation, diode rectification, voltage regulation, battery/storage role, and vehicle loads as related parts of a charging-system evidence model.",
+          "content": [
+            "Alternator: primary electric-energy source claim from the Frontiers article",
+            "AC generation -> diode rectification -> DC vehicle electrical system",
+            "Rotor, stator, diode rectifier, and voltage regulator shown as alternator elements",
+            "Battery and loads shown as lesson-model relationships; verify vehicle-specific topology"
+          ]
         },
         {
           "id": "charging-diagnostic-flow",
@@ -187,7 +363,18 @@
             "ug-electrical-lo-3"
           ],
           "accessibilityTextRequired": true,
-          "status": "planned"
+          "status": "content-ready",
+          "altText": "Flow from concern to operating context, measurement, applicable source selection, comparison, hypothesis, discriminating check, and verification.",
+          "content": [
+            "Concern",
+            "Operating context",
+            "Measurement",
+            "Applicable reference",
+            "Interpretation",
+            "Hypothesis",
+            "Next discriminating check",
+            "Verification"
+          ]
         },
         {
           "id": "charging-evidence-table",
@@ -199,7 +386,15 @@
             "ug-electrical-lo-2"
           ],
           "accessibilityTextRequired": true,
-          "status": "planned"
+          "status": "content-ready",
+          "altText": "Table separating symptom, measurement, source reference, hypothesis, and conclusion with limitations for each evidence type.",
+          "content": [
+            "Symptom -> indicates a condition but not a unique cause",
+            "Measurement -> requires operating and test-point context",
+            "Source reference -> requires applicability and comparison-role match",
+            "Hypothesis -> tentative explanation to be tested",
+            "Conclusion -> requires converging evidence and verification"
+          ]
         },
         {
           "id": "charging-measurement-bars",
@@ -211,7 +406,14 @@
             "ug-electrical-lo-2"
           ],
           "accessibilityTextRequired": true,
-          "status": "planned"
+          "status": "content-ready",
+          "altText": "Bar comparison for a source-scoped 12 V charging-cable example showing 0.300 V design basis, 0.350 V project-authored measurement, and 0.500 V maximum.",
+          "content": [
+            "0.300 V source-backed design basis",
+            "0.350 V project-authored training measurement",
+            "0.500 V source-backed maximum"
+          ],
+          "sourceScope": "Delco Remy 12 V charging-cable sizing-table context; values are not universal charging-system thresholds."
         },
         {
           "id": "charging-workflow-summary",
@@ -225,7 +427,15 @@
             "ug-electrical-lo-3"
           ],
           "accessibilityTextRequired": true,
-          "status": "planned"
+          "status": "content-ready",
+          "altText": "Summary of system understanding, evidence collection, applicable source comparison, diagnostic decision, and verification.",
+          "content": [
+            "System understanding",
+            "Evidence",
+            "Applicable source",
+            "Decision",
+            "Verification"
+          ]
         }
       ],
       "practiceTasks": [
@@ -260,7 +470,24 @@
         "evidence-reference",
         "lesson-summary"
       ],
-      "structureExceptions": []
+      "structureExceptions": [],
+      "contentStatus": "complete-review-ready",
+      "evidenceApprovalStatus": "pending-human-technical-and-chunk-review",
+      "evidenceReview": {
+        "rightsClearedSourceIds": [
+          "frontiers-automotive-alternator-2023"
+        ],
+        "pendingTechnicalReviewChunkIds": [
+          "frontiers-alternator-primary-source-p7",
+          "frontiers-alternator-ac-dc-rectification-p7"
+        ],
+        "authoritativeSpecificationIds": [
+          "delco-charging-cable-new-vehicle-design-drop-12v",
+          "delco-charging-cable-life-max-drop-12v",
+          "delco-charging-3wire-number2-lead-max-drop-12v"
+        ],
+        "reviewNote": "Lesson content is complete as an instructional draft. Frontiers text is rights-cleared for attributed textual reuse, but its two candidate chunks remain pending human technical review and chunk approval."
+      }
     },
     {
       "lessonPlanId": "ug-brakes-foundations",

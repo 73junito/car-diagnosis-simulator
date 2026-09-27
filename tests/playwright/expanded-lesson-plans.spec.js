@@ -40,13 +40,27 @@ test.describe('Expanded lesson plans', () => {
     await expect(plan.getByText('evidence-to-decision reasoning')).toBeVisible();
     await expect(plan.getByText(/AUT-120 · Electrical I · Direct Course Alignment/)).toBeVisible();
 
+    await expect(plan.locator('.lesson-readiness span').filter({ hasText: 'Complete Review Ready' })).toBeVisible();
+    await expect(plan.locator('.lesson-readiness span').filter({ hasText: 'Pending Human Technical And Chunk Review' })).toBeVisible();
+
     await plan.getByText('Instructional sequence').click();
     await expect(plan.locator('.instruction-block-list > li')).toHaveCount(11);
+    await expect(plan.locator('.lesson-teaching-points > li')).toHaveCount(43);
+    await expect(plan.getByText(/0\.350 V training measurement is above the design basis/)).toBeVisible();
+    await expect(plan.getByText(/Do not apply the 0\.200 V reference when wiring configuration or conductor identity is unknown/)).toBeVisible();
+    await expect(plan.getByText(/rights-cleared; technical\/chunk approval pending/).first()).toBeVisible();
 
     await plan.getByText('Planned visuals').click();
     await expect(plan.locator('.lesson-visual-grid > article')).toHaveCount(5);
     await expect(plan.getByText('Charging-system relationship map')).toBeVisible();
     await expect(plan.getByText('Evidence-to-next-check flow')).toBeVisible();
+    await expect(plan.getByText(/0\.300 V source-backed design basis/)).toBeVisible();
+    await expect(plan.getByText(/0\.500 V source-backed maximum/)).toBeVisible();
+
+    await plan.getByText('Evidence focus and boundaries').click();
+    await expect(plan.getByText(/technical review and chunk approval remain pending/)).toBeVisible();
+    await expect(plan.locator('.pending-chunk-list li').filter({ hasText: 'frontiers-alternator-primary-source-p7' })).toBeVisible();
+    await expect(plan.locator('.pending-chunk-list li').filter({ hasText: 'frontiers-alternator-ac-dc-rectification-p7' })).toBeVisible();
 
     expect(pageErrors).toEqual([]);
   });

@@ -5,10 +5,11 @@
   "source_basis": {
     "source_id": "frontiers-automotive-alternator-2023",
     "publisher": "Frontiers in Mechanical Engineering",
-    "approved_chunks": [
+    "candidate_chunks": [
       "frontiers-alternator-primary-source-p7",
       "frontiers-alternator-ac-dc-rectification-p7"
-    ]
+    ],
+    "chunk_status": "rights-cleared; technical review and canonical chunk approval pending"
   },
   "revision_reason": "Whole-item revisions address the two REVISE decisions recorded in PR #479. Options now match the categories asked by their stems.",
   "governance": {

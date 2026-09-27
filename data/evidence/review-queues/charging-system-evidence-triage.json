@@ -1,38 +1,7 @@
 {
   "scenario_id": "charging-system",
   "generated_at": "2026-09-25",
-  "approved_source_id": "frontiers-automotive-alternator-2023",
-  "approved_chunks": [
-    "frontiers-alternator-primary-source-p7",
-    "frontiers-alternator-ac-dc-rectification-p7"
-  ],
-  "evidence_linked": [
-    {
-      "question_id": "ba2541c8-f70b-4730-a7c3-c2c5113511e2",
-      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
-      "note": "Alternator components."
-    },
-    {
-      "question_id": "5b432ab1-efd1-4ef6-8937-30749e78f892",
-      "chunk_id": "frontiers-alternator-primary-source-p7",
-      "note": "Primary vehicle electrical-energy source."
-    },
-    {
-      "question_id": "47c057ce-2e41-4ba6-b96e-6c3311417724",
-      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
-      "note": "DC diode rectification; duplicate-content review required."
-    },
-    {
-      "question_id": "f52216b1-cb9c-4162-9a23-f2100aa30381",
-      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
-      "note": "DC diode rectification; duplicate-content review required."
-    },
-    {
-      "question_id": "49dad565-9f85-476a-b87b-cbc31ce5bb68",
-      "chunk_id": "frontiers-alternator-primary-source-p7",
-      "note": "Primary vehicle electrical-energy source."
-    }
-  ],
+  "approved_chunks": [],
   "evidence_needed": [
     {
       "question_id": "f6ba3fc5-25bd-4504-b758-47f4a25eb792",
@@ -57,6 +26,39 @@
     {
       "question_id": "7bc5e4c2-93d4-4366-b56f-b8e0a09186ef",
       "need": "Voltage-drop testing procedure and tool selection."
+    }
+  ],
+  "rights_cleared_source_id": "frontiers-automotive-alternator-2023",
+  "candidate_chunks": [
+    "frontiers-alternator-primary-source-p7",
+    "frontiers-alternator-ac-dc-rectification-p7"
+  ],
+  "governance_note": "Canonical source-state registry records rights clearance for Frontiers text, but technical review and chunk approval remain pending. Candidate links are not approval records.",
+  "proposed_evidence_links": [
+    {
+      "question_id": "ba2541c8-f70b-4730-a7c3-c2c5113511e2",
+      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+      "note": "Alternator components."
+    },
+    {
+      "question_id": "5b432ab1-efd1-4ef6-8937-30749e78f892",
+      "chunk_id": "frontiers-alternator-primary-source-p7",
+      "note": "Primary vehicle electrical-energy source."
+    },
+    {
+      "question_id": "47c057ce-2e41-4ba6-b96e-6c3311417724",
+      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+      "note": "DC diode rectification; duplicate-content review required."
+    },
+    {
+      "question_id": "f52216b1-cb9c-4162-9a23-f2100aa30381",
+      "chunk_id": "frontiers-alternator-ac-dc-rectification-p7",
+      "note": "DC diode rectification; duplicate-content review required."
+    },
+    {
+      "question_id": "49dad565-9f85-476a-b87b-cbc31ce5bb68",
+      "chunk_id": "frontiers-alternator-primary-source-p7",
+      "note": "Primary vehicle electrical-energy source."
     }
   ]
 }
