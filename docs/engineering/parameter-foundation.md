@@ -149,3 +149,22 @@ Fault behavior remains conservative:
 - high-resistance actuator power or ground: path is marked degraded, but voltage drop and actuator response are not invented without a component/load model.
 
 The UI separates commanded duty cycle, ideal mathematical average, actuator-side observed command representation, actuator power availability, and actuator ground availability.
+
+## Authoritative manufacturer specification catalogs
+
+Source-specific manufacturer limits are stored separately from generic training examples under `data/engineering/authoritative-specifications/`.
+
+The first catalog, `delco-remy-starting-charging.json`, is backed by citation-only Delco Remy / PHINIA references registered in `data/evidence/external-technical-references.json`. Vendor documents remain external-reference-only: they are not copied into reusable chunks, Ollama context, transcripts, or figures.
+
+Each authoritative specification requires:
+
+- `valueRole: authoritative_specification`
+- a registered `source.id`
+- an exact `source.locator`
+- an explicit comparison semantic such as `maximum`, `greater_than`, or `design_basis`
+- an `applicability` object identifying system, voltage, model family, test method, or other scope where applicable
+- project-authored notes describing the boundary
+
+The specification selector resolves the most specific applicable record. Model-family restrictions outrank general troubleshooting limits, so a 12 V 50MT starter-cable query resolves to the source-specific 0.400 V limit rather than the general 0.5 V heavy-duty troubleshooting value.
+
+The initial source-backed catalog includes starter cable test currents and loss limits, IMS start-enable threshold guidance, diagnostic voltmeter capability/ranges, a cranking-duration warning threshold, and charging-cable voltage-drop design limits. These records are not universal vehicle specifications and must not be applied outside their stated source applicability.
