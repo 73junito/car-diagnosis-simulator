@@ -133,6 +133,34 @@ ngspice performs a transient pulse simulation and measures average command volta
 
 An open PWM command remains `unavailable`. The model does not infer actuator position, speed, force, flow, current, frequency response, or mechanical behavior from PWM average voltage.
 
+## Starting-system voltage-drop cross-validation
+
+The starting-system model is the first computation case that is also exercised against an existing source-backed reference.
+
+Project-authored cable-resistance cases are evaluated at the repository's selected 500 A source-backed 12 V cable-test current:
+
+- 0.000700 ohm -> 0.350 V modeled total cable drop;
+- 0.000900 ohm -> 0.450 V modeled total cable drop.
+
+Python and ngspice must agree within 0.001 V.
+
+The model artifacts remain `project_authored_training_model` with `numeric_delta_only`. They do not contain an authoritative pass/fail result.
+
+A separate regression test selects the existing source-backed 12 V 50MT maximum cable-drop reference of 0.400 V and sends test-only simulated readings through the existing measurement/reference comparison runtime:
+
+- 0.350 V -> `within_reference`;
+- 0.450 V -> `exceeds_reference`;
+- open circuit -> `not_comparable`.
+
+This separation is intentional: the computation produces a modeled value; the authoritative source record supplies the applicable limit.
+
+Run:
+
+```text
+python engineering/python/generate_starting_voltage_drop_model.py
+npm run validate:starting-voltage-drop-model
+```
+
 ## Next boundary
 
-Future SPICE models may expand to voltage-drop/starting and charging applicability cases only through the same artifact adapter and semantic validation path. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.
+The next model should exercise charging-system applicability, especially cases where a valid source-backed charging reference must not be applied to a fault or conductor outside that reference's stated scope. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.

@@ -1,0 +1,19 @@
+* AutoLearnPro starting-system cable voltage-drop training models
+* 500 A test current is source-backed; cable resistances are project-authored.
+* Generated drops are training-model outputs, not vehicle specifications.
+IWITHIN 0 within_node DC 500
+RWITHIN within_node 0 0.0007
+
+IEXCEEDS 0 exceeds_node DC 500
+REXCEEDS exceeds_node 0 0.0009
+
+.control
+op
+let tm_start_within = v(within_node)
+let tm_start_exceeds = v(exceeds_node)
+print tm_start_within
+print tm_start_exceeds
+quit
+.endc
+
+.end

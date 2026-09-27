@@ -11,6 +11,7 @@ on:
       - "tests/ngspice-relay-model.test.js"
       - "tests/sensor-model-artifacts.test.js"
       - "tests/pwm-actuator-model-artifacts.test.js"
+      - "tests/starting-voltage-drop-model-artifacts.test.js"
       - "package.json"
       - ".github/workflows/ngspice-validation.yml"
   push:
@@ -55,5 +56,8 @@ jobs:
       - name: Run ngspice PWM actuator cross-validation
         run: npm run validate:pwm-actuator-model
 
+      - name: Run starting-system voltage-drop cross-validation
+        run: npm run validate:starting-voltage-drop-model
+
       - name: Run ngspice and engineering artifact unit tests
-        run: npx jest tests/ngspice-relay-model.test.js tests/sensor-model-artifacts.test.js tests/pwm-actuator-model-artifacts.test.js --runInBand
+        run: npx jest tests/ngspice-relay-model.test.js tests/sensor-model-artifacts.test.js tests/pwm-actuator-model-artifacts.test.js tests/starting-voltage-drop-model-artifacts.test.js --runInBand

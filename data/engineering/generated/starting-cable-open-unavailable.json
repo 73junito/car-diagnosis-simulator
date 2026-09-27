@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "starting-cable-open-unavailable-v1",
+  "modelId": "starting-cable-open-boundary",
+  "evidenceRole": "project_authored_training_model",
+  "generator": {
+    "tool": "python-contract-boundary",
+    "version": "1.0.0"
+  },
+  "domain": {
+    "system": "starting-cable-voltage-drop",
+    "voltageClass": "12V-source-applicable-training-example",
+    "applicability": "generic starting-cable open-circuit training boundary"
+  },
+  "quantity": {
+    "quantityType": "voltage_drop",
+    "unit": "V"
+  },
+  "baseline": {
+    "value": 0,
+    "label": "ideal zero-drop conductor model"
+  },
+  "observed": null,
+  "comparison": {
+    "status": "unavailable",
+    "interpretation": "not_available",
+    "authoritativeSpecification": false,
+    "reason": "Open-circuit cable-drop behavior is not represented as a finite modeled voltage drop for authoritative comparison."
+  },
+  "provenance": {
+    "method": "explicit open-circuit non-comparability boundary",
+    "sourceType": "project_model",
+    "reproducible": true
+  }
+}
