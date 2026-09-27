@@ -1,0 +1,50 @@
+name: Engineering ngspice Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "engineering/ngspice/**"
+      - "engineering/python/**"
+      - "data/engineering/**"
+      - "scripts/verify-engineering-artifacts.js"
+      - "tests/ngspice-relay-model.test.js"
+      - "package.json"
+      - ".github/workflows/ngspice-validation.yml"
+  push:
+    branches: [ main ]
+    paths:
+      - "engineering/ngspice/**"
+      - "engineering/python/**"
+      - "data/engineering/**"
+      - "scripts/verify-engineering-artifacts.js"
+      - "tests/ngspice-relay-model.test.js"
+      - "package.json"
+      - ".github/workflows/ngspice-validation.yml"
+
+jobs:
+  validate-ngspice:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install ngspice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ngspice
+          ngspice --version
+
+      - name: Run ngspice relay/load cross-validation
+        run: npm run validate:ngspice-relay
+
+      - name: Run ngspice adapter unit tests
+        run: npx jest tests/ngspice-relay-model.test.js --runInBand

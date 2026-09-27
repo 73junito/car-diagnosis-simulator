@@ -70,6 +70,28 @@ Validation deliberately applies rules that JSON Schema alone cannot express safe
 - unavailable values must remain explicitly unavailable;
 - project-model provenance must retain the project-authored training-model evidence role.
 
+## ngspice integration
+
+The first independent circuit-simulation backend uses `engineering/ngspice/relay-load-high-resistance.cir`.
+
+Run:
+
+```text
+npm run validate:ngspice-relay
+```
+
+The adapter:
+
+1. executes ngspice in non-interactive batch mode;
+2. reads healthy and high-resistance operating-point currents;
+3. normalizes them into the same engineering artifact contract;
+4. validates the generated artifact;
+5. compares the rounded SPICE result with the committed Python artifact using a 0.001 A tolerance.
+
+The generated ngspice JSON artifact is intentionally not committed because simulator version metadata may vary by environment. The contract and numerical cross-check are the reproducibility boundary.
+
+ngspice remains a computation tool, not an evidence authority. Its output retains `project_authored_training_model`, `numeric_delta_only`, and `authoritativeSpecification: false`.
+
 ## Next boundary
 
-ngspice may be added only after it emits the same artifact contract. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.
+Future SPICE models may expand to sensor, PWM/load, and voltage-drop circuits only through the same artifact adapter and semantic validation path. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.
