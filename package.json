@@ -56,7 +56,8 @@
     "validate:connection-library": "node scripts/verify-connection-library.js",
     "validate:engineering-parameters": "node scripts/verify-engineering-parameters.js",
     "validate:engineering-artifacts": "node scripts/verify-engineering-artifacts.js",
-    "validate:ngspice-relay": "node engineering/ngspice/run-relay-load-model.js && node scripts/verify-engineering-artifacts.js"
+    "validate:ngspice-relay": "node engineering/ngspice/run-relay-load-model.js && node scripts/verify-engineering-artifacts.js",
+    "validate:sensor-model": "node engineering/ngspice/run-sensor-model.js && node scripts/verify-engineering-artifacts.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
