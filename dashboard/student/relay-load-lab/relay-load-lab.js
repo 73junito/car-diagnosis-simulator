@@ -2,13 +2,16 @@
 
 (async function initRelayLoadLab() {
   const NS = "http://www.w3.org/2000/svg";
-  const [templateResponse, symbolLibrary, connectionLibrary] = await Promise.all([
+  const [templateResponse, engineeringResponse, symbolLibrary, connectionLibrary] = await Promise.all([
     fetch("/data/circuit-templates/12v-relay-controlled-load.json"),
+    fetch("/data/engineering/labs/relay-load-training.json"),
     window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),
     window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections")
   ]);
   if (!templateResponse.ok) throw new Error("Unable to load relay-load template.");
+  if (!engineeringResponse.ok) throw new Error("Unable to load relay-load engineering profile.");
   const circuit = await templateResponse.json();
+  const engineeringProfile = await engineeringResponse.json();
   const engine = window.TorqueMindCircuitEngine;
   const validation = window.TorqueMindCircuitTemplateContracts.validateCircuitTemplate(
     circuit, engine, symbolLibrary.registry, connectionLibrary.registry
@@ -24,8 +27,17 @@
   const flowNote = document.getElementById("flowNote");
   const voltageDomains = window.TorqueMindVoltageDomains;
   const symbolRenderer = window.TorqueMindSymbolRenderer;
+  const engineering = window.TorqueMindEngineering;
+  const calculator = engineering.calculator;
+  const profileValidator = engineering.profiles.validateEngineeringProfile;
   const voltageArchitecture = voltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById = new Map(voltageArchitecture.map((d) => [d.id, d]));
+
+  const engineeringErrors = [
+    ...profileValidator(engineeringProfile.loadProfile.engineeringProfile),
+    ...engineeringProfile.conductorProfiles.flatMap((entry) => profileValidator(entry.engineeringProfile))
+  ];
+  if (engineeringErrors.length) throw new Error(engineeringErrors.join("; "));
 
   for (const domain of voltageArchitecture) {
     const chip = document.createElement("span");
@@ -72,6 +84,140 @@
     LOAD1:"Generic electrical load supplied through the relay contact.",
     GND1:"Common chassis return reference for this training circuit."
   };
+
+  const engineeringUi = {
+    status: document.getElementById("engineeringStatus"),
+    sourceVoltage: document.getElementById("engSourceVoltage"),
+    loadResistance: document.getElementById("engLoadResistance"),
+    pathResistance: document.getElementById("engPathResistance"),
+    pathResistanceLabel: document.getElementById("engPathResistanceLabel"),
+    current: document.getElementById("engCurrent"),
+    voltageDrop: document.getElementById("engVoltageDrop"),
+    loadVoltage: document.getElementById("engLoadVoltage"),
+    loadPower: document.getElementById("engLoadPower"),
+    conductorLoss: document.getElementById("engConductorLoss"),
+    formula: document.getElementById("engineeringFormula")
+  };
+
+  const loadResistance = engineeringProfile.loadProfile.engineeringProfile.parameters.resistance.value;
+  const sourceVoltage = circuit.voltageSystems.find((system) => system.id === "LV12").nominalVoltage;
+  const conductorResistanceByConnection = new Map(
+    engineeringProfile.conductorProfiles.map((entry) => {
+      const parameters = entry.engineeringProfile.parameters;
+      const resistance = calculator.calculateConductorResistance({
+        resistivityOhmMeter: parameters.resistivity.value,
+        length: parameters.length.value,
+        lengthUnit: parameters.length.unit,
+        area: parameters.area.value,
+        areaUnit: parameters.area.unit
+      });
+      return [entry.targetConnectionId, resistance.value];
+    })
+  );
+  const basePathResistance = [...conductorResistanceByConnection.values()].reduce((sum, value) => sum + value, 0);
+
+  function formatEngineering(value, unit, digits=3) {
+    return `${Number(value.toFixed(digits))} ${unit}`;
+  }
+
+  function engineeringFaultResistance() {
+    const entry = engineeringProfile.faultEngineering.find((item) => item.faultId === activeFault);
+    return entry ? entry.addedResistance.value : 0;
+  }
+
+  function loadCircuitIsClosed() {
+    if (operatingState !== "command-on") return false;
+    const fault = faultObj();
+    if (!fault) return true;
+    return fault.type !== "open_circuit";
+  }
+
+  function calculateEngineeringState() {
+    const addedFaultResistance = engineeringFaultResistance();
+    const pathResistance = basePathResistance + addedFaultResistance;
+    const closed = loadCircuitIsClosed();
+
+    if (!closed) {
+      return {
+        active:false,
+        addedFaultResistance,
+        pathResistance,
+        current:0,
+        loadPower:0
+      };
+    }
+
+    const totalResistance = loadResistance + pathResistance;
+    const current = calculator.solveOhmsLaw({
+      voltage:sourceVoltage,
+      resistance:totalResistance
+    });
+    const voltageDrop = calculator.calculateVoltageDrop({
+      current:current.value,
+      resistance:pathResistance
+    });
+    const loadVoltage = calculator.calculateLoadVoltage({
+      sourceVoltage,
+      voltageDrop:voltageDrop.value
+    });
+    const loadPower = calculator.calculatePower({
+      voltage:loadVoltage.value,
+      current:current.value
+    });
+    const conductorLoss = calculator.calculatePowerLoss({
+      current:current.value,
+      resistance:pathResistance
+    });
+
+    return {
+      active:true,
+      addedFaultResistance,
+      pathResistance,
+      current,
+      voltageDrop,
+      loadVoltage,
+      loadPower,
+      conductorLoss
+    };
+  }
+
+  function renderEngineering() {
+    const values = calculateEngineeringState();
+    engineeringUi.sourceVoltage.textContent = formatEngineering(sourceVoltage,"V",1);
+    engineeringUi.loadResistance.textContent = formatEngineering(loadResistance,"Ω",2);
+    engineeringUi.pathResistance.textContent = formatEngineering(values.pathResistance,"Ω",4);
+
+    if (values.addedFaultResistance > 0) {
+      engineeringUi.status.textContent = "High-resistance training fault active";
+      engineeringUi.status.className = "engineering-status degraded";
+      engineeringUi.pathResistanceLabel.textContent = `Conductor path + ${formatEngineering(values.addedFaultResistance,"Ω",2)} fault resistance`;
+    } else if (!values.active) {
+      engineeringUi.status.textContent = "Load circuit inactive / interrupted";
+      engineeringUi.status.className = "engineering-status inactive";
+      engineeringUi.pathResistanceLabel.textContent = "Calculated conductor resistance";
+    } else {
+      engineeringUi.status.textContent = "Healthy training example";
+      engineeringUi.status.className = "engineering-status";
+      engineeringUi.pathResistanceLabel.textContent = "Calculated conductor resistance";
+    }
+
+    if (!values.active) {
+      engineeringUi.current.textContent = "0 A";
+      engineeringUi.voltageDrop.textContent = "—";
+      engineeringUi.loadVoltage.textContent = "—";
+      engineeringUi.loadPower.textContent = "0 W";
+      engineeringUi.conductorLoss.textContent = "—";
+      engineeringUi.formula.textContent = "The load-current path is not closed in this state. Current and load power are shown as zero; open-circuit voltage distribution is intentionally not inferred.";
+      return;
+    }
+
+    engineeringUi.current.textContent = formatEngineering(values.current.value,"A",3);
+    engineeringUi.voltageDrop.textContent = formatEngineering(values.voltageDrop.value,"V",3);
+    engineeringUi.loadVoltage.textContent = formatEngineering(values.loadVoltage.value,"V",3);
+    engineeringUi.loadPower.textContent = formatEngineering(values.loadPower.value,"W",3);
+    engineeringUi.conductorLoss.textContent = formatEngineering(values.conductorLoss.value,"W",3);
+    engineeringUi.formula.textContent = `Series model: I = V ÷ (Rload + Rpath). Calculated values carry provenance from the declared ${formatEngineering(sourceVoltage,"V",1)} system value and the generic training-example resistance inputs.`;
+  }
 
   function el(name, attrs={}, text="") {
     const node = document.createElementNS(NS, name);
@@ -222,7 +368,7 @@
   }
   function render() {
     svg.querySelectorAll("*:not(title):not(desc)").forEach((n)=>n.remove());
-    addDefs(); renderWires(); renderComponents(); renderLabels(); renderTestPoints();
+    addDefs(); renderWires(); renderComponents(); renderLabels(); renderTestPoints(); renderEngineering();
     stateBadge.textContent = stateDef().label;
     flowNote.textContent = stateDef().note + " Animated arrows are conceptual and do not represent measured magnitude.";
   }

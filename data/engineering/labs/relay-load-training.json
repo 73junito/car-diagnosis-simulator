@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.0.0",
+  "profileId": "relay-load-engineering-training-001",
+  "profileRole": "lab-engineering-training-profile",
+  "circuitTemplateId": "automotive-12v-relay-controlled-load",
+  "notice": "All numerical component and conductor values in this profile are project-authored generic training examples unless explicitly identified as a declared system value. They are not vehicle-specific specifications or diagnostic limits.",
+  "loadProfile": {
+    "targetComponentId": "LOAD1",
+    "engineeringProfile": {
+      "profileType": "resistive_load",
+      "parameters": {
+        "resistance": {
+          "quantityType": "resistance",
+          "unit": "ohm",
+          "valueRole": "generic_training_example",
+          "value": 6
+        }
+      }
+    }
+  },
+  "conductorProfiles": [
+    {
+      "targetConnectionId": "W_CONTACT_LOAD",
+      "engineeringProfile": {
+        "profileType": "conductor",
+        "material": "copper-training-example",
+        "parameters": {
+          "resistivity": {
+            "quantityType": "resistivity",
+            "unit": "ohm_m",
+            "valueRole": "generic_training_example",
+            "value": 1.72e-8
+          },
+          "length": {
+            "quantityType": "length",
+            "unit": "m",
+            "valueRole": "generic_training_example",
+            "value": 3
+          },
+          "area": {
+            "quantityType": "area",
+            "unit": "mm2",
+            "valueRole": "generic_training_example",
+            "value": 2.5
+          }
+        }
+      }
+    },
+    {
+      "targetConnectionId": "W_LOAD_GND",
+      "engineeringProfile": {
+        "profileType": "conductor",
+        "material": "copper-training-example",
+        "parameters": {
+          "resistivity": {
+            "quantityType": "resistivity",
+            "unit": "ohm_m",
+            "valueRole": "generic_training_example",
+            "value": 1.72e-8
+          },
+          "length": {
+            "quantityType": "length",
+            "unit": "m",
+            "valueRole": "generic_training_example",
+            "value": 2
+          },
+          "area": {
+            "quantityType": "area",
+            "unit": "mm2",
+            "valueRole": "generic_training_example",
+            "value": 2.5
+          }
+        }
+      }
+    }
+  ],
+  "faultEngineering": [
+    {
+      "faultId": "FAULT_HIGH_RES_LOAD_POWER",
+      "targetConnectionId": "W_CONTACT_LOAD",
+      "addedResistance": {
+        "quantityType": "resistance",
+        "unit": "ohm",
+        "valueRole": "generic_training_example",
+        "value": 1.5
+      }
+    },
+    {
+      "faultId": "FAULT_HIGH_RES_LOAD_GROUND",
+      "targetConnectionId": "W_LOAD_GND",
+      "addedResistance": {
+        "quantityType": "resistance",
+        "unit": "ohm",
+        "valueRole": "generic_training_example",
+        "value": 1.5
+      }
+    }
+  ]
+}

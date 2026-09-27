@@ -201,6 +201,7 @@ const requiredOutputFiles = [
   "src/engineering/calculator.js",
   "src/engineering/index.js",
   "data/engineering/training-examples.json",
+  "data/engineering/labs/relay-load-training.json",
   "dashboard/obd2.html",
   "dashboard/obd2-student.html",
   "data/scenarios.js",

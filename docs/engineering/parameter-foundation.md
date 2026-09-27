@@ -71,3 +71,20 @@ Vehicle-specific limits used for diagnosis, grading, or assessment require an au
 ## Next integration phase
 
 After this foundation is merged, existing labs can optionally attach engineering profiles without changing their circuit topology. The Circuit Composer can then use the same contracts to assign values, run calculations, compare healthy and faulted conditions, and preserve the distinction between examples, calculations, measurements, and sourced specifications.
+
+## First lab integration: relay-controlled load
+
+The 12 V relay-controlled load lab is the first consumer of the engineering-parameter foundation.
+
+Its lab-specific profile lives at `data/engineering/labs/relay-load-training.json` and remains separate from both the reusable symbol library and the reusable circuit topology. The profile declares only generic training examples:
+
+- a 6 ohm load resistance;
+- explicit conductor resistivity, length, and cross-sectional area for the load power conductor;
+- explicit conductor resistivity, length, and cross-sectional area for the load ground conductor;
+- a 1.5 ohm added resistance for each high-resistance training fault.
+
+The circuit''s 12 V nominal architecture remains a `declared_system_value`; the component/conductor inputs are `generic_training_example`; current, voltage drop, load voltage, load power, and conductor/fault loss are rendered as `calculated_value`.
+
+The healthy example calculates the full series loop from both modeled conductors. When a high-resistance load-power or load-ground fault is selected, the added example resistance is inserted into the same series model and every dependent value is recalculated.
+
+For an open circuit or an operating state in which the relay-controlled load path is not closed, the lab reports zero load current and zero load power but intentionally does not infer open-circuit voltage distribution. Vehicle-specific diagnostic voltage locations and limits remain outside the generic training model.
