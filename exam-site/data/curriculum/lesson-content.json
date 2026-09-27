@@ -388,10 +388,11 @@
           "teachingPoints": [
             "Frontiers source: rights-cleared textual reuse under CC BY 4.0 for the exact hashed article; technical review and chunk approval remain pending.",
             "Delco charging references: use only with their stored system-voltage, test-method, wiring, conductor, and comparison-role applicability.",
+            "Delco battery-relationship reference: citation-only external technical reference; no reusable vendor excerpt, figure, or chunk is stored.",
             "Project-authored training measurements: useful for reasoning practice but never promoted to authoritative vehicle specifications.",
             "Vehicle-specific service procedures and limits require an appropriate authoritative source before use on a real vehicle."
           ],
-          "learnerAction": "For every technical statement in the worked example, identify whether it comes from a scholarly source, authoritative specification, or project-authored training example.",
+          "learnerAction": "For every technical statement in the worked example and system model, identify whether it comes from a scholarly source, authoritative specification, citation-only external technical reference, project-authored training example, or vehicle-specific service information.",
           "evidenceReferences": [
             {
               "type": "source-state",
@@ -403,6 +404,11 @@
             {
               "type": "authoritative-catalog",
               "id": "delco-remy-starting-charging"
+            },
+            {
+              "type": "external-technical-reference",
+              "id": "delco-remy-alternator-battery-relationship-2016",
+              "approval": "citation-only external reference; no reusable vendor excerpt stored"
             }
           ]
         },
@@ -422,7 +428,7 @@
             "Treat symptoms and measurements as evidence, not automatic diagnoses.",
             "Match every numeric comparison to an applicable source and comparison role.",
             "Keep project-authored training values separate from authoritative specifications.",
-            "Choose the next check to reduce uncertainty, then verify the final conclusion."
+            "Choose the next check to reduce uncertainty, then verify the final conclusion using the applicable vehicle-specific procedure and authoritative information."
           ],
           "learnerAction": "Write a five-sentence diagnostic summary moving from concern to evidence, source comparison, next check, and verification without naming a failed component prematurely."
         }

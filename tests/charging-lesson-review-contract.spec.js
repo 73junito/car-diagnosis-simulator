@@ -108,6 +108,27 @@ describe('Charging lesson review corrections', () => {
     expect(JSON.stringify(block)).not.toMatch(/pending Frontiers technical-review chunks/i);
   });
 
+  test('closing blocks preserve complete evidence-role taxonomy and verification boundary', () => {
+    const evidenceBlock = plan.contentBlocks.find((item) => item.id === 'charging-evidence-reference');
+    expect(evidenceBlock.learnerAction).toMatch(/scholarly source, authoritative specification, citation-only external technical reference, project-authored training example, or vehicle-specific service information/);
+    expect(evidenceBlock.teachingPoints).toContain(
+      'Delco battery-relationship reference: citation-only external technical reference; no reusable vendor excerpt, figure, or chunk is stored.'
+    );
+    expect(evidenceBlock.evidenceReferences).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          type: 'external-technical-reference',
+          id: 'delco-remy-alternator-battery-relationship-2016'
+        })
+      ])
+    );
+
+    const summary = plan.contentBlocks.find((item) => item.id === 'charging-summary');
+    expect(summary.teachingPoints).toContain(
+      'Choose the next check to reduce uncertainty, then verify the final conclusion using the applicable vehicle-specific procedure and authoritative information.'
+    );
+  });
+
   test('generic charging circuit supports the full lesson and exposes the load-feed test point', () => {
     expect(chargingCircuit.curriculum.supportsObjectiveIds).toEqual([
       'ug-electrical-lo-1',
