@@ -1,0 +1,20 @@
+* AutoLearnPro sensor voltage-divider training model
+* Project-authored model values only; not a vehicle specification.
+VREF healthy_ref 0 DC 5
+RUP healthy_ref healthy_signal 1k
+RDOWN healthy_signal 0 1k
+
+VFAULT fault_ref 0 DC 5
+RFAULTUP fault_ref fault_signal 1k
+RFAULTDOWN fault_signal 0 1e-6
+
+.control
+op
+let tm_healthy_sensor = v(healthy_signal)
+let tm_fault_sensor = v(fault_signal)
+print tm_healthy_sensor
+print tm_fault_sensor
+quit
+.endc
+
+.end
