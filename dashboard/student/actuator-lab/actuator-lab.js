@@ -18,7 +18,13 @@
  const stateSelect=document.getElementById("stateSelect"), faultSelect=document.getElementById("faultSelect");
  const stateBadge=document.getElementById("stateBadge"), flowNote=document.getElementById("flowNote"), voltageProfile=document.getElementById("voltageProfile");
  const symbolRenderer=window.TorqueMindSymbolRenderer, voltageDomains=window.TorqueMindVoltageDomains;
- const engineering=window.TorqueMindEngineering, calculator=engineering.calculator, measurements=engineering.measurements, comparisons=engineering.comparisons;
+ const engineering=window.TorqueMindEngineering, calculator=engineering.calculator, measurements=engineering.measurements, comparisons=engineering.comparisons, artifacts=engineering.artifacts;
+ const artifactRegistry=await artifacts.loadRegistry();
+ const nominalShortGroundArtifact=await artifacts.resolveArtifact(
+  artifactRegistry,
+  "actuator.short-ground.nominal30",
+  {dutyCyclePercent:30}
+ );
  const actuatorProfile=engineeringProfile.actuatorProfile.engineeringProfile;
  const engineeringErrors=engineering.profiles.validateEngineeringProfile(actuatorProfile);
  if(engineeringErrors.length) throw new Error(engineeringErrors.join("; "));
@@ -80,13 +86,22 @@
   if(behavior){
    statusClass="fault";
    if(behavior.mode==="actuator_command_unavailable"){observed=null;status="Actuator-side PWM unavailable";}
-   if(behavior.mode==="actuator_command_forced_ground"){observed=0;status="PWM short-to-ground training fault";}
+   if(behavior.mode==="actuator_command_forced_ground"){
+    observed=0;status="PWM short-to-ground training fault";
+    if(dutyCycle===30&&nominalShortGroundArtifact.status==="ready"){
+     const baseline=artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact,"baseline");
+     const faulted=artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact,"observed");
+     if(Math.abs(baseline.value-ideal.value)>1e-9) throw new Error("PWM artifact baseline does not match the current nominal average.");
+     observed=faulted.value;
+     note=behavior.reason+" Validated engineering artifact applied for the 30% nominal training state.";
+    }
+   }
    if(behavior.mode==="actuator_command_forced_power"){observed=supplyVoltage;status="PWM short-to-power training fault";}
    if(behavior.mode==="actuator_power_unavailable"){power="Unavailable";status="Actuator power unavailable";}
    if(behavior.mode==="actuator_ground_unavailable"){ground="Unavailable";status="Actuator ground unavailable";}
    if(behavior.mode==="actuator_power_degraded"){power="Degraded";status="Actuator power path degraded";}
    if(behavior.mode==="actuator_ground_degraded"){ground="Degraded";status="Actuator ground path degraded";}
-   note=behavior.reason;
+   if(!note.includes("Validated engineering artifact applied")) note=behavior.reason;
   }
   return{ideal,observed,status,statusClass,power,ground,note};
  }

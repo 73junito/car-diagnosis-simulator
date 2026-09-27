@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryRole": "browser-engineering-artifacts",
+  "entries": [
+    {
+      "key": "sensor.short-ground.nominal50",
+      "path": "/data/engineering/generated/sensor-signal-short-ground.json",
+      "labId": "sensor-lab",
+      "faultId": "FAULT_SIGNAL_SHORT_GROUND",
+      "context": {
+        "normalizedInputPercent": 50
+      },
+      "expected": {
+        "artifactId": "sensor-signal-short-ground-v1",
+        "evidenceRole": "project_authored_training_model",
+        "quantityType": "voltage",
+        "unit": "V",
+        "authoritativeSpecification": false
+      }
+    },    {
+      "key": "actuator.short-ground.nominal30",
+      "path": "/data/engineering/generated/pwm-actuator-short-ground.json",
+      "labId": "actuator-lab",
+      "faultId": "FAULT_PWM_SHORT_GROUND",
+      "context": {
+        "dutyCyclePercent": 30
+      },
+      "expected": {
+        "artifactId": "pwm-actuator-short-ground-v1",
+        "evidenceRole": "project_authored_training_model",
+        "quantityType": "voltage",
+        "unit": "V",
+        "authoritativeSpecification": false
+      }
+    }
+  ]
+}
