@@ -351,7 +351,7 @@
             "ug-electrical-lo-3"
           ],
           "teachingPoints": [
-            "Check 1: identify the alternator elements supported by the pending Frontiers technical-review chunks.",
+            "Check 1: explain the functional relationship among the battery, alternator, diode rectifier, voltage regulator, and vehicle electrical loads using the lesson system model and identify which parts require vehicle-specific verification.",
             "Check 2: explain why a design-basis value is not automatically a failure threshold.",
             "Check 3: decide whether a 3-wire #2-lead limit can be used when conductor identity is unknown.",
             "Check 4: distinguish a symptom, measurement, hypothesis, and verified conclusion."
