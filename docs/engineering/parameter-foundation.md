@@ -168,3 +168,20 @@ Each authoritative specification requires:
 The specification selector resolves the most specific applicable record. Model-family restrictions outrank general troubleshooting limits, so a 12 V 50MT starter-cable query resolves to the source-specific 0.400 V limit rather than the general 0.5 V heavy-duty troubleshooting value.
 
 The initial source-backed catalog includes starter cable test currents and loss limits, IMS start-enable threshold guidance, diagnostic voltmeter capability/ranges, a cranking-duration warning threshold, and charging-cable voltage-drop design limits. These records are not universal vehicle specifications and must not be applied outside their stated source applicability.
+
+## Starting-system source-backed reference integration
+
+The starting-system lab now combines two independent authoritative source layers without asserting compatibility between them:
+
+- Interstate Batteries exact-product 12 V battery ratings from the user-supplied 2021 specification sheet.
+- Delco Remy source-specific starter cable test currents and starter-family voltage-loss limits.
+
+The Interstate source is registered as a user-supplied citation-only technical reference using its document SHA-256. The PDF itself is not copied into the repository, reusable chunks, Ollama context, transcripts, or figures.
+
+The initial Interstate product catalog contains exact 12 V profiles for MT-48/H6 and representative Commercial/Commercial AGM Group 31 products. Each published CCA, CA, reserve-capacity, and 20-hour Ah value remains an authoritative_specification tied to a page/table locator.
+
+The lab derives one cross-source-independent engineering calculation from the Delco Remy procedure only:
+
+`Rmax = Vdrop,max / Itest`
+
+For example, the cited 12 V 50MT procedure uses 0.400 V maximum total cable loss at 500 A, yielding a calculated equivalent total cable resistance of 0.800 mOhm. The battery selector does not participate in that calculation and does not imply battery/starter compatibility.

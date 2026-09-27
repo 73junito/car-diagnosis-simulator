@@ -44,7 +44,7 @@ const UNITS_BY_QUANTITY = Object.freeze({
   voltage_drop: ["V"],
   power_loss: ["W"],
   normalized_input: ["percent"],
-  duration: ["s"]
+  duration: ["s", "min"]
 });
 
 const TOLERANCE_TYPES = Object.freeze(["percent", "absolute"]);

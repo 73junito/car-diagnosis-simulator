@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryType": "document-technical-reference",
+  "purpose": "Citation-only metadata for user-supplied technical documents used to support structured engineering facts. Source files are not copied into the repository or made ingestible by training/RAG systems.",
+  "sources": [
+    {
+      "source_id": "interstate-batteries-specification-sheet-2021",
+      "publisher": "Interstate Batteries",
+      "title": "Specification Sheet",
+      "publication_or_revision": "Updated 02-2021 / 05-2021",
+      "source_kind": "user-supplied-document",
+      "document_filename": "Interstate Batteries Spec Sheets.pdf",
+      "document_sha256": "7eca6ee44f1365ea2e8483072ccb17e2eb372724ffc3d1c8427b19ab6cd43e7f",
+      "rights_status": "user-supplied-citation-only-no-republication",
+      "evidence_role": "document-technical-reference",
+      "citation_allowed": true,
+      "ollama_eligible": false,
+      "reusable_chunks_allowed": false,
+      "transcript_ingestion_allowed": false,
+      "figures_reuse_allowed": false,
+      "references": [
+        {"locator":"PDF p. 1, MTZ AGM table","supports_claim":"Lists exact MTZ battery part-number ratings including CCA, CA, reserve capacity and 20-hour amp-hour values."},
+        {"locator":"PDF p. 1, MTX AGM table","supports_claim":"Lists exact MTX AGM battery part-number ratings including CCA, CA, reserve capacity and 20-hour amp-hour values."},
+        {"locator":"PDF p. 1, MTP Line table","supports_claim":"Lists exact MTP battery part-number ratings including CCA, CA, reserve capacity and selected 20-hour amp-hour values."},
+        {"locator":"PDF p. 2, MT Line table","supports_claim":"Lists exact MT-line passenger-car/light-truck battery ratings and states that the batteries on that sheet are 12 V."},
+        {"locator":"PDF p. 3, Commercial 12 Volt table","supports_claim":"Lists exact commercial Group 31 battery ratings including CCA, CA, reserve capacity and selected amp-hour values."},
+        {"locator":"PDF p. 3, Commercial AGM 12 Volt table","supports_claim":"Lists exact commercial AGM Group 31 battery ratings including CCA, CA, reserve capacity and amp-hour values."},
+        {"locator":"PDF p. 6, Commercial 12 Volt table","supports_claim":"Lists additional exact commercial M-line battery ratings."}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0.0",
+  "catalogRole": "authoritative-product-profiles",
+  "manufacturer": "Interstate Batteries",
+  "publicationOrRevision": "Updated 02-2021 / 05-2021",
+  "rightsMode": "citation-only-structured-facts",
+  "sourceRegistryPath": "data/evidence/document-technical-references.json",
+  "notice": "Exact product ratings from the cited 2021 Interstate Batteries specification sheet. These records are not universal battery requirements and do not establish compatibility with any starter family.",
+  "productProfiles": [
+    {
+      "id":"interstate-mt-48-h6-2021",
+      "partNumber":"MT-48/H6",
+      "groupSize":"H6 (48)",
+      "systemVoltage":12,
+      "engineeringProfile":{
+        "profileType":"battery",
+        
+        "parameters":{
+          "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":700,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 2, MT Line table"}},
+          "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":770,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 2, MT Line table"}},
+          "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":95,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 2, MT Line table"}},
+          "capacity20Hr":{"quantityType":"capacity","unit":"Ah","valueRole":"authoritative_specification","value":50,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 2, MT Line table"}}
+        }
+      }
+    },
+    {
+      "id":"interstate-31p-vhd-2021","partNumber":"31P-VHD","groupSize":"31A","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":660,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":825,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":160,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}}
+      }}
+    },
+    {
+      "id":"interstate-31p-ecl-2021","partNumber":"31P-ECL","groupSize":"31A","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":700,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":875,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":190,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "capacity20Hr":{"quantityType":"capacity","unit":"Ah","valueRole":"authoritative_specification","value":104,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}}
+      }}
+    },
+    {
+      "id":"interstate-31p-lhd-2021","partNumber":"31P-LHD","groupSize":"31A","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":750,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":940,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":180,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}}
+      }}
+    },
+    {
+      "id":"interstate-31p-hd-2021","partNumber":"31P-HD","groupSize":"31A","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":925,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":1110,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":180,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "capacity20Hr":{"quantityType":"capacity","unit":"Ah","valueRole":"authoritative_specification","value":104,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}}
+      }}
+    },
+    {
+      "id":"interstate-31p-mhd-2021","partNumber":"31P-MHD","groupSize":"31A","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":950,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":1190,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":195,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}}
+      }}
+    },
+    {
+      "id":"interstate-31-xhd-2021","partNumber":"31-XHD","groupSize":"31T","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":1000,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":1250,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":195,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial 12 Volt table"}}
+      }}
+    },
+    {
+      "id":"interstate-31p-agm71-2021","partNumber":"31P-AGM71","groupSize":"31A","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","chemistry":"lead_acid_agm","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":925,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":1155,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":200,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "capacity20Hr":{"quantityType":"capacity","unit":"Ah","valueRole":"authoritative_specification","value":100,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}}
+      }}
+    },
+    {
+      "id":"interstate-31-agm71-2021","partNumber":"31-AGM71","groupSize":"31T","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","chemistry":"lead_acid_agm","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":925,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":1155,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":200,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "capacity20Hr":{"quantityType":"capacity","unit":"Ah","valueRole":"authoritative_specification","value":100,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}}
+      }}
+    },
+    {
+      "id":"interstate-31-agm51-2021","partNumber":"31-AGM51","groupSize":"31T","systemVoltage":12,
+      "engineeringProfile":{"profileType":"battery","chemistry":"lead_acid_agm","parameters":{
+        "coldCrankingCurrent":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":925,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "crankingCurrent32F":{"quantityType":"current","unit":"A","valueRole":"authoritative_specification","value":1110,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "reserveCapacity":{"quantityType":"duration","unit":"min","valueRole":"authoritative_specification","value":200,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}},
+        "capacity20Hr":{"quantityType":"capacity","unit":"Ah","valueRole":"authoritative_specification","value":100,"source":{"id":"interstate-batteries-specification-sheet-2021","locator":"PDF p. 3, Commercial AGM 12 Volt table"}}
+      }}
+    }
+  ]
+}

@@ -51,6 +51,46 @@
       <span class="legend-note">Line styles are training conventions. The declared system voltage is explicit and no manufacturer wire color is implied.</span>
     </section>
 
+    <section class="engineering-panel" aria-labelledby="startingEngineeringHeading">
+      <div class="engineering-heading">
+        <div>
+          <p class="eyebrow">Source-backed engineering reference</p>
+          <h2 id="startingEngineeringHeading">Battery capability and starter-cable test reference</h2>
+          <p>Battery ratings and starter limits come from separate sources. Selecting both does not establish product compatibility.</p>
+        </div>
+        <span class="engineering-status" id="startingEngineeringStatus">Reference values loaded</span>
+      </div>
+
+      <div class="reference-controls">
+        <div class="control-group">
+          <label for="batteryReferenceSelect">Interstate battery reference</label>
+          <select id="batteryReferenceSelect"></select>
+        </div>
+        <div class="control-group">
+          <label for="starterFamilySelect">Delco Remy starter family</label>
+          <select id="starterFamilySelect">
+            <option value="50MT">50MT</option>
+            <option value="37MT">37MT</option>
+            <option value="40MT">40MT</option>
+            <option value="41MT">41MT</option>
+            <option value="42MT">42MT</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="engineering-grid">
+        <article class="engineering-card"><span class="value-role declared">Declared system value</span><strong>12 V</strong><small>Generic lab architecture</small></article>
+        <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engBatteryCca">—</strong><small id="engBatteryCcaLabel">Battery CCA</small></article>
+        <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engBatteryCa">—</strong><small>Battery CA at 32°F</small></article>
+        <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engBatteryRc">—</strong><small>Reserve capacity</small></article>
+        <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engBatteryAh">—</strong><small>20-hour capacity when published</small></article>
+        <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engStarterTestCurrent">—</strong><small>Delco cable-test current</small></article>
+        <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engStarterDropLimit">—</strong><small>Total cable voltage-loss limit</small></article>
+        <article class="engineering-card result"><span class="value-role calculated">Calculated value</span><strong id="engCableResistanceLimit">—</strong><small>Equivalent total cable resistance at cited test load</small></article>
+      </div>
+      <p class="engineering-formula" id="startingEngineeringFormula"></p>
+    </section>
+
     <section class="workspace">
       <div class="diagram-card">
         <div class="diagram-heading">
@@ -89,7 +129,7 @@
 
     <section class="boundary">
       <h2>Evidence boundary</h2>
-      <p>This project-authored template teaches general circuit relationships only. Exact starter architecture, cable routing, protection, terminal designations, voltage-drop limits, procedures, and specifications must come from authoritative vehicle-specific service information.</p>
+      <p>This project-authored template teaches general circuit relationships. The Interstate battery ratings and Delco Remy starter/cable limits shown above are source-specific reference records with their own applicability. Selecting them together does not establish product compatibility and does not replace authoritative vehicle-specific service information for actual wiring, procedures, limits, or component selection.</p>
     </section>
   </main>
 
@@ -103,6 +143,11 @@
   <script src="/src/symbols/registry.js"></script>
   <script src="/src/symbols/svg-renderer.js"></script>
   <script src="/src/symbols/index.js"></script>
+  <script src="/src/engineering/contracts.js"></script>
+  <script src="/src/engineering/profiles.js"></script>
+  <script src="/src/engineering/calculator.js"></script>
+  <script src="/src/engineering/specifications.js"></script>
+  <script src="/src/engineering/index.js"></script>
   <script src="./starting-system-lab.js"></script>
 </body>
 </html>
