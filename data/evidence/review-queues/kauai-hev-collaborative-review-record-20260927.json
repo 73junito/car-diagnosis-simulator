@@ -266,7 +266,8 @@
     "Unsupported evidence remains unavailable, not comparable, or not yet determined rather than being inferred."
   ],
   "next_gate_requirements": [
-    "Resolve licensor-authority and third-party-material provenance before any rights-cleared decision.",
+    "Preserve framework-reference-only use and independently author AutoLearnPro expression.",
+    "Resolve licensor-authority and third-party-material provenance before any direct-content rights-cleared decision.",
     "Named human technical reviewer and timestamp for technical currency and applicability.",
     "Named human safety reviewer and timestamp for safety-sensitive learner use.",
     "Only after required gates are complete may candidate evidence chunks be created or approved."
@@ -277,14 +278,28 @@
     "decision": "pending-third-party-and-licensor-authority-verification",
     "user_selection": "Option 2",
     "rights_cleared": false,
-    "notes": "Package-level CC BY 4.0 license remains candidate evidence only until licensor authority and third-party-material provenance are verified.",
+    "notes": "Kauai materials may be used as framework/reference inspiration only. Direct reuse of expressive source content remains blocked unless separately cleared; licensor authority and third-party provenance remain unresolved.",
     "reviewer_id": "rafael-rodriguez",
-    "status": "pending-third-party",
+    "status": "framework-reference-only",
     "release_effect": "none",
     "required_before_clearance": [
       "verify licensor authority for the package-level license statement",
       "verify third-party-material provenance and reuse rights",
       "document the evidence supporting any later rights-cleared decision"
-    ]
+    ],
+    "framework_policy": {
+      "classification": "framework-reference-only / original-expression-required",
+      "permitted_use": [
+        "study course organization, module sequence, topic categories, learning progression, and general instructional framework",
+        "use those structural ideas as inspiration for independently authored AutoLearnPro curriculum"
+      ],
+      "prohibited_without_separate_clearance": [
+        "copying syllabus prose or explanations",
+        "copying assignments, diagrams, tables, unique descriptions, or substantial expressive passages",
+        "ingesting or chunking Kauai source text as reusable instructional content"
+      ],
+      "authorship_requirement": "AutoLearnPro must independently author course text, module descriptions, learning objectives, lesson content, assessments, and instructional materials.",
+      "direct_content_reuse": "blocked-unless-separately-cleared"
+    }
   }
 }
