@@ -30,6 +30,11 @@ function validateComparablePair(baseline, observed) {
   if (baseline.quantityType !== observed.quantityType || baseline.unit !== observed.unit) {
     return { valid:false, errors:["quantity type and unit must match"] };
   }
+  const baselineDomain = baseline.electricalDomain?.voltageSystemId || null;
+  const observedDomain = observed.electricalDomain?.voltageSystemId || null;
+  if (baselineDomain && observedDomain && baselineDomain !== observedDomain) {
+    return { valid:false, errors:["electrical voltage domain must match"] };
+  }
   return { valid:true, errors:[] };
 }
 
