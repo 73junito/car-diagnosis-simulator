@@ -161,6 +161,28 @@ python engineering/python/generate_starting_voltage_drop_model.py
 npm run validate:starting-voltage-drop-model
 ```
 
+## Charging-system applicability validation
+
+Charging-system work adds a stricter source-applicability gate rather than inventing a new charging voltage-drop model.
+
+The existing source catalog contains distinct 12 V charging references, including:
+
+- 0.300 V as a new-vehicle cable-sizing design basis;
+- 0.500 V as a life-of-vehicle maximum cable-drop basis;
+- 0.200 V maximum specifically for a 3-wire charging-system #2 lead.
+
+A new `evaluateSpecificationApplicability` function checks all constraints declared by the selected source reference before authoritative comparison. Constrained fields include system, system voltage, test method, wiring configuration, conductor, and starter family when applicable.
+
+This produces the intended charging behavior:
+
+- exact 12 V / 3-wire / #2 lead context -> the 0.200 V maximum may be applied;
+- alternator-ground fault -> the #2 lead reference is `not_comparable`;
+- missing wiring/conductor context -> the constrained reference is not applicable;
+- open charging path -> authoritative numeric comparison is `not_comparable`;
+- the 0.300 V new-vehicle design-basis value remains `reference_only`, not a pass/fail limit.
+
+Catalog discovery remains intentionally broad. Strict applicability is enforced only when a source record is actually used for interpretation.
+
 ## Next boundary
 
-The next model should exercise charging-system applicability, especially cases where a valid source-backed charging reference must not be applied to a fault or conductor outside that reference's stated scope. Simulator output must not bypass evidence role, applicability, domain, or comparability validation.
+After charging applicability is protected, the next engineering phase should validate multi-voltage domain isolation so low-voltage and higher-voltage model outputs cannot be compared across incompatible electrical domains.
