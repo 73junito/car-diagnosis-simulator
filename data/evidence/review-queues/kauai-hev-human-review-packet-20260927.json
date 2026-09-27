@@ -1,0 +1,146 @@
+{
+  "source_id": "kauai-cc-dol-auto-green-tech-package",
+  "packet_id": "kauai-hev-human-review-packet-20260927",
+  "stage": "human-rights-technical-safety-review-required",
+  "created_at": "2026-09-27",
+  "policy": {
+    "advances_approval_gates": false,
+    "creates_chunks": false,
+    "ingests_content": false,
+    "lesson_mapping_status": "proposed-only",
+    "question_generation_allowed": false,
+    "reviewer_identity_required_for_decision": true
+  },
+  "package": {
+    "artifact_filename": "DOL Auto Green Tech (1).zip",
+    "artifact_sha256": "526b0ee09127a9372d7c884fd12d03780c0bef5a09ca4798d54a50b5c883d609",
+    "license_candidate": "CC BY 4.0",
+    "license_file": "License.txt",
+    "license_file_sha256": "477f7356d8ebd51420a8e2bdb28f6bda3cc600793d396f3c478d03e0dedcbd39",
+    "provenance": "Kauaʻi Community College HEV curriculum archive; current college catalog/program pages corroborate AMT 171/172/173 sequence",
+    "rights_status": "candidate-only-pending-human-package-scope-and-third-party-review"
+  },
+  "reviewer_fields": {
+    "rights_reviewer": null,
+    "rights_reviewed_at": null,
+    "technical_reviewer": null,
+    "technical_reviewed_at": null,
+    "safety_reviewer": null,
+    "safety_reviewed_at": null,
+    "overall_decision": "pending"
+  },
+  "files": [
+    {
+      "review_id": "kauai-amt171-hv-safety",
+      "role": "high-voltage-electrical-safety",
+      "path": "Certificates/HEV I - Intro to HEV Technology Certificate of Training/AMT 171/171.2 High Voltage Electrical Safety/171.2a High Voltage Electrical Safety LP.docx",
+      "sha256": "82e328b622879afb5aaebd0e5defc149e140a8920883eb3c80276d63c82ce2e9",
+      "embedded_media_count": 0,
+      "observed_topics": [
+        "high-voltage electrical safety",
+        "voltage-level terminology",
+        "electrical shock",
+        "test equipment",
+        "personal protective equipment",
+        "multimeters",
+        "insulation testers"
+      ],
+      "candidate_reuse_boundary": {
+        "conceptual_topics_only": [
+          "importance of high-voltage safety",
+          "need to distinguish voltage domains",
+          "need to use equipment appropriate to the system under test",
+          "need to use vehicle-specific service information before locating or disabling high-voltage components"
+        ],
+        "blocked_pending_review": [
+          "one-hand-rule instruction as learner procedure",
+          "specific glove-class suitability claims",
+          "specific high-voltage cable-color identification rule",
+          "specific meter category selection guidance",
+          "insulation-test procedure",
+          "service-plug procedure",
+          "coded task statements"
+        ]
+      },
+      "human_review_questions": {
+        "rights": [
+          "Does the package-level CC BY 4.0 license apply to this exact lesson-plan text?",
+          "Does any statement derive from separately controlled standards, manufacturer service information, or other third-party material?"
+        ],
+        "technical": [
+          "Are the voltage-domain terms current and appropriate for the intended HEV/EV curriculum?",
+          "Are the conceptual safety statements still technically accurate across contemporary vehicle architectures?"
+        ],
+        "safety": [
+          "Which statements may be used as conceptual instruction only?",
+          "Which statements require vehicle-specific service information, equipment ratings, PPE requirements, or institutional safety policy before learner use?"
+        ]
+      },
+      "proposed_curriculum_alignment": [
+        "AUT 250 Hybrid & Electric Vehicle Technology",
+        "AET 550 Electric & Hybrid Vehicle Systems"
+      ],
+      "decision": "pending"
+    },
+    {
+      "review_id": "kauai-amt171-dc-dc",
+      "role": "dc-dc-converter",
+      "path": "Certificates/HEV I - Intro to HEV Technology Certificate of Training/AMT 171/171.4 Familiarization of HV Systems/171.4c DC-DC Converters/171.4c DC-DC Converters LP.docx",
+      "sha256": "7ed292b6b2c405b17f6652358bf0645a89c8bedb6e739f1a0ef927c4f3c4f75e",
+      "embedded_media_count": 0,
+      "observed_topics": [
+        "buck and boost converter concepts",
+        "switching-converter circuits",
+        "PWM switching",
+        "transformer windings",
+        "full-wave rectification",
+        "output filtering",
+        "12-volt output circuit"
+      ],
+      "candidate_reuse_boundary": {
+        "conceptual_topics_only": [
+          "primary purpose of a DC-DC converter",
+          "difference between step-down and step-up conversion",
+          "switching-converter building blocks",
+          "relationship between high-voltage energy storage and low-voltage vehicle loads"
+        ],
+        "blocked_pending_review": [
+          "component-location claims",
+          "claims that a DC-DC converter replaces specific traditional-vehicle components",
+          "wiring-diagram procedure",
+          "12-volt output test procedure",
+          "specific voltage expectations",
+          "safety procedure around energized converter circuits"
+        ]
+      },
+      "human_review_questions": {
+        "rights": [
+          "Does the package-level CC BY 4.0 license apply to this exact lesson-plan text?",
+          "Are any topology descriptions or task statements derived from separately controlled technical material?"
+        ],
+        "technical": [
+          "Are the converter-topology descriptions sufficiently general for modern HEV/EV architectures?",
+          "Should bidirectional conversion, galvanic isolation, or integrated power electronics be added to avoid presenting an outdated universal model?"
+        ],
+        "safety": [
+          "Which converter concepts are safe for classroom explanation without procedure?",
+          "Which measurements require explicit de-energization, isolation, PPE, equipment-rating, or vehicle-specific procedural prerequisites?"
+        ]
+      },
+      "proposed_curriculum_alignment": [
+        "AUT 250 Hybrid & Electric Vehicle Technology",
+        "AUT 210 Advanced Electrical & Electronics",
+        "AET 550 Electric & Hybrid Vehicle Systems"
+      ],
+      "decision": "pending"
+    }
+  ],
+  "decision_rules": [
+    "No rights decision may be inferred from package-level license presence alone.",
+    "No technical approval may be inferred from curriculum provenance or historical course use.",
+    "No safety-sensitive procedure may become learner instruction without explicit technical and safety review.",
+    "No chunk may be created or approved until rights and technical gates are complete.",
+    "Reviewer name and timestamp are required for every human decision.",
+    "Vehicle-specific procedures and limits must remain subordinate to applicable service information."
+  ]
+}
