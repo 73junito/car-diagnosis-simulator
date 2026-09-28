@@ -122,6 +122,35 @@ test.describe('Expanded lesson plans', () => {
     expect(pageErrors).toEqual([]);
   });
 
+  test('renders all original AUT-250 instructional visuals without placeholders', async ({ page }) => {
+    const pageErrors = collectPageErrors(page);
+
+    await page.goto('/lesson-plans/#ug-hev-foundations');
+    await expect(page.locator('html')).toHaveAttribute('data-aut250-modules', 'loaded');
+
+    const plan = page.locator('#ug-hev-foundations');
+    const modules = plan.locator('[data-course-module]');
+    await expect(modules).toHaveCount(6);
+
+    for (let index = 0; index < 6; index += 1) {
+      const module = modules.nth(index);
+      await module.getByText('Planned visuals').click();
+      await expect(module.locator('.module-visual-grid > article')).toHaveCount(3);
+    }
+
+    await expect(plan.locator('.module-svg')).toHaveCount(8);
+    await expect(plan.locator('.module-data-table')).toHaveCount(6);
+    await expect(plan.locator('.boundary-visual')).toHaveCount(1);
+    await expect(plan.locator('.timeline-visual')).toHaveCount(1);
+    await expect(plan.locator('.visual-placeholder')).toHaveCount(0);
+
+    await expect(plan.locator('.module-svg').first()).toHaveAttribute('role', 'img');
+    await expect(plan.locator('.module-data-table').first()).toHaveAttribute('aria-label', /battery/i);
+    await expect(plan.getByText('Request → Measure → Compare → Correlate → Verify')).toBeVisible();
+
+    expect(pageErrors).toEqual([]);
+  });
+
   test('links every pathway course to its expanded lesson plan', async ({ page }) => {
     const pageErrors = collectPageErrors(page);
 
