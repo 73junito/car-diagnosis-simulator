@@ -38,6 +38,80 @@ function approvalIsValid(approval) {
   ].every(Boolean);
 }
 
+
+function renderEvidenceDrawer(approval, module) {
+  const prereq = approval?.prerequisite_state || {};
+  const effect = approval?.approval_effect_if_confirmed || {};
+  const release = approval?.release_state || {};
+  const limitations = approval?.limitations || [];
+  const questionMetadata = (module.trainingQuestions || []).map((question) => ({
+    id: question.id,
+    topic: question.topic,
+    authorship: question.authorship,
+    deliveryMode: question.deliveryMode,
+    scored: question.scored,
+    highStakesEligible: question.highStakesEligible
+  }));
+
+  return `
+    <section class="evidence-drawer-section">
+      <h3>Training authorization</h3>
+      <dl class="evidence-fact-grid">
+        <div><dt>Training status</dt><dd>${escapeHtml(release.training_bank_final_approval)}</dd></div>
+        <div><dt>Citation representation</dt><dd>${escapeHtml(prereq.citation_representation)}</dd></div>
+        <div><dt>Deterministic validation</dt><dd>${escapeHtml(prereq.deterministic_metadata_validation)}</dd></div>
+        <div><dt>Validated questions</dt><dd>${escapeHtml(prereq.deterministic_questions_valid)} / ${escapeHtml(approval.question_count)}</dd></div>
+      </dl>
+      <p class="evidence-drawer-note">Metadata-only citation validation does not claim excerpt verification, source-text hash verification, or source-rights clearance.</p>
+    </section>
+
+    <section class="evidence-drawer-section">
+      <h3>Human review gates</h3>
+      <p>${prereq.human_reviews_complete ? "Complete" : "Incomplete"}: ${(prereq.required_human_roles || []).map((role)=>escapeHtml(role)).join(" · ")}</p>
+    </section>
+
+    <section class="evidence-drawer-section">
+      <h3>Module safety & evidence boundary</h3>
+      <p>${escapeHtml(module.safetyAndEvidenceBoundary || "No module boundary supplied.")}</p>
+    </section>
+
+    <section class="evidence-drawer-section">
+      <h3>Question metadata</h3>
+      <div class="evidence-question-list">
+        ${questionMetadata.map((item)=>`
+          <article>
+            <code>${escapeHtml(item.id)}</code>
+            <strong>${escapeHtml(String(item.topic || "").replace(/-/g," "))}</strong>
+            <span>${escapeHtml(item.authorship)} · ${escapeHtml(item.deliveryMode)} · non-scored · not high-stakes eligible</span>
+          </article>`).join("")}
+      </div>
+      <p class="evidence-drawer-note">Answer keys are intentionally not shown in this instructor/evidence summary.</p>
+    </section>
+
+    <section class="evidence-drawer-section">
+      <h3>Approval limitations</h3>
+      <ul>${limitations.map((item)=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
+      <p><strong>Assessment API eligible:</strong> ${effect.production_assessment_api_eligible === false ? "No" : "Unexpected state"}</p>
+    </section>
+
+    <p><a href="/lesson-plans/#ug-hev-foundations">Open full curriculum view</a></p>`;
+}
+
+function initEvidenceDrawer(approval, module) {
+  const drawer = document.querySelector("[data-evidence-drawer]");
+  const content = document.querySelector("[data-evidence-drawer-content]");
+  content.innerHTML = renderEvidenceDrawer(approval, module);
+
+  document.querySelector("[data-evidence-drawer-open]").addEventListener("click", () => {
+    if (typeof drawer.showModal === "function") drawer.showModal();
+    else drawer.setAttribute("open", "");
+  });
+  document.querySelector("[data-evidence-drawer-close]").addEventListener("click", () => {
+    if (typeof drawer.close === "function") drawer.close();
+    else drawer.removeAttribute("open");
+  });
+}
+
 function moduleIdFromUrl() {
   return new URLSearchParams(window.location.search).get("module") || "aut250-m1-battery-systems";
 }
@@ -111,6 +185,7 @@ async function init() {
     document.querySelector("[data-player-eyebrow]").textContent = `AUT-250 · MODULE ${String(module.sequence).padStart(2, "0")} · FORMATIVE TRAINING`;
     document.querySelector("[data-player-title]").textContent = module.title;
     document.querySelector("[data-player-objective]").textContent = module.moduleObjectives?.[0] || "";
+    initEvidenceDrawer(approval, module);
 
     const visualGrid = document.querySelector("[data-module-visual-grid]");
     visualGrid.innerHTML = renderModuleVisuals(module.visuals || []);
