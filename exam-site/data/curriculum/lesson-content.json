@@ -3818,7 +3818,17 @@
         "questionApprovalEffect": "none",
         "citationReviewBatch": "aut250-training-batch-001",
         "reviewTrigger": "20-question threshold reached; run fresh bulk citation/provenance validation before any approval transition",
-        "assessmentBoundary": "These items are training-only drafts. They are not served by the approved assessment API and must not be promoted to approved or scored assessment without separate provenance, citation, technical, instructional, and safety review."
+        "assessmentBoundary": "These items are training-only drafts. They are not served by the approved assessment API and must not be promoted to approved or scored assessment without separate provenance, citation, technical, instructional, and safety review.",
+        "bulkReview": {
+          "reviewId": "aut250-training-batch-001-review-20260927",
+          "reviewArtifact": "data/evidence/review-queues/aut250-training-question-bulk-review-20260927.json",
+          "status": "completed-with-holds",
+          "candidateSupported": 14,
+          "holdForStrongerEvidence": 6,
+          "approved": 0,
+          "citationValidated": 0,
+          "nextGate": "Resolve six evidence holds, then perform deterministic citation validation and named human technical/instructional/safety review before any approval transition."
+        }
       }
     }
   ]
