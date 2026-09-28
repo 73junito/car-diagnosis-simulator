@@ -31,7 +31,7 @@ describe('AUT-250 human review gate package', () => {
     expect(rights.limitations).toEqual(expect.arrayContaining([
       expect.stringMatching(/metadata/i),
       expect.stringMatching(/Do not ingest/i),
-      expect.stringMatching(/must not be represented as excerpt verification/i)
+      expect.stringMatching(/Do not represent metadata-only citation evidence as excerpt verification/i)
     ]));
 
     for (const role of ['technical', 'instructional', 'safety']) {
