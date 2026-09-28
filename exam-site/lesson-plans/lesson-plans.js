@@ -427,6 +427,11 @@ function renderCourseModules(modules = [], releaseGate = { approved: false }) {
           <p class="eyebrow">Learner course sequence</p>
           <h4 id="aut250-module-title">AUT-250 follow-on modules</h4>
           <p>Work through the six modules in sequence. Completion markers are stored only in this browser and do not represent scored assessment or institutional credit.</p>
+          <p class="program-context" data-training-release-status>
+            ${releaseGate.approved
+              ? "Training bank: approved for formative training use · non-scored"
+              : "Training bank: unavailable — final approval gate not satisfied"}
+          </p>
         </div>
         <div class="module-progress" aria-live="polite">
           <strong><span data-module-complete-count>0</span> / ${modules.length}</strong>
