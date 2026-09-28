@@ -134,6 +134,20 @@ for (const item of architecture.catalogDevelopmentMappings || []) {
   mappedLessons.add(item.existingLessonPlanId);
 }
 
+
+const seenCatalogCrosswalks = new Set();
+for (const item of architecture.catalogCourseCrosswalks || []) {
+  assert(catalogById.has(item.catalogCourseId),
+    "Unknown catalog crosswalk course " + item.catalogCourseId);
+  assert(developedUndergraduateById.has(item.existingCourseId),
+    "Unknown crosswalk developed course " + item.existingCourseId);
+  assert(lessonIds.has(item.existingLessonPlanId),
+    "Unknown crosswalk lesson " + item.existingLessonPlanId);
+  assert(!seenCatalogCrosswalks.has(item.catalogCourseId),
+    "Catalog crosswalk duplicated " + item.catalogCourseId);
+  seenCatalogCrosswalks.add(item.catalogCourseId);
+}
+
 assert(mappedLessons.size === lessons.length,
   "Expected all " + lessons.length + " existing lessons to be classified, found " + mappedLessons.size);
 

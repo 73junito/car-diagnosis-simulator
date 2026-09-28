@@ -6,7 +6,8 @@ const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
 const policy = readJson("data/curriculum/content-policy.json");
 const lessons = readJson("data/curriculum/lesson-plans.json").lessonPlans;
 const contentDoc = readJson("data/curriculum/lesson-content.json");
-const plans = contentDoc.lessonContentPlans;
+const extensionDoc = readJson("data/curriculum/lesson-content-extensions.json");
+const plans = [...contentDoc.lessonContentPlans, ...extensionDoc.lessonContentPlans];
 const programArchitecture = readJson("data/curriculum/program-architecture.json");
 const catalogCourses = readJson("data/curriculum/course-catalog.json").courses;
 const catalogById = new Map(catalogCourses.map((course) => [course.id, course]));
@@ -27,7 +28,7 @@ for (const program of programArchitecture.programs || []) {
     expectedProgramMappings.set(course.existingLessonPlanId, {
       programId: program.id,
       relationship: "course",
-      programCourseId: course.id,
+      programCourseId: course.legacyProgramCourseId || course.id,
       programCourseTitle: course.title,
       mappingType: course.mappingType || "direct-course-alignment"
     });
@@ -60,6 +61,7 @@ for (const mapping of programArchitecture.catalogDevelopmentMappings || []) {
 
 assert(policy.schemaVersion === "1.0.0", "Unsupported content policy schemaVersion");
 assert(contentDoc.schemaVersion === "1.2.0", "Expanded lesson content must use schemaVersion 1.2.0");
+assert(extensionDoc.schemaVersion === "1.2.0", "Lesson content extensions must use schemaVersion 1.2.0");
 assert(policy.coreRules.length >= 20, "Content policy must contain the full core rule set");
 assert(policy.visualTypes.length === 7, "Content policy must define exactly seven visual types");
 assert(policy.lessonStructure.length >= 10, "Canonical lesson structure is incomplete");

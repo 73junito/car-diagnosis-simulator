@@ -11,36 +11,6 @@
       "existingCourseId": "aut-101",
       "existingLessonPlanId": "ug-aut101-foundations",
       "mappingType": "canonical-catalog-course"
-    },
-    {
-      "catalogCourseId": "aut-120",
-      "mappingType": "catalog-crosswalk",
-      "existingCourseId": "electrical-1",
-      "existingLessonPlanId": "ug-electrical-charging-system"
-    },
-    {
-      "catalogCourseId": "aut-140",
-      "mappingType": "catalog-crosswalk",
-      "existingCourseId": "brakes-1",
-      "existingLessonPlanId": "ug-brakes-foundations"
-    },
-    {
-      "catalogCourseId": "aut-210",
-      "mappingType": "catalog-crosswalk",
-      "existingCourseId": "engine-performance-1",
-      "existingLessonPlanId": "ug-engine-performance-foundations"
-    },
-    {
-      "catalogCourseId": "aut-150",
-      "mappingType": "catalog-crosswalk",
-      "existingCourseId": "suspension-steering-1",
-      "existingLessonPlanId": "ug-suspension-steering-foundations"
-    },
-    {
-      "catalogCourseId": "aut-330",
-      "mappingType": "legacy-training-crosswalk",
-      "existingCourseId": "hybrid-electric-vehicle-technology",
-      "existingLessonPlanId": "ug-hev-foundations"
     }
   ],
   "authorityReferences": [
@@ -150,7 +120,10 @@
           "status": "verified-kansas-common-course",
           "prerequisites": [
             "AAS-AUT-101"
-          ]
+          ],
+          "legacyProgramCourseId": "AUT-110",
+          "existingCourseId": "brakes-1",
+          "existingLessonPlanId": "ug-brakes-foundations"
         },
         {
           "id": "AAS-AUT-120",
@@ -160,7 +133,10 @@
           "status": "verified-kansas-common-course",
           "prerequisites": [
             "AAS-AUT-101"
-          ]
+          ],
+          "legacyProgramCourseId": "AUT-120",
+          "existingCourseId": "electrical-1",
+          "existingLessonPlanId": "ug-electrical-charging-system"
         },
         {
           "id": "AAS-AUT-130",
@@ -170,7 +146,10 @@
           "status": "verified-kansas-common-course",
           "prerequisites": [
             "AAS-AUT-120"
-          ]
+          ],
+          "legacyProgramCourseId": "AUT-130",
+          "existingCourseId": "engine-performance-1",
+          "existingLessonPlanId": "ug-engine-performance-foundations"
         },
         {
           "id": "AAS-AUT-140",
@@ -180,7 +159,10 @@
           "status": "verified-kansas-common-course",
           "prerequisites": [
             "AAS-AUT-101"
-          ]
+          ],
+          "legacyProgramCourseId": "AUT-140",
+          "existingCourseId": "suspension-steering-1",
+          "existingLessonPlanId": "ug-suspension-steering-foundations"
         },
         {
           "id": "AAS-AUT-201",
@@ -252,7 +234,10 @@
           "prerequisites": [
             "AAS-AUT-210",
             "AAS-AUT-220"
-          ]
+          ],
+          "legacyProgramCourseId": "AUT-250",
+          "existingCourseId": "hybrid-electric-vehicle-technology",
+          "existingLessonPlanId": "ug-hev-foundations"
         },
         {
           "id": "AAS-AUT-260",
@@ -476,6 +461,38 @@
           "reason": "Valuable graduate leadership content, but not part of the proposed Automotive Engineering Technology 30-credit core."
         }
       ]
+    }
+  ],
+  "catalogCourseCrosswalks": [
+    {
+      "catalogCourseId": "aut-120",
+      "existingCourseId": "electrical-1",
+      "existingLessonPlanId": "ug-electrical-charging-system",
+      "mappingType": "catalog-crosswalk"
+    },
+    {
+      "catalogCourseId": "aut-140",
+      "existingCourseId": "brakes-1",
+      "existingLessonPlanId": "ug-brakes-foundations",
+      "mappingType": "catalog-crosswalk"
+    },
+    {
+      "catalogCourseId": "aut-210",
+      "existingCourseId": "engine-performance-1",
+      "existingLessonPlanId": "ug-engine-performance-foundations",
+      "mappingType": "catalog-crosswalk"
+    },
+    {
+      "catalogCourseId": "aut-150",
+      "existingCourseId": "suspension-steering-1",
+      "existingLessonPlanId": "ug-suspension-steering-foundations",
+      "mappingType": "catalog-crosswalk"
+    },
+    {
+      "catalogCourseId": "aut-330",
+      "existingCourseId": "hybrid-electric-vehicle-technology",
+      "existingLessonPlanId": "ug-hev-foundations",
+      "mappingType": "legacy-training-crosswalk"
     }
   ]
 }

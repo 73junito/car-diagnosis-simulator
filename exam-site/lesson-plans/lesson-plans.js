@@ -682,12 +682,17 @@ function renderGroup(targetId, level, plans, lessons, courses, releaseGate) {
 }
 async function init() {
   try {
-    const [contentDoc, lessonDoc, undergraduateDoc, graduateDoc] = await Promise.all([
+    const [contentDoc, extensionDoc, lessonDoc, undergraduateDoc, graduateDoc] = await Promise.all([
       loadJson("lesson-content.json"),
+      loadJson("lesson-content-extensions.json"),
       loadJson("lesson-plans.json"),
       loadJson("undergraduate-courses.json"),
       loadJson("graduate-courses.json")
     ]);
+    contentDoc.lessonContentPlans = [
+      ...(contentDoc.lessonContentPlans || []),
+      ...(extensionDoc.lessonContentPlans || [])
+    ];
 
     let trainingReleaseGate;
     try {
