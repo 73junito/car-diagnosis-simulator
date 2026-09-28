@@ -16,7 +16,7 @@ describe('AUT-250 human review gate package', () => {
     expect(pkg.current_state.release_eligible).toBe(false);
   });
 
-  test('requires four human review roles and records rights plus technical gates only', () => {
+  test('requires four human review roles and records rights, technical, and instructional gates only', () => {
     const roles = ['rights', 'technical', 'instructional', 'safety'];
     expect(Object.keys(pkg.reviewer_requirements).sort()).toEqual(roles.sort());
 
@@ -45,16 +45,30 @@ describe('AUT-250 human review gate package', () => {
       expect.stringMatching(/does not approve citations/i)
     ]));
 
-    for (const role of ['instructional', 'safety']) {
-      const review = pkg.reviewer_requirements[role];
-      expect(review.required).toBe(true);
-      expect(review.reviewer_name).toBeNull();
-      expect(review.reviewer_id).toBeNull();
-      expect(review.qualification_reference).toBeNull();
-      expect(review.reviewed_at).toBeNull();
-      expect(review.decision).toBe('pending');
-      expect(Object.values(review.checklist).every((value) => value === false)).toBe(true);
-    }
+    const instructional = pkg.reviewer_requirements.instructional;
+    expect(instructional.required).toBe(true);
+    expect(instructional.reviewer_name).toBe('Rafael Rodriguez');
+    expect(instructional.reviewer_id).toBe('rafael-rodriguez');
+    expect(instructional.qualification_reference).toMatch(/post-secondary automotive instructor/i);
+    expect(instructional.reviewed_at).toBe('2026-09-27');
+    expect(instructional.decision).toBe('pass-with-limitations');
+    expect(Object.values(instructional.checklist).every(Boolean)).toBe(true);
+    expect(instructional.limitations).toEqual(expect.arrayContaining([
+      expect.stringMatching(/formative training questions/i),
+      expect.stringMatching(/reasoning, uncertainty, evidence correlation/i),
+      expect.stringMatching(/Distractors must not normalize unsafe service shortcuts/i),
+      expect.stringMatching(/analytics must not substitute for technical or safety review/i),
+      expect.stringMatching(/does not approve rights, citations, safety/i)
+    ]));
+
+    const safety = pkg.reviewer_requirements.safety;
+    expect(safety.required).toBe(true);
+    expect(safety.reviewer_name).toBeNull();
+    expect(safety.reviewer_id).toBeNull();
+    expect(safety.qualification_reference).toBeNull();
+    expect(safety.reviewed_at).toBeNull();
+    expect(safety.decision).toBe('pending');
+    expect(Object.values(safety.checklist).every((value) => value === false)).toBe(true);
   });
 
   test('keeps citation evidence options explicit without selecting one', () => {
