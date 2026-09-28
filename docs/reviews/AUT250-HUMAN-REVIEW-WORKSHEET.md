@@ -102,11 +102,10 @@ Use the existing `citation-validator-1.0` unchanged. Only excerpts with an affir
 ### Option B — Metadata-only citation proof
 Use the separate `scripts/validate-aut250-metadata-citations.js` preflight to verify source identity, DOI/URL syntax, bibliographic metadata, per-question source linkage, candidate-support status, and human-gate state without storing copyrighted excerpts. This preflight does not claim excerpt or source-text hash validation and does not write production citation validation records.
 
-Confirmed option: ____________________  
-Decision reviewer(s): ____________________  
-Decision date: ____________________  
-Rationale:  
-____________________________________________________________
+Confirmed option: **Option B — Metadata-only citation proof**  
+Decision reviewer(s): Rafael Rodriguez  
+Decision date: 2026-09-27  
+Rationale: AUT-250 evidence remains metadata/link-only; no affirmative rights basis has been established for storing copyrighted source excerpts; the separate metadata-only validator preserves `citation-validator-1.0` semantics and avoids false excerpt/hash verification claims.
 
 ## Final release gate
 
