@@ -1,6 +1,22 @@
 const MODELS = {
-  "Battery-system functional architecture": { kind:"nodes", items:["Cells / Modules","Sensors","Protection","Control","Switching","Thermal"] },
-  "Measured, calculated, commanded, and inferred battery data": { kind:"table", headers:["Evidence type","Examples","Meaning"], rows:[["Measured","Voltage, current, temperature","Observed data"],["Calculated","State of charge, state of health","Model-derived estimate"],["Commanded","Contactor or cooling request","Control intent"],["Inferred","Possible condition","Diagnostic hypothesis"]] },
+  "Battery-system functional architecture": {
+    kind:"architecture",
+    primary:["Cells / Modules","Sensors","Control","Switching"],
+    crossCutting:[
+      ["Protection","Protection influences switching and system response"],
+      ["Thermal","Thermal conditions influence control and protection"]
+    ]
+  },
+  "Measured, calculated, commanded, and inferred battery data": {
+    kind:"table",
+    headers:["Evidence type","Examples","Meaning","Diagnostic caution"],
+    rows:[
+      ["Measured","Voltage, current, temperature","Observed data","Verify measurement quality and operating context"],
+      ["Calculated","State of charge, state of health","Model-derived estimate","Depends on model assumptions and input data"],
+      ["Commanded","Contactor or cooling request","Control intent","Shows requested behavior, not actual response"],
+      ["Inferred","Possible condition","Diagnostic hypothesis","Treat as a hypothesis, not failure proof"]
+    ]
+  },
   "Battery evidence-to-next-check reasoning": { kind:"steps", items:["Preserve evidence","Classify data","Compare context","Correlate systems","Choose next check"] },
 
   "DC source, inverter, electric machine, and low-voltage support": { kind:"lanes", rows:[["DC energy source","Inverter","Electric machine"],["DC energy source","DC-DC converter","Low-voltage system"]] },
@@ -51,12 +67,37 @@ function esc(value) {
     .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
 
+function slug(value) {
+  return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+}
+
 function steps(model) {
-  return `<ol class="module-visual-steps">${model.items.map((item,index)=>`<li><span>${String(index+1).padStart(2,"0")}</span><strong>${esc(item)}</strong></li>`).join("")}</ol>`;
+  return `<ol class="module-visual-steps">${model.items.map((item,index)=>`
+    <li data-visual-reasoning-step="${esc(slug(item))}">
+      <span>${String(index+1).padStart(2,"0")}</span><strong>${esc(item)}</strong>
+      ${index < model.items.length - 1 ? '<b class="module-visual-step-arrow" aria-hidden="true">→</b>' : ""}
+    </li>`).join("")}</ol>`;
 }
 
 function nodes(model) {
   return `<div class="module-visual-node-map" role="img" aria-label="Functional relationship diagram">${model.items.map((item,index)=>`<div class="module-visual-node"><span>${String(index+1).padStart(2,"0")}</span><strong>${esc(item)}</strong></div>`).join("")}</div>`;
+}
+
+function architecture(model) {
+  return `
+    <div class="module-visual-architecture" role="img" aria-label="Battery functional architecture showing primary flow and cross-cutting influences">
+      <div class="module-architecture-primary">
+        ${model.primary.map((item,index)=>`
+          <div class="module-architecture-step">
+            <strong>${esc(item)}</strong>
+            ${index < model.primary.length - 1 ? '<span class="module-architecture-arrow" aria-hidden="true">→</span>' : ""}
+          </div>`).join("")}
+      </div>
+      <div class="module-architecture-cross">
+        ${model.crossCutting.map(([name,description])=>`
+          <article><strong>${esc(name)}</strong><span aria-hidden="true">↗</span><small>${esc(description)}</small></article>`).join("")}
+      </div>
+    </div>`;
 }
 
 function lanes(model) {
@@ -83,6 +124,7 @@ function renderModel(model, title) {
   if (!model) return '<p class="module-visual-missing">Visual model unavailable.</p>';
   if (model.kind === "steps") return steps(model);
   if (model.kind === "nodes") return nodes(model);
+  if (model.kind === "architecture") return architecture(model);
   if (model.kind === "lanes") return lanes(model);
   if (model.kind === "table") return table(model,title);
   if (model.kind === "boundary") return boundary(model);
@@ -103,3 +145,13 @@ export function renderModuleVisuals(visuals = []) {
 }
 
 export const AUT250_VISUAL_TITLES = Object.freeze(Object.keys(MODELS));
+
+
+export function setModuleVisualReasoningStep(step) {
+  document.querySelectorAll("[data-visual-reasoning-step]").forEach((item) => {
+    const active = item.dataset.visualReasoningStep === step;
+    item.classList.toggle("is-active", active);
+    if (active) item.setAttribute("aria-current", "step");
+    else item.removeAttribute("aria-current");
+  });
+}
