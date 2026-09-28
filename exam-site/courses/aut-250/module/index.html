@@ -28,11 +28,11 @@
           <strong>Request → Measure → Compare → Correlate → Verify</strong>
         </div>
         <ol class="diagnostic-reasoning-strip">
-          <li><span>01</span><strong>Request</strong><small>Define the concern or requested state.</small></li>
-          <li><span>02</span><strong>Measure</strong><small>Collect relevant observations and data.</small></li>
-          <li><span>03</span><strong>Compare</strong><small>Use applicable authoritative information.</small></li>
-          <li><span>04</span><strong>Correlate</strong><small>Relate evidence across systems and context.</small></li>
-          <li><span>05</span><strong>Verify</strong><small>Confirm the conclusion under relevant conditions.</small></li>
+          <li data-reasoning-step="request"><span>01</span><strong>Request</strong><small>Define the concern or requested state.</small></li>
+          <li data-reasoning-step="measure"><span>02</span><strong>Measure</strong><small>Collect relevant observations and data.</small></li>
+          <li data-reasoning-step="compare"><span>03</span><strong>Compare</strong><small>Use applicable authoritative information.</small></li>
+          <li data-reasoning-step="correlate"><span>04</span><strong>Correlate</strong><small>Relate evidence across systems and context.</small></li>
+          <li data-reasoning-step="verify"><span>05</span><strong>Verify</strong><small>Confirm the conclusion under relevant conditions.</small></li>
         </ol>
       </div>
     </section>
@@ -43,6 +43,12 @@
       <p data-player-objective></p>
       <div class="aut250-player-boundary">Approved for formative training use · non-scored · not eligible for institutional or high-stakes assessment.</div>
       <button type="button" class="button secondary-button aut250-evidence-open" data-evidence-drawer-open hidden>Evidence &amp; instructor details</button>
+    </section>
+
+    <section class="aut250-learning-summary" data-learning-summary hidden aria-labelledby="learning-summary-title">
+      <p class="eyebrow">WHAT YOU WILL LEARN</p>
+      <h2 id="learning-summary-title">Module learning focus</h2>
+      <ul data-learning-objectives></ul>
     </section>
 
     <div id="player-gate-blocked" class="training-release-blocked" role="status" hidden>
@@ -68,12 +74,17 @@
       <article class="aut250-player-card" data-question-card>
         <p class="eyebrow" data-question-topic>TRAINING QUESTION</p>
         <h2 data-question-stem></h2>
-        <div class="aut250-player-options" data-question-options role="radiogroup"></div>
+        <div class="aut250-question-context">
+          <span>Reasoning focus</span>
+          <strong data-question-reasoning-focus>Measure</strong>
+          <small data-question-attempt-status>Not attempted</small>
+        </div>
+        <div class="aut250-player-options" data-question-options role="radiogroup" aria-label="Answer choices"></div>
         <div class="aut250-player-actions">
-          <button type="button" class="button primary" data-submit-answer>Check answer</button>
+          <button type="button" class="button primary" data-submit-answer disabled>Check answer</button>
           <button type="button" class="button secondary-button" data-retry-answer hidden>Retry</button>
         </div>
-        <div class="aut250-player-feedback" data-question-feedback aria-live="polite"></div>
+        <div class="aut250-player-feedback" data-question-feedback role="status" aria-live="polite"></div>
       </article>
 
       <div class="aut250-player-nav">
