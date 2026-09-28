@@ -215,3 +215,5 @@ button:focus-visible{outline:3px solid #2f6f61;outline-offset:3px}
   .aut250-player-option{border:0!important;padding:.25rem 0!important}
   a[href]::after{content:"";display:none}
 }
+
+.aut250-player-shell [hidden],.course-dashboard-hero [hidden],#course-gate-blocked[hidden]{display:none!important}
