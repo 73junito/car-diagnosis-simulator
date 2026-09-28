@@ -208,7 +208,7 @@ function renderQuestion(state) {
   setActiveReasoningStep(step);
 
   document.querySelector("[data-question-position]").textContent =
-    `Question ${state.index + 1} of ${state.questions.length}`;
+    `Module ${String(state.module.sequence).padStart(2, "0")} · Question ${state.index + 1} of ${state.questions.length}`;
   document.querySelector("[data-question-progress]").style.width =
     `${((state.index + 1) / state.questions.length) * 100}%`;
   document.querySelector("[data-question-topic]").textContent =
@@ -291,6 +291,61 @@ function retryAnswer() {
   if (first) first.focus();
 }
 
+function uniqueReasoningSteps(questions, progress) {
+  const attempted = new Set(progress.attemptedQuestionIds || []);
+  return [...new Set(
+    questions
+      .filter((question) => attempted.has(question.id))
+      .map((question) => reasoningStepForQuestion(question))
+  )];
+}
+
+function showModuleCompletion(state) {
+  const section = document.querySelector("[data-module-completion]");
+  const questionIds = state.questions.map((question) => question.id);
+  const attemptedCount = questionIds.filter((id) => state.progress.attemptedQuestionIds.includes(id)).length;
+  const feedbackCount = questionIds.filter((id) => state.progress.feedbackViewedQuestionIds.includes(id)).length;
+  const complete = state.progress.completed === true;
+  const steps = uniqueReasoningSteps(state.questions, state.progress);
+  const firstIncomplete = state.questions.findIndex((question) =>
+    !state.progress.attemptedQuestionIds.includes(question.id) ||
+    !state.progress.feedbackViewedQuestionIds.includes(question.id)
+  );
+
+  document.querySelector("[data-question-player]").hidden = true;
+  section.hidden = false;
+
+  document.querySelector("[data-module-completion-title]").textContent =
+    complete ? `Module ${String(state.module.sequence).padStart(2, "0")} complete` : "Module still in progress";
+  document.querySelector("[data-module-completion-message]").textContent =
+    complete
+      ? "You attempted every formative question and viewed the feedback for this module."
+      : "Some formative questions still need an attempt and feedback review before this module is complete.";
+  document.querySelector("[data-completion-attempted]").textContent = `${attemptedCount} / ${state.questions.length}`;
+  document.querySelector("[data-completion-feedback]").textContent = `${feedbackCount} / ${state.questions.length}`;
+  document.querySelector("[data-completion-status]").textContent = complete ? "Complete" : "In progress";
+  document.querySelector("[data-completion-reasoning]").textContent =
+    steps.length ? steps.map((step) => step.charAt(0).toUpperCase() + step.slice(1)).join(" · ") : "No reasoning steps recorded yet";
+
+  const review = document.querySelector("[data-review-module]");
+  review.href = `/courses/aut-250/module/?module=${encodeURIComponent(state.module.id)}&question=1`;
+
+  const next = document.querySelector("[data-continue-module]");
+  if (complete && state.nextModule) {
+    next.textContent = `Continue to Module ${String(state.nextModule.sequence).padStart(2, "0")}`;
+    next.href = `/courses/aut-250/module/?module=${encodeURIComponent(state.nextModule.id)}&question=1`;
+  } else if (complete) {
+    next.textContent = "Return to AUT-250 dashboard";
+    next.href = "/courses/aut-250/";
+  } else {
+    next.textContent = "Continue incomplete questions";
+    next.href = `/courses/aut-250/module/?module=${encodeURIComponent(state.module.id)}&question=${Math.max(firstIncomplete + 1, 1)}`;
+  }
+
+  section.scrollIntoView({ behavior: "smooth", block: "start" });
+  section.focus?.({ preventScroll: true });
+}
+
 async function init() {
   try {
     const [approval, curriculum] = await Promise.all([loadJson(APPROVAL_URL), loadJson(CURRICULUM_URL)]);
@@ -325,8 +380,10 @@ async function init() {
     const storedProgress = readProgress();
     const saved = moduleProgress(storedProgress, module.id);
     const requestedIndex = requestedQuestionIndex(questions.length);
+    const moduleIndex = plan.courseModules.findIndex((item) => item.id === module.id);
     const state = {
       module,
+      nextModule: moduleIndex >= 0 ? plan.courseModules[moduleIndex + 1] || null : null,
       questions,
       progress: saved,
       index: requestedIndex ?? Math.min(saved.currentQuestionIndex, questions.length - 1)
@@ -367,7 +424,7 @@ async function init() {
           ...progress,
           currentQuestionIndex: state.index
         }));
-        window.location.href = "/courses/aut-250/";
+        showModuleCompletion(state);
       }
     });
   } catch (error) {
