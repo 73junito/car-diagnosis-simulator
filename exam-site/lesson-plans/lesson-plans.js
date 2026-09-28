@@ -107,6 +107,143 @@ function renderVisuals(visuals) {
   ).join("");
 }
 
+function renderCourseModules(modules = []) {
+  if (!modules.length) return "";
+
+  return `
+    <section class="course-module-experience" aria-labelledby="aut250-module-title">
+      <div class="course-module-intro">
+        <div>
+          <p class="eyebrow">Learner course sequence</p>
+          <h4 id="aut250-module-title">AUT-250 follow-on modules</h4>
+          <p>Work through the six modules in sequence. Completion markers are stored only in this browser and do not represent scored assessment or institutional credit.</p>
+        </div>
+        <div class="module-progress" aria-live="polite">
+          <strong><span data-module-complete-count>0</span> / ${modules.length}</strong>
+          <span>modules completed</span>
+        </div>
+      </div>
+
+      <nav class="module-jump-nav" aria-label="AUT-250 module navigation">
+        ${modules.map((module) => `
+          <a href="#${escapeHtml(module.id)}">
+            <span>${String(module.sequence).padStart(2, "0")}</span>
+            ${escapeHtml(module.title)}
+          </a>`).join("")}
+      </nav>
+
+      <div class="course-module-list">
+        ${modules.map((module) => `
+          <article class="course-module-card" id="${escapeHtml(module.id)}" data-course-module="${escapeHtml(module.id)}">
+            <header class="course-module-head">
+              <div>
+                <p class="module-kicker">Module ${String(module.sequence).padStart(2, "0")} · ${escapeHtml(String(module.estimatedMinutes))} MIN</p>
+                <h5>${escapeHtml(module.title)}</h5>
+              </div>
+              <button type="button" class="module-complete-toggle" data-module-complete-toggle="${escapeHtml(module.id)}" aria-pressed="false">
+                Mark complete
+              </button>
+            </header>
+
+            <details open>
+              <summary>Module objectives</summary>
+              ${list(module.moduleObjectives || [], "module-objective-list")}
+            </details>
+
+            <details>
+              <summary>Lessons</summary>
+              <div class="module-lesson-list">
+                ${(module.lessons || []).map((lesson, lessonIndex) => `
+                  <article class="module-lesson">
+                    <span>Lesson ${module.sequence}.${lessonIndex + 1}</span>
+                    <h6>${escapeHtml(lesson.title)}</h6>
+                    <p>${escapeHtml(lesson.text)}</p>
+                    <p class="learner-action"><strong>Learner task:</strong> ${escapeHtml(lesson.learnerAction)}</p>
+                    <p class="source-boundary"><strong>Evidence boundary:</strong> ${escapeHtml(lesson.evidenceBoundary)}</p>
+                  </article>`).join("")}
+              </div>
+            </details>
+
+            <details>
+              <summary>Practice and assessment activities</summary>
+              <div class="expanded-plan-overview module-activity-grid">
+                <div><strong>Practice</strong>${list(module.practice || [])}</div>
+                <div><strong>Assessment activities</strong>${list(module.assessments || [])}</div>
+              </div>
+            </details>
+
+            <details>
+              <summary>Planned visuals</summary>
+              <div class="module-visual-grid">
+                ${(module.visuals || []).map((visual) => `
+                  <article>
+                    <span>${escapeHtml(titleCase(visual.type))}</span>
+                    <h6>${escapeHtml(visual.title)}</h6>
+                    <p>Original AutoLearnPro instructional visual planned for this module.</p>
+                  </article>`).join("")}
+              </div>
+            </details>
+
+            <div class="module-safety-boundary">
+              <strong>Safety and evidence boundary</strong>
+              <p>${escapeHtml(module.safetyAndEvidenceBoundary)}</p>
+            </div>
+          </article>`).join("")}
+      </div>
+    </section>`;
+}
+
+function initModuleProgress() {
+  const modules = [...document.querySelectorAll("[data-course-module]")];
+  if (!modules.length) return;
+
+  const storageKey = "autolearnpro:aut250:completed-modules";
+  let completed = [];
+  try {
+    completed = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    if (!Array.isArray(completed)) completed = [];
+  } catch {
+    completed = [];
+  }
+
+  const update = () => {
+    const completedSet = new Set(completed);
+    for (const module of modules) {
+      const id = module.dataset.courseModule;
+      const button = module.querySelector("[data-module-complete-toggle]");
+      const isComplete = completedSet.has(id);
+      module.dataset.completed = isComplete ? "true" : "false";
+      if (button) {
+        button.setAttribute("aria-pressed", String(isComplete));
+        button.textContent = isComplete ? "Completed" : "Mark complete";
+      }
+    }
+
+    document.querySelectorAll("[data-module-complete-count]")
+      .forEach((node) => { node.textContent = String(completedSet.size); });
+
+    try {
+      localStorage.setItem(storageKey, JSON.stringify([...completedSet]));
+    } catch {
+      // Local progress is optional; the course remains usable without storage.
+    }
+  };
+
+  document.querySelectorAll("[data-module-complete-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id = button.dataset.moduleCompleteToggle;
+      const set = new Set(completed);
+      if (set.has(id)) set.delete(id);
+      else set.add(id);
+      completed = [...set];
+      update();
+    });
+  });
+
+  update();
+  document.documentElement.dataset.aut250Modules = "loaded";
+}
+
 function renderProgramMapping(mapping) {
   if (mapping.relationship === "course") {
     return `Program mapping: ${escapeHtml(mapping.programCourseId)} · ${escapeHtml(mapping.programCourseTitle)} · ${escapeHtml(titleCase(mapping.mappingType))}`;
@@ -156,6 +293,8 @@ function renderPlan(plan, lesson, course) {
           <div><strong>Assessment plan</strong>${list(plan.assessmentPlan)}</div>
         </div>
       </details>
+
+      ${renderCourseModules(plan.courseModules)}
 
       <details>
         <summary>Evidence focus and boundaries</summary>
@@ -216,6 +355,7 @@ async function init() {
       courses
     );
 
+    initModuleProgress();
     document.documentElement.dataset.lessonPlans = "loaded";
   } catch (error) {
     console.error(error);
