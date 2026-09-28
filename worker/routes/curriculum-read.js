@@ -6,8 +6,8 @@
  *
  * Contract:
  * - The response mirrors the static data/curriculum/* JSON contract exactly
- *   ({ schemaVersion, pathways, courses, competencies, lessonPlans,
- *   scenarioMappings }) so consumers validated against the static source can
+ *   ({ schemaVersion, pathways, courses, catalogCourses, competencies,
+ *   lessonPlans, scenarioMappings }) so consumers validated against the static source can
  *   swap to this endpoint without shape changes.
  * - Read-only: explicit column lists only (never all columns), no writes.
  * - Fail-closed: missing configuration, query errors, or broken referential
@@ -29,6 +29,7 @@ const SELECTS = {
   pathways: 'id, academic_level, status',
   programs: 'id, pathway_id, academic_level, cip_code, program_name, cip_title, status',
   courses: 'id, program_id, academic_level, cip_code, title, status',
+  catalogCourses: 'id, code, academic_level, classification, degree_program, cip_code, category, credits, prerequisites, description, status, url, canonical_url, source_file, source_basis, delivery',
   competencies: 'id, course_id, academic_level, statement, status',
   lessonPlans: 'id, course_id, competency_id, academic_level, title, status',
   lessonSteps: 'lesson_plan_id, position, step_text',
@@ -69,6 +70,7 @@ export async function handleCurriculumRead(c) {
       pathways,
       programs,
       courses,
+      catalogCourses,
       competencies,
       lessonPlans,
       lessonSteps,
@@ -77,6 +79,7 @@ export async function handleCurriculumRead(c) {
       selectRows(supabase, 'curriculum_pathways', SELECTS.pathways, 'id'),
       selectRows(supabase, 'curriculum_programs', SELECTS.programs, 'id'),
       selectRows(supabase, 'curriculum_courses', SELECTS.courses, 'id'),
+      selectRows(supabase, 'curriculum_catalog_courses', SELECTS.catalogCourses, 'code'),
       selectRows(supabase, 'curriculum_competencies', SELECTS.competencies, 'id'),
       selectRows(supabase, 'curriculum_lesson_plans', SELECTS.lessonPlans, 'id'),
       selectRows(supabase, 'curriculum_lesson_steps', SELECTS.lessonSteps, 'position'),
@@ -112,6 +115,31 @@ export async function handleCurriculumRead(c) {
       title: course.title,
       status: course.status
     }))
+
+    const payloadCatalogCourses = catalogCourses.map((course) => {
+      const payload = {
+        id: course.id,
+        code: course.code,
+        title: course.title,
+        academicLevel: course.academic_level,
+        classification: course.classification,
+        degreeProgram: course.degree_program,
+        cipCode: course.cip_code,
+        category: course.category,
+        credits: course.credits,
+        prerequisites: course.prerequisites,
+        description: course.description,
+        status: course.status,
+        url: course.url,
+        source: {
+          file: course.source_file,
+          basis: course.source_basis
+        },
+        canonicalUrl: course.canonical_url
+      }
+      if (course.delivery) payload.delivery = course.delivery
+      return payload
+    })
 
     const payloadCompetencies = competencies.map((competency) => ({
       id: competency.id,
@@ -158,6 +186,7 @@ export async function handleCurriculumRead(c) {
         schemaVersion: CURRICULUM_SCHEMA_VERSION,
         pathways: payloadPathways,
         courses: payloadCourses,
+        catalogCourses: payloadCatalogCourses,
         competencies: payloadCompetencies,
         lessonPlans: payloadLessonPlans,
         scenarioMappings: payloadScenarioMappings

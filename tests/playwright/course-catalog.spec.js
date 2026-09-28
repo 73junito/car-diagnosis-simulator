@@ -7,11 +7,21 @@ const catalog = JSON.parse(
 );
 const courses = catalog.courses;
 const examBase = "http://127.0.0.1:3012";
+const apiUrl = "https://app.autolearnpro.com/api/curriculum";
 
 test.describe("academic course catalog", () => {
-  test("catalog renders all 68 unique courses", async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
+    await page.route(apiUrl, (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ schemaVersion: "1.0.0", catalogCourses: courses })
+    }));
+  });
+
+  test("catalog renders all 68 unique courses from the API", async ({ page }) => {
     await page.goto(examBase + "/catalog/");
     await expect(page.locator("html")).toHaveAttribute("data-catalog-status", "loaded");
+    await expect(page.locator("html")).toHaveAttribute("data-catalog-source", "api");
     await expect(page.locator(".catalog-course-card")).toHaveCount(68);
     await expect(page.locator("[data-catalog-count]")).toContainText("68 courses shown");
   });
@@ -26,6 +36,14 @@ test.describe("academic course catalog", () => {
       await expect(page.locator(".catalog-course-code")).toHaveText(course.code);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", course.canonicalUrl);
     }
+  });
+
+  test("falls back to static catalog when the API fails", async ({ page }) => {
+    await page.unroute(apiUrl);
+    await page.route(apiUrl, (route) => route.fulfill({ status: 503, body: "unavailable" }));
+    await page.goto(examBase + "/catalog/");
+    await expect(page.locator("html")).toHaveAttribute("data-catalog-source", "static");
+    await expect(page.locator(".catalog-course-card")).toHaveCount(68);
   });
 
   test("AUT 250 resolves to Diagnostics I and EV training is crosswalked from AUT 330", async ({ page }) => {

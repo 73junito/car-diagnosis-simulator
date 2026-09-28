@@ -37,6 +37,7 @@ assert(aut330 && aut330.delivery && aut330.delivery.trainingUrl === "/courses/au
 for (const route of [
   "exam-site/catalog/index.html",
   "exam-site/catalog/catalog.js",
+  "exam-site/catalog/catalog-data.js",
   "exam-site/catalog/course/index.html",
   "exam-site/catalog/course/course.js"
 ]) assert(fs.existsSync(path.join(root, route)), "Missing route asset " + route);

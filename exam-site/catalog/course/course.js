@@ -1,4 +1,4 @@
-const DATA_URL = "/data/curriculum/course-catalog.json";
+import { loadCatalogCourses } from "../catalog-data.js";
 const root = document.querySelector("[data-course-detail]");
 const escapeHtml = (value) => String(value ?? "")
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
@@ -11,10 +11,9 @@ function normalizedCode(value) {
 async function init() {
   const requested = normalizedCode(new URLSearchParams(location.search).get("course"));
   try {
-    const response = await fetch(DATA_URL, { cache: "no-store" });
-    if (!response.ok) throw new Error("Catalog returned " + response.status);
-    const payload = await response.json();
-    const course = payload.courses.find((item) => normalizedCode(item.code) === requested);
+    const result = await loadCatalogCourses();
+    document.documentElement.dataset.catalogSource = result.source;
+    const course = result.courses.find((item) => normalizedCode(item.code) === requested);
     if (!course) {
       document.title = "Course not found | AutoLearnPro";
       root.innerHTML = '<section class="catalog-detail-card"><p class="eyebrow">COURSE NOT FOUND</p><h1>No catalog course matches this URL.</h1><p>Return to the catalog and choose a listed course.</p><a class="button primary" href="/catalog/">Open course catalog</a></section>';
