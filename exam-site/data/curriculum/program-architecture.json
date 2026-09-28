@@ -203,6 +203,36 @@
       "existingCourseId": "aut-390",
       "existingLessonPlanId": "ug-aut390-connected-sdv",
       "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-400",
+      "existingCourseId": "aut-400",
+      "existingLessonPlanId": "ug-aut400-research-methods",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-410",
+      "existingCourseId": "aut-410",
+      "existingLessonPlanId": "ug-aut410-systems-integration",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-420",
+      "existingCourseId": "aut-420",
+      "existingLessonPlanId": "ug-aut420-internship",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-450",
+      "existingCourseId": "aut-450",
+      "existingLessonPlanId": "ug-aut450-capstone-i",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-451",
+      "existingCourseId": "aut-451",
+      "existingLessonPlanId": "ug-aut451-capstone-ii",
+      "mappingType": "canonical-catalog-course"
     }
   ],
   "authorityReferences": [

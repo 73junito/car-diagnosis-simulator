@@ -8383,6 +8383,1276 @@
         "lesson-summary"
       ],
       "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut400-research-methods",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-400",
+        "catalogCourseCode": "AUT 400",
+        "catalogCourseTitle": "Automotive Technology Research Methods",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop research-method foundations for automotive technology through research questions, literature reviews, experimental design, data collection, analysis, technical writing, and research presentation with clear provenance and evidence boundaries.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "Junior standing and AUT 300",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut400-research-methods-lo-1",
+          "statement": "Explain the major planning, integration, professional, research, or project relationships represented in Automotive Technology Research Methods using the scope defined by the canonical catalog.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut400-research-methods-lo-2",
+          "statement": "Distinguish source evidence, collected evidence, requirements, assumptions, methods, observations, and conclusions when working within automotive technology research methods.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut400-research-methods-lo-3",
+          "statement": "Use documented evidence, applicable requirements, and explicit limitations to justify and communicate a professional next step or project conclusion.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "research questions",
+        "literature reviews",
+        "experimental design",
+        "data collection",
+        "data analysis",
+        "technical writing",
+        "research presentation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut400-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the evidence, planning, professional, and communication outcomes for Automotive Technology Research Methods.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-1",
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ]
+        },
+        {
+          "id": "aut400-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior learning",
+          "description": "Activate relevant prerequisite knowledge while identifying what still requires current evidence, approval, or source verification.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-1"
+          ]
+        },
+        {
+          "id": "aut400-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core project and professional relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Automotive Technology Research Methods.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-1"
+          ]
+        },
+        {
+          "id": "aut400-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Evidence and planning model",
+          "description": "Use a generalized model to connect objectives, evidence, requirements, methods, decisions, and documentation without inventing institution- or workplace-specific requirements.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-1",
+            "ug-aut400-research-methods-lo-2"
+          ]
+        },
+        {
+          "id": "aut400-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "From question or requirement to supported decision",
+          "description": "Demonstrate how an academic or professional task moves from defined purpose through evidence and documented reasoning to a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ]
+        },
+        {
+          "id": "aut400-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence, requirement, and conclusion sorting",
+          "description": "Classify sample statements as source evidence, collected evidence, requirement, assumption, method, observation, limitation, or conclusion.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-2"
+          ]
+        },
+        {
+          "id": "aut400-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized professional application scenario",
+          "description": "Choose and justify an evidence-supported next step while preserving supervision, approval, safety, confidentiality, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ]
+        },
+        {
+          "id": "aut400-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check planning, evidence classification, requirement interpretation, and communication reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-1",
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ]
+        },
+        {
+          "id": "aut400-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ]
+        },
+        {
+          "id": "aut400-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence, approval, and provenance",
+          "description": "Reinforce that institution-, workplace-, project-, legal-, regulatory-, technical-, or safety-dependent requirements require applicable authoritative information or authorized supervision.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ]
+        },
+        {
+          "id": "aut400-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize evidence use, planning, professional boundaries, traceability, limitations, and communication for Automotive Technology Research Methods.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-1",
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut400-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Technology Research Methods relationship model",
+          "purpose": "Show generalized relationships among purpose, evidence, requirements, methods, decisions, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut400-workflow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-decision workflow",
+          "purpose": "Show a generalized sequence from task definition through evidence, review, decision, documentation, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut400-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, requirement, assumption, limitation, and conclusion",
+          "purpose": "Compare information categories and what support is needed before a professional conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut400-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Technology Research Methods professional framework",
+          "purpose": "Summarize planning, evidence, approvals, traceability, verification, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut400-research-methods-lo-1",
+            "ug-aut400-research-methods-lo-2",
+            "ug-aut400-research-methods-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major planning, evidence, or professional relationships in a generalized Automotive Technology Research Methods example",
+        "Sort sample information into evidence, requirement, assumption, method, observation, limitation, or conclusion",
+        "Identify what approval, source, supervision, or technical information is required before a decision is treated as authorized",
+        "Write an evidence-based rationale and documentation plan for a professional next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/requirement classification exercise",
+        "Formative generalized professional scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Research-question development",
+        "Literature and provenance",
+        "Experimental/data methods",
+        "Technical communication"
+      ],
+      "evidenceExpectation": "Academic, technical, workplace, institutional, legal, regulatory, safety, project, and approval-dependent claims require applicable authoritative information, documented supervision, or approved project requirements and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut410-systems-integration",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-410",
+        "catalogCourseCode": "AUT 410",
+        "catalogCourseTitle": "Automotive Systems Integration",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Integrate mechanical, electrical, electronic, software, communication, and energy-system reasoning within modern vehicles using interfaces, dependencies, evidence, and system-level verification.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 310, AUT 320 or AUT 330, and AUT 350",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut410-systems-integration-lo-1",
+          "statement": "Explain the major planning, integration, professional, research, or project relationships represented in Automotive Systems Integration using the scope defined by the canonical catalog.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut410-systems-integration-lo-2",
+          "statement": "Distinguish source evidence, collected evidence, requirements, assumptions, methods, observations, and conclusions when working within automotive systems integration.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut410-systems-integration-lo-3",
+          "statement": "Use documented evidence, applicable requirements, and explicit limitations to justify and communicate a professional next step or project conclusion.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "mechanical systems",
+        "electrical systems",
+        "electronic systems",
+        "software systems",
+        "communication systems",
+        "energy systems",
+        "systems integration"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut410-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the evidence, planning, professional, and communication outcomes for Automotive Systems Integration.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-1",
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ]
+        },
+        {
+          "id": "aut410-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior learning",
+          "description": "Activate relevant prerequisite knowledge while identifying what still requires current evidence, approval, or source verification.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-1"
+          ]
+        },
+        {
+          "id": "aut410-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core project and professional relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Automotive Systems Integration.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-1"
+          ]
+        },
+        {
+          "id": "aut410-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Evidence and planning model",
+          "description": "Use a generalized model to connect objectives, evidence, requirements, methods, decisions, and documentation without inventing institution- or workplace-specific requirements.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-1",
+            "ug-aut410-systems-integration-lo-2"
+          ]
+        },
+        {
+          "id": "aut410-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "From question or requirement to supported decision",
+          "description": "Demonstrate how an academic or professional task moves from defined purpose through evidence and documented reasoning to a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ]
+        },
+        {
+          "id": "aut410-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence, requirement, and conclusion sorting",
+          "description": "Classify sample statements as source evidence, collected evidence, requirement, assumption, method, observation, limitation, or conclusion.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-2"
+          ]
+        },
+        {
+          "id": "aut410-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized professional application scenario",
+          "description": "Choose and justify an evidence-supported next step while preserving supervision, approval, safety, confidentiality, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ]
+        },
+        {
+          "id": "aut410-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check planning, evidence classification, requirement interpretation, and communication reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-1",
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ]
+        },
+        {
+          "id": "aut410-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ]
+        },
+        {
+          "id": "aut410-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence, approval, and provenance",
+          "description": "Reinforce that institution-, workplace-, project-, legal-, regulatory-, technical-, or safety-dependent requirements require applicable authoritative information or authorized supervision.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ]
+        },
+        {
+          "id": "aut410-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize evidence use, planning, professional boundaries, traceability, limitations, and communication for Automotive Systems Integration.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-1",
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut410-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Systems Integration relationship model",
+          "purpose": "Show generalized relationships among purpose, evidence, requirements, methods, decisions, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut410-workflow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-decision workflow",
+          "purpose": "Show a generalized sequence from task definition through evidence, review, decision, documentation, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut410-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, requirement, assumption, limitation, and conclusion",
+          "purpose": "Compare information categories and what support is needed before a professional conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut410-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Systems Integration professional framework",
+          "purpose": "Summarize planning, evidence, approvals, traceability, verification, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut410-systems-integration-lo-1",
+            "ug-aut410-systems-integration-lo-2",
+            "ug-aut410-systems-integration-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major planning, evidence, or professional relationships in a generalized Automotive Systems Integration example",
+        "Sort sample information into evidence, requirement, assumption, method, observation, limitation, or conclusion",
+        "Identify what approval, source, supervision, or technical information is required before a decision is treated as authorized",
+        "Write an evidence-based rationale and documentation plan for a professional next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/requirement classification exercise",
+        "Formative generalized professional scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Cross-domain integration",
+        "Interfaces and dependencies",
+        "System-level evidence",
+        "Architecture and verification"
+      ],
+      "evidenceExpectation": "Academic, technical, workplace, institutional, legal, regulatory, safety, project, and approval-dependent claims require applicable authoritative information, documented supervision, or approved project requirements and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut420-internship",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-420",
+        "catalogCourseCode": "AUT 420",
+        "catalogCourseTitle": "Automotive Technology Internship",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Prepare learners to organize supervised professional experience in automotive technology, diagnostics, research, manufacturing, fleet operations, or related settings through goals, professional documentation, evidence of learning, and reflective practice.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "Senior standing and department approval",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut420-internship-lo-1",
+          "statement": "Explain the major planning, integration, professional, research, or project relationships represented in Automotive Technology Internship using the scope defined by the canonical catalog.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut420-internship-lo-2",
+          "statement": "Distinguish source evidence, collected evidence, requirements, assumptions, methods, observations, and conclusions when working within automotive technology internship.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut420-internship-lo-3",
+          "statement": "Use documented evidence, applicable requirements, and explicit limitations to justify and communicate a professional next step or project conclusion.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "supervised professional experience",
+        "professional goals",
+        "workplace communication",
+        "documentation",
+        "evidence of learning",
+        "reflection",
+        "professional boundaries"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut420-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the evidence, planning, professional, and communication outcomes for Automotive Technology Internship.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-1",
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ]
+        },
+        {
+          "id": "aut420-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior learning",
+          "description": "Activate relevant prerequisite knowledge while identifying what still requires current evidence, approval, or source verification.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-1"
+          ]
+        },
+        {
+          "id": "aut420-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core project and professional relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Automotive Technology Internship.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-1"
+          ]
+        },
+        {
+          "id": "aut420-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Evidence and planning model",
+          "description": "Use a generalized model to connect objectives, evidence, requirements, methods, decisions, and documentation without inventing institution- or workplace-specific requirements.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-1",
+            "ug-aut420-internship-lo-2"
+          ]
+        },
+        {
+          "id": "aut420-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "From question or requirement to supported decision",
+          "description": "Demonstrate how an academic or professional task moves from defined purpose through evidence and documented reasoning to a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ]
+        },
+        {
+          "id": "aut420-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence, requirement, and conclusion sorting",
+          "description": "Classify sample statements as source evidence, collected evidence, requirement, assumption, method, observation, limitation, or conclusion.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-2"
+          ]
+        },
+        {
+          "id": "aut420-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized professional application scenario",
+          "description": "Choose and justify an evidence-supported next step while preserving supervision, approval, safety, confidentiality, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ]
+        },
+        {
+          "id": "aut420-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check planning, evidence classification, requirement interpretation, and communication reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-1",
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ]
+        },
+        {
+          "id": "aut420-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ]
+        },
+        {
+          "id": "aut420-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence, approval, and provenance",
+          "description": "Reinforce that institution-, workplace-, project-, legal-, regulatory-, technical-, or safety-dependent requirements require applicable authoritative information or authorized supervision.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ]
+        },
+        {
+          "id": "aut420-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize evidence use, planning, professional boundaries, traceability, limitations, and communication for Automotive Technology Internship.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-1",
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut420-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Technology Internship relationship model",
+          "purpose": "Show generalized relationships among purpose, evidence, requirements, methods, decisions, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut420-workflow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-decision workflow",
+          "purpose": "Show a generalized sequence from task definition through evidence, review, decision, documentation, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut420-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, requirement, assumption, limitation, and conclusion",
+          "purpose": "Compare information categories and what support is needed before a professional conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut420-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Technology Internship professional framework",
+          "purpose": "Summarize planning, evidence, approvals, traceability, verification, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut420-internship-lo-1",
+            "ug-aut420-internship-lo-2",
+            "ug-aut420-internship-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major planning, evidence, or professional relationships in a generalized Automotive Technology Internship example",
+        "Sort sample information into evidence, requirement, assumption, method, observation, limitation, or conclusion",
+        "Identify what approval, source, supervision, or technical information is required before a decision is treated as authorized",
+        "Write an evidence-based rationale and documentation plan for a professional next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/requirement classification exercise",
+        "Formative generalized professional scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Professional experience",
+        "Learning evidence",
+        "Workplace documentation",
+        "Reflection and authorization boundaries"
+      ],
+      "evidenceExpectation": "Academic, technical, workplace, institutional, legal, regulatory, safety, project, and approval-dependent claims require applicable authoritative information, documented supervision, or approved project requirements and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut450-capstone-i",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-450",
+        "catalogCourseCode": "AUT 450",
+        "catalogCourseTitle": "Automotive Technology Capstone I",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop the planning phase of a comprehensive automotive technology project through problem definition, research, requirements, methodology, evidence planning, risk identification, and project organization.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 400 and senior standing",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut450-capstone-i-lo-1",
+          "statement": "Explain the major planning, integration, professional, research, or project relationships represented in Automotive Technology Capstone I using the scope defined by the canonical catalog.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut450-capstone-i-lo-2",
+          "statement": "Distinguish source evidence, collected evidence, requirements, assumptions, methods, observations, and conclusions when working within automotive technology capstone i.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut450-capstone-i-lo-3",
+          "statement": "Use documented evidence, applicable requirements, and explicit limitations to justify and communicate a professional next step or project conclusion.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "problem definition",
+        "research",
+        "requirements",
+        "methodology",
+        "project planning",
+        "evidence planning",
+        "risk and constraints"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut450-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the evidence, planning, professional, and communication outcomes for Automotive Technology Capstone I.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-1",
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ]
+        },
+        {
+          "id": "aut450-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior learning",
+          "description": "Activate relevant prerequisite knowledge while identifying what still requires current evidence, approval, or source verification.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-1"
+          ]
+        },
+        {
+          "id": "aut450-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core project and professional relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Automotive Technology Capstone I.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-1"
+          ]
+        },
+        {
+          "id": "aut450-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Evidence and planning model",
+          "description": "Use a generalized model to connect objectives, evidence, requirements, methods, decisions, and documentation without inventing institution- or workplace-specific requirements.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-1",
+            "ug-aut450-capstone-i-lo-2"
+          ]
+        },
+        {
+          "id": "aut450-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "From question or requirement to supported decision",
+          "description": "Demonstrate how an academic or professional task moves from defined purpose through evidence and documented reasoning to a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ]
+        },
+        {
+          "id": "aut450-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence, requirement, and conclusion sorting",
+          "description": "Classify sample statements as source evidence, collected evidence, requirement, assumption, method, observation, limitation, or conclusion.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-2"
+          ]
+        },
+        {
+          "id": "aut450-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized professional application scenario",
+          "description": "Choose and justify an evidence-supported next step while preserving supervision, approval, safety, confidentiality, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ]
+        },
+        {
+          "id": "aut450-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check planning, evidence classification, requirement interpretation, and communication reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-1",
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ]
+        },
+        {
+          "id": "aut450-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ]
+        },
+        {
+          "id": "aut450-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence, approval, and provenance",
+          "description": "Reinforce that institution-, workplace-, project-, legal-, regulatory-, technical-, or safety-dependent requirements require applicable authoritative information or authorized supervision.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ]
+        },
+        {
+          "id": "aut450-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize evidence use, planning, professional boundaries, traceability, limitations, and communication for Automotive Technology Capstone I.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-1",
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut450-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Technology Capstone I relationship model",
+          "purpose": "Show generalized relationships among purpose, evidence, requirements, methods, decisions, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut450-workflow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-decision workflow",
+          "purpose": "Show a generalized sequence from task definition through evidence, review, decision, documentation, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut450-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, requirement, assumption, limitation, and conclusion",
+          "purpose": "Compare information categories and what support is needed before a professional conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut450-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Technology Capstone I professional framework",
+          "purpose": "Summarize planning, evidence, approvals, traceability, verification, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut450-capstone-i-lo-1",
+            "ug-aut450-capstone-i-lo-2",
+            "ug-aut450-capstone-i-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major planning, evidence, or professional relationships in a generalized Automotive Technology Capstone I example",
+        "Sort sample information into evidence, requirement, assumption, method, observation, limitation, or conclusion",
+        "Identify what approval, source, supervision, or technical information is required before a decision is treated as authorized",
+        "Write an evidence-based rationale and documentation plan for a professional next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/requirement classification exercise",
+        "Formative generalized professional scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Capstone problem definition",
+        "Requirements and methodology",
+        "Evidence/verification planning",
+        "Project risk and traceability"
+      ],
+      "evidenceExpectation": "Academic, technical, workplace, institutional, legal, regulatory, safety, project, and approval-dependent claims require applicable authoritative information, documented supervision, or approved project requirements and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut451-capstone-ii",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-451",
+        "catalogCourseCode": "AUT 451",
+        "catalogCourseTitle": "Automotive Technology Capstone II",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Complete an applied automotive technology project through implementation or execution, testing, evidence review, documentation, limitations analysis, and professional presentation without overstating results beyond the collected evidence.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 450",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut451-capstone-ii-lo-1",
+          "statement": "Explain the major planning, integration, professional, research, or project relationships represented in Automotive Technology Capstone II using the scope defined by the canonical catalog.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut451-capstone-ii-lo-2",
+          "statement": "Distinguish source evidence, collected evidence, requirements, assumptions, methods, observations, and conclusions when working within automotive technology capstone ii.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut451-capstone-ii-lo-3",
+          "statement": "Use documented evidence, applicable requirements, and explicit limitations to justify and communicate a professional next step or project conclusion.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "project completion",
+        "testing",
+        "verification",
+        "technical documentation",
+        "results analysis",
+        "limitations",
+        "professional presentation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut451-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the evidence, planning, professional, and communication outcomes for Automotive Technology Capstone II.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-1",
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ]
+        },
+        {
+          "id": "aut451-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior learning",
+          "description": "Activate relevant prerequisite knowledge while identifying what still requires current evidence, approval, or source verification.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-1"
+          ]
+        },
+        {
+          "id": "aut451-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core project and professional relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Automotive Technology Capstone II.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-1"
+          ]
+        },
+        {
+          "id": "aut451-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Evidence and planning model",
+          "description": "Use a generalized model to connect objectives, evidence, requirements, methods, decisions, and documentation without inventing institution- or workplace-specific requirements.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-1",
+            "ug-aut451-capstone-ii-lo-2"
+          ]
+        },
+        {
+          "id": "aut451-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "From question or requirement to supported decision",
+          "description": "Demonstrate how an academic or professional task moves from defined purpose through evidence and documented reasoning to a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ]
+        },
+        {
+          "id": "aut451-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence, requirement, and conclusion sorting",
+          "description": "Classify sample statements as source evidence, collected evidence, requirement, assumption, method, observation, limitation, or conclusion.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-2"
+          ]
+        },
+        {
+          "id": "aut451-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized professional application scenario",
+          "description": "Choose and justify an evidence-supported next step while preserving supervision, approval, safety, confidentiality, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ]
+        },
+        {
+          "id": "aut451-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check planning, evidence classification, requirement interpretation, and communication reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-1",
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ]
+        },
+        {
+          "id": "aut451-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ]
+        },
+        {
+          "id": "aut451-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Evidence, approval, and provenance",
+          "description": "Reinforce that institution-, workplace-, project-, legal-, regulatory-, technical-, or safety-dependent requirements require applicable authoritative information or authorized supervision.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ]
+        },
+        {
+          "id": "aut451-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize evidence use, planning, professional boundaries, traceability, limitations, and communication for Automotive Technology Capstone II.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-1",
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut451-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Technology Capstone II relationship model",
+          "purpose": "Show generalized relationships among purpose, evidence, requirements, methods, decisions, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut451-workflow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-decision workflow",
+          "purpose": "Show a generalized sequence from task definition through evidence, review, decision, documentation, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut451-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, requirement, assumption, limitation, and conclusion",
+          "purpose": "Compare information categories and what support is needed before a professional conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut451-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Technology Capstone II professional framework",
+          "purpose": "Summarize planning, evidence, approvals, traceability, verification, and communication.",
+          "supportsObjectiveIds": [
+            "ug-aut451-capstone-ii-lo-1",
+            "ug-aut451-capstone-ii-lo-2",
+            "ug-aut451-capstone-ii-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major planning, evidence, or professional relationships in a generalized Automotive Technology Capstone II example",
+        "Sort sample information into evidence, requirement, assumption, method, observation, limitation, or conclusion",
+        "Identify what approval, source, supervision, or technical information is required before a decision is treated as authorized",
+        "Write an evidence-based rationale and documentation plan for a professional next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/requirement classification exercise",
+        "Formative generalized professional scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Project execution",
+        "Testing and verification",
+        "Technical documentation",
+        "Evidence-based conclusions and presentation"
+      ],
+      "evidenceExpectation": "Academic, technical, workplace, institutional, legal, regulatory, safety, project, and approval-dependent claims require applicable authoritative information, documented supervision, or approved project requirements and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
     }
   ]
 }

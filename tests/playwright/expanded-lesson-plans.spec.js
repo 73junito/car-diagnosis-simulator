@@ -15,14 +15,14 @@ test.describe('Expanded lesson plans', () => {
     await page.goto('/lesson-plans/');
     await expect(page.locator('html')).toHaveAttribute('data-lesson-plans', 'loaded');
 
-    await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(38);
+    await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(43);
     await expect(page.locator('#graduate-plan-list .expanded-plan')).toHaveCount(5);
-    await expect(page.locator('.expanded-plan')).toHaveCount(43);
-    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(43);
+    await expect(page.locator('.expanded-plan')).toHaveCount(48);
+    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(48);
 
-    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(130);
-    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(475);
-    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(174);
+    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(145);
+    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(530);
+    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(194);
 
     expect(pageErrors).toEqual([]);
   });
@@ -184,6 +184,39 @@ test.describe('Expanded lesson plans', () => {
     const cybersecurity = page.locator('#ug-aut380-cybersecurity');
     await expect(cybersecurity).toContainText('authorized');
     await expect(cybersecurity).toContainText('defensive');
+
+    expect(pageErrors).toEqual([]);
+  });
+
+
+  test('renders the AUT 400-451 undergraduate completion batch with planned non-scored boundaries', async ({ page }) => {
+    const pageErrors = collectPageErrors(page);
+    const batch = [
+      'ug-aut400-research-methods',
+      'ug-aut410-systems-integration',
+      'ug-aut420-internship',
+      'ug-aut450-capstone-i',
+      'ug-aut451-capstone-ii'
+    ];
+
+    await page.goto('/lesson-plans/');
+    for (const id of batch) {
+      const plan = page.locator('#' + id);
+      await expect(plan, id).toBeVisible();
+      await expect(plan.locator('.objective-list > li'), id + ' objectives').toHaveCount(3);
+      await plan.getByText('Instructional sequence').click();
+      await expect(plan.locator('.instruction-block-list > li'), id + ' blocks').toHaveCount(11);
+      await plan.getByText('Planned visuals').click();
+      await expect(plan.locator('.lesson-visual-grid > article'), id + ' visuals').toHaveCount(4);
+      await plan.getByText('Evidence focus and boundaries').click();
+      await expect(plan.getByText(/Scored assessment remains a separate approval state/i), id + ' assessment boundary').toBeVisible();
+      await expect(plan.getByText(/must not be invented/i), id + ' evidence boundary').toBeVisible();
+    }
+
+    await expect(page.locator('#ug-aut420-internship')).toContainText('supervised');
+    await expect(page.locator('#ug-aut420-internship')).toContainText('authorization');
+    await expect(page.locator('#ug-aut450-capstone-i')).toContainText('requirements');
+    await expect(page.locator('#ug-aut451-capstone-ii')).toContainText('limitations');
 
     expect(pageErrors).toEqual([]);
   });
@@ -351,7 +384,7 @@ test.describe('Expanded lesson plans', () => {
     const pageErrors = collectPageErrors(page);
 
     await page.goto('/learning-path/');
-    await expect(page.locator('.lesson-detail-link')).toHaveCount(43);
+    await expect(page.locator('.lesson-detail-link')).toHaveCount(48);
 
     const electrical = page.locator('#electrical-1');
     await electrical.locator('summary').click();

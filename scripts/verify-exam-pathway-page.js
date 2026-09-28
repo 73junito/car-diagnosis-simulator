@@ -61,7 +61,7 @@ async function verify() {
   const undergradCount = await page.locator("#undergraduate-content .course-grid article").count();
   const graduateCount = await page.locator("#graduate-content .graduate-grid article").count();
 
-  assert(undergradCount === 38, `Expected 38 undergraduate courses, found ${undergradCount}`);
+  assert(undergradCount === 43, `Expected 43 undergraduate courses, found ${undergradCount}`);
   assert(graduateCount === 5, `Expected 5 graduate courses, found ${graduateCount}`);
 
   const body = await page.locator("body").innerText();
