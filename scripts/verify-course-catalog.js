@@ -23,6 +23,7 @@ for (const course of courses) {
   assert(/^aut-\d{3}$/.test(course.id), "Invalid course id " + course.id);
   assert(/^AUT \d{3}$/.test(course.code), "Invalid course code " + course.code);
   assert(course.title && course.credits && course.prerequisites && course.description, "Incomplete record " + course.code);
+  assert(course.classification === (course.academicLevel === "graduate" ? "Graduate" : "Undergraduate"), "Classification mismatch " + course.code);
   assert(course.url === "/catalog/course/?course=" + course.code.replace(" ", "-"), "Unexpected URL " + course.code);
   assert(course.canonicalUrl === "https://exam.autolearnpro.com" + course.url, "Unexpected canonical URL " + course.code);
   assert(course.source && course.source.file === "Syllabus - the general foundation o.txt", "Missing source " + course.code);

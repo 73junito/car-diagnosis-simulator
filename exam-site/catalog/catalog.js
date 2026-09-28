@@ -20,7 +20,7 @@ function card(course) {
     '<h3><a href="' + escapeHtml(course.url) + '">' + escapeHtml(course.title) + '</a></h3>' +
     '<p>' + escapeHtml(course.description) + '</p>' +
     '<div class="catalog-course-meta"><span>' +
-    escapeHtml(course.academicLevel === "graduate" ? "Graduate" : "Undergraduate") +
+    escapeHtml(course.classification) +
     '</span><span>' + escapeHtml(course.category) + '</span></div>' +
     '<a class="text-link" href="' + escapeHtml(course.url) +
     '">View course details <span aria-hidden="true">→</span></a></article>';

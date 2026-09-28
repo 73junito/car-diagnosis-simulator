@@ -21,7 +21,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-101"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-101",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-105",
@@ -40,7 +41,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-105"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-105",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-110",
@@ -59,7 +61,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-110"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-110",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-115",
@@ -78,7 +81,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-115"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-115",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-120",
@@ -97,7 +101,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-120"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-120",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-121",
@@ -116,7 +121,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-121"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-121",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-130",
@@ -135,7 +141,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-130"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-130",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-131",
@@ -154,7 +161,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-131"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-131",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-140",
@@ -173,7 +181,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-140"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-140",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-150",
@@ -192,7 +201,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-150"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-150",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-160",
@@ -211,7 +221,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-160"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-160",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-170",
@@ -230,7 +241,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-170"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-170",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-180",
@@ -249,7 +261,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-180"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-180",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-200",
@@ -268,7 +281,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-200"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-200",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-201",
@@ -287,7 +301,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-201"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-201",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-210",
@@ -306,7 +321,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-210"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-210",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-211",
@@ -325,7 +341,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-211"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-211",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-220",
@@ -344,7 +361,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-220"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-220",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-230",
@@ -363,7 +381,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-230"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-230",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-240",
@@ -382,7 +401,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-240"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-240",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-250",
@@ -401,7 +421,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-250"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-250",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-251",
@@ -420,7 +441,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-251"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-251",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-260",
@@ -439,7 +461,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-260"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-260",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-270",
@@ -458,7 +481,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-270"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-270",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-280",
@@ -477,7 +501,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-280"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-280",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-300",
@@ -496,7 +521,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-300"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-300",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-301",
@@ -515,7 +541,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-301"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-301",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-310",
@@ -534,7 +561,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-310"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-310",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-320",
@@ -553,7 +581,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-320"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-320",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-321",
@@ -572,7 +601,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-321"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-321",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-330",
@@ -597,7 +627,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-330"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-330",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-331",
@@ -616,7 +647,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-331"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-331",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-340",
@@ -635,7 +667,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-340"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-340",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-350",
@@ -654,7 +687,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-350"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-350",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-360",
@@ -673,7 +707,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-360"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-360",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-370",
@@ -692,7 +727,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-370"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-370",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-380",
@@ -711,7 +747,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-380"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-380",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-390",
@@ -730,7 +767,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-390"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-390",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-400",
@@ -749,7 +787,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-400"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-400",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-410",
@@ -768,7 +807,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-410"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-410",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-420",
@@ -787,7 +827,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-420"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-420",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-450",
@@ -806,7 +847,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-450"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-450",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-451",
@@ -825,7 +867,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-451"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-451",
+      "classification": "Undergraduate"
     },
     {
       "id": "aut-501",
@@ -844,7 +887,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-501"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-501",
+      "classification": "Graduate"
     },
     {
       "id": "aut-510",
@@ -863,7 +907,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-510"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-510",
+      "classification": "Graduate"
     },
     {
       "id": "aut-515",
@@ -882,7 +927,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-515"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-515",
+      "classification": "Graduate"
     },
     {
       "id": "aut-520",
@@ -901,7 +947,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-520"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-520",
+      "classification": "Graduate"
     },
     {
       "id": "aut-525",
@@ -920,7 +967,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-525"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-525",
+      "classification": "Graduate"
     },
     {
       "id": "aut-530",
@@ -939,7 +987,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-530"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-530",
+      "classification": "Graduate"
     },
     {
       "id": "aut-535",
@@ -958,7 +1007,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-535"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-535",
+      "classification": "Graduate"
     },
     {
       "id": "aut-540",
@@ -977,7 +1027,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-540"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-540",
+      "classification": "Graduate"
     },
     {
       "id": "aut-545",
@@ -996,7 +1047,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-545"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-545",
+      "classification": "Graduate"
     },
     {
       "id": "aut-550",
@@ -1015,7 +1067,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-550"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-550",
+      "classification": "Graduate"
     },
     {
       "id": "aut-555",
@@ -1034,7 +1087,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-555"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-555",
+      "classification": "Graduate"
     },
     {
       "id": "aut-560",
@@ -1053,7 +1107,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-560"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-560",
+      "classification": "Graduate"
     },
     {
       "id": "aut-565",
@@ -1072,7 +1127,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-565"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-565",
+      "classification": "Graduate"
     },
     {
       "id": "aut-570",
@@ -1091,7 +1147,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-570"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-570",
+      "classification": "Graduate"
     },
     {
       "id": "aut-575",
@@ -1110,7 +1167,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-575"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-575",
+      "classification": "Graduate"
     },
     {
       "id": "aut-580",
@@ -1129,7 +1187,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-580"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-580",
+      "classification": "Graduate"
     },
     {
       "id": "aut-585",
@@ -1148,7 +1207,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-585"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-585",
+      "classification": "Graduate"
     },
     {
       "id": "aut-590",
@@ -1167,7 +1227,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-590"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-590",
+      "classification": "Graduate"
     },
     {
       "id": "aut-600",
@@ -1186,7 +1247,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-600"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-600",
+      "classification": "Graduate"
     },
     {
       "id": "aut-610",
@@ -1205,7 +1267,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-610"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-610",
+      "classification": "Graduate"
     },
     {
       "id": "aut-620",
@@ -1224,7 +1287,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-620"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-620",
+      "classification": "Graduate"
     },
     {
       "id": "aut-630",
@@ -1243,7 +1307,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-630"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-630",
+      "classification": "Graduate"
     },
     {
       "id": "aut-640",
@@ -1262,7 +1327,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-640"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-640",
+      "classification": "Graduate"
     },
     {
       "id": "aut-650",
@@ -1281,7 +1347,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-650"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-650",
+      "classification": "Graduate"
     },
     {
       "id": "aut-690",
@@ -1300,7 +1367,8 @@
         "file": "Syllabus - the general foundation o.txt",
         "basis": "user-provided academic catalog"
       },
-      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-690"
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-690",
+      "classification": "Graduate"
     }
   ]
 }

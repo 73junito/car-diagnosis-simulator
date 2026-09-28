@@ -30,15 +30,15 @@ async function init() {
       : "";
 
     root.innerHTML = '<article class="catalog-detail-card">' +
-      '<p class="eyebrow">' + escapeHtml(course.academicLevel.toUpperCase()) + ' / ' + escapeHtml(course.category.toUpperCase()) + '</p>' +
+      '<p class="eyebrow">' + escapeHtml(course.classification.toUpperCase()) + ' / ' + escapeHtml(course.category.toUpperCase()) + '</p>' +
       '<div class="catalog-detail-title"><div><span class="catalog-course-code">' + escapeHtml(course.code) +
       '</span><h1>' + escapeHtml(course.title) + '</h1></div><span class="catalog-detail-credits">' +
       escapeHtml(course.credits) + ' credits</span></div>' +
       '<p class="catalog-detail-description">' + escapeHtml(course.description) + '</p>' +
       '<dl class="catalog-detail-meta"><div><dt>Degree program</dt><dd>' + escapeHtml(course.degreeProgram) +
       '</dd></div><div><dt>Prerequisites</dt><dd>' + escapeHtml(course.prerequisites) +
-      '</dd></div><div><dt>Academic level</dt><dd>' + escapeHtml(course.academicLevel) +
-      '</dd></div><div><dt>CIP pathway</dt><dd>' + escapeHtml(course.cipCode) +
+      '</dd></div><div><dt>Classification</dt><dd>' + escapeHtml(course.classification) +
+      '</dd></div><div><dt>Program CIP metadata</dt><dd>' + escapeHtml(course.cipCode) +
       '</dd></div><div><dt>Catalog status</dt><dd>' + escapeHtml(course.status) +
       '</dd></div><div><dt>Source</dt><dd>' + escapeHtml(course.source && course.source.file) +
       '</dd></div></dl>' + training + '</article>';
