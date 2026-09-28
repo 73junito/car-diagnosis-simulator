@@ -37,6 +37,6 @@ describe('AUT-250 learner course dashboard', () => {
   test('stores completion only in this browser', () => {
     expect(js).toContain('localStorage.getItem(STORAGE_KEY)');
     expect(js).toContain('localStorage.setItem(STORAGE_KEY');
-    expect(html).toContain('progress stored only in this browser');
+    expect(js).toContain('progress stored only in this browser');
   });
 });
