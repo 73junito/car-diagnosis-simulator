@@ -9,6 +9,7 @@ const targetDir = path.join(root, "exam-site", "data", "curriculum");
 
 const files = [
   "academic-pathways.json",
+  "course-catalog.json",
   "undergraduate-courses.json",
   "graduate-courses.json",
   "competencies.json",

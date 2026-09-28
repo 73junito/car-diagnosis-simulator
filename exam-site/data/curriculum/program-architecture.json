@@ -57,7 +57,7 @@
         {"id":"AUT-225","title":"Advanced Diagnostic Strategy","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-220"]},
         {"id":"AUT-230","title":"Manual & Automatic Transmissions","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-101"]},
         {"id":"AUT-240","title":"Heating & Air Conditioning","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-120"]},
-        {"id":"AUT-250","title":"Hybrid & Electric Vehicle Technology","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-210","AUT-220"]},
+        {"id":"AUT-250","title":"Hybrid & Electric Vehicle Technology","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-210","AUT-220"],"existingCourseId":"hybrid-electric-vehicle-technology","existingLessonPlanId":"ug-hev-foundations"},
         {"id":"AUT-260","title":"ADAS & Vehicle Networking","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-210","AUT-220"]},
         {"id":"AUT-270","title":"AI-Assisted Automotive Diagnostics","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-220","AUT-225"]},
         {"id":"AUT-280","title":"Automotive Data & Telematics","credits":3,"bucket":"automotive-technology","status":"proposed","prerequisites":["AUT-220","AUT-260"]},
