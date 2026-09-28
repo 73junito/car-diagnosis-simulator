@@ -1,4 +1,5 @@
-import { renderModuleVisuals } from "./module-visuals.js";
+import { renderModuleVisuals, setModuleVisualReasoningStep } from "./module-visuals.js";
+import { getDistractorFeedback } from "./distractor-feedback.js";
 
 const CURRICULUM_URL = "/data/curriculum/lesson-content.json";
 const APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
@@ -174,7 +175,7 @@ function reasoningStepForQuestion(question) {
   const topic = String(question?.topic || "").toLowerCase();
   if (topic.includes("verification") || topic.includes("post-repair")) return "verify";
   if (topic.includes("correlation") || topic.includes("hypoth") || topic.includes("dependencies") || topic.includes("boundaries")) return "correlate";
-  if (topic.includes("compare") || topic.includes("interpretation") || topic.includes("estimation") || topic.includes("command-response") || topic.includes("readiness")) return "compare";
+  if (topic.includes("compare") || topic.includes("interpretation") || topic.includes("estimation") || topic.includes("command-response") || topic.includes("readiness") || topic === "diagnostic-process") return "compare";
   if (topic.includes("request") || topic.includes("concern")) return "request";
   return "measure";
 }
@@ -196,6 +197,7 @@ function setActiveReasoningStep(step) {
   });
   const focus = document.querySelector("[data-question-reasoning-focus]");
   if (focus) focus.textContent = step.charAt(0).toUpperCase() + step.slice(1);
+  setModuleVisualReasoningStep(step);
 }
 
 function moduleIdFromUrl() {
@@ -266,12 +268,21 @@ function checkAnswer(state) {
     currentQuestionIndex: state.index
   }));
 
+  const distractorFeedback = getDistractorFeedback(question.id, question.answer);
+  const distractorItems = Object.entries(distractorFeedback).map(([letter, rationale]) => `
+    <li><strong>${escapeHtml(letter)}.</strong> ${escapeHtml(rationale)}</li>`).join("");
+
   feedback.innerHTML = `
     <div class="aut250-feedback-grid">
       <div><span>Result</span><strong>${correct ? "Correct" : "Try again"}</strong></div>
       <div><span>Why</span><p>${escapeHtml(question.explanation)}</p></div>
       <div><span>Diagnostic takeaway</span><p>${escapeHtml(REASONING_TAKEAWAYS[step])}</p></div>
     </div>
+    ${distractorItems ? `
+      <details class="aut250-distractor-feedback">
+        <summary>Why the other choices are weaker</summary>
+        <ul>${distractorItems}</ul>
+      </details>` : ""}
     <p class="training-boundary">Reasoning feedback only. This does not authorize a vehicle service action.</p>`;
 
   document.querySelector("[data-question-attempt-status]").textContent = "Attempted";
