@@ -40,6 +40,23 @@ describe('AUT-250 human review gate package', () => {
       .toEqual(['approved-excerpt-chunks', 'metadata-only-citation-proof']);
   });
 
+  test('selects metadata-only citation proof as a pending project preference', () => {
+    expect(pkg.citation_evidence_decision.project_preference.option_id).toBe('metadata-only-citation-proof');
+    expect(pkg.citation_evidence_decision.project_preference.status).toBe('selected-pending-human-confirmation');
+    expect(pkg.citation_evidence_decision.project_preference.approval_effect).toBe('none');
+    expect(pkg.citation_evidence_decision.metadata_preflight.script)
+      .toBe('scripts/validate-aut250-metadata-citations.js');
+    expect(pkg.citation_evidence_decision.metadata_preflight.writes_production_validation_records).toBe(false);
+    expect(pkg.citation_evidence_decision.metadata_preflight.explicitly_does_not_validate)
+      .toEqual(expect.arrayContaining([
+        'source excerpt text',
+        'source text hashes',
+        'copyright or license clearance',
+        'question approval',
+        'assessment eligibility'
+      ]));
+  });
+
   test('prohibits validator shortcuts and auto approval', () => {
     expect(pkg.citation_evidence_decision.prohibited_shortcuts.join(' ')).toMatch(/Do not weaken citation-validator-1\.0/i);
     expect(pkg.citation_evidence_decision.prohibited_shortcuts.join(' ')).toMatch(/Do not create fake or synthetic source chunks/i);

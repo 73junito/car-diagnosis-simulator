@@ -108,7 +108,39 @@
       "Do not store copyrighted excerpts without a documented rights basis.",
       "Do not weaken citation-validator-1.0 so metadata-only records appear excerpt-validated.",
       "Do not promote question provenance before required human reviews are complete."
-    ]
+    ],
+    "project_preference": {
+      "option_id": "metadata-only-citation-proof",
+      "status": "selected-pending-human-confirmation",
+      "rationale": "Current AUT-250 evidence is intentionally metadata/link-only and no rights basis exists for storing copyrighted excerpts. A separate metadata-only validator preserves citation-validator-1.0 semantics and avoids false excerpt/hash claims.",
+      "selected_by": "project workflow",
+      "approval_effect": "none"
+    },
+    "metadata_preflight": {
+      "script": "scripts/validate-aut250-metadata-citations.js",
+      "version": "aut250-metadata-citation-preflight-1.0",
+      "writes_production_validation_records": false,
+      "validates": [
+        "20-question batch completeness",
+        "per-question source linkage",
+        "candidate-supported disposition",
+        "required bibliographic metadata",
+        "HTTPS source identity",
+        "DOI syntax when DOI is present",
+        "metadata-and-link-only ingestion status",
+        "human-review completion state"
+      ],
+      "explicitly_does_not_validate": [
+        "source excerpt text",
+        "source text hashes",
+        "copyright or license clearance",
+        "technical correctness",
+        "instructional quality",
+        "safety approval",
+        "question approval",
+        "assessment eligibility"
+      ]
+    }
   },
   "release_gate": {
     "status": "blocked",
