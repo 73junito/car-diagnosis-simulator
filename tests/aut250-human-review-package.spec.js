@@ -16,11 +16,25 @@ describe('AUT-250 human review gate package', () => {
     expect(pkg.current_state.release_eligible).toBe(false);
   });
 
-  test('requires four named human review roles', () => {
+  test('requires four human review roles and records only the completed rights gate', () => {
     const roles = ['rights', 'technical', 'instructional', 'safety'];
     expect(Object.keys(pkg.reviewer_requirements).sort()).toEqual(roles.sort());
 
-    for (const role of roles) {
+    const rights = pkg.reviewer_requirements.rights;
+    expect(rights.required).toBe(true);
+    expect(rights.reviewer_name).toBe('Rafael Rodriguez');
+    expect(rights.reviewer_id).toBe('rafael-rodriguez');
+    expect(rights.qualification_reference).toMatch(/project owner/i);
+    expect(rights.reviewed_at).toBe('2026-09-27');
+    expect(rights.decision).toBe('pass-with-limitations');
+    expect(Object.values(rights.checklist).every(Boolean)).toBe(true);
+    expect(rights.limitations).toEqual(expect.arrayContaining([
+      expect.stringMatching(/metadata/i),
+      expect.stringMatching(/Do not ingest/i),
+      expect.stringMatching(/must not be represented as excerpt verification/i)
+    ]));
+
+    for (const role of ['technical', 'instructional', 'safety']) {
       const review = pkg.reviewer_requirements[role];
       expect(review.required).toBe(true);
       expect(review.reviewer_name).toBeNull();
