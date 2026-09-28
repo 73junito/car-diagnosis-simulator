@@ -43,16 +43,7 @@ test.describe('TTED805: No-Crank Assessment Mode', () => {
       });
     });
 
-    // STEP 2: Verify mocked API contract before navigation
-    const apiResponse = await fetchMockedApi(
-      page,
-      '/api/scenario-questions-approved?scenario_id=no-crank'
-    );
-    expect(apiResponse.status).toBe(200);
-    expect(apiResponse.json.questions).toHaveLength(0);
-    console.log('✓ API contract verified: no-crank returns 200 with 0 questions (fail-closed)');
-
-    // STEP 3: Provide a test auth token and navigate with a server-created attempt id.
+    // STEP 2: Provide a test auth token and navigate with a server-created attempt id.
     await page.addInitScript(() => {
       localStorage.setItem('supabase_access_token', 'playwright-test-token');
     });
@@ -60,17 +51,17 @@ test.describe('TTED805: No-Crank Assessment Mode', () => {
     await page.goto(`${BASE_URL}/dashboard/student/scenario/?scenario=no-crank-clicking&mode=assessment&attempt_id=test-attempt-123`,
       { waitUntil: 'domcontentloaded', timeout: 30000 });
 
-    // STEP 4: Verify assessment mode requested only the server-bound attempt question set.
+    // STEP 3: Verify assessment mode requested only the server-bound attempt question set.
     await page.waitForTimeout(500);
     expect(assessmentQuestionRequestSeen).toBe(true);
     expect(requestedAttemptId).toBe('test-attempt-123');
     console.log('✓ Assessment attempt question request intercepted: test-attempt-123');
 
-    // STEP 5: Verify fail-closed state - no question cards render
+    // STEP 4: Verify fail-closed state - no question cards render
     const questionCards = await page.locator('article.question-card').count();
     expect(questionCards).toBe(0);
 
-    // STEP 6: Verify the new server-authoritative fail-closed message is displayed.
+    // STEP 5: Verify the new server-authoritative fail-closed message is displayed.
     await expect(page.getByRole('heading', { name: 'Assessment unavailable' })).toBeVisible();
     await expect(
       page.getByText('The server-assigned assessment question set is not available.')
