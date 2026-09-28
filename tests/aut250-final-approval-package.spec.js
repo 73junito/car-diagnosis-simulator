@@ -8,13 +8,16 @@ describe('AUT-250 final approval package', () => {
     'utf8'
   ));
 
-  test('requires explicit final user approval before changing training status', () => {
+  test('records explicit final user approval for training use only', () => {
     expect(approval.requested_final_decision.scope).toBe('training-bank-final-approval-only');
-    expect(approval.requested_final_decision.decision).toBe('pending-explicit-user-approval');
-    expect(approval.requested_final_decision.approver_name).toBeNull();
-    expect(approval.requested_final_decision.approver_id).toBeNull();
-    expect(approval.requested_final_decision.approved_at).toBeNull();
-    expect(approval.release_state.training_bank_final_approval).toBe('pending');
+    expect(approval.requested_final_decision.decision).toBe('approved');
+    expect(approval.requested_final_decision.approver_name).toBe('Rafael Rodriguez');
+    expect(approval.requested_final_decision.approver_id).toBe('rafael-rodriguez');
+    expect(approval.requested_final_decision.approved_at).toBe('2026-09-27');
+    expect(approval.requested_final_decision.user_confirmation)
+      .toBe('I approve the AUT-250 training-bank final approval as written.');
+    expect(approval.release_state.training_bank_final_approval)
+      .toBe('approved-for-training-use');
   });
 
   test('binds final approval to completed prerequisite gates', () => {
