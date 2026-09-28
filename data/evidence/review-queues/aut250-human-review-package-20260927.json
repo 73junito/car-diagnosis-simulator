@@ -1,0 +1,126 @@
+{
+  "package_id": "aut250-human-review-package-20260927",
+  "course_id": "AUT-250",
+  "lesson_plan_id": "ug-hev-foundations",
+  "question_batch": "aut250-training-batch-001",
+  "question_count": 20,
+  "source_review_artifact": "data/evidence/review-queues/aut250-training-question-bulk-review-20260927.json",
+  "created_at": "2026-09-27T19:14:00-05:00",
+  "approval_effect": "none",
+  "current_state": {
+    "questions_candidate_supported": 20,
+    "questions_approved": 0,
+    "questions_citation_validated": 0,
+    "assessment_eligible": false,
+    "release_eligible": false
+  },
+  "reviewer_requirements": {
+    "rights": {
+      "required": true,
+      "reviewer_name": null,
+      "reviewer_id": null,
+      "qualification_reference": null,
+      "reviewed_at": null,
+      "decision": "pending",
+      "checklist": {
+        "source_identity_and_ownership_reviewed": false,
+        "permitted_use_scope_reviewed": false,
+        "quote_or_excerpt_storage_rights_reviewed": false,
+        "metadata_link_only_policy_confirmed": false,
+        "third_party_material_risk_reviewed": false
+      },
+      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded."
+    },
+    "technical": {
+      "required": true,
+      "reviewer_name": null,
+      "reviewer_id": null,
+      "qualification_reference": null,
+      "reviewed_at": null,
+      "decision": "pending",
+      "checklist": {
+        "technical_claims_reviewed": false,
+        "source_applicability_reviewed": false,
+        "vehicle_specific_boundaries_preserved": false,
+        "no_single_clue_root_cause_overreach": false,
+        "no_universal_service_values_introduced": false,
+        "explanations_and_keys_checked": false
+      },
+      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded."
+    },
+    "instructional": {
+      "required": true,
+      "reviewer_name": null,
+      "reviewer_id": null,
+      "qualification_reference": null,
+      "reviewed_at": null,
+      "decision": "pending",
+      "checklist": {
+        "module_alignment_reviewed": false,
+        "learning_objective_alignment_reviewed": false,
+        "distractor_quality_reviewed": false,
+        "explanation_quality_reviewed": false,
+        "difficulty_and_progression_reviewed": false,
+        "training_only_language_clear": false
+      },
+      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded."
+    },
+    "safety": {
+      "required": true,
+      "reviewer_name": null,
+      "reviewer_id": null,
+      "qualification_reference": null,
+      "reviewed_at": null,
+      "decision": "pending",
+      "checklist": {
+        "high_voltage_safety_language_reviewed": false,
+        "vehicle_specific_procedure_boundaries_reviewed": false,
+        "ppe_and_meter_language_reviewed": false,
+        "no_universal_wait_times_or_thresholds": false,
+        "no_unsafe_bypass_or_intrusive_steps": false,
+        "learner_feedback_does_not_authorize_service_action": false
+      },
+      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded."
+    }
+  },
+  "citation_evidence_decision": {
+    "status": "pending-human-rights-and-governance-decision",
+    "current_validator": "scripts/validate-citations.js",
+    "current_validator_version": "citation-validator-1.0",
+    "approved_representation": null,
+    "options_under_review": [
+      {
+        "option_id": "approved-excerpt-chunks",
+        "description": "Use approved source excerpts/chunks only where storage and reuse rights are affirmatively cleared, preserving current validator semantics.",
+        "validator_compatibility": "native",
+        "rights_risk": "requires explicit permission/license basis for stored excerpts"
+      },
+      {
+        "option_id": "metadata-only-citation-proof",
+        "description": "Create a separately reviewed validator for metadata/link-only citations that verifies authoritative identity, DOI/URL, bibliographic metadata, applicability, and reviewer attestations without storing copyrighted excerpts.",
+        "validator_compatibility": "requires-new-validator",
+        "rights_risk": "lower-content-storage risk, but must not falsely claim excerpt/hash validation"
+      }
+    ],
+    "prohibited_shortcuts": [
+      "Do not mark candidate sources approved solely to satisfy the validator.",
+      "Do not create fake or synthetic source chunks.",
+      "Do not store copyrighted excerpts without a documented rights basis.",
+      "Do not weaken citation-validator-1.0 so metadata-only records appear excerpt-validated.",
+      "Do not promote question provenance before required human reviews are complete."
+    ]
+  },
+  "release_gate": {
+    "status": "blocked",
+    "required_conditions": [
+      "rights review completed",
+      "technical review completed",
+      "instructional review completed",
+      "safety review completed",
+      "citation-evidence representation decision recorded",
+      "deterministic citation validation completed under the approved representation",
+      "separate final approval action recorded"
+    ],
+    "auto_approval_allowed": false
+  }
+}

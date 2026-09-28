@@ -3829,6 +3829,22 @@
           "citationValidated": 0,
           "deterministicValidationStatus": "blocked-by-governance-prerequisites",
           "nextGate": "Complete named human rights/technical/instructional/safety review and establish an approved citation-evidence representation before deterministic citation validation."
+        },
+        "humanReviewPackage": {
+          "packageId": "aut250-human-review-package-20260927",
+          "artifact": "data/evidence/review-queues/aut250-human-review-package-20260927.json",
+          "worksheet": "docs/reviews/AUT250-HUMAN-REVIEW-WORKSHEET.md",
+          "status": "pending",
+          "requiredRoles": [
+            "rights",
+            "technical",
+            "instructional",
+            "safety"
+          ],
+          "completedRoles": [],
+          "citationEvidenceDecision": "pending",
+          "releaseGate": "blocked",
+          "approvalEffect": "none"
         }
       }
     }
