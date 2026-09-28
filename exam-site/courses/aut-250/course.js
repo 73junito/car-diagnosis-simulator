@@ -81,7 +81,7 @@ function renderModules(modules, progress) {
           <span>${questionCount} training questions</span>
         </div>
         <div class="aut250-dashboard-actions">
-          <a class="button primary" href="/lesson-plans/#ug-hev-foundations">Open module</a>
+          <a class="button primary" href="/courses/aut-250/module/?module=${encodeURIComponent(module.id)}">Open module</a>
           <button type="button" class="button secondary-button" data-toggle-module="${escapeHtml(module.id)}">${complete ? "Mark incomplete" : "Mark complete"}</button>
         </div>
       </article>`;
