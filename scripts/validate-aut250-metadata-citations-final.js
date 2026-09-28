@@ -35,7 +35,7 @@ function isHttpsUrl(value) {
   try { return new URL(value).protocol === 'https:'; } catch { return false; }
 }
 function isDoi(value) {
-  return typeof value === 'string' && /^10\\.\\d{4,9}\\/.+$/i.test(value.trim());
+  return typeof value === 'string' && /^10\.\d{4,9}\/.+$/i.test(value.trim());
 }
 function humanRoleComplete(review) {
   if (!review) return false;
