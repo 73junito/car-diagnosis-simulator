@@ -57,9 +57,9 @@ function renderEvidenceDrawer(approval, module) {
     <section class="evidence-drawer-section">
       <h3>Training authorization</h3>
       <dl class="evidence-fact-grid">
-        <div><dt>Training status</dt><dd>${escapeHtml(release.training_bank_final_approval)}</dd></div>
-        <div><dt>Citation representation</dt><dd>${escapeHtml(prereq.citation_representation)}</dd></div>
-        <div><dt>Deterministic validation</dt><dd>${escapeHtml(prereq.deterministic_metadata_validation)}</dd></div>
+        <div><dt>Training status</dt><dd>${release.training_bank_final_approval === "approved-for-training-use" ? "Approved for training use" : "Not approved"}</dd></div>
+        <div><dt>Citation representation</dt><dd>${prereq.citation_representation === "metadata-only-citation-proof" ? "Metadata-only citation proof" : escapeHtml(prereq.citation_representation)}</dd></div>
+        <div><dt>Deterministic validation</dt><dd>${prereq.deterministic_metadata_validation === "valid" ? "Valid" : escapeHtml(prereq.deterministic_metadata_validation)}</dd></div>
         <div><dt>Validated questions</dt><dd>${escapeHtml(prereq.deterministic_questions_valid)} / ${escapeHtml(approval.question_count)}</dd></div>
       </dl>
       <p class="evidence-drawer-note">Metadata-only citation validation does not claim excerpt verification, source-text hash verification, or source-rights clearance.</p>
@@ -67,7 +67,7 @@ function renderEvidenceDrawer(approval, module) {
 
     <section class="evidence-drawer-section">
       <h3>Human review gates</h3>
-      <p>${prereq.human_reviews_complete ? "Complete" : "Incomplete"}: ${(prereq.required_human_roles || []).map((role)=>escapeHtml(role)).join(" · ")}</p>
+      <p>${prereq.human_reviews_complete ? `${(prereq.required_human_roles || []).length} / ${(prereq.required_human_roles || []).length} complete` : "Incomplete"}: ${(prereq.required_human_roles || []).map((role)=>escapeHtml(role)).join(" · ")}</p>
     </section>
 
     <section class="evidence-drawer-section">
@@ -94,15 +94,18 @@ function renderEvidenceDrawer(approval, module) {
       <p><strong>Assessment API eligible:</strong> ${effect.production_assessment_api_eligible === false ? "No" : "Unexpected state"}</p>
     </section>
 
+    <p class="evidence-drawer-note">Current release authority comes from the final AUT-250 approval credential. Historical workflow labels in curriculum metadata may describe earlier review stages and do not override that record.</p>
     <p><a href="/lesson-plans/#ug-hev-foundations">Open full curriculum view</a></p>`;
 }
 
 function initEvidenceDrawer(approval, module) {
   const drawer = document.querySelector("[data-evidence-drawer]");
   const content = document.querySelector("[data-evidence-drawer-content]");
+  const openButton = document.querySelector("[data-evidence-drawer-open]");
   content.innerHTML = renderEvidenceDrawer(approval, module);
+  openButton.hidden = false;
 
-  document.querySelector("[data-evidence-drawer-open]").addEventListener("click", () => {
+  openButton.addEventListener("click", () => {
     if (typeof drawer.showModal === "function") drawer.showModal();
     else drawer.setAttribute("open", "");
   });
