@@ -39,6 +39,24 @@ describe('AUT-250 deterministic metadata citation validation', () => {
       .toEqual(['rights', 'technical', 'instructional', 'safety']);
   });
 
+  test('records post-validation gate status with final approval still blocked', () => {
+    const status = JSON.parse(read(
+      'data/evidence/validation-results/aut250-training-batch-001-gate-status-20260927.json'
+    ));
+    expect(status.deterministic_metadata_validation.status).toBe('complete');
+    expect(status.deterministic_metadata_validation.result).toBe('valid');
+    expect(status.deterministic_metadata_validation.questions_valid).toBe(20);
+    expect(status.human_reviews.status).toBe('complete');
+    expect(status.citation_representation.representation).toBe('metadata-only-citation-proof');
+    expect(status.remaining_gate.status).toBe('blocked-pending-separate-final-approval');
+    expect(status.remaining_gate.final_approval_recorded).toBe(false);
+    expect(status.effects.question_approval).toBe('none');
+    expect(status.effects.assessment_eligibility).toBe(false);
+    expect(status.effects.production_release).toBe(false);
+    expect(status.effects.high_stakes_use).toBe(false);
+    expect(status.effects.legacy_citation_validations_written).toBe(false);
+  });
+
   test('does not overclaim excerpt, rights, approval, assessment, or release effects', () => {
     expect(artifact.claims.metadata_identity_and_linkage_verified).toBe(true);
     expect(artifact.claims.source_excerpt_verified).toBe(false);
