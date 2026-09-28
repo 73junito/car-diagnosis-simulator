@@ -146,7 +146,7 @@ test.describe('Expanded lesson plans', () => {
 
     await expect(plan.locator('.module-svg').first()).toHaveAttribute('role', 'img');
     await expect(plan.locator('.module-data-table').first()).toHaveAttribute('aria-label', /battery/i);
-    await expect(plan.getByText('Request → Measure → Compare → Correlate → Verify')).toBeVisible();
+    await expect(plan.getByRole('heading', { name: 'Request → Measure → Compare → Correlate → Verify', exact: true })).toBeVisible();
 
     expect(pageErrors).toEqual([]);
   });
