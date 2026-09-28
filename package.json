@@ -48,6 +48,7 @@
     "exam:prepare": "npm run validate:academic-pathways && npm run validate:course-catalog && npm run validate:program-architecture && npm run validate:curriculum-content && npm run exam:curriculum:sync",
     "exam:pathways:verify": "npm run exam:prepare && node scripts/verify-exam-pathway-page.js",
     "exam:catalog:verify": "npm run exam:prepare && npx playwright test tests/playwright/course-catalog.spec.js --project=chromium",
+    "exam:navigation:verify": "npm run exam:prepare && npx playwright test tests/playwright/exam-sidebar-navigation.spec.js --project=chromium",
     "audit:scenario-questions": "node scripts/scenario-question-readiness-report.js",
     "cloudflare:exam:deploy": "npm run exam:prepare && wrangler deploy --config wrangler.exam.jsonc",
     "cloudflare:exam:preview": "npm run exam:prepare && wrangler dev --config wrangler.exam.jsonc",

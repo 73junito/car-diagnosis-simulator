@@ -328,3 +328,35 @@ button:focus-visible{outline:3px solid #2f6f61;outline-offset:3px}
   .catalog-filters{display:grid}
   .catalog-filters input,.catalog-filters select{min-width:0;width:100%}
 }
+
+/* Shared exam navigation: left sidebar is the primary navigation source of truth. */
+.exam-shell-layout{display:grid;grid-template-columns:minmax(210px,240px) minmax(0,1fr);gap:2rem;align-items:start;max-width:1500px;margin:0 auto;padding:1.25rem 1.5rem 0}
+.exam-shell-layout>main{min-width:0;width:100%}
+.exam-sidebar{position:sticky;top:1rem;border:1px solid var(--line,#d9e4df);border-radius:16px;background:#fff;padding:.9rem;box-shadow:0 10px 28px rgba(25,55,45,.05)}
+.exam-sidebar-head{padding:.35rem .4rem .8rem;border-bottom:1px solid var(--line,#d9e4df);margin-bottom:.55rem}
+.exam-sidebar-head strong{display:block;color:#214f47;font-size:.95rem}
+.exam-sidebar-head span{display:block;margin-top:.15rem;color:#71817d;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em}
+.exam-sidebar nav{display:grid;gap:.25rem}
+.exam-sidebar a{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.7rem .75rem;border-radius:10px;color:#425c56;text-decoration:none;font-size:.82rem;font-weight:700}
+.exam-sidebar a:hover{background:#f4f8f5;color:#214f47}
+.exam-sidebar a[aria-current="page"]{background:#eaf3ed;color:#214f47;box-shadow:inset 3px 0 0 #52756c}
+.has-exam-sidebar .site-header nav[aria-label="Primary"][hidden],
+.has-exam-sidebar footer .footer-links[hidden]{display:none!important}
+.has-exam-sidebar .exam-shell-layout .shell{max-width:1180px}
+.has-exam-sidebar .exam-shell-layout .pathway-hero>.shell,
+.has-exam-sidebar .exam-shell-layout .hero>.shell{padding-left:0;padding-right:0}
+.has-exam-sidebar .exam-shell-layout .section.shell{padding-left:0;padding-right:0}
+.has-exam-sidebar .exam-shell-layout .catalog-course-page{padding-left:0;padding-right:0}
+@media(max-width:900px){
+  .exam-shell-layout{grid-template-columns:1fr;gap:1rem;padding:1rem}
+  .exam-sidebar{position:static}
+  .exam-sidebar nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .exam-sidebar nav{grid-template-columns:1fr}
+  .exam-shell-layout{padding:.75rem}
+}
+@media print{
+  .exam-sidebar{display:none!important}
+  .exam-shell-layout{display:block!important;max-width:none!important;padding:0!important}
+}
