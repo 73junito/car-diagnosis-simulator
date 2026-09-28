@@ -65,6 +65,72 @@
       "existingCourseId": "aut-180",
       "existingLessonPlanId": "ug-aut180-service-information",
       "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-200",
+      "existingCourseId": "aut-200",
+      "existingLessonPlanId": "ug-aut200-engine-systems-ii",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-201",
+      "existingCourseId": "aut-201",
+      "existingLessonPlanId": "ug-aut201-engine-systems-ii-lab",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-211",
+      "existingCourseId": "aut-211",
+      "existingLessonPlanId": "ug-aut211-engine-performance-lab",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-220",
+      "existingCourseId": "aut-220",
+      "existingLessonPlanId": "ug-aut220-automatic-transmissions",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-230",
+      "existingCourseId": "aut-230",
+      "existingLessonPlanId": "ug-aut230-automotive-electronics",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-240",
+      "existingCourseId": "aut-240",
+      "existingLessonPlanId": "ug-aut240-electrical-systems-ii",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-250",
+      "existingCourseId": "aut-250",
+      "existingLessonPlanId": "ug-aut250-automotive-diagnostics-i",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-251",
+      "existingCourseId": "aut-251",
+      "existingLessonPlanId": "ug-aut251-diagnostics-lab",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-260",
+      "existingCourseId": "aut-260",
+      "existingLessonPlanId": "ug-aut260-vehicle-dynamics",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-270",
+      "existingCourseId": "aut-270",
+      "existingLessonPlanId": "ug-aut270-emissions-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-280",
+      "existingCourseId": "aut-280",
+      "existingLessonPlanId": "ug-aut280-control-systems",
+      "mappingType": "canonical-catalog-course"
     }
   ],
   "authorityReferences": [

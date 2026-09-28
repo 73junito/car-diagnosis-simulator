@@ -344,6 +344,204 @@
         "Document citation and applicability"
       ],
       "status": "planned"
+    },
+    {
+      "id": "ug-aut200-engine-systems-ii",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-200",
+      "competencyId": "ug-aut200-engine-mechanical-diagnosis",
+      "title": "Advanced Engine Mechanical Systems and Diagnostic Evidence",
+      "sequence": [
+        "Define the mechanical concern",
+        "Map the relevant engine subsystem",
+        "Identify possible mechanical relationships",
+        "Select an evidence-gathering approach",
+        "Record observations and measurements",
+        "Compare only with applicable specifications",
+        "Practice a mechanical diagnostic decision",
+        "Document the supported next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut201-engine-systems-ii-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-201",
+      "competencyId": "ug-aut201-engine-mechanical-lab",
+      "title": "Engine Mechanical Laboratory Analysis and Measurement",
+      "sequence": [
+        "Define the lab objective",
+        "Identify the component or subsystem",
+        "Select the inspection or measurement approach",
+        "Collect condition evidence",
+        "Record units and operating context",
+        "Verify applicable specifications",
+        "Practice an evidence-to-diagnosis decision",
+        "Document findings and next action"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut211-engine-performance-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-211",
+      "competencyId": "ug-aut211-engine-performance-lab",
+      "title": "Engine Performance Laboratory Testing and Evidence",
+      "sequence": [
+        "Define the performance concern",
+        "Select the test method",
+        "Establish the measurement context",
+        "Collect scan or instrument evidence",
+        "Record units and operating conditions",
+        "Compare with applicable technical information",
+        "Practice a performance diagnostic decision",
+        "Document the evidence and next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut220-automatic-transmissions",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-220",
+      "competencyId": "ug-aut220-automatic-transmission-systems",
+      "title": "Automatic Transmission and Transaxle System Relationships",
+      "sequence": [
+        "Identify the transmission configuration",
+        "Trace generalized power flow",
+        "Connect torque-converter functions",
+        "Connect planetary gearset relationships",
+        "Relate hydraulic and electronic controls",
+        "Classify symptom and control evidence",
+        "Practice a transmission reasoning scenario",
+        "Document the next diagnostic question"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut230-automotive-electronics",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-230",
+      "competencyId": "ug-aut230-automotive-electronics",
+      "title": "Automotive Electronic Circuits, Signals, and Control Evidence",
+      "sequence": [
+        "Identify the electronic function",
+        "Map the circuit or signal path",
+        "Connect semiconductor and control roles",
+        "Identify sensor and actuator relationships",
+        "Collect or interpret signal evidence",
+        "Check applicable technical information",
+        "Practice an electronic diagnostic decision",
+        "Document the evidence and next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut240-electrical-systems-ii",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-240",
+      "competencyId": "ug-aut240-advanced-electrical-diagnosis",
+      "title": "Advanced Electrical Systems and Diagnostic Evidence",
+      "sequence": [
+        "Define the electrical concern",
+        "Map the affected circuit or subsystem",
+        "Identify relevant loads and paths",
+        "Select the electrical test approach",
+        "Record measurements and operating context",
+        "Compare with applicable specifications",
+        "Practice an advanced electrical decision",
+        "Document verification and next action"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut250-automotive-diagnostics-i",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-250",
+      "competencyId": "ug-aut250-systematic-diagnostics",
+      "title": "Systematic Automotive Diagnosis and Verification",
+      "sequence": [
+        "Confirm and define the concern",
+        "Collect initial diagnostic information",
+        "Interpret codes and live-data context",
+        "Form testable hypotheses",
+        "Select an applicable test",
+        "Compare evidence with authoritative information",
+        "Practice a diagnostic decision and verification plan",
+        "Document the evidence chain and next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut251-diagnostics-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-251",
+      "competencyId": "ug-aut251-diagnostics-lab",
+      "title": "Automotive Diagnostics Laboratory Evidence and Fault Isolation",
+      "sequence": [
+        "Define the laboratory fault or concern",
+        "Classify the affected domain",
+        "Select a safe evidence-gathering approach",
+        "Collect mechanical/electrical/electronic evidence",
+        "Record context and observations",
+        "Use applicable information to narrow the fault",
+        "Practice a fault-isolation decision",
+        "Document findings and verification"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut260-vehicle-dynamics",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-260",
+      "competencyId": "ug-aut260-vehicle-dynamics",
+      "title": "Vehicle Dynamics, Forces, and Stability Relationships",
+      "sequence": [
+        "Define the dynamic condition",
+        "Identify forces and moments conceptually",
+        "Connect tire and traction behavior",
+        "Relate suspension and steering response",
+        "Consider acceleration braking and weight transfer",
+        "Separate model assumptions from measured evidence",
+        "Practice a dynamics reasoning problem",
+        "Document assumptions and supported conclusions"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut270-emissions-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-270",
+      "competencyId": "ug-aut270-emissions-systems",
+      "title": "Automotive Emissions, Aftertreatment, and Diagnostic Evidence",
+      "sequence": [
+        "Define the emissions-related concern",
+        "Map the relevant emissions subsystem",
+        "Connect combustion and aftertreatment roles",
+        "Relate sensors and control strategies",
+        "Collect or interpret system evidence",
+        "Check applicable technical and regulatory information",
+        "Practice an emissions diagnostic decision",
+        "Document the evidence and next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut280-control-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-280",
+      "competencyId": "ug-aut280-control-systems",
+      "title": "Automotive Feedback, Control Modules, Sensors, and Actuators",
+      "sequence": [
+        "Define the controlled function",
+        "Identify inputs outputs and controller",
+        "Map the feedback relationship",
+        "Relate sensors and actuators",
+        "Interpret generalized control evidence",
+        "Check applicable control information",
+        "Practice a feedback-system diagnostic decision",
+        "Document the evidence and next step"
+      ],
+      "status": "planned"
     }
   ]
 }

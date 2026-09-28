@@ -41,7 +41,10 @@ const aut105Migration = fs.readFileSync(aut105MigrationPath, 'utf8');
 const foundationsBatchMigrationPath = path.join(migrationsDir, '20260928180000_add_foundations_core_batch_110_180.sql');
 assert(fs.existsSync(foundationsBatchMigrationPath), 'Foundations/core batch developed-curriculum migration is missing');
 const foundationsBatchMigration = fs.readFileSync(foundationsBatchMigrationPath, 'utf8');
-const developedMigrationCorpus = migration + '\n' + evSyncMigration + '\n' + aut101Migration + '\n' + aut105Migration + '\n' + foundationsBatchMigration;
+const coreSystemsBatchMigrationPath = path.join(migrationsDir, '20260928213000_add_core_systems_batch_200_280.sql');
+assert(fs.existsSync(coreSystemsBatchMigrationPath), 'Core systems batch developed-curriculum migration is missing');
+const coreSystemsBatchMigration = fs.readFileSync(coreSystemsBatchMigrationPath, 'utf8');
+const developedMigrationCorpus = migration + '\n' + evSyncMigration + '\n' + aut101Migration + '\n' + aut105Migration + '\n' + foundationsBatchMigration + '\n' + coreSystemsBatchMigration;
 
 const requiredTables = [
   'curriculum_pathways',
