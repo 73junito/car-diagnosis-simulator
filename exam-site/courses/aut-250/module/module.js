@@ -1,4 +1,5 @@
 import { renderModuleVisuals } from "./module-visuals.js";
+import { getDistractorFeedback } from "./distractor-feedback.js";
 
 const CURRICULUM_URL = "/data/curriculum/lesson-content.json";
 const APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
@@ -266,12 +267,21 @@ function checkAnswer(state) {
     currentQuestionIndex: state.index
   }));
 
+  const distractorFeedback = getDistractorFeedback(question.id, question.answer);
+  const distractorItems = Object.entries(distractorFeedback).map(([letter, rationale]) => `
+    <li><strong>${escapeHtml(letter)}.</strong> ${escapeHtml(rationale)}</li>`).join("");
+
   feedback.innerHTML = `
     <div class="aut250-feedback-grid">
       <div><span>Result</span><strong>${correct ? "Correct" : "Try again"}</strong></div>
       <div><span>Why</span><p>${escapeHtml(question.explanation)}</p></div>
       <div><span>Diagnostic takeaway</span><p>${escapeHtml(REASONING_TAKEAWAYS[step])}</p></div>
     </div>
+    ${distractorItems ? `
+      <details class="aut250-distractor-feedback">
+        <summary>Why the other choices are weaker</summary>
+        <ul>${distractorItems}</ul>
+      </details>` : ""}
     <p class="training-boundary">Reasoning feedback only. This does not authorize a vehicle service action.</p>`;
 
   document.querySelector("[data-question-attempt-status]").textContent = "Attempted";
