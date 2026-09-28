@@ -23,7 +23,7 @@ describe('AUT-250 evidence instructor drawer', () => {
     expect(js).toContain('source-rights clearance');
     expect(js).toContain('Approved for training use');
     expect(js).toContain('Metadata-only citation proof');
-    expect(js).toContain('4 /');
+    expect(js).toContain('(prereq.required_human_roles || []).length');
     expect(js).toContain('Current release authority comes from the final AUT-250 approval credential');
   });
 
