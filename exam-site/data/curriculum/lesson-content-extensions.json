@@ -250,6 +250,264 @@
         "lesson-summary"
       ],
       "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut105-safety-professional-practice",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-105",
+        "catalogCourseCode": "AUT 105",
+        "catalogCourseTitle": "Automotive Safety and Professional Practices",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop a disciplined approach to automotive shop safety, hazardous-material and environmental awareness, tool and equipment boundaries, high-voltage hazard recognition, documentation, and professional responsibility without substituting generic instruction for applicable site, product, vehicle, or regulatory requirements.",
+      "estimatedMinutes": 120,
+      "prerequisites": [
+        "No formal course prerequisite",
+        "AUT 101 foundations recommended for curriculum sequence"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut105-lo-1",
+          "statement": "Identify common categories of automotive shop hazards and distinguish hazard recognition from authorization to perform a specific task.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut105-lo-2",
+          "statement": "Use applicable safety, environmental, equipment, product, and technical information to determine whether work may proceed, requires additional controls, or should stop and be escalated.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut105-lo-3",
+          "statement": "Document observed hazards, selected controls, professional communication, and the reason for a safe next action without inventing limits, procedures, or regulatory requirements.",
+          "cognitiveLevel": "professional-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "shop hazard recognition",
+        "hazardous materials and environmental practices",
+        "tool and equipment boundaries",
+        "high-voltage and stored-energy hazard recognition",
+        "applicable safety and technical information",
+        "stop-work and escalation decisions",
+        "documentation and professional communication"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut105-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the hazard-recognition, information-use, documentation, and professional-decision outcomes for the lesson.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1",
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ]
+        },
+        {
+          "id": "aut105-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Safety starts before the task",
+          "description": "Connect prior shop experience to the principle that recognizing a task is not the same as being authorized, equipped, or informed to perform it.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1"
+          ]
+        },
+        {
+          "id": "aut105-hazard-categories",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Hazard categories in automotive work",
+          "description": "Organize hazards around work areas, materials, tools and equipment, electrical or stored energy, and environmental conditions without assigning universal thresholds.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1"
+          ]
+        },
+        {
+          "id": "aut105-control-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Recognize, verify, control, document, escalate",
+          "description": "Use a conceptual process model for moving from a recognized hazard to an information-supported professional action.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1",
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ]
+        },
+        {
+          "id": "aut105-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "When the safest next step is to stop",
+          "description": "Demonstrate how an unclear hazard, missing information, or uncertain authorization can lead to a documented stop-work and escalation decision rather than an improvised procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ]
+        },
+        {
+          "id": "aut105-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Hazard and information sorting",
+          "description": "Classify sample observations by hazard category and identify what applicable information would be needed before proceeding.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1",
+            "ug-aut105-lo-2"
+          ]
+        },
+        {
+          "id": "aut105-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Safe next-action scenario",
+          "description": "Select whether to proceed, add controls, stop, or escalate in a generalized shop scenario and justify the decision using the information available.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ]
+        },
+        {
+          "id": "aut105-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Safety reasoning check",
+          "description": "Use low-stakes formative prompts to check hazard recognition, information selection, documentation, and escalation reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1",
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ]
+        },
+        {
+          "id": "aut105-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain the safer choice and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ]
+        },
+        {
+          "id": "aut105-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information governs the task",
+          "description": "Reinforce that site rules, product information, equipment instructions, vehicle-specific information, and applicable legal or regulatory requirements must be verified rather than invented.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ]
+        },
+        {
+          "id": "aut105-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Professional safety practice summary",
+          "description": "Summarize hazard recognition, information use, controls, documentation, stop-work authority, escalation, and professional communication as foundations for later technical work.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1",
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut105-hazard-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive shop hazard categories",
+          "purpose": "Show broad hazard categories and their relationships without presenting universal limits or task-specific procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut105-decision-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Proceed, control, stop, or escalate",
+          "purpose": "Show an information-supported decision path from observed condition to professional next action.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut105-information-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Hazard versus required information",
+          "purpose": "Compare hazard categories with the kinds of applicable information that may be needed before work proceeds.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1",
+            "ug-aut105-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut105-professional-practice-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Safe and professional work habits",
+          "purpose": "Summarize recognition, verification, control, documentation, communication, and escalation.",
+          "supportsObjectiveIds": [
+            "ug-aut105-lo-1",
+            "ug-aut105-lo-2",
+            "ug-aut105-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Classify generalized shop observations by hazard category",
+        "Identify what applicable information should be checked before a task proceeds",
+        "Choose between proceed, add controls, stop, or escalate for a generalized scenario",
+        "Write a brief professional hazard and next-action note"
+      ],
+      "assessmentPlan": [
+        "Low-stakes hazard-recognition check",
+        "Information-source matching exercise",
+        "Formative stop-work or escalation reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Shop safety boundaries",
+        "Hazardous-material and environmental information",
+        "Tool and equipment applicability",
+        "High-voltage and stored-energy hazard recognition",
+        "Documentation and professional responsibility"
+      ],
+      "evidenceExpectation": "Safety, environmental, equipment, product, legal, regulatory, and vehicle-specific claims require applicable authoritative information and provenance. Numeric limits, procedures, required protective equipment, disposal rules, and authorization requirements must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
     }
   ]
 }

@@ -44,6 +44,13 @@
       "cipCode": "47.0604",
       "title": "Hybrid & Electric Vehicle Technology",
       "status": "planned"
+    },
+    {
+      "id": "aut-105",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Safety and Professional Practices",
+      "status": "planned"
     }
   ]
 }

@@ -182,6 +182,24 @@
         "Verify and document reasoning"
       ],
       "status": "planned"
+    },
+    {
+      "id": "ug-aut105-safety-professional-practice",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-105",
+      "competencyId": "ug-aut105-safe-professional-practice",
+      "title": "Automotive Shop Safety, Environmental Practice, and Professional Responsibility",
+      "sequence": [
+        "Identify work-area hazards",
+        "Classify tools, equipment, materials, and energy hazards",
+        "Locate applicable safety and environmental information",
+        "Establish safe work boundaries",
+        "Recognize high-voltage and stored-energy escalation points",
+        "Document conditions and controls",
+        "Practice a stop-work or escalation decision",
+        "Explain and verify the professional next step"
+      ],
+      "status": "planned"
     }
   ]
 }
