@@ -10,7 +10,7 @@ test.describe('AUT-250 guided question player', () => {
     await expect(page.locator('[data-question-position]')).toHaveText('Question 1 of 4');
     await expect(page.locator('[data-question-card]')).toHaveCount(1);
 
-    await page.locator('input[name="guided-question"][value="A"]').check();
+    await page.locator('input[name="guided-question"][value="B"]').check();
     await page.locator('[data-submit-answer]').click();
     await expect(page.locator('[data-question-feedback]')).toContainText('Correct.');
     await expect(page.locator('[data-question-feedback]')).toContainText('does not authorize a vehicle service action');
