@@ -290,6 +290,25 @@
   // Audit trail is recorded server-side by grading endpoint (in attempt_answers table)
   // Do not insert directly into question_attempts table (will be locked down)
 
+  async function loadAssessmentAttemptQuestions(attemptId) {
+    if (!attemptId) throw new Error('Assessment attempt ID is required.');
+    const authToken = getAuthToken();
+    if (!authToken) throw new Error('Authentication required to load assessment questions.');
+
+    const response = await fetch(`/api/assessment-attempts/${encodeURIComponent(attemptId)}/questions`, {
+      headers: { 'Authorization': `Bearer ${authToken}` },
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      const payload = await response.json().catch(() => ({}));
+      throw new Error(payload.error || `Unable to load assessment questions: ${response.status}`);
+    }
+
+    const payload = await response.json();
+    return Array.isArray(payload.questions) ? payload.questions : [];
+  }
+
   async function submitAnswerForGrading({
     attemptId,
     questionId,
@@ -502,12 +521,39 @@
     const evidenceScenarioId = item.questionBankId || item.symptomCategory || key;
     const scenario = item.raw || item;
 
+    if (isAssessmentMode && !attemptId) {
+      root.innerHTML = `<div class="scenario-card"><h1>Assessment unavailable</h1><p>A server-created assessment attempt is required.</p></div>`;
+      return;
+    }
 
-    const questionBank = normalizeQuestionBank(key, await loadScenarioQuestions(evidenceScenarioId));
-    const approvedQuestionBank = questionBank.filter((q) => String(q.status || q.question_provenance?.status || '').toLowerCase() === 'approved');
+    const loadedQuestions = isAssessmentMode
+      ? await loadAssessmentAttemptQuestions(attemptId)
+      : await loadScenarioQuestions(evidenceScenarioId);
+    const questionBank = normalizeQuestionBank(key, loadedQuestions);
+    const approvedQuestionBank = isAssessmentMode
+      ? questionBank
+      : questionBank.filter((q) => String(q.status || q.question_provenance?.status || '').toLowerCase() === 'approved');
     const studentId = getStudentId();
     const state = readAttemptState(key, studentId);
     const failedHistory = state.history.filter((entry) => !entry.passed);
+
+    if (isAssessmentMode) {
+      if (!attemptId || approvedQuestionBank.length !== QUESTIONS_PER_ATTEMPT) {
+        root.innerHTML = `<div class="scenario-card"><h1>Assessment unavailable</h1><p>The server-assigned assessment question set is not available.</p></div>`;
+        return;
+      }
+
+      const sameServerAttempt = state.activeAttempt?.serverAttemptId === attemptId;
+      const priorAnswers = sameServerAttempt ? (state.activeAttempt?.answers || {}) : {};
+      state.activeAttempt = {
+        serverAttemptId: attemptId,
+        attemptNumber: sameServerAttempt ? (state.activeAttempt?.attemptNumber || 1) : 1,
+        startedAt: sameServerAttempt ? (state.activeAttempt?.startedAt || new Date().toISOString()) : new Date().toISOString(),
+        questionIds: approvedQuestionBank.map((question) => question.__qid),
+        answers: priorAnswers
+      };
+      writeAttemptState(key, studentId, state);
+    }
 
     const title =
       item.title ||
@@ -516,8 +562,8 @@
       scenario.symptoms ||
       key;
 
-    if (!state.activeAttempt) {
-      // If there are enough approved questions, create a graded attempt
+    if (!isAssessmentMode && !state.activeAttempt) {
+      // Training mode may create a browser-managed practice attempt.
       if (approvedQuestionBank.length >= QUESTIONS_PER_ATTEMPT) {
         const previousQuestionIds = failedHistory
           .flatMap((entry) => Array.isArray(entry.questionIds) ? entry.questionIds : []);
@@ -665,6 +711,10 @@
       .filter(Boolean);
 
     if (questions.length !== state.activeAttempt.questionIds.length) {
+      if (isAssessmentMode) {
+        root.innerHTML = `<div class="scenario-card"><h1>Assessment unavailable</h1><p>The assigned question set failed validation.</p></div>`;
+        return;
+      }
       state.activeAttempt = createAttempt({
         questionBank: approvedQuestionBank,
         failedAttempts: failedHistory.length,
@@ -805,7 +855,7 @@
           const gradeResult = await submitAnswerForGrading({
             attemptId: attemptId,
             questionId: options.dataset.questionId || questionQid,
-            scenarioId: key,
+            scenarioId: evidenceScenarioId,
             selectedAnswer: selected.value,
             isAssessmentMode
           });
@@ -858,7 +908,12 @@
         const answeredCount = Object.keys(state.activeAttempt.answers).length;
         const totalQuestions = state.activeAttempt.questionIds.length;
         if (answeredCount >= totalQuestions) {
-          // Calculate score from server-provided grading results
+          if (isAssessmentMode) {
+            summaryEl.innerHTML = `<p><strong>All assigned responses submitted.</strong></p><p>Assessment scoring and finalization are server-controlled and are not enabled in this release.</p>`;
+            return;
+          }
+
+          // Training-only local summary from server-provided grading results.
           const correctCount = Object.values(state.activeAttempt.answers || {})
             .filter((a) => a && a.isCorrect).length;
           const score = Math.round((correctCount / Math.max(1, totalQuestions)) * 100);
