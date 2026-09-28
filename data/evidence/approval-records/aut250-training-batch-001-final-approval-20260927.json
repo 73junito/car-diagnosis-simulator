@@ -26,11 +26,11 @@
   },
   "requested_final_decision": {
     "scope": "training-bank-final-approval-only",
-    "decision": "pending-explicit-user-approval",
-    "approver_name": null,
-    "approver_id": null,
-    "approved_at": null,
-    "user_confirmation": null
+    "decision": "approved",
+    "approver_name": "Rafael Rodriguez",
+    "approver_id": "rafael-rodriguez",
+    "approved_at": "2026-09-27",
+    "user_confirmation": "I approve the AUT-250 training-bank final approval as written."
   },
   "approval_effect_if_confirmed": {
     "question_status": "approved-for-training-use",
@@ -51,7 +51,7 @@
     "Any later move to scored, institutional, certification-like, or high-stakes assessment use requires a separate governance review and explicit approval."
   ],
   "release_state": {
-    "training_bank_final_approval": "pending",
+    "training_bank_final_approval": "approved-for-training-use",
     "production_release": false,
     "high_stakes_release": false,
     "assessment_release": false
