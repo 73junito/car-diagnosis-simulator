@@ -99,7 +99,7 @@ describe('AUT-250 Ollama question bank expansion contract', () => {
     expect(workflow).not.toMatch(/echo\s+.*OLLAMA_API_KEY/i);
   });
 
-  test('dry run validates the approved 20-question source state without contacting Ollama', () => {
+  test('dry run validates both approved training banks without contacting Ollama', () => {
     const { spawnSync } = require('child_process');
     const result = spawnSync(
       process.execPath,
@@ -108,9 +108,10 @@ describe('AUT-250 Ollama question bank expansion contract', () => {
     );
     expect(result.status).toBe(0);
     const report = JSON.parse(result.stdout);
-    expect(report.retained_question_count).toBe(20);
+    expect(report.retained_question_count).toBe(40);
     expect(report.module_count).toBe(6);
     expect(report.governance.approved_training_bank).toBe(true);
+    expect(report.governance.approved_training_batches).toBe(2);
     expect(report.governance.third_party_source_text_sent_to_model).toBe(false);
     expect(report.governance.auto_approval).toBe(false);
   });

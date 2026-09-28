@@ -12,7 +12,7 @@ test('AUT-250 evidence drawer exposes governance details without answer keys', a
   await expect(drawer.getByText('Valid', { exact: true })).toBeVisible();
   await expect(drawer.getByText(/rights · technical · instructional · safety/i)).toBeVisible();
   await expect(drawer.getByText(/Battery access, isolation, measurement, PPE, wait times/i)).toBeVisible();
-  await expect(drawer.locator('.evidence-question-list article')).toHaveCount(4);
+  await expect(drawer.locator('.evidence-question-list article')).toHaveCount(8);
   await expect(drawer.getByText(/Answer keys are intentionally not shown/)).toBeVisible();
   await expect(drawer).not.toContainText('Calculated values may depend on models and multiple inputs');
 

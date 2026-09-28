@@ -16,7 +16,11 @@ const args = Object.fromEntries(
 const model = args.model || 'gpt-oss:20b';
 const targetCount = Number(args.target || 20);
 const curriculumPath = path.resolve(root, args.curriculum || 'data/curriculum/lesson-content.json');
-const approvalPath = path.resolve(root, args.approval || 'data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json');
+const supplementPath = path.resolve(root, args.supplement || 'data/curriculum/aut250-training-batch-002.json');
+const approvalPaths = [
+  path.resolve(root, args.approval1 || 'data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json'),
+  path.resolve(root, args.approval2 || 'data/evidence/approval-records/aut250-training-batch-002-final-approval-20260928.json')
+];
 const outputPath = path.resolve(root, args.output || 'aut250-question-drafts.json');
 const apiUrl = process.env.OLLAMA_API_URL || 'https://ollama.com/api/chat';
 const apiKey = process.env.OLLAMA_API_KEY || '';
@@ -33,38 +37,58 @@ if (!Number.isInteger(targetCount) || targetCount < 1 || targetCount > 20) {
 if (!dryRun && !apiKey) fail('OLLAMA_API_KEY is required unless --dry-run=true.');
 
 const curriculum = JSON.parse(fs.readFileSync(curriculumPath, 'utf8'));
-const approval = JSON.parse(fs.readFileSync(approvalPath, 'utf8'));
-const plan = (curriculum.lessonContentPlans || []).find((item) => item.lessonPlanId === 'ug-hev-foundations');
+const approvals = approvalPaths.map((approvalPath) => JSON.parse(fs.readFileSync(approvalPath, 'utf8')));
+const supplement = JSON.parse(fs.readFileSync(supplementPath, 'utf8'));
+const basePlan = (curriculum.lessonContentPlans || []).find((item) => item.lessonPlanId === 'ug-hev-foundations');
+const plan = basePlan ? JSON.parse(JSON.stringify(basePlan)) : null;
+if (plan) {
+  const supplementalQuestions = (supplement.modules || []).flatMap((module) => module.questions || []);
+  const supplementValid = supplement.questionBatch === 'aut250-training-batch-002-ollama-repaired' && supplement.questionCount === 20 && supplementalQuestions.length === 20 && supplementalQuestions.every((q) => q.status === 'approved-for-training-use' && q.deliveryMode === 'training' && q.scored === false && q.highStakesEligible === false && q.institutionalAssessmentEligible === false && q.productionAssessmentApiEligible === false);
+  if (!supplementValid) fail('AUT-250 Batch 002 supplemental bank is invalid.');
+  for (const supplementalModule of supplement.modules) {
+    const module = (plan.courseModules || []).find((item) => item.id === supplementalModule.moduleId);
+    if (!module) fail(`Unknown AUT-250 Batch 002 module: ${supplementalModule.moduleId}`);
+    module.trainingQuestions = [...(module.trainingQuestions || []), ...supplementalModule.questions];
+  }
+}
 
 if (!plan) fail('AUT-250 lesson plan ug-hev-foundations was not found.');
 if ((plan.courseModules || []).length !== 6) fail('AUT-250 must contain exactly six course modules.');
 
 const retainedQuestions = (plan.courseModules || []).flatMap((module) => module.trainingQuestions || []);
-if (retainedQuestions.length !== 20) fail(`Expected 20 retained approved questions; found ${retainedQuestions.length}.`);
+if (retainedQuestions.length !== 40) fail(`Expected 40 retained approved questions; found ${retainedQuestions.length}.`);
 
-const effect = approval.approval_effect_if_confirmed || {};
-const release = approval.release_state || {};
-const prerequisites = approval.prerequisite_state || {};
+const expectedApprovals = [
+  { batch: 'aut250-training-batch-001', count: 20 },
+  { batch: 'aut250-training-batch-002-ollama-repaired', count: 20 }
+];
 
-const governanceReady = [
-  approval.course_id === 'AUT-250',
-  approval.lesson_plan_id === 'ug-hev-foundations',
-  approval.question_batch === 'aut250-training-batch-001',
-  approval.question_count === 20,
-  approval.requested_final_decision?.decision === 'approved',
-  release.training_bank_final_approval === 'approved-for-training-use',
-  prerequisites.human_reviews_complete === true,
-  prerequisites.citation_representation === 'metadata-only-citation-proof',
-  prerequisites.deterministic_metadata_validation === 'valid',
-  prerequisites.deterministic_questions_valid === 20,
-  prerequisites.deterministic_questions_invalid === 0,
-  effect.training_delivery_allowed === true,
-  effect.scored === false,
-  effect.high_stakes_eligible === false,
-  effect.institutional_assessment_eligible === false,
-  effect.production_assessment_api_eligible === false
-].every(Boolean);
+const approvalReady = ({ batch, count }) => {
+  const approval = approvals.find((item) => item.question_batch === batch);
+  const effect = approval?.approval_effect_if_confirmed || {};
+  const release = approval?.release_state || {};
+  const prerequisites = approval?.prerequisite_state || {};
+  return [
+    approval?.course_id === 'AUT-250',
+    approval?.lesson_plan_id === 'ug-hev-foundations',
+    approval?.question_batch === batch,
+    approval?.question_count === count,
+    approval?.requested_final_decision?.decision === 'approved',
+    release.training_bank_final_approval === 'approved-for-training-use',
+    prerequisites.human_reviews_complete === true,
+    prerequisites.citation_representation === 'metadata-only-citation-proof',
+    prerequisites.deterministic_metadata_validation === 'valid',
+    prerequisites.deterministic_questions_valid === count,
+    prerequisites.deterministic_questions_invalid === 0,
+    effect.training_delivery_allowed === true,
+    effect.scored === false,
+    effect.high_stakes_eligible === false,
+    effect.institutional_assessment_eligible === false,
+    effect.production_assessment_api_eligible === false
+  ].every(Boolean);
+};
 
+const governanceReady = expectedApprovals.every(approvalReady);
 if (!governanceReady) fail('AUT-250 final approval and deterministic validation prerequisites are not satisfied.');
 
 const moduleSummary = (plan.courseModules || []).map((module) => ({
@@ -86,6 +110,7 @@ if (dryRun) {
     modules: moduleSummary,
     governance: {
       approved_training_bank: true,
+      approved_training_batches: 2,
       human_reviews_complete: true,
       deterministic_metadata_validation: 'valid',
       citation_representation: 'metadata-only-citation-proof',

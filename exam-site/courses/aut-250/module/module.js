@@ -3,6 +3,8 @@ import { getDistractorFeedback } from "./distractor-feedback.js";
 
 const CURRICULUM_URL = "/data/curriculum/lesson-content.json";
 const APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
+const BATCH002_APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-002-final-approval-20260928.json";
+const BATCH002_CURRICULUM_URL = "/data/curriculum/aut250-training-batch-002.json";
 const STORAGE_KEY = "autolearnpro:aut250:module-progress";
 const PROGRESS_VERSION = 2;
 
@@ -19,12 +21,13 @@ async function loadJson(url) {
   return response.json();
 }
 
-function approvalIsValid(approval) {
+function approvalIsValid(approval, expectedBatch) {
   const effect = approval?.approval_effect_if_confirmed;
   const release = approval?.release_state;
   const decision = approval?.requested_final_decision;
   return [
     approval?.course_id === "AUT-250",
+    approval?.question_batch === expectedBatch,
     approval?.lesson_plan_id === "ug-hev-foundations",
     approval?.question_count === 20,
     decision?.decision === "approved",
@@ -41,6 +44,24 @@ function approvalIsValid(approval) {
   ].every(Boolean);
 }
 
+
+function mergeBatch002IntoModule(module, supplement) {
+  const supplementalModule = supplement?.modules?.find((item) => item.moduleId === module.id);
+  const questions = supplementalModule?.questions || [];
+  const boundaryOk = supplement?.questionBatch === "aut250-training-batch-002-ollama-repaired" &&
+    supplement?.questionCount === 20 && questions.every((question) =>
+      question.status === "approved-for-training-use" &&
+      question.deliveryMode === "training" &&
+      question.scored === false &&
+      question.highStakesEligible === false &&
+      question.institutionalAssessmentEligible === false &&
+      question.productionAssessmentApiEligible === false
+    );
+  if (!boundaryOk) throw new Error("AUT-250 Batch 002 supplemental bank failed validation");
+  const existing = new Set((module.trainingQuestions || []).map((question) => question.id));
+  module.trainingQuestions = [...(module.trainingQuestions || []), ...questions.filter((question) => !existing.has(question.id))];
+  return module;
+}
 
 function renderEvidenceDrawer(approval, module) {
   const prereq = approval?.prerequisite_state || {};
@@ -359,11 +380,20 @@ function showModuleCompletion(state) {
 
 async function init() {
   try {
-    const [approval, curriculum] = await Promise.all([loadJson(APPROVAL_URL), loadJson(CURRICULUM_URL)]);
-    if (!approvalIsValid(approval)) throw new Error("AUT-250 training approval gate not satisfied");
+    const [approval, batch002Approval, curriculum, batch002Supplement] = await Promise.all([
+      loadJson(APPROVAL_URL),
+      loadJson(BATCH002_APPROVAL_URL),
+      loadJson(CURRICULUM_URL),
+      loadJson(BATCH002_CURRICULUM_URL)
+    ]);
+    if (!approvalIsValid(approval, "aut250-training-batch-001") ||
+        !approvalIsValid(batch002Approval, "aut250-training-batch-002-ollama-repaired")) {
+      throw new Error("AUT-250 training approval gate not satisfied");
+    }
 
     const plan = curriculum.lessonContentPlans?.find((item) => item.lessonPlanId === "ug-hev-foundations");
     const module = plan?.courseModules?.find((item) => item.id === moduleIdFromUrl());
+    if (module) mergeBatch002IntoModule(module, batch002Supplement);
     if (!module) throw new Error("Requested AUT-250 module not found");
     const questions = module.trainingQuestions || [];
     if (!questions.length) throw new Error("Requested module has no approved training questions");
