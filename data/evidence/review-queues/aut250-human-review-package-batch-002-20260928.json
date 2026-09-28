@@ -1,0 +1,869 @@
+{
+    "package_id":  "aut250-human-review-package-batch-002-20260928",
+    "course_id":  "AUT-250",
+    "lesson_plan_id":  "ug-hev-foundations",
+    "question_batch":  "aut250-training-batch-002-ollama-repaired",
+    "question_count":  20,
+    "created_at":  "2026-09-28T05:31:26.765Z",
+    "source_draft_artifact":  "F:/TorqueMind-aut250-ollama-output/aut250-question-expansion.json",
+    "approval_effect":  "none",
+    "current_state":  {
+                          "question_status":  "approved-for-training-use",
+                          "metadata_mapping":  "complete-pending-human-review",
+                          "technical_review":  "complete-pass-with-limitations",
+                          "instructional_review":  "complete-pass-with-limitations",
+                          "safety_review":  "complete-pass-with-limitations",
+                          "rights_review":  "complete-pass-with-limitations",
+                          "assessment_eligibility":  false
+                      },
+    "source_policy":  {
+                          "primary_search_strategy":  "scholarly/peer-reviewed literature prioritized; publisher/DOI records used for bibliographic verification",
+                          "repository_ingestion":  "blocked",
+                          "source_text_chunking":  "blocked",
+                          "verbatim_quote_storage":  "blocked",
+                          "permitted_use":  "citation metadata, DOI/URL, bibliographic facts, and project-authored evidence summaries only",
+                          "rights_note":  "Open-access or Creative Commons indicators are recorded only as candidate metadata. No source is rights-approved or content-ingestion-approved by this review."
+                      },
+    "candidate_sources":  [
+                              {
+                                  "id":  "scholar-battery-soc-soh-review-2023",
+                                  "title":  "A Systematic Literature Review of State of Health and State of Charge Estimation Methods for Batteries Used in Electric Vehicle Applications",
+                                  "publisher":  "World Electric Vehicle Journal / MDPI",
+                                  "year":  2023,
+                                  "doi":  "10.3390/wevj14090247",
+                                  "url":  "https://doi.org/10.3390/wevj14090247",
+                                  "authority":  "peer-reviewed-review",
+                                  "topic_scope":  [
+                                                      "battery management systems",
+                                                      "SOC/SOH estimation",
+                                                      "directly measured voltage/current/temperature",
+                                                      "state estimation"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "scholar-ev-power-electronics-digitalization-2018",
+                                  "title":  "Toward Green Vehicles Digitalization for the Next Generation of Connected and Electrified Transport Systems",
+                                  "publisher":  "Energies / MDPI",
+                                  "year":  2018,
+                                  "doi":  "10.3390/en11113124",
+                                  "url":  "https://doi.org/10.3390/en11113124",
+                                  "authority":  "peer-reviewed-review",
+                                  "topic_scope":  [
+                                                      "electric machines",
+                                                      "inverters",
+                                                      "DC/DC converters",
+                                                      "regenerative energy flow",
+                                                      "EV electrical architecture"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "scholar-ev-charging-review-2023",
+                                  "title":  "Review of Electric Vehicle Charging Technologies, Standards, Architectures, and Converter Configurations",
+                                  "publisher":  "IEEE Access",
+                                  "year":  2023,
+                                  "doi":  "10.1109/ACCESS.2023.3267164",
+                                  "url":  "https://doi.org/10.1109/ACCESS.2023.3267164",
+                                  "authority":  "peer-reviewed-review",
+                                  "topic_scope":  [
+                                                      "onboard/offboard charging",
+                                                      "AC/DC conversion",
+                                                      "charging architecture",
+                                                      "charging control",
+                                                      "charging standards"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "scholar-integrated-thermal-review-2025",
+                                  "title":  "Towards integrated thermal management systems in battery electric vehicles: A review",
+                                  "publisher":  "eTransportation / Elsevier",
+                                  "year":  2025,
+                                  "doi":  "10.1016/j.etran.2025.100396",
+                                  "url":  "https://doi.org/10.1016/j.etran.2025.100396",
+                                  "authority":  "peer-reviewed-review",
+                                  "topic_scope":  [
+                                                      "battery thermal management",
+                                                      "motor thermal management",
+                                                      "power electronics thermal management",
+                                                      "cabin thermal management",
+                                                      "operating-condition dependence"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "scholar-ev-aux-power-module-review-2023",
+                                  "title":  "A Review of Electric Vehicle Auxiliary Power Modules: Challenges, Topologies, and Future Trends",
+                                  "publisher":  "IEEE Transactions on Power Electronics",
+                                  "year":  2023,
+                                  "doi":  "10.1109/TPEL.2023.3288393",
+                                  "url":  "https://doi.org/10.1109/TPEL.2023.3288393",
+                                  "authority":  "peer-reviewed-review",
+                                  "topic_scope":  [
+                                                      "traction-to-low-voltage conversion",
+                                                      "12 V battery",
+                                                      "low-voltage loads",
+                                                      "auxiliary power modules"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "scholar-ev-fault-diagnosis-review-2026",
+                                  "title":  "Fault diagnosis and predictive maintenance of electric vehicle powertrain using artificial intelligence techniques: A review",
+                                  "publisher":  "Results in Engineering / Elsevier",
+                                  "year":  2026,
+                                  "doi":  "10.1016/j.rineng.2026.110857",
+                                  "url":  "https://doi.org/10.1016/j.rineng.2026.110857",
+                                  "authority":  "peer-reviewed-review",
+                                  "topic_scope":  [
+                                                      "EV fault detection and diagnosis",
+                                                      "multi-source diagnostic data",
+                                                      "diagnostic models",
+                                                      "predictive maintenance"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "scholar-vehicle-health-monitoring-review-2025",
+                                  "title":  "Advances in intelligent vehicular health monitoring and fault diagnosis: Techniques, technologies, and future directions",
+                                  "publisher":  "Measurement / Elsevier",
+                                  "year":  2025,
+                                  "doi":  "10.1016/j.measurement.2025.117618",
+                                  "url":  "https://doi.org/10.1016/j.measurement.2025.117618",
+                                  "authority":  "peer-reviewed-review",
+                                  "topic_scope":  [
+                                                      "vehicle health monitoring",
+                                                      "fault diagnosis",
+                                                      "multi-sensor fusion",
+                                                      "diagnostic evidence"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "secondary-ev-low-voltage-service-context-2025",
+                                  "title":  "Replacing the 12V Battery in an EV: What Could Go Wrong?",
+                                  "publisher":  "Midtronics",
+                                  "year":  2025,
+                                  "url":  "https://www.midtronics.com/blog/replacing-12v-battery-ev/",
+                                  "authority":  "industry-technical-secondary",
+                                  "topic_scope":  [
+                                                      "12 V control-module power",
+                                                      "high-voltage contactor enabling",
+                                                      "vehicle wake-up/service context"
+                                                  ],
+                                  "review_use":  "secondary corroboration only; scholarly source remains preferred",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "sae-hv-safety-service-technician-2010",
+                                  "title":  "High Voltage Safety for the Service Technician",
+                                  "publisher":  "SAE International",
+                                  "year":  2010,
+                                  "doi":  "10.4271/2010-01-2014",
+                                  "url":  "https://doi.org/10.4271/2010-01-2014",
+                                  "authority":  "automotive-technical-paper",
+                                  "topic_scope":  [
+                                                      "high-voltage service safety",
+                                                      "manufacturer-directed service procedures",
+                                                      "HV disabling",
+                                                      "zero-voltage verification",
+                                                      "PPE and tools"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "nhtsa-ev-service-safety",
+                                  "title":  "Electric and Hybrid Vehicles: Battery, Charging \u0026 Safety",
+                                  "publisher":  "National Highway Traffic Safety Administration",
+                                  "year":  2026,
+                                  "url":  "https://www.nhtsa.gov/vehicle-safety/electric-and-hybrid-vehicles",
+                                  "authority":  "federal-safety-guidance",
+                                  "topic_scope":  [
+                                                      "qualified EV service technicians",
+                                                      "EV-specific high-voltage training",
+                                                      "proper PPE and diagnostic equipment",
+                                                      "vehicle-specific owner/service information"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "sae-nissan-can-diagnostic-flow-2014",
+                                  "title":  "Network Diagnostic Flow Chart-How to Troubleshoot Vehicle Level CAN Communication and CAN Diagnostic Issues on Nissan and Infinity Vehicles",
+                                  "publisher":  "SAE International",
+                                  "year":  2014,
+                                  "doi":  "10.4271/2014-01-1978",
+                                  "url":  "https://doi.org/10.4271/2014-01-1978",
+                                  "authority":  "oem-authored-automotive-technical-paper",
+                                  "topic_scope":  [
+                                                      "vehicle CAN diagnostics",
+                                                      "multiple buses/modules",
+                                                      "service manual and diagnostic tools",
+                                                      "network troubleshooting workflow"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "gm-u0121-shared-circuit-diagnostic-2008",
+                                  "title":  "Unable To Communicate With The EBCM DTC U0121 (PIT4056C)",
+                                  "publisher":  "General Motors; NHTSA-hosted service bulletin",
+                                  "year":  2008,
+                                  "url":  "https://static.nhtsa.gov/odi/tsbs/2012/SB-10022691-8261.pdf",
+                                  "authority":  "oem-service-bulletin",
+                                  "topic_scope":  [
+                                                      "lost communication",
+                                                      "power/ground/enable/network circuit verification",
+                                                      "shared circuit causing module communication loss",
+                                                      "avoid premature module replacement"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "icar-adas-diagnostic-process-2025",
+                                  "title":  "Advanced Driver Assistance Systems (ADAS) Collision Repair Diagnostics Process",
+                                  "publisher":  "I-CAR",
+                                  "year":  2025,
+                                  "url":  "https://rts.i-car.com/crn-642.html",
+                                  "authority":  "industry-repair-training-guidance",
+                                  "topic_scope":  [
+                                                      "12-volt and communication prerequisites",
+                                                      "pre-scan evidence preservation",
+                                                      "OEM diagnostic information",
+                                                      "post-repair scan and diagnostic process"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "iet-fault-hypothesis-testing-1992",
+                                  "title":  "A domain-independent theory for testing fault hypotheses",
+                                  "publisher":  "Institution of Engineering and Technology / IEEE Xplore",
+                                  "year":  1992,
+                                  "url":  "https://ieeexplore.ieee.org/document/170065",
+                                  "authority":  "peer-reviewed-conference-paper",
+                                  "topic_scope":  [
+                                                      "fault hypotheses",
+                                                      "hypothetico-deductive reasoning",
+                                                      "confirming/disconfirming hypotheses",
+                                                      "discriminating competing hypotheses",
+                                                      "test selection"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "automotive-engine-diagnostic-survey-2012",
+                                  "title":  "A survey on diagnostic methods for automotive engines",
+                                  "publisher":  "International Journal of Engine Research / SAGE",
+                                  "year":  2012,
+                                  "doi":  "10.1177/1468087411422851",
+                                  "url":  "https://doi.org/10.1177/1468087411422851",
+                                  "authority":  "peer-reviewed-review",
+                                  "topic_scope":  [
+                                                      "automotive fault detection",
+                                                      "fault isolation",
+                                                      "model-based diagnosis",
+                                                      "data-driven diagnosis"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              },
+                              {
+                                  "id":  "gm-pre-post-scan-position-2022",
+                                  "title":  "Pre- and Post-Scan of Collision Vehicles",
+                                  "publisher":  "General Motors",
+                                  "year":  2022,
+                                  "url":  "https://www.gmparts.com/content/dam/gmparts/na/us/en/index/technical-resources/position-statements/02-pdfs/new/pre-post-scan-collision-vehicles.pdf",
+                                  "authority":  "oem-position-statement",
+                                  "topic_scope":  [
+                                                      "post-repair diagnostic retest",
+                                                      "verify faults repaired",
+                                                      "verify no new faults introduced",
+                                                      "OEM repair procedures"
+                                                  ],
+                                  "review_use":  "candidate citation support only",
+                                  "ingestion_status":  "metadata-and-link-only"
+                              }
+                          ],
+    "citation_evidence_decision":  {
+                                       "status":  "confirmed-project-governance",
+                                       "approved_representation":  "metadata-only-citation-proof",
+                                       "inherited_from":  "aut250-human-review-package-20260927",
+                                       "approval_effect":  "none",
+                                       "note":  "Project-level representation is reused; source applicability and all human review decisions are new for batch 002."
+                                   },
+    "duplicate_review":  {
+                             "exact_or_guard_detected_duplicates":  0,
+                             "material_review_status":  "clear-after-repair",
+                             "approval_effect":  "none"
+                         },
+    "reviewer_requirements":  {
+                                  "rights":  {
+                                                 "required":  true,
+                                                 "reviewer_name":  "Rafael Rodriguez",
+                                                 "reviewer_id":  "rafael-rodriguez",
+                                                 "qualification_reference":  "AutoLearnPro project owner / content-governance authority.",
+                                                 "reviewed_at":  "2026-09-28",
+                                                 "decision":  "pass-with-limitations",
+                                                 "checklist":  {
+                                                                   "source_identity_and_ownership_reviewed":  true,
+                                                                   "permitted_use_scope_reviewed":  true,
+                                                                   "metadata_link_only_policy_confirmed":  true,
+                                                                   "third_party_material_risk_reviewed":  true
+                                                               },
+                                                 "completion_rule":  "All checklist items true, reviewer identity/qualification/date populated, and decision pass or pass-with-limitations.",
+                                                 "limitations":  [
+                                                                     "Use only citation metadata, canonical URLs/DOIs, bibliographic facts, and project-authored summaries.",
+                                                                     "Do not ingest, chunk, redistribute, or store copyrighted source excerpts unless a separate documented rights basis exists.",
+                                                                     "Metadata-only evidence must not be described as excerpt validation, source-text hash validation, or copyright/license clearance.",
+                                                                     "Open-access or Creative Commons indicators must be verified per source before any broader reuse.",
+                                                                     "Rights approval does not by itself approve production release, assessment eligibility, or final question promotion."
+                                                                 ],
+                                                 "user_confirmation":  "I approve the Rights Review."
+                                             },
+                                  "technical":  {
+                                                    "required":  true,
+                                                    "reviewer_name":  "Rafael Rodriguez",
+                                                    "reviewer_id":  "rafael-rodriguez",
+                                                    "qualification_reference":  "Former post-secondary automotive instructor with over six years of automotive instruction; automotive/diesel technician background; retired Army heavy equipment repair leader/technician.",
+                                                    "reviewed_at":  "2026-09-28",
+                                                    "decision":  "pass-with-limitations",
+                                                    "checklist":  {
+                                                                      "technical_claims_reviewed":  true,
+                                                                      "source_applicability_reviewed":  true,
+                                                                      "vehicle_specific_boundaries_preserved":  true,
+                                                                      "no_single_clue_root_cause_overreach":  true,
+                                                                      "no_universal_service_values_introduced":  true,
+                                                                      "explanations_and_keys_checked":  true
+                                                                  },
+                                                    "completion_rule":  "All checklist items true, reviewer identity/qualification/date populated, and decision pass or pass-with-limitations.",
+                                                    "limitations":  [
+                                                                        "The 20 questions remain conceptual/formative training questions and do not authorize vehicle service procedures.",
+                                                                        "Vehicle-specific thresholds, electrical-state verification, isolation steps, PPE, test points, acceptance criteria, and procedures must come from applicable authoritative information.",
+                                                                        "No single DTC, measurement, symptom, state estimate, communication fault, charging condition, or other observation establishes component failure by itself.",
+                                                                        "Request -\u003e Measure -\u003e Compare -\u003e Correlate -\u003e Verify remains an AutoLearnPro project-authored diagnostic framework.",
+                                                                        "Technical approval does not approve citations, rights, safety, instructional quality, production use, or assessment eligibility."
+                                                                    ],
+                                                    "user_confirmation":  "I approve the Technical Review"
+                                                },
+                                  "instructional":  {
+                                                        "required":  true,
+                                                        "reviewer_name":  "Rafael Rodriguez",
+                                                        "reviewer_id":  "rafael-rodriguez",
+                                                        "qualification_reference":  "Former post-secondary automotive instructor with over six years of experience teaching automotive systems, diagnostics, electrical/electronics, engine performance, climate control, brakes, drivetrain, suspension/steering, and transmission courses.",
+                                                        "reviewed_at":  "2026-09-28",
+                                                        "decision":  "pass-with-limitations",
+                                                        "checklist":  {
+                                                                          "module_alignment_reviewed":  true,
+                                                                          "learning_objective_alignment_reviewed":  true,
+                                                                          "distractor_quality_reviewed":  true,
+                                                                          "explanation_quality_reviewed":  true,
+                                                                          "difficulty_and_progression_reviewed":  true,
+                                                                          "training_only_language_clear":  true
+                                                                      },
+                                                        "completion_rule":  "All checklist items true, reviewer identity/qualification/date populated, and decision pass or pass-with-limitations.",
+                                                        "limitations":  [
+                                                                            "The 20 items remain formative training content and are not institutional or high-stakes assessment items.",
+                                                                            "Difficulty labels may be recalibrated later using learner-performance data, but analytics must not substitute for technical, safety, or rights review.",
+                                                                            "Learner feedback should continue emphasizing evidence correlation, uncertainty, and applicable vehicle-specific information.",
+                                                                            "Distractors must continue avoiding unsafe service shortcuts, universal procedures, or component replacement from a single clue.",
+                                                                            "Instructional approval does not approve rights, safety, citation validation, production release, or assessment eligibility."
+                                                                        ],
+                                                        "user_confirmation":  "I approve the Instructional Review."
+                                                    },
+                                  "safety":  {
+                                                 "required":  true,
+                                                 "reviewer_name":  "Rafael Rodriguez",
+                                                 "reviewer_id":  "rafael-rodriguez",
+                                                 "qualification_reference":  "Former post-secondary automotive instructor and automotive/diesel technician with experience teaching shop safety, electrical/electronics, diagnostics, and hands-on automotive laboratory procedures.",
+                                                 "reviewed_at":  "2026-09-28",
+                                                 "decision":  "pass-with-limitations",
+                                                 "checklist":  {
+                                                                   "high_voltage_safety_language_reviewed":  true,
+                                                                   "vehicle_specific_procedure_boundaries_reviewed":  true,
+                                                                   "no_universal_wait_times_or_thresholds":  true,
+                                                                   "no_unsafe_bypass_or_intrusive_steps":  true,
+                                                                   "learner_feedback_does_not_authorize_service_action":  true
+                                                               },
+                                                 "completion_rule":  "All checklist items true, reviewer identity/qualification/date populated, and decision pass or pass-with-limitations.",
+                                                 "limitations":  [
+                                                                     "AUT-250 remains conceptual/formative training and does not replace manufacturer or workplace safety procedures.",
+                                                                     "High-voltage isolation, discharge or wait times, PPE selection, meter category or rating, test points, and acceptance criteria remain vehicle- or component-specific.",
+                                                                     "No learner response or feedback authorizes component removal, high-voltage access, energized testing, or bypass of protection systems.",
+                                                                     "Diagnostic evidence may justify further investigation but does not authorize unsafe physical action.",
+                                                                     "Safety approval does not approve rights, citation validation, production release, or assessment eligibility."
+                                                                 ],
+                                                 "user_confirmation":  "I approve the Safety Review."
+                                             }
+                              },
+    "summary":  {
+                    "candidate_supported":  20,
+                    "metadata_mapped":  20,
+                    "approved":  20,
+                    "technical_review_complete":  20,
+                    "instructional_review_complete":  20,
+                    "safety_review_complete":  20,
+                    "rights_review_complete":  20
+                },
+    "questions":  [
+                      {
+                          "question_id":  "aut250-m1-battery-systems-ollama-draft-388cf05bff3a",
+                          "module_id":  "aut250-m1-battery-systems",
+                          "topic":  "cell-group-evidence",
+                          "reasoning_focus":  "correlate",
+                          "claim_review":  "A battery data set shows one cell-group voltage differing from neighboring groups during the same operating state. What is the most defensible next interpretation?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-battery-soc-soh-review-2023",
+                                                       "scholar-ev-fault-diagnosis-review-2026"
+                                                   ],
+                          "source_applicability_notes":  "Cell-group differences are treated as evidence to correlate with state, trends, and related battery data; no single observation is treated as failure proof.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m1-battery-systems-ollama-draft-b33bb6397d19",
+                          "module_id":  "aut250-m1-battery-systems",
+                          "topic":  "state-of-health-context",
+                          "reasoning_focus":  "compare",
+                          "claim_review":  "A battery state-of-health estimate changes noticeably from an earlier record. What should be compared before using that change to support a repair decision?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-battery-soc-soh-review-2023"
+                                                   ],
+                          "source_applicability_notes":  "SOH remains an estimated/calculated state; interpretation is tied to inputs, context, and trend rather than a universal replacement rule.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m1-battery-systems-ollama-draft-a3c702a9fd0c",
+                          "module_id":  "aut250-m1-battery-systems",
+                          "topic":  "cell-imbalance-correlation",
+                          "reasoning_focus":  "correlate",
+                          "claim_review":  "A battery-management system reports a cell-imbalance condition. Which evidence best helps evaluate whether a meaningful difference is actually present?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-battery-soc-soh-review-2023",
+                                                       "scholar-ev-fault-diagnosis-review-2026"
+                                                   ],
+                          "source_applicability_notes":  "Cell-group voltage evidence is appropriate for evaluating an imbalance hypothesis when compared under relevant operating context.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m1-battery-systems-ollama-draft-5d05fc2f7739",
+                          "module_id":  "aut250-m1-battery-systems",
+                          "topic":  "temperature-context",
+                          "reasoning_focus":  "request",
+                          "claim_review":  "Before deciding that a battery temperature reading is abnormal, what information should be requested or established first?",
+                          "support_strength":  "moderate",
+                          "candidate_source_ids":  [
+                                                       "scholar-battery-soc-soh-review-2023",
+                                                       "scholar-integrated-thermal-review-2025"
+                                                   ],
+                          "source_applicability_notes":  "Battery temperature is interpreted with operating context and applicable vehicle criteria; wording avoids universal limits.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m2-power-electronics-ollama-draft-ae4b42cfbe10",
+                          "module_id":  "aut250-m2-power-electronics",
+                          "topic":  "power-electronics-thermal-evidence",
+                          "reasoning_focus":  "correlate",
+                          "claim_review":  "Which evidence set best supports investigation of a possible power-electronics thermal concern?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-ev-power-electronics-digitalization-2018",
+                                                       "scholar-integrated-thermal-review-2025"
+                                                   ],
+                          "source_applicability_notes":  "Power-electronics temperature is correlated with operating state and thermal behavior rather than treated as an isolated pass/fail value.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m2-power-electronics-ollama-draft-9daed9d46c42",
+                          "module_id":  "aut250-m2-power-electronics",
+                          "topic":  "command-response-deviation",
+                          "reasoning_focus":  "compare",
+                          "claim_review":  "A DC-DC converter measured response differs from the commanded or expected response. What is the most appropriate next step?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-ev-fault-diagnosis-review-2026",
+                                                       "scholar-vehicle-health-monitoring-review-2025"
+                                                   ],
+                          "source_applicability_notes":  "Command-response disagreement is diagnostic evidence requiring validation and correlation; it does not identify a failed converter by itself.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m2-power-electronics-ollama-draft-97ac5915441e",
+                          "module_id":  "aut250-m2-power-electronics",
+                          "topic":  "missing-command-evidence",
+                          "reasoning_focus":  "correlate",
+                          "claim_review":  "An inverter-related fault is present while the expected command is not observed. What should be correlated before identifying a root cause?",
+                          "support_strength":  "moderate",
+                          "candidate_source_ids":  [
+                                                       "scholar-ev-power-electronics-digitalization-2018",
+                                                       "scholar-ev-fault-diagnosis-review-2026"
+                                                   ],
+                          "source_applicability_notes":  "A missing command is evaluated across command path, communication, enabling, supply/readiness, and fault history rather than assigned to one cause.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m2-power-electronics-ollama-draft-869ccae18c7e",
+                          "module_id":  "aut250-m2-power-electronics",
+                          "topic":  "post-repair-verification",
+                          "reasoning_focus":  "verify",
+                          "claim_review":  "After service to a power-electronics system, which verification approach best demonstrates that the original concern has been addressed?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "gm-pre-post-scan-position-2022",
+                                                       "icar-adas-diagnostic-process-2025"
+                                                   ],
+                          "source_applicability_notes":  "Post-repair verification returns to the original concern and relevant system behavior instead of relying on code clearing or replacement alone.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m3-charging-ollama-draft-7ea378e5d3a8",
+                          "module_id":  "aut250-m3-charging",
+                          "topic":  "charging-boundary-evidence",
+                          "reasoning_focus":  "request",
+                          "claim_review":  "For a no-charge concern, which initial evidence set best helps separate an external-supply issue from a vehicle-side readiness issue?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-ev-charging-review-2023"
+                                                   ],
+                          "source_applicability_notes":  "Charging diagnosis is separated across external supply/equipment, connection recognition, vehicle readiness, and battery-side conditions.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m3-charging-ollama-draft-3c3ec1c8ad76",
+                          "module_id":  "aut250-m3-charging",
+                          "topic":  "charging-voltage-mismatch",
+                          "reasoning_focus":  "compare",
+                          "claim_review":  "External charging voltage and the vehicle-side expected input do not agree. What conclusion is justified from that mismatch alone?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-ev-charging-review-2023"
+                                                   ],
+                          "source_applicability_notes":  "A charging voltage mismatch is retained as evidence requiring validation and boundary correlation, not proof that either side is defective.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m3-charging-ollama-draft-ffdb41345681",
+                          "module_id":  "aut250-m3-charging",
+                          "topic":  "thermal-charge-limitation",
+                          "reasoning_focus":  "correlate",
+                          "claim_review":  "Charging is limited while temperature-related information is present. Which evidence should be correlated to evaluate a thermal-limitation hypothesis?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-ev-charging-review-2023",
+                                                       "scholar-integrated-thermal-review-2025"
+                                                   ],
+                          "source_applicability_notes":  "Thermal charging limitation is evaluated using temperature, thermal status/commands, charging state, context, and applicable criteria.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m4-thermal-ollama-draft-acb8b4263120",
+                          "module_id":  "aut250-m4-thermal",
+                          "topic":  "thermal-protection-status",
+                          "reasoning_focus":  "request",
+                          "claim_review":  "Before considering physical inspection of a thermal-management component, which nonintrusive evidence is most useful to request first?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-integrated-thermal-review-2025"
+                                                   ],
+                          "source_applicability_notes":  "Nonintrusive thermal/protection status is requested before escalation to physical inspection or higher-risk work.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m4-thermal-ollama-draft-9d0fb71fdab3",
+                          "module_id":  "aut250-m4-thermal",
+                          "topic":  "temperature-sensor-plausibility",
+                          "reasoning_focus":  "compare",
+                          "claim_review":  "Which approach best evaluates whether a reported temperature value is plausible?",
+                          "support_strength":  "moderate",
+                          "candidate_source_ids":  [
+                                                       "scholar-integrated-thermal-review-2025",
+                                                       "scholar-vehicle-health-monitoring-review-2025"
+                                                   ],
+                          "source_applicability_notes":  "Temperature plausibility is evaluated through related evidence, trends, and context; calibration data alone is not treated as proof.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m4-thermal-ollama-draft-2adc14f13628",
+                          "module_id":  "aut250-m4-thermal",
+                          "topic":  "thermal-derate-correlation",
+                          "reasoning_focus":  "correlate",
+                          "claim_review":  "Vehicle output decreases as temperature rises. What evidence pattern would best support, but not by itself prove, a thermal-protection hypothesis?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-integrated-thermal-review-2025",
+                                                       "scholar-ev-fault-diagnosis-review-2026"
+                                                   ],
+                          "source_applicability_notes":  "A repeatable relationship among temperature, protection status, operating state, and derate supports a hypothesis without proving a component fault.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m5-low-voltage-ollama-draft-9f6870e57dd8",
+                          "module_id":  "aut250-m5-low-voltage",
+                          "topic":  "network-readiness-evidence",
+                          "reasoning_focus":  "request",
+                          "claim_review":  "Before escalating a communication-loss concern, which foundational evidence should be requested or checked first?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "scholar-ev-aux-power-module-review-2023",
+                                                       "sae-nissan-can-diagnostic-flow-2014",
+                                                       "icar-adas-diagnostic-process-2025"
+                                                   ],
+                          "source_applicability_notes":  "Low-voltage supply, wake-up/readiness, network, module status, and fault history are foundational evidence before escalation.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m5-low-voltage-ollama-draft-450cd6fb3fe0",
+                          "module_id":  "aut250-m5-low-voltage",
+                          "topic":  "wake-up-response",
+                          "reasoning_focus":  "measure",
+                          "claim_review":  "What evidence best indicates whether a control module responded to an expected wake-up request?",
+                          "support_strength":  "moderate",
+                          "candidate_source_ids":  [
+                                                       "scholar-ev-aux-power-module-review-2023",
+                                                       "sae-nissan-can-diagnostic-flow-2014"
+                                                   ],
+                          "source_applicability_notes":  "Wake-up response is represented as architecture-dependent module status/state evidence interpreted with supply and network context.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m5-low-voltage-ollama-draft-19360267ce2a",
+                          "module_id":  "aut250-m5-low-voltage",
+                          "topic":  "shared-low-voltage-dependency",
+                          "reasoning_focus":  "correlate",
+                          "claim_review":  "Several modules report low-voltage or availability concerns at about the same time. Which evidence best supports investigation of a shared cause?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "sae-nissan-can-diagnostic-flow-2014",
+                                                       "gm-u0121-shared-circuit-diagnostic-2008"
+                                                   ],
+                          "source_applicability_notes":  "Shared supply, ground, wake-up, network, and timing dependencies are considered before independent module-failure conclusions.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m6-diagnostic-reasoning-ollama-draft-925d943ffcea",
+                          "module_id":  "aut250-m6-diagnostic-reasoning",
+                          "topic":  "request-step-definition",
+                          "reasoning_focus":  "request",
+                          "claim_review":  "In the Request -\u003e Measure -\u003e Compare -\u003e Correlate -\u003e Verify model, what is the purpose of the Request step?",
+                          "support_strength":  "moderate",
+                          "candidate_source_ids":  [
+                                                       "automotive-engine-diagnostic-survey-2012",
+                                                       "iet-fault-hypothesis-testing-1992"
+                                                   ],
+                          "source_applicability_notes":  "The Request step remains explicitly project-authored; external diagnostic literature supports purposeful evidence gathering and hypothesis-oriented diagnosis without claiming authorship of the framework.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m6-diagnostic-reasoning-ollama-draft-207f60bb39e0",
+                          "module_id":  "aut250-m6-diagnostic-reasoning",
+                          "topic":  "measurement-uncertainty",
+                          "reasoning_focus":  "measure",
+                          "claim_review":  "A measurement appears inconsistent with other evidence. What action best helps determine whether the measurement itself is reliable?",
+                          "support_strength":  "moderate",
+                          "candidate_source_ids":  [
+                                                       "scholar-vehicle-health-monitoring-review-2025",
+                                                       "automotive-engine-diagnostic-survey-2012"
+                                                   ],
+                          "source_applicability_notes":  "Repeat/cross-check behavior is used to evaluate measurement consistency; the item does not claim repetition alone proves accuracy.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      },
+                      {
+                          "question_id":  "aut250-m6-diagnostic-reasoning-ollama-draft-5d5c6c04aacf",
+                          "module_id":  "aut250-m6-diagnostic-reasoning",
+                          "topic":  "verification-documentation",
+                          "reasoning_focus":  "verify",
+                          "claim_review":  "Which documentation best supports a verifiable post-repair record?",
+                          "support_strength":  "strong",
+                          "candidate_source_ids":  [
+                                                       "gm-pre-post-scan-position-2022",
+                                                       "icar-adas-diagnostic-process-2025"
+                                                   ],
+                          "source_applicability_notes":  "Documentation links original concern, evidence, corrective action, and verification results; documentation supports traceability but is not itself the repair verification.",
+                          "citation_validation_status":  "metadata-mapped-pending-human-review",
+                          "technical_review_status":  "complete-pass-with-limitations",
+                          "instructional_review_status":  "complete-pass-with-limitations",
+                          "safety_review_status":  "complete-pass-with-limitations",
+                          "rights_review_status":  "complete-pass-with-limitations",
+                          "duplicate_status":  "clear",
+                          "approval_effect":  "approved-for-training-use"
+                      }
+                  ],
+    "release_gate":  {
+                         "status":  "final-approved-for-training-use",
+                         "requires":  [
+                                          "rights review",
+                                          "technical review",
+                                          "instructional review",
+                                          "safety review",
+                                          "metadata evidence confirmation"
+                                      ],
+                         "question_approval_effect":  "none",
+                         "assessment_eligibility_effect":  "none"
+                     },
+    "instructional_normalization":  {
+                                        "status":  "complete-pending-instructional-approval",
+                                        "answer_key_distribution":  {
+                                                                        "A":  5,
+                                                                        "B":  5,
+                                                                        "C":  5,
+                                                                        "D":  5
+                                                                    },
+                                        "length_cue_flags":  0,
+                                        "question_ids_preserved":  true,
+                                        "explanations_preserved":  true,
+                                        "note":  "Option wording and key positions normalized to reduce test-taking cues; learning targets and explanations preserved. Q18 uses ASCII arrows for stable storage/display."
+                                    },
+    "deterministic_metadata_validation":  {
+                                              "status":  "preflight-valid",
+                                              "validator_version":  "aut250-metadata-citation-preflight-batch2-1.0",
+                                              "validated_at":  "2026-09-28T05:43:23.875Z",
+                                              "question_count":  20,
+                                              "reviewed_question_count":  20,
+                                              "candidate_source_count":  16,
+                                              "metadata_linkage_verified":  true,
+                                              "human_review_complete":  true,
+                                              "errors":  [
+
+                                                         ],
+                                              "validation_result_file":  "data/evidence/validation-results/aut250-training-batch-002-metadata-validation-20260928.json",
+                                              "question_approval_effect":  "none",
+                                              "assessment_eligibility_effect":  "none"
+                                          },
+    "final_approval":  {
+                           "status":  "approved-for-training-use",
+                           "approval_record":  "data/evidence/approval-records/aut250-training-batch-002-final-approval-20260928.json",
+                           "approved_at":  "2026-09-28",
+                           "approved_by":  "Rafael Rodriguez",
+                           "scored":  false,
+                           "high_stakes_eligible":  false,
+                           "institutional_assessment_eligible":  false,
+                           "production_assessment_api_eligible":  false
+                       }
+}

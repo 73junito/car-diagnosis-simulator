@@ -1,0 +1,25 @@
+{
+  "validator_version": "aut250-metadata-citation-preflight-batch2-1.0",
+  "validation_method": "deterministic-metadata-linkage-human-gate-and-draft-governance-preflight",
+  "validated_at": "2026-09-28T05:43:23.875Z",
+  "question_batch": "aut250-training-batch-002-ollama-repaired",
+  "question_count": 20,
+  "reviewed_question_count": 20,
+  "candidate_source_count": 16,
+  "metadata_linkage_verified": true,
+  "human_review_roles_complete": [
+    "rights",
+    "technical",
+    "instructional",
+    "safety"
+  ],
+  "human_review_complete": true,
+  "rights_clearance_claimed": false,
+  "excerpt_verification_claimed": false,
+  "source_hash_verification_claimed": false,
+  "production_citation_validation_written": false,
+  "question_approval_effect": "none",
+  "assessment_eligibility_effect": "none",
+  "result": "preflight-valid",
+  "errors": []
+}

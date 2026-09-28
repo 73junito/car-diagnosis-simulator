@@ -1,5 +1,8 @@
 const ROOT = "/data/curriculum";
-const AUT250_TRAINING_APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
+const AUT250_TRAINING_APPROVALS = [
+  { url: "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json", batch: "aut250-training-batch-001", count: 20 },
+  { url: "/data/evidence/approval-records/aut250-training-batch-002-final-approval-20260928.json", batch: "aut250-training-batch-002-ollama-repaired", count: 20 }
+];
 
 const escapeHtml = (value) => String(value ?? "")
   .replace(/&/g, "&amp;")
@@ -19,40 +22,53 @@ async function loadJson(name) {
   return response.json();
 }
 
-async function loadTrainingApproval() {
-  const response = await fetch(AUT250_TRAINING_APPROVAL_URL, { cache: "no-store" });
-  if (!response.ok) throw new Error(`Failed to load AUT-250 training approval: ${response.status}`);
-  return response.json();
+async function loadTrainingApprovals() {
+  return Promise.all(AUT250_TRAINING_APPROVALS.map(async ({ url }) => {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Failed to load AUT-250 training approval: ${response.status}`);
+    return response.json();
+  }));
 }
 
-function evaluateAut250TrainingRelease(approval) {
-  const effect = approval?.approval_effect_if_confirmed;
-  const release = approval?.release_state;
-  const decision = approval?.requested_final_decision;
+function evaluateAut250TrainingRelease(approvals = []) {
+  const list = Array.isArray(approvals) ? approvals : [approvals];
+  const batchChecks = AUT250_TRAINING_APPROVALS.map(({ batch, count }) => {
+    const approval = list.find((item) => item?.question_batch === batch);
+    const effect = approval?.approval_effect_if_confirmed;
+    const release = approval?.release_state;
+    const decision = approval?.requested_final_decision;
+    return {
+      batch,
+      present: Boolean(approval),
+      correctCount: approval?.question_count === count,
+      explicitlyApproved: decision?.decision === "approved",
+      trainingOnlyScope: decision?.scope === "training-bank-final-approval-only",
+      trainingApproved: release?.training_bank_final_approval === "approved-for-training-use",
+      trainingDeliveryAllowed: effect?.training_delivery_allowed === true,
+      remainsUnscored: effect?.scored === false,
+      notHighStakes: effect?.high_stakes_eligible === false && release?.high_stakes_release === false,
+      notInstitutionalAssessment: effect?.institutional_assessment_eligible === false,
+      notProductionAssessmentApi: effect?.production_assessment_api_eligible === false,
+      noAssessmentRelease: release?.assessment_release === false,
+      noProductionRelease: release?.production_release === false
+    };
+  });
 
   const checks = {
-    correctBatch: approval?.question_batch === "aut250-training-batch-001",
-    correctCount: approval?.question_count === 20,
-    explicitlyApproved: decision?.decision === "approved",
-    trainingOnlyScope: decision?.scope === "training-bank-final-approval-only",
-    trainingApproved: release?.training_bank_final_approval === "approved-for-training-use",
-    trainingDeliveryAllowed: effect?.training_delivery_allowed === true,
-    remainsUnscored: effect?.scored === false,
-    notHighStakes: effect?.high_stakes_eligible === false && release?.high_stakes_release === false,
-    notInstitutionalAssessment: effect?.institutional_assessment_eligible === false,
-    notProductionAssessmentApi: effect?.production_assessment_api_eligible === false,
-    noAssessmentRelease: release?.assessment_release === false,
-    noProductionRelease: release?.production_release === false
+    allRequiredBatchesPresent: batchChecks.every((entry) => entry.present),
+    allRequiredBatchesApproved: batchChecks.every((entry) =>
+      Object.entries(entry).filter(([key]) => key !== "batch").every(([, value]) => value === true)
+    )
   };
-
   const approved = Object.values(checks).every(Boolean);
   return {
     approved,
     checks,
+    batchChecks,
     status: approved ? "approved-for-training-use" : "blocked",
     message: approved
       ? "Approved for formative training use only."
-      : "Training questions are unavailable because the final approval gate is not satisfied."
+      : "Training questions are unavailable because all required final approval gates are not satisfied."
   };
 }
 
@@ -661,7 +677,7 @@ async function init() {
 
     let trainingReleaseGate;
     try {
-      trainingReleaseGate = evaluateAut250TrainingRelease(await loadTrainingApproval());
+      trainingReleaseGate = evaluateAut250TrainingRelease(await loadTrainingApprovals());
     } catch (approvalError) {
       console.error("AUT-250 training approval gate failed closed:", approvalError);
       trainingReleaseGate = {

@@ -9,37 +9,48 @@ describe('AUT-250 training question bank', () => {
   const modules = aut250.courseModules || [];
   const questions = modules.flatMap((module) => module.trainingQuestions || []);
 
-  test('contains exactly 20 unique training questions across six modules', () => {
+  test('contains exactly 40 unique approved training questions across six modules', () => {
     expect(modules).toHaveLength(6);
-    expect(questions).toHaveLength(20);
-    expect(new Set(questions.map((question) => question.id)).size).toBe(20);
-    expect(new Set(questions.map((question) => question.stem.trim())).size).toBe(20);
+    expect(questions).toHaveLength(40);
+    expect(new Set(questions.map((question) => question.id)).size).toBe(40);
+    expect(new Set(questions.map((question) => question.stem.trim())).size).toBe(40);
     expect(modules.map((module) => (module.trainingQuestions || []).length))
-      .toEqual([4, 4, 3, 3, 3, 3]);
+      .toEqual([8, 8, 6, 6, 6, 6]);
   });
 
-  test('keeps every AUT-250 item draft, training-only, and non-high-stakes', () => {
+  test('keeps every AUT-250 item approved only for formative training and non-assessment use', () => {
     for (const question of questions) {
-      expect(question.status).toBe('draft');
+      expect(question.status).toBe('approved-for-training-use');
       expect(question.deliveryMode).toBe('training');
       expect(question.scored).toBe(false);
       expect(question.highStakesEligible).toBe(false);
-      expect(question.provenanceStatus).toBe('pending-bulk-review');
-      expect(question.citationValidationStatus).toBe('pending');
+      expect(question.institutionalAssessmentEligible).toBe(false);
+      expect(question.productionAssessmentApiEligible).toBe(false);
+      expect(question.provenanceStatus).toBe('human-reviewed');
+      expect(question.citationValidationStatus).toBe('metadata-preflight-valid');
       expect(question.authorship).toBe('project-authored');
+      expect(['aut250-training-batch-001', 'aut250-training-batch-002-ollama-repaired'])
+        .toContain(question.approvalBatch);
       expect(question.answer).toMatch(/^[A-D]$/);
       expect(Object.keys(question.choices)).toEqual(['A', 'B', 'C', 'D']);
       expect(question.explanation.length).toBeGreaterThan(40);
     }
   });
 
-  test('records the 20-question bulk review trigger without approval effect', () => {
-    expect(aut250.trainingQuestionBank.totalQuestions).toBe(20);
-    expect(aut250.trainingQuestionBank.status).toBe('draft');
-    expect(aut250.trainingQuestionBank.deliveryMode).toBe('training');
-    expect(aut250.trainingQuestionBank.questionApprovalEffect).toBe('none');
-    expect(aut250.trainingQuestionBank.reviewTrigger).toMatch(/20-question threshold reached/i);
-    expect(aut250.trainingQuestionBank.assessmentBoundary).toMatch(/not served by the approved assessment API/i);
+  test('records both approved batches without changing assessment eligibility', () => {
+    const bank = aut250.trainingQuestionBank;
+    expect(bank.totalQuestions).toBe(40);
+    expect(bank.status).toBe('approved-for-training-use');
+    expect(bank.deliveryMode).toBe('training');
+    expect(bank.questionApprovalEffect).toBe('training-use-only');
+    expect(bank.approvedBatches).toEqual([
+      'aut250-training-batch-001',
+      'aut250-training-batch-002-ollama-repaired'
+    ]);
+    expect(bank.approvalRecords).toHaveLength(2);
+    expect(bank.releaseGate).toBe('both-final-approval-records-required');
+    expect(bank.assessmentBoundary).toMatch(/non-scored/i);
+    expect(bank.assessmentBoundary).toMatch(/not eligible for high-stakes, institutional, or production assessment api use/i);
   });
 
   test('contains no question-specific universal service thresholds or procedures', () => {
