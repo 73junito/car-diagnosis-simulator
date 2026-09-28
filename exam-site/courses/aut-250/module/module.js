@@ -1,3 +1,5 @@
+import { renderModuleVisuals } from "./module-visuals.js";
+
 const CURRICULUM_URL = "/data/curriculum/lesson-content.json";
 const APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
 
@@ -109,6 +111,10 @@ async function init() {
     document.querySelector("[data-player-eyebrow]").textContent = `AUT-250 · MODULE ${String(module.sequence).padStart(2, "0")} · FORMATIVE TRAINING`;
     document.querySelector("[data-player-title]").textContent = module.title;
     document.querySelector("[data-player-objective]").textContent = module.moduleObjectives?.[0] || "";
+
+    const visualGrid = document.querySelector("[data-module-visual-grid]");
+    visualGrid.innerHTML = renderModuleVisuals(module.visuals || []);
+    document.querySelector("[data-visual-section]").hidden = false;
 
     const state = { questions, index: 0 };
     const player = document.querySelector("[data-question-player]");
