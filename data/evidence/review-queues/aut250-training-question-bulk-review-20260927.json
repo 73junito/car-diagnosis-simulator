@@ -1,0 +1,534 @@
+{
+  "review_id": "aut250-training-batch-001-review-20260927",
+  "review_type": "bulk-citation-provenance-technical-instructional-safety-duplicate-screen",
+  "reviewed_at": "2026-09-27T19:14:00-05:00",
+  "scope": {
+    "course_id": "AUT-250",
+    "lesson_plan_id": "ug-hev-foundations",
+    "question_batch": "aut250-training-batch-001",
+    "question_count": 20,
+    "modules": 6
+  },
+  "approval_effect": "none",
+  "question_status_after_review": "draft",
+  "assessment_eligibility_after_review": false,
+  "source_policy": {
+    "primary_search_strategy": "scholarly/peer-reviewed literature prioritized; publisher/DOI records used for bibliographic verification",
+    "repository_ingestion": "blocked",
+    "source_text_chunking": "blocked",
+    "verbatim_quote_storage": "blocked",
+    "permitted_use": "citation metadata, DOI/URL, bibliographic facts, and project-authored evidence summaries only",
+    "rights_note": "Open-access or Creative Commons indicators are recorded only as candidate metadata. No source is rights-approved or content-ingestion-approved by this review."
+  },
+  "candidate_sources": [
+    {
+      "id": "scholar-battery-soc-soh-review-2023",
+      "title": "A Systematic Literature Review of State of Health and State of Charge Estimation Methods for Batteries Used in Electric Vehicle Applications",
+      "publisher": "World Electric Vehicle Journal / MDPI",
+      "year": 2023,
+      "doi": "10.3390/wevj14090247",
+      "url": "https://doi.org/10.3390/wevj14090247",
+      "authority": "peer-reviewed-review",
+      "topic_scope": [
+        "battery management systems",
+        "SOC/SOH estimation",
+        "directly measured voltage/current/temperature",
+        "state estimation"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "scholar-ev-power-electronics-digitalization-2018",
+      "title": "Toward Green Vehicles Digitalization for the Next Generation of Connected and Electrified Transport Systems",
+      "publisher": "Energies / MDPI",
+      "year": 2018,
+      "doi": "10.3390/en11113124",
+      "url": "https://doi.org/10.3390/en11113124",
+      "authority": "peer-reviewed-review",
+      "topic_scope": [
+        "electric machines",
+        "inverters",
+        "DC/DC converters",
+        "regenerative energy flow",
+        "EV electrical architecture"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "scholar-ev-charging-review-2023",
+      "title": "Review of Electric Vehicle Charging Technologies, Standards, Architectures, and Converter Configurations",
+      "publisher": "IEEE Access",
+      "year": 2023,
+      "doi": "10.1109/ACCESS.2023.3267164",
+      "url": "https://doi.org/10.1109/ACCESS.2023.3267164",
+      "authority": "peer-reviewed-review",
+      "topic_scope": [
+        "onboard/offboard charging",
+        "AC/DC conversion",
+        "charging architecture",
+        "charging control",
+        "charging standards"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "scholar-integrated-thermal-review-2025",
+      "title": "Towards integrated thermal management systems in battery electric vehicles: A review",
+      "publisher": "eTransportation / Elsevier",
+      "year": 2025,
+      "doi": "10.1016/j.etran.2025.100396",
+      "url": "https://doi.org/10.1016/j.etran.2025.100396",
+      "authority": "peer-reviewed-review",
+      "topic_scope": [
+        "battery thermal management",
+        "motor thermal management",
+        "power electronics thermal management",
+        "cabin thermal management",
+        "operating-condition dependence"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "scholar-ev-aux-power-module-review-2023",
+      "title": "A Review of Electric Vehicle Auxiliary Power Modules: Challenges, Topologies, and Future Trends",
+      "publisher": "IEEE Transactions on Power Electronics",
+      "year": 2023,
+      "doi": "10.1109/TPEL.2023.3288393",
+      "url": "https://doi.org/10.1109/TPEL.2023.3288393",
+      "authority": "peer-reviewed-review",
+      "topic_scope": [
+        "traction-to-low-voltage conversion",
+        "12 V battery",
+        "low-voltage loads",
+        "auxiliary power modules"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "scholar-ev-fault-diagnosis-review-2026",
+      "title": "Fault diagnosis and predictive maintenance of electric vehicle powertrain using artificial intelligence techniques: A review",
+      "publisher": "Results in Engineering / Elsevier",
+      "year": 2026,
+      "doi": "10.1016/j.rineng.2026.110857",
+      "url": "https://doi.org/10.1016/j.rineng.2026.110857",
+      "authority": "peer-reviewed-review",
+      "topic_scope": [
+        "EV fault detection and diagnosis",
+        "multi-source diagnostic data",
+        "diagnostic models",
+        "predictive maintenance"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "scholar-vehicle-health-monitoring-review-2025",
+      "title": "Advances in intelligent vehicular health monitoring and fault diagnosis: Techniques, technologies, and future directions",
+      "publisher": "Measurement / Elsevier",
+      "year": 2025,
+      "doi": "10.1016/j.measurement.2025.117618",
+      "url": "https://doi.org/10.1016/j.measurement.2025.117618",
+      "authority": "peer-reviewed-review",
+      "topic_scope": [
+        "vehicle health monitoring",
+        "fault diagnosis",
+        "multi-sensor fusion",
+        "diagnostic evidence"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "secondary-ev-low-voltage-service-context-2025",
+      "title": "Replacing the 12V Battery in an EV: What Could Go Wrong?",
+      "publisher": "Midtronics",
+      "year": 2025,
+      "url": "https://www.midtronics.com/blog/replacing-12v-battery-ev/",
+      "authority": "industry-technical-secondary",
+      "topic_scope": [
+        "12 V control-module power",
+        "high-voltage contactor enabling",
+        "vehicle wake-up/service context"
+      ],
+      "review_use": "secondary corroboration only; scholarly source remains preferred",
+      "ingestion_status": "metadata-and-link-only"
+    }
+  ],
+  "duplicate_review": {
+    "exact_question_id_duplicates": 0,
+    "exact_stem_duplicates": 0,
+    "material_semantic_duplicates": 0,
+    "note": "Concepts intentionally recur across modules only where instructional context differs (for example evidence correlation, vehicle-specific applicability, and verification). No item is redundant enough to remove in this batch."
+  },
+  "safety_review": {
+    "universal_wait_times_present": false,
+    "universal_ppe_classes_present": false,
+    "universal_numeric_service_thresholds_present": false,
+    "universal_component_replacement_rules_present": false,
+    "vehicle_specific_procedure_substitution_present": false,
+    "review_complete": false,
+    "note": "Automated/content review found no prohibited universal service values. Human technical/safety sign-off is still required."
+  },
+  "summary": {
+    "candidate_supported": 14,
+    "hold_for_stronger_evidence": 6,
+    "approved": 0,
+    "citation_validated": 0,
+    "technical_review_complete": 0,
+    "instructional_review_complete": 0,
+    "safety_review_complete": 0
+  },
+  "questions": [
+    {
+      "question_id": "aut250-m1-q01",
+      "module_id": "aut250-m1-battery-systems",
+      "claim_review": "Direct battery measurements should be distinguished from calculated/estimated battery states.",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "scholar-battery-soc-soh-review-2023"
+      ],
+      "source_applicability_notes": "The review explicitly distinguishes directly measured voltage/current/temperature from estimated battery states such as SOC/SOH.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m1-q02",
+      "module_id": "aut250-m1-battery-systems",
+      "claim_review": "Battery conclusions should correlate multiple compatible observations rather than rely on one isolated data point.",
+      "disposition": "candidate-supported",
+      "support_strength": "moderate",
+      "candidate_source_ids": [
+        "scholar-battery-soc-soh-review-2023",
+        "scholar-ev-fault-diagnosis-review-2026"
+      ],
+      "source_applicability_notes": "The literature supports multi-parameter BMS monitoring and multi-source fault diagnosis; wording remains project-authored diagnostic pedagogy.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m1-q03",
+      "module_id": "aut250-m1-battery-systems",
+      "claim_review": "SOC is an estimated/calculated state rather than a direct physical measurement of stored energy.",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "scholar-battery-soc-soh-review-2023"
+      ],
+      "source_applicability_notes": "Directly supported by the battery state-estimation review.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m1-q04",
+      "module_id": "aut250-m1-battery-systems",
+      "claim_review": "Battery access/isolation should follow applicable vehicle-specific procedures and verified electrical state.",
+      "disposition": "hold-for-stronger-evidence",
+      "support_strength": "insufficient-for-approval",
+      "candidate_source_ids": [],
+      "hold_reason": "Needs an authoritative vehicle-service or high-voltage service-safety source that directly supports service-procedure dependence; general academic architecture sources are not sufficient for service authorization.",
+      "citation_validation_status": "blocked-pending-source",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m2-q01",
+      "module_id": "aut250-m2-power-electronics",
+      "claim_review": "Comparing commanded state with measured response helps identify divergence between control intent and actual operation.",
+      "disposition": "candidate-supported",
+      "support_strength": "moderate",
+      "candidate_source_ids": [
+        "scholar-ev-fault-diagnosis-review-2026",
+        "scholar-vehicle-health-monitoring-review-2025"
+      ],
+      "source_applicability_notes": "General diagnostic/fault-monitoring literature supports command/measurement comparison and multi-sensor diagnosis; exact phrasing is project-authored.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m2-q02",
+      "module_id": "aut250-m2-power-electronics",
+      "claim_review": "An inverter/converter-related fault indication can involve interacting supply, control, communication, thermal, machine, or internal-protection factors.",
+      "disposition": "candidate-supported",
+      "support_strength": "moderate",
+      "candidate_source_ids": [
+        "scholar-ev-power-electronics-digitalization-2018",
+        "scholar-ev-fault-diagnosis-review-2026"
+      ],
+      "source_applicability_notes": "Sources support interacting EV power-electronic/control subsystems and fault-diagnosis complexity; question deliberately avoids component-failure inference.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m2-q03",
+      "module_id": "aut250-m2-power-electronics",
+      "claim_review": "Regenerative operation converts mechanical/electrical-machine energy back to electrical energy under permitted conditions.",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "scholar-ev-power-electronics-digitalization-2018"
+      ],
+      "source_applicability_notes": "The review describes reversed inverter energy flow during regenerative operation.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m2-q04",
+      "module_id": "aut250-m2-power-electronics",
+      "claim_review": "Actual vehicle power-electronics architecture should be established before applying topology-specific interpretations.",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "scholar-ev-power-electronics-digitalization-2018",
+        "scholar-ev-charging-review-2023"
+      ],
+      "source_applicability_notes": "Both reviews document multiple converter, machine, and charging architectures rather than a single universal topology.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m3-q01",
+      "module_id": "aut250-m3-charging",
+      "claim_review": "Charging diagnosis benefits from separating infrastructure, interface, vehicle conversion/control, battery, and thermal boundaries.",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "scholar-ev-charging-review-2023"
+      ],
+      "source_applicability_notes": "The charging review distinguishes EVSE/infrastructure, onboard/offboard conversion, vehicle/battery interfaces, control, and standards.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m3-q02",
+      "module_id": "aut250-m3-charging",
+      "claim_review": "A will-not-charge symptom alone does not identify a failed component because charging depends on multiple coordinated conditions.",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "scholar-ev-charging-review-2023"
+      ],
+      "source_applicability_notes": "Charging architecture and control are multi-stage and topology-dependent; symptom-to-component inference is not justified from architecture alone.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m3-q03",
+      "module_id": "aut250-m3-charging",
+      "claim_review": "Connection recognition/readiness-state evidence should be established before escalating to more invasive charging diagnosis.",
+      "disposition": "candidate-supported",
+      "support_strength": "moderate",
+      "candidate_source_ids": [
+        "scholar-ev-charging-review-2023"
+      ],
+      "source_applicability_notes": "The review supports staged charging architecture/control and communication dependencies; the nonintrusive-first ordering is project-authored pedagogy requiring human technical review.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m4-q01",
+      "module_id": "aut250-m4-thermal",
+      "claim_review": "Temperature interpretation requires operating context, plausibility, thermal control response, trends, and applicable limits.",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "scholar-integrated-thermal-review-2025"
+      ],
+      "source_applicability_notes": "The review documents subsystem thermal demands that vary with driving conditions and ambient temperature.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m4-q02",
+      "module_id": "aut250-m4-thermal",
+      "claim_review": "Reduced performance associated with temperature may reflect several thermal/control causes and should be correlated before naming a failed component.",
+      "disposition": "candidate-supported",
+      "support_strength": "moderate",
+      "candidate_source_ids": [
+        "scholar-integrated-thermal-review-2025",
+        "scholar-ev-fault-diagnosis-review-2026"
+      ],
+      "source_applicability_notes": "Integrated thermal systems and fault-diagnosis literature support multi-factor interpretation rather than single-clue replacement.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m4-q03",
+      "module_id": "aut250-m4-thermal",
+      "claim_review": "Universal thermal thresholds are inappropriate because architectures, subsystem requirements, and operating conditions differ.",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "scholar-integrated-thermal-review-2025"
+      ],
+      "source_applicability_notes": "The review explicitly describes different thermal loads and strategies across batteries, motors, electronics, cabins, ambient and driving conditions.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m5-q01",
+      "module_id": "aut250-m5-low-voltage",
+      "claim_review": "Low-voltage power supports EV auxiliary/control loads and can affect vehicle readiness even when the traction battery is charged.",
+      "disposition": "candidate-supported",
+      "support_strength": "moderate",
+      "candidate_source_ids": [
+        "scholar-ev-aux-power-module-review-2023",
+        "secondary-ev-low-voltage-service-context-2025"
+      ],
+      "source_applicability_notes": "The IEEE review strongly supports HV-to-LV supply and 12 V/auxiliary loads; the industry source corroborates control-module/contactors/wake-up context. Stronger scholarly support for wake-up/contactors would improve this item.",
+      "citation_validation_status": "pending",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m5-q02",
+      "module_id": "aut250-m5-low-voltage",
+      "claim_review": "Simultaneous module unavailability can arise from a shared power, ground, wake-up, network, or timing dependency.",
+      "disposition": "hold-for-stronger-evidence",
+      "support_strength": "insufficient-for-approval",
+      "candidate_source_ids": [
+        "scholar-vehicle-health-monitoring-review-2025"
+      ],
+      "hold_reason": "Needs an authoritative automotive network/electrical diagnostic source directly addressing common-cause/shared-dependency diagnosis; current source is too general.",
+      "citation_validation_status": "blocked-pending-source",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m5-q03",
+      "module_id": "aut250-m5-low-voltage",
+      "claim_review": "A readiness-first strategy should collect foundational nonintrusive evidence before higher-risk testing.",
+      "disposition": "hold-for-stronger-evidence",
+      "support_strength": "insufficient-for-approval",
+      "candidate_source_ids": [
+        "scholar-ev-aux-power-module-review-2023"
+      ],
+      "hold_reason": "This is a defensible instructional strategy but the current scholarly source does not directly establish the diagnostic ordering or safety rationale. Hold for technical reviewer plus service-diagnostics evidence.",
+      "citation_validation_status": "blocked-pending-source",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m6-q01",
+      "module_id": "aut250-m6-diagnostic-reasoning",
+      "claim_review": "The project-authored Request → Measure → Compare → Correlate → Verify model defines Compare as comparing observations with applicable authoritative information and expected context.",
+      "disposition": "hold-for-stronger-evidence",
+      "support_strength": "insufficient-for-approval",
+      "candidate_source_ids": [
+        "scholar-ev-fault-diagnosis-review-2026",
+        "scholar-vehicle-health-monitoring-review-2025"
+      ],
+      "hold_reason": "The five-stage model is project-authored. External literature supports fault diagnosis and multi-source comparison generally, but not this exact framework. Requires internal curriculum provenance plus human technical validation rather than pretending an external source originated the model.",
+      "citation_validation_status": "blocked-pending-source",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m6-q02",
+      "module_id": "aut250-m6-diagnostic-reasoning",
+      "claim_review": "Competing hypotheses and discriminating evidence reduce premature single-cause conclusions.",
+      "disposition": "hold-for-stronger-evidence",
+      "support_strength": "insufficient-for-approval",
+      "candidate_source_ids": [
+        "scholar-ev-fault-diagnosis-review-2026",
+        "scholar-vehicle-health-monitoring-review-2025"
+      ],
+      "hold_reason": "Current EV fault-diagnosis reviews support multi-source/model-based diagnosis but do not directly establish the specific competing-hypothesis pedagogy. Hold for a stronger diagnostic-method source or explicit technical reviewer approval.",
+      "citation_validation_status": "blocked-pending-source",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    },
+    {
+      "question_id": "aut250-m6-q03",
+      "module_id": "aut250-m6-diagnostic-reasoning",
+      "claim_review": "Post-repair verification should confirm the original concern and relevant system behavior rather than rely only on clearing fault codes.",
+      "disposition": "hold-for-stronger-evidence",
+      "support_strength": "insufficient-for-approval",
+      "candidate_source_ids": [
+        "scholar-ev-fault-diagnosis-review-2026"
+      ],
+      "hold_reason": "Needs authoritative service-diagnostics evidence explicitly supporting post-repair verification; current review supports diagnosis/monitoring but not the code-clearing comparison.",
+      "citation_validation_status": "blocked-pending-source",
+      "technical_review_status": "pending-human-review",
+      "instructional_review_status": "pending-human-review",
+      "safety_review_status": "pending-human-review",
+      "duplicate_status": "clear",
+      "approval_effect": "none"
+    }
+  ]
+}
