@@ -3,6 +3,9 @@
 ## Purpose
 This document outlines the high-level repository layout, migration status, and conventions for Cloudflare Worker routing, agent placement, and AI metadata storage.
 
+## Architecture references
+- Shared curriculum, scenario, assessment, and lab attempt model: docs/architecture/shared-attempt-governance.md.
+
 ## High-level system
 - `worker/` — Cloudflare Worker runtime and routes (target for production).
 - `api/` — Vercel Functions (legacy; kept during migration).

@@ -93,7 +93,7 @@ export async function handleGradeScenarioSubmission(c) {
     // Select payload_json (contains assessment metadata) and other attempt fields
     const { data: attempt, error: attemptError } = await supabase
       .from('attempts')
-      .select('id, user_id, delivery_mode, payload_json')
+      .select('id, user_id, scenario, delivery_mode, status, payload_json')
       .eq('id', attempt_id)
       .single()
 
@@ -106,7 +106,17 @@ export async function handleGradeScenarioSubmission(c) {
       return c.json({ error: 'Not authorized to grade this attempt' }, 403)
     }
 
-    // Security: Verify delivery_mode matches
+    // Security: Only active attempts may accept submissions.
+    if (attempt.status !== 'active') {
+      return c.json({ error: 'Attempt is not active' }, 409)
+    }
+
+    // Security: The attempt must be bound to the requested scenario.
+    if (attempt.scenario !== scenario_id) {
+      return c.json({ error: 'Attempt does not belong to this scenario' }, 400)
+    }
+
+    // Security: Verify delivery_mode matches.
     if (attempt.delivery_mode !== delivery_mode) {
       return c.json({ error: 'Delivery mode mismatch' }, 400)
     }
@@ -139,7 +149,7 @@ export async function handleGradeScenarioSubmission(c) {
     // During assessment mode, suppress immediate feedback until attempt is finalized
     const aiAssistanceAvailable =
       attempt.delivery_mode !== 'independent_non_proctored_assessment' &&
-      aiAssistanceAllowed !== true
+      aiAssistanceAllowed === true
 
     // In assessment mode: only confirm submission accepted (no feedback)
     // In training mode: provide full feedback including is_correct
