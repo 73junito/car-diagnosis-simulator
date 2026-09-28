@@ -8,10 +8,11 @@ describe('AUT-250 evidence instructor drawer', () => {
   const js = read('exam-site/courses/aut-250/module/module.js');
 
   test('keeps evidence details in a progressive-disclosure drawer', () => {
-    expect(html).toContain('data-evidence-drawer-open');
+    expect(html).toContain('data-evidence-drawer-open hidden');
     expect(html).toContain('data-evidence-drawer');
     expect(html).toContain('INSTRUCTOR / EVIDENCE VIEW');
     expect(js).toContain('initEvidenceDrawer(approval, module)');
+    expect(js).toContain('openButton.hidden = false');
   });
 
   test('shows governance facts without claiming rights or excerpt validation', () => {
@@ -20,6 +21,10 @@ describe('AUT-250 evidence instructor drawer', () => {
     expect(js).toContain('human_reviews_complete');
     expect(js).toContain('Metadata-only citation validation does not claim excerpt verification');
     expect(js).toContain('source-rights clearance');
+    expect(js).toContain('Approved for training use');
+    expect(js).toContain('Metadata-only citation proof');
+    expect(js).toContain('(prereq.required_human_roles || []).length');
+    expect(js).toContain('Current release authority comes from the final AUT-250 approval credential');
   });
 
   test('surfaces module safety boundary and question metadata only', () => {

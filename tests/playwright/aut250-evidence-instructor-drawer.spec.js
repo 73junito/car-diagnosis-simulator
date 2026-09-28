@@ -8,8 +8,8 @@ test('AUT-250 evidence drawer exposes governance details without answer keys', a
   await page.locator('[data-evidence-drawer-open]').click();
   const drawer = page.locator('[data-evidence-drawer]');
   await expect(drawer).toBeVisible();
-  await expect(drawer.getByText('metadata-only-citation-proof', { exact: true })).toBeVisible();
-  await expect(drawer.getByText('valid', { exact: true })).toBeVisible();
+  await expect(drawer.getByText('Metadata-only citation proof', { exact: true })).toBeVisible();
+  await expect(drawer.getByText('Valid', { exact: true })).toBeVisible();
   await expect(drawer.getByText(/rights · technical · instructional · safety/i)).toBeVisible();
   await expect(drawer.getByText(/Battery access, isolation, measurement, PPE, wait times/i)).toBeVisible();
   await expect(drawer.locator('.evidence-question-list article')).toHaveCount(4);
