@@ -1,27 +1,5 @@
 const { test, expect } = require('@playwright/test');
 
-async function fetchMockedApi(page, path) {
-  await page.goto('/', {
-    waitUntil: 'domcontentloaded',
-  });
-
-  return page.evaluate(async (requestPath) => {
-    const requestUrl = new URL(
-      requestPath,
-      window.location.origin
-    );
-
-    const response = await fetch(requestUrl);
-    const text = await response.text();
-
-    return {
-      status: response.status,
-      text: text,
-      json: JSON.parse(text),
-    };
-  }, path);
-}
-
 test.describe('TTED805: No-Crank Assessment Mode', () => {
   test('enforces fail-closed blocking when no approved questions available', async ({ page }) => {
     const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:3003';
