@@ -1,0 +1,81 @@
+name: AUT-250 Ollama question bank expansion
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_count:
+        description: Number of new AUT-250 draft questions to request (1-20)
+        required: true
+        default: '20'
+        type: string
+      model:
+        description: Ollama Cloud model
+        required: true
+        default: gpt-oss:20b
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Draft AUT-250 expansion from project-authored curriculum
+    runs-on: ubuntu-latest
+    environment: ollama
+    timeout-minutes: 10
+    env:
+      OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
+      OLLAMA_API_URL: https://ollama.com/api/chat
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Validate inputs and governance
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "${{ inputs.target_count }}" =~ ^([1-9]|1[0-9]|20)$ ]]; then
+            echo "target_count must be 1-20"
+            exit 1
+          fi
+          if [[ -z "$OLLAMA_API_KEY" ]]; then
+            echo "Environment secret API_GITHUB is not configured"
+            exit 1
+          fi
+          node scripts/generate-aut250-question-drafts.js \
+            --target="${{ inputs.target_count }}" \
+            --model="${{ inputs.model }}" \
+            --dry-run=true
+
+      - name: Send AUT-250 expansion instructions to Ollama Cloud
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/aut250-question-drafts"
+          node scripts/generate-aut250-question-drafts.js \
+            --target="${{ inputs.target_count }}" \
+            --model="${{ inputs.model }}" \
+            --output="$RUNNER_TEMP/aut250-question-drafts/aut250-question-expansion.json"
+
+      - name: Upload draft artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: "aut250-question-expansion-${{ github.run_id }}"
+          path: ${{ runner.temp }}/aut250-question-drafts/aut250-question-expansion.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Governance notice
+        shell: bash
+        run: |
+          echo "AUT-250 expansion is draft-only."
+          echo "Only project-authored curriculum and retained approved questions were sent to Ollama Cloud."
+          echo "No third-party source text or excerpt was sent."
+          echo "No database write, scoring change, assessment eligibility change, or automatic approval occurred."
+          echo "Human rights, technical, instructional, safety, and metadata-evidence mapping reviews remain required."
