@@ -3842,7 +3842,8 @@
             "safety"
           ],
           "completedRoles": [
-            "rights"
+            "rights",
+            "technical"
           ],
           "citationEvidenceDecision": "pending",
           "releaseGate": "blocked",

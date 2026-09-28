@@ -16,7 +16,7 @@ describe('AUT-250 human review gate package', () => {
     expect(pkg.current_state.release_eligible).toBe(false);
   });
 
-  test('requires four human review roles and records only the completed rights gate', () => {
+  test('requires four human review roles and records rights plus technical gates only', () => {
     const roles = ['rights', 'technical', 'instructional', 'safety'];
     expect(Object.keys(pkg.reviewer_requirements).sort()).toEqual(roles.sort());
 
@@ -28,13 +28,24 @@ describe('AUT-250 human review gate package', () => {
     expect(rights.reviewed_at).toBe('2026-09-27');
     expect(rights.decision).toBe('pass-with-limitations');
     expect(Object.values(rights.checklist).every(Boolean)).toBe(true);
-    expect(rights.limitations).toEqual(expect.arrayContaining([
-      expect.stringMatching(/metadata/i),
-      expect.stringMatching(/Do not ingest/i),
-      expect.stringMatching(/Do not represent metadata-only citation evidence as excerpt verification/i)
+
+    const technical = pkg.reviewer_requirements.technical;
+    expect(technical.required).toBe(true);
+    expect(technical.reviewer_name).toBe('Rafael Rodriguez');
+    expect(technical.reviewer_id).toBe('rafael-rodriguez');
+    expect(technical.qualification_reference).toMatch(/automotive instructor/i);
+    expect(technical.reviewed_at).toBe('2026-09-27');
+    expect(technical.decision).toBe('pass-with-limitations');
+    expect(Object.values(technical.checklist).every(Boolean)).toBe(true);
+    expect(technical.limitations).toEqual(expect.arrayContaining([
+      expect.stringMatching(/conceptual training questions/i),
+      expect.stringMatching(/Vehicle-specific voltages/i),
+      expect.stringMatching(/single observation cannot by itself establish component failure/i),
+      expect.stringMatching(/AutoLearnPro project-authored diagnostic framework/i),
+      expect.stringMatching(/does not approve citations/i)
     ]));
 
-    for (const role of ['technical', 'instructional', 'safety']) {
+    for (const role of ['instructional', 'safety']) {
       const review = pkg.reviewer_requirements[role];
       expect(review.required).toBe(true);
       expect(review.reviewer_name).toBeNull();
