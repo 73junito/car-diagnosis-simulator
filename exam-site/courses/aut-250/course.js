@@ -215,7 +215,7 @@ async function init() {
     document.documentElement.dataset.aut250CourseRelease = "approved-for-training-use";
     releaseStatus.textContent = "Approved for formative training use · non-scored";
     document.querySelector("[data-course-summary]").textContent =
-      "24 training hours · 6 modules · 18 lessons · 20 formative questions. Progress is stored only in this browser.";
+      "24 training hours · 6 modules · 18 lessons · 20 formative questions; progress stored only in this browser.";
 
     const progress = getProgress();
     setProgress(progress);
