@@ -92,15 +92,17 @@ ____________________________________________________________
 
 ## Citation-evidence representation decision
 
-Choose **one** only after rights/governance review.
+**Current project preference:** Option B — Metadata-only citation proof, pending human rights/governance confirmation.
+
+The project preference does **not** complete this gate. A human reviewer must still confirm the representation before deterministic validation may advance.
 
 ### Option A — Approved excerpt chunks
 Use the existing `citation-validator-1.0` unchanged. Only excerpts with an affirmative storage/reuse rights basis may become approved source chunks.
 
 ### Option B — Metadata-only citation proof
-Create a new separately reviewed validator that verifies authoritative source identity, DOI/URL, bibliographic metadata, applicability, and human attestations without storing copyrighted excerpts. It must not claim excerpt or source-text hash validation.
+Use the separate `scripts/validate-aut250-metadata-citations.js` preflight to verify source identity, DOI/URL syntax, bibliographic metadata, per-question source linkage, candidate-support status, and human-gate state without storing copyrighted excerpts. This preflight does not claim excerpt or source-text hash validation and does not write production citation validation records.
 
-Selected option: ____________________  
+Confirmed option: ____________________  
 Decision reviewer(s): ____________________  
 Decision date: ____________________  
 Rationale:  
