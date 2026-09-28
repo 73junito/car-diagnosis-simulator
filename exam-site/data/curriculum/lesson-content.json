@@ -3834,7 +3834,7 @@
           "packageId": "aut250-human-review-package-20260927",
           "artifact": "data/evidence/review-queues/aut250-human-review-package-20260927.json",
           "worksheet": "docs/reviews/AUT250-HUMAN-REVIEW-WORKSHEET.md",
-          "status": "in-progress",
+          "status": "human-reviews-complete",
           "requiredRoles": [
             "rights",
             "technical",
@@ -3844,7 +3844,8 @@
           "completedRoles": [
             "rights",
             "technical",
-            "instructional"
+            "instructional",
+            "safety"
           ],
           "citationEvidenceDecision": "pending",
           "releaseGate": "blocked",
