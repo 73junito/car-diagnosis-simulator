@@ -16,6 +16,7 @@ const args = Object.fromEntries(
 const model = args.model || 'gpt-oss:20b';
 const targetCount = Number(args.target || 20);
 const curriculumPath = path.resolve(root, args.curriculum || 'data/curriculum/lesson-content.json');
+const supplementPath = path.resolve(root, args.supplement || 'data/curriculum/aut250-training-batch-002.json');
 const approvalPaths = [
   path.resolve(root, args.approval1 || 'data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json'),
   path.resolve(root, args.approval2 || 'data/evidence/approval-records/aut250-training-batch-002-final-approval-20260928.json')
@@ -37,7 +38,19 @@ if (!dryRun && !apiKey) fail('OLLAMA_API_KEY is required unless --dry-run=true.'
 
 const curriculum = JSON.parse(fs.readFileSync(curriculumPath, 'utf8'));
 const approvals = approvalPaths.map((approvalPath) => JSON.parse(fs.readFileSync(approvalPath, 'utf8')));
-const plan = (curriculum.lessonContentPlans || []).find((item) => item.lessonPlanId === 'ug-hev-foundations');
+const supplement = JSON.parse(fs.readFileSync(supplementPath, 'utf8'));
+const basePlan = (curriculum.lessonContentPlans || []).find((item) => item.lessonPlanId === 'ug-hev-foundations');
+const plan = basePlan ? JSON.parse(JSON.stringify(basePlan)) : null;
+if (plan) {
+  const supplementalQuestions = (supplement.modules || []).flatMap((module) => module.questions || []);
+  const supplementValid = supplement.questionBatch === 'aut250-training-batch-002-ollama-repaired' && supplement.questionCount === 20 && supplementalQuestions.length === 20 && supplementalQuestions.every((q) => q.status === 'approved-for-training-use' && q.deliveryMode === 'training' && q.scored === false && q.highStakesEligible === false && q.institutionalAssessmentEligible === false && q.productionAssessmentApiEligible === false);
+  if (!supplementValid) fail('AUT-250 Batch 002 supplemental bank is invalid.');
+  for (const supplementalModule of supplement.modules) {
+    const module = (plan.courseModules || []).find((item) => item.id === supplementalModule.moduleId);
+    if (!module) fail(`Unknown AUT-250 Batch 002 module: ${supplementalModule.moduleId}`);
+    module.trainingQuestions = [...(module.trainingQuestions || []), ...supplementalModule.questions];
+  }
+}
 
 if (!plan) fail('AUT-250 lesson plan ug-hev-foundations was not found.');
 if ((plan.courseModules || []).length !== 6) fail('AUT-250 must contain exactly six course modules.');

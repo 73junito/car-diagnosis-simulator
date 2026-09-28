@@ -151,7 +151,7 @@ test.describe('Expanded lesson plans', () => {
     expect(pageErrors).toEqual([]);
   });
 
-  test('renders the 20-question AUT-250 training bank with local feedback only', async ({ page }) => {
+  test('renders the 40-question AUT-250 training bank with local feedback only', async ({ page }) => {
     const pageErrors = collectPageErrors(page);
 
     await page.goto('/lesson-plans/#ug-hev-foundations');
@@ -166,9 +166,9 @@ test.describe('Expanded lesson plans', () => {
       await module.getByText(/Training questions \(/).click();
     }
 
-    await expect(plan.locator('[data-training-question]')).toHaveCount(20);
-    await expect(plan.locator('.training-question-status')).toHaveCount(20);
-    await expect(plan.locator('.training-boundary')).toHaveCount(20);
+    await expect(plan.locator('[data-training-question]')).toHaveCount(40);
+    await expect(plan.locator('.training-question-status')).toHaveCount(40);
+    await expect(plan.locator('.training-boundary')).toHaveCount(40);
 
     const first = plan.locator('[data-training-question="aut250-m1-q01"]');
     await expect(first).toContainText(/Why should a technician distinguish direct battery measurements/i);

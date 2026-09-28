@@ -25,7 +25,7 @@ describe('AUT-250 Ollama question bank expansion contract', () => {
 
     const request = JSON.parse(messages[1].content);
     expect(request.project_authored_curriculum).toHaveLength(6);
-    expect(request.retained_questions).toHaveLength(40);
+    expect(request.retained_questions).toHaveLength(20);
     expect(request.constraints.no_third_party_source_text).toBe(true);
     expect(request.constraints.no_citation_generation).toBe(true);
     expect(request.constraints.scored).toBe(false);
@@ -99,7 +99,7 @@ describe('AUT-250 Ollama question bank expansion contract', () => {
     expect(workflow).not.toMatch(/echo\s+.*OLLAMA_API_KEY/i);
   });
 
-  test('dry run validates the approved 40-question source state without contacting Ollama', () => {
+  test('dry run validates both approved training banks without contacting Ollama', () => {
     const { spawnSync } = require('child_process');
     const result = spawnSync(
       process.execPath,

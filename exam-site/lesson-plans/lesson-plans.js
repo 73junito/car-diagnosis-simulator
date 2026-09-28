@@ -1,7 +1,10 @@
 const ROOT = "/data/curriculum";
+const AUT250_TRAINING_APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
+const AUT250_BATCH002_APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-002-final-approval-20260928.json";
+const AUT250_BATCH002_CURRICULUM = "aut250-training-batch-002.json";
 const AUT250_TRAINING_APPROVALS = [
-  { url: "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json", batch: "aut250-training-batch-001", count: 20 },
-  { url: "/data/evidence/approval-records/aut250-training-batch-002-final-approval-20260928.json", batch: "aut250-training-batch-002-ollama-repaired", count: 20 }
+  { url: AUT250_TRAINING_APPROVAL_URL, batch: "aut250-training-batch-001", count: 20 },
+  { url: AUT250_BATCH002_APPROVAL_URL, batch: "aut250-training-batch-002-ollama-repaired", count: 20 }
 ];
 
 const escapeHtml = (value) => String(value ?? "")
@@ -22,6 +25,12 @@ async function loadJson(name) {
   return response.json();
 }
 
+async function loadTrainingApproval() {
+  const response = await fetch(AUT250_TRAINING_APPROVAL_URL, { cache: "no-store" });
+  if (!response.ok) throw new Error(`Failed to load AUT-250 training approval: ${response.status}`);
+  return response.json();
+}
+
 async function loadTrainingApprovals() {
   return Promise.all(AUT250_TRAINING_APPROVALS.map(async ({ url }) => {
     const response = await fetch(url, { cache: "no-store" });
@@ -37,9 +46,8 @@ function evaluateAut250TrainingRelease(approvals = []) {
     const effect = approval?.approval_effect_if_confirmed;
     const release = approval?.release_state;
     const decision = approval?.requested_final_decision;
-    return {
-      batch,
-      present: Boolean(approval),
+    const checks = {
+      correctBatch: approval?.question_batch === batch,
       correctCount: approval?.question_count === count,
       explicitlyApproved: decision?.decision === "approved",
       trainingOnlyScope: decision?.scope === "training-bank-final-approval-only",
@@ -52,24 +60,30 @@ function evaluateAut250TrainingRelease(approvals = []) {
       noAssessmentRelease: release?.assessment_release === false,
       noProductionRelease: release?.production_release === false
     };
+    return { batch, approved: Object.values(checks).every(Boolean), checks };
   });
-
   const checks = {
-    allRequiredBatchesPresent: batchChecks.every((entry) => entry.present),
-    allRequiredBatchesApproved: batchChecks.every((entry) =>
-      Object.entries(entry).filter(([key]) => key !== "batch").every(([, value]) => value === true)
-    )
+    batch001Approved: batchChecks.find((item) => item.batch === "aut250-training-batch-001")?.approved === true,
+    batch002Approved: batchChecks.find((item) => item.batch === "aut250-training-batch-002-ollama-repaired")?.approved === true
   };
   const approved = Object.values(checks).every(Boolean);
-  return {
-    approved,
-    checks,
-    batchChecks,
-    status: approved ? "approved-for-training-use" : "blocked",
-    message: approved
-      ? "Approved for formative training use only."
-      : "Training questions are unavailable because all required final approval gates are not satisfied."
-  };
+  return { approved, checks, batchChecks, status: approved ? "approved-for-training-use" : "blocked", message: approved ? "Approved for formative training use only." : "Training questions are unavailable because all required final approval gates are not satisfied." };
+}
+
+function mergeAut250Batch002(contentDoc, supplement) {
+  const plan = contentDoc.lessonContentPlans?.find((item) => item.lessonPlanId === "ug-hev-foundations");
+  const questions = (supplement?.modules || []).flatMap((module) => module.questions || []);
+  const boundaryOk = supplement?.questionBatch === "aut250-training-batch-002-ollama-repaired" &&
+    supplement?.questionCount === 20 && questions.length === 20 &&
+    questions.every((question) => question.status === "approved-for-training-use" && question.deliveryMode === "training" && question.scored === false && question.highStakesEligible === false && question.institutionalAssessmentEligible === false && question.productionAssessmentApiEligible === false);
+  if (!plan || !boundaryOk) throw new Error("AUT-250 Batch 002 supplemental bank failed validation");
+  for (const supplementalModule of supplement.modules) {
+    const module = plan.courseModules?.find((item) => item.id === supplementalModule.moduleId);
+    if (!module) throw new Error(`Unknown AUT-250 Batch 002 module: ${supplementalModule.moduleId}`);
+    const existing = new Set((module.trainingQuestions || []).map((question) => question.id));
+    module.trainingQuestions = [...(module.trainingQuestions || []), ...supplementalModule.questions.filter((question) => !existing.has(question.id))];
+  }
+  return contentDoc;
 }
 
 function list(items, className = "") {
@@ -677,7 +691,12 @@ async function init() {
 
     let trainingReleaseGate;
     try {
-      trainingReleaseGate = evaluateAut250TrainingRelease(await loadTrainingApprovals());
+      const [approvals, batch002Supplement] = await Promise.all([
+        loadTrainingApprovals(),
+        loadJson(AUT250_BATCH002_CURRICULUM)
+      ]);
+      trainingReleaseGate = evaluateAut250TrainingRelease(approvals);
+      if (trainingReleaseGate.approved) mergeAut250Batch002(contentDoc, batch002Supplement);
     } catch (approvalError) {
       console.error("AUT-250 training approval gate failed closed:", approvalError);
       trainingReleaseGate = {
