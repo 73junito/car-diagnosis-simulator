@@ -217,6 +217,90 @@
       "courseId": "aut-280",
       "statement": "Explain generalized feedback and control relationships, interpret sensor/actuator evidence, and use applicable system information to justify a control-system diagnostic next step.",
       "status": "planned"
+    },
+    {
+      "id": "ug-aut300-advanced-diagnostics",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-300",
+      "statement": "Integrate multi-domain vehicle evidence, prioritize testable hypotheses, and justify an advanced diagnostic next step using applicable technical information.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut301-advanced-diagnostics-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-301",
+      "statement": "Plan and execute generalized advanced diagnostic evidence collection, interpret cross-domain test results, and document a source-supported fault-isolation decision.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut310-network-communications",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-310",
+      "statement": "Explain generalized vehicle-network relationships, interpret communication evidence, and use applicable architecture and protocol information to justify a network diagnostic next step.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut320-hybrid-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-320",
+      "statement": "Explain generalized hybrid energy-flow and component relationships, recognize high-voltage safety boundaries, and identify applicable information required before diagnostic or service work.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut321-hybrid-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-321",
+      "statement": "Organize generalized hybrid laboratory evidence, recognize when work must stop for high-voltage or authorization reasons, and justify an information-supported next diagnostic step.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut331-ev-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-331",
+      "statement": "Organize EV laboratory evidence, recognize high-voltage and charging safety boundaries, and justify a safe next diagnostic action using applicable vehicle and equipment information.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut340-battery-management",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-340",
+      "statement": "Explain generalized battery and management-system relationships, interpret state and health evidence in context, and identify applicable information required for safe diagnostic decisions.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut350-adas",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-350",
+      "statement": "Explain generalized ADAS sensor and control relationships, interpret system evidence, and identify applicable calibration, environmental, and vehicle information required before service decisions.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut360-data-analysis",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-360",
+      "statement": "Collect and organize generalized vehicle data, evaluate context and quality, select appropriate visual or analytical representations, and justify conclusions without overstating the evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut370-embedded-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-370",
+      "statement": "Explain generalized embedded-system and ECU relationships, trace input-processing-output flow, and distinguish conceptual architecture from implementation-specific details requiring authoritative documentation.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut380-cybersecurity",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-380",
+      "statement": "Identify generalized automotive cybersecurity assets, threats, and controls, interpret defensive evidence, and document risk and mitigation reasoning within authorized and ethical boundaries.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut390-connected-sdv",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-390",
+      "statement": "Explain generalized connected and software-defined vehicle relationships, identify data and software lifecycle dependencies, and distinguish architectural concepts from implementation-specific claims requiring authoritative information.",
+      "status": "planned"
     }
   ]
 }

@@ -131,6 +131,78 @@
       "existingCourseId": "aut-280",
       "existingLessonPlanId": "ug-aut280-control-systems",
       "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-300",
+      "existingCourseId": "aut-300",
+      "existingLessonPlanId": "ug-aut300-advanced-diagnostics",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-301",
+      "existingCourseId": "aut-301",
+      "existingLessonPlanId": "ug-aut301-advanced-diagnostics-lab",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-310",
+      "existingCourseId": "aut-310",
+      "existingLessonPlanId": "ug-aut310-network-communications",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-320",
+      "existingCourseId": "aut-320",
+      "existingLessonPlanId": "ug-aut320-hybrid-vehicle-technology",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-321",
+      "existingCourseId": "aut-321",
+      "existingLessonPlanId": "ug-aut321-hybrid-lab",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-331",
+      "existingCourseId": "aut-331",
+      "existingLessonPlanId": "ug-aut331-electric-vehicle-lab",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-340",
+      "existingCourseId": "aut-340",
+      "existingLessonPlanId": "ug-aut340-battery-management",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-350",
+      "existingCourseId": "aut-350",
+      "existingLessonPlanId": "ug-aut350-adas",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-360",
+      "existingCourseId": "aut-360",
+      "existingLessonPlanId": "ug-aut360-data-analysis",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-370",
+      "existingCourseId": "aut-370",
+      "existingLessonPlanId": "ug-aut370-embedded-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-380",
+      "existingCourseId": "aut-380",
+      "existingLessonPlanId": "ug-aut380-cybersecurity",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-390",
+      "existingCourseId": "aut-390",
+      "existingLessonPlanId": "ug-aut390-connected-sdv",
+      "mappingType": "canonical-catalog-course"
     }
   ],
   "authorityReferences": [
