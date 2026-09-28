@@ -59,7 +59,7 @@ describe('AUT-250 learner progress and polish', () => {
     expect(courseHtml).toContain('data-progress-activity');
     expect(courseHtml).toContain('data-progress-hours');
     expect(courseHtml).toContain('data-progress-lessons');
-    expect(course).toContain('24 training hours · 6 modules · 18 lessons · 20 formative questions');
+    expect(course).toContain('24 training hours · 6 modules · 18 lessons · 40 formative questions');
     expect(course).toContain('activityPercent');
     expect(course).not.toMatch(/grade|scorePercent|percentCorrect/i);
   });
