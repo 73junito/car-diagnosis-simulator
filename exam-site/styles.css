@@ -123,3 +123,26 @@ footer{background:#102f33;color:#e9f0e9;padding:3rem 0}.footer-inner{display:gri
 .module-visual-cycle strong{grid-column:1/-1;padding-top:.35rem;font-size:.78rem}
 .module-visual-missing{font-size:.78rem;font-style:italic}
 @media (max-width:900px){.aut250-module-visual-grid{grid-template-columns:1fr}.module-visual-timeline>div{grid-template-columns:35px 1fr}.module-visual-timeline>div span{grid-column:2}}
+
+
+/* AUT-250 evidence / instructor drawer */
+.aut250-evidence-open{margin-top:1rem}
+.aut250-evidence-drawer{width:min(560px,92vw);max-height:100vh;height:100vh;margin:0 0 0 auto;border:0;border-left:1px solid var(--line,#d9e4df);padding:0;background:#fff;box-shadow:-24px 0 60px rgba(20,45,38,.16)}
+.aut250-evidence-drawer::backdrop{background:rgba(18,35,30,.42)}
+.aut250-evidence-drawer-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;padding:1.25rem;border-bottom:1px solid var(--line,#d9e4df);background:#fff}
+.aut250-evidence-drawer-head h2{margin:.25rem 0 0;font-size:1.4rem}
+.aut250-evidence-close{border:1px solid var(--line,#d9e4df);background:#fff;border-radius:999px;width:40px;height:40px;font-size:1.4rem;cursor:pointer}
+.aut250-evidence-drawer>[data-evidence-drawer-content]{padding:1.25rem}
+.evidence-drawer-section{padding:0 0 1.25rem;margin-bottom:1.25rem;border-bottom:1px solid var(--line,#e2e8e5)}
+.evidence-drawer-section h3{margin:0 0 .75rem;font-size:1rem}
+.evidence-fact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem;margin:0}
+.evidence-fact-grid>div{padding:.7rem;border-radius:12px;background:#f7faf8}
+.evidence-fact-grid dt{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;opacity:.7}
+.evidence-fact-grid dd{margin:.25rem 0 0;font-size:.85rem;font-weight:700;overflow-wrap:anywhere}
+.evidence-drawer-note{font-size:.75rem;line-height:1.45;margin:.8rem 0 0}
+.evidence-question-list{display:grid;gap:.55rem}
+.evidence-question-list article{display:grid;gap:.15rem;padding:.65rem;border-radius:12px;background:#f7faf8}
+.evidence-question-list code{font-size:.7rem}
+.evidence-question-list strong{font-size:.85rem;text-transform:capitalize}
+.evidence-question-list span{font-size:.72rem}
+@media (max-width:560px){.aut250-evidence-drawer{width:100vw}.evidence-fact-grid{grid-template-columns:1fr}}
