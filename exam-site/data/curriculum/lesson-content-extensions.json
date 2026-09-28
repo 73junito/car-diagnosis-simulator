@@ -5335,6 +5335,3054 @@
         "lesson-summary"
       ],
       "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut300-advanced-diagnostics",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-300",
+        "catalogCourseCode": "AUT 300",
+        "catalogCourseTitle": "Advanced Automotive Diagnostics",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop advanced diagnostic reasoning for intermittent, electronic, mechanical, and network-related vehicle faults through evidence sequencing, hypothesis testing, source verification, and repair-verification planning.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 250 and AUT 280",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut300-advanced-diagnostics-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Advanced Automotive Diagnostics without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut300-advanced-diagnostics-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about advanced automotive diagnostics.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut300-advanced-diagnostics-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "intermittent faults",
+        "electronic faults",
+        "mechanical faults",
+        "network-related faults",
+        "hypothesis testing",
+        "evidence sequencing",
+        "repair verification"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut300-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Advanced Automotive Diagnostics.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-1",
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ]
+        },
+        {
+          "id": "aut300-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-1"
+          ]
+        },
+        {
+          "id": "aut300-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Advanced Automotive Diagnostics.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-1"
+          ]
+        },
+        {
+          "id": "aut300-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-1",
+            "ug-aut300-advanced-diagnostics-lo-2"
+          ]
+        },
+        {
+          "id": "aut300-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ]
+        },
+        {
+          "id": "aut300-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-2"
+          ]
+        },
+        {
+          "id": "aut300-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ]
+        },
+        {
+          "id": "aut300-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-1",
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ]
+        },
+        {
+          "id": "aut300-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ]
+        },
+        {
+          "id": "aut300-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ]
+        },
+        {
+          "id": "aut300-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Advanced Automotive Diagnostics.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-1",
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut300-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Automotive Diagnostics system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut300-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut300-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut300-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Automotive Diagnostics learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut300-advanced-diagnostics-lo-1",
+            "ug-aut300-advanced-diagnostics-lo-2",
+            "ug-aut300-advanced-diagnostics-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Advanced Automotive Diagnostics example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced diagnostic strategy",
+        "Multi-domain evidence",
+        "Hypothesis testing",
+        "Verification planning"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut301-advanced-diagnostics-lab",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-301",
+        "catalogCourseCode": "AUT 301",
+        "catalogCourseTitle": "Advanced Automotive Diagnostics Laboratory",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Structure advanced diagnostic laboratory work around oscilloscopes, scan tools, network analysis, vehicle test equipment, test context, fault isolation, and documented verification.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "Concurrent enrollment in AUT 300",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut301-advanced-diagnostics-lab-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Advanced Automotive Diagnostics Laboratory without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut301-advanced-diagnostics-lab-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about advanced automotive diagnostics laboratory.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut301-advanced-diagnostics-lab-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "oscilloscope evidence",
+        "scan-tool evidence",
+        "network analysis",
+        "vehicle test equipment",
+        "test context",
+        "fault isolation",
+        "verification"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut301-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Advanced Automotive Diagnostics Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-1",
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut301-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut301-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Advanced Automotive Diagnostics Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut301-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-1",
+            "ug-aut301-advanced-diagnostics-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut301-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut301-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut301-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut301-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-1",
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut301-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut301-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut301-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Advanced Automotive Diagnostics Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-1",
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut301-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Automotive Diagnostics Laboratory system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut301-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut301-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut301-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Automotive Diagnostics Laboratory learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut301-advanced-diagnostics-lab-lo-1",
+            "ug-aut301-advanced-diagnostics-lab-lo-2",
+            "ug-aut301-advanced-diagnostics-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Advanced Automotive Diagnostics Laboratory example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced lab testing",
+        "Cross-domain evidence",
+        "Fault isolation",
+        "Verification and documentation"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut310-network-communications",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-310",
+        "catalogCourseCode": "AUT 310",
+        "catalogCourseTitle": "Vehicle Network Communications",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop vehicle-network reasoning across CAN, CAN FD, LIN, Automotive Ethernet, network architecture, messages, network faults, and diagnostics while keeping protocol parameters and vehicle-specific topology source-gated.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 230 and AUT 280",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut310-network-communications-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Vehicle Network Communications without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut310-network-communications-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about vehicle network communications.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut310-network-communications-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "CAN",
+        "CAN FD",
+        "LIN",
+        "Automotive Ethernet",
+        "network architecture",
+        "communication messages",
+        "network faults and diagnostics"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut310-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Vehicle Network Communications.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-1",
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ]
+        },
+        {
+          "id": "aut310-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-1"
+          ]
+        },
+        {
+          "id": "aut310-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Vehicle Network Communications.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-1"
+          ]
+        },
+        {
+          "id": "aut310-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-1",
+            "ug-aut310-network-communications-lo-2"
+          ]
+        },
+        {
+          "id": "aut310-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ]
+        },
+        {
+          "id": "aut310-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-2"
+          ]
+        },
+        {
+          "id": "aut310-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ]
+        },
+        {
+          "id": "aut310-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-1",
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ]
+        },
+        {
+          "id": "aut310-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ]
+        },
+        {
+          "id": "aut310-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ]
+        },
+        {
+          "id": "aut310-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Vehicle Network Communications.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-1",
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut310-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Vehicle Network Communications system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut310-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut310-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut310-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Vehicle Network Communications learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut310-network-communications-lo-1",
+            "ug-aut310-network-communications-lo-2",
+            "ug-aut310-network-communications-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Vehicle Network Communications example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Network architecture",
+        "Communication evidence",
+        "Fault localization",
+        "Protocol/topology source boundaries"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut320-hybrid-vehicle-technology",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-320",
+        "catalogCourseCode": "AUT 320",
+        "catalogCourseTitle": "Hybrid Vehicle Technology",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Introduce hybrid architectures, electric machines, power electronics, regenerative braking, high-voltage systems, battery systems, and diagnostics through generalized energy-flow and system-relationship reasoning.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 240 and AUT 280",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut320-hybrid-vehicle-technology-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Hybrid Vehicle Technology without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut320-hybrid-vehicle-technology-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about hybrid vehicle technology.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut320-hybrid-vehicle-technology-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "hybrid architectures",
+        "electric machines",
+        "power electronics",
+        "regenerative braking",
+        "high-voltage systems",
+        "battery systems",
+        "hybrid diagnostics"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut320-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Hybrid Vehicle Technology.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-1",
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ]
+        },
+        {
+          "id": "aut320-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-1"
+          ]
+        },
+        {
+          "id": "aut320-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Hybrid Vehicle Technology.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-1"
+          ]
+        },
+        {
+          "id": "aut320-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-1",
+            "ug-aut320-hybrid-vehicle-technology-lo-2"
+          ]
+        },
+        {
+          "id": "aut320-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ]
+        },
+        {
+          "id": "aut320-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-2"
+          ]
+        },
+        {
+          "id": "aut320-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ]
+        },
+        {
+          "id": "aut320-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-1",
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ]
+        },
+        {
+          "id": "aut320-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ]
+        },
+        {
+          "id": "aut320-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ]
+        },
+        {
+          "id": "aut320-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Hybrid Vehicle Technology.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-1",
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut320-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Hybrid Vehicle Technology system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut320-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut320-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut320-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Hybrid Vehicle Technology learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut320-hybrid-vehicle-technology-lo-1",
+            "ug-aut320-hybrid-vehicle-technology-lo-2",
+            "ug-aut320-hybrid-vehicle-technology-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Hybrid Vehicle Technology example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Hybrid architecture",
+        "Energy flow",
+        "High-voltage system relationships",
+        "Safety and diagnostic source boundaries"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut321-hybrid-lab",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-321",
+        "catalogCourseCode": "AUT 321",
+        "catalogCourseTitle": "Hybrid Vehicle Laboratory",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Provide laboratory-oriented hybrid-system analysis and diagnosis using generalized energy-flow observations, test planning, high-voltage boundaries, evidence recording, and applicable technical information.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 320",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut321-hybrid-lab-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Hybrid Vehicle Laboratory without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut321-hybrid-lab-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about hybrid vehicle laboratory.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut321-hybrid-lab-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "hybrid lab analysis",
+        "energy-flow evidence",
+        "high-voltage boundaries",
+        "battery-system observations",
+        "power-electronic observations",
+        "test planning",
+        "hybrid diagnosis"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut321-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Hybrid Vehicle Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-1",
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut321-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut321-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Hybrid Vehicle Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut321-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-1",
+            "ug-aut321-hybrid-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut321-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut321-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut321-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut321-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-1",
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut321-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut321-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut321-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Hybrid Vehicle Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-1",
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut321-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Hybrid Vehicle Laboratory system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut321-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut321-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut321-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Hybrid Vehicle Laboratory learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut321-hybrid-lab-lo-1",
+            "ug-aut321-hybrid-lab-lo-2",
+            "ug-aut321-hybrid-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Hybrid Vehicle Laboratory example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Hybrid lab evidence",
+        "High-voltage boundaries",
+        "Test planning",
+        "Safe diagnostic documentation"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut331-electric-vehicle-lab",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-331",
+        "catalogCourseCode": "AUT 331",
+        "catalogCourseTitle": "Electric Vehicle Laboratory",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Provide laboratory analysis of EV electrical, battery, charging, and high-voltage systems using source-controlled safety information, evidence collection, test planning, and diagnostic documentation.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 330",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut331-electric-vehicle-lab-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Electric Vehicle Laboratory without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut331-electric-vehicle-lab-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about electric vehicle laboratory.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut331-electric-vehicle-lab-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "EV electrical systems",
+        "battery systems",
+        "charging systems",
+        "high-voltage systems",
+        "test planning",
+        "diagnostic evidence",
+        "safe documentation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut331-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Electric Vehicle Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-1",
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut331-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut331-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Electric Vehicle Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut331-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-1",
+            "ug-aut331-electric-vehicle-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut331-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut331-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut331-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut331-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-1",
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut331-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut331-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut331-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Electric Vehicle Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-1",
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut331-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Electric Vehicle Laboratory system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut331-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut331-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut331-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Electric Vehicle Laboratory learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut331-electric-vehicle-lab-lo-1",
+            "ug-aut331-electric-vehicle-lab-lo-2",
+            "ug-aut331-electric-vehicle-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Electric Vehicle Laboratory example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "EV lab evidence",
+        "Battery/charging relationships",
+        "High-voltage safety boundaries",
+        "Vehicle/equipment source requirements"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut340-battery-management",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-340",
+        "catalogCourseCode": "AUT 340",
+        "catalogCourseTitle": "Battery Systems and Battery Management",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop battery-system understanding across cells, packs, battery-management systems, state of charge, state of health, thermal management, balancing, degradation, and diagnostics while source-gating numeric thresholds and service procedures.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 330",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut340-battery-management-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Battery Systems and Battery Management without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut340-battery-management-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about battery systems and battery management.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut340-battery-management-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "battery cells and packs",
+        "battery-management systems",
+        "state of charge",
+        "state of health",
+        "thermal management",
+        "balancing and degradation",
+        "battery diagnostics"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut340-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Battery Systems and Battery Management.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-1",
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut340-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-1"
+          ]
+        },
+        {
+          "id": "aut340-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Battery Systems and Battery Management.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-1"
+          ]
+        },
+        {
+          "id": "aut340-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-1",
+            "ug-aut340-battery-management-lo-2"
+          ]
+        },
+        {
+          "id": "aut340-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut340-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-2"
+          ]
+        },
+        {
+          "id": "aut340-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut340-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-1",
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut340-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut340-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut340-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Battery Systems and Battery Management.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-1",
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut340-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Battery Systems and Battery Management system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut340-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut340-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut340-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Battery Systems and Battery Management learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut340-battery-management-lo-1",
+            "ug-aut340-battery-management-lo-2",
+            "ug-aut340-battery-management-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Battery Systems and Battery Management example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Battery architecture",
+        "BMS relationships",
+        "State/health evidence",
+        "Thermal and safety source boundaries"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut350-adas",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-350",
+        "catalogCourseCode": "AUT 350",
+        "catalogCourseTitle": "Advanced Driver Assistance Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Introduce camera, radar, ultrasonic, adaptive cruise, lane systems, collision avoidance, sensor calibration, and ADAS diagnostics with strong applicability and calibration-information boundaries.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 280 and AUT 310",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut350-adas-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Advanced Driver Assistance Systems without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut350-adas-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about advanced driver assistance systems.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut350-adas-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "camera systems",
+        "radar systems",
+        "ultrasonic sensing",
+        "adaptive cruise",
+        "lane systems",
+        "collision avoidance",
+        "sensor calibration and diagnostics"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut350-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Advanced Driver Assistance Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-1",
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ]
+        },
+        {
+          "id": "aut350-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-1"
+          ]
+        },
+        {
+          "id": "aut350-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Advanced Driver Assistance Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-1"
+          ]
+        },
+        {
+          "id": "aut350-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-1",
+            "ug-aut350-adas-lo-2"
+          ]
+        },
+        {
+          "id": "aut350-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ]
+        },
+        {
+          "id": "aut350-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-2"
+          ]
+        },
+        {
+          "id": "aut350-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ]
+        },
+        {
+          "id": "aut350-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-1",
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ]
+        },
+        {
+          "id": "aut350-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ]
+        },
+        {
+          "id": "aut350-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ]
+        },
+        {
+          "id": "aut350-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Advanced Driver Assistance Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-1",
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut350-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Driver Assistance Systems system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut350-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut350-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut350-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Driver Assistance Systems learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut350-adas-lo-1",
+            "ug-aut350-adas-lo-2",
+            "ug-aut350-adas-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Advanced Driver Assistance Systems example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "ADAS sensor relationships",
+        "System/environment context",
+        "Calibration applicability",
+        "Diagnostic verification"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut360-data-analysis",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-360",
+        "catalogCourseCode": "AUT 360",
+        "catalogCourseTitle": "Automotive Data Acquisition and Analysis",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop disciplined collection, processing, visualization, and interpretation of vehicle and diagnostic data with attention to units, sampling context, data quality, comparison, and evidence-supported conclusions.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 110 and AUT 300",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut360-data-analysis-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Automotive Data Acquisition and Analysis without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut360-data-analysis-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about automotive data acquisition and analysis.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut360-data-analysis-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "data acquisition",
+        "data processing",
+        "data visualization",
+        "diagnostic data",
+        "units and sampling context",
+        "data quality",
+        "interpretation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut360-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Automotive Data Acquisition and Analysis.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-1",
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ]
+        },
+        {
+          "id": "aut360-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-1"
+          ]
+        },
+        {
+          "id": "aut360-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Automotive Data Acquisition and Analysis.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-1"
+          ]
+        },
+        {
+          "id": "aut360-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-1",
+            "ug-aut360-data-analysis-lo-2"
+          ]
+        },
+        {
+          "id": "aut360-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ]
+        },
+        {
+          "id": "aut360-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-2"
+          ]
+        },
+        {
+          "id": "aut360-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ]
+        },
+        {
+          "id": "aut360-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-1",
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ]
+        },
+        {
+          "id": "aut360-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ]
+        },
+        {
+          "id": "aut360-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ]
+        },
+        {
+          "id": "aut360-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Automotive Data Acquisition and Analysis.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-1",
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut360-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Data Acquisition and Analysis system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut360-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut360-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut360-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Data Acquisition and Analysis learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut360-data-analysis-lo-1",
+            "ug-aut360-data-analysis-lo-2",
+            "ug-aut360-data-analysis-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Automotive Data Acquisition and Analysis example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Data collection",
+        "Visualization",
+        "Data quality/context",
+        "Evidence-based interpretation"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut370-embedded-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-370",
+        "catalogCourseCode": "AUT 370",
+        "catalogCourseTitle": "Automotive Embedded Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop conceptual understanding of microcontrollers, embedded systems, ECU architecture, real-time systems, inputs, outputs, and automotive computing through signal-flow and control relationships.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 230 and AUT 310",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut370-embedded-systems-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Automotive Embedded Systems without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut370-embedded-systems-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about automotive embedded systems.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut370-embedded-systems-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "microcontrollers",
+        "embedded systems",
+        "ECU architecture",
+        "real-time systems",
+        "inputs",
+        "outputs",
+        "automotive computing"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut370-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Automotive Embedded Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-1",
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut370-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut370-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Automotive Embedded Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut370-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-1",
+            "ug-aut370-embedded-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut370-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut370-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut370-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut370-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-1",
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut370-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut370-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut370-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Automotive Embedded Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-1",
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut370-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Embedded Systems system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut370-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut370-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut370-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Embedded Systems learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut370-embedded-systems-lo-1",
+            "ug-aut370-embedded-systems-lo-2",
+            "ug-aut370-embedded-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Automotive Embedded Systems example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "ECU architecture",
+        "Input/output relationships",
+        "Real-time concepts",
+        "Implementation-specific source boundaries"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut380-cybersecurity",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-380",
+        "catalogCourseCode": "AUT 380",
+        "catalogCourseTitle": "Automotive Cybersecurity",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Introduce defensive vehicle cybersecurity through threat modeling, ECU security, secure communication, intrusion detection, and cybersecurity risk management without providing exploit procedures or unauthorized access instructions.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 310 and AUT 370",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut380-cybersecurity-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Automotive Cybersecurity without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut380-cybersecurity-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about automotive cybersecurity.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut380-cybersecurity-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "vehicle cybersecurity",
+        "threat modeling",
+        "ECU security",
+        "secure communication",
+        "intrusion detection",
+        "risk management",
+        "defensive analysis"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut380-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Automotive Cybersecurity.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-1",
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut380-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-1"
+          ]
+        },
+        {
+          "id": "aut380-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Automotive Cybersecurity.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-1"
+          ]
+        },
+        {
+          "id": "aut380-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-1",
+            "ug-aut380-cybersecurity-lo-2"
+          ]
+        },
+        {
+          "id": "aut380-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut380-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-2"
+          ]
+        },
+        {
+          "id": "aut380-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut380-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-1",
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut380-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut380-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut380-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Automotive Cybersecurity.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-1",
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut380-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Cybersecurity system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut380-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut380-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut380-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Cybersecurity learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut380-cybersecurity-lo-1",
+            "ug-aut380-cybersecurity-lo-2",
+            "ug-aut380-cybersecurity-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Automotive Cybersecurity example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Defensive cybersecurity",
+        "Threat modeling",
+        "Security controls and evidence",
+        "Authorized risk-management boundaries"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut390-connected-sdv",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-390",
+        "catalogCourseCode": "AUT 390",
+        "catalogCourseTitle": "Connected and Software-Defined Vehicles",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop system-level understanding of connected vehicles, cloud services, over-the-air updates, centralized computing, software architecture, and vehicle data through architecture, provenance, and lifecycle reasoning.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 310 and AUT 370",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut390-connected-sdv-lo-1",
+          "statement": "Explain the major systems, architectures, data flows, or relationships represented in Connected and Software-Defined Vehicles without treating a generalized instructional model as a vehicle-specific procedure or implementation.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut390-connected-sdv-lo-2",
+          "statement": "Distinguish observations, measurements, data, source information, assumptions, hypotheses, and conclusions when reasoning about connected and software-defined vehicles.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut390-connected-sdv-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe, authorized, and verifiable next diagnostic, analytical, or engineering step.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "connected vehicles",
+        "cloud services",
+        "over-the-air updates",
+        "centralized computing",
+        "software architecture",
+        "vehicle data",
+        "lifecycle and provenance"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut390-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the system, evidence, analysis, and source-use outcomes for Connected and Software-Defined Vehicles.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-1",
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ]
+        },
+        {
+          "id": "aut390-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while separating prior assumptions from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-1"
+          ]
+        },
+        {
+          "id": "aut390-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core architecture and system relationships",
+          "description": "Explain the major relationships identified by the canonical catalog description for Connected and Software-Defined Vehicles.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-1"
+          ]
+        },
+        {
+          "id": "aut390-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Architecture and evidence model",
+          "description": "Use a simplified model without implying universal topology, calibration, thresholds, implementation details, or service procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-1",
+            "ug-aut390-connected-sdv-lo-2"
+          ]
+        },
+        {
+          "id": "aut390-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next decision",
+          "description": "Demonstrate how a generalized technical concern moves through evidence gathering, source verification, reasoning, and a justified next action.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ]
+        },
+        {
+          "id": "aut390-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify information as observation, measurement, data, source statement, assumption, hypothesis, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-2"
+          ]
+        },
+        {
+          "id": "aut390-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized advanced-technology scenario",
+          "description": "Choose and justify an information-supported next step while preserving safety, authorization, cybersecurity, and source boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ]
+        },
+        {
+          "id": "aut390-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence interpretation, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-1",
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ]
+        },
+        {
+          "id": "aut390-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ]
+        },
+        {
+          "id": "aut390-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, calibration-, software-, protocol-, legal-, regulatory-, or security-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ]
+        },
+        {
+          "id": "aut390-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize system relationships, evidence habits, source boundaries, advanced reasoning, and documentation for Connected and Software-Defined Vehicles.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-1",
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut390-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Connected and Software-Defined Vehicles system relationships",
+          "purpose": "Show generalized system or architecture relationships without presenting implementation-specific or vehicle-specific detail.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut390-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from technical question through evidence, applicable information, decision, and verification.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut390-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, source, assumption, and conclusion",
+          "purpose": "Compare technical information categories and the support required before a conclusion is justified.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut390-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Connected and Software-Defined Vehicles learning framework",
+          "purpose": "Summarize architecture, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut390-connected-sdv-lo-1",
+            "ug-aut390-connected-sdv-lo-2",
+            "ug-aut390-connected-sdv-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major architecture, system, or data relationships in a generalized Connected and Software-Defined Vehicles example",
+        "Sort sample information into evidence, source statement, assumption, hypothesis, or conclusion",
+        "Identify what authoritative information or authorization is required before applying a calibration, procedure, threshold, or implementation-specific claim",
+        "Write an evidence-based rationale and verification plan for a safe and authorized next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence/source classification exercise",
+        "Formative generalized advanced-technology scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Connected architecture",
+        "Cloud/vehicle relationships",
+        "Software lifecycle and OTA concepts",
+        "Data/security/provenance boundaries"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, calibration requirements, software or protocol implementation details, product/equipment instructions, legal or regulatory requirements, safety rules, and authorization requirements require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
     }
   ]
 }

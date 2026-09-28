@@ -184,6 +184,90 @@
       "cipCode": "47.0604",
       "title": "Automotive Control Systems",
       "status": "planned"
+    },
+    {
+      "id": "aut-300",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Advanced Automotive Diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "aut-301",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Advanced Automotive Diagnostics Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-310",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Vehicle Network Communications",
+      "status": "planned"
+    },
+    {
+      "id": "aut-320",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Hybrid Vehicle Technology",
+      "status": "planned"
+    },
+    {
+      "id": "aut-321",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Hybrid Vehicle Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-331",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Electric Vehicle Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-340",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Battery Systems and Battery Management",
+      "status": "planned"
+    },
+    {
+      "id": "aut-350",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Advanced Driver Assistance Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-360",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Data Acquisition and Analysis",
+      "status": "planned"
+    },
+    {
+      "id": "aut-370",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Embedded Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-380",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Cybersecurity",
+      "status": "planned"
+    },
+    {
+      "id": "aut-390",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Connected and Software-Defined Vehicles",
+      "status": "planned"
     }
   ]
 }

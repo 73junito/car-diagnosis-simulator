@@ -542,6 +542,222 @@
         "Document the evidence and next step"
       ],
       "status": "planned"
+    },
+    {
+      "id": "ug-aut300-advanced-diagnostics",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-300",
+      "competencyId": "ug-aut300-advanced-diagnostics",
+      "title": "Advanced Automotive Diagnostic Strategy and Evidence",
+      "sequence": [
+        "Define the advanced concern",
+        "Separate affected domains",
+        "Organize available evidence",
+        "Rank testable hypotheses",
+        "Select a discriminating test",
+        "Interpret results with applicable information",
+        "Plan verification of the conclusion",
+        "Document the evidence chain"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut301-advanced-diagnostics-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-301",
+      "competencyId": "ug-aut301-advanced-diagnostics-lab",
+      "title": "Advanced Diagnostic Laboratory Testing and Fault Isolation",
+      "sequence": [
+        "Define the laboratory fault",
+        "Choose the diagnostic domain",
+        "Select appropriate test equipment",
+        "Establish test context",
+        "Collect and compare evidence",
+        "Narrow the fault using applicable information",
+        "Practice verification of the diagnosis",
+        "Document the reasoning and result"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut310-network-communications",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-310",
+      "competencyId": "ug-aut310-network-communications",
+      "title": "Vehicle Network Communications and Diagnostic Evidence",
+      "sequence": [
+        "Identify the communication concern",
+        "Map the generalized network architecture",
+        "Identify relevant message paths",
+        "Classify communication evidence",
+        "Differentiate node link and message hypotheses",
+        "Check applicable topology and protocol information",
+        "Practice a network fault decision",
+        "Document the supported next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut320-hybrid-vehicle-technology",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-320",
+      "competencyId": "ug-aut320-hybrid-systems",
+      "title": "Hybrid Vehicle Architecture, Energy Flow, and Diagnostic Foundations",
+      "sequence": [
+        "Identify the hybrid architecture",
+        "Trace generalized energy flow",
+        "Connect electric-machine roles",
+        "Connect power-electronic functions",
+        "Relate regenerative braking and battery behavior",
+        "Recognize high-voltage information boundaries",
+        "Practice a hybrid diagnostic reasoning scenario",
+        "Document the safe next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut321-hybrid-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-321",
+      "competencyId": "ug-aut321-hybrid-lab",
+      "title": "Hybrid Vehicle Laboratory Analysis and Evidence",
+      "sequence": [
+        "Define the hybrid lab objective",
+        "Identify the affected subsystem",
+        "Review safety and authorization boundaries",
+        "Select a generalized evidence approach",
+        "Record system observations",
+        "Check applicable technical information",
+        "Practice a stop/proceed diagnostic decision",
+        "Document findings and verification needs"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut331-electric-vehicle-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-331",
+      "competencyId": "ug-aut331-ev-lab",
+      "title": "Electric Vehicle Laboratory Analysis and High-Voltage Evidence",
+      "sequence": [
+        "Define the EV lab objective",
+        "Identify the electrical or energy subsystem",
+        "Review high-voltage and charging boundaries",
+        "Select an evidence-gathering approach",
+        "Record observations and test context",
+        "Check applicable vehicle/equipment information",
+        "Practice a safe diagnostic decision",
+        "Document findings and verification"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut340-battery-management",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-340",
+      "competencyId": "ug-aut340-battery-management",
+      "title": "Battery Systems, Management, Health, and Diagnostic Evidence",
+      "sequence": [
+        "Identify the battery-system concern",
+        "Map cell pack and management roles",
+        "Relate state-of-charge evidence",
+        "Relate state-of-health evidence",
+        "Connect thermal and balancing functions",
+        "Separate generalized trends from vehicle-specific limits",
+        "Practice a battery diagnostic decision",
+        "Document the evidence and next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut350-adas",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-350",
+      "competencyId": "ug-aut350-adas",
+      "title": "ADAS Sensors, Functions, Calibration Context, and Diagnostic Evidence",
+      "sequence": [
+        "Define the ADAS concern",
+        "Identify the sensing/control function",
+        "Map sensor and network relationships",
+        "Record relevant environmental/system evidence",
+        "Distinguish fault evidence from calibration need",
+        "Check applicable calibration/service information",
+        "Practice an ADAS diagnostic decision",
+        "Document verification requirements"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut360-data-analysis",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-360",
+      "competencyId": "ug-aut360-data-analysis",
+      "title": "Vehicle Data Acquisition, Visualization, and Interpretation",
+      "sequence": [
+        "Define the data question",
+        "Identify variables and units",
+        "Establish collection context",
+        "Inspect data quality",
+        "Organize and visualize the data",
+        "Compare patterns without overclaiming",
+        "Practice an evidence-based interpretation",
+        "Document assumptions and conclusion"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut370-embedded-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-370",
+      "competencyId": "ug-aut370-embedded-systems",
+      "title": "Automotive Embedded Systems and ECU Architecture Foundations",
+      "sequence": [
+        "Identify the embedded function",
+        "Map inputs processing and outputs",
+        "Connect microcontroller and ECU roles",
+        "Consider real-time constraints conceptually",
+        "Relate network and local signals",
+        "Identify implementation-specific information needs",
+        "Practice an embedded-system reasoning scenario",
+        "Document the supported architecture conclusion"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut380-cybersecurity",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-380",
+      "competencyId": "ug-aut380-cybersecurity",
+      "title": "Automotive Cybersecurity, Threat Modeling, and Risk Foundations",
+      "sequence": [
+        "Define the protected vehicle function",
+        "Identify assets and trust boundaries",
+        "Describe plausible threat categories",
+        "Relate preventive and detective controls",
+        "Interpret generalized security evidence",
+        "Assess risk without exploit execution",
+        "Practice a defensive response decision",
+        "Document mitigation and verification needs"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut390-connected-sdv",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-390",
+      "competencyId": "ug-aut390-connected-sdv",
+      "title": "Connected and Software-Defined Vehicle Architecture Foundations",
+      "sequence": [
+        "Identify the connected vehicle function",
+        "Map vehicle edge and cloud relationships",
+        "Trace data and service dependencies",
+        "Connect centralized computing concepts",
+        "Describe update/lifecycle relationships",
+        "Identify security and provenance dependencies",
+        "Practice an architecture reasoning scenario",
+        "Document assumptions and source needs"
+      ],
+      "status": "planned"
     }
   ]
 }

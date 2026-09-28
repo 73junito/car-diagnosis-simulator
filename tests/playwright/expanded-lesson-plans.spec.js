@@ -15,14 +15,14 @@ test.describe('Expanded lesson plans', () => {
     await page.goto('/lesson-plans/');
     await expect(page.locator('html')).toHaveAttribute('data-lesson-plans', 'loaded');
 
-    await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(26);
+    await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(38);
     await expect(page.locator('#graduate-plan-list .expanded-plan')).toHaveCount(5);
-    await expect(page.locator('.expanded-plan')).toHaveCount(31);
-    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(31);
+    await expect(page.locator('.expanded-plan')).toHaveCount(43);
+    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(43);
 
-    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(94);
-    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(343);
-    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(126);
+    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(130);
+    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(475);
+    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(174);
 
     expect(pageErrors).toEqual([]);
   });
@@ -145,6 +145,45 @@ test.describe('Expanded lesson plans', () => {
     await expect(diagnostics.getByRole('heading', { name: 'Systematic Automotive Diagnosis and Verification' })).toBeVisible();
     await expect(diagnostics).toContainText('Automotive Diagnostics I');
     await expect(diagnostics).not.toContainText('Hybrid & Electric Vehicle Technology');
+
+    expect(pageErrors).toEqual([]);
+  });
+
+
+  test('renders the AUT 300-390 advanced-technology batch with planned non-scored boundaries', async ({ page }) => {
+    const pageErrors = collectPageErrors(page);
+    const batch = [
+      'ug-aut300-advanced-diagnostics',
+      'ug-aut301-advanced-diagnostics-lab',
+      'ug-aut310-network-communications',
+      'ug-aut320-hybrid-vehicle-technology',
+      'ug-aut321-hybrid-lab',
+      'ug-aut331-electric-vehicle-lab',
+      'ug-aut340-battery-management',
+      'ug-aut350-adas',
+      'ug-aut360-data-analysis',
+      'ug-aut370-embedded-systems',
+      'ug-aut380-cybersecurity',
+      'ug-aut390-connected-sdv'
+    ];
+
+    await page.goto('/lesson-plans/');
+    for (const id of batch) {
+      const plan = page.locator('#' + id);
+      await expect(plan, id).toBeVisible();
+      await expect(plan.locator('.objective-list > li'), id + ' objectives').toHaveCount(3);
+      await plan.getByText('Instructional sequence').click();
+      await expect(plan.locator('.instruction-block-list > li'), id + ' blocks').toHaveCount(11);
+      await plan.getByText('Planned visuals').click();
+      await expect(plan.locator('.lesson-visual-grid > article'), id + ' visuals').toHaveCount(4);
+      await plan.getByText('Evidence focus and boundaries').click();
+      await expect(plan.getByText(/Scored assessment remains a separate approval state/i), id + ' assessment boundary').toBeVisible();
+      await expect(plan.getByText(/must not be invented/i), id + ' source boundary').toBeVisible();
+    }
+
+    const cybersecurity = page.locator('#ug-aut380-cybersecurity');
+    await expect(cybersecurity).toContainText('authorized');
+    await expect(cybersecurity).toContainText('defensive');
 
     expect(pageErrors).toEqual([]);
   });
@@ -312,7 +351,7 @@ test.describe('Expanded lesson plans', () => {
     const pageErrors = collectPageErrors(page);
 
     await page.goto('/learning-path/');
-    await expect(page.locator('.lesson-detail-link')).toHaveCount(31);
+    await expect(page.locator('.lesson-detail-link')).toHaveCount(43);
 
     const electrical = page.locator('#electrical-1');
     await electrical.locator('summary').click();
