@@ -107,6 +107,211 @@ function renderVisuals(visuals) {
   ).join("");
 }
 
+
+const AUT250_VISUAL_MODELS = {
+  "Battery-system functional architecture": {
+    kind: "nodes",
+    nodes: ["Cells / Modules", "Sensors", "Switching", "Protection", "Control", "Thermal"],
+    links: [["Cells / Modules","Sensors"],["Sensors","Control"],["Control","Switching"],["Protection","Switching"],["Thermal","Control"]]
+  },
+  "Measured, calculated, commanded, and inferred battery data": {
+    kind: "table",
+    headers: ["Category", "Examples", "Interpretation"],
+    rows: [
+      ["Measured", "Voltage, current, temperature", "Direct sensor or meter observation"],
+      ["Calculated", "State of charge, state of health", "Model-derived estimate"],
+      ["Commanded", "Requested contactor or cooling action", "Control intent"],
+      ["Inferred", "Possible cause or condition", "Diagnostic hypothesis"]
+    ]
+  },
+  "Battery evidence-to-next-check reasoning": {
+    kind: "steps",
+    steps: ["Preserve evidence", "Classify data", "Compare context", "Correlate systems", "Choose next check"]
+  },
+  "DC source, inverter, electric machine, and low-voltage support": {
+    kind: "energy",
+    lanes: [
+      ["DC Energy Source", "Inverter", "Electric Machine"],
+      ["DC Energy Source", "DC-DC Converter", "Low-Voltage System"]
+    ]
+  },
+  "Commanded state to measured response": {
+    kind: "steps",
+    steps: ["Requested state", "Control action", "Measured response", "Compare", "Explain mismatch"]
+  },
+  "Power-electronics evidence categories": {
+    kind: "table",
+    headers: ["Evidence", "Question"],
+    rows: [
+      ["Supply", "Is required electrical input available?"],
+      ["Command", "What operation was requested?"],
+      ["Response", "What voltage, current, torque, or state occurred?"],
+      ["Communication", "Are modules exchanging valid information?"],
+      ["Thermal", "Is protection or derating active?"]
+    ]
+  },
+  "Charge-readiness sequence": {
+    kind: "steps",
+    steps: ["Connection detected", "Supply recognized", "Interlocks satisfied", "Vehicle ready", "Energy transfer enabled"]
+  },
+  "Infrastructure-to-battery charging boundaries": {
+    kind: "boundary",
+    groups: [
+      ["Infrastructure", "External source / equipment"],
+      ["Interface", "Connector / communication"],
+      ["Vehicle", "Control / conversion"],
+      ["Battery", "Acceptance / protection"]
+    ]
+  },
+  "Charging evidence by system boundary": {
+    kind: "table",
+    headers: ["Boundary", "Evidence examples"],
+    rows: [
+      ["Infrastructure", "Supply available, external equipment state"],
+      ["Interface", "Connection recognition, communication state"],
+      ["Vehicle", "Enable request, conversion status"],
+      ["Battery", "Acceptance conditions, protection state"],
+      ["Thermal", "Temperature-related limiting"]
+    ]
+  },
+  "Cross-system thermal relationships": {
+    kind: "nodes",
+    nodes: ["Battery", "Power Electronics", "Electric Machine", "Cabin", "Ambient", "Thermal Control"],
+    links: [["Battery","Thermal Control"],["Power Electronics","Thermal Control"],["Electric Machine","Thermal Control"],["Cabin","Thermal Control"],["Ambient","Thermal Control"]]
+  },
+  "Temperature, command, and performance trend": {
+    kind: "timeline",
+    points: [
+      ["T1", "Normal temperature", "Normal command", "Full capability"],
+      ["T2", "Rising temperature", "Cooling increases", "Capability maintained"],
+      ["T3", "Limit approached", "Protection active", "Performance reduced"]
+    ]
+  },
+  "Thermal evidence and alternative explanations": {
+    kind: "table",
+    headers: ["Observation", "Possible explanations"],
+    rows: [
+      ["High reported temperature", "Actual heat, sensor bias, poor heat transfer"],
+      ["Cooling command high", "High load, restricted flow, actuator issue"],
+      ["Reduced power", "Thermal protection, electrical limit, control strategy"]
+    ]
+  },
+  "Low-voltage control dependency map": {
+    kind: "nodes",
+    nodes: ["Low-Voltage Supply", "Module Wake-Up", "Network Communication", "Contactor Control", "Propulsion Readiness"],
+    links: [["Low-Voltage Supply","Module Wake-Up"],["Module Wake-Up","Network Communication"],["Network Communication","Contactor Control"],["Contactor Control","Propulsion Readiness"]]
+  },
+  "Wake-up, communication, and readiness sequence": {
+    kind: "steps",
+    steps: ["Low-voltage stable", "Modules wake", "Network online", "Preconditions checked", "Ready state requested"]
+  },
+  "Shared-dependency evidence matrix": {
+    kind: "table",
+    headers: ["Symptom cluster", "Shared dependency to investigate"],
+    rows: [
+      ["Several modules offline", "Power, ground, wake-up, network"],
+      ["Many communication faults", "Shared supply or network condition"],
+      ["No propulsion-ready state", "Foundational control prerequisites"]
+    ]
+  },
+  "Request → Measure → Compare → Correlate → Verify": {
+    kind: "steps",
+    steps: ["Request", "Measure", "Compare", "Correlate", "Verify"]
+  },
+  "Competing hypotheses and discriminating evidence": {
+    kind: "table",
+    headers: ["Hypothesis", "Evidence that would support", "Discriminating check"],
+    rows: [
+      ["Supply dependency", "Multiple functions affected", "Verify shared supply state"],
+      ["Control / communication", "Command missing or data unavailable", "Confirm command and network state"],
+      ["Component condition", "Correct inputs but abnormal response", "Vehicle-specific functional test"]
+    ]
+  },
+  "Evidence-supported repair and verification cycle": {
+    kind: "cycle",
+    steps: ["Concern", "Evidence", "Hypotheses", "Decision", "Action", "Verification"]
+  }
+};
+
+function renderSvgNodes(model, title) {
+  const positions = [
+    [90,70],[260,45],[430,70],[120,190],[300,200],[470,185]
+  ];
+  const byName = new Map(model.nodes.map((name, index) => [name, positions[index] || [80 + (index % 3) * 180, 70 + Math.floor(index / 3) * 120]]));
+  const lines = (model.links || []).map(([a,b]) => {
+    const pa=byName.get(a), pb=byName.get(b);
+    if(!pa || !pb) return "";
+    return `<line x1="${pa[0]}" y1="${pa[1]}" x2="${pb[0]}" y2="${pb[1]}" class="viz-link" />`;
+  }).join("");
+  const nodes = model.nodes.map((name,index)=>{
+    const [x,y]=byName.get(name);
+    return `<g><rect x="${x-58}" y="${y-24}" width="116" height="48" rx="12" class="viz-node"/><text x="${x}" y="${y+4}" text-anchor="middle" class="viz-node-label">${escapeHtml(name)}</text></g>`;
+  }).join("");
+  return `<svg class="module-svg" viewBox="0 0 560 260" role="img" aria-label="${escapeHtml(title)}">${lines}${nodes}</svg>`;
+}
+
+function renderSvgSteps(model, title) {
+  const count=model.steps.length;
+  const gap=500/(count-1 || 1);
+  return `<svg class="module-svg" viewBox="0 0 560 150" role="img" aria-label="${escapeHtml(title)}">
+    ${model.steps.map((step,index)=>{
+      const x=30+index*gap;
+      const next=index<count-1 ? `<line x1="${x+42}" y1="75" x2="${x+gap-42}" y2="75" class="viz-link"/>` : "";
+      return `${next}<circle cx="${x}" cy="75" r="28" class="viz-step"/><text x="${x}" y="80" text-anchor="middle" class="viz-step-number">${index+1}</text><text x="${x}" y="128" text-anchor="middle" class="viz-step-label">${escapeHtml(step)}</text>`;
+    }).join("")}
+  </svg>`;
+}
+
+function renderSvgEnergy(model, title) {
+  return `<svg class="module-svg" viewBox="0 0 560 220" role="img" aria-label="${escapeHtml(title)}">
+    ${model.lanes.map((lane,row)=>lane.map((label,index)=>{
+      const x=80+index*200, y=65+row*95;
+      const arrow=index<lane.length-1 ? `<line x1="${x+60}" y1="${y}" x2="${x+140}" y2="${y}" class="viz-link"/>` : "";
+      return `${arrow}<rect x="${x-58}" y="${y-24}" width="116" height="48" rx="12" class="viz-node"/><text x="${x}" y="${y+4}" text-anchor="middle" class="viz-node-label">${escapeHtml(label)}</text>`;
+    }).join("")).join("")}
+  </svg>`;
+}
+
+function renderSvgBoundary(model, title) {
+  return `<div class="boundary-visual" role="img" aria-label="${escapeHtml(title)}">
+    ${model.groups.map((group,index)=>`<div><span>${String(index+1).padStart(2,"0")}</span><strong>${escapeHtml(group[0])}</strong><p>${escapeHtml(group[1])}</p></div>`).join("")}
+  </div>`;
+}
+
+function renderSvgTimeline(model, title) {
+  return `<div class="timeline-visual" role="img" aria-label="${escapeHtml(title)}">
+    ${model.points.map((point)=>`<div><strong>${escapeHtml(point[0])}</strong><span>${escapeHtml(point[1])}</span><span>${escapeHtml(point[2])}</span><span>${escapeHtml(point[3])}</span></div>`).join("")}
+  </div>`;
+}
+
+function renderSvgCycle(model, title) {
+  return `<svg class="module-svg" viewBox="0 0 560 330" role="img" aria-label="${escapeHtml(title)}">
+    ${model.steps.map((step,index)=>{
+      const angle=(Math.PI*2*index/model.steps.length)-Math.PI/2;
+      const x=280+170*Math.cos(angle), y=165+105*Math.sin(angle);
+      return `<g><circle cx="${x}" cy="${y}" r="42" class="viz-cycle"/><text x="${x}" y="${y+4}" text-anchor="middle" class="viz-cycle-label">${escapeHtml(step)}</text></g>`;
+    }).join("")}
+    <circle cx="280" cy="165" r="48" class="viz-center"/><text x="280" y="160" text-anchor="middle" class="viz-center-label">Evidence</text><text x="280" y="180" text-anchor="middle" class="viz-center-label">loop</text>
+  </svg>`;
+}
+
+function renderVisualTable(model, title) {
+  return `<div class="module-data-table-wrap"><table class="module-data-table" aria-label="${escapeHtml(title)}"><thead><tr>${model.headers.map(h=>`<th>${escapeHtml(h)}</th>`).join("")}</tr></thead><tbody>${model.rows.map(row=>`<tr>${row.map(cell=>`<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+
+function renderOriginalModuleVisual(visual) {
+  const model=AUT250_VISUAL_MODELS[visual.title];
+  if(!model) return `<p class="visual-placeholder">Original AutoLearnPro instructional visual planned for this module.</p>`;
+  if(model.kind==="nodes") return renderSvgNodes(model,visual.title);
+  if(model.kind==="steps") return renderSvgSteps(model,visual.title);
+  if(model.kind==="energy") return renderSvgEnergy(model,visual.title);
+  if(model.kind==="boundary") return renderSvgBoundary(model,visual.title);
+  if(model.kind==="timeline") return renderSvgTimeline(model,visual.title);
+  if(model.kind==="cycle") return renderSvgCycle(model,visual.title);
+  if(model.kind==="table") return renderVisualTable(model,visual.title);
+  return `<p class="visual-placeholder">Original AutoLearnPro instructional visual planned for this module.</p>`;
+}
+
 function renderCourseModules(modules = []) {
   if (!modules.length) return "";
 
@@ -179,7 +384,7 @@ function renderCourseModules(modules = []) {
                   <article>
                     <span>${escapeHtml(titleCase(visual.type))}</span>
                     <h6>${escapeHtml(visual.title)}</h6>
-                    <p>Original AutoLearnPro instructional visual planned for this module.</p>
+                    ${renderOriginalModuleVisual(visual)}
                   </article>`).join("")}
               </div>
             </details>
