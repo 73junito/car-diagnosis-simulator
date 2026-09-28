@@ -3822,12 +3822,13 @@
         "bulkReview": {
           "reviewId": "aut250-training-batch-001-review-20260927",
           "reviewArtifact": "data/evidence/review-queues/aut250-training-question-bulk-review-20260927.json",
-          "status": "completed-with-holds",
-          "candidateSupported": 14,
-          "holdForStrongerEvidence": 6,
+          "status": "source-holds-resolved-validation-blocked",
+          "candidateSupported": 20,
+          "holdForStrongerEvidence": 0,
           "approved": 0,
           "citationValidated": 0,
-          "nextGate": "Resolve six evidence holds, then perform deterministic citation validation and named human technical/instructional/safety review before any approval transition."
+          "deterministicValidationStatus": "blocked-by-governance-prerequisites",
+          "nextGate": "Complete named human rights/technical/instructional/safety review and establish an approved citation-evidence representation before deterministic citation validation."
         }
       }
     }
