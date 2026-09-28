@@ -59,12 +59,20 @@
           <h2>Six-module learning path</h2>
           <p class="course-dashboard-summary" data-course-summary>Loading course…</p>
         </div>
-        <div class="course-progress-panel">
+        <div class="course-progress-panel" aria-live="polite">
           <strong data-course-progress>0 / 6</strong>
           <span>modules completed</span>
           <div class="course-progress-track" aria-hidden="true"><span data-course-progress-bar></span></div>
         </div>
       </div>
+
+      <div class="aut250-progress-metrics" aria-label="Course progress details">
+        <article><span>Questions attempted</span><strong data-progress-attempted>0 / 20</strong></article>
+        <article><span>Learning activity</span><strong data-progress-activity>0%</strong></article>
+        <article><span>Course scope</span><strong data-progress-hours>24 hours</strong></article>
+        <article><span>Lesson count</span><strong data-progress-lessons>18 lessons</strong></article>
+      </div>
+      <p class="aut250-last-activity" data-course-last-activity>Last activity: Not started</p>
 
       <div class="course-continue-wrap">
         <a class="button primary" href="#modules" data-course-continue>Continue learning</a>
