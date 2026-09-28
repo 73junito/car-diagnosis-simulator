@@ -15,14 +15,40 @@ test.describe('Expanded lesson plans', () => {
     await page.goto('/lesson-plans/');
     await expect(page.locator('html')).toHaveAttribute('data-lesson-plans', 'loaded');
 
-    await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(5);
+    await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(6);
     await expect(page.locator('#graduate-plan-list .expanded-plan')).toHaveCount(5);
-    await expect(page.locator('.expanded-plan')).toHaveCount(10);
-    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(10);
+    await expect(page.locator('.expanded-plan')).toHaveCount(11);
+    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(11);
 
-    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(31);
-    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(112);
-    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(42);
+    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(34);
+    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(123);
+    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(46);
+
+    expect(pageErrors).toEqual([]);
+  });
+
+
+  test('renders the planned AUT 101 foundations lesson with non-scored boundaries', async ({ page }) => {
+    const pageErrors = collectPageErrors(page);
+
+    await page.goto('/lesson-plans/#ug-aut101-foundations');
+    const plan = page.locator('#ug-aut101-foundations');
+
+    await expect(plan).toBeVisible();
+    await expect(plan.getByRole('heading', { name: 'Automotive Systems, Professional Practice, and Evidence Foundations' })).toBeVisible();
+    await expect(plan.locator('.objective-list > li')).toHaveCount(3);
+
+    await plan.getByText('Instructional sequence').click();
+    await expect(plan.locator('.instruction-block-list > li')).toHaveCount(11);
+
+    await plan.getByText('Planned visuals').click();
+    await expect(plan.locator('.lesson-visual-grid > article')).toHaveCount(4);
+    await expect(plan.getByText('Major vehicle-system relationships')).toBeVisible();
+    await expect(plan.getByText('Concern-to-next-step workflow')).toBeVisible();
+
+    await plan.getByText('Evidence focus and boundaries').click();
+    await expect(plan.getByText(/Scored assessment remains a separate approval state/i)).toBeVisible();
+    await expect(plan.getByText(/Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source/i)).toBeVisible();
 
     expect(pageErrors).toEqual([]);
   });
@@ -190,7 +216,7 @@ test.describe('Expanded lesson plans', () => {
     const pageErrors = collectPageErrors(page);
 
     await page.goto('/learning-path/');
-    await expect(page.locator('.lesson-detail-link')).toHaveCount(10);
+    await expect(page.locator('.lesson-detail-link')).toHaveCount(11);
 
     const electrical = page.locator('#electrical-1');
     await electrical.locator('summary').click();

@@ -4,6 +4,13 @@
   "cipCode": "47.0604",
   "courses": [
     {
+      "id": "aut-101",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Introduction to Automotive Technology",
+      "status": "planned"
+    },
+    {
       "id": "electrical-1",
       "academicLevel": "undergraduate",
       "cipCode": "47.0604",

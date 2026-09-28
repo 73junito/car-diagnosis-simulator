@@ -17,6 +17,7 @@ const files = [
   "scenario-mappings.json",
   "content-policy.json",
   "lesson-content.json",
+  "lesson-content-extensions.json",
   "program-architecture.json"
 ];
 

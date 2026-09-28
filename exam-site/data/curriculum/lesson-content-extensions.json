@@ -1,0 +1,255 @@
+{
+  "schemaVersion": "1.2.0",
+  "lessonContentPlans": [
+    {
+      "lessonPlanId": "ug-aut101-foundations",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-101",
+        "catalogCourseCode": "AUT 101",
+        "catalogCourseTitle": "Introduction to Automotive Technology",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Introduce the major systems, professional expectations, safety boundaries, technical-information habits, and evidence-based reasoning process learners will use throughout the automotive technology curriculum.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "No formal course prerequisite",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut101-lo-1",
+          "statement": "Identify major vehicle systems and explain their basic functional relationships without treating a system overview as a vehicle-specific service procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut101-lo-2",
+          "statement": "Distinguish a customer concern, observation, measurement, technical reference, hypothesis, and diagnostic conclusion.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut101-lo-3",
+          "statement": "Use safety, professional practice, and applicable technical information to select and document an appropriate next step for a basic vehicle concern.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "vehicle systems and subsystem relationships",
+        "safety boundaries",
+        "professional practice",
+        "technical information",
+        "evidence versus conclusion",
+        "diagnostic workflow and documentation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut101-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the systems, evidence, safety, and professional-practice outcomes for the lesson.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-1",
+            "ug-aut101-lo-2",
+            "ug-aut101-lo-3"
+          ]
+        },
+        {
+          "id": "aut101-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "What learners already know",
+          "description": "Activate everyday vehicle knowledge while separating informal familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-1"
+          ]
+        },
+        {
+          "id": "aut101-system-overview",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Vehicle systems as an interconnected whole",
+          "description": "Introduce major vehicle systems and the idea that a symptom in one area may depend on conditions in another.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-1"
+          ]
+        },
+        {
+          "id": "aut101-system-map",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Vehicle-system relationship model",
+          "description": "Use a simplified conceptual model to connect power, control, chassis, thermal, electrical, and information functions without implying a universal vehicle architecture.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-1"
+          ]
+        },
+        {
+          "id": "aut101-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "From concern to next step",
+          "description": "Demonstrate how a basic vehicle concern moves from reported symptom to observation, information gathering, hypothesis, and a justified next check.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-2",
+            "ug-aut101-lo-3"
+          ]
+        },
+        {
+          "id": "aut101-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence sorting",
+          "description": "Classify sample statements as concern, observation, measurement, reference, hypothesis, or conclusion.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-2"
+          ]
+        },
+        {
+          "id": "aut101-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Basic vehicle concern",
+          "description": "Choose a safe and information-supported next step for a simple vehicle concern without being given a repair answer.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-3"
+          ]
+        },
+        {
+          "id": "aut101-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Foundations reasoning check",
+          "description": "Use low-stakes formative prompts to check system recognition, evidence classification, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-1",
+            "ug-aut101-lo-2",
+            "ug-aut101-lo-3"
+          ]
+        },
+        {
+          "id": "aut101-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-2",
+            "ug-aut101-lo-3"
+          ]
+        },
+        {
+          "id": "aut101-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Technical information and source boundary",
+          "description": "Reinforce that vehicle-specific procedures, specifications, limits, and safety instructions require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-3"
+          ]
+        },
+        {
+          "id": "aut101-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Foundations summary",
+          "description": "Summarize how systems thinking, safety, professional practice, evidence, and documentation support later automotive coursework.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-1",
+            "ug-aut101-lo-2",
+            "ug-aut101-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut101-system-relationships",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Major vehicle-system relationships",
+          "purpose": "Show high-level relationships among vehicle systems without presenting a vehicle-specific schematic.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut101-diagnostic-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Concern-to-next-step workflow",
+          "purpose": "Show the sequence from concern through evidence gathering and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-2",
+            "ug-aut101-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut101-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence versus conclusion",
+          "purpose": "Compare concerns, observations, measurements, references, hypotheses, and conclusions.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut101-foundations-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive learning foundations",
+          "purpose": "Summarize systems thinking, safety, professional practice, evidence, technical information, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut101-lo-1",
+            "ug-aut101-lo-2",
+            "ug-aut101-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Match common vehicle functions to the major system most directly responsible for them",
+        "Sort sample statements into concern, observation, measurement, reference, hypothesis, or conclusion",
+        "Identify which information must be verified before following a vehicle-specific procedure",
+        "Write a brief rationale for a safe next step in a basic guided concern"
+      ],
+      "assessmentPlan": [
+        "Low-stakes vehicle-system recognition check",
+        "Evidence-classification exercise",
+        "Formative next-step reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "General vehicle-system relationships",
+        "Safety and professional-practice boundaries",
+        "Technical-information applicability",
+        "Evidence-to-decision reasoning"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, values, limits, and specifications require an appropriate authoritative source and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, review status, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    }
+  ]
+}
