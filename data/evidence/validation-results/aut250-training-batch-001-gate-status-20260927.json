@@ -1,0 +1,38 @@
+{
+  "gate_status_id": "aut250-training-batch-001-post-metadata-validation-20260927",
+  "course_id": "AUT-250",
+  "question_batch": "aut250-training-batch-001",
+  "validation_artifact": "data/evidence/validation-results/aut250-training-batch-001-metadata-validation-20260927.json",
+  "validator_version": "aut250-metadata-citation-validator-1.0",
+  "deterministic_metadata_validation": {
+    "status": "complete",
+    "result": "valid",
+    "questions_valid": 20,
+    "questions_invalid": 0,
+    "candidate_sources": 16
+  },
+  "human_reviews": {
+    "status": "complete",
+    "roles": [
+      "rights",
+      "technical",
+      "instructional",
+      "safety"
+    ]
+  },
+  "citation_representation": {
+    "status": "confirmed",
+    "representation": "metadata-only-citation-proof"
+  },
+  "remaining_gate": {
+    "status": "blocked-pending-separate-final-approval",
+    "final_approval_recorded": false
+  },
+  "effects": {
+    "question_approval": "none",
+    "assessment_eligibility": false,
+    "production_release": false,
+    "high_stakes_use": false,
+    "legacy_citation_validations_written": false
+  }
+}
