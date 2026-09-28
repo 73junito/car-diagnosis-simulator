@@ -42,6 +42,7 @@
       <h1 data-player-title>Loading module…</h1>
       <p data-player-objective></p>
       <div class="aut250-player-boundary">Approved for formative training use · non-scored · not eligible for institutional or high-stakes assessment.</div>
+      <button type="button" class="button secondary-button aut250-evidence-open" data-evidence-drawer-open>Evidence &amp; instructor details</button>
     </section>
 
     <div id="player-gate-blocked" class="training-release-blocked" role="status" hidden>
@@ -81,6 +82,17 @@
       </div>
     </section>
   </main>
+
+  <dialog class="aut250-evidence-drawer" data-evidence-drawer aria-labelledby="evidence-drawer-title">
+    <div class="aut250-evidence-drawer-head">
+      <div>
+        <p class="eyebrow">INSTRUCTOR / EVIDENCE VIEW</p>
+        <h2 id="evidence-drawer-title">Governance and evidence boundaries</h2>
+      </div>
+      <button type="button" class="aut250-evidence-close" data-evidence-drawer-close aria-label="Close evidence details">×</button>
+    </div>
+    <div data-evidence-drawer-content></div>
+  </dialog>
 
   <script type="module" src="/courses/aut-250/module/module.js"></script>
 </body>
