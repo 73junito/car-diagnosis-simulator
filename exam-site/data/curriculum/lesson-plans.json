@@ -200,6 +200,150 @@
         "Explain and verify the professional next step"
       ],
       "status": "planned"
+    },
+    {
+      "id": "ug-aut110-automotive-math",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-110",
+      "competencyId": "ug-aut110-quantitative-reasoning",
+      "title": "Automotive Mathematics and Quantitative Reasoning",
+      "sequence": [
+        "Identify the quantity and units",
+        "Organize known and unknown values",
+        "Select the mathematical relationship",
+        "Preserve units and conversion context",
+        "Solve the relationship",
+        "Check scale and reasonableness",
+        "Practice an automotive calculation",
+        "Document the result and assumptions"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut115-measurement-instrumentation",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-115",
+      "competencyId": "ug-aut115-measurement-instrumentation",
+      "title": "Automotive Measurement, Instrument Selection, and Evidence",
+      "sequence": [
+        "Define the quantity to be measured",
+        "Select an appropriate instrument category",
+        "Check units and measurement context",
+        "Recognize resolution and reading limits",
+        "Record the observation",
+        "Compare only with applicable specifications",
+        "Practice an evidence-based measurement decision",
+        "Document the result and source need"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut121-electrical-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-121",
+      "competencyId": "ug-aut121-electrical-lab-evidence",
+      "title": "Electrical Laboratory Measurement and Circuit Evidence",
+      "sequence": [
+        "Review the circuit objective",
+        "Identify the test points and variables",
+        "Establish a safe generalized setup",
+        "Collect electrical observations",
+        "Record units and operating context",
+        "Compare evidence with the stated exercise basis",
+        "Practice a diagnostic next-step decision",
+        "Document and verify the reasoning"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut130-engine-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-130",
+      "competencyId": "ug-aut130-engine-systems-foundations",
+      "title": "Engine Construction, Operation, and System Relationships",
+      "sequence": [
+        "Identify major engine components",
+        "Trace four-stroke operation conceptually",
+        "Connect lubrication functions",
+        "Connect cooling functions",
+        "Relate components to operating evidence",
+        "Identify information that must be vehicle-specific",
+        "Practice a system-relationship scenario",
+        "Document the supported conclusion or next question"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut131-engine-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-131",
+      "competencyId": "ug-aut131-engine-lab-evidence",
+      "title": "Engine Laboratory Inspection, Measurement, and Documentation",
+      "sequence": [
+        "Identify the component or assembly",
+        "Define the inspection objective",
+        "Select the measurement or observation approach",
+        "Record condition and measurement evidence",
+        "Locate required service information",
+        "Plan rather than invent procedure steps",
+        "Practice an evidence-to-next-step decision",
+        "Document findings and verification needs"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut160-drivetrain-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-160",
+      "competencyId": "ug-aut160-drivetrain-systems",
+      "title": "Manual Transmission and Drivetrain System Relationships",
+      "sequence": [
+        "Identify the drivetrain configuration",
+        "Trace generalized power flow",
+        "Connect clutch and transmission roles",
+        "Connect transfer and shaft roles",
+        "Connect differential and axle roles",
+        "Distinguish configuration from symptom evidence",
+        "Practice a drivetrain reasoning scenario",
+        "Document the next inspection question"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut170-hvac-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-170",
+      "competencyId": "ug-aut170-hvac-systems",
+      "title": "Automotive HVAC, Refrigeration, and Climate-Control Foundations",
+      "sequence": [
+        "Identify the HVAC operating concern",
+        "Map the major system functions",
+        "Trace the refrigeration cycle conceptually",
+        "Connect climate and electrical controls",
+        "Record operating observations",
+        "Identify required vehicle and refrigerant information",
+        "Practice an HVAC reasoning scenario",
+        "Document the supported next step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut180-service-information",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-180",
+      "competencyId": "ug-aut180-service-information",
+      "title": "Technical Documentation, Service Information, and Source Verification",
+      "sequence": [
+        "Define the information need",
+        "Identify the source type",
+        "Check vehicle or system applicability",
+        "Interpret diagrams and specifications in context",
+        "Separate source statements from inference",
+        "Trace a diagnostic procedure without rewriting it as universal guidance",
+        "Practice a source-selection scenario",
+        "Document citation and applicability"
+      ],
+      "status": "planned"
     }
   ]
 }

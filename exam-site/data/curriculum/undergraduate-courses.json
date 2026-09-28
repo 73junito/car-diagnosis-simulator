@@ -51,6 +51,62 @@
       "cipCode": "47.0604",
       "title": "Automotive Safety and Professional Practices",
       "status": "planned"
+    },
+    {
+      "id": "aut-110",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Mathematics",
+      "status": "planned"
+    },
+    {
+      "id": "aut-115",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Measurement and Instrumentation",
+      "status": "planned"
+    },
+    {
+      "id": "aut-121",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Electrical Systems I Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-130",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Engine Systems I",
+      "status": "planned"
+    },
+    {
+      "id": "aut-131",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Engine Systems I Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-160",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Manual Transmissions and Drivetrain Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-170",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive HVAC Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-180",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Technical Documentation and Service Information",
+      "status": "planned"
     }
   ]
 }

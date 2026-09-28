@@ -84,6 +84,62 @@
       "courseId": "aut-105",
       "statement": "Recognize automotive shop hazards and professional responsibilities, use applicable safety and environmental information to select a safe next action, and document when work should stop, be controlled, or be escalated.",
       "status": "planned"
+    },
+    {
+      "id": "ug-aut110-quantitative-reasoning",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-110",
+      "statement": "Apply automotive mathematical relationships with correct units, identify assumptions and required source information, and explain whether a quantitative result is reasonable for the stated problem.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut115-measurement-instrumentation",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-115",
+      "statement": "Select an appropriate measurement approach, distinguish a measured value from a specification or conclusion, and document units, instrument context, and source requirements.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut121-electrical-lab-evidence",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-121",
+      "statement": "Build and evaluate generalized electrical test setups, record measurements with context, and use evidence to justify a safe next diagnostic action.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut130-engine-systems-foundations",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-130",
+      "statement": "Explain major engine component and system relationships, distinguish operating evidence from conclusions, and identify when vehicle-specific information is required.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut131-engine-lab-evidence",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-131",
+      "statement": "Organize engine laboratory evidence, select appropriate measurement or documentation steps, and recognize when applicable service information is required before a procedure or specification can be used.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut160-drivetrain-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-160",
+      "statement": "Trace generalized drivetrain power flow, identify major subsystem roles, and use observations and applicable information to justify a next inspection or diagnostic question.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut170-hvac-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-170",
+      "statement": "Explain generalized HVAC and climate-control relationships, classify operating observations, and identify the applicable information required before interpreting pressures, temperatures, refrigerant handling, or service procedures.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut180-service-information",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-180",
+      "statement": "Locate and interpret applicable technical information, distinguish authoritative source content from learner inference, and document the source basis for a diagnostic or service decision.",
+      "status": "planned"
     }
   ]
 }

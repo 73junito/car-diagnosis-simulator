@@ -1,0 +1,103 @@
+begin;
+
+insert into public.curriculum_courses (id, program_id, academic_level, cip_code, title, status) values
+  ('aut-110','automotive-technology','undergraduate','47.0604','Automotive Mathematics','planned'),
+  ('aut-115','automotive-technology','undergraduate','47.0604','Automotive Measurement and Instrumentation','planned'),
+  ('aut-121','automotive-technology','undergraduate','47.0604','Automotive Electrical Systems I Laboratory','planned'),
+  ('aut-130','automotive-technology','undergraduate','47.0604','Engine Systems I','planned'),
+  ('aut-131','automotive-technology','undergraduate','47.0604','Engine Systems I Laboratory','planned'),
+  ('aut-160','automotive-technology','undergraduate','47.0604','Manual Transmissions and Drivetrain Systems','planned'),
+  ('aut-170','automotive-technology','undergraduate','47.0604','Automotive HVAC Systems','planned'),
+  ('aut-180','automotive-technology','undergraduate','47.0604','Automotive Technical Documentation and Service Information','planned')
+on conflict (id) do update set program_id=excluded.program_id, academic_level=excluded.academic_level, cip_code=excluded.cip_code, title=excluded.title, status=excluded.status, updated_at=now();
+
+insert into public.curriculum_competencies (id, course_id, academic_level, competency_area_id, statement, status) values
+  ('ug-aut110-quantitative-reasoning','aut-110','undergraduate',null,'Apply automotive mathematical relationships with correct units, identify assumptions and required source information, and explain whether a quantitative result is reasonable for the stated problem.','planned'),
+  ('ug-aut115-measurement-instrumentation','aut-115','undergraduate',null,'Select an appropriate measurement approach, distinguish a measured value from a specification or conclusion, and document units, instrument context, and source requirements.','planned'),
+  ('ug-aut121-electrical-lab-evidence','aut-121','undergraduate',null,'Build and evaluate generalized electrical test setups, record measurements with context, and use evidence to justify a safe next diagnostic action.','planned'),
+  ('ug-aut130-engine-systems-foundations','aut-130','undergraduate',null,'Explain major engine component and system relationships, distinguish operating evidence from conclusions, and identify when vehicle-specific information is required.','planned'),
+  ('ug-aut131-engine-lab-evidence','aut-131','undergraduate',null,'Organize engine laboratory evidence, select appropriate measurement or documentation steps, and recognize when applicable service information is required before a procedure or specification can be used.','planned'),
+  ('ug-aut160-drivetrain-systems','aut-160','undergraduate',null,'Trace generalized drivetrain power flow, identify major subsystem roles, and use observations and applicable information to justify a next inspection or diagnostic question.','planned'),
+  ('ug-aut170-hvac-systems','aut-170','undergraduate',null,'Explain generalized HVAC and climate-control relationships, classify operating observations, and identify the applicable information required before interpreting pressures, temperatures, refrigerant handling, or service procedures.','planned'),
+  ('ug-aut180-service-information','aut-180','undergraduate',null,'Locate and interpret applicable technical information, distinguish authoritative source content from learner inference, and document the source basis for a diagnostic or service decision.','planned')
+on conflict (id) do update set course_id=excluded.course_id, academic_level=excluded.academic_level, competency_area_id=excluded.competency_area_id, statement=excluded.statement, status=excluded.status, updated_at=now();
+
+insert into public.curriculum_lesson_plans (id, course_id, competency_id, academic_level, title, status) values
+  ('ug-aut110-automotive-math','aut-110','ug-aut110-quantitative-reasoning','undergraduate','Automotive Mathematics and Quantitative Reasoning','planned'),
+  ('ug-aut115-measurement-instrumentation','aut-115','ug-aut115-measurement-instrumentation','undergraduate','Automotive Measurement, Instrument Selection, and Evidence','planned'),
+  ('ug-aut121-electrical-lab','aut-121','ug-aut121-electrical-lab-evidence','undergraduate','Electrical Laboratory Measurement and Circuit Evidence','planned'),
+  ('ug-aut130-engine-systems','aut-130','ug-aut130-engine-systems-foundations','undergraduate','Engine Construction, Operation, and System Relationships','planned'),
+  ('ug-aut131-engine-lab','aut-131','ug-aut131-engine-lab-evidence','undergraduate','Engine Laboratory Inspection, Measurement, and Documentation','planned'),
+  ('ug-aut160-drivetrain-systems','aut-160','ug-aut160-drivetrain-systems','undergraduate','Manual Transmission and Drivetrain System Relationships','planned'),
+  ('ug-aut170-hvac-systems','aut-170','ug-aut170-hvac-systems','undergraduate','Automotive HVAC, Refrigeration, and Climate-Control Foundations','planned'),
+  ('ug-aut180-service-information','aut-180','ug-aut180-service-information','undergraduate','Technical Documentation, Service Information, and Source Verification','planned')
+on conflict (id) do update set course_id=excluded.course_id, competency_id=excluded.competency_id, academic_level=excluded.academic_level, title=excluded.title, status=excluded.status, updated_at=now();
+
+insert into public.curriculum_lesson_steps (lesson_plan_id, position, step_text) values
+  ('ug-aut110-automotive-math',1,'Identify the quantity and units'),
+  ('ug-aut110-automotive-math',2,'Organize known and unknown values'),
+  ('ug-aut110-automotive-math',3,'Select the mathematical relationship'),
+  ('ug-aut110-automotive-math',4,'Preserve units and conversion context'),
+  ('ug-aut110-automotive-math',5,'Solve the relationship'),
+  ('ug-aut110-automotive-math',6,'Check scale and reasonableness'),
+  ('ug-aut110-automotive-math',7,'Practice an automotive calculation'),
+  ('ug-aut110-automotive-math',8,'Document the result and assumptions'),
+  ('ug-aut115-measurement-instrumentation',1,'Define the quantity to be measured'),
+  ('ug-aut115-measurement-instrumentation',2,'Select an appropriate instrument category'),
+  ('ug-aut115-measurement-instrumentation',3,'Check units and measurement context'),
+  ('ug-aut115-measurement-instrumentation',4,'Recognize resolution and reading limits'),
+  ('ug-aut115-measurement-instrumentation',5,'Record the observation'),
+  ('ug-aut115-measurement-instrumentation',6,'Compare only with applicable specifications'),
+  ('ug-aut115-measurement-instrumentation',7,'Practice an evidence-based measurement decision'),
+  ('ug-aut115-measurement-instrumentation',8,'Document the result and source need'),
+  ('ug-aut121-electrical-lab',1,'Review the circuit objective'),
+  ('ug-aut121-electrical-lab',2,'Identify the test points and variables'),
+  ('ug-aut121-electrical-lab',3,'Establish a safe generalized setup'),
+  ('ug-aut121-electrical-lab',4,'Collect electrical observations'),
+  ('ug-aut121-electrical-lab',5,'Record units and operating context'),
+  ('ug-aut121-electrical-lab',6,'Compare evidence with the stated exercise basis'),
+  ('ug-aut121-electrical-lab',7,'Practice a diagnostic next-step decision'),
+  ('ug-aut121-electrical-lab',8,'Document and verify the reasoning'),
+  ('ug-aut130-engine-systems',1,'Identify major engine components'),
+  ('ug-aut130-engine-systems',2,'Trace four-stroke operation conceptually'),
+  ('ug-aut130-engine-systems',3,'Connect lubrication functions'),
+  ('ug-aut130-engine-systems',4,'Connect cooling functions'),
+  ('ug-aut130-engine-systems',5,'Relate components to operating evidence'),
+  ('ug-aut130-engine-systems',6,'Identify information that must be vehicle-specific'),
+  ('ug-aut130-engine-systems',7,'Practice a system-relationship scenario'),
+  ('ug-aut130-engine-systems',8,'Document the supported conclusion or next question'),
+  ('ug-aut131-engine-lab',1,'Identify the component or assembly'),
+  ('ug-aut131-engine-lab',2,'Define the inspection objective'),
+  ('ug-aut131-engine-lab',3,'Select the measurement or observation approach'),
+  ('ug-aut131-engine-lab',4,'Record condition and measurement evidence'),
+  ('ug-aut131-engine-lab',5,'Locate required service information'),
+  ('ug-aut131-engine-lab',6,'Plan rather than invent procedure steps'),
+  ('ug-aut131-engine-lab',7,'Practice an evidence-to-next-step decision'),
+  ('ug-aut131-engine-lab',8,'Document findings and verification needs'),
+  ('ug-aut160-drivetrain-systems',1,'Identify the drivetrain configuration'),
+  ('ug-aut160-drivetrain-systems',2,'Trace generalized power flow'),
+  ('ug-aut160-drivetrain-systems',3,'Connect clutch and transmission roles'),
+  ('ug-aut160-drivetrain-systems',4,'Connect transfer and shaft roles'),
+  ('ug-aut160-drivetrain-systems',5,'Connect differential and axle roles'),
+  ('ug-aut160-drivetrain-systems',6,'Distinguish configuration from symptom evidence'),
+  ('ug-aut160-drivetrain-systems',7,'Practice a drivetrain reasoning scenario'),
+  ('ug-aut160-drivetrain-systems',8,'Document the next inspection question'),
+  ('ug-aut170-hvac-systems',1,'Identify the HVAC operating concern'),
+  ('ug-aut170-hvac-systems',2,'Map the major system functions'),
+  ('ug-aut170-hvac-systems',3,'Trace the refrigeration cycle conceptually'),
+  ('ug-aut170-hvac-systems',4,'Connect climate and electrical controls'),
+  ('ug-aut170-hvac-systems',5,'Record operating observations'),
+  ('ug-aut170-hvac-systems',6,'Identify required vehicle and refrigerant information'),
+  ('ug-aut170-hvac-systems',7,'Practice an HVAC reasoning scenario'),
+  ('ug-aut170-hvac-systems',8,'Document the supported next step'),
+  ('ug-aut180-service-information',1,'Define the information need'),
+  ('ug-aut180-service-information',2,'Identify the source type'),
+  ('ug-aut180-service-information',3,'Check vehicle or system applicability'),
+  ('ug-aut180-service-information',4,'Interpret diagrams and specifications in context'),
+  ('ug-aut180-service-information',5,'Separate source statements from inference'),
+  ('ug-aut180-service-information',6,'Trace a diagnostic procedure without rewriting it as universal guidance'),
+  ('ug-aut180-service-information',7,'Practice a source-selection scenario'),
+  ('ug-aut180-service-information',8,'Document citation and applicability')
+on conflict (lesson_plan_id, position) do update set step_text=excluded.step_text;
+
+commit;

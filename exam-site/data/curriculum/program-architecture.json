@@ -17,6 +17,54 @@
       "existingCourseId": "aut-105",
       "existingLessonPlanId": "ug-aut105-safety-professional-practice",
       "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-110",
+      "existingCourseId": "aut-110",
+      "existingLessonPlanId": "ug-aut110-automotive-math",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-115",
+      "existingCourseId": "aut-115",
+      "existingLessonPlanId": "ug-aut115-measurement-instrumentation",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-121",
+      "existingCourseId": "aut-121",
+      "existingLessonPlanId": "ug-aut121-electrical-lab",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-130",
+      "existingCourseId": "aut-130",
+      "existingLessonPlanId": "ug-aut130-engine-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-131",
+      "existingCourseId": "aut-131",
+      "existingLessonPlanId": "ug-aut131-engine-lab",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-160",
+      "existingCourseId": "aut-160",
+      "existingLessonPlanId": "ug-aut160-drivetrain-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-170",
+      "existingCourseId": "aut-170",
+      "existingLessonPlanId": "ug-aut170-hvac-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-180",
+      "existingCourseId": "aut-180",
+      "existingLessonPlanId": "ug-aut180-service-information",
+      "mappingType": "canonical-catalog-course"
     }
   ],
   "authorityReferences": [

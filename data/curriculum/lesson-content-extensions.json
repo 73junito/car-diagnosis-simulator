@@ -508,6 +508,2039 @@
         "lesson-summary"
       ],
       "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut110-automotive-math",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-110",
+        "catalogCourseCode": "AUT 110",
+        "catalogCourseTitle": "Automotive Mathematics",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop mathematical reasoning used in automotive technology through measurement, ratios, proportions, algebra, geometry, electrical calculations, torque, power, and diagnostic calculations while maintaining clear units, assumptions, and source boundaries.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "No formal course prerequisite",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut110-automotive-math-lo-1",
+          "statement": "Explain the core concepts and relationships represented in Automotive Mathematics without treating a general instructional model as a vehicle-specific procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut110-automotive-math-lo-2",
+          "statement": "Distinguish observations, measurements, source information, assumptions, and conclusions when working with automotive mathematics evidence.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut110-automotive-math-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe next learning or diagnostic step while identifying information that still requires authoritative verification.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "measurement and units",
+        "ratios and proportions",
+        "algebraic relationships",
+        "geometry",
+        "electrical calculations",
+        "torque and power relationships",
+        "diagnostic calculations"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut110-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the conceptual, evidence, and source-use outcomes for Automotive Mathematics.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-1",
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ]
+        },
+        {
+          "id": "aut110-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior knowledge",
+          "description": "Activate relevant prior learning while separating general familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-1"
+          ]
+        },
+        {
+          "id": "aut110-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core system and concept relationships",
+          "description": "Explain the major relationships identified by the catalog description for Automotive Mathematics.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-1"
+          ]
+        },
+        {
+          "id": "aut110-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Concept relationship model",
+          "description": "Use a simplified instructional model to organize relationships without implying a universal vehicle architecture, specification, or procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-1",
+            "ug-aut110-automotive-math-lo-2"
+          ]
+        },
+        {
+          "id": "aut110-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next step",
+          "description": "Demonstrate how a generalized concern or task moves from information gathering to a justified next step without inventing technical values or procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ]
+        },
+        {
+          "id": "aut110-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify sample information as observation, measurement, source statement, assumption, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-2"
+          ]
+        },
+        {
+          "id": "aut110-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized application scenario",
+          "description": "Choose and justify an information-supported next step in a generalized scenario while preserving source and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ]
+        },
+        {
+          "id": "aut110-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence classification, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-1",
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ]
+        },
+        {
+          "id": "aut110-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ]
+        },
+        {
+          "id": "aut110-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, legal-, regulatory-, and specification-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ]
+        },
+        {
+          "id": "aut110-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize the concepts, evidence habits, source boundaries, and documentation practices for Automotive Mathematics.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-1",
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut110-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Mathematics concept relationships",
+          "purpose": "Show the major instructional relationships without presenting a vehicle-specific diagram or specification.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut110-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from task or concern through evidence, applicable information, and documented next action.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut110-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Observation, source, assumption, and conclusion",
+          "purpose": "Compare evidence categories and the information required before a technical conclusion is supported.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut110-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Mathematics learning framework",
+          "purpose": "Summarize concepts, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut110-automotive-math-lo-1",
+            "ug-aut110-automotive-math-lo-2",
+            "ug-aut110-automotive-math-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major concepts or system relationships in a generalized Automotive Mathematics example",
+        "Sort sample information into observation, measurement, source statement, assumption, or conclusion",
+        "Identify what authoritative information would be required before applying a specification or procedure",
+        "Write a brief evidence-based rationale for a safe next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence and source-classification exercise",
+        "Formative generalized reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Units and measurement context",
+        "Mathematical relationships",
+        "Reasonableness checks",
+        "Documented assumptions and source requirements"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, product or equipment instructions, legal or regulatory requirements, and authorization rules require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut115-measurement-instrumentation",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-115",
+        "catalogCourseCode": "AUT 115",
+        "catalogCourseTitle": "Automotive Measurement and Instrumentation",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Introduce precision measurement and instrumentation through instrument selection, reading, units, tolerances, specifications, and evidence recording without substituting generic instruction for applicable instrument or vehicle information.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 110",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut115-measurement-instrumentation-lo-1",
+          "statement": "Explain the core concepts and relationships represented in Automotive Measurement and Instrumentation without treating a general instructional model as a vehicle-specific procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut115-measurement-instrumentation-lo-2",
+          "statement": "Distinguish observations, measurements, source information, assumptions, and conclusions when working with automotive measurement and instrumentation evidence.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut115-measurement-instrumentation-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe next learning or diagnostic step while identifying information that still requires authoritative verification.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "calipers and micrometers",
+        "dial indicators",
+        "pressure measurement",
+        "electrical measurement",
+        "units and resolution",
+        "tolerances and specifications",
+        "measurement documentation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut115-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the conceptual, evidence, and source-use outcomes for Automotive Measurement and Instrumentation.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-1",
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ]
+        },
+        {
+          "id": "aut115-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior knowledge",
+          "description": "Activate relevant prior learning while separating general familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-1"
+          ]
+        },
+        {
+          "id": "aut115-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core system and concept relationships",
+          "description": "Explain the major relationships identified by the catalog description for Automotive Measurement and Instrumentation.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-1"
+          ]
+        },
+        {
+          "id": "aut115-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Concept relationship model",
+          "description": "Use a simplified instructional model to organize relationships without implying a universal vehicle architecture, specification, or procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-1",
+            "ug-aut115-measurement-instrumentation-lo-2"
+          ]
+        },
+        {
+          "id": "aut115-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next step",
+          "description": "Demonstrate how a generalized concern or task moves from information gathering to a justified next step without inventing technical values or procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ]
+        },
+        {
+          "id": "aut115-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify sample information as observation, measurement, source statement, assumption, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-2"
+          ]
+        },
+        {
+          "id": "aut115-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized application scenario",
+          "description": "Choose and justify an information-supported next step in a generalized scenario while preserving source and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ]
+        },
+        {
+          "id": "aut115-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence classification, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-1",
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ]
+        },
+        {
+          "id": "aut115-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ]
+        },
+        {
+          "id": "aut115-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, legal-, regulatory-, and specification-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ]
+        },
+        {
+          "id": "aut115-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize the concepts, evidence habits, source boundaries, and documentation practices for Automotive Measurement and Instrumentation.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-1",
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut115-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Measurement and Instrumentation concept relationships",
+          "purpose": "Show the major instructional relationships without presenting a vehicle-specific diagram or specification.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut115-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from task or concern through evidence, applicable information, and documented next action.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut115-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Observation, source, assumption, and conclusion",
+          "purpose": "Compare evidence categories and the information required before a technical conclusion is supported.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut115-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Measurement and Instrumentation learning framework",
+          "purpose": "Summarize concepts, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut115-measurement-instrumentation-lo-1",
+            "ug-aut115-measurement-instrumentation-lo-2",
+            "ug-aut115-measurement-instrumentation-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major concepts or system relationships in a generalized Automotive Measurement and Instrumentation example",
+        "Sort sample information into observation, measurement, source statement, assumption, or conclusion",
+        "Identify what authoritative information would be required before applying a specification or procedure",
+        "Write a brief evidence-based rationale for a safe next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence and source-classification exercise",
+        "Formative generalized reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Instrument selection",
+        "Measurement context and units",
+        "Tolerance/specification boundaries",
+        "Evidence recording and interpretation"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, product or equipment instructions, legal or regulatory requirements, and authorization rules require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut121-electrical-lab",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-121",
+        "catalogCourseCode": "AUT 121",
+        "catalogCourseTitle": "Automotive Electrical Systems I Laboratory",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Provide a laboratory-oriented scaffold for circuit construction, testing, measurement, and diagnosis using safe setup, measurement context, evidence recording, and verification rather than unverified vehicle-specific procedures.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "Concurrent enrollment in AUT 120",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut121-electrical-lab-lo-1",
+          "statement": "Explain the core concepts and relationships represented in Automotive Electrical Systems I Laboratory without treating a general instructional model as a vehicle-specific procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut121-electrical-lab-lo-2",
+          "statement": "Distinguish observations, measurements, source information, assumptions, and conclusions when working with automotive electrical systems i laboratory evidence.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut121-electrical-lab-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe next learning or diagnostic step while identifying information that still requires authoritative verification.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "circuit construction",
+        "electrical measurement",
+        "test setup",
+        "voltage current and resistance evidence",
+        "wiring and grounding observations",
+        "diagnostic reasoning",
+        "lab documentation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut121-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the conceptual, evidence, and source-use outcomes for Automotive Electrical Systems I Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-1",
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut121-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior knowledge",
+          "description": "Activate relevant prior learning while separating general familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut121-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core system and concept relationships",
+          "description": "Explain the major relationships identified by the catalog description for Automotive Electrical Systems I Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut121-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Concept relationship model",
+          "description": "Use a simplified instructional model to organize relationships without implying a universal vehicle architecture, specification, or procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-1",
+            "ug-aut121-electrical-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut121-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next step",
+          "description": "Demonstrate how a generalized concern or task moves from information gathering to a justified next step without inventing technical values or procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut121-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify sample information as observation, measurement, source statement, assumption, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut121-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized application scenario",
+          "description": "Choose and justify an information-supported next step in a generalized scenario while preserving source and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut121-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence classification, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-1",
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut121-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut121-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, legal-, regulatory-, and specification-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut121-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize the concepts, evidence habits, source boundaries, and documentation practices for Automotive Electrical Systems I Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-1",
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut121-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Electrical Systems I Laboratory concept relationships",
+          "purpose": "Show the major instructional relationships without presenting a vehicle-specific diagram or specification.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut121-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from task or concern through evidence, applicable information, and documented next action.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut121-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Observation, source, assumption, and conclusion",
+          "purpose": "Compare evidence categories and the information required before a technical conclusion is supported.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut121-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Electrical Systems I Laboratory learning framework",
+          "purpose": "Summarize concepts, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut121-electrical-lab-lo-1",
+            "ug-aut121-electrical-lab-lo-2",
+            "ug-aut121-electrical-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major concepts or system relationships in a generalized Automotive Electrical Systems I Laboratory example",
+        "Sort sample information into observation, measurement, source statement, assumption, or conclusion",
+        "Identify what authoritative information would be required before applying a specification or procedure",
+        "Write a brief evidence-based rationale for a safe next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence and source-classification exercise",
+        "Formative generalized reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Electrical lab setup",
+        "Measurement context",
+        "Circuit evidence",
+        "Safe diagnostic reasoning and documentation"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, product or equipment instructions, legal or regulatory requirements, and authorization rules require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut130-engine-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-130",
+        "catalogCourseCode": "AUT 130",
+        "catalogCourseTitle": "Engine Systems I",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Introduce internal-combustion engine construction and operation through major component roles, lubrication, cooling, and four-stroke relationships while keeping vehicle-specific service procedures and specifications source-gated.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 101",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut130-engine-systems-lo-1",
+          "statement": "Explain the core concepts and relationships represented in Engine Systems I without treating a general instructional model as a vehicle-specific procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut130-engine-systems-lo-2",
+          "statement": "Distinguish observations, measurements, source information, assumptions, and conclusions when working with engine systems i evidence.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut130-engine-systems-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe next learning or diagnostic step while identifying information that still requires authoritative verification.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "major engine components",
+        "four-stroke operation",
+        "lubrication system roles",
+        "cooling system roles",
+        "mechanical relationships",
+        "operating evidence",
+        "service-information boundaries"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut130-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the conceptual, evidence, and source-use outcomes for Engine Systems I.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-1",
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut130-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior knowledge",
+          "description": "Activate relevant prior learning while separating general familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut130-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core system and concept relationships",
+          "description": "Explain the major relationships identified by the catalog description for Engine Systems I.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut130-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Concept relationship model",
+          "description": "Use a simplified instructional model to organize relationships without implying a universal vehicle architecture, specification, or procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-1",
+            "ug-aut130-engine-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut130-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next step",
+          "description": "Demonstrate how a generalized concern or task moves from information gathering to a justified next step without inventing technical values or procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut130-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify sample information as observation, measurement, source statement, assumption, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut130-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized application scenario",
+          "description": "Choose and justify an information-supported next step in a generalized scenario while preserving source and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut130-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence classification, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-1",
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut130-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut130-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, legal-, regulatory-, and specification-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut130-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize the concepts, evidence habits, source boundaries, and documentation practices for Engine Systems I.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-1",
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut130-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Engine Systems I concept relationships",
+          "purpose": "Show the major instructional relationships without presenting a vehicle-specific diagram or specification.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut130-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from task or concern through evidence, applicable information, and documented next action.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut130-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Observation, source, assumption, and conclusion",
+          "purpose": "Compare evidence categories and the information required before a technical conclusion is supported.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut130-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Engine Systems I learning framework",
+          "purpose": "Summarize concepts, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut130-engine-systems-lo-1",
+            "ug-aut130-engine-systems-lo-2",
+            "ug-aut130-engine-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major concepts or system relationships in a generalized Engine Systems I example",
+        "Sort sample information into observation, measurement, source statement, assumption, or conclusion",
+        "Identify what authoritative information would be required before applying a specification or procedure",
+        "Write a brief evidence-based rationale for a safe next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence and source-classification exercise",
+        "Formative generalized reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Engine construction and operation",
+        "Lubrication and cooling relationships",
+        "Operating evidence",
+        "Vehicle-specific information boundaries"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, product or equipment instructions, legal or regulatory requirements, and authorization rules require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut131-engine-lab",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-131",
+        "catalogCourseCode": "AUT 131",
+        "catalogCourseTitle": "Engine Systems I Laboratory",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Structure engine laboratory learning around component identification, inspection, measurement, disassembly/assembly planning, evidence recording, and service-information verification without inventing specifications or procedures.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "Concurrent enrollment in AUT 130",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut131-engine-lab-lo-1",
+          "statement": "Explain the core concepts and relationships represented in Engine Systems I Laboratory without treating a general instructional model as a vehicle-specific procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut131-engine-lab-lo-2",
+          "statement": "Distinguish observations, measurements, source information, assumptions, and conclusions when working with engine systems i laboratory evidence.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut131-engine-lab-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe next learning or diagnostic step while identifying information that still requires authoritative verification.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "component identification",
+        "inspection evidence",
+        "precision measurement",
+        "disassembly and assembly planning",
+        "service procedures as source-governed information",
+        "documentation",
+        "verification"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut131-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the conceptual, evidence, and source-use outcomes for Engine Systems I Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-1",
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut131-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior knowledge",
+          "description": "Activate relevant prior learning while separating general familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut131-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core system and concept relationships",
+          "description": "Explain the major relationships identified by the catalog description for Engine Systems I Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-1"
+          ]
+        },
+        {
+          "id": "aut131-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Concept relationship model",
+          "description": "Use a simplified instructional model to organize relationships without implying a universal vehicle architecture, specification, or procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-1",
+            "ug-aut131-engine-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut131-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next step",
+          "description": "Demonstrate how a generalized concern or task moves from information gathering to a justified next step without inventing technical values or procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut131-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify sample information as observation, measurement, source statement, assumption, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-2"
+          ]
+        },
+        {
+          "id": "aut131-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized application scenario",
+          "description": "Choose and justify an information-supported next step in a generalized scenario while preserving source and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut131-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence classification, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-1",
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut131-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut131-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, legal-, regulatory-, and specification-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ]
+        },
+        {
+          "id": "aut131-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize the concepts, evidence habits, source boundaries, and documentation practices for Engine Systems I Laboratory.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-1",
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut131-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Engine Systems I Laboratory concept relationships",
+          "purpose": "Show the major instructional relationships without presenting a vehicle-specific diagram or specification.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut131-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from task or concern through evidence, applicable information, and documented next action.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut131-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Observation, source, assumption, and conclusion",
+          "purpose": "Compare evidence categories and the information required before a technical conclusion is supported.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut131-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Engine Systems I Laboratory learning framework",
+          "purpose": "Summarize concepts, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut131-engine-lab-lo-1",
+            "ug-aut131-engine-lab-lo-2",
+            "ug-aut131-engine-lab-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major concepts or system relationships in a generalized Engine Systems I Laboratory example",
+        "Sort sample information into observation, measurement, source statement, assumption, or conclusion",
+        "Identify what authoritative information would be required before applying a specification or procedure",
+        "Write a brief evidence-based rationale for a safe next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence and source-classification exercise",
+        "Formative generalized reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Engine inspection evidence",
+        "Measurement and condition recording",
+        "Service-information applicability",
+        "Lab documentation and verification"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, product or equipment instructions, legal or regulatory requirements, and authorization rules require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut160-drivetrain-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-160",
+        "catalogCourseCode": "AUT 160",
+        "catalogCourseTitle": "Manual Transmissions and Drivetrain Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop a system-level understanding of clutches, manual transmissions, transfer cases, driveshafts, differentials, axles, four-wheel drive, and all-wheel drive through power-flow reasoning and evidence-based system identification.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 115",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut160-drivetrain-systems-lo-1",
+          "statement": "Explain the core concepts and relationships represented in Manual Transmissions and Drivetrain Systems without treating a general instructional model as a vehicle-specific procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut160-drivetrain-systems-lo-2",
+          "statement": "Distinguish observations, measurements, source information, assumptions, and conclusions when working with manual transmissions and drivetrain systems evidence.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut160-drivetrain-systems-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe next learning or diagnostic step while identifying information that still requires authoritative verification.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "clutch functions",
+        "manual transmission relationships",
+        "transfer cases",
+        "driveshafts",
+        "differentials and axles",
+        "four-wheel drive",
+        "all-wheel drive",
+        "power-flow evidence"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut160-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the conceptual, evidence, and source-use outcomes for Manual Transmissions and Drivetrain Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-1",
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut160-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior knowledge",
+          "description": "Activate relevant prior learning while separating general familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut160-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core system and concept relationships",
+          "description": "Explain the major relationships identified by the catalog description for Manual Transmissions and Drivetrain Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut160-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Concept relationship model",
+          "description": "Use a simplified instructional model to organize relationships without implying a universal vehicle architecture, specification, or procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-1",
+            "ug-aut160-drivetrain-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut160-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next step",
+          "description": "Demonstrate how a generalized concern or task moves from information gathering to a justified next step without inventing technical values or procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut160-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify sample information as observation, measurement, source statement, assumption, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut160-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized application scenario",
+          "description": "Choose and justify an information-supported next step in a generalized scenario while preserving source and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut160-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence classification, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-1",
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut160-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut160-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, legal-, regulatory-, and specification-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut160-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize the concepts, evidence habits, source boundaries, and documentation practices for Manual Transmissions and Drivetrain Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-1",
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut160-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Manual Transmissions and Drivetrain Systems concept relationships",
+          "purpose": "Show the major instructional relationships without presenting a vehicle-specific diagram or specification.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut160-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from task or concern through evidence, applicable information, and documented next action.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut160-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Observation, source, assumption, and conclusion",
+          "purpose": "Compare evidence categories and the information required before a technical conclusion is supported.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut160-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Manual Transmissions and Drivetrain Systems learning framework",
+          "purpose": "Summarize concepts, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut160-drivetrain-systems-lo-1",
+            "ug-aut160-drivetrain-systems-lo-2",
+            "ug-aut160-drivetrain-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major concepts or system relationships in a generalized Manual Transmissions and Drivetrain Systems example",
+        "Sort sample information into observation, measurement, source statement, assumption, or conclusion",
+        "Identify what authoritative information would be required before applying a specification or procedure",
+        "Write a brief evidence-based rationale for a safe next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence and source-classification exercise",
+        "Formative generalized reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Drivetrain architecture",
+        "Power-flow relationships",
+        "Configuration and symptom evidence",
+        "Inspection and diagnostic information boundaries"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, product or equipment instructions, legal or regulatory requirements, and authorization rules require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut170-hvac-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-170",
+        "catalogCourseCode": "AUT 170",
+        "catalogCourseTitle": "Automotive HVAC Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Introduce automotive heating, ventilation, air conditioning, refrigeration-cycle relationships, climate controls, electrical controls, and diagnostic reasoning while keeping refrigerant handling, pressures, temperatures, and service procedures source-gated.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 120",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut170-hvac-systems-lo-1",
+          "statement": "Explain the core concepts and relationships represented in Automotive HVAC Systems without treating a general instructional model as a vehicle-specific procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut170-hvac-systems-lo-2",
+          "statement": "Distinguish observations, measurements, source information, assumptions, and conclusions when working with automotive hvac systems evidence.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut170-hvac-systems-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe next learning or diagnostic step while identifying information that still requires authoritative verification.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "heating and ventilation",
+        "air-conditioning relationships",
+        "refrigeration cycle",
+        "climate controls",
+        "electrical controls",
+        "operating observations",
+        "diagnostic information boundaries"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut170-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the conceptual, evidence, and source-use outcomes for Automotive HVAC Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-1",
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut170-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior knowledge",
+          "description": "Activate relevant prior learning while separating general familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut170-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core system and concept relationships",
+          "description": "Explain the major relationships identified by the catalog description for Automotive HVAC Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut170-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Concept relationship model",
+          "description": "Use a simplified instructional model to organize relationships without implying a universal vehicle architecture, specification, or procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-1",
+            "ug-aut170-hvac-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut170-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next step",
+          "description": "Demonstrate how a generalized concern or task moves from information gathering to a justified next step without inventing technical values or procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut170-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify sample information as observation, measurement, source statement, assumption, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut170-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized application scenario",
+          "description": "Choose and justify an information-supported next step in a generalized scenario while preserving source and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut170-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence classification, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-1",
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut170-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut170-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, legal-, regulatory-, and specification-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut170-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize the concepts, evidence habits, source boundaries, and documentation practices for Automotive HVAC Systems.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-1",
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut170-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive HVAC Systems concept relationships",
+          "purpose": "Show the major instructional relationships without presenting a vehicle-specific diagram or specification.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut170-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from task or concern through evidence, applicable information, and documented next action.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut170-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Observation, source, assumption, and conclusion",
+          "purpose": "Compare evidence categories and the information required before a technical conclusion is supported.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut170-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive HVAC Systems learning framework",
+          "purpose": "Summarize concepts, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut170-hvac-systems-lo-1",
+            "ug-aut170-hvac-systems-lo-2",
+            "ug-aut170-hvac-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major concepts or system relationships in a generalized Automotive HVAC Systems example",
+        "Sort sample information into observation, measurement, source statement, assumption, or conclusion",
+        "Identify what authoritative information would be required before applying a specification or procedure",
+        "Write a brief evidence-based rationale for a safe next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence and source-classification exercise",
+        "Formative generalized reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "HVAC system relationships",
+        "Refrigeration-cycle concepts",
+        "Climate/electrical controls",
+        "Source-gated diagnostic and service information"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, product or equipment instructions, legal or regulatory requirements, and authorization rules require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut180-service-information",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-180",
+        "catalogCourseCode": "AUT 180",
+        "catalogCourseTitle": "Automotive Technical Documentation and Service Information",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop disciplined use of service information, wiring diagrams, technical specifications, diagnostic procedures, and digital technical resources with emphasis on applicability, provenance, interpretation, and documentation.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 101",
+        "Orientation to the AutoLearnPro learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut180-service-information-lo-1",
+          "statement": "Explain the core concepts and relationships represented in Automotive Technical Documentation and Service Information without treating a general instructional model as a vehicle-specific procedure.",
+          "cognitiveLevel": "knowledge"
+        },
+        {
+          "id": "ug-aut180-service-information-lo-2",
+          "statement": "Distinguish observations, measurements, source information, assumptions, and conclusions when working with automotive technical documentation and service information evidence.",
+          "cognitiveLevel": "evidence-interpretation"
+        },
+        {
+          "id": "ug-aut180-service-information-lo-3",
+          "statement": "Use applicable technical information and documented evidence to justify a safe next learning or diagnostic step while identifying information that still requires authoritative verification.",
+          "cognitiveLevel": "diagnostic-reasoning"
+        }
+      ],
+      "keyConcepts": [
+        "service information",
+        "wiring diagrams",
+        "technical specifications",
+        "diagnostic procedures",
+        "digital technical resources",
+        "source applicability",
+        "provenance and documentation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut180-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Lesson targets",
+          "description": "Preview the conceptual, evidence, and source-use outcomes for Automotive Technical Documentation and Service Information.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-1",
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ]
+        },
+        {
+          "id": "aut180-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prior knowledge",
+          "description": "Activate relevant prior learning while separating general familiarity from verified technical information.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-1"
+          ]
+        },
+        {
+          "id": "aut180-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Core system and concept relationships",
+          "description": "Explain the major relationships identified by the catalog description for Automotive Technical Documentation and Service Information.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-1"
+          ]
+        },
+        {
+          "id": "aut180-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Concept relationship model",
+          "description": "Use a simplified instructional model to organize relationships without implying a universal vehicle architecture, specification, or procedure.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-1",
+            "ug-aut180-service-information-lo-2"
+          ]
+        },
+        {
+          "id": "aut180-worked-example",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence to next step",
+          "description": "Demonstrate how a generalized concern or task moves from information gathering to a justified next step without inventing technical values or procedures.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ]
+        },
+        {
+          "id": "aut180-guided-practice",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Evidence and source sorting",
+          "description": "Classify sample information as observation, measurement, source statement, assumption, or conclusion and identify missing applicability information.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-2"
+          ]
+        },
+        {
+          "id": "aut180-independent-scenario",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Generalized application scenario",
+          "description": "Choose and justify an information-supported next step in a generalized scenario while preserving source and safety boundaries.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ]
+        },
+        {
+          "id": "aut180-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Formative reasoning check",
+          "description": "Use low-stakes prompts to check conceptual understanding, evidence classification, source selection, and next-step reasoning.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-1",
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ]
+        },
+        {
+          "id": "aut180-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Explain and retry",
+          "description": "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ]
+        },
+        {
+          "id": "aut180-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Applicable information and provenance",
+          "description": "Reinforce that vehicle-, product-, equipment-, legal-, regulatory-, and specification-dependent claims require applicable authoritative information.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ]
+        },
+        {
+          "id": "aut180-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Lesson summary",
+          "description": "Summarize the concepts, evidence habits, source boundaries, and documentation practices for Automotive Technical Documentation and Service Information.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-1",
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut180-concept-map",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Technical Documentation and Service Information concept relationships",
+          "purpose": "Show the major instructional relationships without presenting a vehicle-specific diagram or specification.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut180-reasoning-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-next-step workflow",
+          "purpose": "Show a generalized sequence from task or concern through evidence, applicable information, and documented next action.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut180-evidence-table",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Observation, source, assumption, and conclusion",
+          "purpose": "Compare evidence categories and the information required before a technical conclusion is supported.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut180-summary-infographic",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Technical Documentation and Service Information learning framework",
+          "purpose": "Summarize concepts, evidence, source verification, reasoning, and documentation.",
+          "supportsObjectiveIds": [
+            "ug-aut180-service-information-lo-1",
+            "ug-aut180-service-information-lo-2",
+            "ug-aut180-service-information-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Identify the major concepts or system relationships in a generalized Automotive Technical Documentation and Service Information example",
+        "Sort sample information into observation, measurement, source statement, assumption, or conclusion",
+        "Identify what authoritative information would be required before applying a specification or procedure",
+        "Write a brief evidence-based rationale for a safe next step"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept recognition check",
+        "Evidence and source-classification exercise",
+        "Formative generalized reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Service-information selection",
+        "Diagram/specification interpretation",
+        "Source applicability and provenance",
+        "Documentation and citation"
+      ],
+      "evidenceExpectation": "Technical claims require approved provenance. Vehicle-specific procedures, specifications, numeric limits, product or equipment instructions, legal or regulatory requirements, and authorization rules require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
     }
   ]
 }
