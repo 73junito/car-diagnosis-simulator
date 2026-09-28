@@ -39,20 +39,28 @@
     },
     "technical": {
       "required": true,
-      "reviewer_name": null,
-      "reviewer_id": null,
-      "qualification_reference": null,
-      "reviewed_at": null,
-      "decision": "pending",
+      "reviewer_name": "Rafael Rodriguez",
+      "reviewer_id": "rafael-rodriguez",
+      "qualification_reference": "Former automotive instructor with over six years of post-secondary automotive instruction; automotive/diesel technician background; retired Army heavy equipment repair leader/technician.",
+      "reviewed_at": "2026-09-27",
+      "decision": "pass-with-limitations",
       "checklist": {
-        "technical_claims_reviewed": false,
-        "source_applicability_reviewed": false,
-        "vehicle_specific_boundaries_preserved": false,
-        "no_single_clue_root_cause_overreach": false,
-        "no_universal_service_values_introduced": false,
-        "explanations_and_keys_checked": false
+        "technical_claims_reviewed": true,
+        "source_applicability_reviewed": true,
+        "vehicle_specific_boundaries_preserved": true,
+        "no_single_clue_root_cause_overreach": true,
+        "no_universal_service_values_introduced": true,
+        "explanations_and_keys_checked": true
       },
-      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded."
+      "limitations": [
+        "The 20 questions remain conceptual training questions and do not authorize vehicle service procedures.",
+        "Vehicle-specific voltages, thresholds, isolation steps, wait times, PPE requirements, test points, and procedures must come from applicable authoritative service information.",
+        "A DTC, temperature reading, SOC/SOH estimate, communication fault, charging symptom, or other single observation cannot by itself establish component failure.",
+        "Request → Measure → Compare → Correlate → Verify remains an AutoLearnPro project-authored diagnostic framework; external sources support underlying diagnostic principles but are not represented as the origin of that framework.",
+        "Technical approval does not approve citations, rights, high-stakes assessment use, or production release."
+      ],
+      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded.",
+      "user_confirmation": "I approve the Technical Review as written."
     },
     "instructional": {
       "required": true,
