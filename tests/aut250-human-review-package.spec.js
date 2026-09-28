@@ -16,7 +16,7 @@ describe('AUT-250 human review gate package', () => {
     expect(pkg.current_state.release_eligible).toBe(false);
   });
 
-  test('requires four human review roles and records rights, technical, and instructional gates only', () => {
+  test('requires four human review roles and records all four completed gates', () => {
     const roles = ['rights', 'technical', 'instructional', 'safety'];
     expect(Object.keys(pkg.reviewer_requirements).sort()).toEqual(roles.sort());
 
@@ -63,12 +63,19 @@ describe('AUT-250 human review gate package', () => {
 
     const safety = pkg.reviewer_requirements.safety;
     expect(safety.required).toBe(true);
-    expect(safety.reviewer_name).toBeNull();
-    expect(safety.reviewer_id).toBeNull();
-    expect(safety.qualification_reference).toBeNull();
-    expect(safety.reviewed_at).toBeNull();
-    expect(safety.decision).toBe('pending');
-    expect(Object.values(safety.checklist).every((value) => value === false)).toBe(true);
+    expect(safety.reviewer_name).toBe('Rafael Rodriguez');
+    expect(safety.reviewer_id).toBe('rafael-rodriguez');
+    expect(safety.qualification_reference).toMatch(/shop safety/i);
+    expect(safety.reviewed_at).toBe('2026-09-27');
+    expect(safety.decision).toBe('pass-with-limitations');
+    expect(Object.values(safety.checklist).every(Boolean)).toBe(true);
+    expect(safety.limitations).toEqual(expect.arrayContaining([
+      expect.stringMatching(/conceptual and training-focused/i),
+      expect.stringMatching(/High-voltage isolation/i),
+      expect.stringMatching(/bypassing interlocks/i),
+      expect.stringMatching(/must not authorize component removal/i),
+      expect.stringMatching(/does not by itself approve citation validation/i)
+    ]));
   });
 
   test('keeps citation evidence options explicit without selecting one', () => {
