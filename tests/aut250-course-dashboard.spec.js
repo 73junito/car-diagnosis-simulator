@@ -29,9 +29,13 @@ describe('AUT-250 learner course dashboard', () => {
     expect(js).toContain('dataset.aut250CourseRelease = "blocked"');
   });
 
-  test('requires exactly six modules and twenty approved training questions', () => {
+  test('requires six modules, both approvals, and the 40-question combined training bank', () => {
     expect(js).toContain('modules.length !== 6');
-    expect(js).toContain('length !== 20');
+    expect(js).toContain('BATCH002_APPROVAL_URL');
+    expect(js).toContain('BATCH002_CURRICULUM_URL');
+    expect(js).toContain('mergeBatch002IntoPlan');
+    expect(js).toContain('[8, 8, 6, 6, 6, 6]');
+    expect(js).toContain('length !== 40');
   });
 
   test('stores completion only in this browser', () => {
