@@ -151,6 +151,41 @@ test.describe('Expanded lesson plans', () => {
     expect(pageErrors).toEqual([]);
   });
 
+  test('renders the 20-question AUT-250 training bank with local feedback only', async ({ page }) => {
+    const pageErrors = collectPageErrors(page);
+
+    await page.goto('/lesson-plans/#ug-hev-foundations');
+    await expect(page.locator('html')).toHaveAttribute('data-aut250-training-questions', 'loaded');
+
+    const plan = page.locator('#ug-hev-foundations');
+    const modules = plan.locator('[data-course-module]');
+    await expect(modules).toHaveCount(6);
+
+    for (let index = 0; index < 6; index += 1) {
+      const module = modules.nth(index);
+      await module.getByText(/Training questions \(/).click();
+    }
+
+    await expect(plan.locator('[data-training-question]')).toHaveCount(20);
+    await expect(plan.locator('.training-question-status')).toHaveCount(20);
+    await expect(plan.locator('.training-boundary')).toHaveCount(20);
+
+    const first = plan.locator('[data-training-question="aut250-m1-q01"]');
+    await expect(first).toContainText(/Why should a technician distinguish direct battery measurements/i);
+    await expect(first.locator('input[type="radio"]')).toHaveCount(4);
+    await first.locator('input[value="A"]').check();
+    await first.getByRole('button', { name: 'Check answer' }).click();
+    await expect(first.locator('[data-training-feedback]')).toContainText('Not yet.');
+    await expect(first.locator('[data-training-feedback]')).toContainText(/model-derived states are different evidence types/i);
+
+    await first.locator('input[value="B"]').check();
+    await first.getByRole('button', { name: 'Check answer' }).click();
+    await expect(first.locator('[data-training-feedback]')).toContainText('Correct.');
+
+    await expect(plan.getByText(/not scored · not eligible for high-stakes assessment/i).first()).toBeVisible();
+    expect(pageErrors).toEqual([]);
+  });
+
   test('links every pathway course to its expanded lesson plan', async ({ page }) => {
     const pageErrors = collectPageErrors(page);
 
