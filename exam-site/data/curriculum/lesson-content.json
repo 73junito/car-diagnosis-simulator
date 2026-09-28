@@ -3077,7 +3077,89 @@
               "title": "Battery evidence-to-next-check reasoning"
             }
           ],
-          "safetyAndEvidenceBoundary": "Battery access, isolation, measurement, PPE, wait times, test equipment, acceptance limits, and replacement criteria are vehicle-specific and require approved authoritative service information."
+          "safetyAndEvidenceBoundary": "Battery access, isolation, measurement, PPE, wait times, test equipment, acceptance limits, and replacement criteria are vehicle-specific and require approved authoritative service information.",
+          "trainingQuestions": [
+            {
+              "id": "aut250-m1-q01",
+              "stem": "Why should a technician distinguish direct battery measurements from calculated battery-state values?",
+              "choices": {
+                "A": "Calculated values are always more accurate than measurements",
+                "B": "Calculated values may depend on models and multiple inputs, while measurements represent observed sensor or meter data",
+                "C": "Measurements cannot be used during diagnosis",
+                "D": "Calculated values never change with operating conditions"
+              },
+              "answer": "B",
+              "explanation": "Direct measurements and model-derived states are different evidence types. A calculated state should be interpreted with its inputs, operating context, and applicable service information.",
+              "topic": "battery-data-interpretation",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m1-q02",
+              "stem": "Which diagnostic approach best supports a battery-system conclusion?",
+              "choices": {
+                "A": "Replace the pack after one unusual data point",
+                "B": "Use the first stored code as proof of failure",
+                "C": "Correlate voltage, current, temperature, operating state, event history, and applicable service information",
+                "D": "Ignore calculated values entirely"
+              },
+              "answer": "C",
+              "explanation": "Battery diagnosis is stronger when compatible evidence is correlated across operating state, measurements, history, and authoritative vehicle information.",
+              "topic": "battery-evidence-correlation",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m1-q03",
+              "stem": "A reported state-of-charge value should be treated as which type of evidence?",
+              "choices": {
+                "A": "A model-derived estimate that should be interpreted with operating context",
+                "B": "A direct physical measurement of stored energy",
+                "C": "Proof that the battery is healthy",
+                "D": "A universal replacement threshold"
+              },
+              "answer": "A",
+              "explanation": "State of charge is generally an estimated or calculated state, not a direct measurement of stored energy.",
+              "topic": "battery-state-estimation",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m1-q04",
+              "stem": "What is the safest general rule before performing vehicle-specific battery access or isolation work?",
+              "choices": {
+                "A": "Use a universal disconnect sequence",
+                "B": "Follow the applicable vehicle procedure and verify the required electrical state before access",
+                "C": "Rely on cable color alone",
+                "D": "Assume the system is safe after the ignition is switched off"
+              },
+              "answer": "B",
+              "explanation": "Access, isolation, verification, wait times, PPE, and test methods are vehicle-specific and must come from applicable authoritative service information.",
+              "topic": "battery-safety-boundary",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            }
+          ]
         },
         {
           "id": "aut250-m2-power-electronics",
@@ -3139,7 +3221,89 @@
               "title": "Power-electronics evidence categories"
             }
           ],
-          "safetyAndEvidenceBoundary": "Opening, probing, discharging, insulation testing, or measuring power-electronic assemblies requires the applicable vehicle procedure, verified electrical state, and suitable equipment."
+          "safetyAndEvidenceBoundary": "Opening, probing, discharging, insulation testing, or measuring power-electronic assemblies requires the applicable vehicle procedure, verified electrical state, and suitable equipment.",
+          "trainingQuestions": [
+            {
+              "id": "aut250-m2-q01",
+              "stem": "What is the primary diagnostic value of comparing a commanded state with the measured response?",
+              "choices": {
+                "A": "It can show whether the system response matches the control request",
+                "B": "It proves the inverter has failed",
+                "C": "It eliminates the need for service information",
+                "D": "It establishes a universal pass/fail current"
+              },
+              "answer": "A",
+              "explanation": "Comparing request and response helps identify where behavior diverges from control intent without prematurely naming a failed component.",
+              "topic": "command-response",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m2-q02",
+              "stem": "Why should a diagnostic code related to an inverter or converter not automatically trigger component replacement?",
+              "choices": {
+                "A": "Power-electronics codes are never useful",
+                "B": "The condition may involve supply, command, communication, thermal, isolation, machine, or internal-protection factors",
+                "C": "Converters cannot fail",
+                "D": "Codes only apply to low-voltage systems"
+              },
+              "answer": "B",
+              "explanation": "Power-electronics operation depends on several interacting systems, so a code is evidence to investigate rather than automatic proof of a failed assembly.",
+              "topic": "power-electronics-reasoning",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m2-q03",
+              "stem": "During regenerative operation, what general energy relationship is being evaluated?",
+              "choices": {
+                "A": "Mechanical energy can be converted to electrical energy under permitted conditions",
+                "B": "Electrical energy is always converted only to heat",
+                "C": "The low-voltage battery directly drives the wheels",
+                "D": "The inverter is bypassed in every vehicle"
+              },
+              "answer": "A",
+              "explanation": "Regenerative operation can convert vehicle mechanical energy into electrical energy when the vehicle architecture and operating conditions permit it.",
+              "topic": "regeneration",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m2-q04",
+              "stem": "Before interpreting inverter or DC-DC converter data, what should be established first?",
+              "choices": {
+                "A": "The actual vehicle architecture and applicable system information",
+                "B": "A universal nominal voltage",
+                "C": "A fixed switching frequency",
+                "D": "A generic internal circuit diagram"
+              },
+              "answer": "A",
+              "explanation": "Vehicles differ in topology, integration, voltage domains, and control strategy. Diagnosis begins by identifying the actual architecture.",
+              "topic": "power-electronics-architecture",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            }
+          ]
         },
         {
           "id": "aut250-m3-charging",
@@ -3201,7 +3365,69 @@
               "title": "Charging evidence by system boundary"
             }
           ],
-          "safetyAndEvidenceBoundary": "Charging equipment ratings, connector handling, energized measurements, isolation checks, and internal charger tests require applicable product and vehicle procedures."
+          "safetyAndEvidenceBoundary": "Charging equipment ratings, connector handling, energized measurements, isolation checks, and internal charger tests require applicable product and vehicle procedures.",
+          "trainingQuestions": [
+            {
+              "id": "aut250-m3-q01",
+              "stem": "Which model best helps isolate a no-charge concern?",
+              "choices": {
+                "A": "Treat all charging failures as battery failures",
+                "B": "Separate infrastructure, interface, vehicle, battery, and thermal evidence",
+                "C": "Replace the charge port first",
+                "D": "Judge the condition from one unsuccessful charge attempt"
+              },
+              "answer": "B",
+              "explanation": "Separating the charging system into functional boundaries helps identify where the expected readiness or energy-transfer sequence stops.",
+              "topic": "charging-boundaries",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m3-q02",
+              "stem": "Why does a 'will not charge' symptom not identify the failed component by itself?",
+              "choices": {
+                "A": "Charging involves multiple coordinated prerequisites and system boundaries",
+                "B": "Charging systems have no diagnostic data",
+                "C": "External equipment can never affect charging",
+                "D": "Battery conditions are unrelated to charging"
+              },
+              "answer": "A",
+              "explanation": "Charging depends on supply, connection, communication, vehicle control, battery acceptance, safety interlocks, and thermal conditions.",
+              "topic": "charge-readiness",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m3-q03",
+              "stem": "What is an appropriate first reasoning step when a vehicle will not begin charging?",
+              "choices": {
+                "A": "Identify whether the vehicle recognizes the connection and where the expected readiness sequence stops",
+                "B": "Open the battery pack immediately",
+                "C": "Assume the external equipment is defective",
+                "D": "Apply a universal handshake voltage"
+              },
+              "answer": "A",
+              "explanation": "Establishing connection recognition and readiness state provides nonintrusive evidence before more invasive testing.",
+              "topic": "charging-diagnostic-sequence",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            }
+          ]
         },
         {
           "id": "aut250-m4-thermal",
@@ -3263,7 +3489,69 @@
               "title": "Thermal evidence and alternative explanations"
             }
           ],
-          "safetyAndEvidenceBoundary": "Refrigerant, coolant, high-voltage heaters, electric compressors, pumps, and other thermal components require system-specific service precautions and approved procedures."
+          "safetyAndEvidenceBoundary": "Refrigerant, coolant, high-voltage heaters, electric compressors, pumps, and other thermal components require system-specific service precautions and approved procedures.",
+          "trainingQuestions": [
+            {
+              "id": "aut250-m4-q01",
+              "stem": "What should be considered when interpreting an unusual component temperature?",
+              "choices": {
+                "A": "Only whether the value is numerically high",
+                "B": "Sensor plausibility, operating state, thermal commands, trends, and applicable vehicle limits",
+                "C": "The temperature proves the component has failed",
+                "D": "Thermal data is unrelated to propulsion performance"
+              },
+              "answer": "B",
+              "explanation": "Temperature becomes useful diagnostic evidence when it is interpreted with operating state, command-response behavior, trends, and vehicle-specific criteria.",
+              "topic": "thermal-evidence",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m4-q02",
+              "stem": "A reduced-power event that appears with rising temperature should be interpreted how?",
+              "choices": {
+                "A": "As automatic proof of battery failure",
+                "B": "As evidence that may involve thermal protection, heat transfer, sensing, actuator performance, load, or another related condition",
+                "C": "As proof that the cooling pump is failed",
+                "D": "Without considering operating conditions"
+              },
+              "answer": "B",
+              "explanation": "Thermal limiting can have several causes, so trend, command, sensor, and operating evidence should be correlated before reaching a conclusion.",
+              "topic": "thermal-derate",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m4-q03",
+              "stem": "Why are universal thermal thresholds inappropriate for AUT-250 training content?",
+              "choices": {
+                "A": "Thresholds, sensor locations, cooling strategies, and protection logic vary by vehicle design",
+                "B": "Temperature never matters",
+                "C": "All electrified vehicles use identical cooling systems",
+                "D": "Thermal systems are not serviceable"
+              },
+              "answer": "A",
+              "explanation": "Vehicle architectures and protection strategies differ, so numeric limits must come from applicable authoritative information.",
+              "topic": "thermal-boundaries",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            }
+          ]
         },
         {
           "id": "aut250-m5-low-voltage",
@@ -3325,7 +3613,69 @@
               "title": "Shared-dependency evidence matrix"
             }
           ],
-          "safetyAndEvidenceBoundary": "Low-voltage checks do not establish that a high-voltage system is de-energized. High-voltage state must be verified only by the applicable service procedure."
+          "safetyAndEvidenceBoundary": "Low-voltage checks do not establish that a high-voltage system is de-energized. High-voltage state must be verified only by the applicable service procedure.",
+          "trainingQuestions": [
+            {
+              "id": "aut250-m5-q01",
+              "stem": "Why can a low-voltage supply problem create high-voltage propulsion symptoms?",
+              "choices": {
+                "A": "Low-voltage power can support module wake-up, communication, switching control, and readiness functions",
+                "B": "The low-voltage battery always directly powers the traction motor",
+                "C": "High-voltage systems do not use control modules",
+                "D": "Low-voltage faults cannot affect communication"
+              },
+              "answer": "A",
+              "explanation": "Many control and communication functions required for propulsion readiness depend on stable low-voltage power.",
+              "topic": "low-voltage-dependencies",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m5-q02",
+              "stem": "Several modules become unavailable at the same time. What should be considered before replacing multiple modules?",
+              "choices": {
+                "A": "A shared power, ground, wake-up, network, or timing dependency",
+                "B": "That all modules failed independently at the same instant",
+                "C": "Only battery state of charge",
+                "D": "Only the highest-numbered diagnostic code"
+              },
+              "answer": "A",
+              "explanation": "Clusters of communication faults may share a foundational dependency, so common causes should be investigated first.",
+              "topic": "communication-dependencies",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m5-q03",
+              "stem": "What is the purpose of a readiness-first diagnostic strategy?",
+              "choices": {
+                "A": "To collect foundational, nonintrusive evidence before escalating to higher-risk testing",
+                "B": "To skip low-voltage checks",
+                "C": "To prove the high-voltage system is de-energized",
+                "D": "To replace control modules more quickly"
+              },
+              "answer": "A",
+              "explanation": "Low-voltage condition, communication, readiness state, and event history can explain multiple symptoms and can often be evaluated before intrusive testing.",
+              "topic": "readiness-first",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            }
+          ]
         },
         {
           "id": "aut250-m6-diagnostic-reasoning",
@@ -3387,7 +3737,69 @@
               "title": "Evidence-supported repair and verification cycle"
             }
           ],
-          "safetyAndEvidenceBoundary": "Diagnostic reasoning does not authorize physical access. Any test involving energized circuits, disabled safety systems, exposed conductors, service disconnects, or high-voltage components requires the applicable approved procedure."
+          "safetyAndEvidenceBoundary": "Diagnostic reasoning does not authorize physical access. Any test involving energized circuits, disabled safety systems, exposed conductors, service disconnects, or high-voltage components requires the applicable approved procedure.",
+          "trainingQuestions": [
+            {
+              "id": "aut250-m6-q01",
+              "stem": "In the Request → Measure → Compare → Correlate → Verify model, what does 'Compare' require?",
+              "choices": {
+                "A": "Compare the observed response with applicable authoritative information and expected context",
+                "B": "Compare repair prices",
+                "C": "Compare only two diagnostic codes",
+                "D": "Assume the requested state is correct"
+              },
+              "answer": "A",
+              "explanation": "The comparison step evaluates observed behavior against applicable criteria or expected system behavior before correlation and verification.",
+              "topic": "diagnostic-process",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m6-q02",
+              "stem": "Why should a technician develop competing hypotheses during a complex diagnosis?",
+              "choices": {
+                "A": "To choose evidence checks that distinguish among plausible explanations and reduce confirmation bias",
+                "B": "To avoid collecting evidence",
+                "C": "To make every possible repair",
+                "D": "To select the first component mentioned by a code"
+              },
+              "answer": "A",
+              "explanation": "Competing hypotheses encourage discriminating tests and make it less likely that one early clue will dominate the diagnosis.",
+              "topic": "hypothesis-testing",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            },
+            {
+              "id": "aut250-m6-q03",
+              "stem": "What makes post-repair verification stronger than simply clearing codes?",
+              "choices": {
+                "A": "It checks whether the original concern and relevant system behavior are actually resolved under appropriate conditions",
+                "B": "It guarantees no future faults",
+                "C": "It removes the need for documentation",
+                "D": "It proves every related component is new"
+              },
+              "answer": "A",
+              "explanation": "Verification should address the original concern, relevant operating state, fault information, and system response rather than relying on code clearing alone.",
+              "topic": "verification",
+              "status": "draft",
+              "deliveryMode": "training",
+              "scored": false,
+              "highStakesEligible": false,
+              "provenanceStatus": "pending-bulk-review",
+              "citationValidationStatus": "pending",
+              "authorship": "project-authored"
+            }
+          ]
         }
       ],
       "courseModuleSequence": [
@@ -3398,7 +3810,16 @@
         "aut250-m5-low-voltage",
         "aut250-m6-diagnostic-reasoning"
       ],
-      "courseCompletionExpectation": "Learners complete the foundation lesson and all six project-authored modules, then demonstrate evidence-based reasoning in an integrated electrified-vehicle diagnostic case. Scored certification-style or high-stakes assessment remains outside this course-content approval state until separately reviewed and approved."
+      "courseCompletionExpectation": "Learners complete the foundation lesson and all six project-authored modules, then demonstrate evidence-based reasoning in an integrated electrified-vehicle diagnostic case. Scored certification-style or high-stakes assessment remains outside this course-content approval state until separately reviewed and approved.",
+      "trainingQuestionBank": {
+        "status": "draft",
+        "deliveryMode": "training",
+        "totalQuestions": 20,
+        "questionApprovalEffect": "none",
+        "citationReviewBatch": "aut250-training-batch-001",
+        "reviewTrigger": "20-question threshold reached; run fresh bulk citation/provenance validation before any approval transition",
+        "assessmentBoundary": "These items are training-only drafts. They are not served by the approved assessment API and must not be promoted to approved or scored assessment without separate provenance, citation, technical, instructional, and safety review."
+      }
     }
   ]
 }
