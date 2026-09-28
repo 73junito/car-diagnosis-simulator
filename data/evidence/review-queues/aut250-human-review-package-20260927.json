@@ -114,10 +114,10 @@
     }
   },
   "citation_evidence_decision": {
-    "status": "pending-human-rights-and-governance-decision",
+    "status": "confirmed",
     "current_validator": "scripts/validate-citations.js",
     "current_validator_version": "citation-validator-1.0",
-    "approved_representation": null,
+    "approved_representation": "metadata-only-citation-proof",
     "options_under_review": [
       {
         "option_id": "approved-excerpt-chunks",
@@ -141,10 +141,13 @@
     ],
     "project_preference": {
       "option_id": "metadata-only-citation-proof",
-      "status": "selected-pending-human-confirmation",
+      "status": "confirmed",
       "rationale": "Current AUT-250 evidence is intentionally metadata/link-only and no rights basis exists for storing copyrighted excerpts. A separate metadata-only validator preserves citation-validator-1.0 semantics and avoids false excerpt/hash claims.",
       "selected_by": "project workflow",
-      "approval_effect": "none"
+      "approval_effect": "none",
+      "approved_by": "Rafael Rodriguez",
+      "approved_by_id": "rafael-rodriguez",
+      "approved_at": "2026-09-27"
     },
     "metadata_preflight": {
       "script": "scripts/validate-aut250-metadata-citations.js",
@@ -170,10 +173,19 @@
         "question approval",
         "assessment eligibility"
       ]
-    }
+    },
+    "confirmed_by": "Rafael Rodriguez",
+    "confirmed_by_id": "rafael-rodriguez",
+    "confirmed_at": "2026-09-27",
+    "user_confirmation": "I approve the metadata-only citation representation.",
+    "confirmation_rationale": [
+      "AUT-250 evidence remains metadata/link-only.",
+      "No affirmative rights basis has been established for storing copyrighted source excerpts.",
+      "The separate metadata-only validator preserves citation-validator-1.0 semantics and avoids false excerpt/hash validation claims."
+    ]
   },
   "release_gate": {
-    "status": "blocked",
+    "status": "blocked-pending-deterministic-validation-and-final-approval",
     "required_conditions": [
       "rights review completed",
       "technical review completed",
@@ -183,6 +195,9 @@
       "deterministic citation validation completed under the approved representation",
       "separate final approval action recorded"
     ],
-    "auto_approval_allowed": false
+    "auto_approval_allowed": false,
+    "deterministic_validation_ready": true,
+    "human_reviews_complete": true,
+    "citation_representation_confirmed": true
   }
 }
