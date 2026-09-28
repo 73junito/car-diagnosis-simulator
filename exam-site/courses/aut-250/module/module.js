@@ -1,4 +1,4 @@
-import { renderModuleVisuals } from "./module-visuals.js";
+import { renderModuleVisuals, setModuleVisualReasoningStep } from "./module-visuals.js";
 import { getDistractorFeedback } from "./distractor-feedback.js";
 
 const CURRICULUM_URL = "/data/curriculum/lesson-content.json";
@@ -197,6 +197,7 @@ function setActiveReasoningStep(step) {
   });
   const focus = document.querySelector("[data-question-reasoning-focus]");
   if (focus) focus.textContent = step.charAt(0).toUpperCase() + step.slice(1);
+  setModuleVisualReasoningStep(step);
 }
 
 function moduleIdFromUrl() {
