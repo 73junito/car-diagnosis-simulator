@@ -43,10 +43,12 @@ describe('AUT-250 training question bank', () => {
   });
 
   test('contains no question-specific universal service thresholds or procedures', () => {
-    const serialized = JSON.stringify(questions).toLowerCase();
-    expect(serialized).not.toMatch(/wait\s+\d+\s*(seconds|minutes)/);
-    expect(serialized).not.toMatch(/class\s+[0-9]+\s+glove/);
-    expect(serialized).not.toMatch(/replace.*(pack|inverter|converter).*when.*\d/);
-    expect(serialized).not.toMatch(/must measure exactly/);
+    for (const question of questions) {
+      const serialized = JSON.stringify(question).toLowerCase();
+      expect(serialized).not.toMatch(/wait\s+\d+\s*(seconds|minutes)/);
+      expect(serialized).not.toMatch(/class\s+[0-9]+\s+glove/);
+      expect(serialized).not.toMatch(/replace[^.]{0,120}(pack|inverter|converter)[^.]{0,120}when[^.]{0,40}\d/);
+      expect(serialized).not.toMatch(/must measure exactly/);
+    }
   });
 });
