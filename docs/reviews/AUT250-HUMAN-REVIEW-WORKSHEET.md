@@ -9,23 +9,23 @@ This worksheet is a human-review aid. Completing it does not by itself approve a
 
 ## Rights review
 
-Reviewer name: ____________________  
-Reviewer ID: ____________________  
-Qualification / authority reference: ____________________  
-Review date/time: ____________________
+Reviewer name: Rafael Rodriguez  
+Reviewer ID: rafael-rodriguez  
+Qualification / authority reference: AutoLearnPro project owner / content-governance authority  
+Review date: 2026-09-27
 
 Confirm each item:
 
-- [ ] Source identity and ownership reviewed
-- [ ] Permitted use scope reviewed
-- [ ] Quote/excerpt storage rights reviewed
-- [ ] Metadata/link-only policy confirmed where applicable
-- [ ] Third-party material risk reviewed
+- [x] Source identity and ownership reviewed
+- [x] Permitted use scope reviewed
+- [x] Quote/excerpt storage rights reviewed
+- [x] Metadata/link-only policy confirmed where applicable
+- [x] Third-party material risk reviewed
 
-Decision: **Pending / Pass / Pass with limitations / Hold**
+Decision: **Pass with limitations**
 
 Notes:  
-____________________________________________________________
+Citation metadata, canonical links/DOIs, bibliographic facts, and project-authored summaries are permitted for this workflow. Do not ingest, chunk, redistribute, or directly reuse copyrighted source excerpts unless separately cleared. Metadata-only evidence must not be represented as excerpt verification, source-text hash verification, or rights clearance.
 
 ## Technical review
 

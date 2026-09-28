@@ -3834,14 +3834,16 @@
           "packageId": "aut250-human-review-package-20260927",
           "artifact": "data/evidence/review-queues/aut250-human-review-package-20260927.json",
           "worksheet": "docs/reviews/AUT250-HUMAN-REVIEW-WORKSHEET.md",
-          "status": "pending",
+          "status": "in-progress",
           "requiredRoles": [
             "rights",
             "technical",
             "instructional",
             "safety"
           ],
-          "completedRoles": [],
+          "completedRoles": [
+            "rights"
+          ],
           "citationEvidenceDecision": "pending",
           "releaseGate": "blocked",
           "approvalEffect": "none"

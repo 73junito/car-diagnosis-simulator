@@ -17,19 +17,25 @@
   "reviewer_requirements": {
     "rights": {
       "required": true,
-      "reviewer_name": null,
-      "reviewer_id": null,
-      "qualification_reference": null,
-      "reviewed_at": null,
-      "decision": "pending",
+      "reviewer_name": "Rafael Rodriguez",
+      "reviewer_id": "rafael-rodriguez",
+      "qualification_reference": "AutoLearnPro project owner / content-governance authority",
+      "reviewed_at": "2026-09-27",
+      "decision": "pass-with-limitations",
       "checklist": {
-        "source_identity_and_ownership_reviewed": false,
-        "permitted_use_scope_reviewed": false,
-        "quote_or_excerpt_storage_rights_reviewed": false,
-        "metadata_link_only_policy_confirmed": false,
-        "third_party_material_risk_reviewed": false
+        "source_identity_and_ownership_reviewed": true,
+        "permitted_use_scope_reviewed": true,
+        "quote_or_excerpt_storage_rights_reviewed": true,
+        "metadata_link_only_policy_confirmed": true,
+        "third_party_material_risk_reviewed": true
       },
-      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded."
+      "limitations": [
+        "Use citation metadata, canonical links/DOIs, bibliographic facts, and project-authored summaries only.",
+        "Do not ingest, chunk, redistribute, or directly reuse copyrighted source excerpts unless separately cleared.",
+        "Do not represent metadata-only citation evidence as excerpt verification, source-text hash verification, or rights clearance."
+      ],
+      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded.",
+      "user_confirmation": "I approve the Rights Review as written."
     },
     "technical": {
       "required": true,
