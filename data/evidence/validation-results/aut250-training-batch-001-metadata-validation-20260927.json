@@ -10,9 +10,9 @@
   },
   "approved_representation": "metadata-only-citation-proof",
   "input_integrity": {
-    "data/evidence/review-queues/aut250-training-question-bulk-review-20260927.json": "68cb1752be64211b7b55917e33a75de405f24fd1146a9b4802958ca18eee50a7",
-    "data/evidence/review-queues/aut250-human-review-package-20260927.json": "f5d0f7c31343b924dbb8854924e4f98c38d70247ac794145fa7335652b4d43fa",
-    "data/curriculum/lesson-content.json": "45a319b274fa49080b682809ebbff8d9cffb95afe85e09040e8de71286ef9215"
+    "data/evidence/review-queues/aut250-training-question-bulk-review-20260927.json": "ece82655439f96b4328479f6f7c6c4b1b5b3c61a1bbd51b6de53c200d77a1fdf",
+    "data/evidence/review-queues/aut250-human-review-package-20260927.json": "f4a0592bce1152eded94b916aab9dba9499d3e28881b5c0acb04c6353bdcb1c2",
+    "data/curriculum/lesson-content.json": "3fb53f4ce65295463c6eabcb47ecf3daba2b3698f87e059e6d6b066bb955ccbf"
   },
   "human_review_roles_complete": [
     "rights",
