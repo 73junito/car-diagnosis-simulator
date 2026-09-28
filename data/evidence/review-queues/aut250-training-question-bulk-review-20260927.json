@@ -682,5 +682,31 @@
     "remaining_holds": 0,
     "approval_effect": "none",
     "note": "Resolving a source-support hold does not constitute citation validation, rights clearance, technical approval, instructional approval, safety approval, or assessment eligibility."
+  },
+  "deterministic_validation_gate": {
+    "validator": "scripts/validate-citations.js",
+    "validator_version": "citation-validator-1.0",
+    "status": "blocked-by-governance-prerequisites",
+    "current_question_state": "draft",
+    "validator_required_question_states": [
+      "validated",
+      "approved"
+    ],
+    "requires": [
+      "question_citations rows",
+      "approved_sources status=approved",
+      "source_chunks status=approved",
+      "stored citation quote matching source_chunks.text_excerpt",
+      "SHA-256 hash match for approved source excerpt",
+      "canonical source URL on validator allowlist"
+    ],
+    "blocked_reasons": [
+      "AUT-250 questions intentionally remain draft after source-support review.",
+      "Candidate sources are metadata-and-link-only; no copyrighted source excerpts have been approved for repository/database chunking.",
+      "No named technical, instructional, safety, or rights reviewers have completed the approval gates.",
+      "Promoting provenance or approving chunks solely to satisfy the validator would bypass the fail-closed governance contract."
+    ],
+    "decision": "do-not-run-or-weaken-validator-yet",
+    "next_action": "Complete named human rights/technical/instructional/safety review and establish an approved citation-evidence representation before deterministic validation. If source text cannot be lawfully stored as approved chunks, create a separately reviewed metadata-only citation validator rather than changing citation-validator-1.0 semantics."
   }
 }
