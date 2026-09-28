@@ -175,7 +175,7 @@ function reasoningStepForQuestion(question) {
   const topic = String(question?.topic || "").toLowerCase();
   if (topic.includes("verification") || topic.includes("post-repair")) return "verify";
   if (topic.includes("correlation") || topic.includes("hypoth") || topic.includes("dependencies") || topic.includes("boundaries")) return "correlate";
-  if (topic.includes("compare") || topic.includes("interpretation") || topic.includes("estimation") || topic.includes("command-response") || topic.includes("readiness")) return "compare";
+  if (topic.includes("compare") || topic.includes("interpretation") || topic.includes("estimation") || topic.includes("command-response") || topic.includes("readiness") || topic === "diagnostic-process") return "compare";
   if (topic.includes("request") || topic.includes("concern")) return "request";
   return "measure";
 }
