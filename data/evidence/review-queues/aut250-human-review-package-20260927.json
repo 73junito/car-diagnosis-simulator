@@ -64,20 +64,28 @@
     },
     "instructional": {
       "required": true,
-      "reviewer_name": null,
-      "reviewer_id": null,
-      "qualification_reference": null,
-      "reviewed_at": null,
-      "decision": "pending",
+      "reviewer_name": "Rafael Rodriguez",
+      "reviewer_id": "rafael-rodriguez",
+      "qualification_reference": "Former post-secondary automotive instructor with over six years of experience teaching automotive systems, diagnostics, electrical/electronics, engine performance, climate control, brakes, drivetrain, suspension/steering, and transmission courses.",
+      "reviewed_at": "2026-09-27",
+      "decision": "pass-with-limitations",
       "checklist": {
-        "module_alignment_reviewed": false,
-        "learning_objective_alignment_reviewed": false,
-        "distractor_quality_reviewed": false,
-        "explanation_quality_reviewed": false,
-        "difficulty_and_progression_reviewed": false,
-        "training_only_language_clear": false
+        "module_alignment_reviewed": true,
+        "learning_objective_alignment_reviewed": true,
+        "distractor_quality_reviewed": true,
+        "explanation_quality_reviewed": true,
+        "difficulty_and_progression_reviewed": true,
+        "training_only_language_clear": true
       },
-      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded."
+      "limitations": [
+        "The 20 items remain formative training questions, not institutional or high-stakes assessment items.",
+        "Correct-answer feedback should continue emphasizing reasoning, uncertainty, evidence correlation, and vehicle-specific authoritative information.",
+        "Distractors must not normalize unsafe service shortcuts, universal procedures, or component replacement from a single clue.",
+        "Question difficulty may be recalibrated later using learner-performance data, but analytics must not substitute for technical or safety review.",
+        "Instructional approval does not approve rights, citations, safety, production assessment use, or final release."
+      ],
+      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded.",
+      "user_confirmation": "I approve the Instructional Review as written."
     },
     "safety": {
       "required": true,
