@@ -1,5 +1,7 @@
 const CURRICULUM_URL = "/data/curriculum/lesson-content.json";
 const APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
+const BATCH002_APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-002-final-approval-20260928.json";
+const BATCH002_CURRICULUM_URL = "/data/curriculum/aut250-training-batch-002.json";
 const STORAGE_KEY = "autolearnpro:aut250:module-progress";
 const PROGRESS_VERSION = 2;
 
@@ -16,14 +18,14 @@ async function loadJson(url) {
   return response.json();
 }
 
-function evaluateApproval(approval) {
+function evaluateApproval(approval, expectedBatch) {
   const effect = approval?.approval_effect_if_confirmed;
   const release = approval?.release_state;
   const decision = approval?.requested_final_decision;
   return [
     approval?.course_id === "AUT-250",
     approval?.lesson_plan_id === "ug-hev-foundations",
-    approval?.question_batch === "aut250-training-batch-001",
+    approval?.question_batch === expectedBatch,
     approval?.question_count === 20,
     decision?.decision === "approved",
     decision?.scope === "training-bank-final-approval-only",
@@ -37,6 +39,32 @@ function evaluateApproval(approval) {
     release?.assessment_release === false,
     release?.high_stakes_release === false
   ].every(Boolean);
+}
+
+function mergeBatch002IntoPlan(plan, supplement) {
+  const supplementalQuestions = (supplement?.modules || []).flatMap((module) => module.questions || []);
+  const boundaryOk = supplement?.questionBatch === "aut250-training-batch-002-ollama-repaired" &&
+    supplement?.questionCount === 20 &&
+    supplementalQuestions.length === 20 &&
+    supplementalQuestions.every((question) =>
+      question.status === "approved-for-training-use" &&
+      question.deliveryMode === "training" &&
+      question.scored === false &&
+      question.highStakesEligible === false &&
+      question.institutionalAssessmentEligible === false &&
+      question.productionAssessmentApiEligible === false
+    );
+  if (!plan || !boundaryOk) throw new Error("AUT-250 Batch 002 supplemental bank failed validation");
+  for (const supplementalModule of supplement.modules) {
+    const module = plan.courseModules?.find((item) => item.id === supplementalModule.moduleId);
+    if (!module) throw new Error(`Unknown AUT-250 Batch 002 module: ${supplementalModule.moduleId}`);
+    const existing = new Set((module.trainingQuestions || []).map((question) => question.id));
+    module.trainingQuestions = [
+      ...(module.trainingQuestions || []),
+      ...supplementalModule.questions.filter((question) => !existing.has(question.id))
+    ];
+  }
+  return plan;
 }
 
 function emptyProgress() {
@@ -198,18 +226,28 @@ function renderModules(modules, progress) {
 async function init() {
   const releaseStatus = document.querySelector("[data-course-release-status]");
   try {
-    const [approval, curriculum] = await Promise.all([
+    const [approval, batch002Approval, curriculum, batch002Supplement] = await Promise.all([
       loadJson(APPROVAL_URL),
-      loadJson(CURRICULUM_URL)
+      loadJson(BATCH002_APPROVAL_URL),
+      loadJson(CURRICULUM_URL),
+      loadJson(BATCH002_CURRICULUM_URL)
     ]);
 
-    if (!evaluateApproval(approval)) throw new Error("Final AUT-250 training approval gate not satisfied");
+    if (!evaluateApproval(approval, "aut250-training-batch-001") ||
+        !evaluateApproval(batch002Approval, "aut250-training-batch-002-ollama-repaired")) {
+      throw new Error("Final AUT-250 training approval gate not satisfied");
+    }
 
     const plan = curriculum.lessonContentPlans?.find((item) => item.lessonPlanId === "ug-hev-foundations");
+    mergeBatch002IntoPlan(plan, batch002Supplement);
     const modules = plan?.courseModules || [];
     if (modules.length !== 6) throw new Error(`Expected 6 AUT-250 modules, found ${modules.length}`);
-    if (modules.flatMap((module) => module.trainingQuestions || []).length !== 20) {
-      throw new Error("Expected exactly 20 approved AUT-250 training questions");
+    const counts = modules.map((module) => (module.trainingQuestions || []).length);
+    if (JSON.stringify(counts) !== JSON.stringify([8, 8, 6, 6, 6, 6])) {
+      throw new Error(`Expected approved AUT-250 distribution 8/8/6/6/6/6, found ${counts.join("/")}`);
+    }
+    if (modules.flatMap((module) => module.trainingQuestions || []).length !== 40) {
+      throw new Error("Expected exactly 40 approved AUT-250 training questions");
     }
 
     document.documentElement.dataset.aut250CourseRelease = "approved-for-training-use";
