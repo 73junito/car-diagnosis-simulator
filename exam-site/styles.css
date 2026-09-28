@@ -56,3 +56,25 @@ footer{background:#102f33;color:#e9f0e9;padding:3rem 0}.footer-inner{display:gri
 .aut250-dashboard-meta{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line,#e2e8e5)}
 .aut250-dashboard-actions{margin-top:1rem;justify-content:flex-start}
 @media (max-width:760px){.course-dashboard-hero-grid,.aut250-dashboard-grid{grid-template-columns:1fr}.course-dashboard-toolbar{align-items:flex-start;flex-direction:column}.course-progress-panel{text-align:left;width:100%}}
+
+
+/* AUT-250 guided question player */
+.aut250-player-shell{padding-top:2rem;padding-bottom:5rem;max-width:980px}
+.aut250-player-breadcrumb{display:flex;gap:.55rem;align-items:center;font-size:.84rem;margin:1rem 0 2rem}
+.aut250-player-hero{padding:1.5rem 0 1rem}
+.aut250-player-boundary{display:inline-block;margin-top:1rem;padding:.65rem .9rem;border:1px solid var(--line,#d9e4df);border-radius:999px;font-size:.82rem;background:#f7faf8}
+.aut250-question-player{margin-top:1.75rem}
+.aut250-player-progress-row{display:flex;gap:1rem;align-items:center;justify-content:space-between;margin-bottom:1rem;font-size:.84rem;font-weight:700}
+.aut250-player-progress-track{flex:1;max-width:420px;height:8px;border-radius:999px;background:#e7eeeb;overflow:hidden}
+.aut250-player-progress-track span{display:block;height:100%;width:0;background:currentColor;transition:width .2s ease}
+.aut250-player-card{border:1px solid var(--line,#d9e4df);border-radius:20px;padding:clamp(1.2rem,3vw,2rem);background:#fff;box-shadow:0 18px 45px rgba(25,55,45,.06)}
+.aut250-player-card h2{font-size:clamp(1.4rem,3vw,2rem);margin:.55rem 0 1.2rem}
+.aut250-player-options{display:grid;gap:.75rem}
+.aut250-player-option{display:flex;gap:.8rem;align-items:flex-start;border:1px solid var(--line,#d9e4df);border-radius:14px;padding:1rem;cursor:pointer}
+.aut250-player-option:has(input:checked){outline:2px solid currentColor;outline-offset:1px}
+.aut250-player-option input{margin-top:.2rem}
+.aut250-player-actions,.aut250-player-nav{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.25rem}
+.aut250-player-feedback{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line,#e2e8e5)}
+.aut250-player-feedback:empty{display:none}
+.aut250-player-nav{justify-content:space-between}
+@media (max-width:620px){.aut250-player-progress-row{align-items:flex-start;flex-direction:column}.aut250-player-progress-track{width:100%;max-width:none}.aut250-player-nav{justify-content:flex-start}}
