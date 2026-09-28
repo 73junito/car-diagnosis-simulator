@@ -107,6 +107,83 @@
       "cipCode": "47.0604",
       "title": "Automotive Technical Documentation and Service Information",
       "status": "planned"
+    },
+    {
+      "id": "aut-200",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Engine Systems II",
+      "status": "planned"
+    },
+    {
+      "id": "aut-201",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Engine Systems II Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-211",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Engine Performance Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-220",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automatic Transmissions and Transaxles",
+      "status": "planned"
+    },
+    {
+      "id": "aut-230",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Electronics",
+      "status": "planned"
+    },
+    {
+      "id": "aut-240",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Electrical Systems II",
+      "status": "planned"
+    },
+    {
+      "id": "aut-250",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Diagnostics I",
+      "status": "planned"
+    },
+    {
+      "id": "aut-251",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Diagnostics I Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-260",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Vehicle Dynamics",
+      "status": "planned"
+    },
+    {
+      "id": "aut-270",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Emissions and Environmental Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-280",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Control Systems",
+      "status": "planned"
     }
   ]
 }

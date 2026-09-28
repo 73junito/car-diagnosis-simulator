@@ -140,6 +140,83 @@
       "courseId": "aut-180",
       "statement": "Locate and interpret applicable technical information, distinguish authoritative source content from learner inference, and document the source basis for a diagnostic or service decision.",
       "status": "planned"
+    },
+    {
+      "id": "ug-aut200-engine-mechanical-diagnosis",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-200",
+      "statement": "Analyze advanced engine mechanical relationships, distinguish measured evidence from diagnosis, and identify the applicable service information required before specifications or procedures are used.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut201-engine-mechanical-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-201",
+      "statement": "Organize engine mechanical laboratory evidence, select an appropriate measurement or inspection approach, and justify a next step using applicable specifications and documented observations.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut211-engine-performance-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-211",
+      "statement": "Collect and interpret generalized engine-performance test evidence, preserve test context and units, and justify a diagnostic next step using applicable technical information.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut220-automatic-transmission-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-220",
+      "statement": "Explain generalized automatic-transmission power-flow and control relationships, distinguish system evidence from conclusions, and identify applicable information required for diagnosis or service.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut230-automotive-electronics",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-230",
+      "statement": "Explain electronic signal and control relationships, interpret generalized sensor/actuator evidence, and use applicable technical information to justify a diagnostic next step.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut240-advanced-electrical-diagnosis",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-240",
+      "statement": "Analyze advanced electrical-system relationships, interpret measurements in operating context, and justify a next diagnostic action using applicable vehicle-specific information.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut250-systematic-diagnostics",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-250",
+      "statement": "Organize diagnostic evidence from symptoms, scan data, trouble codes, tests, and applicable information to justify and verify a systematic next diagnostic step.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut251-diagnostics-lab",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-251",
+      "statement": "Plan and document generalized fault-isolation work, collect relevant evidence, and justify a safe next test without substituting assumptions for verified vehicle information.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut260-vehicle-dynamics",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-260",
+      "statement": "Explain generalized vehicle-dynamics relationships, apply appropriate quantitative reasoning, and distinguish modeled behavior from vehicle-specific limits or measured evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut270-emissions-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-270",
+      "statement": "Explain emissions-system relationships, interpret generalized sensor and system evidence, and identify applicable technical or regulatory information required before diagnostic conclusions are made.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut280-control-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-280",
+      "statement": "Explain generalized feedback and control relationships, interpret sensor/actuator evidence, and use applicable system information to justify a control-system diagnostic next step.",
+      "status": "planned"
     }
   ]
 }
