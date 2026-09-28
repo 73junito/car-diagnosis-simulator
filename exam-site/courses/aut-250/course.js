@@ -1,6 +1,7 @@
 const CURRICULUM_URL = "/data/curriculum/lesson-content.json";
 const APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
 const STORAGE_KEY = "autolearnpro:aut250:module-progress";
+const PROGRESS_VERSION = 2;
 
 const escapeHtml = (value) => String(value ?? "")
   .replace(/&/g, "&amp;")
@@ -19,7 +20,7 @@ function evaluateApproval(approval) {
   const effect = approval?.approval_effect_if_confirmed;
   const release = approval?.release_state;
   const decision = approval?.requested_final_decision;
-  const checks = [
+  return [
     approval?.course_id === "AUT-250",
     approval?.lesson_plan_id === "ug-hev-foundations",
     approval?.question_batch === "aut250-training-batch-001",
@@ -35,16 +36,52 @@ function evaluateApproval(approval) {
     release?.production_release === false,
     release?.assessment_release === false,
     release?.high_stakes_release === false
-  ];
-  return checks.every(Boolean);
+  ].every(Boolean);
+}
+
+function emptyProgress() {
+  return { version: PROGRESS_VERSION, lastModuleId: null, modules: {} };
+}
+
+function normalizeModuleProgress(value = {}) {
+  return {
+    currentQuestionIndex: Number.isInteger(value.currentQuestionIndex) && value.currentQuestionIndex >= 0
+      ? value.currentQuestionIndex : 0,
+    attemptedQuestionIds: Array.isArray(value.attemptedQuestionIds) ? [...new Set(value.attemptedQuestionIds)] : [],
+    feedbackViewedQuestionIds: Array.isArray(value.feedbackViewedQuestionIds) ? [...new Set(value.feedbackViewedQuestionIds)] : [],
+    completed: value.completed === true,
+    lastVisitedAt: typeof value.lastVisitedAt === "string" ? value.lastVisitedAt : null
+  };
+}
+
+function migrateLegacyProgress(parsed) {
+  const next = emptyProgress();
+  if (!parsed || typeof parsed !== "object") return next;
+  Object.entries(parsed).forEach(([moduleId, value]) => {
+    if (typeof value === "boolean") {
+      next.modules[moduleId] = {
+        ...normalizeModuleProgress(),
+        legacyMarkedComplete: value,
+        completed: false
+      };
+    }
+  });
+  return next;
 }
 
 function getProgress() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    return parsed && typeof parsed === "object" ? parsed : {};
+    if (parsed?.version !== PROGRESS_VERSION || !parsed.modules) return migrateLegacyProgress(parsed);
+    return {
+      version: PROGRESS_VERSION,
+      lastModuleId: typeof parsed.lastModuleId === "string" ? parsed.lastModuleId : null,
+      modules: Object.fromEntries(
+        Object.entries(parsed.modules).map(([id, value]) => [id, normalizeModuleProgress(value)])
+      )
+    };
   } catch {
-    return {};
+    return emptyProgress();
   }
 }
 
@@ -52,51 +89,110 @@ function setProgress(progress) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 
-function renderProgress(modules, progress) {
-  const completed = modules.filter((module) => progress[module.id]).length;
-  document.querySelector("[data-course-progress]").textContent = `${completed} / ${modules.length}`;
-  document.querySelector("[data-course-progress-bar]").style.width = `${modules.length ? (completed / modules.length) * 100 : 0}%`;
+function moduleProgress(progress, moduleId) {
+  return normalizeModuleProgress(progress.modules?.[moduleId]);
+}
 
-  const next = modules.find((module) => !progress[module.id]) || modules[modules.length - 1];
+function moduleStatus(module, progress) {
+  const state = moduleProgress(progress, module.id);
+  const attempted = state.attemptedQuestionIds.filter((id) =>
+    (module.trainingQuestions || []).some((question) => question.id === id)
+  ).length;
+  const total = (module.trainingQuestions || []).length;
+  if (state.completed && total > 0 && attempted === total) return "Completed";
+  if (attempted > 0 || state.lastVisitedAt) return "In progress";
+  return "Not started";
+}
+
+function summarize(modules, progress) {
+  const completedModules = modules.filter((module) => moduleStatus(module, progress) === "Completed").length;
+  const totalQuestions = modules.reduce((sum, module) => sum + (module.trainingQuestions || []).length, 0);
+  const attemptedQuestionIds = new Set();
+  modules.forEach((module) => {
+    moduleProgress(progress, module.id).attemptedQuestionIds.forEach((id) => attemptedQuestionIds.add(id));
+  });
+  const totalLessons = modules.reduce((sum, module) => sum + (module.lessons || []).length, 0);
+  const minutes = modules.reduce((sum, module) => sum + Number(module.estimatedMinutes || 0), 0);
+  const activityPercent = totalQuestions ? Math.round((attemptedQuestionIds.size / totalQuestions) * 100) : 0;
+  return {
+    completedModules,
+    totalModules: modules.length,
+    attemptedQuestions: attemptedQuestionIds.size,
+    totalQuestions,
+    totalLessons,
+    minutes,
+    hours: Math.round((minutes / 60) * 10) / 10,
+    activityPercent
+  };
+}
+
+function renderProgress(modules, progress) {
+  const summary = summarize(modules, progress);
+  document.querySelector("[data-course-progress]").textContent =
+    `${summary.completedModules} / ${summary.totalModules}`;
+  document.querySelector("[data-course-progress-bar]").style.width = `${summary.activityPercent}%`;
+  document.querySelector("[data-progress-attempted]").textContent =
+    `${summary.attemptedQuestions} / ${summary.totalQuestions}`;
+  document.querySelector("[data-progress-activity]").textContent = `${summary.activityPercent}%`;
+  document.querySelector("[data-progress-hours]").textContent = `${summary.hours} hours`;
+  document.querySelector("[data-progress-lessons]").textContent = `${summary.totalLessons} lessons`;
+
+  const next = modules.find((module) => moduleStatus(module, progress) !== "Completed") || modules[modules.length - 1];
+  const preferred = modules.find((module) => module.id === progress.lastModuleId) || next;
+  const preferredState = moduleProgress(progress, preferred?.id);
   const continueLink = document.querySelector("[data-course-continue]");
-  continueLink.href = next ? `#${next.id}` : "#modules";
-  continueLink.textContent = completed === modules.length ? "Review modules" : completed ? "Continue learning" : "Start course";
+
+  if (preferred) {
+    const index = Math.min(
+      preferredState.currentQuestionIndex || 0,
+      Math.max((preferred.trainingQuestions || []).length - 1, 0)
+    );
+    continueLink.href =
+      `/courses/aut-250/module/?module=${encodeURIComponent(preferred.id)}&question=${index + 1}`;
+    continueLink.textContent = summary.attemptedQuestions
+      ? `Continue Module ${String(preferred.sequence).padStart(2, "0")}`
+      : "Start course";
+  }
+
+  document.querySelector("[data-course-last-activity]").textContent =
+    progress.lastModuleId
+      ? `Last activity: Module ${String(preferred?.sequence || "").padStart(2, "0")}`
+      : "Last activity: Not started";
 }
 
 function renderModules(modules, progress) {
   const grid = document.querySelector("[data-module-grid]");
   grid.innerHTML = modules.map((module, index) => {
     const questionCount = (module.trainingQuestions || []).length;
-    const complete = Boolean(progress[module.id]);
+    const state = moduleProgress(progress, module.id);
+    const status = moduleStatus(module, progress);
+    const attempted = state.attemptedQuestionIds.filter((id) =>
+      (module.trainingQuestions || []).some((question) => question.id === id)
+    ).length;
+    const href = `/courses/aut-250/module/?module=${encodeURIComponent(module.id)}&question=${Math.min(state.currentQuestionIndex + 1, Math.max(questionCount, 1))}`;
+    const action = status === "Completed" ? "Review module" : status === "In progress" ? "Continue module" : "Open module";
+
     return `
-      <article class="aut250-dashboard-card ${complete ? "is-complete" : ""}" id="${escapeHtml(module.id)}" data-dashboard-module="${escapeHtml(module.id)}">
+      <article class="aut250-dashboard-card ${status === "Completed" ? "is-complete" : ""}" id="${escapeHtml(module.id)}" data-dashboard-module="${escapeHtml(module.id)}" data-module-status="${status.toLowerCase().replace(/ /g, "-")}">
         <div class="aut250-dashboard-card-head">
           <span>Module ${String(index + 1).padStart(2, "0")}</span>
           <span>${escapeHtml(module.estimatedMinutes)} min</span>
         </div>
-        <h3>${escapeHtml(module.title)}</h3>
+        <div class="aut250-dashboard-card-title-row">
+          <h3>${escapeHtml(module.title)}</h3>
+          <span class="aut250-module-status" data-status="${status.toLowerCase().replace(/ /g, "-")}">${status}</span>
+        </div>
         <p>${escapeHtml((module.moduleObjectives || [])[0] || "")}</p>
         <div class="aut250-dashboard-meta">
           <span>${(module.lessons || []).length} lessons</span>
           <span>${questionCount} training questions</span>
+          <span>${attempted} attempted</span>
         </div>
         <div class="aut250-dashboard-actions">
-          <a class="button primary" href="/courses/aut-250/module/?module=${encodeURIComponent(module.id)}">Open module</a>
-          <button type="button" class="button secondary-button" data-toggle-module="${escapeHtml(module.id)}">${complete ? "Mark incomplete" : "Mark complete"}</button>
+          <a class="button primary" href="${href}">${action}</a>
         </div>
       </article>`;
   }).join("");
-
-  grid.querySelectorAll("[data-toggle-module]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const id = button.dataset.toggleModule;
-      const nextProgress = getProgress();
-      nextProgress[id] = !nextProgress[id];
-      setProgress(nextProgress);
-      renderModules(modules, nextProgress);
-      renderProgress(modules, nextProgress);
-    });
-  });
 }
 
 async function init() {
@@ -119,20 +215,23 @@ async function init() {
     document.documentElement.dataset.aut250CourseRelease = "approved-for-training-use";
     releaseStatus.textContent = "Approved for formative training use · non-scored";
     document.querySelector("[data-course-summary]").textContent =
-      "1,440 minutes across six follow-on modules, with progress stored only in this browser.";
+      "24 training hours · 6 modules · 18 lessons · 20 formative questions. Progress is stored only in this browser.";
 
     const progress = getProgress();
+    setProgress(progress);
     renderModules(modules, progress);
     renderProgress(modules, progress);
   } catch (error) {
     console.error("AUT-250 course dashboard failed closed:", error);
     document.documentElement.dataset.aut250CourseRelease = "blocked";
     releaseStatus.textContent = "Training unavailable — approval gate not satisfied";
-    document.querySelector("[data-course-summary]").textContent = "No training content is exposed while the approval gate is blocked.";
+    document.querySelector("[data-course-summary]").textContent =
+      "No training content is exposed while the approval gate is blocked.";
     document.querySelector("[data-module-grid]").innerHTML = "";
     document.querySelector("#course-gate-blocked").hidden = false;
-    document.querySelector("[data-course-continue]").setAttribute("aria-disabled", "true");
-    document.querySelector("[data-course-continue]").removeAttribute("href");
+    const continueLink = document.querySelector("[data-course-continue]");
+    continueLink.setAttribute("aria-disabled", "true");
+    continueLink.removeAttribute("href");
   }
 }
 
