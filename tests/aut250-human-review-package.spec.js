@@ -103,6 +103,24 @@ describe('AUT-250 human review gate package', () => {
       ]));
   });
 
+  test('confirms metadata-only citation representation without approving release', () => {
+    expect(pkg.citation_evidence_decision.status).toBe('confirmed');
+    expect(pkg.citation_evidence_decision.approved_representation)
+      .toBe('metadata-only-citation-proof');
+    expect(pkg.citation_evidence_decision.confirmed_by).toBe('Rafael Rodriguez');
+    expect(pkg.citation_evidence_decision.confirmed_by_id).toBe('rafael-rodriguez');
+    expect(pkg.citation_evidence_decision.project_preference.status).toBe('confirmed');
+    expect(pkg.release_gate.human_reviews_complete).toBe(true);
+    expect(pkg.release_gate.citation_representation_confirmed).toBe(true);
+    expect(pkg.release_gate.deterministic_validation_ready).toBe(true);
+    expect(pkg.release_gate.status)
+      .toBe('blocked-pending-deterministic-validation-and-final-approval');
+    expect(pkg.current_state.questions_approved).toBe(0);
+    expect(pkg.current_state.questions_citation_validated).toBe(0);
+    expect(pkg.current_state.assessment_eligible).toBe(false);
+    expect(pkg.current_state.release_eligible).toBe(false);
+  });
+
   test('prohibits validator shortcuts and auto approval', () => {
     expect(pkg.citation_evidence_decision.prohibited_shortcuts.join(' ')).toMatch(/Do not weaken citation-validator-1\.0/i);
     expect(pkg.citation_evidence_decision.prohibited_shortcuts.join(' ')).toMatch(/Do not create fake or synthetic source chunks/i);
