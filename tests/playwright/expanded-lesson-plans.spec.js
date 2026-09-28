@@ -100,7 +100,7 @@ test.describe('Expanded lesson plans', () => {
 
     await battery.getByText('Lessons').click();
     await expect(battery.locator('.module-lesson')).toHaveCount(3);
-    await expect(battery.getByText(/calculated states such as state of charge and state of health/i)).toBeVisible();
+    await expect(battery.getByText(/Battery diagnosis requires separating direct observations from calculated states/i)).toBeVisible();
 
     await battery.getByText('Planned visuals').click();
     await expect(battery.locator('.module-visual-grid article')).toHaveCount(3);
