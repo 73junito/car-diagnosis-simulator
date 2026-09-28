@@ -3847,9 +3847,10 @@
             "instructional",
             "safety"
           ],
-          "citationEvidenceDecision": "pending",
-          "releaseGate": "blocked",
-          "approvalEffect": "none"
+          "citationEvidenceDecision": "metadata-only-citation-proof-confirmed",
+          "releaseGate": "blocked-pending-deterministic-validation-and-final-approval",
+          "approvalEffect": "none",
+          "deterministicValidationGate": "ready"
         }
       }
     }
