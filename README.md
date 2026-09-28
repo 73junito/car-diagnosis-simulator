@@ -8,6 +8,7 @@ The project is designed around a simple principle: **training, labs, and future 
 
 - Public site: https://autolearnpro.com/
 - Learner application: https://app.autolearnpro.com/
+- Student dashboard: https://app.autolearnpro.com/dashboard/student/
 - Course / exam domain: https://exam.autolearnpro.com/
 
 Production delivery uses Cloudflare Workers and static assets. Supabase provides authentication and PostgreSQL persistence.
