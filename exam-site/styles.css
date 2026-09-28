@@ -217,3 +217,16 @@ button:focus-visible{outline:3px solid #2f6f61;outline-offset:3px}
 }
 
 .aut250-player-shell [hidden],.course-dashboard-hero [hidden],#course-gate-blocked[hidden]{display:none!important}
+
+/* AUT-250 module completion reflection */
+.aut250-module-completion{margin:2rem 0;padding:1.4rem;border:1px solid var(--line,#d9e4df);border-radius:18px;background:#fbfcfa}
+.aut250-module-completion h2{margin:.2rem 0 .55rem}
+.aut250-completion-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin:1rem 0}
+.aut250-completion-metrics article{background:#fff;border:1px solid var(--line,#d9e4df);border-radius:12px;padding:.9rem}
+.aut250-completion-metrics span,.aut250-completion-reasoning>span{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#6a7d78}
+.aut250-completion-metrics strong{display:block;margin-top:.28rem;color:#234f47}
+.aut250-completion-reasoning{padding:.9rem 1rem;background:#eef4f0;border-radius:12px}
+.aut250-completion-reasoning p{margin:.35rem 0 0}
+.aut250-completion-actions{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1rem}
+@media(max-width:620px){.aut250-completion-metrics{grid-template-columns:1fr}.aut250-completion-actions .button{width:100%;text-align:center}}
+@media print{.aut250-module-completion{break-inside:avoid}.aut250-completion-actions{display:none!important}}

@@ -67,7 +67,7 @@
 
     <section class="aut250-question-player" data-question-player hidden>
       <div class="aut250-player-progress-row">
-        <span data-question-position>Question 1 of 1</span>
+        <span data-question-position>Module 01 · Question 1 of 1</span>
         <div class="aut250-player-progress-track" aria-hidden="true"><span data-question-progress></span></div>
       </div>
 
@@ -91,6 +91,27 @@
         <button type="button" class="button secondary-button" data-prev-question>Previous</button>
         <button type="button" class="button primary" data-next-question>Next question</button>
       </div>
+    </section>
+
+    <section class="aut250-module-completion" data-module-completion hidden aria-labelledby="module-completion-title">
+      <p class="eyebrow">MODULE REFLECTION</p>
+      <h2 id="module-completion-title" data-module-completion-title>Module status</h2>
+      <p data-module-completion-message></p>
+      <div class="aut250-completion-metrics">
+        <article><span>Questions attempted</span><strong data-completion-attempted>0 / 0</strong></article>
+        <article><span>Feedback viewed</span><strong data-completion-feedback>0 / 0</strong></article>
+        <article><span>Module status</span><strong data-completion-status>In progress</strong></article>
+      </div>
+      <div class="aut250-completion-reasoning">
+        <span>Reasoning steps practiced</span>
+        <p data-completion-reasoning></p>
+      </div>
+      <div class="aut250-completion-actions">
+        <a class="button secondary-button" data-review-module href="#">Review module</a>
+        <a class="button primary" data-continue-module href="#">Continue</a>
+        <a class="button secondary-button" href="/courses/aut-250/">Return to dashboard</a>
+      </div>
+      <p class="training-boundary">Completion reflects participation in formative training. It is not a grade, score, certification, or assessment result.</p>
     </section>
   </main>
 
