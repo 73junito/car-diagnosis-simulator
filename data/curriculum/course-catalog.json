@@ -1,0 +1,1374 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceTitle": "Automotive Technology Academic Catalog",
+  "sourceFile": "Syllabus - the general foundation o.txt",
+  "catalogStatus": "planning",
+  "courses": [
+    {
+      "id": "aut-101",
+      "code": "AUT 101",
+      "title": "Introduction to Automotive Technology",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "None",
+      "description": "Introduction to automotive systems, vehicle technologies, diagnostic processes, industry practices, and emerging automotive technologies.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-101",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-101",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-105",
+      "code": "AUT 105",
+      "title": "Automotive Safety and Professional Practices",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "2",
+      "prerequisites": "None",
+      "description": "Automotive shop safety, hazardous materials, environmental practices, tools, equipment, high-voltage safety, documentation, and professional practices.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-105",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-105",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-110",
+      "code": "AUT 110",
+      "title": "Automotive Mathematics",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "None",
+      "description": "Mathematical applications used in automotive technology, including measurement, ratios, proportions, algebra, geometry, electrical calculations, torque, power, and diagnostic calculations.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-110",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-110",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-115",
+      "code": "AUT 115",
+      "title": "Automotive Measurement and Instrumentation",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "AUT 110",
+      "description": "Precision measurement and instrumentation including calipers, micrometers, dial indicators, pressure measurement, electrical measurement, tolerances, and specifications.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-115",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-115",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-120",
+      "code": "AUT 120",
+      "title": "Automotive Electrical Systems I",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "AUT 110",
+      "description": "Fundamentals of automotive electricity, including voltage, current, resistance, circuits, wiring, relays, fuses, grounding, and electrical testing.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-120",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-120",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-121",
+      "code": "AUT 121",
+      "title": "Automotive Electrical Systems I Laboratory",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "1",
+      "prerequisites": "Concurrent enrollment in AUT 120",
+      "description": "Laboratory application of automotive electrical principles through circuit construction, testing, measurement, and diagnosis.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-121",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-121",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-130",
+      "code": "AUT 130",
+      "title": "Engine Systems I",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "AUT 101",
+      "description": "Internal-combustion engine construction and operation, including major engine components, lubrication, cooling, and four-stroke operation.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-130",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-130",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-131",
+      "code": "AUT 131",
+      "title": "Engine Systems I Laboratory",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "1",
+      "prerequisites": "Concurrent enrollment in AUT 130",
+      "description": "Engine inspection, measurement, component identification, disassembly, assembly, and service procedures.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-131",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-131",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-140",
+      "code": "AUT 140",
+      "title": "Automotive Brake Systems",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "AUT 120",
+      "description": "Hydraulic and electronic braking systems, disc and drum brakes, ABS, brake control systems, inspection, diagnosis, and service.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-140",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-140",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-150",
+      "code": "AUT 150",
+      "title": "Steering, Suspension, and Wheel Alignment",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "AUT 115",
+      "description": "Steering and suspension systems, wheel alignment, tire wear, electric power steering, and vehicle stability systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-150",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-150",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-160",
+      "code": "AUT 160",
+      "title": "Manual Transmissions and Drivetrain Systems",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "AUT 115",
+      "description": "Clutches, manual transmissions, transfer cases, driveshafts, differentials, axles, four-wheel drive, and all-wheel drive.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-160",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-160",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-170",
+      "code": "AUT 170",
+      "title": "Automotive HVAC Systems",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "3",
+      "prerequisites": "AUT 120",
+      "description": "Automotive heating, ventilation, air conditioning, refrigeration cycles, climate controls, electrical controls, and diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-170",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-170",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-180",
+      "code": "AUT 180",
+      "title": "Automotive Technical Documentation and Service Information",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Automotive Foundations",
+      "credits": "2",
+      "prerequisites": "AUT 101",
+      "description": "Interpretation and use of service information, wiring diagrams, technical specifications, diagnostic procedures, and digital technical resources.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-180",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-180",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-200",
+      "code": "AUT 200",
+      "title": "Engine Systems II",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 130",
+      "description": "Advanced engine mechanical systems, valve trains, timing systems, cylinder sealing, lubrication, cooling, and mechanical diagnosis.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-200",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-200",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-201",
+      "code": "AUT 201",
+      "title": "Engine Systems II Laboratory",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "1",
+      "prerequisites": "Concurrent enrollment in AUT 200",
+      "description": "Laboratory analysis, measurement, inspection, and diagnosis of engine mechanical systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-201",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-201",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-210",
+      "code": "AUT 210",
+      "title": "Engine Performance and Fuel Systems",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 200, AUT 120",
+      "description": "Fuel injection, ignition, electronic throttle control, air induction, sensors, actuators, and engine performance systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-210",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-210",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-211",
+      "code": "AUT 211",
+      "title": "Engine Performance Laboratory",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "1",
+      "prerequisites": "Concurrent enrollment in AUT 210",
+      "description": "Engine-performance testing using scan tools, meters, oscilloscopes, pressure-testing equipment, and technical specifications.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-211",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-211",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-220",
+      "code": "AUT 220",
+      "title": "Automatic Transmissions and Transaxles",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 160",
+      "description": "Automatic transmissions, transaxles, torque converters, planetary gearsets, hydraulic controls, electronic controls, and CVTs.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-220",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-220",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-230",
+      "code": "AUT 230",
+      "title": "Automotive Electronics",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 120, AUT 121",
+      "description": "Automotive electronic circuits, semiconductors, sensors, actuators, control modules, signal processing, and electronic diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-230",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-230",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-240",
+      "code": "AUT 240",
+      "title": "Automotive Electrical Systems II",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 120, AUT 121",
+      "description": "Advanced starting, charging, power distribution, voltage-drop testing, batteries, electrical loads, and electrical diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-240",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-240",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-250",
+      "code": "AUT 250",
+      "title": "Automotive Diagnostics I",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 210, AUT 230",
+      "description": "Systematic vehicle diagnosis using scan tools, diagnostic trouble codes, live data, testing procedures, specifications, and repair verification.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-250",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-250",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-251",
+      "code": "AUT 251",
+      "title": "Automotive Diagnostics I Laboratory",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "1",
+      "prerequisites": "Concurrent enrollment in AUT 250",
+      "description": "Practical diagnosis of mechanical, electrical, and electronic vehicle faults.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-251",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-251",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-260",
+      "code": "AUT 260",
+      "title": "Vehicle Dynamics",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 110, AUT 150",
+      "description": "Forces, torque, acceleration, braking, traction, tire behavior, suspension, steering response, weight transfer, and vehicle stability.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-260",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-260",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-270",
+      "code": "AUT 270",
+      "title": "Automotive Emissions and Environmental Systems",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 210",
+      "description": "Vehicle emissions, combustion byproducts, catalytic converters, evaporative systems, oxygen sensors, EGR, and emissions diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-270",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-270",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-280",
+      "code": "AUT 280",
+      "title": "Automotive Control Systems",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Core Automotive Systems",
+      "credits": "3",
+      "prerequisites": "AUT 230, AUT 250",
+      "description": "Electronic control modules, feedback systems, sensors, actuators, control strategies, and computerized vehicle systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-280",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-280",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-300",
+      "code": "AUT 300",
+      "title": "Advanced Automotive Diagnostics",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 250, AUT 280",
+      "description": "Advanced diagnosis of intermittent, electronic, mechanical, and network-related vehicle faults.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-300",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-300",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-301",
+      "code": "AUT 301",
+      "title": "Advanced Automotive Diagnostics Laboratory",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "1",
+      "prerequisites": "Concurrent enrollment in AUT 300",
+      "description": "Advanced laboratory diagnosis using oscilloscopes, scan tools, network analysis, and vehicle test equipment.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-301",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-301",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-310",
+      "code": "AUT 310",
+      "title": "Vehicle Network Communications",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 230, AUT 280",
+      "description": "CAN, CAN FD, LIN, Automotive Ethernet, network architecture, communication messages, network faults, and network diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-310",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-310",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-320",
+      "code": "AUT 320",
+      "title": "Hybrid Vehicle Technology",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 240, AUT 280",
+      "description": "Hybrid architectures, electric machines, power electronics, regenerative braking, high-voltage systems, battery systems, and diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-320",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-320",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-321",
+      "code": "AUT 321",
+      "title": "Hybrid Vehicle Laboratory",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "1",
+      "prerequisites": "AUT 320",
+      "description": "Laboratory analysis and diagnosis of hybrid vehicle systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-321",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-321",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-330",
+      "code": "AUT 330",
+      "title": "Electric Vehicle Technology",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 240, AUT 280",
+      "description": "Battery-electric vehicle architecture, traction motors, inverters, charging, regenerative braking, thermal management, and diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-330",
+      "delivery": {
+        "trainingPackageId": "AUT-250",
+        "trainingUrl": "/courses/aut-250/",
+        "mappingStatus": "legacy-package-id",
+        "note": "Existing approved formative EV training retains its historical package identifier while catalog numbering follows the academic catalog."
+      },
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-330",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-331",
+      "code": "AUT 331",
+      "title": "Electric Vehicle Laboratory",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "1",
+      "prerequisites": "AUT 330",
+      "description": "Laboratory analysis of EV electrical, battery, charging, and high-voltage systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-331",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-331",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-340",
+      "code": "AUT 340",
+      "title": "Battery Systems and Battery Management",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 330",
+      "description": "Battery cells, packs, battery-management systems, state of charge, state of health, thermal management, balancing, degradation, and diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-340",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-340",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-350",
+      "code": "AUT 350",
+      "title": "Advanced Driver Assistance Systems",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 280, AUT 310",
+      "description": "Camera, radar, ultrasonic, adaptive cruise, lane systems, collision avoidance, sensor calibration, and ADAS diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-350",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-350",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-360",
+      "code": "AUT 360",
+      "title": "Automotive Data Acquisition and Analysis",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 110, AUT 300",
+      "description": "Collection, processing, visualization, and interpretation of vehicle and diagnostic data.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-360",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-360",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-370",
+      "code": "AUT 370",
+      "title": "Automotive Embedded Systems",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 230, AUT 310",
+      "description": "Microcontrollers, embedded systems, ECU architecture, real-time systems, inputs, outputs, and automotive computing.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-370",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-370",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-380",
+      "code": "AUT 380",
+      "title": "Automotive Cybersecurity",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 310, AUT 370",
+      "description": "Vehicle cybersecurity, threat modeling, ECU security, secure communication, intrusion detection, and cybersecurity risk management.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-380",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-380",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-390",
+      "code": "AUT 390",
+      "title": "Connected and Software-Defined Vehicles",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 310, AUT 370",
+      "description": "Connected vehicles, cloud services, over-the-air updates, centralized computing, software architecture, and vehicle data.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-390",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-390",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-400",
+      "code": "AUT 400",
+      "title": "Automotive Technology Research Methods",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "Junior standing, AUT 300",
+      "description": "Research questions, literature reviews, experimental design, data collection, analysis, technical writing, and research presentation.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-400",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-400",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-410",
+      "code": "AUT 410",
+      "title": "Automotive Systems Integration",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 310, AUT 320 or AUT 330, AUT 350",
+      "description": "Integration of mechanical, electrical, electronic, software, communication, and energy systems within modern vehicles.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-410",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-410",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-420",
+      "code": "AUT 420",
+      "title": "Automotive Technology Internship",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "Senior standing and department approval",
+      "description": "Supervised professional experience in automotive technology, diagnostics, research, manufacturing, fleet operations, or related industry settings.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-420",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-420",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-450",
+      "code": "AUT 450",
+      "title": "Automotive Technology Capstone I",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "2",
+      "prerequisites": "AUT 400 and senior standing",
+      "description": "Development of a comprehensive automotive technology project, including problem definition, research, requirements, methodology, and project planning.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-450",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-450",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-451",
+      "code": "AUT 451",
+      "title": "Automotive Technology Capstone II",
+      "academicLevel": "undergraduate",
+      "degreeProgram": "Bachelor of Science in Automotive Technology",
+      "cipCode": "47.0604",
+      "category": "Advanced Automotive Technology",
+      "credits": "3",
+      "prerequisites": "AUT 450",
+      "description": "Completion, testing, documentation, and presentation of an applied automotive technology project.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-451",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-451",
+      "classification": "Undergraduate"
+    },
+    {
+      "id": "aut-501",
+      "code": "AUT 501",
+      "title": "Advanced Automotive Systems",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "Bachelor's degree in automotive technology, engineering, applied technology, or related field",
+      "description": "Advanced analysis of integrated mechanical, electrical, electronic, software, communication, and energy systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-501",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-501",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-510",
+      "code": "AUT 510",
+      "title": "Advanced Vehicle Diagnostics",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 501 or equivalent",
+      "description": "Advanced fault isolation, diagnostic reasoning, model-based diagnostics, network faults, waveform analysis, and diagnostic validation.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-510",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-510",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-515",
+      "code": "AUT 515",
+      "title": "Automotive Systems Modeling",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "Graduate-level mathematics or equivalent",
+      "description": "Mathematical and computational modeling of vehicle systems, simulation, parameter estimation, and model validation.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-515",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-515",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-520",
+      "code": "AUT 520",
+      "title": "Advanced Vehicle Data Analytics",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 515 or equivalent",
+      "description": "Statistical analysis, time-series data, anomaly detection, predictive maintenance, visualization, and interpretation of vehicle datasets.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-520",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-520",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-525",
+      "code": "AUT 525",
+      "title": "Experimental Methods in Automotive Technology",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 501",
+      "description": "Experimental design, instrumentation, measurement uncertainty, data acquisition, validation, repeatability, and technical reporting.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-525",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-525",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-530",
+      "code": "AUT 530",
+      "title": "Advanced Electric Vehicle Systems",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 501 and undergraduate EV coursework or equivalent",
+      "description": "Advanced EV architectures, electric machines, inverters, charging systems, regenerative braking, thermal systems, and energy management.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-530",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-530",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-535",
+      "code": "AUT 535",
+      "title": "Advanced Battery Systems",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 530",
+      "description": "Battery modeling, state estimation, degradation, thermal behavior, balancing, battery-management algorithms, safety, and diagnostics.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-535",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-535",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-540",
+      "code": "AUT 540",
+      "title": "Power Electronics for Vehicle Systems",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 530 or equivalent",
+      "description": "Converters, inverters, switching devices, motor drives, control strategies, efficiency, and thermal management.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-540",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-540",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-545",
+      "code": "AUT 545",
+      "title": "Advanced Vehicle Energy Management",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 530, AUT 535",
+      "description": "Energy-flow analysis and optimization in hybrid and electric vehicles.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-545",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-545",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-550",
+      "code": "AUT 550",
+      "title": "Advanced Automotive Networks",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 501 or equivalent",
+      "description": "Advanced CAN, CAN FD, Automotive Ethernet, gateways, network timing, diagnostics, communication reliability, and network analysis.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-550",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-550",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-555",
+      "code": "AUT 555",
+      "title": "Automotive Embedded Systems and ECU Architecture",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 550 or equivalent",
+      "description": "Advanced ECU architecture, microcontrollers, real-time systems, embedded software, communication interfaces, and system validation.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-555",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-555",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-560",
+      "code": "AUT 560",
+      "title": "Advanced ADAS and Vehicle Perception",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 501, AUT 550",
+      "description": "Advanced vehicle perception using radar, cameras, LiDAR, sensor fusion, calibration, testing, and validation.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-560",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-560",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-565",
+      "code": "AUT 565",
+      "title": "Autonomous Vehicle Systems",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 560",
+      "description": "Autonomous vehicle architecture, localization, mapping, perception, planning, vehicle control, simulation, testing, and validation.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-565",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-565",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-570",
+      "code": "AUT 570",
+      "title": "Automotive Cybersecurity Engineering",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 550",
+      "description": "Threat modeling, vehicle attack surfaces, secure networks, authentication, intrusion detection, secure diagnostics, and cybersecurity engineering.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-570",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-570",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-575",
+      "code": "AUT 575",
+      "title": "Software-Defined Vehicle Architecture",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 555, AUT 550",
+      "description": "Zonal and centralized architectures, software platforms, middleware, over-the-air updates, vehicle data, and software lifecycle management.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-575",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-575",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-580",
+      "code": "AUT 580",
+      "title": "Advanced Automotive Control Systems",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 515",
+      "description": "Advanced feedback control, state-space models, stability, estimation, optimization, and control applications in vehicle systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-580",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-580",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-585",
+      "code": "AUT 585",
+      "title": "Vehicle Digital Twins and Simulation",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "3",
+      "prerequisites": "AUT 515, AUT 520",
+      "description": "Digital representations of vehicles, simulation, model calibration, real-time data integration, validation, and predictive analysis.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-585",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-585",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-590",
+      "code": "AUT 590",
+      "title": "Advanced Automotive Technology Seminar",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Core and Specializations",
+      "credits": "1–3",
+      "prerequisites": "Graduate standing",
+      "description": "Critical examination of current automotive research, technologies, standards, technical publications, and emerging industry developments.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-590",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-590",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-600",
+      "code": "AUT 600",
+      "title": "Automotive Research Design",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Research and Professional Practice",
+      "credits": "3",
+      "prerequisites": "AUT 525",
+      "description": "Advanced research design, research questions, hypotheses, experimental protocols, analytical methods, validation, and research proposals.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-600",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-600",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-610",
+      "code": "AUT 610",
+      "title": "Applied Automotive Research Project",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Research and Professional Practice",
+      "credits": "3",
+      "prerequisites": "AUT 600",
+      "description": "Supervised applied research addressing an automotive technology problem through data collection, analysis, evaluation, and technical reporting.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-610",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-610",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-620",
+      "code": "AUT 620",
+      "title": "Graduate Automotive Technology Internship",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Research and Professional Practice",
+      "credits": "3",
+      "prerequisites": "Graduate standing and program approval",
+      "description": "Advanced professional experience involving automotive research, engineering technology, diagnostics, testing, manufacturing, or vehicle development.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-620",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-620",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-630",
+      "code": "AUT 630",
+      "title": "Advanced Automotive Systems Integration",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Research and Professional Practice",
+      "credits": "3",
+      "prerequisites": "AUT 515 and two advanced technology courses",
+      "description": "Integration and evaluation of mechanical, electrical, electronic, software, communication, energy, and control systems.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-630",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-630",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-640",
+      "code": "AUT 640",
+      "title": "Automotive Technology Thesis",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Research and Professional Practice",
+      "credits": "3–6",
+      "prerequisites": "AUT 600 and thesis-advisor approval",
+      "description": "Original graduate research culminating in a master's thesis and formal defense.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-640",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-640",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-650",
+      "code": "AUT 650",
+      "title": "Applied Automotive Technology Capstone",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Research and Professional Practice",
+      "credits": "3–6",
+      "prerequisites": "AUT 600",
+      "description": "Advanced applied project involving design, development, testing, evaluation, or integration of an automotive technology solution.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-650",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-650",
+      "classification": "Graduate"
+    },
+    {
+      "id": "aut-690",
+      "code": "AUT 690",
+      "title": "Graduate Research Seminar",
+      "academicLevel": "graduate",
+      "degreeProgram": "Master of Science in Advanced Automotive Technology",
+      "cipCode": "15.0803",
+      "category": "Graduate Research and Professional Practice",
+      "credits": "1",
+      "prerequisites": "Graduate standing",
+      "description": "Graduate presentation and discussion of automotive research, emerging technologies, technical literature, and professional research practices.",
+      "status": "planned",
+      "url": "/catalog/course/?course=AUT-690",
+      "source": {
+        "file": "Syllabus - the general foundation o.txt",
+        "basis": "user-provided academic catalog"
+      },
+      "canonicalUrl": "https://exam.autolearnpro.com/catalog/course/?course=AUT-690",
+      "classification": "Graduate"
+    }
+  ]
+}
