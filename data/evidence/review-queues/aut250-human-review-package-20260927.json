@@ -89,20 +89,28 @@
     },
     "safety": {
       "required": true,
-      "reviewer_name": null,
-      "reviewer_id": null,
-      "qualification_reference": null,
-      "reviewed_at": null,
-      "decision": "pending",
+      "reviewer_name": "Rafael Rodriguez",
+      "reviewer_id": "rafael-rodriguez",
+      "qualification_reference": "Former post-secondary automotive instructor and automotive/diesel technician with experience teaching shop safety, electrical/electronics, diagnostics, and hands-on automotive laboratory procedures.",
+      "reviewed_at": "2026-09-27",
+      "decision": "pass-with-limitations",
       "checklist": {
-        "high_voltage_safety_language_reviewed": false,
-        "vehicle_specific_procedure_boundaries_reviewed": false,
-        "ppe_and_meter_language_reviewed": false,
-        "no_universal_wait_times_or_thresholds": false,
-        "no_unsafe_bypass_or_intrusive_steps": false,
-        "learner_feedback_does_not_authorize_service_action": false
+        "high_voltage_safety_language_reviewed": true,
+        "vehicle_specific_procedure_boundaries_reviewed": true,
+        "ppe_and_meter_language_reviewed": true,
+        "no_universal_wait_times_or_thresholds": true,
+        "no_unsafe_bypass_or_intrusive_steps": true,
+        "learner_feedback_does_not_authorize_service_action": true
       },
-      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded."
+      "limitations": [
+        "AUT-250 remains conceptual and training-focused; it does not replace manufacturer service information or workplace safety procedures.",
+        "High-voltage isolation, discharge or wait times, PPE selection, meter category or rating, test points, and acceptance criteria must remain vehicle- or component-specific.",
+        "No learner-facing item may instruct bypassing interlocks, defeating protection systems, probing energized high-voltage circuits without an approved procedure, or performing intrusive testing merely to answer a training question.",
+        "Diagnostic feedback may recommend obtaining additional evidence, but it must not authorize component removal, high-voltage access, or repair based solely on the training response.",
+        "Safety approval does not by itself approve citation validation, assessment eligibility, production release, or final question approval."
+      ],
+      "completion_rule": "All checklist items true, named reviewer fields populated, and decision recorded.",
+      "user_confirmation": "I approve the Safety Review as written."
     }
   },
   "citation_evidence_decision": {
