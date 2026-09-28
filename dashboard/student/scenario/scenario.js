@@ -526,9 +526,19 @@
       return;
     }
 
-    const loadedQuestions = isAssessmentMode
-      ? await loadAssessmentAttemptQuestions(attemptId)
-      : await loadScenarioQuestions(evidenceScenarioId);
+    let loadedQuestions;
+    try {
+      loadedQuestions = isAssessmentMode
+        ? await loadAssessmentAttemptQuestions(attemptId)
+        : await loadScenarioQuestions(evidenceScenarioId);
+    } catch (err) {
+      if (isAssessmentMode) {
+        console.error('Assessment question load failed:', err);
+        root.innerHTML = `<div class="scenario-card"><h1>Assessment unavailable</h1><p>The server-assigned assessment question set is not available.</p></div>`;
+        return;
+      }
+      throw err;
+    }
     const questionBank = normalizeQuestionBank(key, loadedQuestions);
     const approvedQuestionBank = isAssessmentMode
       ? questionBank
