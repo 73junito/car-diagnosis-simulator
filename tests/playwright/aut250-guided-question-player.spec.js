@@ -7,7 +7,7 @@ test.describe('AUT-250 guided question player', () => {
     await page.waitForLoadState('networkidle');
 
     await expect(page.locator('html')).toHaveAttribute('data-aut250-player-release', 'approved-for-training-use');
-    await expect(page.locator('[data-question-position]')).toHaveText('Question 1 of 4');
+    await expect(page.locator('[data-question-position]')).toHaveText('Module 01 · Question 1 of 4');
     await expect(page.locator('[data-question-card]')).toHaveCount(1);
     await expect(page.locator('[data-submit-answer]')).toBeDisabled();
     await expect(page.locator('[data-retry-answer]')).toBeHidden();
@@ -26,7 +26,7 @@ test.describe('AUT-250 guided question player', () => {
     await expect(page.locator('[data-next-question]')).toBeEnabled();
 
     await page.locator('[data-next-question]').click();
-    await expect(page.locator('[data-question-position]')).toHaveText('Question 2 of 4');
+    await expect(page.locator('[data-question-position]')).toHaveText('Module 01 · Question 2 of 4');
   });
 
   test('fails closed if approval is unavailable', async ({ page }) => {
