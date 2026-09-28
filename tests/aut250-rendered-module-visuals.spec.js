@@ -29,7 +29,8 @@ describe('AUT-250 learner-rendered module visuals', () => {
   });
 
   test('renders project-authored visuals before the question player', () => {
-    expect(player).toContain('import { renderModuleVisuals }');
+    expect(player).toContain('renderModuleVisuals');
+    expect(player).toContain('setModuleVisualReasoningStep');
     expect(player).toContain('visualGrid.innerHTML = renderModuleVisuals(module.visuals || [])');
     expect(html.indexOf('data-visual-section')).toBeLessThan(html.indexOf('data-question-player'));
     expect(html).toContain('Project-authored instructional graphics');
