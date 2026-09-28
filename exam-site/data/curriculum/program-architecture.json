@@ -11,6 +11,12 @@
       "existingCourseId": "aut-101",
       "existingLessonPlanId": "ug-aut101-foundations",
       "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-105",
+      "existingCourseId": "aut-105",
+      "existingLessonPlanId": "ug-aut105-safety-professional-practice",
+      "mappingType": "canonical-catalog-course"
     }
   ],
   "authorityReferences": [

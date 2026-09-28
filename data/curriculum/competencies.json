@@ -77,6 +77,13 @@
       "courseId": "hybrid-electric-vehicle-technology",
       "statement": "Explain electrified-vehicle energy flow, distinguish voltage domains and system roles, and use documented evidence to select safe, vehicle-specific diagnostic next steps without treating one symptom, code, or measurement as proof of component failure.",
       "status": "planned"
+    },
+    {
+      "id": "ug-aut105-safe-professional-practice",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-105",
+      "statement": "Recognize automotive shop hazards and professional responsibilities, use applicable safety and environmental information to select a safe next action, and document when work should stop, be controlled, or be escalated.",
+      "status": "planned"
     }
   ]
 }
