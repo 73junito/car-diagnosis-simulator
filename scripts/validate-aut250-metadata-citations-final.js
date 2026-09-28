@@ -28,8 +28,11 @@ const CURRICULUM_PATH = path.join(ROOT, CURRICULUM_REL);
 function read(file) {
   return fs.readFileSync(file, 'utf8');
 }
+function normalizeForHash(text) {
+  return text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+}
 function sha256(text) {
-  return crypto.createHash('sha256').update(text).digest('hex');
+  return crypto.createHash('sha256').update(normalizeForHash(text), 'utf8').digest('hex');
 }
 function isHttpsUrl(value) {
   try { return new URL(value).protocol === 'https:'; } catch { return false; }
