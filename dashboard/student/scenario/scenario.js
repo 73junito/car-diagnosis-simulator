@@ -3,6 +3,36 @@
   const REGENERATE_AFTER_FAILED_ATTEMPTS = 3;
   const PASSING_SCORE_PERCENT = 80;
 
+  function getAuthToken() {
+    try {
+      if (typeof window.getAccessToken === "function") {
+        const token = window.getAccessToken();
+        if (token) return token;
+      }
+    } catch (_) {
+      // Continue through the compatibility stores below.
+    }
+
+    try {
+      const direct = localStorage.getItem("supabase_access_token");
+      if (direct) return direct;
+
+      const legacySession = localStorage.getItem("sb-supabase-session");
+      if (legacySession) {
+        const parsed = JSON.parse(legacySession);
+        if (parsed?.access_token) return parsed.access_token;
+      }
+    } catch (_) {
+      // Continue to session storage fallback.
+    }
+
+    try {
+      return sessionStorage.getItem("auth_token") || null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   function getStudentId() {
     const key = "torquemind.student.id";
     try {
@@ -274,11 +304,17 @@
         throw new Error('Assessment mode requires a server-created attempt ID. This attempt may not be properly initialized for assessment.');
       }
 
+      const authToken = getAuthToken();
+      if (!authToken) {
+        throw new Error('Authentication required to submit a graded response.');
+      }
+
       const response = await fetch('/api/scenario-submissions/grade', {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
         },
         body: JSON.stringify({
           attempt_id: attemptId,
