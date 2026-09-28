@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const COLLECTIONS = ['pathways', 'courses', 'competencies', 'lessonPlans', 'scenarioMappings'];
+const COLLECTIONS = ['pathways', 'courses', 'catalogCourses', 'competencies', 'lessonPlans', 'scenarioMappings'];
 const TOP_LEVEL_KEYS = ['schemaVersion', ...COLLECTIONS];
 
 function loadStaticContract(targetRoot = root) {
@@ -24,6 +24,7 @@ function loadStaticContract(targetRoot = root) {
   const pathwaysDoc = readJson('academic-pathways.json');
   const undergraduate = readJson('undergraduate-courses.json');
   const graduate = readJson('graduate-courses.json');
+  const catalogDoc = readJson('course-catalog.json');
   const competenciesDoc = readJson('competencies.json');
   const lessonPlansDoc = readJson('lesson-plans.json');
   const mappingsDoc = readJson('scenario-mappings.json');
@@ -32,6 +33,7 @@ function loadStaticContract(targetRoot = root) {
     schemaVersion: pathwaysDoc.schemaVersion,
     pathways: pathwaysDoc.pathways,
     courses: [...undergraduate.courses, ...graduate.courses],
+    catalogCourses: catalogDoc.courses,
     competencies: competenciesDoc.competencies,
     lessonPlans: lessonPlansDoc.lessonPlans,
     scenarioMappings: mappingsDoc.scenarioMappings
@@ -63,6 +65,12 @@ function compareRecord(label, expected, actual, errors) {
         expectedValue.every((value, index) => value === actualValue[index]);
       if (!equal) {
         errors.push(`${label}.${key} sequence mismatch`);
+      }
+    } else if (expectedValue && typeof expectedValue === 'object') {
+      if (JSON.stringify(actualValue) !== JSON.stringify(expectedValue)) {
+        errors.push(
+          `${label}.${key} mismatch: expected ${JSON.stringify(expectedValue)} got ${JSON.stringify(actualValue)}`
+        );
       }
     } else if (actualValue !== expectedValue) {
       errors.push(
@@ -188,8 +196,9 @@ async function main() {
 
   console.log(
     `[PASS] Curriculum API contract verified: ${staticContract.pathways.length} pathways, ` +
-      `${staticContract.courses.length} courses, ${staticContract.competencies.length} competencies, ` +
-      `${staticContract.lessonPlans.length} lesson plans, ${staticContract.scenarioMappings.length} scenario mappings`
+      `${staticContract.courses.length} developed courses, ${staticContract.catalogCourses.length} catalog courses, ` +
+      `${staticContract.competencies.length} competencies, ${staticContract.lessonPlans.length} lesson plans, ` +
+      `${staticContract.scenarioMappings.length} scenario mappings`
   );
 }
 

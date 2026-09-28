@@ -38,6 +38,7 @@ const CORS_HEADERS = { 'access-control-allow-origin': '*' };
 const EXPECTED_TOP_LEVEL_KEYS = [
   'competencies',
   'courses',
+  'catalogCourses',
   'lessonPlans',
   'pathways',
   'schemaVersion',
@@ -52,6 +53,7 @@ const ALLOWED_FIELD_NAMES = new Set([
   'schemaVersion',
   'pathways',
   'courses',
+  'catalogCourses',
   'competencies',
   'lessonPlans',
   'scenarioMappings',
@@ -63,8 +65,25 @@ const ALLOWED_FIELD_NAMES = new Set([
   'programName',
   'cipTitle',
   'status',
-  // course
+  // course and catalog course
   'title',
+  'code',
+  'classification',
+  'degreeProgram',
+  'category',
+  'credits',
+  'prerequisites',
+  'description',
+  'url',
+  'canonicalUrl',
+  'source',
+  'file',
+  'basis',
+  'delivery',
+  'trainingPackageId',
+  'trainingUrl',
+  'mappingStatus',
+  'note',
   // competency
   'courseId',
   'statement',
@@ -97,6 +116,7 @@ function buildApiPayload() {
       ...readJson('undergraduate-courses.json').courses,
       ...readJson('graduate-courses.json').courses
     ],
+    catalogCourses: readJson('course-catalog.json').courses,
     competencies: readJson('competencies.json').competencies,
     lessonPlans: readJson('lesson-plans.json').lessonPlans,
     scenarioMappings: readJson('scenario-mappings.json').scenarioMappings

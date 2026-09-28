@@ -1,4 +1,4 @@
-const DATA_URL = "/data/curriculum/course-catalog.json";
+import { loadCatalogCourses } from "./catalog-data.js";
 const escapeHtml = (value) => String(value ?? "")
   .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
   .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
@@ -49,12 +49,10 @@ function render() {
 }
 async function init() {
   try {
-    const response = await fetch(DATA_URL, { cache: "no-store" });
-    if (!response.ok) throw new Error("Catalog returned " + response.status);
-    const payload = await response.json();
-    courses = Array.isArray(payload.courses) ? payload.courses : [];
-    if (courses.length !== 68) throw new Error("Expected 68 courses, received " + courses.length);
+    const result = await loadCatalogCourses();
+    courses = result.courses;
     document.documentElement.dataset.catalogStatus = "loaded";
+    document.documentElement.dataset.catalogSource = result.source;
     render();
   } catch (error) {
     document.documentElement.dataset.catalogStatus = "error";

@@ -61,6 +61,25 @@ function buildRows() {
     status: course.status
   }));
 
+  const catalogCourses = staticContract.catalogCourses.map((course) => ({
+    id: course.id,
+    code: course.code,
+    title: course.title,
+    academic_level: course.academicLevel,
+    classification: course.classification,
+    degree_program: course.degreeProgram,
+    cip_code: course.cipCode,
+    category: course.category,
+    credits: course.credits,
+    prerequisites: course.prerequisites,
+    description: course.description,
+    status: course.status,
+    url: course.url,
+    canonical_url: course.canonicalUrl,
+    source_file: course.source.file,
+    source_basis: course.source.basis,
+    delivery: course.delivery || null
+  }));
   const competencies = staticContract.competencies.map((competency) => ({
     id: competency.id,
     course_id: competency.courseId,
@@ -103,6 +122,7 @@ function buildRows() {
     curriculum_pathways: pathways,
     curriculum_programs: programs,
     curriculum_courses: courses,
+    curriculum_catalog_courses: catalogCourses,
     curriculum_competencies: competencies,
     curriculum_lesson_plans: lessonPlans,
     curriculum_lesson_steps: lessonSteps,
@@ -172,6 +192,7 @@ describe('GET /api/curriculum', () => {
 
     expect(payload.pathways).toHaveLength(2);
     expect(payload.courses).toHaveLength(10);
+    expect(payload.catalogCourses).toHaveLength(68);
     expect(payload.competencies).toHaveLength(10);
     expect(payload.lessonPlans).toHaveLength(10);
     expect(payload.scenarioMappings).toHaveLength(2);
@@ -349,7 +370,8 @@ describe('verify-curriculum-api-contract CLI', () => {
 
     expect(output).toContain('[PASS] Curriculum API contract verified');
     expect(output).toContain('2 pathways');
-    expect(output).toContain('10 courses');
+    expect(output).toContain('10 developed courses');
+    expect(output).toContain('68 catalog courses');
   });
 
   test('fails for a tampered API response file', () => {
