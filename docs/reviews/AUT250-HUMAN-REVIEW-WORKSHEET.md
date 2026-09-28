@@ -71,24 +71,24 @@ The 20 items remain formative training questions, not institutional or high-stak
 
 ## Safety review
 
-Reviewer name: ____________________  
-Reviewer ID: ____________________  
-Qualification reference: ____________________  
-Review date/time: ____________________
+Reviewer name: Rafael Rodriguez  
+Reviewer ID: rafael-rodriguez  
+Qualification reference: Former post-secondary automotive instructor and automotive/diesel technician with experience teaching shop safety, electrical/electronics, diagnostics, and hands-on automotive laboratory procedures.  
+Review date: 2026-09-27
 
 Confirm each item:
 
-- [ ] High-voltage safety language reviewed
-- [ ] Vehicle-specific procedure boundaries reviewed
-- [ ] PPE and test-equipment language reviewed
-- [ ] No universal wait times or numeric thresholds introduced
-- [ ] No unsafe bypass or intrusive procedure is instructed
-- [ ] Feedback does not authorize unsafe service action
+- [x] High-voltage safety language reviewed
+- [x] Vehicle-specific procedure boundaries reviewed
+- [x] PPE and test-equipment language reviewed
+- [x] No universal wait times or numeric thresholds introduced
+- [x] No unsafe bypass or intrusive procedure is instructed
+- [x] Feedback does not authorize unsafe service action
 
-Decision: **Pending / Pass / Pass with limitations / Hold**
+Decision: **Pass with limitations**
 
 Notes:  
-____________________________________________________________
+AUT-250 remains conceptual and training-focused; it does not replace manufacturer service information or workplace safety procedures. High-voltage isolation, discharge or wait times, PPE selection, meter category or rating, test points, and acceptance criteria must remain vehicle- or component-specific. No learner-facing item may instruct bypassing interlocks, defeating protection systems, probing energized high-voltage circuits without an approved procedure, or performing intrusive testing merely to answer a training question. Diagnostic feedback may recommend obtaining additional evidence, but it must not authorize component removal, high-voltage access, or repair based solely on the training response. Safety approval does not by itself approve citation validation, assessment eligibility, production release, or final question approval.
 
 ## Citation-evidence representation decision
 
