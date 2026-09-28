@@ -1,0 +1,451 @@
+{
+  "validation_id": "aut250-training-batch-001-metadata-validation-20260927",
+  "validator_version": "aut250-metadata-citation-validator-1.0",
+  "validation_method": "deterministic-metadata-only-citation-proof",
+  "scope": {
+    "course_id": "AUT-250",
+    "lesson_plan_id": "ug-hev-foundations",
+    "question_batch": "aut250-training-batch-001",
+    "expected_question_count": 20
+  },
+  "approved_representation": "metadata-only-citation-proof",
+  "input_integrity": {
+    "data/evidence/review-queues/aut250-training-question-bulk-review-20260927.json": "68cb1752be64211b7b55917e33a75de405f24fd1146a9b4802958ca18eee50a7",
+    "data/evidence/review-queues/aut250-human-review-package-20260927.json": "f5d0f7c31343b924dbb8854924e4f98c38d70247ac794145fa7335652b4d43fa",
+    "data/curriculum/lesson-content.json": "45a319b274fa49080b682809ebbff8d9cffb95afe85e09040e8de71286ef9215"
+  },
+  "human_review_roles_complete": [
+    "rights",
+    "technical",
+    "instructional",
+    "safety"
+  ],
+  "human_review_complete": true,
+  "question_results": [
+    {
+      "question_id": "aut250-m1-q01",
+      "module_id": "aut250-m1-battery-systems",
+      "support_strength": "strong",
+      "source_ids": [
+        "scholar-battery-soc-soh-review-2023"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-battery-soc-soh-review-2023",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m1-q02",
+      "module_id": "aut250-m1-battery-systems",
+      "support_strength": "moderate",
+      "source_ids": [
+        "scholar-battery-soc-soh-review-2023",
+        "scholar-ev-fault-diagnosis-review-2026"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-battery-soc-soh-review-2023",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "scholar-ev-fault-diagnosis-review-2026",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m1-q03",
+      "module_id": "aut250-m1-battery-systems",
+      "support_strength": "strong",
+      "source_ids": [
+        "scholar-battery-soc-soh-review-2023"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-battery-soc-soh-review-2023",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m1-q04",
+      "module_id": "aut250-m1-battery-systems",
+      "support_strength": "strong",
+      "source_ids": [
+        "sae-hv-safety-service-technician-2010",
+        "nhtsa-ev-service-safety"
+      ],
+      "sources": [
+        {
+          "source_id": "sae-hv-safety-service-technician-2010",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "nhtsa-ev-service-safety",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m2-q01",
+      "module_id": "aut250-m2-power-electronics",
+      "support_strength": "moderate",
+      "source_ids": [
+        "scholar-ev-fault-diagnosis-review-2026",
+        "scholar-vehicle-health-monitoring-review-2025"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-ev-fault-diagnosis-review-2026",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "scholar-vehicle-health-monitoring-review-2025",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m2-q02",
+      "module_id": "aut250-m2-power-electronics",
+      "support_strength": "moderate",
+      "source_ids": [
+        "scholar-ev-power-electronics-digitalization-2018",
+        "scholar-ev-fault-diagnosis-review-2026"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-ev-power-electronics-digitalization-2018",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "scholar-ev-fault-diagnosis-review-2026",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m2-q03",
+      "module_id": "aut250-m2-power-electronics",
+      "support_strength": "strong",
+      "source_ids": [
+        "scholar-ev-power-electronics-digitalization-2018"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-ev-power-electronics-digitalization-2018",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m2-q04",
+      "module_id": "aut250-m2-power-electronics",
+      "support_strength": "strong",
+      "source_ids": [
+        "scholar-ev-power-electronics-digitalization-2018",
+        "scholar-ev-charging-review-2023"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-ev-power-electronics-digitalization-2018",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "scholar-ev-charging-review-2023",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m3-q01",
+      "module_id": "aut250-m3-charging",
+      "support_strength": "strong",
+      "source_ids": [
+        "scholar-ev-charging-review-2023"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-ev-charging-review-2023",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m3-q02",
+      "module_id": "aut250-m3-charging",
+      "support_strength": "strong",
+      "source_ids": [
+        "scholar-ev-charging-review-2023"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-ev-charging-review-2023",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m3-q03",
+      "module_id": "aut250-m3-charging",
+      "support_strength": "moderate",
+      "source_ids": [
+        "scholar-ev-charging-review-2023"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-ev-charging-review-2023",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m4-q01",
+      "module_id": "aut250-m4-thermal",
+      "support_strength": "strong",
+      "source_ids": [
+        "scholar-integrated-thermal-review-2025"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-integrated-thermal-review-2025",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m4-q02",
+      "module_id": "aut250-m4-thermal",
+      "support_strength": "moderate",
+      "source_ids": [
+        "scholar-integrated-thermal-review-2025",
+        "scholar-ev-fault-diagnosis-review-2026"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-integrated-thermal-review-2025",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "scholar-ev-fault-diagnosis-review-2026",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m4-q03",
+      "module_id": "aut250-m4-thermal",
+      "support_strength": "strong",
+      "source_ids": [
+        "scholar-integrated-thermal-review-2025"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-integrated-thermal-review-2025",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m5-q01",
+      "module_id": "aut250-m5-low-voltage",
+      "support_strength": "moderate",
+      "source_ids": [
+        "scholar-ev-aux-power-module-review-2023",
+        "secondary-ev-low-voltage-service-context-2025"
+      ],
+      "sources": [
+        {
+          "source_id": "scholar-ev-aux-power-module-review-2023",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "secondary-ev-low-voltage-service-context-2025",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m5-q02",
+      "module_id": "aut250-m5-low-voltage",
+      "support_strength": "strong",
+      "source_ids": [
+        "sae-nissan-can-diagnostic-flow-2014",
+        "gm-u0121-shared-circuit-diagnostic-2008"
+      ],
+      "sources": [
+        {
+          "source_id": "sae-nissan-can-diagnostic-flow-2014",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "gm-u0121-shared-circuit-diagnostic-2008",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m5-q03",
+      "module_id": "aut250-m5-low-voltage",
+      "support_strength": "moderate",
+      "source_ids": [
+        "icar-adas-diagnostic-process-2025",
+        "nhtsa-ev-service-safety"
+      ],
+      "sources": [
+        {
+          "source_id": "icar-adas-diagnostic-process-2025",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "nhtsa-ev-service-safety",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m6-q01",
+      "module_id": "aut250-m6-diagnostic-reasoning",
+      "support_strength": "moderate",
+      "source_ids": [
+        "automotive-engine-diagnostic-survey-2012",
+        "iet-fault-hypothesis-testing-1992"
+      ],
+      "sources": [
+        {
+          "source_id": "automotive-engine-diagnostic-survey-2012",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "iet-fault-hypothesis-testing-1992",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m6-q02",
+      "module_id": "aut250-m6-diagnostic-reasoning",
+      "support_strength": "strong",
+      "source_ids": [
+        "iet-fault-hypothesis-testing-1992"
+      ],
+      "sources": [
+        {
+          "source_id": "iet-fault-hypothesis-testing-1992",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    },
+    {
+      "question_id": "aut250-m6-q03",
+      "module_id": "aut250-m6-diagnostic-reasoning",
+      "support_strength": "strong",
+      "source_ids": [
+        "gm-pre-post-scan-position-2022",
+        "icar-adas-diagnostic-process-2025"
+      ],
+      "sources": [
+        {
+          "source_id": "gm-pre-post-scan-position-2022",
+          "metadata_valid": true,
+          "errors": []
+        },
+        {
+          "source_id": "icar-adas-diagnostic-process-2025",
+          "metadata_valid": true,
+          "errors": []
+        }
+      ],
+      "result": "valid",
+      "errors": []
+    }
+  ],
+  "summary": {
+    "questions_valid": 20,
+    "questions_invalid": 0,
+    "candidate_sources": 16,
+    "metadata_linkage_verified": true,
+    "deterministic_validation_complete": true
+  },
+  "claims": {
+    "metadata_identity_and_linkage_verified": true,
+    "source_excerpt_verified": false,
+    "source_text_hash_verified": false,
+    "rights_clearance_claimed": false,
+    "production_legacy_citation_validation_written": false,
+    "question_approval_effect": "none",
+    "assessment_eligibility_effect": "none",
+    "release_effect": "none"
+  },
+  "result": "valid",
+  "errors": []
+}
