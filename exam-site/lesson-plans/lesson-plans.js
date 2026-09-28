@@ -312,6 +312,66 @@ function renderOriginalModuleVisual(visual) {
   return `<p class="visual-placeholder">Original AutoLearnPro instructional visual planned for this module.</p>`;
 }
 
+
+function renderTrainingQuestions(questions = []) {
+  if (!questions.length) return "";
+
+  return `
+    <div class="training-question-list">
+      ${questions.map((question, index) => `
+        <article class="training-question-card" data-training-question="${escapeHtml(question.id)}" data-answer="${escapeHtml(question.answer)}">
+          <div class="training-question-head">
+            <span>Training question ${String(index + 1).padStart(2, "0")}</span>
+            <span class="training-question-status">${escapeHtml(titleCase(question.status))} · citation review pending</span>
+          </div>
+          <h6>${escapeHtml(question.stem)}</h6>
+          <div class="training-question-options" role="radiogroup" aria-label="${escapeHtml(question.stem)}">
+            ${Object.entries(question.choices || {}).map(([letter, label]) => `
+              <label>
+                <input type="radio" name="${escapeHtml(question.id)}" value="${escapeHtml(letter)}">
+                <span><strong>${escapeHtml(letter)}.</strong> ${escapeHtml(label)}</span>
+              </label>`).join("")}
+          </div>
+          <button type="button" class="training-check-answer" data-training-check="${escapeHtml(question.id)}">Check answer</button>
+          <div class="training-feedback" data-training-feedback="${escapeHtml(question.id)}" aria-live="polite"></div>
+          <p class="training-boundary">Training only · not scored · not eligible for high-stakes assessment · provenance and citation validation pending.</p>
+        </article>`).join("")}
+    </div>`;
+}
+
+function initTrainingQuestions() {
+  const cards = [...document.querySelectorAll("[data-training-question]")];
+  if (!cards.length) return;
+
+  for (const card of cards) {
+    const button = card.querySelector("[data-training-check]");
+    const feedback = card.querySelector("[data-training-feedback]");
+    if (!button || !feedback) continue;
+
+    button.addEventListener("click", () => {
+      const selected = card.querySelector('input[type="radio"]:checked');
+      if (!selected) {
+        feedback.textContent = "Select an answer before checking.";
+        feedback.dataset.result = "incomplete";
+        return;
+      }
+
+      const id = card.dataset.trainingQuestion;
+      const module = card.closest("[data-course-module]");
+      const question = module?._trainingQuestions?.find?.((item) => item.id === id);
+      const isCorrect = selected.value === card.dataset.answer;
+
+      feedback.dataset.result = isCorrect ? "correct" : "incorrect";
+      feedback.innerHTML = `
+        <strong>${isCorrect ? "Correct." : "Not yet."}</strong>
+        ${question?.explanation ? `<span>${escapeHtml(question.explanation)}</span>` : ""}
+      `;
+    });
+  }
+
+  document.documentElement.dataset.aut250TrainingQuestions = "loaded";
+}
+
 function renderCourseModules(modules = []) {
   if (!modules.length) return "";
 
@@ -387,6 +447,11 @@ function renderCourseModules(modules = []) {
                     ${renderOriginalModuleVisual(visual)}
                   </article>`).join("")}
               </div>
+            </details>
+
+            <details class="training-question-section">
+              <summary>Training questions (${(module.trainingQuestions || []).length})</summary>
+              ${renderTrainingQuestions(module.trainingQuestions || [])}
             </details>
 
             <div class="module-safety-boundary">
@@ -560,7 +625,15 @@ async function init() {
       courses
     );
 
+    document.querySelectorAll("[data-course-module]").forEach((node) => {
+      const id = node.dataset.courseModule;
+      node._trainingQuestions = contentDoc.lessonContentPlans
+        .flatMap((plan) => plan.courseModules || [])
+        .find((module) => module.id === id)?.trainingQuestions || [];
+    });
+
     initModuleProgress();
+    initTrainingQuestions();
     document.documentElement.dataset.lessonPlans = "loaded";
   } catch (error) {
     console.error(error);
