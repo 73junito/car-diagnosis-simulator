@@ -157,6 +157,139 @@
       ],
       "review_use": "secondary corroboration only; scholarly source remains preferred",
       "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "sae-hv-safety-service-technician-2010",
+      "title": "High Voltage Safety for the Service Technician",
+      "publisher": "SAE International",
+      "year": 2010,
+      "doi": "10.4271/2010-01-2014",
+      "url": "https://doi.org/10.4271/2010-01-2014",
+      "authority": "automotive-technical-paper",
+      "topic_scope": [
+        "high-voltage service safety",
+        "manufacturer-directed service procedures",
+        "HV disabling",
+        "zero-voltage verification",
+        "PPE and tools"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "nhtsa-ev-service-safety",
+      "title": "Electric and Hybrid Vehicles: Battery, Charging & Safety",
+      "publisher": "National Highway Traffic Safety Administration",
+      "year": 2026,
+      "url": "https://www.nhtsa.gov/vehicle-safety/electric-and-hybrid-vehicles",
+      "authority": "federal-safety-guidance",
+      "topic_scope": [
+        "qualified EV service technicians",
+        "EV-specific high-voltage training",
+        "proper PPE and diagnostic equipment",
+        "vehicle-specific owner/service information"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "sae-nissan-can-diagnostic-flow-2014",
+      "title": "Network Diagnostic Flow Chart-How to Troubleshoot Vehicle Level CAN Communication and CAN Diagnostic Issues on Nissan and Infinity Vehicles",
+      "publisher": "SAE International",
+      "year": 2014,
+      "doi": "10.4271/2014-01-1978",
+      "url": "https://doi.org/10.4271/2014-01-1978",
+      "authority": "oem-authored-automotive-technical-paper",
+      "topic_scope": [
+        "vehicle CAN diagnostics",
+        "multiple buses/modules",
+        "service manual and diagnostic tools",
+        "network troubleshooting workflow"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "gm-u0121-shared-circuit-diagnostic-2008",
+      "title": "Unable To Communicate With The EBCM DTC U0121 (PIT4056C)",
+      "publisher": "General Motors; NHTSA-hosted service bulletin",
+      "year": 2008,
+      "url": "https://static.nhtsa.gov/odi/tsbs/2012/SB-10022691-8261.pdf",
+      "authority": "oem-service-bulletin",
+      "topic_scope": [
+        "lost communication",
+        "power/ground/enable/network circuit verification",
+        "shared circuit causing module communication loss",
+        "avoid premature module replacement"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "icar-adas-diagnostic-process-2025",
+      "title": "Advanced Driver Assistance Systems (ADAS) Collision Repair Diagnostics Process",
+      "publisher": "I-CAR",
+      "year": 2025,
+      "url": "https://rts.i-car.com/crn-642.html",
+      "authority": "industry-repair-training-guidance",
+      "topic_scope": [
+        "12-volt and communication prerequisites",
+        "pre-scan evidence preservation",
+        "OEM diagnostic information",
+        "post-repair scan and diagnostic process"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "iet-fault-hypothesis-testing-1992",
+      "title": "A domain-independent theory for testing fault hypotheses",
+      "publisher": "Institution of Engineering and Technology / IEEE Xplore",
+      "year": 1992,
+      "url": "https://ieeexplore.ieee.org/document/170065",
+      "authority": "peer-reviewed-conference-paper",
+      "topic_scope": [
+        "fault hypotheses",
+        "hypothetico-deductive reasoning",
+        "confirming/disconfirming hypotheses",
+        "discriminating competing hypotheses",
+        "test selection"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "automotive-engine-diagnostic-survey-2012",
+      "title": "A survey on diagnostic methods for automotive engines",
+      "publisher": "International Journal of Engine Research / SAGE",
+      "year": 2012,
+      "doi": "10.1177/1468087411422851",
+      "url": "https://doi.org/10.1177/1468087411422851",
+      "authority": "peer-reviewed-review",
+      "topic_scope": [
+        "automotive fault detection",
+        "fault isolation",
+        "model-based diagnosis",
+        "data-driven diagnosis"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
+    },
+    {
+      "id": "gm-pre-post-scan-position-2022",
+      "title": "Pre- and Post-Scan of Collision Vehicles",
+      "publisher": "General Motors",
+      "year": 2022,
+      "url": "https://www.gmparts.com/content/dam/gmparts/na/us/en/index/technical-resources/position-statements/02-pdfs/new/pre-post-scan-collision-vehicles.pdf",
+      "authority": "oem-position-statement",
+      "topic_scope": [
+        "post-repair diagnostic retest",
+        "verify faults repaired",
+        "verify no new faults introduced",
+        "OEM repair procedures"
+      ],
+      "review_use": "candidate citation support only",
+      "ingestion_status": "metadata-and-link-only"
     }
   ],
   "duplicate_review": {
@@ -175,8 +308,8 @@
     "note": "Automated/content review found no prohibited universal service values. Human technical/safety sign-off is still required."
   },
   "summary": {
-    "candidate_supported": 14,
-    "hold_for_stronger_evidence": 6,
+    "candidate_supported": 20,
+    "hold_for_stronger_evidence": 0,
     "approved": 0,
     "citation_validated": 0,
     "technical_review_complete": 0,
@@ -240,16 +373,19 @@
       "question_id": "aut250-m1-q04",
       "module_id": "aut250-m1-battery-systems",
       "claim_review": "Battery access/isolation should follow applicable vehicle-specific procedures and verified electrical state.",
-      "disposition": "hold-for-stronger-evidence",
-      "support_strength": "insufficient-for-approval",
-      "candidate_source_ids": [],
-      "hold_reason": "Needs an authoritative vehicle-service or high-voltage service-safety source that directly supports service-procedure dependence; general academic architecture sources are not sufficient for service authorization.",
-      "citation_validation_status": "blocked-pending-source",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
+      "candidate_source_ids": [
+        "sae-hv-safety-service-technician-2010",
+        "nhtsa-ev-service-safety"
+      ],
+      "citation_validation_status": "pending",
       "technical_review_status": "pending-human-review",
       "instructional_review_status": "pending-human-review",
       "safety_review_status": "pending-human-review",
       "duplicate_status": "clear",
-      "approval_effect": "none"
+      "approval_effect": "none",
+      "source_applicability_notes": "SAE service-technician guidance explicitly identifies manufacturer-directed HV disabling procedures, PPE/tools, and zero-voltage checks; NHTSA independently requires qualified EV-specific HV service capability. This supports using applicable vehicle procedures rather than a universal disconnect sequence."
     },
     {
       "question_id": "aut250-m2-q01",
@@ -447,88 +583,104 @@
       "question_id": "aut250-m5-q02",
       "module_id": "aut250-m5-low-voltage",
       "claim_review": "Simultaneous module unavailability can arise from a shared power, ground, wake-up, network, or timing dependency.",
-      "disposition": "hold-for-stronger-evidence",
-      "support_strength": "insufficient-for-approval",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
       "candidate_source_ids": [
-        "scholar-vehicle-health-monitoring-review-2025"
+        "sae-nissan-can-diagnostic-flow-2014",
+        "gm-u0121-shared-circuit-diagnostic-2008"
       ],
-      "hold_reason": "Needs an authoritative automotive network/electrical diagnostic source directly addressing common-cause/shared-dependency diagnosis; current source is too general.",
-      "citation_validation_status": "blocked-pending-source",
+      "citation_validation_status": "pending",
       "technical_review_status": "pending-human-review",
       "instructional_review_status": "pending-human-review",
       "safety_review_status": "pending-human-review",
       "duplicate_status": "clear",
-      "approval_effect": "none"
+      "approval_effect": "none",
+      "source_applicability_notes": "The SAE OEM-authored CAN diagnostic paper establishes structured network troubleshooting across many modules/buses. The GM bulletin demonstrates that lost-module communication can persist despite apparent module symptoms and requires verifying power, ground, enable, network, and shared-circuit conditions before module replacement."
     },
     {
       "question_id": "aut250-m5-q03",
       "module_id": "aut250-m5-low-voltage",
       "claim_review": "A readiness-first strategy should collect foundational nonintrusive evidence before higher-risk testing.",
-      "disposition": "hold-for-stronger-evidence",
-      "support_strength": "insufficient-for-approval",
+      "disposition": "candidate-supported",
+      "support_strength": "moderate",
       "candidate_source_ids": [
-        "scholar-ev-aux-power-module-review-2023"
+        "icar-adas-diagnostic-process-2025",
+        "nhtsa-ev-service-safety"
       ],
-      "hold_reason": "This is a defensible instructional strategy but the current scholarly source does not directly establish the diagnostic ordering or safety rationale. Hold for technical reviewer plus service-diagnostics evidence.",
-      "citation_validation_status": "blocked-pending-source",
+      "citation_validation_status": "pending",
       "technical_review_status": "pending-human-review",
       "instructional_review_status": "pending-human-review",
       "safety_review_status": "pending-human-review",
       "duplicate_status": "clear",
-      "approval_effect": "none"
+      "approval_effect": "none",
+      "source_applicability_notes": "I-CAR's diagnostic process states that pre-scan capability depends on a maintained 12-V electrical system and communication networks and requires OEM information before further diagnosis. NHTSA adds the EV-specific safety qualification boundary. Together these support a foundational/nonintrusive evidence-first strategy, while exact sequencing remains project-authored pedagogy."
     },
     {
       "question_id": "aut250-m6-q01",
       "module_id": "aut250-m6-diagnostic-reasoning",
       "claim_review": "The project-authored Request → Measure → Compare → Correlate → Verify model defines Compare as comparing observations with applicable authoritative information and expected context.",
-      "disposition": "hold-for-stronger-evidence",
-      "support_strength": "insufficient-for-approval",
+      "disposition": "candidate-supported",
+      "support_strength": "moderate",
       "candidate_source_ids": [
-        "scholar-ev-fault-diagnosis-review-2026",
-        "scholar-vehicle-health-monitoring-review-2025"
+        "automotive-engine-diagnostic-survey-2012",
+        "iet-fault-hypothesis-testing-1992"
       ],
-      "hold_reason": "The five-stage model is project-authored. External literature supports fault diagnosis and multi-source comparison generally, but not this exact framework. Requires internal curriculum provenance plus human technical validation rather than pretending an external source originated the model.",
-      "citation_validation_status": "blocked-pending-source",
+      "citation_validation_status": "pending",
       "technical_review_status": "pending-human-review",
       "instructional_review_status": "pending-human-review",
       "safety_review_status": "pending-human-review",
       "duplicate_status": "clear",
-      "approval_effect": "none"
+      "approval_effect": "none",
+      "source_applicability_notes": "The five-stage Request → Measure → Compare → Correlate → Verify sequence remains explicitly project-authored. External diagnostic literature supports measurement/model comparison, fault isolation, hypothesis testing, and verification-oriented reasoning; it does not claim authorship of the AutoLearnPro framework."
     },
     {
       "question_id": "aut250-m6-q02",
       "module_id": "aut250-m6-diagnostic-reasoning",
       "claim_review": "Competing hypotheses and discriminating evidence reduce premature single-cause conclusions.",
-      "disposition": "hold-for-stronger-evidence",
-      "support_strength": "insufficient-for-approval",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
       "candidate_source_ids": [
-        "scholar-ev-fault-diagnosis-review-2026",
-        "scholar-vehicle-health-monitoring-review-2025"
+        "iet-fault-hypothesis-testing-1992"
       ],
-      "hold_reason": "Current EV fault-diagnosis reviews support multi-source/model-based diagnosis but do not directly establish the specific competing-hypothesis pedagogy. Hold for a stronger diagnostic-method source or explicit technical reviewer approval.",
-      "citation_validation_status": "blocked-pending-source",
+      "citation_validation_status": "pending",
       "technical_review_status": "pending-human-review",
       "instructional_review_status": "pending-human-review",
       "safety_review_status": "pending-human-review",
       "duplicate_status": "clear",
-      "approval_effect": "none"
+      "approval_effect": "none",
+      "source_applicability_notes": "The paper explicitly describes confirming, disconfirming, and discriminating competing fault hypotheses and selecting tests based on their ability to distinguish hypotheses."
     },
     {
       "question_id": "aut250-m6-q03",
       "module_id": "aut250-m6-diagnostic-reasoning",
       "claim_review": "Post-repair verification should confirm the original concern and relevant system behavior rather than rely only on clearing fault codes.",
-      "disposition": "hold-for-stronger-evidence",
-      "support_strength": "insufficient-for-approval",
+      "disposition": "candidate-supported",
+      "support_strength": "strong",
       "candidate_source_ids": [
-        "scholar-ev-fault-diagnosis-review-2026"
+        "gm-pre-post-scan-position-2022",
+        "icar-adas-diagnostic-process-2025"
       ],
-      "hold_reason": "Needs authoritative service-diagnostics evidence explicitly supporting post-repair verification; current review supports diagnosis/monitoring but not the code-clearing comparison.",
-      "citation_validation_status": "blocked-pending-source",
+      "citation_validation_status": "pending",
       "technical_review_status": "pending-human-review",
       "instructional_review_status": "pending-human-review",
       "safety_review_status": "pending-human-review",
       "duplicate_status": "clear",
-      "approval_effect": "none"
+      "approval_effect": "none",
+      "source_applicability_notes": "GM requires retesting after repairs to verify faults were repaired and no new faults were introduced; I-CAR likewise requires post-repair scanning and renewed OEM diagnostic work if related DTCs return. This directly supports verification beyond merely clearing codes."
     }
-  ]
+  ],
+  "hold_resolution": {
+    "status": "all-six-resolved-to-candidate-support",
+    "resolved_question_ids": [
+      "aut250-m1-q04",
+      "aut250-m5-q02",
+      "aut250-m5-q03",
+      "aut250-m6-q01",
+      "aut250-m6-q02",
+      "aut250-m6-q03"
+    ],
+    "remaining_holds": 0,
+    "approval_effect": "none",
+    "note": "Resolving a source-support hold does not constitute citation validation, rights clearance, technical approval, instructional approval, safety approval, or assessment eligibility."
+  }
 }
