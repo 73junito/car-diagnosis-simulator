@@ -1,155 +1,224 @@
-# TorqueMind — Diagnostic Training Platform
+# AutoLearnPro / TorqueMind
 
-TorqueMind is a lightweight browser-based training platform for automotive diagnostic reasoning. It provides evidence-driven scenarios, system isolation workflows, and teacher analytics to help trainees build reliable troubleshooting skills.
-TorqueMind is a lightweight browser-based training platform for automotive diagnostic reasoning. It provides evidence-driven scenarios, system isolation workflows, and teacher analytics to help trainees build reliable troubleshooting skills.
+AutoLearnPro is an evidence-aware automotive technology learning platform. TorqueMind is the diagnostic reasoning and simulation layer used across scenario training, interactive labs, curriculum delivery, and future assessment workflows.
 
-Overview
-TorqueMind helps technicians and instructors practice evidence-based diagnostic reasoning using realistic vehicle scenarios. Students collect evidence, isolate systems, and make confidence-weighted diagnoses while instructors get aggregated insights.
+The project is designed around a simple principle: **training, labs, and future assessments may share learner-facing components, but higher-stakes state and decisions must remain server authoritative and separately governed.**
 
-Features
-- Scenario-based diagnostic exercises with simulated tools
-- System isolation and evidence tracking for structured reasoning
-- Confidence-weighted decisions and instant feedback
-- Teacher dashboard with exports, insights, and scenario assignment
+## Live applications
 
-Demo
-Visit the live demo: https://app.autolearnpro.com/
+- Public site: https://autolearnpro.com/
+- Learner application: https://app.autolearnpro.com/
+- Course / exam domain: https://exam.autolearnpro.com/
 
-[![Test Dashboard](https://img.shields.io/badge/test-dashboard-live-brightgreen)](https://app.autolearnpro.com/dashboard/student/)
+Production delivery uses Cloudflare Workers and static assets. Supabase provides authentication and PostgreSQL persistence.
 
-Run locally
+## What the project includes
+
+### Curriculum and learning paths
+
+The repository contains structured undergraduate and graduate curriculum architecture, course metadata, lesson plans, competencies, academic pathway validation, and evidence-governance contracts.
+
+### Diagnostic scenarios
+
+Learners work through structured diagnostic scenarios that emphasize evidence collection, system isolation, measurement, comparison, correlation, verification, and documentation.
+
+### Interactive labs
+
+Current browser-based lab engines include:
+
+- circuit lab
+- sensor lab
+- starting-system lab
+- network lab
+- relay / load lab
+- multivoltage lab
+- actuator lab
+
+Labs keep their specialized simulation and engineering runtimes while sharing common learner, governance, audit, and completion concepts.
+
+### Training questions
+
+Training-question delivery is intentionally separated from assessment eligibility. Training content may provide immediate feedback and retry behavior when its approval contract allows it.
+
+### Assessment architecture
+
+The repository contains infrastructure for future server-authoritative assessment attempts. Assessment delivery remains fail-closed unless the required governance, eligibility, evidence, and runtime gates are satisfied.
+
+Training approval does **not** automatically grant scored, institutional, high-stakes, or production-assessment eligibility.
+
+See:
+
+- `docs/architecture/shared-attempt-governance.md`
+- `docs/SYSTEM-ARCHITECTURE.md`
+- `dashboard/student/scenario/WORKFLOW.md`
+
+## Architecture at a glance
+
+```mermaid
+flowchart LR
+    Curriculum["Curriculum / Course"] --> Training["Training"]
+    Curriculum --> FutureAssessment["Future Assessment"]
+
+    Training --> SharedUI["Shared Learner UI"]
+    FutureAssessment --> AttemptController["Server Attempt Controller"]
+    AttemptController --> SharedUI
+
+    SharedUI --> ScenarioEngine["Scenario Engine"]
+    SharedUI --> LabEngine["Lab Engine"]
+
+    ScenarioEngine --> WorkerAPI["Cloudflare Worker API"]
+    LabEngine --> LabRuntime["Specialized Lab Runtime"]
+
+    WorkerAPI --> Supabase["Supabase / PostgreSQL"]
+    LabRuntime --> Progress["Progress / Evidence"]
+    Supabase --> Progress
+```
+
+## Repository layout
+
+| Path | Purpose |
+| --- | --- |
+| `worker/` | Canonical Cloudflare Worker production API runtime |
+| `dashboard/student/` | Learner dashboard, scenarios, and labs |
+| `exam-site/` | Course and exam-domain static assets |
+| `data/` | Curriculum, scenario, evidence, and governed content data |
+| `supabase/` | PostgreSQL migrations, database contracts, and security tests |
+| `engineering/` | Engineering models and generated artifacts |
+| `scripts/` | Validation, build, sync, reporting, and deployment helpers |
+| `tests/` | Jest and Playwright verification |
+| `docs/` | Architecture, governance, deployment, and operational documentation |
+| `api/` | Legacy API implementations retained during migration; not the canonical production security boundary |
+
+## Local development
+
+### Prerequisites
+
+- Node.js 22.19.0 or newer (see `package.json` `engines`)
+- npm
+- Git
+
+Install dependencies:
+
 ```bash
-cd "d:/Car Diagnosis Simulator/car-diagnosis-sim"
-python -m http.server 8000
-# open http://localhost:8000 in your browser
+npm ci
 ```
 
-Development notes
-- The app is a single-page static site (HTML/CSS/JS). No build step required.
-- Diagnostic logic lives in `engine/diagnosticEngine.js` and is loaded before `script.js`.
-- Backend/Auth powered by Supabase. Firebase removed from the project as of 2026-05-04.
-
-Who it's for
-- Technical instructors, vocational trainers, and learners preparing for ASE-style assessments.
-
-Contributing
-- Open a PR against `main` or create feature branches. This repo favors small, focused commits.
-
-Contribution and Branch Protection
-
-The `main` branch is protected. All changes must go through a pull request and pass these required PR checks:
-
-- `Unit Tests / unit-tests`
-- `API Smoke Test / smoke`
-- `db-ssl-validation`
-
-Branch protection currently requires `db-ssl-validation` to pass on pull requests.
-
-One approving review is required, branches must be up to date, and force-pushes/deletions are blocked.
-
-License
-- MIT
-
-Security notes
-- Enable GitHub Secret Scanning and Push Protection to prevent accidental commits of secrets (API keys, tokens, service credentials). This must be enabled in the repository Security settings by an administrator.
-- We recommend enabling Dependency Review and Dependabot alerts for automated dependency vulnerability detection.
-
-## Analytics Exports
-
-Generate instructor analytics artifacts:
+Run the local static test server:
 
 ```bash
-npm run export:analytics
+npm run start:test
 ```
 
-Outputs:
+Run the main test suite:
 
-- `reports/student-performance.csv`
-- `reports/xapi-statements.json`
-
-Supabase setup + RLS policies
------------------------------
-
-This project uses Supabase (Auth + Postgres) and relies on Row-Level Security (RLS) for ownership and teacher/student RBAC. Follow these steps to prepare a Supabase project for TorqueMind.
-
-1. Create a Supabase project and note the `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and service role key (`SUPABASE_KEY` / `SUPABASE_SERVICE_ROLE_KEY`). Store them in your environment or CI secrets.
-
-2. Apply the SQL policies found in the repository under `db/` using the Supabase SQL Editor. Key files:
-	- `db/replays_policy.sql` — enables RLS on `replays` and adds insert/select policies scoped to `auth.uid()`.
-	- `db/classroom_policies.sql` — RLS policies for `completions`, `enrollments`, `assignments`, and any `WITH CHECK` constraints needed for authenticated inserts.
-
-	To apply: open the Supabase project dashboard → SQL Editor → New query, paste the contents of each file and run them. Confirm there are no errors.
-
-3. Verify profiles/roles: the API expects a `profiles` table with a `role` column (values like `teacher` or `student`). Ensure teachers have `role = 'teacher'`.
-
-4. CI secrets: Add the following to your GitHub Actions repository secrets (do NOT commit keys to Git):
-	- `SUPABASE_URL`
-	- `SUPABASE_ANON_KEY`
-	- `SUPABASE_KEY` or `SUPABASE_SERVICE_ROLE_KEY`
-	- `TEST_TEACHER_EMAIL` and `TEST_TEACHER_PASSWORD` (used by the smoke test)
-
-5. Troubleshooting notes:
-	- If inserts fail with "new row violates row-level security policy", check the table's `WITH CHECK` policy and ensure the insert payload sets ownership columns server-side (the API enforces `user_id = req.user.id` before inserting).
-	- To temporarily enable verbose logging for debugging, set `DEBUG_API=true` (for API runtime logs) or `DEBUG_AUTH=true` (for auth middleware). Remove or unset these in production.
-
-If you want, I can (a) paste the exact SQL from the `db/` files here, or (b) apply them to your Supabase project if you provide explicit, ephemeral service-role credentials and consent.
-
-Tests
------
-
-Tests are split between unit tests (Jest) and end-to-end tests (Playwright).
-
-- Run unit tests: `npm test`
-- Run Playwright E2E: `npm run test:playwright`
-
-## Ollama via Cloudflare Tunnel
-
-TorqueMind can use a locally hosted Ollama instance through a Cloudflare Tunnel protected by Cloudflare Access.
-
-### Rollout documentation
-
-- `docs/ollama-tunnel-design.md`
-- `docs/ollama-tunnel-staging-checklist.md`
-- `docs/ollama-cloudflared-access-setup.md`
-- `docs/ollama-cloudflared-windows-service.md`
-
-### Helper scripts
-
-Upload the Cloudflare Access service-token credentials to the staging Worker:
-
-```powershell
-powershell `
-	-NoProfile `
-	-ExecutionPolicy Bypass `
-	-File .\scripts\add-ollama-secrets.ps1
+```bash
+npm test
 ```
-Verify the Access-protected Ollama tunnel directly:
 
-```powershell
-powershell `
-	-NoProfile `
-	-ExecutionPolicy Bypass `
-	-File .\scripts\verify-ollama-tunnel.ps1 `
-	-TunnelHost "https://ollama.example.com"
+Run Playwright:
+
+```bash
+npm run test:playwright
 ```
-After the tunnel verification returns HTTP 200 for both `/api/tags` and `/api/chat`, build, deploy, and test the staging Worker:
 
-```powershell
-powershell `
-	-NoProfile `
-	-ExecutionPolicy Bypass `
-	-File .\scripts\deploy-and-test-staging.ps1
+Run both:
+
+```bash
+npm run test:all
 ```
-Do not activate a placeholder hostname. Update `wrangler.jsonc` only after the real tunnel hostname and Cloudflare Access application are operational.
 
-The staging rollout is complete only when `/api/torquemind-feedback` returns HTTP 200 with:
+Build the static deployment:
 
-- `reasonIncorrect`
-- `reasonCorrect`
-- `aseConcept`
-- `nextStep`
-- `x-request-id`
-- rate-limit headers
+```bash
+npm run build
+```
 
+## Important validation commands
 
-Playwright is configured to only run tests under `tests/playwright` to avoid accidental discovery of Jest tests.
+```bash
+npm run validate:scenarios
+npm run validate:academic-pathways
+npm run validate:program-architecture
+npm run validate:curriculum-content
+npm run validate:evidence-approval
+npm run validate:circuits
+npm run test:supabase-contracts
+npm run docs:mermaid
+```
+
+The repository contains additional targeted validators for engineering artifacts, curriculum APIs, compliance authority, and source/evidence contracts. See `package.json` for the current script inventory.
+
+## Deployment
+
+Cloudflare configuration is split by application surface:
+
+- `wrangler.jsonc` â€” core Worker/API configuration
+- `wrangler.app.jsonc` â€” learner application
+- `wrangler.exam.jsonc` â€” course/exam domain
+
+Common deployment commands include:
+
+```bash
+npm run cloudflare:app:deploy
+npm run cloudflare:exam:deploy
+```
+
+Do not deploy from an unreviewed branch unless the deployment is explicitly intended as a preview.
+
+## Data and security model
+
+- Authentication uses Supabase-issued tokens.
+- Privileged database operations are performed server-side.
+- Sensitive tables use Row-Level Security and explicit privilege grants.
+- Correct answers are not included in learner question-delivery payloads.
+- Assessment-specific behavior is expected to fail closed when authorization, eligibility, question assignment, evidence, or attempt state is invalid.
+- Service-role credentials, API tokens, passwords, and private keys must never be committed.
+
+See `SECURITY.md` and `supabase/DATABASE-ARCHITECTURE.md`.
+
+## Evidence and content governance
+
+The project distinguishes among:
+
+- source discovery
+- metadata linkage
+- rights / reuse review
+- technical review
+- instructional review
+- safety review
+- training approval
+- separate assessment eligibility
+
+A content item must not be promoted simply because another content item, source, or training batch was approved previously. Approval is scoped to the exact governed artifact and use.
+
+## Public policies
+
+Current public-facing policy/contact pages in this repository include:
+
+- `privacy.html`
+- `terms.html`
+- `contact.html`
+
+Internal draft policy work must not be described as published policy until it is intentionally released.
+
+## Contributing
+
+All changes should use focused feature branches and pull requests targeting `main`. Required checks and review expectations are documented in `.github/CONTRIBUTING.md` and `docs/ci-contract.md`.
+
+Do not bypass governance, evidence, safety, assessment, or security gates merely to make a test pass.
+
+## Security
+
+Please do not open a public issue containing a vulnerability, secret, credential, private user data, or exploitable reproduction detail. Follow the private reporting process in `SECURITY.md`.
+
+## Support
+
+See `SUPPORT.md` for repository support expectations and the distinction between support requests and security reports.
+
+## Licensing status
+
+Repository-wide licensing is currently under review. No blanket license is granted for this repository, its original instructional content, datasets, evidence packages, documentation, media, or other materials unless an individual file or source expressly states otherwise.
+
+Third-party materials retain their original licenses, copyright status, terms of use, and attribution requirements. Inclusion or reference in this repository does not relicense those materials.
+
+A future licensing decision may distinguish between original software source code, original curriculum/content, and third-party/reference materials. Until that review is complete, do not assume permission to copy, redistribute, sublicense, or republish repository content solely because it is publicly accessible.

@@ -98,5 +98,14 @@
   },
   "dependencies": {
     "hono": "^4.13.8"
+  },
+  "description": "Evidence-aware automotive technology learning, diagnostic scenario, and lab platform",
+  "homepage": "https://autolearnpro.com/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/73junito/car-diagnosis-simulator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/73junito/car-diagnosis-simulator/issues"
   }
 }
