@@ -24,6 +24,27 @@ const MODELS = {
   "Evidence-supported repair and verification cycle": { kind:"cycle", items:["Concern","Evidence","Hypotheses","Decision","Action","Verification"] }
 };
 
+const TAKEAWAYS = {
+  "Battery-system functional architecture": "Battery evidence becomes more useful when sensing, protection, switching, control, and thermal functions are considered as one interacting system.",
+  "Measured, calculated, commanded, and inferred battery data": "A direct measurement, a model-derived state, a control request, and a diagnostic hypothesis are different evidence types.",
+  "Battery evidence-to-next-check reasoning": "Preserve and classify evidence before choosing the next diagnostic check.",
+  "DC source, inverter, electric machine, and low-voltage support": "Energy conversion and low-voltage support are related functions, so symptoms should be interpreted across system boundaries.",
+  "Commanded state to measured response": "Comparing control intent with measured response can reveal where behavior diverges without prematurely naming a failed component.",
+  "Power-electronics evidence categories": "Supply, command, response, communication, and thermal evidence should be correlated before drawing a conclusion.",
+  "Charge-readiness sequence": "A charging concern can be narrowed by identifying the first readiness condition that does not occur as expected.",
+  "Infrastructure-to-battery charging boundaries": "Charging diagnosis is clearer when infrastructure, interface, vehicle, and battery evidence are kept distinct.",
+  "Charging evidence by system boundary": "Evidence should be assigned to the system boundary that produced it before causes are inferred.",
+  "Cross-system thermal relationships": "Thermal behavior can involve several vehicle systems at once, so temperature data needs operating context.",
+  "Temperature, command, and performance trend": "A temperature value becomes more informative when viewed as a trend alongside command and performance changes.",
+  "Thermal evidence and alternative explanations": "The same thermal symptom may support several explanations, so discriminating evidence is needed.",
+  "Low-voltage control dependency map": "Low-voltage stability can affect wake-up, communication, switching control, and propulsion readiness.",
+  "Wake-up, communication, and readiness sequence": "Foundational readiness conditions should be confirmed before higher-level propulsion conclusions are made.",
+  "Shared-dependency evidence matrix": "Multiple simultaneous symptoms can point toward a shared dependency rather than several independent failures.",
+  "Request → Measure → Compare → Correlate → Verify": "Use the complete reasoning sequence so evidence is collected, interpreted, related, and confirmed before closure.",
+  "Competing hypotheses and discriminating evidence": "Keep more than one plausible explanation until evidence meaningfully separates them.",
+  "Evidence-supported repair and verification cycle": "A diagnostic decision is incomplete until the outcome is verified under relevant conditions."
+};
+
 function esc(value) {
   return String(value ?? "")
     .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
@@ -76,6 +97,7 @@ export function renderModuleVisuals(visuals = []) {
     return `<article class="module-visual-card" data-module-visual="${esc(visual.title)}">
       <div class="module-visual-card-head"><span>${esc(String(visual.type || "visual").replace(/-/g," "))}</span><strong>${esc(visual.title)}</strong></div>
       ${renderModel(model,visual.title)}
+      <p class="module-visual-takeaway"><strong>Takeaway:</strong> ${esc(TAKEAWAYS[visual.title] || "Use this visual to organize evidence before drawing a diagnostic conclusion.")}</p>
     </article>`;
   }).join("");
 }

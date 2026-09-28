@@ -2,6 +2,8 @@ import { renderModuleVisuals } from "./module-visuals.js";
 
 const CURRICULUM_URL = "/data/curriculum/lesson-content.json";
 const APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
+const STORAGE_KEY = "autolearnpro:aut250:module-progress";
+const PROGRESS_VERSION = 2;
 
 const escapeHtml = (value) => String(value ?? "")
   .replace(/&/g, "&amp;")
@@ -115,16 +117,107 @@ function initEvidenceDrawer(approval, module) {
   });
 }
 
+function emptyProgress() {
+  return { version: PROGRESS_VERSION, lastModuleId: null, modules: {} };
+}
+
+function readProgress() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    if (parsed?.version !== PROGRESS_VERSION || !parsed.modules) return emptyProgress();
+    return parsed;
+  } catch {
+    return emptyProgress();
+  }
+}
+
+function writeProgress(progress) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+
+function moduleProgress(progress, moduleId) {
+  const current = progress.modules?.[moduleId] || {};
+  return {
+    currentQuestionIndex: Number.isInteger(current.currentQuestionIndex) && current.currentQuestionIndex >= 0
+      ? current.currentQuestionIndex : 0,
+    attemptedQuestionIds: Array.isArray(current.attemptedQuestionIds) ? [...new Set(current.attemptedQuestionIds)] : [],
+    feedbackViewedQuestionIds: Array.isArray(current.feedbackViewedQuestionIds) ? [...new Set(current.feedbackViewedQuestionIds)] : [],
+    completed: current.completed === true,
+    lastVisitedAt: typeof current.lastVisitedAt === "string" ? current.lastVisitedAt : null
+  };
+}
+
+function saveModuleProgress(module, updater) {
+  const progress = readProgress();
+  progress.version = PROGRESS_VERSION;
+  progress.modules = progress.modules || {};
+  const current = moduleProgress(progress, module.id);
+  const next = updater(current);
+  const questionIds = (module.trainingQuestions || []).map((question) => question.id);
+  next.completed = questionIds.length > 0 &&
+    questionIds.every((id) => next.attemptedQuestionIds.includes(id)) &&
+    questionIds.every((id) => next.feedbackViewedQuestionIds.includes(id));
+  next.lastVisitedAt = new Date().toISOString();
+  progress.modules[module.id] = next;
+  progress.lastModuleId = module.id;
+  writeProgress(progress);
+  return next;
+}
+
+function requestedQuestionIndex(questionCount) {
+  const raw = Number(new URLSearchParams(window.location.search).get("question"));
+  if (!Number.isInteger(raw) || raw < 1) return null;
+  return Math.min(raw - 1, Math.max(questionCount - 1, 0));
+}
+
+function reasoningStepForQuestion(question) {
+  const topic = String(question?.topic || "").toLowerCase();
+  if (topic.includes("verification") || topic.includes("post-repair")) return "verify";
+  if (topic.includes("correlation") || topic.includes("hypoth") || topic.includes("dependencies") || topic.includes("boundaries")) return "correlate";
+  if (topic.includes("compare") || topic.includes("interpretation") || topic.includes("estimation") || topic.includes("command-response") || topic.includes("readiness")) return "compare";
+  if (topic.includes("request") || topic.includes("concern")) return "request";
+  return "measure";
+}
+
+const REASONING_TAKEAWAYS = {
+  request: "Define the concern or requested state before deciding what evidence matters.",
+  measure: "Preserve observed evidence before moving from observation to explanation.",
+  compare: "Compare the evidence with applicable authoritative information and expected context.",
+  correlate: "Relate evidence across systems and conditions before naming a cause.",
+  verify: "Confirm the conclusion under relevant conditions before closing the reasoning loop."
+};
+
+function setActiveReasoningStep(step) {
+  document.querySelectorAll("[data-reasoning-step]").forEach((item) => {
+    const active = item.dataset.reasoningStep === step;
+    item.classList.toggle("is-active", active);
+    if (active) item.setAttribute("aria-current", "step");
+    else item.removeAttribute("aria-current");
+  });
+  const focus = document.querySelector("[data-question-reasoning-focus]");
+  if (focus) focus.textContent = step.charAt(0).toUpperCase() + step.slice(1);
+}
+
 function moduleIdFromUrl() {
   return new URLSearchParams(window.location.search).get("module") || "aut250-m1-battery-systems";
 }
 
 function renderQuestion(state) {
   const question = state.questions[state.index];
-  document.querySelector("[data-question-position]").textContent = `Question ${state.index + 1} of ${state.questions.length}`;
-  document.querySelector("[data-question-progress]").style.width = `${((state.index + 1) / state.questions.length) * 100}%`;
-  document.querySelector("[data-question-topic]").textContent = String(question.topic || "Training question").replace(/-/g, " ").toUpperCase();
+  const step = reasoningStepForQuestion(question);
+  setActiveReasoningStep(step);
+
+  document.querySelector("[data-question-position]").textContent =
+    `Question ${state.index + 1} of ${state.questions.length}`;
+  document.querySelector("[data-question-progress]").style.width =
+    `${((state.index + 1) / state.questions.length) * 100}%`;
+  document.querySelector("[data-question-topic]").textContent =
+    String(question.topic || "Training question").replace(/-/g, " ").toUpperCase();
   document.querySelector("[data-question-stem]").textContent = question.stem;
+
+  const attempted = state.progress.attemptedQuestionIds.includes(question.id);
+  document.querySelector("[data-question-attempt-status]").textContent =
+    attempted ? "Previously attempted" : "Not attempted";
 
   const options = document.querySelector("[data-question-options]");
   options.innerHTML = Object.entries(question.choices || {}).map(([letter, label]) => `
@@ -133,12 +226,26 @@ function renderQuestion(state) {
       <span><strong>${escapeHtml(letter)}.</strong> ${escapeHtml(label)}</span>
     </label>`).join("");
 
+  const submit = document.querySelector("[data-submit-answer]");
+  submit.disabled = true;
+  options.querySelectorAll('input[name="guided-question"]').forEach((input) => {
+    input.addEventListener("change", () => {
+      submit.disabled = false;
+    });
+  });
+
   document.querySelector("[data-question-feedback]").innerHTML = "";
   document.querySelector("[data-retry-answer]").hidden = true;
-  document.querySelector("[data-submit-answer]").disabled = false;
   document.querySelector("[data-prev-question]").disabled = state.index === 0;
-  document.querySelector("[data-next-question]").textContent =
-    state.index === state.questions.length - 1 ? "Finish module" : "Next question";
+
+  const next = document.querySelector("[data-next-question]");
+  next.textContent = state.index === state.questions.length - 1 ? "Finish module" : "Next question";
+  next.disabled = !attempted;
+
+  saveModuleProgress(state.module, (progress) => ({
+    ...progress,
+    currentQuestionIndex: state.index
+  }));
 }
 
 function checkAnswer(state) {
@@ -151,13 +258,26 @@ function checkAnswer(state) {
   }
 
   const correct = selected.value === question.answer;
+  const step = reasoningStepForQuestion(question);
+  state.progress = saveModuleProgress(state.module, (progress) => ({
+    ...progress,
+    attemptedQuestionIds: [...new Set([...progress.attemptedQuestionIds, question.id])],
+    feedbackViewedQuestionIds: [...new Set([...progress.feedbackViewedQuestionIds, question.id])],
+    currentQuestionIndex: state.index
+  }));
+
   feedback.innerHTML = `
-    <strong>${correct ? "Correct." : "Not yet."}</strong>
-    <p>${escapeHtml(question.explanation)}</p>
+    <div class="aut250-feedback-grid">
+      <div><span>Result</span><strong>${correct ? "Correct" : "Try again"}</strong></div>
+      <div><span>Why</span><p>${escapeHtml(question.explanation)}</p></div>
+      <div><span>Diagnostic takeaway</span><p>${escapeHtml(REASONING_TAKEAWAYS[step])}</p></div>
+    </div>
     <p class="training-boundary">Reasoning feedback only. This does not authorize a vehicle service action.</p>`;
 
+  document.querySelector("[data-question-attempt-status]").textContent = "Attempted";
   document.querySelector("[data-submit-answer]").disabled = true;
   document.querySelector("[data-retry-answer]").hidden = correct;
+  document.querySelector("[data-next-question]").disabled = false;
 }
 
 function retryAnswer() {
@@ -165,8 +285,10 @@ function retryAnswer() {
     input.checked = false;
   });
   document.querySelector("[data-question-feedback]").innerHTML = "";
-  document.querySelector("[data-submit-answer]").disabled = false;
+  document.querySelector("[data-submit-answer]").disabled = true;
   document.querySelector("[data-retry-answer]").hidden = true;
+  const first = document.querySelector('input[name="guided-question"]');
+  if (first) first.focus();
 }
 
 async function init() {
@@ -190,11 +312,29 @@ async function init() {
     document.querySelector("[data-player-objective]").textContent = module.moduleObjectives?.[0] || "";
     initEvidenceDrawer(approval, module);
 
+    const objectives = document.querySelector("[data-learning-objectives]");
+    objectives.innerHTML = (module.moduleObjectives || []).map((objective) =>
+      `<li>${escapeHtml(objective)}</li>`
+    ).join("");
+    document.querySelector("[data-learning-summary]").hidden = false;
+
     const visualGrid = document.querySelector("[data-module-visual-grid]");
     visualGrid.innerHTML = renderModuleVisuals(module.visuals || []);
     document.querySelector("[data-visual-section]").hidden = false;
 
-    const state = { questions, index: 0 };
+    const storedProgress = readProgress();
+    const saved = moduleProgress(storedProgress, module.id);
+    const requestedIndex = requestedQuestionIndex(questions.length);
+    const state = {
+      module,
+      questions,
+      progress: saved,
+      index: requestedIndex ?? Math.min(saved.currentQuestionIndex, questions.length - 1)
+    };
+    state.progress = saveModuleProgress(module, (progress) => ({
+      ...progress,
+      currentQuestionIndex: state.index
+    }));
     const player = document.querySelector("[data-question-player]");
     player.hidden = false;
     renderQuestion(state);
@@ -204,14 +344,29 @@ async function init() {
     document.querySelector("[data-prev-question]").addEventListener("click", () => {
       if (state.index > 0) {
         state.index -= 1;
+        state.progress = saveModuleProgress(module, (progress) => ({
+          ...progress,
+          currentQuestionIndex: state.index
+        }));
         renderQuestion(state);
+        document.querySelector("[data-question-card]").focus({ preventScroll: true });
       }
     });
     document.querySelector("[data-next-question]").addEventListener("click", () => {
+      if (document.querySelector("[data-next-question]").disabled) return;
       if (state.index < state.questions.length - 1) {
         state.index += 1;
+        state.progress = saveModuleProgress(module, (progress) => ({
+          ...progress,
+          currentQuestionIndex: state.index
+        }));
         renderQuestion(state);
+        document.querySelector("[data-question-card]").focus({ preventScroll: true });
       } else {
+        state.progress = saveModuleProgress(module, (progress) => ({
+          ...progress,
+          currentQuestionIndex: state.index
+        }));
         window.location.href = "/courses/aut-250/";
       }
     });

@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 test.use({ baseURL: 'http://127.0.0.1:3012' });
 
 test.describe('AUT-250 learner course dashboard', () => {
-  test('renders six approved modules with browser-only progress', async ({ page }) => {
+  test('renders six approved modules with participation-based browser progress', async ({ page }) => {
     await page.goto('/courses/aut-250/');
     await page.waitForLoadState('networkidle');
 
@@ -11,9 +11,29 @@ test.describe('AUT-250 learner course dashboard', () => {
     await expect(page.locator('[data-dashboard-module]')).toHaveCount(6);
     await expect(page.locator('[data-course-release-status]')).toContainText('Approved for formative training use');
     await expect(page.locator('[data-course-progress]')).toHaveText('0 / 6');
+    await expect(page.locator('[data-progress-attempted]')).toHaveText('0 / 20');
+    await expect(page.locator('[data-toggle-module]')).toHaveCount(0);
 
-    await page.locator('[data-toggle-module]').first().click();
+    await page.evaluate(() => localStorage.setItem('autolearnpro:aut250:module-progress', JSON.stringify({
+      version: 2,
+      lastModuleId: 'aut250-m1-battery-systems',
+      modules: {
+        'aut250-m1-battery-systems': {
+          currentQuestionIndex: 3,
+          attemptedQuestionIds: ['aut250-m1-q01','aut250-m1-q02','aut250-m1-q03','aut250-m1-q04'],
+          feedbackViewedQuestionIds: ['aut250-m1-q01','aut250-m1-q02','aut250-m1-q03','aut250-m1-q04'],
+          completed: true,
+          lastVisitedAt: '2026-09-28T00:00:00.000Z'
+        }
+      }
+    })));
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
     await expect(page.locator('[data-course-progress]')).toHaveText('1 / 6');
+    await expect(page.locator('[data-progress-attempted]')).toHaveText('4 / 20');
+    await expect(page.locator('[data-dashboard-module="aut250-m1-battery-systems"] .aut250-module-status')).toHaveText('Completed');
+    await expect(page.locator('[data-course-continue]')).toContainText('Continue Module 01');
   });
 
   test('fails closed if the final approval credential cannot be verified', async ({ page }) => {
