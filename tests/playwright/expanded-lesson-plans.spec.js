@@ -82,6 +82,46 @@ test.describe('Expanded lesson plans', () => {
     expect(pageErrors).toEqual([]);
   });
 
+  test('renders AUT-250 modules with learner navigation and local completion state', async ({ page }) => {
+    const pageErrors = collectPageErrors(page);
+
+    await page.goto('/lesson-plans/#ug-hev-foundations');
+    await expect(page.locator('html')).toHaveAttribute('data-aut250-modules', 'loaded');
+
+    const plan = page.locator('#ug-hev-foundations');
+    const modules = plan.locator('[data-course-module]');
+    await expect(modules).toHaveCount(6);
+    await expect(plan.locator('.module-jump-nav a')).toHaveCount(6);
+    await expect(plan.locator('.module-progress')).toContainText('0 / 6');
+
+    const battery = plan.locator('#aut250-m1-battery-systems');
+    await expect(battery.getByRole('heading', { name: 'Battery Systems, Monitoring, and State Estimation' })).toBeVisible();
+    await expect(battery.locator('.module-objective-list li')).toHaveCount(4);
+
+    await battery.getByText('Lessons').click();
+    await expect(battery.locator('.module-lesson')).toHaveCount(3);
+    await expect(battery.getByText(/Battery diagnosis requires separating direct observations from calculated states/i)).toBeVisible();
+
+    await battery.getByText('Planned visuals').click();
+    await expect(battery.locator('.module-visual-grid article')).toHaveCount(3);
+    await expect(battery.locator('.module-safety-boundary')).toContainText(/vehicle-specific/i);
+
+    const completeButton = battery.locator('[data-module-complete-toggle]');
+    await expect(completeButton).toHaveText('Mark complete');
+    await completeButton.click();
+    await expect(completeButton).toHaveAttribute('aria-pressed', 'true');
+    await expect(completeButton).toHaveText('Completed');
+    await expect(plan.locator('.module-progress')).toContainText('1 / 6');
+
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-aut250-modules', 'loaded');
+    await expect(page.locator('#aut250-m1-battery-systems [data-module-complete-toggle]'))
+      .toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#ug-hev-foundations .module-progress')).toContainText('1 / 6');
+
+    expect(pageErrors).toEqual([]);
+  });
+
   test('links every pathway course to its expanded lesson plan', async ({ page }) => {
     const pageErrors = collectPageErrors(page);
 
