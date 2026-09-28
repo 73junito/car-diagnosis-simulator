@@ -29,24 +29,24 @@ Citation metadata, canonical links/DOIs, bibliographic facts, and project-author
 
 ## Technical review
 
-Reviewer name: ____________________  
-Reviewer ID: ____________________  
-Qualification reference: ____________________  
-Review date/time: ____________________
+Reviewer name: Rafael Rodriguez  
+Reviewer ID: rafael-rodriguez  
+Qualification reference: Former automotive instructor with over six years of post-secondary automotive instruction; automotive/diesel technician background; retired Army heavy equipment repair leader/technician.  
+Review date: 2026-09-27
 
 Confirm each item:
 
-- [ ] Technical claims reviewed
-- [ ] Source applicability reviewed
-- [ ] Vehicle-specific boundaries preserved
-- [ ] No single clue is treated as root-cause proof
-- [ ] No universal service values/procedures introduced
-- [ ] Answer keys and explanations checked
+- [x] Technical claims reviewed
+- [x] Source applicability reviewed
+- [x] Vehicle-specific boundaries preserved
+- [x] No single clue is treated as root-cause proof
+- [x] No universal service values/procedures introduced
+- [x] Answer keys and explanations checked
 
-Decision: **Pending / Pass / Pass with limitations / Hold**
+Decision: **Pass with limitations**
 
 Notes:  
-____________________________________________________________
+The 20 questions remain conceptual training questions and do not authorize vehicle service procedures. Vehicle-specific voltages, thresholds, isolation steps, wait times, PPE requirements, test points, and procedures must come from applicable authoritative service information. A DTC, temperature reading, SOC/SOH estimate, communication fault, charging symptom, or other single observation cannot by itself establish component failure. Request → Measure → Compare → Correlate → Verify remains an AutoLearnPro project-authored diagnostic framework; external sources support underlying diagnostic principles but are not represented as the origin of that framework. Technical approval does not approve citations, rights, high-stakes assessment use, or production release.
 
 ## Instructional review
 
