@@ -7,6 +7,10 @@ const lessonPlans = JSON.parse(fs.readFileSync("data/curriculum/lesson-plans.jso
 const programArchitecture = JSON.parse(
   fs.readFileSync("data/curriculum/program-architecture.json", "utf8")
 );
+const catalogCourses = JSON.parse(
+  fs.readFileSync("data/curriculum/course-catalog.json", "utf8")
+).courses;
+const catalogById = new Map(catalogCourses.map((course) => [course.id, course]));
 const statusById = new Map(lessonPlans.map((lesson) => [lesson.id, lesson.status]));
 
 function buildProgramMappings() {
@@ -32,6 +36,21 @@ function buildProgramMappings() {
         title: supplemental.title
       });
     }
+  }
+
+  for (const mapping of programArchitecture.catalogDevelopmentMappings || []) {
+    const catalogCourse = catalogById.get(mapping.catalogCourseId);
+    if (!catalogCourse) {
+      throw new Error(`Unknown catalog course ${mapping.catalogCourseId}`);
+    }
+    mappings.set(mapping.existingLessonPlanId, {
+      programId: "academic-course-catalog",
+      relationship: "catalog-course",
+      catalogCourseId: catalogCourse.id,
+      catalogCourseCode: catalogCourse.code,
+      catalogCourseTitle: catalogCourse.title,
+      mappingType: mapping.mappingType
+    });
   }
 
   return mappings;
@@ -88,6 +107,40 @@ function plan(config) {
 }
 
 const plans = [
+  plan({
+    id: "ug-aut101-foundations",
+    summary: "Introduce the major systems, professional expectations, safety boundaries, technical-information habits, and evidence-based reasoning process learners will use throughout the automotive technology curriculum.",
+    minutes: 180,
+    prerequisites: ["No formal course prerequisite", "Orientation to the AutoLearnPro learning environment"],
+    objectives: [
+      objective("ug-aut101-lo-1", "Identify major vehicle systems and explain their basic functional relationships without treating a system overview as a vehicle-specific service procedure.", "knowledge"),
+      objective("ug-aut101-lo-2", "Distinguish a customer concern, observation, measurement, technical reference, hypothesis, and diagnostic conclusion.", "evidence-interpretation"),
+      objective("ug-aut101-lo-3", "Use safety, professional practice, and applicable technical information to select and document an appropriate next step for a basic vehicle concern.", "diagnostic-reasoning")
+    ],
+    keyConcepts: ["vehicle systems and subsystem relationships", "safety boundaries", "professional practice", "technical information", "evidence versus conclusion", "diagnostic workflow and documentation"],
+    blocks: [
+      block("aut101-objectives", "learning-objective", "introduce", "Lesson targets", "Preview the systems, evidence, safety, and professional-practice outcomes for the lesson.", ["ug-aut101-lo-1","ug-aut101-lo-2","ug-aut101-lo-3"]),
+      block("aut101-prior-knowledge", "prior-knowledge", "introduce", "What learners already know", "Activate everyday vehicle knowledge while separating informal familiarity from verified technical information.", ["ug-aut101-lo-1"]),
+      block("aut101-system-overview", "concept-explanation", "explain", "Vehicle systems as an interconnected whole", "Introduce major vehicle systems and the idea that a symptom in one area may depend on conditions in another.", ["ug-aut101-lo-1"]),
+      block("aut101-system-map", "visual-or-model", "explain", "Vehicle-system relationship model", "Use a simplified conceptual model to connect power, control, chassis, thermal, electrical, and information functions without implying a universal vehicle architecture.", ["ug-aut101-lo-1"]),
+      block("aut101-worked-example", "worked-example", "demonstrate", "From concern to next step", "Demonstrate how a basic vehicle concern moves from reported symptom to observation, information gathering, hypothesis, and a justified next check.", ["ug-aut101-lo-2","ug-aut101-lo-3"]),
+      block("aut101-guided-practice", "guided-practice", "practice", "Evidence sorting", "Classify sample statements as concern, observation, measurement, reference, hypothesis, or conclusion.", ["ug-aut101-lo-2"]),
+      block("aut101-independent-scenario", "independent-scenario", "diagnose", "Basic vehicle concern", "Choose a safe and information-supported next step for a simple vehicle concern without being given a repair answer.", ["ug-aut101-lo-3"]),
+      block("aut101-reasoning-check", "knowledge-or-reasoning-check", "assess", "Foundations reasoning check", "Use low-stakes formative prompts to check system recognition, evidence classification, and next-step reasoning.", ["ug-aut101-lo-1","ug-aut101-lo-2","ug-aut101-lo-3"]),
+      block("aut101-feedback", "feedback-and-retry", "remediate", "Explain and retry", "Provide reasoning-focused feedback and allow revision without creating scored assessment eligibility.", ["ug-aut101-lo-2","ug-aut101-lo-3"]),
+      block("aut101-evidence-reference", "evidence-reference", "summarize", "Technical information and source boundary", "Reinforce that vehicle-specific procedures, specifications, limits, and safety instructions require applicable authoritative information.", ["ug-aut101-lo-3"]),
+      block("aut101-summary", "lesson-summary", "summarize", "Foundations summary", "Summarize how systems thinking, safety, professional practice, evidence, and documentation support later automotive coursework.", ["ug-aut101-lo-1","ug-aut101-lo-2","ug-aut101-lo-3"])
+    ],
+    visuals: [
+      visual("aut101-system-relationships", "concept-diagram", "explain", "Major vehicle-system relationships", "Show high-level relationships among vehicle systems without presenting a vehicle-specific schematic.", ["ug-aut101-lo-1"]),
+      visual("aut101-diagnostic-flow", "flowchart", "sequence", "Concern-to-next-step workflow", "Show the sequence from concern through evidence gathering and documentation.", ["ug-aut101-lo-2","ug-aut101-lo-3"]),
+      visual("aut101-evidence-table", "table", "compare", "Evidence versus conclusion", "Compare concerns, observations, measurements, references, hypotheses, and conclusions.", ["ug-aut101-lo-2"]),
+      visual("aut101-foundations-infographic", "infographic", "summarize", "Automotive learning foundations", "Summarize systems thinking, safety, professional practice, evidence, technical information, and documentation.", ["ug-aut101-lo-1","ug-aut101-lo-2","ug-aut101-lo-3"])
+    ],
+    practiceTasks: ["Match common vehicle functions to the major system most directly responsible for them", "Sort sample statements into concern, observation, measurement, reference, hypothesis, or conclusion", "Identify which information must be verified before following a vehicle-specific procedure", "Write a brief rationale for a safe next step in a basic guided concern"],
+    assessmentPlan: ["Low-stakes vehicle-system recognition check", "Evidence-classification exercise", "Formative next-step reasoning scenario", "Reasoning-focused feedback and retry"],
+    evidenceFocus: ["General vehicle-system relationships", "Safety and professional-practice boundaries", "Technical-information applicability", "Evidence-to-decision reasoning"]
+  }),
   plan({
     id: "ug-electrical-charging-system",
     summary: "Build from charging-system relationships to evidence-based diagnostic decisions using symptoms, measurements, and vehicle-specific verification procedures.",

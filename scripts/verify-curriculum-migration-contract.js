@@ -32,7 +32,10 @@ const catalogMigration = fs.readFileSync(catalogMigrationPath, 'utf8');
 const evSyncMigrationPath = path.join(migrationsDir, '20260928094000_sync_hybrid_ev_developed_curriculum.sql');
 assert(fs.existsSync(evSyncMigrationPath), 'EV developed-curriculum sync migration is missing');
 const evSyncMigration = fs.readFileSync(evSyncMigrationPath, 'utf8');
-const developedMigrationCorpus = migration + '\n' + evSyncMigration;
+const aut101MigrationPath = path.join(migrationsDir, '20260928152000_add_aut101_developed_curriculum.sql');
+assert(fs.existsSync(aut101MigrationPath), 'AUT 101 developed-curriculum migration is missing');
+const aut101Migration = fs.readFileSync(aut101MigrationPath, 'utf8');
+const developedMigrationCorpus = migration + '\n' + evSyncMigration + '\n' + aut101Migration;
 
 const requiredTables = [
   'curriculum_pathways',

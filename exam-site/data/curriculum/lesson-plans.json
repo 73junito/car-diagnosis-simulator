@@ -2,6 +2,24 @@
   "schemaVersion": "1.0.0",
   "lessonPlans": [
     {
+      "id": "ug-aut101-foundations",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-101",
+      "competencyId": "ug-aut101-systems-professional-foundations",
+      "title": "Automotive Systems, Professional Practice, and Evidence Foundations",
+      "sequence": [
+        "Orient to vehicle systems",
+        "Connect system roles",
+        "Recognize safety and professional boundaries",
+        "Distinguish concern, observation, test, and conclusion",
+        "Use technical information",
+        "Follow a basic diagnostic workflow",
+        "Practice with a guided vehicle concern",
+        "Explain and document the next step"
+      ],
+      "status": "planned"
+    },
+    {
       "id": "ug-electrical-charging-system",
       "academicLevel": "undergraduate",
       "courseId": "electrical-1",

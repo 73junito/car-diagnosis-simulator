@@ -6,6 +6,7 @@ const architecture = readJson("data/curriculum/program-architecture.json");
 const lessons = readJson("data/curriculum/lesson-plans.json").lessonPlans;
 const undergraduateCourses = readJson("data/curriculum/undergraduate-courses.json").courses;
 const graduateCourses = readJson("data/curriculum/graduate-courses.json").courses;
+const catalogCourses = readJson("data/curriculum/course-catalog.json").courses;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -29,6 +30,14 @@ assert(undergraduate.totalCredits === 68, "Undergraduate A.A.S. must total exact
 assert(graduate.cipCode === "15.0803", "Graduate CIP must be 15.0803");
 assert(graduate.cipTitle === "Automotive Engineering Technology/Technician", "Graduate CIP title mismatch");
 assert(graduate.totalCredits === 30, "Graduate program must total exactly 30 proposed credits");
+assert(architecture.catalogAuthority && architecture.catalogAuthority.courseCodeAuthority === true,
+  "Academic course catalog must be declared as the AUT course-code authority");
+assert(undergraduate.identifierNamespace === "legacy-aas-proposal",
+  "Legacy A.A.S. proposal must use an explicit identifier namespace");
+for (const course of undergraduate.courses) {
+  assert(!/^AUT-\d{3}$/.test(course.id),
+    "Legacy A.A.S. proposal cannot claim a current catalog AUT code: " + course.id);
+}
 
 for (const program of architecture.programs) {
   const courseIds = new Set();
@@ -105,6 +114,24 @@ for (const program of architecture.programs) {
       "Lesson " + item.existingLessonPlanId + " mapped more than once");
     mappedLessons.add(item.existingLessonPlanId);
   }
+}
+
+const catalogById = new Map(catalogCourses.map((course) => [course.id, course]));
+const developedUndergraduateById = new Map(undergraduateCourses.map((course) => [course.id, course]));
+const seenCatalogDevelopment = new Set();
+for (const item of architecture.catalogDevelopmentMappings || []) {
+  assert(catalogById.has(item.catalogCourseId),
+    "Unknown catalog course " + item.catalogCourseId);
+  assert(developedUndergraduateById.has(item.existingCourseId),
+    "Unknown developed undergraduate course " + item.existingCourseId);
+  assert(lessonIds.has(item.existingLessonPlanId),
+    "Unknown catalog-developed lesson " + item.existingLessonPlanId);
+  assert(!seenCatalogDevelopment.has(item.catalogCourseId),
+    "Catalog course mapped more than once " + item.catalogCourseId);
+  assert(!mappedLessons.has(item.existingLessonPlanId),
+    "Lesson " + item.existingLessonPlanId + " mapped more than once");
+  seenCatalogDevelopment.add(item.catalogCourseId);
+  mappedLessons.add(item.existingLessonPlanId);
 }
 
 assert(mappedLessons.size === lessons.length,

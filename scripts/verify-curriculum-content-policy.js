@@ -8,6 +8,8 @@ const lessons = readJson("data/curriculum/lesson-plans.json").lessonPlans;
 const contentDoc = readJson("data/curriculum/lesson-content.json");
 const plans = contentDoc.lessonContentPlans;
 const programArchitecture = readJson("data/curriculum/program-architecture.json");
+const catalogCourses = readJson("data/curriculum/course-catalog.json").courses;
+const catalogById = new Map(catalogCourses.map((course) => [course.id, course]));
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -39,6 +41,21 @@ for (const program of programArchitecture.programs || []) {
       title: supplemental.title
     });
   }
+}
+
+for (const mapping of programArchitecture.catalogDevelopmentMappings || []) {
+  const catalogCourse = catalogById.get(mapping.catalogCourseId);
+  assert(catalogCourse, `Unknown catalog course ${mapping.catalogCourseId}`);
+  assert(!expectedProgramMappings.has(mapping.existingLessonPlanId),
+    `Lesson ${mapping.existingLessonPlanId} classified more than once`);
+  expectedProgramMappings.set(mapping.existingLessonPlanId, {
+    programId: "academic-course-catalog",
+    relationship: "catalog-course",
+    catalogCourseId: catalogCourse.id,
+    catalogCourseCode: catalogCourse.code,
+    catalogCourseTitle: catalogCourse.title,
+    mappingType: mapping.mappingType
+  });
 }
 
 assert(policy.schemaVersion === "1.0.0", "Unsupported content policy schemaVersion");

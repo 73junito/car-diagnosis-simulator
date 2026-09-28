@@ -2,6 +2,13 @@
   "schemaVersion": "1.0.0",
   "competencies": [
     {
+      "id": "ug-aut101-systems-professional-foundations",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-101",
+      "statement": "Explain major vehicle-system roles, distinguish observations from diagnostic conclusions, and use safety, professional practice, and technical information to plan an evidence-based next step.",
+      "status": "planned"
+    },
+    {
       "id": "ug-electrical-evidence-diagnosis",
       "academicLevel": "undergraduate",
       "courseId": "electrical-1",
