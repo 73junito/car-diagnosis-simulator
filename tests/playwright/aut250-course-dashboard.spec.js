@@ -1,5 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
+test.use({ baseURL: 'http://127.0.0.1:3012' });
+
 test.describe('AUT-250 learner course dashboard', () => {
   test('renders six approved modules with browser-only progress', async ({ page }) => {
     await page.goto('/courses/aut-250/');
