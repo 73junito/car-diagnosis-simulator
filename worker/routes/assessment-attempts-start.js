@@ -65,46 +65,32 @@ export async function handleStartAssessmentAttempt(c) {
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey)
 
-    // 3. Create assessment attempt record
-    // This is immutable once created; only modifications allowed are answer submissions
-    // Assessment metadata stored in payload_json to avoid schema expansion
-    const assessmentMetadata = {
-      user_email: userEmail,
-      delivery_mode: 'independent_non_proctored_assessment',
-      ai_assistance_allowed: false,
-      counts_as_official_assessment: true,
-      assessment_version: 'ADF-2026.1',
-      learner_attestation: true,
-      attestation_timestamp: attestation_timestamp || new Date().toISOString(),
-      attestation_verified: true, // Set server-side from JWT verification
-      started_at: new Date().toISOString()
-    }
+    // 3. Atomically create the attempt and bind the server-selected question set.
+    // The database function fails closed unless explicit assessment eligibility
+    // AND the provenance/citation approval chain are both satisfied.
+    const scenarioId = 'no-crank'
+    const { data: attemptId, error: createError } = await supabase.rpc('start_assessment_attempt_v1', {
+      p_user_id: userId,
+      p_scenario: scenarioId,
+      p_payload_json: assessmentMetadata,
+      p_question_count: 20
+    })
 
-    const { data: attempt, error: createError } = await supabase
-      .from('attempts')
-      .insert({
-        user_id: userId,
-        scenario: 'no-crank', // Required, NOT NULL
-        delivery_mode: 'independent_non_proctored_assessment',
-        workflow_type: 'scenario_diagnostic',
-        status: 'active', // Active, not in_progress (CHECK constraint only allows active|completed|abandoned)
-        payload_json: assessmentMetadata // Store assessment metadata as JSON
-      })
-      .select()
-      .single()
-
-    if (createError || !attempt) {
-      console.error('Failed to create attempt:', createError)
+    if (createError || !attemptId) {
+      const message = String(createError?.message || '')
+      if (message.includes('assessment_bank_not_ready')) {
+        return c.json({ error: 'Assessment bank is not approved and ready for delivery' }, 409)
+      }
+      console.error('Failed to create assessment attempt:', createError)
       return c.json({ error: 'Failed to create assessment attempt' }, 500)
     }
 
-    // 4. Return attempt ID and launch URL
-    const scenarioId = 'no-crank'
-    const launchUrl = `/dashboard/student/scenario/?id=${scenarioId}&mode=assessment&attempt_id=${attempt.id}`
+    // 4. Return attempt ID and launch URL. Question selection remains server-side.
+    const launchUrl = `/dashboard/student/scenario/?id=${scenarioId}&mode=assessment&attempt_id=${attemptId}`
 
     return c.json(
       {
-        attempt_id: attempt.id,
+        attempt_id: attemptId,
         launch_url: launchUrl,
         metadata: {
           delivery_mode: 'independent_non_proctored_assessment',

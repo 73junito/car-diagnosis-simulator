@@ -118,6 +118,15 @@ flowchart LR
 - Training approval does not imply scored, high-stakes, institutional, or production-assessment eligibility.
 - The Worker routes are canonical for production. Legacy `api/` implementations must not be treated as the production security contract.
 
+## Implementation status
+
+The first server-authoritative binding layer is implemented by `20260928072000_add_assessment_attempt_question_binding.sql` and the Cloudflare Worker routes:
+
+- assessment eligibility is a separate, empty-by-default registry;
+- assessment attempts are created atomically with an immutable `attempt_questions` set;
+- assessment-mode question delivery reads only the assigned set;
+- grading rejects assessment questions that are not assigned to the attempt;
+- assessment completion remains unscored in the browser until a server finalization route is implemented.
 ## Planned server-authoritative assessment contract
 
 A future assessment attempt should bind the learner to an immutable server-selected set of questions and/or lab configuration. The intended data relationship is:
