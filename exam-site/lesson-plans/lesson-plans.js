@@ -1,4 +1,5 @@
 const ROOT = "/data/curriculum";
+const AUT250_TRAINING_APPROVAL_URL = "/data/evidence/approval-records/aut250-training-batch-001-final-approval-20260927.json";
 
 const escapeHtml = (value) => String(value ?? "")
   .replace(/&/g, "&amp;")
@@ -16,6 +17,43 @@ async function loadJson(name) {
   const response = await fetch(`${ROOT}/${name}`, { cache: "no-store" });
   if (!response.ok) throw new Error(`Failed to load ${name}: ${response.status}`);
   return response.json();
+}
+
+async function loadTrainingApproval() {
+  const response = await fetch(AUT250_TRAINING_APPROVAL_URL, { cache: "no-store" });
+  if (!response.ok) throw new Error(`Failed to load AUT-250 training approval: ${response.status}`);
+  return response.json();
+}
+
+function evaluateAut250TrainingRelease(approval) {
+  const effect = approval?.approval_effect_if_confirmed;
+  const release = approval?.release_state;
+  const decision = approval?.requested_final_decision;
+
+  const checks = {
+    correctBatch: approval?.question_batch === "aut250-training-batch-001",
+    correctCount: approval?.question_count === 20,
+    explicitlyApproved: decision?.decision === "approved",
+    trainingOnlyScope: decision?.scope === "training-bank-final-approval-only",
+    trainingApproved: release?.training_bank_final_approval === "approved-for-training-use",
+    trainingDeliveryAllowed: effect?.training_delivery_allowed === true,
+    remainsUnscored: effect?.scored === false,
+    notHighStakes: effect?.high_stakes_eligible === false && release?.high_stakes_release === false,
+    notInstitutionalAssessment: effect?.institutional_assessment_eligible === false,
+    notProductionAssessmentApi: effect?.production_assessment_api_eligible === false,
+    noAssessmentRelease: release?.assessment_release === false,
+    noProductionRelease: release?.production_release === false
+  };
+
+  const approved = Object.values(checks).every(Boolean);
+  return {
+    approved,
+    checks,
+    status: approved ? "approved-for-training-use" : "blocked",
+    message: approved
+      ? "Approved for formative training use only."
+      : "Training questions are unavailable because the final approval gate is not satisfied."
+  };
 }
 
 function list(items, className = "") {
@@ -313,8 +351,15 @@ function renderOriginalModuleVisual(visual) {
 }
 
 
-function renderTrainingQuestions(questions = []) {
+function renderTrainingQuestions(questions = [], releaseGate = { approved: false }) {
   if (!questions.length) return "";
+  if (!releaseGate.approved) {
+    return `
+      <div class="training-release-blocked" role="status" data-training-release-blocked>
+        <strong>Training questions unavailable</strong>
+        <p>${escapeHtml(releaseGate.message || "The final approval gate is not satisfied.")}</p>
+      </div>`;
+  }
 
   return `
     <div class="training-question-list">
@@ -322,7 +367,7 @@ function renderTrainingQuestions(questions = []) {
         <article class="training-question-card" data-training-question="${escapeHtml(question.id)}" data-answer="${escapeHtml(question.answer)}">
           <div class="training-question-head">
             <span>Training question ${String(index + 1).padStart(2, "0")}</span>
-            <span class="training-question-status">${escapeHtml(titleCase(question.status))} · citation review pending</span>
+            <span class="training-question-status">Approved for formative training use · non-scored</span>
           </div>
           <h6>${escapeHtml(question.stem)}</h6>
           <div class="training-question-options" role="radiogroup" aria-label="${escapeHtml(question.stem)}">
@@ -334,7 +379,7 @@ function renderTrainingQuestions(questions = []) {
           </div>
           <button type="button" class="training-check-answer" data-training-check="${escapeHtml(question.id)}">Check answer</button>
           <div class="training-feedback" data-training-feedback="${escapeHtml(question.id)}" aria-live="polite"></div>
-          <p class="training-boundary">Training only · not scored · not eligible for high-stakes assessment · provenance and citation validation pending.</p>
+          <p class="training-boundary">Training only · not scored · not eligible for high-stakes assessment · not eligible for institutional assessment · not released to the production assessment API.</p>
         </article>`).join("")}
     </div>`;
 }
@@ -372,7 +417,7 @@ function initTrainingQuestions() {
   document.documentElement.dataset.aut250TrainingQuestions = "loaded";
 }
 
-function renderCourseModules(modules = []) {
+function renderCourseModules(modules = [], releaseGate = { approved: false }) {
   if (!modules.length) return "";
 
   return `
@@ -382,6 +427,11 @@ function renderCourseModules(modules = []) {
           <p class="eyebrow">Learner course sequence</p>
           <h4 id="aut250-module-title">AUT-250 follow-on modules</h4>
           <p>Work through the six modules in sequence. Completion markers are stored only in this browser and do not represent scored assessment or institutional credit.</p>
+          <p class="training-release-status" data-training-release-status>
+            ${releaseGate.approved
+              ? "Training bank: approved for formative training use · non-scored"
+              : "Training bank: unavailable — final approval gate not satisfied"}
+          </p>
         </div>
         <div class="module-progress" aria-live="polite">
           <strong><span data-module-complete-count>0</span> / ${modules.length}</strong>
@@ -451,7 +501,7 @@ function renderCourseModules(modules = []) {
 
             <details class="training-question-section">
               <summary>Training questions (${(module.trainingQuestions || []).length})</summary>
-              ${renderTrainingQuestions(module.trainingQuestions || [])}
+              ${renderTrainingQuestions(module.trainingQuestions || [], releaseGate)}
             </details>
 
             <div class="module-safety-boundary">
@@ -522,7 +572,7 @@ function renderProgramMapping(mapping) {
   return `Program mapping: ${escapeHtml(titleCase(mapping.classification))} · ${escapeHtml(mapping.title)}`;
 }
 
-function renderPlan(plan, lesson, course) {
+function renderPlan(plan, lesson, course, releaseGate) {
   return `
     <article class="expanded-plan" id="${escapeHtml(plan.lessonPlanId)}">
       <div class="expanded-plan-head">
@@ -564,7 +614,7 @@ function renderPlan(plan, lesson, course) {
         </div>
       </details>
 
-      ${renderCourseModules(plan.courseModules)}
+      ${renderCourseModules(plan.courseModules, releaseGate)}
 
       <details>
         <summary>Evidence focus and boundaries</summary>
@@ -586,7 +636,7 @@ function renderPlan(plan, lesson, course) {
     </article>`;
 }
 
-function renderGroup(targetId, level, plans, lessons, courses) {
+function renderGroup(targetId, level, plans, lessons, courses, releaseGate) {
   const target = document.getElementById(targetId);
   const lessonsById = new Map(lessons.map((lesson) => [lesson.id, lesson]));
   const coursesById = new Map(courses.map((course) => [course.id, course]));
@@ -595,7 +645,7 @@ function renderGroup(targetId, level, plans, lessons, courses) {
     .map((plan) => {
       const lesson = lessonsById.get(plan.lessonPlanId);
       const course = coursesById.get(lesson.courseId);
-      return renderPlan(plan, lesson, course);
+      return renderPlan(plan, lesson, course, releaseGate);
     })
     .join("");
   target.innerHTML = html;
@@ -609,20 +659,36 @@ async function init() {
       loadJson("graduate-courses.json")
     ]);
 
+    let trainingReleaseGate;
+    try {
+      trainingReleaseGate = evaluateAut250TrainingRelease(await loadTrainingApproval());
+    } catch (approvalError) {
+      console.error("AUT-250 training approval gate failed closed:", approvalError);
+      trainingReleaseGate = {
+        approved: false,
+        checks: {},
+        status: "blocked",
+        message: "Training questions are unavailable because the final approval record could not be verified."
+      };
+    }
+    document.documentElement.dataset.aut250TrainingRelease = trainingReleaseGate.status;
+
     const courses = [...undergraduateDoc.courses, ...graduateDoc.courses];
     renderGroup(
       "undergraduate-plan-list",
       "undergraduate",
       contentDoc.lessonContentPlans,
       lessonDoc.lessonPlans,
-      courses
+      courses,
+      trainingReleaseGate
     );
     renderGroup(
       "graduate-plan-list",
       "graduate",
       contentDoc.lessonContentPlans,
       lessonDoc.lessonPlans,
-      courses
+      courses,
+      trainingReleaseGate
     );
 
     document.querySelectorAll("[data-course-module]").forEach((node) => {
@@ -633,7 +699,11 @@ async function init() {
     });
 
     initModuleProgress();
-    initTrainingQuestions();
+    if (trainingReleaseGate.approved) {
+      initTrainingQuestions();
+    } else {
+      document.documentElement.dataset.aut250TrainingQuestions = "blocked";
+    }
     document.documentElement.dataset.lessonPlans = "loaded";
   } catch (error) {
     console.error(error);
