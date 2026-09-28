@@ -24,10 +24,10 @@ describe('AUT-250 bulk citation/provenance review', () => {
   test('records the fail-closed disposition totals', () => {
     const supported = review.questions.filter((item) => item.disposition === 'candidate-supported');
     const held = review.questions.filter((item) => item.disposition === 'hold-for-stronger-evidence');
-    expect(supported).toHaveLength(14);
-    expect(held).toHaveLength(6);
-    expect(review.summary.candidate_supported).toBe(14);
-    expect(review.summary.hold_for_stronger_evidence).toBe(6);
+    expect(supported).toHaveLength(20);
+    expect(held).toHaveLength(0);
+    expect(review.summary.candidate_supported).toBe(20);
+    expect(review.summary.hold_for_stronger_evidence).toBe(0);
     expect(review.summary.approved).toBe(0);
     expect(review.summary.citation_validated).toBe(0);
   });
@@ -53,6 +53,20 @@ describe('AUT-250 bulk citation/provenance review', () => {
       expect(source.ingestion_status).toBe('metadata-and-link-only');
       expect(source.review_use).toMatch(/candidate citation support only|secondary corroboration only/);
     }
+  });
+
+  test('records deterministic citation validation as blocked until governance prerequisites exist', () => {
+    expect(review.deterministic_validation_gate.validator).toBe('scripts/validate-citations.js');
+    expect(review.deterministic_validation_gate.status).toBe('blocked-by-governance-prerequisites');
+    expect(review.deterministic_validation_gate.current_question_state).toBe('draft');
+    expect(review.deterministic_validation_gate.decision).toBe('do-not-run-or-weaken-validator-yet');
+    expect(review.deterministic_validation_gate.requires).toEqual(expect.arrayContaining([
+      expect.stringMatching(/approved_sources/),
+      expect.stringMatching(/source_chunks/),
+      expect.stringMatching(/SHA-256/)
+    ]));
+    expect(review.hold_resolution.remaining_holds).toBe(0);
+    expect(review.hold_resolution.approval_effect).toBe('none');
   });
 
   test('records duplicate and safety screening without claiming human completion', () => {
