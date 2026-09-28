@@ -106,7 +106,8 @@ test.describe('Expanded lesson plans', () => {
     await expect(battery.locator('.module-visual-grid article')).toHaveCount(3);
     await expect(battery.locator('.module-safety-boundary')).toContainText(/vehicle-specific/i);
 
-    const completeButton = battery.getByRole('button', { name: 'Mark complete' });
+    const completeButton = battery.locator('[data-module-complete-toggle]');
+    await expect(completeButton).toHaveText('Mark complete');
     await completeButton.click();
     await expect(completeButton).toHaveAttribute('aria-pressed', 'true');
     await expect(completeButton).toHaveText('Completed');
