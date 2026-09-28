@@ -78,17 +78,17 @@ describe('AUT-250 human review gate package', () => {
     ]));
   });
 
-  test('keeps citation evidence options explicit without selecting one', () => {
-    expect(pkg.citation_evidence_decision.status).toBe('pending-human-rights-and-governance-decision');
-    expect(pkg.citation_evidence_decision.approved_representation).toBeNull();
+  test('keeps citation evidence options explicit after selecting metadata-only proof', () => {
+    expect(pkg.citation_evidence_decision.status).toBe('confirmed');
+    expect(pkg.citation_evidence_decision.approved_representation).toBe('metadata-only-citation-proof');
     expect(pkg.citation_evidence_decision.options_under_review).toHaveLength(2);
     expect(pkg.citation_evidence_decision.options_under_review.map((item) => item.option_id))
       .toEqual(['approved-excerpt-chunks', 'metadata-only-citation-proof']);
   });
 
-  test('selects metadata-only citation proof as a pending project preference', () => {
+  test('confirms metadata-only citation proof as the project representation', () => {
     expect(pkg.citation_evidence_decision.project_preference.option_id).toBe('metadata-only-citation-proof');
-    expect(pkg.citation_evidence_decision.project_preference.status).toBe('selected-pending-human-confirmation');
+    expect(pkg.citation_evidence_decision.project_preference.status).toBe('confirmed');
     expect(pkg.citation_evidence_decision.project_preference.approval_effect).toBe('none');
     expect(pkg.citation_evidence_decision.metadata_preflight.script)
       .toBe('scripts/validate-aut250-metadata-citations.js');
@@ -124,7 +124,8 @@ describe('AUT-250 human review gate package', () => {
   test('prohibits validator shortcuts and auto approval', () => {
     expect(pkg.citation_evidence_decision.prohibited_shortcuts.join(' ')).toMatch(/Do not weaken citation-validator-1\.0/i);
     expect(pkg.citation_evidence_decision.prohibited_shortcuts.join(' ')).toMatch(/Do not create fake or synthetic source chunks/i);
-    expect(pkg.release_gate.status).toBe('blocked');
+    expect(pkg.release_gate.status).toBe('blocked-pending-deterministic-validation-and-final-approval');
+    expect(pkg.release_gate.deterministic_validation_ready).toBe(true);
     expect(pkg.release_gate.auto_approval_allowed).toBe(false);
     expect(pkg.release_gate.required_conditions).toEqual(expect.arrayContaining([
       'rights review completed',
