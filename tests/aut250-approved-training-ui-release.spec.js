@@ -63,7 +63,7 @@ describe('AUT-250 approved formative training learner release', () => {
   test('learner-facing copy preserves the formative-only boundary', () => {
     const source = read(scriptRel);
     expect(source).toContain('Approved for formative training use · non-scored');
-    expect(source).toContain('not eligible for high-stakes or institutional assessment');
+    expect(source).toContain('not eligible for high-stakes assessment · not eligible for institutional assessment');
     expect(source).toContain('not released to the production assessment API');
     expect(source).not.toContain('citation review pending');
     expect(source).not.toContain('provenance and citation validation pending');
