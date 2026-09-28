@@ -138,7 +138,7 @@ test.describe('Expanded lesson plans', () => {
       await expect(module.locator('.module-visual-grid > article')).toHaveCount(3);
     }
 
-    await expect(plan.locator('.module-svg')).toHaveCount(8);
+    await expect(plan.locator('.module-svg')).toHaveCount(10);
     await expect(plan.locator('.module-data-table')).toHaveCount(6);
     await expect(plan.locator('.boundary-visual')).toHaveCount(1);
     await expect(plan.locator('.timeline-visual')).toHaveCount(1);
