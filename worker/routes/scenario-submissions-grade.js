@@ -121,6 +121,32 @@ export async function handleGradeScenarioSubmission(c) {
       return c.json({ error: 'Delivery mode mismatch' }, 400)
     }
 
+    // Assessment submissions must be bound to this exact server-created attempt.
+    if (delivery_mode === 'independent_non_proctored_assessment') {
+      const { data: assignment, error: assignmentError } = await supabase
+        .from('attempt_questions')
+        .select('question_id')
+        .eq('attempt_id', attempt_id)
+        .eq('question_id', question_id)
+        .maybeSingle()
+
+      if (assignmentError || !assignment) {
+        return c.json({ error: 'Question is not assigned to this attempt' }, 403)
+      }
+
+      const { data: eligibility, error: eligibilityError } = await supabase
+        .from('assessment_question_eligibility')
+        .select('question_id, scenario_id, eligibility_status')
+        .eq('question_id', question_id)
+        .eq('scenario_id', scenario_id)
+        .eq('eligibility_status', 'approved')
+        .maybeSingle()
+
+      if (eligibilityError || !eligibility) {
+        return c.json({ error: 'Assessment eligibility gate not satisfied' }, 409)
+      }
+    }
+
     // Extract assessment metadata from payload_json
     const aiAssistanceAllowed = attempt.payload_json?.ai_assistance_allowed === true
 
