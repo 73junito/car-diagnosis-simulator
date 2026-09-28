@@ -50,24 +50,24 @@ The 20 questions remain conceptual training questions and do not authorize vehic
 
 ## Instructional review
 
-Reviewer name: ____________________  
-Reviewer ID: ____________________  
-Qualification reference: ____________________  
-Review date/time: ____________________
+Reviewer name: Rafael Rodriguez  
+Reviewer ID: rafael-rodriguez  
+Qualification reference: Former post-secondary automotive instructor with over six years of experience teaching automotive systems, diagnostics, electrical/electronics, engine performance, climate control, brakes, drivetrain, suspension/steering, and transmission courses.  
+Review date: 2026-09-27
 
 Confirm each item:
 
-- [ ] Module alignment reviewed
-- [ ] Learning-objective alignment reviewed
-- [ ] Distractor quality reviewed
-- [ ] Explanation quality reviewed
-- [ ] Difficulty/progression reviewed
-- [ ] Training-only boundary is clear
+- [x] Module alignment reviewed
+- [x] Learning-objective alignment reviewed
+- [x] Distractor quality reviewed
+- [x] Explanation quality reviewed
+- [x] Difficulty/progression reviewed
+- [x] Training-only boundary is clear
 
-Decision: **Pending / Pass / Pass with limitations / Hold**
+Decision: **Pass with limitations**
 
 Notes:  
-____________________________________________________________
+The 20 items remain formative training questions, not institutional or high-stakes assessment items. Correct-answer feedback should continue emphasizing reasoning, uncertainty, evidence correlation, and vehicle-specific authoritative information. Distractors must not normalize unsafe service shortcuts, universal procedures, or component replacement from a single clue. Question difficulty may be recalibrated later using learner-performance data, but analytics must not substitute for technical or safety review. Instructional approval does not approve rights, citations, safety, production assessment use, or final release.
 
 ## Safety review
 
