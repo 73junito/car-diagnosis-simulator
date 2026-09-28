@@ -1,0 +1,59 @@
+{
+  "approval_id": "aut250-training-batch-001-final-approval-20260927",
+  "course_id": "AUT-250",
+  "lesson_plan_id": "ug-hev-foundations",
+  "question_batch": "aut250-training-batch-001",
+  "question_count": 20,
+  "prerequisite_artifacts": {
+    "bulk_review": "data/evidence/review-queues/aut250-training-question-bulk-review-20260927.json",
+    "human_review_package": "data/evidence/review-queues/aut250-human-review-package-20260927.json",
+    "deterministic_validation": "data/evidence/validation-results/aut250-training-batch-001-metadata-validation-20260927.json",
+    "post_validation_gate_status": "data/evidence/validation-results/aut250-training-batch-001-gate-status-20260927.json"
+  },
+  "prerequisite_state": {
+    "candidate_supported_questions": 20,
+    "human_reviews_complete": true,
+    "required_human_roles": [
+      "rights",
+      "technical",
+      "instructional",
+      "safety"
+    ],
+    "citation_representation": "metadata-only-citation-proof",
+    "deterministic_metadata_validation": "valid",
+    "deterministic_questions_valid": 20,
+    "deterministic_questions_invalid": 0
+  },
+  "requested_final_decision": {
+    "scope": "training-bank-final-approval-only",
+    "decision": "pending-explicit-user-approval",
+    "approver_name": null,
+    "approver_id": null,
+    "approved_at": null,
+    "user_confirmation": null
+  },
+  "approval_effect_if_confirmed": {
+    "question_status": "approved-for-training-use",
+    "training_delivery_allowed": true,
+    "scored": false,
+    "high_stakes_eligible": false,
+    "institutional_assessment_eligible": false,
+    "production_assessment_api_eligible": false,
+    "legacy_citation_validation_effect": "none",
+    "source_rights_clearance_effect": "none"
+  },
+  "limitations": [
+    "Approval applies only to formative AUT-250 training use.",
+    "Questions remain non-scored and are not eligible for high-stakes or institutional assessment use.",
+    "Vehicle-specific service values, thresholds, PPE, isolation procedures, wait times, test points, and repair procedures must continue to come from applicable authoritative service information.",
+    "No single DTC, symptom, measurement, or observation may be represented as sufficient proof of component failure.",
+    "Metadata-only citation validation does not constitute excerpt verification, source-text hash verification, or source-rights clearance.",
+    "Any later move to scored, institutional, certification-like, or high-stakes assessment use requires a separate governance review and explicit approval."
+  ],
+  "release_state": {
+    "training_bank_final_approval": "pending",
+    "production_release": false,
+    "high_stakes_release": false,
+    "assessment_release": false
+  }
+}
