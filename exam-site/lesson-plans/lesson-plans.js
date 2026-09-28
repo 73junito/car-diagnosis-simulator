@@ -379,7 +379,7 @@ function renderTrainingQuestions(questions = [], releaseGate = { approved: false
           </div>
           <button type="button" class="training-check-answer" data-training-check="${escapeHtml(question.id)}">Check answer</button>
           <div class="training-feedback" data-training-feedback="${escapeHtml(question.id)}" aria-live="polite"></div>
-          <p class="training-boundary">Training only · not scored · not eligible for high-stakes or institutional assessment · not released to the production assessment API.</p>
+          <p class="training-boundary">Training only · not scored · not eligible for high-stakes assessment · not eligible for institutional assessment · not released to the production assessment API.</p>
         </article>`).join("")}
     </div>`;
 }
@@ -427,7 +427,7 @@ function renderCourseModules(modules = [], releaseGate = { approved: false }) {
           <p class="eyebrow">Learner course sequence</p>
           <h4 id="aut250-module-title">AUT-250 follow-on modules</h4>
           <p>Work through the six modules in sequence. Completion markers are stored only in this browser and do not represent scored assessment or institutional credit.</p>
-          <p class="program-context" data-training-release-status>
+          <p class="training-release-status" data-training-release-status>
             ${releaseGate.approved
               ? "Training bank: approved for formative training use · non-scored"
               : "Training bank: unavailable — final approval gate not satisfied"}
