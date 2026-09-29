@@ -51,6 +51,32 @@ describe('Worker production routing', () => {
       .toBe('https://app.autolearnpro.com')
   })
 
+
+  test('keeps Semantic Scholar research routes disabled unless explicitly enabled', async () => {
+    const response = await worker.fetch(
+      new Request('https://app.autolearnpro.com/api/research/semantic-scholar/search?q=automotive'),
+      {},
+      {}
+    )
+
+    expect(response.status).toBe(404)
+  })
+
+  test('requires authentication before Semantic Scholar research access', async () => {
+    const response = await worker.fetch(
+      new Request('https://app.autolearnpro.com/api/research/semantic-scholar/search?q=automotive'),
+      {
+        SEMANTIC_SCHOLAR_ENABLED: 'true',
+        SUPABASE_URL: 'https://example.supabase.co',
+        SUPABASE_SERVICE_ROLE_KEY: 'test-service-role'
+      },
+      {}
+    )
+
+    expect(response.status).toBe(401)
+    await expect(response.json()).resolves.toEqual({ error: 'Authentication required' })
+  })
+
   test('does not allow arbitrary origins', async () => {
     const response = await worker.fetch(
       new Request('https://autolearnpro.com/api/torquemind-feedback', {

@@ -6,6 +6,10 @@ import { handleGradeScenarioSubmission } from "./routes/scenario-submissions-gra
 import { handleStartAssessmentAttempt } from "./routes/assessment-attempts-start.js";
 import { handleAssessmentAttemptQuestions } from "./routes/assessment-attempt-questions.js";
 import { handleCurriculumRead } from "./routes/curriculum-read.js";
+import {
+  handleSemanticScholarSearch,
+  handleSemanticScholarPaper
+} from "./routes/semantic-scholar-research.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 
@@ -81,6 +85,17 @@ app.use('/api/curriculum/*', cors({
   maxAge: 86400
 }))
 app.all('/api/curriculum', handleCurriculumRead)
+
+// Semantic Scholar research discovery: server-side, authenticated, and role-restricted.
+// The API key is a Worker secret and is never returned to clients.
+app.use('/api/research/semantic-scholar/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/research/semantic-scholar/search', handleSemanticScholarSearch)
+app.get('/api/research/semantic-scholar/paper/:paperId', handleSemanticScholarPaper)
 
 export default {
   fetch(request, env, ctx) {
