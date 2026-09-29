@@ -848,6 +848,294 @@
         "Present results conclusions and future work"
       ],
       "status": "planned"
+    },
+    {
+      "id": "grad-aut501-integrated-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-501",
+      "competencyId": "grad-aut501-integrated-systems",
+      "title": "Integrated Automotive Systems Analysis",
+      "sequence": [
+        "Define the integrated vehicle function",
+        "Map participating domains",
+        "Identify interfaces and dependencies",
+        "Trace energy information and control flow",
+        "Organize available evidence",
+        "Identify uncertainty and missing information",
+        "Design a system-level verification approach",
+        "Document conclusions limitations and next steps"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut515-systems-modeling",
+      "academicLevel": "graduate",
+      "courseId": "aut-515",
+      "competencyId": "grad-aut515-systems-modeling",
+      "title": "Automotive Systems Modeling, Simulation, and Validation",
+      "sequence": [
+        "Define the modeled system and purpose",
+        "Identify variables states and assumptions",
+        "Select a modeling structure",
+        "Establish parameter sources",
+        "Execute or interpret simulation behavior",
+        "Compare model output with evidence",
+        "Evaluate uncertainty and validity",
+        "Document model limitations and next validation work"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut520-data-analytics",
+      "academicLevel": "graduate",
+      "courseId": "aut-520",
+      "competencyId": "grad-aut520-data-analytics",
+      "title": "Advanced Vehicle Data Analytics and Interpretation",
+      "sequence": [
+        "Define the analytical question",
+        "Characterize the dataset and provenance",
+        "Prepare variables and time context",
+        "Select an analytical approach",
+        "Evaluate patterns anomalies or trends",
+        "Test alternative interpretations",
+        "Plan validation against independent evidence",
+        "Document findings uncertainty and limitations"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut530-advanced-ev-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-530",
+      "competencyId": "grad-aut530-advanced-ev-systems",
+      "title": "Advanced Electric Vehicle Architecture and Energy Systems",
+      "sequence": [
+        "Define the EV architecture and operating state",
+        "Map energy conversion paths",
+        "Analyze machine and inverter roles",
+        "Connect charging and regenerative functions",
+        "Connect thermal and energy-management functions",
+        "Organize operating evidence",
+        "Design a verification strategy using applicable information",
+        "Document conclusions assumptions and limitations"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut535-battery-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-535",
+      "competencyId": "grad-aut535-battery-systems",
+      "title": "Advanced Battery Modeling, State Estimation, and Diagnostics",
+      "sequence": [
+        "Define the battery-system question",
+        "Separate measured and estimated variables",
+        "Select a model or estimation framework",
+        "Identify degradation and thermal influences",
+        "Evaluate balancing and management logic conceptually",
+        "Compare evidence with model expectations",
+        "Design a safe validation strategy",
+        "Document uncertainty applicability and next steps"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut540-power-electronics",
+      "academicLevel": "graduate",
+      "courseId": "aut-540",
+      "competencyId": "grad-aut540-power-electronics",
+      "title": "Vehicle Power Electronics, Conversion, and Control",
+      "sequence": [
+        "Define the conversion function",
+        "Map input output and control domains",
+        "Identify switching and drive relationships",
+        "Trace control behavior conceptually",
+        "Evaluate efficiency evidence",
+        "Connect thermal behavior and loading",
+        "Plan source-supported validation",
+        "Document assumptions risks and limitations"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut545-energy-management",
+      "academicLevel": "graduate",
+      "courseId": "aut-545",
+      "competencyId": "grad-aut545-energy-management",
+      "title": "Advanced Vehicle Energy-Flow Analysis and Optimization",
+      "sequence": [
+        "Define the operating objective",
+        "Map energy sources sinks and storage",
+        "Identify controllable energy paths",
+        "Define constraints and tradeoffs",
+        "Compare candidate management strategies",
+        "Evaluate evidence and sensitivity",
+        "Plan validation across operating conditions",
+        "Document optimization assumptions and limitations"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut550-automotive-networks",
+      "academicLevel": "graduate",
+      "courseId": "aut-550",
+      "competencyId": "grad-aut550-automotive-networks",
+      "title": "Advanced Vehicle Networks, Timing, and Reliability",
+      "sequence": [
+        "Define the communication requirement",
+        "Map the relevant network topology",
+        "Identify protocol and gateway roles",
+        "Analyze timing and message behavior",
+        "Evaluate reliability and fault evidence",
+        "Compare competing network hypotheses",
+        "Design a network verification plan",
+        "Document topology assumptions and limitations"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut555-embedded-ecu",
+      "academicLevel": "graduate",
+      "courseId": "aut-555",
+      "competencyId": "grad-aut555-embedded-ecu",
+      "title": "Automotive Embedded Systems and ECU Architecture Analysis",
+      "sequence": [
+        "Define the ECU function and context",
+        "Map hardware software and communication layers",
+        "Identify real-time and interface requirements",
+        "Trace data and control paths",
+        "Evaluate available execution evidence",
+        "Identify version and applicability dependencies",
+        "Design a validation strategy",
+        "Document architecture assumptions and limitations"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut560-adas-perception",
+      "academicLevel": "graduate",
+      "courseId": "aut-560",
+      "competencyId": "grad-aut560-adas-perception",
+      "title": "Advanced ADAS Perception, Sensor Fusion, and Validation",
+      "sequence": [
+        "Define the perception task",
+        "Map participating sensors and data products",
+        "Compare sensing strengths and limitations",
+        "Analyze fusion relationships",
+        "Identify calibration dependencies",
+        "Evaluate scenario and environmental evidence",
+        "Design a validation matrix",
+        "Document limitations applicability and next tests"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut565-autonomous-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-565",
+      "competencyId": "grad-aut565-autonomous-systems",
+      "title": "Autonomous Vehicle Architecture, Planning, Control, and Validation",
+      "sequence": [
+        "Define the autonomous function and operating context",
+        "Map localization mapping and perception inputs",
+        "Trace planning decisions conceptually",
+        "Connect planning to vehicle control",
+        "Identify subsystem dependencies and failure modes",
+        "Evaluate simulation or test evidence",
+        "Design a validation strategy across scenarios",
+        "Document operational limitations and unresolved risks"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut570-cybersecurity",
+      "academicLevel": "graduate",
+      "courseId": "aut-570",
+      "competencyId": "grad-aut570-cybersecurity",
+      "title": "Automotive Cybersecurity Threat Modeling and Verification",
+      "sequence": [
+        "Define the protected function and assets",
+        "Map trust boundaries and attack surfaces",
+        "Identify threat scenarios at a defensive level",
+        "Map candidate controls",
+        "Evaluate authentication and network evidence",
+        "Assess detection and diagnostic protections",
+        "Design a defensive verification plan",
+        "Document residual risk assumptions and limitations"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut575-software-defined-vehicle",
+      "academicLevel": "graduate",
+      "courseId": "aut-575",
+      "competencyId": "grad-aut575-software-defined-vehicle",
+      "title": "Software-Defined Vehicle Platforms and Lifecycle Architecture",
+      "sequence": [
+        "Define the software-defined vehicle function",
+        "Compare zonal and centralized structures",
+        "Map platform and middleware responsibilities",
+        "Trace vehicle data paths",
+        "Analyze update and configuration dependencies",
+        "Evaluate lifecycle and verification evidence",
+        "Design a configuration-aware validation approach",
+        "Document architecture tradeoffs and limitations"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut580-control-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-580",
+      "competencyId": "grad-aut580-control-systems",
+      "title": "Advanced Automotive Control, Estimation, and Stability",
+      "sequence": [
+        "Define the control objective",
+        "Establish states inputs outputs and assumptions",
+        "Analyze feedback structure",
+        "Evaluate stability conceptually",
+        "Connect estimation and observation",
+        "Examine optimization tradeoffs",
+        "Design simulation or test validation",
+        "Document model limits and control conclusions"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut585-digital-twins",
+      "academicLevel": "graduate",
+      "courseId": "aut-585",
+      "competencyId": "grad-aut585-digital-twins",
+      "title": "Vehicle Digital Twins, Simulation, and Predictive Validation",
+      "sequence": [
+        "Define the physical and digital system boundary",
+        "Identify model components and data interfaces",
+        "Establish calibration variables and sources",
+        "Connect real-time observations conceptually",
+        "Evaluate synchronization and fidelity",
+        "Assess predictive outputs and uncertainty",
+        "Design calibration and validation tests",
+        "Document limitations and update requirements"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut590-technology-seminar",
+      "academicLevel": "graduate",
+      "courseId": "aut-590",
+      "competencyId": "grad-aut590-technology-seminar",
+      "title": "Critical Review of Emerging Automotive Technology",
+      "sequence": [
+        "Define the seminar question",
+        "Locate relevant scholarly and technical sources",
+        "Evaluate source authority and applicability",
+        "Compare methods evidence and claims",
+        "Identify standards or technical context",
+        "Synthesize competing interpretations",
+        "Present and defend an evidence-based position",
+        "Document provenance limitations and open questions"
+      ],
+      "status": "planned"
     }
   ]
 }

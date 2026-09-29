@@ -62,7 +62,7 @@ async function verify() {
   const graduateCount = await page.locator("#graduate-content .graduate-grid article").count();
 
   assert(undergradCount === 43, `Expected 43 undergraduate courses, found ${undergradCount}`);
-  assert(graduateCount === 5, `Expected 5 graduate courses, found ${graduateCount}`);
+  assert(graduateCount === 21, `Expected 21 graduate courses, found ${graduateCount}`);
 
   const body = await page.locator("body").innerText();
   assert(body.includes("CIP 47.0604"), "Undergraduate CIP missing");

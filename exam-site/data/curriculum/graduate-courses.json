@@ -3,10 +3,152 @@
   "academicLevel": "graduate",
   "cipCode": "15.0803",
   "courses": [
-    {"id":"advanced-diagnostic-analysis","academicLevel":"graduate","cipCode":"15.0803","title":"Advanced Diagnostic Analysis","status":"planned"},
-    {"id":"vehicle-systems-testing","academicLevel":"graduate","cipCode":"15.0803","title":"Vehicle Systems and Testing","status":"planned"},
-    {"id":"curriculum-assessment-design","academicLevel":"graduate","cipCode":"15.0803","title":"Curriculum & Assessment Design","status":"planned"},
-    {"id":"applied-research","academicLevel":"graduate","cipCode":"15.0803","title":"Applied Research","status":"planned"},
-    {"id":"technical-instructional-leadership","academicLevel":"graduate","cipCode":"15.0803","title":"Technical Instructional Leadership","status":"planned"}
+    {
+      "id": "advanced-diagnostic-analysis",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Diagnostic Analysis",
+      "status": "planned"
+    },
+    {
+      "id": "vehicle-systems-testing",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Vehicle Systems and Testing",
+      "status": "planned"
+    },
+    {
+      "id": "curriculum-assessment-design",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Curriculum & Assessment Design",
+      "status": "planned"
+    },
+    {
+      "id": "applied-research",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Applied Research",
+      "status": "planned"
+    },
+    {
+      "id": "technical-instructional-leadership",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Technical Instructional Leadership",
+      "status": "planned"
+    },
+    {
+      "id": "aut-501",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Automotive Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-515",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Automotive Systems Modeling",
+      "status": "planned"
+    },
+    {
+      "id": "aut-520",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Vehicle Data Analytics",
+      "status": "planned"
+    },
+    {
+      "id": "aut-530",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Electric Vehicle Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-535",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Battery Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-540",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Power Electronics for Vehicle Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-545",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Vehicle Energy Management",
+      "status": "planned"
+    },
+    {
+      "id": "aut-550",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Automotive Networks",
+      "status": "planned"
+    },
+    {
+      "id": "aut-555",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Automotive Embedded Systems and ECU Architecture",
+      "status": "planned"
+    },
+    {
+      "id": "aut-560",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced ADAS and Vehicle Perception",
+      "status": "planned"
+    },
+    {
+      "id": "aut-565",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Autonomous Vehicle Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-570",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Automotive Cybersecurity Engineering",
+      "status": "planned"
+    },
+    {
+      "id": "aut-575",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Software-Defined Vehicle Architecture",
+      "status": "planned"
+    },
+    {
+      "id": "aut-580",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Automotive Control Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-585",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Vehicle Digital Twins and Simulation",
+      "status": "planned"
+    },
+    {
+      "id": "aut-590",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Automotive Technology Seminar",
+      "status": "planned"
+    }
   ]
 }

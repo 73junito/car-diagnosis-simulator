@@ -233,6 +233,102 @@
       "existingCourseId": "aut-451",
       "existingLessonPlanId": "ug-aut451-capstone-ii",
       "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-501",
+      "existingCourseId": "aut-501",
+      "existingLessonPlanId": "grad-aut501-integrated-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-515",
+      "existingCourseId": "aut-515",
+      "existingLessonPlanId": "grad-aut515-systems-modeling",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-520",
+      "existingCourseId": "aut-520",
+      "existingLessonPlanId": "grad-aut520-data-analytics",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-530",
+      "existingCourseId": "aut-530",
+      "existingLessonPlanId": "grad-aut530-advanced-ev-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-535",
+      "existingCourseId": "aut-535",
+      "existingLessonPlanId": "grad-aut535-battery-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-540",
+      "existingCourseId": "aut-540",
+      "existingLessonPlanId": "grad-aut540-power-electronics",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-545",
+      "existingCourseId": "aut-545",
+      "existingLessonPlanId": "grad-aut545-energy-management",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-550",
+      "existingCourseId": "aut-550",
+      "existingLessonPlanId": "grad-aut550-automotive-networks",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-555",
+      "existingCourseId": "aut-555",
+      "existingLessonPlanId": "grad-aut555-embedded-ecu",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-560",
+      "existingCourseId": "aut-560",
+      "existingLessonPlanId": "grad-aut560-adas-perception",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-565",
+      "existingCourseId": "aut-565",
+      "existingLessonPlanId": "grad-aut565-autonomous-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-570",
+      "existingCourseId": "aut-570",
+      "existingLessonPlanId": "grad-aut570-cybersecurity",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-575",
+      "existingCourseId": "aut-575",
+      "existingLessonPlanId": "grad-aut575-software-defined-vehicle",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-580",
+      "existingCourseId": "aut-580",
+      "existingLessonPlanId": "grad-aut580-control-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-585",
+      "existingCourseId": "aut-585",
+      "existingLessonPlanId": "grad-aut585-digital-twins",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-590",
+      "existingCourseId": "aut-590",
+      "existingLessonPlanId": "grad-aut590-technology-seminar",
+      "mappingType": "canonical-catalog-course"
     }
   ],
   "authorityReferences": [
@@ -715,6 +811,18 @@
       "existingCourseId": "hybrid-electric-vehicle-technology",
       "existingLessonPlanId": "ug-hev-foundations",
       "mappingType": "legacy-training-crosswalk"
+    },
+    {
+      "catalogCourseId": "aut-510",
+      "existingCourseId": "advanced-diagnostic-analysis",
+      "existingLessonPlanId": "grad-diagnostic-evidence-analysis",
+      "mappingType": "catalog-crosswalk"
+    },
+    {
+      "catalogCourseId": "aut-525",
+      "existingCourseId": "vehicle-systems-testing",
+      "existingLessonPlanId": "grad-vehicle-systems-testing",
+      "mappingType": "catalog-crosswalk"
     }
   ]
 }

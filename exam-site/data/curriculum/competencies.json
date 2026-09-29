@@ -336,6 +336,118 @@
       "courseId": "aut-451",
       "statement": "Execute and document an approved automotive technology project, evaluate test evidence against project requirements, explain limitations, and present conclusions that are traceable to verified results.",
       "status": "planned"
+    },
+    {
+      "id": "grad-aut501-integrated-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-501",
+      "statement": "Analyze interactions among advanced automotive system domains, identify interface evidence and uncertainty, and design a traceable system-level verification strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut515-systems-modeling",
+      "academicLevel": "graduate",
+      "courseId": "aut-515",
+      "statement": "Construct and evaluate automotive system models, justify parameter choices and assumptions, and assess model validity against appropriate evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut520-data-analytics",
+      "academicLevel": "graduate",
+      "courseId": "aut-520",
+      "statement": "Evaluate vehicle datasets using appropriate analytical methods, distinguish statistical patterns from supported technical conclusions, and document uncertainty and validation needs.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut530-advanced-ev-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-530",
+      "statement": "Analyze advanced EV subsystem interactions, evaluate operating evidence across energy-conversion domains, and design a source-supported verification strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut535-battery-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-535",
+      "statement": "Evaluate battery-system models and diagnostic evidence, distinguish estimated states from measured observations, and justify a validation strategy that respects safety and source boundaries.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut540-power-electronics",
+      "academicLevel": "graduate",
+      "courseId": "aut-540",
+      "statement": "Analyze vehicle power-electronic energy conversion and control relationships, interpret evidence across electrical and thermal domains, and identify applicable source requirements for validation.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut545-energy-management",
+      "academicLevel": "graduate",
+      "courseId": "aut-545",
+      "statement": "Evaluate vehicle energy-flow strategies, articulate optimization objectives and constraints, and justify conclusions using traceable operating evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut550-automotive-networks",
+      "academicLevel": "graduate",
+      "courseId": "aut-550",
+      "statement": "Analyze advanced vehicle-network behavior and topology evidence, distinguish communication symptoms from root-cause conclusions, and design a traceable network verification strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut555-embedded-ecu",
+      "academicLevel": "graduate",
+      "courseId": "aut-555",
+      "statement": "Evaluate embedded automotive architecture and software/hardware interactions, identify interface evidence and timing constraints conceptually, and design an applicable validation approach.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut560-adas-perception",
+      "academicLevel": "graduate",
+      "courseId": "aut-560",
+      "statement": "Evaluate multi-sensor perception evidence, explain sensor-fusion and calibration dependencies, and design a validation strategy that documents environment and configuration limitations.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut565-autonomous-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-565",
+      "statement": "Analyze autonomous-system functional chains, identify cross-domain dependencies and failure evidence, and design a traceable simulation or test validation strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut570-cybersecurity",
+      "academicLevel": "graduate",
+      "courseId": "aut-570",
+      "statement": "Evaluate automotive cybersecurity risks and controls using threat-model evidence, distinguish defensive verification from exploit development, and document residual risk and validation needs.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut575-software-defined-vehicle",
+      "academicLevel": "graduate",
+      "courseId": "aut-575",
+      "statement": "Evaluate software-defined vehicle architecture tradeoffs, trace software/data dependencies, and design a configuration-aware verification and lifecycle strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut580-control-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-580",
+      "statement": "Evaluate advanced automotive control-system models and evidence, assess stability and estimation assumptions, and justify a validation strategy against system requirements.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut585-digital-twins",
+      "academicLevel": "graduate",
+      "courseId": "aut-585",
+      "statement": "Evaluate a vehicle digital-twin architecture, distinguish model state from observed vehicle state, and design calibration and validation activities using traceable data.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut590-technology-seminar",
+      "academicLevel": "graduate",
+      "courseId": "aut-590",
+      "statement": "Critically synthesize current automotive research and technical publications, compare competing claims, and communicate evidence-supported conclusions with explicit uncertainty and source provenance.",
+      "status": "planned"
     }
   ]
 }
