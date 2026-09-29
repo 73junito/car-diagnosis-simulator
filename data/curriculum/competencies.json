@@ -301,6 +301,41 @@
       "courseId": "aut-390",
       "statement": "Explain generalized connected and software-defined vehicle relationships, identify data and software lifecycle dependencies, and distinguish architectural concepts from implementation-specific claims requiring authoritative information.",
       "status": "planned"
+    },
+    {
+      "id": "ug-aut400-research-methods",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-400",
+      "statement": "Formulate an automotive technology research question, organize appropriate evidence and methods, and distinguish source-supported findings from assumptions or unsupported conclusions.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut410-systems-integration",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-410",
+      "statement": "Analyze cross-domain vehicle-system dependencies, identify interface evidence, and justify an integration or diagnostic next step using applicable technical information.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut420-professional-internship",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-420",
+      "statement": "Document supervised professional learning, connect workplace experiences to curriculum competencies, and communicate evidence of growth while respecting organizational safety, confidentiality, and authorization boundaries.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut450-capstone-planning",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-450",
+      "statement": "Define an applied automotive technology problem, justify project requirements and methodology with evidence, and produce a traceable project plan with explicit assumptions, constraints, and verification needs.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut451-capstone-completion",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-451",
+      "statement": "Execute and document an approved automotive technology project, evaluate test evidence against project requirements, explain limitations, and present conclusions that are traceable to verified results.",
+      "status": "planned"
     }
   ]
 }

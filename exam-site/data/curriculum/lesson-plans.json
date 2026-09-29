@@ -758,6 +758,96 @@
         "Document assumptions and source needs"
       ],
       "status": "planned"
+    },
+    {
+      "id": "ug-aut400-research-methods",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-400",
+      "competencyId": "ug-aut400-research-methods",
+      "title": "Automotive Research Questions, Methods, and Evidence",
+      "sequence": [
+        "Define the research problem",
+        "Formulate a focused research question",
+        "Plan a literature review",
+        "Select an appropriate research or experimental design",
+        "Define data-collection needs",
+        "Plan analysis and interpretation",
+        "Organize technical writing and presentation",
+        "Document provenance limitations and next steps"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut410-systems-integration",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-410",
+      "competencyId": "ug-aut410-systems-integration",
+      "title": "Integrated Vehicle Systems and Cross-Domain Reasoning",
+      "sequence": [
+        "Define the integrated vehicle function",
+        "Map participating system domains",
+        "Identify interfaces and dependencies",
+        "Trace information energy and control flow",
+        "Organize cross-domain evidence",
+        "Identify applicable architecture information",
+        "Practice an integration reasoning scenario",
+        "Document the system-level verification plan"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut420-internship",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-420",
+      "competencyId": "ug-aut420-professional-internship",
+      "title": "Automotive Professional Experience, Documentation, and Reflection",
+      "sequence": [
+        "Clarify the supervised experience context",
+        "Define learning goals with the approved supervisor or program",
+        "Identify professional and safety expectations",
+        "Document authorized work and observations",
+        "Connect experiences to curriculum competencies",
+        "Reflect on evidence of learning",
+        "Prepare professional communication or artifacts",
+        "Document outcomes and next development goals"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut450-capstone-i",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-450",
+      "competencyId": "ug-aut450-capstone-planning",
+      "title": "Automotive Capstone Problem Definition, Research, and Project Planning",
+      "sequence": [
+        "Define the capstone problem",
+        "Identify stakeholders and context",
+        "Review relevant evidence and prior work",
+        "Develop project requirements",
+        "Select and justify a methodology",
+        "Plan data evidence and verification",
+        "Identify constraints risks and dependencies",
+        "Document the project plan and review criteria"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut451-capstone-ii",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-451",
+      "competencyId": "ug-aut451-capstone-completion",
+      "title": "Automotive Capstone Completion, Testing, Documentation, and Presentation",
+      "sequence": [
+        "Confirm the approved project plan",
+        "Execute the planned project work",
+        "Collect testing and verification evidence",
+        "Compare results with requirements",
+        "Address deviations within approved scope",
+        "Analyze limitations and unresolved questions",
+        "Prepare final technical documentation",
+        "Present results conclusions and future work"
+      ],
+      "status": "planned"
     }
   ]
 }

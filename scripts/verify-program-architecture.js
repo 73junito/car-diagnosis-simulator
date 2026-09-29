@@ -158,6 +158,35 @@ assert(aut330Crosswalk &&
   aut330Crosswalk.mappingType === "legacy-training-crosswalk",
   "AUT 330 must retain the historical EV training crosswalk");
 
+const undergraduateCatalogIds = new Set(
+  catalogCourses
+    .filter((course) => course.academicLevel === "undergraduate")
+    .map((course) => course.id)
+);
+const directCatalogIds = new Set(
+  (architecture.catalogDevelopmentMappings || []).map((item) => item.catalogCourseId)
+);
+const crosswalkCatalogIds = new Set(
+  (architecture.catalogCourseCrosswalks || []).map((item) => item.catalogCourseId)
+);
+for (const id of directCatalogIds) {
+  assert(!crosswalkCatalogIds.has(id),
+    "Undergraduate catalog course cannot be both direct-developed and crosswalked: " + id);
+}
+const coveredUndergraduateCatalogIds = new Set([
+  ...directCatalogIds,
+  ...crosswalkCatalogIds
+].filter((id) => undergraduateCatalogIds.has(id)));
+assert(undergraduateCatalogIds.size === 43,
+  "Expected 43 undergraduate catalog courses, found " + undergraduateCatalogIds.size);
+assert(coveredUndergraduateCatalogIds.size === undergraduateCatalogIds.size,
+  "Expected all 43 undergraduate catalog courses to be covered exactly once, found " +
+  coveredUndergraduateCatalogIds.size);
+for (const id of undergraduateCatalogIds) {
+  assert(coveredUndergraduateCatalogIds.has(id),
+    "Undergraduate catalog course lacks developed mapping or approved crosswalk: " + id);
+}
+
 assert(mappedLessons.size === lessons.length,
   "Expected all " + lessons.length + " existing lessons to be classified, found " + mappedLessons.size);
 
