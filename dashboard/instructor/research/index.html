@@ -28,6 +28,41 @@
       <p>Search results are unreviewed discovery metadata. They do not automatically become approved curriculum evidence and do not create scored-assessment eligibility. Human review and provenance verification are required before instructional approval.</p>
     </section>
 
+    <section class="tm-panel" aria-labelledby="research-gap-title">
+      <h2 id="research-gap-title">Evidence gap</h2>
+      <p>Create a curriculum gap before saving scholarly evidence. The lesson relationship is verified by the server.</p>
+      <form id="research-gap-form">
+        <label for="research-lesson">Lesson or module</label>
+        <select id="research-lesson" name="lessonPlanId" required>
+          <option value="">Loading curriculum…</option>
+        </select>
+        <label for="research-gap-summary">Gap description</label>
+        <textarea id="research-gap-summary" name="gapSummary" rows="3" maxlength="1000" required
+          placeholder="Describe the missing, outdated, or weakly supported content."></textarea>
+        <div style="display:flex;gap:.75rem;align-items:end;flex-wrap:wrap">
+          <label for="research-gap-type">Gap type
+            <select id="research-gap-type" name="gapType">
+              <option value="evidence" selected>Evidence</option>
+              <option value="coverage">Coverage</option>
+              <option value="currency">Currency</option>
+              <option value="practice">Practice</option>
+              <option value="visual">Visual</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label for="research-gap-priority">Priority
+            <select id="research-gap-priority" name="priority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </label>
+          <button class="tm-btn tm-btn-primary" type="submit">Create evidence gap</button>
+        </div>
+      </form>
+      <p id="research-gap-status" role="status" aria-live="polite">No active evidence gap.</p>
+    </section>
+
     <section class="tm-panel" aria-labelledby="research-search-title">
       <h2 id="research-search-title">Search papers</h2>
       <form id="research-form">

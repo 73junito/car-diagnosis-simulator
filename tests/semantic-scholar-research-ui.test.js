@@ -32,6 +32,25 @@ describe('Semantic Scholar instructor research UI', () => {
     expect(js).toContain('paper.abstract')
   })
 
+  test('supports evidence-gap creation from canonical curriculum lessons', () => {
+    expect(html).toContain('id="research-gap-form"')
+    expect(html).toContain('id="research-lesson"')
+    expect(html).toContain('Create evidence gap')
+    expect(js).toContain("fetch('/api/curriculum'")
+    expect(js).toContain("apiRequest('/api/research/curriculum-evidence/gaps'")
+    expect(js).toContain('lessonPlanId: lessonSelect.value')
+    expect(js).toContain('gapSummary: gapSummaryInput.value.trim()')
+  })
+
+  test('saves Semantic Scholar results only as unreviewed evidence tied to an active gap', () => {
+    expect(js).toContain("apiRequest('/api/research/curriculum-evidence/records'")
+    expect(js).toContain('gapId: activeGap.id')
+    expect(js).toContain('providerRecordId: paper.paperId')
+    expect(js).toContain('Save as Curriculum Evidence')
+    expect(js).toContain('Human review and license verification are still required.')
+    expect(js).not.toContain('scoredAssessmentEligible: true')
+  })
+
   test('includes Semantic Scholar attribution', () => {
     expect(html).toContain('Semantic Scholar')
     expect(html).toContain('Allen Institute for AI')
