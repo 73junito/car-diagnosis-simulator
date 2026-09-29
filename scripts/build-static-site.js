@@ -172,6 +172,8 @@ const requiredOutputFiles = [
   "manifest.webmanifest",
   "config/routes.js",
   "dashboard/student/index.html",
+  "dashboard/instructor/research/index.html",
+  "dashboard/instructor/research/research.js",
   "dashboard/student/scenario/index.html",
   "dashboard/student/circuit-lab/index.html",
   "dashboard/student/starting-system-lab/index.html",

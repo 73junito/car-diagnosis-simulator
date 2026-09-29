@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Research Discovery | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme.css" />
+  <link rel="stylesheet" href="/theme/tokens.css" />
+  <link rel="stylesheet" href="/theme/layout.css" />
+  <link rel="stylesheet" href="/theme/dashboard.css" />
+</head>
+<body>
+  <main class="container tm-main">
+    <section class="tm-hero-banner">
+      <div>
+        <p class="tm-hero-banner__eyebrow">Instructor Tools</p>
+        <h1 class="tm-hero-banner__title">Scholarly Research Discovery</h1>
+        <p class="tm-hero-banner__subtitle">Search scholarly metadata for curriculum research and evidence review.</p>
+        <span class="tm-hero-banner__status">Semantic Scholar</span>
+      </div>
+      <div class="tm-hero-banner__actions">
+        <a class="tm-btn tm-btn-secondary" href="/dashboard/instructor/analytics.html">Instructor Analytics</a>
+      </div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="research-boundary-title">
+      <h2 id="research-boundary-title">Research governance boundary</h2>
+      <p>Search results are unreviewed discovery metadata. They do not automatically become approved curriculum evidence and do not create scored-assessment eligibility. Human review and provenance verification are required before instructional approval.</p>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="research-search-title">
+      <h2 id="research-search-title">Search papers</h2>
+      <form id="research-form">
+        <label for="research-query">Research topic or keywords</label>
+        <div style="display:flex;gap:.75rem;align-items:end;flex-wrap:wrap">
+          <input id="research-query" name="q" type="search" minlength="3" maxlength="300" required
+            placeholder="Example: electric vehicle battery diagnostics" style="min-width:min(100%,34rem)" />
+          <label for="research-limit">Results
+            <select id="research-limit" name="limit">
+              <option value="5" selected>5</option>
+              <option value="10">10</option>
+            </select>
+          </label>
+          <button class="tm-btn tm-btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+      <p id="research-status" role="status" aria-live="polite">Ready.</p>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="research-results-title">
+      <h2 id="research-results-title">Results</h2>
+      <div id="research-results"></div>
+    </section>
+
+    <p><small>Research discovery metadata powered in part by <a href="https://www.semanticscholar.org/">Semantic Scholar</a>, a project of the Allen Institute for AI (Ai2).</small></p>
+  </main>
+
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
+  <script src="./research.js"></script>
+</body>
+</html>
