@@ -5,6 +5,10 @@
   const gapTypeInput = document.getElementById('research-gap-type')
   const gapPriorityInput = document.getElementById('research-gap-priority')
   const gapStatus = document.getElementById('research-gap-status')
+  const existingGapSelect = document.getElementById('research-existing-gap')
+  const useGapButton = document.getElementById('research-use-gap')
+  const reviewStatus = document.getElementById('evidence-review-status')
+  const reviewList = document.getElementById('evidence-review-list')
   const form = document.getElementById('research-form')
   const queryInput = document.getElementById('research-query')
   const limitInput = document.getElementById('research-limit')
@@ -12,6 +16,8 @@
   const results = document.getElementById('research-results')
 
   let activeGap = null
+  let approvedSources = []
+  let existingGaps = []
 
   function accessToken(){
     return typeof window.getAccessToken === 'function' ? window.getAccessToken() : null
@@ -86,6 +92,289 @@
     }
   }
 
+  function clearNode(node){
+    while (node.firstChild) node.removeChild(node.firstChild)
+  }
+
+  async function loadApprovedSources(){
+    if (!accessToken()) {
+      approvedSources = []
+      return
+    }
+    try {
+      const payload = await apiRequest('/api/research/curriculum-evidence/approved-sources')
+      approvedSources = Array.isArray(payload.data) ? payload.data : []
+    } catch {
+      approvedSources = []
+    }
+  }
+
+  async function loadExistingGaps(){
+    clearNode(existingGapSelect)
+    existingGaps = []
+    const lessonPlanId = lessonSelect.value
+
+    const blank = document.createElement('option')
+    blank.value = ''
+    blank.textContent = lessonPlanId ? 'Loading existing gaps…' : 'Select a lesson to load existing gaps'
+    existingGapSelect.appendChild(blank)
+
+    if (!lessonPlanId || !accessToken()) return
+
+    try {
+      const params = new URLSearchParams({ lessonPlanId })
+      const payload = await apiRequest('/api/research/curriculum-evidence/gaps?' + params.toString())
+      existingGaps = Array.isArray(payload.data) ? payload.data : []
+
+      clearNode(existingGapSelect)
+      const option = document.createElement('option')
+      option.value = ''
+      option.textContent = existingGaps.length ? 'Select an existing gap' : 'No existing gaps for this lesson'
+      existingGapSelect.appendChild(option)
+
+      existingGaps.forEach((gap) => {
+        const gapOption = document.createElement('option')
+        gapOption.value = gap.id
+        gapOption.textContent =
+          String(gap.priority || 'medium').toUpperCase() + ' · ' +
+          String(gap.status || 'identified') + ' · ' +
+          String(gap.gap_summary || '').slice(0, 120)
+        existingGapSelect.appendChild(gapOption)
+      })
+    } catch (error) {
+      clearNode(existingGapSelect)
+      const option = document.createElement('option')
+      option.value = ''
+      option.textContent = 'Existing gaps unavailable'
+      existingGapSelect.appendChild(option)
+      gapStatus.textContent = error.message || 'Existing evidence gaps could not be loaded.'
+    }
+  }
+
+  async function activateGap(gap){
+    activeGap = gap || null
+    if (!activeGap) {
+      gapStatus.textContent = 'No active evidence gap.'
+      reviewStatus.textContent = 'Select or create an evidence gap to load saved evidence.'
+      clearNode(reviewList)
+      return
+    }
+
+    gapStatus.textContent =
+      'Active gap: ' + activeGap.gap_summary + ' (' + activeGap.status + ').'
+    await loadApprovedSources()
+    await loadEvidence()
+  }
+
+  async function patchEvidence(record, action, body = {}){
+    return apiRequest(
+      '/api/research/curriculum-evidence/records/' + encodeURIComponent(record.id),
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ action, ...body })
+      }
+    )
+  }
+
+  function createActionButton(label, onClick, disabled = false){
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.className = 'tm-btn tm-btn-secondary'
+    button.textContent = label
+    button.disabled = disabled
+    button.addEventListener('click', onClick)
+    return button
+  }
+
+  function renderEvidenceRecord(record){
+    const card = document.createElement('article')
+    card.className = 'tm-card'
+    card.style.marginBottom = '1rem'
+
+    card.appendChild(text('h3', record.title || 'Untitled evidence'))
+    card.appendChild(text(
+      'p',
+      'Review: ' + record.review_status +
+        ' · License: ' + record.license_status +
+        ' · Assessment eligibility: none'
+    ))
+
+    if (record.doi) card.appendChild(text('p', 'DOI: ' + record.doi))
+    if (record.source_url) {
+      const link = document.createElement('a')
+      link.href = record.source_url
+      link.target = '_blank'
+      link.rel = 'noopener noreferrer'
+      link.textContent = 'Open source record'
+      card.appendChild(link)
+    }
+
+    const message = text('p', 'Human review required before approval.', 'fine-print')
+    message.setAttribute('role', 'status')
+
+    const actions = document.createElement('div')
+    actions.style.display = 'flex'
+    actions.style.gap = '.5rem'
+    actions.style.flexWrap = 'wrap'
+    actions.style.marginTop = '.75rem'
+
+    const finalized = record.review_status === 'approved' || record.review_status === 'rejected'
+
+    const reviewButton = createActionButton(
+      'Mark reviewed',
+      async () => {
+        reviewButton.disabled = true
+        message.textContent = 'Recording human review…'
+        try {
+          await patchEvidence(record, 'review')
+          message.textContent = 'Human review recorded.'
+          await loadEvidence()
+        } catch (error) {
+          message.textContent = error.message
+          reviewButton.disabled = false
+        }
+      },
+      finalized || !['discovered', 'reviewed'].includes(record.review_status)
+    )
+    actions.appendChild(reviewButton)
+
+    const licenseSelect = document.createElement('select')
+    licenseSelect.setAttribute('aria-label', 'License review status')
+    ;[
+      ['verified-for-use', 'Verified for use'],
+      ['restricted', 'Restricted'],
+      ['unknown', 'Unknown']
+    ].forEach(([value, label]) => {
+      const option = document.createElement('option')
+      option.value = value
+      option.textContent = label
+      licenseSelect.appendChild(option)
+    })
+    licenseSelect.disabled = finalized || !record.reviewed_by
+    actions.appendChild(licenseSelect)
+
+    const licenseButton = createActionButton(
+      'Record license review',
+      async () => {
+        licenseButton.disabled = true
+        message.textContent = 'Recording license review…'
+        try {
+          await patchEvidence(record, 'license', { licenseStatus: licenseSelect.value })
+          message.textContent = 'License review recorded.'
+          await loadEvidence()
+        } catch (error) {
+          message.textContent = error.message
+          licenseButton.disabled = false
+        }
+      },
+      finalized || !record.reviewed_by
+    )
+    actions.appendChild(licenseButton)
+
+    const sourceSelect = document.createElement('select')
+    sourceSelect.setAttribute('aria-label', 'Approved provenance source')
+    const sourceBlank = document.createElement('option')
+    sourceBlank.value = ''
+    sourceBlank.textContent = approvedSources.length
+      ? 'Select approved provenance source'
+      : 'No approved provenance sources available'
+    sourceSelect.appendChild(sourceBlank)
+    approvedSources.forEach((source) => {
+      const option = document.createElement('option')
+      option.value = source.id
+      option.textContent = source.title || source.id
+      if (record.approved_source_id === source.id) option.selected = true
+      sourceSelect.appendChild(option)
+    })
+    sourceSelect.disabled = finalized || approvedSources.length === 0
+    actions.appendChild(sourceSelect)
+
+    const linkButton = createActionButton(
+      'Link provenance',
+      async () => {
+        if (!sourceSelect.value) {
+          message.textContent = 'Select an approved provenance source first.'
+          return
+        }
+        linkButton.disabled = true
+        message.textContent = 'Linking approved provenance source…'
+        try {
+          await patchEvidence(record, 'link-source', { approvedSourceId: sourceSelect.value })
+          message.textContent = 'Approved provenance source linked.'
+          await loadEvidence()
+        } catch (error) {
+          message.textContent = error.message
+          linkButton.disabled = false
+        }
+      },
+      finalized || approvedSources.length === 0
+    )
+    actions.appendChild(linkButton)
+
+    const approveButton = createActionButton(
+      'Approve evidence',
+      async () => {
+        approveButton.disabled = true
+        message.textContent = 'Applying approval gate…'
+        try {
+          await patchEvidence(record, 'approve')
+          message.textContent = 'Evidence approved for curriculum use. Assessment eligibility remains none.'
+          await loadEvidence()
+        } catch (error) {
+          message.textContent = error.message
+          approveButton.disabled = false
+        }
+      },
+      finalized ||
+        record.review_status !== 'license-verified' ||
+        !record.approved_source_id
+    )
+    actions.appendChild(approveButton)
+
+    const rejectButton = createActionButton(
+      'Reject evidence',
+      async () => {
+        rejectButton.disabled = true
+        message.textContent = 'Rejecting evidence…'
+        try {
+          await patchEvidence(record, 'reject')
+          message.textContent = 'Evidence rejected.'
+          await loadEvidence()
+        } catch (error) {
+          message.textContent = error.message
+          rejectButton.disabled = false
+        }
+      },
+      finalized
+    )
+    actions.appendChild(rejectButton)
+
+    card.appendChild(actions)
+    card.appendChild(message)
+    return card
+  }
+
+  async function loadEvidence(){
+    clearNode(reviewList)
+    if (!activeGap) {
+      reviewStatus.textContent = 'Select or create an evidence gap to load saved evidence.'
+      return
+    }
+
+    reviewStatus.textContent = 'Loading saved evidence…'
+    try {
+      const params = new URLSearchParams({ gapId: activeGap.id })
+      const payload = await apiRequest('/api/research/curriculum-evidence/records?' + params.toString())
+      const records = Array.isArray(payload.data) ? payload.data : []
+      reviewStatus.textContent = records.length
+        ? 'Showing ' + records.length + ' saved evidence record' + (records.length === 1 ? '.' : 's.')
+        : 'No saved evidence for this gap yet.'
+      records.forEach((record) => reviewList.appendChild(renderEvidenceRecord(record)))
+    } catch (error) {
+      reviewStatus.textContent = error.message || 'Saved evidence could not be loaded.'
+    }
+  }
+
   async function createGap(event){
     event.preventDefault()
     if (!accessToken()) {
@@ -105,9 +394,10 @@
         })
       })
 
-      activeGap = payload.data
+      await activateGap(payload.data)
+      await loadExistingGaps()
       gapStatus.textContent =
-        'Active gap created for ' + activeGap.lesson_plan_id + '. Search and save evidence below.'
+        'Active gap created for ' + activeGap.lesson_plan_id + '. Search, save, and review evidence below.'
     } catch (error) {
       gapStatus.textContent =
         error.message === 'AUTH_REQUIRED' ? 'Authentication required.' : error.message
@@ -148,6 +438,7 @@
       message.textContent =
         'Saved as discovered evidence. Human review and license verification are still required.'
       button.textContent = 'Saved'
+      await loadEvidence()
     } catch (error) {
       message.textContent = error.message
       if (error.status !== 409) button.disabled = false
@@ -254,6 +545,20 @@
         : error.message || 'Research service is temporarily unavailable.'
     }
   }
+
+  lessonSelect.addEventListener('change', async () => {
+    await activateGap(null)
+    await loadExistingGaps()
+  })
+
+  useGapButton.addEventListener('click', async () => {
+    const selected = existingGaps.find((gap) => gap.id === existingGapSelect.value)
+    if (!selected) {
+      gapStatus.textContent = 'Select an existing evidence gap first.'
+      return
+    }
+    await activateGap(selected)
+  })
 
   gapForm.addEventListener('submit', createGap)
   form.addEventListener('submit', search)

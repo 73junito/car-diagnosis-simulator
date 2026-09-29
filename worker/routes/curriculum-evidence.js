@@ -199,6 +199,28 @@ export async function handleCurriculumEvidenceRecords(c) {
   return c.json({ data, governance: governance() }, 201)
 }
 
+export async function handleCurriculumApprovedSources(c) {
+  if (c.req.method !== 'GET') {
+    return c.json({ error: 'Method not allowed' }, 405)
+  }
+
+  const auth = await authorizeResearch(c, { requireSemanticScholarEnabled: false })
+  if (auth.response) return auth.response
+  if (!EVIDENCE_REVIEW_ROLES.has(String(auth.role || '').trim().toLowerCase())) {
+    return c.json({ error: 'Instructor, professor, or admin access required' }, 403)
+  }
+
+  const supabase = serviceClient(c)
+  const { data, error } = await supabase
+    .from('approved_sources')
+    .select('id, title, publisher, publication_year, license, status')
+    .eq('status', 'approved')
+    .order('title', { ascending: true })
+
+  if (error) return databaseError(c, 'Approved source read failed:', error)
+  return c.json({ data: data || [], governance: governance() }, 200)
+}
+
 export async function handleCurriculumEvidenceRecordReview(c) {
   if (c.req.method !== 'PATCH') {
     return c.json({ error: 'Method not allowed' }, 405)

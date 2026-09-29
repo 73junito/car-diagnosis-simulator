@@ -61,6 +61,15 @@
         </div>
       </form>
       <p id="research-gap-status" role="status" aria-live="polite">No active evidence gap.</p>
+      <div style="margin-top:1rem">
+        <label for="research-existing-gap">Existing evidence gaps for selected lesson</label>
+        <div style="display:flex;gap:.75rem;align-items:end;flex-wrap:wrap">
+          <select id="research-existing-gap">
+            <option value="">Select a lesson to load existing gaps</option>
+          </select>
+          <button id="research-use-gap" class="tm-btn tm-btn-secondary" type="button">Use selected gap</button>
+        </div>
+      </div>
     </section>
 
     <section class="tm-panel" aria-labelledby="research-search-title">
@@ -85,6 +94,13 @@
     <section class="tm-panel" aria-labelledby="research-results-title">
       <h2 id="research-results-title">Results</h2>
       <div id="research-results"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="evidence-review-title">
+      <h2 id="evidence-review-title">Saved evidence review</h2>
+      <p>Review saved evidence for the active gap. Approval requires human review, verified reuse rights, and linkage to an approved provenance source.</p>
+      <p id="evidence-review-status" role="status" aria-live="polite">Select or create an evidence gap to load saved evidence.</p>
+      <div id="evidence-review-list"></div>
     </section>
 
     <p><small>Research discovery metadata powered in part by <a href="https://www.semanticscholar.org/">Semantic Scholar</a>, a project of the Allen Institute for AI (Ai2).</small></p>
