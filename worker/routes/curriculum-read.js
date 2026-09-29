@@ -29,7 +29,7 @@ const SELECTS = {
   pathways: 'id, academic_level, status',
   programs: 'id, pathway_id, academic_level, cip_code, program_name, cip_title, status',
   courses: 'id, program_id, academic_level, cip_code, title, status',
-  catalogCourses: 'id, code, academic_level, classification, degree_program, cip_code, category, credits, prerequisites, description, status, url, canonical_url, source_file, source_basis, delivery',
+  catalogCourses: 'id, code, title, academic_level, classification, degree_program, cip_code, category, credits, prerequisites, description, status, url, canonical_url, source_file, source_basis, delivery',
   competencies: 'id, course_id, academic_level, statement, status',
   lessonPlans: 'id, course_id, competency_id, academic_level, title, status',
   lessonSteps: 'lesson_plan_id, position, step_text',
