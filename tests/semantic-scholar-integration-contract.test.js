@@ -18,10 +18,11 @@ describe('Semantic Scholar integration contract', () => {
     expect(route).toContain('extractBearerToken')
     expect(route).toContain('verifySupabaseToken')
     expect(route).toContain('user?.app_metadata?.role')
-    expect(route).toContain("role === 'instructor'")
-    expect(route).toContain("role === 'professor'")
-    expect(route).toContain("role === 'admin'")
-    expect(route).toContain('Instructor, professor, or admin access required')
+    expect(route).toContain("new Set(['teacher', 'instructor', 'professor', 'admin'])")
+    expect(route).toContain(".from('profiles')")
+    expect(route).toContain(".select('role')")
+    expect(route).toContain(".eq('id', user.id)")
+    expect(route).toContain('Teacher, instructor, professor, or admin access required')
   })
 
   test('API key remains a server-side Cloudflare Secrets Store binding', () => {
