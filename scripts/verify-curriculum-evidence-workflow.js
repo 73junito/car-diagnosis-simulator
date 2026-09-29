@@ -12,8 +12,8 @@ const lessonPlanId = String(
 const expectedSupabaseRef = String(
   process.env.EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF || 'pffdgqpynpbffbcnxmum'
 ).trim()
-const searchQuery = String(
-  process.env.EVIDENCE_WORKFLOW_SEARCH_QUERY || '10.3389/fmech.2022.1090152'
+const evidenceDoi = String(
+  process.env.EVIDENCE_WORKFLOW_DOI || '10.3389/fmech.2022.1090152'
 ).trim()
 const approvedSourceId = String(
   process.env.EVIDENCE_WORKFLOW_APPROVED_SOURCE_ID || 'frontiers-automotive-alternator-2023'
@@ -52,6 +52,7 @@ async function main() {
   required('EVIDENCE_WORKFLOW_LESSON_PLAN_ID', lessonPlanId)
   required('EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF', expectedSupabaseRef)
   required('EVIDENCE_WORKFLOW_APPROVED_SOURCE_ID', approvedSourceId)
+  required('EVIDENCE_WORKFLOW_DOI', evidenceDoi)
   assert(
     supabaseUrl.includes(expectedSupabaseRef),
     'SUPABASE_URL does not match EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF'
@@ -90,18 +91,18 @@ async function main() {
     assert(gap.status === 'identified', 'New gap must remain identified')
     assert(gap.scored_assessment_eligible === false, 'Gap must not be assessment eligible')
 
-    const search = await api(
-      '/api/research/semantic-scholar/search?' +
-        new URLSearchParams({ q: searchQuery, limit: '1' }).toString()
+    const paperLookup = await api(
+      '/api/research/semantic-scholar/paper/' +
+        encodeURIComponent(`DOI:${evidenceDoi}`)
     )
-    assert(search.governance?.curriculumApproval === 'not-granted', 'Search cannot grant curriculum approval')
+    assert(paperLookup.governance?.curriculumApproval === 'not-granted', 'Paper lookup cannot grant curriculum approval')
     assert(
-      search.governance?.scoredAssessmentEligibility === 'not-granted',
-      'Search cannot grant scored-assessment eligibility'
+      paperLookup.governance?.scoredAssessmentEligibility === 'not-granted',
+      'Paper lookup cannot grant scored-assessment eligibility'
     )
 
-    const paper = Array.isArray(search.data) ? search.data.find((item) => item?.paperId && item?.title) : null
-    assert(paper, 'Semantic Scholar search returned no usable paper')
+    const paper = paperLookup.data
+    assert(paper?.paperId && paper?.title, 'Semantic Scholar exact DOI lookup returned no usable paper')
 
     const approvedSourcesPayload = await api(
       '/api/research/curriculum-evidence/approved-sources'

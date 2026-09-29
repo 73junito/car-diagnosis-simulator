@@ -64,7 +64,7 @@ jobs:
           EVIDENCE_WORKFLOW_BASE_URL: https://app.autolearnpro.com
           EVIDENCE_WORKFLOW_LESSON_PLAN_ID: ug-electrical-charging-system
           EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF: pffdgqpynpbffbcnxmum
-          EVIDENCE_WORKFLOW_SEARCH_QUERY: 10.3389/fmech.2022.1090152
+          EVIDENCE_WORKFLOW_DOI: 10.3389/fmech.2022.1090152
           EVIDENCE_WORKFLOW_APPROVED_SOURCE_ID: frontiers-automotive-alternator-2023
           SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PRODUCTION_SECRET || secrets.PRODUCTION_KEY }}
