@@ -13,7 +13,10 @@ const expectedSupabaseRef = String(
   process.env.EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF || 'pffdgqpynpbffbcnxmum'
 ).trim()
 const searchQuery = String(
-  process.env.EVIDENCE_WORKFLOW_SEARCH_QUERY || 'automotive charging system diagnostics'
+  process.env.EVIDENCE_WORKFLOW_SEARCH_QUERY || '10.3389/fmech.2022.1090152'
+).trim()
+const approvedSourceId = String(
+  process.env.EVIDENCE_WORKFLOW_APPROVED_SOURCE_ID || 'frontiers-automotive-alternator-2023'
 ).trim()
 
 function required(name, value) {
@@ -48,6 +51,7 @@ async function main() {
   required('SUPABASE_SERVICE_ROLE_KEY', serviceRoleKey)
   required('EVIDENCE_WORKFLOW_LESSON_PLAN_ID', lessonPlanId)
   required('EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF', expectedSupabaseRef)
+  required('EVIDENCE_WORKFLOW_APPROVED_SOURCE_ID', approvedSourceId)
   assert(
     supabaseUrl.includes(expectedSupabaseRef),
     'SUPABASE_URL does not match EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF'
@@ -99,6 +103,19 @@ async function main() {
     const paper = Array.isArray(search.data) ? search.data.find((item) => item?.paperId && item?.title) : null
     assert(paper, 'Semantic Scholar search returned no usable paper')
 
+    const approvedSourcesPayload = await api(
+      '/api/research/curriculum-evidence/approved-sources'
+    )
+    const source = Array.isArray(approvedSourcesPayload.data)
+      ? approvedSourcesPayload.data.find((item) => item.id === approvedSourceId)
+      : null
+    assert(source, 'Configured approved provenance source was not returned by the API')
+    assert(source.status === 'approved', 'Configured provenance source is not approved')
+
+    const paperDoi = String(paper.externalIds?.DOI || '').trim().toLowerCase()
+    const sourceDoi = String(source.license?.doi || '').trim().toLowerCase()
+    assert(paperDoi && sourceDoi && paperDoi === sourceDoi, 'Discovered paper DOI does not match approved provenance source DOI')
+
     const evidencePayload = await api('/api/research/curriculum-evidence/records', {
       method: 'POST',
       body: JSON.stringify({
@@ -141,14 +158,56 @@ async function main() {
     assert(saved.license_status === 'unverified', 'Read-back evidence license status changed')
     assert(saved.scored_assessment_eligible === false, 'Read-back evidence became assessment eligible')
 
+    const reviewPayload = await api(
+      '/api/research/curriculum-evidence/records/' + encodeURIComponent(evidence.id),
+      { method: 'PATCH', body: JSON.stringify({ action: 'review' }) }
+    )
+    assert(reviewPayload.data?.review_status === 'reviewed', 'Human review did not move evidence to reviewed')
+    assert(reviewPayload.data?.reviewed_by, 'Human review did not record reviewer identity')
+    assert(reviewPayload.data?.reviewed_at, 'Human review did not record review timestamp')
+    assert(reviewPayload.data?.scored_assessment_eligible === false, 'Human review changed assessment eligibility')
+
+    const licensePayload = await api(
+      '/api/research/curriculum-evidence/records/' + encodeURIComponent(evidence.id),
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ action: 'license', licenseStatus: 'verified-for-use' })
+      }
+    )
+    assert(licensePayload.data?.review_status === 'license-verified', 'License review did not move evidence to license-verified')
+    assert(licensePayload.data?.license_status === 'verified-for-use', 'License review did not verify reuse rights')
+    assert(licensePayload.data?.license_reviewed_by, 'License review did not record reviewer identity')
+    assert(licensePayload.data?.license_reviewed_at, 'License review did not record timestamp')
+    assert(licensePayload.data?.scored_assessment_eligible === false, 'License review changed assessment eligibility')
+
+    const linkPayload = await api(
+      '/api/research/curriculum-evidence/records/' + encodeURIComponent(evidence.id),
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ action: 'link-source', approvedSourceId })
+      }
+    )
+    assert(linkPayload.data?.approved_source_id === approvedSourceId, 'Approved provenance source was not linked')
+    assert(linkPayload.data?.scored_assessment_eligible === false, 'Provenance linking changed assessment eligibility')
+
+    const approvePayload = await api(
+      '/api/research/curriculum-evidence/records/' + encodeURIComponent(evidence.id),
+      { method: 'PATCH', body: JSON.stringify({ action: 'approve' }) }
+    )
+    assert(approvePayload.data?.review_status === 'approved', 'Evidence approval did not reach approved state')
+    assert(approvePayload.data?.license_status === 'verified-for-use', 'Approved evidence lost verified license state')
+    assert(approvePayload.data?.approved_source_id === approvedSourceId, 'Approved evidence lost provenance linkage')
+    assert(approvePayload.data?.scored_assessment_eligible === false, 'Evidence approval changed assessment eligibility')
+
     console.log('[PASS] Curriculum evidence workflow verified end-to-end')
     console.log(JSON.stringify({
       lessonPlanId,
       gapStatus: gap.status,
       provider: evidence.discovery_provider,
-      reviewStatus: evidence.review_status,
-      licenseStatus: evidence.license_status,
-      scoredAssessmentEligible: evidence.scored_assessment_eligible,
+      reviewStatus: approvePayload.data.review_status,
+      licenseStatus: approvePayload.data.license_status,
+      approvedSourceId: approvePayload.data.approved_source_id,
+      scoredAssessmentEligible: approvePayload.data.scored_assessment_eligible,
       cleanup: 'pending'
     }))
   } finally {
