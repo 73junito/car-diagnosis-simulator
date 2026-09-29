@@ -142,8 +142,21 @@ async function acquireSemanticScholarQuota(env) {
   }
 }
 
+async function resolveSemanticScholarApiKey(env) {
+  const binding = env?.SEMANTIC_SCHOLAR_API_KEY
+
+  if (binding && typeof binding.get === 'function') {
+    const value = await binding.get()
+    return String(value || '').trim()
+  }
+
+  // Local development and unit tests may provide a plain string through
+  // .dev.vars. Production uses the Cloudflare Secrets Store binding.
+  return String(binding || '').trim()
+}
+
 async function requestSemanticScholar(url, env, options = {}) {
-  const apiKey = String(env?.SEMANTIC_SCHOLAR_API_KEY || '').trim()
+  const apiKey = await resolveSemanticScholarApiKey(env)
   if (!apiKey) {
     throw Object.assign(new Error('Semantic Scholar API key is not configured'), {
       code: 'API_KEY_NOT_CONFIGURED'

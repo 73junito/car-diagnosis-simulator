@@ -34,6 +34,13 @@
       }
     ]
   },
+  "secrets_store_secrets": [
+    {
+      "binding": "SEMANTIC_SCHOLAR_API_KEY",
+      "store_id": "c32646eb8bd1485b89b3dbf184fe933d",
+      "secret_name": "Semantic_Scholar"
+    }
+  ],
   "previews": {
     "durable_objects": {
       "bindings": [

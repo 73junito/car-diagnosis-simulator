@@ -8,13 +8,17 @@ Semantic Scholar results are discovery inputs only. They do not automatically be
 
 ## Server-side secret
 
-Configure the API key only as the Cloudflare Worker secret:
+Production uses the Cloudflare account-level Secrets Store rather than duplicating the key into GitHub or a per-Worker secret.
 
-```
-SEMANTIC_SCHOLAR_API_KEY
-```
+- Secrets Store ID: `c32646eb8bd1485b89b3dbf184fe933d`
+- Secret name: `Semantic_Scholar`
+- Worker binding: `SEMANTIC_SCHOLAR_API_KEY`
 
-Never place the key in browser JavaScript, JSON data files, Git history, Wrangler `vars`, logs, tests, screenshots, or documentation.
+The binding is declared in `wrangler.app.jsonc` with `secrets_store_secrets`. Worker code retrieves the value asynchronously with `await env.SEMANTIC_SCHOLAR_API_KEY.get()`.
+
+For local development and unit tests only, `.dev.vars` may provide a plain `SEMANTIC_SCHOLAR_API_KEY` string. Production must use the Secrets Store binding.
+
+Never place the key value in browser JavaScript, JSON data files, Git history, Wrangler `vars`, logs, tests, screenshots, or documentation.
 
 ## Routes
 

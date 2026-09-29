@@ -24,9 +24,14 @@ describe('Semantic Scholar integration contract', () => {
     expect(route).toContain('Instructor, professor, or admin access required')
   })
 
-  test('API key remains a server-side secret rather than a Wrangler variable', () => {
+  test('API key remains a server-side Cloudflare Secrets Store binding', () => {
     expect(service).toContain("'x-api-key': apiKey")
-    expect(appConfig).not.toContain('SEMANTIC_SCHOLAR_API_KEY')
+    expect(service).toContain("typeof binding.get === 'function'")
+    expect(service).toContain('await binding.get()')
+    expect(appConfig).toContain('"secrets_store_secrets"')
+    expect(appConfig).toContain('"binding": "SEMANTIC_SCHOLAR_API_KEY"')
+    expect(appConfig).toContain('"store_id": "c32646eb8bd1485b89b3dbf184fe933d"')
+    expect(appConfig).toContain('"secret_name": "Semantic_Scholar"')
     expect(publicConfig).not.toContain('SEMANTIC_SCHOLAR_API_KEY')
     expect(workerIndex).not.toMatch(/s2k-/i)
     expect(route).not.toMatch(/s2k-/i)
