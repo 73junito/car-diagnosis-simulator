@@ -25,7 +25,8 @@ describe('Curriculum evidence production E2E verifier contract', () => {
   test('requires authentication and cleanup credentials before execution', () => {
     expect(workflow).toContain('PRODUCTION_URL')
     expect(workflow).toContain('PRODUCTION_ANON')
-    expect(workflow).toContain('SUPABASE_KEY')
+    expect(workflow).toContain('PRODUCTION_SECRET')
+    expect(workflow).toContain('PRODUCTION_KEY')
     expect(workflow).toContain('TEST_TEACHER_EMAIL')
     expect(workflow).toContain('TEST_TEACHER_PASSWORD')
     expect(script).toContain("required('EVIDENCE_WORKFLOW_ACCESS_TOKEN'")
