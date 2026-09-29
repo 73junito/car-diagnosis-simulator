@@ -20,43 +20,43 @@ describe('Durable Object rate limiter', () => {
   test('DO class enforces fixed-window limit and reset', async () => {
     const state = createMockState()
     const doObj = new TorqueMindRateLimitCounter(state, {})
+    const fixedNow = 1_800_000_000_000
+    const nowSpy = jest.spyOn(Date, 'now').mockImplementation(() => fixedNow)
 
     const req = (limit, windowSeconds) => ({ method: 'POST', url: 'https://x/check', headers: { 'content-type': 'application/json' }, text: async () => JSON.stringify({ limit, windowSeconds }) })
 
-    // first allowed
-    let r = await doObj.fetch(req(2, 1))
-    expect(r.status).toBe(200)
-    const txt = (r && typeof r.text === 'function') ? await r.text() : null
-    console.log('DO response text:', txt)
-    let body = txt ? JSON.parse(txt) : {}
-    expect(body.allowed).toBe(true)
-
-    // second allowed
-    r = await doObj.fetch(req(2, 1))
-    expect(r.status).toBe(200)
-    const txt2 = (r && typeof r.text === 'function') ? await r.text() : null
-    body = txt2 ? JSON.parse(txt2) : {}
-    expect(body.allowed).toBe(true)
-
-    // third rejected
-    r = await doObj.fetch(req(2, 1))
-    expect(r.status).toBe(429)
-    const txt3 = (r && typeof r.text === 'function') ? await r.text() : null
-    body = txt3 ? JSON.parse(txt3) : {}
-    expect(body.allowed).toBe(false)
-
-    // advance window by mocking Date.now
-    const realNow = Date.now
     try {
-      const future = realNow() + 1500
-      jest.spyOn(Date, 'now').mockImplementation(() => future)
+      // first allowed
+      let r = await doObj.fetch(req(2, 1))
+      expect(r.status).toBe(200)
+      const txt = (r && typeof r.text === 'function') ? await r.text() : null
+      console.log('DO response text:', txt)
+      let body = txt ? JSON.parse(txt) : {}
+      expect(body.allowed).toBe(true)
+
+      // second allowed
+      r = await doObj.fetch(req(2, 1))
+      expect(r.status).toBe(200)
+      const txt2 = (r && typeof r.text === 'function') ? await r.text() : null
+      body = txt2 ? JSON.parse(txt2) : {}
+      expect(body.allowed).toBe(true)
+
+      // third rejected in the same fixed window
+      r = await doObj.fetch(req(2, 1))
+      expect(r.status).toBe(429)
+      const txt3 = (r && typeof r.text === 'function') ? await r.text() : null
+      body = txt3 ? JSON.parse(txt3) : {}
+      expect(body.allowed).toBe(false)
+
+      // advance beyond the window deterministically
+      nowSpy.mockImplementation(() => fixedNow + 1500)
       const r2 = await doObj.fetch(req(2, 1))
       expect(r2.status).toBe(200)
       const t2 = (r2 && typeof r2.text === 'function') ? await r2.text() : null
       const b2 = t2 ? JSON.parse(t2) : {}
       expect(b2.allowed).toBe(true)
     } finally {
-      jest.spyOn(Date, 'now').mockRestore()
+      nowSpy.mockRestore()
     }
   })
 
