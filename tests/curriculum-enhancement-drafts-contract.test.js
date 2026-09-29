@@ -62,6 +62,12 @@ describe('AI-assisted curriculum enhancement draft contract', () => {
     expect(migration).toContain('create trigger curriculum_enhancement_evidence_gate')
   })
 
+  test('worker route imports its Supabase client and shared authorization guard', () => {
+    expect(route).toContain("import { createClient } from '@supabase/supabase-js'")
+    expect(route).toContain("import { authorizeResearch } from './semantic-scholar-research.js'")
+    expect(route).toContain('const auth = await authorizeResearch(c, { requireSemanticScholarEnabled: false })')
+  })
+
   test('worker exposes draft create/list and review/reject only', () => {
     expect(route).toContain("import { createClient } from '@supabase/supabase-js'")
     expect(workerIndex).toContain(
