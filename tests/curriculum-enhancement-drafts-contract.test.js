@@ -39,6 +39,7 @@ describe('AI-assisted curriculum enhancement draft contract', () => {
     expect(migration).toContain('revoke all on public.curriculum_enhancement_drafts from public, anon, authenticated')
     expect(migration).toContain('revoke all on public.curriculum_enhancement_draft_evidence from public, anon, authenticated')
     expect(migration).toContain('grant select, insert, update, delete on public.curriculum_enhancement_drafts to service_role')
+    expect(migration).toContain('idx_curriculum_enhancement_draft_evidence_evidence')
   })
 
   test('database evidence links fail closed unless approved evidence has explicit AI rights', () => {
