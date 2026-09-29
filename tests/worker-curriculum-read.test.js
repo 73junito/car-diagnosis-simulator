@@ -28,6 +28,15 @@ const SERVICE_ENV = {
   SUPABASE_SERVICE_ROLE_KEY: 'service-role-test-key-do-not-leak'
 };
 
+test('curriculum contract ignores object property insertion order', () => {
+  const payload = JSON.parse(JSON.stringify(staticContract));
+  const course = payload.catalogCourses.find((item) => item.delivery);
+  expect(course).toBeDefined();
+
+  course.delivery = Object.fromEntries(Object.entries(course.delivery).reverse());
+  expect(validateCurriculumApiContract(payload, staticContract)).toEqual([]);
+});
+
 function buildRows() {
   const pathways = [];
   const programs = [];
