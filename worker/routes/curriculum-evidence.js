@@ -13,7 +13,7 @@ const EVIDENCE_FIELDS = [
   'authors', 'publication_year', 'venue', 'doi', 'source_url', 'abstract',
   'citation_count', 'open_access_pdf_url', 'open_access_license',
   'provider_metadata', 'review_status', 'license_status',
-  'literature_catalog_id', 'saved_by', 'reviewed_by', 'reviewed_at',
+  'approved_source_id', 'saved_by', 'reviewed_by', 'reviewed_at',
   'license_reviewed_by', 'license_reviewed_at', 'scored_assessment_eligible',
   'created_at', 'updated_at'
 ].join(', ')

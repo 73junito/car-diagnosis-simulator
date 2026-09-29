@@ -15,7 +15,7 @@ describe('Curriculum evidence-gap persistence contract', () => {
     expect(migration).toContain('create table if not exists public.curriculum_module_gaps')
     expect(migration).toContain('create table if not exists public.curriculum_evidence_records')
     expect(migration).toContain('references public.curriculum_lesson_plans')
-    expect(migration).toContain('references public.literature_catalog')
+    expect(migration).toContain('references public.approved_sources')
     expect(migration).toContain('unique (gap_id, discovery_provider, provider_record_id)')
   })
 

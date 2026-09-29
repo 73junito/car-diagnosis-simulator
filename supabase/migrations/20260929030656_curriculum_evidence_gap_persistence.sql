@@ -47,7 +47,7 @@ create table if not exists public.curriculum_evidence_records (
     check (review_status in ('discovered','reviewed','license-verified','approved','rejected')),
   license_status text not null default 'unverified'
     check (license_status in ('unverified','review-required','verified-for-use','restricted','unknown')),
-  literature_catalog_id uuid references public.literature_catalog(id) on delete set null,
+  approved_source_id text references public.approved_sources(id) on delete set null,
   saved_by uuid not null,
   reviewed_by uuid,
   reviewed_at timestamptz,
