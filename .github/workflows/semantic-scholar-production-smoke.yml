@@ -1,0 +1,124 @@
+name: Semantic Scholar Production Smoke
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  semantic-scholar-production-smoke:
+    name: semantic-scholar-production-smoke
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify required secrets are present
+        env:
+          SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_ANON }}
+          TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
+          TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${SUPABASE_URL:-}" || { echo "PRODUCTION_URL is missing."; exit 1; }
+          test -n "${SUPABASE_ANON_KEY:-}" || { echo "PRODUCTION_ANON is missing."; exit 1; }
+          test -n "${TEST_TEACHER_EMAIL:-}" || { echo "TEST_TEACHER_EMAIL is missing."; exit 1; }
+          test -n "${TEST_TEACHER_PASSWORD:-}" || { echo "TEST_TEACHER_PASSWORD is missing."; exit 1; }
+          echo "Required production smoke credentials are configured."
+
+      - name: Authenticate production test teacher
+        id: auth
+        env:
+          SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_ANON }}
+          TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
+          TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          AUTH_PAYLOAD="$(jq -nc             --arg email "$TEST_TEACHER_EMAIL"             --arg password "$TEST_TEACHER_PASSWORD"             '{email:$email,password:$password}')"
+
+          AUTH_RESPONSE="$(curl -fsS             -X POST             "$SUPABASE_URL/auth/v1/token?grant_type=password"             -H "apikey: $SUPABASE_ANON_KEY"             -H "Content-Type: application/json"             --data "$AUTH_PAYLOAD")"
+
+          ACCESS_TOKEN="$(printf '%s' "$AUTH_RESPONSE" | jq -r '.access_token // empty')"
+          ROLE="$(printf '%s' "$AUTH_RESPONSE" | jq -r '.user.app_metadata.role // empty')"
+
+          test -n "$ACCESS_TOKEN" || { echo "Production test-user authentication did not return an access token."; exit 1; }
+
+          case "$ROLE" in
+            instructor|professor|admin) ;;
+            *)
+              echo "Production test user does not have an authorized research role."
+              exit 1
+              ;;
+          esac
+
+          echo "::add-mask::$ACCESS_TOKEN"
+          {
+            echo "token<<EOF"
+            echo "$ACCESS_TOKEN"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Production test-user authentication succeeded with an authorized research role."
+
+      - name: Call live Semantic Scholar search
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          HTTP_STATUS="$(curl -sS             -o /tmp/semantic-scholar-search.json             -w '%{http_code}'             -H "Authorization: Bearer $ACCESS_TOKEN"             -H "Accept: application/json"             "https://app.autolearnpro.com/api/research/semantic-scholar/search?q=automotive%20diagnostics&limit=1")"
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "Semantic Scholar live search returned HTTP $HTTP_STATUS."
+            jq '{error}' /tmp/semantic-scholar-search.json 2>/dev/null || true
+            exit 1
+          fi
+
+          jq -e '
+            .provider == "Semantic Scholar" and
+            .usage == "research-discovery" and
+            .reviewStatus == "unreviewed" and
+            .assessmentEligibility == "none" and
+            .governance.curriculumApproval == "not-granted" and
+            .governance.scoredAssessmentEligibility == "not-granted" and
+            .governance.humanReviewRequired == true and
+            (.retrievedAt | type == "string") and
+            (.data | type == "array")
+          ' /tmp/semantic-scholar-search.json >/dev/null
+
+          SAFE_SUMMARY="$(jq -c '{
+            provider,
+            usage,
+            reviewStatus,
+            assessmentEligibility,
+            governance,
+            resultCount: (.data | length),
+            firstPaperHasId: ((.data[0].paperId // "") | length > 0),
+            firstPaperHasTitle: ((.data[0].title // "") | length > 0),
+            cache
+          }' /tmp/semantic-scholar-search.json)"
+
+          echo "Semantic Scholar production search passed."
+          echo "$SAFE_SUMMARY"
+
+      - name: Verify unauthenticated access still fails closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          HTTP_STATUS="$(curl -sS             -o /tmp/semantic-scholar-unauth.json             -w '%{http_code}'             "https://app.autolearnpro.com/api/research/semantic-scholar/search?q=automotive%20diagnostics&limit=1")"
+
+          test "$HTTP_STATUS" = "401" || {
+            echo "Expected unauthenticated HTTP 401, received $HTTP_STATUS."
+            exit 1
+          }
+
+          echo "Unauthenticated research access remains fail-closed with HTTP 401."
