@@ -317,6 +317,12 @@ describe('Curriculum read API design contracts', () => {
       expect(call.columns).not.toContain('*');
       expect(call.columns).toMatch(/^[a-z_]+(, [a-z_]+)+$/);
     }
+
+    const catalogSelect = selectCalls.find(
+      (call) => call.table === 'curriculum_catalog_courses'
+    );
+    expect(catalogSelect).toBeDefined();
+    expect(catalogSelect.columns.split(', ')).toContain('title');
   });
 
   test('worker registers /api/curriculum with a strict CORS allowlist', () => {
