@@ -1,0 +1,70 @@
+name: Curriculum Evidence Production E2E
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  curriculum-evidence-production-e2e:
+    name: curriculum-evidence-production-e2e
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify required production credentials
+        env:
+          SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_ANON }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
+          TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
+          TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${SUPABASE_URL:-}" || { echo "PRODUCTION_URL is missing."; exit 1; }
+          test -n "${SUPABASE_ANON_KEY:-}" || { echo "PRODUCTION_ANON is missing."; exit 1; }
+          test -n "${SUPABASE_SERVICE_ROLE_KEY:-}" || { echo "SUPABASE_KEY is missing."; exit 1; }
+          test -n "${TEST_TEACHER_EMAIL:-}" || { echo "TEST_TEACHER_EMAIL is missing."; exit 1; }
+          test -n "${TEST_TEACHER_PASSWORD:-}" || { echo "TEST_TEACHER_PASSWORD is missing."; exit 1; }
+          echo "Required production E2E credentials are configured."
+
+      - name: Authenticate production test teacher
+        id: auth
+        env:
+          SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_ANON }}
+          TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
+          TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          AUTH_PAYLOAD="$(jq -nc --arg email "$TEST_TEACHER_EMAIL" --arg password "$TEST_TEACHER_PASSWORD" '{email:$email,password:$password}')"
+          AUTH_RESPONSE="$(curl -fsS -X POST "$SUPABASE_URL/auth/v1/token?grant_type=password" -H "apikey: $SUPABASE_ANON_KEY" -H "Content-Type: application/json" --data "$AUTH_PAYLOAD")"
+          ACCESS_TOKEN="$(printf '%s' "$AUTH_RESPONSE" | jq -r '.access_token // empty')"
+          test -n "$ACCESS_TOKEN" || { echo "Production test-user authentication did not return an access token."; exit 1; }
+          echo "::add-mask::$ACCESS_TOKEN"
+          echo "token=$ACCESS_TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Verify evidence workflow and cleanup
+        env:
+          EVIDENCE_WORKFLOW_ACCESS_TOKEN: ${{ steps.auth.outputs.token }}
+          EVIDENCE_WORKFLOW_BASE_URL: https://app.autolearnpro.com
+          EVIDENCE_WORKFLOW_LESSON_PLAN_ID: ug-electrical-charging-system
+          EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF: pffdgqpynpbffbcnxmum
+          EVIDENCE_WORKFLOW_SEARCH_QUERY: automotive charging system diagnostics
+          SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: npm run verify:evidence-workflow
