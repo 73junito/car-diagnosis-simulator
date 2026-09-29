@@ -72,8 +72,11 @@ function errorResponse(c, error) {
   return c.json({ error: 'Research provider unavailable' }, 502)
 }
 
-async function authorizeResearch(c) {
-  if (String(c.env?.SEMANTIC_SCHOLAR_ENABLED || '').toLowerCase() !== 'true') {
+export async function authorizeResearch(c, { requireSemanticScholarEnabled = true } = {}) {
+  if (
+    requireSemanticScholarEnabled &&
+    String(c.env?.SEMANTIC_SCHOLAR_ENABLED || '').toLowerCase() !== 'true'
+  ) {
     return { response: c.json({ error: 'Not found' }, 404) }
   }
 
