@@ -9653,6 +9653,4070 @@
         "lesson-summary"
       ],
       "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut501-integrated-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-501",
+        "catalogCourseCode": "AUT 501",
+        "catalogCourseTitle": "Advanced Automotive Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze integrated mechanical, electrical, electronic, software, communication, and energy systems as interacting vehicle domains, emphasizing interfaces, evidence, uncertainty, and system-level verification.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Bachelor's degree in automotive technology, engineering, applied technology, or related field",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut501-integrated-systems-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced Automotive Systems using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut501-integrated-systems-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced automotive systems evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut501-integrated-systems-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "mechanical-electrical integration",
+        "electronic control",
+        "software-defined behavior",
+        "vehicle communications",
+        "energy systems",
+        "interfaces and dependencies",
+        "system-level evidence"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut501-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced Automotive Systems.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-1",
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut501-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut501-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut501-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-1",
+            "grad-aut501-integrated-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut501-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut501-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut501-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut501-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-1",
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut501-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut501-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut501-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-1",
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut501-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Automotive Systems advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut501-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut501-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut501-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Automotive Systems graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut501-integrated-systems-lo-1",
+            "grad-aut501-integrated-systems-lo-2",
+            "grad-aut501-integrated-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced Automotive Systems problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut515-systems-modeling",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-515",
+        "catalogCourseCode": "AUT 515",
+        "catalogCourseTitle": "Automotive Systems Modeling",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop mathematical and computational representations of vehicle systems with attention to assumptions, parameters, simulation behavior, parameter estimation, validation evidence, and model limitations.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Graduate-level mathematics or equivalent",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut515-systems-modeling-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Automotive Systems Modeling using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut515-systems-modeling-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with automotive systems modeling evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut515-systems-modeling-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "mathematical models",
+        "computational models",
+        "simulation",
+        "parameter estimation",
+        "model assumptions",
+        "validation",
+        "model limitations"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut515-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Automotive Systems Modeling.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-1",
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ]
+        },
+        {
+          "id": "aut515-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-1"
+          ]
+        },
+        {
+          "id": "aut515-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-1"
+          ]
+        },
+        {
+          "id": "aut515-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-1",
+            "grad-aut515-systems-modeling-lo-2"
+          ]
+        },
+        {
+          "id": "aut515-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ]
+        },
+        {
+          "id": "aut515-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-2"
+          ]
+        },
+        {
+          "id": "aut515-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ]
+        },
+        {
+          "id": "aut515-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-1",
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ]
+        },
+        {
+          "id": "aut515-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ]
+        },
+        {
+          "id": "aut515-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ]
+        },
+        {
+          "id": "aut515-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-1",
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut515-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Systems Modeling advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut515-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut515-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut515-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Systems Modeling graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut515-systems-modeling-lo-1",
+            "grad-aut515-systems-modeling-lo-2",
+            "grad-aut515-systems-modeling-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Automotive Systems Modeling problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut520-data-analytics",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-520",
+        "catalogCourseCode": "AUT 520",
+        "catalogCourseTitle": "Advanced Vehicle Data Analytics",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Apply statistical, time-series, anomaly-detection, predictive-maintenance, visualization, and interpretation methods to vehicle datasets while preserving data provenance, uncertainty, and validation boundaries.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 515 or equivalent",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut520-data-analytics-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced Vehicle Data Analytics using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut520-data-analytics-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced vehicle data analytics evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut520-data-analytics-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "statistical analysis",
+        "time-series data",
+        "anomaly detection",
+        "predictive maintenance",
+        "visualization",
+        "data provenance",
+        "interpretation uncertainty"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut520-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced Vehicle Data Analytics.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-1",
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ]
+        },
+        {
+          "id": "aut520-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-1"
+          ]
+        },
+        {
+          "id": "aut520-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-1"
+          ]
+        },
+        {
+          "id": "aut520-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-1",
+            "grad-aut520-data-analytics-lo-2"
+          ]
+        },
+        {
+          "id": "aut520-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ]
+        },
+        {
+          "id": "aut520-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-2"
+          ]
+        },
+        {
+          "id": "aut520-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ]
+        },
+        {
+          "id": "aut520-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-1",
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ]
+        },
+        {
+          "id": "aut520-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ]
+        },
+        {
+          "id": "aut520-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ]
+        },
+        {
+          "id": "aut520-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-1",
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut520-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Vehicle Data Analytics advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut520-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut520-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut520-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Vehicle Data Analytics graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut520-data-analytics-lo-1",
+            "grad-aut520-data-analytics-lo-2",
+            "grad-aut520-data-analytics-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced Vehicle Data Analytics problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut530-advanced-ev-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-530",
+        "catalogCourseCode": "AUT 530",
+        "catalogCourseTitle": "Advanced Electric Vehicle Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze advanced electric-vehicle architectures, electric machines, inverters, charging, regenerative braking, thermal systems, and energy-management interactions without treating generic models as vehicle-specific service guidance.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 501 and undergraduate EV coursework or equivalent",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut530-advanced-ev-systems-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced Electric Vehicle Systems using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut530-advanced-ev-systems-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced electric vehicle systems evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut530-advanced-ev-systems-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "EV architectures",
+        "electric machines",
+        "inverters",
+        "charging systems",
+        "regenerative braking",
+        "thermal systems",
+        "energy management"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut530-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced Electric Vehicle Systems.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-1",
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut530-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut530-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut530-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-1",
+            "grad-aut530-advanced-ev-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut530-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut530-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut530-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut530-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-1",
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut530-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut530-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut530-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-1",
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut530-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Electric Vehicle Systems advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut530-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut530-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut530-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Electric Vehicle Systems graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut530-advanced-ev-systems-lo-1",
+            "grad-aut530-advanced-ev-systems-lo-2",
+            "grad-aut530-advanced-ev-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced Electric Vehicle Systems problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut535-battery-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-535",
+        "catalogCourseCode": "AUT 535",
+        "catalogCourseTitle": "Advanced Battery Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze battery models, state estimation, degradation, thermal behavior, balancing, battery-management algorithms, safety considerations, and diagnostic evidence with explicit model and source limitations.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 530",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut535-battery-systems-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced Battery Systems using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut535-battery-systems-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced battery systems evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut535-battery-systems-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "battery modeling",
+        "state estimation",
+        "degradation",
+        "thermal behavior",
+        "balancing",
+        "battery-management algorithms",
+        "diagnostic evidence"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut535-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced Battery Systems.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-1",
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut535-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut535-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut535-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-1",
+            "grad-aut535-battery-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut535-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut535-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut535-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut535-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-1",
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut535-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut535-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut535-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-1",
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut535-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Battery Systems advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut535-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut535-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut535-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Battery Systems graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut535-battery-systems-lo-1",
+            "grad-aut535-battery-systems-lo-2",
+            "grad-aut535-battery-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced Battery Systems problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut540-power-electronics",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-540",
+        "catalogCourseCode": "AUT 540",
+        "catalogCourseTitle": "Power Electronics for Vehicle Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze converters, inverters, switching devices, motor drives, control strategies, efficiency, and thermal-management relationships while keeping device limits and procedures tied to authoritative technical information.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 530 or equivalent",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut540-power-electronics-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Power Electronics for Vehicle Systems using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut540-power-electronics-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with power electronics for vehicle systems evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut540-power-electronics-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "power converters",
+        "inverters",
+        "switching devices",
+        "motor drives",
+        "control strategies",
+        "efficiency",
+        "thermal management"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut540-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Power Electronics for Vehicle Systems.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-1",
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ]
+        },
+        {
+          "id": "aut540-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-1"
+          ]
+        },
+        {
+          "id": "aut540-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-1"
+          ]
+        },
+        {
+          "id": "aut540-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-1",
+            "grad-aut540-power-electronics-lo-2"
+          ]
+        },
+        {
+          "id": "aut540-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ]
+        },
+        {
+          "id": "aut540-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-2"
+          ]
+        },
+        {
+          "id": "aut540-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ]
+        },
+        {
+          "id": "aut540-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-1",
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ]
+        },
+        {
+          "id": "aut540-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ]
+        },
+        {
+          "id": "aut540-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ]
+        },
+        {
+          "id": "aut540-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-1",
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut540-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Power Electronics for Vehicle Systems advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut540-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut540-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut540-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Power Electronics for Vehicle Systems graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut540-power-electronics-lo-1",
+            "grad-aut540-power-electronics-lo-2",
+            "grad-aut540-power-electronics-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Power Electronics for Vehicle Systems problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut545-energy-management",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-545",
+        "catalogCourseCode": "AUT 545",
+        "catalogCourseTitle": "Advanced Vehicle Energy Management",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze and optimize energy flow in hybrid and electric vehicles using system boundaries, operating objectives, constraints, evidence, and validation rather than unsupported universal control targets.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 530 and AUT 535",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut545-energy-management-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced Vehicle Energy Management using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut545-energy-management-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced vehicle energy management evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut545-energy-management-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "energy-flow analysis",
+        "hybrid energy paths",
+        "electric-vehicle energy paths",
+        "optimization objectives",
+        "constraints",
+        "efficiency tradeoffs",
+        "validation evidence"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut545-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced Vehicle Energy Management.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-1",
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut545-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-1"
+          ]
+        },
+        {
+          "id": "aut545-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-1"
+          ]
+        },
+        {
+          "id": "aut545-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-1",
+            "grad-aut545-energy-management-lo-2"
+          ]
+        },
+        {
+          "id": "aut545-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut545-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-2"
+          ]
+        },
+        {
+          "id": "aut545-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut545-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-1",
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut545-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut545-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ]
+        },
+        {
+          "id": "aut545-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-1",
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut545-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Vehicle Energy Management advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut545-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut545-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut545-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Vehicle Energy Management graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut545-energy-management-lo-1",
+            "grad-aut545-energy-management-lo-2",
+            "grad-aut545-energy-management-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced Vehicle Energy Management problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut550-automotive-networks",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-550",
+        "catalogCourseCode": "AUT 550",
+        "catalogCourseTitle": "Advanced Automotive Networks",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze advanced CAN, CAN FD, Automotive Ethernet, gateways, network timing, diagnostics, communication reliability, and network evidence without assuming a universal topology or protocol implementation.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 501 or equivalent",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut550-automotive-networks-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced Automotive Networks using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut550-automotive-networks-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced automotive networks evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut550-automotive-networks-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "CAN and CAN FD",
+        "Automotive Ethernet",
+        "gateways",
+        "network timing",
+        "network diagnostics",
+        "communication reliability",
+        "network analysis"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut550-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced Automotive Networks.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-1",
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ]
+        },
+        {
+          "id": "aut550-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-1"
+          ]
+        },
+        {
+          "id": "aut550-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-1"
+          ]
+        },
+        {
+          "id": "aut550-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-1",
+            "grad-aut550-automotive-networks-lo-2"
+          ]
+        },
+        {
+          "id": "aut550-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ]
+        },
+        {
+          "id": "aut550-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-2"
+          ]
+        },
+        {
+          "id": "aut550-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ]
+        },
+        {
+          "id": "aut550-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-1",
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ]
+        },
+        {
+          "id": "aut550-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ]
+        },
+        {
+          "id": "aut550-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ]
+        },
+        {
+          "id": "aut550-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-1",
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut550-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Automotive Networks advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut550-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut550-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut550-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Automotive Networks graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut550-automotive-networks-lo-1",
+            "grad-aut550-automotive-networks-lo-2",
+            "grad-aut550-automotive-networks-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced Automotive Networks problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut555-embedded-ecu",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-555",
+        "catalogCourseCode": "AUT 555",
+        "catalogCourseTitle": "Automotive Embedded Systems and ECU Architecture",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze ECU architecture, microcontrollers, real-time systems, embedded software, communication interfaces, and validation strategies while preserving hardware/software version and source applicability.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 550 or equivalent",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut555-embedded-ecu-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Automotive Embedded Systems and ECU Architecture using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut555-embedded-ecu-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with automotive embedded systems and ecu architecture evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut555-embedded-ecu-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "ECU architecture",
+        "microcontrollers",
+        "real-time systems",
+        "embedded software",
+        "communication interfaces",
+        "hardware-software interaction",
+        "system validation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut555-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Automotive Embedded Systems and ECU Architecture.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-1",
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ]
+        },
+        {
+          "id": "aut555-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-1"
+          ]
+        },
+        {
+          "id": "aut555-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-1"
+          ]
+        },
+        {
+          "id": "aut555-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-1",
+            "grad-aut555-embedded-ecu-lo-2"
+          ]
+        },
+        {
+          "id": "aut555-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ]
+        },
+        {
+          "id": "aut555-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-2"
+          ]
+        },
+        {
+          "id": "aut555-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ]
+        },
+        {
+          "id": "aut555-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-1",
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ]
+        },
+        {
+          "id": "aut555-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ]
+        },
+        {
+          "id": "aut555-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ]
+        },
+        {
+          "id": "aut555-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-1",
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut555-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Embedded Systems and ECU Architecture advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut555-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut555-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut555-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Embedded Systems and ECU Architecture graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut555-embedded-ecu-lo-1",
+            "grad-aut555-embedded-ecu-lo-2",
+            "grad-aut555-embedded-ecu-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Automotive Embedded Systems and ECU Architecture problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut560-adas-perception",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-560",
+        "catalogCourseCode": "AUT 560",
+        "catalogCourseTitle": "Advanced ADAS and Vehicle Perception",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze advanced vehicle perception using radar, cameras, LiDAR, sensor fusion, calibration concepts, testing, and validation with explicit environmental, configuration, and source dependencies.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 501 and AUT 550",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut560-adas-perception-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced ADAS and Vehicle Perception using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut560-adas-perception-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced adas and vehicle perception evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut560-adas-perception-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "radar perception",
+        "camera perception",
+        "LiDAR perception",
+        "sensor fusion",
+        "calibration concepts",
+        "test design",
+        "perception validation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut560-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced ADAS and Vehicle Perception.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-1",
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ]
+        },
+        {
+          "id": "aut560-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-1"
+          ]
+        },
+        {
+          "id": "aut560-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-1"
+          ]
+        },
+        {
+          "id": "aut560-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-1",
+            "grad-aut560-adas-perception-lo-2"
+          ]
+        },
+        {
+          "id": "aut560-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ]
+        },
+        {
+          "id": "aut560-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-2"
+          ]
+        },
+        {
+          "id": "aut560-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ]
+        },
+        {
+          "id": "aut560-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-1",
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ]
+        },
+        {
+          "id": "aut560-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ]
+        },
+        {
+          "id": "aut560-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ]
+        },
+        {
+          "id": "aut560-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-1",
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut560-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced ADAS and Vehicle Perception advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut560-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut560-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut560-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced ADAS and Vehicle Perception graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut560-adas-perception-lo-1",
+            "grad-aut560-adas-perception-lo-2",
+            "grad-aut560-adas-perception-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced ADAS and Vehicle Perception problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut565-autonomous-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-565",
+        "catalogCourseCode": "AUT 565",
+        "catalogCourseTitle": "Autonomous Vehicle Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze autonomous vehicle architecture across localization, mapping, perception, planning, vehicle control, simulation, testing, and validation while preserving operational-domain and evidence limitations.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 560",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut565-autonomous-systems-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Autonomous Vehicle Systems using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut565-autonomous-systems-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with autonomous vehicle systems evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut565-autonomous-systems-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "autonomous architecture",
+        "localization",
+        "mapping",
+        "perception",
+        "planning",
+        "vehicle control",
+        "simulation and validation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut565-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Autonomous Vehicle Systems.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-1",
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut565-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut565-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut565-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-1",
+            "grad-aut565-autonomous-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut565-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut565-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut565-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut565-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-1",
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut565-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut565-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut565-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-1",
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut565-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Autonomous Vehicle Systems advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut565-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut565-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut565-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Autonomous Vehicle Systems graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut565-autonomous-systems-lo-1",
+            "grad-aut565-autonomous-systems-lo-2",
+            "grad-aut565-autonomous-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Autonomous Vehicle Systems problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut570-cybersecurity",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-570",
+        "catalogCourseCode": "AUT 570",
+        "catalogCourseTitle": "Automotive Cybersecurity Engineering",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze automotive cybersecurity through threat modeling, attack surfaces, secure networks, authentication, intrusion detection, secure diagnostics, and engineering verification without providing exploit instructions.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 550",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut570-cybersecurity-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Automotive Cybersecurity Engineering using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut570-cybersecurity-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with automotive cybersecurity engineering evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut570-cybersecurity-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "threat modeling",
+        "vehicle attack surfaces",
+        "secure networks",
+        "authentication",
+        "intrusion detection",
+        "secure diagnostics",
+        "cybersecurity verification"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut570-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Automotive Cybersecurity Engineering.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-1",
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut570-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-1"
+          ]
+        },
+        {
+          "id": "aut570-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-1"
+          ]
+        },
+        {
+          "id": "aut570-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-1",
+            "grad-aut570-cybersecurity-lo-2"
+          ]
+        },
+        {
+          "id": "aut570-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut570-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-2"
+          ]
+        },
+        {
+          "id": "aut570-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut570-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-1",
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut570-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut570-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ]
+        },
+        {
+          "id": "aut570-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-1",
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut570-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Automotive Cybersecurity Engineering advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut570-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut570-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut570-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Automotive Cybersecurity Engineering graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut570-cybersecurity-lo-1",
+            "grad-aut570-cybersecurity-lo-2",
+            "grad-aut570-cybersecurity-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Automotive Cybersecurity Engineering problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut575-software-defined-vehicle",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-575",
+        "catalogCourseCode": "AUT 575",
+        "catalogCourseTitle": "Software-Defined Vehicle Architecture",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze zonal and centralized vehicle architectures, software platforms, middleware, over-the-air update concepts, vehicle data, and software lifecycle management with configuration and security boundaries.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 555 and AUT 550",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut575-software-defined-vehicle-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Software-Defined Vehicle Architecture using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut575-software-defined-vehicle-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with software-defined vehicle architecture evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut575-software-defined-vehicle-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "zonal architectures",
+        "centralized architectures",
+        "software platforms",
+        "middleware",
+        "over-the-air updates",
+        "vehicle data",
+        "software lifecycle management"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut575-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Software-Defined Vehicle Architecture.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-1",
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ]
+        },
+        {
+          "id": "aut575-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-1"
+          ]
+        },
+        {
+          "id": "aut575-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-1"
+          ]
+        },
+        {
+          "id": "aut575-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-1",
+            "grad-aut575-software-defined-vehicle-lo-2"
+          ]
+        },
+        {
+          "id": "aut575-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ]
+        },
+        {
+          "id": "aut575-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-2"
+          ]
+        },
+        {
+          "id": "aut575-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ]
+        },
+        {
+          "id": "aut575-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-1",
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ]
+        },
+        {
+          "id": "aut575-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ]
+        },
+        {
+          "id": "aut575-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ]
+        },
+        {
+          "id": "aut575-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-1",
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut575-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Software-Defined Vehicle Architecture advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut575-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut575-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut575-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Software-Defined Vehicle Architecture graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut575-software-defined-vehicle-lo-1",
+            "grad-aut575-software-defined-vehicle-lo-2",
+            "grad-aut575-software-defined-vehicle-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Software-Defined Vehicle Architecture problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut580-control-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-580",
+        "catalogCourseCode": "AUT 580",
+        "catalogCourseTitle": "Advanced Automotive Control Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze advanced feedback control, state-space models, stability, estimation, optimization, and automotive control applications with explicit model assumptions and validation evidence.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 515",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut580-control-systems-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced Automotive Control Systems using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut580-control-systems-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced automotive control systems evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut580-control-systems-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "feedback control",
+        "state-space models",
+        "stability",
+        "state estimation",
+        "optimization",
+        "vehicle control applications",
+        "model validation"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut580-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced Automotive Control Systems.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-1",
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut580-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut580-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-1"
+          ]
+        },
+        {
+          "id": "aut580-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-1",
+            "grad-aut580-control-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut580-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut580-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-2"
+          ]
+        },
+        {
+          "id": "aut580-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut580-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-1",
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut580-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut580-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ]
+        },
+        {
+          "id": "aut580-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-1",
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut580-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Automotive Control Systems advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut580-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut580-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut580-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Automotive Control Systems graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut580-control-systems-lo-1",
+            "grad-aut580-control-systems-lo-2",
+            "grad-aut580-control-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced Automotive Control Systems problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut585-digital-twins",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-585",
+        "catalogCourseCode": "AUT 585",
+        "catalogCourseTitle": "Vehicle Digital Twins and Simulation",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Analyze digital vehicle representations through simulation, model calibration, real-time data integration, validation, and predictive analysis with explicit synchronization and model-fidelity limitations.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "AUT 515 and AUT 520",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut585-digital-twins-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Vehicle Digital Twins and Simulation using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut585-digital-twins-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with vehicle digital twins and simulation evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut585-digital-twins-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "digital twins",
+        "simulation",
+        "model calibration",
+        "real-time data integration",
+        "validation",
+        "predictive analysis",
+        "model fidelity"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut585-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Vehicle Digital Twins and Simulation.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-1",
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ]
+        },
+        {
+          "id": "aut585-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-1"
+          ]
+        },
+        {
+          "id": "aut585-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-1"
+          ]
+        },
+        {
+          "id": "aut585-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-1",
+            "grad-aut585-digital-twins-lo-2"
+          ]
+        },
+        {
+          "id": "aut585-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ]
+        },
+        {
+          "id": "aut585-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-2"
+          ]
+        },
+        {
+          "id": "aut585-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ]
+        },
+        {
+          "id": "aut585-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-1",
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ]
+        },
+        {
+          "id": "aut585-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ]
+        },
+        {
+          "id": "aut585-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ]
+        },
+        {
+          "id": "aut585-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-1",
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut585-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Vehicle Digital Twins and Simulation advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut585-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut585-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut585-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Vehicle Digital Twins and Simulation graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut585-digital-twins-lo-1",
+            "grad-aut585-digital-twins-lo-2",
+            "grad-aut585-digital-twins-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Vehicle Digital Twins and Simulation problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut590-technology-seminar",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-590",
+        "catalogCourseCode": "AUT 590",
+        "catalogCourseTitle": "Advanced Automotive Technology Seminar",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Critically examine current automotive research, technologies, standards, technical publications, and emerging industry developments through source evaluation, synthesis, discussion, and documented uncertainty.",
+      "estimatedMinutes": 240,
+      "prerequisites": [
+        "Graduate standing",
+        "Orientation to the AutoLearnPro graduate learning environment"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut590-technology-seminar-lo-1",
+          "statement": "Analyze the advanced system, model, or technical relationships represented in Advanced Automotive Technology Seminar using explicit assumptions and applicable evidence.",
+          "cognitiveLevel": "advanced-analysis"
+        },
+        {
+          "id": "grad-aut590-technology-seminar-lo-2",
+          "statement": "Evaluate competing interpretations, uncertainty, model limitations, and source applicability when working with advanced automotive technology seminar evidence.",
+          "cognitiveLevel": "evidence-evaluation"
+        },
+        {
+          "id": "grad-aut590-technology-seminar-lo-3",
+          "statement": "Design and defend a source-supported verification or validation strategy while documenting unresolved limitations and next research needs.",
+          "cognitiveLevel": "validation-design"
+        }
+      ],
+      "keyConcepts": [
+        "research evaluation",
+        "technical publications",
+        "standards awareness",
+        "emerging technologies",
+        "evidence synthesis",
+        "technical discussion",
+        "source provenance"
+      ],
+      "contentBlocks": [
+        {
+          "id": "aut590-objectives",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "title": "Graduate lesson targets",
+          "description": "Preview the advanced analysis, evidence-evaluation, and validation outcomes for Advanced Automotive Technology Seminar.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-1",
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ]
+        },
+        {
+          "id": "aut590-prior-knowledge",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "introduce",
+          "title": "Connect prerequisite knowledge",
+          "description": "Activate prerequisite concepts while identifying assumptions that must be verified for the current system or dataset.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-1"
+          ]
+        },
+        {
+          "id": "aut590-advanced-concepts",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "title": "Advanced technical relationships",
+          "description": "Explain the advanced relationships identified by the catalog scope without converting a conceptual model into universal vehicle-specific guidance.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-1"
+          ]
+        },
+        {
+          "id": "aut590-model",
+          "type": "visual-or-model",
+          "instructionalPurpose": "explain",
+          "title": "Advanced relationship model",
+          "description": "Use a conceptual model to organize interacting variables, interfaces, or evidence while preserving model and applicability limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-1",
+            "grad-aut590-technology-seminar-lo-2"
+          ]
+        },
+        {
+          "id": "aut590-worked-analysis",
+          "type": "worked-example",
+          "instructionalPurpose": "demonstrate",
+          "title": "Evidence, uncertainty, and competing interpretations",
+          "description": "Demonstrate how advanced technical evidence is evaluated against assumptions, alternative explanations, and verification requirements.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ]
+        },
+        {
+          "id": "aut590-guided-analysis",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "title": "Graduate evidence analysis",
+          "description": "Evaluate a generalized evidence set, identify uncertainty and source dependencies, and compare plausible interpretations.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-2"
+          ]
+        },
+        {
+          "id": "aut590-independent-analysis",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "title": "Independent graduate analysis scenario",
+          "description": "Develop and defend a verification or validation strategy for a generalized advanced automotive problem without inventing technical limits or procedures.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ]
+        },
+        {
+          "id": "aut590-reasoning-check",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "title": "Graduate formative reasoning check",
+          "description": "Use low-stakes prompts to check advanced conceptual analysis, uncertainty reasoning, source selection, and validation design.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-1",
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ]
+        },
+        {
+          "id": "aut590-feedback",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "title": "Critique, revise, and retry",
+          "description": "Provide reasoning-focused critique and allow revision without creating scored assessment eligibility.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ]
+        },
+        {
+          "id": "aut590-evidence-reference",
+          "type": "evidence-reference",
+          "instructionalPurpose": "summarize",
+          "title": "Authoritative evidence and research boundary",
+          "description": "Reinforce that standards, technical limits, algorithms, procedures, configurations, legal requirements, and vehicle-specific claims require applicable authoritative sources.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ]
+        },
+        {
+          "id": "aut590-summary",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "title": "Graduate synthesis",
+          "description": "Synthesize advanced concepts, evidence, uncertainty, validation strategy, provenance, and documented limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-1",
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ]
+        }
+      ],
+      "visuals": [
+        {
+          "id": "aut590-system-model",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "title": "Advanced Automotive Technology Seminar advanced relationship model",
+          "purpose": "Show advanced relationships and interfaces without presenting a vehicle-specific architecture or unsupported quantitative model.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-1"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut590-validation-flow",
+          "type": "flowchart",
+          "instructionalPurpose": "sequence",
+          "title": "Evidence-to-validation workflow",
+          "purpose": "Show a graduate analysis sequence from question and assumptions through evidence, uncertainty, verification, and documented conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut590-evidence-matrix",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "title": "Evidence, assumptions, uncertainty, and validation",
+          "purpose": "Compare evidence classes, assumptions, uncertainties, and the validation actions needed before accepting a conclusion.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        },
+        {
+          "id": "aut590-synthesis",
+          "type": "infographic",
+          "instructionalPurpose": "summarize",
+          "title": "Advanced Automotive Technology Seminar graduate analysis framework",
+          "purpose": "Summarize advanced analysis, evidence evaluation, source verification, validation, and limitations.",
+          "supportsObjectiveIds": [
+            "grad-aut590-technology-seminar-lo-1",
+            "grad-aut590-technology-seminar-lo-2",
+            "grad-aut590-technology-seminar-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "status": "planned"
+        }
+      ],
+      "practiceTasks": [
+        "Map the major advanced relationships or interfaces in a generalized Advanced Automotive Technology Seminar problem",
+        "Evaluate a sample evidence set for assumptions, uncertainty, provenance, and alternative interpretations",
+        "Identify which technical claims require authoritative source verification before use",
+        "Design and defend a verification or validation strategy with documented limitations"
+      ],
+      "assessmentPlan": [
+        "Low-stakes advanced concept analysis",
+        "Evidence and uncertainty evaluation exercise",
+        "Formative validation-design scenario",
+        "Reasoning-focused critique and retry"
+      ],
+      "evidenceFocus": [
+        "Advanced system or model relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Verification or validation design"
+      ],
+      "evidenceExpectation": "Technical and scholarly claims require approved provenance. Standards, algorithms, numeric limits, calibration values, procedures, configurations, legal requirements, security controls, and vehicle-specific specifications require applicable authoritative information and must not be invented.",
+      "assessmentBoundary": "Training checks may coach, explain, critique, and allow retry. Scored assessment remains a separate approval state and requires provenance, human review, curriculum mapping, and secure delivery.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
     }
   ]
 }

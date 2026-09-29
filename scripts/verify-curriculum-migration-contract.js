@@ -50,7 +50,10 @@ const advancedTechnologyBatchMigration = fs.readFileSync(advancedTechnologyBatch
 const undergraduateCompletionMigrationPath = path.join(migrationsDir, '20260929003000_add_undergrad_completion_batch_400_451.sql');
 assert(fs.existsSync(undergraduateCompletionMigrationPath), 'Undergraduate completion batch developed-curriculum migration is missing');
 const undergraduateCompletionMigration = fs.readFileSync(undergraduateCompletionMigrationPath, 'utf8');
-const developedMigrationCorpus = migration + '\n' + evSyncMigration + '\n' + aut101Migration + '\n' + aut105Migration + '\n' + foundationsBatchMigration + '\n' + coreSystemsBatchMigration + '\n' + advancedTechnologyBatchMigration + '\n' + undergraduateCompletionMigration;
+const graduateCoreMigrationPath = path.join(migrationsDir, '20260929020000_add_graduate_core_batch_501_590.sql');
+assert(fs.existsSync(graduateCoreMigrationPath), 'Graduate core batch developed-curriculum migration is missing');
+const graduateCoreMigration = fs.readFileSync(graduateCoreMigrationPath, 'utf8');
+const developedMigrationCorpus = migration + '\n' + evSyncMigration + '\n' + aut101Migration + '\n' + aut105Migration + '\n' + foundationsBatchMigration + '\n' + coreSystemsBatchMigration + '\n' + advancedTechnologyBatchMigration + '\n' + undergraduateCompletionMigration + '\n' + graduateCoreMigration;
 
 const requiredTables = [
   'curriculum_pathways',

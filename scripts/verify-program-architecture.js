@@ -118,12 +118,19 @@ for (const program of architecture.programs) {
 
 const catalogById = new Map(catalogCourses.map((course) => [course.id, course]));
 const developedUndergraduateById = new Map(undergraduateCourses.map((course) => [course.id, course]));
+const developedGraduateById = new Map(graduateCourses.map((course) => [course.id, course]));
+const developedById = new Map([
+  ...developedUndergraduateById,
+  ...developedGraduateById
+]);
 const seenCatalogDevelopment = new Set();
 for (const item of architecture.catalogDevelopmentMappings || []) {
   assert(catalogById.has(item.catalogCourseId),
     "Unknown catalog course " + item.catalogCourseId);
-  assert(developedUndergraduateById.has(item.existingCourseId),
-    "Unknown developed undergraduate course " + item.existingCourseId);
+  assert(developedById.has(item.existingCourseId),
+    "Unknown developed course " + item.existingCourseId);
+  assert(developedById.get(item.existingCourseId).academicLevel === catalogById.get(item.catalogCourseId).academicLevel,
+    "Catalog/developed academic-level mismatch for " + item.catalogCourseId);
   assert(lessonIds.has(item.existingLessonPlanId),
     "Unknown catalog-developed lesson " + item.existingLessonPlanId);
   assert(!seenCatalogDevelopment.has(item.catalogCourseId),
@@ -139,8 +146,10 @@ const seenCatalogCrosswalks = new Set();
 for (const item of architecture.catalogCourseCrosswalks || []) {
   assert(catalogById.has(item.catalogCourseId),
     "Unknown catalog crosswalk course " + item.catalogCourseId);
-  assert(developedUndergraduateById.has(item.existingCourseId),
+  assert(developedById.has(item.existingCourseId),
     "Unknown crosswalk developed course " + item.existingCourseId);
+  assert(developedById.get(item.existingCourseId).academicLevel === catalogById.get(item.catalogCourseId).academicLevel,
+    "Catalog/crosswalk academic-level mismatch for " + item.catalogCourseId);
   assert(lessonIds.has(item.existingLessonPlanId),
     "Unknown crosswalk lesson " + item.existingLessonPlanId);
   assert(!seenCatalogCrosswalks.has(item.catalogCourseId),

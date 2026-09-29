@@ -16,13 +16,13 @@ test.describe('Expanded lesson plans', () => {
     await expect(page.locator('html')).toHaveAttribute('data-lesson-plans', 'loaded');
 
     await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(43);
-    await expect(page.locator('#graduate-plan-list .expanded-plan')).toHaveCount(5);
-    await expect(page.locator('.expanded-plan')).toHaveCount(48);
-    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(48);
+    await expect(page.locator('#graduate-plan-list .expanded-plan')).toHaveCount(21);
+    await expect(page.locator('.expanded-plan')).toHaveCount(64);
+    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(64);
 
-    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(145);
-    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(530);
-    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(194);
+    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(193);
+    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(706);
+    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(258);
 
     expect(pageErrors).toEqual([]);
   });
@@ -221,6 +221,45 @@ test.describe('Expanded lesson plans', () => {
     expect(pageErrors).toEqual([]);
   });
 
+
+  test('renders the AUT 501-590 graduate core batch with planned non-scored boundaries', async ({ page }) => {
+    const pageErrors = collectPageErrors(page);
+    const batch = [
+      'grad-aut501-integrated-systems',
+      'grad-aut515-systems-modeling',
+      'grad-aut520-data-analytics',
+      'grad-aut530-advanced-ev-systems',
+      'grad-aut535-battery-systems',
+      'grad-aut540-power-electronics',
+      'grad-aut545-energy-management',
+      'grad-aut550-automotive-networks',
+      'grad-aut555-embedded-ecu',
+      'grad-aut560-adas-perception',
+      'grad-aut565-autonomous-systems',
+      'grad-aut570-cybersecurity',
+      'grad-aut575-software-defined-vehicle',
+      'grad-aut580-control-systems',
+      'grad-aut585-digital-twins',
+      'grad-aut590-technology-seminar'
+    ];
+
+    await page.goto('/lesson-plans/');
+    for (const id of batch) {
+      const plan = page.locator('#' + id);
+      await expect(plan, id).toBeVisible();
+      await expect(plan.locator('.objective-list > li'), id + ' objectives').toHaveCount(3);
+      await plan.getByText('Instructional sequence').click();
+      await expect(plan.locator('.instruction-block-list > li'), id + ' blocks').toHaveCount(11);
+      await plan.getByText('Planned visuals').click();
+      await expect(plan.locator('.lesson-visual-grid > article'), id + ' visuals').toHaveCount(4);
+      await plan.getByText('Evidence focus and boundaries').click();
+      await expect(plan.getByText(/Scored assessment remains a separate approval state/i), id + ' assessment boundary').toBeVisible();
+      await expect(plan.getByText(/must not be invented/i), id + ' source boundary').toBeVisible();
+    }
+
+    expect(pageErrors).toEqual([]);
+  });
+
   test('shows the full charging-system instructional plan', async ({ page }) => {
     const pageErrors = collectPageErrors(page);
 
@@ -384,7 +423,7 @@ test.describe('Expanded lesson plans', () => {
     const pageErrors = collectPageErrors(page);
 
     await page.goto('/learning-path/');
-    await expect(page.locator('.lesson-detail-link')).toHaveCount(48);
+    await expect(page.locator('.lesson-detail-link')).toHaveCount(64);
 
     const electrical = page.locator('#electrical-1');
     await electrical.locator('summary').click();
