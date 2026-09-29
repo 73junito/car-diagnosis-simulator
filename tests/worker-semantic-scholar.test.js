@@ -2,7 +2,8 @@
 import {
   searchSemanticScholar,
   getSemanticScholarPaper,
-  _resetSemanticScholarStateForTests
+  _resetSemanticScholarStateForTests,
+  _semanticScholarRetryDelayMs
 } from '../worker/services/semantic-scholar.js'
 
 function quotaNamespace(status = 200, payload = { allowed: true, count: 1, remaining: 0 }) {
@@ -130,6 +131,21 @@ describe('Semantic Scholar research service', () => {
     })
 
     expect(global.fetch).not.toHaveBeenCalled()
+  })
+
+  test('upstream retries wait for a fresh local quota window', () => {
+    const response = new Response('', { status: 429 })
+    expect(_semanticScholarRetryDelayMs(response, 0, {
+      SEMANTIC_SCHOLAR_RATE_WINDOW_SECONDS: '2'
+    })).toBe(2000)
+
+    const retryAfterResponse = new Response('', {
+      status: 429,
+      headers: { 'retry-after': '3' }
+    })
+    expect(_semanticScholarRetryDelayMs(retryAfterResponse, 0, {
+      SEMANTIC_SCHOLAR_RATE_WINDOW_SECONDS: '2'
+    })).toBe(3000)
   })
 
   test('paper metadata lookup is normalized and marked unreviewed', async () => {
