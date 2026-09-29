@@ -103,6 +103,20 @@
       <div id="evidence-review-list"></div>
     </section>
 
+    <section class="tm-panel" aria-labelledby="enhancement-drafts-title">
+      <h2 id="enhancement-drafts-title">AI-assisted curriculum enhancement drafts</h2>
+      <p>Generate instructor-review drafts only from approved evidence whose source explicitly permits AI/RAG use. Drafts cannot publish curriculum or generate scored assessment content.</p>
+      <label for="enhancement-goal">Enhancement goal</label>
+      <textarea id="enhancement-goal" rows="3" maxlength="1000"
+        placeholder="Describe the instructional improvement you want the draft to propose."></textarea>
+      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-top:.75rem">
+        <button id="generate-enhancement-draft" class="tm-btn tm-btn-primary" type="button">Generate enhancement draft</button>
+        <span id="enhancement-selection-count" class="fine-print">0 eligible evidence records selected.</span>
+      </div>
+      <p id="enhancement-draft-status" role="status" aria-live="polite">Select eligible approved evidence above to enable drafting.</p>
+      <div id="enhancement-draft-list"></div>
+    </section>
+
     <p><small>Research discovery metadata powered in part by <a href="https://www.semanticscholar.org/">Semantic Scholar</a>, a project of the Allen Institute for AI (Ai2).</small></p>
   </main>
 

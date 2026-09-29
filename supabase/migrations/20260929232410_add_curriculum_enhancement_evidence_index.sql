@@ -1,0 +1,2 @@
+create index if not exists idx_curriculum_enhancement_draft_evidence_evidence
+  on public.curriculum_enhancement_draft_evidence(evidence_id);

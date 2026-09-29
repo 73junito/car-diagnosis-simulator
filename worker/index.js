@@ -17,6 +17,10 @@ import {
   handleCurriculumApprovedSourceRightsReview,
   handleCurriculumEvidenceRecordReview
 } from "./routes/curriculum-evidence.js";
+import {
+  handleCurriculumEnhancementDrafts,
+  handleCurriculumEnhancementDraftReview
+} from "./routes/curriculum-enhancements.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 
@@ -117,6 +121,8 @@ app.all('/api/research/curriculum-evidence/records', handleCurriculumEvidenceRec
 app.get('/api/research/curriculum-evidence/approved-sources', handleCurriculumApprovedSources)
 app.patch('/api/research/curriculum-evidence/approved-sources/:sourceId/rights', handleCurriculumApprovedSourceRightsReview)
 app.patch('/api/research/curriculum-evidence/records/:evidenceId', handleCurriculumEvidenceRecordReview)
+app.all('/api/research/curriculum-enhancements/drafts', handleCurriculumEnhancementDrafts)
+app.patch('/api/research/curriculum-enhancements/drafts/:draftId', handleCurriculumEnhancementDraftReview)
 
 export default {
   fetch(request, env, ctx) {
