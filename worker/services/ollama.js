@@ -1,16 +1,28 @@
-export async function requestOllama({ url, model, prompt, apiKey, accessClientId, accessClientSecret, signal, timeoutMs }) {
+export async function requestOllama({
+  url,
+  model,
+  prompt,
+  apiKey,
+  accessClientId,
+  accessClientSecret,
+  signal,
+  timeoutMs,
+  systemPrompt = 'You are TorqueMind, an automotive diagnostic tutor. Return only valid JSON.',
+  numPredict = 220,
+  temperature = 0.2
+}) {
   const body = {
     model,
     stream: false,
     think: false,
     format: 'json',
     messages: [
-      { role: 'system', content: 'You are TorqueMind, an automotive diagnostic tutor. Return only valid JSON.' },
+      { role: 'system', content: systemPrompt },
       { role: 'user', content: prompt }
     ],
     options: {
-      temperature: 0.2,
-      num_predict: 220
+      temperature,
+      num_predict: numPredict
     }
   }
 

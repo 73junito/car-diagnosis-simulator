@@ -14,6 +14,11 @@
   const limitInput = document.getElementById('research-limit')
   const status = document.getElementById('research-status')
   const results = document.getElementById('research-results')
+  const enhancementGoal = document.getElementById('enhancement-goal')
+  const generateEnhancementDraftButton = document.getElementById('generate-enhancement-draft')
+  const enhancementSelectionCount = document.getElementById('enhancement-selection-count')
+  const enhancementDraftStatus = document.getElementById('enhancement-draft-status')
+  const enhancementDraftList = document.getElementById('enhancement-draft-list')
 
   const rightsScopeConfig = [
     ['citation_link_allowed', 'Citation / link'],
@@ -28,6 +33,7 @@
   let activeGap = null
   let approvedSources = []
   let existingGaps = []
+  const selectedEnhancementEvidenceIds = new Set()
 
   function accessToken(){
     return typeof window.getAccessToken === 'function' ? window.getAccessToken() : null
@@ -163,10 +169,15 @@
 
   async function activateGap(gap){
     activeGap = gap || null
+    selectedEnhancementEvidenceIds.clear()
+    updateEnhancementSelectionCount()
+
     if (!activeGap) {
       gapStatus.textContent = 'No active evidence gap.'
       reviewStatus.textContent = 'Select or create an evidence gap to load saved evidence.'
+      enhancementDraftStatus.textContent = 'Select or create an evidence gap to load curriculum enhancement drafts.'
       clearNode(reviewList)
+      clearNode(enhancementDraftList)
       return
     }
 
@@ -174,6 +185,7 @@
       'Active gap: ' + activeGap.gap_summary + ' (' + activeGap.status + ').'
     await loadApprovedSources()
     await loadEvidence()
+    await loadEnhancementDrafts()
   }
 
   async function patchEvidence(record, action, body = {}){
@@ -208,6 +220,21 @@
       scope.paraphrase_summary_allowed === true &&
       scope.database_storage_allowed === true &&
       Boolean(scope.reviewed_by && scope.reviewed_at && scope.license_evidence_reference)
+  }
+
+  function aiDraftRightsAllowed(scope){
+    return curriculumRightsAllowed(scope) && scope.ai_rag_ingestion_allowed === true
+  }
+
+  function selectedEvidenceSource(record){
+    return approvedSources.find((source) => source.id === record.approved_source_id) || null
+  }
+
+  function updateEnhancementSelectionCount(){
+    const count = selectedEnhancementEvidenceIds.size
+    enhancementSelectionCount.textContent =
+      count + ' eligible evidence record' + (count === 1 ? '' : 's') + ' selected.'
+    generateEnhancementDraftButton.disabled = !activeGap || count === 0
   }
 
   function createActionButton(label, onClick, disabled = false){
@@ -342,6 +369,34 @@
       link.textContent = 'Open source record'
       card.appendChild(link)
     }
+
+    const sourceForDraft = selectedEvidenceSource(record)
+    const draftEligible =
+      record.review_status === 'approved' &&
+      record.license_status === 'verified-for-use' &&
+      record.scored_assessment_eligible === false &&
+      Boolean(sourceForDraft && aiDraftRightsAllowed(sourceForDraft.rights_scope))
+
+    const draftChoice = document.createElement('label')
+    draftChoice.style.display = 'block'
+    draftChoice.style.marginTop = '.75rem'
+    const draftCheckbox = document.createElement('input')
+    draftCheckbox.type = 'checkbox'
+    draftCheckbox.checked = selectedEnhancementEvidenceIds.has(record.id)
+    draftCheckbox.disabled = !draftEligible
+    draftCheckbox.setAttribute('aria-label', 'Use this approved evidence for AI-assisted curriculum drafting')
+    draftCheckbox.addEventListener('change', () => {
+      if (draftCheckbox.checked) selectedEnhancementEvidenceIds.add(record.id)
+      else selectedEnhancementEvidenceIds.delete(record.id)
+      updateEnhancementSelectionCount()
+    })
+    draftChoice.appendChild(draftCheckbox)
+    draftChoice.appendChild(document.createTextNode(
+      draftEligible
+        ? ' Use for AI-assisted curriculum enhancement draft'
+        : ' AI drafting unavailable — evidence must be approved and source AI/RAG rights must be explicitly enabled'
+    ))
+    card.appendChild(draftChoice)
 
     const message = text('p', 'Human review required before approval.', 'fine-print')
     message.setAttribute('role', 'status')
@@ -535,6 +590,175 @@
     }
   }
 
+  async function patchEnhancementDraft(draftId, action){
+    return apiRequest(
+      '/api/research/curriculum-enhancements/drafts/' + encodeURIComponent(draftId),
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ action })
+      }
+    )
+  }
+
+  function appendStringList(card, heading, values){
+    if (!Array.isArray(values) || !values.length) return
+    card.appendChild(text('h4', heading))
+    const list = document.createElement('ul')
+    values.forEach((value) => list.appendChild(text('li', value)))
+    card.appendChild(list)
+  }
+
+  function renderEnhancementDraft(draft){
+    const card = document.createElement('article')
+    card.className = 'tm-card'
+    card.style.marginBottom = '1rem'
+
+    const payload = draft.draft_payload || {}
+    card.appendChild(text('h3', payload.summary || 'Curriculum enhancement draft'))
+    card.appendChild(text(
+      'p',
+      'Status: ' + draft.status +
+        ' · Publication: draft only' +
+        ' · Assessment generation: not allowed' +
+        ' · Assessment eligibility: none',
+      'fine-print'
+    ))
+
+    if (payload.rationale) {
+      card.appendChild(text('h4', 'Rationale'))
+      card.appendChild(text('p', payload.rationale))
+    }
+    appendStringList(card, 'Proposed objectives', payload.proposed_objectives)
+    appendStringList(card, 'Proposed lesson steps', payload.proposed_steps)
+    appendStringList(card, 'Safety notes', payload.safety_notes)
+
+    if (Array.isArray(payload.source_notes) && payload.source_notes.length) {
+      card.appendChild(text('h4', 'Evidence use notes'))
+      const list = document.createElement('ul')
+      payload.source_notes.forEach((note) => {
+        list.appendChild(text(
+          'li',
+          String(note.evidenceId || 'Evidence') + ': ' + String(note.use || '')
+        ))
+      })
+      card.appendChild(list)
+    }
+
+    const message = text(
+      'p',
+      'Instructor review is required. This draft cannot publish curriculum or create assessment items.',
+      'fine-print'
+    )
+    message.setAttribute('role', 'status')
+
+    if (draft.status === 'draft') {
+      const actions = document.createElement('div')
+      actions.style.display = 'flex'
+      actions.style.gap = '.5rem'
+      actions.style.flexWrap = 'wrap'
+
+      const reviewButton = createActionButton('Mark draft reviewed', async () => {
+        reviewButton.disabled = true
+        message.textContent = 'Recording instructor review…'
+        try {
+          await patchEnhancementDraft(draft.id, 'review')
+          message.textContent = 'Draft marked reviewed. Publication remains unavailable.'
+          await loadEnhancementDrafts()
+        } catch (error) {
+          message.textContent = error.message
+          reviewButton.disabled = false
+        }
+      })
+
+      const rejectButton = createActionButton('Reject draft', async () => {
+        rejectButton.disabled = true
+        message.textContent = 'Rejecting draft…'
+        try {
+          await patchEnhancementDraft(draft.id, 'reject')
+          message.textContent = 'Draft rejected.'
+          await loadEnhancementDrafts()
+        } catch (error) {
+          message.textContent = error.message
+          rejectButton.disabled = false
+        }
+      })
+
+      actions.appendChild(reviewButton)
+      actions.appendChild(rejectButton)
+      card.appendChild(actions)
+    }
+
+    card.appendChild(message)
+    return card
+  }
+
+  async function loadEnhancementDrafts(){
+    clearNode(enhancementDraftList)
+    if (!activeGap) {
+      enhancementDraftStatus.textContent = 'Select or create an evidence gap to load curriculum enhancement drafts.'
+      return
+    }
+
+    enhancementDraftStatus.textContent = 'Loading curriculum enhancement drafts…'
+    try {
+      const params = new URLSearchParams({ lessonPlanId: activeGap.lesson_plan_id })
+      const payload = await apiRequest(
+        '/api/research/curriculum-enhancements/drafts?' + params.toString()
+      )
+      const drafts = Array.isArray(payload.data) ? payload.data : []
+      enhancementDraftStatus.textContent = drafts.length
+        ? 'Showing ' + drafts.length + ' instructor-review draft' + (drafts.length === 1 ? '.' : 's.')
+        : 'No AI-assisted curriculum enhancement drafts exist for this lesson.'
+      drafts.forEach((draft) => enhancementDraftList.appendChild(renderEnhancementDraft(draft)))
+    } catch (error) {
+      enhancementDraftStatus.textContent =
+        error.message || 'Curriculum enhancement drafts could not be loaded.'
+    }
+  }
+
+  async function generateEnhancementDraft(){
+    if (!activeGap) {
+      enhancementDraftStatus.textContent = 'Select or create an evidence gap first.'
+      return
+    }
+
+    const goal = String(enhancementGoal.value || '').trim()
+    if (goal.length < 10) {
+      enhancementDraftStatus.textContent = 'Enter an enhancement goal of at least 10 characters.'
+      return
+    }
+
+    const evidenceIds = [...selectedEnhancementEvidenceIds]
+    if (!evidenceIds.length) {
+      enhancementDraftStatus.textContent = 'Select at least one AI-eligible approved evidence record.'
+      return
+    }
+
+    generateEnhancementDraftButton.disabled = true
+    enhancementDraftStatus.textContent =
+      'Generating an instructor-review draft from rights-cleared evidence…'
+    try {
+      await apiRequest('/api/research/curriculum-enhancements/drafts', {
+        method: 'POST',
+        body: JSON.stringify({
+          lessonPlanId: activeGap.lesson_plan_id,
+          evidenceIds,
+          goal
+        })
+      })
+      enhancementDraftStatus.textContent =
+        'Draft generated. Human review is required; publication and assessment generation remain unavailable.'
+      selectedEnhancementEvidenceIds.clear()
+      updateEnhancementSelectionCount()
+      await loadEvidence()
+      await loadEnhancementDrafts()
+    } catch (error) {
+      enhancementDraftStatus.textContent = error.message
+    } finally {
+      updateEnhancementSelectionCount()
+    }
+  }
+
   async function createGap(event){
     event.preventDefault()
     if (!accessToken()) {
@@ -722,5 +946,7 @@
 
   gapForm.addEventListener('submit', createGap)
   form.addEventListener('submit', search)
+  generateEnhancementDraftButton.addEventListener('click', generateEnhancementDraft)
+  updateEnhancementSelectionCount()
   loadCurriculum()
 })()

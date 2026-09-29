@@ -64,11 +64,19 @@ describe('Curriculum evidence production E2E verifier contract', () => {
     expect(script).toContain("JSON.stringify({ action: 'approve' })")
     expect(script).toContain("review_status === 'approved'")
     expect(script).toContain("scored_assessment_eligible === false")
+    expect(script).toContain("baseUrl + '/api/research/curriculum-enhancements/drafts'")
+    expect(script).toContain('blockedDraftResponse.status === 409')
+    expect(script).toContain('AI-assisted drafting is blocked')
+    expect(script).toContain('AI rights gate persisted a curriculum enhancement draft despite denied AI/RAG rights')
+    expect(script).toContain('[PASS] AI curriculum drafting remained blocked without explicit AI/RAG rights')
     expect(workflow).toContain('EVIDENCE_WORKFLOW_DOI: 10.3389/fmech.2022.1090152')
     expect(workflow).toContain('EVIDENCE_WORKFLOW_APPROVED_SOURCE_ID: frontiers-automotive-alternator-2023')
   })
 
-  test('cleans up only the exact gap created by the verifier', () => {
+  test('cleans up any draft artifacts before deleting the exact evidence gap', () => {
+    expect(script).toContain(".from('curriculum_enhancement_drafts')")
+    expect(script).toContain(".from('curriculum_enhancement_draft_evidence')")
+    expect(script).toContain(".eq('goal', enhancementGoal)")
     expect(script).toContain(".eq('gap_id', gapId)")
     expect(script).toContain(".eq('id', gapId)")
     expect(script).toContain('Cleanup left the test gap behind')

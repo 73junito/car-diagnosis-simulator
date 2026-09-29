@@ -58,6 +58,25 @@ describe('Ollama adapter', () => {
     await requestOllama({ url: 'http://example', model: 'm', prompt: 'p' })
   })
 
+  test('supports a curriculum-specific system prompt and output budget', async () => {
+    global.fetch.mockImplementationOnce((url, opts) => {
+      const body = JSON.parse(opts.body)
+      expect(body.messages[0].content).toContain('curriculum drafting assistant')
+      expect(body.options.num_predict).toBe(1200)
+      expect(body.options.temperature).toBe(0.1)
+      return Promise.resolve({ ok: true, text: async () => JSON.stringify({ message: { content: '{}' } }) })
+    })
+
+    await requestOllama({
+      url: 'http://example',
+      model: 'm',
+      prompt: 'p',
+      systemPrompt: 'You are a curriculum drafting assistant.',
+      numPredict: 1200,
+      temperature: 0.1
+    })
+  })
+
   test('forwards AbortSignal', async () => {
     const abort = new AbortController()
     global.fetch.mockResolvedValue({ ok: true, text: async () => JSON.stringify({ message: { content: 'ok' } }) })
