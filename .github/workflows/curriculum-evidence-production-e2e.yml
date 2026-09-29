@@ -28,7 +28,7 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.PRODUCTION_ANON }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PRODUCTION_SECRET || secrets.PRODUCTION_KEY }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
         shell: bash
@@ -36,7 +36,7 @@ jobs:
           set -euo pipefail
           test -n "${SUPABASE_URL:-}" || { echo "PRODUCTION_URL is missing."; exit 1; }
           test -n "${SUPABASE_ANON_KEY:-}" || { echo "PRODUCTION_ANON is missing."; exit 1; }
-          test -n "${SUPABASE_SERVICE_ROLE_KEY:-}" || { echo "SUPABASE_KEY is missing."; exit 1; }
+          test -n "${SUPABASE_SERVICE_ROLE_KEY:-}" || { echo "PRODUCTION_SECRET/PRODUCTION_KEY is missing."; exit 1; }
           test -n "${TEST_TEACHER_EMAIL:-}" || { echo "TEST_TEACHER_EMAIL is missing."; exit 1; }
           test -n "${TEST_TEACHER_PASSWORD:-}" || { echo "TEST_TEACHER_PASSWORD is missing."; exit 1; }
           echo "Required production E2E credentials are configured."
@@ -66,5 +66,5 @@ jobs:
           EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF: pffdgqpynpbffbcnxmum
           EVIDENCE_WORKFLOW_SEARCH_QUERY: automotive charging system diagnostics
           SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PRODUCTION_SECRET || secrets.PRODUCTION_KEY }}
         run: npm run verify:evidence-workflow
