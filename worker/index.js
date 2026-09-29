@@ -13,6 +13,7 @@ import {
 import {
   handleCurriculumEvidenceGaps,
   handleCurriculumEvidenceRecords,
+  handleCurriculumApprovedSources,
   handleCurriculumEvidenceRecordReview
 } from "./routes/curriculum-evidence.js";
 import { createRequestContext } from './middleware/request-context.js'
@@ -112,6 +113,7 @@ app.use('/api/research/curriculum-evidence/*', cors({
 }))
 app.all('/api/research/curriculum-evidence/gaps', handleCurriculumEvidenceGaps)
 app.all('/api/research/curriculum-evidence/records', handleCurriculumEvidenceRecords)
+app.get('/api/research/curriculum-evidence/approved-sources', handleCurriculumApprovedSources)
 app.patch('/api/research/curriculum-evidence/records/:evidenceId', handleCurriculumEvidenceRecordReview)
 
 export default {
