@@ -44,6 +44,20 @@ function idKeyFor(collection) {
   return collection === 'scenarioMappings' ? 'scenarioId' : 'id';
 }
 
+function canonicalizeJson(value) {
+  if (Array.isArray(value)) {
+    return value.map(canonicalizeJson);
+  }
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map((key) => [key, canonicalizeJson(value[key])])
+    );
+  }
+  return value;
+}
+
 function compareRecord(label, expected, actual, errors) {
   const expectedKeys = Object.keys(expected).sort();
   const actualKeys = Object.keys(actual).sort();
@@ -67,7 +81,9 @@ function compareRecord(label, expected, actual, errors) {
         errors.push(`${label}.${key} sequence mismatch`);
       }
     } else if (expectedValue && typeof expectedValue === 'object') {
-      if (JSON.stringify(actualValue) !== JSON.stringify(expectedValue)) {
+      const actualJson = JSON.stringify(canonicalizeJson(actualValue));
+      const expectedJson = JSON.stringify(canonicalizeJson(expectedValue));
+      if (actualJson !== expectedJson) {
         errors.push(
           `${label}.${key} mismatch: expected ${JSON.stringify(expectedValue)} got ${JSON.stringify(actualValue)}`
         );
