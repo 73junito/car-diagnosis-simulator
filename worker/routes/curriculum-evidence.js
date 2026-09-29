@@ -3,6 +3,8 @@ import { authorizeResearch } from './semantic-scholar-research.js'
 
 const GAP_TYPES = new Set(['coverage', 'currency', 'evidence', 'practice', 'visual', 'other'])
 const PRIORITIES = new Set(['low', 'medium', 'high'])
+const EVIDENCE_REVIEW_ROLES = new Set(['instructor', 'professor', 'admin'])
+const LICENSE_STATUSES = new Set(['verified-for-use', 'restricted', 'unknown'])
 const GAP_FIELDS = [
   'id', 'lesson_plan_id', 'course_id', 'competency_id', 'academic_level',
   'gap_type', 'gap_summary', 'priority', 'status', 'created_by',
@@ -195,4 +197,112 @@ export async function handleCurriculumEvidenceRecords(c) {
   if (error) return databaseError(c, 'Curriculum evidence create failed:', error)
 
   return c.json({ data, governance: governance() }, 201)
+}
+
+export async function handleCurriculumEvidenceRecordReview(c) {
+  if (c.req.method !== 'PATCH') {
+    return c.json({ error: 'Method not allowed' }, 405)
+  }
+
+  const auth = await authorizeResearch(c, { requireSemanticScholarEnabled: false })
+  if (auth.response) return auth.response
+  if (!EVIDENCE_REVIEW_ROLES.has(String(auth.role || '').trim().toLowerCase())) {
+    return c.json({ error: 'Instructor, professor, or admin access required' }, 403)
+  }
+
+  const evidenceId = textValue(c.req.param('evidenceId'))
+  const body = await bodyJson(c)
+  if (!evidenceId || !body) {
+    return c.json({ error: 'Evidence id and valid JSON body are required' }, 400)
+  }
+
+  const action = textValue(body.action)
+  const supabase = serviceClient(c)
+  const { data: current, error: currentError } = await supabase
+    .from('curriculum_evidence_records')
+    .select(EVIDENCE_FIELDS)
+    .eq('id', evidenceId)
+    .maybeSingle()
+
+  if (currentError) return databaseError(c, 'Curriculum evidence lookup failed:', currentError)
+  if (!current) return c.json({ error: 'Curriculum evidence record not found' }, 404)
+  if (current.review_status === 'approved' || current.review_status === 'rejected') {
+    return c.json({ error: 'Finalized evidence cannot be modified' }, 409)
+  }
+
+  const now = new Date().toISOString()
+  const changes = { updated_at: now }
+
+  if (action === 'review') {
+    if (!['discovered', 'reviewed'].includes(current.review_status)) {
+      return c.json({ error: 'Evidence must be discovered or reviewed for human review' }, 409)
+    }
+    changes.review_status = 'reviewed'
+    changes.reviewed_by = auth.user.id
+    changes.reviewed_at = now
+  } else if (action === 'license') {
+    const licenseStatus = textValue(body.licenseStatus)
+    if (!LICENSE_STATUSES.has(licenseStatus)) {
+      return c.json({ error: 'licenseStatus must be verified-for-use, restricted, or unknown' }, 400)
+    }
+    if (!current.reviewed_by || !current.reviewed_at) {
+      return c.json({ error: 'Human review is required before license review' }, 409)
+    }
+    changes.license_status = licenseStatus
+    changes.license_reviewed_by = auth.user.id
+    changes.license_reviewed_at = now
+    changes.review_status = licenseStatus === 'verified-for-use'
+      ? 'license-verified'
+      : 'reviewed'
+  } else if (action === 'link-source') {
+    const approvedSourceId = textValue(body.approvedSourceId)
+    if (!approvedSourceId) {
+      return c.json({ error: 'approvedSourceId is required' }, 400)
+    }
+    const { data: source, error: sourceError } = await supabase
+      .from('approved_sources')
+      .select('id, status')
+      .eq('id', approvedSourceId)
+      .maybeSingle()
+    if (sourceError) return databaseError(c, 'Approved source lookup failed:', sourceError)
+    if (!source) return c.json({ error: 'Approved source not found' }, 404)
+    if (source.status !== 'approved') {
+      return c.json({ error: 'Provenance source must have approved status' }, 409)
+    }
+    changes.approved_source_id = source.id
+  } else if (action === 'approve') {
+    if (current.review_status !== 'license-verified') {
+      return c.json({ error: 'Evidence must be license-verified before approval' }, 409)
+    }
+    if (!current.reviewed_by || !current.reviewed_at) {
+      return c.json({ error: 'Human review is required before approval' }, 409)
+    }
+    if (
+      current.license_status !== 'verified-for-use' ||
+      !current.license_reviewed_by ||
+      !current.license_reviewed_at
+    ) {
+      return c.json({ error: 'Verified reuse rights are required before approval' }, 409)
+    }
+    if (!current.approved_source_id) {
+      return c.json({ error: 'Approved provenance source linkage is required before approval' }, 409)
+    }
+    changes.review_status = 'approved'
+  } else if (action === 'reject') {
+    changes.review_status = 'rejected'
+    changes.reviewed_by = auth.user.id
+    changes.reviewed_at = now
+  } else {
+    return c.json({ error: 'action must be review, license, link-source, approve, or reject' }, 400)
+  }
+
+  const { data, error } = await supabase
+    .from('curriculum_evidence_records')
+    .update(changes)
+    .eq('id', evidenceId)
+    .select(EVIDENCE_FIELDS)
+    .single()
+
+  if (error) return databaseError(c, 'Curriculum evidence review update failed:', error)
+  return c.json({ data, governance: governance() }, 200)
 }

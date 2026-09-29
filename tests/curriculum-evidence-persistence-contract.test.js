@@ -53,7 +53,7 @@ describe('Curriculum evidence-gap persistence contract', () => {
     expect(route).toContain("import { authorizeResearch } from './semantic-scholar-research.js'")
     expect(route).toContain('authorizeResearch(c, { requireSemanticScholarEnabled: false })')
     expect(workerIndex).toContain("app.use('/api/research/curriculum-evidence/*'")
-    expect(workerIndex).toContain("allowMethods: ['GET', 'POST', 'OPTIONS']")
+    expect(workerIndex).toContain("allowMethods: ['GET', 'POST', 'PATCH', 'OPTIONS']")
     expect(workerIndex).toContain("allowHeaders: ['Content-Type', 'Authorization']")
     expect(workerIndex).toContain("app.all('/api/research/curriculum-evidence/gaps'")
     expect(workerIndex).toContain("app.all('/api/research/curriculum-evidence/records'")

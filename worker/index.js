@@ -12,7 +12,8 @@ import {
 } from "./routes/semantic-scholar-research.js";
 import {
   handleCurriculumEvidenceGaps,
-  handleCurriculumEvidenceRecords
+  handleCurriculumEvidenceRecords,
+  handleCurriculumEvidenceRecordReview
 } from "./routes/curriculum-evidence.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
@@ -105,12 +106,13 @@ app.get('/api/research/semantic-scholar/paper/:paperId', handleSemanticScholarPa
 // Writes remain server-side through the service role and cannot grant assessment eligibility.
 app.use('/api/research/curriculum-evidence/*', cors({
   origin: 'https://app.autolearnpro.com',
-  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowMethods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400
 }))
 app.all('/api/research/curriculum-evidence/gaps', handleCurriculumEvidenceGaps)
 app.all('/api/research/curriculum-evidence/records', handleCurriculumEvidenceRecords)
+app.patch('/api/research/curriculum-evidence/records/:evidenceId', handleCurriculumEvidenceRecordReview)
 
 export default {
   fetch(request, env, ctx) {
