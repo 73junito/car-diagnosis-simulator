@@ -68,6 +68,30 @@ describe('Semantic Scholar research service', () => {
     expect(global.fetch).toHaveBeenCalledTimes(1)
   })
 
+  test('reads the production API key from a Cloudflare Secrets Store binding', async () => {
+    const quota = quotaNamespace()
+    const secretBinding = {
+      get: jest.fn(async () => 'store-secret')
+    }
+
+    global.fetch = jest.fn(async (url, init) => {
+      expect(init.headers['x-api-key']).toBe('store-secret')
+      return new Response(JSON.stringify({
+        total: 0,
+        offset: 0,
+        data: []
+      }), { status: 200, headers: { 'content-type': 'application/json' } })
+    })
+
+    await searchSemanticScholar('automotive research', 5, {
+      SEMANTIC_SCHOLAR_API_KEY: secretBinding,
+      TORQUEMIND_RATE_LIMITER: quota.binding
+    })
+
+    expect(secretBinding.get).toHaveBeenCalledTimes(1)
+    expect(global.fetch).toHaveBeenCalledTimes(1)
+  })
+
   test('deduplicates cached identical searches without another upstream request', async () => {
     const quota = quotaNamespace()
     global.fetch = jest.fn(async () => new Response(JSON.stringify({
