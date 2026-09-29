@@ -26,6 +26,15 @@ function positiveInt(value, fallback, max) {
   return Math.min(Math.floor(parsed), max)
 }
 
+export function _semanticScholarRetryDelayMs(response, attempt, env) {
+  const retryAfter = Number(response?.headers?.get?.('retry-after'))
+  const upstreamWaitMs = Number.isFinite(retryAfter) && retryAfter > 0
+    ? Math.min(retryAfter * 1000, 4000)
+    : Math.min(750 * (2 ** attempt), 3000)
+  const quotaWindowMs = positiveInt(env?.SEMANTIC_SCHOLAR_RATE_WINDOW_SECONDS, 2, 10) * 1000
+  return Math.max(upstreamWaitMs, quotaWindowMs)
+}
+
 function normalizePaper(paper) {
   if (!paper || typeof paper !== 'object') return null
   return {
@@ -227,11 +236,7 @@ async function requestSemanticScholar(url, env, options = {}) {
       lastError.status = response.status
 
       if (attempt < maxRetries) {
-        const retryAfter = Number(response.headers.get('retry-after'))
-        const waitMs = Number.isFinite(retryAfter) && retryAfter > 0
-          ? Math.min(retryAfter * 1000, 4000)
-          : Math.min(750 * (2 ** attempt), 3000)
-        await delay(waitMs)
+        await delay(_semanticScholarRetryDelayMs(response, attempt, env))
       }
     }
 
