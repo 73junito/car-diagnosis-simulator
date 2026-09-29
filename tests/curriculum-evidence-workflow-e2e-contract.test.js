@@ -54,6 +54,10 @@ describe('Curriculum evidence production E2E verifier contract', () => {
   test('verifies human review, license, provenance, and approval while assessment stays ineligible', () => {
     expect(script).toContain("'/api/research/curriculum-evidence/approved-sources'")
     expect(script).toContain('Discovered paper DOI does not match approved provenance source DOI')
+    expect(script).toContain('source.rights_scope.citation_link_allowed === true')
+    expect(script).toContain('source.rights_scope.paraphrase_summary_allowed === true')
+    expect(script).toContain('source.rights_scope.database_storage_allowed === true')
+    expect(script).toContain('source.rights_scope.ai_rag_ingestion_allowed === false')
     expect(script).toContain("JSON.stringify({ action: 'review' })")
     expect(script).toContain("action: 'license', licenseStatus: 'verified-for-use'")
     expect(script).toContain("action: 'link-source', approvedSourceId")

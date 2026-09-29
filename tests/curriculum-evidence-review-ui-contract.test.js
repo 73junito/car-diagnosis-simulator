@@ -67,7 +67,7 @@ describe('Curriculum evidence review UI contract', () => {
     expect(js).toContain("record.review_status === 'approved'")
     expect(js).toContain("record.review_status === 'rejected'")
     expect(html).toContain(
-      'Approval requires human review, verified reuse rights, and linkage to an approved provenance source.'
+      'Approval requires human review, verified reuse rights, linkage to an approved provenance source, and a current human-reviewed rights scope permitting citation/link, paraphrase/summary, and database storage.'
     )
   })
 

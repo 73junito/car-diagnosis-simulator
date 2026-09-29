@@ -112,6 +112,14 @@ async function main() {
       : null
     assert(source, 'Configured approved provenance source was not returned by the API')
     assert(source.status === 'approved', 'Configured provenance source is not approved')
+    assert(source.rights_scope, 'Configured provenance source has no granular rights scope')
+    assert(source.rights_scope.citation_link_allowed === true, 'Citation/link rights are not approved')
+    assert(source.rights_scope.paraphrase_summary_allowed === true, 'Paraphrase/summary rights are not approved')
+    assert(source.rights_scope.database_storage_allowed === true, 'Database storage rights are not approved')
+    assert(
+      source.rights_scope.ai_rag_ingestion_allowed === false,
+      'AI/RAG ingestion must remain disabled until separately reviewed'
+    )
 
     const paperDoi = String(paper.externalIds?.DOI || '').trim().toLowerCase()
     const sourceDoi = String(source.license?.doi || '').trim().toLowerCase()
