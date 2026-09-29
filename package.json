@@ -44,6 +44,7 @@
     "validate:compliance-authority": "node scripts/verify-compliance-authority.js",
     "validate:curriculum-schema": "node scripts/verify-curriculum-migration-contract.js",
     "validate:curriculum-api": "node scripts/verify-curriculum-api-contract.js",
+    "verify:evidence-workflow": "node scripts/verify-curriculum-evidence-workflow.js",
     "exam:curriculum:sync": "node scripts/sync-exam-curriculum.js",
     "exam:prepare": "npm run validate:academic-pathways && npm run validate:course-catalog && npm run validate:program-architecture && npm run validate:curriculum-content && npm run exam:curriculum:sync",
     "exam:pathways:verify": "npm run exam:prepare && node scripts/verify-exam-pathway-page.js",
