@@ -63,6 +63,7 @@ describe('AI-assisted curriculum enhancement draft contract', () => {
   })
 
   test('worker exposes draft create/list and review/reject only', () => {
+    expect(route).toContain("import { createClient } from '@supabase/supabase-js'")
     expect(workerIndex).toContain(
       "app.all('/api/research/curriculum-enhancements/drafts', handleCurriculumEnhancementDrafts)"
     )
