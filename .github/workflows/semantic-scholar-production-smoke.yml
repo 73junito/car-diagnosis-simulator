@@ -47,17 +47,7 @@ jobs:
           AUTH_RESPONSE="$(curl -fsS             -X POST             "$SUPABASE_URL/auth/v1/token?grant_type=password"             -H "apikey: $SUPABASE_ANON_KEY"             -H "Content-Type: application/json"             --data "$AUTH_PAYLOAD")"
 
           ACCESS_TOKEN="$(printf '%s' "$AUTH_RESPONSE" | jq -r '.access_token // empty')"
-          ROLE="$(printf '%s' "$AUTH_RESPONSE" | jq -r '.user.app_metadata.role // empty')"
-
           test -n "$ACCESS_TOKEN" || { echo "Production test-user authentication did not return an access token."; exit 1; }
-
-          case "$ROLE" in
-            instructor|professor|admin) ;;
-            *)
-              echo "Production test user does not have an authorized research role."
-              exit 1
-              ;;
-          esac
 
           echo "::add-mask::$ACCESS_TOKEN"
           {
@@ -66,7 +56,7 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-          echo "Production test-user authentication succeeded with an authorized research role."
+          echo "Production test-user authentication succeeded; server-side role authorization will be exercised by the live endpoint."
 
       - name: Call live Semantic Scholar search
         env:

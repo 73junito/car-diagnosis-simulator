@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js'
 import {
   extractBearerToken,
   verifySupabaseToken
@@ -7,9 +8,43 @@ import {
   getSemanticScholarPaper
 } from '../services/semantic-scholar.js'
 
-function isResearchStaff(user) {
-  const role = user?.app_metadata?.role
-  return role === 'instructor' || role === 'professor' || role === 'admin'
+const RESEARCH_ROLES = new Set(['teacher', 'instructor', 'professor', 'admin'])
+
+function isResearchRole(role) {
+  return RESEARCH_ROLES.has(String(role || '').trim().toLowerCase())
+}
+
+async function resolveResearchRole(user, supabaseUrl, serviceRoleKey) {
+  const appMetadataRole = user?.app_metadata?.role
+  if (isResearchRole(appMetadataRole)) return appMetadataRole
+
+  if (!user?.id) return null
+
+  try {
+    const supabase = createClient(supabaseUrl, serviceRoleKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+      }
+    })
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle()
+
+    if (error) {
+      console.error('Research role lookup failed:', error.message || error)
+      return null
+    }
+
+    return isResearchRole(data?.role) ? data.role : null
+  } catch (error) {
+    console.error('Research role lookup failed:', error?.message || error)
+    return null
+  }
 }
 
 function errorResponse(c, error) {
@@ -58,11 +93,12 @@ async function authorizeResearch(c) {
     return { response: c.json({ error: 'Authentication required' }, 401) }
   }
 
-  if (!isResearchStaff(user)) {
-    return { response: c.json({ error: 'Instructor, professor, or admin access required' }, 403) }
+  const role = await resolveResearchRole(user, supabaseUrl, serviceRoleKey)
+  if (!role) {
+    return { response: c.json({ error: 'Teacher, instructor, professor, or admin access required' }, 403) }
   }
 
-  return { user }
+  return { user, role }
 }
 
 export async function handleSemanticScholarSearch(c) {
