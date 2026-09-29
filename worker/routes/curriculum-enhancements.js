@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js'
 import { authorizeResearch } from './semantic-scholar-research.js'
 import { requestOllama } from '../services/ollama.js'
 import { requestOpenAI } from '../services/openai-compatible.js'
