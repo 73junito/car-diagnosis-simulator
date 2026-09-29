@@ -32,6 +32,7 @@ describe('Curriculum evidence production E2E verifier contract', () => {
     expect(script).toContain("required('EVIDENCE_WORKFLOW_ACCESS_TOKEN'")
     expect(script).toContain("required('SUPABASE_SERVICE_ROLE_KEY'")
     expect(script).toContain("required('EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF'")
+    expect(script).toContain("required('EVIDENCE_WORKFLOW_APPROVED_SOURCE_ID'")
     expect(script).toContain('Cleanup credential preflight failed:')
     expect(workflow).toContain('EVIDENCE_WORKFLOW_EXPECTED_SUPABASE_REF: pffdgqpynpbffbcnxmum')
   })
@@ -45,6 +46,19 @@ describe('Curriculum evidence production E2E verifier contract', () => {
     expect(script).toContain('evidence.scored_assessment_eligible === false')
     expect(script).toContain("search.governance?.curriculumApproval === 'not-granted'")
     expect(script).toContain("search.governance?.scoredAssessmentEligibility === 'not-granted'")
+  })
+
+  test('verifies human review, license, provenance, and approval while assessment stays ineligible', () => {
+    expect(script).toContain("'/api/research/curriculum-evidence/approved-sources'")
+    expect(script).toContain('Discovered paper DOI does not match approved provenance source DOI')
+    expect(script).toContain("JSON.stringify({ action: 'review' })")
+    expect(script).toContain("action: 'license', licenseStatus: 'verified-for-use'")
+    expect(script).toContain("action: 'link-source', approvedSourceId")
+    expect(script).toContain("JSON.stringify({ action: 'approve' })")
+    expect(script).toContain("review_status === 'approved'")
+    expect(script).toContain("scored_assessment_eligible === false")
+    expect(workflow).toContain('EVIDENCE_WORKFLOW_SEARCH_QUERY: 10.3389/fmech.2022.1090152')
+    expect(workflow).toContain('EVIDENCE_WORKFLOW_APPROVED_SOURCE_ID: frontiers-automotive-alternator-2023')
   })
 
   test('cleans up only the exact gap created by the verifier', () => {
