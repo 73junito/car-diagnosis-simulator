@@ -5,6 +5,20 @@ const GAP_TYPES = new Set(['coverage', 'currency', 'evidence', 'practice', 'visu
 const PRIORITIES = new Set(['low', 'medium', 'high'])
 const EVIDENCE_REVIEW_ROLES = new Set(['teacher', 'instructor', 'professor', 'admin'])
 const LICENSE_STATUSES = new Set(['verified-for-use', 'restricted', 'unknown'])
+const RIGHTS_SCOPE_KEYS = [
+  'citation_link_allowed',
+  'paraphrase_summary_allowed',
+  'direct_excerpt_allowed',
+  'figures_tables_diagrams_allowed',
+  'database_storage_allowed',
+  'ai_rag_ingestion_allowed',
+  'commercial_use_allowed'
+]
+const RIGHTS_SCOPE_FIELDS = [
+  'source_id', ...RIGHTS_SCOPE_KEYS, 'effective_at', 'expires_at',
+  'license_evidence_reference', 'review_notes', 'reviewed_by', 'reviewed_at',
+  'created_at', 'updated_at'
+].join(', ')
 const GAP_FIELDS = [
   'id', 'lesson_plan_id', 'course_id', 'competency_id', 'academic_level',
   'gap_type', 'gap_summary', 'priority', 'status', 'created_by',
@@ -50,6 +64,10 @@ function textValue(value) {
 function optionalText(value) {
   const normalized = textValue(value)
   return normalized || null
+}
+
+function validIsoDate(value) {
+  return value == null || /^\d{4}-\d{2}-\d{2}$/.test(value)
 }
 
 function databaseError(c, label, error) {
@@ -218,7 +236,95 @@ export async function handleCurriculumApprovedSources(c) {
     .order('title', { ascending: true })
 
   if (error) return databaseError(c, 'Approved source read failed:', error)
-  return c.json({ data: data || [], governance: governance() }, 200)
+
+  const sourceIds = (data || []).map((source) => source.id)
+  let scopes = []
+  if (sourceIds.length) {
+    const { data: scopeData, error: scopeError } = await supabase
+      .from('approved_source_rights_scopes')
+      .select(RIGHTS_SCOPE_FIELDS)
+      .in('source_id', sourceIds)
+    if (scopeError) return databaseError(c, 'Approved source rights read failed:', scopeError)
+    scopes = scopeData || []
+  }
+
+  const rightsBySource = new Map(scopes.map((scope) => [scope.source_id, scope]))
+  const enriched = (data || []).map((source) => ({
+    ...source,
+    rights_scope: rightsBySource.get(source.id) || null
+  }))
+  return c.json({ data: enriched, governance: governance() }, 200)
+}
+
+export async function handleCurriculumApprovedSourceRightsReview(c) {
+  if (c.req.method !== 'PATCH') {
+    return c.json({ error: 'Method not allowed' }, 405)
+  }
+
+  const auth = await authorizeResearch(c, { requireSemanticScholarEnabled: false })
+  if (auth.response) return auth.response
+  if (!EVIDENCE_REVIEW_ROLES.has(String(auth.role || '').trim().toLowerCase())) {
+    return c.json({ error: 'Teacher, instructor, professor, or admin access required' }, 403)
+  }
+
+  const sourceId = textValue(c.req.param('sourceId'))
+  const body = await bodyJson(c)
+  if (!sourceId || !body) {
+    return c.json({ error: 'Source id and valid JSON body are required' }, 400)
+  }
+
+  for (const key of RIGHTS_SCOPE_KEYS) {
+    if (typeof body[key] !== 'boolean') {
+      return c.json({ error: `${key} must be explicitly true or false` }, 400)
+    }
+  }
+
+  const effectiveAt = optionalText(body.effective_at)
+  const expiresAt = optionalText(body.expires_at)
+  const evidenceReference = textValue(body.license_evidence_reference)
+  if (!validIsoDate(effectiveAt) || !validIsoDate(expiresAt)) {
+    return c.json({ error: 'Rights scope dates must use YYYY-MM-DD' }, 400)
+  }
+  if (effectiveAt && expiresAt && expiresAt < effectiveAt) {
+    return c.json({ error: 'Rights scope expiration cannot precede its effective date' }, 400)
+  }
+  if (!evidenceReference) {
+    return c.json({ error: 'license_evidence_reference is required' }, 400)
+  }
+
+  const supabase = serviceClient(c)
+  const { data: source, error: sourceError } = await supabase
+    .from('approved_sources')
+    .select('id, status')
+    .eq('id', sourceId)
+    .maybeSingle()
+  if (sourceError) return databaseError(c, 'Approved source lookup failed:', sourceError)
+  if (!source) return c.json({ error: 'Approved source not found' }, 404)
+  if (source.status !== 'approved') {
+    return c.json({ error: 'Rights scope can only be reviewed for an approved source' }, 409)
+  }
+
+  const now = new Date().toISOString()
+  const payload = {
+    source_id: sourceId,
+    ...Object.fromEntries(RIGHTS_SCOPE_KEYS.map((key) => [key, body[key]])),
+    effective_at: effectiveAt,
+    expires_at: expiresAt,
+    license_evidence_reference: evidenceReference,
+    review_notes: optionalText(body.review_notes),
+    reviewed_by: auth.user.id,
+    reviewed_at: now,
+    updated_at: now
+  }
+
+  const { data: scope, error } = await supabase
+    .from('approved_source_rights_scopes')
+    .upsert(payload, { onConflict: 'source_id' })
+    .select(RIGHTS_SCOPE_FIELDS)
+    .single()
+  if (error) return databaseError(c, 'Approved source rights update failed:', error)
+
+  return c.json({ data: scope, governance: governance() }, 200)
 }
 
 export async function handleCurriculumEvidenceRecordReview(c) {
@@ -309,6 +415,32 @@ export async function handleCurriculumEvidenceRecordReview(c) {
     if (!current.approved_source_id) {
       return c.json({ error: 'Approved provenance source linkage is required before approval' }, 409)
     }
+
+    const { data: rightsScope, error: rightsError } = await supabase
+      .from('approved_source_rights_scopes')
+      .select(RIGHTS_SCOPE_FIELDS)
+      .eq('source_id', current.approved_source_id)
+      .maybeSingle()
+    if (rightsError) return databaseError(c, 'Approved source rights lookup failed:', rightsError)
+
+    const today = new Date().toISOString().slice(0, 10)
+    const rightsCurrent = rightsScope &&
+      (!rightsScope.effective_at || rightsScope.effective_at <= today) &&
+      (!rightsScope.expires_at || rightsScope.expires_at >= today)
+    const curriculumRightsAllowed = rightsCurrent &&
+      rightsScope.citation_link_allowed === true &&
+      rightsScope.paraphrase_summary_allowed === true &&
+      rightsScope.database_storage_allowed === true &&
+      rightsScope.reviewed_by &&
+      rightsScope.reviewed_at &&
+      textValue(rightsScope.license_evidence_reference)
+
+    if (!curriculumRightsAllowed) {
+      return c.json({
+        error: 'Current human-reviewed rights scope must allow citation/link, paraphrase/summary, and database storage before approval'
+      }, 409)
+    }
+
     changes.review_status = 'approved'
   } else if (action === 'reject') {
     changes.review_status = 'rejected'

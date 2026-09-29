@@ -15,6 +15,16 @@
   const status = document.getElementById('research-status')
   const results = document.getElementById('research-results')
 
+  const rightsScopeConfig = [
+    ['citation_link_allowed', 'Citation / link'],
+    ['paraphrase_summary_allowed', 'Paraphrase / summary'],
+    ['direct_excerpt_allowed', 'Direct excerpt / reprint'],
+    ['figures_tables_diagrams_allowed', 'Figures / tables / diagrams'],
+    ['database_storage_allowed', 'Database storage'],
+    ['ai_rag_ingestion_allowed', 'AI / RAG ingestion'],
+    ['commercial_use_allowed', 'Commercial use']
+  ]
+
   let activeGap = null
   let approvedSources = []
   let existingGaps = []
@@ -176,6 +186,30 @@
     )
   }
 
+  async function patchRightsScope(sourceId, body){
+    return apiRequest(
+      '/api/research/curriculum-evidence/approved-sources/' +
+        encodeURIComponent(sourceId) + '/rights',
+      {
+        method: 'PATCH',
+        body: JSON.stringify(body)
+      }
+    )
+  }
+
+  function curriculumRightsAllowed(scope){
+    if (!scope) return false
+    const today = new Date().toISOString().slice(0, 10)
+    const current =
+      (!scope.effective_at || scope.effective_at <= today) &&
+      (!scope.expires_at || scope.expires_at >= today)
+    return current &&
+      scope.citation_link_allowed === true &&
+      scope.paraphrase_summary_allowed === true &&
+      scope.database_storage_allowed === true &&
+      Boolean(scope.reviewed_by && scope.reviewed_at && scope.license_evidence_reference)
+  }
+
   function createActionButton(label, onClick, disabled = false){
     const button = document.createElement('button')
     button.type = 'button'
@@ -184,6 +218,106 @@
     button.disabled = disabled
     button.addEventListener('click', onClick)
     return button
+  }
+
+  function renderRightsScopeEditor(source, message){
+    const scope = source.rights_scope || {}
+    const panel = document.createElement('div')
+    panel.className = 'tm-card'
+    panel.style.marginTop = '.75rem'
+
+    panel.appendChild(text('h4', 'Source rights scope'))
+    panel.appendChild(text(
+      'p',
+      curriculumRightsAllowed(scope)
+        ? 'Current human-reviewed curriculum-use rights are sufficient.'
+        : 'Rights are incomplete, expired, or not yet reviewed. Approval remains blocked.',
+      'fine-print'
+    ))
+
+    const fields = new Map()
+    rightsScopeConfig.forEach(([key, labelText]) => {
+      const label = document.createElement('label')
+      label.style.display = 'block'
+      const input = document.createElement('input')
+      input.type = 'checkbox'
+      input.checked = scope[key] === true
+      input.setAttribute('data-rights-scope', key)
+      fields.set(key, input)
+      label.appendChild(input)
+      label.appendChild(document.createTextNode(' ' + labelText))
+      panel.appendChild(label)
+    })
+
+    const evidenceLabel = document.createElement('label')
+    evidenceLabel.textContent = 'License evidence / permission reference'
+    evidenceLabel.style.display = 'block'
+    evidenceLabel.style.marginTop = '.75rem'
+    const evidenceInput = document.createElement('input')
+    evidenceInput.type = 'text'
+    evidenceInput.required = true
+    evidenceInput.value =
+      scope.license_evidence_reference ||
+      (source.license && (source.license.license_url || source.license.canonical_url)) ||
+      ''
+    evidenceInput.setAttribute('aria-label', 'License evidence or permission reference')
+    evidenceLabel.appendChild(evidenceInput)
+    panel.appendChild(evidenceLabel)
+
+    const effectiveLabel = document.createElement('label')
+    effectiveLabel.textContent = 'Effective date'
+    effectiveLabel.style.display = 'block'
+    const effectiveInput = document.createElement('input')
+    effectiveInput.type = 'date'
+    effectiveInput.value = scope.effective_at || ''
+    effectiveLabel.appendChild(effectiveInput)
+    panel.appendChild(effectiveLabel)
+
+    const expiresLabel = document.createElement('label')
+    expiresLabel.textContent = 'Expiration date'
+    expiresLabel.style.display = 'block'
+    const expiresInput = document.createElement('input')
+    expiresInput.type = 'date'
+    expiresInput.value = scope.expires_at || ''
+    expiresLabel.appendChild(expiresInput)
+    panel.appendChild(expiresLabel)
+
+    const notesLabel = document.createElement('label')
+    notesLabel.textContent = 'Rights review notes'
+    notesLabel.style.display = 'block'
+    const notesInput = document.createElement('textarea')
+    notesInput.rows = 3
+    notesInput.value = scope.review_notes || ''
+    notesLabel.appendChild(notesInput)
+    panel.appendChild(notesLabel)
+
+    const saveButton = createActionButton('Save rights scope', async () => {
+      saveButton.disabled = true
+      message.textContent = 'Saving human-reviewed rights scope…'
+      try {
+        const body = {
+          license_evidence_reference: evidenceInput.value.trim(),
+          effective_at: effectiveInput.value || null,
+          expires_at: expiresInput.value || null,
+          review_notes: notesInput.value.trim() || null
+        }
+        rightsScopeConfig.forEach(([key]) => {
+          body[key] = fields.get(key).checked
+        })
+
+        const payload = await patchRightsScope(source.id, body)
+        source.rights_scope = payload.data
+        message.textContent = 'Source rights scope recorded.'
+        await loadApprovedSources()
+        await loadEvidence()
+      } catch (error) {
+        message.textContent = error.message
+        saveButton.disabled = false
+      }
+    })
+    panel.appendChild(saveButton)
+
+    return panel
   }
 
   function renderEvidenceRecord(record){
@@ -282,12 +416,34 @@
     approvedSources.forEach((source) => {
       const option = document.createElement('option')
       option.value = source.id
-      option.textContent = source.title || source.id
+      option.textContent =
+        (source.title || source.id) +
+        (curriculumRightsAllowed(source.rights_scope)
+          ? ' — rights ready'
+          : ' — rights review needed')
       if (record.approved_source_id === source.id) option.selected = true
       sourceSelect.appendChild(option)
     })
     sourceSelect.disabled = finalized || approvedSources.length === 0
     actions.appendChild(sourceSelect)
+
+    const rightsContainer = document.createElement('div')
+    rightsContainer.style.width = '100%'
+    const renderSelectedRights = () => {
+      clearNode(rightsContainer)
+      const selectedSource = approvedSources.find((source) => source.id === sourceSelect.value)
+      if (selectedSource) {
+        rightsContainer.appendChild(renderRightsScopeEditor(selectedSource, message))
+      } else {
+        rightsContainer.appendChild(text(
+          'p',
+          'Select an approved provenance source to review its use-specific rights.',
+          'fine-print'
+        ))
+      }
+    }
+    sourceSelect.addEventListener('change', renderSelectedRights)
+    renderSelectedRights()
 
     const linkButton = createActionButton(
       'Link provenance',
@@ -327,7 +483,10 @@
       },
       finalized ||
         record.review_status !== 'license-verified' ||
-        !record.approved_source_id
+        !record.approved_source_id ||
+        !curriculumRightsAllowed(
+          approvedSources.find((source) => source.id === record.approved_source_id)?.rights_scope
+        )
     )
     actions.appendChild(approveButton)
 
@@ -350,6 +509,7 @@
     actions.appendChild(rejectButton)
 
     card.appendChild(actions)
+    card.appendChild(rightsContainer)
     card.appendChild(message)
     return card
   }
