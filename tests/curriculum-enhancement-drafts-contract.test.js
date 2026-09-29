@@ -6,6 +6,10 @@ const migration = fs.readFileSync(
   path.join(root, 'supabase/migrations/20260929230536_add_curriculum_enhancement_drafts.sql'),
   'utf8'
 )
+const indexMigration = fs.readFileSync(
+  path.join(root, 'supabase/migrations/20260929232410_add_curriculum_enhancement_evidence_index.sql'),
+  'utf8'
+)
 const route = fs.readFileSync(
   path.join(root, 'worker/routes/curriculum-enhancements.js'),
   'utf8'
@@ -39,7 +43,8 @@ describe('AI-assisted curriculum enhancement draft contract', () => {
     expect(migration).toContain('revoke all on public.curriculum_enhancement_drafts from public, anon, authenticated')
     expect(migration).toContain('revoke all on public.curriculum_enhancement_draft_evidence from public, anon, authenticated')
     expect(migration).toContain('grant select, insert, update, delete on public.curriculum_enhancement_drafts to service_role')
-    expect(migration).toContain('idx_curriculum_enhancement_draft_evidence_evidence')
+    expect(indexMigration).toContain('idx_curriculum_enhancement_draft_evidence_evidence')
+    expect(indexMigration).toContain('on public.curriculum_enhancement_draft_evidence(evidence_id)')
   })
 
   test('database evidence links fail closed unless approved evidence has explicit AI rights', () => {

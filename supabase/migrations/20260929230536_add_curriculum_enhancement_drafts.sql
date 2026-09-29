@@ -46,8 +46,6 @@ create index if not exists idx_curriculum_enhancement_drafts_lesson_created
   on public.curriculum_enhancement_drafts(lesson_plan_id, created_at desc);
 create index if not exists idx_curriculum_enhancement_draft_evidence_source
   on public.curriculum_enhancement_draft_evidence(source_id);
-create index if not exists idx_curriculum_enhancement_draft_evidence_evidence
-  on public.curriculum_enhancement_draft_evidence(evidence_id);
 
 create or replace function public.enforce_curriculum_enhancement_evidence()
 returns trigger
