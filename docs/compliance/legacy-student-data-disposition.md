@@ -113,24 +113,35 @@ Disposition:
 
 ### enrollments / classes
 
-The classroom authorization model is still represented in repository policy tests, so the schema should not be removed in this review.
+Local review on 2026-09-30 confirmed that the classroom schema has an active runtime dependency, not merely a policy-test dependency:
+
+- `torquemind-api/index.js` reads and writes both `classes` and `enrollments`;
+- the browser classroom UI calls the class create/list/join routes;
+- Render deployment configuration and CI smoke/unit workflows actively include `torquemind-api`;
+- current CI starts the API against the approved staging Supabase project.
 
 Production data state:
 - `enrollments`: 0 rows;
 - `classes`: 2,206 rows;
-- distinct class owners: 1;
+- distinct class owners: 1, matching an existing Auth user;
 - assignments referencing a class: 0;
 - scenario assignments referencing a class: 0;
-- enrolled users: 0;
-- legacy roster students attached to a class: 0.
+- classes with enrollments: 0;
+- classes with assignments: 0;
+- classes with scenario assignments: 0;
+- all 2,206 class names match the smoke-test fixture naming pattern;
+- no new class rows were created during the most recent 7-day window reviewed.
 
-The class rows are therefore operationally orphaned, but ownership-linked data should not be destroyed without an owner/use review.
+Root cause:
+- `torquemind-api/scripts/smoke-test.js` creates a uniquely named smoke-test class on every run;
+- the script previously had no cleanup path;
+- current CI targets the approved staging project, so the production accumulation is historical.
 
 Disposition:
-- preserve the classroom schema and RLS contract;
-- freeze expansion until institution onboarding requirements are approved;
-- review the 2,206 unattached class rows for archive/delete in a separately authorized cleanup;
-- do not infer that row ownership alone establishes an ongoing retention purpose.
+- `classes` and `enrollments` are active runtime assets and must remain;
+- the smoke test must delete only the exact fixture row it created, including on failure;
+- after the leak fix is merged, prepare a separately guarded cleanup for the 2,206 verified historical smoke rows;
+- keep institution onboarding expansion frozen pending the institution-model decision.
 
 ## Security findings
 

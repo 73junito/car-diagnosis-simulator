@@ -52,7 +52,7 @@ This contract does not execute deletion, alter database foreign keys, change pro
 | SDI-L01 question_attempts | R07 | retired from production and verified absent on 2026-09-30; canonical progress data remains in governed active stores |
 | SDI-L02 transcripts/summary | R03/R04 + R07 | frozen pending institution-record determination |
 | SDI-L03 student_recommendations | R04 + R07 | retired and verified absent on 2026-09-30 after current physical-backup verification and guarded production migration; authenticated empty boundary remains until a governed neutral model exists |
-| SDI-L04 roster/classroom model | R03 + R07 | empty legacy roster shells retired and verified absent on 2026-09-30; `enrollments` and `classes` remain governed/frozen pending institution-model approval and separate class-row review |
+| SDI-L04 roster/classroom model | R03 + R07 | legacy roster shells retired; `enrollments` and `classes` are active runtime schema. The 2,206 existing class rows are verified historical smoke fixtures pending guarded cleanup after the leak fix; onboarding remains frozen pending institution-model approval. |
 
 ## Deletion request lifecycle
 
