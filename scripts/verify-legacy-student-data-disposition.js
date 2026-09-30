@@ -58,8 +58,18 @@ const rec = register.assets.find((asset) => asset.id === 'LD-003')
 if (!rec || rec.disposition !== 'migrate_then_retire') {
   fail('legacy recommendations must be migrate_then_retire')
 }
-if (!register.production_facts?.recommendation_access?.anon_select_policy) {
-  fail('anonymous recommendation read finding must remain explicit')
+const recommendationAccess = register.production_facts?.recommendation_access
+if (!recommendationAccess?.baseline_anon_select_policy) {
+  fail('baseline anonymous recommendation read finding must remain explicit')
+}
+if (recommendationAccess.post_migration_anon_select_policy !== false) {
+  fail('post-migration anonymous recommendation access must be false')
+}
+if (recommendationAccess.post_migration_dashboard_direct_rest_dependency !== false) {
+  fail('post-migration dashboard direct REST dependency must be false')
+}
+if (recommendationAccess.authenticated_server_boundary !== true) {
+  fail('authenticated recommendation server boundary must be recorded')
 }
 
 const classes = register.assets.find((asset) => asset.id === 'LD-008')

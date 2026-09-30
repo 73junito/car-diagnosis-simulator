@@ -77,8 +77,31 @@ window.initStudentDashboard = function(){
 
 document.addEventListener('DOMContentLoaded', ()=>{ if(window.initStudentDashboard) window.initStudentDashboard(); });
 
+function getStudentDashboardAccessToken() {
+  try {
+    if (typeof window.getAccessToken === 'function') {
+      const token = window.getAccessToken();
+      if (token) return token;
+    }
+  } catch (_) {}
 
+  try {
+    const direct = localStorage.getItem('supabase_access_token');
+    if (direct) return direct;
 
+    const legacySession = localStorage.getItem('sb-supabase-session');
+    if (legacySession) {
+      const parsed = JSON.parse(legacySession);
+      if (parsed && parsed.access_token) return parsed.access_token;
+    }
+  } catch (_) {}
+
+  try {
+    return sessionStorage.getItem('auth_token') || null;
+  } catch (_) {
+    return null;
+  }
+}
 
 async function loadPerformanceSummary() {
   const root = document.getElementById("performanceSummary");
@@ -208,25 +231,21 @@ async function loadAdaptiveRecommendations() {
   if (!root) return;
 
   try {
-    if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+    const token = getStudentDashboardAccessToken();
+    if (!token) {
       root.innerHTML = "<p>Recommendations unavailable.</p>";
       return;
     }
 
-    const url =
-      `${window.SUPABASE_URL}/rest/v1/student_recommendations` +
-      `?select=student_id,competency_code,scenario_id,reason,priority` +
-      `&student_id=eq.anonymous&order=priority.asc&limit=5`;
-
-    const res = await fetch(url, {
+    const res = await fetch('/api/student/recommendations', {
       headers: {
-        apikey: window.SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
+        Authorization: `Bearer ${token}`
       }
     });
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const rows = await res.json();
+    const body = await res.json();
+    const rows = Array.isArray(body.recommendations) ? body.recommendations : [];
 
     root.innerHTML = rows.length
       ? `<div class="recommendation-list">${rows.map(row => `
@@ -234,7 +253,6 @@ async function loadAdaptiveRecommendations() {
             <div>
               <strong>${row.scenario_id}</strong>
               <p>${row.reason}</p>
-              <small>Competency Area: ${row.competency_code}</small>
             </div>
             <a class="recommendation-link" href="./scenario/?id=${encodeURIComponent(row.scenario_id)}">Start Practice</a>
           </article>
