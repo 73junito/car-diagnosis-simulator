@@ -19,13 +19,14 @@ No production data is deleted, archived, migrated, or rewritten by this change. 
 | `delete_after_verification` | No active application dependency is confirmed; delete only after a final consumer/export check and approved destructive runbook. |
 | `retain_schema_clean_rows` | Preserve the schema/authorization surface, but review orphaned production rows for cleanup. |
 | `retire_empty_schema` | Empty legacy table can be retired after dependency and migration-history review. |
+| `retired_verified` | Production object/data retired through an approved migration and verified absent afterward. |
 | `blocked` | A dependency, legal/security hold, branding conflict, or unresolved ownership prevents disposition. |
 
 ## Production evidence summary
 
 | Asset | Production rows | Active code dependency | Key dependency / risk | Disposition |
 | --- | ---: | --- | --- | --- |
-| `question_attempts` | 80 | No current application dependency after progress migration | Guarded destructive retirement migration prepared; production application and post-drop verification remain | `migrate_then_retire` |
+| `question_attempts` | 0 | No current application dependency | Retired from production on 2026-09-30; all 80 historical anonymous rows and dependent legacy views removed by the approved guarded migration | `retired_verified` |
 | `student_transcripts` | 1 | No direct application reference found | Single identified/linkable transcript row | `delete_after_verification` |
 | `student_recommendations` | 6 | Yes, through authenticated server boundary after access migration | Legacy table remains the source; taxonomy drift remains | `migrate_then_retire` |
 | `students` | 0 | No current application reference found | Legacy roster shell; references schools/classes | `retire_empty_schema` |
@@ -44,11 +45,11 @@ The P0.5 baseline found two dashboard summary views derived from `question_attem
 
 The progress-migration follow-up replaces both direct view reads with an authenticated server API backed by canonical `attempts` and `attempt_answers`. Both canonical queries are scoped to the verified user ID. Student identifiers and the unsupported legacy timing metric are not returned to the browser. The guarded database migration revokes anonymous/authenticated access to the two legacy summary views without recreating them in fresh environments.
 
-Disposition:
-1. keep the authenticated canonical progress API;
-2. repository/runtime/export scans and 24-hour Supabase log review found no current consumer;
-3. a guarded destructive migration now verifies the exact 80-row anonymous dataset, the verified dependency graph, and absence of external foreign keys before dropping anything;
-4. production application and post-drop verification remain pending.
+Disposition — complete:
+1. the authenticated canonical progress API remains active;
+2. repository/runtime/export scans and a 24-hour Supabase log review found no current consumer before retirement;
+3. the approved guarded migration removed the 80-row anonymous legacy table and its verified dependent view chain on 2026-09-30;
+4. post-migration verification confirmed the legacy table and former dashboard views are absent while canonical `attempts` and `attempt_answers` remain present.
 
 ### student_transcripts
 
@@ -129,7 +130,7 @@ The progress-migration follow-up:
 - revokes anonymous/authenticated privileges on the two legacy views when they exist;
 - does not recreate legacy views in clean environments.
 
-The views remain retirement targets pending final consumer verification.
+The legacy progress views and their dependent legacy chain have now been retired from production and verified absent.
 
 ## Ordered cleanup plan
 
@@ -139,11 +140,12 @@ The views remain retirement targets pending final consumer verification.
    - anonymous/authenticated table privileges revoked by guarded migration;
    - legacy table retirement remains pending replacement-model/consumer verification.
 
-2. **Performance/transcript migration — implemented**
+2. **Performance/transcript migration + legacy progress retirement — complete**
    - authenticated canonical progress API added;
    - dashboard legacy summary-view reads removed;
-   - anonymous/authenticated view privileges revoked by guarded migration;
-   - destructive retirement of the views/table remains pending final consumer verification.
+   - guarded production retirement migration applied on 2026-09-30;
+   - 80 historical anonymous legacy rows and the verified dependent legacy view chain removed;
+   - post-change verification confirmed canonical progress tables remain present.
 
 3. **Identified transcript cleanup**
    - verify no retention obligation;

@@ -16,6 +16,7 @@ const allowedDispositions = new Set([
   'delete_after_verification',
   'retain_schema_clean_rows',
   'retire_empty_schema',
+  'retired_verified',
   'blocked'
 ])
 
@@ -31,8 +32,11 @@ try {
   fail('invalid JSON: ' + error.message)
 }
 
-if (register.version !== 1) fail('version must be 1')
-if (register.production_mutation !== false) fail('P0.5 review must not authorize production mutation')
+if (register.version !== 2) fail('version must be 2')
+if (register.production_mutation !== true) fail('register must record the approved production retirement')
+if (register.production_mutation_type !== 'approved_guarded_legacy_progress_retirement') {
+  fail('production mutation type must record the approved guarded retirement')
+}
 
 if (!Array.isArray(register.assets) || register.assets.length === 0) {
   fail('assets must be a non-empty array')
@@ -52,6 +56,11 @@ for (const asset of register.assets) {
   }
   if (!Array.isArray(asset.blockers)) fail(asset.id + '.blockers must be an array')
   if (!asset.next_action) fail(asset.id + '.next_action is required')
+}
+
+const retiredProgress = register.assets.find((asset) => asset.id === 'LD-001')
+if (!retiredProgress || retiredProgress.disposition !== 'retired_verified' || retiredProgress.rows !== 0) {
+  fail('legacy progress asset must be retired_verified with zero production rows')
 }
 
 const rec = register.assets.find((asset) => asset.id === 'LD-003')
@@ -85,6 +94,15 @@ if (summaryViews?.post_migration_authenticated_select_privilege !== false) {
 if (summaryViews?.authenticated_canonical_server_boundary !== true) {
   fail('authenticated canonical progress boundary must be recorded')
 }
+if (summaryViews?.production_legacy_table_present !== false) {
+  fail('production legacy progress table must be recorded absent')
+}
+if (summaryViews?.production_legacy_summary_views_present !== false) {
+  fail('production legacy progress summary views must be recorded absent')
+}
+if (summaryViews?.canonical_attempts_present !== true || summaryViews?.canonical_attempt_answers_present !== true) {
+  fail('canonical progress tables must remain present after retirement')
+}
 
 const classes = register.assets.find((asset) => asset.id === 'LD-008')
 if (!classes || classes.disposition !== 'retain_schema_clean_rows') {
@@ -101,5 +119,5 @@ if (!Array.isArray(register.invariants) || register.invariants.length === 0) {
 console.log(
   '[PASS] Legacy student-data disposition: ' +
   register.assets.length +
-  ' assets reviewed; no production mutation authorized'
+  ' assets reviewed; legacy progress retirement applied and verified'
 )

@@ -204,8 +204,8 @@
       "classification": [
         "student_restricted"
       ],
-      "status": "retirement_migration_prepared_pending_production_application",
-      "action": "apply_guarded_retirement_migration_and_verify_absence"
+      "status": "retired_verified_production_2026_09_30",
+      "action": "none_retirement_complete"
     },
     {
       "id": "SDI-L02",
