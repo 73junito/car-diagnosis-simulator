@@ -51,7 +51,7 @@ This contract does not execute deletion, alter database foreign keys, change pro
 | SDI-009 completions/replays | R04 + R07 | active ownership/use review required before retention automation |
 | SDI-L01 question_attempts | R07 | retired from production and verified absent on 2026-09-30; canonical progress data remains in governed active stores |
 | SDI-L02 transcripts/summary | R03/R04 + R07 | frozen pending institution-record determination |
-| SDI-L03 student_recommendations | R04 + R07 | frozen pending current-use and taxonomy review |
+| SDI-L03 student_recommendations | R04 + R07 | current-use/taxonomy review complete; legacy source retirement prepared, pending application deployment verification and production backup/restore review |
 | SDI-L04 students/student/enrollments/classes/schools | R03 + R07 | institution model must be confirmed before onboarding expansion |
 
 ## Deletion request lifecycle

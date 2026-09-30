@@ -224,8 +224,8 @@
         "student_restricted",
         "review_required"
       ],
-      "status": "production_data_exists",
-      "action": "review_taxonomy_purpose_retention_and_consumers"
+      "status": "retirement_migration_prepared_pending_application_deployment",
+      "action": "keep_authenticated_empty_boundary_until_governed_neutral_recommendation_model_exists"
     },
     {
       "id": "SDI-L04",

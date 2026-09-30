@@ -1,13 +1,4 @@
-const { createClient } = require('@supabase/supabase-js')
 const { extractBearerToken, verifySupabaseToken } = require('../_utils/auth-utils')
-
-const LIMIT = 5
-
-function isLegacyTableMissing(error) {
-  const code = error && error.code
-  const message = String((error && error.message) || '')
-  return code === '42P01' || code === 'PGRST205' || /student_recommendations.*(not found|does not exist)/i.test(message)
-}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -28,27 +19,5 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: authError || 'Invalid token' })
   }
 
-  const supabase = createClient(supabaseUrl, serviceRoleKey)
-  const { data, error } = await supabase
-    .from('student_recommendations')
-    .select('scenario_id,reason,priority')
-    .eq('student_id', 'anonymous')
-    .order('priority', { ascending: true })
-    .limit(LIMIT)
-
-  if (error) {
-    if (isLegacyTableMissing(error)) return res.status(200).json({ recommendations: [] })
-    console.error('Failed to load student recommendations:', error)
-    return res.status(500).json({ error: 'Failed to load recommendations' })
-  }
-
-  return res.status(200).json({
-    recommendations: Array.isArray(data)
-      ? data.map((row) => ({
-          scenario_id: row.scenario_id,
-          reason: row.reason,
-          priority: row.priority
-        }))
-      : []
-  })
+  return res.status(200).json({ recommendations: [] })
 }
