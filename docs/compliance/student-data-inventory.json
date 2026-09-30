@@ -1,0 +1,253 @@
+{
+  "version": 1,
+  "verified_at": "2026-09-29",
+  "scope": "AutoLearn Pro production schema and current application code",
+  "change_type": "governance_only",
+  "classifications": {
+    "authentication_secret": "Session tokens or credentials that can authorize access.",
+    "student_restricted": "Identified or linkable student education/activity data.",
+    "institution_record": "Institution-managed roster, class, enrollment, or role information.",
+    "deidentified_aggregate": "Aggregate statistics not reasonably linkable to a student.",
+    "public_content": "Non-student curriculum/reference content governed separately by source rights.",
+    "review_required": "Legacy, ambiguous, or schemaless data requiring purpose/retention review."
+  },
+  "assets": [
+    {
+      "id": "SDI-001",
+      "system": "Supabase Auth + public.profiles",
+      "fields": [
+        "user_uuid",
+        "email",
+        "role",
+        "created_at"
+      ],
+      "classification": [
+        "student_restricted",
+        "institution_record"
+      ],
+      "purpose": [
+        "authentication",
+        "authorization",
+        "role_routing"
+      ],
+      "status": "confirmed_active",
+      "retention": "not_yet_defined"
+    },
+    {
+      "id": "SDI-002",
+      "system": "public.attempts",
+      "fields": [
+        "attempt_uuid",
+        "user_uuid",
+        "scenario",
+        "delivery_mode",
+        "workflow_type",
+        "status",
+        "score",
+        "completion_state",
+        "payload_json",
+        "timestamps"
+      ],
+      "classification": [
+        "student_restricted"
+      ],
+      "purpose": [
+        "assessment_attempt_lifecycle",
+        "training_attempt_lifecycle"
+      ],
+      "status": "confirmed_active_code_path",
+      "retention": "not_yet_defined"
+    },
+    {
+      "id": "SDI-003",
+      "system": "public.attempt_answers",
+      "fields": [
+        "attempt_uuid",
+        "question_uuid",
+        "user_uuid",
+        "student_answer",
+        "is_correct",
+        "submitted_at"
+      ],
+      "classification": [
+        "student_restricted"
+      ],
+      "purpose": [
+        "server_side_grading_audit_trail"
+      ],
+      "status": "confirmed_active_code_path",
+      "retention": "not_yet_defined"
+    },
+    {
+      "id": "SDI-004",
+      "system": "public.attempt_questions",
+      "fields": [
+        "attempt_uuid",
+        "question_uuid",
+        "sequence",
+        "assigned_at"
+      ],
+      "classification": [
+        "student_restricted"
+      ],
+      "purpose": [
+        "assessment_question_binding"
+      ],
+      "status": "confirmed_active_code_path",
+      "retention": "not_yet_defined"
+    },
+    {
+      "id": "SDI-005",
+      "system": "public.telemetry_events",
+      "fields": [
+        "session_id",
+        "user_uuid_optional",
+        "event_type",
+        "payload_json",
+        "source",
+        "created_at"
+      ],
+      "classification": [
+        "student_restricted",
+        "review_required"
+      ],
+      "purpose": [
+        "product_telemetry",
+        "session_history"
+      ],
+      "status": "confirmed_active_payload_contract_missing",
+      "retention": "not_yet_defined"
+    },
+    {
+      "id": "SDI-006",
+      "system": "AI tutor request transit",
+      "fields": [
+        "scenario",
+        "question",
+        "student_answer",
+        "topic",
+        "provider_request_metadata"
+      ],
+      "classification": [
+        "student_restricted"
+      ],
+      "purpose": [
+        "training_mode_instructional_feedback"
+      ],
+      "status": "confirmed_transient_processing",
+      "provider_controls": "subprocessor_review_required",
+      "assessment_mode": "provider_access_blocked"
+    },
+    {
+      "id": "SDI-007",
+      "system": "browser session and local storage",
+      "fields": [
+        "auth_session_or_token",
+        "assessment_attempt_id",
+        "delivery_mode"
+      ],
+      "classification": [
+        "authentication_secret",
+        "student_restricted"
+      ],
+      "purpose": [
+        "authenticated_session",
+        "attempt_context"
+      ],
+      "status": "confirmed_active",
+      "retention": "client_session_dependent"
+    },
+    {
+      "id": "SDI-008",
+      "system": "instructor analytics aggregation",
+      "fields": [
+        "student_or_user_identifier",
+        "session_count",
+        "average_score",
+        "average_confidence"
+      ],
+      "classification": [
+        "student_restricted"
+      ],
+      "purpose": [
+        "instructor_analytics"
+      ],
+      "status": "code_path_exists_source_report_currently_absent",
+      "retention": "not_yet_defined"
+    },
+    {
+      "id": "SDI-009",
+      "system": "public.completions + public.replays",
+      "fields": [
+        "user_uuid",
+        "scenario_linkage",
+        "actions",
+        "result",
+        "confidence",
+        "timestamps"
+      ],
+      "classification": [
+        "student_restricted",
+        "review_required"
+      ],
+      "purpose": [
+        "historical_completion_and_replay_tracking"
+      ],
+      "status": "production_data_exists_active_path_not_confirmed",
+      "retention": "not_yet_defined"
+    }
+  ],
+  "legacy_review_assets": [
+    {
+      "id": "SDI-L01",
+      "system": "public.question_attempts",
+      "classification": [
+        "student_restricted",
+        "review_required"
+      ],
+      "status": "production_data_exists",
+      "action": "determine_owner_use_and_disposition"
+    },
+    {
+      "id": "SDI-L02",
+      "system": "public.student_transcripts + summary",
+      "classification": [
+        "student_restricted",
+        "review_required"
+      ],
+      "status": "production_data_exists",
+      "action": "confirm_institution_record_or_legacy_analytics"
+    },
+    {
+      "id": "SDI-L03",
+      "system": "public.student_recommendations",
+      "classification": [
+        "student_restricted",
+        "review_required"
+      ],
+      "status": "production_data_exists",
+      "action": "review_taxonomy_purpose_retention_and_consumers"
+    },
+    {
+      "id": "SDI-L04",
+      "system": "public.students + public.student + public.enrollments + public.classes + public.schools",
+      "classification": [
+        "institution_record",
+        "student_restricted",
+        "review_required"
+      ],
+      "status": "mixed_population",
+      "action": "confirm_institution_model_before_onboarding"
+    }
+  ],
+  "invariants": [
+    "new_student_fields_require_inventory_entry",
+    "schemaless_user_linked_json_defaults_to_student_restricted",
+    "no_targeted_advertising_from_student_data",
+    "no_sale_or_rental_of_student_data",
+    "no_unrelated_model_training_on_identifiable_student_records",
+    "auth_tokens_never_enter_telemetry",
+    "legacy_assets_not_reused_without_review",
+    "retention_periods_require_approved_contract"
+  ]
+}
