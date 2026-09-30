@@ -25,7 +25,7 @@ No production data is deleted, archived, migrated, or rewritten by this change. 
 
 | Asset | Production rows | Active code dependency | Key dependency / risk | Disposition |
 | --- | ---: | --- | --- | --- |
-| `question_attempts` | 80 | No current application dependency after progress migration | Stores selected and authoritative answers; legacy database dependencies still require retirement review | `migrate_then_retire` |
+| `question_attempts` | 80 | No current application dependency after progress migration | Guarded destructive retirement migration prepared; production application and post-drop verification remain | `migrate_then_retire` |
 | `student_transcripts` | 1 | No direct application reference found | Single identified/linkable transcript row | `delete_after_verification` |
 | `student_recommendations` | 6 | Yes, through authenticated server boundary after access migration | Legacy table remains the source; taxonomy drift remains | `migrate_then_retire` |
 | `students` | 0 | No current application reference found | Legacy roster shell; references schools/classes | `retire_empty_schema` |
@@ -46,9 +46,9 @@ The progress-migration follow-up replaces both direct view reads with an authent
 
 Disposition:
 1. keep the authenticated canonical progress API;
-2. verify no external consumer remains for the legacy views/table;
-3. retire the remaining legacy database dependency without reproducing prohibited branding in new project artifacts;
-4. retire the legacy summary views and `question_attempts` under a separate destructive migration.
+2. repository/runtime/export scans and 24-hour Supabase log review found no current consumer;
+3. a guarded destructive migration now verifies the exact 80-row anonymous dataset, the verified dependency graph, and absence of external foreign keys before dropping anything;
+4. production application and post-drop verification remain pending.
 
 ### student_transcripts
 

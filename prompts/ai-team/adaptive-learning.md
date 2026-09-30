@@ -10,8 +10,12 @@ Return:
 7. Risks
 8. Implementation order
 
-Use existing data:
-- question_attempts
-- student_transcript_summary
-- ase_readiness_summary
-- scenario_ase_map
+Use current governed data and APIs:
+- attempts
+- attempt_answers
+- authenticated student progress API
+- student recommendations API
+- vendor-neutral competency mappings
+- scenario catalog
+
+Do not reintroduce retired legacy progress tables, legacy summary views, or deprecated branded taxonomy.

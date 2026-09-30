@@ -42,7 +42,7 @@ The following production structures contain student-linked records but were not 
 
 | Asset ID | System / location | Data elements | Classification | Required action |
 | --- | --- | --- | --- | --- |
-| SDI-L01 | `public.question_attempts` | student identifier, scenario/question IDs, selected and authoritative answers, correctness, elapsed time, timestamp | `student_restricted` + `review_required` | Determine owner/current use, then retain, migrate, or retire under an approved plan. |
+| SDI-L01 | `public.question_attempts` | student identifier, scenario/question IDs, selected and authoritative answers, correctness, elapsed time, timestamp | `student_restricted` | Guarded retirement migration prepared; production application and post-drop verification remain pending. |
 | SDI-L02 | `public.student_transcripts` and summary view | student identifier, attempt/scenario counts, correctness counts, accuracy, average time, activity timestamps | `student_restricted` + `review_required` | Confirm whether this is institution-record output or legacy analytics. |
 | SDI-L03 | `public.student_recommendations` | student identifier, scenario/reason/priority/status, timestamps, plus an additional historical classification field | `student_restricted` + `review_required` | Review taxonomy, purpose, retention, and current consumers before further use. |
 | SDI-L04 | `public.students`, `public.student`, `public.enrollments`, `public.classes`, `public.schools` | names/identifiers, school/class relationships, roles, enrollment relationships, timestamps | `institution_record` + `student_restricted` + `review_required` | Confirm intended institution model and active consumers before onboarding institutional records. |

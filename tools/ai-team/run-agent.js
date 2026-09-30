@@ -8,7 +8,7 @@ const REQUEST_TIMEOUT_MS = 10 * 60 * 1000;
 const agents = {
   architect: {
     model: "qwen3:30b",
-    role: "System architect for TorqueMind automotive ASE training platform."
+    role: "System architect for the TorqueMind automotive learning platform."
   },
   builder: {
     model: "qwen3.5:latest",
@@ -24,7 +24,7 @@ const agents = {
   },
   tutor: {
     model: "qwen3:30b",
-    role: "ASE Master Technician and automotive diagnostic instructor."
+    role: "Experienced automotive diagnostic instructor."
   }
 };
 
@@ -112,11 +112,10 @@ TorqueMind / Car Diagnosis Simulator
 Important current platform features:
 - Scenario engine
 - Supabase question bank
-- question_attempts
-- student_transcript_summary
-- ase_domains
-- scenario_ase_map
-- ase_readiness_summary
+- canonical attempts and attempt answers
+- authenticated student progress API
+- authenticated student recommendation API
+- vendor-neutral competency mappings
 - instructor analytics dashboard
 - student dashboard
 - Vercel deployment
