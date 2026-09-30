@@ -1,0 +1,166 @@
+# AutoLearn Pro Legacy Student-Data Disposition Review
+
+Status: P0.5 governance baseline
+Verified: 2026-09-29
+Change type: documentation/governance/validation only
+
+## Purpose
+
+This review determines the safe disposition path for production student-related assets previously marked `review_required`.
+
+No production data is deleted, archived, migrated, or rewritten by this change. Destructive actions remain separately gated by the Retention and Deletion Contract.
+
+## Disposition vocabulary
+
+| Disposition | Meaning |
+| --- | --- |
+| `retain_active` | Current use is confirmed and governed. |
+| `migrate_then_retire` | Current code still depends on the asset; replace the dependency before retirement. |
+| `delete_after_verification` | No active application dependency is confirmed; delete only after a final consumer/export check and approved destructive runbook. |
+| `retain_schema_clean_rows` | Preserve the schema/authorization surface, but review orphaned production rows for cleanup. |
+| `retire_empty_schema` | Empty legacy table can be retired after dependency and migration-history review. |
+| `blocked` | A dependency, legal/security hold, branding conflict, or unresolved ownership prevents disposition. |
+
+## Production evidence summary
+
+| Asset | Production rows | Active code dependency | Key dependency / risk | Disposition |
+| --- | ---: | --- | --- | --- |
+| `question_attempts` | 80 | Yes, indirectly through two dashboard summary views | Stores selected and authoritative answers; feeds legacy summary views and an additional legacy certification-branded readiness view | `migrate_then_retire` |
+| `student_transcripts` | 1 | No direct application reference found | Single identified/linkable transcript row | `delete_after_verification` |
+| `student_recommendations` | 6 | Yes, direct student-dashboard REST read | Anonymous public SELECT policy; schema/taxonomy drift from current dashboard field naming | `migrate_then_retire` |
+| `students` | 0 | No current application reference found | Legacy roster shell; references schools/classes | `retire_empty_schema` |
+| `student` | 0 | No current application reference found | Unstructured legacy placeholder table | `retire_empty_schema` |
+| `enrollments` | 0 | No runtime application reference found; authorization tests exist | Intended classroom authorization surface | `retain_schema_clean_rows` |
+| `schools` | 0 | No current application reference found | Legacy roster dependency of `students` only | `retire_empty_schema` |
+| `classes` | 2,206 | No runtime application reference found; authorization tests exist | All rows belong to one owner; no enrollments, students, assignments, or scenario assignments reference them | `retain_schema_clean_rows` |
+
+## Detailed findings
+
+### question_attempts
+
+All 80 production rows are tagged `anonymous`, but the table contains submitted answers, authoritative answers, correctness, elapsed time, and scenario/question linkage.
+
+The student dashboard currently reads:
+- a scenario-level performance summary view; and
+- a transcript summary view.
+
+Both views are derived from `question_attempts`.
+
+Disposition:
+1. migrate dashboard performance/transcript rendering to canonical attempt/answer data served through authenticated server APIs;
+2. remove the legacy summary-view dependency;
+3. retire the additional legacy certification-branded readiness dependency without reproducing that branding in new project artifacts;
+4. verify no external consumer remains;
+5. retire `question_attempts` under a separate destructive migration.
+
+### student_transcripts
+
+The table contains one identified/linkable row. No current application code reference was found.
+
+Disposition:
+1. verify no export/report process consumes the table;
+2. determine whether the row has any contractual/institution retention requirement;
+3. if none applies, delete through the approved deletion runbook;
+4. preserve only minimal deletion evidence, not the transcript content itself.
+
+### student_recommendations
+
+All six current rows use the anonymous student marker. However, the table currently has an anonymous SELECT policy with an unconditional predicate, and the student dashboard directly queries it through the public Supabase REST endpoint.
+
+The dashboard requests a current competency-oriented field name that is not present in the table's legacy schema, indicating taxonomy drift.
+
+Disposition:
+1. replace direct public REST access with an authenticated/server-controlled recommendation endpoint or remove the panel until a governed recommendation model exists;
+2. remove anonymous public SELECT access;
+3. migrate any still-valid recommendation semantics to a current neutral taxonomy;
+4. retire the legacy table after consumer verification.
+
+No new public student-recommendation endpoint is authorized by this review.
+
+### students / student / schools
+
+These tables are empty and no current runtime code dependency was found.
+
+Disposition:
+- mark for retirement after confirming no migration, external integration, or institution onboarding dependency remains.
+
+### enrollments / classes
+
+The classroom authorization model is still represented in repository policy tests, so the schema should not be removed in this review.
+
+Production data state:
+- `enrollments`: 0 rows;
+- `classes`: 2,206 rows;
+- distinct class owners: 1;
+- assignments referencing a class: 0;
+- scenario assignments referencing a class: 0;
+- enrolled users: 0;
+- legacy roster students attached to a class: 0.
+
+The class rows are therefore operationally orphaned, but ownership-linked data should not be destroyed without an owner/use review.
+
+Disposition:
+- preserve the classroom schema and RLS contract;
+- freeze expansion until institution onboarding requirements are approved;
+- review the 2,206 unattached class rows for archive/delete in a separately authorized cleanup;
+- do not infer that row ownership alone establishes an ongoing retention purpose.
+
+## Security findings
+
+### Public recommendation read
+
+`student_recommendations` currently permits anonymous SELECT with an unconditional RLS predicate and the anon role has SELECT privilege.
+
+Because the current dashboard depends on that public path, revocation must be paired with a replacement or removal of the UI dependency. This is a migrate-before-revoke blocker, not approval to keep the public policy indefinitely.
+
+### Legacy views
+
+The two student summary views use `security_invoker=true`, which is the correct Supabase/Postgres pattern for allowing underlying RLS to govern view access. They still remain legacy because they are derived from `question_attempts` rather than the canonical assessment model.
+
+## Ordered cleanup plan
+
+1. **Recommendation access migration**
+   - remove the student dashboard's direct anonymous REST read;
+   - introduce a governed server-side replacement only if recommendations remain a required feature;
+   - revoke anonymous table access;
+   - retire the legacy recommendation table after verification.
+
+2. **Performance/transcript migration**
+   - serve student-specific performance from canonical attempts/answers with authenticated ownership checks;
+   - remove dashboard dependency on legacy summary views;
+   - retire legacy summary views and `question_attempts`.
+
+3. **Identified transcript cleanup**
+   - verify no retention obligation;
+   - delete the single identified/linkable legacy transcript row using the approved deletion runbook.
+
+4. **Empty roster-shell retirement**
+   - retire empty `student`, `students`, and `schools` structures once migration/dependency review is complete.
+
+5. **Classroom row cleanup**
+   - retain `classes` / `enrollments` schema;
+   - investigate the single-owner 2,206-row orphan set;
+   - archive/delete only after ownership/use review and dry-run evidence.
+
+## Destructive-operation gates
+
+Before any deletion/drop migration:
+- create a dependency report;
+- provide row-count dry run;
+- confirm legal/security holds;
+- confirm current consumer inventory;
+- document rollback/recovery strategy;
+- verify production backup/restore implications;
+- require explicit authorized execution;
+- verify post-change application and RLS behavior.
+
+## Verification evidence
+
+- Production schema, row counts, RLS policies, grants, foreign keys, and view definitions inspected read-only.
+- Repository runtime/API references inspected against current `main`.
+- No production mutation was performed.
+- No student identifiers, names, or record contents were copied into this document.
+
+## Next implementation
+
+The smallest safe next implementation is the recommendation-access migration because it is the only reviewed legacy asset with confirmed direct anonymous table access from the student dashboard.
