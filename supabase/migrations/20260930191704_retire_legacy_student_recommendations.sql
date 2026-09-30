@@ -1,0 +1,9 @@
+-- Migration-history reconciliation only.
+--
+-- Production Supabase records version 20260930191704 with the name
+-- retire_legacy_student_recommendations, but no corresponding migration file
+-- ever existed in repository history. The governed retirement SQL is already
+-- tracked in 20260930175711_retire_legacy_student_recommendations.sql.
+--
+-- This file is intentionally a no-op. It preserves migration ledger parity for
+-- Supabase preview/branch creation without re-running destructive retirement SQL.
