@@ -229,14 +229,14 @@
     },
     {
       "id": "SDI-L04",
-      "system": "public.enrollments + public.classes retained; public.students + public.student + public.schools retired",
+      "system": "public.enrollments + public.classes active; public.students + public.student + public.schools retired",
       "classification": [
         "institution_record",
         "student_restricted",
         "review_required"
       ],
-      "status": "mixed_population_legacy_roster_shells_retired_classroom_schema_retained",
-      "action": "confirm_institution_model_before_onboarding_and_review_unattached_class_rows_separately"
+      "status": "active_classroom_schema_legacy_roster_shells_retired_historical_smoke_rows_cleanup_pending",
+      "action": "retain_active_classroom_schema_merge_smoke_cleanup_then_guardedly_remove_verified_historical_smoke_rows_before_onboarding_expansion"
     }
   ],
   "invariants": [

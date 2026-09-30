@@ -259,6 +259,52 @@ async function ensureProfile(userId) {
   }
 }
 
+let activeSmokeClass = null;
+
+async function cleanupSmokeClass(options = {}) {
+  const {
+    classId,
+    className,
+    userId,
+    supabaseUrl = SUPABASE_URL,
+    serviceRoleKey = SUPABASE_SERVICE_ROLE_KEY,
+    createClientImpl,
+  } = options;
+
+  if (!classId || String(classId).startsWith('local-')) return { action: 'local-noop' };
+  if (!/^Smoke Test Class \d+$/.test(className || '')) {
+    throw new Error('Smoke cleanup refused: class name is not an exact smoke-test fixture.');
+  }
+  if (!userId) throw new Error('Smoke cleanup refused: class owner is missing.');
+  assertApprovedStagingDestination(supabaseUrl);
+  if (!serviceRoleKey) throw new Error('Smoke cleanup refused: service-role credential is missing.');
+
+  const createClient = createClientImpl || require('@supabase/supabase-js').createClient;
+  const admin = createClient(supabaseUrl, serviceRoleKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { data, error } = await admin
+    .from('classes')
+    .delete()
+    .eq('id', classId)
+    .eq('owner_id', userId)
+    .eq('name', className)
+    .select('id');
+
+  if (error) throw new Error('Smoke cleanup failed to delete the exact test class.');
+  if (!Array.isArray(data) || data.length !== 1 || data[0].id !== classId) {
+    throw new Error('Smoke cleanup refused: exact test class was not uniquely deleted.');
+  }
+  return { action: 'deleted', classId };
+}
+
+async function cleanupActiveSmokeClass() {
+  if (!activeSmokeClass) return { action: 'none' };
+  const target = activeSmokeClass;
+  activeSmokeClass = null;
+  return cleanupSmokeClass(target);
+}
+
 async function main() {
   console.log(`TorqueMind smoke test against ${BASE_URL}`);
 
@@ -305,11 +351,20 @@ async function main() {
     process.exit(4);
   }
 
+  activeSmokeClass = {
+    classId,
+    className,
+    userId,
+    supabaseUrl: SUPABASE_URL,
+    serviceRoleKey: SUPABASE_SERVICE_ROLE_KEY,
+  };
+
   console.log("2/7 OK: create class");
 
   const classes = await request("/api/classes", {}, token);
   if (!classes.ok) {
     console.error("List classes failed", classes);
+    await cleanupActiveSmokeClass();
     process.exit(5);
   }
   console.log("3/7 OK: list classes");
@@ -337,6 +392,7 @@ async function main() {
 
   if (!replay.ok) {
     console.error("Post replay failed", replay);
+    await cleanupActiveSmokeClass();
     process.exit(6);
   }
   console.log("4/7 OK: post replay");
@@ -356,6 +412,7 @@ async function main() {
 
   if (!complete.ok) {
     console.error("Post completion failed", complete);
+    await cleanupActiveSmokeClass();
     process.exit(7);
   }
   console.log("5/7 OK: post completion");
@@ -371,6 +428,7 @@ async function main() {
       console.log("6/7 SKIP: teacher data not implemented in fallback mode");
     } else {
       console.error("Teacher data failed", teacherData);
+      await cleanupActiveSmokeClass();
       process.exit(8);
     }
   } else {
@@ -384,6 +442,7 @@ async function main() {
         classId,
         teacherData: teacherData.body,
       });
+      await cleanupActiveSmokeClass();
       process.exit(8);
     }
 
@@ -391,10 +450,16 @@ async function main() {
   }
 
   console.log("7/7 SMOKE TEST PASSED");
+  await cleanupActiveSmokeClass();
 }
 
 if (require.main === module) {
-  main().catch((err) => {
+  main().catch(async (err) => {
+    try {
+      await cleanupActiveSmokeClass();
+    } catch (cleanupError) {
+      console.error("Smoke class cleanup also failed", cleanupError);
+    }
     console.error("Smoke test crashed", err);
     process.exit(99);
   });
@@ -403,4 +468,5 @@ if (require.main === module) {
 module.exports = {
   assertApprovedStagingDestination,
   ensureTeacherFixture,
+  cleanupSmokeClass,
 };

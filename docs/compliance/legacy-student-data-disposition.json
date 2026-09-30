@@ -78,12 +78,12 @@
       "id": "LD-006",
       "system": "public.enrollments",
       "rows": 0,
-      "active_dependency": false,
-      "disposition": "retain_schema_clean_rows",
+      "active_dependency": true,
+      "disposition": "retain_active",
       "blockers": [
-        "classroom_authorization_contract_still_tested"
+        "institution_model_confirmation_required"
       ],
-      "next_action": "retain_schema_and_freeze_expansion_until_institution_model_approved"
+      "next_action": "retain_active_classroom_schema_and_freeze_onboarding_expansion_until_institution_model_approved"
     },
     {
       "id": "LD-007",
@@ -98,17 +98,38 @@
       "id": "LD-008",
       "system": "public.classes",
       "rows": 2206,
-      "active_dependency": false,
-      "disposition": "retain_schema_clean_rows",
+      "active_dependency": true,
+      "disposition": "retain_active",
       "blockers": [
-        "single_owner_row_set_requires_owner_use_review",
-        "classroom_authorization_contract_still_tested"
+        "historical_smoke_rows_require_guarded_cleanup_after_leak_fix",
+        "institution_model_confirmation_required"
       ],
-      "next_action": "review_2206_unattached_rows_for_archive_or_delete_without_dropping_schema"
+      "next_action": "merge_smoke_cleanup_then_guarded_delete_verified_historical_smoke_rows_without_dropping_schema"
     }
   ],
   "production_facts": {
     "classes_distinct_owners": 1,
+    "classroom_runtime_dependency": {
+      "torquemind_api_reads_classes": true,
+      "torquemind_api_writes_classes": true,
+      "torquemind_api_reads_enrollments": true,
+      "torquemind_api_writes_enrollments": true,
+      "frontend_classroom_routes_present": true,
+      "render_service_configuration_present": true,
+      "ci_exercises_classroom_routes": true
+    },
+    "historical_smoke_class_rows": {
+      "rows": 2206,
+      "all_rows_match_smoke_test_name_pattern": true,
+      "classes_with_enrollments": 0,
+      "classes_with_assignments": 0,
+      "classes_with_scenario_assignments": 0,
+      "distinct_owners": 1,
+      "owner_matches_auth_user": true,
+      "created_last_7_days": 0,
+      "current_ci_targets_approved_staging_project": true,
+      "root_cause": "smoke_test_created_class_per_run_without_cleanup"
+    },
     "roster_shell_retirement": {
       "production_students_present": false,
       "production_student_present": false,
