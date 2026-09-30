@@ -103,33 +103,43 @@ function getStudentDashboardAccessToken() {
   }
 }
 
+let studentProgressPromise = null;
+
+function fetchStudentProgress() {
+  if (studentProgressPromise) return studentProgressPromise;
+
+  const token = getStudentDashboardAccessToken();
+  if (!token) return Promise.resolve({ performance: [], transcript: null, unavailable: true });
+
+  studentProgressPromise = fetch('/api/student/progress', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).then(async (res) => {
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }).catch((error) => {
+    studentProgressPromise = null;
+    throw error;
+  });
+
+  return studentProgressPromise;
+}
+
 async function loadPerformanceSummary() {
   const root = document.getElementById("performanceSummary");
   if (!root) return;
 
   try {
-    if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+    const body = await fetchStudentProgress();
+    if (body.unavailable) {
       root.innerHTML = "<p>Performance data unavailable.</p>";
       return;
     }
 
-    const url =
-      `${window.SUPABASE_URL}/rest/v1/student_performance_summary` +
-      `?select=scenario_id,attempts,correct_attempts,accuracy_pct,avg_time_seconds` +
-      `&order=accuracy_pct.asc`;
+    const rows = Array.isArray(body.performance) ? body.performance : [];
 
-    const res = await fetch(url, {
-      headers: {
-        apikey: window.SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
-      }
-    });
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const rows = await res.json();
-
-    if (!Array.isArray(rows) || !rows.length) {
+    if (!rows.length) {
       root.innerHTML = "<p>No performance data available yet.</p>";
       return;
     }
@@ -139,20 +149,18 @@ async function loadPerformanceSummary() {
         <thead>
           <tr>
             <th>Scenario</th>
-            <th>Attempts</th>
+            <th>Responses</th>
             <th>Correct</th>
             <th>Accuracy</th>
-            <th>Avg Time</th>
           </tr>
         </thead>
         <tbody>
           ${rows.map(r => `
             <tr>
               <td>${r.scenario_id}</td>
-              <td>${r.attempts}</td>
-              <td>${r.correct_attempts}</td>
+              <td>${r.responses}</td>
+              <td>${r.correct_responses}</td>
               <td>${r.accuracy_pct}%</td>
-              <td>${Math.round(Number(r.avg_time_seconds || 0))}s</td>
             </tr>
           `).join("")}
         </tbody>
@@ -177,26 +185,13 @@ async function loadStudentTranscriptSummary() {
   if (!root) return;
 
   try {
-    if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
+    const body = await fetchStudentProgress();
+    if (body.unavailable) {
       root.innerHTML = "<p>Transcript data unavailable.</p>";
       return;
     }
 
-    const url =
-      `${window.SUPABASE_URL}/rest/v1/student_transcript_summary` +
-      `?select=student_id,scenario_count,attempt_count,correct_attempt_count,accuracy_pct,avg_time_seconds,last_activity`;
-
-    const res = await fetch(url, {
-      headers: {
-        apikey: window.SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
-      }
-    });
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const rows = await res.json();
-    const transcript = Array.isArray(rows) ? rows[0] : null;
+    const transcript = body.transcript || null;
 
     if (!transcript) {
       root.innerHTML = "<p>No transcript data yet.</p>";
@@ -205,12 +200,10 @@ async function loadStudentTranscriptSummary() {
 
     root.innerHTML = `
       <div class="transcript-grid">
-        <div><strong>Student</strong><br>${transcript.student_id}</div>
         <div><strong>Scenarios</strong><br>${transcript.scenario_count}</div>
-        <div><strong>Attempts</strong><br>${transcript.attempt_count}</div>
-        <div><strong>Correct</strong><br>${transcript.correct_attempt_count}</div>
+        <div><strong>Responses</strong><br>${transcript.response_count}</div>
+        <div><strong>Correct</strong><br>${transcript.correct_response_count}</div>
         <div><strong>Accuracy</strong><br>${transcript.accuracy_pct}%</div>
-        <div><strong>Avg Time</strong><br>${Math.round(Number(transcript.avg_time_seconds || 0))}s</div>
       </div>
     `;
   } catch (err) {

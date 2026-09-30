@@ -10,13 +10,13 @@
       "rows": 80,
       "identified_rows": 0,
       "anonymous_rows": 80,
-      "active_dependency": true,
+      "active_dependency": false,
       "disposition": "migrate_then_retire",
       "blockers": [
-        "student_dashboard_summary_views",
-        "legacy_certification_readiness_dependency"
+        "legacy_certification_readiness_dependency",
+        "external_consumer_check"
       ],
-      "next_action": "replace_dashboard_summary_dependencies_with_authenticated_canonical_assessment_api"
+      "next_action": "verify_remaining_database_and_external_consumers_then_retire_legacy_views_and_table"
     },
     {
       "id": "LD-002",
@@ -122,13 +122,18 @@
       "authenticated_server_boundary": true
     },
     "summary_views": {
-      "security_invoker": true,
-      "derive_from": "public.question_attempts"
+      "baseline_security_invoker": true,
+      "baseline_derive_from": "public.question_attempts",
+      "baseline_dashboard_direct_rest_dependency": true,
+      "post_migration_dashboard_direct_rest_dependency": false,
+      "post_migration_anon_select_privilege": false,
+      "post_migration_authenticated_select_privilege": false,
+      "authenticated_canonical_server_boundary": true
     }
   },
   "ordered_cleanup": [
     "recommendation_access_migration_implemented",
-    "performance_transcript_migration",
+    "performance_transcript_migration_implemented",
     "identified_transcript_cleanup",
     "empty_roster_shell_retirement",
     "classroom_orphan_row_review"

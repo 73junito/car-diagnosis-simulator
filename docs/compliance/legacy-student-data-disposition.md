@@ -25,7 +25,7 @@ No production data is deleted, archived, migrated, or rewritten by this change. 
 
 | Asset | Production rows | Active code dependency | Key dependency / risk | Disposition |
 | --- | ---: | --- | --- | --- |
-| `question_attempts` | 80 | Yes, indirectly through two dashboard summary views | Stores selected and authoritative answers; feeds legacy summary views and an additional legacy certification-branded readiness view | `migrate_then_retire` |
+| `question_attempts` | 80 | No current application dependency after progress migration | Stores selected and authoritative answers; legacy database dependencies still require retirement review | `migrate_then_retire` |
 | `student_transcripts` | 1 | No direct application reference found | Single identified/linkable transcript row | `delete_after_verification` |
 | `student_recommendations` | 6 | Yes, through authenticated server boundary after access migration | Legacy table remains the source; taxonomy drift remains | `migrate_then_retire` |
 | `students` | 0 | No current application reference found | Legacy roster shell; references schools/classes | `retire_empty_schema` |
@@ -40,18 +40,15 @@ No production data is deleted, archived, migrated, or rewritten by this change. 
 
 All 80 production rows are tagged `anonymous`, but the table contains submitted answers, authoritative answers, correctness, elapsed time, and scenario/question linkage.
 
-The student dashboard currently reads:
-- a scenario-level performance summary view; and
-- a transcript summary view.
+The P0.5 baseline found two dashboard summary views derived from `question_attempts`.
 
-Both views are derived from `question_attempts`.
+The progress-migration follow-up replaces both direct view reads with an authenticated server API backed by canonical `attempts` and `attempt_answers`. Both canonical queries are scoped to the verified user ID. Student identifiers and the unsupported legacy timing metric are not returned to the browser. The guarded database migration revokes anonymous/authenticated access to the two legacy summary views without recreating them in fresh environments.
 
 Disposition:
-1. migrate dashboard performance/transcript rendering to canonical attempt/answer data served through authenticated server APIs;
-2. remove the legacy summary-view dependency;
-3. retire the additional legacy certification-branded readiness dependency without reproducing that branding in new project artifacts;
-4. verify no external consumer remains;
-5. retire `question_attempts` under a separate destructive migration.
+1. keep the authenticated canonical progress API;
+2. verify no external consumer remains for the legacy views/table;
+3. retire the remaining legacy database dependency without reproducing prohibited branding in new project artifacts;
+4. retire the legacy summary views and `question_attempts` under a separate destructive migration.
 
 ### student_transcripts
 
@@ -120,9 +117,19 @@ The access-migration follow-up:
 
 The table remains a migration target, not a permanent recommendation architecture.
 
-### Legacy views
+### Legacy views — dashboard migration implemented
 
-The two student summary views use `security_invoker=true`, which is the correct Supabase/Postgres pattern for allowing underlying RLS to govern view access. They still remain legacy because they are derived from `question_attempts` rather than the canonical assessment model.
+The baseline views use `security_invoker=true` and derive from `question_attempts`. The dashboard no longer reads either view directly.
+
+The progress-migration follow-up:
+- moves both panels to an authenticated application API;
+- derives progress from canonical `attempts` and `attempt_answers`;
+- scopes both canonical queries to the verified user ID;
+- removes the student identifier and unsupported legacy timing metric from dashboard output;
+- revokes anonymous/authenticated privileges on the two legacy views when they exist;
+- does not recreate legacy views in clean environments.
+
+The views remain retirement targets pending final consumer verification.
 
 ## Ordered cleanup plan
 
@@ -132,10 +139,11 @@ The two student summary views use `security_invoker=true`, which is the correct 
    - anonymous/authenticated table privileges revoked by guarded migration;
    - legacy table retirement remains pending replacement-model/consumer verification.
 
-2. **Performance/transcript migration**
-   - serve student-specific performance from canonical attempts/answers with authenticated ownership checks;
-   - remove dashboard dependency on legacy summary views;
-   - retire legacy summary views and `question_attempts`.
+2. **Performance/transcript migration — implemented**
+   - authenticated canonical progress API added;
+   - dashboard legacy summary-view reads removed;
+   - anonymous/authenticated view privileges revoked by guarded migration;
+   - destructive retirement of the views/table remains pending final consumer verification.
 
 3. **Identified transcript cleanup**
    - verify no retention obligation;
