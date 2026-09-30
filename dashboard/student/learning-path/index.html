@@ -26,14 +26,123 @@
     </nav>
 
     <section id="moduleContent" class="dashboard-card"><div class="tm-learning-path">
-  <p>Track progress by ASE system and diagnostic competency.</p>
+  <p>Track progress by vehicle system and diagnostic competency.</p>
   <div id="learningPathContent"></div>
 </div></section>
+
+    <section class="dashboard-card" aria-labelledby="supplementalReferencesTitle">
+      <h2 id="supplementalReferencesTitle">Supplemental STEM &amp; Technical References</h2>
+      <p>Use these governed references for background reading and source-aware study. Rights vary by source; the labels below show what the platform may reuse.</p>
+      <p id="supplementalReferencesStatus" role="status" aria-live="polite">Loading mapped references…</p>
+      <div id="supplementalReferencesList"></div>
+    </section>
   </main>
 
   <script type="module">
     import { mountShell } from "/theme/shell.js";
     mountShell();
+
+    const referenceStatus = document.getElementById('supplementalReferencesStatus');
+    const referenceList = document.getElementById('supplementalReferencesList');
+
+    function textElement(tag, value, className) {
+      const element = document.createElement(tag);
+      element.textContent = value;
+      if (className) element.className = className;
+      return element;
+    }
+
+    function rightsLabel(source) {
+      const rights = source.rights || {};
+      if (
+        rights.aiRagIngestionAllowed === true &&
+        rights.commercialUseAllowed === true &&
+        rights.directReproductionAllowed === true
+      ) {
+        return 'Reusable with attribution under the recorded license.';
+      }
+      return 'Reference only: citation/linking permitted; platform AI ingestion, direct reproduction, and commercial reuse are disabled.';
+    }
+
+    function renderReference(source, mappings, lessonTitles) {
+      const card = document.createElement('article');
+      card.className = 'tm-card';
+      card.style.marginBottom = '1rem';
+
+      card.appendChild(textElement('h3', source.title || source.id));
+
+      const meta = [
+        source.publisher,
+        source.publicationYear ? String(source.publicationYear) : '',
+        source.subjectArea
+      ].filter(Boolean).join(' · ');
+      if (meta) card.appendChild(textElement('p', meta, 'fine-print'));
+
+      card.appendChild(textElement('p', rightsLabel(source), 'fine-print'));
+
+      const mapped = mappings.filter((mapping) => mapping.reference_id === source.id);
+      if (mapped.length) {
+        card.appendChild(textElement('h4', 'Mapped learning topics'));
+        const list = document.createElement('ul');
+        mapped.forEach((mapping) => {
+          const title = lessonTitles.get(mapping.lesson_plan_id) || mapping.lesson_plan_id;
+          const item = document.createElement('li');
+          item.appendChild(document.createTextNode(title));
+          if (mapping.notes) {
+            item.appendChild(document.createTextNode(' — ' + mapping.notes));
+          }
+          list.appendChild(item);
+        });
+        card.appendChild(list);
+      }
+
+      if (source.canonicalUrl) {
+        const link = document.createElement('a');
+        link.href = source.canonicalUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'Open reference';
+        card.appendChild(link);
+      }
+
+      return card;
+    }
+
+    async function loadSupplementalReferences() {
+      try {
+        const [curriculumResponse, referencesResponse] = await Promise.all([
+          fetch('/api/curriculum', { headers: { Accept: 'application/json' } }),
+          fetch('/api/curriculum/references', { headers: { Accept: 'application/json' } })
+        ]);
+
+        if (!curriculumResponse.ok || !referencesResponse.ok) {
+          throw new Error('Reference services are unavailable.');
+        }
+
+        const curriculum = await curriculumResponse.json();
+        const references = await referencesResponse.json();
+        const lessonTitles = new Map(
+          (curriculum.lessonPlans || []).map((lesson) => [lesson.id, lesson.title])
+        );
+        const sources = Array.isArray(references.data) ? references.data : [];
+        const mappings = Array.isArray(references.mappings) ? references.mappings : [];
+
+        referenceList.replaceChildren();
+        sources.forEach((source) => {
+          referenceList.appendChild(renderReference(source, mappings, lessonTitles));
+        });
+
+        referenceStatus.textContent = sources.length
+          ? 'Showing ' + sources.length + ' governed supplemental reference' + (sources.length === 1 ? '.' : 's.')
+          : 'No supplemental references are mapped yet.';
+      } catch (error) {
+        referenceList.replaceChildren();
+        referenceStatus.textContent =
+          error instanceof Error ? error.message : 'Supplemental references could not be loaded.';
+      }
+    }
+
+    loadSupplementalReferences();
   </script>
 </body>
 </html>
