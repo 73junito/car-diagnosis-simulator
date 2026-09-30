@@ -71,6 +71,20 @@ if (!runtime.includes("'payload_field_not_allowed'")) {
   fail('runtime must fail closed on unexpected payload fields')
 }
 
+if (!/create table if not exists public\.telemetry_events/i.test(migration)) {
+  fail('migration must bootstrap the canonical telemetry table for Supabase preview branches')
+}
+if (!/alter table public\.telemetry_events enable row level security/i.test(migration)) {
+  fail('migration must enable RLS on telemetry_events')
+}
+for (const policy of [
+  'telemetry_events_select_none',
+  'telemetry_events_insert_none',
+  'telemetry_events_update_none',
+  'telemetry_events_delete_none'
+]) {
+  if (!migration.includes(policy)) fail('migration must preserve fail-closed RLS policy: ' + policy)
+}
 if (!/add column if not exists expires_at timestamptz/i.test(migration)) {
   fail('migration must add expires_at')
 }
