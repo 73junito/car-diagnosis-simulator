@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "verified_at": "2026-09-29",
+  "scope": "AutoLearn Pro external processing paths that currently process, may process, or are technically capable of receiving student-related data",
+  "change_type": "governance_only",
+  "statuses": [
+    "active_required",
+    "active_conditional",
+    "supported_not_approved",
+    "non_student_only",
+    "review_required"
+  ],
+  "processors": [
+    {
+      "id": "SPR-001",
+      "provider": "Cloudflare",
+      "service_role": [
+        "worker_api_hosting",
+        "edge_transport",
+        "request_security_metadata",
+        "optional_access_layer"
+      ],
+      "student_data": [
+        "http_request_response_content_in_transit",
+        "end_user_request_metadata",
+        "tutor_request_content_in_transit"
+      ],
+      "status": [
+        "active_required"
+      ],
+      "approval": "infrastructure_required",
+      "contract_evidence": "public_dpa_verified_account_acceptance_review_required",
+      "retention": "account_configuration_review_required",
+      "training_use": "not_applicable_to_hosting_processing",
+      "student_data_allowed": true
+    },
+    {
+      "id": "SPR-002",
+      "provider": "Supabase",
+      "service_role": [
+        "authentication",
+        "postgresql_database",
+        "rest_api"
+      ],
+      "student_data": [
+        "account_identifier",
+        "email",
+        "role",
+        "attempts",
+        "answers",
+        "scores",
+        "telemetry",
+        "student_linked_records"
+      ],
+      "status": [
+        "active_required"
+      ],
+      "approval": "infrastructure_required",
+      "contract_evidence": "public_dpa_verified_account_acceptance_review_required",
+      "retention": "p0_3_required",
+      "training_use": "not_authorized",
+      "student_data_allowed": true
+    },
+    {
+      "id": "SPR-003",
+      "provider": "ollama.autolearnpro.com",
+      "service_role": [
+        "operator_controlled_ai_gateway"
+      ],
+      "student_data": [
+        "scenario_context",
+        "question_context",
+        "student_answer",
+        "topic",
+        "model_request_metadata"
+      ],
+      "status": [
+        "active_conditional",
+        "review_required"
+      ],
+      "approval": "conditional_pending_routing_verification",
+      "contract_evidence": "internal_gateway_ownership_and_downstream_contract_not_established_by_code",
+      "retention": "gateway_logging_review_required",
+      "training_use": "not_authorized",
+      "student_data_allowed": false
+    },
+    {
+      "id": "SPR-004",
+      "provider": "Ollama Cloud",
+      "service_role": [
+        "probable_downstream_model_compute"
+      ],
+      "student_data": [
+        "prompt_content",
+        "generated_response"
+      ],
+      "status": [
+        "active_conditional",
+        "review_required"
+      ],
+      "approval": "probable_not_confirmed",
+      "contract_evidence": "public_privacy_no_training_transient_processing_reviewed_account_level_terms_required",
+      "retention": "public_policy_says_transient_account_level_verification_required",
+      "training_use": "public_policy_says_no_training_account_level_verification_required",
+      "student_data_allowed": false
+    },
+    {
+      "id": "SPR-005",
+      "provider": "Named provider using openai-compatible integration",
+      "service_role": [
+        "alternate_ai_inference"
+      ],
+      "student_data": [
+        "would_receive_tutor_prompt_content_if_configured"
+      ],
+      "status": [
+        "supported_not_approved"
+      ],
+      "approval": "named_provider_review_required_before_use",
+      "contract_evidence": "not_applicable_until_named",
+      "retention": "must_be_defined_before_use",
+      "training_use": "must_be_defined_and_approved_before_use",
+      "student_data_allowed": false
+    },
+    {
+      "id": "SPR-006",
+      "provider": "Resend or SendGrid",
+      "service_role": [
+        "pilot_request_notification"
+      ],
+      "student_data": [
+        "not_approved_for_student_data"
+      ],
+      "status": [
+        "non_student_only"
+      ],
+      "approval": "business_contact_only",
+      "contract_evidence": "outside_student_processing_scope_for_current_flow",
+      "retention": "separate_business_contact_review",
+      "training_use": "not_applicable",
+      "student_data_allowed": false
+    }
+  ],
+  "invariants": [
+    "provider_switch_requires_register_review",
+    "wildcard_provider_type_is_not_student_data_authorization",
+    "no_unrelated_training_on_identifiable_student_records",
+    "public_vendor_policy_does_not_replace_required_contract_review",
+    "authentication_secrets_never_enter_register_or_telemetry",
+    "student_answer_content_remains_student_restricted_in_transit",
+    "unknown_routing_or_retention_keeps_provider_review_required",
+    "pilot_notification_services_are_not_student_data_paths"
+  ]
+}
