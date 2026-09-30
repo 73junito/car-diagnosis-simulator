@@ -117,7 +117,7 @@ Local review on 2026-09-30 confirmed that the classroom schema has an active run
 
 - `torquemind-api/index.js` reads and writes both `classes` and `enrollments`;
 - the browser classroom UI calls the class create/list/join routes;
-- Render deployment configuration and CI smoke/unit workflows actively include `torquemind-api`;
+- Cloudflare production runtime and CI smoke/unit workflows actively include `torquemind-api`;
 - current CI starts the API against the approved staging Supabase project.
 
 Production cleanup completed on 2026-09-30:
