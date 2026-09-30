@@ -7,42 +7,42 @@ function read(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8')
 }
 
-describe('student recommendation access boundary', () => {
+describe('student recommendation retirement boundary', () => {
   const dashboard = read('dashboard/student/student.js')
   const apiRoute = read('api/student/recommendations.js')
   const workerRoute = read('worker/routes/student-recommendations.js')
   const workerIndex = read('worker/index.js')
-  const migration = read('supabase/migrations/20260930162957_restrict_legacy_student_recommendations_access.sql')
+  const migration = read('supabase/migrations/20260930175711_retire_legacy_student_recommendations.sql')
 
-  test('dashboard uses authenticated application API instead of direct table REST access', () => {
+  test('dashboard keeps the authenticated application API contract', () => {
     expect(dashboard).toContain("fetch('/api/student/recommendations'")
     expect(dashboard).toContain('Authorization: `Bearer ${token}`')
     expect(dashboard).not.toContain('/rest/v1/student_recommendations')
   })
 
-  test('server boundaries require bearer authentication and return only approved fields', () => {
+  test('server boundaries authenticate but no longer read the legacy table', () => {
     for (const code of [apiRoute, workerRoute]) {
       expect(code).toContain('extractBearerToken')
       expect(code).toContain('verifySupabaseToken')
-      expect(code).toContain(".select('scenario_id,reason,priority')")
-      expect(code).toContain(".eq('student_id', 'anonymous')")
-      expect(code).not.toMatch(/student_id:\s*row\.student_id/)
-      expect(code).not.toMatch(/competency_code/)
-      expect(code).toContain("code === 'PGRST205'")
-      expect(code).toContain("code === '42P01'")
+      expect(code).toContain('recommendations: []')
+      expect(code).not.toContain(".from('student_recommendations')")
     }
   })
-
-  test('worker route permits Authorization header and exposes only GET', () => {
+  test('worker route remains GET-only with Authorization allowed', () => {
     expect(workerIndex).toContain("app.get('/api/student/recommendations', handleStudentRecommendations)")
     expect(workerIndex).toContain("allowMethods: ['GET', 'OPTIONS']")
     expect(workerIndex).toContain("allowHeaders: ['Content-Type', 'Authorization']")
   })
 
-  test('migration revokes public table access without recreating the legacy table', () => {
+  test('retirement migration is guarded and never cascades', () => {
     expect(migration).toContain("to_regclass('public.student_recommendations')")
-    expect(migration).toContain('revoke all privileges on table public.student_recommendations from anon, authenticated')
-    expect(migration).toContain('grant all privileges on table public.student_recommendations to service_role')
-    expect(migration).not.toMatch(/create\s+table/i)
+    expect(migration).toContain('legacy_rows <> 6')
+    expect(migration).toContain("student_id is distinct from 'anonymous'")
+    expect(migration).toContain('external_fk_count <> 0')
+    expect(migration).toContain('dependent_view_count <> 0')
+    expect(migration).toContain('user_trigger_count <> 0')
+    expect(migration).toContain('routine_ref_count <> 0')
+    expect(migration).toContain('drop table public.student_recommendations restrict')
+    expect(migration).not.toMatch(/cascade/i)
   })
 })

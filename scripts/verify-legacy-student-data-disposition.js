@@ -17,6 +17,7 @@ const allowedDispositions = new Set([
   'retain_schema_clean_rows',
   'retire_empty_schema',
   'retired_verified',
+  'retirement_migration_prepared',
   'blocked'
 ])
 
@@ -64,8 +65,12 @@ if (!retiredProgress || retiredProgress.disposition !== 'retired_verified' || re
 }
 
 const rec = register.assets.find((asset) => asset.id === 'LD-003')
-if (!rec || rec.disposition !== 'migrate_then_retire') {
-  fail('legacy recommendations must be migrate_then_retire')
+if (!rec || rec.disposition !== 'retirement_migration_prepared') {
+  fail('legacy recommendations must be retirement_migration_prepared')
+}
+if (!rec.blockers.includes('application_deployment_verification') ||
+    !rec.blockers.includes('production_backup_restore_review')) {
+  fail('legacy recommendation retirement blockers must remain explicit')
 }
 const recommendationAccess = register.production_facts?.recommendation_access
 if (!recommendationAccess?.baseline_anon_select_policy) {

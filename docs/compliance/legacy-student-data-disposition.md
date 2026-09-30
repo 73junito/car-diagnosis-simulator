@@ -72,15 +72,24 @@ When both gates clear, delete through the approved guarded runbook and preserve 
 
 All six current rows use the anonymous student marker. The P0.5 baseline found an anonymous SELECT policy with an unconditional predicate and a direct student-dashboard REST dependency.
 
-The access-migration follow-up replaces that direct table read with an authenticated server-controlled endpoint. The response is limited to scenario, reason, and priority fields; student identifiers and legacy taxonomy fields are not returned. The database migration revokes anonymous/authenticated table privileges while retaining service-role access.
+The access-migration follow-up replaced direct browser access with an authenticated server-controlled endpoint and revoked anonymous/authenticated table privileges.
 
-Disposition:
-1. keep the authenticated server boundary while the legacy source remains;
-2. migrate any still-valid recommendation semantics to a current neutral taxonomy;
-3. replace the legacy source with a governed recommendation model or remove the feature;
-4. retire the legacy table after consumer verification.
+Retirement review completed on 2026-09-30:
+1. all six rows are anonymous;
+2. no dependent views, user triggers, stored-routine consumers, or incoming foreign keys were found;
+3. recent Supabase logs showed no runtime table access beyond migration activity;
+4. all six scenario IDs remain recognizable training scenarios, but none has a governed neutral competency/curriculum mapping in the production database;
+5. preserving the historical ranking would therefore preserve unsupported taxonomy semantics.
 
-No public student-recommendation table access is authorized.
+Implementation decision:
+- the authenticated recommendation endpoint keeps its response contract but returns an empty recommendation list;
+- the endpoint no longer reads `public.student_recommendations`;
+- recommendation generation remains disabled until a governed neutral model exists;
+- a fail-closed `DROP TABLE ... RESTRICT` retirement migration is prepared with exact row/anonymity and dependency guards;
+- a production transaction-only dry run successfully dropped the table, verified absence, rolled back, and restored all six rows;
+- production table retirement remains blocked until the application change is deployed/verified and production backup/restore behavior is reviewed.
+
+No public legacy recommendation access or assessment-eligibility effect is authorized.
 
 ### students / student / schools
 
