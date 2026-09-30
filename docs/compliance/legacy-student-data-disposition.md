@@ -29,10 +29,10 @@ No production data is deleted, archived, migrated, or rewritten by this change. 
 | `question_attempts` | 0 | No current application dependency | Retired from production on 2026-09-30; all 80 historical anonymous rows and dependent legacy views removed by the approved guarded migration | `retired_verified` |
 | `student_transcripts` | 1 | No direct application reference found | Single identified/linkable transcript row | `delete_after_verification` |
 | `student_recommendations` | 0 | No active table read after production deployment | Retired from production after verified physical backup and guarded migration; authenticated endpoint remains empty until a governed neutral model exists | `retired_verified` |
-| `students` | 0 | No current application reference found | Legacy roster shell; references schools/classes | `retire_empty_schema` |
-| `student` | 0 | No current application reference found | Unstructured legacy placeholder table | `retire_empty_schema` |
+| `students` | 0 | No current application reference found | Retired from production after zero-row/dependency verification; classroom schema remains separate | `retired_verified` |
+| `student` | 0 | No current application reference found | Retired from production after zero-row/dependency verification | `retired_verified` |
 | `enrollments` | 0 | No runtime application reference found; authorization tests exist | Intended classroom authorization surface | `retain_schema_clean_rows` |
-| `schools` | 0 | No current application reference found | Legacy roster dependency of `students` only | `retire_empty_schema` |
+| `schools` | 0 | No current application reference found | Retired from production after child-table retirement removed the legacy roster dependency | `retired_verified` |
 | `classes` | 2,206 | No runtime application reference found; authorization tests exist | All rows belong to one owner; no enrollments, students, assignments, or scenario assignments reference them | `retain_schema_clean_rows` |
 
 ## Detailed findings
@@ -98,10 +98,18 @@ No public legacy recommendation access or assessment-eligibility effect is autho
 
 ### students / student / schools
 
-These tables are empty and no current runtime code dependency was found.
+Retirement completed on 2026-09-30:
+1. local repository inspection found no active Supabase client, REST, or runtime consumer for the three legacy roster shells;
+2. production verification confirmed all three tables contained zero rows;
+3. no incoming foreign keys, dependent views, user triggers, stored-routine consumers, or publication memberships blocked retirement;
+4. the only legacy foreign keys were outgoing from `students` to `classes` and `schools`;
+5. a transaction-only production dry run dropped all three tables with `RESTRICT`, verified `enrollments` and `classes` remained present, rolled back, and restored all three target tables;
+6. the guarded retirement was then executed permanently and all three targets are verified absent;
+7. `enrollments` remains present with 0 rows and `classes` remains present with 2,206 rows.
 
 Disposition:
-- mark for retirement after confirming no migration, external integration, or institution onboarding dependency remains.
+- `students`, `student`, and `schools` are `retired_verified`;
+- preserve the retained classroom schema and continue institution-model review separately.
 
 ### enrollments / classes
 

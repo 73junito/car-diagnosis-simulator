@@ -229,14 +229,14 @@
     },
     {
       "id": "SDI-L04",
-      "system": "public.students + public.student + public.enrollments + public.classes + public.schools",
+      "system": "public.enrollments + public.classes retained; public.students + public.student + public.schools retired",
       "classification": [
         "institution_record",
         "student_restricted",
         "review_required"
       ],
-      "status": "mixed_population",
-      "action": "confirm_institution_model_before_onboarding"
+      "status": "mixed_population_legacy_roster_shells_retired_classroom_schema_retained",
+      "action": "confirm_institution_model_before_onboarding_and_review_unattached_class_rows_separately"
     }
   ],
   "invariants": [

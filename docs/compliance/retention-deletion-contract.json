@@ -184,7 +184,7 @@
         "R03",
         "R07"
       ],
-      "state": "institution_model_confirmation_required"
+      "state": "legacy_roster_shells_retired_classroom_schema_retained_institution_model_confirmation_required"
     }
   ],
   "deletion_lifecycle": [

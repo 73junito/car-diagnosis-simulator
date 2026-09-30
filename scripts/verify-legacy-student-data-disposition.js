@@ -35,8 +35,8 @@ try {
 
 if (register.version !== 2) fail('version must be 2')
 if (register.production_mutation !== true) fail('register must record the approved production retirement')
-if (register.production_mutation_type !== 'approved_guarded_legacy_progress_retirement') {
-  fail('production mutation type must record the approved guarded retirement')
+if (register.production_mutation_type !== 'approved_guarded_legacy_retirements') {
+  fail('production mutation type must record the approved guarded retirements')
 }
 
 if (!Array.isArray(register.assets) || register.assets.length === 0) {
@@ -76,6 +76,50 @@ if (!Array.isArray(rec.production_migration_versions) ||
     !rec.production_migration_versions.includes('20260930191704')) {
   fail('legacy recommendation retirement migration versions must remain recorded')
 }
+const rosterIds = ['LD-004', 'LD-005', 'LD-007']
+for (const id of rosterIds) {
+  const asset = register.assets.find((item) => item.id === id)
+  if (!asset || asset.disposition !== 'retired_verified' || asset.rows !== 0) {
+    fail(id + ' legacy roster shell must be retired_verified with zero production rows')
+  }
+  if (asset.blockers.length !== 0) {
+    fail(id + ' legacy roster shell must have no remaining blockers')
+  }
+}
+
+const rosterFacts = register.production_facts?.roster_shell_retirement
+if (!rosterFacts ||
+    rosterFacts.production_students_present !== false ||
+    rosterFacts.production_student_present !== false ||
+    rosterFacts.production_schools_present !== false ||
+    rosterFacts.enrollments_preserved !== true ||
+    rosterFacts.classes_preserved !== true) {
+  fail('legacy roster retirement production facts must record retired shells and preserved classroom schema')
+}
+
+const rosterMigrationPath = path.join(
+  process.cwd(),
+  'supabase',
+  'migrations',
+  '20260930203051_retire_legacy_roster_shells.sql'
+)
+let rosterMigration
+try {
+  rosterMigration = fs.readFileSync(rosterMigrationPath, 'utf8')
+} catch (error) {
+  fail('legacy roster retirement migration missing: ' + error.message)
+}
+for (const statement of [
+  'drop table public.students restrict',
+  'drop table public.student restrict',
+  'drop table public.schools restrict'
+]) {
+  if (!rosterMigration.includes(statement)) fail('legacy roster retirement migration missing: ' + statement)
+}
+if (rosterMigration.toLowerCase().includes('cascade')) {
+  fail('legacy roster retirement migration must not use CASCADE')
+}
+
 const recommendationAccess = register.production_facts?.recommendation_access
 if (!recommendationAccess?.baseline_anon_select_policy) {
   fail('baseline anonymous recommendation read finding must remain explicit')
@@ -128,5 +172,5 @@ if (!Array.isArray(register.invariants) || register.invariants.length === 0) {
 console.log(
   '[PASS] Legacy student-data disposition: ' +
   register.assets.length +
-  ' assets reviewed; legacy progress retirement applied and verified'
+  ' assets reviewed; guarded legacy retirements applied and verified'
 )
