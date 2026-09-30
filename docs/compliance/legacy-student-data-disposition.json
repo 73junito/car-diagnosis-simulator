@@ -41,11 +41,10 @@
       "active_dependency": true,
       "disposition": "migrate_then_retire",
       "blockers": [
-        "student_dashboard_direct_rest_read",
-        "anonymous_select_policy",
+        "legacy_table_source_dependency",
         "taxonomy_drift"
       ],
-      "next_action": "replace_or_remove_public_dashboard_dependency_then_revoke_anon_access"
+      "next_action": "replace_legacy_table_with_current_governed_recommendation_model_then_retire"
     },
     {
       "id": "LD-004",
@@ -114,9 +113,13 @@
       "students_with_class": 0
     },
     "recommendation_access": {
-      "anon_select_policy": true,
-      "anon_select_predicate": "unconditional",
-      "dashboard_direct_rest_dependency": true
+      "baseline_anon_select_policy": true,
+      "baseline_anon_select_predicate": "unconditional",
+      "baseline_dashboard_direct_rest_dependency": true,
+      "post_migration_anon_select_policy": false,
+      "post_migration_authenticated_select_privilege": false,
+      "post_migration_dashboard_direct_rest_dependency": false,
+      "authenticated_server_boundary": true
     },
     "summary_views": {
       "security_invoker": true,
@@ -124,7 +127,7 @@
     }
   },
   "ordered_cleanup": [
-    "recommendation_access_migration",
+    "recommendation_access_migration_implemented",
     "performance_transcript_migration",
     "identified_transcript_cleanup",
     "empty_roster_shell_retirement",

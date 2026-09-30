@@ -27,7 +27,7 @@ No production data is deleted, archived, migrated, or rewritten by this change. 
 | --- | ---: | --- | --- | --- |
 | `question_attempts` | 80 | Yes, indirectly through two dashboard summary views | Stores selected and authoritative answers; feeds legacy summary views and an additional legacy certification-branded readiness view | `migrate_then_retire` |
 | `student_transcripts` | 1 | No direct application reference found | Single identified/linkable transcript row | `delete_after_verification` |
-| `student_recommendations` | 6 | Yes, direct student-dashboard REST read | Anonymous public SELECT policy; schema/taxonomy drift from current dashboard field naming | `migrate_then_retire` |
+| `student_recommendations` | 6 | Yes, through authenticated server boundary after access migration | Legacy table remains the source; taxonomy drift remains | `migrate_then_retire` |
 | `students` | 0 | No current application reference found | Legacy roster shell; references schools/classes | `retire_empty_schema` |
 | `student` | 0 | No current application reference found | Unstructured legacy placeholder table | `retire_empty_schema` |
 | `enrollments` | 0 | No runtime application reference found; authorization tests exist | Intended classroom authorization surface | `retain_schema_clean_rows` |
@@ -65,17 +65,17 @@ Disposition:
 
 ### student_recommendations
 
-All six current rows use the anonymous student marker. However, the table currently has an anonymous SELECT policy with an unconditional predicate, and the student dashboard directly queries it through the public Supabase REST endpoint.
+All six current rows use the anonymous student marker. The P0.5 baseline found an anonymous SELECT policy with an unconditional predicate and a direct student-dashboard REST dependency.
 
-The dashboard requests a current competency-oriented field name that is not present in the table's legacy schema, indicating taxonomy drift.
+The access-migration follow-up replaces that direct table read with an authenticated server-controlled endpoint. The response is limited to scenario, reason, and priority fields; student identifiers and legacy taxonomy fields are not returned. The database migration revokes anonymous/authenticated table privileges while retaining service-role access.
 
 Disposition:
-1. replace direct public REST access with an authenticated/server-controlled recommendation endpoint or remove the panel until a governed recommendation model exists;
-2. remove anonymous public SELECT access;
-3. migrate any still-valid recommendation semantics to a current neutral taxonomy;
+1. keep the authenticated server boundary while the legacy source remains;
+2. migrate any still-valid recommendation semantics to a current neutral taxonomy;
+3. replace the legacy source with a governed recommendation model or remove the feature;
 4. retire the legacy table after consumer verification.
 
-No new public student-recommendation endpoint is authorized by this review.
+No public student-recommendation table access is authorized.
 
 ### students / student / schools
 
@@ -107,11 +107,18 @@ Disposition:
 
 ## Security findings
 
-### Public recommendation read
+### Public recommendation read — access migration implemented
 
-`student_recommendations` currently permits anonymous SELECT with an unconditional RLS predicate and the anon role has SELECT privilege.
+The baseline review found anonymous SELECT with an unconditional RLS predicate and a direct dashboard dependency.
 
-Because the current dashboard depends on that public path, revocation must be paired with a replacement or removal of the UI dependency. This is a migrate-before-revoke blocker, not approval to keep the public policy indefinitely.
+The access-migration follow-up:
+- moves the dashboard to an authenticated application API;
+- removes direct browser access to the legacy table;
+- revokes anonymous/authenticated table privileges when the legacy table exists;
+- preserves service-role access for the temporary server-side bridge;
+- does not recreate the legacy table in fresh environments.
+
+The table remains a migration target, not a permanent recommendation architecture.
 
 ### Legacy views
 
@@ -119,11 +126,11 @@ The two student summary views use `security_invoker=true`, which is the correct 
 
 ## Ordered cleanup plan
 
-1. **Recommendation access migration**
-   - remove the student dashboard's direct anonymous REST read;
-   - introduce a governed server-side replacement only if recommendations remain a required feature;
-   - revoke anonymous table access;
-   - retire the legacy recommendation table after verification.
+1. **Recommendation access migration — implemented**
+   - dashboard direct table read removed;
+   - authenticated server-side bridge added;
+   - anonymous/authenticated table privileges revoked by guarded migration;
+   - legacy table retirement remains pending replacement-model/consumer verification.
 
 2. **Performance/transcript migration**
    - serve student-specific performance from canonical attempts/answers with authenticated ownership checks;

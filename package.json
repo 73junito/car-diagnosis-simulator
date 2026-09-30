@@ -47,6 +47,7 @@
     "validate:retention-deletion-contract": "node scripts/verify-retention-deletion-contract.js",
     "validate:telemetry-payload-contract": "node scripts/verify-telemetry-payload-contract.js",
     "validate:legacy-student-data-disposition": "node scripts/verify-legacy-student-data-disposition.js",
+    "validate:student-recommendation-access": "node scripts/verify-student-recommendation-access.js",
     "validate:curriculum-schema": "node scripts/verify-curriculum-migration-contract.js",
     "validate:curriculum-api": "node scripts/verify-curriculum-api-contract.js",
     "verify:evidence-workflow": "node scripts/verify-curriculum-evidence-workflow.js",

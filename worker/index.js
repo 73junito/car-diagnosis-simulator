@@ -5,6 +5,7 @@ import { handleScenarioQuestionsApproved } from "./routes/scenario-questions-app
 import { handleGradeScenarioSubmission } from "./routes/scenario-submissions-grade.js";
 import { handleStartAssessmentAttempt } from "./routes/assessment-attempts-start.js";
 import { handleAssessmentAttemptQuestions } from "./routes/assessment-attempt-questions.js";
+import { handleStudentRecommendations } from "./routes/student-recommendations.js";
 import { handleCurriculumRead } from "./routes/curriculum-read.js";
 import { handleCurriculumReferences } from "./routes/curriculum-references.js";
 import {
@@ -82,6 +83,14 @@ app.use('/api/assessment-attempts/:attempt_id/questions/*', cors({
   maxAge: 86400
 }))
 app.get('/api/assessment-attempts/:attempt_id/questions', handleAssessmentAttemptQuestions)
+
+app.use('/api/student/recommendations/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/student/recommendations', handleStudentRecommendations)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
