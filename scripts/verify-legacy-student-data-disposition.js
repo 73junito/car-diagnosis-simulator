@@ -72,6 +72,20 @@ if (recommendationAccess.authenticated_server_boundary !== true) {
   fail('authenticated recommendation server boundary must be recorded')
 }
 
+const summaryViews = register.production_facts?.summary_views
+if (summaryViews?.post_migration_dashboard_direct_rest_dependency !== false) {
+  fail('post-migration dashboard summary-view dependency must be false')
+}
+if (summaryViews?.post_migration_anon_select_privilege !== false) {
+  fail('post-migration anonymous summary-view access must be false')
+}
+if (summaryViews?.post_migration_authenticated_select_privilege !== false) {
+  fail('post-migration authenticated summary-view access must be false')
+}
+if (summaryViews?.authenticated_canonical_server_boundary !== true) {
+  fail('authenticated canonical progress boundary must be recorded')
+}
+
 const classes = register.assets.find((asset) => asset.id === 'LD-008')
 if (!classes || classes.disposition !== 'retain_schema_clean_rows') {
   fail('classroom schema must remain separate from orphan-row cleanup')
