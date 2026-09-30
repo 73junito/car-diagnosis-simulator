@@ -224,7 +224,7 @@
         "student_restricted",
         "review_required"
       ],
-      "status": "retirement_migration_prepared_deployment_verified_pending_current_backup_snapshot",
+      "status": "retired_verified",
       "action": "keep_authenticated_empty_boundary_until_governed_neutral_recommendation_model_exists"
     },
     {

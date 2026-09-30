@@ -65,12 +65,16 @@ if (!retiredProgress || retiredProgress.disposition !== 'retired_verified' || re
 }
 
 const rec = register.assets.find((asset) => asset.id === 'LD-003')
-if (!rec || rec.disposition !== 'retirement_migration_prepared') {
-  fail('legacy recommendations must be retirement_migration_prepared')
+if (!rec || rec.disposition !== 'retired_verified' || rec.rows !== 0) {
+  fail('legacy recommendations must be retired_verified with zero production rows')
 }
-if (rec.blockers.length !== 1 ||
-    rec.blockers[0] !== 'current_backup_snapshot_verification') {
-  fail('legacy recommendation retirement must remain blocked only on current backup snapshot verification')
+if (rec.blockers.length !== 0) {
+  fail('legacy recommendation retirement must have no remaining blockers')
+}
+if (!Array.isArray(rec.production_migration_versions) ||
+    !rec.production_migration_versions.includes('20260930175711') ||
+    !rec.production_migration_versions.includes('20260930191704')) {
+  fail('legacy recommendation retirement migration versions must remain recorded')
 }
 const recommendationAccess = register.production_facts?.recommendation_access
 if (!recommendationAccess?.baseline_anon_select_policy) {
