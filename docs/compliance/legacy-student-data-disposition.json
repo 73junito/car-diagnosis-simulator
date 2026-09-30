@@ -3,7 +3,7 @@
   "verified_at": "2026-09-30",
   "change_type": "governance_post_production_verification",
   "production_mutation": true,
-  "production_mutation_type": "approved_guarded_legacy_progress_retirement",
+  "production_mutation_type": "approved_guarded_legacy_retirements",
   "assets": [
     {
       "id": "LD-001",
@@ -61,22 +61,18 @@
       "system": "public.students",
       "rows": 0,
       "active_dependency": false,
-      "disposition": "retire_empty_schema",
-      "blockers": [
-        "migration_dependency_review"
-      ],
-      "next_action": "confirm_no_external_or_onboarding_dependency"
+      "disposition": "retired_verified",
+      "blockers": [],
+      "next_action": "preserve_retirement_and_keep_classroom_schema_review_separate"
     },
     {
       "id": "LD-005",
       "system": "public.student",
       "rows": 0,
       "active_dependency": false,
-      "disposition": "retire_empty_schema",
-      "blockers": [
-        "migration_dependency_review"
-      ],
-      "next_action": "confirm_no_external_or_onboarding_dependency"
+      "disposition": "retired_verified",
+      "blockers": [],
+      "next_action": "preserve_retirement_and_keep_classroom_schema_review_separate"
     },
     {
       "id": "LD-006",
@@ -94,12 +90,9 @@
       "system": "public.schools",
       "rows": 0,
       "active_dependency": false,
-      "disposition": "retire_empty_schema",
-      "blockers": [
-        "legacy_students_fk",
-        "migration_dependency_review"
-      ],
-      "next_action": "retire_after_students_dependency_review"
+      "disposition": "retired_verified",
+      "blockers": [],
+      "next_action": "preserve_retirement_and_keep_classroom_schema_review_separate"
     },
     {
       "id": "LD-008",
@@ -116,6 +109,16 @@
   ],
   "production_facts": {
     "classes_distinct_owners": 1,
+    "roster_shell_retirement": {
+      "production_students_present": false,
+      "production_student_present": false,
+      "production_schools_present": false,
+      "enrollments_preserved": true,
+      "classes_preserved": true,
+      "production_transaction_dry_run": "passed_drop_verified_and_rolled_back_all_three_tables_restored",
+      "production_direct_execution": "passed_guarded_drop_restrict",
+      "repository_migration": "20260930203051_retire_legacy_roster_shells.sql"
+    },
     "class_linkages": {
       "assignments_with_class": 0,
       "scenario_assignments_with_class": 0,
@@ -154,7 +157,7 @@
     "performance_transcript_migration_implemented",
     "legacy_progress_retirement_verified_complete",
     "identified_transcript_cleanup",
-    "empty_roster_shell_retirement",
+    "empty_roster_shell_retirement_verified_complete",
     "classroom_orphan_row_review"
   ],
   "destructive_gates": [
