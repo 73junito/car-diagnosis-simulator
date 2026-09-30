@@ -30,7 +30,7 @@ This document does not authorize new collection or reuse. Unknown or schemaless 
 | SDI-002 | `public.attempts` | attempt UUID, user UUID, scenario, delivery/workflow mode, status, score, completion state, JSON payload, timestamps | `student_restricted` | Assessment/training attempt lifecycle | Confirmed active code path |
 | SDI-003 | `public.attempt_answers` | attempt/question/user UUIDs, submitted answer, correctness, submission time | `student_restricted` | Server-side grading audit trail | Confirmed active code path |
 | SDI-004 | `public.attempt_questions` | attempt/question linkage, sequence, assignment time | `student_restricted` | Bind approved questions to an assessment attempt | Confirmed active code path |
-| SDI-005 | `public.telemetry_events` | session ID, optional user UUID, event type, schemaless JSON payload, source, timestamp | `student_restricted` + `review_required` | Product/session telemetry and instructor session history | Confirmed active; payload schema needs control |
+| SDI-005 | `public.telemetry_events` | session ID, optional user UUID, event type, allowlisted JSON payload, source, timestamp, logical expiry | `student_restricted` | Product/session telemetry and instructor session history | P0.4 allowlisted public ingress; 30-day logical TTL; physical purge deferred |
 | SDI-006 | AI tutor request transit | scenario, question, student answer, topic, provider/model request metadata | `student_restricted` | Training-mode instructional feedback | Confirmed transient processing; blocked in official assessment mode |
 | SDI-007 | Browser session/local storage | authentication session/token, assessment attempt ID, delivery mode | `authentication_secret` + `student_restricted` | Maintain authenticated session and attempt context | Confirmed active |
 | SDI-008 | Instructor analytics aggregation | student/user identifier, session count, average score, average confidence when source report exists | `student_restricted`; aggregate output may qualify as `deidentified_aggregate` only after review | Instructor analytics | Code path exists; current local report file absent |
@@ -63,7 +63,7 @@ This processing remains `student_restricted`. Provider-side retention, training,
 
 ### Telemetry
 
-`telemetry_events.payload_json` is schemaless. Because payload shape is not enforced by the database, telemetry must be treated as `student_restricted` whenever a user/session can be linked to a student, and payload fields must not contain credentials, answer keys, unnecessary student text, biometric data, precise geolocation, or sensitive survey/health data.
+`telemetry_events.payload_json` remains a JSONB column, but P0.4 now enforces an allowlisted schema at the public telemetry ingress. Telemetry remains `student_restricted` whenever a user/session can be linked to a student, and credentials, answer keys, unnecessary student text, biometric data, precise geolocation, and sensitive survey/health data remain prohibited.
 
 ## P0 rules established by this inventory
 
@@ -88,9 +88,9 @@ Record every external service that may receive student-related data, including p
 
 Define retention by asset class and deployment context, with institution-requested deletion, account closure, legal/security holds, backups, telemetry, exports, and legacy data explicitly covered.
 
-### P0.4 — Telemetry payload contract
+### P0.4 — Telemetry payload contract — implemented
 
-Replace unconstrained telemetry assumptions with an allowlisted event schema and prohibited-field list. Add tests that reject authentication secrets and disallowed student-content fields.
+Public telemetry now uses an allowlisted event schema, prohibited-field controls, focused tests, and a 30-day logical TTL. Physical purge automation remains separately gated by the retention/deletion contract.
 
 ### P0.5 — Legacy disposition review
 

@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "verified_at": "2026-09-29",
+  "ttl_days": 30,
+  "ttl_mode": "logical_expiry",
+  "physical_purge": "deferred_pending_separate_authorized_deletion_automation",
+  "public_ingress": {
+    "allowed_top_level_fields": [
+      "session_id",
+      "event_type",
+      "payload_json"
+    ],
+    "prohibited_top_level_examples": [
+      "user_id",
+      "source",
+      "expires_at",
+      "token",
+      "authorization"
+    ],
+    "allowed_events": {
+      "scenario_started": {
+        "required_payload_fields": [
+          "scenario_id"
+        ],
+        "optional_payload_fields": [
+          "scenario_key",
+          "symptom_category"
+        ],
+        "purpose": "student_dashboard_navigation_telemetry"
+      }
+    }
+  },
+  "storage": {
+    "table": "public.telemetry_events",
+    "expiry_column": "expires_at",
+    "expiry_formula": "created_at + 30 days",
+    "reads_hide_expired_rows": true,
+    "existing_rows_backfilled": true
+  },
+  "prohibited_content": [
+    "authentication_secrets",
+    "authorization_headers",
+    "student_answers",
+    "answer_keys",
+    "grades_or_scores",
+    "email_addresses",
+    "student_names",
+    "biometric_identifiers",
+    "voice_recordings",
+    "photos",
+    "precise_geolocation",
+    "health_or_disability_information",
+    "sensitive_survey_responses",
+    "ai_prompts_or_responses"
+  ],
+  "invariants": [
+    "unknown_client_event_types_fail_closed",
+    "unexpected_top_level_fields_fail_closed",
+    "unexpected_payload_fields_fail_closed",
+    "client_cannot_assert_user_id",
+    "client_cannot_override_source_or_expiry",
+    "expired_rows_hidden_from_normal_history_and_export",
+    "thirty_day_ttl_is_internal_minimization_policy_not_statutory_claim",
+    "physical_purge_requires_separate_authorized_change"
+  ]
+}

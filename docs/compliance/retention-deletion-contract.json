@@ -59,7 +59,7 @@
         "account_or_institution_request_when_linkable",
         "purpose_termination"
       ],
-      "configuration_state": "ttl_required_before_expansion"
+      "configuration_state": "30_day_logical_ttl_active_physical_purge_deferred"
     },
     {
       "id": "R06",
@@ -123,7 +123,7 @@
       "classes": [
         "R05"
       ],
-      "state": "exact_ttl_unresolved_expansion_blocked"
+      "state": "30_day_logical_ttl_active_physical_purge_deferred"
     },
     {
       "asset_id": "SDI-006",
