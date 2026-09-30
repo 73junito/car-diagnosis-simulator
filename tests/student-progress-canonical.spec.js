@@ -87,7 +87,7 @@ describe('canonical student progress', () => {
   })
 
   test('legacy view access migration is guarded and does not recreate legacy views', () => {
-    const migration = read('supabase/migrations/20260930143909_restrict_legacy_student_summary_views.sql')
+    const migration = read('supabase/migrations/20260930163022_restrict_legacy_student_summary_views.sql')
 
     expect(migration).toContain("to_regclass('public.student_performance_summary')")
     expect(migration).toContain("to_regclass('public.student_transcript_summary')")

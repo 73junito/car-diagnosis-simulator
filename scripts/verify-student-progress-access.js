@@ -8,7 +8,7 @@ const dashboard = fs.readFileSync(path.join(root, 'dashboard', 'student', 'stude
 const apiRoute = fs.readFileSync(path.join(root, 'api', 'student', 'progress.js'), 'utf8')
 const workerRoute = fs.readFileSync(path.join(root, 'worker', 'routes', 'student-progress.js'), 'utf8')
 const migration = fs.readFileSync(
-  path.join(root, 'supabase', 'migrations', '20260930143909_restrict_legacy_student_summary_views.sql'),
+  path.join(root, 'supabase', 'migrations', '20260930163022_restrict_legacy_student_summary_views.sql'),
   'utf8'
 )
 

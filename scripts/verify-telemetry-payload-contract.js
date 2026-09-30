@@ -10,7 +10,7 @@ const migrationPath = path.join(
   root,
   'supabase',
   'migrations',
-  '20260930040019_enforce_telemetry_payload_contract_and_ttl.sql'
+  '20260930162904_enforce_telemetry_payload_contract_and_ttl.sql'
 )
 
 function fail(message) {

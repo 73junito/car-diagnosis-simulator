@@ -8,7 +8,7 @@ const migrationPath = path.join(
   root,
   'supabase',
   'migrations',
-  '20260930145732_retire_legacy_student_progress.sql'
+  '20260930153300_retire_legacy_student_progress.sql'
 )
 const migration = fs.readFileSync(migrationPath, 'utf8')
 const prompt = fs.readFileSync(path.join(root, 'prompts', 'ai-team', 'adaptive-learning.md'), 'utf8')

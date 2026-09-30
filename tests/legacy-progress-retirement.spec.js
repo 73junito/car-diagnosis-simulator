@@ -3,7 +3,7 @@ const path = require('path')
 
 const root = process.cwd()
 const migration = fs.readFileSync(
-  path.join(root, 'supabase', 'migrations', '20260930145732_retire_legacy_student_progress.sql'),
+  path.join(root, 'supabase', 'migrations', '20260930153300_retire_legacy_student_progress.sql'),
   'utf8'
 )
 

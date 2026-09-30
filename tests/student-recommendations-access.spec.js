@@ -12,7 +12,7 @@ describe('student recommendation access boundary', () => {
   const apiRoute = read('api/student/recommendations.js')
   const workerRoute = read('worker/routes/student-recommendations.js')
   const workerIndex = read('worker/index.js')
-  const migration = read('supabase/migrations/20260930045405_restrict_legacy_student_recommendations_access.sql')
+  const migration = read('supabase/migrations/20260930162957_restrict_legacy_student_recommendations_access.sql')
 
   test('dashboard uses authenticated application API instead of direct table REST access', () => {
     expect(dashboard).toContain("fetch('/api/student/recommendations'")
