@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "verified_at": "2026-09-29",
+  "change_type": "governance_only",
+  "production_mutation": false,
+  "assets": [
+    {
+      "id": "LD-001",
+      "system": "public.question_attempts",
+      "rows": 80,
+      "identified_rows": 0,
+      "anonymous_rows": 80,
+      "active_dependency": true,
+      "disposition": "migrate_then_retire",
+      "blockers": [
+        "student_dashboard_summary_views",
+        "legacy_certification_readiness_dependency"
+      ],
+      "next_action": "replace_dashboard_summary_dependencies_with_authenticated_canonical_assessment_api"
+    },
+    {
+      "id": "LD-002",
+      "system": "public.student_transcripts",
+      "rows": 1,
+      "identified_rows": 1,
+      "anonymous_rows": 0,
+      "active_dependency": false,
+      "disposition": "delete_after_verification",
+      "blockers": [
+        "retention_obligation_check",
+        "external_consumer_check"
+      ],
+      "next_action": "run_consumer_and_retention_verification_before_deletion"
+    },
+    {
+      "id": "LD-003",
+      "system": "public.student_recommendations",
+      "rows": 6,
+      "identified_rows": 0,
+      "anonymous_rows": 6,
+      "active_dependency": true,
+      "disposition": "migrate_then_retire",
+      "blockers": [
+        "student_dashboard_direct_rest_read",
+        "anonymous_select_policy",
+        "taxonomy_drift"
+      ],
+      "next_action": "replace_or_remove_public_dashboard_dependency_then_revoke_anon_access"
+    },
+    {
+      "id": "LD-004",
+      "system": "public.students",
+      "rows": 0,
+      "active_dependency": false,
+      "disposition": "retire_empty_schema",
+      "blockers": [
+        "migration_dependency_review"
+      ],
+      "next_action": "confirm_no_external_or_onboarding_dependency"
+    },
+    {
+      "id": "LD-005",
+      "system": "public.student",
+      "rows": 0,
+      "active_dependency": false,
+      "disposition": "retire_empty_schema",
+      "blockers": [
+        "migration_dependency_review"
+      ],
+      "next_action": "confirm_no_external_or_onboarding_dependency"
+    },
+    {
+      "id": "LD-006",
+      "system": "public.enrollments",
+      "rows": 0,
+      "active_dependency": false,
+      "disposition": "retain_schema_clean_rows",
+      "blockers": [
+        "classroom_authorization_contract_still_tested"
+      ],
+      "next_action": "retain_schema_and_freeze_expansion_until_institution_model_approved"
+    },
+    {
+      "id": "LD-007",
+      "system": "public.schools",
+      "rows": 0,
+      "active_dependency": false,
+      "disposition": "retire_empty_schema",
+      "blockers": [
+        "legacy_students_fk",
+        "migration_dependency_review"
+      ],
+      "next_action": "retire_after_students_dependency_review"
+    },
+    {
+      "id": "LD-008",
+      "system": "public.classes",
+      "rows": 2206,
+      "active_dependency": false,
+      "disposition": "retain_schema_clean_rows",
+      "blockers": [
+        "single_owner_row_set_requires_owner_use_review",
+        "classroom_authorization_contract_still_tested"
+      ],
+      "next_action": "review_2206_unattached_rows_for_archive_or_delete_without_dropping_schema"
+    }
+  ],
+  "production_facts": {
+    "classes_distinct_owners": 1,
+    "class_linkages": {
+      "assignments_with_class": 0,
+      "scenario_assignments_with_class": 0,
+      "enrollments": 0,
+      "students_with_class": 0
+    },
+    "recommendation_access": {
+      "anon_select_policy": true,
+      "anon_select_predicate": "unconditional",
+      "dashboard_direct_rest_dependency": true
+    },
+    "summary_views": {
+      "security_invoker": true,
+      "derive_from": "public.question_attempts"
+    }
+  },
+  "ordered_cleanup": [
+    "recommendation_access_migration",
+    "performance_transcript_migration",
+    "identified_transcript_cleanup",
+    "empty_roster_shell_retirement",
+    "classroom_orphan_row_review"
+  ],
+  "destructive_gates": [
+    "dependency_report",
+    "row_count_dry_run",
+    "legal_security_hold_check",
+    "current_consumer_inventory",
+    "rollback_recovery_strategy",
+    "backup_restore_review",
+    "explicit_authorized_execution",
+    "post_change_application_and_rls_verification"
+  ],
+  "invariants": [
+    "no_production_mutation_in_p0_5_review",
+    "public_recommendation_access_is_not_approved_long_term",
+    "migrate_before_revoke_when_current_ui_depends_on_legacy_asset",
+    "identified_transcript_requires_strictest_deletion_review",
+    "retain_classroom_schema_separately_from_orphan_row_retention",
+    "do_not_reproduce_legacy_certification_branding_in_new_artifacts"
+  ]
+}
