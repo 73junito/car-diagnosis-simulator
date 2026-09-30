@@ -53,13 +53,20 @@ Disposition — complete:
 
 ### student_transcripts
 
-The table contains one identified/linkable row. No current application code reference was found.
+The table contains one identified/linkable row.
 
-Disposition:
-1. verify no export/report process consumes the table;
-2. determine whether the row has any contractual/institution retention requirement;
-3. if none applies, delete through the approved deletion runbook;
-4. preserve only minimal deletion evidence, not the transcript content itself.
+Verification completed on 2026-09-30:
+1. repository runtime/export search found no current consumer of `public.student_transcripts`;
+2. the active transcript UI/API uses the canonical authenticated student-progress path instead;
+3. a 24-hour Supabase log review found no observed `student_transcripts` access;
+4. the table has no incoming foreign-key references and no dependent views.
+
+Deletion remains blocked by governance, not by application dependencies:
+1. the retention contract classifies this legacy asset under R03/R04 + R07 and freezes it pending institution-record determination;
+2. production backup/restore behavior has not yet been verified through the available project tooling;
+3. no destructive production deletion is authorized until both gates are satisfied.
+
+When both gates clear, delete through the approved guarded runbook and preserve only minimal deletion evidence, not transcript content.
 
 ### student_recommendations
 

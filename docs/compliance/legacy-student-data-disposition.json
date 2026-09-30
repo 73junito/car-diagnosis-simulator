@@ -24,12 +24,14 @@
       "identified_rows": 1,
       "anonymous_rows": 0,
       "active_dependency": false,
+      "consumer_verification": "complete_no_current_runtime_export_or_recent_log_consumer_found",
+      "dependency_verification": "complete_no_external_foreign_keys_or_dependent_views",
       "disposition": "delete_after_verification",
       "blockers": [
-        "retention_obligation_check",
-        "external_consumer_check"
+        "institution_record_determination",
+        "production_backup_restore_review"
       ],
-      "next_action": "run_consumer_and_retention_verification_before_deletion"
+      "next_action": "resolve_institution_record_status_and_backup_restore_behavior_before_authorizing_deletion"
     },
     {
       "id": "LD-003",
