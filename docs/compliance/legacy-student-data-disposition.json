@@ -1,22 +1,21 @@
 {
-  "version": 1,
-  "verified_at": "2026-09-29",
-  "change_type": "governance_only",
-  "production_mutation": false,
+  "version": 2,
+  "verified_at": "2026-09-30",
+  "change_type": "governance_post_production_verification",
+  "production_mutation": true,
+  "production_mutation_type": "approved_guarded_legacy_progress_retirement",
   "assets": [
     {
       "id": "LD-001",
       "system": "public.question_attempts",
-      "rows": 80,
+      "rows": 0,
+      "historical_rows_retired": 80,
       "identified_rows": 0,
-      "anonymous_rows": 80,
+      "anonymous_rows_retired": 80,
       "active_dependency": false,
-      "disposition": "migrate_then_retire",
-      "blockers": [
-        "production_migration_application",
-        "post_drop_verification"
-      ],
-      "next_action": "apply_guarded_retirement_migration_then_verify_legacy_objects_absent"
+      "disposition": "retired_verified",
+      "blockers": [],
+      "next_action": "none_legacy_progress_retirement_complete"
     },
     {
       "id": "LD-002",
@@ -128,13 +127,18 @@
       "post_migration_dashboard_direct_rest_dependency": false,
       "post_migration_anon_select_privilege": false,
       "post_migration_authenticated_select_privilege": false,
-      "authenticated_canonical_server_boundary": true
+      "authenticated_canonical_server_boundary": true,
+      "production_legacy_table_present": false,
+      "production_legacy_summary_views_present": false,
+      "canonical_attempts_present": true,
+      "canonical_attempt_answers_present": true,
+      "production_migration_history_name": "retire_legacy_student_progress"
     }
   },
   "ordered_cleanup": [
     "recommendation_access_migration_implemented",
     "performance_transcript_migration_implemented",
-    "legacy_progress_retirement_migration_prepared",
+    "legacy_progress_retirement_verified_complete",
     "identified_transcript_cleanup",
     "empty_roster_shell_retirement",
     "classroom_orphan_row_review"
@@ -150,7 +154,7 @@
     "post_change_application_and_rls_verification"
   ],
   "invariants": [
-    "no_production_mutation_in_p0_5_review",
+    "production_retirement_requires_approved_migration_and_post_change_verification",
     "public_recommendation_access_is_not_approved_long_term",
     "migrate_before_revoke_when_current_ui_depends_on_legacy_asset",
     "identified_transcript_requires_strictest_deletion_review",
