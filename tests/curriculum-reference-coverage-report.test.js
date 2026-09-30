@@ -119,10 +119,22 @@ describe('curriculum reference coverage audit', () => {
   })
 
   test('renders a markdown audit with the all-lesson coverage table', () => {
-    const markdown = renderMarkdown(buildCoverage(curriculum, references))
+    const escapedCurriculum = {
+      lessonPlans: [
+        ...curriculum.lessonPlans,
+        {
+          id: 'ug-path\\with-pipe|example',
+          title: 'Path \\ and | delimiter',
+          academicLevel: 'undergraduate',
+          courseId: 'escape-test',
+          status: 'planned'
+        }
+      ]
+    }
+    const markdown = renderMarkdown(buildCoverage(escapedCurriculum, references))
     expect(markdown).toContain('# Curriculum Reference Coverage Audit')
     expect(markdown).toContain('Regenerate with: `npm run audit:curriculum-references`.')
-    expect(markdown).toContain('Overall coverage: **2/3 lessons (66.7%)**.')
+    expect(markdown).toContain('Overall coverage: **2/4 lessons (50%)**.')
     expect(markdown).toContain('## Uncovered-domain audit hints')
     expect(markdown).toContain('| computing / data science | 1 |')
     expect(markdown).toContain('ug-electrical-charging-system')
@@ -130,6 +142,8 @@ describe('curriculum reference coverage audit', () => {
     expect(markdown).toContain(
       'Suggested gap domains are deterministic audit hints only; they do not authorize or select a source.'
     )
+    expect(markdown).toContain('ug-path\\\\with-pipe\\|example')
+    expect(markdown).toContain('Path \\\\ and \\| delimiter')
   })
 
   test('parses threshold and output arguments', () => {
