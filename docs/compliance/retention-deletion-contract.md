@@ -31,7 +31,7 @@ This contract does not execute deletion, alter database foreign keys, change pro
 | R02 account_lifecycle | profile/email/role and account-linked preferences needed to operate an account | while account is active and purpose remains valid | validated account-closure request; operational completion target 30 calendar days |
 | R03 institution_controlled | rosters, enrollments, classes, institution-managed roles | institution-configured; no indefinite default | institution request, contract end, valid student/parent request where applicable, or configured schedule |
 | R04 assessment_record | attempts, assigned questions, submitted answers, scores/completion records | institution-configured for institutional deployments; purpose-bound for direct users | institution request, account closure where no overriding lawful/contractual need exists, or configured schedule |
-| R05 telemetry_minimized | user/session-linked telemetry | shortest period needed for product/security purpose; exact production TTL must be configured before expansion | TTL expiry, account/institution deletion request where linkable, or purpose termination |
+| R05 telemetry_minimized | user/session-linked telemetry | 30-day logical TTL for approved telemetry; physical purge automation remains separately gated | TTL expiry, account/institution deletion request where linkable, or purpose termination |
 | R06 ai_transient | tutor prompt/response content | no application archival by default; downstream retention must be verified and approved | request completion plus provider/gateway deletion or expiry according to approved terms |
 | R07 legacy_frozen | review_required legacy tables/views/exports | no new use; retain only until disposition review establishes lawful purpose or deletion plan | approved migrate/archive/delete decision |
 | R08 security_legal_hold | narrowly scoped records required for incident response, fraud/security investigation, litigation preservation, or other legal duty | only for documented hold scope and duration | hold release or legal requirement expiration |
@@ -44,7 +44,7 @@ This contract does not execute deletion, alter database foreign keys, change pro
 | SDI-002 attempts | R04 | institution-configurable retention required before institutional scale |
 | SDI-003 attempt_answers | R04 | follows parent attempt/student deletion scope unless a documented hold applies |
 | SDI-004 attempt_questions | R04 | linkage record follows parent attempt deletion scope |
-| SDI-005 telemetry_events | R05 | exact TTL unresolved; expansion blocked until payload contract + TTL are approved |
+| SDI-005 telemetry_events | R05 | P0.4 establishes a 30-day logical TTL and allowlisted public payload contract; physical purge automation remains deferred |
 | SDI-006 AI tutor request transit | R06 | application should not persist prompt/response merely for convenience; gateway/downstream retention remains review-required |
 | SDI-007 browser/session storage | R01 | clear on sign-out/session expiry where technically applicable |
 | SDI-008 instructor analytics aggregation | R04 or deidentified aggregate | identifiable source follows underlying student records; truly deidentified aggregate may be retained separately only after deidentification review |
@@ -153,6 +153,6 @@ No production deletion automation may be merged until:
 - FTC COPPA FAQ: https://www.ftc.gov/business-guidance/resources/complying-coppa-frequently-asked-questions
 - FTC COPPA compliance plan: https://www.ftc.gov/business-guidance/resources/childrens-online-privacy-protection-rule-six-step-compliance-plan-your-business
 
-## Next P0 slice
+## Next retention implementation
 
-P0.4 should establish an allowlisted telemetry payload contract and a concrete production TTL before student-linked telemetry expands beyond the currently documented events.
+P0.4 establishes the allowlisted telemetry payload contract and 30-day logical TTL. Physical purge automation remains a separate implementation that must satisfy the destructive-operation gates in this contract before production use.

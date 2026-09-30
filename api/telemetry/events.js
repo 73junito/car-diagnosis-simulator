@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const storage = require('./storage');
+const { validateClientTelemetryEvent } = require('./contract');
 
 const telemetryEmitter = new EventEmitter();
 let _idCounter = 1;
@@ -63,9 +64,14 @@ async function handler(req, res) {
       ? req.body
       : JSON.parse(req.body || '{}');
 
-    const event = addTelemetryEvent(body);
+    const validation = validateClientTelemetryEvent(body);
+    if (!validation.ok) {
+      return res.status(400).json({ ok: false, error: validation.error });
+    }
+
+    const event = addTelemetryEvent(validation.event);
     if (!event) {
-      return res.status(400).json({ ok: false, error: 'Invalid event' });
+      return res.status(400).json({ ok: false, error: 'invalid_event' });
     }
 
     const saved = await storage.saveTelemetryEvent({

@@ -160,3 +160,37 @@ describe('telemetry storage adapter', () => {
     expect(listResult.data).toEqual([]);
   });
 });
+
+
+describe('telemetry logical expiry filtering', () => {
+  afterEach(() => {
+    jest.resetModules()
+    jest.clearAllMocks()
+    setStorageEnv()
+  })
+
+  test('listTelemetryEvents hides expired rows and keeps unexpired/pre-migration rows', async () => {
+    const data = [
+      { id: 'expired', expires_at: '2026-01-01T00:00:00.000Z' },
+      { id: 'future', expires_at: '2999-01-01T00:00:00.000Z' },
+      { id: 'legacy-no-expiry' }
+    ]
+    const limitMock = jest.fn().mockResolvedValue({ data, error: null })
+    const orderMock = jest.fn(() => ({ limit: limitMock }))
+    const selectMock = jest.fn(() => ({ order: orderMock }))
+    const fromMock = jest.fn(() => ({ select: selectMock }))
+
+    const { adapter } = loadStorage({
+      env: {
+        SUPABASE_URL: 'https://example.supabase.co',
+        SUPABASE_SERVICE_ROLE_KEY: 'service-key'
+      },
+      client: { from: fromMock }
+    })
+
+    const result = await adapter.listTelemetryEvents({ limit: 10 })
+
+    expect(result.ok).toBe(true)
+    expect(result.data.map((row) => row.id)).toEqual(['future', 'legacy-no-expiry'])
+  })
+})

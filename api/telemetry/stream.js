@@ -1,5 +1,6 @@
 const express = require('express');
 const telemetry = require('../../lib/telemetry');
+const { validateClientTelemetryEvent } = require('./contract');
 
 const TELEMETRY_EVENT_LIMIT_BYTES = 10 * 1024;
 const telemetryEventJson = express.json({
@@ -104,7 +105,11 @@ function registerTelemetryRoutes(app, emitter = telemetry.streamEmitter) {
     app.post('/api/telemetry/events', parseTelemetryEventBody, async (req, res) => {
     try {
       const json = req.body && typeof req.body === 'object' ? req.body : {};
-      const result = await telemetry.saveEvent(json);
+      const validation = validateClientTelemetryEvent(json);
+      if (!validation.ok) {
+        return res.status(400).json({ ok: false, error: validation.error });
+      }
+      const result = await telemetry.saveEvent(validation.event);
       if (!result || result.ok === false) return res.status(400).json({ ok: false, error: 'invalid_event' });
       return res.json({ ok: true });
     } catch (e) {

@@ -105,18 +105,18 @@
         "event_type",
         "payload_json",
         "source",
-        "created_at"
+        "created_at",
+        "expires_at"
       ],
       "classification": [
-        "student_restricted",
-        "review_required"
+        "student_restricted"
       ],
       "purpose": [
         "product_telemetry",
         "session_history"
       ],
-      "status": "confirmed_active_payload_contract_missing",
-      "retention": "not_yet_defined"
+      "status": "confirmed_active_p0_4_payload_contract_and_logical_ttl",
+      "retention": "30_days_logical_expiry_physical_purge_deferred"
     },
     {
       "id": "SDI-006",

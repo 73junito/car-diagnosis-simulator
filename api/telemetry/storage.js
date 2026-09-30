@@ -2,6 +2,8 @@
 // Uses SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_ANON_KEY) when present.
 // Fails gracefully when not configured.
 
+const { isTelemetryRowExpired } = require('./contract');
+
 let supabase = null;
 let _lastConfig = { url: null, key: null };
 
@@ -72,7 +74,10 @@ async function listTelemetryEvents({ sessionId, limit = 100 } = {}) {
 
   const { data, error } = await query;
   if (error) return { ok: false, error, data: [] };
-  return { ok: true, data };
+  const visible = Array.isArray(data)
+    ? data.filter((row) => !isTelemetryRowExpired(row))
+    : [];
+  return { ok: true, data: visible };
 }
 
 module.exports = {

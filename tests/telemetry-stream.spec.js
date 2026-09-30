@@ -125,9 +125,9 @@ test('POST /api/telemetry/events accepts pre-parsed body and enforces size from 
     const finalHandler = handlers[handlers.length - 1];
     const req = new EventEmitter();
     const body = {
-      type: 'telemetry.event',
-      timestamp: '2026-05-21T00:00:00.000Z',
-      payload: 'x',
+      session_id: 'student-dashboard',
+      event_type: 'scenario_started',
+      payload_json: { scenario_id: 1, scenario_key: 'charging-system' },
     };
     req.body = body;
     req._body = true; // simulate upstream express.json() already parsed this request
