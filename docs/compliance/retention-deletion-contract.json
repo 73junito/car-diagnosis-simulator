@@ -1,0 +1,221 @@
+{
+  "version": 1,
+  "verified_at": "2026-09-29",
+  "change_type": "governance_only",
+  "operational_targets": {
+    "direct_user_account_closure_days": 30,
+    "kansas_school_request_days": 30,
+    "coppa_parent_guardian_request_days": 30,
+    "note": "These are internal project targets, not statements that every law imposes the same deadline."
+  },
+  "retention_classes": [
+    {
+      "id": "R01",
+      "name": "session_ephemeral",
+      "rule": "shortest_practical_session_lifetime",
+      "delete_on": [
+        "sign_out",
+        "session_expiry",
+        "security_revocation",
+        "account_closure"
+      ]
+    },
+    {
+      "id": "R02",
+      "name": "account_lifecycle",
+      "rule": "while_account_active_and_purpose_valid",
+      "delete_on": [
+        "validated_account_closure"
+      ],
+      "target_days": 30
+    },
+    {
+      "id": "R03",
+      "name": "institution_controlled",
+      "rule": "institution_configured_no_indefinite_default",
+      "delete_on": [
+        "institution_request",
+        "contract_end",
+        "valid_student_or_parent_request_where_applicable",
+        "configured_schedule"
+      ]
+    },
+    {
+      "id": "R04",
+      "name": "assessment_record",
+      "rule": "institution_configured_for_institutional_deployments_purpose_bound_for_direct_users",
+      "delete_on": [
+        "institution_request",
+        "account_closure_without_overriding_lawful_need",
+        "configured_schedule"
+      ]
+    },
+    {
+      "id": "R05",
+      "name": "telemetry_minimized",
+      "rule": "shortest_period_needed_for_product_or_security_purpose",
+      "delete_on": [
+        "ttl_expiry",
+        "account_or_institution_request_when_linkable",
+        "purpose_termination"
+      ],
+      "configuration_state": "ttl_required_before_expansion"
+    },
+    {
+      "id": "R06",
+      "name": "ai_transient",
+      "rule": "no_application_archival_by_default",
+      "delete_on": [
+        "request_completion_plus_approved_provider_expiry_or_deletion"
+      ],
+      "configuration_state": "provider_retention_must_be_verified"
+    },
+    {
+      "id": "R07",
+      "name": "legacy_frozen",
+      "rule": "no_new_use_until_disposition_review",
+      "delete_on": [
+        "approved_migrate_archive_or_delete_decision"
+      ]
+    },
+    {
+      "id": "R08",
+      "name": "security_legal_hold",
+      "rule": "minimum_scope_for_documented_hold_only",
+      "delete_on": [
+        "hold_release",
+        "legal_requirement_expiration"
+      ]
+    }
+  ],
+  "asset_mapping": [
+    {
+      "asset_id": "SDI-001",
+      "classes": [
+        "R01",
+        "R02"
+      ],
+      "state": "30_day_account_closure_target_provider_backup_log_review_required"
+    },
+    {
+      "asset_id": "SDI-002",
+      "classes": [
+        "R04"
+      ],
+      "state": "institution_configurable_retention_required"
+    },
+    {
+      "asset_id": "SDI-003",
+      "classes": [
+        "R04"
+      ],
+      "state": "follows_parent_attempt_student_scope_unless_valid_hold"
+    },
+    {
+      "asset_id": "SDI-004",
+      "classes": [
+        "R04"
+      ],
+      "state": "linkage_follows_parent_attempt_scope"
+    },
+    {
+      "asset_id": "SDI-005",
+      "classes": [
+        "R05"
+      ],
+      "state": "exact_ttl_unresolved_expansion_blocked"
+    },
+    {
+      "asset_id": "SDI-006",
+      "classes": [
+        "R06"
+      ],
+      "state": "application_no_archive_default_provider_retention_review_required"
+    },
+    {
+      "asset_id": "SDI-007",
+      "classes": [
+        "R01"
+      ],
+      "state": "clear_on_signout_or_session_expiry_where_applicable"
+    },
+    {
+      "asset_id": "SDI-008",
+      "classes": [
+        "R04"
+      ],
+      "state": "identifiable_source_follows_underlying_records_deidentified_output_requires_review"
+    },
+    {
+      "asset_id": "SDI-009",
+      "classes": [
+        "R04",
+        "R07"
+      ],
+      "state": "ownership_use_review_required"
+    },
+    {
+      "asset_id": "SDI-L01",
+      "classes": [
+        "R07"
+      ],
+      "state": "frozen_pending_disposition_review"
+    },
+    {
+      "asset_id": "SDI-L02",
+      "classes": [
+        "R03",
+        "R04",
+        "R07"
+      ],
+      "state": "frozen_pending_institution_record_determination"
+    },
+    {
+      "asset_id": "SDI-L03",
+      "classes": [
+        "R04",
+        "R07"
+      ],
+      "state": "frozen_pending_current_use_taxonomy_review"
+    },
+    {
+      "asset_id": "SDI-L04",
+      "classes": [
+        "R03",
+        "R07"
+      ],
+      "state": "institution_model_confirmation_required"
+    }
+  ],
+  "deletion_lifecycle": [
+    "authenticate_requester",
+    "determine_scope",
+    "check_narrow_documented_holds",
+    "restrict_nonessential_processing_where_feasible",
+    "delete_or_irreversibly_deidentify_primary_records",
+    "delete_or_expire_downstream_copies",
+    "prevent_backup_restore_resurrection",
+    "record_minimal_completion_evidence",
+    "notify_requester_or_institution"
+  ],
+  "implementation_gates": [
+    "disposable_database_dependency_test",
+    "dry_run_or_report_mode",
+    "tenant_and_student_scoped_selection",
+    "fail_closed_hold_checks",
+    "minimal_deletion_audit_evidence",
+    "documented_backup_restore_behavior",
+    "subprocessor_deletion_steps",
+    "explicit_authorized_action_for_production_destruction"
+  ],
+  "invariants": [
+    "no_indefinite_retention_by_default",
+    "thirty_day_target_is_operational_not_statutory",
+    "complete_deletion_includes_downstream_and_exports",
+    "backup_restore_must_not_resurrect_deleted_records",
+    "legacy_assets_frozen_until_disposition_review",
+    "assessment_integrity_does_not_create_unlimited_retention",
+    "deidentified_aggregate_requires_reidentification_review",
+    "holds_are_narrow_documented_and_time_bounded"
+  ]
+}
