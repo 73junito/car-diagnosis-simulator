@@ -176,7 +176,7 @@
         "R04",
         "R07"
       ],
-      "state": "retirement_prepared_deployment_verified_pending_current_backup_snapshot_verification"
+      "state": "retired_verified"
     },
     {
       "asset_id": "SDI-L04",

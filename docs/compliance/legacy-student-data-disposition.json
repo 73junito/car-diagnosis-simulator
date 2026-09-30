@@ -36,20 +36,25 @@
     {
       "id": "LD-003",
       "system": "public.student_recommendations",
-      "rows": 6,
+      "rows": 0,
       "identified_rows": 0,
-      "anonymous_rows": 6,
+      "anonymous_rows": 0,
       "active_dependency": false,
       "taxonomy_review": "complete_no_governed_neutral_mapping_exists_for_current_legacy_rows",
       "replacement_behavior": "authenticated_endpoint_returns_empty_until_governed_neutral_model_exists",
       "production_transaction_dry_run": "passed_drop_verified_and_rolled_back_6_rows_restored",
-      "disposition": "retirement_migration_prepared",
+      "disposition": "retired_verified",
       "deployment_verification": "complete_production_worker_version_1d0ce846_b8b0_4f11_ac2e_f346294c52c9_from_merge_ba508e1b401a3b2840698547100cc26aa0cfa6b4",
-      "backup_restore_review": "pro_plan_daily_physical_backups_with_7_day_retention_documented_current_snapshot_listing_unverified_due_cli_401",
-      "blockers": [
-        "current_backup_snapshot_verification"
+      "backup_restore_review": "verified_physical_backup_2026_09_30_08_27_39_utc_with_restore_action",
+      "production_retirement": "verified_table_absent_after_guarded_migration",
+      "production_migration_history_name": "retire_legacy_student_recommendations",
+      "production_migration_versions": [
+        "20260930175711",
+        "20260930191704"
       ],
-      "next_action": "verify_a_current_recoverable_backup_snapshot_then_apply_guarded_retirement_migration"
+      "migration_history_note": "second_version_is_safe_idempotent_noop_after_original_version_already_recorded",
+      "blockers": [],
+      "next_action": "advance_to_empty_roster_shell_retirement_review"
     },
     {
       "id": "LD-004",
@@ -145,7 +150,7 @@
   },
   "ordered_cleanup": [
     "recommendation_access_migration_implemented",
-    "recommendation_retirement_migration_prepared",
+    "recommendation_retirement_verified_complete",
     "performance_transcript_migration_implemented",
     "legacy_progress_retirement_verified_complete",
     "identified_transcript_cleanup",

@@ -44,7 +44,7 @@ The following production structures contain student-linked records but were not 
 | --- | --- | --- | --- | --- |
 | SDI-L01 | `public.question_attempts` | historical student-linked answer data | `student_restricted` | Retired from production and verified absent on 2026-09-30; canonical progress remains on `attempts` + `attempt_answers`. |
 | SDI-L02 | `public.student_transcripts` and summary view | student identifier, attempt/scenario counts, correctness counts, accuracy, average time, activity timestamps | `student_restricted` + `review_required` | Confirm whether this is institution-record output or legacy analytics. |
-| SDI-L03 | `public.student_recommendations` | anonymous legacy scenario/reason/priority/status records plus an unsupported historical classification field | `student_restricted` + `review_required` | Current-use/taxonomy review complete; authenticated endpoint now returns no recommendations pending a governed neutral model; guarded retirement prepared. |
+| SDI-L03 | `public.student_recommendations` | retired legacy recommendation records; production table verified absent | `student_restricted` + `review_required` | Retired and verified on 2026-09-30 after current physical-backup verification and guarded migration; authenticated endpoint remains empty pending a governed neutral model. |
 | SDI-L04 | `public.students`, `public.student`, `public.enrollments`, `public.classes`, `public.schools` | names/identifiers, school/class relationships, roles, enrollment relationships, timestamps | `institution_record` + `student_restricted` + `review_required` | Confirm intended institution model and active consumers before onboarding institutional records. |
 
 ## Processing boundaries discovered in code
