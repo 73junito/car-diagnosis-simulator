@@ -13,10 +13,10 @@
       "active_dependency": false,
       "disposition": "migrate_then_retire",
       "blockers": [
-        "legacy_certification_readiness_dependency",
-        "external_consumer_check"
+        "production_migration_application",
+        "post_drop_verification"
       ],
-      "next_action": "verify_remaining_database_and_external_consumers_then_retire_legacy_views_and_table"
+      "next_action": "apply_guarded_retirement_migration_then_verify_legacy_objects_absent"
     },
     {
       "id": "LD-002",
@@ -134,6 +134,7 @@
   "ordered_cleanup": [
     "recommendation_access_migration_implemented",
     "performance_transcript_migration_implemented",
+    "legacy_progress_retirement_migration_prepared",
     "identified_transcript_cleanup",
     "empty_roster_shell_retirement",
     "classroom_orphan_row_review"

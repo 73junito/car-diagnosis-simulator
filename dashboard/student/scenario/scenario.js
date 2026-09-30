@@ -288,7 +288,7 @@
     .replace(/'/g, "&#39;");
 
   // Audit trail is recorded server-side by grading endpoint (in attempt_answers table)
-  // Do not insert directly into question_attempts table (will be locked down)
+  // Do not insert directly into retired legacy answer-storage tables
 
   async function loadAssessmentAttemptQuestions(attemptId) {
     if (!attemptId) throw new Error('Assessment attempt ID is required.');

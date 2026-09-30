@@ -159,7 +159,7 @@
       "classes": [
         "R07"
       ],
-      "state": "frozen_pending_disposition_review"
+      "state": "retirement_migration_prepared_pending_production_application"
     },
     {
       "asset_id": "SDI-L02",

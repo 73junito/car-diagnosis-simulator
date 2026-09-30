@@ -49,7 +49,7 @@ This contract does not execute deletion, alter database foreign keys, change pro
 | SDI-007 browser/session storage | R01 | clear on sign-out/session expiry where technically applicable |
 | SDI-008 instructor analytics aggregation | R04 or deidentified aggregate | identifiable source follows underlying student records; truly deidentified aggregate may be retained separately only after deidentification review |
 | SDI-009 completions/replays | R04 + R07 | active ownership/use review required before retention automation |
-| SDI-L01 question_attempts | R07 | frozen pending disposition review |
+| SDI-L01 question_attempts | R07 | retirement approved by disposition review; guarded destructive migration prepared and pending production application |
 | SDI-L02 transcripts/summary | R03/R04 + R07 | frozen pending institution-record determination |
 | SDI-L03 student_recommendations | R04 + R07 | frozen pending current-use and taxonomy review |
 | SDI-L04 students/student/enrollments/classes/schools | R03 + R07 | institution model must be confirmed before onboarding expansion |

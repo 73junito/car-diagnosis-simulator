@@ -202,11 +202,10 @@
       "id": "SDI-L01",
       "system": "public.question_attempts",
       "classification": [
-        "student_restricted",
-        "review_required"
+        "student_restricted"
       ],
-      "status": "production_data_exists",
-      "action": "determine_owner_use_and_disposition"
+      "status": "retirement_migration_prepared_pending_production_application",
+      "action": "apply_guarded_retirement_migration_and_verify_absence"
     },
     {
       "id": "SDI-L02",
