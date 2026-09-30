@@ -106,6 +106,12 @@ describe('canonical production domain', () => {
         continue;
       }
 
+      // A cleanup may delete a previously tracked deployment file in the
+      // working tree. Deleted files cannot be active production references.
+      if (!fs.existsSync(path.resolve(ROOT, file))) {
+        continue;
+      }
+
       const content = readRoot(file);
       if (pattern.test(content)) {
         offenders.push(file);

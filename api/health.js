@@ -13,10 +13,10 @@ module.exports = async (req, res) => {
 
   // Deployment metadata to help distinguish local vs preview/prod
   const deployment = {
-    region: process.env.VERCEL_REGION || process.env.VERCEL_REGION || 'local',
-    environment: process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown',
-    url: process.env.VERCEL_URL || process.env.SITE_URL || null,
-    commit: process.env.VERCEL_GIT_COMMIT_SHA || process.env.GIT_COMMIT || null
+    region: process.env.CLOUDFLARE_REGION || 'local',
+    environment: process.env.TORQUEMIND_ENVIRONMENT || process.env.NODE_ENV || 'unknown',
+    url: process.env.SITE_URL || null,
+    commit: process.env.GITHUB_SHA || process.env.GIT_COMMIT || process.env.APP_VERSION || null
   };
 
   return res.status(200).json({ ok: true, time: new Date().toISOString(), env, deployment });
