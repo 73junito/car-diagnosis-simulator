@@ -6,6 +6,10 @@ const migration = fs.readFileSync(
   path.join(root, 'supabase/migrations/20260929222509_add_approved_source_rights_scopes.sql'),
   'utf8'
 )
+const aiAuthorizationMigration = fs.readFileSync(
+  path.join(root, 'supabase/migrations/20260930000435_authorize_frontiers_ai_rag.sql'),
+  'utf8'
+)
 const route = fs.readFileSync(
   path.join(root, 'worker/routes/curriculum-evidence.js'),
   'utf8'
@@ -32,6 +36,17 @@ describe('Approved source granular rights scope contract', () => {
     expect(migration).toContain("license->>'classification' = 'CC_BY'")
     expect(migration).toContain("license->>'reuse_permission_verified'")
     expect(migration).toContain('AI/RAG ingestion remains false pending separate explicit review')
+  })
+
+  test('authorizes AI/RAG only for the specifically reviewed CC BY source', () => {
+    expect(aiAuthorizationMigration).toContain("source.id = 'frontiers-automotive-alternator-2023'")
+    expect(aiAuthorizationMigration).toContain("source.status = 'approved'")
+    expect(aiAuthorizationMigration).toContain("source.license->>'classification' = 'CC_BY'")
+    expect(aiAuthorizationMigration).toContain("source.license->>'reuse_permission_verified'")
+    expect(aiAuthorizationMigration).toContain('rights.reviewed_by is not null')
+    expect(aiAuthorizationMigration).toContain('rights.reviewed_at is not null')
+    expect(aiAuthorizationMigration).toContain('ai_rag_ingestion_allowed = true')
+    expect(aiAuthorizationMigration).toContain('frontiers_ai_rag_authorization_failed')
   })
 
   test('enforces granular rights before database approval', () => {
