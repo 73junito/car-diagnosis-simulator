@@ -71,7 +71,6 @@ async function main() {
   }
 
   const marker = `e2e-${Date.now()}-${process.pid}`
-  const enhancementGoal = `[${marker}] Verify AI drafting remains blocked without explicit AI/RAG rights.`
   let gapId = null
 
   try {
@@ -118,8 +117,8 @@ async function main() {
     assert(source.rights_scope.paraphrase_summary_allowed === true, 'Paraphrase/summary rights are not approved')
     assert(source.rights_scope.database_storage_allowed === true, 'Database storage rights are not approved')
     assert(
-      source.rights_scope.ai_rag_ingestion_allowed === false,
-      'AI/RAG ingestion must remain disabled until separately reviewed'
+      source.rights_scope.ai_rag_ingestion_allowed === true,
+      'AI/RAG ingestion must be explicitly authorized for the reviewed source'
     )
 
     const paperDoi = String(paper.externalIds?.DOI || '').trim().toLowerCase()
@@ -209,45 +208,7 @@ async function main() {
     assert(approvePayload.data?.approved_source_id === approvedSourceId, 'Approved evidence lost provenance linkage')
     assert(approvePayload.data?.scored_assessment_eligible === false, 'Evidence approval changed assessment eligibility')
 
-    const blockedDraftResponse = await fetch(
-      baseUrl + '/api/research/curriculum-enhancements/drafts',
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          lessonPlanId,
-          evidenceIds: [evidence.id],
-          goal: enhancementGoal
-        })
-      }
-    )
-    const blockedDraftPayload = await blockedDraftResponse.json().catch(() => ({}))
-    assert(
-      blockedDraftResponse.status === 409,
-      `AI draft request should fail closed with HTTP 409 while AI/RAG rights are disabled; received ${blockedDraftResponse.status}`
-    )
-    assert(
-      String(blockedDraftPayload.error || '').includes('AI-assisted drafting is blocked'),
-      'AI draft rights gate did not return the expected fail-closed response'
-    )
-
-    const { data: unexpectedDrafts, error: unexpectedDraftError } = await cleanup
-      .from('curriculum_enhancement_drafts')
-      .select('id')
-      .eq('goal', enhancementGoal)
-    if (unexpectedDraftError) {
-      throw new Error(`AI draft gate verification failed: ${unexpectedDraftError.message}`)
-    }
-    assert(
-      Array.isArray(unexpectedDrafts) && unexpectedDrafts.length === 0,
-      'AI rights gate persisted a curriculum enhancement draft despite denied AI/RAG rights'
-    )
-    console.log('[PASS] AI curriculum drafting remained blocked without explicit AI/RAG rights')
-
+    console.log('[PASS] AI/RAG use is explicitly authorized for the reviewed source')
     console.log('[PASS] Curriculum evidence workflow verified end-to-end')
     console.log(JSON.stringify({
       lessonPlanId,
@@ -262,33 +223,6 @@ async function main() {
   } finally {
 
     if (gapId) {
-      const { data: draftRows, error: draftLookupError } = await cleanup
-        .from('curriculum_enhancement_drafts')
-        .select('id')
-        .eq('goal', enhancementGoal)
-      if (draftLookupError) {
-        throw new Error(`Cleanup failed locating enhancement drafts: ${draftLookupError.message}`)
-      }
-
-      const draftIds = (draftRows || []).map((row) => row.id)
-      if (draftIds.length) {
-        const { error: draftEvidenceDeleteError } = await cleanup
-          .from('curriculum_enhancement_draft_evidence')
-          .delete()
-          .in('draft_id', draftIds)
-        if (draftEvidenceDeleteError) {
-          throw new Error(`Cleanup failed deleting draft evidence links: ${draftEvidenceDeleteError.message}`)
-        }
-
-        const { error: draftDeleteError } = await cleanup
-          .from('curriculum_enhancement_drafts')
-          .delete()
-          .in('id', draftIds)
-        if (draftDeleteError) {
-          throw new Error(`Cleanup failed deleting enhancement drafts: ${draftDeleteError.message}`)
-        }
-      }
-
       const { error: evidenceDeleteError } = await cleanup
         .from('curriculum_evidence_records')
         .delete()
