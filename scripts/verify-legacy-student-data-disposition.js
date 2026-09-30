@@ -68,9 +68,9 @@ const rec = register.assets.find((asset) => asset.id === 'LD-003')
 if (!rec || rec.disposition !== 'retirement_migration_prepared') {
   fail('legacy recommendations must be retirement_migration_prepared')
 }
-if (!rec.blockers.includes('application_deployment_verification') ||
-    !rec.blockers.includes('production_backup_restore_review')) {
-  fail('legacy recommendation retirement blockers must remain explicit')
+if (rec.blockers.length !== 1 ||
+    rec.blockers[0] !== 'current_backup_snapshot_verification') {
+  fail('legacy recommendation retirement must remain blocked only on current backup snapshot verification')
 }
 const recommendationAccess = register.production_facts?.recommendation_access
 if (!recommendationAccess?.baseline_anon_select_policy) {

@@ -28,7 +28,7 @@ No production data is deleted, archived, migrated, or rewritten by this change. 
 | --- | ---: | --- | --- | --- |
 | `question_attempts` | 0 | No current application dependency | Retired from production on 2026-09-30; all 80 historical anonymous rows and dependent legacy views removed by the approved guarded migration | `retired_verified` |
 | `student_transcripts` | 1 | No direct application reference found | Single identified/linkable transcript row | `delete_after_verification` |
-| `student_recommendations` | 6 | Yes, through authenticated server boundary after access migration | Legacy table remains the source; taxonomy drift remains | `migrate_then_retire` |
+| `student_recommendations` | 6 | No active table read after production deployment | Authenticated endpoint returns an empty list until a governed neutral model exists; guarded retirement is prepared | `retirement_migration_prepared` |
 | `students` | 0 | No current application reference found | Legacy roster shell; references schools/classes | `retire_empty_schema` |
 | `student` | 0 | No current application reference found | Unstructured legacy placeholder table | `retire_empty_schema` |
 | `enrollments` | 0 | No runtime application reference found; authorization tests exist | Intended classroom authorization surface | `retain_schema_clean_rows` |
@@ -87,7 +87,10 @@ Implementation decision:
 - recommendation generation remains disabled until a governed neutral model exists;
 - a fail-closed `DROP TABLE ... RESTRICT` retirement migration is prepared with exact row/anonymity and dependency guards;
 - a production transaction-only dry run successfully dropped the table, verified absence, rolled back, and restored all six rows;
-- production table retirement remains blocked until the application change is deployed/verified and production backup/restore behavior is reviewed.
+- production deployment is verified on the merged production Worker version `1d0ce846-b8b0-4f11-ac2e-f346294c52c9`;
+- the production project is on the Supabase Pro plan, whose documented behavior provides automatic daily physical backups with 7-day retention and restore support;
+- a specific current backup snapshot could not be enumerated because `supabase backups list` returned HTTP 401 from the available CLI profile;
+- permanent retirement remains blocked only on verification of a current recoverable backup snapshot.
 
 No public legacy recommendation access or assessment-eligibility effect is authorized.
 
