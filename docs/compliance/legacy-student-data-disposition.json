@@ -44,11 +44,12 @@
       "replacement_behavior": "authenticated_endpoint_returns_empty_until_governed_neutral_model_exists",
       "production_transaction_dry_run": "passed_drop_verified_and_rolled_back_6_rows_restored",
       "disposition": "retirement_migration_prepared",
+      "deployment_verification": "complete_production_worker_version_1d0ce846_b8b0_4f11_ac2e_f346294c52c9_from_merge_ba508e1b401a3b2840698547100cc26aa0cfa6b4",
+      "backup_restore_review": "pro_plan_daily_physical_backups_with_7_day_retention_documented_current_snapshot_listing_unverified_due_cli_401",
       "blockers": [
-        "application_deployment_verification",
-        "production_backup_restore_review"
+        "current_backup_snapshot_verification"
       ],
-      "next_action": "deploy_empty_authenticated_boundary_verify_no_legacy_consumer_then_apply_guarded_retirement_after_backup_review"
+      "next_action": "verify_a_current_recoverable_backup_snapshot_then_apply_guarded_retirement_migration"
     },
     {
       "id": "LD-004",
