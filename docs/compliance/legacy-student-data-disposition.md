@@ -31,9 +31,9 @@ No production data is deleted, archived, migrated, or rewritten by this change. 
 | `student_recommendations` | 0 | No active table read after production deployment | Retired from production after verified physical backup and guarded migration; authenticated endpoint remains empty until a governed neutral model exists | `retired_verified` |
 | `students` | 0 | No current application reference found | Retired from production after zero-row/dependency verification; classroom schema remains separate | `retired_verified` |
 | `student` | 0 | No current application reference found | Retired from production after zero-row/dependency verification | `retired_verified` |
-| `enrollments` | 0 | No runtime application reference found; authorization tests exist | Intended classroom authorization surface | `retain_schema_clean_rows` |
+| `enrollments` | 0 | Active runtime dependency in classroom API | Active classroom enrollment surface; zero current rows | `retain_active` |
 | `schools` | 0 | No current application reference found | Retired from production after child-table retirement removed the legacy roster dependency | `retired_verified` |
-| `classes` | 2,206 | No runtime application reference found; authorization tests exist | All rows belong to one owner; no enrollments, students, assignments, or scenario assignments reference them | `retain_schema_clean_rows` |
+| `classes` | 0 | Active runtime dependency in classroom API | Active classroom class surface; 2,206 historical smoke fixtures removed by guarded cleanup | `retain_active` |
 
 ## Detailed findings
 
@@ -105,7 +105,7 @@ Retirement completed on 2026-09-30:
 4. the only legacy foreign keys were outgoing from `students` to `classes` and `schools`;
 5. a transaction-only production dry run dropped all three tables with `RESTRICT`, verified `enrollments` and `classes` remained present, rolled back, and restored all three target tables;
 6. the guarded retirement was then executed permanently and all three targets are verified absent;
-7. `enrollments` remains present with 0 rows and `classes` remains present with 2,206 rows.
+7. at roster-shell retirement time, `enrollments` remained present with 0 rows and `classes` remained present with 2,206 rows; the later guarded smoke-fixture cleanup reduced `classes` to 0 rows without removing the schema.
 
 Disposition:
 - `students`, `student`, and `schools` are `retired_verified`;
@@ -117,30 +117,29 @@ Local review on 2026-09-30 confirmed that the classroom schema has an active run
 
 - `torquemind-api/index.js` reads and writes both `classes` and `enrollments`;
 - the browser classroom UI calls the class create/list/join routes;
-- Render deployment configuration and CI smoke/unit workflows actively include `torquemind-api`;
+- Cloudflare production runtime and CI smoke/unit workflows actively include `torquemind-api`;
 - current CI starts the API against the approved staging Supabase project.
 
-Production data state:
-- `enrollments`: 0 rows;
-- `classes`: 2,206 rows;
-- distinct class owners: 1, matching an existing Auth user;
-- assignments referencing a class: 0;
-- scenario assignments referencing a class: 0;
-- classes with enrollments: 0;
-- classes with assignments: 0;
-- classes with scenario assignments: 0;
-- all 2,206 class names match the smoke-test fixture naming pattern;
-- no new class rows were created during the most recent 7-day window reviewed.
+Production cleanup completed on 2026-09-30:
+- before cleanup, `classes` contained 2,206 rows and `enrollments` contained 0 rows;
+- every historical class name matched the exact smoke-test fixture pattern;
+- all 2,206 class codes were unique;
+- the rows belonged to one owner that matched an existing Auth user;
+- zero classes had enrollments, assignments, or scenario assignments;
+- there were no user triggers or publication memberships on `classes`;
+- the expected incoming foreign-key set was unchanged;
+- a transaction-only dry run deleted all 2,206 rows, preserved both active tables, then rolled back and restored all 2,206 rows;
+- the same guarded row-only cleanup was then executed permanently;
+- post-change verification confirms `classes`: 0 rows and `enrollments`: 0 rows while the active tables and RLS policies remain present.
 
-Root cause:
-- `torquemind-api/scripts/smoke-test.js` creates a uniquely named smoke-test class on every run;
-- the script previously had no cleanup path;
-- current CI targets the approved staging project, so the production accumulation is historical.
+Root cause and prevention:
+- `torquemind-api/scripts/smoke-test.js` previously created a uniquely named smoke-test class on every run without cleanup;
+- the leak fix merged before historical deletion and now removes only the exact staging fixture created by each smoke run;
+- current CI targets the approved staging project.
 
 Disposition:
-- `classes` and `enrollments` are active runtime assets and must remain;
-- the smoke test must delete only the exact fixture row it created, including on failure;
-- after the leak fix is merged, prepare a separately guarded cleanup for the 2,206 verified historical smoke rows;
+- `classes` and `enrollments` remain active runtime assets;
+- the 2,206 historical smoke rows are cleanup-complete and verified absent;
 - keep institution onboarding expansion frozen pending the institution-model decision.
 
 ## Security findings
@@ -194,10 +193,11 @@ The legacy progress views and their dependent legacy chain have now been retired
 4. **Empty roster-shell retirement**
    - retire empty `student`, `students`, and `schools` structures once migration/dependency review is complete.
 
-5. **Classroom row cleanup**
-   - retain `classes` / `enrollments` schema;
-   - investigate the single-owner 2,206-row orphan set;
-   - archive/delete only after ownership/use review and dry-run evidence.
+5. **Classroom historical smoke-row cleanup — completed**
+   - retained the active `classes` / `enrollments` schema;
+   - verified all 2,206 historical rows were smoke-test fixtures with zero classroom linkages;
+   - transaction dry run passed and rollback restored all rows;
+   - guarded production deletion completed with both active tables and RLS policies preserved.
 
 ## Destructive-operation gates
 

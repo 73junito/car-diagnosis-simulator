@@ -97,18 +97,18 @@
     {
       "id": "LD-008",
       "system": "public.classes",
-      "rows": 2206,
+      "rows": 0,
+      "historical_rows_retired": 2206,
       "active_dependency": true,
       "disposition": "retain_active",
       "blockers": [
-        "historical_smoke_rows_require_guarded_cleanup_after_leak_fix",
         "institution_model_confirmation_required"
       ],
-      "next_action": "merge_smoke_cleanup_then_guarded_delete_verified_historical_smoke_rows_without_dropping_schema"
+      "next_action": "retain_active_classroom_schema_and_freeze_onboarding_expansion_until_institution_model_approved"
     }
   ],
   "production_facts": {
-    "classes_distinct_owners": 1,
+    "classes_distinct_owners": 0,
     "classroom_runtime_dependency": {
       "torquemind_api_reads_classes": true,
       "torquemind_api_writes_classes": true,
@@ -119,16 +119,21 @@
       "ci_exercises_classroom_routes": true
     },
     "historical_smoke_class_rows": {
-      "rows": 2206,
-      "all_rows_match_smoke_test_name_pattern": true,
-      "classes_with_enrollments": 0,
-      "classes_with_assignments": 0,
-      "classes_with_scenario_assignments": 0,
-      "distinct_owners": 1,
-      "owner_matches_auth_user": true,
-      "created_last_7_days": 0,
+      "rows": 0,
+      "historical_rows_retired": 2206,
+      "all_historical_rows_matched_smoke_test_name_pattern": true,
+      "classes_with_enrollments_before_cleanup": 0,
+      "classes_with_assignments_before_cleanup": 0,
+      "classes_with_scenario_assignments_before_cleanup": 0,
+      "distinct_owners_before_cleanup": 1,
+      "owner_matched_auth_user_before_cleanup": true,
+      "created_last_7_days_before_cleanup": 0,
       "current_ci_targets_approved_staging_project": true,
-      "root_cause": "smoke_test_created_class_per_run_without_cleanup"
+      "root_cause": "smoke_test_created_class_per_run_without_cleanup",
+      "leak_fix_merged": true,
+      "production_transaction_dry_run": "passed_delete_2206_and_rollback_restored_2206",
+      "production_cleanup": "verified_complete",
+      "repository_migration": "20260930210756_cleanup_historical_smoke_classes.sql"
     },
     "roster_shell_retirement": {
       "production_students_present": false,
@@ -179,7 +184,7 @@
     "legacy_progress_retirement_verified_complete",
     "identified_transcript_cleanup",
     "empty_roster_shell_retirement_verified_complete",
-    "classroom_orphan_row_review"
+    "historical_smoke_class_cleanup_verified_complete"
   ],
   "destructive_gates": [
     "dependency_report",

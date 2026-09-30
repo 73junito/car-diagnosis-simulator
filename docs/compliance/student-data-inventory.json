@@ -235,8 +235,8 @@
         "student_restricted",
         "review_required"
       ],
-      "status": "active_classroom_schema_legacy_roster_shells_retired_historical_smoke_rows_cleanup_pending",
-      "action": "retain_active_classroom_schema_merge_smoke_cleanup_then_guardedly_remove_verified_historical_smoke_rows_before_onboarding_expansion"
+      "status": "active_classroom_schema_zero_rows_legacy_roster_shells_retired_historical_smoke_cleanup_complete",
+      "action": "retain_active_classroom_schema_and_keep_onboarding_frozen_pending_institution_model_approval"
     }
   ],
   "invariants": [

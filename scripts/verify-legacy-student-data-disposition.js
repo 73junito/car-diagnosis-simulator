@@ -162,8 +162,11 @@ const classes = register.assets.find((asset) => asset.id === 'LD-008')
 if (!enrollments || enrollments.disposition !== 'retain_active' || enrollments.active_dependency !== true) {
   fail('enrollments must remain an active classroom runtime asset')
 }
-if (!classes || classes.disposition !== 'retain_active' || classes.active_dependency !== true) {
-  fail('classes must remain an active classroom runtime asset')
+if (!classes || classes.disposition !== 'retain_active' || classes.active_dependency !== true || classes.rows !== 0) {
+  fail('classes must remain an active classroom runtime asset with zero current rows after smoke cleanup')
+}
+if (classes.historical_rows_retired !== 2206) {
+  fail('classes must record the 2206 historical smoke rows retired')
 }
 
 const classroomRuntime = register.production_facts?.classroom_runtime_dependency
@@ -177,13 +180,17 @@ if (!classroomRuntime ||
 
 const smokeRows = register.production_facts?.historical_smoke_class_rows
 if (!smokeRows ||
-    smokeRows.rows !== 2206 ||
-    smokeRows.all_rows_match_smoke_test_name_pattern !== true ||
-    smokeRows.classes_with_enrollments !== 0 ||
-    smokeRows.classes_with_assignments !== 0 ||
-    smokeRows.classes_with_scenario_assignments !== 0 ||
-    smokeRows.current_ci_targets_approved_staging_project !== true) {
-  fail('historical smoke-class cleanup evidence must remain explicit')
+    smokeRows.rows !== 0 ||
+    smokeRows.historical_rows_retired !== 2206 ||
+    smokeRows.all_historical_rows_matched_smoke_test_name_pattern !== true ||
+    smokeRows.classes_with_enrollments_before_cleanup !== 0 ||
+    smokeRows.classes_with_assignments_before_cleanup !== 0 ||
+    smokeRows.classes_with_scenario_assignments_before_cleanup !== 0 ||
+    smokeRows.current_ci_targets_approved_staging_project !== true ||
+    smokeRows.leak_fix_merged !== true ||
+    smokeRows.production_cleanup !== 'verified_complete' ||
+    smokeRows.repository_migration !== '20260930210756_cleanup_historical_smoke_classes.sql') {
+  fail('historical smoke-class cleanup evidence must remain explicit and complete')
 }
 
 if (!Array.isArray(register.destructive_gates) || register.destructive_gates.length < 5) {
