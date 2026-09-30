@@ -25,7 +25,11 @@ where rights.source_id = source.id
 
 do $$
 begin
-  if not exists (
+  if exists (
+    select 1
+    from public.approved_sources
+    where id = 'frontiers-automotive-alternator-2023'
+  ) and not exists (
     select 1
     from public.approved_source_rights_scopes
     where source_id = 'frontiers-automotive-alternator-2023'
