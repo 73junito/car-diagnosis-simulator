@@ -6,6 +6,7 @@ import { handleGradeScenarioSubmission } from "./routes/scenario-submissions-gra
 import { handleStartAssessmentAttempt } from "./routes/assessment-attempts-start.js";
 import { handleAssessmentAttemptQuestions } from "./routes/assessment-attempt-questions.js";
 import { handleCurriculumRead } from "./routes/curriculum-read.js";
+import { handleCurriculumReferences } from "./routes/curriculum-references.js";
 import {
   handleSemanticScholarSearch,
   handleSemanticScholarPaper
@@ -96,6 +97,7 @@ app.use('/api/curriculum/*', cors({
   maxAge: 86400
 }))
 app.all('/api/curriculum', handleCurriculumRead)
+app.get('/api/curriculum/references', handleCurriculumReferences)
 
 // Semantic Scholar research discovery: server-side, authenticated, and role-restricted.
 // The API key is a Worker secret and is never returned to clients.
