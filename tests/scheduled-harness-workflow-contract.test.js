@@ -1,7 +1,8 @@
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
-import { spawnSync } from 'child_process'
+import http from 'http'
+import { spawn, spawnSync } from 'child_process'
 
 const root = path.resolve('.')
 const workflow = fs.readFileSync(
@@ -28,8 +29,8 @@ describe('scheduled harness workflow contract', () => {
     expect(workflow).toContain('--method GET')
     expect(workflow).toContain('--path /api/curriculum')
     expect(workflow).toContain('--min-success-rate 1')
-    expect(harness).toContain("const requestPath = args.path || '/api/request-pilot'")
-    expect(harness).toContain("const requestMethod = String(args.method || 'POST')")
+    expect(harness).toContain("const requestPath = args.path || '/api/curriculum'")
+    expect(harness).toContain("const requestMethod = String(args.method || 'GET')")
     expect(harness).toContain("process.exitCode = 1")
   })
 
@@ -37,6 +38,45 @@ describe('scheduled harness workflow contract', () => {
     expect(fs.existsSync(path.join(root, '.github/workflows/append-runs-history.yml'))).toBe(false)
     expect(workflow).not.toContain('tmp_out')
     expect(workflow).not.toContain('Commit runs artifacts')
+  })
+
+  test('writes export before failing a mixed-status success gate', async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'harness-gate-'))
+    const exportPath = path.join(dir, 'run.json')
+    let requestCount = 0
+
+    const server = http.createServer((req, res) => {
+      requestCount += 1
+      res.statusCode = requestCount === 1 ? 500 : 200
+      res.setHeader('content-type', 'application/json')
+      res.end(JSON.stringify({ ok: res.statusCode === 200 }))
+    })
+
+    await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
+    const address = server.address()
+    const child = spawn(
+      process.execPath,
+      [
+        path.join(root, 'scripts/harness.js'),
+        '--count', '2',
+        '--concurrency', '1',
+        '--method', 'GET',
+        '--path', '/probe',
+        '--min-success-rate', '1',
+        '--export', exportPath,
+        '--url', `http://127.0.0.1:${address.port}`
+      ],
+      { stdio: ['ignore', 'pipe', 'pipe'] }
+    )
+
+    const exitCode = await new Promise(resolve => child.on('close', resolve))
+    await new Promise(resolve => server.close(resolve))
+
+    expect(exitCode).toBe(1)
+    expect(fs.existsSync(exportPath)).toBe(true)
+    const run = JSON.parse(fs.readFileSync(exportPath, 'utf8'))
+    expect(run.results).toHaveLength(2)
+    expect(run.results.filter(result => result.ok)).toHaveLength(1)
   })
 
   test('refuses to append zero-success results', () => {

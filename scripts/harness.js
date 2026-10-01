@@ -23,8 +23,8 @@ const outPath = args.export || `runs/run-${Date.now()}.json`;
 let baseUrl = args.url || process.env.TARGET_URL || process.env.PREVIEW_URL;
 if (baseUrl && typeof baseUrl === 'string') baseUrl = baseUrl.trim();
 
-const requestPath = args.path || '/api/request-pilot';
-const requestMethod = String(args.method || 'POST').trim().toUpperCase();
+const requestPath = args.path || '/api/curriculum';
+const requestMethod = String(args.method || 'GET').trim().toUpperCase();
 const minSuccessRate = args['min-success-rate'] == null
   ? null
   : Number(args['min-success-rate']);
