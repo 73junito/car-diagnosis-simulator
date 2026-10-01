@@ -32,7 +32,20 @@ create table if not exists public.instructor_verification_requests (
   reviewed_at timestamptz,
   reviewed_by uuid references auth.users(id),
   review_note text,
-  unique (user_id)
+  unique (user_id),
+  constraint instructor_verification_review_metadata check (
+    (
+      status = 'pending'
+      and reviewed_at is null
+      and reviewed_by is null
+    )
+    or
+    (
+      status in ('approved','rejected')
+      and reviewed_at is not null
+      and reviewed_by is not null
+    )
+  )
 );
 
 create index if not exists instructor_verification_requests_school_code_idx

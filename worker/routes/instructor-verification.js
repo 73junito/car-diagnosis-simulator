@@ -4,8 +4,18 @@ import {
   verifySupabaseToken
 } from '../../api/_utils/auth-utils.js'
 
+const INSTRUCTOR_ROLES = new Set(['teacher', 'instructor', 'professor'])
+
 function normalizeSchoolCode(value) {
   return String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '')
+}
+
+function normalizedRole(value) {
+  return String(value || '').trim().toLowerCase()
+}
+
+function isInstructorRole(value) {
+  return INSTRUCTOR_ROLES.has(normalizedRole(value))
 }
 
 function createServiceClient(supabaseUrl, serviceRoleKey) {
@@ -39,6 +49,26 @@ async function authorize(c) {
     user,
     supabase: createServiceClient(supabaseUrl, serviceRoleKey)
   }
+}
+
+async function resolveTrustedRole(user, supabase) {
+  const metadataRole = normalizedRole(user?.app_metadata?.role)
+  if (metadataRole === 'admin' || isInstructorRole(metadataRole)) {
+    return metadataRole
+  }
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Instructor role lookup failed:', error.message || error)
+    return null
+  }
+
+  return normalizedRole(data?.role)
 }
 
 function publicInstitution(row) {
@@ -114,6 +144,25 @@ export async function handleInstructorVerificationRequest(c) {
   }
   if (!institution) return c.json({ error: 'School code not recognized' }, 404)
 
+  const { data: existing, error: existingError } = await auth.supabase
+    .from('instructor_verification_requests')
+    .select('id,school_code,status,verification_method,requested_at,reviewed_at')
+    .eq('user_id', auth.user.id)
+    .maybeSingle()
+
+  if (existingError) {
+    console.error('Instructor verification request lookup failed:', existingError.message || existingError)
+    return c.json({ error: 'Unable to read verification request' }, 500)
+  }
+
+  if (existing) {
+    return c.json({
+      error: 'A verification request already exists and cannot be replaced',
+      verification: existing,
+      authorizationGranted: false
+    }, 409)
+  }
+
   const requestRow = {
     user_id: auth.user.id,
     school_code: schoolCode,
@@ -127,11 +176,14 @@ export async function handleInstructorVerificationRequest(c) {
 
   const { data, error } = await auth.supabase
     .from('instructor_verification_requests')
-    .upsert(requestRow, { onConflict: 'user_id' })
+    .insert(requestRow)
     .select('id,school_code,status,verification_method,requested_at,reviewed_at')
     .single()
 
   if (error) {
+    if (error.code === '23505') {
+      return c.json({ error: 'A verification request already exists and cannot be replaced' }, 409)
+    }
     console.error('Instructor verification request failed:', error.message || error)
     return c.json({ error: 'Unable to create verification request' }, 500)
   }
@@ -150,6 +202,9 @@ export async function handleInstructorVerificationStatus(c) {
   const auth = await authorize(c)
   if (auth.response) return auth.response
 
+  const role = await resolveTrustedRole(auth.user, auth.supabase)
+  const isAdmin = role === 'admin'
+
   const { data, error } = await auth.supabase
     .from('instructor_verification_requests')
     .select('id,school_code,status,verification_method,requested_at,reviewed_at,review_note')
@@ -165,7 +220,8 @@ export async function handleInstructorVerificationStatus(c) {
     return c.json({
       verification: null,
       institution: null,
-      authorizationGranted: false
+      authorizationGranted: isAdmin,
+      role
     }, 200)
   }
 
@@ -175,10 +231,14 @@ export async function handleInstructorVerificationStatus(c) {
     .eq('school_code', data.school_code)
     .maybeSingle()
 
+  const authorizationGranted =
+    isAdmin || (isInstructorRole(role) && data.status === 'approved')
+
   return c.json({
     verification: data,
     institution: publicInstitution(institution),
-    authorizationGranted: data.status === 'approved'
+    authorizationGranted,
+    role
   }, 200)
 }
 
