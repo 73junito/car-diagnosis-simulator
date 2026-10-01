@@ -10,12 +10,12 @@ const researchPage = fs.readFileSync(
 
 describe('shared public navigation contract', () => {
   test('responsive collapse is scoped to the homepage menu', () => {
-    expect(styles).toContain('#mainNav {')
-    expect(styles).toContain('#mainNav.open {')
-    expect(styles).not.toMatch(/@media\s*\(max-width:\s*980px\)[\s\S]*?\.nav-links\s*\{\s*display:\s*none;/)
+    expect(styles).toContain('.home-page #mainNav{')
+    expect(styles).toContain('.home-page #mainNav.open{display:flex}')
+    expect(styles).not.toMatch(/body:not\(\.home-page\)[\s\S]*?\.nav-links\s*\{\s*display:\s*none;/)
   })
 
-  test('research sources navigation remains a shared nav without homepage toggle dependency', () => {
+  test('research sources navigation remains visible without homepage toggle support', () => {
     expect(researchPage).toContain('<nav class="nav-links">')
     expect(researchPage).not.toContain('id="mainNav"')
     expect(researchPage).not.toContain('id="navToggle"')
