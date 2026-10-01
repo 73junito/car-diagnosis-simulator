@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Public homepage', () => {
-  test('public homepage exposes current student and instructor entry points', async ({ page }) => {
+  test('redesigned homepage exposes the current learning model and role entry points', async ({ page }) => {
     const base = process.env.PUBLIC_SITE_BASE_URL || '/';
 
     const consoleErrors = [];
@@ -14,20 +14,23 @@ test.describe('Public homepage', () => {
     await expect(page).toHaveTitle('AutoLearnPro | Evidence-Governed Automotive Learning');
 
     await expect(
-      page.getByRole('heading', { name: /Build Automotive Diagnostic Reasoning/i })
+      page.getByRole('heading', { name: 'Teach the process behind the diagnosis.' })
     ).toBeVisible();
 
     await expect(
-      page.getByRole('link', { name: 'Student Sign In' }).first()
+      page.getByRole('link', { name: 'Enter Student Workspace' })
     ).toHaveAttribute('href', 'https://app.autolearnpro.com/sign-in/student/');
 
     await expect(
-      page.getByRole('link', { name: 'Instructor Sign In' }).first()
+      page.getByRole('link', { name: 'Instructor Access' }).first()
     ).toHaveAttribute('href', 'https://app.autolearnpro.com/sign-in/instructor/');
 
     await expect(
-      page.getByRole('link', { name: 'Explore Curriculum' })
+      page.getByRole('link', { name: /Explore Curriculum/ })
     ).toHaveAttribute('href', 'https://exam.autolearnpro.com/learning-path/');
+
+    await expect(page.getByText('Evidence before answers.')).toBeVisible();
+    await expect(page.getByText('Current live scenario mappings are undergraduate-only.')).toBeVisible();
 
     const content = await page.content();
     expect(content).not.toContain('20-question attempts');
@@ -35,6 +38,18 @@ test.describe('Public homepage', () => {
     expect(content).not.toContain('vercel.app');
 
     await page.setViewportSize({ width: 375, height: 812 });
+    await expect(page.getByRole('button', { name: 'Open navigation' })).toBeVisible();
+    await page.getByRole('button', { name: 'Open navigation' }).click();
+    await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toHaveClass(/open/);
+    const closeButton = page.getByRole('button', { name: 'Close navigation' });
+    await expect(closeButton).toHaveAttribute('aria-expanded', 'true');
+
+    await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link').first().focus();
+    await page.keyboard.press('Escape');
+    const openButton = page.getByRole('button', { name: 'Open navigation' });
+    await expect(openButton).toBeFocused();
+    await expect(openButton).toHaveAttribute('aria-expanded', 'false');
+
     await page.screenshot({ path: 'playwright/screenshots/public-homepage-mobile.png', fullPage: true });
 
     expect(consoleErrors).toEqual([]);
