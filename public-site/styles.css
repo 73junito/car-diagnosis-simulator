@@ -244,14 +244,6 @@ img{max-width:100%}
 .flow-node strong{display:block;color:#fff;font-size:.93rem}
 .flow-node small{display:block;margin-top:2px;color:#91a6ba;font-size:.79rem}
 .flow-connector{height:8px;width:1px;margin:auto;background:linear-gradient(var(--blue),transparent)}
-.hero-visual{
-  position:relative;
-  margin-top:18px;
-  padding-top:18px;
-  border-top:1px solid rgba(255,255,255,.07);
-  text-align:right;
-}
-.hero-visual img{width:min(100%,270px);opacity:.88}
 .trust-strip{
   border-top:1px solid rgba(255,255,255,.06);
   border-bottom:1px solid rgba(255,255,255,.06);
@@ -442,7 +434,23 @@ img{max-width:100%}
 }
 .footer-brand img{height:36px}
 .footer-grid p{max-width:46ch;margin:16px 0 0;color:#8399ae;font-size:.9rem}
-.footer-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 20px}
+.footer-links{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:24px;
+}
+.footer-group{
+  display:grid;
+  align-content:start;
+  gap:8px;
+}
+.footer-group strong{
+  color:#edf4fb;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
 .footer-links a{color:#a8b8c8;text-decoration:none;font-size:.9rem}
 .footer-links a:hover{color:#fff}
 .footer-grid small{color:#71869a;white-space:nowrap}
