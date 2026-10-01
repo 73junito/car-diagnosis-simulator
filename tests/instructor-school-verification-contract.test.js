@@ -6,6 +6,10 @@ const migration = fs.readFileSync(
   path.join(root, 'supabase/migrations/20261001033126_add_instructor_school_verification.sql'),
   'utf8'
 )
+const seedMigration = fs.readFileSync(
+  path.join(root, 'supabase/migrations/20261001041910_seed_federal_school_codes_2026_27_q4.sql'),
+  'utf8'
+)
 const route = fs.readFileSync(
   path.join(root, 'worker/routes/instructor-verification.js'),
   'utf8'
@@ -70,9 +74,14 @@ describe('instructor school verification contract', () => {
     expect(workerIndex).toContain("allowHeaders: ['Content-Type', 'Authorization']")
   })
 
-  test('keeps the institution directory server-side', () => {
+  test('keeps the institution directory server-side and source-locked', () => {
     expect(route).toContain(".from('institutions')")
     expect(migration).toContain("source_period text not null default '2026-27 4th Quarter'")
+    expect(seedMigration).toContain('-- record-count: 6547')
+    expect(seedMigration).toContain(
+      '-- source-sha256: 59fac0beb0aa9c66f3237c2a22d16a32bdfc64deb390002b008e98c2e5bf136a'
+    )
+    expect(seedMigration.match(/^\('/gm)).toHaveLength(6547)
     expect(buildScript).not.toContain('supabase/migrations')
     expect(buildScript).not.toContain('institutions.csv')
   })
