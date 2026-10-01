@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Student Sign In | AutoLearnPro</title>
+  <link rel="stylesheet" href="/sign-in/sign-in.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <a class="auth-brand" href="https://autolearnpro.com/">← AutoLearnPro</a>
+    <section class="auth-card" aria-labelledby="studentTitle">
+      <p class="small">Student workspace</p>
+      <h1 id="studentTitle">Student Sign In</h1>
+      <p>Sign in to reach your scenarios, learning path, transcript, coach, and activity workspace.</p>
+      <form id="studentSignIn">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button id="submitButton" type="submit">Sign In</button>
+      </form>
+      <div id="status" class="status hidden" role="status" aria-live="polite"></div>
+      <p class="small">Are you an instructor? <a href="/sign-in/instructor/">Use Instructor Sign In</a>.</p>
+    </section>
+  </main>
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
+  <script src="/sign-in/student/sign-in.js"></script>
+</body>
+</html>

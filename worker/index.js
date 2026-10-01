@@ -24,6 +24,11 @@ import {
   handleCurriculumEnhancementDrafts,
   handleCurriculumEnhancementDraftReview
 } from "./routes/curriculum-enhancements.js";
+import {
+  handleInstitutionLookup,
+  handleInstructorVerificationRequest,
+  handleInstructorVerificationStatus
+} from "./routes/instructor-verification.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 
@@ -100,6 +105,18 @@ app.use('/api/student/progress/*', cors({
   maxAge: 86400
 }))
 app.get('/api/student/progress', handleStudentProgress)
+
+// Instructor institution verification. Federal School Code resolves the institution,
+// while a separate affiliation review controls instructor authorization.
+app.use('/api/instructor/verification/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/instructor/verification/institution', handleInstitutionLookup)
+app.post('/api/instructor/verification/request', handleInstructorVerificationRequest)
+app.get('/api/instructor/verification/status', handleInstructorVerificationStatus)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.

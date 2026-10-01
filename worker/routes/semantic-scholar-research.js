@@ -101,6 +101,25 @@ export async function authorizeResearch(c, { requireSemanticScholarEnabled = tru
     return { response: c.json({ error: 'Teacher, instructor, professor, or admin access required' }, 403) }
   }
 
+  if (String(role).toLowerCase() !== 'admin') {
+    const supabase = createClient(supabaseUrl, serviceRoleKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+      }
+    })
+    const { data, error: verificationError } = await supabase
+      .from('instructor_verification_requests')
+      .select('status')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
+    if (verificationError || data?.status !== 'approved') {
+      return { response: c.json({ error: 'Verified instructor affiliation required' }, 403) }
+    }
+  }
+
   return { user, role }
 }
 
