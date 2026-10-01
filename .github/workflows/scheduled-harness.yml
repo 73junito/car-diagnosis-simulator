@@ -26,18 +26,9 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Check HARNESS_URL secret
-        env:
-          HARNESS_URL: ${{ secrets.HARNESS_URL }}
-        run: |
-          if [ -z "$HARNESS_URL" ]; then
-            echo "Error: HARNESS_URL secret is not set."
-            exit 1
-          fi
-
       - name: Run non-mutating production harness
         env:
-          HARNESS_URL: ${{ secrets.HARNESS_URL }}
+          TARGET_URL: https://app.autolearnpro.com
         run: |
           mkdir -p runs
           node scripts/harness.js \
@@ -48,7 +39,7 @@ jobs:
             --path /api/curriculum \
             --min-success-rate 1 \
             --export runs/run-scheduled-latest.json \
-            --url "$HARNESS_URL"
+            --url "$TARGET_URL"
 
       - name: Build scheduled summary
         run: |

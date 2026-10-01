@@ -22,7 +22,9 @@ describe('scheduled harness workflow contract', () => {
     expect(workflow).not.toContain('repository_dispatch')
   })
 
-  test('targets a current non-mutating Cloudflare route and fails closed', () => {
+  test('targets the current app origin and fails closed', () => {
+    expect(workflow).toContain('TARGET_URL: https://app.autolearnpro.com')
+    expect(workflow).not.toContain('HARNESS_URL')
     expect(workflow).toContain('--method GET')
     expect(workflow).toContain('--path /api/curriculum')
     expect(workflow).toContain('--min-success-rate 1')
