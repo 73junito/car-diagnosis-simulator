@@ -8,6 +8,7 @@ describe('current public homepage contract', () => {
   test('uses current evidence-governed positioning', () => {
     expect(home).toContain('Build Automotive Diagnostic Reasoning Through Guided, Evidence-Governed Learning')
     expect(home).toContain('Curriculum-First Learning')
+    expect(home).toContain('Current live scenario mappings are undergraduate-only.')
     expect(home).toContain('Governed Technical References')
     expect(home).toContain('Evidence before answers')
     expect(home).toContain('Federal School Code')

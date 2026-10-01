@@ -11,7 +11,7 @@ test.describe('Public homepage', () => {
 
     await page.goto(base, { waitUntil: 'networkidle' });
 
-    await expect(page).toHaveTitle(/AutoLearnPro|Evidence-Governed Automotive Learning/i);
+    await expect(page).toHaveTitle('AutoLearnPro | Evidence-Governed Automotive Learning');
 
     await expect(
       page.getByRole('heading', { name: /Build Automotive Diagnostic Reasoning/i })
