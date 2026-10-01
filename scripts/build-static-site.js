@@ -26,6 +26,7 @@ const runtimeDirectories = [
   "modules",
   "schemas",
   "services",
+  "sign-in",
   "src",
   "theme"
 ];
@@ -172,6 +173,13 @@ const requiredOutputFiles = [
   "manifest.webmanifest",
   "config/routes.js",
   "dashboard/student/index.html",
+  "sign-in/sign-in.css",
+  "sign-in/student/index.html",
+  "sign-in/student/sign-in.js",
+  "sign-in/instructor/index.html",
+  "sign-in/instructor/sign-in.js",
+  "dashboard/instructor/index.html",
+  "dashboard/instructor/index.js",
   "dashboard/instructor/research/index.html",
   "dashboard/instructor/research/research.js",
   "dashboard/student/scenario/index.html",
