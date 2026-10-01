@@ -3,7 +3,6 @@ import {
   extractBearerToken,
   verifySupabaseToken
 } from '../../api/_utils/auth-utils.js'
-import { findFederalSchoolByCode } from '../data/federal-school-codes.js'
 
 function normalizeSchoolCode(value) {
   return String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '')
@@ -68,7 +67,17 @@ export async function handleInstitutionLookup(c) {
     return c.json({ error: 'Enter a valid six-character Federal School Code' }, 400)
   }
 
-  const data = await findFederalSchoolByCode(schoolCode)
+  const { data, error } = await auth.supabase
+    .from('institutions')
+    .select('school_code,school_name,address,city,state_code,zip_code,province,country,postal_code')
+    .eq('school_code', schoolCode)
+    .eq('active', true)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Institution lookup failed:', error.message || error)
+    return c.json({ error: 'Institution directory unavailable' }, 503)
+  }
   if (!data) return c.json({ error: 'School code not recognized' }, 404)
 
   return c.json({ institution: publicInstitution(data) }, 200)
@@ -92,25 +101,18 @@ export async function handleInstructorVerificationRequest(c) {
     return c.json({ error: 'Enter a valid six-character Federal School Code' }, 400)
   }
 
-  const institution = await findFederalSchoolByCode(schoolCode)
-  if (!institution) return c.json({ error: 'School code not recognized' }, 404)
-
-  const institutionRow = {
-    ...institution,
-    source_name: 'Federal School Code List',
-    source_period: '2026-27 4th Quarter',
-    active: true,
-    updated_at: new Date().toISOString()
-  }
-
-  const { error: institutionError } = await auth.supabase
+  const { data: institution, error: institutionError } = await auth.supabase
     .from('institutions')
-    .upsert(institutionRow, { onConflict: 'school_code' })
+    .select('school_code,school_name,address,city,state_code,zip_code,province,country,postal_code')
+    .eq('school_code', schoolCode)
+    .eq('active', true)
+    .maybeSingle()
 
   if (institutionError) {
-    console.error('Institution persistence failed:', institutionError.message || institutionError)
-    return c.json({ error: 'Unable to persist institution verification' }, 500)
+    console.error('Institution verification lookup failed:', institutionError.message || institutionError)
+    return c.json({ error: 'Institution directory unavailable' }, 503)
   }
+  if (!institution) return c.json({ error: 'School code not recognized' }, 404)
 
   const requestRow = {
     user_id: auth.user.id,

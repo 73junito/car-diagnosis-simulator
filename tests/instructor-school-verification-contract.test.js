@@ -30,7 +30,7 @@ describe('instructor school verification contract', () => {
 
   test('requires authenticated server-side school lookup and never grants a role', () => {
     expect(route).toContain('verifySupabaseToken')
-    expect(route).toContain('findFederalSchoolByCode')
+    expect(route).toContain(".from('institutions')")
     expect(route).toContain("status: 'pending'")
     expect(route).toContain('authorizationGranted: false')
     expect(route).not.toContain("update({ role:")
@@ -70,12 +70,10 @@ describe('instructor school verification contract', () => {
     expect(workerIndex).toContain("allowHeaders: ['Content-Type', 'Authorization']")
   })
 
-  test('uses the generated 2026-27 federal directory without exposing it as a static asset', () => {
-    const dataModule = fs.readFileSync(
-      path.join(root, 'worker/data/federal-school-codes.js'),
-      'utf8'
-    )
-    expect(dataModule).toContain('FEDERAL_SCHOOL_CODE_RECORD_COUNT = 6547')
-    expect(buildScript).not.toContain('worker/data/federal-school-codes.js')
+  test('keeps the institution directory server-side', () => {
+    expect(route).toContain(".from('institutions')")
+    expect(migration).toContain("source_period text not null default '2026-27 4th Quarter'")
+    expect(buildScript).not.toContain('supabase/migrations')
+    expect(buildScript).not.toContain('institutions.csv')
   })
 })
