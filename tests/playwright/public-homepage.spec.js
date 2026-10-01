@@ -41,7 +41,14 @@ test.describe('Public homepage', () => {
     await expect(page.getByRole('button', { name: 'Open navigation' })).toBeVisible();
     await page.getByRole('button', { name: 'Open navigation' }).click();
     await expect(page.getByRole('navigation', { name: 'Primary navigation' })).toHaveClass(/open/);
-    await expect(page.getByRole('button', { name: 'Close navigation' })).toHaveAttribute('aria-expanded', 'true');
+    const closeButton = page.getByRole('button', { name: 'Close navigation' });
+    await expect(closeButton).toHaveAttribute('aria-expanded', 'true');
+
+    await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link').first().focus();
+    await page.keyboard.press('Escape');
+    const openButton = page.getByRole('button', { name: 'Open navigation' });
+    await expect(openButton).toBeFocused();
+    await expect(openButton).toHaveAttribute('aria-expanded', 'false');
 
     await page.screenshot({ path: 'playwright/screenshots/public-homepage-mobile.png', fullPage: true });
 

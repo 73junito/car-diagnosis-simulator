@@ -18,7 +18,10 @@ mainNav?.querySelectorAll('a').forEach((link) => {
 });
 
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') setMenuOpen(false);
+  if (event.key !== 'Escape') return;
+  const wasOpen = navToggle?.getAttribute('aria-expanded') === 'true';
+  setMenuOpen(false);
+  if (wasOpen) navToggle?.focus();
 });
 
 window.addEventListener('resize', () => {

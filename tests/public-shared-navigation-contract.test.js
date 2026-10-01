@@ -22,4 +22,14 @@ describe('shared public navigation contract', () => {
     expect(researchPage).toContain('>Home</a>')
     expect(researchPage).toContain('>Launch Platform</a>')
   })
+
+  test('shared institutional access styles remain available', () => {
+    expect(styles).toContain('--blue-500:#2f8cff')
+    expect(styles).toContain('body:not(.home-page) .lede{')
+    expect(styles).toContain('body:not(.home-page) .cards{')
+    expect(styles).toContain('body:not(.home-page) .card{')
+    expect(styles).toContain('body:not(.home-page) .btn{')
+    expect(styles).toContain('body:not(.home-page) .btn.primary{')
+    expect(styles).toContain('body:not(.home-page) .btn.ghost{')
+  })
 })
