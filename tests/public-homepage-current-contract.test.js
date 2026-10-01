@@ -34,9 +34,12 @@ describe('current public homepage contract', () => {
   test('keeps the simplified hero and grouped legal-support footer', () => {
     expect(home).not.toContain('hero-visual')
     expect(home).not.toContain('automotive-diagnostics.svg')
-    expect(home).toContain('<strong>Learning</strong>')
-    expect(home).toContain('<strong>Governance</strong>')
-    expect(home).toContain('<strong>Support</strong>')
+    expect(home).toContain('role="group" aria-labelledby="footer-learning-heading"')
+    expect(home).toContain('role="group" aria-labelledby="footer-governance-heading"')
+    expect(home).toContain('role="group" aria-labelledby="footer-support-heading"')
+    expect(home).toContain('id="footer-learning-heading">Learning</strong>')
+    expect(home).toContain('id="footer-governance-heading">Governance</strong>')
+    expect(home).toContain('id="footer-support-heading">Support</strong>')
     expect(home).toContain('href="/accessibility/"')
   })
 
