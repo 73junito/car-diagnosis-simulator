@@ -406,11 +406,11 @@ button:focus-visible {
     place-items: center;
   }
 
-  .nav-links {
+  #mainNav {
     display: none;
   }
 
-  .nav-links.open {
+  #mainNav.open {
     position: absolute;
     top: 62px;
     right: 20px;
@@ -426,11 +426,11 @@ button:focus-visible {
     box-shadow: var(--shadow);
   }
 
-  .nav-links.open a {
+  #mainNav.open a {
     padding: 11px 12px;
   }
 
-  .nav-links .cta {
+  #mainNav .cta {
     margin-left: 0;
     text-align: center;
   }
