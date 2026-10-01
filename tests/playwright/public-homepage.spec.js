@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Public homepage', () => {
-  test('public homepage launches the AutoLearnPro platform', async ({ page }) => {
+  test('public homepage exposes current student and instructor entry points', async ({ page }) => {
     const base = process.env.PUBLIC_SITE_BASE_URL || '/';
 
     const consoleErrors = [];
@@ -11,30 +11,32 @@ test.describe('Public homepage', () => {
 
     await page.goto(base, { waitUntil: 'networkidle' });
 
-    await expect(page).toHaveTitle(/AutoLearnPro|Automotive Diagnostic Training/i);
+    await expect(page).toHaveTitle('AutoLearnPro | Evidence-Governed Automotive Learning');
 
     await expect(
-      page.getByRole('heading', { name: /Master Automotive Diagnostics/i })
+      page.getByRole('heading', { name: /Build Automotive Diagnostic Reasoning/i })
     ).toBeVisible();
 
-    // Verify both CTAs point to the platform (hero and nav)
     await expect(
-      page.getByRole('link', { name: 'Launch AutoLearnPro' })
-    ).toHaveAttribute('href', 'https://app.autolearnpro.com/');
+      page.getByRole('link', { name: 'Student Sign In' }).first()
+    ).toHaveAttribute('href', 'https://app.autolearnpro.com/sign-in/student/');
 
     await expect(
-      page.getByRole('link', { name: 'Launch Platform' })
-    ).toHaveAttribute('href', 'https://app.autolearnpro.com/');
+      page.getByRole('link', { name: 'Instructor Sign In' }).first()
+    ).toHaveAttribute('href', 'https://app.autolearnpro.com/sign-in/instructor/');
 
-    // basic checks
+    await expect(
+      page.getByRole('link', { name: 'Explore Curriculum' })
+    ).toHaveAttribute('href', 'https://exam.autolearnpro.com/learning-path/');
+
     const content = await page.content();
+    expect(content).not.toContain('20-question attempts');
+    expect(content).not.toContain('refreshed question sets after repeated failures');
     expect(content).not.toContain('vercel.app');
 
-    // viewport mobile check + screenshot
     await page.setViewportSize({ width: 375, height: 812 });
     await page.screenshot({ path: 'playwright/screenshots/public-homepage-mobile.png', fullPage: true });
 
-    // ensure no console errors or failed requests
     expect(consoleErrors).toEqual([]);
     expect(failedRequests).toEqual([]);
   });
