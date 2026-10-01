@@ -15,18 +15,27 @@ describe('curriculum reference coverage expansion batch 4', () => {
     const mappingRows = [...migration.matchAll(/\(\n\s*'(?:technical-writing|openstax|nhtsa|bccampus)-/g)]
     expect(mappingRows).toHaveLength(13)
 
-    const targets = [
-      'ug-engine-performance-foundations',
-      'ug-aut211-engine-performance-lab',
-      'ug-aut250-automotive-diagnostics-i',
-      'ug-aut251-diagnostics-lab',
-      'ug-aut300-advanced-diagnostics',
-      'ug-aut301-advanced-diagnostics-lab',
-      'ug-aut321-hybrid-lab',
-      'ug-aut331-electric-vehicle-lab',
-      'ug-aut410-systems-integration'
+    const expectedMappings = [
+      ['openstax-principles-data-science-2025', 'ug-engine-performance-foundations', 'diagnostic-data-foundation'],
+      ['openstax-principles-data-science-2025', 'ug-aut211-engine-performance-lab', 'testing-data-foundation'],
+      ['technical-writing-for-technicians-2019', 'ug-aut211-engine-performance-lab', 'laboratory-documentation'],
+      ['openstax-principles-data-science-2025', 'ug-aut250-automotive-diagnostics-i', 'diagnostic-data-foundation'],
+      ['openstax-principles-data-science-2025', 'ug-aut251-diagnostics-lab', 'testing-data-foundation'],
+      ['technical-writing-for-technicians-2019', 'ug-aut251-diagnostics-lab', 'laboratory-documentation'],
+      ['openstax-principles-data-science-2025', 'ug-aut300-advanced-diagnostics', 'diagnostic-data-foundation'],
+      ['openstax-principles-data-science-2025', 'ug-aut301-advanced-diagnostics-lab', 'testing-data-foundation'],
+      ['technical-writing-for-technicians-2019', 'ug-aut301-advanced-diagnostics-lab', 'laboratory-documentation'],
+      ['nhtsa-electric-hybrid-vehicle-safety-2026', 'ug-aut321-hybrid-lab', 'high-voltage-safety-reference'],
+      ['nhtsa-electric-hybrid-vehicle-safety-2026', 'ug-aut331-electric-vehicle-lab', 'high-voltage-safety-reference'],
+      ['openstax-introduction-computer-science-2026', 'ug-aut410-systems-integration', 'computing-systems-foundation'],
+      ['bccampus-basic-motor-control-2020', 'ug-aut410-systems-integration', 'control-systems-foundation']
     ]
-    targets.forEach((lessonId) => expect(migration).toContain(lessonId))
+
+    expectedMappings.forEach(([referenceId, lessonId, role]) => {
+      expect(migration).toContain(
+        `'${referenceId}',\n  '${lessonId}',\n  '${role}'`
+      )
+    })
   })
 
   test('leaves unsupported broad foundations and shop-safety lessons unmapped', () => {
