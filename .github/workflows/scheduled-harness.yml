@@ -2,12 +2,12 @@ name: Scheduled Harness Run
 
 on:
   schedule:
-    - cron: '0 6 * * *' # daily at 06:00 UTC
+    - cron: '0 6 * * *'
   workflow_dispatch: {}
 
 permissions:
   contents: write
-  actions: write
+  pull-requests: write
 
 jobs:
   run-harness:
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v7
@@ -24,97 +24,61 @@ jobs:
           node-version: '24'
 
       - name: Install deps
-        run: |
-          npm ci
+        run: npm ci
 
-      - name: Check HARNESS_URL secret
+      - name: Run non-mutating production harness
         env:
-          HARNESS_URL: ${{ secrets.HARNESS_URL }}
-        run: |
-          if [ -z "$HARNESS_URL" ]; then
-            echo "Error: HARNESS_URL secret is not set. Add it in Settings → Secrets and variables → Actions."
-            exit 1
-          fi
-
-      - name: Run harness
-        env:
-          HARNESS_URL: ${{ secrets.HARNESS_URL }}
+          TARGET_URL: https://app.autolearnpro.com
         run: |
           mkdir -p runs
-          node scripts/harness.js --count 50 --concurrency 3 --rate 10 --export runs/run-scheduled-latest.json --url "$HARNESS_URL"
+          node scripts/harness.js \
+            --count 50 \
+            --concurrency 3 \
+            --rate 10 \
+            --method GET \
+            --path /api/curriculum \
+            --min-success-rate 1 \
+            --export runs/run-scheduled-latest.json \
+            --url "$TARGET_URL"
 
-      - name: Post-process run export
+      - name: Build scheduled summary
         run: |
-          node -e "const fs=require('fs'); const pRun='runs/run-scheduled-latest.json'; if(fs.existsSync(pRun)){ const run=JSON.parse(fs.readFileSync(pRun)); fs.writeFileSync('runs/run-scheduled-summary.json', JSON.stringify({results:run.results||[],count:(run.results||[]).length},null,2)); } else { console.log('no run export found'); }"
+          node - <<'NODE'
+          const fs = require('fs')
+          const source = 'runs/run-scheduled-latest.json'
+          const run = JSON.parse(fs.readFileSync(source, 'utf8'))
+          fs.writeFileSync(
+            'runs/run-scheduled-summary.json',
+            JSON.stringify({ results: run.results || [], count: (run.results || []).length }, null, 2)
+          )
+          NODE
 
-      - name: Commit runs artifacts
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add runs || true
-          git commit -m "chore: add scheduled harness run artifacts" || echo "no changes to commit"
-          git push || true
-
-      - name: Upload runs artifacts
+      - name: Upload harness artifacts
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: runs-artifacts
           path: |
             runs/run-scheduled-latest.json
             runs/run-scheduled-summary.json
+          if-no-files-found: warn
 
-      - name: Signal append-runs-history via repository_dispatch
-        if: always()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Append successful run to history
         run: |
-          echo "Triggering repository_dispatch event 'append-history'"
-          ref="${GITHUB_REF#refs/heads/}"
-          payload="{\"event_type\":\"append-history\",\"client_payload\":{\"run_id\":\"${GITHUB_RUN_ID}\",\"ref\":\"$ref\"}}"
-          echo "payload=$payload"
-          curl -s -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            https://api.github.com/repos/${{ github.repository }}/dispatches \
-            -d "$payload" || true
+          node scripts/append-harness-history.js \
+            runs/run-scheduled-summary.json \
+            runs/history.csv
 
-      - name: Ensure history file (fallback)
-        run: |
-          set -e
-          mkdir -p runs
-          if [ ! -f runs/history.csv ]; then
-            echo "accepted,denied,acceptRate,completed,avgDuration,p50,p90,p99,notificationAttempts,totalLogs,generatedAt,source" > runs/history.csv
-            echo "Created runs/history.csv header (uncommitted)"
-          fi
-
-      - id: append-summary-pr
-        name: Append history row and create PR (fallback)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          SUMMARY=runs/run-scheduled-summary.json
-          if [ ! -f "$SUMMARY" ]; then
-            echo "No summary file found; skipping history append."
-            echo "appended=0" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          node -e "const fs=require('fs'); const p=process.env.SUMMARY||'runs/run-scheduled-summary.json'; const s=JSON.parse(fs.readFileSync(p)); const results=s.results||[]; const total=results.length; const accepted=results.filter(r=>r.ok).length; const denied=results.filter(r=>!r.ok).length; const lat=results.map(r=>r.latency||0).filter(n=>typeof n==='number'); const avg=Math.round(lat.length? lat.reduce((a,b)=>a+b,0)/lat.length:0); const sorted=lat.slice().sort((a,b)=>a-b); const pct=(n,k)=>{ if(!n.length) return 0; const i=Math.floor(k*(n.length-1)); return Math.round(n[i]||0); }; const p50=pct(sorted,0.5); const p90=pct(sorted,0.9); const p99=pct(sorted,0.99); const notif=0; const totalLogs=0; const gen=new Date().toISOString(); const acceptRate=(accepted+denied)? (accepted/(accepted+denied)).toFixed(2):'0'; const row=[accepted,denied,acceptRate,total,avg,p50,p90,p99,notif,totalLogs,gen,'run-scheduled-summary.json'].join(','); fs.appendFileSync('runs/history.csv', row+'\n'); console.log('APPENDED:'+row); process.stdout.write('appended=1');" > tmp_out_pr.txt
-          if grep -q '^APPENDED:' tmp_out_pr.txt; then
-            echo "appended=1" >> "$GITHUB_OUTPUT"
-          else
-            echo "appended=0" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Create PR for appended history (fallback)
-        if: steps.append-summary-pr.outputs.appended == '1'
+      - name: Create history PR
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: append runs/history.csv from scheduled harness (fallback)"
-          title: "chore: update runs/history.csv (scheduled harness fallback)"
+          add-paths: |
+            runs/history.csv
+          commit-message: "chore: append scheduled harness history"
+          title: "chore: update scheduled harness history"
           body: |-
-            This PR was opened automatically by the scheduled harness run (fallback) to append a new row to `runs/history.csv`.
-          branch: history/update-${{ github.run_id }}-fallback
+            Automated history update from a successful scheduled harness run.
+          branch: history/update-${{ github.run_id }}
           labels: runs-history
           delete-branch: true
