@@ -41,7 +41,8 @@ screenshots/
 
 # Generated or experimental artifacts to ignore
 .wrangler/
-runs/
+runs/*
+!runs/history.csv
 runs-artifacts-*/
 downloaded-artifacts/
 playwright-report/
