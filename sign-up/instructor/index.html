@@ -18,7 +18,8 @@
         <label for="email">Institution email</label>
         <input id="email" name="email" type="email" autocomplete="email" required>
         <label for="password">Password</label>
-        <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+        <p class="field-help" id="passwordHelp">Use at least 8 characters and avoid common or easily guessed passwords.</p>
+        <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" aria-describedby="passwordHelp" required>
         <label for="confirmPassword">Confirm password</label>
         <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
         <button id="createButton" type="submit">Create Instructor Account</button>
@@ -31,7 +32,7 @@
         <a href="https://autolearnpro.com/terms">Terms</a> and acknowledge the
         <a href="https://autolearnpro.com/privacy">Privacy Policy</a>.
       </p>
-      <p class="small">Already have an account? <a href="/sign-in/instructor/">Instructor Sign In</a>.</p>
+      <p class="small">Already have an account? <a href="/sign-in/instructor/">Instructor Sign In</a> or <a href="/sign-in/recover/">reset your password</a>.</p>
       <p class="small">Are you a student? <a href="/sign-up/student/">Create a Student Account</a>.</p>
     </section>
   </main>

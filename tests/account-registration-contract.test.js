@@ -50,7 +50,7 @@ describe('account registration contract', () => {
   test('supports confirmed sessions and institution verification', () => {
     expect(studentSignUpJs).toContain("window.location.assign('/dashboard/student/')")
     expect(instructorSignUpJs).toContain("window.location.assign('/sign-in/instructor/')")
-    expect(instructorSignInJs).toContain("if (token())")
+    expect(instructorSignInJs).toContain("if (!redirected && token())")
     expect(instructorSignInJs).toContain("schoolStep.classList.remove('hidden')")
   })
   test('ships registration pages in the app static build', () => {
