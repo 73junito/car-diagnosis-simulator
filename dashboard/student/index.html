@@ -61,8 +61,18 @@
           <a href="/dashboard/student/coach/">Coach</a>
           <a href="/dashboard/student/activity/">Activity</a>
           <a href="/dashboard/student/transcript/">Transcript</a>
-          <a href="/dashboard/student/starting-system-lab/">Labs</a>
         </div>
+        <details class="student-labs-menu">
+          <summary>Labs</summary>
+          <div class="student-labs-grid">
+            <a href="/dashboard/student/starting-system-lab/">12 V Starting Lab</a>
+            <a href="/dashboard/student/relay-load-lab/">12 V Relay Load Lab</a>
+            <a href="/dashboard/student/sensor-lab/">12 V Sensor Lab</a>
+            <a href="/dashboard/student/actuator-lab/">12 V PWM Actuator Lab</a>
+            <a href="/dashboard/student/network-lab/">12 V CAN/LIN Network Lab</a>
+            <a href="/dashboard/student/multivoltage-lab/">Electrified Multi-Voltage Lab</a>
+          </div>
+        </details>
         <details class="student-training-settings">
           <summary>Training settings</summary>
           <p>Resetting progress removes locally saved scenario status and cannot be undone.</p>
@@ -70,9 +80,6 @@
         </details>
       </details>
     </section>
-
-<h1 class="visually-hidden">Student Scenario Dashboard</h1>
-<p class="page-subtitle visually-hidden">Select a diagnostic scenario to begin training or assessment.</p>
 
     <section class="student-scenario-browser" aria-labelledby="practiceScenariosTitle">
       <div class="student-browser-heading">
@@ -323,7 +330,6 @@
           ? window.studentProgress.loadProgress()
           : {};
         const completed = Object.values(progress).filter(p=>p.status==='completed').length;
-        const inProgress = Object.values(progress).filter(p=>p.status==='in-progress').length;
         const percent = total ? Math.round((completed / total) * 100) : 0;
 
         const progressText = document.getElementById('studentProgressText');
@@ -337,9 +343,12 @@
           ? window.studentProgress.getLastScenario()
           : null;
         const lastScenario = last && last.id ? registry.find(x=>x.id===last.id) : null;
+        const resumeScenario = lastScenario && progress[last.id] && progress[last.id].status === 'in-progress'
+          ? lastScenario
+          : null;
         const inProgressScenario = registry.find(s => progress[s.id] && progress[s.id].status === 'in-progress');
         const nextUnfinished = registry.find(s => !progress[s.id] || progress[s.id].status !== 'completed');
-        const recommended = lastScenario || inProgressScenario || nextUnfinished || registry[0] || null;
+        const recommended = resumeScenario || inProgressScenario || nextUnfinished || registry[0] || null;
 
         const focusText = document.getElementById('currentFocusText');
         if(focusText && recommended){
@@ -379,7 +388,7 @@
         if(primaryBtn){
           if(recommended){
             const recStatus = progress[recommended.id] && progress[recommended.id].status;
-            primaryBtn.textContent = (lastScenario || recStatus === 'in-progress') ? 'Continue Scenario' : completed > 0 ? 'Start Next Scenario' : 'Start Your First Scenario';
+            primaryBtn.textContent = (resumeScenario || recStatus === 'in-progress') ? 'Continue Scenario' : completed > 0 ? 'Start Next Scenario' : 'Start Your First Scenario';
             primaryBtn.onclick = () => {
               try{
                 if(window.studentProgress && window.studentProgress.setLastScenario) window.studentProgress.setLastScenario(recommended.id);
