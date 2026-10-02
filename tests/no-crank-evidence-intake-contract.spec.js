@@ -65,6 +65,33 @@ describe('no-crank evidence intake contract', () => {
     }
   });
 
+  test('keeps the scholarly starter-current candidate separate from question approval', () => {
+    const scholarly = JSON.parse(fs.readFileSync(
+      path.join(root, 'data', 'evidence', 'open-scholarly', 'scholarly-source-manifest.json'),
+      'utf8'
+    ));
+    const candidate = intake.source_candidates.find((source) =>
+      source.candidate_id === 'jurnal-engine-battery-voltage-drop-2026'
+    );
+    const manifestSource = scholarly.sources.find((source) =>
+      source.id === 'jurnal-engine-battery-voltage-drop-2026'
+    );
+
+    expect(candidate).toBeTruthy();
+    expect(candidate.evidence_decision).toBe('candidate-only');
+    expect(candidate.may_generate_questions).toBe(false);
+    expect(candidate.approval_effect).toBe('none');
+    expect(manifestSource).toBeTruthy();
+    expect(manifestSource.status).toBe('draft');
+    expect(manifestSource.reviewer_approved).toBe(false);
+
+    const mapping = intake.question_mappings.find((row) =>
+      row.question_id === 'no-crank-starter-current-01'
+    );
+    expect(mapping.candidate_sources).toEqual(['jurnal-engine-battery-voltage-drop-2026']);
+    expect(mapping.mapping_status).toBe('pending-human-rights-and-technical-review');
+  });
+
   test('preserves external-reference-only rights boundaries', () => {
     const externalOnly = intake.source_candidates.filter((source) =>
       String(source.rights_decision).includes('external-reference-only')

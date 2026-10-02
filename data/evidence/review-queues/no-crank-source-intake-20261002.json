@@ -129,6 +129,32 @@
       "store_verbatim_excerpt": false,
       "may_generate_questions": false,
       "approval_effect": "none"
+    },
+    {
+      "candidate_id": "jurnal-engine-battery-voltage-drop-2026",
+      "title": "Analisis Pengaruh Drop Tegangan Baterai terhadap Waktu Starting pada Engine 4N15 Mitsubishi Triton",
+      "publisher": "Jurnal Engine: Energi, Manufaktur, dan Material / Universitas Proklamasi 45",
+      "publication_date": "2026-05-27",
+      "doi": "10.30588/jeemm.v10i1.2691",
+      "canonical_url": "https://ejournal.up45.ac.id/index.php/Jurnal_ENGINE/article/view/2691",
+      "authority_status": "peer-reviewed-scholarly-automotive-study",
+      "observed_scope": [
+        "battery voltage drop during engine starting",
+        "starter high initial current",
+        "battery condition and internal resistance",
+        "cold-cranking capability (CCA)",
+        "minimum voltage during starting"
+      ],
+      "applicability_limit": "Vehicle-specific field study on a Mitsubishi Triton 4N15 diesel engine; measured values must not be generalized as universal thresholds.",
+      "rights_classification_candidate": "CC_BY",
+      "rights_basis": "Publisher article page identifies the article as Creative Commons Attribution 4.0; exact artifact and human rights review remain required before reuse approval.",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "rights_decision": "pending-human-rights-verification",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, DOI/URL, and project-authored factual summary only until human rights and technical review are complete",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
     }
   ],
   "question_mappings": [
@@ -218,9 +244,11 @@
     },
     {
       "question_id": "no-crank-starter-current-01",
-      "candidate_sources": [],
-      "claim_scope": "Starter current draw is not independently diagnostic and must be interpreted with cranking voltage, cranking speed, temperature, circuit condition, and the applicable starter/OEM specification.",
-      "mapping_status": "source-gap"
+      "candidate_sources": [
+        "jurnal-engine-battery-voltage-drop-2026"
+      ],
+      "claim_scope": "Starter-current interpretation should be tied to battery voltage drop, battery condition/internal resistance, and CCA rather than treated as an isolated diagnostic result.",
+      "mapping_status": "pending-human-rights-and-technical-review"
     },
     {
       "question_id": "no-crank-seized-engine-01",
@@ -280,8 +308,8 @@
   ],
   "summary": {
     "question_count": 20,
-    "mapped_to_at_least_one_candidate_source": 10,
-    "source_gap_count": 10,
+    "mapped_to_at_least_one_candidate_source": 11,
+    "source_gap_count": 9,
     "approved_questions_created": 0,
     "approved_sources_created": 0,
     "approved_chunks_created": 0,
@@ -289,7 +317,7 @@
   },
   "required_before_next_gate": [
     "Complete a targeted Google Scholar discovery pass for starting-system and battery-testing claims and record original-publisher/DOI targets.",
-    "Resolve the 10 source-gap mappings, prioritizing safety-critical and vehicle-specific claims.",
+    "Resolve the 9 remaining source-gap mappings, prioritizing safety-critical and vehicle-specific claims.",
     "Obtain rights clearance only for sources whose exact licenses permit the intended commercial-capable use; otherwise retain metadata/link-only reference status.",
     "Perform human technical review of each claim-to-source mapping and record reviewer identity and timestamp.",
     "Do not store proprietary excerpts or send external-reference-only source text to Ollama/RAG.",
