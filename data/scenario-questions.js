@@ -72,9 +72,9 @@ window.SCENARIO_QUESTIONS = {
     {
       id: "no-crank-battery-load-01",
       status: "draft",
-      question_text: "During a carbon-pile load test performed for 15 seconds at about 70°F (21°C), which result is below the commonly specified minimum for a 12 V lead-acid battery?",
+      question_text: "During a carbon-pile load test at one-half the battery's CCA rating for 15 seconds, with the battery at about 70°F (21°C), which result is below the commonly specified minimum for a conventional 12 V lead-acid battery?",
       option_a: "Voltage stays above 12.4V under load",
-      option_b: "Voltage drops below 9.6V under a rated load",
+      option_b: "Voltage drops below 9.6 V while the specified load is applied",
       option_c: "Voltage remains at 12.6V under load",
       option_d: "Battery accepts full charge quickly",
       correct_answer: "B",
