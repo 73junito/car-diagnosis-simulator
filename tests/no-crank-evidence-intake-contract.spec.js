@@ -36,6 +36,13 @@ describe('no-crank evidence intake contract', () => {
     const mappedRows = intake.question_mappings.filter((row) =>
       Array.isArray(row.candidate_sources) && row.candidate_sources.length > 0
     );
+    const candidateIds = intake.source_candidates.map((source) => source.candidate_id);
+    expect(new Set(candidateIds).size).toBe(candidateIds.length);
+    for (const row of mappedRows) {
+      for (const candidateId of row.candidate_sources) {
+        expect(candidateIds).toContain(candidateId);
+      }
+    }
 
     expect(sourceGapRows).toHaveLength(intake.summary.source_gap_count);
     expect(mappedRows).toHaveLength(intake.summary.mapped_to_at_least_one_candidate_source);
