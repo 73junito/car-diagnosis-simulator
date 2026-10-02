@@ -57,6 +57,13 @@ describe('public Worker least privilege', () => {
     expect(publicConfig.assets.directory).toBe('./public-site');
   });
 
+  test('only health and ping bypass asset-first routing', () => {
+    expect(publicConfig.assets.run_worker_first).toEqual([
+      '/api/health',
+      '/__ping'
+    ]);
+  });
+
   test('public Worker declares no database or AI bindings', () => {
     expect(publicConfig.secrets_store_secrets).toBeUndefined();
     expect(publicConfig.vars.SUPABASE_URL).toBeUndefined();
@@ -86,13 +93,13 @@ describe('public Worker least privilege', () => {
   });
 
   test.each([
-    '/api/curriculum',
-    '/api/student/progress',
-    '/api/scenario-questions-approved',
-    '/api/assessment-attempts/start',
-    '/api/instructor/verification/status'
-  ])('does not serve the app API route %s', async (route) => {
-    const response = await call(`https://autolearnpro.com${route}`);
+    { method: 'GET', route: '/api/curriculum' },
+    { method: 'GET', route: '/api/student/progress' },
+    { method: 'GET', route: '/api/scenario-questions-approved' },
+    { method: 'POST', route: '/api/assessment-attempts/start' },
+    { method: 'GET', route: '/api/instructor/verification/status' }
+  ])('does not serve the app API route $method $route', async ({ method, route }) => {
+    const response = await call(`https://autolearnpro.com${route}`, { method });
 
     expect(response.status).toBe(404);
   });
