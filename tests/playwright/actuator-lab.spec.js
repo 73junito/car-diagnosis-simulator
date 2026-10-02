@@ -87,6 +87,7 @@ test.describe("12 V PWM actuator lab",()=>{
 
  test("dashboard links to actuator lab",async({page})=>{
   await page.goto("/dashboard/student/");
+  await page.locator('.student-more-tools > summary').click();
   await expect(page.getByRole("link",{name:"12 V PWM Actuator Lab"})).toHaveAttribute("href","/dashboard/student/actuator-lab/");
  });
 });
