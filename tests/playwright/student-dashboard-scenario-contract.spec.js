@@ -28,6 +28,10 @@ test('renders and wires all 21 scenario cards to unique diagnostic routes', asyn
   await page.goto('/dashboard/student/', { waitUntil: 'domcontentloaded' });
 
   const cards = page.locator('article.tm-scenario-v2-card');
+
+  // Keep the first view intentionally compact, then verify the full registry contract.
+  await expect(cards).toHaveCount(6);
+  await page.getByRole('button', { name: 'Show all scenarios' }).click();
   await expect(cards).toHaveCount(expected.length);
 
   for (let index = 0; index < expected.length; index++) {
