@@ -393,7 +393,11 @@
             const id = resumeBtn.dataset.scenario;
             const found = registry.find(x=>x.id===id);
             if(!found) return;
-            if(window.studentProgress && window.studentProgress.setProgressFor){
+            if(
+              window.studentProgress &&
+              window.studentProgress.setProgressFor &&
+              progress[id]?.status !== 'completed'
+            ){
               window.studentProgress.setProgressFor(id,'in-progress');
             }
             if(typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID){
