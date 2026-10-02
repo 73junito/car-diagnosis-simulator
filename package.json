@@ -109,7 +109,7 @@
     "wrangler": "^4.143.1"
   },
   "dependencies": {
-    "hono": "^4.13.8"
+    "hono": "^4.13.10"
   },
   "description": "Evidence-aware automotive technology learning, diagnostic scenario, and lab platform",
   "homepage": "https://autolearnpro.com/",
