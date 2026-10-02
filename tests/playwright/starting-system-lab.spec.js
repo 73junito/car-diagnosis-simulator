@@ -76,6 +76,7 @@ test.describe("12 V starting-system template lab", () => {
 
   test("student dashboard exposes the starting-system lab", async ({ page }) => {
     await page.goto("/dashboard/student/");
+  await page.locator('.student-more-tools > summary').click();
     await expect(page.getByRole("link", { name: "12 V Starting Lab" })).toHaveAttribute(
       "href",
       "/dashboard/student/starting-system-lab/"
