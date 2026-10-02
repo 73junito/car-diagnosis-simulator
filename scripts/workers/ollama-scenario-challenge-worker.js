@@ -7,6 +7,8 @@ const {
   buildChallengeJsonSchema
 } = require('../agents/scenario-challenge-question-agent');
 
+const MAX_QUESTIONS_PER_REQUEST = 10;
+
 function describeContent(content) {
   const text = String(content || '');
   const trimmed = text.trim();
@@ -17,21 +19,64 @@ function describeContent(content) {
   };
 }
 
-async function runScenarioChallengeWorker({
-  apiUrl, apiKey, model, batchId, batchTarget, allocation, scenarioContext, retainedQuestions,
-  timeoutMs = 120000, fetchImpl = globalThis.fetch
-}) {
-  if (!apiUrl || !apiKey || !model) throw new Error('Ollama Cloud configuration is incomplete.');
+function buildAllocationChunks(allocation, maxQuestions = MAX_QUESTIONS_PER_REQUEST) {
+  if (!Number.isInteger(maxQuestions) || maxQuestions < 1) {
+    throw new Error('maxQuestions must be a positive integer.');
+  }
 
-  const startedAt = Date.now();
+  const chunks = [];
+  let currentAllocation = {};
+  let currentCount = 0;
+
+  for (const [scenarioId, rawCount] of Object.entries(allocation || {})) {
+    if (!Number.isInteger(rawCount) || rawCount < 0) {
+      throw new Error(`Allocation for ${scenarioId} must be a non-negative integer.`);
+    }
+
+    let remaining = rawCount;
+    while (remaining > 0) {
+      const available = maxQuestions - currentCount;
+      const take = Math.min(remaining, available);
+      currentAllocation[scenarioId] = (currentAllocation[scenarioId] || 0) + take;
+      currentCount += take;
+      remaining -= take;
+
+      if (currentCount === maxQuestions) {
+        chunks.push({ allocation: currentAllocation, target: currentCount });
+        currentAllocation = {};
+        currentCount = 0;
+      }
+    }
+  }
+
+  if (currentCount > 0) {
+    chunks.push({ allocation: currentAllocation, target: currentCount });
+  }
+
+  return chunks;
+}
+
+async function requestChallengeChunk({
+  apiUrl,
+  apiKey,
+  model,
+  batchId,
+  batchTarget,
+  allocation,
+  scenarioContext,
+  retainedQuestions,
+  deadlineAt,
+  fetchImpl,
+  chunkIndex,
+  chunkCount
+}) {
   const baseMessages = buildChallengeMessages({
     batchId, batchTarget, allocation, scenarioContext, retainedQuestions
   });
   const format = buildChallengeJsonSchema({ batchId, batchTarget });
 
   for (let attempt = 1; attempt <= 2; attempt += 1) {
-    const elapsed = Date.now() - startedAt;
-    const remainingMs = timeoutMs - elapsed;
+    const remainingMs = deadlineAt - Date.now();
     if (remainingMs <= 0) {
       throw new Error('Ollama Cloud request timed out before a valid model response was received.');
     }
@@ -48,7 +93,7 @@ async function runScenarioChallengeWorker({
               'The previous response could not be parsed as the required JSON object.',
               'Retry from the original instructions.',
               'Return one complete JSON object only; no markdown, prose, code fences, prefix, or suffix.',
-              'The object must match the supplied JSON schema and contain the full requested batch.'
+              'The object must match the supplied JSON schema and contain the full requested chunk.'
             ].join(' ')
           }
         ];
@@ -91,24 +136,33 @@ async function runScenarioChallengeWorker({
         if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) {
           throw new Error('Model response violated the JSON-only boundary contract.');
         }
+
         const generated = parseModelJson(trimmed);
         if (!generated || typeof generated !== 'object' || Array.isArray(generated)) {
           throw new Error('Model response was not a JSON object.');
         }
-        return { generated, agentVersion: AGENT_VERSION };
+        if (generated.batch_id !== batchId) {
+          throw new Error('Model response batch_id did not match the requested batch.');
+        }
+        if (!Array.isArray(generated.questions) || generated.questions.length !== batchTarget) {
+          throw new Error('Model response question count did not match the requested chunk.');
+        }
+
+        return generated.questions;
       } catch (error) {
         const diagnostic = describeContent(content);
         console.warn(
-          `Ollama challenge parse failure attempt ${attempt}/2: ` +
-          `chars=${diagnostic.chars}, starts_object=${diagnostic.startsObject}, ` +
-          `ends_object=${diagnostic.endsObject}`
+          `Ollama challenge parse failure chunk ${chunkIndex}/${chunkCount}, attempt ${attempt}/2: ` +
+          `target=${batchTarget}, chars=${diagnostic.chars}, ` +
+          `starts_object=${diagnostic.startsObject}, ends_object=${diagnostic.endsObject}, ` +
+          `reason=${error.message}`
         );
 
         if (attempt === 2) {
           throw new Error(
-            'Ollama Cloud returned malformed message content after 2 attempts ' +
-            `(chars=${diagnostic.chars}, starts_object=${diagnostic.startsObject}, ` +
-            `ends_object=${diagnostic.endsObject}).`
+            `Ollama Cloud returned malformed message content for chunk ${chunkIndex}/${chunkCount} after 2 attempts ` +
+            `(target=${batchTarget}, chars=${diagnostic.chars}, ` +
+            `starts_object=${diagnostic.startsObject}, ends_object=${diagnostic.endsObject}).`
           );
         }
       }
@@ -117,7 +171,66 @@ async function runScenarioChallengeWorker({
     }
   }
 
-  throw new Error('Ollama Cloud did not return a valid model response.');
+  throw new Error('Ollama Cloud did not return a valid chunk response.');
 }
 
-module.exports = { runScenarioChallengeWorker, describeContent };
+async function runScenarioChallengeWorker({
+  apiUrl, apiKey, model, batchId, batchTarget, allocation, scenarioContext, retainedQuestions,
+  timeoutMs = 120000, fetchImpl = globalThis.fetch
+}) {
+  if (!apiUrl || !apiKey || !model) throw new Error('Ollama Cloud configuration is incomplete.');
+
+  const chunks = buildAllocationChunks(allocation);
+  const plannedCount = chunks.reduce((sum, chunk) => sum + chunk.target, 0);
+  if (plannedCount !== batchTarget) {
+    throw new Error(`Allocation total ${plannedCount} does not match batch target ${batchTarget}.`);
+  }
+
+  const deadlineAt = Date.now() + timeoutMs;
+  const questions = [];
+
+  for (let index = 0; index < chunks.length; index += 1) {
+    const chunk = chunks[index];
+    const scenarioIds = new Set(Object.keys(chunk.allocation));
+    const chunkScenarioContext = (scenarioContext || [])
+      .filter((row) => scenarioIds.has(row.scenario_id));
+    const chunkRetainedQuestions = (retainedQuestions || [])
+      .filter((row) => scenarioIds.has(row.scenario_id));
+
+    const generatedQuestions = await requestChallengeChunk({
+      apiUrl,
+      apiKey,
+      model,
+      batchId,
+      batchTarget: chunk.target,
+      allocation: chunk.allocation,
+      scenarioContext: chunkScenarioContext,
+      retainedQuestions: chunkRetainedQuestions,
+      deadlineAt,
+      fetchImpl,
+      chunkIndex: index + 1,
+      chunkCount: chunks.length
+    });
+
+    questions.push(...generatedQuestions);
+  }
+
+  if (questions.length !== batchTarget) {
+    throw new Error(`Generated question count ${questions.length} does not match batch target ${batchTarget}.`);
+  }
+
+  return {
+    generated: {
+      batch_id: batchId,
+      questions
+    },
+    agentVersion: AGENT_VERSION
+  };
+}
+
+module.exports = {
+  runScenarioChallengeWorker,
+  describeContent,
+  buildAllocationChunks,
+  MAX_QUESTIONS_PER_REQUEST
+};
