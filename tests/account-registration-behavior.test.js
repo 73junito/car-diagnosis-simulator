@@ -18,6 +18,7 @@ function jwtWithEmail(email) {
 describe('account registration behavior', () => {
   beforeEach(() => {
     localStorage.clear()
+    sessionStorage.clear()
     document.body.innerHTML = ''
     window.history.replaceState({}, '', '/')
     delete window.supabaseSignIn

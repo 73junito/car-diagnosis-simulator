@@ -27,8 +27,25 @@
       }
     )
 
-    if (result?.error || result?.error_description || !result?.user) {
-      setStatus(result?.error_description || result?.msg || result?.error || 'Account creation failed.', 'error')
+    if (result?.error || result?.error_description || result?.code) {
+      setStatus(
+        window.getAuthErrorMessage?.(result, 'Account creation failed.') ||
+          'Account creation failed.',
+        'error'
+      )
+      button.disabled = false
+      return
+    }
+
+    const identities = result?.user?.identities
+    if (
+      !result?.user ||
+      (Array.isArray(identities) && identities.length === 0)
+    ) {
+      setStatus(
+        'Unable to create a new account with these details. If you may already have an account, sign in or reset your password.',
+        'error'
+      )
       button.disabled = false
       return
     }

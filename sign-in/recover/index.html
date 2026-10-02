@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Reset Password | AutoLearnPro</title>
+  <link rel="stylesheet" href="/sign-in/sign-in.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <a class="auth-brand" href="https://autolearnpro.com/">← AutoLearnPro</a>
+    <section class="auth-card" aria-labelledby="recoverTitle">
+      <p class="small">Account recovery</p>
+      <h1 id="recoverTitle">Reset your password</h1>
+      <p>Enter the email address for your AutoLearnPro account.</p>
+      <form id="recoveryForm">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <button id="recoveryButton" type="submit">Send Reset Link</button>
+      </form>
+      <div id="status" class="status hidden" role="status" aria-live="polite"></div>      <p class="small">For privacy, AutoLearnPro uses the same confirmation message whether or not an account exists for the email entered.</p>
+      <p class="small"><a href="/sign-in/student/">Student Sign In</a> · <a href="/sign-in/instructor/">Instructor Sign In</a></p>
+    </section>
+  </main>
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
+  <script src="/sign-in/recover/recover.js"></script>
+</body>
+</html>

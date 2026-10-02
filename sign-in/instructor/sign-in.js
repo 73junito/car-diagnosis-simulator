@@ -16,6 +16,36 @@
     status.className = 'status ' + (type || '')
   }
 
+  function handleAuthRedirectState() {
+    const redirectType = sessionStorage.getItem('supabase_auth_redirect_type') || ''
+    const errorRaw = sessionStorage.getItem('supabase_auth_redirect_error') || ''
+    sessionStorage.removeItem('supabase_auth_redirect_type')
+    sessionStorage.removeItem('supabase_auth_redirect_error')
+
+    if (errorRaw) {
+      let error = {}
+      try { error = JSON.parse(errorRaw) } catch { error = {} }
+      setStatus(
+        window.getAuthErrorMessage?.(
+          {
+            error_code: error.code,
+            error_description: error.description
+          },
+          'Authentication link could not be completed. Try again.'
+        ) || 'Authentication link could not be completed. Try again.',
+        'error'
+      )
+      return false
+    }
+
+    if (redirectType === 'recovery' && token()) {
+      window.location.replace('/sign-in/update-password/')
+      return true
+    }
+
+    return false
+  }
+
   async function api(path, options = {}) {
     const headers = new Headers(options.headers || {})
     headers.set('Authorization', 'Bearer ' + token())
@@ -62,7 +92,10 @@
     )
 
     if (!login?.access_token) {
-      setStatus(login?.error_description || login?.error || 'Sign-in failed', 'error')
+      setStatus(
+        window.getAuthErrorMessage?.(login, 'Sign-in failed.') || 'Sign-in failed.',
+        'error'
+      )
       button.disabled = false
       return
     }
@@ -162,7 +195,9 @@
     })
   })
 
-  if (token()) {
+  const redirected = handleAuthRedirectState()
+
+  if (!redirected && token()) {
     loadStatus().then((statusResult) => {
       if (statusResult === 'authorized' || statusResult === 'pending') return
       if (statusResult === 'ready') {
