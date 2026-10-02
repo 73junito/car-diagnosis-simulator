@@ -411,6 +411,25 @@ body.detail-open{overflow:hidden;height:100vh}
   flex-wrap: wrap;
 }
 
+.student-primary-actions #btnResume {
+  background: var(--tm-primary);
+  border-color: var(--tm-primary);
+  color: #fff;
+  box-shadow: var(--tm-shadow-soft);
+}
+
+.student-primary-actions #btnResume:hover,
+.student-primary-actions #btnResume:focus-visible {
+  background: var(--tm-primary-2);
+  border-color: var(--tm-primary-2);
+  color: #fff;
+}
+
+.student-primary-actions #btnResume:focus-visible {
+  outline: 3px solid var(--tm-accent);
+  outline-offset: 2px;
+}
+
 .student-quick-start {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr)) minmax(170px, .7fr);
