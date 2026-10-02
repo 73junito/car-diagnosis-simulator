@@ -23,14 +23,15 @@ test('student scenario cards stay compact with explicit actions', async ({ page 
     // The compact dashboard card intentionally omits large scenario media.
     await expect(card.locator('img')).toHaveCount(0);
 
-    // Do not repeat the scenario title verbatim as body copy.
-    const titleText = (await card.locator('.tm-scenario-v2-card-title').innerText()).trim().toLowerCase().replace(/\s+/g, ' ');
-    const bodyText = card.locator('.tm-scenario-v2-card-text');
-    if (await bodyText.count()) {
-      const symptomText = (await bodyText.innerText()).trim().toLowerCase().replace(/\s+/g, ' ');
-      expect(symptomText).not.toBe(titleText);
-    }
+    // Current fixtures derive title and body from the same symptom text.
+    await expect(card.locator('.tm-scenario-v2-card-text')).toHaveCount(0);
   }
+
+  await page.evaluate(() => {
+    window.SCENARIO_REGISTRY[0].shortSymptom = 'Distinct supporting symptom';
+    document.getElementById('searchInput').dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await expect(cards.first().locator('.tm-scenario-v2-card-text')).toHaveText('Distinct supporting symptom');
 
   await page.getByRole('button', { name: 'Show all scenarios' }).click();
   await expect(cards).toHaveCount(21);
