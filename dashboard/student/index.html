@@ -284,7 +284,16 @@
 
       let showAllScenarios = false;
 
-      
+      function clearScenarioFilters(){
+        const search = document.getElementById('searchInput');
+        const category = document.getElementById('filterCategory');
+        const difficulty = document.getElementById('filterDifficulty');
+        if(search) search.value = '';
+        if(category) category.value = 'all';
+        if(difficulty) difficulty.value = 'all';
+        showAllScenarios = false;
+        renderDashboard();
+      }
 
       // Internal renderer performs DOM updates. Keep this focused on DOM only.
       function renderGrid(){
@@ -334,16 +343,7 @@
           emptyResetBtn.className = 'tm-btn tm-btn-secondary';
           emptyResetBtn.type = 'button';
           emptyResetBtn.textContent = 'Clear filters';
-          emptyResetBtn.addEventListener('click', () => {
-            const search = document.getElementById('searchInput');
-            const category = document.getElementById('filterCategory');
-            const difficulty = document.getElementById('filterDifficulty');
-            if(search) search.value = '';
-            if(category) category.value = 'all';
-            if(difficulty) difficulty.value = 'all';
-            showAllScenarios = false;
-            renderDashboard();
-          });
+          emptyResetBtn.addEventListener('click', clearScenarioFilters);
           empty.appendChild(emptyResetBtn);
           container.appendChild(empty);
         } else {
@@ -444,16 +444,7 @@
 
         const resetFiltersBtn = document.getElementById('resetFiltersBtn');
         if(resetFiltersBtn){
-          resetFiltersBtn.addEventListener('click', () => {
-            const search = document.getElementById('searchInput');
-            const category = document.getElementById('filterCategory');
-            const difficulty = document.getElementById('filterDifficulty');
-            if(search) search.value = '';
-            if(category) category.value = 'all';
-            if(difficulty) difficulty.value = 'all';
-            showAllScenarios = false;
-            renderDashboard();
-          });
+          resetFiltersBtn.addEventListener('click', clearScenarioFilters);
         }
 
         const showAllBtn = document.getElementById('showAllScenariosBtn');
