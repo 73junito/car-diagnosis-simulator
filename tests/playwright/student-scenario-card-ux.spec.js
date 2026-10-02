@@ -35,4 +35,16 @@ test('student scenario cards stay compact with explicit actions', async ({ page 
 
   await page.getByRole('button', { name: 'Show all scenarios' }).click();
   await expect(cards).toHaveCount(21);
+
+  // Preserve body copy when it adds information instead of duplicating the title.
+  const distinctCopy = 'Battery voltage drops below the expected cranking threshold.';
+  await page.evaluate((text) => {
+    if (window.SCENARIO_REGISTRY?.[0]) {
+      window.SCENARIO_REGISTRY[0].shortSymptom = text;
+    }
+  }, distinctCopy);
+  await page.dispatchEvent('#searchInput', 'input');
+
+  const firstCard = cards.first();
+  await expect(firstCard.locator('.tm-scenario-v2-card-text')).toHaveText(distinctCopy);
 });
