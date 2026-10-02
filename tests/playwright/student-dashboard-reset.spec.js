@@ -30,10 +30,9 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   // Verify empty state appears
   await expect(page.locator('.empty-state')).toBeVisible();
 
-  // Use the clear-filters action inside the empty-state section
-  const resetButton = page
-    .locator('#scenarioGrid')
-    .getByRole('button', { name: 'Clear filters' });
+  // Use the persistent clear-filters control so the reset contract exercises
+  // the same control students use for category/difficulty filters.
+  const resetButton = page.locator('#resetFiltersBtn');
 
   await expect(resetButton).toBeVisible();
   await expect(resetButton).toBeEnabled();
