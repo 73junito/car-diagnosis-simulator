@@ -84,6 +84,7 @@ test.describe("12 V relay-controlled load lab", () => {
 
   test("student dashboard links to the relay-load lab", async ({ page }) => {
     await page.goto("/dashboard/student/");
+  await page.locator('.student-more-tools > summary').click();
     await expect(page.getByRole("link", { name:"12 V Relay Load Lab" })).toHaveAttribute("href","/dashboard/student/relay-load-lab/");
   });
 });

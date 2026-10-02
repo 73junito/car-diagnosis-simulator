@@ -4,17 +4,18 @@ test.describe('Student Dashboard - Single Scenario Launcher', () => {
   test('uses scenario cards as the only student scenario launcher', async ({ page }) => {
     await page.goto('/dashboard/student/', { waitUntil: 'domcontentloaded' });
 
-    // SHOULD PASS: Browse Scenarios anchor points to card grid
-    await expect(page.getByRole('link', { name: 'Browse Scenarios', exact: true }))
+    // Primary browse action points to the scenario grid.
+    await expect(page.getByRole('link', { name: 'Choose a Scenario', exact: true }))
       .toHaveAttribute('href', '#scenarioGridSection');
 
-    // SHOULD PASS: Available Scenarios heading visible
-    await expect(page.getByRole('heading', { name: 'Available Scenarios', exact: true }))
+    await expect(page.getByRole('heading', { name: 'Choose a scenario', exact: true }))
       .toBeVisible();
 
-    // SHOULD PASS: exactly 21 cards present (catches duplicate-card regressions)
-    await expect(page.locator('article.tm-scenario-v2-card'))
-      .toHaveCount(21);
+    // The student lands on a compact six-card view, with all scenarios one action away.
+    const cards = page.locator('article.tm-scenario-v2-card');
+    await expect(cards).toHaveCount(6);
+    await page.getByRole('button', { name: 'Show all scenarios' }).click();
+    await expect(cards).toHaveCount(21);
 
     // SHOULD FAIL (initially, PASS after map removal): No map image
     await expect(page.locator('img[alt="Scenario dashboard map"]'))

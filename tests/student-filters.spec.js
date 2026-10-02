@@ -34,20 +34,17 @@ function attachTestRenderer() {
 
   function populateFilterOptions(registry){
     const cat = document.getElementById('filterCategory');
-    const ase = document.getElementById('filterAse');
-    if(!cat || !ase) return;
-    const cats = new Set(); const ases = new Set();
-    registry.forEach(s => { if(s.category) cats.add(s.category); if(s.aseArea) ases.add(s.aseArea); });
+    if(!cat) return;
+    const cats = new Set();
+    registry.forEach(s => { if(s.category) cats.add(s.category); });
     Array.from(cats).sort().forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c.replace(/[-_]/g,' '); cat.appendChild(o); });
-    Array.from(ases).sort().forEach(a => { const o = document.createElement('option'); o.value = a; o.textContent = a; ase.appendChild(o); });
   }
 
   function getFilters(){
     return {
       q: (document.getElementById('searchInput') || {}).value || '',
       category: (document.getElementById('filterCategory') || {}).value || 'all',
-      difficulty: (document.getElementById('filterDifficulty') || {}).value || 'all',
-      ase: (document.getElementById('filterAse') || {}).value || 'all'
+      difficulty: (document.getElementById('filterDifficulty') || {}).value || 'all'
     };
   }
 
@@ -59,10 +56,7 @@ function attachTestRenderer() {
     if(filters.difficulty && filters.difficulty !== 'all'){
       if(String((s.difficulty||'')).toLowerCase() !== String(filters.difficulty).toLowerCase()) return false;
     }
-    if(filters.ase && filters.ase !== 'all'){
-      if(String((s.aseArea||'')).toLowerCase() !== String(filters.ase).toLowerCase()) return false;
-    }
-    if(filters.q && filters.q.trim() !== ''){
+     if(filters.q && filters.q.trim() !== ''){
       const q = filters.q.trim().toLowerCase();
       const hay = ((s.title||'') + ' ' + (s.shortSymptom||'') + ' ' + (s.id||'')).toLowerCase();
       if(!hay.includes(q)) return false;
@@ -74,7 +68,6 @@ function attachTestRenderer() {
     const search = document.getElementById('searchInput');
     const category = document.getElementById('filterCategory');
     const difficulty = document.getElementById('filterDifficulty');
-    const ase = document.getElementById('filterAse');
     let changed = false;
     if(search){
       search.value = '';
@@ -82,7 +75,7 @@ function attachTestRenderer() {
       search.dispatchEvent(new Event('change', { bubbles: true }));
       changed = true;
     }
-    [category, difficulty, ase].forEach((el)=>{
+    [category, difficulty].forEach((el)=>{
       if(!el) return;
       el.value = 'all';
       el.dispatchEvent(new Event('input', { bubbles: true }));
@@ -114,7 +107,7 @@ function attachTestRenderer() {
 
   // attach handlers
   function attachFilterHandlers(){
-    const inputs = ['searchInput','filterCategory','filterDifficulty','filterAse'];
+    const inputs = ['searchInput','filterCategory','filterDifficulty'];
     inputs.forEach(id => { const el = document.getElementById(id); if(!el) return; el.addEventListener('input', renderGrid); el.addEventListener('change', renderGrid); });
     const resetFiltersBtn = document.getElementById('resetFiltersBtn');
     if(resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAllFilters);
@@ -207,22 +200,6 @@ describe('Student dashboard filters', () => {
     });
   });
 
-  test('ASE filter works or gracefully ignores missing ASE metadata', () => {
-    const reg = window.SCENARIO_REGISTRY;
-    const ases = Array.from(new Set(reg.map(s=>s.aseArea).filter(Boolean)));
-    const sel = document.getElementById('filterAse');
-    if(ases.length===0){
-      // selecting ASE should not throw and should keep original count when set to 'all'
-      sel.value = 'all';
-      sel.dispatchEvent(new Event('change'));
-      expect(document.getElementById('scenarioGrid').querySelectorAll('.sd-card').length).toBe(reg.length);
-    } else {
-      const a = ases[0]; sel.value = a; sel.dispatchEvent(new Event('change'));
-      const expected = reg.filter(s=>s.aseArea===a).length;
-      expect(document.getElementById('scenarioGrid').querySelectorAll('.sd-card').length).toBe(expected);
-    }
-  });
-
   test('result counter updates correctly and empty state appears when 0 results', () => {
     const search = document.getElementById('searchInput');
     search.value = 'this-will-never-match-xyz';
@@ -252,7 +229,6 @@ describe('Student dashboard filters', () => {
     document.getElementById('searchInput').value = '';
     document.getElementById('filterCategory').value = 'all';
     document.getElementById('filterDifficulty').value = 'all';
-    document.getElementById('filterAse').value = 'all';
     document.getElementById('searchInput').dispatchEvent(new Event('input'));
     const grid = document.getElementById('scenarioGrid');
     expect(grid.querySelectorAll('.sd-card').length).toBe(21);

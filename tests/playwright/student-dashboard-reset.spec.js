@@ -18,8 +18,9 @@ test('empty-filter then reset restores cards', async ({ page }) => {
 
   await page.goto(BASE, { waitUntil: 'networkidle' });
 
-  // Start from a known state
+  // Start from a known state. Search stays visible; advanced filters are collapsed.
   await page.fill('#searchInput', '');
+  await page.locator('.student-scenario-controls > summary').click();
   await page.selectOption('#filterCategory', 'all');
 
   // Force empty results
@@ -29,10 +30,9 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   // Verify empty state appears
   await expect(page.locator('.empty-state')).toBeVisible();
 
-  // Use the Reset button inside the empty-state section
-  const resetButton = page
-    .locator('#scenarioGrid')
-    .getByRole('button', { name: 'Reset filters' });
+  // Use the persistent clear-filters control so the reset contract exercises
+  // the same control students use for category/difficulty filters.
+  const resetButton = page.locator('#resetFiltersBtn');
 
   await expect(resetButton).toBeVisible();
   await expect(resetButton).toBeEnabled();

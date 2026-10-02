@@ -8,7 +8,10 @@ test.describe('Student legacy entrypoints', () => {
     test(`${legacyPath} redirects to the canonical student dashboard`, async ({ page }) => {
       await page.goto(legacyPath);
       await expect(page).toHaveURL(/\/dashboard\/student\/$/);
-      await expect(page.locator('article.tm-scenario-v2-card')).toHaveCount(21);
+      const cards = page.locator('article.tm-scenario-v2-card');
+      await expect(cards).toHaveCount(6);
+      await page.getByRole('button', { name: 'Show all scenarios' }).click();
+      await expect(cards).toHaveCount(21);
     });
 
     test(`${legacyPath} preserves scenario query parameter in redirect`, async ({ page }) => {

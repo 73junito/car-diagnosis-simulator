@@ -30,6 +30,7 @@ test.describe("12 V CAN/LIN network lab",()=>{
  });
  test("dashboard links to network lab",async({page})=>{
   await page.goto("/dashboard/student/");
+  await page.locator('.student-more-tools > summary').click();
   await expect(page.getByRole("link",{name:"12 V CAN/LIN Network Lab"})).toHaveAttribute("href","/dashboard/student/network-lab/");
  });
 });
