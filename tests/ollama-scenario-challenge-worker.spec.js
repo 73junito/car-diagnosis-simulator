@@ -75,6 +75,33 @@ describe('Ollama scenario challenge worker', () => {
     warnSpy.mockRestore();
   });
 
+  test('retries fenced or prose-wrapped JSON instead of accepting permissive extraction', async () => {
+    const requests = [];
+    const responses = [
+      '```json\\n{"batch_id":1,"questions":[]}\\n```',
+      JSON.stringify({ batch_id: 1, questions: [] })
+    ];
+    const fetchImpl = async (url, options) => {
+      requests.push(JSON.parse(options.body));
+      const content = responses.shift();
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({ message: { content } })
+      };
+    };
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await runScenarioChallengeWorker({ ...baseArgs, fetchImpl });
+
+    expect(result.generated).toEqual({ batch_id: 1, questions: [] });
+    expect(requests).toHaveLength(2);
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy.mock.calls[0][0]).toContain('starts_object=false');
+    expect(warnSpy.mock.calls[0][0]).toContain('ends_object=false');
+    warnSpy.mockRestore();
+  });
+
   test('fails closed after two malformed responses without logging response content', async () => {
     const fetchImpl = async () => ({
       ok: true,
