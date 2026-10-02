@@ -42,5 +42,29 @@ button[disabled] { opacity: .55; cursor: wait; }
 .status.success { color: var(--success); }
 .hidden { display: none !important; }
 .institution-card { margin-top: 18px; padding: 16px; border: 1px solid var(--panel-border); border-radius: 10px; }
+.institution-results {
+  margin-top: 8px;
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #091525;
+}
+.institution-option {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--panel-border);
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  font-weight: 700;
+}
+.institution-option:last-child { border-bottom: 0; }
+.institution-option:hover,
+.institution-option:focus-visible { background: rgba(47,140,255,.14); }
+.institution-option span { display: block; margin-top: 3px; color: var(--muted); font-size: .84rem; font-weight: 500; }
+.field-help { margin: 4px 0 8px; font-size: .86rem; }
 .actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .small { font-size: .9rem; }

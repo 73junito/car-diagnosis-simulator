@@ -18,6 +18,33 @@ function isInstructorRole(value) {
   return INSTRUCTOR_ROLES.has(normalizedRole(value))
 }
 
+function emailDomain(value) {
+  const email = String(value || '').trim().toLowerCase()
+  const at = email.lastIndexOf('@')
+  if (at <= 0 || at === email.length - 1) return null
+  return email.slice(at + 1)
+}
+
+async function verifiedInstitutionEmail(user, schoolCode, supabase) {
+  const domain = emailDomain(user?.email)
+  if (!domain) return { ok: false, domain: null }
+
+  const { data, error } = await supabase
+    .from('institution_email_domains')
+    .select('school_code,domain,active')
+    .eq('school_code', schoolCode)
+    .eq('domain', domain)
+    .eq('active', true)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Institution email-domain lookup failed:', error.message || error)
+    return { ok: false, domain, lookupError: true }
+  }
+
+  return { ok: Boolean(data), domain }
+}
+
 function createServiceClient(supabaseUrl, serviceRoleKey) {
   return createClient(supabaseUrl, serviceRoleKey, {
     auth: {
@@ -144,6 +171,21 @@ export async function handleInstructorVerificationRequest(c) {
   }
   if (!institution) return c.json({ error: 'School code not recognized' }, 404)
 
+  const institutionEmail = await verifiedInstitutionEmail(
+    auth.user,
+    schoolCode,
+    auth.supabase
+  )
+  if (institutionEmail.lookupError) {
+    return c.json({ error: 'Institution email verification unavailable' }, 503)
+  }
+  if (!institutionEmail.ok) {
+    return c.json({
+      error: 'Use an approved institutional email address for this institution before requesting instructor access',
+      institutionalEmailVerified: false
+    }, 403)
+  }
+
   const { data: existing, error: existingError } = await auth.supabase
     .from('instructor_verification_requests')
     .select('id,school_code,status,verification_method,requested_at,reviewed_at')
@@ -191,8 +233,9 @@ export async function handleInstructorVerificationRequest(c) {
   return c.json({
     verification: data,
     institution: publicInstitution(institution),
+    institutionalEmailVerified: true,
     authorizationGranted: false,
-    message: 'Institution identified. Instructor affiliation review is pending.'
+    message: 'Institution and institutional email verified. Instructor affiliation review is pending.'
   }, 202)
 }
 
@@ -231,12 +274,21 @@ export async function handleInstructorVerificationStatus(c) {
     .eq('school_code', data.school_code)
     .maybeSingle()
 
+  const institutionEmail = isAdmin
+    ? { ok: true }
+    : await verifiedInstitutionEmail(auth.user, data.school_code, auth.supabase)
+
   const authorizationGranted =
-    isAdmin || (isInstructorRole(role) && data.status === 'approved')
+    isAdmin || (
+      isInstructorRole(role) &&
+      data.status === 'approved' &&
+      institutionEmail.ok
+    )
 
   return c.json({
     verification: data,
     institution: publicInstitution(institution),
+    institutionalEmailVerified: Boolean(institutionEmail.ok),
     authorizationGranted,
     role
   }, 200)

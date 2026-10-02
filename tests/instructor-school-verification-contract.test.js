@@ -10,6 +10,10 @@ const seedMigration = fs.readFileSync(
   path.join(root, 'supabase/migrations/20261001041910_seed_federal_school_codes_2026_27_q4.sql'),
   'utf8'
 )
+const domainMigration = fs.readFileSync(
+  path.join(root, 'supabase/migrations/20261002001500_add_institution_email_domains.sql'),
+  'utf8'
+)
 const route = fs.readFileSync(
   path.join(root, 'worker/routes/instructor-verification.js'),
   'utf8'
@@ -37,13 +41,17 @@ describe('instructor school verification contract', () => {
   })
 
 
-  test('requires authenticated server-side school lookup and never grants a role', () => {
+  test('requires authenticated server-side school and institutional-email verification and never grants a role', () => {
     expect(route).toContain('verifySupabaseToken')
     expect(route).toContain(".from('institutions')")
+    expect(route).toContain(".from('institution_email_domains')")
+    expect(route).toContain(".eq('domain', domain)")
+    expect(route).toContain('institutionalEmailVerified')
     expect(route).toContain("status: 'pending'")
     expect(route).toContain('.insert(requestRow)')
     expect(route).not.toContain('.upsert(requestRow')
-    expect(route).toContain("isInstructorRole(role) && data.status === 'approved'")
+    expect(route).toContain("data.status === 'approved'")
+    expect(route).toContain('institutionEmail.ok')
     expect(route).toContain('authorizationGranted: false')
     expect(route).not.toContain("update({ role:")
     expect(route).not.toContain(".from('profiles').update")
@@ -80,6 +88,15 @@ describe('instructor school verification contract', () => {
     expect(workerIndex).toContain("app.post('/api/instructor/verification/request'")
     expect(workerIndex).toContain("app.get('/api/instructor/verification/status'")
     expect(workerIndex).toContain("allowHeaders: ['Content-Type', 'Authorization']")
+  })
+
+  test('keeps institutional email domains server-side and independently verified', () => {
+    expect(domainMigration).toContain('create table if not exists public.institution_email_domains')
+    expect(domainMigration).toContain('verified_by uuid not null references auth.users(id)')
+    expect(domainMigration).toContain('source_reference text not null')
+    expect(domainMigration).toContain('enable row level security')
+    expect(domainMigration).toContain('revoke all on table public.institution_email_domains from public, anon, authenticated')
+    expect(domainMigration).toContain('grant all on table public.institution_email_domains to service_role')
   })
 
   test('keeps the institution directory server-side and source-locked', () => {

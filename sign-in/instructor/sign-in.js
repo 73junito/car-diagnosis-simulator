@@ -24,22 +24,30 @@
   }
 
   async function loadStatus() {
-    const response = await api('/api/instructor/verification/status')
-    if (!response.ok) return false
+    let response
+    try {
+      response = await api('/api/instructor/verification/status')
+    } catch {
+      return 'error'
+    }
+
+    if (response.status === 401) return 'unauthenticated'
+    if (!response.ok) return 'error'
+
     const body = await response.json()
     if (body.authorizationGranted) {
       setStatus('Instructor affiliation verified. Opening instructor workspace…', 'success')
       window.location.assign('/dashboard/instructor/')
-      return true
+      return 'authorized'
     }
     if (body.verification?.status === 'pending') {
       credentialStep.classList.add('hidden')
       schoolStep.classList.add('hidden')
       const school = body.institution?.schoolName || body.verification.school_code
       setStatus('Verification pending for ' + school + '. Instructor access has not been granted.', '')
-      return true
+      return 'pending'
     }
-    return false
+    return 'ready'
   }
 
   signInForm.addEventListener('submit', async (event) => {
@@ -59,7 +67,23 @@
       return
     }
 
-    if (await loadStatus()) return
+    const statusResult = await loadStatus()
+    if (statusResult === 'authorized' || statusResult === 'pending') return
+    if (statusResult === 'unauthenticated') {
+      window.supabaseSignOut?.()
+      credentialStep.classList.remove('hidden')
+      schoolStep.classList.add('hidden')
+      setStatus('Your session expired. Sign in again to continue.', 'error')
+      button.disabled = false
+      return
+    }
+    if (statusResult === 'error') {
+      credentialStep.classList.remove('hidden')
+      schoolStep.classList.add('hidden')
+      setStatus('Unable to verify your instructor account right now. Try again.', 'error')
+      button.disabled = false
+      return
+    }
 
     credentialStep.classList.add('hidden')
     schoolStep.classList.remove('hidden')
@@ -138,5 +162,25 @@
     })
   })
 
-  if (token()) loadStatus()
+  if (token()) {
+    loadStatus().then((statusResult) => {
+      if (statusResult === 'authorized' || statusResult === 'pending') return
+      if (statusResult === 'ready') {
+        credentialStep.classList.add('hidden')
+        schoolStep.classList.remove('hidden')
+        setStatus('Account authenticated. Verify your institution to continue.', 'success')
+        return
+      }
+      if (statusResult === 'unauthenticated') {
+        window.supabaseSignOut?.()
+        credentialStep.classList.remove('hidden')
+        schoolStep.classList.add('hidden')
+        setStatus('Your session expired. Sign in again to continue.', 'error')
+        return
+      }
+      credentialStep.classList.remove('hidden')
+      schoolStep.classList.add('hidden')
+      setStatus('Unable to verify your instructor account right now. Try again.', 'error')
+    })
+  }
 })()

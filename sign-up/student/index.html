@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Create Student Account | AutoLearnPro</title>
+  <link rel="stylesheet" href="/sign-in/sign-in.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <a class="auth-brand" href="https://autolearnpro.com/">← AutoLearnPro</a>
+    <section class="auth-card" aria-labelledby="studentCreateTitle">
+      <p class="small">Student workspace</p>
+      <h1 id="studentCreateTitle">Create Student Account</h1>
+      <p>Create an account with either a personal or institutional email address to access your student workspace and available learning materials.</p>
+      <form id="studentSignUp">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
+
+        <label for="institutionSearch">Institution</label>
+        <p class="field-help" id="institutionHelp">Type at least two letters of your school name, then select the correct institution. This selection does not verify enrollment.</p>
+        <input
+          id="institutionSearch"
+          name="institutionSearch"
+          type="search"
+          autocomplete="off"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="institutionResults"
+          aria-describedby="institutionHelp"
+          required
+        >
+        <input id="schoolCode" name="schoolCode" type="hidden">
+        <div id="institutionResults" class="institution-results hidden" role="listbox" aria-label="Institution matches"></div>
+        <div id="selectedInstitution" class="institution-card hidden" aria-live="polite"></div>
+
+        <button id="createButton" type="submit">Create Student Account</button>
+      </form>      <div id="status" class="status hidden" role="status" aria-live="polite"></div>
+      <p class="small">
+        By creating an account, you agree to the
+        <a href="https://autolearnpro.com/terms">Terms</a> and acknowledge the
+        <a href="https://autolearnpro.com/privacy">Privacy Policy</a>.
+      </p>
+      <p class="small">Already have an account? <a href="/sign-in/student/">Student Sign In</a>.</p>
+      <p class="small">Are you an instructor? <a href="/sign-up/instructor/">Create an Instructor Account</a>.</p>
+    </section>
+  </main>
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
+  <script src="/sign-up/student/sign-up.js"></script>
+</body>
+</html>
