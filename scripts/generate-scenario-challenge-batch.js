@@ -22,7 +22,7 @@ const apiKey = process.env.OLLAMA_API_KEY || '';
 const timeoutMs = Number(args['timeout-ms'] || process.env.OLLAMA_CHALLENGE_TIMEOUT_MS || 600000);
 
 if (![1,2,3,4].includes(batchId)) throw new Error('--batch must be 1, 2, 3, or 4.');
-if (!Number.isFinite(timeoutMs) || timeoutMs < 1000) throw new Error('--timeout-ms must be a finite number of at least 1000.');
+if (!Number.isFinite(timeoutMs) || timeoutMs < 1000 || timeoutMs > 2147483647) throw new Error('--timeout-ms must be between 1000 and 2147483647 milliseconds.');
 if (!dryRun && !apiKey) throw new Error('OLLAMA_API_KEY is required unless --dry-run=true.');
 
 const plan = JSON.parse(fs.readFileSync(
