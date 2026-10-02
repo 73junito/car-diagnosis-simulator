@@ -138,5 +138,12 @@
     })
   })
 
-  if (token()) loadStatus()
+  if (token()) {
+    loadStatus().then((handled) => {
+      if (handled) return
+      credentialStep.classList.add('hidden')
+      schoolStep.classList.remove('hidden')
+      setStatus('Account authenticated. Verify your institution to continue.', 'success')
+    })
+  }
 })()

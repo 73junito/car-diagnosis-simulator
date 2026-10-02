@@ -27,6 +27,7 @@ const runtimeDirectories = [
   "schemas",
   "services",
   "sign-in",
+  "sign-up",
   "src",
   "theme"
 ];
@@ -178,6 +179,10 @@ const requiredOutputFiles = [
   "sign-in/student/sign-in.js",
   "sign-in/instructor/index.html",
   "sign-in/instructor/sign-in.js",
+  "sign-up/student/index.html",
+  "sign-up/student/sign-up.js",
+  "sign-up/instructor/index.html",
+  "sign-up/instructor/sign-up.js",
   "dashboard/instructor/index.html",
   "dashboard/instructor/index.js",
   "dashboard/instructor/research/index.html",

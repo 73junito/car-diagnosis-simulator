@@ -1,5 +1,5 @@
 // Lightweight Supabase-auth helpers (frontend).
-// Exposes globals: supabaseSignIn, supabaseSignOut, getAccessToken, clearLocalFallbackOnAuth, teacherLoginPrompt
+// Exposes globals: supabaseSignIn, supabaseSignUp, supabaseSignOut, getAccessToken, clearLocalFallbackOnAuth, teacherLoginPrompt
 (function(){
   function showToast(msg, timeout=3000){
     try { if (window.showToast) return window.showToast(msg, timeout); } catch(e){ void e; }
@@ -7,6 +7,13 @@
     if (!t){ t = document.createElement('div'); t.id = 'carSim_toast'; t.style.position='fixed'; t.style.right='12px'; t.style.top='12px'; t.style.zIndex=10000; document.body.appendChild(t); }
     const el = document.createElement('div'); el.style.background='rgba(0,0,0,0.8)'; el.style.color='white'; el.style.padding='8px 12px'; el.style.marginTop='8px'; el.style.borderRadius='6px'; el.innerText = msg;
     t.appendChild(el); setTimeout(()=>{ el.remove(); }, timeout);
+  }
+
+  function storeSession(body, email){
+    if (!body?.access_token) return;
+    localStorage.setItem('supabase_access_token', body.access_token);
+    localStorage.setItem('supabase_refresh_token', body.refresh_token || '');
+    localStorage.setItem('supabase_user_email', email);
   }
 
   async function supabaseSignIn(email, password){
@@ -21,11 +28,31 @@
       });
       const body = await res.json();
       if (!res.ok) return body;
-      if (body.access_token){
-        localStorage.setItem('supabase_access_token', body.access_token);
-        localStorage.setItem('supabase_refresh_token', body.refresh_token || '');
-        localStorage.setItem('supabase_user_email', email);
-      }
+      storeSession(body, email);
+      return body;
+    } catch(e){ return { error: e.message || String(e) }; }
+  }
+
+  async function supabaseSignUp(email, password, options = {}){
+    const url = (window.SUPABASE_URL || '').replace(/\/$/, '');
+    const anon = window.SUPABASE_ANON_KEY || '';
+    if (!url || !anon) return { error: 'Supabase not configured' };
+    const redirectTo = String(options.redirectTo || '').trim();
+    const endpoint = url + '/auth/v1/signup' +
+      (redirectTo ? '?redirect_to=' + encodeURIComponent(redirectTo) : '');
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'apikey': anon, 'Accept':'application/json' },
+        body: JSON.stringify({
+          email,
+          password,
+          data: options.data || {}
+        })
+      });
+      const body = await res.json();
+      if (!res.ok) return body;
+      storeSession(body, email);
       return body;
     } catch(e){ return { error: e.message || String(e) }; }
   }
@@ -50,6 +77,7 @@
 
   // Expose
   window.supabaseSignIn = supabaseSignIn;
+  window.supabaseSignUp = supabaseSignUp;
   window.supabaseSignOut = supabaseSignOut;
   window.getAccessToken = getAccessToken;
   window.clearLocalFallbackOnAuth = clearLocalFallbackOnAuth;

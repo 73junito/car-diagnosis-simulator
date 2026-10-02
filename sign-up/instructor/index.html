@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Create Instructor Account | AutoLearnPro</title>
+  <link rel="stylesheet" href="/sign-in/sign-in.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <a class="auth-brand" href="https://autolearnpro.com/">← AutoLearnPro</a>
+    <section class="auth-card" aria-labelledby="instructorCreateTitle">
+      <p class="small">Instructor workspace</p>
+      <h1 id="instructorCreateTitle">Create Instructor Account</h1>
+      <p>Create an account first. Institution identification and affiliation review are still required before instructor-authorized tools become available.</p>
+      <form id="instructorSignUp">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
+        <button id="createButton" type="submit">Create Instructor Account</button>
+      </form>      <div id="status" class="status hidden" role="status" aria-live="polite"></div>
+      <p class="small">
+        A new account does not grant instructor authorization. A Federal School Code identifies the institution; affiliation approval is reviewed separately.
+      </p>
+      <p class="small">
+        By creating an account, you agree to the
+        <a href="https://autolearnpro.com/terms">Terms</a> and acknowledge the
+        <a href="https://autolearnpro.com/privacy">Privacy Policy</a>.
+      </p>
+      <p class="small">Already have an account? <a href="/sign-in/instructor/">Instructor Sign In</a>.</p>
+      <p class="small">Are you a student? <a href="/sign-up/student/">Create a Student Account</a>.</p>
+    </section>
+  </main>
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
+  <script src="/sign-up/instructor/sign-up.js"></script>
+</body>
+</html>
