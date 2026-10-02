@@ -66,7 +66,20 @@ describe('Ollama scenario challenge batch contract', () => {
   test('passes free-form dispatch values through environment variables before shell use', () => {
     expect(workflow).toContain('CHALLENGE_MODEL: ${{ inputs.model }}');
     expect(workflow).toContain('CHALLENGE_BATCH_ID: ${{ inputs.batch_id }}');
+    expect(workflow).toContain("OLLAMA_CHALLENGE_TIMEOUT_MS: '600000'");
     expect(workflow).toContain('--model="$CHALLENGE_MODEL"');
     expect(workflow).not.toContain('--model="${{ inputs.model }}"');
+  });
+
+  test('gives large Ollama generations an explicit configurable timeout', () => {
+    const generator = fs.readFileSync(
+      path.join(root, 'scripts', 'generate-scenario-challenge-batch.js'),
+      'utf8'
+    );
+
+    expect(generator).toContain('OLLAMA_CHALLENGE_TIMEOUT_MS || 600000');
+    expect(generator).toContain('timeoutMs');
+    expect(generator).toContain('timeout_ms: timeoutMs');
+    expect(generator).toContain('timeoutMs > 2147483647');
   });
 });

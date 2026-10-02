@@ -29,6 +29,7 @@ jobs:
       OLLAMA_API_URL: https://ollama.com/api/chat
       CHALLENGE_BATCH_ID: ${{ inputs.batch_id }}
       CHALLENGE_MODEL: ${{ inputs.model }}
+      OLLAMA_CHALLENGE_TIMEOUT_MS: '600000'
 
     steps:
       - name: Checkout
