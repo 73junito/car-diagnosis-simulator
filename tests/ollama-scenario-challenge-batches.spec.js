@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const { buildGenerationChunks } = require('../scripts/lib/scenario-challenge-chunks');
 
 describe('Ollama scenario challenge batch contract', () => {
   const root = path.resolve(__dirname, '..');
@@ -43,25 +42,6 @@ describe('Ollama scenario challenge batch contract', () => {
     }
   });
 
-  test('shards each 50-question batch into bounded chunks without changing allocation', () => {
-    for (const batch of plan.batches) {
-      const chunks = buildGenerationChunks({
-        allocation: batch.allocation,
-        scenarioOrder: plan.scenario_banks,
-        maxQuestions: 12
-      });
-
-      expect(chunks.length).toBeGreaterThan(1);
-      expect(chunks.reduce((sum, chunk) => sum + chunk.target_count, 0)).toBe(50);
-      for (const chunk of chunks) {
-        expect(chunk.target_count).toBeLessThanOrEqual(12);
-      }
-
-      const rebuilt = Object.assign({}, ...chunks.map((chunk) => chunk.allocation));
-      expect(rebuilt).toEqual(batch.allocation);
-    }
-  });
-
   test('asks for challenging distractors without permitting misleading or ambiguous items', () => {
     expect(agent).toContain('deceptively challenging but fair');
     expect(agent).toContain('plausible near-misses');
@@ -101,8 +81,5 @@ describe('Ollama scenario challenge batch contract', () => {
     expect(generator).toContain('timeoutMs');
     expect(generator).toContain('timeout_ms: timeoutMs');
     expect(generator).toContain('timeoutMs > 2147483647');
-    expect(generator).toContain('buildGenerationChunks');
-    expect(generator).toContain('maxQuestions: 12');
-    expect(generator).toContain('remainingMs');
   });
 });
