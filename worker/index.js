@@ -29,6 +29,7 @@ import {
   handleInstructorVerificationRequest,
   handleInstructorVerificationStatus
 } from "./routes/instructor-verification.js";
+import { handleInstitutionSearch } from "./routes/institution-search.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 
@@ -105,6 +106,17 @@ app.use('/api/student/progress/*', cors({
   maxAge: 86400
 }))
 app.get('/api/student/progress', handleStudentProgress)
+
+// Public institution search for account creation. Results expose only the
+// institution identity fields needed for a student or instructor to select
+// the correct school; selection itself never proves affiliation.
+app.use('/api/institutions/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type'],
+  maxAge: 86400
+}))
+app.get('/api/institutions/search', handleInstitutionSearch)
 
 // Instructor institution verification. Federal School Code resolves the institution,
 // while a separate affiliation review controls instructor authorization.

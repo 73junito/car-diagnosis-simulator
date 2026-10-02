@@ -15,6 +15,8 @@ const instructorSignUpJs = read('sign-up/instructor/sign-up.js')
 const build = read('scripts/build-static-site.js')
 const migration = read('supabase/migrations/20261001235500_create_profile_on_auth_signup.sql')
 const domainMigration = read('supabase/migrations/20261002001500_add_institution_email_domains.sql')
+const studentClaimMigration = read('supabase/migrations/20261002004500_add_student_institution_claims.sql')
+const workerIndex = read('worker/index.js')
 
 describe('account registration contract', () => {
   test('exposes account creation from both sign-in pages', () => {
@@ -65,8 +67,26 @@ describe('account registration contract', () => {
 
   test('allows student personal or institutional email while requiring institutional instructor email', () => {
     expect(studentSignUp).toContain('either a personal or institutional email address')
+    expect(studentSignUp).toContain('id="institutionSearch"')
+    expect(studentSignUp).toContain('id="schoolCode"')
+    expect(studentSignUp).toContain('This selection does not verify enrollment')
+    expect(studentSignUpJs).toContain("'/api/institutions/search?q='")
+    expect(studentSignUpJs).toContain("school_code: schoolCode.value")
+    expect(studentSignUpJs).toContain("institution_claim_source: 'self-selected-at-registration'")
     expect(instructorSignUp).toContain('institution-issued email address')
     expect(instructorSignUp).toContain('verified email-domain matching')
+  })
+
+  test('stores student school selection only as a non-authoritative claim', () => {
+    expect(studentClaimMigration).toContain('create table if not exists public.student_institution_claims')
+    expect(studentClaimMigration).toContain("status in ('claimed','verified','rejected')")
+    expect(studentClaimMigration).toContain("coalesce(new.raw_user_meta_data->>'account_type', '') <> 'student'")
+    expect(studentClaimMigration).toContain("new.raw_user_meta_data->>'school_code'")
+    expect(studentClaimMigration).toContain("values (")
+    expect(studentClaimMigration).toContain("'claimed'")
+    expect(studentClaimMigration).toContain('A claimed row is not enrollment proof')
+    expect(studentClaimMigration).toContain('revoke all on table public.student_institution_claims from public, anon, authenticated')
+    expect(workerIndex).toContain("app.get('/api/institutions/search', handleInstitutionSearch)")
   })
 
   test('includes terms and privacy acknowledgement on registration', () => {

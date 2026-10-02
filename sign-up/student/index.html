@@ -21,6 +21,25 @@
         <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
         <label for="confirmPassword">Confirm password</label>
         <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
+
+        <label for="institutionSearch">Institution</label>
+        <p class="field-help" id="institutionHelp">Type at least two letters of your school name, then select the correct institution. This selection does not verify enrollment.</p>
+        <input
+          id="institutionSearch"
+          name="institutionSearch"
+          type="search"
+          autocomplete="off"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="institutionResults"
+          aria-describedby="institutionHelp"
+          required
+        >
+        <input id="schoolCode" name="schoolCode" type="hidden">
+        <div id="institutionResults" class="institution-results hidden" role="listbox" aria-label="Institution matches"></div>
+        <div id="selectedInstitution" class="institution-card hidden" aria-live="polite"></div>
+
         <button id="createButton" type="submit">Create Student Account</button>
       </form>      <div id="status" class="status hidden" role="status" aria-live="polite"></div>
       <p class="small">
