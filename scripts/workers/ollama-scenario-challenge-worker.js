@@ -84,7 +84,14 @@ async function runScenarioChallengeWorker({
       if (!content) throw new Error('Ollama Cloud returned no message content.');
 
       try {
-        const generated = parseModelJson(content);
+        if (typeof content !== 'string') {
+          throw new Error('Model response content was not a string.');
+        }
+        const trimmed = content.trim();
+        if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) {
+          throw new Error('Model response violated the JSON-only boundary contract.');
+        }
+        const generated = parseModelJson(trimmed);
         if (!generated || typeof generated !== 'object' || Array.isArray(generated)) {
           throw new Error('Model response was not a JSON object.');
         }
