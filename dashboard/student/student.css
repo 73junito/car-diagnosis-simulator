@@ -552,7 +552,7 @@ body.detail-open{overflow:hidden;height:100vh}
 
 .student-tools-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   padding: 0 18px 18px;
 }
@@ -574,10 +574,32 @@ body.detail-open{overflow:hidden;height:100vh}
   border-color: var(--tm-primary, #1f4e79);
 }
 
+.student-labs-menu,
 .student-training-settings {
   margin: 0 18px 18px;
   padding-top: 12px;
   border-top: 1px solid var(--tm-border, #d9e2ec);
+}
+
+.student-labs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.student-labs-grid a {
+  padding: 9px 10px;
+  border: 1px solid var(--tm-border, #d9e2ec);
+  border-radius: 8px;
+  color: var(--tm-text, #111827);
+  text-decoration: none;
+  background: var(--tm-surface-2, #f8fafc);
+}
+
+.student-labs-grid a:hover,
+.student-labs-grid a:focus-visible {
+  border-color: var(--tm-primary, #1f4e79);
 }
 
 .student-training-settings p {
@@ -712,7 +734,8 @@ body.detail-open{overflow:hidden;height:100vh}
     text-align: center;
   }
 
-  .student-tools-grid {
+  .student-tools-grid,
+  .student-labs-grid {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -765,7 +788,8 @@ body.detail-open{overflow:hidden;height:100vh}
     text-align: center;
   }
 
-  .student-tools-grid {
+  .student-tools-grid,
+  .student-labs-grid {
     grid-template-columns: 1fr;
   }
 
