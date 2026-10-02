@@ -412,17 +412,17 @@ body.detail-open{overflow:hidden;height:100vh}
 }
 
 .student-primary-actions #btnResume {
-  background: var(--tm-primary);
-  border-color: var(--tm-primary);
-  color: #fff;
+  background: #fff;
+  border-color: #fff;
+  color: var(--tm-primary);
   box-shadow: var(--tm-shadow-soft);
 }
 
 .student-primary-actions #btnResume:hover,
 .student-primary-actions #btnResume:focus-visible {
-  background: var(--tm-primary-2);
-  border-color: var(--tm-primary-2);
-  color: #fff;
+  background: var(--tm-surface-2);
+  border-color: #fff;
+  color: var(--tm-primary);
 }
 
 .student-primary-actions #btnResume:focus-visible {
