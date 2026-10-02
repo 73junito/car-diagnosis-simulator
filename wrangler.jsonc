@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "autolearnpro-public",
-  "main": "worker/index.js",
+  "main": "worker/public-index.js",
   "compatibility_date": "2026-07-30",
   "compatibility_flags": [
     "nodejs_compat"
