@@ -14,8 +14,66 @@ const SYSTEM_INSTRUCTIONS = [
   'Keep the stem concise and scenario-centered. Each option must answer the same question at the same level of specificity.',
   'Use four unique options A-D and rotate the correct-answer position across the batch.',
   'Avoid duplicating or lightly paraphrasing retained questions supplied in the prompt.',
-  'Return JSON only and match the requested schema exactly.'
+  'Return exactly one complete JSON object that matches the requested schema. The first character must be { and the last character must be }. Do not add prose, markdown, code fences, or text before or after the object.'
 ].join(' ');
+
+function buildChallengeJsonSchema({ batchId, batchTarget }) {
+  return {
+    type: 'object',
+    additionalProperties: false,
+    required: ['batch_id', 'questions'],
+    properties: {
+      batch_id: { type: 'integer', enum: [batchId] },
+      questions: {
+        type: 'array',
+        minItems: batchTarget,
+        maxItems: batchTarget,
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: [
+            'scenario_id', 'difficulty', 'question', 'options', 'correct_answer',
+            'explanation', 'challenge_pattern', 'claims_to_verify', 'support_status',
+            'status', 'eligible_for_training_mix', 'eligible_for_scoring',
+            'assessment_eligible'
+          ],
+          properties: {
+            scenario_id: { type: 'string', minLength: 1 },
+            difficulty: { type: 'string', enum: ['intermediate', 'advanced'] },
+            question: { type: 'string', minLength: 1 },
+            options: {
+              type: 'object',
+              additionalProperties: false,
+              required: ['A', 'B', 'C', 'D'],
+              properties: {
+                A: { type: 'string', minLength: 1 },
+                B: { type: 'string', minLength: 1 },
+                C: { type: 'string', minLength: 1 },
+                D: { type: 'string', minLength: 1 }
+              }
+            },
+            correct_answer: { type: 'string', enum: ['A', 'B', 'C', 'D'] },
+            explanation: { type: 'string', minLength: 1 },
+            challenge_pattern: { type: 'string', minLength: 1 },
+            claims_to_verify: {
+              type: 'array',
+              minItems: 1,
+              items: { type: 'string', minLength: 1 }
+            },
+            support_status: {
+              type: 'string',
+              enum: ['synthetic-draft-pending-evidence']
+            },
+            status: { type: 'string', enum: ['draft'] },
+            eligible_for_training_mix: { type: 'boolean', enum: [false] },
+            eligible_for_scoring: { type: 'boolean', enum: [false] },
+            assessment_eligible: { type: 'boolean', enum: [false] }
+          }
+        }
+      }
+    }
+  };
+}
 
 function buildChallengeMessages({ batchId, batchTarget, allocation, scenarioContext, retainedQuestions }) {
   const userPrompt = {
@@ -75,4 +133,4 @@ function buildChallengeMessages({ batchId, batchTarget, allocation, scenarioCont
   ];
 }
 
-module.exports = { AGENT_VERSION, SYSTEM_INSTRUCTIONS, buildChallengeMessages };
+module.exports = { AGENT_VERSION, SYSTEM_INSTRUCTIONS, buildChallengeMessages, buildChallengeJsonSchema };
