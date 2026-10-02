@@ -81,6 +81,7 @@ test.describe("12 V three-wire sensor lab",()=>{
 
  test("dashboard links to sensor lab",async({page})=>{
   await page.goto("/dashboard/student/");
+  await page.locator('.student-more-tools > summary').click();
   await expect(page.getByRole("link",{name:"12 V Sensor Lab"})).toHaveAttribute("href","/dashboard/student/sensor-lab/");
  });
 });
