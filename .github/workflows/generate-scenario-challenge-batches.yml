@@ -1,0 +1,68 @@
+name: Ollama scenario challenge batches
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch_id:
+        description: Challenge-question batch (1-4, 50 questions each)
+        required: true
+        default: '1'
+        type: choice
+        options: ['1','2','3','4']
+      model:
+        description: Ollama Cloud model
+        required: true
+        default: gpt-oss:20b-cloud
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Generate synthetic scenario challenge batch
+    runs-on: ubuntu-latest
+    environment: ollama
+    timeout-minutes: 15
+    env:
+      OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
+      OLLAMA_API_URL: https://ollama.com/api/chat
+      CHALLENGE_BATCH_ID: ${{ inputs.batch_id }}
+      CHALLENGE_MODEL: ${{ inputs.model }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Validate batch plan
+        run: |
+          node scripts/generate-scenario-challenge-batch.js \
+            --batch="$CHALLENGE_BATCH_ID" \
+            --model="$CHALLENGE_MODEL" \
+            --dry-run=true
+
+      - name: Generate batch with Ollama Cloud
+        run: |
+          mkdir -p "$RUNNER_TEMP/scenario-challenge"
+          node scripts/generate-scenario-challenge-batch.js \
+            --batch="$CHALLENGE_BATCH_ID" \
+            --model="$CHALLENGE_MODEL" \
+            --output="$RUNNER_TEMP/scenario-challenge/batch-$CHALLENGE_BATCH_ID.json"
+
+      - name: Upload synthetic draft artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: "scenario-challenge-batch-${{ inputs.batch_id }}-${{ github.run_id }}"
+          path: ${{ runner.temp }}/scenario-challenge/batch-${{ inputs.batch_id }}.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Governance notice
+        run: |
+          echo "These are synthetic drafts only."
+          echo "They are not eligible for training-bank mixing, scoring, or assessment until evidence mapping and human reviews are complete."
