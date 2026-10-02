@@ -78,6 +78,7 @@ test.describe("electrified multi-voltage lab",()=>{
 
   test("student dashboard links to the multi-voltage lab",async({page})=>{
     await page.goto("/dashboard/student/");
+  await page.locator('.student-more-tools > summary').click();
     await expect(page.getByRole("link",{name:"Electrified Multi-Voltage Lab"})).toHaveAttribute("href","/dashboard/student/multivoltage-lab/");
   });
 });
