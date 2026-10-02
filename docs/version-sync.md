@@ -18,7 +18,7 @@ node scripts/write-version.js && echo "no build step required for static site"
 
 CI note
 
-- On CI, set `GITHUB_SHA` (GitHub Actions automatically provides `GITHUB_SHA`) so `public/version.json` contains the commit SHA. If not present, a timestamp-based version is used.
+- On GitHub Actions, `GITHUB_SHA` is used automatically. On Cloudflare Workers Builds, `WORKERS_CI_COMMIT_SHA` is used. `GIT_COMMIT` and `APP_VERSION` remain supported fallbacks; if none are present, the version is `dev`.
 - Do NOT commit `public/version.json` changes back to the repo — the file is intended to be generated during the build.
 
 Client wiring

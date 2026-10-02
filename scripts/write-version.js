@@ -2,9 +2,19 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+function resolveVersion(env = process.env) {
+  return (
+    env.GITHUB_SHA ||
+    env.WORKERS_CI_COMMIT_SHA ||
+    env.GIT_COMMIT ||
+    env.APP_VERSION ||
+    'dev'
+  );
+}
+
 async function main() {
   try {
-    const version = process.env.GITHUB_SHA || process.env.GIT_COMMIT || process.env.APP_VERSION || 'dev';
+    const version = resolveVersion();
     const outDir = path.resolve(__dirname, '..', 'public');
     const outFile = path.join(outDir, 'version.json');
 
@@ -22,4 +32,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main };
+module.exports = { main, resolveVersion };
