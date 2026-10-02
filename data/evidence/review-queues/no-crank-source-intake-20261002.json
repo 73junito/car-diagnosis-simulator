@@ -218,11 +218,9 @@
     },
     {
       "question_id": "no-crank-starter-current-01",
-      "candidate_sources": [
-        "delco-remy-starter-cranking-tech-tip-2023"
-      ],
-      "claim_scope": "Starter current draw is not independently diagnostic and must be interpreted with the wider starting-system condition and applicable specification.",
-      "mapping_status": "pending-human-review-limited-scope"
+      "candidate_sources": [],
+      "claim_scope": "Starter current draw is not independently diagnostic and must be interpreted with cranking voltage, cranking speed, temperature, circuit condition, and the applicable starter/OEM specification.",
+      "mapping_status": "source-gap"
     },
     {
       "question_id": "no-crank-seized-engine-01",
@@ -282,8 +280,8 @@
   ],
   "summary": {
     "question_count": 20,
-    "mapped_to_at_least_one_candidate_source": 12,
-    "source_gap_count": 8,
+    "mapped_to_at_least_one_candidate_source": 11,
+    "source_gap_count": 9,
     "approved_questions_created": 0,
     "approved_sources_created": 0,
     "approved_chunks_created": 0,
@@ -291,7 +289,7 @@
   },
   "required_before_next_gate": [
     "Complete a targeted Google Scholar discovery pass for starting-system and battery-testing claims and record original-publisher/DOI targets.",
-    "Resolve the eight source-gap mappings, prioritizing safety-critical and vehicle-specific claims.",
+    "Resolve the nine source-gap mappings, prioritizing safety-critical and vehicle-specific claims.",
     "Obtain rights clearance only for sources whose exact licenses permit the intended commercial-capable use; otherwise retain metadata/link-only reference status.",
     "Perform human technical review of each claim-to-source mapping and record reviewer identity and timestamp.",
     "Do not store proprietary excerpts or send external-reference-only source text to Ollama/RAG.",
