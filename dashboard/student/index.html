@@ -58,7 +58,7 @@
         <strong id="v2InProgressCount">0</strong>
       </article>
       <article class="student-progress-summary-card">
-        <span>Available</span>
+        <span>Total Scenarios</span>
         <strong id="scenarioCount">0</strong>
       </article>
     </section>
@@ -185,13 +185,20 @@
           .map(value => String(value).replace(/[-_]/g, ' '))
           .join(' • ');
 
-        const symptom = document.createElement('p');
-        symptom.className = 'tm-scenario-v2-card-text';
-        symptom.textContent = s.shortSymptom || '';
+        const symptomText = (s.shortSymptom || '').trim();
+        const titleText = (s.title || s.id || '').trim();
+        const normalizedTitle = titleText.toLowerCase().replace(/\s+/g, ' ');
+        const normalizedSymptom = symptomText.toLowerCase().replace(/\s+/g, ' ');
 
         body.appendChild(top);
         body.appendChild(meta);
-        body.appendChild(symptom);
+
+        if(symptomText && normalizedSymptom !== normalizedTitle){
+          const symptom = document.createElement('p');
+          symptom.className = 'tm-scenario-v2-card-text';
+          symptom.textContent = symptomText;
+          body.appendChild(symptom);
+        }
 
         const footer = document.createElement('div');
         footer.className = 'tm-scenario-v2-card-footer student-scenario-card__actions';
