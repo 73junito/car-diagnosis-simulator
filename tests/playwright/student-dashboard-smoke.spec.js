@@ -36,7 +36,7 @@ test.describe('Student dashboard smoke', ()=>{
     // Ensure a clean UI state: clear persisted progress and filter inputs to avoid cross-test leakage
     await page.evaluate(()=>{
       try{ localStorage.removeItem('student_progress'); localStorage.removeItem('last_scenario'); }catch(err){ void err; }
-      try{ const s=document.getElementById('searchInput'); if(s) { s.value=''; s.dispatchEvent(new Event('input')); } ['filterCategory','filterDifficulty','filterAse'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value='all'; }); }catch(err){ void err; }
+      try{ const s=document.getElementById('searchInput'); if(s) { s.value=''; s.dispatchEvent(new Event('input')); } ['filterCategory','filterDifficulty'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value='all'; }); }catch(err){ void err; }
     });
     await page.reload();
     await page.waitForLoadState('networkidle');
@@ -49,7 +49,7 @@ test.describe('Student dashboard smoke', ()=>{
     // debug: output active filters and which IDs are shown
     await page.evaluate(()=>{
       try{
-        const filters = (typeof getFilters==='function') ? getFilters() : { q: (document.getElementById('searchInput')||{}).value||'', category: (document.getElementById('filterCategory')||{}).value||'all', difficulty: (document.getElementById('filterDifficulty')||{}).value||'all', ase: (document.getElementById('filterAse')||{}).value||'all' };
+        const filters = (typeof getFilters==='function') ? getFilters() : { q: (document.getElementById('searchInput')||{}).value||'', category: (document.getElementById('filterCategory')||{}).value||'all', difficulty: (document.getElementById('filterDifficulty')||{}).value||'all' };
         const registry = (window.SCENARIO_REGISTRY||[]).slice(0,21);
         const shown = (typeof matchesFilter==='function') ? registry.filter(s=>matchesFilter(s, filters)) : registry.filter(s=>{
           if(filters.category && filters.category !== 'all'){
@@ -58,10 +58,7 @@ test.describe('Student dashboard smoke', ()=>{
           if(filters.difficulty && filters.difficulty !== 'all'){
             if(String((s.difficulty||'')).toLowerCase() !== String(filters.difficulty).toLowerCase()) return false;
           }
-          if(filters.ase && filters.ase !== 'all'){
-            if(String((s.aseArea||'')).toLowerCase() !== String(filters.ase).toLowerCase()) return false;
-          }
-          if(filters.q && filters.q.trim() !== ''){ const q = filters.q.trim().toLowerCase(); const hay = ((s.title||'') + ' ' + (s.shortSymptom||'') + ' ' + (s.id||'')).toLowerCase(); if(!hay.includes(q)) return false; }
+           if(filters.q && filters.q.trim() !== ''){ const q = filters.q.trim().toLowerCase(); const hay = ((s.title||'') + ' ' + (s.shortSymptom||'') + ' ' + (s.id||'')).toLowerCase(); if(!hay.includes(q)) return false; }
           return true;
         });
         console.log('ACTIVE FILTERS', JSON.stringify(filters));
@@ -72,11 +69,17 @@ test.describe('Student dashboard smoke', ()=>{
     await expect(page.locator('#scenarioGrid .sd-card').first()).toBeVisible({ timeout: 15000 });
     const cards = await page.$$('#scenarioGrid .sd-card');
     console.log('INITIAL CARDS COUNT', cards.length);
-    expect(cards.length).toBe(21);
+    expect(cards.length).toBe(6);
+
+    // The landing view stays compact; students can expand the full scenario list.
+    const showAll = page.locator('#showAllScenariosBtn');
+    await expect(showAll).toBeVisible();
+    await showAll.click();
+    await expect(page.locator('#scenarioGrid .sd-card')).toHaveCount(21);
 
     // ensure DOM card count matches the shown IDs computed from the registry
     const shownIds = await page.evaluate(()=>{
-      const filters = (typeof getFilters==='function') ? getFilters() : { q: (document.getElementById('searchInput')||{}).value||'', category: (document.getElementById('filterCategory')||{}).value||'all', difficulty: (document.getElementById('filterDifficulty')||{}).value||'all', ase: (document.getElementById('filterAse')||{}).value||'all' };
+      const filters = (typeof getFilters==='function') ? getFilters() : { q: (document.getElementById('searchInput')||{}).value||'', category: (document.getElementById('filterCategory')||{}).value||'all', difficulty: (document.getElementById('filterDifficulty')||{}).value||'all' };
       const registry = (window.SCENARIO_REGISTRY||[]).slice(0,21);
       return ((typeof matchesFilter==='function') ? registry.filter(s=>matchesFilter(s, filters)) : registry).map(s=>s.id);
     });

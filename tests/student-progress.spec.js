@@ -34,11 +34,13 @@ function renderForTests(){
   const container = document.getElementById('scenarioGrid'); while(container.firstChild){ container.removeChild(container.firstChild); }
   const registry = (window.SCENARIO_REGISTRY||[]);
   registry.forEach(s => container.appendChild(createCard(s)));
-  // update summary
+  // update the compact progress cards used by the student landing page
   const progress = window.studentProgress.loadProgress();
   const completed = Object.values(progress).filter(p=>p.status==='completed').length;
   const inProgress = Object.values(progress).filter(p=>p.status==='in-progress').length;
-  document.getElementById('progressSummary').textContent = `Completed: ${completed} / ${registry.length} • In Progress: ${inProgress}`;
+  document.getElementById('v2CompletedCount').textContent = String(completed);
+  document.getElementById('v2InProgressCount').textContent = String(inProgress);
+  document.getElementById('scenarioCount').textContent = String(registry.length);
   // resume & reset buttons behavior (minimal)
   const resumeBtn = document.getElementById('btnResume');
   const resetBtn = document.getElementById('btnReset');
@@ -113,7 +115,9 @@ describe('Student progress persistence and UI', () => {
     const badges = Array.from(document.querySelectorAll('.sd-badge')).map(n=>n.textContent);
     expect(badges).toContain('completed');
     expect(badges).toContain('in-progress');
-    expect(document.getElementById('progressSummary').textContent).toMatch(/Completed: 1 \/ 21/);
+    expect(document.getElementById('v2CompletedCount').textContent).toBe('1');
+    expect(document.getElementById('v2InProgressCount').textContent).toBe('1');
+    expect(document.getElementById('scenarioCount').textContent).toBe('21');
   });
 
   test('corrupted localStorage recovery', () => {
