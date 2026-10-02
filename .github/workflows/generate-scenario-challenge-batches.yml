@@ -27,6 +27,8 @@ jobs:
     env:
       OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
       OLLAMA_API_URL: https://ollama.com/api/chat
+      CHALLENGE_BATCH_ID: ${{ inputs.batch_id }}
+      CHALLENGE_MODEL: ${{ inputs.model }}
 
     steps:
       - name: Checkout
@@ -40,17 +42,17 @@ jobs:
       - name: Validate batch plan
         run: |
           node scripts/generate-scenario-challenge-batch.js \
-            --batch="${{ inputs.batch_id }}" \
-            --model="${{ inputs.model }}" \
+            --batch="$CHALLENGE_BATCH_ID" \
+            --model="$CHALLENGE_MODEL" \
             --dry-run=true
 
       - name: Generate batch with Ollama Cloud
         run: |
           mkdir -p "$RUNNER_TEMP/scenario-challenge"
           node scripts/generate-scenario-challenge-batch.js \
-            --batch="${{ inputs.batch_id }}" \
-            --model="${{ inputs.model }}" \
-            --output="$RUNNER_TEMP/scenario-challenge/batch-${{ inputs.batch_id }}.json"
+            --batch="$CHALLENGE_BATCH_ID" \
+            --model="$CHALLENGE_MODEL" \
+            --output="$RUNNER_TEMP/scenario-challenge/batch-$CHALLENGE_BATCH_ID.json"
 
       - name: Upload synthetic draft artifact
         uses: actions/upload-artifact@v7
