@@ -29,10 +29,10 @@ test('empty-filter then reset restores cards', async ({ page }) => {
   // Verify empty state appears
   await expect(page.locator('.empty-state')).toBeVisible();
 
-  // Use the Reset button inside the empty-state section
+  // Use the clear-filters action inside the empty-state section
   const resetButton = page
     .locator('#scenarioGrid')
-    .getByRole('button', { name: 'Reset filters' });
+    .getByRole('button', { name: 'Clear filters' });
 
   await expect(resetButton).toBeVisible();
   await expect(resetButton).toBeEnabled();
