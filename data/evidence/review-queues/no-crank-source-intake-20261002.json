@@ -1,0 +1,298 @@
+{
+  "scenario_id": "no-crank",
+  "stage": "source-intake-and-question-mapping-pending-human-rights-and-technical-review",
+  "researched_at": "2026-10-02",
+  "policy": "data/evidence/open-evidence-source-policy.json",
+  "scholarly_discovery": {
+    "primary_source": "Google Scholar",
+    "status": "pending-targeted-scholarly-pass",
+    "note": "Procedure-specific starter and battery claims in this intake are currently mapped only to manufacturer/test-equipment technical references. No scholarly source is being treated as approved evidence by this artifact."
+  },
+  "governance": {
+    "rights_approval_complete": false,
+    "technical_review_complete": false,
+    "provenance_complete": false,
+    "citation_validation_complete": false,
+    "database_ingestion_complete": false,
+    "question_generation_unblocked": false,
+    "assessment_eligibility_changed": false
+  },
+  "source_candidates": [
+    {
+      "candidate_id": "delco-remy-starter-cranking-tech-tip-2023",
+      "title": "Tech Tip: Diagnosing Starter Cranking Problems",
+      "publisher": "Delco Remy / PHINIA",
+      "publication_date": "2023-06-13",
+      "canonical_url": "https://www.delcoremy.com/the-latest/2023/june-2023/tech-tip-diagnosing-starter-cranking-problems",
+      "authority_status": "manufacturer-technical-guidance",
+      "observed_scope": [
+        "symptom-first click/no-crank diagnosis",
+        "battery/load testing before starter replacement",
+        "starter main-cable voltage-drop testing",
+        "control-circuit checks",
+        "ring-gear inspection after starter diagnosis"
+      ],
+      "rights_classification_candidate": "MANUFACTURER_PROPRIETARY",
+      "rights_decision": "external-reference-only-pending-explicit-permission",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/locator, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+    {
+      "candidate_id": "delco-remy-heavy-duty-troubleshooting-guide",
+      "title": "Delco Remy Heavy Duty Troubleshooting Guide: Starting and Charging System Testing",
+      "publisher": "Delco Remy / PHINIA",
+      "publication_date": null,
+      "canonical_url": "https://www.delcoremy.com/getmedia/ae3ecdd8-8714-4e43-a82f-11a97d01f7dd/Heavy-Duty-Troubleshooting-Guide-Flyer-12-16.pdf.aspx",
+      "authority_status": "manufacturer-technical-guidance",
+      "observed_scope": [
+        "battery and cable inspection",
+        "starting-system voltage-drop testing",
+        "control-circuit testing",
+        "heavy-duty starting and charging diagnostics"
+      ],
+      "applicability_limit": "Heavy-duty procedure; numeric thresholds and steps must not be generalized to all vehicles.",
+      "rights_classification_candidate": "MANUFACTURER_PROPRIETARY",
+      "rights_decision": "external-reference-only-pending-explicit-permission",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/locator, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+    {
+      "candidate_id": "fluke-starter-circuit-voltage-drop",
+      "title": "How to Check Starter Circuit Voltage Drop with a Multimeter",
+      "publisher": "Fluke Corporation",
+      "publication_date": null,
+      "canonical_url": "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-check-starter-circuit-voltage-drop-with-a-multimeter",
+      "authority_status": "test-equipment-manufacturer-technical-guidance",
+      "observed_scope": [
+        "loaded starter-circuit voltage-drop testing",
+        "positive and ground-side checks",
+        "high-resistance cable/connection diagnosis",
+        "starter-test safety setup"
+      ],
+      "rights_classification_candidate": "ALL_RIGHTS_RESERVED",
+      "rights_decision": "external-reference-only",
+      "rights_basis": "Fluke Terms of Use grant access/use but exclude redistribution, derivative use, data extraction, and unauthorized content use.",
+      "terms_url": "https://www.fluke.com/en-us/fluke/fluke-terms-of-use",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/locator, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+    {
+      "candidate_id": "fluke-automotive-voltage-drop",
+      "title": "Diagnosing Voltage Drops: Electrical Automotive Troubleshooting",
+      "publisher": "Fluke Corporation",
+      "publication_date": null,
+      "canonical_url": "https://www.fluke.com/en/learn/blog/automotive/electrical-automotive-troubleshooting",
+      "authority_status": "test-equipment-manufacturer-technical-guidance",
+      "observed_scope": [
+        "excessive resistance and voltage drop",
+        "corrosion and loose connections",
+        "ground-path restrictions",
+        "slow cranking and electrical underperformance"
+      ],
+      "rights_classification_candidate": "ALL_RIGHTS_RESERVED",
+      "rights_decision": "external-reference-only",
+      "rights_basis": "Fluke Terms of Use restrict redistribution, derivative use, extraction, and unauthorized content reuse.",
+      "terms_url": "https://www.fluke.com/en-us/fluke/fluke-terms-of-use",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/locator, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+    {
+      "candidate_id": "clore-1876-carbon-pile-load-tester",
+      "title": "1876 6/12/24 Volt Carbon Pile Battery Load Tester Instructions",
+      "publisher": "Clore Automotive",
+      "publication_date": null,
+      "canonical_url": "https://cloreautomotive.com/wp-content/uploads/2022/01/1876-61224-Volt-Carbon-Pile-Battery-Load-Tester-1.pdf",
+      "authority_status": "test-equipment-manufacturer-instructions",
+      "observed_scope": [
+        "carbon-pile battery load testing",
+        "one-half CCA load criterion",
+        "15-second test duration",
+        "temperature-dependent minimum voltage including 9.6 V at about 70°F/21°C"
+      ],
+      "verification_gap": "Automated retrieval returned HTTP 403 during this intake. Exact artifact bytes, license/terms, and checksum were not verified.",
+      "rights_classification_candidate": "UNKNOWN",
+      "rights_decision": "blocked-pending-artifact-and-rights-verification",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "citation metadata only until artifact and rights are reviewed",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    }
+  ],
+  "question_mappings": [
+    {
+      "question_id": "no-crank-battery-check-01",
+      "candidate_sources": [
+        "delco-remy-starter-cranking-tech-tip-2023"
+      ],
+      "claim_scope": "Initial diagnostic checks for click/no-crank should include battery condition and cable/terminal integrity before condemning the starter.",
+      "mapping_status": "pending-human-review"
+    },
+    {
+      "question_id": "no-crank-battery-voltage-01",
+      "candidate_sources": [],
+      "claim_scope": "Rested open-circuit voltage for a conventional fully charged 12 V lead-acid battery.",
+      "mapping_status": "source-gap"
+    },
+    {
+      "question_id": "no-crank-battery-load-01",
+      "candidate_sources": [
+        "clore-1876-carbon-pile-load-tester"
+      ],
+      "claim_scope": "Conditional carbon-pile load-test threshold tied to load magnitude, duration, and battery temperature.",
+      "mapping_status": "pending-artifact-and-human-review"
+    },
+    {
+      "question_id": "no-crank-voltage-drop-01",
+      "candidate_sources": [
+        "fluke-starter-circuit-voltage-drop",
+        "fluke-automotive-voltage-drop",
+        "delco-remy-heavy-duty-troubleshooting-guide"
+      ],
+      "claim_scope": "Loaded voltage-drop testing helps locate excessive resistance in starter cables and connections.",
+      "mapping_status": "pending-human-review"
+    },
+    {
+      "question_id": "no-crank-terminal-corrosion-01",
+      "candidate_sources": [
+        "fluke-automotive-voltage-drop",
+        "delco-remy-heavy-duty-troubleshooting-guide"
+      ],
+      "claim_scope": "Corrosion or loose/damaged connections can increase resistance and reduce starter-circuit performance.",
+      "mapping_status": "pending-human-review"
+    },
+    {
+      "question_id": "no-crank-ground-resistance-01",
+      "candidate_sources": [
+        "fluke-starter-circuit-voltage-drop",
+        "fluke-automotive-voltage-drop"
+      ],
+      "claim_scope": "Excessive ground-path voltage drop can cause slow crank or no crank under load.",
+      "mapping_status": "pending-human-review"
+    },
+    {
+      "question_id": "no-crank-starter-relay-01",
+      "candidate_sources": [
+        "delco-remy-starter-cranking-tech-tip-2023"
+      ],
+      "claim_scope": "Starter control-circuit checks should use the wiring/service procedure and voltage-based diagnosis while energized.",
+      "mapping_status": "pending-human-review"
+    },
+    {
+      "question_id": "no-crank-solenoid-voltage-01",
+      "candidate_sources": [
+        "delco-remy-starter-cranking-tech-tip-2023"
+      ],
+      "claim_scope": "Starter/IMS control voltage must be interpreted against the applicable circuit design and service specification.",
+      "mapping_status": "pending-human-review"
+    },
+    {
+      "question_id": "no-crank-ignition-switch-01",
+      "candidate_sources": [],
+      "claim_scope": "Start-request path may involve switch/input/module/network/wiring depending on design.",
+      "mapping_status": "source-gap-vehicle-specific"
+    },
+    {
+      "question_id": "no-crank-park-neutral-01",
+      "candidate_sources": [],
+      "claim_scope": "Valid Park/Neutral or transmission-range input may be required for starter authorization.",
+      "mapping_status": "source-gap-vehicle-specific"
+    },
+    {
+      "question_id": "no-crank-clutch-interlock-01",
+      "candidate_sources": [],
+      "claim_scope": "Vehicles equipped with a clutch-start interlock may inhibit cranking when the input is invalid.",
+      "mapping_status": "source-gap-vehicle-specific"
+    },
+    {
+      "question_id": "no-crank-starter-current-01",
+      "candidate_sources": [],
+      "claim_scope": "Starter current draw is not independently diagnostic and must be interpreted with cranking voltage, cranking speed, temperature, circuit condition, and the applicable starter/OEM specification.",
+      "mapping_status": "source-gap"
+    },
+    {
+      "question_id": "no-crank-seized-engine-01",
+      "candidate_sources": [],
+      "claim_scope": "Suspected engine mechanical lockup should be verified with an approved mechanical procedure while the vehicle is safely disabled.",
+      "mapping_status": "source-gap-safety-critical"
+    },
+    {
+      "question_id": "no-crank-immobilizer-01",
+      "candidate_sources": [],
+      "claim_scope": "Security/immobilizer behavior is vehicle-specific and may or may not inhibit crank.",
+      "mapping_status": "source-gap-vehicle-specific"
+    },
+    {
+      "question_id": "no-crank-wiring-diagram-01",
+      "candidate_sources": [
+        "delco-remy-starter-cranking-tech-tip-2023"
+      ],
+      "claim_scope": "Correct circuit documentation is needed to identify control and power-path checks.",
+      "mapping_status": "pending-human-review-limited-scope"
+    },
+    {
+      "question_id": "no-crank-starter-pid-01",
+      "candidate_sources": [],
+      "claim_scope": "Starter command/crank request/enable scan data are manufacturer/model dependent.",
+      "mapping_status": "source-gap-vehicle-specific"
+    },
+    {
+      "question_id": "no-crank-cable-inspect-01",
+      "candidate_sources": [
+        "delco-remy-heavy-duty-troubleshooting-guide",
+        "fluke-automotive-voltage-drop"
+      ],
+      "claim_scope": "Battery/starter cable and terminal condition should be visually inspected for corrosion, damage, and connection issues.",
+      "mapping_status": "pending-human-review"
+    },
+    {
+      "question_id": "no-crank-relay-bypass-01",
+      "candidate_sources": [],
+      "claim_scope": "Improvised bypassing can defeat safety interlocks or circuit protection; manufacturer-approved test methods should be used.",
+      "mapping_status": "source-gap-safety-critical"
+    },
+    {
+      "question_id": "no-crank-post-repair-01",
+      "candidate_sources": [],
+      "claim_scope": "Post-repair verification should confirm the original symptom is corrected and repeat the relevant diagnostic checks.",
+      "mapping_status": "source-gap"
+    },
+    {
+      "question_id": "no-crank-mechanical-engagement-01",
+      "candidate_sources": [
+        "delco-remy-starter-cranking-tech-tip-2023"
+      ],
+      "claim_scope": "Starter drive/pinion/ring-gear engagement faults can require inspection after starter diagnosis.",
+      "mapping_status": "pending-human-review"
+    }
+  ],
+  "summary": {
+    "question_count": 20,
+    "mapped_to_at_least_one_candidate_source": 10,
+    "source_gap_count": 10,
+    "approved_questions_created": 0,
+    "approved_sources_created": 0,
+    "approved_chunks_created": 0,
+    "database_writes": 0
+  },
+  "required_before_next_gate": [
+    "Complete a targeted Google Scholar discovery pass for starting-system and battery-testing claims and record original-publisher/DOI targets.",
+    "Resolve the 10 source-gap mappings, prioritizing safety-critical and vehicle-specific claims.",
+    "Obtain rights clearance only for sources whose exact licenses permit the intended commercial-capable use; otherwise retain metadata/link-only reference status.",
+    "Perform human technical review of each claim-to-source mapping and record reviewer identity and timestamp.",
+    "Do not store proprietary excerpts or send external-reference-only source text to Ollama/RAG.",
+    "Do not create approved provenance, citation validations, or assessment eligibility from this intake artifact."
+  ]
+}
