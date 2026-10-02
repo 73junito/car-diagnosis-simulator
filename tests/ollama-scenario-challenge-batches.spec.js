@@ -80,5 +80,6 @@ describe('Ollama scenario challenge batch contract', () => {
     expect(generator).toContain('OLLAMA_CHALLENGE_TIMEOUT_MS || 600000');
     expect(generator).toContain('timeoutMs');
     expect(generator).toContain('timeout_ms: timeoutMs');
+    expect(generator).toContain('timeoutMs > 2147483647');
   });
 });
