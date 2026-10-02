@@ -8,11 +8,16 @@ const {
   buildChallengeJsonSchema
 } = require('../scripts/agents/scenario-challenge-question-agent');
 
-const makeQuestions = (count, scenarioId = 'no-crank') =>
+const makeQuestions = (count, scenarioId = 'no-crank', prefix = 'Question') =>
   Array.from({ length: count }, (_, index) => ({
     scenario_id: scenarioId,
-    question: `Question ${index + 1}`
+    question: `${prefix} ${scenarioId} ${index + 1}`
   }));
+
+const makeAllocatedQuestions = (allocation, prefix = 'Question') =>
+  Object.entries(allocation).flatMap(([scenarioId, count]) =>
+    makeQuestions(count, scenarioId, prefix)
+  );
 
 const baseArgs = {
   apiUrl: 'https://ollama.com/api/chat',
@@ -88,8 +93,6 @@ describe('Ollama scenario challenge worker', () => {
       const request = JSON.parse(options.body);
       requests.push(request);
       const prompt = JSON.parse(request.messages[1].content);
-      const target = request.format.properties.questions.minItems;
-      const scenarioId = Object.keys(prompt.scenario_allocation)[0];
 
       return {
         ok: true,
@@ -98,7 +101,10 @@ describe('Ollama scenario challenge worker', () => {
           message: {
             content: JSON.stringify({
               batch_id: 1,
-              questions: makeQuestions(target, scenarioId)
+              questions: makeAllocatedQuestions(
+                prompt.scenario_allocation,
+                `chunk-${requests.length}`
+              )
             })
           }
         })
@@ -119,6 +125,89 @@ describe('Ollama scenario challenge worker', () => {
       { a: 2, b: 8 },
       { b: 5 }
     ]);
+  });
+
+  test('retries a chunk whose scenario counts do not match the requested allocation', async () => {
+    const requests = [];
+    const args = {
+      ...baseArgs,
+      batchTarget: 10,
+      allocation: { a: 2, b: 8 },
+      scenarioContext: [{ scenario_id: 'a' }, { scenario_id: 'b' }]
+    };
+
+    const fetchImpl = async (url, options) => {
+      const request = JSON.parse(options.body);
+      requests.push(request);
+      const prompt = JSON.parse(request.messages[1].content);
+      const questions = requests.length === 1
+        ? makeQuestions(10, 'a', 'misallocated')
+        : makeAllocatedQuestions(prompt.scenario_allocation, 'corrected');
+
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: {
+            content: JSON.stringify({ batch_id: 1, questions })
+          }
+        })
+      };
+    };
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await runScenarioChallengeWorker({ ...args, fetchImpl });
+
+    expect(result.generated.questions).toHaveLength(10);
+    expect(requests).toHaveLength(2);
+    expect(warnSpy.mock.calls[0][0])
+      .toContain('reason=Model response scenario allocation did not match the requested chunk.');
+    warnSpy.mockRestore();
+  });
+
+  test('carries earlier generated questions into later same-scenario avoidance context', async () => {
+    const requests = [];
+    const args = {
+      ...baseArgs,
+      batchTarget: 25,
+      allocation: { a: 12, b: 13 },
+      scenarioContext: [{ scenario_id: 'a' }, { scenario_id: 'b' }],
+      retainedQuestions: [
+        { scenario_id: 'a', question: 'retained a' },
+        { scenario_id: 'b', question: 'retained b' }
+      ]
+    };
+
+    const fetchImpl = async (url, options) => {
+      const request = JSON.parse(options.body);
+      requests.push(request);
+      const prompt = JSON.parse(request.messages[1].content);
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: {
+            content: JSON.stringify({
+              batch_id: 1,
+              questions: makeAllocatedQuestions(
+                prompt.scenario_allocation,
+                `generated-${requests.length}`
+              )
+            })
+          }
+        })
+      };
+    };
+
+    await runScenarioChallengeWorker({ ...args, fetchImpl });
+
+    const secondPrompt = JSON.parse(requests[1].messages[1].content);
+    expect(secondPrompt.retained_questions.some(
+      (row) => row.scenario_id === 'a' && row.question.startsWith('generated-1 a')
+    )).toBe(true);
+    expect(secondPrompt.retained_questions).toContainEqual(
+      expect.objectContaining({ scenario_id: 'a', question: 'retained a' })
+    );
   });
 
   test('retries one malformed chunk response with a stricter JSON-only instruction', async () => {
