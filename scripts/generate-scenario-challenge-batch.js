@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { runScenarioChallengeWorker } = require('./workers/ollama-scenario-challenge-worker');
 const { validateGenerated } = require('./lib/scenario-challenge-validator');
+const { buildGenerationChunks } = require('./lib/scenario-challenge-chunks');
 
 const root = path.resolve(__dirname, '..');
 const args = Object.fromEntries(
@@ -72,7 +73,11 @@ const scenarioContext = plan.scenario_banks.map((scenarioId) => ({
   routed_examples: routeExamples.filter((row) => row.bank === scenarioId).map((row) => row.route),
   retained_question_count: retainedQuestions.filter((q) => q.scenario_id === scenarioId).length
 }));
-
+const generationChunks = buildGenerationChunks({
+  allocation: batch.allocation,
+  scenarioOrder: plan.scenario_banks,
+  maxQuestions: 12
+});
 
 if (dryRun) {
   process.stdout.write(JSON.stringify({
@@ -83,21 +88,55 @@ if (dryRun) {
     retained_question_count: retainedQuestions.length,
     model,
     timeout_ms: timeoutMs,
+    generation_chunks: generationChunks,
     governance: plan.governance
   }, null, 2) + '\n');
   process.exit(0);
 }
 
 (async () => {
-  const { generated, agentVersion } = await runScenarioChallengeWorker({
-    apiUrl, apiKey, model,
-    batchId,
-    batchTarget: batch.target_count,
-    allocation: batch.allocation,
-    scenarioContext,
-    retainedQuestions,
-    timeoutMs
-  });
+  const generatedQuestions = [];
+  const generationStartedAt = Date.now();
+  let agentVersion = null;
+
+  for (let index = 0; index < generationChunks.length; index += 1) {
+    const chunk = generationChunks[index];
+    const elapsedMs = Date.now() - generationStartedAt;
+    const remainingMs = timeoutMs - elapsedMs;
+    if (remainingMs < 1000) {
+      throw new Error('Ollama challenge batch timeout expired before all chunks completed.');
+    }
+
+    console.log(
+      `Generating chunk ${index + 1}/${generationChunks.length} ` +
+      `(${chunk.target_count} questions across ${chunk.scenario_ids.length} scenarios)`
+    );
+
+    const chunkScenarioSet = new Set(chunk.scenario_ids);
+    const result = await runScenarioChallengeWorker({
+      apiUrl,
+      apiKey,
+      model,
+      batchId,
+      batchTarget: chunk.target_count,
+      allocation: chunk.allocation,
+      scenarioContext: scenarioContext.filter((item) => chunkScenarioSet.has(item.scenario_id)),
+      retainedQuestions: retainedQuestions.filter((item) => chunkScenarioSet.has(item.scenario_id)),
+      timeoutMs: remainingMs
+    });
+
+    if (!result.generated || !Array.isArray(result.generated.questions)) {
+      throw new Error(`Ollama challenge chunk ${index + 1} did not return a questions array.`);
+    }
+
+    agentVersion = result.agentVersion;
+    generatedQuestions.push(...result.generated.questions);
+  }
+
+  const generated = {
+    batch_id: batchId,
+    questions: generatedQuestions
+  };
   const questions = validateGenerated({ doc: generated, plan, batch });
   const result = {
     generator: {
