@@ -22,6 +22,14 @@ test('student scenario cards stay compact with explicit actions', async ({ page 
 
     // The compact dashboard card intentionally omits large scenario media.
     await expect(card.locator('img')).toHaveCount(0);
+
+    // Do not repeat the scenario title verbatim as body copy.
+    const titleText = (await card.locator('.tm-scenario-v2-card-title').innerText()).trim().toLowerCase().replace(/\s+/g, ' ');
+    const bodyText = card.locator('.tm-scenario-v2-card-text');
+    if (await bodyText.count()) {
+      const symptomText = (await bodyText.innerText()).trim().toLowerCase().replace(/\s+/g, ' ');
+      expect(symptomText).not.toBe(titleText);
+    }
   }
 
   await page.getByRole('button', { name: 'Show all scenarios' }).click();
