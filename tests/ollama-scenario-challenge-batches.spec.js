@@ -11,8 +11,8 @@ describe('Ollama scenario challenge batch contract', () => {
     path.join(root, 'scripts', 'agents', 'scenario-challenge-question-agent.js'),
     'utf8'
   );
-  const generator = fs.readFileSync(
-    path.join(root, 'scripts', 'generate-scenario-challenge-batch.js'),
+  const validator = fs.readFileSync(
+    path.join(root, 'scripts', 'lib', 'scenario-challenge-validator.js'),
     'utf8'
   );
   const workflow = fs.readFileSync(
@@ -57,9 +57,16 @@ describe('Ollama scenario challenge batch contract', () => {
     expect(plan.governance.eligible_for_scoring).toBe(false);
     expect(plan.governance.assessment_eligible).toBe(false);
 
-    expect(generator).toContain("evidence_mapping_completed: false");
-    expect(generator).toContain("citation_validation_completed: false");
-    expect(generator).toContain("approved: false");
+    expect(validator).toContain("evidence_mapping_completed: false");
+    expect(validator).toContain("citation_validation_completed: false");
+    expect(validator).toContain("approved: false");
     expect(workflow).toContain('not eligible for training-bank mixing');
+  });
+
+  test('passes free-form dispatch values through environment variables before shell use', () => {
+    expect(workflow).toContain('CHALLENGE_MODEL: ${{ inputs.model }}');
+    expect(workflow).toContain('CHALLENGE_BATCH_ID: ${{ inputs.batch_id }}');
+    expect(workflow).toContain('--model="$CHALLENGE_MODEL"');
+    expect(workflow).not.toContain('--model="${{ inputs.model }}"');
   });
 });
