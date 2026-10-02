@@ -11,8 +11,14 @@ jobs:
     steps:
       - name: Check inputs
         run: |
-          echo 'Applying branch protection to "main" with required checks: unit-tests, build-and-test, Run ESLint, api-smoke'
+          echo 'Applying branch protection to "main" with required checks: unit-tests, build-and-test (22), build-and-test (24), Run ESLint, api-smoke'
 
+      # Required contexts must match the exact check-run names GitHub publishes.
+      # Matrix jobs append their matrix values to the job id, so the
+      # `build-and-test` job in .github/workflows/ci.yml
+      # (strategy.matrix.node-version: ['22', '24']) reports as
+      # "build-and-test (22)" and "build-and-test (24)" and never as the bare
+      # "build-and-test". Keep the list below in sync if that matrix changes.
       - name: Create payload
         run: |
           cat > payload.json <<'JSON'
@@ -21,7 +27,8 @@ jobs:
               "strict": true,
               "contexts": [
                 "unit-tests",
-                "build-and-test",
+                "build-and-test (22)",
+                "build-and-test (24)",
                 "Run ESLint",
                 "api-smoke"
               ]
