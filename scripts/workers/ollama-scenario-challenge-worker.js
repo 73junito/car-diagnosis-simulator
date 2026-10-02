@@ -19,6 +19,29 @@ function describeContent(content) {
   };
 }
 
+function validateChunkScenarioAllocation(questions, allocation) {
+  const expectedIds = new Set(Object.keys(allocation));
+  const actualCounts = Object.fromEntries(
+    Object.keys(allocation).map((scenarioId) => [scenarioId, 0])
+  );
+
+  for (const question of questions) {
+    const scenarioId = question?.scenario_id;
+    if (!expectedIds.has(scenarioId)) {
+      throw new Error('Model response included a scenario outside the requested chunk allocation.');
+    }
+    actualCounts[scenarioId] += 1;
+  }
+
+  for (const [scenarioId, expectedCount] of Object.entries(allocation)) {
+    if (actualCounts[scenarioId] !== expectedCount) {
+      throw new Error(
+        'Model response scenario allocation did not match the requested chunk.'
+      );
+    }
+  }
+}
+
 function buildAllocationChunks(allocation, maxQuestions = MAX_QUESTIONS_PER_REQUEST) {
   if (!Number.isInteger(maxQuestions) || maxQuestions < 1) {
     throw new Error('maxQuestions must be a positive integer.');
@@ -147,6 +170,7 @@ async function requestChallengeChunk({
         if (!Array.isArray(generated.questions) || generated.questions.length !== batchTarget) {
           throw new Error('Model response question count did not match the requested chunk.');
         }
+        validateChunkScenarioAllocation(generated.questions, allocation);
 
         return generated.questions;
       } catch (error) {
@@ -194,8 +218,20 @@ async function runScenarioChallengeWorker({
     const scenarioIds = new Set(Object.keys(chunk.allocation));
     const chunkScenarioContext = (scenarioContext || [])
       .filter((row) => scenarioIds.has(row.scenario_id));
-    const chunkRetainedQuestions = (retainedQuestions || [])
-      .filter((row) => scenarioIds.has(row.scenario_id));
+    const previouslyGeneratedForChunk = questions
+      .filter((row) => scenarioIds.has(row.scenario_id))
+      .map((row) => ({
+        scenario_id: row.scenario_id,
+        question_id: null,
+        status: 'synthetic-draft-current-run',
+        question: row.question,
+        options: row.options,
+        correct_answer: row.correct_answer
+      }));
+    const chunkRetainedQuestions = [
+      ...(retainedQuestions || []).filter((row) => scenarioIds.has(row.scenario_id)),
+      ...previouslyGeneratedForChunk
+    ];
 
     const generatedQuestions = await requestChallengeChunk({
       apiUrl,
@@ -232,5 +268,6 @@ module.exports = {
   runScenarioChallengeWorker,
   describeContent,
   buildAllocationChunks,
+  validateChunkScenarioAllocation,
   MAX_QUESTIONS_PER_REQUEST
 };
