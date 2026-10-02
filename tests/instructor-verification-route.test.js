@@ -27,6 +27,15 @@ function makeQuery({ maybeSingle = { data: null, error: null }, single } = {}) {
   )
   return query
 }
+function makeApprovedDomain(domain = 'example.edu') {
+  return makeQuery({
+    maybeSingle: {
+      data: { school_code: '001234', domain, active: true },
+      error: null
+    }
+  })
+}
+
 function makeContext({ method = 'GET', body = {}, query = {} } = {}) {
   return {
     env: {
@@ -43,10 +52,14 @@ function makeContext({ method = 'GET', body = {}, query = {} } = {}) {
   }
 }
 
-function setAuthenticatedUser(role = 'instructor', id = 'verified-user') {
+function setAuthenticatedUser(
+  role = 'instructor',
+  id = 'verified-user',
+  email = 'faculty@example.edu'
+) {
   authUtils.extractBearerToken.mockReturnValue('token')
   authUtils.verifySupabaseToken.mockResolvedValue({
-    user: { id, app_metadata: { role } },
+    user: { id, email, app_metadata: { role } },
     error: null
   })
 }
@@ -75,6 +88,12 @@ describe('instructor verification route authorization', () => {
         error: null
       }
     })
+    const domain = makeQuery({
+      maybeSingle: {
+        data: { school_code: '001234', domain: 'example.edu', active: true },
+        error: null
+      }
+    })
     const request = makeQuery({
       maybeSingle: { data: null, error: null },
       single: {
@@ -93,6 +112,7 @@ describe('instructor verification route authorization', () => {
     createClient.mockReturnValue({
       from: jest.fn((table) => ({
         institutions: institution,
+        institution_email_domains: domain,
         instructor_verification_requests: request,
         profiles: profile
       }[table]))
@@ -108,6 +128,40 @@ describe('instructor verification route authorization', () => {
     expect(request.insert).toHaveBeenCalledTimes(1)
     expect(request.insertedRow.user_id).toBe('verified-user')
     expect(request.insertedRow.user_id).not.toBe('attacker-supplied')
+  })
+
+  test('rejects a personal email domain for instructor verification', async () => {
+    setAuthenticatedUser('instructor', 'verified-user', 'person@gmail.com')
+
+    const institution = makeQuery({
+      maybeSingle: {
+        data: { school_code: '001234', school_name: 'Example College', active: true },
+        error: null
+      }
+    })
+    const noDomainMatch = makeQuery({
+      maybeSingle: { data: null, error: null }
+    })
+    const request = makeQuery()
+
+    createClient.mockReturnValue({
+      from: jest.fn((table) => ({
+        institutions: institution,
+        institution_email_domains: noDomainMatch,
+        instructor_verification_requests: request
+      }[table]))
+    })
+
+    const response = await handleInstructorVerificationRequest(
+      makeContext({
+        method: 'POST',
+        body: { schoolCode: '001234' }
+      })
+    )
+
+    expect(response.status).toBe(403)
+    expect(response.payload.institutionalEmailVerified).toBe(false)
+    expect(request.insert).not.toHaveBeenCalled()
   })
 
   test.each([
@@ -135,13 +189,46 @@ describe('instructor verification route authorization', () => {
     createClient.mockReturnValue({
       from: jest.fn((table) => ({
         instructor_verification_requests: verification,
-        institutions: institution
+        institutions: institution,
+        institution_email_domains: makeApprovedDomain()
       }[table]))
     })
 
     const response = await handleInstructorVerificationStatus(makeContext())
     expect(response.status).toBe(200)
     expect(response.payload.authorizationGranted).toBe(expected)
+  })
+
+  test('does not authorize an instructor when the approved affiliation email domain no longer matches', async () => {
+    setAuthenticatedUser('instructor', 'verified-user', 'person@gmail.com')
+    const verification = makeQuery({
+      maybeSingle: {
+        data: { school_code: '001234', status: 'approved' },
+        error: null
+      }
+    })
+    const institution = makeQuery({
+      maybeSingle: {
+        data: { school_code: '001234', school_name: 'Example College' },
+        error: null
+      }
+    })
+    const noDomainMatch = makeQuery({
+      maybeSingle: { data: null, error: null }
+    })
+
+    createClient.mockReturnValue({
+      from: jest.fn((table) => ({
+        instructor_verification_requests: verification,
+        institutions: institution,
+        institution_email_domains: noDomainMatch
+      }[table]))
+    })
+
+    const response = await handleInstructorVerificationStatus(makeContext())
+    expect(response.status).toBe(200)
+    expect(response.payload.institutionalEmailVerified).toBe(false)
+    expect(response.payload.authorizationGranted).toBe(false)
   })
 
   test('does not authorize a student even with an approved affiliation row', async () => {
@@ -166,7 +253,8 @@ describe('instructor verification route authorization', () => {
       from: jest.fn((table) => ({
         profiles: profile,
         instructor_verification_requests: verification,
-        institutions: institution
+        institutions: institution,
+        institution_email_domains: makeApprovedDomain()
       }[table]))
     })
     const response = await handleInstructorVerificationStatus(makeContext())
@@ -212,6 +300,7 @@ describe('instructor verification route authorization', () => {
       createClient.mockReturnValue({
         from: jest.fn((table) => ({
           institutions: institution,
+          institution_email_domains: makeApprovedDomain(),
           instructor_verification_requests: request
         }[table]))
       })

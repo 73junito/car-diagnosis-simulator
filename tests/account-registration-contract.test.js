@@ -14,6 +14,7 @@ const instructorSignUp = read('sign-up/instructor/index.html')
 const instructorSignUpJs = read('sign-up/instructor/sign-up.js')
 const build = read('scripts/build-static-site.js')
 const migration = read('supabase/migrations/20261001235500_create_profile_on_auth_signup.sql')
+const domainMigration = read('supabase/migrations/20261002001500_add_institution_email_domains.sql')
 
 describe('account registration contract', () => {
   test('exposes account creation from both sign-in pages', () => {
@@ -34,10 +35,14 @@ describe('account registration contract', () => {
 
   test('keeps instructor registration separate from authorization', () => {
     expect(instructorSignUp).toContain('does not grant instructor authorization')
-    expect(instructorSignUp).toContain('affiliation approval is reviewed separately')
+    expect(instructorSignUp).toContain('Personal email domains cannot satisfy the instructor-access gate')
+    expect(instructorSignUp).toContain('Institution email')
     expect(migration).toContain("values (new.id, new.email, 'student')")
     expect(migration).not.toContain("new.raw_user_meta_data->>'role'")
     expect(migration).not.toContain("'instructor'")
+    expect(domainMigration).toContain('create table if not exists public.institution_email_domains')
+    expect(domainMigration).toContain('primary key (school_code, domain)')
+    expect(domainMigration).toContain('grant all on table public.institution_email_domains to service_role')
   })
 
   test('supports confirmed sessions and institution verification', () => {
@@ -56,6 +61,12 @@ describe('account registration contract', () => {
     ]) {
       expect(build).toContain(expected)
     }
+  })
+
+  test('allows student personal or institutional email while requiring institutional instructor email', () => {
+    expect(studentSignUp).toContain('either a personal or institutional email address')
+    expect(instructorSignUp).toContain('institution-issued email address')
+    expect(instructorSignUp).toContain('verified email-domain matching')
   })
 
   test('includes terms and privacy acknowledgement on registration', () => {
