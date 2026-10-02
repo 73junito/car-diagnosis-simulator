@@ -9,11 +9,41 @@
     t.appendChild(el); setTimeout(()=>{ el.remove(); }, timeout);
   }
 
+  function tokenEmail(accessToken){
+    try {
+      const payload = String(accessToken || '').split('.')[1]
+      if (!payload) return ''
+      const normalized = payload.replace(/-/g, '+').replace(/_/g, '/')
+      const padded = normalized + '='.repeat((4 - normalized.length % 4) % 4)
+      return JSON.parse(atob(padded))?.email || ''
+    } catch {
+      return ''
+    }
+  }
+
   function storeSession(body, email){
     if (!body?.access_token) return;
     localStorage.setItem('supabase_access_token', body.access_token);
     localStorage.setItem('supabase_refresh_token', body.refresh_token || '');
-    localStorage.setItem('supabase_user_email', email);
+    const resolvedEmail = email || tokenEmail(body.access_token)
+    if (resolvedEmail) localStorage.setItem('supabase_user_email', resolvedEmail);
+  }
+
+  function consumeAuthRedirect(){
+    const rawHash = String(window.location.hash || '').replace(/^#/, '')
+    if (!rawHash) return false
+    const params = new URLSearchParams(rawHash)
+    const accessToken = params.get('access_token')
+    if (!accessToken) return false
+
+    storeSession({
+      access_token: accessToken,
+      refresh_token: params.get('refresh_token') || ''
+    })
+
+    const cleanUrl = window.location.pathname + window.location.search
+    window.history.replaceState({}, document.title, cleanUrl)
+    return true
   }
 
   async function supabaseSignIn(email, password){
@@ -75,11 +105,14 @@
     if (cur && String(cur).startsWith('local-')){ localStorage.removeItem('carSim_currentClassId'); localStorage.removeItem('carSim_currentClassCode'); }
   }
 
+  consumeAuthRedirect();
+
   // Expose
   window.supabaseSignIn = supabaseSignIn;
   window.supabaseSignUp = supabaseSignUp;
   window.supabaseSignOut = supabaseSignOut;
   window.getAccessToken = getAccessToken;
+  window.consumeAuthRedirect = consumeAuthRedirect;
   window.clearLocalFallbackOnAuth = clearLocalFallbackOnAuth;
   window.showToast = showToast;
 })();
