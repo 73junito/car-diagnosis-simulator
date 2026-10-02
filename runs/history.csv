@@ -1,1 +1,2 @@
 accepted,denied,acceptRate,completed,avgDuration,p50,p90,p99,notificationAttempts,totalLogs,generatedAt,source
+50,0,1.00,50,414,284,631,1825,0,0,2026-10-02T11:37:38.850Z,run-scheduled-summary.json
