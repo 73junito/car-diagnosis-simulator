@@ -20,9 +20,7 @@ test('empty-filter then reset restores cards', async ({ page }) => {
 
   // Start from a known state. Search stays visible; advanced filters are collapsed.
   await page.fill('#searchInput', '');
-  await page.getByRole('group').filter({ hasText: 'Filters' }).getByText('Filters').click().catch(async () => {
-    await page.locator('.student-scenario-controls > summary').click();
-  });
+  await page.locator('.student-scenario-controls > summary').click();
   await page.selectOption('#filterCategory', 'all');
 
   // Force empty results
