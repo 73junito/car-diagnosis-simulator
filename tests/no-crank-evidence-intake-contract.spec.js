@@ -8,10 +8,19 @@ describe('no-crank evidence intake contract', () => {
     'utf8'
   ));
 
-  test('covers all 20 no-crank questions without changing approval state', () => {
+  test('covers the exact canonical no-crank question set without changing approval state', () => {
+    const scenarioQuestionsPath = path.join(root, 'data', 'scenario-questions.js');
+    const scenarioQuestionsCode = fs.readFileSync(scenarioQuestionsPath, 'utf8');
+    const sandbox = { SCENARIO_QUESTIONS: undefined };
+    const loader = new Function('window', scenarioQuestionsCode + '\nreturn window.SCENARIO_QUESTIONS;');
+    const canonicalBanks = loader(sandbox);
+    const canonicalIds = canonicalBanks['no-crank'].map((question) => question.id).sort();
+    const mappedIds = intake.question_mappings.map((row) => row.question_id).sort();
+
     expect(intake.scenario_id).toBe('no-crank');
     expect(intake.question_mappings).toHaveLength(20);
-    expect(new Set(intake.question_mappings.map((row) => row.question_id)).size).toBe(20);
+    expect(new Set(mappedIds).size).toBe(20);
+    expect(mappedIds).toEqual(canonicalIds);
     expect(intake.governance.assessment_eligibility_changed).toBe(false);
     expect(intake.summary.approved_questions_created).toBe(0);
     expect(intake.summary.approved_sources_created).toBe(0);
