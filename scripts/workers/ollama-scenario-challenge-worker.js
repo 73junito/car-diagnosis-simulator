@@ -4,13 +4,14 @@ const { parseModelJson } = require('../lib/parse-model-json');
 const { AGENT_VERSION, buildChallengeMessages } = require('../agents/scenario-challenge-question-agent');
 
 async function runScenarioChallengeWorker({
-  apiUrl, apiKey, model, batchId, batchTarget, allocation, scenarioContext, retainedQuestions, timeoutMs = 120000
+  apiUrl, apiKey, model, batchId, batchTarget, allocation, scenarioContext, retainedQuestions,
+  timeoutMs = 120000, fetchImpl = globalThis.fetch
 }) {
   if (!apiUrl || !apiKey || !model) throw new Error('Ollama Cloud configuration is incomplete.');
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch(apiUrl, {
+    const response = await fetchImpl(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
