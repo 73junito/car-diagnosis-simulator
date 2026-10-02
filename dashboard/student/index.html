@@ -38,12 +38,12 @@
         <nav class="student-more-tools__links" aria-label="Additional student tools">
           <a href="/dashboard/student/coach/">Coach</a>
           <a href="/dashboard/student/activity/">Activity</a>
-          <a href="/dashboard/student/starting-system-lab/">Starting System Lab</a>
-          <a href="/dashboard/student/relay-load-lab/">Relay Load Lab</a>
-          <a href="/dashboard/student/sensor-lab/">Sensor Lab</a>
-          <a href="/dashboard/student/actuator-lab/">Actuator Lab</a>
-          <a href="/dashboard/student/network-lab/">Network Lab</a>
-          <a href="/dashboard/student/multivoltage-lab/">Multi-Voltage Lab</a>
+          <a href="/dashboard/student/starting-system-lab/">12 V Starting Lab</a>
+          <a href="/dashboard/student/relay-load-lab/">12 V Relay Load Lab</a>
+          <a href="/dashboard/student/sensor-lab/">12 V Sensor Lab</a>
+          <a href="/dashboard/student/actuator-lab/">12 V PWM Actuator Lab</a>
+          <a href="/dashboard/student/network-lab/">12 V CAN/LIN Network Lab</a>
+          <a href="/dashboard/student/multivoltage-lab/">Electrified Multi-Voltage Lab</a>
         </nav>
       </details>
     </section>
@@ -76,33 +76,35 @@
         <div class="filter-count" id="filterCount" aria-live="polite">Loading scenarios...</div>
       </div>
 
-      <details class="student-scenario-controls">
-        <summary>Search and filter scenarios</summary>
-        <div class="filters" id="scenarioFilters" aria-label="Scenario filters">
-          <div class="filter-item">
-            <label for="searchInput" class="filter-label">Search</label>
-            <input id="searchInput" class="filter-input" type="search" placeholder="Search by name or symptom">
-          </div>
-          <div class="filter-item">
-            <label for="filterCategory" class="filter-label">Category</label>
-            <select id="filterCategory" class="filter-input">
-              <option value="all">All categories</option>
-            </select>
-          </div>
-          <div class="filter-item">
-            <label for="filterDifficulty" class="filter-label">Difficulty</label>
-            <select id="filterDifficulty" class="filter-input">
-              <option value="all">All levels</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
-          </div>
-          <div class="filter-actions">
-            <button id="resetFiltersBtn" class="tm-btn tm-btn-secondary" type="button">Clear filters</button>
-          </div>
+      <div class="student-scenario-search-row">
+        <div class="student-scenario-search">
+          <label for="searchInput" class="visually-hidden">Search scenarios</label>
+          <input id="searchInput" class="filter-input" type="search" placeholder="Search scenarios by name or symptom">
         </div>
-      </details>
+        <details class="student-scenario-controls">
+          <summary>Filters</summary>
+          <div class="filters" id="scenarioFilters" aria-label="Scenario filters">
+            <div class="filter-item">
+              <label for="filterCategory" class="filter-label">Category</label>
+              <select id="filterCategory" class="filter-input">
+                <option value="all">All categories</option>
+              </select>
+            </div>
+            <div class="filter-item">
+              <label for="filterDifficulty" class="filter-label">Difficulty</label>
+              <select id="filterDifficulty" class="filter-input">
+                <option value="all">All levels</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </div>
+            <div class="filter-actions">
+              <button id="resetFiltersBtn" class="tm-btn tm-btn-secondary" type="button">Clear filters</button>
+            </div>
+          </div>
+        </details>
+      </div>
 
       <div id="scenarioGrid" class="scenario-grid" aria-live="polite"></div>
       <div class="student-scenario-list-actions">
@@ -328,6 +330,21 @@
           const empty = document.createElement('div');
           empty.className = 'empty-state';
           empty.innerHTML = '<strong>No scenarios found.</strong><p>Clear the filters or try a different search.</p>';
+          const emptyResetBtn = document.createElement('button');
+          emptyResetBtn.className = 'tm-btn tm-btn-secondary';
+          emptyResetBtn.type = 'button';
+          emptyResetBtn.textContent = 'Clear filters';
+          emptyResetBtn.addEventListener('click', () => {
+            const search = document.getElementById('searchInput');
+            const category = document.getElementById('filterCategory');
+            const difficulty = document.getElementById('filterDifficulty');
+            if(search) search.value = '';
+            if(category) category.value = 'all';
+            if(difficulty) difficulty.value = 'all';
+            showAllScenarios = false;
+            renderDashboard();
+          });
+          empty.appendChild(emptyResetBtn);
           container.appendChild(empty);
         } else {
           visible.forEach(s => {
