@@ -2,8 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 const { runScenarioChallengeWorker } = require('./workers/ollama-scenario-challenge-worker');
+const { validateGenerated } = require('./lib/scenario-challenge-validator');
 
 const root = path.resolve(__dirname, '..');
 const args = Object.fromEntries(
@@ -71,50 +71,6 @@ const scenarioContext = plan.scenario_banks.map((scenarioId) => ({
   retained_question_count: retainedQuestions.filter((q) => q.scenario_id === scenarioId).length
 }));
 
-function validateGenerated(doc) {
-  const questions = Array.isArray(doc?.questions) ? doc.questions : [];
-  if (questions.length !== 50) throw new Error(`Expected exactly 50 questions; received ${questions.length}.`);
-
-  const counts = Object.fromEntries(plan.scenario_banks.map((id) => [id, 0]));
-  const stems = new Set();
-  for (const [index, item] of questions.entries()) {
-    if (!plan.scenario_banks.includes(item.scenario_id)) throw new Error(`Question ${index + 1} has invalid scenario_id.`);
-    counts[item.scenario_id] += 1;
-    if (item.status !== 'draft' ||
-        item.support_status !== 'synthetic-draft-pending-evidence' ||
-        item.eligible_for_training_mix !== false ||
-        item.eligible_for_scoring !== false ||
-        item.assessment_eligible !== false) {
-      throw new Error(`Question ${index + 1} violates draft governance.`);
-    }
-    if (!['A','B','C','D'].includes(item.correct_answer)) throw new Error(`Question ${index + 1} has invalid correct_answer.`);
-    for (const key of ['A','B','C','D']) {
-      if (!String(item.options?.[key] || '').trim()) throw new Error(`Question ${index + 1} is missing option ${key}.`);
-    }
-    if (!Array.isArray(item.claims_to_verify) || item.claims_to_verify.length === 0) {
-      throw new Error(`Question ${index + 1} must declare claims_to_verify.`);
-    }
-    const stem = String(item.question || '').trim().toLowerCase().replace(/\s+/g, ' ');
-    if (stem.length < 15 || stems.has(stem)) throw new Error(`Question ${index + 1} has an invalid or duplicate stem.`);
-    stems.add(stem);
-  }
-
-  for (const [scenarioId, expected] of Object.entries(batch.allocation)) {
-    if (counts[scenarioId] !== expected) {
-      throw new Error(`Scenario ${scenarioId} expected ${expected} questions; received ${counts[scenarioId]}.`);
-    }
-  }
-
-  return questions.map((item) => ({
-    ...item,
-    synthetic_draft_id: `${item.scenario_id}-challenge-${crypto.createHash('sha256').update(item.question).digest('hex').slice(0, 12)}`,
-    human_technical_review_completed: false,
-    human_instructional_review_completed: false,
-    evidence_mapping_completed: false,
-    citation_validation_completed: false,
-    approved: false
-  }));
-}
 
 if (dryRun) {
   process.stdout.write(JSON.stringify({
@@ -138,7 +94,7 @@ if (dryRun) {
     scenarioContext,
     retainedQuestions
   });
-  const questions = validateGenerated(generated);
+  const questions = validateGenerated({ doc: generated, plan, batch });
   const result = {
     generator: {
       provider: 'ollama-cloud',
