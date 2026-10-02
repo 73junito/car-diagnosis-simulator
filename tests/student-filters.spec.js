@@ -139,6 +139,19 @@ describe('Student dashboard filters', () => {
     window.__testAttachFilters();
   });
 
+  test('student-first dashboard keeps advanced tools behind progressive disclosure', () => {
+    expect(document.getElementById('primaryContinueBtn')).toBeTruthy();
+    expect(document.getElementById('studentProgressText')).toBeTruthy();
+    expect(document.getElementById('recommendedScenarioCard')).toBeTruthy();
+    expect(document.querySelector('.student-tools-strip > details')).toBeTruthy();
+    expect(document.querySelector('.student-filter-details')).toBeTruthy();
+    expect(document.getElementById('filterCategory')).toBeTruthy();
+    expect(document.getElementById('filterDifficulty')).toBeTruthy();
+    expect(document.getElementById('filterAse')).toBeTruthy();
+    expect(document.querySelectorAll('.student-labs-grid a').length).toBe(6);
+    expect(document.querySelector('.tm-filter-toolbar[aria-label="Student tools"]')).toBeNull();
+  });
+
   test('initially renders 21 cards', () => {
     const grid = document.getElementById('scenarioGrid');
     expect(grid.querySelectorAll('.sd-card').length).toBe(21);
