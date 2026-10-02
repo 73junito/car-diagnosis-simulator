@@ -19,8 +19,10 @@ const outputPath = path.resolve(root, args.output || `scenario-challenge-batch-$
 const dryRun = args['dry-run'] === 'true';
 const apiUrl = process.env.OLLAMA_API_URL || 'https://ollama.com/api/chat';
 const apiKey = process.env.OLLAMA_API_KEY || '';
+const timeoutMs = Number(args['timeout-ms'] || process.env.OLLAMA_CHALLENGE_TIMEOUT_MS || 600000);
 
 if (![1,2,3,4].includes(batchId)) throw new Error('--batch must be 1, 2, 3, or 4.');
+if (!Number.isFinite(timeoutMs) || timeoutMs < 1000) throw new Error('--timeout-ms must be a finite number of at least 1000.');
 if (!dryRun && !apiKey) throw new Error('OLLAMA_API_KEY is required unless --dry-run=true.');
 
 const plan = JSON.parse(fs.readFileSync(
@@ -80,6 +82,7 @@ if (dryRun) {
     scenario_count: plan.scenario_banks.length,
     retained_question_count: retainedQuestions.length,
     model,
+    timeout_ms: timeoutMs,
     governance: plan.governance
   }, null, 2) + '\n');
   process.exit(0);
@@ -92,7 +95,8 @@ if (dryRun) {
     batchTarget: batch.target_count,
     allocation: batch.allocation,
     scenarioContext,
-    retainedQuestions
+    retainedQuestions,
+    timeoutMs
   });
   const questions = validateGenerated({ doc: generated, plan, batch });
   const result = {
