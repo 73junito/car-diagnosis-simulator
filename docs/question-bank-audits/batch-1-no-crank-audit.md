@@ -42,7 +42,10 @@ These sources are candidates for metadata/citation evidence only until rights an
    - This source demonstrates why the existing 9.6 V question must state test conditions.
    - Candidate rights mode: metadata/link/citation only pending rights review.
 
-## Question-by-question technical audit
+## As-found question-by-question technical audit
+
+The table below records the **pre-remediation snapshot** observed when this PR began. It explains why each existing item needed review; it is not the final state of the branch.
+
 
 | # | Question ID / topic | Audit disposition | Required correction or evidence condition |
 |---:|---|---|---|
@@ -67,29 +70,40 @@ These sources are candidates for metadata/citation evidence only until rights an
 | 19 | `no-crank-post-repair-01` — Verification | **Revise** | Verify the original symptom is corrected and repeat relevant cranking/electrical checks. Do not require “no DTCs remain” universally; verify related faults according to the service procedure. |
 | 20 | Un-ID’d record — Mechanical starter engagement | **Assign stable ID and revise** | Add a stable ID. Replace “most often caused by” with a supported diagnostic statement about possible pinion/drive/ring-gear engagement faults; avoid unsupported prevalence claims. |
 
-## Audit result
+## As-found audit result
 
 - **Ready to approve unchanged:** 0
-- **Retain concept but requires evidence and/or wording refinement:** 12
-- **Requires material revision:** 7
-- **Replace:** 1
+- **Retain concept but required evidence and/or wording refinement:** 12
+- **Required material revision:** 7
+- **Required replacement:** 1
 - **Missing stable ID:** 1 record
-- **Questions promoted to approved by this audit:** 0
+- **Questions promoted to approved by the audit:** 0
 
-The bank therefore has the correct *quantity* (20 records) but is **not yet production-ready as a governed 20-question bank**.
+These findings describe the bank **before this PR's draft-only remediation**.
+
+## Post-change result in this PR
+
+- Static `no-crank` records: **20**
+- Records with stable IDs: **20/20**
+- Duplicate IDs: **0**
+- Records preserved as `draft`: **20/20**
+- Records promoted to `approved`: **0**
+- Previously un-ID'd mechanical-engagement record: now `no-crank-mechanical-engagement-01`
+- Ambiguous, overly universal, or unsafe wording identified in the as-found audit: revised in the draft bank
+- Assessment eligibility: **unchanged and fail-closed**
+
+The bank therefore now has the intended *draft structure and stable identity*, but it is **not yet production-ready as a governed 20-question bank** because the evidence, rights, provenance, human-review, citation-validation, staging, and approval gates are still incomplete.
 
 ## Next implementation sequence
 
-1. Create the revised 20-question `no-crank` draft set while preserving draft status.
-2. Assign every question a stable ID and remove universal/vehicle-specific claims that are not evidence-backed.
-3. Create candidate source metadata records with fail-closed rights status.
-4. Map each revised question to one or more evidence claims.
-5. Perform human technical review and source-rights review.
-6. Create/verify provenance and citation records.
-7. Run deterministic citation validation.
-8. Verify the staging endpoint still returns zero graded questions until all approval gates pass.
-9. Promote only fully reviewed/evidence-backed questions.
-10. Confirm the live API returns exactly 20 approved `no-crank` questions before enabling the normal attempt flow.
+1. Create candidate source metadata records with fail-closed rights status.
+2. Map each revised question to one or more evidence claims.
+3. Perform human technical review and source-rights review.
+4. Create/verify provenance and citation records.
+5. Run deterministic citation validation.
+6. Verify the staging endpoint still returns zero graded questions until all approval gates pass.
+7. Promote only fully reviewed/evidence-backed questions.
+8. Confirm the live API returns exactly 20 approved `no-crank` questions before enabling the normal attempt flow.
 
 ## Batch 1 scope after No Crank
 
