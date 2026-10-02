@@ -118,6 +118,8 @@ describe('Student progress persistence and UI', () => {
     expect(document.getElementById('v2CompletedCount').textContent).toBe('1');
     expect(document.getElementById('v2InProgressCount').textContent).toBe('1');
     expect(document.getElementById('scenarioCount').textContent).toBe('21');
+    const progressLabels = Array.from(document.querySelectorAll('.student-progress-summary-card span')).map(node => node.textContent.trim());
+    expect(progressLabels).toContain('Total Scenarios');
   });
 
   test('corrupted localStorage recovery', () => {

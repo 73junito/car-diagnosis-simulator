@@ -22,8 +22,29 @@ test('student scenario cards stay compact with explicit actions', async ({ page 
 
     // The compact dashboard card intentionally omits large scenario media.
     await expect(card.locator('img')).toHaveCount(0);
+
+    // Current fixtures derive title and body from the same symptom text.
+    await expect(card.locator('.tm-scenario-v2-card-text')).toHaveCount(0);
   }
+
+  await page.evaluate(() => {
+    window.SCENARIO_REGISTRY[0].shortSymptom = 'Distinct supporting symptom';
+    document.getElementById('searchInput').dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await expect(cards.first().locator('.tm-scenario-v2-card-text')).toHaveText('Distinct supporting symptom');
 
   await page.getByRole('button', { name: 'Show all scenarios' }).click();
   await expect(cards).toHaveCount(21);
+
+  // Preserve body copy when it adds information instead of duplicating the title.
+  const distinctCopy = 'Battery voltage drops below the expected cranking threshold.';
+  await page.evaluate((text) => {
+    if (window.SCENARIO_REGISTRY?.[0]) {
+      window.SCENARIO_REGISTRY[0].shortSymptom = text;
+    }
+  }, distinctCopy);
+  await page.dispatchEvent('#searchInput', 'input');
+
+  const firstCard = cards.first();
+  await expect(firstCard.locator('.tm-scenario-v2-card-text')).toHaveText(distinctCopy);
 });
