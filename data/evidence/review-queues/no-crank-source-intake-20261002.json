@@ -280,8 +280,8 @@
   ],
   "summary": {
     "question_count": 20,
-    "mapped_to_at_least_one_candidate_source": 11,
-    "source_gap_count": 9,
+    "mapped_to_at_least_one_candidate_source": 10,
+    "source_gap_count": 10,
     "approved_questions_created": 0,
     "approved_sources_created": 0,
     "approved_chunks_created": 0,
@@ -289,7 +289,7 @@
   },
   "required_before_next_gate": [
     "Complete a targeted Google Scholar discovery pass for starting-system and battery-testing claims and record original-publisher/DOI targets.",
-    "Resolve the nine source-gap mappings, prioritizing safety-critical and vehicle-specific claims.",
+    "Resolve the 10 source-gap mappings, prioritizing safety-critical and vehicle-specific claims.",
     "Obtain rights clearance only for sources whose exact licenses permit the intended commercial-capable use; otherwise retain metadata/link-only reference status.",
     "Perform human technical review of each claim-to-source mapping and record reviewer identity and timestamp.",
     "Do not store proprietary excerpts or send external-reference-only source text to Ollama/RAG.",
