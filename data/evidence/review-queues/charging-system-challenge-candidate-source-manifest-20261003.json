@@ -1,0 +1,429 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "scenario-challenge-candidate-source-manifest",
+  "scenario_id": "charging-system",
+  "stage": "candidate-source-discovery-only",
+  "discovered_at": "2026-10-03",
+  "policy": "data/evidence/open-evidence-source-policy.json",
+  "intake_queue": "evidence/review-queues/scenario-challenge-evidence-intake-20261003.json",
+  "purpose": "First discovery slice for the preserved scenario-challenge drafts: record candidate source identities for a bounded set of charging-system claims. This artifact performs candidate source discovery only. It creates no claim-to-source mapping, no rights decision, no citation validation, no technical or instructional review, and no approval. mapped_count stays zero even when a candidate source is identified.",
+  "scope": {
+    "claims_in_slice": 13,
+    "draft_count": 9,
+    "max_claims_allowed": 15,
+    "discovery_priority": [
+      "authoritative-public-technical",
+      "appropriately-licensed-oer-educational",
+      "scholarly-open-access"
+    ],
+    "out_of_scope": [
+      "claim-to-source mapping commits",
+      "rights approval or license verification completion",
+      "citation validation",
+      "technical or instructional review",
+      "approval, training-mix, scoring, or assessment eligibility changes",
+      "modification of the 200 preserved draft questions"
+    ]
+  },
+  "governance": {
+    "source_discovery_complete_for_slice": true,
+    "claim_to_source_mapping_committed": false,
+    "rights_review_complete": false,
+    "citation_validation_complete": false,
+    "technical_review_complete": false,
+    "instructional_review_complete": false,
+    "approval_complete": false,
+    "training_mix_unblocked": false,
+    "scoring_unblocked": false,
+    "assessment_eligibility_changed": false,
+    "draft_questions_modified": false,
+    "database_writes": 0
+  },
+  "source_candidates": [
+{
+      "candidate_id": "navy-navedtra-14264a-ch8",
+      "title": "Construction Mechanic Basic, Chapter 8: Automotive Electrical Circuits and Wiring",
+      "author_or_issuer": "U.S. Navy / Center for Seabees and Facilities Engineering (government employee authorship not established by the chapter itself)",
+      "publisher": "U.S. Navy (NAVEDTRA 14264A)",
+      "canonical_url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+      "section_or_page": [
+        "Section 1.0.0, printed 8-4: charging circuit components",
+        "Sections 1.2.1-1.2.3, printed 8-14 to 8-17: stator AC generation, diode rectification, field-current regulation",
+        "Section 1.2.4, printed 8-17: charging voltage evaluated against manufacturer specification",
+        "Sections 1.3.1-1.3.2, printed 8-19 to 8-20: output/load testing versus regulator voltage testing",
+        "Section 1.3.4, printed 8-21: voltage drop between alternator output and battery and along the ground return"
+      ],
+      "publication_or_revision_date": "not stated in supplied chapter; PDF creation metadata 2014-06-10 is not a publication date",
+      "source_type": "government-training-manual",
+      "observed_scope": [
+        "charging-circuit components",
+        "alternator and regulator operation",
+        "charging output and regulator tests",
+        "voltage drop and connection checks",
+        "battery and component testing"
+      ],
+      "applicability_caveat": "Historical vehicle examples and fixed voltage ranges are not universal; regulator bypass procedures are hazardous and must not become generic learner instructions.",
+      "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "rights_status": "rights-review-required",
+      "rights_basis": "SECNAVINST 5870.9 can place federal employee official-duty works outside copyright, but chapter authorship and third-party figure/text provenance are unverified. Government hosting alone is not proof of public-domain status.",
+      "rights_reference": "data/evidence/review-queues/charging-system-source-intake-20260924.json; data/evidence/source-state-registry.json",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/section locators, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+{
+      "candidate_id": "army-da-pam-750-33-1976",
+      "title": "Charging System Troubleshooting (The Easy Way), DA Pamphlet 750-33",
+      "author_or_issuer": "Headquarters, Department of the Army",
+      "publisher": "Headquarters, Department of the Army (GPO stock 008-020-00623-8)",
+      "canonical_url": "https://archive.org/details/PAM750-33",
+      "section_or_page": [
+        "Introduction, inside front cover: battery, generator/alternator, connections and regulator as interdependent charging-system parts",
+        "Chapter 2, printed p. 8: battery voltage and indicator observations guiding charging-circuit checks",
+        "Chapter 3, printed pp. 10 to 17: 25 A and 60 A wheeled-vehicle charging tests",
+        "Chapter 5, printed pp. 18 to 28: 100 A internally and externally rectified wheeled-vehicle alternator tests"
+      ],
+      "publication_or_revision_date": "1976-12-15",
+      "source_type": "government-technical-publication",
+      "observed_scope": [
+        "battery voltage checks",
+        "25 A and 60 A wheeled-vehicle charging tests",
+        "100 A rectified wheeled-vehicle alternator tests",
+        "tracked-vehicle and 300 A military systems tests"
+      ],
+      "applicability_caveat": "Military-specific voltages, switch procedures and ohm limits must not become generic contemporary passenger-car guidance.",
+      "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "rights_status": "rights-review-required",
+      "rights_basis": "Archive item carries a Public Domain Mark but Archive disclaims rights-metadata guarantees; scanned title page and Secretary of the Army order indicate official publication. Authorship, contractor and third-party illustration provenance remain unverified.",
+      "rights_reference": "data/evidence/review-queues/charging-system-source-intake-20260924.json",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/page locators, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+{
+      "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+      "title": "Primer on Lead-Acid Storage Batteries (DOE-HDBK-1084-95)",
+      "author_or_issuer": "U.S. Department of Energy (USDOE), Washington, DC",
+      "publisher": "U.S. Department of Energy",
+      "canonical_url": "https://www.energy.gov/documents/doe-hdbk-1084-95",
+      "secondary_locator_url": "https://doi.org/10.2172/205011",
+      "section_or_page": [
+        "Battery Components and Operation, pp. 5 to 7: cells vs. batteries, battery components, cell and battery voltage, capacity and battery ratings, series and parallel connections",
+        "Operation and Construction, pp. 13 to 20: active materials, electrochemistry of the lead-acid cell, plate construction, alloying, specific gravity, effects of discharge rate and temperature on capacity and life",
+        "Applications > Starting, Lighting, and Ignition, p. 23",
+        "Maintenance > Matching the Charger to Battery Requirements, p. 29",
+        "Maintenance > Testing, p. 36"
+      ],
+      "publication_or_revision_date": "1995-09-01 (OSTI record for DOE-HDBK-1084-95)",
+      "source_type": "government-technical-handbook",
+      "observed_scope": [
+        "lead-acid battery types, operation, construction and electrochemistry",
+        "starting, lighting and ignition applications",
+        "sizing and selection",
+        "charger matching, equalizing charge, overdischarge avoidance and testing",
+        "handbook self-describes as an information resource that does not replace manufacturer directions or safety training"
+      ],
+      "applicability_caveat": "Section-level locators are recorded from the handbook table of contents; exact subsections for individual claims must be confirmed during artifact capture and technical review.",
+      "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "rights_status": "rights-review-required",
+      "rights_basis": "DOE-published technical handbook available via energy.gov and OSTI DOI. Project policy forbids inferring public-domain status from government hosting alone; contractor authorship and any third-party content must be verified at artifact capture.",
+      "rights_reference": "discovered 2026-10-03; OSTI DOI 10.2172/205011",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/section locators, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+{
+      "candidate_id": "bccampus-flinn-alternator-2021",
+      "title": "3.2: The Alternator",
+      "author_or_issuer": "Chad Flinn",
+      "publisher": "BCcampus / Workforce LibreTexts",
+      "canonical_url": "https://workforce.libretexts.org/Bookshelves/Electronics_Technology/Trigonometry_and_Single_Phase_AC_Generation_for_Electricians_(Flinn)/03:_AC_Generation/3.02:_The_Alternator",
+      "section_or_page": [
+        "Section 3.02: stationary armature and rotating field distinction",
+        "Section 3.02: slip rings and brushes",
+        "Section 3.02: field-strength control of alternator voltage"
+      ],
+      "publication_or_revision_date": "2021-08-23 (page modified date)",
+      "source_type": "oer-educational-chapter",
+      "observed_scope": [
+        "alternator construction fundamentals",
+        "field-strength control of alternator voltage"
+      ],
+      "applicability_caveat": "General alternator physics, not vehicle-specific diagnosis; figure provenance must be checked separately before any excerpt use.",
+      "rights_classification_candidate": "CC_BY",
+      "rights_license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "rights_status": "rights-review-required",
+      "rights_basis": "Page footer explicitly states CC BY 4.0 with named author and BCcampus source; license observation still requires artifact capture and project-level rights review before any excerpt use.",
+      "rights_reference": "data/evidence/review-queues/charging-system-source-intake-20260924.json",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/section locators, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+{
+      "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+      "title": "4.6: Electrical and Hydraulic Health-Reading and Responding to Signals",
+      "author_or_issuer": "Peter Maokosy",
+      "publisher": "Coalinga College / Workforce LibreTexts",
+      "canonical_url": "https://workforce.libretexts.org/Courses/Coalinga_College/Tractor_Operations_(AG14)/04:_Controls_and_Instruments/4.06:_Electrical_and_Hydraulic_Health-_Reading_and_Responding_to_Signals",
+      "section_or_page": [
+        "Section 4.06: low charging indication as a possible fault prompt",
+        "Section 4.06: dimming lights and slow cranking as non-specific symptoms",
+        "Section 4.06: corroded terminals and connection cleaning"
+      ],
+      "publication_or_revision_date": "2026-05-12 (page modified date)",
+      "source_type": "oer-educational-chapter",
+      "observed_scope": [
+        "symptom-level charging indications",
+        "connection and terminal condition checks"
+      ],
+      "applicability_caveat": "Tractor operator training context, not a vehicle-specific service procedure; separately credited AI-generated figures are outside any proposed excerpt.",
+      "rights_classification_candidate": "CC_BY",
+      "rights_license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "rights_status": "rights-review-required",
+      "rights_basis": "Page footer explicitly states CC BY 4.0 with named author; license observation still requires artifact capture and project-level rights review before any excerpt use.",
+      "rights_reference": "data/evidence/review-queues/charging-system-source-intake-20260924.json",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "bibliographic metadata, URL/section locators, and project-authored factual summary only",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    },
+{
+      "candidate_id": "frontiers-automotive-alternator-2023",
+      "title": "A novel approach to estimate power demand of auxiliary engine loads of light duty vehicles",
+      "author_or_issuer": "Surath Gajanayake, S. Bandara, T. Sugathapala",
+      "publisher": "Frontiers in Mechanical Engineering",
+      "canonical_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+      "secondary_locator_url": "https://doi.org/10.3389/fmech.2022.1090152",
+      "section_or_page": [
+        "Full text; candidate reading locators recorded as p. 7 chunks (frontiers-alternator-primary-source-p7, frontiers-alternator-ac-dc-rectification-p7) in data/evidence/source-state-registry.json"
+      ],
+      "publication_or_revision_date": "2023 (publication year); DOI 10.3389/fmech.2022.1090152",
+      "source_type": "peer-reviewed-open-access-journal-article",
+      "observed_scope": [
+        "auxiliary engine load power demand estimation in light duty vehicles",
+        "alternator/rectification context for accessory electrical load"
+      ],
+      "applicability_caveat": "Research article about load estimation; it does not by itself establish vehicle diagnostic procedures or pass/fail thresholds.",
+      "rights_classification_candidate": "CC_BY",
+      "rights_license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "rights_status": "cleared-text-only-prior-human-decision",
+      "rights_basis": "Human rights review already recorded in data/evidence/source-state-registry.json: cleared-text-only-cc-by-4.0 for attributed text of the exact hashed artifact only; figures, tables and separately credited third-party material are not cleared.",
+      "rights_reference": "data/evidence/source-state-registry.json (rights_verified_by Rafael Rodriguez, 2026-09-26)",
+      "evidence_decision": "candidate-only",
+      "permitted_project_use": "attributed text of the exact hashed artifact may be cited after technical review; in this manifest only metadata and locators are recorded",
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none"
+    }
+  ],
+  "claim_candidates": [
+    {
+      "claim_id": "charging-system-challenge-claim-01",
+      "draft_id": "charging-system-challenge-d31fc9ce93e7",
+      "claim_index": 0,
+      "claim_text": "Battery internal resistance remains below specified maximum",
+      "candidates": [
+        { "candidate_id": "doe-hdbk-1084-95-primer-lead-acid", "locator": "Maintenance > Testing, p. 36; Operation and Construction, pp. 13 to 20", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Exact subsection stating an internal-resistance specification limit must be located at artifact capture; no threshold is treated as established."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "draft_id": "charging-system-challenge-545e31edc689",
+      "claim_index": 0,
+      "claim_text": "High\u2011current ground strap maintains low resistance",
+      "candidates": [
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Section 1.3.4, printed 8-21: voltage drop along the ground return", "locator_verification": "pending-human-review" },
+        { "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026", "locator": "Section 4.06: corroded terminals and connection cleaning", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Vehicle-specific load and limit apply; no single voltage-drop threshold may be generalized."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-03",
+      "draft_id": "charging-system-challenge-dc7bbdb21c65",
+      "claim_index": 0,
+      "claim_text": "Alternator voltage regulation curve",
+      "candidates": [
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Sections 1.2.1-1.2.3, printed 8-14 to 8-17: field-current regulation", "locator_verification": "pending-human-review" },
+        { "candidate_id": "bccampus-flinn-alternator-2021", "locator": "Section 3.02: field-strength control of alternator voltage", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Regulation curve shape and limits are design-specific; candidate locators require technical review before any mapping."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-04",
+      "draft_id": "charging-system-challenge-dc7bbdb21c65",
+      "claim_index": 1,
+      "claim_text": "Engine RPM influence on volt output",
+      "candidates": [
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Sections 1.2.0-1.2.3, printed 8-14 to 8-17: alternator construction and operation", "locator_verification": "pending-human-review" },
+        { "candidate_id": "bccampus-flinn-alternator-2021", "locator": "Section 3.02: rotating field and field-strength control", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Rotor-speed versus output relationship was not explicitly located at discovery; this claim may still become a source gap after technical review."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-05",
+      "draft_id": "charging-system-challenge-dc7bbdb21c65",
+      "claim_index": 2,
+      "claim_text": "Battery charging characteristics",
+      "candidates": [
+        { "candidate_id": "doe-hdbk-1084-95-primer-lead-acid", "locator": "Applications > Starting, Lighting, and Ignition, p. 23; Maintenance > Matching the Charger to Battery Requirements, p. 29", "locator_verification": "pending-human-review" },
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Section 1.2.4, printed 8-17: charging voltage against manufacturer specification", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-06",
+      "draft_id": "charging-system-challenge-8ddd2e64ffbf",
+      "claim_index": 0,
+      "claim_text": "Voltage regulator performance over time",
+      "candidates": [
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Sections 1.2.0-1.2.5, printed 8-14 to 8-19: regulator maintenance and component testing", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Degradation-over-time evidence was not explicitly located at discovery; this claim may become a source gap after technical review."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-07",
+      "draft_id": "charging-system-challenge-8ddd2e64ffbf",
+      "claim_index": 1,
+      "claim_text": "Battery charging current characteristics",
+      "candidates": [
+        { "candidate_id": "doe-hdbk-1084-95-primer-lead-acid", "locator": "Maintenance > Matching the Charger to Battery Requirements, p. 29; Operation and Construction, pp. 13 to 20", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false
+    },
+{
+      "claim_id": "charging-system-challenge-claim-08",
+      "draft_id": "charging-system-challenge-8ddd2e64ffbf",
+      "claim_index": 2,
+      "claim_text": "Engine load impact on charging",
+      "candidates": [
+        { "candidate_id": "frontiers-automotive-alternator-2023", "locator": "Full text; p. 7 candidate chunks: auxiliary load power demand", "locator_verification": "pending-human-review" },
+        { "candidate_id": "army-da-pam-750-33-1976", "locator": "Chapter 3, printed pp. 10 to 17; Chapter 5, printed pp. 18 to 28: charging output under load tests", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Army test values are military-system specific and must not become generic passenger-car guidance."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-09",
+      "draft_id": "charging-system-challenge-815c47e02d0c",
+      "claim_index": 0,
+      "claim_text": "Understanding how a faulty voltage regulator affects alternator output voltage as a function of engine speed.",
+      "candidates": [
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Sections 1.2.0-1.3.2, printed 8-14 to 8-20: regulator operation, output and regulator testing", "locator_verification": "pending-human-review" },
+        { "candidate_id": "bccampus-flinn-alternator-2021", "locator": "Section 3.02: field-strength control of alternator voltage", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-10",
+      "draft_id": "charging-system-challenge-4b7063fad7f3",
+      "claim_index": 0,
+      "claim_text": "High alternator output with steady battery voltage indicates regulator malfunction",
+      "candidates": [
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Sections 1.3.1-1.3.2, printed 8-19 to 8-20: output/load testing versus regulator voltage testing", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Symptom-to-fault inference requires human technical review; this mapping is not treated as established evidence."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-11",
+      "draft_id": "charging-system-challenge-d3ae3441eed6",
+      "claim_index": 0,
+      "claim_text": "Low regulator output leads to battery sulfation",
+      "candidates": [
+        { "candidate_id": "doe-hdbk-1084-95-primer-lead-acid", "locator": "Operation and Construction, pp. 13 to 20: electrochemistry of the lead-acid cell; Maintenance > Testing, p. 36", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Exact subsection naming sulfation must be confirmed at artifact capture; causal wording requires technical review."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "draft_id": "charging-system-challenge-f1bef86b1cba",
+      "claim_index": 0,
+      "claim_text": "Alternator under\u2011charging produces voltage dips during high accessory load",
+      "candidates": [
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Section 1.3.1, printed 8-19: output and load testing", "locator_verification": "pending-human-review" },
+        { "candidate_id": "army-da-pam-750-33-1976", "locator": "Chapter 5, printed pp. 18 to 28: alternator output tests", "locator_verification": "pending-human-review" },
+        { "candidate_id": "frontiers-automotive-alternator-2023", "locator": "Full text; p. 7 candidate chunks: auxiliary load power demand", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-13",
+      "draft_id": "charging-system-challenge-e275f02bf6ba",
+      "claim_index": 0,
+      "claim_text": "13.5\u202fV at battery under idle confirms alternator output is within spec",
+      "candidates": [
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Section 1.2.4, printed 8-17; Sections 1.3.1-1.3.2, printed 8-19 to 8-20: charging voltage evaluation against manufacturer specification", "locator_verification": "pending-human-review" }
+      ],
+      "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
+      "mapping_committed": false,
+      "technical_caveat": "Fixed 13.5 to 14.5 volt ranges are not universal; manufacturer specification governs and no single threshold may be taught as universal."
+    }
+  ],
+  "excluded_or_discovery_leads": [
+    {
+      "candidate_id": "openstax-college-physics-electric-generators",
+      "status": "excluded-rights-conflict",
+      "reason": "Book preface states CC BY 4.0 but the current section reuse notice imposes noncommercial terms and requires prior written permission for ingestion into generative AI offerings; College Physics 2e separately identifies CC BY-NC-SA 4.0. Treated as external-reference-only under project policy.",
+      "canonical_url": "https://openstax.org/books/college-physics/pages/23-5-electric-generators"
+    },
+    {
+      "candidate_id": "wikiversity-charging-system-outcomes-2019",
+      "status": "excluded-insufficient-technical-substance",
+      "reason": "Page lists competencies but supplies no diagnostic procedure, measurement, or explanation capable of substantiating a technical claim.",
+      "canonical_url": "https://en.wikiversity.org/wiki/Automotive_Technology/Charging_System_Diagnosis_and_Repair"
+    },
+    {
+      "candidate_id": "inl-battery-test-manual-lead-acid",
+      "status": "discovery-lead-metadata-unverified",
+      "reason": "A PDF at inldigitallibrary.inl.gov was reachable during discovery, but its exact title, report number, publication date, authorship, and rights statement have not been verified. It must not be promoted to candidate status until that metadata is captured and reviewed.",
+      "canonical_url": "https://inldigitallibrary.inl.gov/sites/sti/sti/6492317.pdf"
+    }
+  ],
+  "summary": {
+    "claims_in_slice": 13,
+    "candidate_sources_discovered": 6,
+    "mapped_count": 0,
+    "citation_validated_count": 0,
+    "technical_reviewed_count": 0,
+    "instructional_reviewed_count": 0,
+    "approved_count": 0,
+    "assessment_eligible_count": 0
+  },
+  "required_before_next_gate": [
+    "Human review of this candidate list and its rights classifications before any claim-to-source mapping is written; mapped_count must remain 0 until that review happens.",
+    "Capture each accepted candidate artifact, record its SHA-256, and confirm publication/revision identity against the canonical record.",
+    "Resolve rights for every source whose rights_status is rights-review-required; unclear rights keep a source candidate-only and outside excerpt storage.",
+    "Confirm claim-level section/page locators during artifact capture; locator_verification must move from pending-human-review by a named reviewer.",
+    "Perform human technical review of each proposed claim-to-source link, including the explicit technical_caveat rows.",
+    "Do not store proprietary excerpts or send external-reference-only source text to Ollama/RAG.",
+    "Do not create citation validations, approvals, or assessment eligibility from this discovery artifact."
+  ]
+}
