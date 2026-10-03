@@ -1,6 +1,7 @@
 'use strict';
 
 const { parseModelJson } = require('../lib/parse-model-json');
+const { validateGeneratedQuestionItem } = require('../lib/scenario-challenge-validator');
 const {
   AGENT_VERSION,
   buildChallengeMessages,
@@ -194,6 +195,12 @@ async function requestChallengeChunk({
           throw new Error('Model response question count did not match the requested chunk.');
         }
         validateChunkScenarioAllocation(generated.questions, allocation);
+        for (const [questionIndex, question] of generated.questions.entries()) {
+          validateGeneratedQuestionItem(
+            question,
+            `Chunk ${chunkIndex}/${chunkCount} question ${questionIndex + 1}`
+          );
+        }
         validateChunkQuestionStems(generated.questions, priorGeneratedQuestions);
 
         return generated.questions;
