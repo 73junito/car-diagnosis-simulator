@@ -30,6 +30,10 @@ describe('scenario challenge evidence intake', () => {
     expect(queue.storage_boundary.private_store_row_count).toBe(4);
     expect(queue.storage_boundary.private_store_rls_enabled).toBe(true);
     expect(queue.storage_boundary.private_store_policy_count).toBe(0);
+    expect(queue.storage_boundary.private_store_verified_at).toBe('2026-10-03');
+    expect(queue.storage_boundary.verification_method).toBe(
+      'server-side SHA-256 equality plus RLS/privilege verification'
+    );
     expect(queue.governance.source_discovery_required).toBe(true);
     expect(queue.governance.rights_review_required).toBe(true);
     expect(queue.governance.technical_review_required).toBe(true);
