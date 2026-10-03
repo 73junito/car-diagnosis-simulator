@@ -69,16 +69,16 @@
     },
     {
       "candidate_id": "bccampus-flinn-alternator-2018",
-      "rights_decision": "pending",
-      "decided_rights_classification": null,
-      "reviewer_identity": null,
-      "reviewed_at": null,
-      "artifact_sha256": null,
-      "scope_of_clearance": null,
+      "rights_decision": "cleared-commercial-reuse",
+      "decided_rights_classification": "cleared-commercial-reuse",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-03T21:23:40Z",
+      "artifact_sha256": "c3883af5dfcfad17f6360e718aea6a20dab4832f8f020fc09253e909a663c344",
+      "scope_of_clearance": "The verified authoritative Pressbooks artifact may be retained, stored, copied, redistributed, excerpted, indexed for retrieval/RAG, adapted, and used commercially under CC BY 4.0, provided appropriate attribution is maintained, the CC BY 4.0 license is identified, modifications are indicated where applicable, and no endorsement is implied. Material specifically marked with a different rights notice is excluded from this clearance and requires separate review.",
       "store_verbatim_excerpt": false,
       "may_generate_questions": false,
       "approval_effect": "none",
-      "review_notes": null
+      "review_notes": "Human review approved by Rafael Rodriguez Jr. The authoritative BCcampus Pressbooks edition of Trigonometry and Single Phase AC Generation for Electricians by Chad Flinn states that the work is licensed under Creative Commons Attribution 4.0 International except where otherwise noted. The publisher states that the book may be retained, reused, copied, redistributed, and revised with attribution. This decision applies only to material governed by the stated CC BY 4.0 license; separately marked third-party material is excluded."
     },
     {
       "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
@@ -110,9 +110,9 @@
   ],
   "summary": {
     "sources_in_review": 6,
-    "rights_decisions_recorded": 1,
-    "sources_cleared": 1,
-    "sources_candidate_only": 5,
+    "rights_decisions_recorded": 2,
+    "sources_cleared": 2,
+    "sources_candidate_only": 4,
     "mapped_count": 0,
     "citation_validated_count": 0,
     "technical_reviewed_count": 0,
