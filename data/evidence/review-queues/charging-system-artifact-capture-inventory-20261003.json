@@ -1,0 +1,168 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "candidate-source-artifact-capture-inventory",
+  "scenario_id": "charging-system",
+  "stage": "artifact-capture-pending-human-rights-review",
+  "generated_at": "2026-10-03T19:33:02Z",
+  "policy": "data/evidence/open-evidence-source-policy.json",
+  "candidate_source_manifest": "data/evidence/review-queues/charging-system-challenge-candidate-source-manifest-20261003.json",
+  "rights_review_records": "data/evidence/review-queues/charging-system-rights-review-records-20261003.json",
+  "purpose": "Immutable, machine-generated artifact inventory for the six discovery candidates so a human rights reviewer has exact bytes or honest metadata to judge. This inventory records artifact facts only: no rights decision, no claim reference, no draft reference, no mapping, no technical or instructional review, no approval, no eligibility.",
+  "capture_method": {
+    "client": "PowerShell Invoke-WebRequest with a browser user agent",
+    "probe": "HEAD request for status, media type and declared length",
+    "capture": "GET of the full body followed by SHA-256 (Get-FileHash)",
+    "full_body_capture_budget_bytes": 26214400,
+    "stability_check": "selected sources were retrieved twice in the same session to detect unstable dynamic pages",
+    "artifact_bytes_stored_in_repository": false
+  },
+  "artifacts": [
+    {
+      "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+      "canonical_url": "https://www.energy.gov/documents/doe-hdbk-1084-95",
+      "retrieval_url": "https://www.energy.gov/documents/doe-hdbk-1084-95",
+      "retrieved_at": "2026-10-03T19:32:58Z",
+      "artifact_filename": "doe-hdbk-1084-95-primer-lead-acid.pdf",
+      "artifact_media_type": "application/pdf",
+      "artifact_byte_length": 499005,
+      "artifact_sha256": "ef3502149e9b2bea09e32818872c33ff75655414ac48dd50d32a6a6613ca3dc1",
+      "artifact_capture_status": "captured",
+      "capture_kind": "exact-source",
+      "retrieval_http_status": 200,
+      "retrieval_result": "captured",
+      "repeat_retrieval_hash_stable": true,
+      "canonical_vs_retrieved_mismatch": null,
+      "capture_note": "Canonical PDF retrieved directly from the DOE document host; repeated retrieval produced the same SHA-256."
+    },
+    {
+      "candidate_id": "navy-navedtra-14264a-ch8",
+      "canonical_url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+      "retrieval_url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+      "retrieved_at": "2026-10-03T19:32:58Z",
+      "artifact_filename": "navy-navedtra-14264a-ch8.pdf",
+      "artifact_media_type": null,
+      "artifact_byte_length": null,
+      "artifact_sha256": null,
+      "artifact_capture_status": "unavailable",
+      "capture_kind": "unavailable",
+      "retrieval_http_status": 403,
+      "retrieval_result": "failed",
+      "repeat_retrieval_hash_stable": null,
+      "canonical_vs_retrieved_mismatch": "Canonical PDF could not be retrieved at all: the host returned HTTP 403 to both HEAD and GET, so the live canonical bytes are unverified.",
+      "capture_note": "No bytes retrieved. No substitute artifact was used.",
+      "unavailable_reason": "media.defense.gov returned HTTP 403 (Forbidden) to HEAD and GET from this capture client.",
+      "metadata_only_evidence": {
+        "canonical_url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+        "prior_artifact_observation": {
+          "artifact_sha256": "91f3bc899204099374ff6e2a25ad6865199a9d3b259068af0605255f3800945d",
+          "source": "data/evidence/source-state-registry.json",
+          "note": "Hash recorded for a locally supplied copy of NAVEDTRA 14264A Chapter 8. Byte identity with the live canonical URL is unverified, so this is provenance only and not a capture of the canonical artifact."
+        }
+      }
+    },
+    {
+      "candidate_id": "army-da-pam-750-33-1976",
+      "canonical_url": "https://archive.org/details/PAM750-33",
+      "retrieval_url": "https://archive.org/download/PAM750-33/PAM750-33.pdf",
+      "retrieved_at": "2026-10-03T19:32:59Z",
+      "artifact_filename": "PAM750-33.pdf",
+      "artifact_media_type": "application/pdf",
+      "artifact_byte_length": null,
+      "artifact_sha256": null,
+      "artifact_capture_status": "unavailable",
+      "capture_kind": "metadata-only",
+      "retrieval_http_status": 200,
+      "retrieval_result": "partial",
+      "repeat_retrieval_hash_stable": null,
+      "canonical_vs_retrieved_mismatch": "Retrieval used the Internet Archive direct file endpoint derived from the canonical item page; headers were captured from that file URL but no body bytes were hashed.",
+      "capture_note": "Headers captured from the canonical item's file URL; the full scanned PDF body was not retrieved, so no hash for the canonical artifact exists yet.",
+      "unavailable_reason": "Declared content length of 539802842 bytes exceeds the 26214400-byte full-body capture budget for this pass.",
+      "metadata_only_evidence": {
+        "canonical_url": "https://archive.org/details/PAM750-33",
+        "retrieval_url": "https://archive.org/download/PAM750-33/PAM750-33.pdf",
+        "declared_content_length": 539802842,
+        "declared_media_type": "application/pdf",
+        "retrieval_http_status": 200,
+        "prior_artifact_observation": {
+          "artifact_sha256": "cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1",
+          "source": "data/evidence/review-queues/charging-system-source-intake-20260924.json",
+          "note": "Hash recorded for a separately supplied copy of DA Pamphlet 750-33. It is not a capture of the canonical URL in this pass."
+        }
+      }
+    },
+    {
+      "candidate_id": "bccampus-flinn-alternator-2018",
+      "canonical_url": "https://workforce.libretexts.org/Bookshelves/Electronics_Technology/Trigonometry_and_Single_Phase_AC_Generation_for_Electricians_(Flinn)/03:_AC_Generation/3.02:_The_Alternator",
+      "retrieval_url": "https://workforce.libretexts.org/Bookshelves/Electronics_Technology/Trigonometry_and_Single_Phase_AC_Generation_for_Electricians_(Flinn)/03:_AC_Generation/3.02:_The_Alternator",
+      "retrieved_at": "2026-10-03T19:33:00Z",
+      "artifact_filename": "3.02_the-alternator.html",
+      "artifact_media_type": "text/html; charset=utf-8",
+      "artifact_byte_length": 131309,
+      "artifact_sha256": "c1cfbfc32ba4a88681ba9d5b9a72fee4b87d9dbec940ce76be988be909b2df5b",
+      "artifact_capture_status": "captured",
+      "capture_kind": "mirror",
+      "retrieval_http_status": 200,
+      "retrieval_result": "captured",
+      "repeat_retrieval_hash_stable": false,
+      "canonical_vs_retrieved_mismatch": "The captured body is the Workforce LibreTexts chapter, a platform copy remixed from the book, not the authoritative pressbooks host. The page itself declares source@https://pressbooks.bccampus.ca/trigforelectricians. Repeat retrieval produced a different body hash, so this hash identifies one retrieval rather than a stable artifact.",
+      "capture_note": "Authoritative pressbooks host returned HTTP 403 to a HEAD probe during the same pass.",
+      "canonical_source_probe": {
+        "url": "https://pressbooks.bccampus.ca/trigforelectricians/",
+        "http_status": 403,
+        "note": "Authoritative book host refused automated retrieval from this client."
+      }
+    },
+    {
+      "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+      "canonical_url": "https://workforce.libretexts.org/Courses/Coalinga_College/Tractor_Operations_(AG14)/04:_Controls_and_Instruments/4.06:_Electrical_and_Hydraulic_Health-_Reading_and_Responding_to_Signals",
+      "retrieval_url": "https://workforce.libretexts.org/Courses/Coalinga_College/Tractor_Operations_(AG14)/04:_Controls_and_Instruments/4.06:_Electrical_and_Hydraulic_Health-_Reading_and_Responding_to_Signals",
+      "retrieved_at": "2026-10-03T19:33:01Z",
+      "artifact_filename": "4.06_electrical_and_hydraulic_health.html",
+      "artifact_media_type": "text/html; charset=utf-8",
+      "artifact_byte_length": 136325,
+      "artifact_sha256": "6d52327c19679c0fe2d64cfc809bc9f1953f097f773b0a6599dac67ed2457f4e",
+      "artifact_capture_status": "captured",
+      "capture_kind": "exact-source",
+      "retrieval_http_status": 200,
+      "retrieval_result": "captured",
+      "repeat_retrieval_hash_stable": false,
+      "canonical_vs_retrieved_mismatch": "The canonical URL was retrieved directly and no external source tag is declared, so this is the publication of record. The page carries the LibreTexts platform remix statement, and repeat retrieval produced a different body hash, so this hash identifies one retrieval rather than a stable artifact.",
+      "capture_note": "Dynamic platform page; a human reviewer should confirm whether a stable export (PDF or book edition) is required for a clearance decision."
+    },
+    {
+      "candidate_id": "frontiers-automotive-alternator-2023",
+      "canonical_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+      "retrieval_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+      "retrieved_at": "2026-10-03T19:33:02Z",
+      "artifact_filename": "frontiers-10.3389-fmech.2022.1090152-full.html",
+      "artifact_media_type": "text/html; charset=utf-8",
+      "artifact_byte_length": 885426,
+      "artifact_sha256": "9a0764fb555fb8676390325c61b4a98667b12de42d59768c475149b184096036",
+      "artifact_capture_status": "captured",
+      "capture_kind": "exact-source",
+      "retrieval_http_status": 200,
+      "retrieval_result": "captured",
+      "repeat_retrieval_hash_stable": true,
+      "canonical_vs_retrieved_mismatch": null,
+      "capture_note": "Publisher page for DOI 10.3389/fmech.2022.1090152 retrieved directly and hash-stable across two retrievals."
+    }
+  ],
+  "summary": {
+    "sources_in_inventory": 6,
+    "artifacts_captured": 4,
+    "artifacts_unavailable": 2,
+    "capture_kind_exact_source": 3,
+    "capture_kind_mirror": 1,
+    "capture_kind_metadata_only": 1,
+    "capture_kind_unavailable": 1,
+    "captured_with_stable_hash": 2,
+    "captured_with_unstable_hash": 2
+  },
+  "next_gate": [
+    "A human rights reviewer decides the clearance scope for each row, using the recorded SHA-256 as the artifact of record.",
+    "The reviewer records reviewer_identity, reviewed_at, decided_rights_classification, artifact_sha256, scope_of_clearance and review_notes in the rights-review records.",
+    "Navy and Army need a full canonical capture before any clearance decision can rest on live bytes; the metadata-only rows are not substitutes.",
+    "The LibreTexts rows need a stable export decision before a hash can serve as an immutable artifact of record.",
+    "No mapping, technical review, instructional review, approval, or eligibility work starts from this inventory."
+  ]
+}
