@@ -216,6 +216,43 @@ describe('Ollama scenario challenge worker', () => {
     );
   });
 
+  test('retries a chunk with normalized-equal stems inside the same response', async () => {
+    const requests = [];
+    const fetchImpl = async (url, options) => {
+      const request = JSON.parse(options.body);
+      requests.push(request);
+      const prompt = JSON.parse(request.messages[1].content);
+      const questions = makeAllocatedQuestions(
+        prompt.scenario_allocation,
+        requests.length === 1 ? 'same-chunk' : 'retry-unique'
+      );
+
+      if (requests.length === 1) {
+        questions[0].question = 'Inspect the starter circuit before replacing components';
+        questions[1].question = '  INSPECT   THE STARTER CIRCUIT BEFORE REPLACING COMPONENTS  ';
+      }
+
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: {
+            content: JSON.stringify({ batch_id: 1, questions })
+          }
+        })
+      };
+    };
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await runScenarioChallengeWorker({ ...baseArgs, fetchImpl });
+
+    expect(result.generated.questions).toHaveLength(10);
+    expect(requests).toHaveLength(2);
+    expect(warnSpy.mock.calls[0][0])
+      .toContain('reason=Model response contained an invalid or duplicate question stem.');
+    warnSpy.mockRestore();
+  });
+
   test('retries a later chunk that repeats a stem from an earlier chunk', async () => {
     const requests = [];
     const repeatedStem = 'A repeated diagnostic stem with enough length';
