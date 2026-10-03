@@ -23,17 +23,19 @@ describe('scenario challenge review artifact storage contract', () => {
     expect(migration).toContain("source_commit ~ '^[0-9a-f]{40}$'");
     expect(migration).toContain('question_count integer not null check (question_count = 50)');
     expect(migration).toContain("status = 'synthetic-draft-review-only'");
-    expect(migration).toContain('payload jsonb not null');
+    expect(migration).toContain('payload_text text not null');
+    expect(migration).toContain('stored as text so payload_sha256 can verify the original representation');
   });
 
   test('is service-role only and fail-closed to browser roles', () => {
     expect(migration).toContain('enable row level security');
     expect(migration).toContain(
-      'revoke all on table public.scenario_challenge_review_artifacts\n    from public, anon, authenticated'
+      'revoke all on table public.scenario_challenge_review_artifacts\n    from public, anon, authenticated, service_role'
     );
     expect(migration).toContain(
-      'grant all on table public.scenario_challenge_review_artifacts\n    to service_role'
+      'grant select, insert on table public.scenario_challenge_review_artifacts\n    to service_role'
     );
+    expect(migration).not.toContain('grant all on table public.scenario_challenge_review_artifacts');
     expect(migration).not.toContain('create policy');
     expect(migration).not.toContain('grant select');
   });
