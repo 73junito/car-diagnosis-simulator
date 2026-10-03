@@ -37,9 +37,12 @@ describe('scenario challenge evidence intake', () => {
     }
   });
 
-  test('keeps source discovery and every release gate fail-closed', () => {
-    expect(queue.storage_boundary.durable_private_source_storage_status).toBe('pending');
-    expect(queue.storage_boundary.source_discovery_blocked_until_durable_private_storage).toBe(true);
+  test('opens governed source discovery only after durable private storage verification while release gates stay closed', () => {
+    expect(queue.storage_boundary.durable_private_source_storage_status).toBe('verified');
+    expect(queue.storage_boundary.source_discovery_blocked_until_durable_private_storage).toBe(false);
+    expect(queue.storage_boundary.private_storage_reference.verified_row_count).toBe(4);
+    expect(queue.storage_boundary.private_storage_reference.verified_question_count).toBe(200);
+    expect(queue.storage_boundary.private_storage_reference.payload_hashes_verified).toBe(true);
     expect(queue.governance.source_discovery_required).toBe(true);
     expect(queue.governance.rights_review_required).toBe(true);
     expect(queue.governance.technical_review_required).toBe(true);
@@ -48,7 +51,7 @@ describe('scenario challenge evidence intake', () => {
 
     for (const entry of queue.entries) {
       expect(entry.candidate_sources).toEqual([]);
-      expect(entry.mapping_status).toBe('blocked-pending-durable-source-artifact');
+      expect(entry.mapping_status).toBe('unmapped-source-discovery-required');
       expect(entry.evidence_mapping_completed).toBe(false);
       expect(entry.citation_validation_completed).toBe(false);
       expect(entry.human_technical_review_completed).toBe(false);
