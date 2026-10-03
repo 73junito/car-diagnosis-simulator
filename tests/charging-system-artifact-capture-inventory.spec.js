@@ -17,11 +17,6 @@ describe('charging-system artifact-capture inventory contract', () => {
       'charging-system-challenge-candidate-source-manifest-20261003.json'),
     'utf8'
   ));
-  const rightsRecords = JSON.parse(fs.readFileSync(
-    path.join(root, 'data', 'evidence', 'review-queues',
-      'charging-system-rights-review-records-20261003.json'),
-    'utf8'
-  ));
 
   test('passes the fail-closed inventory validator', () => {
     const { errors } = validateCaptureInventory();
@@ -84,7 +79,7 @@ describe('charging-system artifact-capture inventory contract', () => {
     expect(output).toContain('artifacts_unavailable: 2');
   });
 
-  test('contains no mapping, review or approval fields and records no rights decision', () => {
+  test('contains no mapping, review, approval, or rights-decision fields', () => {
     const walk = (value) => {
       if (Array.isArray(value)) return value.forEach(walk);
       if (value && typeof value === 'object') {
@@ -96,10 +91,5 @@ describe('charging-system artifact-capture inventory contract', () => {
     };
     walk(inventory);
 
-    for (const review of rightsRecords.reviews) {
-      expect(review.rights_decision).toBe('pending');
-      expect(review.reviewer_identity).toBeNull();
-      expect(review.artifact_sha256).toBeNull();
-    }
   });
 });

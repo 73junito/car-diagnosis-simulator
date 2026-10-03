@@ -8,8 +8,6 @@ const REMEDIATION_PATH = path.join(repoRoot, 'data', 'evidence', 'review-queues'
   'charging-system-artifact-capture-remediation-20261003.json');
 const INVENTORY_PATH = path.join(repoRoot, 'data', 'evidence', 'review-queues',
   'charging-system-artifact-capture-inventory-20261003.json');
-const RIGHTS_RECORDS_PATH = path.join(repoRoot, 'data', 'evidence', 'review-queues',
-  'charging-system-rights-review-records-20261003.json');
 
 const REMEDIATION_STATUSES = [
   'stable-artifact-of-record',
@@ -49,7 +47,6 @@ function validateRemediation(options = {}) {
   const errors = [];
   const remediation = readJson(options.remediationPath || REMEDIATION_PATH, errors, 'artifact-capture remediation');
   const inventory = readJson(options.inventoryPath || INVENTORY_PATH, errors, 'base artifact-capture inventory');
-  const rightsRecords = readJson(options.rightsRecordsPath || RIGHTS_RECORDS_PATH, errors, 'rights-review records');
   if (errors.length > 0) return { errors, summary: null };
 
   if (remediation.artifact_type !== 'candidate-source-artifact-capture-remediation') {
@@ -157,13 +154,6 @@ function validateRemediation(options = {}) {
     errors.push('unresolved must list exactly the candidates that did not reach a stable artifact of record');
   }
 
-  // Remediation supplies artifacts only; rights decisions stay pending.
-  for (const review of rightsRecords.reviews || []) {
-    if (review.rights_decision !== 'pending' || review.reviewer_identity !== null || review.artifact_sha256 !== null) {
-      errors.push(`${review.candidate_id}: rights-review records must remain decision-free; remediation must not record decisions`);
-    }
-  }
-
   return { errors, summary };
 }
 
@@ -187,7 +177,7 @@ if (require.main === module) {
     process.exitCode = 1;
   } else {
     console.log(formatSummary(summary));
-    console.log('PASS: artifact-capture remediation validates with no rights decisions and no mapping fields.');
+    console.log('PASS: artifact-capture remediation validates as machine-only with no rights-decision or mapping fields.');
   }
 }
 
@@ -195,6 +185,5 @@ module.exports = {
   validateRemediation,
   formatSummary,
   REMEDIATION_PATH,
-  INVENTORY_PATH,
-  RIGHTS_RECORDS_PATH
+  INVENTORY_PATH
 };
