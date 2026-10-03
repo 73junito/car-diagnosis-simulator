@@ -205,9 +205,62 @@ describe('Ollama scenario challenge worker', () => {
     expect(secondPrompt.retained_questions.some(
       (row) => row.scenario_id === 'a' && row.question.startsWith('generated-1 a')
     )).toBe(true);
+
+    const thirdPrompt = JSON.parse(requests[2].messages[1].content);
+    expect(thirdPrompt.scenario_allocation).toEqual({ b: 5 });
+    expect(thirdPrompt.retained_questions.some(
+      (row) => row.scenario_id === 'a' && row.question.startsWith('generated-1 a')
+    )).toBe(true);
     expect(secondPrompt.retained_questions).toContainEqual(
       expect.objectContaining({ scenario_id: 'a', question: 'retained a' })
     );
+  });
+
+  test('retries a later chunk that repeats a stem from an earlier chunk', async () => {
+    const requests = [];
+    const repeatedStem = 'A repeated diagnostic stem with enough length';
+    const args = {
+      ...baseArgs,
+      batchTarget: 20,
+      allocation: { a: 10, b: 10 },
+      scenarioContext: [{ scenario_id: 'a' }, { scenario_id: 'b' }]
+    };
+
+    const fetchImpl = async (url, options) => {
+      const request = JSON.parse(options.body);
+      requests.push(request);
+      const prompt = JSON.parse(request.messages[1].content);
+      let questions = makeAllocatedQuestions(
+        prompt.scenario_allocation,
+        `request-${requests.length}`
+      );
+
+      if (requests.length === 1) {
+        questions[0].question = repeatedStem;
+      } else if (requests.length === 2) {
+        questions[0].question = repeatedStem;
+      }
+
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: {
+            content: JSON.stringify({ batch_id: 1, questions })
+          }
+        })
+      };
+    };
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await runScenarioChallengeWorker({ ...args, fetchImpl });
+
+    expect(result.generated.questions).toHaveLength(20);
+    expect(requests).toHaveLength(3);
+    expect(warnSpy.mock.calls.some(([message]) =>
+      message.includes('reason=Model response contained an invalid or duplicate question stem.')
+    )).toBe(true);
+    warnSpy.mockRestore();
   });
 
   test('retries one malformed chunk response with a stricter JSON-only instruction', async () => {
@@ -232,7 +285,7 @@ describe('Ollama scenario challenge worker', () => {
     expect(result.generated.questions).toHaveLength(10);
     expect(requests).toHaveLength(2);
     expect(requests[1].messages.map((m) => m.role)).toEqual(['system', 'user', 'user']);
-    expect(requests[1].messages[2].content).toContain('previous response could not be parsed');
+    expect(requests[1].messages[2].content).toContain('previous response did not satisfy the required output contract');
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('chunk 1/1'));
     expect(warnSpy.mock.calls[0][0]).not.toContain('I will provide the questions next.');
     warnSpy.mockRestore();
