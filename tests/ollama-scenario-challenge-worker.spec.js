@@ -393,13 +393,42 @@ describe('Ollama scenario challenge worker', () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     await expect(runScenarioChallengeWorker({ ...baseArgs, fetchImpl }))
-      .rejects.toThrow('Ollama Cloud returned malformed message content for chunk 1/1 after 2 attempts');
+      .rejects.toThrow('Ollama Cloud returned malformed message content for chunk 1/1 after 3 attempts');
 
-    expect(warnSpy).toHaveBeenCalledTimes(2);
+    expect(warnSpy).toHaveBeenCalledTimes(3);
     for (const [message] of warnSpy.mock.calls) {
       expect(message).not.toContain('sensitive malformed provider content');
       expect(message).toContain('chars=');
     }
+    warnSpy.mockRestore();
+  });
+
+  test('uses a third attempt when two contract responses are invalid', async () => {
+    const requests = [];
+    const responses = [
+      JSON.stringify({ batch_id: 1, questions: makeQuestions(9) }),
+      JSON.stringify({ batch_id: 1, questions: makeQuestions(9) }),
+      JSON.stringify({ batch_id: 1, questions: makeQuestions(10) })
+    ];
+    const fetchImpl = async (url, options) => {
+      requests.push(JSON.parse(options.body));
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: { content: responses.shift() }
+        })
+      };
+    };
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await runScenarioChallengeWorker({ ...baseArgs, fetchImpl });
+
+    expect(result.generated.questions).toHaveLength(10);
+    expect(requests).toHaveLength(3);
+    expect(warnSpy).toHaveBeenCalledTimes(2);
+    expect(warnSpy.mock.calls[0][0]).toContain('attempt 1/3');
+    expect(warnSpy.mock.calls[1][0]).toContain('attempt 2/3');
     warnSpy.mockRestore();
   });
 
