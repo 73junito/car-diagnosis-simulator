@@ -54,7 +54,7 @@ describe('charging-system rights-review records contract', () => {
     ]);
   });
 
-  test('records the approved DOE and Flinn human decisions and leaves four rows pending', () => {
+  test('records the approved DOE, Flinn, and Frontiers human decisions and leaves three rows pending', () => {
     const doe = records.reviews.find((row) =>
       row.candidate_id === 'doe-hdbk-1084-95-primer-lead-acid');
     expect(doe).toMatchObject({
@@ -84,8 +84,25 @@ describe('charging-system rights-review records contract', () => {
     expect(flinn.scope_of_clearance).toContain('separate review');
     expect(flinn.review_notes).toContain('Human review approved by Rafael Rodriguez Jr.');
 
+    const frontiers = records.reviews.find((row) =>
+      row.candidate_id === 'frontiers-automotive-alternator-2023');
+    expect(frontiers).toMatchObject({
+      rights_decision: 'cleared-commercial-reuse',
+      decided_rights_classification: 'cleared-commercial-reuse',
+      reviewer_identity: 'Rafael Rodriguez Jr.',
+      reviewed_at: '2026-10-03T21:45:10Z',
+      artifact_sha256: '9a0764fb555fb8676390325c61b4a98667b12de42d59768c475149b184096036',
+      store_verbatim_excerpt: false,
+      may_generate_questions: false,
+      approval_effect: 'none'
+    });
+    expect(frontiers.scope_of_clearance).toContain('CC BY 4.0');
+    expect(frontiers.scope_of_clearance).toContain('third-party material');
+    expect(frontiers.review_notes).toContain('stable exact-source HTML publisher artifact');
+    expect(frontiers.review_notes).toContain('different PDF representation');
+
     const pending = records.reviews.filter((row) => row.rights_decision === 'pending');
-    expect(pending).toHaveLength(4);
+    expect(pending).toHaveLength(3);
     for (const row of pending) {
       expect(row.reviewer_identity).toBeNull();
       expect(row.reviewed_at).toBeNull();
@@ -96,10 +113,10 @@ describe('charging-system rights-review records contract', () => {
     }
   });
 
-  test('summary reflects two rights decisions without advancing downstream gates', () => {
-    expect(records.summary.rights_decisions_recorded).toBe(2);
-    expect(records.summary.sources_cleared).toBe(2);
-    expect(records.summary.sources_candidate_only).toBe(4);
+  test('summary reflects three rights decisions without advancing downstream gates', () => {
+    expect(records.summary.rights_decisions_recorded).toBe(3);
+    expect(records.summary.sources_cleared).toBe(3);
+    expect(records.summary.sources_candidate_only).toBe(3);
     expect(records.summary.mapped_count).toBe(0);
     expect(records.summary.citation_validated_count).toBe(0);
     expect(records.summary.technical_reviewed_count).toBe(0);
@@ -108,8 +125,8 @@ describe('charging-system rights-review records contract', () => {
     expect(records.summary.assessment_eligible_count).toBe(0);
 
     const output = formatSummary(records.summary);
-    expect(output).toContain('rights_decisions_recorded: 2');
-    expect(output).toContain('sources_candidate_only: 4');
+    expect(output).toContain('rights_decisions_recorded: 3');
+    expect(output).toContain('sources_candidate_only: 3');
     expect(output).toContain('mapped_count: 0');
   });
 
