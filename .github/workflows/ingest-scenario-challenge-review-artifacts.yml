@@ -1,0 +1,44 @@
+name: Ingest private scenario challenge review artifacts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  ingest:
+    name: ingest-private-challenge-artifacts
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download governed batch artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p downloaded-artifacts/37087583590
+          mkdir -p downloaded-artifacts/37088059898
+          mkdir -p downloaded-artifacts/37088465496
+          mkdir -p downloaded-artifacts/37088851220
+
+          gh run download 37087583590 --repo "${GITHUB_REPOSITORY}" --name scenario-challenge-batch-1-37087583590 --dir downloaded-artifacts/37087583590
+          gh run download 37088059898 --repo "${GITHUB_REPOSITORY}" --name scenario-challenge-batch-2-37088059898 --dir downloaded-artifacts/37088059898
+          gh run download 37088465496 --repo "${GITHUB_REPOSITORY}" --name scenario-challenge-batch-3-37088465496 --dir downloaded-artifacts/37088465496
+          gh run download 37088851220 --repo "${GITHUB_REPOSITORY}" --name scenario-challenge-batch-4-37088851220 --dir downloaded-artifacts/37088851220
+
+      - name: Ingest and verify private review artifacts
+        env:
+          SUPABASE_URL: ${{ secrets.PRODUCTION_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PRODUCTION_SECRET || secrets.PRODUCTION_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test -n "${SUPABASE_URL:-}" || { echo "PRODUCTION_URL is missing."; exit 1; }
+          test -n "${SUPABASE_SERVICE_ROLE_KEY:-}" || { echo "PRODUCTION_SECRET/PRODUCTION_KEY is missing."; exit 1; }
+          node scripts/ingest-scenario-challenge-review-artifacts.js --root=downloaded-artifacts
