@@ -8,15 +8,37 @@ const {
   buildChallengeJsonSchema
 } = require('../scripts/agents/scenario-challenge-question-agent');
 
-const makeQuestions = (count, scenarioId = 'no-crank', prefix = 'Question') =>
-  Array.from({ length: count }, (_, index) => ({
-    scenario_id: scenarioId,
-    question: `${prefix} diagnostic ${scenarioId} ${index + 1}`
-  }));
+const makeContractQuestion = (scenarioId, index, prefix = 'Question') => ({
+  scenario_id: scenarioId,
+  difficulty: 'intermediate',
+  question: `${prefix} diagnostic ${scenarioId} ${index + 1} with enough detail`,
+  options: {
+    A: `Option A ${index + 1}`,
+    B: `Option B ${index + 1}`,
+    C: `Option C ${index + 1}`,
+    D: `Option D ${index + 1}`
+  },
+  correct_answer: 'A',
+  explanation: `Explanation ${index + 1}`,
+  challenge_pattern: 'next-best diagnostic step',
+  claims_to_verify: [`Claim ${index + 1}`],
+  support_status: 'synthetic-draft-pending-evidence',
+  status: 'draft',
+  eligible_for_training_mix: false,
+  eligible_for_scoring: false,
+  assessment_eligible: false
+});
 
-const makeAllocatedQuestions = (allocation, prefix = 'Question') =>
+const makeContractQuestions = (count, scenarioId = 'no-crank', prefix = 'Question') =>
+  Array.from({ length: count }, (_, index) =>
+    makeContractQuestion(scenarioId, index, prefix)
+  );
+
+const makeContractAllocatedQuestions = (allocation, prefix = 'Question') =>
   Object.entries(allocation).flatMap(([scenarioId, count]) =>
-    makeQuestions(count, scenarioId, prefix)
+    Array.from({ length: count }, (_, index) =>
+      makeContractQuestion(scenarioId, index, prefix)
+    )
   );
 
 const baseArgs = {
@@ -51,7 +73,7 @@ describe('Ollama scenario challenge worker', () => {
           message: {
             content: JSON.stringify({
               batch_id: 1,
-              questions: makeQuestions(10)
+              questions: makeContractQuestions(10)
             })
           }
         })
@@ -101,7 +123,7 @@ describe('Ollama scenario challenge worker', () => {
           message: {
             content: JSON.stringify({
               batch_id: 1,
-              questions: makeAllocatedQuestions(
+              questions: makeContractAllocatedQuestions(
                 prompt.scenario_allocation,
                 `chunk-${requests.length}`
               )
@@ -127,6 +149,41 @@ describe('Ollama scenario challenge worker', () => {
     ]);
   });
 
+  test('retries a chunk that violates draft governance before final batch validation', async () => {
+    const requests = [];
+    const fetchImpl = async (url, options) => {
+      const request = JSON.parse(options.body);
+      requests.push(request);
+      const prompt = JSON.parse(request.messages[1].content);
+      const questions = makeContractAllocatedQuestions(
+        prompt.scenario_allocation,
+        requests.length === 1 ? 'bad-governance' : 'corrected-governance'
+      );
+
+      if (requests.length === 1) {
+        questions[0].assessment_eligible = true;
+      }
+
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: {
+            content: JSON.stringify({ batch_id: 1, questions })
+          }
+        })
+      };
+    };
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await runScenarioChallengeWorker({ ...baseArgs, fetchImpl });
+
+    expect(result.generated.questions).toHaveLength(10);
+    expect(requests).toHaveLength(2);
+    expect(warnSpy.mock.calls[0][0]).toContain('violates draft governance');
+    warnSpy.mockRestore();
+  });
+
   test('retries a chunk whose scenario counts do not match the requested allocation', async () => {
     const requests = [];
     const args = {
@@ -141,8 +198,8 @@ describe('Ollama scenario challenge worker', () => {
       requests.push(request);
       const prompt = JSON.parse(request.messages[1].content);
       const questions = requests.length === 1
-        ? makeQuestions(10, 'a', 'misallocated')
-        : makeAllocatedQuestions(prompt.scenario_allocation, 'corrected');
+        ? makeContractQuestions(10, 'a', 'misallocated')
+        : makeContractAllocatedQuestions(prompt.scenario_allocation, 'corrected');
 
       return {
         ok: true,
@@ -189,7 +246,7 @@ describe('Ollama scenario challenge worker', () => {
           message: {
             content: JSON.stringify({
               batch_id: 1,
-              questions: makeAllocatedQuestions(
+              questions: makeContractAllocatedQuestions(
                 prompt.scenario_allocation,
                 `generated-${requests.length}`
               )
@@ -222,7 +279,7 @@ describe('Ollama scenario challenge worker', () => {
       const request = JSON.parse(options.body);
       requests.push(request);
       const prompt = JSON.parse(request.messages[1].content);
-      const questions = makeAllocatedQuestions(
+      const questions = makeContractAllocatedQuestions(
         prompt.scenario_allocation,
         requests.length === 1 ? 'same-chunk' : 'retry-unique'
       );
@@ -267,7 +324,7 @@ describe('Ollama scenario challenge worker', () => {
       const request = JSON.parse(options.body);
       requests.push(request);
       const prompt = JSON.parse(request.messages[1].content);
-      let questions = makeAllocatedQuestions(
+      let questions = makeContractAllocatedQuestions(
         prompt.scenario_allocation,
         `request-${requests.length}`
       );
@@ -304,7 +361,7 @@ describe('Ollama scenario challenge worker', () => {
     const requests = [];
     const responses = [
       'I will provide the questions next.',
-      JSON.stringify({ batch_id: 1, questions: makeQuestions(10) })
+      JSON.stringify({ batch_id: 1, questions: makeContractQuestions(10) })
     ];
     const fetchImpl = async (url, options) => {
       requests.push(JSON.parse(options.body));
@@ -331,8 +388,8 @@ describe('Ollama scenario challenge worker', () => {
   test('retries a valid JSON object with the wrong chunk count', async () => {
     const requests = [];
     const responses = [
-      JSON.stringify({ batch_id: 1, questions: makeQuestions(9) }),
-      JSON.stringify({ batch_id: 1, questions: makeQuestions(10) })
+      JSON.stringify({ batch_id: 1, questions: makeContractQuestions(9) }),
+      JSON.stringify({ batch_id: 1, questions: makeContractQuestions(10) })
     ];
     const fetchImpl = async (url, options) => {
       requests.push(JSON.parse(options.body));
@@ -359,7 +416,7 @@ describe('Ollama scenario challenge worker', () => {
     const requests = [];
     const responses = [
       '```json\\n{"batch_id":1,"questions":[]}\\n```',
-      JSON.stringify({ batch_id: 1, questions: makeQuestions(10) })
+      JSON.stringify({ batch_id: 1, questions: makeContractQuestions(10) })
     ];
     const fetchImpl = async (url, options) => {
       requests.push(JSON.parse(options.body));
