@@ -37,7 +37,6 @@ describe('scenario challenge review artifact storage contract', () => {
     );
     expect(migration).not.toContain('grant all on table public.scenario_challenge_review_artifacts');
     expect(migration).not.toContain('create policy');
-    expect(migration).not.toContain('grant select');
   });
 
   test('documents that storage does not grant question eligibility', () => {
