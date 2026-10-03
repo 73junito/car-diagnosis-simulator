@@ -15,6 +15,18 @@
     "Rights review alone does not authorize claim-to-source mapping; mapping is a separate branch and a separate gate.",
     "No question payload, excerpt, or proprietary text may be stored from this review."
   ],
+  "permitted_rights_classifications": [
+    "pending",
+    "cleared-link-citation-only",
+    "cleared-metadata-only",
+    "cleared-text-excerpt",
+    "cleared-full-text-storage",
+    "cleared-rag-use",
+    "cleared-commercial-reuse",
+    "restricted",
+    "rejected"
+  ],
+  "rights_classification_note": "Clearance is scope-specific: a narrower cleared value never implies a broader one, and no value other than pending may be recorded until a named human reviewer records reviewer_identity and reviewed_at for that exact artifact. Rights classification is separate from evidence suitability, citation validation, technical review, instructional review, approval, and eligibility.",
   "reviews": [
     {
       "candidate_id": "navy-navedtra-14264a-ch8",

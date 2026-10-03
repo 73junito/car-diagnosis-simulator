@@ -28,6 +28,24 @@ describe('charging-system rights-review records contract', () => {
     expect(errors).toEqual([]);
   });
 
+  test('uses a scope-specific clearance vocabulary instead of a single rights flag', () => {
+    expect(records.permitted_rights_classifications).toEqual([
+      'pending',
+      'cleared-link-citation-only',
+      'cleared-metadata-only',
+      'cleared-text-excerpt',
+      'cleared-full-text-storage',
+      'cleared-rag-use',
+      'cleared-commercial-reuse',
+      'restricted',
+      'rejected'
+    ]);
+    expect(records.rights_classification_note.length).toBeGreaterThan(0);
+    for (const row of records.reviews) {
+      expect(records.permitted_rights_classifications).toContain(row.rights_decision);
+    }
+  });
+
   test('covers every discovery candidate with a pending, reviewer-free row', () => {
     expect(records.stage).toBe('awaiting-human-rights-review');
     const reviewIds = records.reviews.map((row) => row.candidate_id).sort();

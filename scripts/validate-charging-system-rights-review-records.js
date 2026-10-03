@@ -19,6 +19,19 @@ const ZERO_KEYS = [
 // Rights review must never smuggle claim-to-source mapping into this artifact.
 const FORBIDDEN_REVIEW_KEY = /claim|question_id|draft_id|mapping/i;
 
+// Clearance is scope-specific: a narrower cleared value never implies a broader one.
+const PERMITTED_RIGHTS_CLASSIFICATIONS = [
+  'pending',
+  'cleared-link-citation-only',
+  'cleared-metadata-only',
+  'cleared-text-excerpt',
+  'cleared-full-text-storage',
+  'cleared-rag-use',
+  'cleared-commercial-reuse',
+  'restricted',
+  'rejected'
+];
+
 function readJson(filePath, errors, label) {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -26,6 +39,10 @@ function readJson(filePath, errors, label) {
     errors.push(`${label} could not be read from ${filePath}: ${error.message}`);
     return null;
   }
+}
+
+function nonEmptyRecordText(value) {
+  return typeof value === 'string' && value.trim().length > 0;
 }
 
 function validateRightsReviewRecords(options = {}) {
@@ -58,6 +75,14 @@ function validateRightsReviewRecords(options = {}) {
     return { errors, summary: null };
   }
 
+  if (JSON.stringify(records.permitted_rights_classifications) !==
+      JSON.stringify(PERMITTED_RIGHTS_CLASSIFICATIONS)) {
+    errors.push('permitted_rights_classifications must match the scope-specific clearance vocabulary');
+  }
+  if (!nonEmptyRecordText(records.rights_classification_note)) {
+    errors.push('rights_classification_note must be recorded');
+  }
+
   const seen = new Set();
   for (const review of reviews) {
     const label = review.candidate_id || '<review missing candidate_id>';
@@ -81,7 +106,7 @@ function validateRightsReviewRecords(options = {}) {
           errors.push(`${label}: ${field} must stay null until a named human reviewer records a decision`);
         }
       }
-    } else {
+    } else if (!PERMITTED_RIGHTS_CLASSIFICATIONS.includes(review.rights_decision)) {
       errors.push(`${label}: rights_decision '${review.rights_decision}' is not an accepted state; introduce decided states together with an explicit validator contract`);
     }
   }
