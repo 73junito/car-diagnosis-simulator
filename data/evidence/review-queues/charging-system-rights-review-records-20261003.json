@@ -43,16 +43,16 @@
     },
     {
       "candidate_id": "army-da-pam-750-33-1976",
-      "rights_decision": "pending",
-      "decided_rights_classification": null,
-      "reviewer_identity": null,
-      "reviewed_at": null,
-      "artifact_sha256": null,
-      "scope_of_clearance": null,
+      "rights_decision": "cleared-text-excerpt",
+      "decided_rights_classification": "cleared-text-excerpt",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-03T23:34:29Z",
+      "artifact_sha256": "cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1",
+      "scope_of_clearance": "Textual portions of DA PAM 750-33 attributable to the United States Department of the Army may be quoted, excerpted, and cited from the verified hashed artifact as a U.S. Government work. This clearance does not extend to photographs, illustrations, diagrams, manufacturer-originated material, contractor material, or other separately sourced components whose authorship or rights provenance has not been established. It does not authorize treating the complete scanned artifact as wholly cleared for commercial republication, unrestricted full-text reuse, or RAG ingestion.",
       "store_verbatim_excerpt": false,
       "may_generate_questions": false,
       "approval_effect": "none",
-      "review_notes": null
+      "review_notes": "Human review approved by Rafael Rodriguez Jr. DA PAM 750-33 is an official Department of the Army publication and the verified artifact is the stable Internet Archive scan with SHA-256 cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1. The decision is intentionally limited to attributed textual excerpts because federal publication status does not independently establish the rights provenance of every embedded photograph, diagram, manufacturer-originated item, contractor contribution, or other third-party component. This rights decision does not constitute claim mapping, citation validation, technical review, instructional review, question approval, or assessment eligibility."
     },
     {
       "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
@@ -110,9 +110,9 @@
   ],
   "summary": {
     "sources_in_review": 6,
-    "rights_decisions_recorded": 3,
-    "sources_cleared": 3,
-    "sources_candidate_only": 3,
+    "rights_decisions_recorded": 4,
+    "sources_cleared": 4,
+    "sources_candidate_only": 2,
     "mapped_count": 0,
     "citation_validated_count": 0,
     "technical_reviewed_count": 0,
