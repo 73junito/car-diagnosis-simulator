@@ -8,17 +8,6 @@ const {
   buildChallengeJsonSchema
 } = require('../scripts/agents/scenario-challenge-question-agent');
 
-const makeQuestions = (count, scenarioId = 'no-crank', prefix = 'Question') =>
-  Array.from({ length: count }, (_, index) => ({
-    scenario_id: scenarioId,
-    question: `${prefix} diagnostic ${scenarioId} ${index + 1}`
-  }));
-
-const makeAllocatedQuestions = (allocation, prefix = 'Question') =>
-  Object.entries(allocation).flatMap(([scenarioId, count]) =>
-    makeContractQuestions(count, scenarioId, prefix)
-  );
-
 const makeContractQuestion = (scenarioId, index, prefix = 'Question') => ({
   scenario_id: scenarioId,
   difficulty: 'intermediate',
