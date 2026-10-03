@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "human-rights-review-record",
+  "scenario_id": "charging-system",
+  "stage": "awaiting-human-rights-review",
+  "opened_at": "2026-10-03",
+  "policy": "data/evidence/open-evidence-source-policy.json",
+  "candidate_source_manifest": "data/evidence/review-queues/charging-system-challenge-candidate-source-manifest-20261003.json",
+  "intake_queue": "evidence/review-queues/scenario-challenge-evidence-intake-20261003.json",
+  "purpose": "One row per candidate source awaiting an artifact-level human rights decision. This artifact records rights review only. It contains no claim-to-source mapping and creates no citation validation, technical review, instructional review, approval, or eligibility change.",
+  "invariants": [
+    "Rights decisions require a real reviewer identity and timestamp. Never synthesise or auto-promote a reviewer.",
+    "Each source is reviewed on its own exact artifact; presence in this file is not clearance.",
+    "Candidate classifications in the discovery manifest are candidates, never decisions, and are not promoted by this file.",
+    "Rights review alone does not authorize claim-to-source mapping; mapping is a separate branch and a separate gate.",
+    "No question payload, excerpt, or proprietary text may be stored from this review."
+  ],
+  "reviews": [
+    {
+      "candidate_id": "navy-navedtra-14264a-ch8",
+      "rights_decision": "pending",
+      "decided_rights_classification": null,
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "artifact_sha256": null,
+      "scope_of_clearance": null,
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none",
+      "review_notes": null
+    },
+    {
+      "candidate_id": "army-da-pam-750-33-1976",
+      "rights_decision": "pending",
+      "decided_rights_classification": null,
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "artifact_sha256": null,
+      "scope_of_clearance": null,
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none",
+      "review_notes": null
+    },
+    {
+      "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+      "rights_decision": "pending",
+      "decided_rights_classification": null,
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "artifact_sha256": null,
+      "scope_of_clearance": null,
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none",
+      "review_notes": null
+    },
+    {
+      "candidate_id": "bccampus-flinn-alternator-2018",
+      "rights_decision": "pending",
+      "decided_rights_classification": null,
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "artifact_sha256": null,
+      "scope_of_clearance": null,
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none",
+      "review_notes": null
+    },
+    {
+      "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+      "rights_decision": "pending",
+      "decided_rights_classification": null,
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "artifact_sha256": null,
+      "scope_of_clearance": null,
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none",
+      "review_notes": null
+    },
+    {
+      "candidate_id": "frontiers-automotive-alternator-2023",
+      "rights_decision": "pending",
+      "decided_rights_classification": null,
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "artifact_sha256": null,
+      "scope_of_clearance": null,
+      "store_verbatim_excerpt": false,
+      "may_generate_questions": false,
+      "approval_effect": "none",
+      "prior_rights_observation": "data/evidence/source-state-registry.json records cleared-text-only-cc-by-4.0 for the exact hashed artifact, attributed to a named human reviewer. That prior decision is provenance for this slice; it is not a decision here and does not authorize mapping or excerpts.",
+      "review_notes": null
+    }
+  ],
+  "summary": {
+    "sources_in_review": 6,
+    "rights_decisions_recorded": 0,
+    "sources_cleared": 0,
+    "sources_candidate_only": 6,
+    "mapped_count": 0,
+    "citation_validated_count": 0,
+    "technical_reviewed_count": 0,
+    "instructional_reviewed_count": 0,
+    "approved_count": 0,
+    "assessment_eligible_count": 0
+  },
+  "required_before_any_decision": [
+    "Capture the candidate artifact, record its SHA-256, and confirm the canonical identity and revision of that exact artifact.",
+    "A named human reviewer records reviewer_identity, reviewed_at, decided_rights_classification, scope_of_clearance and review_notes for that artifact only.",
+    "Unclear or conflicting reuse rights keep the source candidate-only; they are not approved evidence.",
+    "Update the validator in the same change that records the first real decision so the decided-state contract is explicit and fail-closed.",
+    "Rights review does not authorize claim-to-source mapping; open a separate branch for mapping after the rights decisions are recorded."
+  ]
+}
