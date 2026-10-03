@@ -1,22 +1,45 @@
-const { runScenarioChallengeWorker } =
-  require('../scripts/workers/ollama-scenario-challenge-worker');
+const {
+  runScenarioChallengeWorker,
+  buildAllocationChunks,
+  MAX_QUESTIONS_PER_REQUEST
+} = require('../scripts/workers/ollama-scenario-challenge-worker');
 const {
   AGENT_VERSION,
   buildChallengeJsonSchema
 } = require('../scripts/agents/scenario-challenge-question-agent');
+
+const makeQuestions = (count, scenarioId = 'no-crank', prefix = 'Question') =>
+  Array.from({ length: count }, (_, index) => ({
+    scenario_id: scenarioId,
+    question: `${prefix} ${scenarioId} ${index + 1}`
+  }));
+
+const makeAllocatedQuestions = (allocation, prefix = 'Question') =>
+  Object.entries(allocation).flatMap(([scenarioId, count]) =>
+    makeQuestions(count, scenarioId, prefix)
+  );
 
 const baseArgs = {
   apiUrl: 'https://ollama.com/api/chat',
   apiKey: 'test-secret',
   model: 'gpt-oss:20b-cloud',
   batchId: 1,
-  batchTarget: 50,
-  allocation: { 'no-crank': 50 },
+  batchTarget: 10,
+  allocation: { 'no-crank': 10 },
   scenarioContext: [{ scenario_id: 'no-crank' }],
   retainedQuestions: []
 };
 
 describe('Ollama scenario challenge worker', () => {
+  test('splits a large allocation into bounded requests without changing the total', () => {
+    expect(MAX_QUESTIONS_PER_REQUEST).toBe(10);
+    expect(buildAllocationChunks({ a: 12, b: 13 })).toEqual([
+      { allocation: { a: 10 }, target: 10 },
+      { allocation: { a: 2, b: 8 }, target: 10 },
+      { allocation: { b: 5 }, target: 5 }
+    ]);
+  });
+
   test('sends the requested model, structured format, and versioned messages', async () => {
     let sent;
     const fetchImpl = async (url, options) => {
@@ -25,7 +48,12 @@ describe('Ollama scenario challenge worker', () => {
         ok: true,
         status: 200,
         text: async () => JSON.stringify({
-          message: { content: JSON.stringify({ batch_id: 1, questions: [] }) }
+          message: {
+            content: JSON.stringify({
+              batch_id: 1,
+              questions: makeQuestions(10)
+            })
+          }
         })
       };
     };
@@ -33,25 +61,160 @@ describe('Ollama scenario challenge worker', () => {
     const result = await runScenarioChallengeWorker({ ...baseArgs, fetchImpl });
 
     expect(result.agentVersion).toBe(AGENT_VERSION);
-    expect(result.generated).toEqual({ batch_id: 1, questions: [] });
+    expect(result.generated.batch_id).toBe(1);
+    expect(result.generated.questions).toHaveLength(10);
     expect(sent.url).toBe(baseArgs.apiUrl);
     expect(sent.request.model).toBe(baseArgs.model);
     expect(sent.request.format).toEqual(buildChallengeJsonSchema({
       batchId: 1,
-      batchTarget: 50
+      batchTarget: 10
     }));
-    expect(sent.request.format.properties.questions.minItems).toBe(50);
-    expect(sent.request.format.properties.questions.maxItems).toBe(50);
+    expect(sent.request.format.properties.questions.minItems).toBe(10);
+    expect(sent.request.format.properties.questions.maxItems).toBe(10);
     expect(sent.request.stream).toBe(false);
     expect(sent.request.messages.map((m) => m.role)).toEqual(['system', 'user']);
     expect(sent.options.headers.Authorization).toBe('Bearer test-secret');
   });
 
-  test('retries one malformed model response with a stricter JSON-only instruction', async () => {
+  test('combines multiple provider chunks into the requested batch', async () => {
+    const requests = [];
+    const args = {
+      ...baseArgs,
+      batchTarget: 25,
+      allocation: { a: 12, b: 13 },
+      scenarioContext: [{ scenario_id: 'a' }, { scenario_id: 'b' }],
+      retainedQuestions: [
+        { scenario_id: 'a', question: 'retained a' },
+        { scenario_id: 'b', question: 'retained b' }
+      ]
+    };
+
+    const fetchImpl = async (url, options) => {
+      const request = JSON.parse(options.body);
+      requests.push(request);
+      const prompt = JSON.parse(request.messages[1].content);
+
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: {
+            content: JSON.stringify({
+              batch_id: 1,
+              questions: makeAllocatedQuestions(
+                prompt.scenario_allocation,
+                `chunk-${requests.length}`
+              )
+            })
+          }
+        })
+      };
+    };
+
+    const result = await runScenarioChallengeWorker({ ...args, fetchImpl });
+
+    expect(result.generated.questions).toHaveLength(25);
+    expect(requests).toHaveLength(3);
+    expect(requests.map((request) =>
+      request.format.properties.questions.minItems
+    )).toEqual([10, 10, 5]);
+    expect(requests.map((request) =>
+      JSON.parse(request.messages[1].content).scenario_allocation
+    )).toEqual([
+      { a: 10 },
+      { a: 2, b: 8 },
+      { b: 5 }
+    ]);
+  });
+
+  test('retries a chunk whose scenario counts do not match the requested allocation', async () => {
+    const requests = [];
+    const args = {
+      ...baseArgs,
+      batchTarget: 10,
+      allocation: { a: 2, b: 8 },
+      scenarioContext: [{ scenario_id: 'a' }, { scenario_id: 'b' }]
+    };
+
+    const fetchImpl = async (url, options) => {
+      const request = JSON.parse(options.body);
+      requests.push(request);
+      const prompt = JSON.parse(request.messages[1].content);
+      const questions = requests.length === 1
+        ? makeQuestions(10, 'a', 'misallocated')
+        : makeAllocatedQuestions(prompt.scenario_allocation, 'corrected');
+
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: {
+            content: JSON.stringify({ batch_id: 1, questions })
+          }
+        })
+      };
+    };
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await runScenarioChallengeWorker({ ...args, fetchImpl });
+
+    expect(result.generated.questions).toHaveLength(10);
+    expect(requests).toHaveLength(2);
+    expect(warnSpy.mock.calls[0][0])
+      .toContain('reason=Model response scenario allocation did not match the requested chunk.');
+    warnSpy.mockRestore();
+  });
+
+  test('carries earlier generated questions into later same-scenario avoidance context', async () => {
+    const requests = [];
+    const args = {
+      ...baseArgs,
+      batchTarget: 25,
+      allocation: { a: 12, b: 13 },
+      scenarioContext: [{ scenario_id: 'a' }, { scenario_id: 'b' }],
+      retainedQuestions: [
+        { scenario_id: 'a', question: 'retained a' },
+        { scenario_id: 'b', question: 'retained b' }
+      ]
+    };
+
+    const fetchImpl = async (url, options) => {
+      const request = JSON.parse(options.body);
+      requests.push(request);
+      const prompt = JSON.parse(request.messages[1].content);
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: {
+            content: JSON.stringify({
+              batch_id: 1,
+              questions: makeAllocatedQuestions(
+                prompt.scenario_allocation,
+                `generated-${requests.length}`
+              )
+            })
+          }
+        })
+      };
+    };
+
+    await runScenarioChallengeWorker({ ...args, fetchImpl });
+
+    const secondPrompt = JSON.parse(requests[1].messages[1].content);
+    expect(secondPrompt.retained_questions.some(
+      (row) => row.scenario_id === 'a' && row.question.startsWith('generated-1 a')
+    )).toBe(true);
+    expect(secondPrompt.retained_questions).toContainEqual(
+      expect.objectContaining({ scenario_id: 'a', question: 'retained a' })
+    );
+  });
+
+  test('retries one malformed chunk response with a stricter JSON-only instruction', async () => {
     const requests = [];
     const responses = [
       'I will provide the questions next.',
-      JSON.stringify({ batch_id: 1, questions: [] })
+      JSON.stringify({ batch_id: 1, questions: makeQuestions(10) })
     ];
     const fetchImpl = async (url, options) => {
       requests.push(JSON.parse(options.body));
@@ -66,12 +229,39 @@ describe('Ollama scenario challenge worker', () => {
 
     const result = await runScenarioChallengeWorker({ ...baseArgs, fetchImpl });
 
-    expect(result.generated).toEqual({ batch_id: 1, questions: [] });
+    expect(result.generated.questions).toHaveLength(10);
     expect(requests).toHaveLength(2);
     expect(requests[1].messages.map((m) => m.role)).toEqual(['system', 'user', 'user']);
     expect(requests[1].messages[2].content).toContain('previous response could not be parsed');
-    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('chars=34'));
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('chunk 1/1'));
     expect(warnSpy.mock.calls[0][0]).not.toContain('I will provide the questions next.');
+    warnSpy.mockRestore();
+  });
+
+  test('retries a valid JSON object with the wrong chunk count', async () => {
+    const requests = [];
+    const responses = [
+      JSON.stringify({ batch_id: 1, questions: makeQuestions(9) }),
+      JSON.stringify({ batch_id: 1, questions: makeQuestions(10) })
+    ];
+    const fetchImpl = async (url, options) => {
+      requests.push(JSON.parse(options.body));
+      return {
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({
+          message: { content: responses.shift() }
+        })
+      };
+    };
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const result = await runScenarioChallengeWorker({ ...baseArgs, fetchImpl });
+
+    expect(result.generated.questions).toHaveLength(10);
+    expect(requests).toHaveLength(2);
+    expect(warnSpy.mock.calls[0][0])
+      .toContain('reason=Model response question count did not match the requested chunk.');
     warnSpy.mockRestore();
   });
 
@@ -79,7 +269,7 @@ describe('Ollama scenario challenge worker', () => {
     const requests = [];
     const responses = [
       '```json\\n{"batch_id":1,"questions":[]}\\n```',
-      JSON.stringify({ batch_id: 1, questions: [] })
+      JSON.stringify({ batch_id: 1, questions: makeQuestions(10) })
     ];
     const fetchImpl = async (url, options) => {
       requests.push(JSON.parse(options.body));
@@ -94,7 +284,7 @@ describe('Ollama scenario challenge worker', () => {
 
     const result = await runScenarioChallengeWorker({ ...baseArgs, fetchImpl });
 
-    expect(result.generated).toEqual({ batch_id: 1, questions: [] });
+    expect(result.generated.questions).toHaveLength(10);
     expect(requests).toHaveLength(2);
     expect(warnSpy).toHaveBeenCalledTimes(1);
     expect(warnSpy.mock.calls[0][0]).toContain('starts_object=false');
@@ -113,7 +303,7 @@ describe('Ollama scenario challenge worker', () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     await expect(runScenarioChallengeWorker({ ...baseArgs, fetchImpl }))
-      .rejects.toThrow('Ollama Cloud returned malformed message content after 2 attempts');
+      .rejects.toThrow('Ollama Cloud returned malformed message content for chunk 1/1 after 2 attempts');
 
     expect(warnSpy).toHaveBeenCalledTimes(2);
     for (const [message] of warnSpy.mock.calls) {
@@ -121,6 +311,15 @@ describe('Ollama scenario challenge worker', () => {
       expect(message).toContain('chars=');
     }
     warnSpy.mockRestore();
+  });
+
+  test('rejects allocation totals that do not match the requested batch target', async () => {
+    await expect(runScenarioChallengeWorker({
+      ...baseArgs,
+      batchTarget: 11,
+      allocation: { 'no-crank': 10 },
+      fetchImpl: jest.fn()
+    })).rejects.toThrow('Allocation total 10 does not match batch target 11.');
   });
 
   test('reports non-2xx failures without surfacing provider body', async () => {
