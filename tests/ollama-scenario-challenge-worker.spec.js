@@ -11,7 +11,7 @@ const {
 const makeQuestions = (count, scenarioId = 'no-crank', prefix = 'Question') =>
   Array.from({ length: count }, (_, index) => ({
     scenario_id: scenarioId,
-    question: `${prefix} ${scenarioId} ${index + 1}`
+    question: `${prefix} diagnostic ${scenarioId} ${index + 1}`
   }));
 
 const makeAllocatedQuestions = (allocation, prefix = 'Question') =>
@@ -203,13 +203,13 @@ describe('Ollama scenario challenge worker', () => {
 
     const secondPrompt = JSON.parse(requests[1].messages[1].content);
     expect(secondPrompt.retained_questions.some(
-      (row) => row.scenario_id === 'a' && row.question.startsWith('generated-1 a')
+      (row) => row.scenario_id === 'a' && row.question.startsWith('generated-1 diagnostic a')
     )).toBe(true);
 
     const thirdPrompt = JSON.parse(requests[2].messages[1].content);
     expect(thirdPrompt.scenario_allocation).toEqual({ b: 5 });
     expect(thirdPrompt.retained_questions.some(
-      (row) => row.scenario_id === 'a' && row.question.startsWith('generated-1 a')
+      (row) => row.scenario_id === 'a' && row.question.startsWith('generated-1 diagnostic a')
     )).toBe(true);
     expect(secondPrompt.retained_questions).toContainEqual(
       expect.objectContaining({ scenario_id: 'a', question: 'retained a' })
