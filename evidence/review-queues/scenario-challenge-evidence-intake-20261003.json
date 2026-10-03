@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "queue_type": "scenario-challenge-evidence-intake",
   "created_at": "2026-10-03",
   "source_commit": "83322281261d6877002ae58b8b0b72502755c52d",
@@ -9,9 +9,25 @@
     "repository_visibility": "public",
     "full_question_payload_committed": false,
     "reason": "Question text, options, keyed answers, and explanations are intentionally not committed to the public repository.",
-    "durable_private_source_storage_status": "pending",
-    "source_discovery_blocked_until_durable_private_storage": true,
-    "actions_artifacts_are_temporary": true
+    "durable_private_source_storage_status": "verified",
+    "source_discovery_blocked_until_durable_private_storage": false,
+    "actions_artifacts_are_temporary": true,
+    "private_storage_reference": {
+      "backend": "supabase",
+      "project_ref": "pffdgqpynpbffbcnxmum",
+      "table": "public.scenario_challenge_review_artifacts",
+      "verified_row_count": 4,
+      "verified_question_count": 200,
+      "verification_workflow_run_id": 37125293532,
+      "verification_commit": "285dcd79051d7666705d91e12f8c4b860d1b123d",
+      "payload_hashes_verified": true,
+      "payload_sha256_by_batch": {
+        "1": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710",
+        "2": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634",
+        "3": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7",
+        "4": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
+    }
   },
   "artifact_provenance": [
     {
@@ -71,7 +87,7 @@
         "Determining whether the starter motor shaft turns freely after confirming battery condition is adequate."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -89,7 +105,7 @@
         "Identifying an open circuit in the solenoid wiring when low voltage is observed during cranking."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -107,7 +123,7 @@
         "Recognizing that loose battery clamp raises risk of arcing and potential fire hazard during cranking."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -125,7 +141,7 @@
         "Using fuel pressure as an indicator to differentiate fuel system from ignition failure."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -143,7 +159,7 @@
         "Prioritizing the fuel pump as a likely cause for a failure to start after a brief crank in cold weather."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -161,7 +177,7 @@
         "Assessing the fuel pump as the primary suspect for a brief crank that fails to start in cold conditions."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -179,7 +195,7 @@
         "Verifying thermostat operation as a key factor when the engine temperature climbs beyond normal range."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -197,7 +213,7 @@
         "Identifying the temperature limit for radiator hoses that must not be exceeded to avoid damage."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -215,7 +231,7 @@
         "Using voltage measurement during a load to confirm proper battery management system behavior."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -233,7 +249,7 @@
         "Performing a coolant pressure test to verify successful radiator hose replacement."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -251,7 +267,7 @@
         "Determine which circuit component causes the voltage drop when the auxiliary power is engaged"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -269,7 +285,7 @@
         "Identify which component is unlikely to add DC resistance during a high‑current test"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -287,7 +303,7 @@
         "Determine the likely cause of a weak spark on a specific cylinder during a misfire"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -305,7 +321,7 @@
         "Identify the component most likely causing warm‑up misfire"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -323,7 +339,7 @@
         "Differentiate fuel supply vs ignition problems using diagnostics"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -341,7 +357,7 @@
         "Identify the source of steering wheel drag after an alignment"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -359,7 +375,7 @@
         "Determine the cause of sustained understeer after alignment"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -377,7 +393,7 @@
         "Identify which alignment variable causes uneven tire wear"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -395,7 +411,7 @@
         "Determine the component most likely causing insufficient cooling under load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -413,7 +429,7 @@
         "Identify which safety boundary is compromised by a 105 °C thermostat reading"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -434,7 +450,7 @@
         "Confirm cabin temperature sensor output"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -455,7 +471,7 @@
         "Validate ignition coil health"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -476,7 +492,7 @@
         "Validate torque converter lock‑up pressure"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -497,7 +513,7 @@
         "Inspect throttle body connections"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -518,7 +534,7 @@
         "Verify idle air control valve operation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -539,7 +555,7 @@
         "Check battery charge level"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -560,7 +576,7 @@
         "Verify starter solenoid load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -581,7 +597,7 @@
         "Measure fuse resistance"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -602,7 +618,7 @@
         "Ensure battery cable connection quality"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -623,7 +639,7 @@
         "Check stored fault codes"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -641,7 +657,7 @@
         "Idle Air Control Valve is operating within specified response range"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -659,7 +675,7 @@
         "Battery cables are fully seated and free of corrosion"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -677,7 +693,7 @@
         "Battery internal resistance remains below specified maximum"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -695,7 +711,7 @@
         "High‑current ground strap maintains low resistance"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -713,7 +729,7 @@
         "CAN bus termination resistors are 120 Ω and correctly installed"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -731,7 +747,7 @@
         "CAN application protocols produce valid data frames"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -749,7 +765,7 @@
         "HV disconnect switch provides full isolation when opened"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -767,7 +783,7 @@
         "Low‑voltage battery is correctly reporting its voltage to the battery management system"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -785,7 +801,7 @@
         "Boost pressure is within the specified range during full throttle"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -803,7 +819,7 @@
         "DPF regeneration valve operates according to the regeneration cycle times"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -821,7 +837,7 @@
         "The HV disconnect switch is wired to isolate the high‑voltage bus when opened."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -839,7 +855,7 @@
         "A faulty transmission fluid temperature sensor can cause delayed shifting in hydraulic automatic transmissions."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -857,7 +873,7 @@
         "Misaligned shift link cables can prevent a manual transmission from changing gear."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -875,7 +891,7 @@
         "A higher differential fluid temperature causes audible whining at high speeds."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -893,7 +909,7 @@
         "Pump‑driven transmissions require a minimum fluid pressure for safe gear engagement."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -911,7 +927,7 @@
         "The high‑voltage DC–DC converter steps down bulk battery voltage to low‑voltage systems in EV/E‑Hybrid vehicles."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -929,7 +945,7 @@
         "The transmission fluid level gauge is used to verify fluid volume after replacement."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -947,7 +963,7 @@
         "Shift‑spring failure can cause a vehicle to stall when engaged in reverse gear."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -965,7 +981,7 @@
         "Worn differential gears produce a whine that is unaffected by fluid temperature or level."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -983,7 +999,7 @@
         "A malfunctioning torque converter clutch can cause slipping in low gears of a transaxle system."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1002,7 +1018,7 @@
         "Interpretation of slow cranking symptom"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1021,7 +1037,7 @@
         "Isolation of starter circuit faults"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1040,7 +1056,7 @@
         "Interpretation of spark absence"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1059,7 +1075,7 @@
         "Ignition system integrity"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1078,7 +1094,7 @@
         "Interpretation of coolant temperature sensor data"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1097,7 +1113,7 @@
         "System reasoning for overheating at idle"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1116,7 +1132,7 @@
         "Safety consideration of voltage drop"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1135,7 +1151,7 @@
         "Verification of relay supply"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1154,7 +1170,7 @@
         "Differentiation from lean condition symptoms"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1173,7 +1189,7 @@
         "Association of sensor failure with Type 1 code"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1191,7 +1207,7 @@
         "Vehicle drift while traveling straight indicates wheel misalignment"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1209,7 +1225,7 @@
         "Visual inspection of tire tread wear is a valid first diagnostic step to confirm wheel alignment"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1227,7 +1243,7 @@
         "Low suction pressure readings indicate refrigerant leak"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1245,7 +1261,7 @@
         "Blower motor capacitor failure causes low‑speed noise and reduced airflow"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1263,7 +1279,7 @@
         "Throttle position sensor voltage measurement is a valid next diagnostic step after confirming power"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1281,7 +1297,7 @@
         "DTC 'low idle valve position' indicates idle air control valve issue"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1299,7 +1315,7 @@
         "Spark plug failure commonly causes sudden engine sputter without DTC"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1317,7 +1333,7 @@
         "Intake manifold vacuum leak causes acceleration hesitation but may not trigger misfire code"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1335,7 +1351,7 @@
         "Crankshaft position sensor signal indicates spark timing"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1353,7 +1369,7 @@
         "Measurement of alternator output under load helps identify power loss during acceleration"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1374,7 +1390,7 @@
         "Parasitic load detection"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1394,7 +1410,7 @@
         "Battery voltage stability"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1414,7 +1430,7 @@
         "Starter solenoid activation behavior"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1434,7 +1450,7 @@
         "Starter circuitry integrity"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1454,7 +1470,7 @@
         "Starter gear engagement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1474,7 +1490,7 @@
         "Starter load behavior"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1494,7 +1510,7 @@
         "Effect of vacuum leak on idle"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1514,7 +1530,7 @@
         "Idle air control valve operation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1534,7 +1550,7 @@
         "Battery charging characteristics"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1554,7 +1570,7 @@
         "Engine load impact on charging"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1572,7 +1588,7 @@
         "Understanding how a faulty voltage regulator affects alternator output voltage as a function of engine speed."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1590,7 +1606,7 @@
         "Differentiation between transceiver‑related CRC errors and bus wire faults."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1608,7 +1624,7 @@
         "Identification of the step that best isolates a CAN bus CRC error source."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1626,7 +1642,7 @@
         "Interpretation of abnormal CAN H line voltage during bus idle."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1644,7 +1660,7 @@
         "Recognition of a critical current limit in high‑voltage isolation operations."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1662,7 +1678,7 @@
         "Identification of primary cause for sudden HV battery voltage drop."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1680,7 +1696,7 @@
         "Diagnostic procedure to confirm a neutral safety switch fault."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1698,7 +1714,7 @@
         "Knowledge of components that constitute a diesel aftertreatment system."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1716,7 +1732,7 @@
         "Interpretation of DPF pressure differential changes."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1734,7 +1750,7 @@
         "Knowledge of safe operating temperature limits for SCR catalysts."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1752,7 +1768,7 @@
         "High‑voltage isolation leakage current indicates cable shielding fault"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1770,7 +1786,7 @@
         "Firmware loop timing in inverter control board causes mode transition delays"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1788,7 +1804,7 @@
         "Torque converter lock‑up solenoid delay causes first‑gear engagement delay after cold start"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1806,7 +1822,7 @@
         "DTC 8A00 indicates low shift solenoid voltage"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1824,7 +1840,7 @@
         "Clutch hydraulic pressure loss blocks neutral‑to‑first shift"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1842,7 +1858,7 @@
         "Linkage inspection confirms reason for shift lever movement without gear change"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1860,7 +1876,7 @@
         "Gear wear on the differential side causes load‑dependent whining"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1878,7 +1894,7 @@
         "Pinion gear wear on the left side can cause pulling and noise during high‑speed left turns"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1896,7 +1912,7 @@
         "Brown fluid discoloration indicates bearing wear in transaxle"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1914,7 +1930,7 @@
         "Drive shaft bearing failure causes high‑load vibration and sluggish acceleration"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1932,7 +1948,7 @@
         "Presence of a proper start‑request signal from the ignition switch"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1950,7 +1966,7 @@
         "Starter motor current draw under cranking load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1968,7 +1984,7 @@
         "Battery voltage drop under load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -1986,7 +2002,7 @@
         "Engine compression measurement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2004,7 +2020,7 @@
         "Fuel rail pressure under cranking conditions"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2022,7 +2038,7 @@
         "Fan motor voltage and mechanical operation under run conditions"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2040,7 +2056,7 @@
         "Role of coolant temperature sensor in heat regulation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2058,7 +2074,7 @@
         "Accuracy of coolant temperature sensor readings compared to gauge display"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2076,7 +2092,7 @@
         "Current consumption at the accessory socket during operation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2094,7 +2110,7 @@
         "Ignition coil spark output under cranking conditions"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2113,7 +2129,7 @@
         "Accessory failure due to excessive current draw"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2132,7 +2148,7 @@
         "Inadequate fuel pressure causes misfire"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2151,7 +2167,7 @@
         "Random misfire code can be explained by sporadic ignition upset"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2170,7 +2186,7 @@
         "Vehicle pulls left due to right front wheel steering"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2189,7 +2205,7 @@
         "Left front toe‑out caused initial steering offset"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2208,7 +2224,7 @@
         "Sensor voltage present but data not delivered to ECU"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2227,7 +2243,7 @@
         "Sensor wiring wrong rarely causes constant reading"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2246,7 +2262,7 @@
         "Stickiness in clutch release lever leads to power loss"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2265,7 +2281,7 @@
         "High pedal pressure does not free the drivetrain"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2284,7 +2300,7 @@
         "High‑RPM misfire due to low fuel pressure"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2302,7 +2318,7 @@
         "Intermittent spark plug failure can cause isolated misfire codes"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2320,7 +2336,7 @@
         "Fuel pressure drop causes power loss during acceleration"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2338,7 +2354,7 @@
         "If fuel pressure is lower than required, high-load power loss occurs"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2356,7 +2372,7 @@
         "Starter relay activation can be confirmed by voltage at the solenoid"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2374,7 +2390,7 @@
         "Starter relay must receive correct voltage to activate starter motor"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2392,7 +2408,7 @@
         "Auxiliary electrical load can reduce battery voltage enough to impede starting"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2410,7 +2426,7 @@
         "A starter relay stuck ON can block current to the solenoid"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2428,7 +2444,7 @@
         "High alternator output with steady battery voltage indicates regulator malfunction"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2446,7 +2462,7 @@
         "Low regulator output leads to battery sulfation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2464,7 +2480,7 @@
         "Firmware bug can generate duplicated CAN messages"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2482,7 +2498,7 @@
         "Identifying transceiver failure in CAN network"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2500,7 +2516,7 @@
         "Prioritizing safety PPE before HV testing"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2518,7 +2534,7 @@
         "Interpreting high‑voltage isolation measurement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2536,7 +2552,7 @@
         "Diagnosing EGR valve impact on exhaust temperature"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2554,7 +2570,7 @@
         "Linking NOx emission to fuel injection timing"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2572,7 +2588,7 @@
         "Assessing insulation resistance between HV battery and chassis"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2590,7 +2606,7 @@
         "Verifying high‑voltage fuse integrity under load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2608,7 +2624,7 @@
         "Identifying natural aging of HV battery cells"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2626,7 +2642,7 @@
         "Testing shift solenoid voltage during gear transition"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2644,7 +2660,7 @@
         "Verifying correct clutch hydraulic linkage after disc replacement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2662,7 +2678,7 @@
         "The shift solenoid provides adequate hydraulic pressure during gear changes."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2680,7 +2696,7 @@
         "Clutch release lever return spring is correctly tensioned."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2698,7 +2714,7 @@
         "Synchro ring wear is present on the engaged gear."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2716,7 +2732,7 @@
         "Output shaft bearing is properly lubricated and in sound condition."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2734,7 +2750,7 @@
         "Differential bearings are within spec and not worn."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2752,7 +2768,7 @@
         "Rear wheel speed sensors are producing valid signals."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2770,7 +2786,7 @@
         "Differential lock lever moves freely through its travel."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2788,7 +2804,7 @@
         "Drain plug gasket integrity is intact."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2806,7 +2822,7 @@
         "Snow‑drift mode selector switch signals the control module correctly."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2824,7 +2840,7 @@
         "Torque converter lock‑up clutch engages properly under load."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2842,7 +2858,7 @@
         "Verify that the battery voltage during cranking is at least 12.24 V (minimum for a 12 V battery)"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2860,7 +2876,7 @@
         "Check that battery cable clamps are free of corrosion and securely attached"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2878,7 +2894,7 @@
         "Confirm that the ignition coil is producing the expected coil voltage during cranking"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2896,7 +2912,7 @@
         "Check that each fuel injector receives proper solenoid voltage and opens during cranking"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2914,7 +2930,7 @@
         "Confirm that the thermostat opens normally as engine temperature rises above its set point"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2932,7 +2948,7 @@
         "Verify that coolant temperature rise above 120 °F during idle indicates overheating"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2950,7 +2966,7 @@
         "Verify that the amplifier has its own fuse rated above 20 A and isolated from the starter circuit"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2968,7 +2984,7 @@
         "Measure the voltage drop across the starter circuit during cranking with a DC voltmeter"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -2986,7 +3002,7 @@
         "Confirm that the voltage drop across the new battery cable during cranking is below 0.5 V"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3004,7 +3020,7 @@
         "Verify that the ignition coil is delivering correct spark timing at high RPM"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3022,7 +3038,7 @@
         "Check spark plug condition for misfire symptoms"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3040,7 +3056,7 @@
         "Differentiate misfire vs timing slip symptoms"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3058,7 +3074,7 @@
         "Recognize vibration symptom of misaligned wheels"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3076,7 +3092,7 @@
         "Confirm alignment results after service"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3094,7 +3110,7 @@
         "Identify primary cause of slight vehicle pull"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3112,7 +3128,7 @@
         "Interpret HVAC temperature readings after service"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3130,7 +3146,7 @@
         "Diagnose low oil pressure in HVAC circuit"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3148,7 +3164,7 @@
         "Identify priority HVAC diagnostic step for cooling failure"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3166,7 +3182,7 @@
         "Diagnose idle‑stalling symptom"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3184,7 +3200,7 @@
         "Determine root cause of fuel‑type specific stalling"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3203,7 +3219,7 @@
         "Stalled idling indicates insufficient idle air"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3222,7 +3238,7 @@
         "Scanning coil conditions ahead of spark plug replacement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3241,7 +3257,7 @@
         "Changing all plugs is unnecessary when log shows specific cylinder"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3260,7 +3276,7 @@
         "Higher coil resistance directly causes misfire during load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3279,7 +3295,7 @@
         "Voltage at rest indicates alternator health"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3298,7 +3314,7 @@
         "Starter motor engagement does not affect voltage if alternator is slipping"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3317,7 +3333,7 @@
         "Checking cell balance precedes alternator or regulator tests"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3336,7 +3352,7 @@
         "Starter click indicates solenoid engagement but insufficient torque"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3355,7 +3371,7 @@
         "Voltage drop at solenoid indicates battery or cable issue"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3374,7 +3390,7 @@
         "Sensor fault can cause no‑crank without battery issues"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3392,7 +3408,7 @@
         "Corrosion on the negative battery terminal can cause intermittent cranking failure"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3410,7 +3426,7 @@
         "High cable resistance causes voltage drop and starter failure during cranking"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3428,7 +3444,7 @@
         "Alternator under‑charging produces voltage dips during high accessory load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3446,7 +3462,7 @@
         "13.5 V at battery under idle confirms alternator output is within spec"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3464,7 +3480,7 @@
         "CAN bus termination is required to prevent continuous error loops"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3482,7 +3498,7 @@
         "Fully charging HV battery is a safety boundary for HV inverter servicing"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3500,7 +3516,7 @@
         "Miswired inverter can cause HV over‑voltage event"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3518,7 +3534,7 @@
         "I/O duty cycle monitoring is the correct next test after temperature validation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3536,7 +3552,7 @@
         "Higher CO₂ indicates possible catalytic converter restriction"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3554,7 +3570,7 @@
         "Differential pressure monitoring verifies proper filter operation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3572,7 +3588,7 @@
         "Verification of high‑voltage isolation resistance confirms bus integrity"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3590,7 +3606,7 @@
         "Importance of HV battery discharge during inverter maintenance"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3608,7 +3624,7 @@
         "Association between vacuum leaks and early gear shift hesitation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3626,7 +3642,7 @@
         "Drive cycle confirms shift correction after solenoid replacement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3644,7 +3660,7 @@
         "Clutch disc wear can cause non‑drive even with pedal release"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3662,7 +3678,7 @@
         "Correct torque application confirms clutch installation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3680,7 +3696,7 @@
         "High‑speed whining indicates axle shaft bearing wear"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3698,7 +3714,7 @@
         "Ring gear wear reduces torque transfer but not same‑speed rotation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3716,7 +3732,7 @@
         "Drain procedure requires engine cooling to prevent fluid splatter"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
@@ -3734,7 +3750,7 @@
         "Post‑drain fluid level check validates correct fill"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
