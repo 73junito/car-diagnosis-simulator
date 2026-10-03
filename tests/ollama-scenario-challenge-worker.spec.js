@@ -501,9 +501,9 @@ describe('Ollama scenario challenge worker', () => {
   test('uses a third attempt when two contract responses are invalid', async () => {
     const requests = [];
     const responses = [
-      JSON.stringify({ batch_id: 1, questions: makeQuestions(9) }),
-      JSON.stringify({ batch_id: 1, questions: makeQuestions(9) }),
-      JSON.stringify({ batch_id: 1, questions: makeQuestions(10) })
+      JSON.stringify({ batch_id: 1, questions: makeContractQuestions(9) }),
+      JSON.stringify({ batch_id: 1, questions: makeContractQuestions(9) }),
+      JSON.stringify({ batch_id: 1, questions: makeContractQuestions(10) })
     ];
     const fetchImpl = async (url, options) => {
       requests.push(JSON.parse(options.body));

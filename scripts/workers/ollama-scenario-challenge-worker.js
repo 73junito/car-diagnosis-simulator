@@ -215,6 +215,8 @@ async function requestChallengeChunk({
           `reason=${error.message}`
         );
 
+        lastFailureReason = error.message;
+
         if (attempt === 3) {
           throw new Error(
             `Ollama Cloud returned malformed message content for chunk ${chunkIndex}/${chunkCount} after 3 attempts ` +
