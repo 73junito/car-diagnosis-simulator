@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "queue_type": "scenario-challenge-evidence-intake",
   "created_at": "2026-10-03",
   "source_commit": "83322281261d6877002ae58b8b0b72502755c52d",
@@ -9,34 +9,61 @@
     "repository_visibility": "public",
     "full_question_payload_committed": false,
     "reason": "Question text, options, keyed answers, and explanations are intentionally not committed to the public repository.",
-    "durable_private_source_storage_status": "pending",
-    "source_discovery_blocked_until_durable_private_storage": true,
-    "actions_artifacts_are_temporary": true
+    "durable_private_source_storage_status": "verified-supabase-private",
+    "source_discovery_blocked_until_durable_private_storage": false,
+    "actions_artifacts_are_temporary": true,
+    "private_store_table": "public.scenario_challenge_review_artifacts",
+    "private_store_row_count": 4,
+    "private_store_access": "service_role_select_insert_only",
+    "private_store_rls_enabled": true,
+    "private_store_policy_count": 0,
+    "private_store_verified_at": "2026-10-03",
+    "verification_method": "server-side SHA-256 equality plus RLS/privilege verification"
   },
   "artifact_provenance": [
     {
       "batch_id": 1,
       "run_id": 37087583590,
       "digest": "sha256:cd002c33c12e139a8d1b1352d8e4b8728b0c0081472e73217a468ff56856930a",
-      "expires_at": "2026-10-17T01:54:43Z"
+      "expires_at": "2026-10-17T01:54:43Z",
+      "workflow_artifact_id": 11261312482,
+      "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710",
+      "private_store_table": "public.scenario_challenge_review_artifacts",
+      "private_store_batch_id": 1,
+      "private_store_verified": true
     },
     {
       "batch_id": 2,
       "run_id": 37088059898,
       "digest": "sha256:d94b8b44af75080251f215894fee46e4cdac5061062433229dd1456869bec49c",
-      "expires_at": "2026-10-17T02:03:15Z"
+      "expires_at": "2026-10-17T02:03:15Z",
+      "workflow_artifact_id": 11260978832,
+      "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634",
+      "private_store_table": "public.scenario_challenge_review_artifacts",
+      "private_store_batch_id": 2,
+      "private_store_verified": true
     },
     {
       "batch_id": 3,
       "run_id": 37088465496,
       "digest": "sha256:c3d142ab5b659eff592a20bb21d8a4a167b30f37b2b912022bab8dad295b380e",
-      "expires_at": "2026-10-17T02:08:43Z"
+      "expires_at": "2026-10-17T02:08:43Z",
+      "workflow_artifact_id": 11260999553,
+      "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7",
+      "private_store_table": "public.scenario_challenge_review_artifacts",
+      "private_store_batch_id": 3,
+      "private_store_verified": true
     },
     {
       "batch_id": 4,
       "run_id": 37088851220,
       "digest": "sha256:b39e5cd460a5de756903e399093feeaf5db366be85378c02df5f10a75bf7575e",
-      "expires_at": "2026-10-17T02:15:24Z"
+      "expires_at": "2026-10-17T02:15:24Z",
+      "workflow_artifact_id": 11261581961,
+      "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973",
+      "private_store_table": "public.scenario_challenge_review_artifacts",
+      "private_store_batch_id": 4,
+      "private_store_verified": true
     }
   ],
   "governance": {
@@ -71,12 +98,17 @@
         "Determining whether the starter motor shaft turns freely after confirming battery condition is adequate."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-639bb2579e85",
@@ -89,12 +121,17 @@
         "Identifying an open circuit in the solenoid wiring when low voltage is observed during cranking."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-3af93632c2f0",
@@ -107,12 +144,17 @@
         "Recognizing that loose battery clamp raises risk of arcing and potential fire hazard during cranking."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-8e77d18e29e3",
@@ -125,12 +167,17 @@
         "Using fuel pressure as an indicator to differentiate fuel system from ignition failure."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-ee001f71e35a",
@@ -143,12 +190,17 @@
         "Prioritizing the fuel pump as a likely cause for a failure to start after a brief crank in cold weather."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-0c55fb091dde",
@@ -161,12 +213,17 @@
         "Assessing the fuel pump as the primary suspect for a brief crank that fails to start in cold conditions."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-e3ad5ef8fc87",
@@ -179,12 +236,17 @@
         "Verifying thermostat operation as a key factor when the engine temperature climbs beyond normal range."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-7ac9d1c07fa6",
@@ -197,12 +259,17 @@
         "Identifying the temperature limit for radiator hoses that must not be exceeded to avoid damage."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-51788006d6cb",
@@ -215,12 +282,17 @@
         "Using voltage measurement during a load to confirm proper battery management system behavior."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-a900f4ce03ee",
@@ -233,12 +305,17 @@
         "Performing a coolant pressure test to verify successful radiator hose replacement."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-f4937fab0e9b",
@@ -251,12 +328,17 @@
         "Determine which circuit component causes the voltage drop when the auxiliary power is engaged"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-55a6836d17c7",
@@ -269,12 +351,17 @@
         "Identify which component is unlikely to add DC resistance during a high‑current test"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-e35002f747c3",
@@ -287,12 +374,17 @@
         "Determine the likely cause of a weak spark on a specific cylinder during a misfire"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-6cfbd0aa542e",
@@ -305,12 +397,17 @@
         "Identify the component most likely causing warm‑up misfire"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-3bde61757b4d",
@@ -323,12 +420,17 @@
         "Differentiate fuel supply vs ignition problems using diagnostics"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-4d6682f8fc27",
@@ -341,12 +443,17 @@
         "Identify the source of steering wheel drag after an alignment"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-895c79a5b903",
@@ -359,12 +466,17 @@
         "Determine the cause of sustained understeer after alignment"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-a74b8ce07c1a",
@@ -377,12 +489,17 @@
         "Identify which alignment variable causes uneven tire wear"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-1ebac1fe1a66",
@@ -395,12 +512,17 @@
         "Determine the component most likely causing insufficient cooling under load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-86c36ff57aab",
@@ -413,12 +535,17 @@
         "Identify which safety boundary is compromised by a 105 °C thermostat reading"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-9a5b2211016d",
@@ -434,12 +561,17 @@
         "Confirm cabin temperature sensor output"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-1f9fec4cf349",
@@ -455,12 +587,17 @@
         "Validate ignition coil health"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-124697caa62d",
@@ -476,12 +613,17 @@
         "Validate torque converter lock‑up pressure"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-3240b8344667",
@@ -497,12 +639,17 @@
         "Inspect throttle body connections"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-1ad8bd11336a",
@@ -518,12 +665,17 @@
         "Verify idle air control valve operation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-55ea5f7582e7",
@@ -539,12 +691,17 @@
         "Check battery charge level"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-5c36a387ee20",
@@ -560,12 +717,17 @@
         "Verify starter solenoid load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-00b9b70eb6e9",
@@ -581,12 +743,17 @@
         "Measure fuse resistance"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-4a56802c3491",
@@ -602,12 +769,17 @@
         "Ensure battery cable connection quality"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-ef8e7e63d555",
@@ -623,12 +795,17 @@
         "Check stored fault codes"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-7c9bfca22b87",
@@ -641,12 +818,17 @@
         "Idle Air Control Valve is operating within specified response range"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-261d4e1a0516",
@@ -659,12 +841,17 @@
         "Battery cables are fully seated and free of corrosion"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-d31fc9ce93e7",
@@ -677,12 +864,17 @@
         "Battery internal resistance remains below specified maximum"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-545e31edc689",
@@ -695,12 +887,17 @@
         "High‑current ground strap maintains low resistance"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-dc823317c5eb",
@@ -713,12 +910,17 @@
         "CAN bus termination resistors are 120 Ω and correctly installed"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-6629990694f1",
@@ -731,12 +933,17 @@
         "CAN application protocols produce valid data frames"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-7cb4bec06bfd",
@@ -749,12 +956,17 @@
         "HV disconnect switch provides full isolation when opened"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-662fe6f748fb",
@@ -767,12 +979,17 @@
         "Low‑voltage battery is correctly reporting its voltage to the battery management system"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-5229bd2ade2a",
@@ -785,12 +1002,17 @@
         "Boost pressure is within the specified range during full throttle"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-a96ed9a7ead6",
@@ -803,12 +1025,17 @@
         "DPF regeneration valve operates according to the regeneration cycle times"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-29f02c3e20c2",
@@ -821,12 +1048,17 @@
         "The HV disconnect switch is wired to isolate the high‑voltage bus when opened."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-aca4991fec58",
@@ -839,12 +1071,17 @@
         "A faulty transmission fluid temperature sensor can cause delayed shifting in hydraulic automatic transmissions."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-740dfd01f966",
@@ -857,12 +1094,17 @@
         "Misaligned shift link cables can prevent a manual transmission from changing gear."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-5600f707d04f",
@@ -875,12 +1117,17 @@
         "A higher differential fluid temperature causes audible whining at high speeds."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-7df2c653af26",
@@ -893,12 +1140,17 @@
         "Pump‑driven transmissions require a minimum fluid pressure for safe gear engagement."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-ac12191c48df",
@@ -911,12 +1163,17 @@
         "The high‑voltage DC–DC converter steps down bulk battery voltage to low‑voltage systems in EV/E‑Hybrid vehicles."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-2cbebc62c409",
@@ -929,12 +1186,17 @@
         "The transmission fluid level gauge is used to verify fluid volume after replacement."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-7eff3c3f3da0",
@@ -947,12 +1209,17 @@
         "Shift‑spring failure can cause a vehicle to stall when engaged in reverse gear."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-226b1ad5bd5f",
@@ -965,12 +1232,17 @@
         "Worn differential gears produce a whine that is unaffected by fluid temperature or level."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-290d47a1d35b",
@@ -983,12 +1255,17 @@
         "A malfunctioning torque converter clutch can cause slipping in low gears of a transaxle system."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 1,
+        "payload_sha256": "8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-39e69be197ca",
@@ -1002,12 +1279,17 @@
         "Interpretation of slow cranking symptom"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-75dc1353d7e3",
@@ -1021,12 +1303,17 @@
         "Isolation of starter circuit faults"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-a9b49de277b4",
@@ -1040,12 +1327,17 @@
         "Interpretation of spark absence"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-9a7e2e2b5e37",
@@ -1059,12 +1351,17 @@
         "Ignition system integrity"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-a4e8b57bb42e",
@@ -1078,12 +1375,17 @@
         "Interpretation of coolant temperature sensor data"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-93ce3ae8baed",
@@ -1097,12 +1399,17 @@
         "System reasoning for overheating at idle"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-783a06d86498",
@@ -1116,12 +1423,17 @@
         "Safety consideration of voltage drop"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-c2eeae4e7440",
@@ -1135,12 +1447,17 @@
         "Verification of relay supply"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-ac02d14baca0",
@@ -1154,12 +1471,17 @@
         "Differentiation from lean condition symptoms"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-da9d94d49f6c",
@@ -1173,12 +1495,17 @@
         "Association of sensor failure with Type 1 code"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-740a0cb43113",
@@ -1191,12 +1518,17 @@
         "Vehicle drift while traveling straight indicates wheel misalignment"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-c6ae90725115",
@@ -1209,12 +1541,17 @@
         "Visual inspection of tire tread wear is a valid first diagnostic step to confirm wheel alignment"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-777930599f0a",
@@ -1227,12 +1564,17 @@
         "Low suction pressure readings indicate refrigerant leak"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-59ad6fed0c5e",
@@ -1245,12 +1587,17 @@
         "Blower motor capacitor failure causes low‑speed noise and reduced airflow"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-6f31dc1fda9d",
@@ -1263,12 +1610,17 @@
         "Throttle position sensor voltage measurement is a valid next diagnostic step after confirming power"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-5562ffaa7eb6",
@@ -1281,12 +1633,17 @@
         "DTC 'low idle valve position' indicates idle air control valve issue"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-1b49e561e76d",
@@ -1299,12 +1656,17 @@
         "Spark plug failure commonly causes sudden engine sputter without DTC"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-b7d2e568e325",
@@ -1317,12 +1679,17 @@
         "Intake manifold vacuum leak causes acceleration hesitation but may not trigger misfire code"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-9efc67258f89",
@@ -1335,12 +1702,17 @@
         "Crankshaft position sensor signal indicates spark timing"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-167f35a3a922",
@@ -1353,12 +1725,17 @@
         "Measurement of alternator output under load helps identify power loss during acceleration"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-f62b74190cfc",
@@ -1374,12 +1751,17 @@
         "Parasitic load detection"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-4ffc2d176a2a",
@@ -1394,12 +1776,17 @@
         "Battery voltage stability"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-cc7997347999",
@@ -1414,12 +1801,17 @@
         "Starter solenoid activation behavior"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-91b8d712108d",
@@ -1434,12 +1826,17 @@
         "Starter circuitry integrity"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-e895af1e1ff2",
@@ -1454,12 +1851,17 @@
         "Starter gear engagement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-1021ba38e79b",
@@ -1474,12 +1876,17 @@
         "Starter load behavior"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-1d8cb915e63b",
@@ -1494,12 +1901,17 @@
         "Effect of vacuum leak on idle"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-c6662e1aaa98",
@@ -1514,12 +1926,17 @@
         "Idle air control valve operation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-dc7bbdb21c65",
@@ -1534,12 +1951,17 @@
         "Battery charging characteristics"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-8ddd2e64ffbf",
@@ -1554,12 +1976,17 @@
         "Engine load impact on charging"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-815c47e02d0c",
@@ -1572,12 +1999,17 @@
         "Understanding how a faulty voltage regulator affects alternator output voltage as a function of engine speed."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-bc6278901010",
@@ -1590,12 +2022,17 @@
         "Differentiation between transceiver‑related CRC errors and bus wire faults."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-412e7361c2fc",
@@ -1608,12 +2045,17 @@
         "Identification of the step that best isolates a CAN bus CRC error source."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-e4264b7bf867",
@@ -1626,12 +2068,17 @@
         "Interpretation of abnormal CAN H line voltage during bus idle."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-7170d29c383c",
@@ -1644,12 +2091,17 @@
         "Recognition of a critical current limit in high‑voltage isolation operations."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-17e97cc97681",
@@ -1662,12 +2114,17 @@
         "Identification of primary cause for sudden HV battery voltage drop."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-8e95fe0ce811",
@@ -1680,12 +2137,17 @@
         "Diagnostic procedure to confirm a neutral safety switch fault."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-21c2b0ce56d9",
@@ -1698,12 +2160,17 @@
         "Knowledge of components that constitute a diesel aftertreatment system."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-3334c3049e1c",
@@ -1716,12 +2183,17 @@
         "Interpretation of DPF pressure differential changes."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-3ca2cd9d2c58",
@@ -1734,12 +2206,17 @@
         "Knowledge of safe operating temperature limits for SCR catalysts."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-26b40d6f628c",
@@ -1752,12 +2229,17 @@
         "High‑voltage isolation leakage current indicates cable shielding fault"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-806c3699de54",
@@ -1770,12 +2252,17 @@
         "Firmware loop timing in inverter control board causes mode transition delays"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-4f7ae021ec92",
@@ -1788,12 +2275,17 @@
         "Torque converter lock‑up solenoid delay causes first‑gear engagement delay after cold start"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-4d81397729eb",
@@ -1806,12 +2298,17 @@
         "DTC 8A00 indicates low shift solenoid voltage"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-2db7693cec66",
@@ -1824,12 +2321,17 @@
         "Clutch hydraulic pressure loss blocks neutral‑to‑first shift"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-1bbac8f2c549",
@@ -1842,12 +2344,17 @@
         "Linkage inspection confirms reason for shift lever movement without gear change"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-a5f9536e8d92",
@@ -1860,12 +2367,17 @@
         "Gear wear on the differential side causes load‑dependent whining"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-377982fc4281",
@@ -1878,12 +2390,17 @@
         "Pinion gear wear on the left side can cause pulling and noise during high‑speed left turns"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-2e7200287683",
@@ -1896,12 +2413,17 @@
         "Brown fluid discoloration indicates bearing wear in transaxle"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-b467e3b94806",
@@ -1914,12 +2436,17 @@
         "Drive shaft bearing failure causes high‑load vibration and sluggish acceleration"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 2,
+        "payload_sha256": "d4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-f45393f49c91",
@@ -1932,12 +2459,17 @@
         "Presence of a proper start‑request signal from the ignition switch"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-a9c1fa150e6f",
@@ -1950,12 +2482,17 @@
         "Starter motor current draw under cranking load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-f45af6713bf3",
@@ -1968,12 +2505,17 @@
         "Battery voltage drop under load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-d09d9d0c5edc",
@@ -1986,12 +2528,17 @@
         "Engine compression measurement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-d59777a6a85e",
@@ -2004,12 +2551,17 @@
         "Fuel rail pressure under cranking conditions"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-3c47b27611f0",
@@ -2022,12 +2574,17 @@
         "Fan motor voltage and mechanical operation under run conditions"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-4853afd8d487",
@@ -2040,12 +2597,17 @@
         "Role of coolant temperature sensor in heat regulation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-ce841c0b75d2",
@@ -2058,12 +2620,17 @@
         "Accuracy of coolant temperature sensor readings compared to gauge display"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-8cfb0ca1d757",
@@ -2076,12 +2643,17 @@
         "Current consumption at the accessory socket during operation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-f6a3fc06d9c8",
@@ -2094,12 +2666,17 @@
         "Ignition coil spark output under cranking conditions"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-e1939df0dbdb",
@@ -2113,12 +2690,17 @@
         "Accessory failure due to excessive current draw"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-015efccd4f70",
@@ -2132,12 +2714,17 @@
         "Inadequate fuel pressure causes misfire"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-3a1ac56dc4da",
@@ -2151,12 +2738,17 @@
         "Random misfire code can be explained by sporadic ignition upset"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-154160a431ea",
@@ -2170,12 +2762,17 @@
         "Vehicle pulls left due to right front wheel steering"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-6d1012dbf5f2",
@@ -2189,12 +2786,17 @@
         "Left front toe‑out caused initial steering offset"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-184097bcebed",
@@ -2208,12 +2810,17 @@
         "Sensor voltage present but data not delivered to ECU"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-6df7909cbfd2",
@@ -2227,12 +2834,17 @@
         "Sensor wiring wrong rarely causes constant reading"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-8a1ed9a7b649",
@@ -2246,12 +2858,17 @@
         "Stickiness in clutch release lever leads to power loss"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-6d871205ae69",
@@ -2265,12 +2882,17 @@
         "High pedal pressure does not free the drivetrain"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-e4d7eaee514f",
@@ -2284,12 +2906,17 @@
         "High‑RPM misfire due to low fuel pressure"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-4878528dfe44",
@@ -2302,12 +2929,17 @@
         "Intermittent spark plug failure can cause isolated misfire codes"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-814fe5a4b20f",
@@ -2320,12 +2952,17 @@
         "Fuel pressure drop causes power loss during acceleration"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-c4d73097c860",
@@ -2338,12 +2975,17 @@
         "If fuel pressure is lower than required, high-load power loss occurs"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-160077755947",
@@ -2356,12 +2998,17 @@
         "Starter relay activation can be confirmed by voltage at the solenoid"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-a10f4ca2545c",
@@ -2374,12 +3021,17 @@
         "Starter relay must receive correct voltage to activate starter motor"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-409522364b54",
@@ -2392,12 +3044,17 @@
         "Auxiliary electrical load can reduce battery voltage enough to impede starting"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-200b77814cd2",
@@ -2410,12 +3067,17 @@
         "A starter relay stuck ON can block current to the solenoid"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-4b7063fad7f3",
@@ -2428,12 +3090,17 @@
         "High alternator output with steady battery voltage indicates regulator malfunction"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-d3ae3441eed6",
@@ -2446,12 +3113,17 @@
         "Low regulator output leads to battery sulfation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-f0ffcc31d315",
@@ -2464,12 +3136,17 @@
         "Firmware bug can generate duplicated CAN messages"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-1679a4016f97",
@@ -2482,12 +3159,17 @@
         "Identifying transceiver failure in CAN network"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-7f03faec32e8",
@@ -2500,12 +3182,17 @@
         "Prioritizing safety PPE before HV testing"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-fa75ca859fe5",
@@ -2518,12 +3205,17 @@
         "Interpreting high‑voltage isolation measurement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-478b0e1fdb77",
@@ -2536,12 +3228,17 @@
         "Diagnosing EGR valve impact on exhaust temperature"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-4371bf3cc50f",
@@ -2554,12 +3251,17 @@
         "Linking NOx emission to fuel injection timing"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-090db3a27464",
@@ -2572,12 +3274,17 @@
         "Assessing insulation resistance between HV battery and chassis"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-d2b535a83992",
@@ -2590,12 +3297,17 @@
         "Verifying high‑voltage fuse integrity under load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-594a383a75f0",
@@ -2608,12 +3320,17 @@
         "Identifying natural aging of HV battery cells"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-55a08c7ecad5",
@@ -2626,12 +3343,17 @@
         "Testing shift solenoid voltage during gear transition"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-316188b45427",
@@ -2644,12 +3366,17 @@
         "Verifying correct clutch hydraulic linkage after disc replacement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-2a1404e26c60",
@@ -2662,12 +3389,17 @@
         "The shift solenoid provides adequate hydraulic pressure during gear changes."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-73d850242f0d",
@@ -2680,12 +3412,17 @@
         "Clutch release lever return spring is correctly tensioned."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-a05592de6bac",
@@ -2698,12 +3435,17 @@
         "Synchro ring wear is present on the engaged gear."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-7006ddf726f7",
@@ -2716,12 +3458,17 @@
         "Output shaft bearing is properly lubricated and in sound condition."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-56ef6631da88",
@@ -2734,12 +3481,17 @@
         "Differential bearings are within spec and not worn."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-8c76c46192b4",
@@ -2752,12 +3504,17 @@
         "Rear wheel speed sensors are producing valid signals."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-3901acbb5d5a",
@@ -2770,12 +3527,17 @@
         "Differential lock lever moves freely through its travel."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-574255bfbe6d",
@@ -2788,12 +3550,17 @@
         "Drain plug gasket integrity is intact."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-960fec07aae9",
@@ -2806,12 +3573,17 @@
         "Snow‑drift mode selector switch signals the control module correctly."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-e1bbca6cc183",
@@ -2824,12 +3596,17 @@
         "Torque converter lock‑up clutch engages properly under load."
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 3,
+        "payload_sha256": "37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-e43656b500f8",
@@ -2842,12 +3619,17 @@
         "Verify that the battery voltage during cranking is at least 12.24 V (minimum for a 12 V battery)"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-challenge-9c6cf7f965ba",
@@ -2860,12 +3642,17 @@
         "Check that battery cable clamps are free of corrosion and securely attached"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-b048e3377d3f",
@@ -2878,12 +3665,17 @@
         "Confirm that the ignition coil is producing the expected coil voltage during cranking"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "no-start-challenge-4b4bcade995f",
@@ -2896,12 +3688,17 @@
         "Check that each fuel injector receives proper solenoid voltage and opens during cranking"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-7d2200376dbe",
@@ -2914,12 +3711,17 @@
         "Confirm that the thermostat opens normally as engine temperature rises above its set point"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "overheating-challenge-d9cd8d4ad0cd",
@@ -2932,12 +3734,17 @@
         "Verify that coolant temperature rise above 120 °F during idle indicates overheating"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-3dc8306d5e41",
@@ -2950,12 +3757,17 @@
         "Verify that the amplifier has its own fuse rated above 20 A and isolated from the starter circuit"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-82edcef899cf",
@@ -2968,12 +3780,17 @@
         "Measure the voltage drop across the starter circuit during cranking with a DC voltmeter"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "electrical-load-challenge-027305ff09e7",
@@ -2986,12 +3803,17 @@
         "Confirm that the voltage drop across the new battery cable during cranking is below 0.5 V"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-0158d36d1731",
@@ -3004,12 +3826,17 @@
         "Verify that the ignition coil is delivering correct spark timing at high RPM"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-7815d5e02432",
@@ -3022,12 +3849,17 @@
         "Check spark plug condition for misfire symptoms"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "misfire-challenge-fc623d535474",
@@ -3040,12 +3872,17 @@
         "Differentiate misfire vs timing slip symptoms"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-2eecfa1347ff",
@@ -3058,12 +3895,17 @@
         "Recognize vibration symptom of misaligned wheels"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-cfac5fac5b9d",
@@ -3076,12 +3918,17 @@
         "Confirm alignment results after service"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "steering-alignment-challenge-25b5681ff59f",
@@ -3094,12 +3941,17 @@
         "Identify primary cause of slight vehicle pull"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-a311cab55d42",
@@ -3112,12 +3964,17 @@
         "Interpret HVAC temperature readings after service"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-f20da157093b",
@@ -3130,12 +3987,17 @@
         "Diagnose low oil pressure in HVAC circuit"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "hvac-cooling-challenge-65ac84aa97ca",
@@ -3148,12 +4010,17 @@
         "Identify priority HVAC diagnostic step for cooling failure"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-44f3eef3d40d",
@@ -3166,12 +4033,17 @@
         "Diagnose idle‑stalling symptom"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-b5f1fedeab21",
@@ -3184,12 +4056,17 @@
         "Determine root cause of fuel‑type specific stalling"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "stalling-challenge-5eaa55940670",
@@ -3203,12 +4080,17 @@
         "Stalled idling indicates insufficient idle air"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-f42e125fc1ad",
@@ -3222,12 +4104,17 @@
         "Scanning coil conditions ahead of spark plug replacement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-4bf835e20fa4",
@@ -3241,12 +4128,17 @@
         "Changing all plugs is unnecessary when log shows specific cylinder"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "misfire-9-challenge-d52b83c19d83",
@@ -3260,12 +4152,17 @@
         "Higher coil resistance directly causes misfire during load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-d3efb3656233",
@@ -3279,12 +4176,17 @@
         "Voltage at rest indicates alternator health"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-f82217621bde",
@@ -3298,12 +4200,17 @@
         "Starter motor engagement does not affect voltage if alternator is slipping"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "power-loss-challenge-bbb81a5edcd1",
@@ -3317,12 +4224,17 @@
         "Checking cell balance precedes alternator or regulator tests"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-4c8e35fac675",
@@ -3336,12 +4248,17 @@
         "Starter click indicates solenoid engagement but insufficient torque"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-e38e66419a91",
@@ -3355,12 +4272,17 @@
         "Voltage drop at solenoid indicates battery or cable issue"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "no-crank-11-challenge-3ca20e11a699",
@@ -3374,12 +4296,17 @@
         "Sensor fault can cause no‑crank without battery issues"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-aa9a7f7c2726",
@@ -3392,12 +4319,17 @@
         "Corrosion on the negative battery terminal can cause intermittent cranking failure"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "intermittent-starting-challenge-04fc727fe204",
@@ -3410,12 +4342,17 @@
         "High cable resistance causes voltage drop and starter failure during cranking"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-f1bef86b1cba",
@@ -3428,12 +4365,17 @@
         "Alternator under‑charging produces voltage dips during high accessory load"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "charging-system-challenge-e275f02bf6ba",
@@ -3446,12 +4388,17 @@
         "13.5 V at battery under idle confirms alternator output is within spec"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-400668dbb42f",
@@ -3464,12 +4411,17 @@
         "CAN bus termination is required to prevent continuous error loops"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "can-bus-network-challenge-f660cae89803",
@@ -3482,12 +4434,17 @@
         "Fully charging HV battery is a safety boundary for HV inverter servicing"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-91e87edfe191",
@@ -3500,12 +4457,17 @@
         "Miswired inverter can cause HV over‑voltage event"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-challenge-e6d21772bbc4",
@@ -3518,12 +4480,17 @@
         "I/O duty cycle monitoring is the correct next test after temperature validation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-2f8e911bca56",
@@ -3536,12 +4503,17 @@
         "Higher CO₂ indicates possible catalytic converter restriction"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "diesel-aftertreatment-challenge-5fcafeeefd7a",
@@ -3554,12 +4526,17 @@
         "Differential pressure monitoring verifies proper filter operation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-af341ebfd79e",
@@ -3572,12 +4549,17 @@
         "Verification of high‑voltage isolation resistance confirms bus integrity"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "hybrid-ev-17-challenge-4b52805a9d06",
@@ -3590,12 +4572,17 @@
         "Importance of HV battery discharge during inverter maintenance"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-c45e62d727e5",
@@ -3608,12 +4595,17 @@
         "Association between vacuum leaks and early gear shift hesitation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "automatic-transmission-challenge-cad849e4b408",
@@ -3626,12 +4618,17 @@
         "Drive cycle confirms shift correction after solenoid replacement"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-f46266be7751",
@@ -3644,12 +4641,17 @@
         "Clutch disc wear can cause non‑drive even with pedal release"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "manual-transmission-challenge-005797c8520c",
@@ -3662,12 +4664,17 @@
         "Correct torque application confirms clutch installation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-3a9b25b4555a",
@@ -3680,12 +4687,17 @@
         "High‑speed whining indicates axle shaft bearing wear"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "differential-challenge-1b30784e1916",
@@ -3698,12 +4710,17 @@
         "Ring gear wear reduces torque transfer but not same‑speed rotation"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-371b677261e5",
@@ -3716,12 +4733,17 @@
         "Drain procedure requires engine cooling to prevent fluid splatter"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     },
     {
       "synthetic_draft_id": "transaxle-challenge-b2bbe724fff5",
@@ -3734,12 +4756,17 @@
         "Post‑drain fluid level check validates correct fill"
       ],
       "candidate_sources": [],
-      "mapping_status": "blocked-pending-durable-source-artifact",
+      "mapping_status": "unmapped-source-discovery-required",
       "evidence_mapping_completed": false,
       "citation_validation_completed": false,
       "human_technical_review_completed": false,
       "human_instructional_review_completed": false,
-      "approved": false
+      "approved": false,
+      "durable_source_ref": {
+        "table": "public.scenario_challenge_review_artifacts",
+        "batch_id": 4,
+        "payload_sha256": "9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973"
+      }
     }
   ]
 }
