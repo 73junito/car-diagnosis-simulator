@@ -42,6 +42,28 @@ function validateChunkScenarioAllocation(questions, allocation) {
   }
 }
 
+function normalizeQuestionStem(value) {
+  return typeof value === 'string'
+    ? value.trim().toLowerCase().replace(/\s+/g, ' ')
+    : '';
+}
+
+function validateChunkQuestionStems(questions, priorQuestions = []) {
+  const seen = new Set(
+    priorQuestions
+      .map((item) => normalizeQuestionStem(item?.question))
+      .filter(Boolean)
+  );
+
+  for (const question of questions) {
+    const stem = normalizeQuestionStem(question?.question);
+    if (stem.length < 15 || seen.has(stem)) {
+      throw new Error('Model response contained an invalid or duplicate question stem.');
+    }
+    seen.add(stem);
+  }
+}
+
 function buildAllocationChunks(allocation, maxQuestions = MAX_QUESTIONS_PER_REQUEST) {
   if (!Number.isInteger(maxQuestions) || maxQuestions < 1) {
     throw new Error('maxQuestions must be a positive integer.');
@@ -88,6 +110,7 @@ async function requestChallengeChunk({
   allocation,
   scenarioContext,
   retainedQuestions,
+  priorGeneratedQuestions,
   deadlineAt,
   fetchImpl,
   chunkIndex,
@@ -113,7 +136,7 @@ async function requestChallengeChunk({
           {
             role: 'user',
             content: [
-              'The previous response could not be parsed as the required JSON object.',
+              'The previous response did not satisfy the required output contract.',
               'Retry from the original instructions.',
               'Return one complete JSON object only; no markdown, prose, code fences, prefix, or suffix.',
               'The object must match the supplied JSON schema and contain the full requested chunk.'
@@ -171,6 +194,7 @@ async function requestChallengeChunk({
           throw new Error('Model response question count did not match the requested chunk.');
         }
         validateChunkScenarioAllocation(generated.questions, allocation);
+        validateChunkQuestionStems(generated.questions, priorGeneratedQuestions);
 
         return generated.questions;
       } catch (error) {
@@ -218,19 +242,17 @@ async function runScenarioChallengeWorker({
     const scenarioIds = new Set(Object.keys(chunk.allocation));
     const chunkScenarioContext = (scenarioContext || [])
       .filter((row) => scenarioIds.has(row.scenario_id));
-    const previouslyGeneratedForChunk = questions
-      .filter((row) => scenarioIds.has(row.scenario_id))
-      .map((row) => ({
-        scenario_id: row.scenario_id,
-        question_id: null,
-        status: 'synthetic-draft-current-run',
-        question: row.question,
-        options: row.options,
-        correct_answer: row.correct_answer
-      }));
+    const previouslyGeneratedForPrompt = questions.map((row) => ({
+      scenario_id: row.scenario_id,
+      question_id: null,
+      status: 'synthetic-draft-current-run',
+      question: row.question,
+      options: row.options,
+      correct_answer: row.correct_answer
+    }));
     const chunkRetainedQuestions = [
       ...(retainedQuestions || []).filter((row) => scenarioIds.has(row.scenario_id)),
-      ...previouslyGeneratedForChunk
+      ...previouslyGeneratedForPrompt
     ];
 
     const generatedQuestions = await requestChallengeChunk({
@@ -242,6 +264,7 @@ async function runScenarioChallengeWorker({
       allocation: chunk.allocation,
       scenarioContext: chunkScenarioContext,
       retainedQuestions: chunkRetainedQuestions,
+      priorGeneratedQuestions: questions,
       deadlineAt,
       fetchImpl,
       chunkIndex: index + 1,
@@ -269,5 +292,6 @@ module.exports = {
   describeContent,
   buildAllocationChunks,
   validateChunkScenarioAllocation,
+  validateChunkQuestionStems,
   MAX_QUESTIONS_PER_REQUEST
 };
