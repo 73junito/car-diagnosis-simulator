@@ -91,7 +91,9 @@ function validateQueue(doc, plan) {
   }
 
   const storage = doc.storage_boundary;
-  if (storage?.repository_visibility !== 'public' || storage?.full_question_payload_committed !== false || storage?.durable_private_source_storage_status !== 'verified-supabase-private' || storage?.source_discovery_blocked_until_durable_private_storage !== false || storage?.private_store_table !== PRIVATE_STORE_TABLE || storage?.private_store_row_count !== 4 || storage?.private_store_access !== 'service_role_select_insert_only' || storage?.private_store_rls_enabled !== true || storage?.private_store_policy_count !== 0) {
+  if (storage?.repository_visibility !== 'public' || storage?.full_question_payload_committed !== false || storage?.durable_private_source_storage_status !== 'verified-supabase-private' || storage?.source_discovery_blocked_until_durable_private_storage !== false || storage?.private_store_table !== PRIVATE_STORE_TABLE || storage?.private_store_row_count !== 4 || storage?.private_store_access !== 'service_role_select_insert_only' || storage?.private_store_rls_enabled !== true || storage?.private_store_policy_count !== 0 ||
+      storage?.private_store_verified_at !== '2026-10-03' ||
+      storage?.verification_method !== 'server-side SHA-256 equality plus RLS/privilege verification') {
     throw new Error('Storage boundary does not match the verified private artifact store.');
   }
 
