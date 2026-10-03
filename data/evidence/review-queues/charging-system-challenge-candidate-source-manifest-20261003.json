@@ -64,8 +64,10 @@
       ],
       "applicability_caveat": "Historical vehicle examples and fixed voltage ranges are not universal; regulator bypass procedures are hazardous and must not become generic learner instructions.",
       "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "provenance_classification": "us-federal-government-publication",
       "rights_status": "rights-review-required",
-      "rights_basis": "SECNAVINST 5870.9 can place federal employee official-duty works outside copyright, but chapter authorship and third-party figure/text provenance are unverified. Government hosting alone is not proof of public-domain status.",
+      "rights_basis": "U.S. federal government publication; official NAVEDTRA occupational reference confirmed; reuse/public-domain determination pending artifact-level rights review.",
+      "provenance_note": "SECNAVINST 5870.9 can place federal employee official-duty works outside copyright, but chapter authorship and third-party figure/text provenance are unverified. Government hosting alone is not proof of public-domain status; PUBLIC_DOMAIN here is a candidate classification only, never a completed rights determination.",
       "rights_reference": "data/evidence/review-queues/charging-system-source-intake-20260924.json; data/evidence/source-state-registry.json",
       "evidence_decision": "candidate-only",
       "permitted_project_use": "bibliographic metadata, URL/section locators, and project-authored factual summary only",
@@ -95,8 +97,10 @@
       ],
       "applicability_caveat": "Military-specific voltages, switch procedures and ohm limits must not become generic contemporary passenger-car guidance.",
       "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "provenance_classification": "us-federal-government-publication",
       "rights_status": "rights-review-required",
-      "rights_basis": "Archive item carries a Public Domain Mark but Archive disclaims rights-metadata guarantees; scanned title page and Secretary of the Army order indicate official publication. Authorship, contractor and third-party illustration provenance remain unverified.",
+      "rights_basis": "U.S. federal government publication; public-release provenance indicated by the official Army title page, Secretary of the Army order and GPO stock number; reuse/public-domain determination pending artifact-level rights review.",
+      "provenance_note": "Internet Archive's Public Domain Mark is not TorqueMind's rights determination and Archive disclaims rights-metadata guarantees; authorship, contractor and third-party illustration provenance remain unverified. PUBLIC_DOMAIN here is a candidate classification only, never a completed rights determination.",
       "rights_reference": "data/evidence/review-queues/charging-system-source-intake-20260924.json",
       "evidence_decision": "candidate-only",
       "permitted_project_use": "bibliographic metadata, URL/page locators, and project-authored factual summary only",
@@ -129,8 +133,10 @@
       ],
       "applicability_caveat": "Section-level locators are recorded from the handbook table of contents; exact subsections for individual claims must be confirmed during artifact capture and technical review.",
       "rights_classification_candidate": "PUBLIC_DOMAIN",
+      "provenance_classification": "us-federal-government-publication",
       "rights_status": "rights-review-required",
-      "rights_basis": "DOE-published technical handbook available via energy.gov and OSTI DOI. Project policy forbids inferring public-domain status from government hosting alone; contractor authorship and any third-party content must be verified at artifact capture.",
+      "rights_basis": "U.S. federal government publication; public release confirmed; reuse/public-domain determination pending artifact-level rights review",
+      "provenance_note": "Distribution Statement A: approved for public release; distribution is unlimited (energy.gov copy, September 1995). The handbook states it draws on earlier site primers and other materials, so third-party content provenance must be verified at artifact capture. PUBLIC_DOMAIN here is a candidate classification only; project policy forbids inferring public-domain status from government hosting or a distribution statement alone.",
       "rights_reference": "discovered 2026-10-03; OSTI DOI 10.2172/205011",
       "evidence_decision": "candidate-only",
       "permitted_project_use": "bibliographic metadata, URL/section locators, and project-authored factual summary only",
@@ -139,17 +145,18 @@
       "approval_effect": "none"
     },
 {
-      "candidate_id": "bccampus-flinn-alternator-2021",
-      "title": "3.2: The Alternator",
+      "candidate_id": "bccampus-flinn-alternator-2018",
+      "title": "3.2: The Alternator (Trigonometry and Single Phase AC Generation for Electricians)",
       "author_or_issuer": "Chad Flinn",
-      "publisher": "BCcampus / Workforce LibreTexts",
+      "publisher": "British Columbia Institute of Technology (BCIT) via BCcampus; chapter hosted on Workforce LibreTexts",
       "canonical_url": "https://workforce.libretexts.org/Bookshelves/Electronics_Technology/Trigonometry_and_Single_Phase_AC_Generation_for_Electricians_(Flinn)/03:_AC_Generation/3.02:_The_Alternator",
+      "secondary_locator_url": "https://pressbooks.bccampus.ca/trigforelectricians/",
       "section_or_page": [
         "Section 3.02: stationary armature and rotating field distinction",
         "Section 3.02: slip rings and brushes",
         "Section 3.02: field-strength control of alternator voltage"
       ],
-      "publication_or_revision_date": "2021-08-23 (page modified date)",
+      "publication_or_revision_date": "2018-12-14 (book publication date per pressbooks.bccampus.ca/trigforelectricians, copyright 2018 BCIT); LibreTexts chapter page last modified 2021-08-23",
       "source_type": "oer-educational-chapter",
       "observed_scope": [
         "alternator construction fundamentals",
@@ -159,7 +166,7 @@
       "rights_classification_candidate": "CC_BY",
       "rights_license_url": "https://creativecommons.org/licenses/by/4.0/",
       "rights_status": "rights-review-required",
-      "rights_basis": "Page footer explicitly states CC BY 4.0 with named author and BCcampus source; license observation still requires artifact capture and project-level rights review before any excerpt use.",
+      "rights_basis": "Chapter page states CC BY 4.0 (tags license:ccby, licenseversion:40, footer statement) and names Chad Flinn (BCIT via BCcampus); BCcampus' CC BY 4.0 terms permit retention, reuse, copying, redistribution and revision subject to attribution and the exceptions noted in the work. Book-level metadata (copyright 2018 BCIT, published 2018-12-14) comes from the authoritative pressbooks source; artifact-level rights review is still required before any excerpt use.",
       "rights_reference": "data/evidence/review-queues/charging-system-source-intake-20260924.json",
       "evidence_decision": "candidate-only",
       "permitted_project_use": "bibliographic metadata, URL/section locators, and project-authored factual summary only",
@@ -204,9 +211,10 @@
       "canonical_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
       "secondary_locator_url": "https://doi.org/10.3389/fmech.2022.1090152",
       "section_or_page": [
+        "Section 3: Estimating the power demand of an automotive alternator",
         "Full text; candidate reading locators recorded as p. 7 chunks (frontiers-alternator-primary-source-p7, frontiers-alternator-ac-dc-rectification-p7) in data/evidence/source-state-registry.json"
       ],
-      "publication_or_revision_date": "2023 (publication year); DOI 10.3389/fmech.2022.1090152",
+      "publication_or_revision_date": "2023-01-12 (publication date); DOI 10.3389/fmech.2022.1090152",
       "source_type": "peer-reviewed-open-access-journal-article",
       "observed_scope": [
         "auxiliary engine load power demand estimation in light duty vehicles",
@@ -258,7 +266,7 @@
       "claim_text": "Alternator voltage regulation curve",
       "candidates": [
         { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Sections 1.2.1-1.2.3, printed 8-14 to 8-17: field-current regulation", "locator_verification": "pending-human-review" },
-        { "candidate_id": "bccampus-flinn-alternator-2021", "locator": "Section 3.02: field-strength control of alternator voltage", "locator_verification": "pending-human-review" }
+        { "candidate_id": "bccampus-flinn-alternator-2018", "locator": "Section 3.02: field-strength control of alternator voltage", "locator_verification": "pending-human-review" }
       ],
       "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
       "mapping_committed": false,
@@ -271,7 +279,7 @@
       "claim_text": "Engine RPM influence on volt output",
       "candidates": [
         { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Sections 1.2.0-1.2.3, printed 8-14 to 8-17: alternator construction and operation", "locator_verification": "pending-human-review" },
-        { "candidate_id": "bccampus-flinn-alternator-2021", "locator": "Section 3.02: rotating field and field-strength control", "locator_verification": "pending-human-review" }
+        { "candidate_id": "bccampus-flinn-alternator-2018", "locator": "Section 3.02: rotating field and field-strength control", "locator_verification": "pending-human-review" }
       ],
       "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
       "mapping_committed": false,
@@ -332,7 +340,7 @@
       "claim_text": "Understanding how a faulty voltage regulator affects alternator output voltage as a function of engine speed.",
       "candidates": [
         { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Sections 1.2.0-1.3.2, printed 8-14 to 8-20: regulator operation, output and regulator testing", "locator_verification": "pending-human-review" },
-        { "candidate_id": "bccampus-flinn-alternator-2021", "locator": "Section 3.02: field-strength control of alternator voltage", "locator_verification": "pending-human-review" }
+        { "candidate_id": "bccampus-flinn-alternator-2018", "locator": "Section 3.02: field-strength control of alternator voltage", "locator_verification": "pending-human-review" }
       ],
       "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
       "mapping_committed": false
@@ -380,11 +388,12 @@
       "claim_index": 0,
       "claim_text": "13.5\u202fV at battery under idle confirms alternator output is within spec",
       "candidates": [
-        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Section 1.2.4, printed 8-17; Sections 1.3.1-1.3.2, printed 8-19 to 8-20: charging voltage evaluation against manufacturer specification", "locator_verification": "pending-human-review" }
+        { "candidate_id": "navy-navedtra-14264a-ch8", "locator": "Section 1.2.4, printed 8-17; Sections 1.3.1-1.3.2, printed 8-19 to 8-20: charging voltage evaluation against manufacturer specification", "locator_verification": "pending-human-review" },
+        { "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026", "locator": "Section 4.06: healthy working electrical system around 13.5 to 14.5 V, with below-range readings connected to alternator/regulator problems", "locator_verification": "pending-human-review" }
       ],
       "discovery_status": "candidate-identified-pending-human-rights-and-technical-review",
       "mapping_committed": false,
-      "technical_caveat": "Fixed 13.5 to 14.5 volt ranges are not universal; manufacturer specification governs and no single threshold may be taught as universal."
+      "technical_caveat": "Fixed 13.5 to 14.5 volt ranges are not universal; manufacturer specification governs and no single threshold may be taught as universal. The Coalinga source supports only a general healthy-system range; it does not establish that 13.5 V at idle, without specified load, temperature, battery state of charge, manufacturer specification or test procedure, conclusively confirms alternator output is within specification. This claim stays unmapped pending a vehicle/service-procedure-level or otherwise authoritative source."
     }
   ],
   "excluded_or_discovery_leads": [
