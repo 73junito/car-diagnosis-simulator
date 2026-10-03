@@ -417,6 +417,7 @@ describe('Ollama scenario challenge worker', () => {
     expect(requests[1].messages.map((m) => m.role)).toEqual(['system', 'user', 'user']);
     expect(requests[1].messages[2].content).toContain('previous response did not satisfy the required output contract');
     expect(requests[1].messages[2].content).toContain('Validation failure:');
+    expect(requests[1].messages[2].content).not.toContain('I will provide the questions next.');
     expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('chunk 1/1'));
     expect(warnSpy.mock.calls[0][0]).not.toContain('I will provide the questions next.');
     warnSpy.mockRestore();
