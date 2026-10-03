@@ -121,6 +121,7 @@ async function requestChallengeChunk({
     batchId, batchTarget, allocation, scenarioContext, retainedQuestions
   });
   const format = buildChallengeJsonSchema({ batchId, batchTarget });
+  let lastFailureReason = null;
 
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     const remainingMs = deadlineAt - Date.now();
@@ -138,10 +139,11 @@ async function requestChallengeChunk({
             role: 'user',
             content: [
               'The previous response did not satisfy the required output contract.',
+              lastFailureReason ? `Validation failure: ${lastFailureReason}` : '',
               'Retry from the original instructions.',
               'Return one complete JSON object only; no markdown, prose, code fences, prefix, or suffix.',
               'The object must match the supplied JSON schema and contain the full requested chunk.'
-            ].join(' ')
+            ].filter(Boolean).join(' ')
           }
         ];
 
