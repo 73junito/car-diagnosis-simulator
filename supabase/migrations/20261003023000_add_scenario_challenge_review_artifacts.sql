@@ -19,19 +19,19 @@ create table if not exists public.scenario_challenge_review_artifacts (
     question_count integer not null check (question_count = 50),
     status text not null default 'synthetic-draft-review-only'
         check (status = 'synthetic-draft-review-only'),
-    payload jsonb not null,
+    payload_text text not null check (length(payload_text) > 0),
     created_at timestamptz not null default now()
 );
 
 alter table public.scenario_challenge_review_artifacts enable row level security;
 
 revoke all on table public.scenario_challenge_review_artifacts
-    from public, anon, authenticated;
-grant all on table public.scenario_challenge_review_artifacts
+    from public, anon, authenticated, service_role;
+grant select, insert on table public.scenario_challenge_review_artifacts
     to service_role;
 
 comment on table public.scenario_challenge_review_artifacts is
     'Private service-role-only storage for exact generated scenario-challenge draft artifacts. Rows are review-only and do not grant training, scoring, assessment, citation, evidence, or approval eligibility.';
 
-comment on column public.scenario_challenge_review_artifacts.payload is
-    'Exact generated batch payload, including answer-bearing draft content. Never expose through browser/client APIs.';
+comment on column public.scenario_challenge_review_artifacts.payload_text is
+    'Exact UTF-8 JSON artifact text, including answer-bearing draft content. Stored as text so payload_sha256 can verify the original representation. Never expose through browser/client APIs.';
