@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "candidate-source-artifact-capture-remediation",
+  "scenario_id": "charging-system",
+  "stage": "capture-remediation-complete-pending-human-rights-review",
+  "generated_at": "2026-10-03T20:30:00Z",
+  "policy": "data/evidence/open-evidence-source-policy.json",
+  "base_inventory": "data/evidence/review-queues/charging-system-artifact-capture-inventory-20261003.json",
+  "rights_review_records": "data/evidence/review-queues/charging-system-rights-review-records-20261003.json",
+  "purpose": "Machine-only capture remediation for the six candidates that were unavailable, metadata-only, mirror, or hash-unstable in the base inventory. This artifact records retrieval attempts and artifact facts only. It records no rights decision, no claim or draft reference, no mapping, no technical or instructional review, and no approval or eligibility change.",
+  "remediation_objectives": [
+    "Resolve or honestly bound the Navy access block without substituting another copy.",
+    "Hash the complete Army artifact outside the automated capture budget.",
+    "Obtain a byte-stable artifact of record for the Coalinga and Flinn LibreTexts candidates.",
+    "Re-verify that already-stable captures still reproduce byte-for-byte."
+  ],
+  "remediation_statuses": [
+    "stable-artifact-of-record",
+    "unstable-no-stable-export",
+    "unavailable-access-blocked"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+      "objective": "Re-verify that the existing exact-source PDF capture still reproduces byte-for-byte.",
+      "attempts": [
+        {
+          "method": "curl GET with browser user agent",
+          "url": "https://www.energy.gov/documents/doe-hdbk-1084-95",
+          "http_status": 200,
+          "media_type": "application/pdf",
+          "byte_length": 499005,
+          "sha256": "ef3502149e9b2bea09e32818872c33ff75655414ac48dd50d32a6a6613ca3dc1",
+          "retrieved_at": "2026-10-03T20:29:51Z",
+          "outcome": "hash-identical-to-base-inventory"
+        }
+      ],
+      "resolution": {
+        "status": "stable-artifact-of-record",
+        "artifact_of_record_url": "https://www.energy.gov/documents/doe-hdbk-1084-95",
+        "artifact_of_record_sha256": "ef3502149e9b2bea09e32818872c33ff75655414ac48dd50d32a6a6613ca3dc1",
+        "artifact_of_record_byte_length": 499005,
+        "stability": "identical SHA-256 reproduced in a later session than the base inventory capture",
+        "note": "No remediation needed; the DOE PDF is a byte-stable exact-source artifact."
+      }
+    },
+    {
+      "candidate_id": "frontiers-automotive-alternator-2023",
+      "objective": "Re-verify that the captured publisher page still reproduces byte-for-byte.",
+      "attempts": [
+        {
+          "method": "curl GET with browser user agent",
+          "url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+          "http_status": 200,
+          "media_type": "text/html; charset=utf-8",
+          "byte_length": 885426,
+          "sha256": "9a0764fb555fb8676390325c61b4a98667b12de42d59768c475149b184096036",
+          "retrieved_at": "2026-10-03T20:29:51Z",
+          "outcome": "hash-identical-to-base-inventory"
+        }
+      ],
+      "resolution": {
+        "status": "stable-artifact-of-record",
+        "artifact_of_record_url": "https://www.frontiersin.org/journals/mechanical-engineering/articles/10.3389/fmech.2022.1090152/full",
+        "artifact_of_record_sha256": "9a0764fb555fb8676390325c61b4a98667b12de42d59768c475149b184096036",
+        "artifact_of_record_byte_length": 885426,
+        "stability": "identical SHA-256 reproduced in a later session than the base inventory capture",
+        "note": "The artifact of record is an HTML publisher page. Whether HTML is an acceptable artifact under review remains a reviewer judgement and is not decided here."
+      }
+    },
+    {
+      "candidate_id": "army-da-pam-750-33-1976",
+      "objective": "Download and hash the complete scanned artifact outside the automated capture budget.",
+      "attempts": [
+        {
+          "method": "curl GET with resume, full body to local temporary storage",
+          "url": "https://archive.org/download/PAM750-33/PAM750-33.pdf",
+          "http_status": 200,
+          "media_type": "application/pdf",
+          "byte_length": 539802842,
+          "sha256": "cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1",
+          "retrieved_at": "2026-10-03T20:27:00Z",
+          "outcome": "complete-body-captured"
+        },
+        {
+          "method": "curl ranged re-fetch of the first 8 MiB to confirm transfer reproducibility",
+          "url": "https://archive.org/download/PAM750-33/PAM750-33.pdf",
+          "http_status": 200,
+          "media_type": "application/octet-stream",
+          "byte_length": 8388608,
+          "sha256": "69c6f3f1dcbfffbd250f97296382368e02ddd5f52a407353ee03f6c2533b5872",
+          "retrieved_at": "2026-10-03T20:27:40Z",
+          "outcome": "prefix-hash-matches-local-full-file-prefix"
+        }
+      ],
+      "resolution": {
+        "status": "stable-artifact-of-record",
+        "artifact_of_record_url": "https://archive.org/download/PAM750-33/PAM750-33.pdf",
+        "artifact_of_record_sha256": "cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1",
+        "artifact_of_record_byte_length": 539802842,
+        "stability": "full-body SHA-256 equals the hash previously recorded in data/evidence/review-queues/charging-system-source-intake-20260924.json, and a ranged re-fetch reproduced the first 8 MiB prefix exactly",
+        "note": "The canonical Internet Archive file is byte-identical to the previously supplied copy, so the earlier capture record is now corroborated by an independent retrieval. No artifact bytes are stored in this repository."
+      }
+    },
+    {
+      "candidate_id": "bccampus-flinn-alternator-2018",
+      "objective": "Obtain the authoritative publisher-provided edition instead of an unstable platform mirror.",
+      "attempts": [
+        {
+          "method": "curl GET of the authoritative book page with browser user agent",
+          "url": "https://pressbooks.bccampus.ca/trigforelectricians/",
+          "http_status": 200,
+          "media_type": "text/html; charset=UTF-8",
+          "byte_length": 72950,
+          "retrieved_at": "2026-10-03T20:27:10Z",
+          "outcome": "authoritative-host-now-accessible"
+        },
+        {
+          "method": "Pressbooks full-book PDF export, first attempt",
+          "url": "https://pressbooks.bccampus.ca/trigforelectricians/open/download?type=pdf",
+          "http_status": 200,
+          "media_type": "application/pdf; charset=binary",
+          "byte_length": 926417,
+          "sha256": "c3883af5dfcfad17f6360e718aea6a20dab4832f8f020fc09253e909a663c344",
+          "retrieved_at": "2026-10-03T20:28:54Z",
+          "outcome": "export-captured"
+        },
+        {
+          "method": "Pressbooks full-book PDF export, repeat attempt after rate limiting",
+          "url": "https://pressbooks.bccampus.ca/trigforelectricians/open/download?type=pdf",
+          "http_status": 200,
+          "media_type": "application/pdf; charset=binary",
+          "byte_length": 926417,
+          "sha256": "c3883af5dfcfad17f6360e718aea6a20dab4832f8f020fc09253e909a663c344",
+          "retrieved_at": "2026-10-03T20:29:35Z",
+          "outcome": "export-reproduced-identically"
+        },
+        {
+          "method": "LibreTexts per-page PDF export, two consecutive attempts",
+          "url": "https://workforce.libretexts.org/@api/deki/pages/2642/pdf/3.2%20:%20The%20Alternator.pdf",
+          "http_status": 200,
+          "media_type": "application/pdf",
+          "byte_length": 117916,
+          "retrieved_at": "2026-10-03T20:27:26Z",
+          "outcome": "export-not-reproducible-second-attempt-returned-different-length-and-hash"
+        }
+      ],
+      "resolution": {
+        "status": "stable-artifact-of-record",
+        "artifact_of_record_url": "https://pressbooks.bccampus.ca/trigforelectricians/open/download?type=pdf",
+        "artifact_of_record_sha256": "c3883af5dfcfad17f6360e718aea6a20dab4832f8f020fc09253e909a663c344",
+        "artifact_of_record_byte_length": 926417,
+        "stability": "two successful retrievals 41 seconds apart produced the identical SHA-256; an intervening attempt was rate limited with HTTP 429 and was retried rather than accepted",
+        "note": "This authoritative publisher export supersedes the hash-unstable Workforce LibreTexts mirror recorded in the base inventory. The chapter of interest remains section 3.02 within the full-book export. Rights metadata for this artifact is unchanged and undecided."
+      }
+    },
+    {
+      "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+      "objective": "Obtain a byte-stable export to replace the hash-unstable HTML capture.",
+      "attempts": [
+        {
+          "method": "LibreTexts per-page PDF export, first attempt",
+          "url": "https://workforce.libretexts.org/@api/deki/pages/51893/pdf/4.6%20:%20Electrical%20and%20Hydraulic%20Health-%20Reading%20and%20Responding%20to%20Signals.pdf",
+          "http_status": 200,
+          "media_type": "application/pdf",
+          "byte_length": 204212,
+          "sha256": "04c37fb50af443264e8afafa69cacab71e867c4b148b74ed7d0e5294b0860ab4",
+          "retrieved_at": "2026-10-03T20:27:29Z",
+          "outcome": "export-captured"
+        },
+        {
+          "method": "LibreTexts per-page PDF export, immediate repeat attempt",
+          "url": "https://workforce.libretexts.org/@api/deki/pages/51893/pdf/4.6%20:%20Electrical%20and%20Hydraulic%20Health-%20Reading%20and%20Responding%20to%20Signals.pdf",
+          "http_status": 200,
+          "media_type": "application/pdf",
+          "byte_length": 204212,
+          "sha256": "d873630fdd3bc4cb53483a0f1d2b49de488ae755989e1e747a2cb595557efa69",
+          "retrieved_at": "2026-10-03T20:27:31Z",
+          "outcome": "export-not-reproducible-same-length-different-hash"
+        }
+      ],
+      "resolution": {
+        "status": "unstable-no-stable-export",
+        "artifact_of_record_url": null,
+        "artifact_of_record_sha256": null,
+        "artifact_of_record_byte_length": null,
+        "stability": "no byte-stable artifact obtained; the HTML capture and the PDF export both vary between identical consecutive requests",
+        "note": "Two consecutive PDF exports returned the same byte length with different content, so the export is not byte-stable. The base inventory HTML capture was also unstable. A stable export would have to come from the author or college, or the eventual rights decision must be scoped so that it does not depend on a reproducible artifact hash."
+      }
+    },
+    {
+      "candidate_id": "navy-navedtra-14264a-ch8",
+      "objective": "Find an authoritative accessible capture path or locate the previously supplied copy, without substituting another artifact.",
+      "attempts": [
+        {
+          "method": "curl GET with browser user agent against the canonical media.defense.gov URL",
+          "url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+          "http_status": 403,
+          "media_type": "text/html",
+          "byte_length": 477,
+          "retrieved_at": "2026-10-03T20:27:45Z",
+          "outcome": "access-blocked"
+        },
+        {
+          "method": "curl GET with the default curl user agent",
+          "url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+          "http_status": 403,
+          "media_type": "text/html",
+          "byte_length": 477,
+          "retrieved_at": "2026-10-03T20:27:46Z",
+          "outcome": "access-blocked"
+        },
+        {
+          "method": "curl GET with explicit Accept and Referer headers",
+          "url": "https://media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+          "http_status": 403,
+          "media_type": "text/html",
+          "byte_length": 477,
+          "retrieved_at": "2026-10-03T20:27:47Z",
+          "outcome": "access-blocked"
+        },
+        {
+          "method": "curl GET against the www host variant",
+          "url": "https://www.media.defense.gov/2014/Jun/20/2002655900/-1/-1/1/140620-N-ZZ182-6548.pdf",
+          "http_status": 0,
+          "retrieved_at": "2026-10-03T20:27:48Z",
+          "outcome": "host-not-resolvable"
+        },
+        {
+          "method": "Bounded local search for the previously supplied chapter copy",
+          "url": null,
+          "http_status": null,
+          "retrieved_at": "2026-10-03T20:27:55Z",
+          "outcome": "no-matching-file-found-in-searched-locations"
+        }
+      ],
+      "resolution": {
+        "status": "unavailable-access-blocked",
+        "artifact_of_record_url": null,
+        "artifact_of_record_sha256": null,
+        "artifact_of_record_byte_length": null,
+        "stability": "no artifact retrieved; stability could not be evaluated",
+        "note": "Four access paths were attempted against the host and none returned PDF bytes; the www variant does not resolve. A bounded local search of five likely storage locations found no previously supplied copy. No substitute artifact was used and none should be. The remaining options are an official Navy or DoD ASSIST access path, or obtaining the exact previously supplied copy and establishing its provenance independently."
+      }
+    }
+  ],
+  "summary": {
+    "candidates_attempted": 6,
+    "stable_artifact_of_record": 4,
+    "unstable_no_stable_export": 1,
+    "unavailable_access_blocked": 1,
+    "new_stable_artifacts_obtained": 2,
+    "captures_reverified_unchanged": 2,
+    "prior_hash_match_confirmations": 1,
+    "attempts_recorded": 15
+  },
+  "unresolved": [
+    {
+      "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+      "blocking_condition": "No byte-stable artifact is obtainable from the publishing platform for automated capture.",
+      "recommended_next_step": "Request a stable export from the author or Coalinga College, or scope the eventual rights decision so it does not depend on a reproducible artifact hash."
+    },
+    {
+      "candidate_id": "navy-navedtra-14264a-ch8",
+      "blocking_condition": "The canonical host blocks automated retrieval and no local copy of the previously supplied artifact was located.",
+      "recommended_next_step": "Request the chapter through an official Navy or DoD ASSIST channel, or obtain the exact previously supplied copy and establish its provenance independently before any decision."
+    }
+  ],
+  "next_gate": [
+    "Human rights decisions remain a separate branch and require a named reviewer for each artifact of record.",
+    "The first decided row introduces the decided-state contract in the validator, requiring artifact_sha256 for scopes that depend on stored or reproduced content while permitting a null hash for link/citation-only or metadata-only clearances.",
+    "Capture facts say nothing about technical or instructional suitability; scope-level review has not occurred for any candidate.",
+    "No mapping work starts from this artifact."
+  ]
+}
