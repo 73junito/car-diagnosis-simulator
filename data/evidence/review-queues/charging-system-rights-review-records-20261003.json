@@ -56,16 +56,16 @@
     },
     {
       "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
-      "rights_decision": "pending",
-      "decided_rights_classification": null,
-      "reviewer_identity": null,
-      "reviewed_at": null,
-      "artifact_sha256": null,
-      "scope_of_clearance": null,
+      "rights_decision": "cleared-link-citation-only",
+      "decided_rights_classification": "cleared-link-citation-only",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-03T21:05:04Z",
+      "artifact_sha256": "ef3502149e9b2bea09e32818872c33ff75655414ac48dd50d32a6a6613ca3dc1",
+      "scope_of_clearance": "Authoritative-source linking and factual citation to DOE-HDBK-1084-95, including section/page locators. This clearance does not authorize full-text storage, reproduction, RAG ingestion, model training, derivative-content rights, or commercial republication.",
       "store_verbatim_excerpt": false,
       "may_generate_questions": false,
       "approval_effect": "none",
-      "review_notes": null
+      "review_notes": "Human review approved by Rafael Rodriguez Jr. DOE-HDBK-1084-95 is an official U.S. Department of Energy handbook and carries Distribution Statement A: approved for public release; distribution is unlimited. Because public release and federal provenance do not by themselves establish unrestricted reuse rights for every incorporated component, this review intentionally grants only link-and-citation clearance. No broader reuse permission is inferred."
     },
     {
       "candidate_id": "bccampus-flinn-alternator-2018",
@@ -110,9 +110,9 @@
   ],
   "summary": {
     "sources_in_review": 6,
-    "rights_decisions_recorded": 0,
-    "sources_cleared": 0,
-    "sources_candidate_only": 6,
+    "rights_decisions_recorded": 1,
+    "sources_cleared": 1,
+    "sources_candidate_only": 5,
     "mapped_count": 0,
     "citation_validated_count": 0,
     "technical_reviewed_count": 0,

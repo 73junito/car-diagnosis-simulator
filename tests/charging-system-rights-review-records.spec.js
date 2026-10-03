@@ -1,4 +1,5 @@
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const {
   validateRightsReviewRecords,
@@ -7,11 +8,9 @@ const {
 
 describe('charging-system rights-review records contract', () => {
   const root = path.resolve(__dirname, '..');
-  const records = JSON.parse(fs.readFileSync(
-    path.join(root, 'data', 'evidence', 'review-queues',
-      'charging-system-rights-review-records-20261003.json'),
-    'utf8'
-  ));
+  const recordsPath = path.join(root, 'data', 'evidence', 'review-queues',
+    'charging-system-rights-review-records-20261003.json');
+  const records = JSON.parse(fs.readFileSync(recordsPath, 'utf8'));
   const manifest = JSON.parse(fs.readFileSync(
     path.join(root, 'data', 'evidence', 'review-queues',
       'charging-system-challenge-candidate-source-manifest-20261003.json'),
@@ -23,12 +22,25 @@ describe('charging-system rights-review records contract', () => {
     'utf8'
   ));
 
+  function validateMutated(mutator) {
+    const clone = JSON.parse(JSON.stringify(records));
+    mutator(clone);
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rights-review-'));
+    const file = path.join(dir, 'records.json');
+    fs.writeFileSync(file, JSON.stringify(clone, null, 2));
+    try {
+      return validateRightsReviewRecords({ recordsPath: file });
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
   test('passes the fail-closed rights-review validator', () => {
     const { errors } = validateRightsReviewRecords();
     expect(errors).toEqual([]);
   });
 
-  test('uses a scope-specific clearance vocabulary instead of a single rights flag', () => {
+  test('uses the pinned scope-specific clearance vocabulary', () => {
     expect(records.permitted_rights_classifications).toEqual([
       'pending',
       'cleared-link-citation-only',
@@ -40,35 +52,40 @@ describe('charging-system rights-review records contract', () => {
       'restricted',
       'rejected'
     ]);
-    expect(records.rights_classification_note.length).toBeGreaterThan(0);
-    for (const row of records.reviews) {
-      expect(records.permitted_rights_classifications).toContain(row.rights_decision);
-    }
   });
 
-  test('covers every discovery candidate with a pending, reviewer-free row', () => {
-    expect(records.stage).toBe('awaiting-human-rights-review');
-    const reviewIds = records.reviews.map((row) => row.candidate_id).sort();
-    const candidateIds = manifest.source_candidates.map((source) => source.candidate_id).sort();
-    expect(reviewIds).toEqual(candidateIds);
+  test('records exactly one approved human DOE decision and leaves five rows pending', () => {
+    const doe = records.reviews.find((row) =>
+      row.candidate_id === 'doe-hdbk-1084-95-primer-lead-acid');
+    expect(doe).toMatchObject({
+      rights_decision: 'cleared-link-citation-only',
+      decided_rights_classification: 'cleared-link-citation-only',
+      reviewer_identity: 'Rafael Rodriguez Jr.',
+      reviewed_at: '2026-10-03T21:05:04Z',
+      artifact_sha256: 'ef3502149e9b2bea09e32818872c33ff75655414ac48dd50d32a6a6613ca3dc1',
+      store_verbatim_excerpt: false,
+      may_generate_questions: false,
+      approval_effect: 'none'
+    });
+    expect(doe.scope_of_clearance).toContain('linking and factual citation');
+    expect(doe.review_notes).toContain('Human review approved by Rafael Rodriguez Jr.');
 
-    for (const row of records.reviews) {
-      expect(row.rights_decision).toBe('pending');
+    const pending = records.reviews.filter((row) => row.rights_decision === 'pending');
+    expect(pending).toHaveLength(5);
+    for (const row of pending) {
       expect(row.reviewer_identity).toBeNull();
       expect(row.reviewed_at).toBeNull();
       expect(row.decided_rights_classification).toBeNull();
       expect(row.artifact_sha256).toBeNull();
       expect(row.scope_of_clearance).toBeNull();
-      expect(row.store_verbatim_excerpt).toBe(false);
-      expect(row.may_generate_questions).toBe(false);
-      expect(row.approval_effect).toBe('none');
+      expect(row.review_notes).toBeNull();
     }
   });
 
-  test('records no rights decision and no downstream approval state', () => {
-    expect(records.summary.rights_decisions_recorded).toBe(0);
-    expect(records.summary.sources_cleared).toBe(0);
-    expect(records.summary.sources_candidate_only).toBe(records.reviews.length);
+  test('summary reflects one rights decision without advancing downstream gates', () => {
+    expect(records.summary.rights_decisions_recorded).toBe(1);
+    expect(records.summary.sources_cleared).toBe(1);
+    expect(records.summary.sources_candidate_only).toBe(5);
     expect(records.summary.mapped_count).toBe(0);
     expect(records.summary.citation_validated_count).toBe(0);
     expect(records.summary.technical_reviewed_count).toBe(0);
@@ -77,12 +94,16 @@ describe('charging-system rights-review records contract', () => {
     expect(records.summary.assessment_eligible_count).toBe(0);
 
     const output = formatSummary(records.summary);
-    expect(output).toContain('sources_in_review: 6');
-    expect(output).toContain('rights_decisions_recorded: 0');
+    expect(output).toContain('rights_decisions_recorded: 1');
+    expect(output).toContain('sources_candidate_only: 5');
     expect(output).toContain('mapped_count: 0');
   });
 
-  test('holds no claim-to-source mapping on the rights-review branch', () => {
+  test('covers every discovery candidate and holds no claim-to-source mapping', () => {
+    const reviewIds = records.reviews.map((row) => row.candidate_id).sort();
+    const candidateIds = manifest.source_candidates.map((source) => source.candidate_id).sort();
+    expect(reviewIds).toEqual(candidateIds);
+
     for (const row of records.reviews) {
       for (const key of Object.keys(row)) {
         expect(key).not.toMatch(/claim|question_id|draft_id|mapping/i);
@@ -93,5 +114,36 @@ describe('charging-system rights-review records contract', () => {
       expect(entry.mapping_status).toBe('unmapped-source-discovery-required');
       expect(entry.candidate_sources).toEqual([]);
     }
+  });
+
+  test('permits a null hash for link-citation-only clearance', () => {
+    const { errors } = validateMutated((clone) => {
+      const doe = clone.reviews.find((row) =>
+        row.candidate_id === 'doe-hdbk-1084-95-primer-lead-acid');
+      doe.artifact_sha256 = null;
+    });
+    expect(errors).toEqual([]);
+  });
+
+  test('requires an artifact hash for content-dependent clearance scopes', () => {
+    const { errors } = validateMutated((clone) => {
+      const doe = clone.reviews.find((row) =>
+        row.candidate_id === 'doe-hdbk-1084-95-primer-lead-acid');
+      doe.rights_decision = 'cleared-full-text-storage';
+      doe.decided_rights_classification = 'cleared-full-text-storage';
+      doe.artifact_sha256 = null;
+    });
+    expect(errors.some((error) => error.includes('requires a 64-character lowercase artifact_sha256'))).toBe(true);
+  });
+
+  test('requires a real reviewer identity and matching decided classification', () => {
+    const result = validateMutated((clone) => {
+      const doe = clone.reviews.find((row) =>
+        row.candidate_id === 'doe-hdbk-1084-95-primer-lead-acid');
+      doe.reviewer_identity = '';
+      doe.decided_rights_classification = 'cleared-metadata-only';
+    });
+    expect(result.errors.some((error) => error.includes('named human reviewer_identity'))).toBe(true);
+    expect(result.errors.some((error) => error.includes('must equal rights_decision'))).toBe(true);
   });
 });
