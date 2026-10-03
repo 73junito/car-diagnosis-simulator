@@ -86,8 +86,8 @@ function validateQueue(doc, plan) {
     if (!Array.isArray(entry.candidate_sources) || entry.candidate_sources.length !== 0) {
       throw new Error(`${label} must begin with no candidate source assignments.`);
     }
-    if (entry.mapping_status !== 'blocked-pending-durable-source-artifact') {
-      throw new Error(`${label} must remain blocked until durable private source storage exists.`);
+    if (entry.mapping_status !== 'unmapped-source-discovery-required') {
+      throw new Error(`${label} must remain unmapped until governed source discovery occurs.`);
     }
 
     for (const field of [
@@ -155,11 +155,32 @@ function validateQueue(doc, plan) {
     }
   }
 
+  const privateStorage = doc.storage_boundary?.private_storage_reference;
   if (doc.storage_boundary?.repository_visibility !== 'public' ||
       doc.storage_boundary?.full_question_payload_committed !== false ||
-      doc.storage_boundary?.durable_private_source_storage_status !== 'pending' ||
-      doc.storage_boundary?.source_discovery_blocked_until_durable_private_storage !== true) {
-    throw new Error('Storage boundary must disclose and enforce the pending private-artifact gate.');
+      doc.storage_boundary?.durable_private_source_storage_status !== 'verified' ||
+      doc.storage_boundary?.source_discovery_blocked_until_durable_private_storage !== false ||
+      privateStorage?.backend !== 'supabase' ||
+      privateStorage?.project_ref !== 'pffdgqpynpbffbcnxmum' ||
+      privateStorage?.table !== 'public.scenario_challenge_review_artifacts' ||
+      privateStorage?.verified_row_count !== 4 ||
+      privateStorage?.verified_question_count !== 200 ||
+      privateStorage?.verification_workflow_run_id !== 37125293532 ||
+      privateStorage?.verification_commit !== '285dcd79051d7666705d91e12f8c4b860d1b123d' ||
+      privateStorage?.payload_hashes_verified !== true) {
+    throw new Error('Storage boundary must reference verified durable private artifact storage.');
+  }
+
+  const expectedPayloadHashes = {
+    1: '8b896cf19ed6328c0107e676cc4225391a216e8240a43e0d8380fbe71e772710',
+    2: 'd4757e409a8ffe2441b0ac564189a8e3785fed65cb90c76641ff5d851723f634',
+    3: '37fdc75863ca4debae302c572e9a84a8666972bb7505f294df9ac2c2a3f6b4e7',
+    4: '9d0ce44c8b4908b47264aaa8eca3bc1877783faa85625a5ec16ba2f774a49973'
+  };
+  for (const [batchId, hash] of Object.entries(expectedPayloadHashes)) {
+    if (privateStorage.payload_sha256_by_batch?.[batchId] !== hash) {
+      throw new Error(`Private storage payload hash mismatch for batch ${batchId}.`);
+    }
   }
 
   return {
@@ -174,7 +195,7 @@ if (require.main === module) {
   const doc = JSON.parse(fs.readFileSync(queuePath, 'utf8'));
   const plan = JSON.parse(fs.readFileSync(PLAN_PATH, 'utf8'));
   const result = validateQueue(doc, plan);
-  console.log(`PASS: ${result.draft_count} drafts, ${result.scenario_count} scenarios, ${result.claim_count} claims; source discovery remains blocked pending durable private artifact storage.`);
+  console.log(`PASS: ${result.draft_count} drafts, ${result.scenario_count} scenarios, ${result.claim_count} claims; durable private storage is verified and source discovery may begin while all evidence/release gates remain closed.`);
 }
 
 module.exports = { validateQueue, DEFAULT_QUEUE, PLAN_PATH, EXPECTED_ARTIFACTS, MOJIBAKE_PATTERN };
