@@ -16,10 +16,10 @@ const ZERO_KEYS = [
   'instructional_reviewed_count', 'approved_count', 'assessment_eligible_count'
 ];
 
-// Rights review must never smuggle claim-to-source mapping into this artifact.
 const FORBIDDEN_REVIEW_KEY = /claim|question_id|draft_id|mapping/i;
+const SHA256_RE = /^[a-f0-9]{64}$/;
+const ISO_UTC_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 
-// Clearance is scope-specific: a narrower cleared value never implies a broader one.
 const PERMITTED_RIGHTS_CLASSIFICATIONS = [
   'pending',
   'cleared-link-citation-only',
@@ -31,6 +31,13 @@ const PERMITTED_RIGHTS_CLASSIFICATIONS = [
   'restricted',
   'rejected'
 ];
+
+const HASH_REQUIRED_CLASSIFICATIONS = new Set([
+  'cleared-text-excerpt',
+  'cleared-full-text-storage',
+  'cleared-rag-use',
+  'cleared-commercial-reuse'
+]);
 
 function readJson(filePath, errors, label) {
   try {
@@ -84,6 +91,10 @@ function validateRightsReviewRecords(options = {}) {
   }
 
   const seen = new Set();
+  let decisionsRecorded = 0;
+  let sourcesCleared = 0;
+  let pendingCount = 0;
+
   for (const review of reviews) {
     const label = review.candidate_id || '<review missing candidate_id>';
     if (!review.candidate_id) errors.push('every review row must record a candidate_id');
@@ -95,19 +106,52 @@ function validateRightsReviewRecords(options = {}) {
         errors.push(`${label}: rights-review rows must not contain mapping field ${key}`);
       }
     }
+
     if (review.store_verbatim_excerpt !== false) errors.push(`${label}: store_verbatim_excerpt must be false`);
     if (review.may_generate_questions !== false) errors.push(`${label}: may_generate_questions must be false`);
     if (review.approval_effect !== 'none') errors.push(`${label}: approval_effect must be none`);
 
+    if (!PERMITTED_RIGHTS_CLASSIFICATIONS.includes(review.rights_decision)) {
+      errors.push(`${label}: rights_decision '${review.rights_decision}' is not an accepted state`);
+      continue;
+    }
+
     if (review.rights_decision === 'pending') {
+      pendingCount += 1;
       for (const field of ['decided_rights_classification', 'reviewer_identity', 'reviewed_at',
         'artifact_sha256', 'scope_of_clearance', 'review_notes']) {
         if (review[field] !== null) {
-          errors.push(`${label}: ${field} must stay null until a named human reviewer records a decision`);
+          errors.push(`${label}: ${field} must stay null while rights_decision is pending`);
         }
       }
-    } else if (!PERMITTED_RIGHTS_CLASSIFICATIONS.includes(review.rights_decision)) {
-      errors.push(`${label}: rights_decision '${review.rights_decision}' is not an accepted state; introduce decided states together with an explicit validator contract`);
+      continue;
+    }
+
+    decisionsRecorded += 1;
+    if (review.rights_decision.startsWith('cleared-')) sourcesCleared += 1;
+
+    if (review.decided_rights_classification !== review.rights_decision) {
+      errors.push(`${label}: decided_rights_classification must equal rights_decision`);
+    }
+    if (!nonEmptyRecordText(review.reviewer_identity)) {
+      errors.push(`${label}: decided rows require a named human reviewer_identity`);
+    }
+    if (!nonEmptyRecordText(review.reviewed_at) || !ISO_UTC_RE.test(review.reviewed_at)) {
+      errors.push(`${label}: decided rows require reviewed_at in UTC ISO-8601 YYYY-MM-DDTHH:MM:SSZ form`);
+    }
+    if (!nonEmptyRecordText(review.scope_of_clearance)) {
+      errors.push(`${label}: decided rows require scope_of_clearance`);
+    }
+    if (!nonEmptyRecordText(review.review_notes)) {
+      errors.push(`${label}: decided rows require review_notes`);
+    }
+
+    if (HASH_REQUIRED_CLASSIFICATIONS.has(review.rights_decision)) {
+      if (!SHA256_RE.test(review.artifact_sha256 || '')) {
+        errors.push(`${label}: ${review.rights_decision} requires a 64-character lowercase artifact_sha256`);
+      }
+    } else if (review.artifact_sha256 !== null && !SHA256_RE.test(review.artifact_sha256)) {
+      errors.push(`${label}: artifact_sha256 must be null or a 64-character lowercase SHA-256`);
     }
   }
 
@@ -123,10 +167,14 @@ function validateRightsReviewRecords(options = {}) {
   if (summary.sources_in_review !== reviews.length) {
     errors.push(`summary.sources_in_review must equal ${reviews.length}`);
   }
-  if (summary.rights_decisions_recorded !== 0) errors.push('summary.rights_decisions_recorded must be 0');
-  if (summary.sources_cleared !== 0) errors.push('summary.sources_cleared must be 0');
-  if (summary.sources_candidate_only !== reviews.length) {
-    errors.push(`summary.sources_candidate_only must equal ${reviews.length}`);
+  if (summary.rights_decisions_recorded !== decisionsRecorded) {
+    errors.push(`summary.rights_decisions_recorded must equal ${decisionsRecorded}`);
+  }
+  if (summary.sources_cleared !== sourcesCleared) {
+    errors.push(`summary.sources_cleared must equal ${sourcesCleared}`);
+  }
+  if (summary.sources_candidate_only !== pendingCount) {
+    errors.push(`summary.sources_candidate_only must equal ${pendingCount}`);
   }
   for (const key of ZERO_KEYS) {
     if (summary[key] !== 0) errors.push(`summary.${key} must be 0`);
@@ -166,7 +214,7 @@ if (require.main === module) {
     process.exitCode = 1;
   } else {
     console.log(formatSummary(summary));
-    console.log('PASS: charging-system rights-review records validate as fail-closed and decision-free.');
+    console.log('PASS: charging-system rights-review records validate with explicit fail-closed decided-state contract.');
   }
 }
 

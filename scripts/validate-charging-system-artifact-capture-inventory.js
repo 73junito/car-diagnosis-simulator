@@ -8,8 +8,6 @@ const INVENTORY_PATH = path.join(repoRoot, 'data', 'evidence', 'review-queues',
   'charging-system-artifact-capture-inventory-20261003.json');
 const MANIFEST_PATH = path.join(repoRoot, 'data', 'evidence', 'review-queues',
   'charging-system-challenge-candidate-source-manifest-20261003.json');
-const RIGHTS_RECORDS_PATH = path.join(repoRoot, 'data', 'evidence', 'review-queues',
-  'charging-system-rights-review-records-20261003.json');
 
 const CAPTURE_STATUSES = ['captured', 'unavailable'];
 const CAPTURE_KINDS = ['exact-source', 'mirror', 'metadata-only', 'unavailable'];
@@ -45,12 +43,10 @@ function walkKeys(value, visit, trail = '$') {
 function validateCaptureInventory(options = {}) {
   const inventoryPath = options.inventoryPath || INVENTORY_PATH;
   const manifestPath = options.manifestPath || MANIFEST_PATH;
-  const rightsRecordsPath = options.rightsRecordsPath || RIGHTS_RECORDS_PATH;
   const errors = [];
 
   const inventory = readJson(inventoryPath, errors, 'artifact-capture inventory');
   const manifest = readJson(manifestPath, errors, 'candidate-source manifest');
-  const rightsRecords = readJson(rightsRecordsPath, errors, 'rights-review records');
   if (errors.length > 0) return { errors, summary: null };
 
   if (inventory.artifact_type !== 'candidate-source-artifact-capture-inventory') {
@@ -156,13 +152,6 @@ function validateCaptureInventory(options = {}) {
   if (summary.capture_kind_metadata_only !== byKind('metadata-only')) errors.push('summary.capture_kind_metadata_only is inconsistent');
   if (summary.capture_kind_unavailable !== byKind('unavailable')) errors.push('summary.capture_kind_unavailable is inconsistent');
 
-  // The inventory supplies artifacts; it must not record rights decisions.
-  for (const review of rightsRecords.reviews || []) {
-    if (review.rights_decision !== 'pending' || review.reviewer_identity !== null || review.artifact_sha256 !== null) {
-      errors.push(`${review.candidate_id}: rights-review records must remain decision-free while this inventory is the active input`);
-    }
-  }
-
   return { errors, summary };
 }
 
@@ -187,7 +176,7 @@ if (require.main === module) {
     process.exitCode = 1;
   } else {
     console.log(formatSummary(summary));
-    console.log('PASS: artifact-capture inventory validates with no rights decisions and no mapping fields.');
+    console.log('PASS: artifact-capture inventory validates as machine-only with no rights-decision or mapping fields.');
   }
 }
 
@@ -195,6 +184,5 @@ module.exports = {
   validateCaptureInventory,
   formatSummary,
   INVENTORY_PATH,
-  MANIFEST_PATH,
-  RIGHTS_RECORDS_PATH
+  MANIFEST_PATH
 };

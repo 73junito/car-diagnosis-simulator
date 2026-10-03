@@ -17,11 +17,6 @@ describe('charging-system artifact-capture remediation contract', () => {
       'charging-system-artifact-capture-inventory-20261003.json'),
     'utf8'
   ));
-  const rightsRecords = JSON.parse(fs.readFileSync(
-    path.join(root, 'data', 'evidence', 'review-queues',
-      'charging-system-rights-review-records-20261003.json'),
-    'utf8'
-  ));
 
   test('passes the fail-closed remediation validator', () => {
     const { errors } = validateRemediation();
@@ -70,7 +65,7 @@ describe('charging-system artifact-capture remediation contract', () => {
       .toEqual(['coalinga-tractor-electrical-hydraulic-health-2026', 'navy-navedtra-14264a-ch8']);
   });
 
-  test('records no rights decision, mapping, or review field', () => {
+  test('records no rights-decision, mapping, or review field in the remediation artifact', () => {
     const walk = (value) => {
       if (Array.isArray(value)) return value.forEach(walk);
       if (value && typeof value === 'object') {
@@ -81,12 +76,6 @@ describe('charging-system artifact-capture remediation contract', () => {
       }
     };
     walk(remediation);
-
-    for (const review of rightsRecords.reviews) {
-      expect(review.rights_decision).toBe('pending');
-      expect(review.reviewer_identity).toBeNull();
-      expect(review.artifact_sha256).toBeNull();
-    }
 
     const output = formatSummary(remediation.summary);
     expect(output).toContain('candidates_attempted: 6');
