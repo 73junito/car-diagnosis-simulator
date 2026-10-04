@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "human-final-content-approval-decisions",
+  "scenario_id": "charging-system",
+  "stage": "final-content-approved-assessment-eligibility-pending",
+  "created_at": "2026-10-04T03:16:40Z",
+  "final_approval_preparation": "data/evidence/review-queues/charging-system-final-approval-prep-20261003.json",
+  "purpose": "Record the named human final content-approval decisions for the three fully reviewed charging-system claims while preserving assessment eligibility as a separate downstream governance gate.",
+  "invariants": [
+    "Reviewer identity and timestamp reflect an explicit human final approval and are not synthesized.",
+    "Approved content must retain the final_content_text and instructional_scope prepared from the human instructional-review decisions.",
+    "Final content approval authorizes only governed instructional use within the recorded scope.",
+    "Final content approval does not authorize scoring, grading, question-bank approval, production assessment release, or assessment eligibility.",
+    "Claims 02 and 12 remain blocked at citation validation and are not included."
+  ],
+  "decisions": [
+    {
+      "claim_id": "charging-system-challenge-claim-05",
+      "final_content_text": "Lead-acid battery charging behavior depends on state of charge and the charger or regulator strategy.",
+      "instructional_scope": "Use as a conceptual explanation objective, not as a universal diagnostic threshold. Keep chemistry-specific and manufacturer-specific procedures separate.",
+      "final_decision": "approved-for-governed-instructional-content",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T03:16:40Z",
+      "technical_status": "reviewed",
+      "citation_status": "validated",
+      "instructional_status": "reviewed",
+      "allowed_use": [
+        "learner-facing explanatory content within the recorded instructional scope",
+        "training examples that do not add unsupported numeric thresholds or scoring rules",
+        "citation-linked instructional presentation consistent with source-rights restrictions"
+      ],
+      "prohibited_by_this_decision": [
+        "assessment eligibility",
+        "scoring or grading use",
+        "question-bank approval",
+        "production release of assessment items",
+        "expansion beyond the recorded instructional scope"
+      ],
+      "assessment_eligible": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-07",
+      "final_content_text": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and charging current decreases as battery voltage rises toward full charge.",
+      "instructional_scope": "Teach the trend and causal relationship only. Do not turn the statement into a fixed automotive amperage pass/fail rule.",
+      "final_decision": "approved-for-governed-instructional-content",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T03:16:40Z",
+      "technical_status": "reviewed",
+      "citation_status": "validated",
+      "instructional_status": "reviewed",
+      "allowed_use": [
+        "learner-facing explanatory content within the recorded instructional scope",
+        "training examples that do not add unsupported numeric thresholds or scoring rules",
+        "citation-linked instructional presentation consistent with source-rights restrictions"
+      ],
+      "prohibited_by_this_decision": [
+        "assessment eligibility",
+        "scoring or grading use",
+        "question-bank approval",
+        "production release of assessment items",
+        "expansion beyond the recorded instructional scope"
+      ],
+      "assessment_eligible": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-08",
+      "final_content_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine.",
+      "instructional_scope": "Use to explain energy conversion and accessory-load effects. Do not infer a universal fuel-consumption value, charging-output threshold, or diagnostic limit from this claim alone.",
+      "final_decision": "approved-for-governed-instructional-content",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T03:16:40Z",
+      "technical_status": "reviewed",
+      "citation_status": "validated",
+      "instructional_status": "reviewed",
+      "allowed_use": [
+        "learner-facing explanatory content within the recorded instructional scope",
+        "training examples that do not add unsupported numeric thresholds or scoring rules",
+        "citation-linked instructional presentation consistent with source-rights restrictions"
+      ],
+      "prohibited_by_this_decision": [
+        "assessment eligibility",
+        "scoring or grading use",
+        "question-bank approval",
+        "production release of assessment items",
+        "expansion beyond the recorded instructional scope"
+      ],
+      "assessment_eligible": false
+    }
+  ],
+  "blocked_claims": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    }
+  ],
+  "summary": {
+    "human_final_decisions_recorded": 3,
+    "final_approved_count": 3,
+    "assessment_eligible_count": 0
+  },
+  "next_gate": [
+    "Assessment eligibility remains a separate explicit governance decision.",
+    "No scoring, grading, question-bank approval, or production assessment release is authorized by this artifact.",
+    "Claims 02 and 12 remain blocked until citation validation is complete."
+  ]
+}
