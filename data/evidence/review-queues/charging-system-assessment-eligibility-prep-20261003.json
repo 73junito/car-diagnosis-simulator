@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "assessment-eligibility-review-preparation",
+  "scenario_id": "charging-system",
+  "stage": "assessment-eligibility-review-prepared-no-eligibility-change",
+  "created_at": "2026-10-04T03:32:08Z",
+  "final_content_approval_decisions": "data/evidence/review-queues/charging-system-final-approval-decisions-20261003.json",
+  "purpose": "Evaluate whether final-approved charging-system claims are ready for assessment eligibility. This artifact intentionally separates approved instructional content from item-level assessment governance.",
+  "governance_precedent": [
+    "Existing AUT-250 training-bank approvals keep scored=false, institutional_assessment_eligible=false, high_stakes_eligible=false, and production_assessment_api_eligible=false even after training approval.",
+    "Existing question-generation controls require deterministic question validity and separate human review before downstream use."
+  ],
+  "invariants": [
+    "A final-approved instructional claim is not itself an assessment item.",
+    "No assessment eligibility may be granted without an exact governed item payload and item-level validation.",
+    "Formative draft generation from approved instructional content does not imply assessment eligibility.",
+    "No scoring, grading, institutional assessment, high-stakes use, production assessment API use, or assessment release is authorized by this preparation artifact.",
+    "Claims 02 and 12 remain blocked at citation validation and are excluded from this assessment review."
+  ],
+  "reviews": [
+    {
+      "claim_id": "charging-system-challenge-claim-05",
+      "final_content_text": "Lead-acid battery charging behavior depends on state of charge and the charger or regulator strategy.",
+      "final_content_status": "approved-for-governed-instructional-content",
+      "assessment_review_status": "prepared-pending-human-assessment-governance",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "assessment_eligibility_recommendation": "remain-ineligible-at-claim-level",
+      "assessment_eligible": false,
+      "formative_draft_generation_allowed": true,
+      "scored": false,
+      "institutional_assessment_eligible": false,
+      "high_stakes_eligible": false,
+      "production_assessment_api_eligible": false,
+      "release_state": {
+        "training_content_release": true,
+        "assessment_release": false,
+        "high_stakes_release": false,
+        "production_release": false
+      },
+      "eligibility_blockers": [
+        "No governed assessment item payload exists for this claim (no stem, response set, keyed answer, or explanation package).",
+        "No deterministic item-level validation has been performed.",
+        "No item-specific scoring or grading rule has been approved.",
+        "No item-specific safety review has been recorded.",
+        "No production assessment release or assessment API eligibility has been approved."
+      ],
+      "requirements_before_any_future_assessment-eligibility-decision": [
+        "Create a governed assessment item derived from the approved claim without expanding beyond its instructional scope.",
+        "Complete item-level rights, technical, instructional, and safety review as applicable.",
+        "Complete deterministic validation of the exact item payload.",
+        "Define and approve any scoring or grading behavior separately.",
+        "Record a separate explicit human assessment-eligibility decision for the exact validated item."
+      ]
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-07",
+      "final_content_text": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and charging current decreases as battery voltage rises toward full charge.",
+      "final_content_status": "approved-for-governed-instructional-content",
+      "assessment_review_status": "prepared-pending-human-assessment-governance",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "assessment_eligibility_recommendation": "remain-ineligible-at-claim-level",
+      "assessment_eligible": false,
+      "formative_draft_generation_allowed": true,
+      "scored": false,
+      "institutional_assessment_eligible": false,
+      "high_stakes_eligible": false,
+      "production_assessment_api_eligible": false,
+      "release_state": {
+        "training_content_release": true,
+        "assessment_release": false,
+        "high_stakes_release": false,
+        "production_release": false
+      },
+      "eligibility_blockers": [
+        "No governed assessment item payload exists for this claim (no stem, response set, keyed answer, or explanation package).",
+        "No deterministic item-level validation has been performed.",
+        "No item-specific scoring or grading rule has been approved.",
+        "No item-specific safety review has been recorded.",
+        "No production assessment release or assessment API eligibility has been approved."
+      ],
+      "requirements_before_any_future_assessment-eligibility-decision": [
+        "Create a governed assessment item derived from the approved claim without expanding beyond its instructional scope.",
+        "Complete item-level rights, technical, instructional, and safety review as applicable.",
+        "Complete deterministic validation of the exact item payload.",
+        "Define and approve any scoring or grading behavior separately.",
+        "Record a separate explicit human assessment-eligibility decision for the exact validated item."
+      ]
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-08",
+      "final_content_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine.",
+      "final_content_status": "approved-for-governed-instructional-content",
+      "assessment_review_status": "prepared-pending-human-assessment-governance",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "assessment_eligibility_recommendation": "remain-ineligible-at-claim-level",
+      "assessment_eligible": false,
+      "formative_draft_generation_allowed": true,
+      "scored": false,
+      "institutional_assessment_eligible": false,
+      "high_stakes_eligible": false,
+      "production_assessment_api_eligible": false,
+      "release_state": {
+        "training_content_release": true,
+        "assessment_release": false,
+        "high_stakes_release": false,
+        "production_release": false
+      },
+      "eligibility_blockers": [
+        "No governed assessment item payload exists for this claim (no stem, response set, keyed answer, or explanation package).",
+        "No deterministic item-level validation has been performed.",
+        "No item-specific scoring or grading rule has been approved.",
+        "No item-specific safety review has been recorded.",
+        "No production assessment release or assessment API eligibility has been approved."
+      ],
+      "requirements_before_any_future_assessment-eligibility-decision": [
+        "Create a governed assessment item derived from the approved claim without expanding beyond its instructional scope.",
+        "Complete item-level rights, technical, instructional, and safety review as applicable.",
+        "Complete deterministic validation of the exact item payload.",
+        "Define and approve any scoring or grading behavior separately.",
+        "Record a separate explicit human assessment-eligibility decision for the exact validated item."
+      ]
+    }
+  ],
+  "blocked_claims": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    }
+  ],
+  "summary": {
+    "final_approved_claims_reviewed_for_assessment_readiness": 3,
+    "recommended_remain_ineligible_at_claim_level": 3,
+    "human_assessment_decisions_recorded": 0,
+    "assessment_eligible_count": 0,
+    "scored_count": 0,
+    "institutional_assessment_eligible_count": 0,
+    "high_stakes_eligible_count": 0,
+    "production_assessment_api_eligible_count": 0
+  },
+  "next_safe_action": [
+    "Use the final-approved claims only as governed source concepts for formative question-draft generation.",
+    "Keep generated drafts unscored and assessment-ineligible by default.",
+    "Run item-level evidence mapping, technical review, instructional review, safety review, and deterministic validation before any future assessment-eligibility decision."
+  ]
+}
