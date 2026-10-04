@@ -82,16 +82,16 @@
     },
     {
       "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
-      "rights_decision": "pending",
-      "decided_rights_classification": null,
-      "reviewer_identity": null,
-      "reviewed_at": null,
+      "rights_decision": "cleared-link-citation-only",
+      "decided_rights_classification": "cleared-link-citation-only",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T00:25:22Z",
       "artifact_sha256": null,
-      "scope_of_clearance": null,
+      "scope_of_clearance": "The canonical Workforce LibreTexts page may be linked to and cited as a CC BY 4.0 source authored by Peter Maokosy for Coalinga College. The page-level license ordinarily permits broader reuse, including commercial reuse and adaptation, but this review does not authorize stored excerpts, full-text storage, RAG ingestion, or other content-dependent reuse because no byte-stable artifact of record has been obtained. Broader clearance may be reconsidered after a reproducible artifact is captured and hashed.",
       "store_verbatim_excerpt": false,
       "may_generate_questions": false,
       "approval_effect": "none",
-      "review_notes": null
+      "review_notes": "Human review approved by Rafael Rodriguez Jr. The Coalinga College Workforce LibreTexts page identifies Peter Maokosy as author and states a CC BY 4.0 license. Automated capture remediation could not obtain a byte-stable HTML or PDF artifact: repeated exports produced differing hashes. This decision therefore records only link-and-citation clearance and deliberately leaves artifact_sha256 null under the validator's narrow-scope allowance. This rights decision does not constitute claim mapping, citation validation, technical review, instructional review, question approval, or assessment eligibility."
     },
     {
       "candidate_id": "frontiers-automotive-alternator-2023",
@@ -110,9 +110,9 @@
   ],
   "summary": {
     "sources_in_review": 6,
-    "rights_decisions_recorded": 4,
-    "sources_cleared": 4,
-    "sources_candidate_only": 2,
+    "rights_decisions_recorded": 5,
+    "sources_cleared": 5,
+    "sources_candidate_only": 1,
     "mapped_count": 0,
     "citation_validated_count": 0,
     "technical_reviewed_count": 0,
