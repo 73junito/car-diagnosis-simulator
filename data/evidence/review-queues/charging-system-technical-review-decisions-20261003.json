@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "human-technical-review-decisions",
+  "scenario_id": "charging-system",
+  "stage": "technical-review-complete-pending-citation-validation",
+  "created_at": "2026-10-04T01:56:38Z",
+  "technical_review_preparation": "data/evidence/review-queues/charging-system-technical-review-prep-20261003.json",
+  "claim_source_mapping": "data/evidence/review-queues/charging-system-claim-source-mapping-20261003.json",
+  "purpose": "Record the named human technical review decisions for the five mapped charging-system claims while preserving the original claim text and carrying approved revisions forward explicitly.",
+  "invariants": [
+    "Reviewer identity and timestamp reflect an explicit human approval; they are not synthesized.",
+    "Original mapped claim text remains preserved for provenance. Revised wording is stored separately as approved_claim_text.",
+    "Technical approval does not imply citation validation, instructional review, final approval, scoring approval, or assessment eligibility.",
+    "Locator findings preserve the preparation-stage verification status; technical approval does not promote corroborated locators to artifact-verified.",
+    "No verbatim source excerpt, proprietary text, learner-facing question payload, or scoring rule is stored in this artifact."
+  ],
+  "reviews": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "original_claim_text": "High‑current ground strap maintains low resistance",
+      "approved_claim_text": "High‑current ground strap maintains low resistance",
+      "technical_decision": "approved-with-caveat",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T01:56:38Z",
+      "technical_finding": "The claim is technically reasonable at a concept level: a high-current ground path must have low resistance, and excessive voltage drop indicates unwanted resistance. The existing caveat is necessary because acceptable drop depends on circuit load, connection count, vehicle design, and manufacturer specification.",
+      "required_caveat": "Do not teach a universal ground-strap resistance or voltage-drop limit; use the applicable manufacturer procedure/specification.",
+      "locator_findings": [
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator_status": "corroborated-not-artifact-verified",
+          "finding": "The indexed Chapter 8 text describes a ground-circuit voltage-drop test between the negative battery terminal and alternator housing and treats excessive drop as evidence of poor connections. Because the exact official PDF remains inaccessible to automated capture, this locator is not promoted to artifact-verified."
+        },
+        {
+          "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+          "locator_status": "verified-canonical-page",
+          "finding": "The canonical Coalinga page states that weak electrical symptoms may be associated with corroded terminals and that cleaning connections can restore electrical strength. This supports connection-condition context, not a universal resistance or voltage-drop threshold."
+        }
+      ],
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "decision_notes": "Human technical reviewer approved the claim with the prepared caveat. This technical decision does not constitute citation validation, instructional review, question approval, scoring approval, or assessment eligibility."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-05",
+      "original_claim_text": "Battery charging characteristics",
+      "approved_claim_text": "Battery charging characteristics",
+      "technical_decision": "approved-with-caveat",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T01:56:38Z",
+      "technical_finding": "The broad claim 'Battery charging characteristics' is supported. DOE describes automotive SLI batteries, partial-float charging in a running vehicle, charger matching, and charging-current behavior; Navy material supplies automotive charging-system voltage evaluation against manufacturer specification.",
+      "required_caveat": "Keep the claim general; battery chemistry, temperature, state of charge, charger/regulator strategy, and manufacturer procedure affect observed charging behavior.",
+      "locator_findings": [
+        {
+          "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+          "locator_status": "verified-authoritative-pdf",
+          "finding": "DOE-HDBK-1084-95 identifies SLI automotive use, states that vehicle-running operation provides partial-float charging, and explains charger matching plus changing charge current as state of charge rises."
+        },
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator_status": "corroborated-not-artifact-verified",
+          "finding": "Indexed Chapter 8 material evaluates charging-system voltage/output against manufacturer specifications. Exact official PDF capture remains blocked, so the locator is not promoted to artifact-verified."
+        }
+      ],
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "decision_notes": "Human technical reviewer approved the claim with the prepared caveat. This technical decision does not constitute citation validation, instructional review, question approval, scoring approval, or assessment eligibility."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-07",
+      "original_claim_text": "Battery charging current characteristics",
+      "approved_claim_text": "Battery charging current characteristics",
+      "technical_decision": "approved-with-caveat",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T01:56:38Z",
+      "technical_finding": "DOE directly supports general charging-current characteristics: initial charging current can be high and decreases as a lead-acid battery approaches full charge under constant-voltage charging; charging method must be matched to the battery application.",
+      "required_caveat": "Do not convert this general lead-acid behavior into a universal automotive amperage threshold or diagnostic pass/fail value.",
+      "locator_findings": [
+        {
+          "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+          "locator_status": "verified-authoritative-pdf",
+          "finding": "The authoritative DOE handbook explains that discharged batteries may initially accept high current, that current must decrease near full charge, and that constant-voltage charging naturally produces decreasing current as battery voltage rises."
+        }
+      ],
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "decision_notes": "Human technical reviewer approved the claim with the prepared caveat. This technical decision does not constitute citation validation, instructional review, question approval, scoring approval, or assessment eligibility."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-08",
+      "original_claim_text": "Engine load impact on charging",
+      "approved_claim_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine.",
+      "technical_decision": "approved-with-revision",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T01:56:38Z",
+      "technical_finding": "The wording 'Engine load impact on charging' is directionally ambiguous. Frontiers demonstrates that the alternator and other auxiliaries impose mechanical power demand on the engine; Army charging tests apply electrical load while measuring charging output. Those sources do not cleanly establish the reverse proposition that engine load itself determines charging performance.",
+      "required_caveat": null,
+      "locator_findings": [
+        {
+          "candidate_id": "frontiers-automotive-alternator-2023",
+          "locator_status": "verified-canonical-publisher",
+          "finding": "The article quantifies alternator and other auxiliary loads as engine power demand and discusses their dependence on engine speed. It supports 'charging/auxiliary systems impose engine load,' not the ambiguous reverse wording."
+        },
+        {
+          "candidate_id": "army-da-pam-750-33-1976",
+          "locator_status": "artifact-previously-verified",
+          "finding": "The mapped chapters contain charging-output-under-load procedures for military systems. They support electrical-load testing of charging output, but their numeric procedures are not generic passenger-vehicle specifications."
+        }
+      ],
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "decision_notes": "Human technical reviewer approved the prepared revision. The original mapped claim text is retained for provenance; this decision establishes the revised claim text for subsequent citation validation and instructional review."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "original_claim_text": "Alternator under‑charging produces voltage dips during high accessory load",
+      "approved_claim_text": "If charging-system output is insufficient under the specified electrical load, system voltage may fall below the manufacturer-specified range.",
+      "technical_decision": "approved-with-revision",
+      "reviewer_identity": "Rafael Rodriguez Jr.",
+      "reviewed_at": "2026-10-04T01:56:38Z",
+      "technical_finding": "The sources support evaluating charging-system voltage/current under electrical load and establish that vehicle auxiliaries create substantial electrical/mechanical demand. They do not directly establish the transient phrase 'voltage dips' as the diagnostic consequence of under-charging. The concept should be rewritten in manufacturer-specification language.",
+      "required_caveat": null,
+      "locator_findings": [
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator_status": "corroborated-not-artifact-verified",
+          "finding": "Indexed Chapter 8 material describes charging-system output testing under maximum load, directs the technician not to let voltage fall below specification, and requires comparison with manufacturer specifications. Exact official PDF capture remains blocked."
+        },
+        {
+          "candidate_id": "army-da-pam-750-33-1976",
+          "locator_status": "artifact-previously-verified",
+          "finding": "The mapped Army chapters provide alternator output/load tests but use military-system procedures and values that cannot be generalized."
+        },
+        {
+          "candidate_id": "frontiers-automotive-alternator-2023",
+          "locator_status": "verified-canonical-publisher",
+          "finding": "The Frontiers article shows that automotive electrical auxiliaries and the alternator represent significant power demand, but it is not a diagnostic source for transient system-voltage dips."
+        }
+      ],
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "decision_notes": "Human technical reviewer approved the prepared revision. The original mapped claim text is retained for provenance; this decision establishes the revised claim text for subsequent citation validation and instructional review."
+    }
+  ],
+  "summary": {
+    "mapped_claims_in_review": 5,
+    "human_technical_decisions_recorded": 5,
+    "approved_with_caveat": 3,
+    "approved_with_revision": 2,
+    "technical_reviewed_count": 5,
+    "citation_validated_count": 0,
+    "instructional_reviewed_count": 0,
+    "approved_count": 0,
+    "assessment_eligible_count": 0
+  },
+  "next_gate": [
+    "Citation validation must evaluate the exact source/locator support for each approved_claim_text.",
+    "Claims 08 and 12 must use the approved revised wording in downstream citation-validation and instructional-review artifacts.",
+    "Do not promote Navy locators beyond corroborated-not-artifact-verified unless the exact official artifact is captured and independently verified.",
+    "Instructional review, approval, scoring, and assessment eligibility remain closed."
+  ]
+}
