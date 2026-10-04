@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "formative-final-item-decisions",
+  "scenario_id": "charging-system",
+  "stage": "final-items-approved-for-governed-formative-use-only",
+  "created_at": "2026-10-04T21:13:22Z",
+  "final_item_approval_preparation": "data/evidence/review-queues/charging-system-formative-final-item-approval-prep-20261004.json",
+  "source_artifact_canonical_sha256": "e30477fa68294896228eb22419205d2d77ecc49556460d9c8940dfbe1c7de93d",
+  "human_confirmation": {
+    "reviewer_identity": "Rafael Rodriguez Jr.",
+    "reviewed_at": "2026-10-04T21:13:22Z",
+    "user_confirmation": "I approve the final item recommendations for charging-system formative items 05, 07, and 08 for governed formative use as written"
+  },
+  "purpose": "Record explicit final human approval of the exact charging-system formative items 05, 07, and 08 for governed formative use only, without granting scoring, assessment, high-stakes, API, assessment-release, or broad production-release authority.",
+  "invariants": [
+    "The final decisions apply only to the exact canonical item hashes recorded here.",
+    "Any change to stem, choices, answer, explanation, or source linkage requires deterministic revalidation and renewed human review before reuse.",
+    "Final item approval authorizes governed formative use of the exact payloads only.",
+    "Final item approval does not authorize scoring, grading, institutional assessment, high-stakes or certification use, production assessment API use, assessment release, or broad production release.",
+    "Claims 02 and 12 remain blocked at citation validation and are excluded."
+  ],
+  "decisions": [
+    {
+      "id": "charging-system-formative-draft-05-001",
+      "claim_id": "charging-system-challenge-claim-05",
+      "canonical_item_sha256": "003f80fef4bfc4a46c3c02e5b5395b4d8b520210cf4a03f9762c76a447ccb980",
+      "review_snapshot": {
+        "stem": "Which statement best describes lead-acid battery charging behavior?",
+        "choices": {
+          "A": "Charging behavior depends on state of charge and the charger or regulator strategy.",
+          "B": "Charging behavior is the same at every state of charge if battery voltage is above a fixed threshold.",
+          "C": "Charging behavior is determined only by battery age and is independent of the charger or regulator strategy.",
+          "D": "Charging behavior can be evaluated with one universal charging-current value for all lead-acid batteries."
+        },
+        "answer": "A",
+        "explanation": "Lead-acid battery charging behavior varies with state of charge and the charging or regulation strategy. Chemistry-specific and manufacturer-specific procedures still control any diagnostic limits or service decisions.",
+        "source_final_content_text": "Lead-acid battery charging behavior depends on state of charge and the charger or regulator strategy."
+      },
+      "final_item_approval": {
+        "decision": "approved-for-governed-formative-use",
+        "reviewer_identity": "Rafael Rodriguez Jr.",
+        "reviewed_at": "2026-10-04T21:13:22Z",
+        "approved_recommendation": "approve-for-governed-formative-use",
+        "allowed_use": [
+          "learner-facing formative presentation of this exact item payload",
+          "unscored practice and concept-check use",
+          "feedback using the approved keyed answer and explanation",
+          "governed training use within the recorded instructional and safety scope"
+        ],
+        "not_authorized": [
+          "scoring or grading authority",
+          "institutional assessment eligibility",
+          "high-stakes or certification use",
+          "production assessment API eligibility",
+          "assessment release",
+          "production release beyond governed formative use",
+          "content changes without deterministic revalidation and renewed human review"
+        ]
+      },
+      "governance_effect": {
+        "final_item_approved": true,
+        "formative_use_approved": true,
+        "scored": false,
+        "assessment_eligible": false,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      }
+    },
+    {
+      "id": "charging-system-formative-draft-07-001",
+      "claim_id": "charging-system-challenge-claim-07",
+      "canonical_item_sha256": "fe51b2c4d22f1f9ce351033b63682a7196f94ec02aa32cc18d6f13573393177f",
+      "review_snapshot": {
+        "stem": "During constant-voltage charging of a discharged lead-acid battery, which current trend is most consistent with the approved instructional concept?",
+        "choices": {
+          "A": "Charging current must remain constant until the battery reaches full charge.",
+          "B": "Charging current may be high initially and then decrease as battery voltage rises toward full charge.",
+          "C": "Charging current must increase continuously as battery voltage rises.",
+          "D": "A single fixed amperage value determines whether every lead-acid battery is charging correctly."
+        },
+        "answer": "B",
+        "explanation": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and current decreases as battery voltage rises toward full charge. The concept describes a trend, not a universal automotive amperage pass/fail value.",
+        "source_final_content_text": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and charging current decreases as battery voltage rises toward full charge."
+      },
+      "final_item_approval": {
+        "decision": "approved-for-governed-formative-use",
+        "reviewer_identity": "Rafael Rodriguez Jr.",
+        "reviewed_at": "2026-10-04T21:13:22Z",
+        "approved_recommendation": "approve-for-governed-formative-use",
+        "allowed_use": [
+          "learner-facing formative presentation of this exact item payload",
+          "unscored practice and concept-check use",
+          "feedback using the approved keyed answer and explanation",
+          "governed training use within the recorded instructional and safety scope"
+        ],
+        "not_authorized": [
+          "scoring or grading authority",
+          "institutional assessment eligibility",
+          "high-stakes or certification use",
+          "production assessment API eligibility",
+          "assessment release",
+          "production release beyond governed formative use",
+          "content changes without deterministic revalidation and renewed human review"
+        ]
+      },
+      "governance_effect": {
+        "final_item_approved": true,
+        "formative_use_approved": true,
+        "scored": false,
+        "assessment_eligible": false,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      }
+    },
+    {
+      "id": "charging-system-formative-draft-08-001",
+      "claim_id": "charging-system-challenge-claim-08",
+      "canonical_item_sha256": "7d6b5733b77b2f6053babca951b2cca6f74399abab1b6d1a13f440da852ea814",
+      "review_snapshot": {
+        "stem": "Why can increased electrical charging demand increase mechanical load on an engine with a belt-driven charging system?",
+        "choices": {
+          "A": "The charging system converts additional mechanical input into electrical output, so greater electrical demand can require more mechanical power from the engine.",
+          "B": "Electrical demand eliminates mechanical resistance in belt-driven accessories, reducing the power required from the engine.",
+          "C": "Charging demand changes only battery voltage and has no relationship to mechanical power transfer.",
+          "D": "Any increase in charging demand proves a specific fuel-consumption increase regardless of vehicle design or operating condition."
+        },
+        "answer": "A",
+        "explanation": "Electrical charging demand and belt-driven auxiliaries require mechanical power from the engine. The approved concept supports the direction of the load relationship, but it does not establish a universal fuel-consumption value, charging-output threshold, or diagnostic limit.",
+        "source_final_content_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine."
+      },
+      "final_item_approval": {
+        "decision": "approved-for-governed-formative-use",
+        "reviewer_identity": "Rafael Rodriguez Jr.",
+        "reviewed_at": "2026-10-04T21:13:22Z",
+        "approved_recommendation": "approve-for-governed-formative-use",
+        "allowed_use": [
+          "learner-facing formative presentation of this exact item payload",
+          "unscored practice and concept-check use",
+          "feedback using the approved keyed answer and explanation",
+          "governed training use within the recorded instructional and safety scope"
+        ],
+        "not_authorized": [
+          "scoring or grading authority",
+          "institutional assessment eligibility",
+          "high-stakes or certification use",
+          "production assessment API eligibility",
+          "assessment release",
+          "production release beyond governed formative use",
+          "content changes without deterministic revalidation and renewed human review"
+        ]
+      },
+      "governance_effect": {
+        "final_item_approved": true,
+        "formative_use_approved": true,
+        "scored": false,
+        "assessment_eligible": false,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      }
+    }
+  ],
+  "blocked_claims": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    }
+  ],
+  "summary": {
+    "items_finally_approved": 3,
+    "formative_use_approved_count": 3,
+    "scored_count": 0,
+    "assessment_eligible_count": 0,
+    "institutional_assessment_eligible_count": 0,
+    "high_stakes_eligible_count": 0,
+    "production_assessment_api_eligible_count": 0,
+    "assessment_release_count": 0,
+    "production_release_count": 0
+  },
+  "next_gate": [
+    "If desired, prepare a separate assessment-readiness review for these exact approved formative items.",
+    "Do not infer scoring or assessment eligibility from final formative approval.",
+    "Keep Claims 02 and 12 blocked until citation validation is complete."
+  ]
+}
