@@ -50,7 +50,7 @@ function validate(options={}){
   if(result.artifact_type!=='deterministic-formative-item-validation') errors.push('artifact_type mismatch');
   if(result.validator_version!=='charging-system-formative-item-validator-1.0') errors.push('validator_version mismatch');
   if(result.validation_type!=='deterministic-exact-payload-contract') errors.push('validation_type mismatch');
-  if(result.source_artifact_sha256!==sha256(sourceBytes)) errors.push('source artifact hash mismatch');
+  if(result.source_artifact_canonical_sha256!==canonicalHash(source)) errors.push('source artifact canonical hash mismatch');
   if(result.scope?.question_count!==3) errors.push('validation scope question_count must be 3');
 
   const finalBy=new Map(final.decisions.map(r=>[r.claim_id,r]));

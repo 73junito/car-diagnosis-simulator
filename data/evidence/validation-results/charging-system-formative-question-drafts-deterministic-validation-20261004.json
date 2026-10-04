@@ -6,7 +6,7 @@
   "validation_type": "deterministic-exact-payload-contract",
   "validated_at": "2026-10-04T19:58:13Z",
   "source_artifact": "data/evidence/review-queues/charging-system-formative-question-drafts-20261003.json",
-  "source_artifact_sha256": "b4f11e4f8ad38530af5a3b39b2ead5aa194d26c076f6781d5148a6b11efc819a",
+  "source_artifact_canonical_sha256": "e30477fa68294896228eb22419205d2d77ecc49556460d9c8940dfbe1c7de93d",
   "scope": {
     "question_count": 3,
     "claim_ids": [

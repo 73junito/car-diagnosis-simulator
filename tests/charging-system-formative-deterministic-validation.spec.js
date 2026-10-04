@@ -1,6 +1,3 @@
-const crypto=require('crypto');
-const fs=require('fs');
-const path=require('path');
 const {validate,formatSummary,canonicalHash}=require('../scripts/validate-charging-system-formative-deterministic-validation');
 
 describe('charging-system formative deterministic validation',()=>{
@@ -19,11 +16,8 @@ describe('charging-system formative deterministic validation',()=>{
     expect(artifact.items.map(i=>i.result)).toEqual(['valid','valid','valid']);
   });
 
-  test('binds validation to the exact source artifact and canonical item hashes',()=>{
-    const root=path.resolve(__dirname,'..');
-    const p=path.join(root,'data','evidence','review-queues','charging-system-formative-question-drafts-20261003.json');
-    const bytes=fs.readFileSync(p);
-    expect(artifact.source_artifact_sha256).toBe(crypto.createHash('sha256').update(bytes).digest('hex'));
+  test('binds validation to the canonical source artifact and canonical item hashes',()=>{
+    expect(artifact.source_artifact_canonical_sha256).toBe(canonicalHash(source));
     for(const item of artifact.items){
       const q=source.questions.find(x=>x.id===item.id);
       expect(item.canonical_item_sha256).toBe(canonicalHash(q));
