@@ -1,0 +1,306 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "claim-to-source-mapping",
+  "scenario_id": "charging-system",
+  "stage": "first-mapping-slice-pending-technical-review",
+  "created_at": "2026-10-04T00:40:00Z",
+  "policy": "data/evidence/open-evidence-source-policy.json",
+  "candidate_source_manifest": "data/evidence/review-queues/charging-system-challenge-candidate-source-manifest-20261003.json",
+  "rights_review_records": "data/evidence/review-queues/charging-system-rights-review-records-20261003.json",
+  "purpose": "Commit a bounded metadata-level claim-to-source mapping after completion of all six human rights decisions. A mapping records which reviewed source and locator may support a claim for later review; it is not citation validation, technical review, instructional review, approval, or assessment eligibility.",
+  "invariants": [
+    "A mapped claim may reference only a source present in the discovery manifest with a completed non-pending rights decision.",
+    "Mapped locators must be copied from the discovery manifest; this artifact does not invent new locators or excerpts.",
+    "Mapping does not imply technical correctness, applicability, citation validity, instructional suitability, approval, or assessment eligibility.",
+    "Claims with explicit unresolved source gaps, unverified thresholds, or unsupported causal relationships remain unmapped.",
+    "No verbatim source excerpt, question payload, scoring rule, or proprietary text is stored in this artifact."
+  ],
+  "mappings": [
+    {
+      "claim_id": "charging-system-challenge-claim-01",
+      "draft_id": "charging-system-challenge-d31fc9ce93e7",
+      "claim_index": 0,
+      "claim_text": "Battery internal resistance remains below specified maximum",
+      "mapping_status": "unmapped-source-or-technical-gap",
+      "mapped_sources": [],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Exact subsection stating an internal-resistance specification limit must be located at artifact capture; no threshold is treated as established.",
+      "mapping_notes": "exact internal-resistance maximum/threshold has not been verified at the cited locator"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "draft_id": "charging-system-challenge-545e31edc689",
+      "claim_index": 0,
+      "claim_text": "High‑current ground strap maintains low resistance",
+      "mapping_status": "mapped-pending-technical-review",
+      "mapped_sources": [
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator": "Section 1.3.4, printed 8-21: voltage drop along the ground return",
+          "rights_decision": "cleared-link-citation-only",
+          "mapping_scope": "concept-level support for low-resistance ground return through voltage-drop testing; no universal threshold is asserted",
+          "locator_verification": "pending-human-technical-review"
+        },
+        {
+          "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+          "locator": "Section 4.06: corroded terminals and connection cleaning",
+          "rights_decision": "cleared-link-citation-only",
+          "mapping_scope": "concept-level support that corroded electrical connections degrade circuit health; no numeric resistance limit is asserted",
+          "locator_verification": "pending-human-technical-review"
+        }
+      ],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Vehicle-specific load and limit apply; no single voltage-drop threshold may be generalized.",
+      "mapping_notes": "Metadata-level claim-to-source mapping only. Rights are already reviewed, but locator verification, citation validation, technical applicability, instructional review, approval, and assessment eligibility remain separate gates."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-03",
+      "draft_id": "charging-system-challenge-dc7bbdb21c65",
+      "claim_index": 0,
+      "claim_text": "Alternator voltage regulation curve",
+      "mapping_status": "unmapped-source-or-technical-gap",
+      "mapped_sources": [],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Regulation curve shape and limits are design-specific; candidate locators require technical review before any mapping.",
+      "mapping_notes": "regulation-curve shape and limits are design-specific and have not passed technical review"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-04",
+      "draft_id": "charging-system-challenge-dc7bbdb21c65",
+      "claim_index": 1,
+      "claim_text": "Engine RPM influence on volt output",
+      "mapping_status": "unmapped-source-or-technical-gap",
+      "mapped_sources": [],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Rotor-speed versus output relationship was not explicitly located at discovery; this claim may still become a source gap after technical review.",
+      "mapping_notes": "rotor/engine-speed versus output relationship was not explicitly located during discovery"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-05",
+      "draft_id": "charging-system-challenge-dc7bbdb21c65",
+      "claim_index": 2,
+      "claim_text": "Battery charging characteristics",
+      "mapping_status": "mapped-pending-technical-review",
+      "mapped_sources": [
+        {
+          "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+          "locator": "Applications > Starting, Lighting, and Ignition, p. 23; Maintenance > Matching the Charger to Battery Requirements, p. 29",
+          "rights_decision": "cleared-link-citation-only",
+          "mapping_scope": "general lead-acid charging characteristics and charger-to-battery matching",
+          "locator_verification": "pending-human-technical-review"
+        },
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator": "Section 1.2.4, printed 8-17: charging voltage against manufacturer specification",
+          "rights_decision": "cleared-link-citation-only",
+          "mapping_scope": "charging-voltage evaluation against manufacturer specification",
+          "locator_verification": "pending-human-technical-review"
+        }
+      ],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": null,
+      "mapping_notes": "Metadata-level claim-to-source mapping only. Rights are already reviewed, but locator verification, citation validation, technical applicability, instructional review, approval, and assessment eligibility remain separate gates."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-06",
+      "draft_id": "charging-system-challenge-8ddd2e64ffbf",
+      "claim_index": 0,
+      "claim_text": "Voltage regulator performance over time",
+      "mapping_status": "unmapped-source-or-technical-gap",
+      "mapped_sources": [],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Degradation-over-time evidence was not explicitly located at discovery; this claim may become a source gap after technical review.",
+      "mapping_notes": "degradation or performance-over-time evidence was not explicitly located"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-07",
+      "draft_id": "charging-system-challenge-8ddd2e64ffbf",
+      "claim_index": 1,
+      "claim_text": "Battery charging current characteristics",
+      "mapping_status": "mapped-pending-technical-review",
+      "mapped_sources": [
+        {
+          "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+          "locator": "Maintenance > Matching the Charger to Battery Requirements, p. 29; Operation and Construction, pp. 13 to 20",
+          "rights_decision": "cleared-link-citation-only",
+          "mapping_scope": "general battery charging-current characteristics and charger matching",
+          "locator_verification": "pending-human-technical-review"
+        }
+      ],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": null,
+      "mapping_notes": "Metadata-level claim-to-source mapping only. Rights are already reviewed, but locator verification, citation validation, technical applicability, instructional review, approval, and assessment eligibility remain separate gates."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-08",
+      "draft_id": "charging-system-challenge-8ddd2e64ffbf",
+      "claim_index": 2,
+      "claim_text": "Engine load impact on charging",
+      "mapping_status": "mapped-pending-technical-review",
+      "mapped_sources": [
+        {
+          "candidate_id": "frontiers-automotive-alternator-2023",
+          "locator": "Full text; p. 7 candidate chunks: auxiliary load power demand",
+          "rights_decision": "cleared-commercial-reuse",
+          "mapping_scope": "auxiliary electrical load power demand as a charging-system load context",
+          "locator_verification": "pending-human-technical-review"
+        },
+        {
+          "candidate_id": "army-da-pam-750-33-1976",
+          "locator": "Chapter 3, printed pp. 10 to 17; Chapter 5, printed pp. 18 to 28: charging output under load tests",
+          "rights_decision": "cleared-text-excerpt",
+          "mapping_scope": "charging-output-under-load testing; military numeric procedures are not generalized",
+          "locator_verification": "pending-human-technical-review"
+        }
+      ],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Army test values are military-system specific and must not become generic passenger-car guidance.",
+      "mapping_notes": "Metadata-level claim-to-source mapping only. Rights are already reviewed, but locator verification, citation validation, technical applicability, instructional review, approval, and assessment eligibility remain separate gates."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-09",
+      "draft_id": "charging-system-challenge-815c47e02d0c",
+      "claim_index": 0,
+      "claim_text": "Understanding how a faulty voltage regulator affects alternator output voltage as a function of engine speed.",
+      "mapping_status": "unmapped-source-or-technical-gap",
+      "mapped_sources": [],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": null,
+      "mapping_notes": "the discovered sources do not yet establish the claimed faulty-regulator behavior specifically as a function of engine speed"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-10",
+      "draft_id": "charging-system-challenge-4b7063fad7f3",
+      "claim_index": 0,
+      "claim_text": "High alternator output with steady battery voltage indicates regulator malfunction",
+      "mapping_status": "unmapped-source-or-technical-gap",
+      "mapped_sources": [],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Symptom-to-fault inference requires human technical review; this mapping is not treated as established evidence.",
+      "mapping_notes": "symptom-to-fault inference is not committed before human technical review"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-11",
+      "draft_id": "charging-system-challenge-d3ae3441eed6",
+      "claim_index": 0,
+      "claim_text": "Low regulator output leads to battery sulfation",
+      "mapping_status": "unmapped-source-or-technical-gap",
+      "mapped_sources": [],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Exact subsection naming sulfation must be confirmed at artifact capture; causal wording requires technical review.",
+      "mapping_notes": "the exact sulfation locator and causal relationship have not been verified"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "draft_id": "charging-system-challenge-f1bef86b1cba",
+      "claim_index": 0,
+      "claim_text": "Alternator under‑charging produces voltage dips during high accessory load",
+      "mapping_status": "mapped-pending-technical-review",
+      "mapped_sources": [
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator": "Section 1.3.1, printed 8-19: output and load testing",
+          "rights_decision": "cleared-link-citation-only",
+          "mapping_scope": "charging-system output/load testing under electrical load",
+          "locator_verification": "pending-human-technical-review"
+        },
+        {
+          "candidate_id": "army-da-pam-750-33-1976",
+          "locator": "Chapter 5, printed pp. 18 to 28: alternator output tests",
+          "rights_decision": "cleared-text-excerpt",
+          "mapping_scope": "alternator output testing under load; military-specific values are not generalized",
+          "locator_verification": "pending-human-technical-review"
+        },
+        {
+          "candidate_id": "frontiers-automotive-alternator-2023",
+          "locator": "Full text; p. 7 candidate chunks: auxiliary load power demand",
+          "rights_decision": "cleared-commercial-reuse",
+          "mapping_scope": "auxiliary load power-demand context",
+          "locator_verification": "pending-human-technical-review"
+        }
+      ],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": null,
+      "mapping_notes": "Metadata-level claim-to-source mapping only. Rights are already reviewed, but locator verification, citation validation, technical applicability, instructional review, approval, and assessment eligibility remain separate gates."
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-13",
+      "draft_id": "charging-system-challenge-e275f02bf6ba",
+      "claim_index": 0,
+      "claim_text": "13.5 V at battery under idle confirms alternator output is within spec",
+      "mapping_status": "unmapped-source-or-technical-gap",
+      "mapped_sources": [],
+      "technical_review_status": "pending",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false,
+      "technical_caveat": "Fixed 13.5 to 14.5 volt ranges are not universal; manufacturer specification governs and no single threshold may be taught as universal. The Coalinga source supports only a general healthy-system range; it does not establish that 13.5 V at idle, without specified load, temperature, battery state of charge, manufacturer specification or test procedure, conclusively confirms alternator output is within specification. This claim stays unmapped pending a vehicle/service-procedure-level or otherwise authoritative source.",
+      "mapping_notes": "explicit source gap: 13.5 V at idle alone does not establish manufacturer-spec compliance without load, temperature, battery state, and procedure context"
+    }
+  ],
+  "summary": {
+    "claims_in_slice": 13,
+    "mapped_count": 5,
+    "unmapped_count": 8,
+    "citation_validated_count": 0,
+    "technical_reviewed_count": 0,
+    "instructional_reviewed_count": 0,
+    "approved_count": 0,
+    "assessment_eligible_count": 0
+  },
+  "next_gate": [
+    "Named human technical review of each mapped claim-to-source link, including locator verification and applicability caveats.",
+    "Unmapped claims require additional authoritative source discovery or a narrower claim before mapping.",
+    "Citation validation remains separate from technical review.",
+    "No learner-facing question, scoring, training-mix, or assessment eligibility change is authorized by this mapping."
+  ]
+}
