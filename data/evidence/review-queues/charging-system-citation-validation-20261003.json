@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "claim-citation-validation",
+  "scenario_id": "charging-system",
+  "stage": "citation-validation-partial-pending-artifact-verification",
+  "created_at": "2026-10-04T02:20:00Z",
+  "technical_review_decisions": "data/evidence/review-queues/charging-system-technical-review-decisions-20261003.json",
+  "rights_review_records": "data/evidence/review-queues/charging-system-rights-review-records-20261003.json",
+  "purpose": "Validate whether the exact technically approved claim wording is supported by the recorded source locators without promoting corroborated-only locators to artifact-verified status.",
+  "invariants": [
+    "Citation validation applies to approved_claim_text from the human technical-review decision artifact, not superseded original wording.",
+    "A claim is citation-validated only when at least one verified source/locator directly supports the approved wording without depending on an unverified required source.",
+    "Supplementary unverified sources do not block validation when a verified primary source independently supports the entire approved claim.",
+    "Corroborated Navy locators remain non-validated until the exact official artifact is captured and verified.",
+    "Citation validation does not constitute instructional review, final approval, scoring approval, question approval, or assessment eligibility."
+  ],
+  "validations": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "approved_claim_text": "High‑current ground strap maintains low resistance",
+      "citation_validation_status": "pending-artifact-verification",
+      "validation_basis": "The Coalinga page supports connection/corrosion context but not the full high-current ground-path proposition. The Navy locator supplies the needed ground-return voltage-drop support, but the exact official artifact remains uncaptured and unhashed.",
+      "sources": [
+        {
+          "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+          "locator": "Section 4.06: corroded terminals and connection cleaning",
+          "rights_decision": "cleared-link-citation-only",
+          "artifact_sha256": null,
+          "locator_status": "verified-canonical-page",
+          "support_status": "partial-support",
+          "support_scope": "Supports corrosion/connection-condition context only; no universal ground-path resistance or voltage-drop threshold."
+        },
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator": "Section 1.3.4, printed 8-21: voltage drop along the ground return",
+          "rights_decision": "cleared-link-citation-only",
+          "artifact_sha256": null,
+          "locator_status": "corroborated-not-artifact-verified",
+          "support_status": "required-support-pending-verification",
+          "support_scope": "Needed for the specific high-current ground-return/voltage-drop concept. Search-indexed text corroborates the locator, but exact artifact verification is still unavailable."
+        }
+      ],
+      "validated_source_count": 0,
+      "pending_source_count": 1,
+      "citation_validated": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-05",
+      "approved_claim_text": "Battery charging characteristics",
+      "citation_validation_status": "validated",
+      "validation_basis": "DOE-HDBK-1084-95 directly supports automotive SLI charging characteristics, partial-float charging while the vehicle is running, charger-to-battery matching, and dependence on application conditions. Navy material is supplementary, not required for this broad approved wording.",
+      "sources": [
+        {
+          "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+          "locator": "Applications > Starting, Lighting, and Ignition, p. 23; Maintenance > Matching the Charger to Battery Requirements, p. 29",
+          "rights_decision": "cleared-link-citation-only",
+          "artifact_sha256": "ef3502149e9b2bea09e32818872c33ff75655414ac48dd50d32a6a6613ca3dc1",
+          "locator_status": "verified-authoritative-pdf",
+          "support_status": "validated-primary-support",
+          "support_scope": "Direct support for general lead-acid/SLI charging characteristics and charger matching."
+        },
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator": "Section 1.2.4, printed 8-17: charging voltage against manufacturer specification",
+          "rights_decision": "cleared-link-citation-only",
+          "artifact_sha256": null,
+          "locator_status": "corroborated-not-artifact-verified",
+          "support_status": "supplementary-pending-verification",
+          "support_scope": "Supplementary automotive charging-system context only; not required to validate the broad approved claim."
+        }
+      ],
+      "validated_source_count": 1,
+      "pending_source_count": 1,
+      "citation_validated": true
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-07",
+      "approved_claim_text": "Battery charging current characteristics",
+      "citation_validation_status": "validated",
+      "validation_basis": "DOE-HDBK-1084-95 directly states that a discharged lead-acid battery may initially accept high charging current and that current must decrease as full charge is approached; under constant-voltage charging, charge current falls as battery voltage rises.",
+      "sources": [
+        {
+          "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+          "locator": "Maintenance > Matching the Charger to Battery Requirements, p. 29; Operation and Construction, pp. 13 to 20",
+          "rights_decision": "cleared-link-citation-only",
+          "artifact_sha256": "ef3502149e9b2bea09e32818872c33ff75655414ac48dd50d32a6a6613ca3dc1",
+          "locator_status": "verified-authoritative-pdf",
+          "support_status": "validated-primary-support",
+          "support_scope": "Direct support for general charging-current behavior; no universal automotive amperage threshold is inferred."
+        }
+      ],
+      "validated_source_count": 1,
+      "pending_source_count": 0,
+      "citation_validated": true
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-08",
+      "approved_claim_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine.",
+      "citation_validation_status": "validated",
+      "validation_basis": "The verified Frontiers article defines auxiliary engine loads as equipment drawing power from the engine and quantifies alternator plus belt-driven auxiliary power demand. This directly supports the approved revised directional claim.",
+      "sources": [
+        {
+          "candidate_id": "frontiers-automotive-alternator-2023",
+          "locator": "Full text; p. 7 candidate chunks: auxiliary load power demand",
+          "rights_decision": "cleared-commercial-reuse",
+          "artifact_sha256": "9a0764fb555fb8676390325c61b4a98667b12de42d59768c475149b184096036",
+          "locator_status": "verified-canonical-publisher",
+          "support_status": "validated-primary-support",
+          "support_scope": "Direct support that alternator and belt-driven auxiliary demand imposes mechanical power demand on the engine."
+        },
+        {
+          "candidate_id": "army-da-pam-750-33-1976",
+          "locator": "Chapter 3, printed pp. 10 to 17; Chapter 5, printed pp. 18 to 28: charging output under load tests",
+          "rights_decision": "cleared-text-excerpt",
+          "artifact_sha256": "cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1",
+          "locator_status": "artifact-verified",
+          "support_status": "supplementary-context",
+          "support_scope": "Supplementary charging-output-under-load context; military numeric procedures are not generalized."
+        }
+      ],
+      "validated_source_count": 2,
+      "pending_source_count": 0,
+      "citation_validated": true
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "approved_claim_text": "If charging-system output is insufficient under the specified electrical load, system voltage may fall below the manufacturer-specified range.",
+      "citation_validation_status": "pending-artifact-verification",
+      "validation_basis": "Army and Frontiers sources support load-testing and electrical-demand context, but the exact generic statement tying insufficient output under specified load to voltage falling below the manufacturer-specified range depends materially on the Navy locator. That locator is corroborated but not artifact-verified.",
+      "sources": [
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator": "Section 1.3.1, printed 8-19: output and load testing",
+          "rights_decision": "cleared-link-citation-only",
+          "artifact_sha256": null,
+          "locator_status": "corroborated-not-artifact-verified",
+          "support_status": "required-support-pending-verification",
+          "support_scope": "Needed for the manufacturer-specification under-load diagnostic relationship; exact official artifact remains unavailable."
+        },
+        {
+          "candidate_id": "army-da-pam-750-33-1976",
+          "locator": "Chapter 5, printed pp. 18 to 28: alternator output tests",
+          "rights_decision": "cleared-text-excerpt",
+          "artifact_sha256": "cbcac329d964a20087cc879db73f758e64a70f620afb94d0a7b8234f0934edd1",
+          "locator_status": "artifact-verified",
+          "support_status": "partial-support",
+          "support_scope": "Supports charging-output testing under load, but military procedures do not establish a generic manufacturer-specification statement."
+        },
+        {
+          "candidate_id": "frontiers-automotive-alternator-2023",
+          "locator": "Full text; p. 7 candidate chunks: auxiliary load power demand",
+          "rights_decision": "cleared-commercial-reuse",
+          "artifact_sha256": "9a0764fb555fb8676390325c61b4a98667b12de42d59768c475149b184096036",
+          "locator_status": "verified-canonical-publisher",
+          "support_status": "context-only",
+          "support_scope": "Supports auxiliary power-demand context, not the diagnostic voltage-below-specification conclusion."
+        }
+      ],
+      "validated_source_count": 0,
+      "pending_source_count": 1,
+      "citation_validated": false
+    }
+  ],
+  "summary": {
+    "technically_reviewed_claims": 5,
+    "citation_validated_count": 3,
+    "citation_pending_count": 2,
+    "instructional_reviewed_count": 0,
+    "approved_count": 0,
+    "assessment_eligible_count": 0
+  },
+  "next_gate": [
+    "Claims 05, 07, and 08 may proceed to instructional review using their approved_claim_text and recorded caveats.",
+    "Claims 02 and 12 remain blocked at citation validation until the required Navy support is artifact-verified or an alternative authoritative verified source directly supports the approved wording.",
+    "Do not promote citation validation into final approval or assessment eligibility."
+  ]
+}
