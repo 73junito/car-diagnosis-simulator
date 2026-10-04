@@ -54,7 +54,7 @@ describe('charging-system rights-review records contract', () => {
     ]);
   });
 
-  test('records the approved DOE, Flinn, Frontiers, Army, and Coalinga human decisions and leaves one row pending', () => {
+  test('records all six approved human rights decisions and leaves no rows pending', () => {
     const doe = records.reviews.find((row) =>
       row.candidate_id === 'doe-hdbk-1084-95-primer-lead-acid');
     expect(doe).toMatchObject({
@@ -133,8 +133,24 @@ describe('charging-system rights-review records contract', () => {
     expect(coalinga.scope_of_clearance).toContain('no byte-stable artifact');
     expect(coalinga.review_notes).toContain('link-and-citation clearance');
 
+    const navy = records.reviews.find((row) =>
+      row.candidate_id === 'navy-navedtra-14264a-ch8');
+    expect(navy).toMatchObject({
+      rights_decision: 'cleared-link-citation-only',
+      decided_rights_classification: 'cleared-link-citation-only',
+      reviewer_identity: 'Rafael Rodriguez Jr.',
+      reviewed_at: '2026-10-04T00:34:41Z',
+      artifact_sha256: null,
+      store_verbatim_excerpt: false,
+      may_generate_questions: false,
+      approval_effect: 'none'
+    });
+    expect(navy.scope_of_clearance).toContain('media.defense.gov');
+    expect(navy.scope_of_clearance).toContain('does not authorize storing or reproducing verbatim excerpts');
+    expect(navy.review_notes).toContain('Automated retrieval of the exact official PDF remained blocked');
+
     const pending = records.reviews.filter((row) => row.rights_decision === 'pending');
-    expect(pending).toHaveLength(1);
+    expect(pending).toHaveLength(0);
     for (const row of pending) {
       expect(row.reviewer_identity).toBeNull();
       expect(row.reviewed_at).toBeNull();
@@ -145,10 +161,10 @@ describe('charging-system rights-review records contract', () => {
     }
   });
 
-  test('summary reflects five rights decisions without advancing downstream gates', () => {
-    expect(records.summary.rights_decisions_recorded).toBe(5);
-    expect(records.summary.sources_cleared).toBe(5);
-    expect(records.summary.sources_candidate_only).toBe(1);
+  test('summary reflects all six rights decisions without advancing downstream gates', () => {
+    expect(records.summary.rights_decisions_recorded).toBe(6);
+    expect(records.summary.sources_cleared).toBe(6);
+    expect(records.summary.sources_candidate_only).toBe(0);
     expect(records.summary.mapped_count).toBe(0);
     expect(records.summary.citation_validated_count).toBe(0);
     expect(records.summary.technical_reviewed_count).toBe(0);
@@ -157,8 +173,8 @@ describe('charging-system rights-review records contract', () => {
     expect(records.summary.assessment_eligible_count).toBe(0);
 
     const output = formatSummary(records.summary);
-    expect(output).toContain('rights_decisions_recorded: 5');
-    expect(output).toContain('sources_candidate_only: 1');
+    expect(output).toContain('rights_decisions_recorded: 6');
+    expect(output).toContain('sources_candidate_only: 0');
     expect(output).toContain('mapped_count: 0');
   });
 
