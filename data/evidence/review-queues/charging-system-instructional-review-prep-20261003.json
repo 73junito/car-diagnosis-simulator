@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "instructional-review-preparation",
+  "scenario_id": "charging-system",
+  "stage": "instructional-recommendations-awaiting-named-human-review",
+  "created_at": "2026-10-04T02:30:00Z",
+  "citation_validation": "data/evidence/review-queues/charging-system-citation-validation-20261003.json",
+  "technical_review_decisions": "data/evidence/review-queues/charging-system-technical-review-decisions-20261003.json",
+  "purpose": "Prepare instructional-review recommendations only for charging-system claims that have already passed citation validation.",
+  "invariants": [
+    "Only citation-validated claims may enter this instructional-review preparation artifact.",
+    "Reviewer identity and reviewed_at remain null until a named human explicitly approves, rejects, or modifies the recommendation.",
+    "Instructional wording may clarify or narrow a validated claim but must not expand beyond the technically reviewed and citation-validated evidence.",
+    "Claims 02 and 12 remain blocked at citation validation and are excluded from instructional review.",
+    "Instructional review does not constitute final approval, scoring approval, question approval, or assessment eligibility."
+  ],
+  "reviews": [
+    {
+      "claim_id": "charging-system-challenge-claim-05",
+      "current_approved_claim_text": "Battery charging characteristics",
+      "instructional_review_status": "pending-human-instructional-review",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "recommended_disposition": "revise-for-instructional-clarity",
+      "instructional_finding": "The phrase 'Battery charging characteristics' is a topic label rather than a complete learner-facing claim. It does not state the relationship the learner should explain, observe, or apply.",
+      "recommended_instructional_text": "Lead-acid battery charging behavior depends on state of charge and the charger or regulator strategy.",
+      "instructional_scope": "Use as a conceptual explanation objective, not as a universal diagnostic threshold. Keep chemistry-specific and manufacturer-specific procedures separate.",
+      "citation_status": "validated",
+      "technical_status": "reviewed",
+      "final_approval_status": "pending",
+      "assessment_eligible": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-07",
+      "current_approved_claim_text": "Battery charging current characteristics",
+      "instructional_review_status": "pending-human-instructional-review",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "recommended_disposition": "revise-for-instructional-clarity",
+      "instructional_finding": "The phrase 'Battery charging current characteristics' is too broad and nominal for instruction. The validated DOE evidence supports a more explicit relationship that learners can explain without introducing a universal amperage threshold.",
+      "recommended_instructional_text": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and charging current decreases as battery voltage rises toward full charge.",
+      "instructional_scope": "Teach the trend and causal relationship only. Do not turn the statement into a fixed automotive amperage pass/fail rule.",
+      "citation_status": "validated",
+      "technical_status": "reviewed",
+      "final_approval_status": "pending",
+      "assessment_eligible": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-08",
+      "current_approved_claim_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine.",
+      "instructional_review_status": "pending-human-instructional-review",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "recommended_disposition": "retain-with-instructional-scope",
+      "instructional_finding": "The revised statement is clear, directional, and suitable for instruction. It connects electrical charging demand and belt-driven accessories to the mechanical power demanded from the engine.",
+      "recommended_instructional_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine.",
+      "instructional_scope": "Use to explain energy conversion and accessory-load effects. Do not infer a universal fuel-consumption value, charging-output threshold, or diagnostic limit from this claim alone.",
+      "citation_status": "validated",
+      "technical_status": "reviewed",
+      "final_approval_status": "pending",
+      "assessment_eligible": false
+    }
+  ],
+  "blocked_claims": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    }
+  ],
+  "summary": {
+    "citation_validated_claims_eligible_for_instructional_review": 3,
+    "instructional_reviews_prepared": 3,
+    "recommended_revise_for_instructional_clarity": 2,
+    "recommended_retain_with_instructional_scope": 1,
+    "human_instructional_decisions_recorded": 0,
+    "instructional_reviewed_count": 0,
+    "approved_count": 0,
+    "assessment_eligible_count": 0
+  },
+  "required_before_recording_human_decision": [
+    "A named human instructional reviewer explicitly accepts, rejects, or modifies each recommendation.",
+    "If Claims 05 or 07 are revised, downstream artifacts must carry the accepted instructional wording without altering the preserved technical-review provenance.",
+    "Claims 02 and 12 remain outside instructional review until citation validation is complete.",
+    "Final approval and assessment eligibility remain separate downstream gates."
+  ]
+}
