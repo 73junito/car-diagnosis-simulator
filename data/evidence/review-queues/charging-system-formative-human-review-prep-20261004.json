@@ -1,0 +1,297 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "formative-item-human-review-preparation",
+  "scenario_id": "charging-system",
+  "stage": "human-review-prepared-no-human-decisions",
+  "created_at": "2026-10-04T20:25:23Z",
+  "source_draft_package": "data/evidence/review-queues/charging-system-formative-question-drafts-20261003.json",
+  "source_validation": "data/evidence/validation-results/charging-system-formative-question-drafts-deterministic-validation-20261004.json",
+  "source_artifact_canonical_sha256": "e30477fa68294896228eb22419205d2d77ecc49556460d9c8940dfbe1c7de93d",
+  "purpose": "Prepare the exact deterministically validated charging-system formative items for separate human rights confirmation, technical review, instructional review, and safety review without approving or releasing any item.",
+  "decision_rules": [
+    "A recommendation in this preparation artifact is not a human decision.",
+    "Reviewer identity and reviewed_at must remain null until the user explicitly records the corresponding human decision.",
+    "Any content change requires deterministic revalidation before human decisions can be applied to the changed payload.",
+    "Rights confirmation does not broaden underlying source rights or authorize source-text reproduction.",
+    "Technical, instructional, and safety decisions are independent gates.",
+    "Final item approval cannot be recorded until all required item-level human gates are complete.",
+    "Item approval does not itself authorize scoring, institutional assessment, high-stakes use, assessment API use, or production release."
+  ],
+  "items": [
+    {
+      "id": "charging-system-formative-draft-05-001",
+      "claim_id": "charging-system-challenge-claim-05",
+      "canonical_item_sha256": "003f80fef4bfc4a46c3c02e5b5395b4d8b520210cf4a03f9762c76a447ccb980",
+      "deterministic_validation_result": "valid",
+      "review_snapshot": {
+        "stem": "Which statement best describes lead-acid battery charging behavior?",
+        "choices": {
+          "A": "Charging behavior depends on state of charge and the charger or regulator strategy.",
+          "B": "Charging behavior is the same at every state of charge if battery voltage is above a fixed threshold.",
+          "C": "Charging behavior is determined only by battery age and is independent of the charger or regulator strategy.",
+          "D": "Charging behavior can be evaluated with one universal charging-current value for all lead-acid batteries."
+        },
+        "answer": "A",
+        "explanation": "Lead-acid battery charging behavior varies with state of charge and the charging or regulation strategy. Chemistry-specific and manufacturer-specific procedures still control any diagnostic limits or service decisions.",
+        "source_final_content_text": "Lead-acid battery charging behavior depends on state of charge and the charger or regulator strategy."
+      },
+      "rights_confirmation": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "confirm-project-authored-expression-within-approved-source-scope",
+        "basis": [
+          "Item wording is project-authored from a final-approved instructional claim.",
+          "No third-party source excerpt is embedded in the item payload.",
+          "Existing source-rights restrictions remain controlling; this item review does not broaden reuse rights."
+        ]
+      },
+      "technical_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-with-recorded-scope",
+        "checks": [
+          "Keyed answer is technically consistent with the final-approved claim.",
+          "Distractors do not create a competing technically correct answer within the stated scope.",
+          "No universal diagnostic threshold or manufacturer-specific limit is asserted.",
+          "Vehicle-specific diagnostic limits remain subordinate to applicable service information."
+        ]
+      },
+      "instructional_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-for-formative-use",
+        "checks": [
+          "Stem asks one clear conceptual question.",
+          "Four response choices are distinct and the keyed answer is unambiguous within scope.",
+          "Explanation reinforces the approved concept without expanding into unsupported diagnostic rules.",
+          "Difficulty remains introductory and appropriate for formative concept checking."
+        ]
+      },
+      "safety_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-as-nonprocedural-concept-item",
+        "checks": [
+          "Item contains no hands-on service procedure, energized testing instruction, bypass instruction, or component-removal direction.",
+          "Item contains no PPE, wait-time, isolation, meter-rating, test-point, or vehicle-specific procedural instruction.",
+          "Answering the item does not authorize physical action on a vehicle.",
+          "Any future procedural extension requires separate technical and safety review."
+        ]
+      },
+      "final_item_approval": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "not-yet-eligible-for-final-item-approval",
+        "reason": "Required human rights, technical, instructional, and safety decisions have not yet been recorded."
+      },
+      "governance_effect": {
+        "scored": false,
+        "assessment_eligible": false,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      }
+    },
+    {
+      "id": "charging-system-formative-draft-07-001",
+      "claim_id": "charging-system-challenge-claim-07",
+      "canonical_item_sha256": "fe51b2c4d22f1f9ce351033b63682a7196f94ec02aa32cc18d6f13573393177f",
+      "deterministic_validation_result": "valid",
+      "review_snapshot": {
+        "stem": "During constant-voltage charging of a discharged lead-acid battery, which current trend is most consistent with the approved instructional concept?",
+        "choices": {
+          "A": "Charging current must remain constant until the battery reaches full charge.",
+          "B": "Charging current may be high initially and then decrease as battery voltage rises toward full charge.",
+          "C": "Charging current must increase continuously as battery voltage rises.",
+          "D": "A single fixed amperage value determines whether every lead-acid battery is charging correctly."
+        },
+        "answer": "B",
+        "explanation": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and current decreases as battery voltage rises toward full charge. The concept describes a trend, not a universal automotive amperage pass/fail value.",
+        "source_final_content_text": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and charging current decreases as battery voltage rises toward full charge."
+      },
+      "rights_confirmation": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "confirm-project-authored-expression-within-approved-source-scope",
+        "basis": [
+          "Item wording is project-authored from a final-approved instructional claim.",
+          "No third-party source excerpt is embedded in the item payload.",
+          "Existing source-rights restrictions remain controlling; this item review does not broaden reuse rights."
+        ]
+      },
+      "technical_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-with-recorded-scope",
+        "checks": [
+          "Keyed answer is technically consistent with the final-approved claim.",
+          "Distractors do not create a competing technically correct answer within the stated scope.",
+          "No universal diagnostic threshold or manufacturer-specific limit is asserted.",
+          "Vehicle-specific diagnostic limits remain subordinate to applicable service information."
+        ]
+      },
+      "instructional_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-for-formative-use",
+        "checks": [
+          "Stem asks one clear conceptual question.",
+          "Four response choices are distinct and the keyed answer is unambiguous within scope.",
+          "Explanation reinforces the approved concept without expanding into unsupported diagnostic rules.",
+          "Difficulty remains introductory and appropriate for formative concept checking."
+        ]
+      },
+      "safety_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-as-nonprocedural-concept-item",
+        "checks": [
+          "Item contains no hands-on service procedure, energized testing instruction, bypass instruction, or component-removal direction.",
+          "Item contains no PPE, wait-time, isolation, meter-rating, test-point, or vehicle-specific procedural instruction.",
+          "Answering the item does not authorize physical action on a vehicle.",
+          "Any future procedural extension requires separate technical and safety review."
+        ]
+      },
+      "final_item_approval": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "not-yet-eligible-for-final-item-approval",
+        "reason": "Required human rights, technical, instructional, and safety decisions have not yet been recorded."
+      },
+      "governance_effect": {
+        "scored": false,
+        "assessment_eligible": false,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      }
+    },
+    {
+      "id": "charging-system-formative-draft-08-001",
+      "claim_id": "charging-system-challenge-claim-08",
+      "canonical_item_sha256": "7d6b5733b77b2f6053babca951b2cca6f74399abab1b6d1a13f440da852ea814",
+      "deterministic_validation_result": "valid",
+      "review_snapshot": {
+        "stem": "Why can increased electrical charging demand increase mechanical load on an engine with a belt-driven charging system?",
+        "choices": {
+          "A": "The charging system converts additional mechanical input into electrical output, so greater electrical demand can require more mechanical power from the engine.",
+          "B": "Electrical demand eliminates mechanical resistance in belt-driven accessories, reducing the power required from the engine.",
+          "C": "Charging demand changes only battery voltage and has no relationship to mechanical power transfer.",
+          "D": "Any increase in charging demand proves a specific fuel-consumption increase regardless of vehicle design or operating condition."
+        },
+        "answer": "A",
+        "explanation": "Electrical charging demand and belt-driven auxiliaries require mechanical power from the engine. The approved concept supports the direction of the load relationship, but it does not establish a universal fuel-consumption value, charging-output threshold, or diagnostic limit.",
+        "source_final_content_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine."
+      },
+      "rights_confirmation": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "confirm-project-authored-expression-within-approved-source-scope",
+        "basis": [
+          "Item wording is project-authored from a final-approved instructional claim.",
+          "No third-party source excerpt is embedded in the item payload.",
+          "Existing source-rights restrictions remain controlling; this item review does not broaden reuse rights."
+        ]
+      },
+      "technical_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-with-recorded-scope",
+        "checks": [
+          "Keyed answer is technically consistent with the final-approved claim.",
+          "Distractors do not create a competing technically correct answer within the stated scope.",
+          "No universal diagnostic threshold or manufacturer-specific limit is asserted.",
+          "Vehicle-specific diagnostic limits remain subordinate to applicable service information."
+        ]
+      },
+      "instructional_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-for-formative-use",
+        "checks": [
+          "Stem asks one clear conceptual question.",
+          "Four response choices are distinct and the keyed answer is unambiguous within scope.",
+          "Explanation reinforces the approved concept without expanding into unsupported diagnostic rules.",
+          "Difficulty remains introductory and appropriate for formative concept checking."
+        ]
+      },
+      "safety_review": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "approve-as-written-as-nonprocedural-concept-item",
+        "checks": [
+          "Item contains no hands-on service procedure, energized testing instruction, bypass instruction, or component-removal direction.",
+          "Item contains no PPE, wait-time, isolation, meter-rating, test-point, or vehicle-specific procedural instruction.",
+          "Answering the item does not authorize physical action on a vehicle.",
+          "Any future procedural extension requires separate technical and safety review."
+        ]
+      },
+      "final_item_approval": {
+        "reviewer": null,
+        "reviewed_at": null,
+        "human_decision": "pending",
+        "recommendation": "not-yet-eligible-for-final-item-approval",
+        "reason": "Required human rights, technical, instructional, and safety decisions have not yet been recorded."
+      },
+      "governance_effect": {
+        "scored": false,
+        "assessment_eligible": false,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      }
+    }
+  ],
+  "blocked_claims": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    }
+  ],
+  "summary": {
+    "items_prepared_for_human_review": 3,
+    "rights_confirmations_prepared": 3,
+    "technical_reviews_prepared": 3,
+    "instructional_reviews_prepared": 3,
+    "safety_reviews_prepared": 3,
+    "human_rights_decisions_recorded": 0,
+    "human_technical_decisions_recorded": 0,
+    "human_instructional_decisions_recorded": 0,
+    "human_safety_decisions_recorded": 0,
+    "human_final_item_approvals_recorded": 0,
+    "scored_count": 0,
+    "assessment_eligible_count": 0,
+    "production_release_count": 0
+  },
+  "next_gate": [
+    "Obtain explicit human decisions for rights confirmation, technical review, instructional review, and safety review on these exact hashed items.",
+    "Record reviewer identity and timestamp only from explicit human approval language.",
+    "Keep final item approval, scoring, assessment eligibility, and release closed until their separate gates are satisfied."
+  ]
+}
