@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "deterministic-formative-item-validation",
+  "scenario_id": "charging-system",
+  "validator_version": "charging-system-formative-item-validator-1.0",
+  "validation_type": "deterministic-exact-payload-contract",
+  "validated_at": "2026-10-04T19:58:13Z",
+  "source_artifact": "data/evidence/review-queues/charging-system-formative-question-drafts-20261003.json",
+  "source_artifact_canonical_sha256": "e30477fa68294896228eb22419205d2d77ecc49556460d9c8940dfbe1c7de93d",
+  "scope": {
+    "question_count": 3,
+    "claim_ids": [
+      "charging-system-challenge-claim-05",
+      "charging-system-challenge-claim-07",
+      "charging-system-challenge-claim-08"
+    ]
+  },
+  "validation_semantics": [
+    "Validation applies only to the exact hashed item payloads.",
+    "Validation verifies deterministic structure, key integrity, provenance linkage, governance flags, and encoded scope guardrails.",
+    "Validation does not constitute human technical, instructional, safety, rights, final item, scoring, assessment-eligibility, or release approval.",
+    "Any content change invalidates the recorded exact-payload hash and requires deterministic revalidation."
+  ],
+  "items": [
+    {
+      "id": "charging-system-formative-draft-05-001",
+      "claim_id": "charging-system-challenge-claim-05",
+      "canonical_item_sha256": "003f80fef4bfc4a46c3c02e5b5395b4d8b520210cf4a03f9762c76a447ccb980",
+      "result": "valid",
+      "checks": {
+        "exact_expected_stem": true,
+        "four_unique_choices": true,
+        "key_present_and_resolves_to_expected_choice": true,
+        "explanation_present": true,
+        "source_final_content_linkage_exact": true,
+        "no_numeric_threshold_detected": true,
+        "unscored": true,
+        "assessment_ineligible": true,
+        "institutional_assessment_ineligible": true,
+        "high_stakes_ineligible": true,
+        "production_assessment_api_ineligible": true,
+        "unreleased": true,
+        "auto_approval_disabled": true,
+        "all_item_level_human_gates_pending": true
+      }
+    },
+    {
+      "id": "charging-system-formative-draft-07-001",
+      "claim_id": "charging-system-challenge-claim-07",
+      "canonical_item_sha256": "fe51b2c4d22f1f9ce351033b63682a7196f94ec02aa32cc18d6f13573393177f",
+      "result": "valid",
+      "checks": {
+        "exact_expected_stem": true,
+        "four_unique_choices": true,
+        "key_present_and_resolves_to_expected_choice": true,
+        "explanation_present": true,
+        "source_final_content_linkage_exact": true,
+        "no_numeric_threshold_detected": true,
+        "unscored": true,
+        "assessment_ineligible": true,
+        "institutional_assessment_ineligible": true,
+        "high_stakes_ineligible": true,
+        "production_assessment_api_ineligible": true,
+        "unreleased": true,
+        "auto_approval_disabled": true,
+        "all_item_level_human_gates_pending": true
+      }
+    },
+    {
+      "id": "charging-system-formative-draft-08-001",
+      "claim_id": "charging-system-challenge-claim-08",
+      "canonical_item_sha256": "7d6b5733b77b2f6053babca951b2cca6f74399abab1b6d1a13f440da852ea814",
+      "result": "valid",
+      "checks": {
+        "exact_expected_stem": true,
+        "four_unique_choices": true,
+        "key_present_and_resolves_to_expected_choice": true,
+        "explanation_present": true,
+        "source_final_content_linkage_exact": true,
+        "no_numeric_threshold_detected": true,
+        "unscored": true,
+        "assessment_ineligible": true,
+        "institutional_assessment_ineligible": true,
+        "high_stakes_ineligible": true,
+        "production_assessment_api_ineligible": true,
+        "unreleased": true,
+        "auto_approval_disabled": true,
+        "all_item_level_human_gates_pending": true
+      }
+    }
+  ],
+  "summary": {
+    "questions_validated": 3,
+    "questions_valid": 3,
+    "questions_invalid": 0,
+    "human_item_approvals_recorded": 0,
+    "scored_count": 0,
+    "assessment_eligible_count": 0,
+    "production_release_count": 0
+  },
+  "post_validation_state": {
+    "draft_status": "draft-pending-item-level-review",
+    "deterministic_validation_result": "valid-for-exact-hashed-payloads",
+    "human_technical_review": "pending",
+    "human_instructional_review": "pending",
+    "human_safety_review": "pending",
+    "item_level_rights_confirmation": "pending",
+    "human_item_approval": "pending",
+    "assessment_eligibility": false,
+    "scoring_authority": false,
+    "production_release": false
+  },
+  "blocked_claims": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    }
+  ]
+}
