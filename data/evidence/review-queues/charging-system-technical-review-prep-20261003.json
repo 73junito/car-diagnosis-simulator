@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "technical-review-preparation",
+  "scenario_id": "charging-system",
+  "stage": "recommendations-awaiting-named-human-review",
+  "created_at": "2026-10-04T01:30:00Z",
+  "claim_source_mapping": "data/evidence/review-queues/charging-system-claim-source-mapping-20261003.json",
+  "purpose": "Prepare bounded technical findings for the five mapped charging-system claims without recording or implying human technical approval.",
+  "invariants": [
+    "Recommendations are preparatory analysis only; reviewer_identity and reviewed_at remain null until a named human explicitly approves a disposition.",
+    "A recommendation of support-with-caveat is not technical approval and does not advance technical_reviewed_count.",
+    "A revise-before-technical-approval finding requires claim revision or additional evidence before the claim can pass technical review.",
+    "Locator corroboration from indexed copies does not substitute for artifact verification when the official source artifact remains inaccessible.",
+    "Citation validation, instructional review, approval, scoring, and assessment eligibility remain separate closed gates."
+  ],
+  "reviews": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "claim_text": "High‑current ground strap maintains low resistance",
+      "review_status": "pending-human-technical-review",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "recommended_disposition": "support-with-caveat",
+      "technical_finding": "The claim is technically reasonable at a concept level: a high-current ground path must have low resistance, and excessive voltage drop indicates unwanted resistance. The existing caveat is necessary because acceptable drop depends on circuit load, connection count, vehicle design, and manufacturer specification.",
+      "locator_findings": [
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator_status": "corroborated-not-artifact-verified",
+          "finding": "The indexed Chapter 8 text describes a ground-circuit voltage-drop test between the negative battery terminal and alternator housing and treats excessive drop as evidence of poor connections. Because the exact official PDF remains inaccessible to automated capture, this locator is not promoted to artifact-verified."
+        },
+        {
+          "candidate_id": "coalinga-tractor-electrical-hydraulic-health-2026",
+          "locator_status": "verified-canonical-page",
+          "finding": "The canonical Coalinga page states that weak electrical symptoms may be associated with corroded terminals and that cleaning connections can restore electrical strength. This supports connection-condition context, not a universal resistance or voltage-drop threshold."
+        }
+      ],
+      "required_caveat": "Do not teach a universal ground-strap resistance or voltage-drop limit; use the applicable manufacturer procedure/specification.",
+      "required_revision": null,
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-05",
+      "claim_text": "Battery charging characteristics",
+      "review_status": "pending-human-technical-review",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "recommended_disposition": "support-with-caveat",
+      "technical_finding": "The broad claim 'Battery charging characteristics' is supported. DOE describes automotive SLI batteries, partial-float charging in a running vehicle, charger matching, and charging-current behavior; Navy material supplies automotive charging-system voltage evaluation against manufacturer specification.",
+      "locator_findings": [
+        {
+          "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+          "locator_status": "verified-authoritative-pdf",
+          "finding": "DOE-HDBK-1084-95 identifies SLI automotive use, states that vehicle-running operation provides partial-float charging, and explains charger matching plus changing charge current as state of charge rises."
+        },
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator_status": "corroborated-not-artifact-verified",
+          "finding": "Indexed Chapter 8 material evaluates charging-system voltage/output against manufacturer specifications. Exact official PDF capture remains blocked, so the locator is not promoted to artifact-verified."
+        }
+      ],
+      "required_caveat": "Keep the claim general; battery chemistry, temperature, state of charge, charger/regulator strategy, and manufacturer procedure affect observed charging behavior.",
+      "required_revision": null,
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-07",
+      "claim_text": "Battery charging current characteristics",
+      "review_status": "pending-human-technical-review",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "recommended_disposition": "support-with-caveat",
+      "technical_finding": "DOE directly supports general charging-current characteristics: initial charging current can be high and decreases as a lead-acid battery approaches full charge under constant-voltage charging; charging method must be matched to the battery application.",
+      "locator_findings": [
+        {
+          "candidate_id": "doe-hdbk-1084-95-primer-lead-acid",
+          "locator_status": "verified-authoritative-pdf",
+          "finding": "The authoritative DOE handbook explains that discharged batteries may initially accept high current, that current must decrease near full charge, and that constant-voltage charging naturally produces decreasing current as battery voltage rises."
+        }
+      ],
+      "required_caveat": "Do not convert this general lead-acid behavior into a universal automotive amperage threshold or diagnostic pass/fail value.",
+      "required_revision": null,
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-08",
+      "claim_text": "Engine load impact on charging",
+      "review_status": "pending-human-technical-review",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "recommended_disposition": "revise-before-technical-approval",
+      "technical_finding": "The wording 'Engine load impact on charging' is directionally ambiguous. Frontiers demonstrates that the alternator and other auxiliaries impose mechanical power demand on the engine; Army charging tests apply electrical load while measuring charging output. Those sources do not cleanly establish the reverse proposition that engine load itself determines charging performance.",
+      "locator_findings": [
+        {
+          "candidate_id": "frontiers-automotive-alternator-2023",
+          "locator_status": "verified-canonical-publisher",
+          "finding": "The article quantifies alternator and other auxiliary loads as engine power demand and discusses their dependence on engine speed. It supports 'charging/auxiliary systems impose engine load,' not the ambiguous reverse wording."
+        },
+        {
+          "candidate_id": "army-da-pam-750-33-1976",
+          "locator_status": "artifact-previously-verified",
+          "finding": "The mapped chapters contain charging-output-under-load procedures for military systems. They support electrical-load testing of charging output, but their numeric procedures are not generic passenger-vehicle specifications."
+        }
+      ],
+      "required_caveat": null,
+      "required_revision": "Rewrite to a technically directional claim such as 'Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine' or, if the intended concept is charging-system response, 'Charging-system output must be evaluated under specified electrical load and engine-speed conditions.'",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "claim_text": "Alternator under‑charging produces voltage dips during high accessory load",
+      "review_status": "pending-human-technical-review",
+      "reviewer_identity": null,
+      "reviewed_at": null,
+      "recommended_disposition": "revise-before-technical-approval",
+      "technical_finding": "The sources support evaluating charging-system voltage/current under electrical load and establish that vehicle auxiliaries create substantial electrical/mechanical demand. They do not directly establish the transient phrase 'voltage dips' as the diagnostic consequence of under-charging. The concept should be rewritten in manufacturer-specification language.",
+      "locator_findings": [
+        {
+          "candidate_id": "navy-navedtra-14264a-ch8",
+          "locator_status": "corroborated-not-artifact-verified",
+          "finding": "Indexed Chapter 8 material describes charging-system output testing under maximum load, directs the technician not to let voltage fall below specification, and requires comparison with manufacturer specifications. Exact official PDF capture remains blocked."
+        },
+        {
+          "candidate_id": "army-da-pam-750-33-1976",
+          "locator_status": "artifact-previously-verified",
+          "finding": "The mapped Army chapters provide alternator output/load tests but use military-system procedures and values that cannot be generalized."
+        },
+        {
+          "candidate_id": "frontiers-automotive-alternator-2023",
+          "locator_status": "verified-canonical-publisher",
+          "finding": "The Frontiers article shows that automotive electrical auxiliaries and the alternator represent significant power demand, but it is not a diagnostic source for transient system-voltage dips."
+        }
+      ],
+      "required_caveat": null,
+      "required_revision": "Prefer: 'If charging-system output is insufficient under the specified electrical load, system voltage may fall below the manufacturer-specified range.' Avoid the unqualified transient term 'voltage dips' unless a source explicitly addresses that behavior.",
+      "citation_validation_status": "pending",
+      "instructional_review_status": "pending",
+      "approval_status": "pending",
+      "assessment_eligible": false
+    }
+  ],
+  "summary": {
+    "mapped_claims_reviewed_for_preparation": 5,
+    "recommended_support_with_caveat": 3,
+    "recommended_revision_before_technical_approval": 2,
+    "human_technical_decisions_recorded": 0,
+    "technical_reviewed_count": 0,
+    "citation_validated_count": 0,
+    "instructional_reviewed_count": 0,
+    "approved_count": 0,
+    "assessment_eligible_count": 0
+  },
+  "required_before_recording_human_decision": [
+    "A named human reviewer explicitly accepts, rejects, or modifies each prepared technical disposition.",
+    "For claims 08 and 12, approve a revised claim statement or keep the current claim technically unapproved.",
+    "Do not promote corroborated Navy locators to artifact-verified while the exact official PDF remains unavailable.",
+    "Do not advance citation validation, instructional review, approval, or assessment eligibility in the technical-review decision."
+  ]
+}
