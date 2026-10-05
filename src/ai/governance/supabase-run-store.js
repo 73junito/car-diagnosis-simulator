@@ -1,6 +1,6 @@
 'use strict';
 
-const { hashEntry } = require('./integrity-chain');
+const { canonicalize, hashEntry } = require('./integrity-chain');
 
 class SupabaseRunStore {
   constructor({ rpc, workerId, leaseMs = 30000 } = {}) {
@@ -51,7 +51,7 @@ class SupabaseRunStore {
       p_action: entry.action,
       p_state: entry.state,
       p_recorded_at: entry.recordedAt,
-      p_metadata: entry.metadata || {},
+      p_metadata_json: JSON.stringify(canonicalize(entry.metadata || {})),
       p_worker_id: this.workerId,
       p_lease_token: leaseToken,
       p_expected_version: expectedVersion,

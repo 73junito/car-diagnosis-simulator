@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-staging-persistence-verification",
+  "phase": "phase-6-supabase-staging-verification",
+  "target": "torquemind-staging",
+  "migration": {
+    "version": "20261005031812",
+    "name": "create_orchestration_persistence_rpc",
+    "applied": true
+  },
+  "security": {
+    "private_schema": "orchestration_private",
+    "tables": [
+      "run_entries",
+      "run_leases",
+      "run_checkpoints"
+    ],
+    "rls_enabled_all": true,
+    "anon_table_select": false,
+    "authenticated_table_select": false,
+    "service_role_table_select": true,
+    "rpc_count": 6,
+    "anon_rpc_execute": false,
+    "authenticated_rpc_execute": false,
+    "service_role_rpc_execute": true
+  },
+  "runtime_contract_checks": {
+    "competing_worker_rejected": "lease_conflict",
+    "expired_or_invalid_lease_rejected": "lease_not_owned",
+    "invalid_integrity_hash_rejected": "integrity_hash_invalid",
+    "stale_version_rejected": "version_conflict",
+    "javascript_postgres_hash_alignment": true,
+    "valid_hash_1": "a3ab0cdbce13103523af75fd656b0ea5fec87bac51dc14b03f50209b9c4f0e12",
+    "valid_hash_2": "182a8c6db04e3bd4cd1e1cd30d99dc19d282e58af312f94c02ea93077e713640",
+    "chained_entry_count": 2,
+    "checkpoint_write_verified": true,
+    "checkpoint_version": 2,
+    "checkpoint_integrity_hash": "182a8c6db04e3bd4cd1e1cd30d99dc19d282e58af312f94c02ea93077e713640",
+    "test_data_cleaned": true
+  },
+  "advisors": {
+    "orchestration_security_findings": [
+      "INFO: RLS enabled with no policies on the three private orchestration tables; expected for service-role-only access."
+    ],
+    "unrelated_existing_findings": [
+      "WARN: public.set_external_data_resource_updated_at has mutable search_path.",
+      "Existing performance advisories on unrelated public tables and indexes."
+    ]
+  },
+  "production_state": {
+    "production_project_changed": false,
+    "application_runtime_switched": false,
+    "production_persistence_enabled": false
+  },
+  "authority_invariants": [
+    "No assessment eligibility change.",
+    "No scored-delivery authority change.",
+    "No production assessment API eligibility change.",
+    "No institutional, high-stakes, certification, licensure, assessment-release, or broad production-release authority change."
+  ]
+}

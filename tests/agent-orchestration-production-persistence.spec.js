@@ -84,7 +84,7 @@ function createBackend() {
             action: params.p_action,
             state: params.p_state,
             recordedAt: params.p_recorded_at,
-            metadata: params.p_metadata || {},
+            metadata: JSON.parse(params.p_metadata_json || '{}'),
           };
 
           if (hashEntry(entry, previousHash) !== params.p_integrity_hash) {
@@ -133,9 +133,37 @@ function createBackend() {
 }
 
 describe('Phase 5 production persistence adapter', () => {
-  test('contract is private, lease-guarded, CAS protected, and not deployed', () => {
+  test('hash material matches the live staging Postgres vectors', () => {
+    const first = hashEntry({
+      runId: 'phase6-staging-run-001',
+      actor: 'question-agent',
+      action: 'step-started',
+      state: 'final_content_approved',
+      recordedAt: '2026-10-05T03:20:00.000Z',
+      metadata: { requestId: 'phase6-request-001' },
+    }, null);
+
+    expect(first).toBe(
+      'a3ab0cdbce13103523af75fd656b0ea5fec87bac51dc14b03f50209b9c4f0e12'
+    );
+
+    const second = hashEntry({
+      runId: 'phase6-staging-run-001',
+      actor: 'question-agent',
+      action: 'step-finished',
+      state: 'item_generated',
+      recordedAt: '2026-10-05T03:20:01.000Z',
+      metadata: { requestId: 'phase6-request-001' },
+    }, first);
+
+    expect(second).toBe(
+      '182a8c6db04e3bd4cd1e1cd30d99dc19d282e58af312f94c02ea93077e713640'
+    );
+  });
+
+  test('contract is private, lease-guarded, CAS protected, and staging-only', () => {
     expect(contract.storage_target).toBe('supabase-postgres');
-    expect(contract.deployment_status).toBe('contract-only-not-applied');
+    expect(contract.deployment_status).toBe('staging-applied-production-not-switched');
     expect(contract.access_model.service_role_only).toBe(true);
     expect(contract.access_model.anon_access).toBe(false);
     expect(contract.access_model.authenticated_access).toBe(false);

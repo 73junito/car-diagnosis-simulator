@@ -21,22 +21,31 @@ function canonicalize(value) {
   return value;
 }
 
-function hashEntry(entry, previousHash = null) {
-  const payload = {
-    previousHash: previousHash || null,
-    entry: canonicalize({
-      runId: entry.runId,
-      actor: entry.actor,
-      action: entry.action,
-      state: entry.state,
-      recordedAt: entry.recordedAt,
-      metadata: entry.metadata || {},
-    }),
-  };
+function lengthPrefix(value) {
+  const text = String(value ?? '');
+  return `${Buffer.byteLength(text, 'utf8')}:${text}`;
+}
 
+function buildHashMaterial(entry, previousHash = null) {
+  const metadataJson = JSON.stringify(canonicalize(entry.metadata || {}));
+
+  return [
+    previousHash || '',
+    entry.runId,
+    entry.actor,
+    entry.action,
+    entry.state,
+    entry.recordedAt,
+    metadataJson,
+  ]
+    .map(lengthPrefix)
+    .join('|');
+}
+
+function hashEntry(entry, previousHash = null) {
   return crypto
     .createHash('sha256')
-    .update(JSON.stringify(payload))
+    .update(buildHashMaterial(entry, previousHash), 'utf8')
     .digest('hex');
 }
 
@@ -63,6 +72,8 @@ function verifyChain(entries) {
 
 module.exports = {
   canonicalize,
+  lengthPrefix,
+  buildHashMaterial,
   hashEntry,
   verifyChain,
 };

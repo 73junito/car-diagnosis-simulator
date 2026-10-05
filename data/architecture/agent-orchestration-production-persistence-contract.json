@@ -3,7 +3,7 @@
   "artifact_type": "agent-orchestration-production-persistence-contract",
   "phase": "phase-5-production-persistence-adapter",
   "storage_target": "supabase-postgres",
-  "deployment_status": "contract-only-not-applied",
+  "deployment_status": "staging-applied-production-not-switched",
   "schema": "orchestration_private",
   "access_model": {
     "public_access": false,
@@ -40,7 +40,7 @@
     "version_bound": true,
     "integrity_hash_bound": true
   },
-  "migration_note": "Supabase CLI was unavailable in the local environment, so no migration file was fabricated or applied in Phase 5.",
+  "migration_note": "Staging migration 20261005031812_create_orchestration_persistence_rpc was applied and verified on torquemind-staging. Production runtime remains unswitched.",
   "authority_invariants": [
     "Production persistence does not create or widen assessment eligibility.",
     "Production persistence does not create scored-delivery authority.",
