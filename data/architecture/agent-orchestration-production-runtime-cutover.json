@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-production-runtime-cutover",
+  "phase": "phase-9-production-runtime-cutover",
+  "status": "prepared-not-deployed",
+  "runtime_mode": {
+    "production": "supabase",
+    "staging": "supabase",
+    "preview": "disabled"
+  },
+  "production_project_ref": "pffdgqpynpbffbcnxmum",
+  "credential_preference": [
+    "SUPABASE_SECRET_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY"
+  ],
+  "fail_closed_guards": [
+    "unsupported persistence mode",
+    "missing Supabase URL",
+    "missing privileged backend key",
+    "invalid Supabase URL",
+    "configured project reference mismatch"
+  ],
+  "rollback": {
+    "configuration_only": true,
+    "set": "TORQUEMIND_ORCHESTRATION_PERSISTENCE=disabled",
+    "database_rollback_required": false
+  },
+  "deployment_gate": {
+    "health_must_remain_200": true,
+    "production_project_ref_must_match": true,
+    "privileged_key_must_remain_server_only": true,
+    "live_lease_append_recover_release_verification_required_after_deploy": true
+  },
+  "authority_invariants": [
+    "Runtime persistence does not create or widen assessment eligibility.",
+    "Runtime persistence does not create scored-delivery authority.",
+    "Runtime persistence does not create production assessment API eligibility.",
+    "Runtime persistence does not create institutional, certification, licensure, high-stakes, or broad release authority.",
+    "Human approval remains separate evidence."
+  ]
+}

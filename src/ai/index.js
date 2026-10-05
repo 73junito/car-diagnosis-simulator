@@ -12,6 +12,10 @@ const RunLedger = require('./governance/run-ledger');
 const FileRunStore = require('./governance/file-run-store');
 const SupabaseRunStore = require('./governance/supabase-run-store');
 const ProductionRunCoordinator = require('./governance/production-run-coordinator');
+const {
+  createProductionPersistenceRuntime,
+  resolveProductionPersistenceConfig,
+} = require('./runtime/production-persistence-runtime');
 const IntegrityChain = require('./governance/integrity-chain');
 const DiagnosticContracts = require('./diagnostics/contracts');
 const ToolGateway = require('./diagnostics/tool-gateway');
@@ -38,6 +42,8 @@ module.exports = {
   FileRunStore,
   SupabaseRunStore,
   ProductionRunCoordinator,
+  createProductionPersistenceRuntime,
+  resolveProductionPersistenceConfig,
   IntegrityChain,
   DiagnosticContracts,
   ToolGateway,

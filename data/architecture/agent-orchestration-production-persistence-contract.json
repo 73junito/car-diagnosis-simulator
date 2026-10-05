@@ -40,7 +40,7 @@
     "version_bound": true,
     "integrity_hash_bound": true
   },
-  "migration_note": "Staging migration 20261005031812_create_orchestration_persistence_rpc was applied and verified on torquemind-staging. Production runtime remains unswitched.",
+  "migration_note": "Repository migration 20261005031812_create_orchestration_persistence_rpc was verified on torquemind-staging and applied to TorqueMind production as migration 20261005035043_create_orchestration_persistence_rpc. Production runtime remains unswitched pending Phase 9 deployment and live verification.",
   "authority_invariants": [
     "Production persistence does not create or widen assessment eligibility.",
     "Production persistence does not create scored-delivery authority.",
