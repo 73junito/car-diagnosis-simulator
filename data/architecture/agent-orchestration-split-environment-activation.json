@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-split-environment-activation",
+  "phase": "phase-9d-split-environment-activation",
+  "status": "prepared-not-deployed",
+  "workflow": ".github/workflows/generate-scenario-question-drafts.yml",
+  "environments": {
+    "production_persistence": {
+      "name": "pffdgqpynpbffbcnxmum_production",
+      "secret_mapping": "SERVICE_ROLE_KEY -> SUPABASE_SERVICE_ROLE_KEY"
+    },
+    "ollama_generation": {
+      "name": "ollama",
+      "secret_mapping": "API_GITHUB -> OLLAMA_API_KEY"
+    }
+  },
+  "execution_sequence": [
+    "persist-start",
+    "generate",
+    "persist-finish"
+  ],
+  "failure_semantics": {
+    "missing_prior_governance_state": "fail-closed-before-generation",
+    "generation_failure": "leave-step-started-as-interrupted-recoverable-state",
+    "finish_mismatch": "fail-closed-without-step-finished"
+  },
+  "security": {
+    "secret_cross_environment_copy": false,
+    "public_route_added": false,
+    "generated_question_payload_written_to_orchestration_database": false
+  },
+  "authority_invariants": [
+    "Existing human approval must precede question-agent execution.",
+    "Generated questions remain draft-only.",
+    "No automatic technical or instructional review is created.",
+    "No assessment eligibility or scored-delivery authority is created."
+  ]
+}
