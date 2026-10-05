@@ -32,15 +32,18 @@ import {
 import { handleInstitutionSearch } from "./routes/institution-search.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
+import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
 
 const app = new Hono();
 
-app.get("/api/health", (c) =>
-  c.json({
-    status: "ok",
-    runtime: "Cloudflare Workers"
-  })
-);
+app.get("/api/health", (c) => {
+  const orchestrationPersistence = orchestrationPersistenceHealth(c.env)
+  return c.json({
+    status: orchestrationPersistence.ok ? "ok" : "degraded",
+    runtime: "Cloudflare Workers",
+    orchestrationPersistence
+  }, orchestrationPersistence.ok ? 200 : 503)
+});
 
 // Lightweight ping for diagnostics
 app.get('/__ping', (c) => c.json({ ok: true }));

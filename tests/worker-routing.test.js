@@ -2,6 +2,56 @@
 import worker from '../worker/index.js'
 
 describe('Worker production routing', () => {
+  test('reports production orchestration persistence wiring as healthy', async () => {
+    const response = await worker.fetch(
+      new Request('https://app.autolearnpro.com/api/health'),
+      {
+        TORQUEMIND_ENVIRONMENT: 'production',
+        TORQUEMIND_ORCHESTRATION_PERSISTENCE: 'supabase',
+        TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: 'pffdgqpynpbffbcnxmum',
+        SUPABASE_URL: 'https://pffdgqpynpbffbcnxmum.supabase.co',
+        SUPABASE_SERVICE_ROLE_KEY: 'server-only-placeholder'
+      },
+      {}
+    )
+
+    expect(response.status).toBe(200)
+    await expect(response.json()).resolves.toMatchObject({
+      status: 'ok',
+      orchestrationPersistence: {
+        ok: true,
+        enabled: true,
+        mode: 'supabase',
+        projectRef: 'pffdgqpynpbffbcnxmum',
+        credentialSource: 'SUPABASE_SERVICE_ROLE_KEY'
+      }
+    })
+  })
+
+  test('health fails closed on a production project mismatch', async () => {
+    const response = await worker.fetch(
+      new Request('https://app.autolearnpro.com/api/health'),
+      {
+        TORQUEMIND_ENVIRONMENT: 'production',
+        TORQUEMIND_ORCHESTRATION_PERSISTENCE: 'supabase',
+        TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: 'pffdgqpynpbffbcnxmum',
+        SUPABASE_URL: 'https://wrongproject.supabase.co',
+        SUPABASE_SERVICE_ROLE_KEY: 'server-only-placeholder'
+      },
+      {}
+    )
+
+    expect(response.status).toBe(503)
+    await expect(response.json()).resolves.toMatchObject({
+      status: 'degraded',
+      orchestrationPersistence: {
+        ok: false,
+        enabled: false,
+        mode: 'supabase'
+      }
+    })
+  })
+
   test('returns 404 for an unknown static route without an asset binding', async () => {
     const response = await worker.fetch(
       new Request('https://autolearnpro.com/definitely-missing-audit-path'),

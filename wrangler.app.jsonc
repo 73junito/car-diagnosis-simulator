@@ -53,6 +53,8 @@
     "vars": {
       "TORQUEMIND_ENVIRONMENT": "preview",
       "SUPABASE_URL": "https://jchfruprqpeypdttvlam.supabase.co",
+      "TORQUEMIND_ORCHESTRATION_PERSISTENCE": "disabled",
+      "TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF": "jchfruprqpeypdttvlam",
       "USE_DO_RATE_LIMIT": "true",
       "TORQUEMIND_RATE_LIMIT_MAX": "10",
       "TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS": "60",
@@ -69,6 +71,8 @@
   "vars": {
     "TORQUEMIND_ENVIRONMENT": "production",
     "SUPABASE_URL": "https://pffdgqpynpbffbcnxmum.supabase.co",
+    "TORQUEMIND_ORCHESTRATION_PERSISTENCE": "supabase",
+    "TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF": "pffdgqpynpbffbcnxmum",
     "USE_DO_RATE_LIMIT": "true",
     "TORQUEMIND_RATE_LIMIT_MAX": "10",
     "TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS": "60",
@@ -97,6 +101,8 @@
       "vars": {
         "TORQUEMIND_ENVIRONMENT": "staging",
         "SUPABASE_URL": "https://jchfruprqpeypdttvlam.supabase.co",
+        "TORQUEMIND_ORCHESTRATION_PERSISTENCE": "supabase",
+        "TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF": "jchfruprqpeypdttvlam",
         "USE_DO_RATE_LIMIT": "true",
         "TORQUEMIND_RATE_LIMIT_MAX": "10",
         "TORQUEMIND_RATE_LIMIT_WINDOW_SECONDS": "60",
