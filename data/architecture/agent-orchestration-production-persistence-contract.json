@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-production-persistence-contract",
+  "phase": "phase-5-production-persistence-adapter",
+  "storage_target": "supabase-postgres",
+  "deployment_status": "contract-only-not-applied",
+  "schema": "orchestration_private",
+  "access_model": {
+    "public_access": false,
+    "anon_access": false,
+    "authenticated_access": false,
+    "service_role_only": true,
+    "function_default_execute_revoked": true
+  },
+  "rpc_contract": [
+    "orchestration_load_entries",
+    "orchestration_acquire_lease",
+    "orchestration_release_lease",
+    "orchestration_append_entry",
+    "orchestration_read_checkpoint",
+    "orchestration_write_checkpoint"
+  ],
+  "concurrency": {
+    "lease_required_for_mutation": true,
+    "lease_owner_bound_to_worker_id": true,
+    "lease_token_required": true,
+    "compare_and_swap_version": true,
+    "stale_writer_fails_closed": true
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "append_only_hash_chain": true,
+    "previous_hash_required_after_first_entry": true,
+    "server_must_validate_hash_and_previous_hash": true,
+    "recovery_fails_closed_on_chain_mismatch": true
+  },
+  "checkpoint": {
+    "derived_from_ledger": true,
+    "ledger_wins_on_conflict": true,
+    "version_bound": true,
+    "integrity_hash_bound": true
+  },
+  "migration_note": "Supabase CLI was unavailable in the local environment, so no migration file was fabricated or applied in Phase 5.",
+  "authority_invariants": [
+    "Production persistence does not create or widen assessment eligibility.",
+    "Production persistence does not create scored-delivery authority.",
+    "Production persistence does not create production assessment API eligibility.",
+    "Production persistence does not create institutional, high-stakes, certification, licensure, assessment-release, or broad production-release authority.",
+    "Human approval remains separate evidence and is not synthesized by persistence or recovery."
+  ]
+}
