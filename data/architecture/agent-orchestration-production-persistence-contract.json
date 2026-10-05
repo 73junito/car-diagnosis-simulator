@@ -3,7 +3,7 @@
   "artifact_type": "agent-orchestration-production-persistence-contract",
   "phase": "phase-5-production-persistence-adapter",
   "storage_target": "supabase-postgres",
-  "deployment_status": "staging-applied-production-not-switched",
+  "deployment_status": "production-applied-runtime-not-switched",
   "schema": "orchestration_private",
   "access_model": {
     "public_access": false,
