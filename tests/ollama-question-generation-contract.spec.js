@@ -28,8 +28,10 @@ describe('Ollama question generation contract', () => {
   test('workflow uses the ollama GitHub Environment secret without exposing it', () => {
     expect(workflow).toContain('environment: ollama');
     expect(workflow).toContain('secrets.API_GITHUB');
+    expect(workflow).toContain('secrets.SUPABASE_SERVICE_ROLE_KEY');
     expect(workflow).toContain('https://ollama.com/api/chat');
     expect(workflow).not.toMatch(/echo\s+.*\$OLLAMA_API_KEY/i);
+    expect(workflow).not.toMatch(/echo\s+.*\$SUPABASE_SERVICE_ROLE_KEY/i);
   });
 
   test('generation is evidence-bound and draft-only', () => {
@@ -79,9 +81,17 @@ describe('Ollama question generation contract', () => {
     expect(migration).toContain('update public.question_provenance');
   });
 
-  test('workflow never writes generated drafts to Supabase', () => {
-    expect(workflow).not.toMatch(/SUPABASE_(SERVICE_ROLE_KEY|DB|SECRET|URL)/);
+  test('workflow persists only governed execution state for a pre-approved run', () => {
+    expect(workflow).toContain('governed_run_id');
+    expect(workflow).toContain('TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase');
+    expect(workflow).toContain('SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}');
+    expect(workflow).toContain('--governed-run-id="${{ inputs.governed_run_id }}"');
+    expect(workflow).not.toMatch(/echo\s+.*\$SUPABASE_SERVICE_ROLE_KEY/i);
     expect(workflow).not.toMatch(/psql|supabase db|apply_migration/i);
-    expect(workflow).toContain('No database write or automatic approval occurred.');
+    expect(generator).toContain('submitPersistentGoverned');
+    expect(generator).toContain("from: 'final_content_approved'");
+    expect(generator).toContain("to: 'item_generated'");
+    expect(generator).toContain('persistent_orchestration: persistentExecution');
+    expect(workflow).toContain('No automatic approval or assessment eligibility was created.');
   });
 });

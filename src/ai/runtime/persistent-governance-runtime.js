@@ -45,7 +45,11 @@ class PersistentGovernanceRuntime {
   }
 
   async checkStep(step) {
-    return this.validateStep({ ...step, latest: await this.latest(step.runId) });
+    const latest = await this.latest(step.runId);
+    if (!latest) {
+      throw new Error('Persistent governed run requires prior governance state');
+    }
+    return this.validateStep({ ...step, latest });
   }
 
   async findByRequest(runId, action, requestId) {

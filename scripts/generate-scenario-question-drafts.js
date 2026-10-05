@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { AGENT_VERSION, selectDrafts } = require('./agents/automotive-question-agent');
 const { runOllamaQuestionWorker } = require('./workers/ollama-question-worker');
+const { createProductionAIOrchestrator } = require('../src/ai/runtime/production-ai-runtime');
 
 const root = path.resolve(__dirname, '..');
 const args = Object.fromEntries(
@@ -21,6 +22,9 @@ const outputPath = path.resolve(root, args.output || 'question-drafts.json');
 const apiUrl = process.env.OLLAMA_API_URL || 'https://ollama.com/api/chat';
 const apiKey = process.env.OLLAMA_API_KEY || '';
 const dryRun = args['dry-run'] === 'true';
+const governedRunId = args['governed-run-id'] || '';
+const persistenceMode = process.env.TORQUEMIND_ORCHESTRATION_PERSISTENCE || 'disabled';
+const persistentExecution = persistenceMode === 'supabase';
 
 function fail(message) {
   console.error(message);
@@ -32,6 +36,9 @@ if (!Number.isInteger(targetCount) || targetCount < 1 || targetCount > 20) {
   fail('--target must be an integer from 1 through 20.');
 }
 if (!dryRun && !apiKey) fail('OLLAMA_API_KEY is required unless --dry-run=true.');
+if (!dryRun && persistentExecution && !/^[A-Za-z0-9._:-]+$/.test(governedRunId)) {
+  fail('A valid --governed-run-id is required when persistent orchestration is enabled.');
+}
 
 const evidence = JSON.parse(fs.readFileSync(evidencePath, 'utf8'));
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
@@ -123,9 +130,74 @@ if (dryRun) {
   process.exit(0);
 }
 (async () => {
-  const { generated } = await runOllamaQuestionWorker({
-    apiUrl, apiKey, model, scenarioId, targetCount, evidenceBundle, retainedQuestions
-  });
+  let generated;
+
+  if (persistentExecution) {
+    const workerId = [
+      'github-actions',
+      process.env.GITHUB_RUN_ID || 'local',
+      process.env.GITHUB_RUN_ATTEMPT || '1'
+    ].join(':');
+
+    const runtime = createProductionAIOrchestrator({
+      env: process.env,
+      workerId
+    });
+
+    runtime.orchestrator.registerAgent({
+      id: 'question-agent',
+      name: 'Automotive Question Drafting Agent',
+      capabilities: ['question-drafting'],
+      execute: async () => {
+        const result = await runOllamaQuestionWorker({
+          apiUrl,
+          apiKey,
+          model,
+          scenarioId,
+          targetCount,
+          evidenceBundle,
+          retainedQuestions
+        });
+        return { done: true, ...result };
+      }
+    });
+
+    const requestId = [
+      'question-generation',
+      process.env.GITHUB_RUN_ID || 'local',
+      process.env.GITHUB_RUN_ATTEMPT || '1',
+      scenarioId
+    ].join(':');
+
+    await runtime.orchestrator.submitPersistentGoverned({
+      id: requestId,
+      capability: 'question-drafting',
+      governed: {
+        runId: governedRunId,
+        from: 'final_content_approved',
+        to: 'item_generated'
+      }
+    });
+
+    await runtime.orchestrator.drain();
+
+    const request = runtime.orchestrator.getRequest(requestId);
+    if (!request || !request.process || request.process.status !== 'completed') {
+      throw new Error('Persistent governed question generation did not complete.');
+    }
+    generated = request.process.result?.generated;
+  } else {
+    ({ generated } = await runOllamaQuestionWorker({
+      apiUrl,
+      apiKey,
+      model,
+      scenarioId,
+      targetCount,
+      evidenceBundle,
+      retainedQuestions
+    }));
+  }
+
   const { questions, skippedDuplicates } = selectDrafts({
     generated, scenarioId, targetCount, eligibleChunks, retainedQuestions
   });
@@ -147,6 +219,9 @@ if (dryRun) {
       evidence_only: true,
       rights_verified_sources_only: true,
       auto_approval: false,
+      persistent_orchestration: persistentExecution,
+      governed_run_id: persistentExecution ? governedRunId : null,
+      required_prior_state: persistentExecution ? 'final_content_approved' : null,
       requires_human_technical_review: true,
       requires_human_instructional_review: true
     },

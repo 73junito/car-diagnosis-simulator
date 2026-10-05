@@ -18,6 +18,10 @@ on:
         required: true
         default: gpt-oss:20b
         type: string
+      governed_run_id:
+        description: Existing governed run already at final_content_approved
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -31,6 +35,11 @@ jobs:
     env:
       OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
       OLLAMA_API_URL: https://ollama.com/api/chat
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
     steps:
       - name: Checkout
@@ -40,6 +49,9 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
 
       - name: Validate generation inputs
         shell: bash
@@ -53,8 +65,16 @@ jobs:
             echo "target_count must be 1-20"
             exit 1
           fi
+          if [[ ! "${{ inputs.governed_run_id }}" =~ ^[A-Za-z0-9._:-]+$ ]]; then
+            echo "Invalid governed_run_id"
+            exit 1
+          fi
           if [[ -z "$OLLAMA_API_KEY" ]]; then
             echo "Environment secret API_GITHUB is not configured"
+            exit 1
+          fi
+          if [[ -z "$SUPABASE_SERVICE_ROLE_KEY" ]]; then
+            echo "Environment secret SUPABASE_SERVICE_ROLE_KEY is not configured"
             exit 1
           fi
 
@@ -67,7 +87,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/question-drafts"
-          node scripts/generate-scenario-question-drafts.js             --scenario="${{ inputs.scenario_id }}"             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --output="$RUNNER_TEMP/question-drafts/generated-question-drafts.json"
+          node scripts/generate-scenario-question-drafts.js             --scenario="${{ inputs.scenario_id }}"             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --governed-run-id="${{ inputs.governed_run_id }}"             --output="$RUNNER_TEMP/question-drafts/generated-question-drafts.json"
 
       - name: Upload draft artifact
         uses: actions/upload-artifact@v7
@@ -81,5 +101,6 @@ jobs:
         shell: bash
         run: |
           echo "Generated content is draft-only."
-          echo "No database write or automatic approval occurred."
+          echo "Governed execution state was persisted to the pre-existing approved run."
+          echo "No automatic approval or assessment eligibility was created."
           echo "Human technical and instructional review remain required."

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-production-execution-activation",
+  "phase": "phase-9c-production-execution-activation",
+  "status": "prepared-not-deployed",
+  "execution_path": {
+    "workflow": ".github/workflows/generate-scenario-question-drafts.yml",
+    "script": "scripts/generate-scenario-question-drafts.js",
+    "agent": "question-agent",
+    "capability": "question-drafting",
+    "persistent_method": "submitPersistentGoverned"
+  },
+  "required_prior_state": {
+    "state": "final_content_approved",
+    "must_already_exist": true,
+    "fresh_run_at_approved_state_allowed": false
+  },
+  "persistence": {
+    "mode": "supabase",
+    "project_ref": "pffdgqpynpbffbcnxmum",
+    "writes": [
+      "step-started",
+      "step-finished",
+      "checkpoint"
+    ],
+    "draft_question_payload_written_to_database": false
+  },
+  "security": {
+    "public_orchestration_route_added": false,
+    "service_role_secret_server_only": true,
+    "missing_secret_fails_closed": true,
+    "missing_governed_run_id_fails_closed": true
+  },
+  "authority_invariants": [
+    "Existing human approval must precede question-agent execution.",
+    "Question generation remains draft-only.",
+    "No automatic technical or instructional review is created.",
+    "No assessment eligibility is created or widened.",
+    "No scored-delivery or production assessment API authority is created."
+  ]
+}
