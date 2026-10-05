@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-recovery-policy",
+  "phase": "phase-4-persistent-state-and-recovery",
+  "storage_profile": {
+    "implementation": "file-backed-jsonl-plus-atomic-checkpoints",
+    "scope": "development-and-test",
+    "production_durability_claimed": false
+  },
+  "source_of_truth": "append-only-run-ledger",
+  "checkpoint_role": "rebuildable-recovery-acceleration",
+  "recovery_rules": {
+    "step-started": {
+      "status": "interrupted",
+      "resumable": true,
+      "retry_key": "requestId",
+      "rule": "Resume the same governed step without duplicating the start record."
+    },
+    "step-finished": {
+      "status": "step-completed",
+      "resumable": true,
+      "retry_key": "requestId",
+      "rule": "Do not replay a completed governed request; continue from its resulting state."
+    },
+    "handoff-recorded": {
+      "status": "awaiting-handoff",
+      "resumable": true,
+      "retry_key": "handoffId",
+      "rule": "Only the recorded target agent and capability may continue with the current handoff."
+    },
+    "human-approval-recorded": {
+      "status": "human-approved",
+      "resumable": true,
+      "retry_key": "approvalEvidence",
+      "rule": "Preserve the recorded human approval and continue only from the approved state."
+    }
+  },
+  "checkpoint_recovery": {
+    "ledger_wins_on_conflict": true,
+    "repair_stale_checkpoint": true,
+    "unknown_latest_action": "fail-closed-for-automatic-advance"
+  },
+  "authority_invariants": [
+    "Persistence and recovery do not create or widen assessment eligibility.",
+    "Persistence and recovery do not create scored-delivery authority.",
+    "Persistence and recovery do not create production assessment API eligibility.",
+    "Persistence and recovery do not create institutional, high-stakes, certification, licensure, assessment-release, or broad production-release authority.",
+    "Human approval remains separately recorded evidence and is never synthesized during recovery."
+  ]
+}

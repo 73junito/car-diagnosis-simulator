@@ -1,8 +1,9 @@
 'use strict';
 
 class RunLedger {
-  constructor() {
-    this.entries = [];
+  constructor({ store = null } = {}) {
+    this.store = store;
+    this.entries = store ? store.loadEntries().map((entry) => this.freezeEntry(entry)) : [];
   }
 
   append(entry) {
@@ -15,13 +16,27 @@ class RunLedger {
       }
     }
 
-    const normalized = Object.freeze({
+    const normalized = this.freezeEntry({
       ...entry,
       recordedAt: entry.recordedAt || new Date().toISOString(),
-      metadata: Object.freeze({ ...(entry.metadata || {}) }),
     });
+
+    if (this.store) {
+      this.store.appendEntry({
+        ...normalized,
+        metadata: { ...normalized.metadata },
+      });
+    }
+
     this.entries.push(normalized);
     return normalized;
+  }
+
+  freezeEntry(entry) {
+    return Object.freeze({
+      ...entry,
+      metadata: Object.freeze({ ...(entry.metadata || {}) }),
+    });
   }
 
   list({ runId = null } = {}) {

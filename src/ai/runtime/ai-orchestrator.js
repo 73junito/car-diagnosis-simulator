@@ -212,6 +212,10 @@ class AIOrchestrator {
     return this.#governanceRuntime.getRun(runId);
   }
 
+  recoverGovernedRun(runId) {
+    return this.#governanceRuntime.recoverRun(runId);
+  }
+
   getStats() {
     return {
       registeredAgents: this.registry.list().length,
