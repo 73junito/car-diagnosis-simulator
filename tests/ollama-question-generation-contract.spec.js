@@ -20,15 +20,20 @@ describe('Ollama question generation contract', () => {
     path.join(root, '.github', 'workflows', 'generate-scenario-question-drafts.yml'),
     'utf8'
   );
+  const persistenceHelper = fs.readFileSync(
+    path.join(root, 'scripts', 'persist-question-generation-run.js'),
+    'utf8'
+  );
   const migration = fs.readFileSync(
     path.join(root, 'supabase', 'migrations', '20260924200000_retire_noncompliant_evidence_sources.sql'),
     'utf8'
   );
 
-  test('workflow uses the ollama GitHub Environment secret without exposing it', () => {
+  test('workflow keeps Ollama and Supabase credentials in separate protected environments', () => {
     expect(workflow).toContain('environment: ollama');
-    expect(workflow).toContain('secrets.API_GITHUB');
-    expect(workflow).toContain('secrets.SUPABASE_SERVICE_ROLE_KEY');
+    expect(workflow).toContain('environment: pffdgqpynpbffbcnxmum_production');
+    expect(workflow).toContain('OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}');
+    expect(workflow).toContain('SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}');
     expect(workflow).toContain('https://ollama.com/api/chat');
     expect(workflow).not.toMatch(/echo\s+.*\$OLLAMA_API_KEY/i);
     expect(workflow).not.toMatch(/echo\s+.*\$SUPABASE_SERVICE_ROLE_KEY/i);
@@ -81,17 +86,20 @@ describe('Ollama question generation contract', () => {
     expect(migration).toContain('update public.question_provenance');
   });
 
-  test('workflow persists only governed execution state for a pre-approved run', () => {
-    expect(workflow).toContain('governed_run_id');
-    expect(workflow).toContain('TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase');
-    expect(workflow).toContain('SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}');
-    expect(workflow).toContain('--governed-run-id="${{ inputs.governed_run_id }}"');
-    expect(workflow).not.toMatch(/echo\s+.*\$SUPABASE_SERVICE_ROLE_KEY/i);
+  test('workflow persists governed start and finish around private generation', () => {
+    expect(workflow).toContain('persist-start:');
+    expect(workflow).toContain('needs: persist-start');
+    expect(workflow).toContain('persist-finish:');
+    expect(workflow).toContain('needs: generate');
+    expect(workflow).toContain('scripts/persist-question-generation-run.js');
+    expect(workflow).toContain('--action=start');
+    expect(workflow).toContain('--action=finish');
+    expect(workflow).toContain('TORQUEMIND_ORCHESTRATION_PERSISTENCE: disabled');
     expect(workflow).not.toMatch(/psql|supabase db|apply_migration/i);
-    expect(generator).toContain('submitPersistentGoverned');
-    expect(generator).toContain("from: 'final_content_approved'");
-    expect(generator).toContain("to: 'item_generated'");
-    expect(generator).toContain('persistent_orchestration: persistentExecution');
+    expect(persistenceHelper).toContain('submitPersistentGoverned');
+    expect(persistenceHelper).toContain("from: 'final_content_approved'");
+    expect(persistenceHelper).toContain("to: 'item_generated'");
+    expect(persistenceHelper).toContain('Persistent finish requires the matching step-started record');
     expect(workflow).toContain('No automatic approval or assessment eligibility was created.');
   });
 });
