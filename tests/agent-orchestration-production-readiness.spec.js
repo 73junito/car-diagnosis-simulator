@@ -14,9 +14,13 @@ describe('Phase 7 production migration readiness', () => {
       '20261005031812_create_orchestration_persistence_rpc.sql'
     );
 
+    const canonicalMigration = fs
+      .readFileSync(migrationPath, 'utf8')
+      .replace(/\r\n/g, '\n');
+
     const digest = crypto
       .createHash('sha256')
-      .update(fs.readFileSync(migrationPath))
+      .update(canonicalMigration, 'utf8')
       .digest('hex');
 
     expect(readiness.migration.version).toBe('20261005031812');

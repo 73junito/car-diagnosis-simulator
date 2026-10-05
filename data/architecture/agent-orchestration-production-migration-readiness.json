@@ -7,7 +7,7 @@
   "migration": {
     "version": "20261005031812",
     "name": "create_orchestration_persistence_rpc",
-    "repository_sha256": "996793e7cccf6c0fd4062a934767e5796b6f7ddb684c5dba5f986c94f80383f7",
+    "repository_sha256": "16781af589557a5b3a5979a683fb25b521607361e54a023dd08deaa39d894f58",
     "present_in_production": false,
     "applied_in_production": false,
     "staging_verified": true
