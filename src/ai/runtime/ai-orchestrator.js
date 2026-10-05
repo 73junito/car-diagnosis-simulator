@@ -4,6 +4,7 @@ const AgentProcess = require('../kernel/agent-process');
 const SchedulerKernel = require('../kernel/scheduler-kernel');
 const AgentRegistry = require('../registry/agent-registry');
 const RuntimeEventBus = require('../events/runtime-event-bus');
+const GovernanceRuntime = require('./governance-runtime');
 
 /**
  * Public entry point for the TorqueMind product AI runtime.
@@ -21,9 +22,11 @@ class AIOrchestrator {
     scheduler = null,
     maxConcurrent = 1,
     maxQueueDepth = 100,
+    governanceRuntime = null,
   } = {}) {
     this.registry = registry;
     this.eventBus = eventBus;
+    this.governanceRuntime = governanceRuntime || new GovernanceRuntime();
     this.scheduler =
       scheduler ||
       new SchedulerKernel({
@@ -71,6 +74,7 @@ class AIOrchestrator {
     quota = 10,
     timeSliceMs = 1000,
     metadata = {},
+    governed = null,
   }) {
     if (!capability || typeof capability !== 'string') {
       throw new Error('submit requires a non-empty capability');
@@ -78,6 +82,16 @@ class AIOrchestrator {
 
     const agent = this.registry.resolve(capability, { agentId });
     const requestId = id || this.createRequestId();
+
+    if (governed) {
+      this.governanceRuntime.checkStep({
+        runId: governed.runId,
+        agent,
+        capability,
+        from: governed.from,
+        to: governed.to,
+      });
+    }
 
     if (this.requests.has(requestId) || this.scheduler.getProcess(requestId)) {
       throw new Error(`Request ${requestId} already exists`);
@@ -96,7 +110,7 @@ class AIOrchestrator {
       timeSliceMs,
       metadata,
       task: async (runtimeContext, currentProcess) => {
-        return agent.execute({
+        const result = await agent.execute({
           input,
           context: {
             ...context,
@@ -106,6 +120,19 @@ class AIOrchestrator {
           orchestrator: this,
           eventBus: this.eventBus,
         });
+
+        if (governed) {
+          this.governanceRuntime.recordFinish({
+            runId: governed.runId,
+            agentId: agent.id,
+            capability,
+            from: governed.from,
+            to: governed.to,
+            requestId,
+          });
+        }
+
+        return result;
       },
     });
 
@@ -116,8 +143,20 @@ class AIOrchestrator {
       input,
       context,
       metadata,
+      governed,
       createdAt: new Date().toISOString(),
     });
+
+    if (governed) {
+      this.governanceRuntime.recordStart({
+        runId: governed.runId,
+        agentId: agent.id,
+        capability,
+        from: governed.from,
+        to: governed.to,
+        requestId,
+      });
+    }
 
     this.scheduler.enqueue(process);
 
@@ -126,6 +165,8 @@ class AIOrchestrator {
       capability,
       agentId: agent.id,
       priority: process.priority,
+      governed: Boolean(governed),
+      runId: governed ? governed.runId : null,
     });
 
     return process.getStatusSummary();
@@ -158,6 +199,10 @@ class AIOrchestrator {
           ? process.getStatusSummary()
           : null,
     };
+  }
+
+  getRunLedger(runId) {
+    return this.governanceRuntime.getRun(runId);
   }
 
   getStats() {
