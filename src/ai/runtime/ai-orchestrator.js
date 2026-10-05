@@ -16,6 +16,8 @@ const GovernanceRuntime = require('./governance-runtime');
  * - exposes lifecycle and result inspection
  */
 class AIOrchestrator {
+  #governanceRuntime;
+
   constructor({
     registry = new AgentRegistry(),
     eventBus = new RuntimeEventBus(),
@@ -26,7 +28,7 @@ class AIOrchestrator {
   } = {}) {
     this.registry = registry;
     this.eventBus = eventBus;
-    this.governanceRuntime = governanceRuntime || new GovernanceRuntime();
+    this.#governanceRuntime = governanceRuntime || new GovernanceRuntime();
     this.scheduler =
       scheduler ||
       new SchedulerKernel({
@@ -84,12 +86,13 @@ class AIOrchestrator {
     const requestId = id || this.createRequestId();
 
     if (governed) {
-      this.governanceRuntime.checkStep({
+      this.#governanceRuntime.checkStep({
         runId: governed.runId,
         agent,
         capability,
         from: governed.from,
         to: governed.to,
+        handoffId: governed.handoffId || null,
       });
     }
 
@@ -122,7 +125,7 @@ class AIOrchestrator {
         });
 
         if (governed) {
-          this.governanceRuntime.recordFinish({
+          this.#governanceRuntime.recordFinish({
             runId: governed.runId,
             agentId: agent.id,
             capability,
@@ -148,7 +151,7 @@ class AIOrchestrator {
     });
 
     if (governed) {
-      this.governanceRuntime.recordStart({
+      this.#governanceRuntime.recordStart({
         runId: governed.runId,
         agentId: agent.id,
         capability,
@@ -201,8 +204,12 @@ class AIOrchestrator {
     };
   }
 
+  recordHandoff(handoff) {
+    return this.#governanceRuntime.recordHandoff(handoff);
+  }
+
   getRunLedger(runId) {
-    return this.governanceRuntime.getRun(runId);
+    return this.#governanceRuntime.getRun(runId);
   }
 
   getStats() {

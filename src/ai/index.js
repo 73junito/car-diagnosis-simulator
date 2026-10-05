@@ -4,6 +4,7 @@ const RuntimeEventBus = require('./events/runtime-event-bus');
 const AgentRegistry = require('./registry/agent-registry');
 const AIOrchestrator = require('./runtime/ai-orchestrator');
 const GovernanceRuntime = require('./runtime/governance-runtime');
+const HumanGateController = require('./runtime/human-gate-controller');
 const PolicyEngine = require('./governance/policy-engine');
 const WorkflowStateMachine = require('./governance/workflow-state-machine');
 const AgentGovernanceCatalog = require('./governance/agent-governance-catalog');
@@ -25,6 +26,7 @@ module.exports = {
   AgentRegistry,
   AIOrchestrator,
   GovernanceRuntime,
+  HumanGateController,
   PolicyEngine,
   WorkflowStateMachine,
   AgentGovernanceCatalog,
