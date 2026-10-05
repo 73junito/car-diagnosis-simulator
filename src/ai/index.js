@@ -10,6 +10,9 @@ const WorkflowStateMachine = require('./governance/workflow-state-machine');
 const AgentGovernanceCatalog = require('./governance/agent-governance-catalog');
 const RunLedger = require('./governance/run-ledger');
 const FileRunStore = require('./governance/file-run-store');
+const SupabaseRunStore = require('./governance/supabase-run-store');
+const ProductionRunCoordinator = require('./governance/production-run-coordinator');
+const IntegrityChain = require('./governance/integrity-chain');
 const DiagnosticContracts = require('./diagnostics/contracts');
 const ToolGateway = require('./diagnostics/tool-gateway');
 const VehicleIdentityResolver = require('./diagnostics/vehicle-identity-resolver');
@@ -33,6 +36,9 @@ module.exports = {
   AgentGovernanceCatalog,
   RunLedger,
   FileRunStore,
+  SupabaseRunStore,
+  ProductionRunCoordinator,
+  IntegrityChain,
   DiagnosticContracts,
   ToolGateway,
   VehicleIdentityResolver,
