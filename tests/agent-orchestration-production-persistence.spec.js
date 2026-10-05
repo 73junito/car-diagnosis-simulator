@@ -163,7 +163,7 @@ describe('Phase 5 production persistence adapter', () => {
 
   test('contract is private, lease-guarded, CAS protected, and staging-only', () => {
     expect(contract.storage_target).toBe('supabase-postgres');
-    expect(contract.deployment_status).toBe('staging-applied-production-not-switched');
+    expect(contract.deployment_status).toBe('production-applied-runtime-not-switched');
     expect(contract.access_model.service_role_only).toBe(true);
     expect(contract.access_model.anon_access).toBe(false);
     expect(contract.access_model.authenticated_access).toBe(false);

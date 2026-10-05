@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-production-persistence-verification",
+  "phase": "phase-8-production-migration-and-verification",
+  "target": "TorqueMind",
+  "repository_migration": {
+    "file": "supabase/migrations/20261005031812_create_orchestration_persistence_rpc.sql",
+    "canonical_sha256": "16781af589557a5b3a5979a683fb25b521607361e54a023dd08deaa39d894f58"
+  },
+  "production_migration": {
+    "applied": true,
+    "applied_version": "20261005035043",
+    "name": "create_orchestration_persistence_rpc"
+  },
+  "security": {
+    "private_schema": "orchestration_private",
+    "tables": [
+      "run_entries",
+      "run_leases",
+      "run_checkpoints"
+    ],
+    "rls_enabled_all": true,
+    "anon_table_select": false,
+    "authenticated_table_select": false,
+    "service_role_table_select": true,
+    "rpc_count": 6,
+    "anon_rpc_execute": false,
+    "authenticated_rpc_execute": false,
+    "service_role_rpc_execute": true
+  },
+  "live_contract_checks": {
+    "competing_worker_rejected": "lease_conflict",
+    "invalid_integrity_hash_rejected": "integrity_hash_invalid",
+    "stale_version_rejected": "version_conflict",
+    "javascript_postgres_hash_alignment": true,
+    "first_integrity_hash": "f35ddb99abbaf0784d6a8a60dee419e68d673435280c1cdbf7ac37b611f1cd61",
+    "second_integrity_hash": "6210ac34b7896cf5da6e4e54f587a1dd58d0d709c4b1425486300d717765fb7d",
+    "chained_entry_count": 2,
+    "checkpoint_write_verified": true,
+    "checkpoint_version": 2,
+    "checkpoint_integrity_hash": "6210ac34b7896cf5da6e4e54f587a1dd58d0d709c4b1425486300d717765fb7d",
+    "test_data_cleaned": true,
+    "remaining_entries": 0,
+    "remaining_checkpoints": 0,
+    "remaining_leases": 0
+  },
+  "advisors": {
+    "orchestration_specific_blockers": 0,
+    "expected_info": [
+      "RLS enabled with no policies on orchestration_private.run_entries.",
+      "RLS enabled with no policies on orchestration_private.run_leases.",
+      "RLS enabled with no policies on orchestration_private.run_checkpoints."
+    ],
+    "unrelated_existing_warnings": [
+      "Existing SECURITY DEFINER function exposure warnings on unrelated public functions.",
+      "Existing project-wide performance advisories on unrelated tables, indexes, and policies."
+    ]
+  },
+  "runtime_state": {
+    "production_runtime_persistence_enabled": false,
+    "application_runtime_switched": false,
+    "production_database_schema_ready": true
+  },
+  "authority_invariants": [
+    "No assessment eligibility change.",
+    "No scored-delivery authority change.",
+    "No production assessment API eligibility change.",
+    "No institutional, high-stakes, certification, licensure, assessment-release, or broad production-release authority change."
+  ]
+}
