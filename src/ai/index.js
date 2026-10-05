@@ -4,6 +4,9 @@ const RuntimeEventBus = require('./events/runtime-event-bus');
 const AgentRegistry = require('./registry/agent-registry');
 const AIOrchestrator = require('./runtime/ai-orchestrator');
 const PolicyEngine = require('./governance/policy-engine');
+const WorkflowStateMachine = require('./governance/workflow-state-machine');
+const AgentGovernanceCatalog = require('./governance/agent-governance-catalog');
+const RunLedger = require('./governance/run-ledger');
 const DiagnosticContracts = require('./diagnostics/contracts');
 const ToolGateway = require('./diagnostics/tool-gateway');
 const VehicleIdentityResolver = require('./diagnostics/vehicle-identity-resolver');
@@ -21,6 +24,9 @@ module.exports = {
   AgentRegistry,
   AIOrchestrator,
   PolicyEngine,
+  WorkflowStateMachine,
+  AgentGovernanceCatalog,
+  RunLedger,
   DiagnosticContracts,
   ToolGateway,
   VehicleIdentityResolver,
