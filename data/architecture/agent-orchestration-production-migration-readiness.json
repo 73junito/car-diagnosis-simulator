@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-production-migration-readiness",
+  "phase": "phase-7-production-migration-readiness",
+  "target": "TorqueMind",
+  "database_status": "ACTIVE_HEALTHY",
+  "migration": {
+    "version": "20261005031812",
+    "name": "create_orchestration_persistence_rpc",
+    "repository_sha256": "16781af589557a5b3a5979a683fb25b521607361e54a023dd08deaa39d894f58",
+    "present_in_production": false,
+    "applied_in_production": false,
+    "staging_verified": true
+  },
+  "preflight": {
+    "orchestration_private_schema_exists": false,
+    "orchestration_function_conflicts": 0,
+    "pgcrypto_installed": true,
+    "extensions_digest_available": true,
+    "blocking_orchestration_advisor_findings": 0
+  },
+  "advisor_baseline": {
+    "security": "Existing project-wide RLS/no-policy informational findings and unrelated function-search-path warning; no orchestration objects exist in production yet.",
+    "performance": "Existing project-wide performance findings on unrelated tables, indexes, and policies; no orchestration-specific performance blocker identified."
+  },
+  "required_production_gate_sequence": [
+    "Apply exactly migration 20261005031812_create_orchestration_persistence_rpc.",
+    "Verify three orchestration_private tables exist with RLS enabled.",
+    "Verify anon/authenticated have no direct table access.",
+    "Verify six public orchestration RPCs deny anon/authenticated and allow service_role only.",
+    "Run live production lease conflict test using isolated test run ID.",
+    "Run wrong/expired lease rejection test.",
+    "Run invalid integrity hash rejection test.",
+    "Run stale compare-and-swap version rejection test.",
+    "Verify JavaScript/Postgres SHA-256 vectors match.",
+    "Write and read a bound checkpoint.",
+    "Release lease and remove all verification rows.",
+    "Run Supabase security and performance advisors again.",
+    "Only after all gates pass may runtime production-persistence wiring be prepared; runtime switch remains a separate change."
+  ],
+  "current_authority": {
+    "production_runtime_persistence_enabled": false,
+    "application_runtime_switched": false,
+    "assessment_eligibility_changed": false,
+    "scored_delivery_authority_changed": false,
+    "production_assessment_api_eligibility_changed": false,
+    "production_release_authority_changed": false
+  }
+}
