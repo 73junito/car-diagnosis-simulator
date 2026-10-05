@@ -9,9 +9,10 @@ const RunLedger = require('../governance/run-ledger');
 class GovernanceRuntime {
   constructor(options = {}) {
     const definition = options.definition || foundation;
+    this.store = options.store || null;
     this.stateMachine = options.stateMachine || new WorkflowStateMachine(definition);
     this.catalog = options.catalog || new AgentGovernanceCatalog(definition);
-    this.ledger = options.ledger || new RunLedger();
+    this.ledger = options.ledger || new RunLedger({ store: this.store });
   }
 
   checkStep({ runId, agent, capability, from, to, handoffId = null }) {
@@ -66,13 +67,27 @@ class GovernanceRuntime {
   }
 
   recordStart({ runId, agentId, capability, from, to, requestId }) {
-    return this.ledger.append({
+    const existing = this.ledger.list({ runId }).find(
+      (entry) =>
+        entry.action === 'step-started' &&
+        entry.metadata &&
+        entry.metadata.requestId === requestId
+    );
+
+    if (existing) {
+      return existing;
+    }
+
+    const entry = this.ledger.append({
       runId,
       actor: agentId,
       action: 'step-started',
       state: from,
       metadata: { capability, from, to, requestId },
     });
+
+    this.writeCheckpoint(runId, entry, 'in-progress');
+    return entry;
   }
 
   recordFinish({ runId, agentId, capability, from, to, requestId }) {
@@ -87,13 +102,16 @@ class GovernanceRuntime {
       return existing;
     }
 
-    return this.ledger.append({
+    const entry = this.ledger.append({
       runId,
       actor: agentId,
       action: 'step-finished',
       state: to,
       metadata: { capability, from, to, requestId },
     });
+
+    this.writeCheckpoint(runId, entry, 'step-completed');
+    return entry;
   }
 
   recordHandoff({
@@ -104,6 +122,19 @@ class GovernanceRuntime {
     state,
     handoffId = null,
   }) {
+    if (handoffId) {
+      const existing = this.ledger.list({ runId }).find(
+        (entry) =>
+          entry.action === 'handoff-recorded' &&
+          entry.metadata &&
+          entry.metadata.handoffId === handoffId
+      );
+
+      if (existing) {
+        return existing;
+      }
+    }
+
     const latest = this.ledger.latest(runId);
 
     if (
@@ -129,7 +160,7 @@ class GovernanceRuntime {
         ? `handoff-${crypto.randomUUID()}`
         : `handoff-${Date.now()}`);
 
-    return this.ledger.append({
+    const entry = this.ledger.append({
       runId,
       actor: fromAgentId,
       action: 'handoff-recorded',
@@ -141,6 +172,9 @@ class GovernanceRuntime {
         capability,
       },
     });
+
+    this.writeCheckpoint(runId, entry, 'awaiting-handoff');
+    return entry;
   }
 
   recordHumanTransition({
@@ -154,6 +188,19 @@ class GovernanceRuntime {
   }) {
     if (!runId || !reviewerIdentity || !reviewedAt) {
       throw new Error('Human approval record is incomplete');
+    }
+
+    if (approvalEvidence) {
+      const existing = this.ledger.list({ runId }).find(
+        (entry) =>
+          entry.action === 'human-approval-recorded' &&
+          entry.metadata &&
+          entry.metadata.approvalEvidence === approvalEvidence
+      );
+
+      if (existing) {
+        return existing;
+      }
     }
 
     const latest = this.ledger.latest(runId);
@@ -173,7 +220,7 @@ class GovernanceRuntime {
       throw new Error('Human transition denied: ' + decision.reason);
     }
 
-    return this.ledger.append({
+    const entry = this.ledger.append({
       runId,
       actor: 'human',
       action: 'human-approval-recorded',
@@ -187,6 +234,64 @@ class GovernanceRuntime {
         approvalEvidence,
       },
     });
+
+    this.writeCheckpoint(runId, entry, 'human-approved');
+    return entry;
+  }
+
+  writeCheckpoint(runId, entry, status) {
+    if (!this.store || typeof this.store.writeCheckpoint !== 'function') {
+      return null;
+    }
+
+    return this.store.writeCheckpoint(runId, {
+      runId,
+      state: entry.state,
+      status,
+      action: entry.action,
+      actor: entry.actor,
+      recordedAt: entry.recordedAt,
+      metadata: { ...(entry.metadata || {}) },
+    });
+  }
+
+  recoverRun(runId) {
+    const latest = this.ledger.latest(runId);
+    if (!latest) {
+      return null;
+    }
+
+    const statusByAction = {
+      'step-started': 'interrupted',
+      'step-finished': 'step-completed',
+      'handoff-recorded': 'awaiting-handoff',
+      'human-approval-recorded': 'human-approved',
+    };
+
+    const recovery = {
+      runId,
+      state: latest.state,
+      action: latest.action,
+      status: statusByAction[latest.action] || 'unknown',
+      resumable: true,
+      metadata: { ...(latest.metadata || {}) },
+    };
+
+    const checkpoint =
+      this.store && typeof this.store.readCheckpoint === 'function'
+        ? this.store.readCheckpoint(runId)
+        : null;
+
+    if (
+      this.store &&
+      (!checkpoint ||
+        checkpoint.state !== recovery.state ||
+        checkpoint.action !== recovery.action)
+    ) {
+      this.store.writeCheckpoint(runId, recovery);
+    }
+
+    return recovery;
   }
 
   getRun(runId) {
