@@ -27,19 +27,18 @@ permissions:
   contents: read
 
 jobs:
-  generate:
-    name: Private evidence-bound question generation
+  persist-start:
+    name: Persist governed execution start
     runs-on: ubuntu-latest
-    environment: ollama
-    timeout-minutes: 10
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
     env:
-      OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
-      OLLAMA_API_URL: https://ollama.com/api/chat
       TORQUEMIND_ENVIRONMENT: production
       TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
       TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
       SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
-      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      REQUEST_ID: question-generation:${{ github.run_id }}:${{ github.run_attempt }}:${{ inputs.scenario_id }}
 
     steps:
       - name: Checkout
@@ -53,7 +52,7 @@ jobs:
       - name: Install runtime dependencies
         run: npm ci --ignore-scripts
 
-      - name: Validate generation inputs
+      - name: Validate governed execution inputs
         shell: bash
         run: |
           set -euo pipefail
@@ -69,25 +68,70 @@ jobs:
             echo "Invalid governed_run_id"
             exit 1
           fi
-          if [[ -z "$OLLAMA_API_KEY" ]]; then
-            echo "Environment secret API_GITHUB is not configured"
+          if [[ -z "$SUPABASE_SERVICE_ROLE_KEY" ]]; then
+            echo "Environment secret SERVICE_ROLE_KEY is not configured"
             exit 1
           fi
-          if [[ -z "$SUPABASE_SERVICE_ROLE_KEY" ]]; then
-            echo "Environment secret SUPABASE_SERVICE_ROLE_KEY is not configured"
+
+      - name: Record persistent step start
+        shell: bash
+        run: |
+          node scripts/persist-question-generation-run.js \
+            --action=start \
+            --run-id="${{ inputs.governed_run_id }}" \
+            --scenario="${{ inputs.scenario_id }}" \
+            --request-id="$REQUEST_ID"
+
+  generate:
+    name: Private evidence-bound question generation
+    needs: persist-start
+    runs-on: ubuntu-latest
+    environment: ollama
+    timeout-minutes: 10
+    env:
+      OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}
+      OLLAMA_API_URL: https://ollama.com/api/chat
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: disabled
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate generation secret
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$OLLAMA_API_KEY" ]]; then
+            echo "Environment secret API_GITHUB is not configured"
             exit 1
           fi
 
       - name: Verify evidence eligibility
         shell: bash
         run: |
-          node scripts/generate-scenario-question-drafts.js             --scenario="${{ inputs.scenario_id }}"             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --dry-run=true
+          node scripts/generate-scenario-question-drafts.js \
+            --scenario="${{ inputs.scenario_id }}" \
+            --target="${{ inputs.target_count }}" \
+            --model="${{ inputs.model }}" \
+            --dry-run=true
 
       - name: Run dedicated Ollama question agent worker
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/question-drafts"
-          node scripts/generate-scenario-question-drafts.js             --scenario="${{ inputs.scenario_id }}"             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --governed-run-id="${{ inputs.governed_run_id }}"             --output="$RUNNER_TEMP/question-drafts/generated-question-drafts.json"
+          node scripts/generate-scenario-question-drafts.js \
+            --scenario="${{ inputs.scenario_id }}" \
+            --target="${{ inputs.target_count }}" \
+            --model="${{ inputs.model }}" \
+            --output="$RUNNER_TEMP/question-drafts/generated-question-drafts.json"
 
       - name: Upload draft artifact
         uses: actions/upload-artifact@v7
@@ -97,10 +141,66 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  persist-finish:
+    name: Persist governed execution finish
+    needs: generate
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      REQUEST_ID: question-generation:${{ github.run_id }}:${{ github.run_attempt }}:${{ inputs.scenario_id }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Download generated draft artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: "question-drafts-${{ inputs.scenario_id }}-${{ github.run_id }}"
+          path: ${{ runner.temp }}/question-drafts
+
+      - name: Verify draft-only artifact boundary
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const file = process.env.RUNNER_TEMP + '/question-drafts/generated-question-drafts.json';
+          const doc = JSON.parse(fs.readFileSync(file, 'utf8'));
+          if (doc?.governance?.auto_approval !== false) throw new Error('Artifact auto-approval boundary failed.');
+          if (!Array.isArray(doc.questions) || !doc.questions.length) throw new Error('No draft questions found.');
+          if (doc.questions.some((q) => q.status !== 'draft' || q.approved !== false)) {
+            throw new Error('Generated question escaped draft-only status.');
+          }
+          NODE
+
+      - name: Record persistent step finish and checkpoint
+        shell: bash
+        run: |
+          node scripts/persist-question-generation-run.js \
+            --action=finish \
+            --run-id="${{ inputs.governed_run_id }}" \
+            --scenario="${{ inputs.scenario_id }}" \
+            --request-id="$REQUEST_ID"
+
       - name: Governance notice
         shell: bash
         run: |
           echo "Generated content is draft-only."
-          echo "Governed execution state was persisted to the pre-existing approved run."
+          echo "Governed execution start and finish were persisted using separate protected environments."
+          echo "No secret crossed an environment boundary."
           echo "No automatic approval or assessment eligibility was created."
           echo "Human technical and instructional review remain required."
