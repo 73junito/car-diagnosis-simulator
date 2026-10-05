@@ -1,8 +1,11 @@
 # Ollama question agent and generation worker
 
 The GitHub Actions `Generate scenario question drafts` job is the private worker for
-development question generation. It reads the `ollama` GitHub Environment secret
-`API_GITHUB` as `OLLAMA_API_KEY`; it does not deploy a public route or write to Supabase.
+development question generation. It reads `API_GITHUB` as `OLLAMA_API_KEY` and the
+server-only `SUPABASE_SERVICE_ROLE_KEY` from the protected `ollama` GitHub Environment.
+It does not deploy a public route. When persistent orchestration is enabled, it writes
+only governed execution state (start, finish, checkpoint) to an existing run whose
+latest persisted state is already `final_content_approved`.
 
 ## Responsibilities
 

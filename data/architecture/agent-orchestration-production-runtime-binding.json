@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "artifact_type": "agent-orchestration-production-runtime-binding",
   "phase": "phase-9b-production-runtime-binding",
-  "status": "prepared-not-deployed",
+  "status": "merged-production-execution-activation-pending",
   "binding": {
     "factory": "src/ai/runtime/production-ai-runtime.js",
     "persistent_governance_runtime": "src/ai/runtime/persistent-governance-runtime.js",
