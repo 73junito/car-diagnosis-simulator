@@ -1,0 +1,198 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "formative-item-scored-delivery-decisions",
+  "scenario_id": "charging-system",
+  "stage": "scored-delivery-enabled-low-stakes-formative-only",
+  "created_at": "2026-10-05T01:10:25Z",
+  "scored_delivery_decision_preparation": "data/evidence/review-queues/charging-system-formative-scored-delivery-decision-prep-20261005.json",
+  "source_artifact_canonical_sha256": "e30477fa68294896228eb22419205d2d77ecc49556460d9c8940dfbe1c7de93d",
+  "human_confirmation": {
+    "reviewer_identity": "Rafael Rodriguez Jr.",
+    "reviewed_at": "2026-10-05T01:10:25Z",
+    "user_confirmation": "I approve scored delivery for charging-system formative items 05, 07, and 08 within the approved low-stakes governed formative assessment scope only, as written."
+  },
+  "purpose": "Record explicit human approval to enable scored delivery for exact charging-system items 05, 07, and 08 within the already approved low-stakes governed formative assessment scope only.",
+  "invariants": [
+    "This decision applies only to the exact canonical item hashes recorded here.",
+    "Scored delivery is enabled only within the already approved low-stakes governed formative assessment scope.",
+    "Institutional assessment, high-stakes use, certification, production assessment API eligibility, assessment release, and broad production release remain separate and closed.",
+    "Delivered scores may support learner feedback only and must not be interpreted as diagnostic competence, certification readiness, course mastery, job qualification, or institutional competency attainment.",
+    "No delivered score authorizes physical diagnostic action or overrides vehicle-specific service information.",
+    "Any item payload change invalidates the exact-hash basis and requires deterministic revalidation and applicable renewed human review.",
+    "Claims 02 and 12 remain blocked at citation validation and are excluded."
+  ],
+  "items": [
+    {
+      "id": "charging-system-formative-draft-05-001",
+      "claim_id": "charging-system-challenge-claim-05",
+      "canonical_item_sha256": "003f80fef4bfc4a46c3c02e5b5395b4d8b520210cf4a03f9762c76a447ccb980",
+      "review_snapshot": {
+        "stem": "Which statement best describes lead-acid battery charging behavior?",
+        "choices": {
+          "A": "Charging behavior depends on state of charge and the charger or regulator strategy.",
+          "B": "Charging behavior is the same at every state of charge if battery voltage is above a fixed threshold.",
+          "C": "Charging behavior is determined only by battery age and is independent of the charger or regulator strategy.",
+          "D": "Charging behavior can be evaluated with one universal charging-current value for all lead-acid batteries."
+        },
+        "answer": "A",
+        "explanation": "Lead-acid battery charging behavior varies with state of charge and the charging or regulation strategy. Chemistry-specific and manufacturer-specific procedures still control any diagnostic limits or service decisions.",
+        "source_final_content_text": "Lead-acid battery charging behavior depends on state of charge and the charger or regulator strategy."
+      },
+      "scored_delivery_decision": {
+        "decision": "enabled-for-low-stakes-governed-formative-assessment-only",
+        "reviewer_identity": "Rafael Rodriguez Jr.",
+        "reviewed_at": "2026-10-05T01:10:25Z",
+        "approved_delivery_scope": {
+          "delivery_mode": "scored-low-stakes-governed-formative-knowledge-check",
+          "purpose": "Return the separately approved item-level score and instructional feedback for the exact approved item within the approved low-stakes formative assessment scope.",
+          "scoring_rule": "Use the separately approved 1-point keyed-answer / 0-point non-keyed-answer scoring definition.",
+          "score_use_limit": "Scores may support learner feedback within governed formative learning only and must not be used as evidence of diagnostic competence, certification readiness, course mastery, job qualification, or institutional competency attainment.",
+          "attempt_consequence": "No certification, employment, licensure, institutional progression, course-completion, or credential consequence may depend on the delivered score.",
+          "physical_action_authority": false
+        }
+      },
+      "governance_effect": {
+        "scored_delivery_enabled_for_low_stakes_governed_formative_use": true,
+        "assessment_eligible_for_low_stakes_governed_formative_use": true,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "certification_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      },
+      "not_authorized_by_this_decision": [
+        "institutional assessment use",
+        "high-stakes or certification use",
+        "production assessment API use",
+        "assessment release",
+        "broad production release",
+        "changing the exact approved item payload"
+      ]
+    },
+    {
+      "id": "charging-system-formative-draft-07-001",
+      "claim_id": "charging-system-challenge-claim-07",
+      "canonical_item_sha256": "fe51b2c4d22f1f9ce351033b63682a7196f94ec02aa32cc18d6f13573393177f",
+      "review_snapshot": {
+        "stem": "During constant-voltage charging of a discharged lead-acid battery, which current trend is most consistent with the approved instructional concept?",
+        "choices": {
+          "A": "Charging current must remain constant until the battery reaches full charge.",
+          "B": "Charging current may be high initially and then decrease as battery voltage rises toward full charge.",
+          "C": "Charging current must increase continuously as battery voltage rises.",
+          "D": "A single fixed amperage value determines whether every lead-acid battery is charging correctly."
+        },
+        "answer": "B",
+        "explanation": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and current decreases as battery voltage rises toward full charge. The concept describes a trend, not a universal automotive amperage pass/fail value.",
+        "source_final_content_text": "Under constant-voltage charging, a discharged lead-acid battery may initially accept high current, and charging current decreases as battery voltage rises toward full charge."
+      },
+      "scored_delivery_decision": {
+        "decision": "enabled-for-low-stakes-governed-formative-assessment-only",
+        "reviewer_identity": "Rafael Rodriguez Jr.",
+        "reviewed_at": "2026-10-05T01:10:25Z",
+        "approved_delivery_scope": {
+          "delivery_mode": "scored-low-stakes-governed-formative-knowledge-check",
+          "purpose": "Return the separately approved item-level score and instructional feedback for the exact approved item within the approved low-stakes formative assessment scope.",
+          "scoring_rule": "Use the separately approved 1-point keyed-answer / 0-point non-keyed-answer scoring definition.",
+          "score_use_limit": "Scores may support learner feedback within governed formative learning only and must not be used as evidence of diagnostic competence, certification readiness, course mastery, job qualification, or institutional competency attainment.",
+          "attempt_consequence": "No certification, employment, licensure, institutional progression, course-completion, or credential consequence may depend on the delivered score.",
+          "physical_action_authority": false
+        }
+      },
+      "governance_effect": {
+        "scored_delivery_enabled_for_low_stakes_governed_formative_use": true,
+        "assessment_eligible_for_low_stakes_governed_formative_use": true,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "certification_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      },
+      "not_authorized_by_this_decision": [
+        "institutional assessment use",
+        "high-stakes or certification use",
+        "production assessment API use",
+        "assessment release",
+        "broad production release",
+        "changing the exact approved item payload"
+      ]
+    },
+    {
+      "id": "charging-system-formative-draft-08-001",
+      "claim_id": "charging-system-challenge-claim-08",
+      "canonical_item_sha256": "7d6b5733b77b2f6053babca951b2cca6f74399abab1b6d1a13f440da852ea814",
+      "review_snapshot": {
+        "stem": "Why can increased electrical charging demand increase mechanical load on an engine with a belt-driven charging system?",
+        "choices": {
+          "A": "The charging system converts additional mechanical input into electrical output, so greater electrical demand can require more mechanical power from the engine.",
+          "B": "Electrical demand eliminates mechanical resistance in belt-driven accessories, reducing the power required from the engine.",
+          "C": "Charging demand changes only battery voltage and has no relationship to mechanical power transfer.",
+          "D": "Any increase in charging demand proves a specific fuel-consumption increase regardless of vehicle design or operating condition."
+        },
+        "answer": "A",
+        "explanation": "Electrical charging demand and belt-driven auxiliaries require mechanical power from the engine. The approved concept supports the direction of the load relationship, but it does not establish a universal fuel-consumption value, charging-output threshold, or diagnostic limit.",
+        "source_final_content_text": "Electrical charging demand and belt-driven auxiliaries increase mechanical load on the engine."
+      },
+      "scored_delivery_decision": {
+        "decision": "enabled-for-low-stakes-governed-formative-assessment-only",
+        "reviewer_identity": "Rafael Rodriguez Jr.",
+        "reviewed_at": "2026-10-05T01:10:25Z",
+        "approved_delivery_scope": {
+          "delivery_mode": "scored-low-stakes-governed-formative-knowledge-check",
+          "purpose": "Return the separately approved item-level score and instructional feedback for the exact approved item within the approved low-stakes formative assessment scope.",
+          "scoring_rule": "Use the separately approved 1-point keyed-answer / 0-point non-keyed-answer scoring definition.",
+          "score_use_limit": "Scores may support learner feedback within governed formative learning only and must not be used as evidence of diagnostic competence, certification readiness, course mastery, job qualification, or institutional competency attainment.",
+          "attempt_consequence": "No certification, employment, licensure, institutional progression, course-completion, or credential consequence may depend on the delivered score.",
+          "physical_action_authority": false
+        }
+      },
+      "governance_effect": {
+        "scored_delivery_enabled_for_low_stakes_governed_formative_use": true,
+        "assessment_eligible_for_low_stakes_governed_formative_use": true,
+        "institutional_assessment_eligible": false,
+        "high_stakes_eligible": false,
+        "certification_eligible": false,
+        "production_assessment_api_eligible": false,
+        "assessment_release": false,
+        "production_release": false
+      },
+      "not_authorized_by_this_decision": [
+        "institutional assessment use",
+        "high-stakes or certification use",
+        "production assessment API use",
+        "assessment release",
+        "broad production release",
+        "changing the exact approved item payload"
+      ]
+    }
+  ],
+  "blocked_claims": [
+    {
+      "claim_id": "charging-system-challenge-claim-02",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    },
+    {
+      "claim_id": "charging-system-challenge-claim-12",
+      "blocked_at": "citation-validation",
+      "reason": "required Navy support remains corroborated-not-artifact-verified"
+    }
+  ],
+  "summary": {
+    "scored_delivery_decisions_recorded": 3,
+    "scored_delivery_enabled_for_low_stakes_governed_formative_use_count": 3,
+    "low_stakes_governed_formative_assessment_eligible_count": 3,
+    "institutional_assessment_eligible_count": 0,
+    "high_stakes_eligible_count": 0,
+    "certification_eligible_count": 0,
+    "production_assessment_api_eligible_count": 0,
+    "assessment_release_count": 0,
+    "production_release_count": 0
+  },
+  "next_safe_action": [
+    "If broader institutional, high-stakes, certification, API, or release use is desired, prepare each as a separate governance decision.",
+    "Do not infer broader assessment or release authority from low-stakes scored delivery.",
+    "Preserve the exact item hashes and approved scoring definitions for any delivered score."
+  ]
+}
