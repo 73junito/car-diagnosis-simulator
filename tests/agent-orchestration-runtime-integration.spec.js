@@ -124,12 +124,32 @@ describe('AIOrchestrator governed runtime integration', () => {
       })
     ).toThrow(/latest ledger state/);
 
+    expect(() =>
+      orchestrator.submit({
+        capability: 'deterministic-validation',
+        governed: {
+          runId: 'run-continuity',
+          from: 'item_generated',
+          to: 'exact_payload_validated',
+        },
+      })
+    ).toThrow(/handoff is required/);
+
+    const handoff = orchestrator.recordHandoff({
+      runId: 'run-continuity',
+      fromAgentId: 'question-agent',
+      toAgentId: 'validation-agent',
+      capability: 'deterministic-validation',
+      state: 'item_generated',
+    });
+
     orchestrator.submit({
       capability: 'deterministic-validation',
       governed: {
         runId: 'run-continuity',
         from: 'item_generated',
         to: 'exact_payload_validated',
+        handoffId: handoff.metadata.handoffId,
       },
     });
     await orchestrator.drain();
