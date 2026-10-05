@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-production-runtime-binding",
+  "phase": "phase-9b-production-runtime-binding",
+  "status": "prepared-not-deployed",
+  "binding": {
+    "factory": "src/ai/runtime/production-ai-runtime.js",
+    "persistent_governance_runtime": "src/ai/runtime/persistent-governance-runtime.js",
+    "orchestrator_method": "submitPersistentGoverned",
+    "enabled_only_when": "TORQUEMIND_ORCHESTRATION_PERSISTENCE=supabase",
+    "disabled_mode_preserves_legacy_submit": true
+  },
+  "durability": {
+    "lease_guarded": true,
+    "compare_and_swap_protected": true,
+    "hash_chain_verified": true,
+    "checkpoint_recovery": true
+  },
+  "human_control": {
+    "separate_control_plane": true,
+    "explicit_approval_evidence_required": true,
+    "agent_cannot_cross_human_only_transition": true
+  },
+  "scope_boundary": [
+    "No new public orchestration API is introduced.",
+    "No assessment eligibility is created or widened.",
+    "No scored-delivery authority is created.",
+    "No production assessment API eligibility is created.",
+    "No institutional, certification, licensure, or high-stakes authority is created."
+  ],
+  "rollback": {
+    "set": "TORQUEMIND_ORCHESTRATION_PERSISTENCE=disabled",
+    "legacy_submit_unchanged": true,
+    "database_rollback_required": false
+  }
+}

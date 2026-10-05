@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "artifact_type": "agent-orchestration-production-runtime-cutover",
   "phase": "phase-9-production-runtime-cutover",
-  "status": "prepared-not-deployed",
+  "status": "production-config-deployed-live-verified-runtime-binding-pending",
   "runtime_mode": {
     "production": "supabase",
     "staging": "supabase",
