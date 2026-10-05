@@ -175,6 +175,114 @@ class AIOrchestrator {
     return process.getStatusSummary();
   }
 
+  async submitPersistentGoverned({
+    id = null,
+    capability,
+    input = {},
+    context = {},
+    agentId = null,
+    priority = null,
+    quota = 10,
+    timeSliceMs = 1000,
+    metadata = {},
+    governed,
+  }) {
+    if (!governed || !governed.runId) {
+      throw new Error('submitPersistentGoverned requires governed run metadata');
+    }
+    if (!capability || typeof capability !== 'string') {
+      throw new Error('submitPersistentGoverned requires a non-empty capability');
+    }
+
+    const agent = this.registry.resolve(capability, { agentId });
+    const requestId = id || this.createRequestId();
+
+    await this.#governanceRuntime.checkStep({
+      runId: governed.runId,
+      agent,
+      capability,
+      from: governed.from,
+      to: governed.to,
+      handoffId: governed.handoffId || null,
+    });
+
+    if (this.requests.has(requestId) || this.scheduler.getProcess(requestId)) {
+      throw new Error(`Request ${requestId} already exists`);
+    }
+
+    await this.#governanceRuntime.recordStart({
+      runId: governed.runId,
+      agentId: agent.id,
+      capability,
+      from: governed.from,
+      to: governed.to,
+      requestId,
+    });
+
+    const process = new AgentProcess({
+      id: requestId,
+      name: `${agent.name || agent.id}: ${capability}`,
+      agentId: agent.id,
+      capability,
+      priority:
+        priority === null || typeof priority === 'undefined'
+          ? Number(agent.defaultPriority || 1)
+          : priority,
+      quota,
+      timeSliceMs,
+      metadata,
+      task: async (runtimeContext, currentProcess) => {
+        const result = await agent.execute({
+          input,
+          context: {
+            ...context,
+            ...runtimeContext,
+          },
+          process: currentProcess,
+          orchestrator: this,
+          eventBus: this.eventBus,
+        });
+
+        await this.#governanceRuntime.recordFinish({
+          runId: governed.runId,
+          agentId: agent.id,
+          capability,
+          from: governed.from,
+          to: governed.to,
+          requestId,
+        });
+
+        return result;
+      },
+    });
+
+    this.requests.set(requestId, {
+      id: requestId,
+      capability,
+      agentId: agent.id,
+      input,
+      context,
+      metadata,
+      governed,
+      persistent: true,
+      createdAt: new Date().toISOString(),
+    });
+
+    this.scheduler.enqueue(process);
+
+    this.eventBus.publish('request.submitted', {
+      requestId,
+      capability,
+      agentId: agent.id,
+      priority: process.priority,
+      governed: true,
+      persistent: true,
+      runId: governed.runId,
+    });
+
+    return process.getStatusSummary();
+  }
+
   async tick(context = {}) {
     return this.scheduler.tick(context);
   }
