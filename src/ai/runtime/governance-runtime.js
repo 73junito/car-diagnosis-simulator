@@ -55,6 +55,17 @@ class GovernanceRuntime {
   }
 
   recordFinish({ runId, agentId, capability, from, to, requestId }) {
+    const existing = this.ledger.list({ runId }).find(
+      (entry) =>
+        entry.action === 'step-finished' &&
+        entry.metadata &&
+        entry.metadata.requestId === requestId
+    );
+
+    if (existing) {
+      return existing;
+    }
+
     return this.ledger.append({
       runId,
       actor: agentId,
