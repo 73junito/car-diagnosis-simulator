@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "production-technical-reviewer-provisioning",
+  "phase": "phase-10e-reviewer-provisioning",
+  "status": "prepared-not-executed",
+  "purpose": "Create a real production technical-reviewer identity without repurposing the existing teacher account or fabricating reviewer authority.",
+  "identity_contract": {
+    "role": "technical_reviewer",
+    "email_source": "protected production environment secret TECHNICAL_REVIEWER_EMAIL",
+    "auth_creation": "Supabase admin inviteUserByEmail",
+    "profile_source_of_truth": "public.profiles.role",
+    "server_controlled_metadata": "auth.users.app_metadata.governance_role",
+    "self_service_role_change": false
+  },
+  "required_attestations": [
+    "reviewer is independent of the content-generation decision being reviewed",
+    "reviewer is qualified to perform automotive technical review",
+    "provisioning is explicitly authorized"
+  ],
+  "fail_closed_rules": [
+    "The existing teacher profile is never relabeled.",
+    "A pre-existing Auth account with a non-reviewer profile is never repurposed.",
+    "Only the default student profile created by this exact invite may be promoted to technical_reviewer.",
+    "A pre-existing account is accepted only when its profile is already technical_reviewer.",
+    "No technical-review decision is recorded by provisioning.",
+    "No assessment, scoring, final approval, release, or delivery authority is granted."
+  ],
+  "recovery": {
+    "invite_succeeds_profile_promotion_fails": "rerun finds the invited Auth user and completes only if its profile is the expected fresh invite or already technical_reviewer",
+    "profile_role_and_app_metadata_already_match": "idempotent success",
+    "preexisting_nonreviewer_identity": "fail closed"
+  },
+  "production_observation_before_implementation": {
+    "profile_roles": {
+      "teacher": 1,
+      "technical_reviewer": 0,
+      "developer_reviewer": 0
+    },
+    "auth_profile_trigger": "on_auth_user_created_profile creates role=student",
+    "technical_review_run_state": "rights_reviewed"
+  }
+}
