@@ -23,6 +23,15 @@ function assertReviewerProvisioningAttestations({
   requireCondition(authorizationAttested === true, 'Reviewer provisioning authorization attestation is required.');
 }
 
+function shouldResendInvite({ createdByThisRun, emailConfirmedAt, profileRole }) {
+  if (createdByThisRun) return false;
+  requireCondition(
+    profileRole === ELIGIBLE_PROVISIONED_ROLE,
+    'Invite resend requires an existing instructional reviewer profile.'
+  );
+  return !emailConfirmedAt;
+}
+
 function validateExistingProfileForProvisioning({
   profile,
   createdByThisRun,
@@ -56,5 +65,6 @@ module.exports = {
   ELIGIBLE_PROVISIONED_ROLE,
   normalizeReviewerEmail,
   assertReviewerProvisioningAttestations,
+  shouldResendInvite,
   validateExistingProfileForProvisioning,
 };

@@ -6,6 +6,7 @@ const {
   ELIGIBLE_PROVISIONED_ROLE,
   normalizeReviewerEmail,
   assertReviewerProvisioningAttestations,
+  shouldResendInvite,
   validateExistingProfileForProvisioning,
 } = require('../src/ai/runtime/instructional-reviewer-provisioning');
 
@@ -54,6 +55,29 @@ describe('production instructional reviewer provisioning', () => {
       expectedUserId: fresh.id,
       expectedEmail: fresh.email,
     })).toThrow(/cannot be repurposed/);
+  });
+
+  test('resends only for an existing unconfirmed instructional reviewer', () => {
+    expect(shouldResendInvite({
+      createdByThisRun: false,
+      emailConfirmedAt: null,
+      profileRole: 'instructional_reviewer',
+    })).toBe(true);
+    expect(shouldResendInvite({
+      createdByThisRun: false,
+      emailConfirmedAt: '2026-10-06T21:30:00.000Z',
+      profileRole: 'instructional_reviewer',
+    })).toBe(false);
+    expect(shouldResendInvite({
+      createdByThisRun: true,
+      emailConfirmedAt: null,
+      profileRole: 'student',
+    })).toBe(false);
+    expect(() => shouldResendInvite({
+      createdByThisRun: false,
+      emailConfirmedAt: null,
+      profileRole: 'technical_reviewer',
+    })).toThrow(/existing instructional reviewer/);
   });
 
   test('workflow uses a protected email secret and grants no downstream authority', () => {
