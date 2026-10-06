@@ -72,6 +72,26 @@ jobs:
             --model="${{ inputs.model }}" \
             --output="$RUNNER_TEMP/native-question-draft/generated-question-draft.json"
 
+      - name: Verify draft-only artifact boundary
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const file = process.env.RUNNER_TEMP + '/native-question-draft/generated-question-draft.json';
+          const doc = JSON.parse(fs.readFileSync(file, 'utf8'));
+          if (doc?.governance?.auto_approval !== false) throw new Error('Auto approval must remain disabled.');
+          if (doc?.governance?.evidence_only !== true) throw new Error('Artifact must remain evidence-only.');
+          if (doc?.governance?.rights_verified_sources_only !== true) throw new Error('Artifact must remain rights-verified only.');
+          if (doc?.governance?.requires_human_technical_review !== true) throw new Error('Technical review must remain required.');
+          if (doc?.governance?.requires_human_instructional_review !== true) throw new Error('Instructional review must remain required.');
+          if (!Array.isArray(doc.questions) || doc.questions.length !== 1) throw new Error('Exactly one draft is required.');
+          const q = doc.questions[0];
+          if (q.status !== 'draft' || q.approved !== false) throw new Error('Question escaped draft-only status.');
+          if (q.human_technical_review_completed !== false || q.human_instructional_review_completed !== false) {
+            throw new Error('Question contains synthesized human review state.');
+          }
+          NODE
+
       - name: Upload native draft artifact
         uses: actions/upload-artifact@v7
         with:
@@ -81,7 +101,7 @@ jobs:
           retention-days: 14
 
   ingest:
-    name: Persist native draft and initialize governance
+    name: Persist private native draft and initialize governance
     needs: generate
     runs-on: ubuntu-latest
     environment: pffdgqpynpbffbcnxmum_production
@@ -92,7 +112,7 @@ jobs:
       TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
       SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
-      GOVERNED_RUN_ID: native-draft:${{ github.run_id }}:${{ github.run_attempt }}:${{ inputs.scenario_id }}
+      GOVERNED_RUN_ID: native-draft:${{ github.run_id }}:${{ inputs.scenario_id }}
 
     steps:
       - name: Checkout
@@ -121,7 +141,7 @@ jobs:
             exit 1
           fi
 
-      - name: Ingest draft and initialize governed run
+      - name: Persist private draft and initialize governed run
         shell: bash
         run: |
           node scripts/ingest-native-question-draft.js \
@@ -132,6 +152,7 @@ jobs:
       - name: Governance notice
         shell: bash
         run: |
-          echo "One question was persisted as draft provenance and initialized at governed state drafted."
-          echo "Question citations were not persisted; evidence mapping remains a separate governed transition."
-          echo "No technical review, instructional review, human approval, assessment eligibility, scored delivery, or release authority was created."
+          echo "The answer-bearing draft payload is stored service-role-only and initialized at governed state drafted."
+          echo "The semantic question is not inserted into public scenario_questions."
+          echo "Question citations are not persisted; evidence mapping remains a separate governed transition."
+          echo "No technical review, instructional review, human approval, assessment eligibility, scored delivery, API eligibility, or release authority was created."

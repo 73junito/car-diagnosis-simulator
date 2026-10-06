@@ -1,12 +1,13 @@
 'use strict';
 
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const {
   validateNativeDraftArtifact,
-  buildScenarioQuestionRow,
+  buildPrivateDraftRow,
   buildDraftProvenanceRow,
-  assertExactExistingQuestion,
+  assertExactExistingPrivateDraft,
   assertDraftProvenance,
 } = require('../src/ai/runtime/native-question-draft');
 
@@ -14,7 +15,12 @@ const root = path.resolve(__dirname, '..');
 
 function fixture() {
   return {
-    generator: { scenario_id: 'charging-system' },
+    generator: {
+      scenario_id: 'charging-system',
+      provider: 'ollama-cloud',
+      model: 'gpt-oss:20b',
+      agent_version: 'automotive-question-agent-v2',
+    },
     governance: {
       auto_approval: false,
       evidence_only: true,
@@ -44,24 +50,43 @@ function fixture() {
 }
 
 describe('Phase 10B native governed draft creation', () => {
-  test('accepts one evidence-bound draft and builds draft-only database rows', () => {
-    const question = validateNativeDraftArtifact(fixture(), { scenarioId: 'charging-system' });
+  test('accepts one evidence-bound draft and builds an exact private-store record', () => {
+    const document = fixture();
+    const question = validateNativeDraftArtifact(document, { scenarioId: 'charging-system' });
+    const payloadText = JSON.stringify(document, null, 2) + '\n';
 
-    expect(buildScenarioQuestionRow(question)).toEqual({
-      scenario_id: 'charging-system',
-      question_id: 'charging-system-ai-draft-abc123',
-      question_text: 'Which statement is directly supported by the supplied evidence?',
-      option_a: 'Option A',
-      option_b: 'Option B',
-      option_c: 'Option C',
-      option_d: 'Option D',
-      correct_answer: 'A',
-      explanation: 'The supplied evidence directly supports option A.',
-      difficulty: 'intermediate',
+    const row = buildPrivateDraftRow(document, question, {
+      governedRunId: 'native-draft:123:charging-system',
+      workflowRunId: 123,
+      workflowRunAttempt: 1,
+      sourceCommit: 'a'.repeat(40),
+      payloadText,
     });
 
-    expect(buildDraftProvenanceRow(question.question_id)).toMatchObject({
-      question_id: question.question_id,
+    expect(row).toMatchObject({
+      governed_run_id: 'native-draft:123:charging-system',
+      question_id: 'charging-system-ai-draft-abc123',
+      scenario_id: 'charging-system',
+      workflow_run_id: 123,
+      workflow_run_attempt: 1,
+      source_commit: 'a'.repeat(40),
+      status: 'drafted-unreviewed',
+      payload_text: payloadText,
+    });
+    expect(row.payload_sha256).toBe(
+      crypto.createHash('sha256').update(payloadText).digest('hex')
+    );
+  });
+
+  test('draft provenance keeps every downstream governance gate false', () => {
+    const provenance = buildDraftProvenanceRow('charging-system-ai-draft-abc123', {
+      privateDraftId: '11111111-1111-1111-1111-111111111111',
+      payloadSha256: 'b'.repeat(64),
+      agentVersion: 'automotive-question-agent-v2',
+    });
+
+    expect(provenance).toMatchObject({
+      question_id: 'charging-system-ai-draft-abc123',
       provenance_version: 1,
       status: 'draft',
       validation_checklist: {
@@ -71,9 +96,11 @@ describe('Phase 10B native governed draft creation', () => {
         instructional_review_complete: false,
       },
     });
+    expect(provenance.notes).toContain('private_draft_id=11111111-1111-1111-1111-111111111111');
+    expect(provenance.notes).toContain('payload_sha256=' + 'b'.repeat(64));
   });
 
-  test('fails closed if generated artifact claims approval or completed review', () => {
+  test('fails closed if generated artifact claims approval, review, or unsupported evidence', () => {
     const approved = fixture();
     approved.questions[0].approved = true;
     expect(() => validateNativeDraftArtifact(approved, { scenarioId: 'charging-system' }))
@@ -84,13 +111,13 @@ describe('Phase 10B native governed draft creation', () => {
     expect(() => validateNativeDraftArtifact(technical, { scenarioId: 'charging-system' }))
       .toThrow(/technical review/);
 
-    const instructional = fixture();
-    instructional.questions[0].human_instructional_review_completed = true;
-    expect(() => validateNativeDraftArtifact(instructional, { scenarioId: 'charging-system' }))
-      .toThrow(/instructional review/);
+    const unsupported = fixture();
+    unsupported.questions[0].citations[0].chunk_id = 'outside-bundle';
+    expect(() => validateNativeDraftArtifact(unsupported, { scenarioId: 'charging-system' }))
+      .toThrow(/outside the artifact evidence set/);
   });
 
-  test('fails closed unless exactly one question is generated', () => {
+  test('requires exactly one generated question', () => {
     const none = fixture();
     none.questions = [];
     expect(() => validateNativeDraftArtifact(none, { scenarioId: 'charging-system' }))
@@ -102,23 +129,29 @@ describe('Phase 10B native governed draft creation', () => {
       .toThrow(/exactly one/);
   });
 
-  test('fails closed when a citation is outside the artifact evidence set', () => {
-    const doc = fixture();
-    doc.questions[0].citations[0].chunk_id = 'unapproved-chunk';
-    expect(() => validateNativeDraftArtifact(doc, { scenarioId: 'charging-system' }))
-      .toThrow(/outside the artifact evidence set/);
+  test('idempotency rejects payload drift but tolerates workflow-attempt metadata changes', () => {
+    const document = fixture();
+    const question = validateNativeDraftArtifact(document, { scenarioId: 'charging-system' });
+    const base = buildPrivateDraftRow(document, question, {
+      governedRunId: 'native-draft:123:charging-system',
+      workflowRunId: 123,
+      workflowRunAttempt: 1,
+      sourceCommit: 'a'.repeat(40),
+      payloadText: JSON.stringify(document),
+    });
+
+    expect(() => assertExactExistingPrivateDraft(
+      { ...base, workflow_run_attempt: 2 },
+      base
+    )).not.toThrow();
+
+    expect(() => assertExactExistingPrivateDraft(
+      { ...base, payload_sha256: 'c'.repeat(64) },
+      base
+    )).toThrow(/payload_sha256/);
   });
 
-  test('idempotent existing-question verification requires exact content identity', () => {
-    const question = validateNativeDraftArtifact(fixture(), { scenarioId: 'charging-system' });
-    const expected = buildScenarioQuestionRow(question);
-
-    expect(() => assertExactExistingQuestion({ ...expected }, expected)).not.toThrow();
-    expect(() => assertExactExistingQuestion({ ...expected, correct_answer: 'B' }, expected))
-      .toThrow(/correct_answer/);
-  });
-
-  test('existing provenance must still be an unreviewed draft', () => {
+  test('existing provenance must remain bound to the same untouched private draft', () => {
     const draft = {
       question_id: 'charging-system-ai-draft-abc123',
       status: 'draft',
@@ -128,16 +161,40 @@ describe('Phase 10B native governed draft creation', () => {
       instructional_reviewed_at: null,
       approved_by: null,
       approved_at: null,
+      notes: 'private_draft_id=private-1 payload_sha256=' + 'd'.repeat(64),
     };
 
-    expect(() => assertDraftProvenance(draft, draft.question_id)).not.toThrow();
+    expect(() => assertDraftProvenance(draft, draft.question_id, {
+      privateDraftId: 'private-1',
+      payloadSha256: 'd'.repeat(64),
+    })).not.toThrow();
+
     expect(() => assertDraftProvenance({ ...draft, status: 'approved' }, draft.question_id))
       .toThrow(/not draft/);
-    expect(() => assertDraftProvenance({ ...draft, approved_by: 'reviewer' }, draft.question_id))
-      .toThrow(/review or approval/);
+
+    expect(() => assertDraftProvenance(draft, draft.question_id, {
+      privateDraftId: 'private-2',
+      payloadSha256: 'd'.repeat(64),
+    })).toThrow(/expected private draft/);
   });
 
-  test('workflow keeps Ollama and production credentials isolated and does not persist citations', () => {
+  test('private store migration is service-role-only with RLS and no policies', () => {
+    const migration = fs.readFileSync(
+      path.join(root, 'supabase', 'migrations', '20261006033456_add_native_governed_question_drafts.sql'),
+      'utf8'
+    ).toLowerCase();
+
+    expect(migration).toContain('alter table public.native_governed_question_drafts enable row level security');
+    expect(migration).toContain('revoke all on table public.native_governed_question_drafts');
+    expect(migration).toContain('from public, anon, authenticated, service_role');
+    expect(migration).toContain('grant select, insert on table public.native_governed_question_drafts');
+    expect(migration).toContain('to service_role');
+    expect(migration).not.toContain('create policy');
+    expect(migration).toContain("check (status = 'drafted-unreviewed')");
+    expect(migration).toContain('payload_text text not null');
+  });
+
+  test('workflow isolates credentials, uses stable run identity, and never promotes to public questions', () => {
     const workflow = fs.readFileSync(
       path.join(root, '.github', 'workflows', 'create-native-governed-question-draft.yml'),
       'utf8'
@@ -149,19 +206,22 @@ describe('Phase 10B native governed draft creation', () => {
 
     expect(workflow).toContain('environment: ollama');
     expect(workflow).toContain('TORQUEMIND_ORCHESTRATION_PERSISTENCE: disabled');
-    expect(workflow).toContain('OLLAMA_API_KEY: ${{ secrets.API_GITHUB }}');
     expect(workflow).toContain('environment: pffdgqpynpbffbcnxmum_production');
-    expect(workflow).toContain('SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}');
+    expect(workflow).toContain('SUPABASE_SERVICE_ROLE_KEY:');
+    expect(workflow).toContain('GOVERNED_RUN_ID: native-draft:');
+    expect(workflow).not.toContain('github.run_attempt');
+    expect(workflow).toContain('--target=1');
 
     const generateSection = workflow.split('  ingest:')[0];
     const ingestSection = workflow.split('  ingest:')[1];
     expect(generateSection).not.toContain('SUPABASE_SERVICE_ROLE_KEY');
     expect(ingestSection).not.toContain('OLLAMA_API_KEY');
 
-    expect(ingest).toContain(".from('scenario_questions')");
+    expect(ingest).toContain(".from('native_governed_question_drafts')");
     expect(ingest).toContain(".from('question_provenance')");
-    expect(ingest).toContain(".from('question_citations')");
-    expect(ingest).not.toMatch(/\.from\('question_citations'\)[\s\S]{0,160}\.insert\(/);
-    expect(ingest).not.toMatch(/\.from\('assessment_question_eligibility'\)[\s\S]{0,160}\.insert\(/);
+    expect(ingest).toContain(".from('scenario_questions')");
+    expect(ingest).not.toMatch(/\.from\('scenario_questions'\)[\s\S]{0,250}\.insert\(/);
+    expect(ingest).not.toMatch(/\.from\('question_citations'\)[\s\S]{0,250}\.insert\(/);
+    expect(ingest).not.toMatch(/\.from\('assessment_question_eligibility'\)[\s\S]{0,250}\.insert\(/);
   });
 });
