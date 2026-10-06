@@ -107,6 +107,59 @@ class PersistentGovernanceRuntime {
     });
   }
 
+  async recordEvidenceMapping({ runId, actor = 'evidence-agent', provenanceId, questionId, citationCount, mappingEvidence }) {
+    if (!runId || !provenanceId || !questionId || !Number.isInteger(citationCount) || citationCount < 1) {
+      throw new Error('Evidence mapping record is incomplete');
+    }
+
+    const entries = await this.entries(runId);
+    const existing = entries.find((entry) =>
+      entry.action === 'evidence-mapping-recorded' &&
+      entry.state === 'evidence_mapped' &&
+      entry.metadata &&
+      entry.metadata.provenanceId === provenanceId &&
+      entry.metadata.questionId === questionId
+    );
+    if (existing) return existing;
+
+    const latest = entries.length ? entries[entries.length - 1] : null;
+    if (!latest) {
+      throw new Error('Evidence mapping requires an initialized governed run');
+    }
+    if (latest.action !== 'draft-initialized' || latest.state !== 'drafted') {
+      throw new Error('Evidence mapping requires the drafted state');
+    }
+    if (actor !== 'evidence-agent') {
+      throw new Error('Evidence mapping actor is not permitted');
+    }
+    if (!this.catalog.get(actor) || !this.catalog.can(actor, 'prepare')) {
+      throw new Error('Evidence mapping actor is not governed');
+    }
+
+    const decision = this.stateMachine.canTransition({
+      from: 'drafted',
+      to: 'evidence_mapped',
+      actor,
+    });
+    if (!decision.allowed) {
+      throw new Error('Governed transition denied: ' + decision.reason);
+    }
+
+    return this.appendAndCheckpoint({
+      runId,
+      actor,
+      action: 'evidence-mapping-recorded',
+      state: 'evidence_mapped',
+      metadata: {
+        provenanceId,
+        questionId,
+        citationCount,
+        mappingEvidence: mappingEvidence || `question_citations:provenance:${provenanceId}`,
+        humanApproval: false,
+      },
+    });
+  }
+
   async recordStart({ runId, agentId, capability, from, to, requestId }) {
     const existing = await this.findByRequest(runId, 'step-started', requestId);
     if (existing) return existing;

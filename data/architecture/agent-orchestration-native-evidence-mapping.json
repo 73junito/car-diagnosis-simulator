@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-native-evidence-mapping",
+  "phase": "phase-10c-native-evidence-mapping",
+  "status": "prepared-not-deployed",
+  "workflow": ".github/workflows/map-native-question-evidence.yml",
+  "governed_transition": {
+    "from": "drafted",
+    "to": "evidence_mapped",
+    "actor": "evidence-agent",
+    "ledger_action": "evidence-mapping-recorded"
+  },
+  "storage_boundary": {
+    "answer_bearing_payload": "remains in service-role-only native_governed_question_drafts",
+    "public_scenario_questions_write": false,
+    "question_provenance_status": "remains draft; review and approval fields remain empty",
+    "persisted_mapping": "question_citations rows only",
+    "citation_validations_persisted": false
+  },
+  "security_basis": {
+    "decision": "bind the private draft to approved, rights-reviewed governed sources without promoting it",
+    "source_rights_gate": "approved_sources.status = approved with complete license review evidence, plus a current approved_source_rights_scopes row allowing citation link, direct excerpt, and database storage with human review evidence",
+    "chunk_identity_gate": "source_chunks.status = approved and approved = true and chunk.source_id equals the cited source",
+    "payload_integrity": "sha256 of private payload_text must equal stored payload_sha256 before mapping"
+  },
+  "workflow_order": [
+    "read the private draft payload without promoting it",
+    "verify payload sha256 and draft-only artifact governance flags",
+    "verify draft provenance is still draft and bound to the private draft",
+    "verify the governed run is exactly the draft-initialized entry at drafted",
+    "verify zero public scenario question rows before any citation write",
+    "resolve cited source, use-specific rights scope, and chunk identities against approved governed records",
+    "persist the exact question_citations set idempotently",
+    "verify zero public scenario question rows and zero assessment eligibility rows",
+    "record the drafted to evidence_mapped transition as evidence-agent",
+    "verify checkpoint state evidence_mapped at ledger version 2 with humanApproval false"
+  ],
+  "recovery": {
+    "citations_persisted_but_transition_missing": "safe; rerun verifies the exact citation set and records the transition once",
+    "transition_already_recorded": "safe; rerun is idempotent and re-verifies all invariants",
+    "payload_or_evidence_drift": "fail closed",
+    "draft_creation_not_run": "fail closed; evidence mapping never initializes its own governed run"
+  },
+  "authority_invariants": [
+    "No public scenario question is created.",
+    "No assessment eligibility, scoring, or delivery authority is created.",
+    "No technical or instructional review is created; review fields remain empty.",
+    "No human approval is synthesized; approval fields remain empty.",
+    "No citation validation result is synthesized; citation_validations stays empty.",
+    "The answer-bearing draft remains confined to native_governed_question_drafts.",
+    "Promotion into scenario_questions is a later, explicit governed phase."
+  ]
+}
