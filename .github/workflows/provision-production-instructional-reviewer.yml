@@ -1,0 +1,71 @@
+name: Provision production instructional reviewer
+
+on:
+  workflow_dispatch:
+    inputs:
+      independence_attested:
+        description: I confirm this reviewer is independent of the technical reviewer and content-generation decision
+        required: true
+        default: false
+        type: boolean
+      qualification_attested:
+        description: I confirm this reviewer is qualified to perform instructional review
+        required: true
+        default: false
+        type: boolean
+      authorization_attested:
+        description: I authorize creating this production instructional-reviewer identity
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-instructional-reviewer-provisioning
+  cancel-in-progress: false
+
+jobs:
+  provision:
+    name: Invite and provision production instructional reviewer
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      INSTRUCTIONAL_REVIEWER_EMAIL: ${{ secrets.INSTRUCTIONAL_REVIEWER_EMAIL }}
+      REVIEWER_INDEPENDENCE_ATTESTED: ${{ inputs.independence_attested }}
+      REVIEWER_QUALIFICATION_ATTESTED: ${{ inputs.qualification_attested }}
+      REVIEWER_AUTHORIZATION_ATTESTED: ${{ inputs.authorization_attested }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate protected reviewer email
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$INSTRUCTIONAL_REVIEWER_EMAIL" ]]; then
+            echo "Production environment secret INSTRUCTIONAL_REVIEWER_EMAIL is not configured."
+            exit 1
+          fi
+
+      - name: Invite and provision reviewer
+        run: node scripts/provision-instructional-reviewer.js
+
+      - name: Governance notice
+        run: |
+          echo "This workflow creates only an instructional-reviewer identity."
+          echo "It does not record an instructional-review decision, final content approval, public question, assessment eligibility, scoring, release, or delivery authority."
