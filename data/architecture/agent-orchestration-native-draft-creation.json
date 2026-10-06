@@ -4,34 +4,42 @@
   "phase": "phase-10b-native-draft-creation",
   "status": "prepared-not-deployed",
   "workflow": ".github/workflows/create-native-governed-question-draft.yml",
-  "generation": {
-    "environment": "ollama",
-    "count": 1,
-    "persistence": "disabled",
-    "evidence_only": true,
-    "rights_verified_sources_only": true
+  "private_store": "public.native_governed_question_drafts",
+  "initial_state": "drafted",
+  "storage_boundary": {
+    "answer_bearing_payload": "service-role-only private draft store",
+    "public_scenario_questions_write": false,
+    "public_question_provenance": "draft metadata only",
+    "candidate_citations_persisted": false
   },
-  "production_ingest": {
-    "environment": "pffdgqpynpbffbcnxmum_production",
-    "tables_written": [
-      "public.scenario_questions",
-      "public.question_provenance"
-    ],
-    "tables_explicitly_not_written": [
-      "public.question_citations",
-      "public.citation_validations",
-      "public.assessment_question_eligibility"
-    ],
-    "initial_governed_state": "drafted"
+  "security_basis": {
+    "scenario_questions_current_anon_select_policy": "using true",
+    "decision": "do not insert unapproved native drafts into scenario_questions",
+    "private_store_rls": true,
+    "private_store_policies": 0,
+    "private_store_privileges": "service_role select+insert only"
+  },
+  "workflow_order": [
+    "generate exactly one evidence-bound draft in ollama environment",
+    "verify draft-only and no synthesized review/approval",
+    "upload temporary Actions artifact",
+    "download in production environment",
+    "persist exact payload text and SHA-256 in private durable store",
+    "create question_provenance version 1 with status draft and all review gates false",
+    "verify semantic question_id is absent from scenario_questions",
+    "initialize governed run at drafted"
+  ],
+  "recovery": {
+    "private_draft_persisted_but_orchestration_missing": "safe; rerun initializes same matching draft",
+    "provenance_persisted_but_orchestration_missing": "safe; status remains draft with no review or approval",
+    "payload_or_run_id_drift": "fail closed"
   },
   "authority_invariants": [
-    "Generated output remains draft-only.",
-    "Citation references may remain in the generation artifact but are not persisted as question_citations in Phase 10B.",
-    "Evidence mapping remains a later explicit governed transition.",
-    "No technical or instructional review is synthesized.",
+    "No evidence_mapped state is claimed.",
+    "No question_citations rows are created.",
+    "No technical or instructional review is created.",
     "No human approval is synthesized.",
-    "No assessment eligibility or scored-delivery authority is created.",
-    "No production API eligibility or release authority is created.",
-    "Ollama and Supabase credentials remain isolated by GitHub environment."
+    "No public scenario question is created.",
+    "No assessment eligibility, scoring, delivery, production API, or release authority is created."
   ]
 }

@@ -1,6 +1,10 @@
 'use strict';
 
+const crypto = require('crypto');
+
 const QUESTION_ID = /^[a-z0-9-]+$/;
+const RUN_ID = /^[A-Za-z0-9._:-]+$/;
+const SHA40 = /^[0-9a-f]{40}$/;
 
 function requireCondition(condition, message) {
   if (!condition) throw new Error(message);
@@ -67,22 +71,42 @@ function validateNativeDraftArtifact(document, { scenarioId } = {}) {
   return question;
 }
 
-function buildScenarioQuestionRow(question) {
+function buildPrivateDraftRow(document, question, {
+  governedRunId,
+  workflowRunId,
+  workflowRunAttempt,
+  sourceCommit,
+  payloadText,
+} = {}) {
+  requireCondition(RUN_ID.test(governedRunId || ''), 'A valid governedRunId is required.');
+  requireCondition(Number.isInteger(workflowRunId) && workflowRunId > 0, 'A valid workflowRunId is required.');
+  requireCondition(Number.isInteger(workflowRunAttempt) && workflowRunAttempt > 0, 'A valid workflowRunAttempt is required.');
+  requireCondition(SHA40.test(sourceCommit || ''), 'A valid sourceCommit is required.');
+  requireCondition(typeof payloadText === 'string' && payloadText.length > 0, 'Exact payloadText is required.');
+
+  const payloadSha256 = crypto.createHash('sha256').update(payloadText).digest('hex');
+
   return {
-    scenario_id: question.scenario_slug,
+    governed_run_id: governedRunId,
     question_id: question.question_id,
-    question_text: question.question.trim(),
-    option_a: question.options.A.trim(),
-    option_b: question.options.B.trim(),
-    option_c: question.options.C.trim(),
-    option_d: question.options.D.trim(),
-    correct_answer: question.correct_answer,
-    explanation: question.explanation.trim(),
-    difficulty: question.difficulty || 'introductory',
+    scenario_id: question.scenario_slug,
+    workflow_run_id: workflowRunId,
+    workflow_run_attempt: workflowRunAttempt,
+    source_commit: sourceCommit,
+    provider: document?.generator?.provider || 'ollama-cloud',
+    model: document?.generator?.model || 'unknown',
+    agent_version: document?.generator?.agent_version || 'unknown',
+    payload_sha256: payloadSha256,
+    status: 'drafted-unreviewed',
+    payload_text: payloadText,
   };
 }
 
-function buildDraftProvenanceRow(questionId) {
+function buildDraftProvenanceRow(questionId, { privateDraftId, payloadSha256, agentVersion } = {}) {
+  requireCondition(QUESTION_ID.test(questionId || ''), 'Question provenance semantic ID is invalid.');
+  requireCondition(typeof privateDraftId === 'string' && privateDraftId.length > 0, 'privateDraftId is required.');
+  requireCondition(/^[0-9a-f]{64}$/.test(payloadSha256 || ''), 'payloadSha256 is invalid.');
+
   return {
     question_id: questionId,
     provenance_version: 1,
@@ -93,31 +117,37 @@ function buildDraftProvenanceRow(questionId) {
       technical_review_complete: false,
       instructional_review_complete: false,
     },
-    notes: 'Native governed draft. Evidence mapping, validation, independent human review, and explicit approval remain required.',
+    notes: [
+      'Native governed draft payload is stored in the service-role-only private draft store.',
+      'Evidence mapping, validation, independent human review, and explicit approval remain required.',
+      `private_draft_id=${privateDraftId}`,
+      `agent_version=${agentVersion || 'unknown'}`,
+      `payload_sha256=${payloadSha256}`,
+    ].join(' '),
   };
 }
 
-function assertExactExistingQuestion(existing, expected) {
+function assertExactExistingPrivateDraft(existing, expected) {
   const keys = [
-    'scenario_id',
+    'governed_run_id',
     'question_id',
-    'question_text',
-    'option_a',
-    'option_b',
-    'option_c',
-    'option_d',
-    'correct_answer',
-    'explanation',
-    'difficulty',
+    'scenario_id',
+    'source_commit',
+    'provider',
+    'model',
+    'agent_version',
+    'payload_sha256',
+    'status',
+    'payload_text',
   ];
   for (const key of keys) {
     const actual = existing?.[key] ?? null;
     const wanted = expected?.[key] ?? null;
-    requireCondition(actual === wanted, `Existing question mismatch: ${key}`);
+    requireCondition(actual === wanted, `Existing private draft mismatch: ${key}`);
   }
 }
 
-function assertDraftProvenance(provenance, questionId) {
+function assertDraftProvenance(provenance, questionId, { privateDraftId, payloadSha256 } = {}) {
   requireCondition(provenance?.question_id === questionId, 'Question provenance semantic ID mismatch.');
   requireCondition(provenance.status === 'draft', 'Question provenance is not draft.');
   requireCondition(
@@ -129,12 +159,24 @@ function assertDraftProvenance(provenance, questionId) {
     !provenance.approved_at,
     'Draft provenance already contains review or approval evidence.'
   );
+  if (privateDraftId) {
+    requireCondition(
+      String(provenance.notes || '').includes(`private_draft_id=${privateDraftId}`),
+      'Draft provenance is not bound to the expected private draft.'
+    );
+  }
+  if (payloadSha256) {
+    requireCondition(
+      String(provenance.notes || '').includes(`payload_sha256=${payloadSha256}`),
+      'Draft provenance payload hash mismatch.'
+    );
+  }
 }
 
 module.exports = {
   validateNativeDraftArtifact,
-  buildScenarioQuestionRow,
+  buildPrivateDraftRow,
   buildDraftProvenanceRow,
-  assertExactExistingQuestion,
+  assertExactExistingPrivateDraft,
   assertDraftProvenance,
 };

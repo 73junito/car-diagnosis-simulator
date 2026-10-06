@@ -6,9 +6,9 @@ const { createClient } = require('@supabase/supabase-js');
 const { createProductionAIOrchestrator } = require('../src/ai/runtime/production-ai-runtime');
 const {
   validateNativeDraftArtifact,
-  buildScenarioQuestionRow,
+  buildPrivateDraftRow,
   buildDraftProvenanceRow,
-  assertExactExistingQuestion,
+  assertExactExistingPrivateDraft,
   assertDraftProvenance,
 } = require('../src/ai/runtime/native-question-draft');
 
@@ -33,10 +33,21 @@ if (!/^[A-Za-z0-9._:-]+$/.test(runId)) fail('A valid --run-id is required.');
 if (!args.artifact || !fs.existsSync(artifactPath)) fail('A readable --artifact file is required.');
 
 (async () => {
-  const document = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
+  const payloadText = fs.readFileSync(artifactPath, 'utf8');
+  const document = JSON.parse(payloadText);
   const question = validateNativeDraftArtifact(document, { scenarioId });
-  const expectedQuestion = buildScenarioQuestionRow(question);
-  const expectedProvenance = buildDraftProvenanceRow(question.question_id);
+
+  const workflowRunId = Number(process.env.GITHUB_RUN_ID || 0);
+  const workflowRunAttempt = Number(process.env.GITHUB_RUN_ATTEMPT || 0);
+  const sourceCommit = String(process.env.GITHUB_SHA || '').trim();
+
+  const expectedPrivateDraft = buildPrivateDraftRow(document, question, {
+    governedRunId: runId,
+    workflowRunId,
+    workflowRunAttempt,
+    sourceCommit,
+    payloadText,
+  });
 
   const workerId = [
     'github-actions',
@@ -62,39 +73,42 @@ if (!args.artifact || !fs.existsSync(artifactPath)) fail('A readable --artifact 
     },
   });
 
-  let { data: storedQuestion, error: existingQuestionError } = await client
-    .from('scenario_questions')
-    .select('id,scenario_id,question_id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,difficulty,created_at')
-    .eq('question_id', question.question_id)
+  const selectPrivate = 'id,governed_run_id,question_id,scenario_id,workflow_run_id,workflow_run_attempt,source_commit,provider,model,agent_version,payload_sha256,status,payload_text,created_at';
+
+  let { data: privateDraft, error: privateDraftError } = await client
+    .from('native_governed_question_drafts')
+    .select(selectPrivate)
+    .eq('governed_run_id', runId)
     .maybeSingle();
-  if (existingQuestionError) throw existingQuestionError;
+  if (privateDraftError) throw privateDraftError;
 
-  if (!storedQuestion) {
-    const { data: duplicateText, error: duplicateTextError } = await client
-      .from('scenario_questions')
-      .select('id,question_id')
-      .eq('scenario_id', scenarioId)
-      .eq('question_text', expectedQuestion.question_text)
+  if (!privateDraft) {
+    const { data: questionCollision, error: questionCollisionError } = await client
+      .from('native_governed_question_drafts')
+      .select(selectPrivate)
+      .eq('question_id', question.question_id)
       .maybeSingle();
-    if (duplicateTextError) throw duplicateTextError;
-    if (duplicateText) {
-      throw new Error('A different question already uses the same scenario/question text.');
-    }
+    if (questionCollisionError) throw questionCollisionError;
 
-    const { data: insertedQuestion, error: insertQuestionError } = await client
-      .from('scenario_questions')
-      .insert(expectedQuestion)
-      .select('id,scenario_id,question_id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,difficulty,created_at')
-      .single();
-    if (insertQuestionError) throw insertQuestionError;
-    storedQuestion = insertedQuestion;
+    if (questionCollision) {
+      assertExactExistingPrivateDraft(questionCollision, expectedPrivateDraft);
+      privateDraft = questionCollision;
+    } else {
+      const { data: insertedDraft, error: insertDraftError } = await client
+        .from('native_governed_question_drafts')
+        .insert(expectedPrivateDraft)
+        .select(selectPrivate)
+        .single();
+      if (insertDraftError) throw insertDraftError;
+      privateDraft = insertedDraft;
+    }
   } else {
-    assertExactExistingQuestion(storedQuestion, expectedQuestion);
+    assertExactExistingPrivateDraft(privateDraft, expectedPrivateDraft);
   }
 
   let { data: provenance, error: provenanceError } = await client
     .from('question_provenance')
-    .select('id,question_id,provenance_version,status,validation_checklist,technical_reviewer_id,technical_reviewed_at,instructional_reviewer_id,instructional_reviewed_at,approved_by,approved_at')
+    .select('id,question_id,provenance_version,status,validation_checklist,technical_reviewer_id,technical_reviewed_at,instructional_reviewer_id,instructional_reviewed_at,approved_by,approved_at,notes')
     .eq('question_id', question.question_id)
     .order('provenance_version', { ascending: false })
     .limit(1)
@@ -102,18 +116,33 @@ if (!args.artifact || !fs.existsSync(artifactPath)) fail('A readable --artifact 
   if (provenanceError) throw provenanceError;
 
   if (!provenance) {
+    const expectedProvenance = buildDraftProvenanceRow(question.question_id, {
+      privateDraftId: privateDraft.id,
+      payloadSha256: privateDraft.payload_sha256,
+      agentVersion: privateDraft.agent_version,
+    });
     const { data: insertedProvenance, error: insertProvenanceError } = await client
       .from('question_provenance')
       .insert(expectedProvenance)
-      .select('id,question_id,provenance_version,status,validation_checklist,technical_reviewer_id,technical_reviewed_at,instructional_reviewer_id,instructional_reviewed_at,approved_by,approved_at')
+      .select('id,question_id,provenance_version,status,validation_checklist,technical_reviewer_id,technical_reviewed_at,instructional_reviewer_id,instructional_reviewed_at,approved_by,approved_at,notes')
       .single();
     if (insertProvenanceError) throw insertProvenanceError;
     provenance = insertedProvenance;
-  } else {
-    assertDraftProvenance(provenance, question.question_id);
   }
 
-  assertDraftProvenance(provenance, question.question_id);
+  assertDraftProvenance(provenance, question.question_id, {
+    privateDraftId: privateDraft.id,
+    payloadSha256: privateDraft.payload_sha256,
+  });
+
+  const { count: publicQuestionCount, error: publicQuestionError } = await client
+    .from('scenario_questions')
+    .select('id', { count: 'exact', head: true })
+    .eq('question_id', question.question_id);
+  if (publicQuestionError) throw publicQuestionError;
+  if (publicQuestionCount !== 0) {
+    throw new Error('Native draft must not be promoted into public scenario_questions.');
+  }
 
   const { count: citationCount, error: citationCountError } = await client
     .from('question_citations')
@@ -124,22 +153,16 @@ if (!args.artifact || !fs.existsSync(artifactPath)) fail('A readable --artifact 
     throw new Error('Native drafted state must not already contain persisted question citations.');
   }
 
-  const { count: eligibilityCount, error: eligibilityError } = await client
-    .from('assessment_question_eligibility')
-    .select('question_id', { count: 'exact', head: true })
-    .eq('question_id', storedQuestion.id);
-  if (eligibilityError) throw eligibilityError;
-  if (eligibilityCount !== 0) {
-    throw new Error('Native draft unexpectedly has assessment eligibility.');
+  const existingRun = await runtime.governanceRuntime.getRun(runId);
+  if (!existingRun.length) {
+    await runtime.governanceRuntime.initializeDraft({
+      runId,
+      provenanceId: provenance.id,
+      questionId: question.question_id,
+      createdAt: privateDraft.created_at,
+      initializationEvidence: `native_governed_question_drafts:${privateDraft.id}`,
+    });
   }
-
-  await runtime.governanceRuntime.initializeDraft({
-    runId,
-    provenanceId: provenance.id,
-    questionId: question.question_id,
-    createdAt: storedQuestion.created_at,
-    initializationEvidence: `question_provenance:${provenance.id}`,
-  });
 
   const entries = await runtime.governanceRuntime.getRun(runId);
   const checkpoint = await runtime.governanceRuntime.recoverRun(runId);
@@ -148,6 +171,8 @@ if (!args.artifact || !fs.existsSync(artifactPath)) fail('A readable --artifact 
     entries.length !== 1 ||
     entries[0].action !== 'draft-initialized' ||
     entries[0].state !== 'drafted' ||
+    entries[0].metadata?.questionId !== question.question_id ||
+    entries[0].metadata?.provenanceId !== provenance.id ||
     checkpoint?.state !== 'drafted' ||
     checkpoint?.version !== 1 ||
     checkpoint?.metadata?.humanApproval !== false
@@ -158,11 +183,14 @@ if (!args.artifact || !fs.existsSync(artifactPath)) fail('A readable --artifact 
   console.log(JSON.stringify({
     runId,
     questionId: question.question_id,
+    privateDraftId: privateDraft.id,
     provenanceId: provenance.id,
+    payloadSha256: privateDraft.payload_sha256,
     state: checkpoint.state,
     version: checkpoint.version,
     status: checkpoint.status,
     integrityHash: checkpoint.integrityHash,
+    publicScenarioQuestionRows: 0,
     citationsPersisted: 0,
     assessmentEligibilityRows: 0,
   }));
