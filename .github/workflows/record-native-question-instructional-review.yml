@@ -1,0 +1,82 @@
+name: Record native question instructional review
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario_id:
+        description: Native scenario ID
+        required: true
+        default: charging-system
+        type: string
+      governed_run_id:
+        description: Existing governed run currently at citation_validated
+        required: true
+        type: string
+      reviewed_payload_sha256:
+        description: Exact private payload SHA-256 reviewed by the human
+        required: true
+        type: string
+      reviewer_id:
+        description: UUID of the authorized instructional reviewer
+        required: true
+        type: string
+      decision:
+        description: Human instructional-review decision
+        required: true
+        type: choice
+        options:
+          - pass
+          - revise
+          - reject
+      checklist_completed:
+        description: Attest that the instructional-review checklist was completed against this exact payload
+        required: true
+        default: false
+        type: boolean
+      comments:
+        description: Optional instructional-review comments
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-instructional-review-${{ inputs.governed_run_id }}
+  cancel-in-progress: false
+
+jobs:
+  record:
+    name: Bind human instructional review
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      INSTRUCTIONAL_REVIEW_SCENARIO_ID: ${{ inputs.scenario_id }}
+      INSTRUCTIONAL_REVIEW_RUN_ID: ${{ inputs.governed_run_id }}
+      INSTRUCTIONAL_REVIEW_PAYLOAD_SHA256: ${{ inputs.reviewed_payload_sha256 }}
+      INSTRUCTIONAL_REVIEW_REVIEWER_ID: ${{ inputs.reviewer_id }}
+      INSTRUCTIONAL_REVIEW_DECISION: ${{ inputs.decision }}
+      INSTRUCTIONAL_REVIEW_CHECKLIST_COMPLETED: ${{ inputs.checklist_completed }}
+      INSTRUCTIONAL_REVIEW_COMMENTS: ${{ inputs.comments }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+      - name: Record exact human instructional review
+        run: node scripts/record-native-question-instructional-review.js
+      - name: Governance notice
+        run: |
+          echo "Phase 10G records only citation_validated -> instructionally_reviewed."
+          echo "It creates no final approval, public question, assessment eligibility, scoring, delivery, or release authority."

@@ -57,6 +57,7 @@ class ProductionRunCoordinator {
         'rights-review-recorded': 'rights-reviewed',
         'technical-review-recorded': 'technically-reviewed',
         'citation-validation-recorded': 'citation-validated',
+        'instructional-review-recorded': 'instructionally-reviewed',
         'step-started': 'interrupted',
         'step-finished': 'step-completed',
         'handoff-recorded': 'awaiting-handoff',

@@ -421,6 +421,109 @@ class PersistentGovernanceRuntime {
     });
   }
 
+
+  async recordInstructionalReview({
+    runId,
+    actor = 'instructional-review-agent',
+    provenanceId,
+    questionId,
+    reviewEvidenceHash,
+    reviewEvidence,
+  }) {
+    if (
+      !runId ||
+      !provenanceId ||
+      !questionId ||
+      !/^[0-9a-f]{64}$/.test(reviewEvidenceHash || '') ||
+      !reviewEvidence ||
+      reviewEvidence.decision !== 'pass' ||
+      !/^[0-9a-f]{64}$/.test(reviewEvidence.payloadSha256 || '') ||
+      !/^[0-9a-f]{64}$/.test(reviewEvidence.citationSetHash || '') ||
+      !/^[0-9a-f]{64}$/.test(reviewEvidence.citationValidationEvidenceHash || '')
+    ) {
+      throw new Error('Instructional review record is incomplete');
+    }
+
+    const computedHash = crypto.createHash('sha256')
+      .update(JSON.stringify(reviewEvidence))
+      .digest('hex');
+    if (computedHash !== reviewEvidenceHash) {
+      throw new Error('Instructional review evidence hash does not match supplied evidence');
+    }
+    if (
+      reviewEvidence.reviewerId === reviewEvidence.technicalReviewerId ||
+      reviewEvidence.reviewerRole !== 'instructional_reviewer'
+    ) {
+      throw new Error('Instructional review evidence does not preserve reviewer independence');
+    }
+
+    const entries = await this.entries(runId);
+    const existing = entries.find((entry) =>
+      entry.action === 'instructional-review-recorded' &&
+      entry.state === 'instructionally_reviewed' &&
+      entry.metadata?.provenanceId === provenanceId &&
+      entry.metadata?.questionId === questionId
+    );
+    if (existing) {
+      if (
+        existing.metadata?.reviewEvidenceHash !== reviewEvidenceHash ||
+        existing.metadata?.payloadSha256 !== reviewEvidence.payloadSha256 ||
+        existing.metadata?.citationSetHash !== reviewEvidence.citationSetHash ||
+        existing.metadata?.citationValidationEvidenceHash !== reviewEvidence.citationValidationEvidenceHash
+      ) {
+        throw new Error('Existing instructional review evidence does not match current human review');
+      }
+      return existing;
+    }
+
+    const latest = entries.length ? entries[entries.length - 1] : null;
+    if (!latest || latest.action !== 'citation-validation-recorded' || latest.state !== 'citation_validated') {
+      throw new Error('Instructional review requires the citation_validated state');
+    }
+    if (
+      latest.metadata?.citationSetHash !== reviewEvidence.citationSetHash ||
+      latest.metadata?.validationEvidenceHash !== reviewEvidence.citationValidationEvidenceHash
+    ) {
+      throw new Error('Instructional review evidence is not bound to the current citation validation');
+    }
+    if (actor !== 'instructional-review-agent') throw new Error('Instructional review actor is not permitted');
+    if (
+      !this.catalog.get(actor) ||
+      !this.catalog.can(actor, 'prepare') ||
+      !this.catalog.provides(actor, 'instructional-review-preparation')
+    ) {
+      throw new Error('Instructional review actor is not governed');
+    }
+
+    const decision = this.stateMachine.canTransition({
+      from: 'citation_validated',
+      to: 'instructionally_reviewed',
+      actor,
+    });
+    if (!decision.allowed) throw new Error('Governed transition denied: ' + decision.reason);
+
+    return this.appendAndCheckpoint({
+      runId,
+      actor,
+      action: 'instructional-review-recorded',
+      state: 'instructionally_reviewed',
+      metadata: {
+        provenanceId,
+        questionId,
+        reviewEvidenceHash,
+        reviewerIdentity: reviewEvidence.reviewerId,
+        technicalReviewerIdentity: reviewEvidence.technicalReviewerId,
+        reviewedAt: reviewEvidence.reviewedAt,
+        payloadSha256: reviewEvidence.payloadSha256,
+        citationSetHash: reviewEvidence.citationSetHash,
+        citationValidationEvidenceHash: reviewEvidence.citationValidationEvidenceHash,
+        humanInstructionalDecisionBound: true,
+        agentSynthesizedDecision: false,
+        humanApproval: false,
+      },
+    });
+  }
+
   async recordStart({ runId, agentId, capability, from, to, requestId }) {
     const existing = await this.findByRequest(runId, 'step-started', requestId);
     if (existing) return existing;
