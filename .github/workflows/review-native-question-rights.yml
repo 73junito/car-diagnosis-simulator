@@ -1,0 +1,75 @@
+name: Review native draft rights
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario_id:
+        description: Scenario question-bank ID
+        required: true
+        default: charging-system
+        type: string
+      governed_run_id:
+        description: Existing governed run at evidence_mapped
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-rights-review-${{ inputs.governed_run_id }}
+  cancel-in-progress: false
+
+jobs:
+  review-rights:
+    name: Bind existing human rights review and advance to rights_reviewed
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate production secret and inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "${{ inputs.scenario_id }}" =~ ^[a-z0-9-]+$ ]]; then
+            echo "Invalid scenario_id"
+            exit 1
+          fi
+          if [[ ! "${{ inputs.governed_run_id }}" =~ ^[A-Za-z0-9._:-]+$ ]]; then
+            echo "Invalid governed_run_id"
+            exit 1
+          fi
+          if [[ -z "$SUPABASE_SERVICE_ROLE_KEY" ]]; then
+            echo "Environment secret SERVICE_ROLE_KEY is not configured"
+            exit 1
+          fi
+
+      - name: Bind existing human rights review and record governed transition
+        shell: bash
+        run: |
+          node scripts/review-native-question-rights.js \
+            --scenario="${{ inputs.scenario_id }}" \
+            --run-id="${{ inputs.governed_run_id }}"
+
+      - name: Governance notice
+        run: |
+          echo "The rights-agent only binds existing human-reviewed source-rights evidence."
+          echo "No new human decision, content approval, citation validation, technical review, instructional review, public question, assessment eligibility, or delivery authority is created."

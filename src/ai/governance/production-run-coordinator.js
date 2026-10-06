@@ -54,6 +54,7 @@ class ProductionRunCoordinator {
       const statusByAction = {
         'draft-initialized': 'draft-initialized',
         'evidence-mapping-recorded': 'evidence-mapped',
+        'rights-review-recorded': 'rights-reviewed',
         'step-started': 'interrupted',
         'step-finished': 'step-completed',
         'handoff-recorded': 'awaiting-handoff',

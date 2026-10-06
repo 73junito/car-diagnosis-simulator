@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-native-rights-review",
+  "phase": "phase-10d-native-rights-review",
+  "status": "prepared-not-deployed",
+  "governed_transition": {
+    "from": "evidence_mapped",
+    "to": "rights_reviewed",
+    "actor": "rights-agent",
+    "ledger_action": "rights-review-recorded"
+  },
+  "decision_semantics": {
+    "new_human_decision": false,
+    "existing_human_rights_reviews_bound": true,
+    "description": "The rights-agent verifies and binds existing human-reviewed approved_source and approved_source_rights_scopes evidence. It does not create, replace, or infer a human rights decision."
+  },
+  "required_evidence": [
+    "exact persisted Phase 10C citation set",
+    "approved source status",
+    "license.rights_status = human_reviewed_approved",
+    "license.reuse_permission_verified = true",
+    "source license reviewer identity and timestamp",
+    "active approved_source_rights_scopes row",
+    "citation_link_allowed = true",
+    "direct_excerpt_allowed = true",
+    "database_storage_allowed = true",
+    "rights-scope reviewer identity and timestamp matching the source license review",
+    "license evidence reference"
+  ],
+  "storage_boundary": {
+    "native_private_payload_write": false,
+    "question_citations_write": false,
+    "question_provenance_write": false,
+    "approved_sources_write": false,
+    "approved_source_rights_scopes_write": false,
+    "citation_validations_write": false,
+    "public_scenario_questions_write": false,
+    "assessment_eligibility_write": false,
+    "orchestration_ledger_write": true
+  },
+  "authority_invariants": [
+    "No human approval is synthesized.",
+    "No new human rights decision is synthesized.",
+    "No technical or instructional review is created.",
+    "No citation validation is created.",
+    "No public scenario question is created.",
+    "No assessment eligibility, scoring, delivery, API, or release authority is created.",
+    "Promotion into scenario_questions remains a later explicit governed phase."
+  ],
+  "recovery": {
+    "ledger_missing_after_validation": "safe; rerun revalidates current rights evidence and appends the transition",
+    "ledger_present_same_evidence": "idempotent success",
+    "ledger_present_evidence_drift": "fail closed"
+  }
+}
