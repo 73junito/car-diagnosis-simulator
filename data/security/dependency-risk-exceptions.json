@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "exceptions": [
+    {
+      "id": "dependabot-alert-109",
+      "package": "sprintf-js",
+      "advisory": "GHSA-hp3w-g68c-fv3c",
+      "cve": "CVE-2026-97058",
+      "severity": "moderate",
+      "status": "temporary-upstream-unpatched",
+      "reviewed_at": "2026-10-05",
+      "review_trigger": "Remove this exception as soon as a patched sprintf-js release or an upstream dependency-chain replacement is available.",
+      "production_runtime_allowed": false,
+      "direct_dependency_allowed": false,
+      "expected_version": "1.0.3",
+      "expected_chain": [
+        "babel-plugin-istanbul",
+        "@istanbuljs/load-nyc-config",
+        "js-yaml",
+        "argparse",
+        "sprintf-js"
+      ],
+      "rationale": "sprintf-js is currently present only as a dev-only transitive dependency used by test/coverage tooling. No patched upstream release is available. This exception contains the risk without overriding incompatible dependency contracts."
+    }
+  ]
+}

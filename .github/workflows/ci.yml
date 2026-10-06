@@ -26,6 +26,9 @@ jobs:
       - name: Verify lockfile sync
         run: npm ci --dry-run --ignore-scripts
 
+      - name: Enforce dependency security exceptions
+        run: npm run validate:dependency-security-exceptions
+
       - name: Enforce no nock in tests
         run: |
           if grep -R --line-number -E "require\(['\"]nock['\"]\)|import\s+nock|from\s+['\"]nock['\"]" tests; then
