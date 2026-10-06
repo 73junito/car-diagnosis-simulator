@@ -1,0 +1,7 @@
+-- Production migration-history compatibility alias.
+--
+-- Production records version 20261003024437 for the schema change represented
+-- canonically in this repository by:
+--   20261003023000_add_scenario_challenge_review_artifacts.sql
+--
+-- This file is intentionally a no-op. Do not duplicate the DDL here.

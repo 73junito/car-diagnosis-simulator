@@ -1,0 +1,7 @@
+-- Production migration-history compatibility alias.
+--
+-- Production records version 20261005035043 for the schema change represented
+-- canonically in this repository/staging by:
+--   20261005031812_create_orchestration_persistence_rpc.sql
+--
+-- This file is intentionally a no-op. Do not duplicate the DDL here.

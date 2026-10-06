@@ -1,0 +1,73 @@
+name: Bootstrap approved provenance orchestration
+
+on:
+  workflow_dispatch:
+    inputs:
+      question_id:
+        description: Existing approved production question ID
+        required: true
+        default: charging-system-alternator-function-01
+        type: string
+      governed_run_id:
+        description: New empty governed run ID
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap:
+    name: Import approved provenance history
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate bootstrap inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "${{ inputs.question_id }}" =~ ^[a-z0-9-]+$ ]]; then
+            echo "Invalid question_id"
+            exit 1
+          fi
+          if [[ ! "${{ inputs.governed_run_id }}" =~ ^[A-Za-z0-9._:-]+$ ]]; then
+            echo "Invalid governed_run_id"
+            exit 1
+          fi
+          if [[ -z "$SUPABASE_SERVICE_ROLE_KEY" ]]; then
+            echo "Environment secret SERVICE_ROLE_KEY is not configured"
+            exit 1
+          fi
+
+      - name: Import approved production provenance
+        shell: bash
+        run: |
+          node scripts/bootstrap-approved-question-orchestration.js \
+            --question-id="${{ inputs.question_id }}" \
+            --run-id="${{ inputs.governed_run_id }}"
+
+      - name: Governance notice
+        shell: bash
+        run: |
+          echo "Imported history is explicitly marked historical provenance backfill."
+          echo "No agent execution or new human approval was synthesized."
+          echo "No assessment eligibility or scored-delivery authority was created."

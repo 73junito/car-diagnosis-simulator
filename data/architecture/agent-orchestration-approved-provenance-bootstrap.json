@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-approved-provenance-bootstrap",
+  "phase": "phase-9e-approved-provenance-bootstrap",
+  "status": "prepared-not-deployed",
+  "workflow": ".github/workflows/bootstrap-approved-question-orchestration.yml",
+  "scope": {
+    "source": "existing production question provenance only",
+    "target": "new empty orchestration run only",
+    "terminal_backfill_state": "final_content_approved"
+  },
+  "required_evidence": [
+    "approved question provenance",
+    "completed technical review",
+    "completed instructional review",
+    "explicit human approval",
+    "all validation checklist fields true",
+    "deterministic citation validation valid",
+    "supports-answer citation",
+    "supports-explanation citation",
+    "approved source chunks",
+    "approved sources",
+    "human-reviewed reuse rights",
+    "reuse permission verified"
+  ],
+  "audit_semantics": {
+    "action": "provenance-state-backfilled",
+    "historical_import": true,
+    "not_agent_execution": true,
+    "preserves_all_intermediate_governance_states": true
+  },
+  "authority_invariants": [
+    "No new human approval is created.",
+    "No intermediate governance state is skipped.",
+    "No assessment eligibility is created.",
+    "No scored-delivery authority is created.",
+    "No public route is added."
+  ]
+}
