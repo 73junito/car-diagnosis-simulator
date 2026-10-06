@@ -97,6 +97,12 @@ describe('production instructional reviewer provisioning', () => {
     expect(workflow).toContain('qualification_attested:');
     expect(workflow).toContain('authorization_attested:');
     expect(workflow).toContain('name: instructional-reviewer-invite-link');
+    const artifactPathLines = workflow
+      .split('\n')
+      .filter((line) => line.includes('INSTRUCTIONAL_REVIEWER_INVITE_ARTIFACT_PATH:'));
+    expect(artifactPathLines).toEqual([
+      '          INSTRUCTIONAL_REVIEWER_INVITE_ARTIFACT_PATH: ${{ runner.temp }}/instructional-reviewer-invite.txt',
+    ]);
     expect(workflow).toContain('retention-days: 1');
     expect(workflow).toContain('if-no-files-found: ignore');
     expect(script).toContain("client.auth.admin.generateLink({ type: 'invite', email })");

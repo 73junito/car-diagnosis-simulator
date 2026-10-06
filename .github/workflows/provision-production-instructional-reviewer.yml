@@ -37,7 +37,6 @@ jobs:
       SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
       INSTRUCTIONAL_REVIEWER_EMAIL: ${{ secrets.INSTRUCTIONAL_REVIEWER_EMAIL }}
-      INSTRUCTIONAL_REVIEWER_INVITE_ARTIFACT_PATH: ${{ runner.temp }}/instructional-reviewer-invite.txt
       REVIEWER_INDEPENDENCE_ATTESTED: ${{ inputs.independence_attested }}
       REVIEWER_QUALIFICATION_ATTESTED: ${{ inputs.qualification_attested }}
       REVIEWER_AUTHORIZATION_ATTESTED: ${{ inputs.authorization_attested }}
@@ -64,6 +63,8 @@ jobs:
           fi
 
       - name: Invite and provision reviewer
+        env:
+          INSTRUCTIONAL_REVIEWER_INVITE_ARTIFACT_PATH: ${{ runner.temp }}/instructional-reviewer-invite.txt
         run: node scripts/provision-instructional-reviewer.js
 
       - name: Upload secure invite-link fallback
