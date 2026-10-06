@@ -15,6 +15,10 @@ describe('production migration history aliases', () => {
       alias: '20261005035043_create_orchestration_persistence_rpc.sql',
       canonical: '20261005031812_create_orchestration_persistence_rpc.sql',
     },
+    {
+      alias: '20261006035521_add_native_governed_question_drafts.sql',
+      canonical: '20261006033456_add_native_governed_question_drafts.sql',
+    },
   ];
 
   test.each(aliases)('$alias is a no-op alias to $canonical', ({ alias, canonical }) => {

@@ -1,0 +1,7 @@
+-- Production migration-history compatibility alias.
+--
+-- Production records version 20261006035521 for the schema change represented
+-- canonically in this repository by:
+--   20261006033456_add_native_governed_question_drafts.sql
+--
+-- This file is intentionally a no-op. Do not duplicate the DDL here.
