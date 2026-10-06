@@ -114,6 +114,22 @@ function appendNote(existing, line) {
     'Reviewer profile role is not eligible for technical review.'
   );
 
+  const { data: reviewerAuth, error: reviewerAuthError } = await client.auth.admin.getUserById(reviewerId);
+  if (reviewerAuthError) throw reviewerAuthError;
+  requireCondition(reviewerAuth?.user, 'Reviewer Auth identity does not exist.');
+  requireCondition(
+    reviewerAuth.user.email_confirmed_at,
+    'Reviewer invite has not been accepted; email confirmation is required before technical review.'
+  );
+  requireCondition(
+    reviewerAuth.user.app_metadata?.governance_role === reviewer.role,
+    'Reviewer Auth governance role does not match the canonical profile role.'
+  );
+  requireCondition(
+    reviewerAuth.user.app_metadata?.governance_scope === 'native-question-technical-review',
+    'Reviewer Auth governance scope is not authorized for native technical review.'
+  );
+
   const { data: publicQuestions, error: publicQuestionsError } = await client
     .from('scenario_questions')
     .select('id')
