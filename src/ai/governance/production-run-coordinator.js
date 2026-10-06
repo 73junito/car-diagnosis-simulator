@@ -53,6 +53,7 @@ class ProductionRunCoordinator {
       const latest = entries[entries.length - 1];
       const statusByAction = {
         'draft-initialized': 'draft-initialized',
+        'evidence-mapping-recorded': 'evidence-mapped',
         'step-started': 'interrupted',
         'step-finished': 'step-completed',
         'handoff-recorded': 'awaiting-handoff',
