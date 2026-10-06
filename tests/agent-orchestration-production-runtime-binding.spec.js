@@ -2,6 +2,7 @@ const { hashEntry } = require('../src/ai/governance/integrity-chain');
 const HumanGateController = require('../src/ai/runtime/human-gate-controller');
 const { stableRightsEvidenceHash } = require('../src/ai/runtime/native-rights-review');
 const { stableTechnicalReviewEvidenceHash } = require('../src/ai/runtime/native-technical-review');
+const { stableCitationValidationEvidenceHash } = require('../src/ai/runtime/native-citation-validation');
 const {
   createProductionAIOrchestrator,
 } = require('../src/ai/runtime/production-ai-runtime');
@@ -416,6 +417,95 @@ describe('Phase 9B production governed runtime binding', () => {
     });
     expect(duplicate.integrityHash).toBe(first.integrityHash);
     expect(backend.state.entries.get('native-technical-run')).toHaveLength(4);
+  });
+
+  test('native citation validation advances only technically_reviewed to citation_validated and is idempotent', async () => {
+    const backend = createBackend();
+    const runtime = createProductionAIOrchestrator({
+      env: enabledEnv,
+      workerId: 'citation-validator',
+      createClientImpl: () => ({ rpc: backend.rpc }),
+    });
+    const runId = 'native-citation-run';
+    const provenanceId = 'prov-citation-1';
+    const questionId = 'charging-system-native-citation-01';
+
+    await runtime.governanceRuntime.initializeDraft({
+      runId, provenanceId, questionId, createdAt: '2026-10-06T18:00:00.000Z',
+    });
+    await runtime.governanceRuntime.recordEvidenceMapping({
+      runId, provenanceId, questionId, citationCount: 2,
+    });
+    const rightsEvidence = [{ sourceId: 'source-1' }];
+    await runtime.governanceRuntime.recordRightsReview({
+      runId, provenanceId, questionId, sourceCount: 1,
+      rightsEvidenceHash: stableRightsEvidenceHash(rightsEvidence),
+      rightsEvidence,
+    });
+    const reviewEvidence = {
+      provenanceId,
+      questionId,
+      payloadSha256: 'a'.repeat(64),
+      reviewerId: '22222222-2222-2222-2222-222222222222',
+      reviewedAt: '2026-10-06T18:30:00.000Z',
+      decision: 'pass',
+    };
+    await runtime.governanceRuntime.recordTechnicalReview({
+      runId, provenanceId, questionId,
+      reviewEvidenceHash: stableTechnicalReviewEvidenceHash(reviewEvidence),
+      reviewEvidence,
+    });
+
+    const validationEvidence = {
+      provenanceId,
+      questionId,
+      payloadSha256: 'a'.repeat(64),
+      citationCount: 2,
+      citationSetHash: 'b'.repeat(64),
+      sourceHashesVerified: true,
+      excerptsVerified: true,
+      urlsVerified: true,
+      result: 'valid',
+      validatorVersion: 'native-citation-validator-1.0',
+      validatedAt: '2026-10-06T20:00:00.000Z',
+    };
+    const args = {
+      runId, provenanceId, questionId, citationCount: 2,
+      citationSetHash: validationEvidence.citationSetHash,
+      validationEvidenceHash: stableCitationValidationEvidenceHash(validationEvidence),
+      validationEvidence,
+    };
+
+    const first = await runtime.governanceRuntime.recordCitationValidation(args);
+    expect(first).toMatchObject({
+      actor: 'evidence-agent',
+      action: 'citation-validation-recorded',
+      state: 'citation_validated',
+      metadata: expect.objectContaining({
+        citationCount: 2,
+        citationSetHash: 'b'.repeat(64),
+        humanApproval: false,
+      }),
+    });
+    expect(backend.state.checkpoints.get(runId)).toMatchObject({
+      version: 5,
+      state: 'citation_validated',
+      action: 'citation-validation-recorded',
+      status: 'citation-validated',
+    });
+
+    const duplicate = await runtime.governanceRuntime.recordCitationValidation(args);
+    expect(duplicate.integrityHash).toBe(first.integrityHash);
+    expect(backend.state.entries.get(runId)).toHaveLength(5);
+
+    await expect(runtime.governanceRuntime.recordCitationValidation({
+      ...args,
+      citationSetHash: 'c'.repeat(64),
+      validationEvidence: { ...validationEvidence, citationSetHash: 'c'.repeat(64) },
+      validationEvidenceHash: stableCitationValidationEvidenceHash({
+        ...validationEvidence, citationSetHash: 'c'.repeat(64),
+      }),
+    })).rejects.toThrow(/does not match current validation/);
   });
 
   test('native technical review fails closed on wrong state, non-pass, or evidence drift', async () => {

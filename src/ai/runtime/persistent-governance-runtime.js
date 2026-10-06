@@ -325,6 +325,102 @@ class PersistentGovernanceRuntime {
     });
   }
 
+  async recordCitationValidation({
+    runId,
+    actor = 'evidence-agent',
+    provenanceId,
+    questionId,
+    citationCount,
+    citationSetHash,
+    validationEvidenceHash,
+    validationEvidence,
+  }) {
+    if (
+      !runId ||
+      !provenanceId ||
+      !questionId ||
+      !Number.isInteger(citationCount) ||
+      citationCount < 1 ||
+      !/^[0-9a-f]{64}$/.test(citationSetHash || '') ||
+      !/^[0-9a-f]{64}$/.test(validationEvidenceHash || '') ||
+      !validationEvidence ||
+      validationEvidence.result !== 'valid'
+    ) {
+      throw new Error('Citation validation record is incomplete');
+    }
+
+    const computedHash = crypto.createHash('sha256')
+      .update(JSON.stringify(validationEvidence))
+      .digest('hex');
+    if (computedHash !== validationEvidenceHash) {
+      throw new Error('Citation validation evidence hash does not match supplied evidence');
+    }
+    if (
+      validationEvidence.citationCount !== citationCount ||
+      validationEvidence.citationSetHash !== citationSetHash ||
+      validationEvidence.sourceHashesVerified !== true ||
+      validationEvidence.excerptsVerified !== true ||
+      validationEvidence.urlsVerified !== true
+    ) {
+      throw new Error('Citation validation evidence is not fully valid');
+    }
+
+    const entries = await this.entries(runId);
+    const existing = entries.find((entry) =>
+      entry.action === 'citation-validation-recorded' &&
+      entry.state === 'citation_validated' &&
+      entry.metadata?.provenanceId === provenanceId &&
+      entry.metadata?.questionId === questionId
+    );
+    if (existing) {
+      if (
+        existing.metadata?.citationCount !== citationCount ||
+        existing.metadata?.citationSetHash !== citationSetHash ||
+        existing.metadata?.validationEvidenceHash !== validationEvidenceHash
+      ) {
+        throw new Error('Existing citation validation evidence does not match current validation');
+      }
+      return existing;
+    }
+
+    const latest = entries.length ? entries[entries.length - 1] : null;
+    if (!latest || latest.action !== 'technical-review-recorded' || latest.state !== 'technically_reviewed') {
+      throw new Error('Citation validation requires the technically_reviewed state');
+    }
+    if (actor !== 'evidence-agent') throw new Error('Citation validation actor is not permitted');
+    if (
+      !this.catalog.get(actor) ||
+      !this.catalog.can(actor, 'prepare') ||
+      !this.catalog.provides(actor, 'citation-validation')
+    ) {
+      throw new Error('Citation validation actor is not governed');
+    }
+
+    const decision = this.stateMachine.canTransition({
+      from: 'technically_reviewed',
+      to: 'citation_validated',
+      actor,
+    });
+    if (!decision.allowed) throw new Error('Governed transition denied: ' + decision.reason);
+
+    return this.appendAndCheckpoint({
+      runId,
+      actor,
+      action: 'citation-validation-recorded',
+      state: 'citation_validated',
+      metadata: {
+        provenanceId,
+        questionId,
+        citationCount,
+        citationSetHash,
+        validationEvidenceHash,
+        validatorVersion: validationEvidence.validatorVersion,
+        validatedAt: validationEvidence.validatedAt,
+        humanApproval: false,
+      },
+    });
+  }
+
   async recordStart({ runId, agentId, capability, from, to, requestId }) {
     const existing = await this.findByRequest(runId, 'step-started', requestId);
     if (existing) return existing;
