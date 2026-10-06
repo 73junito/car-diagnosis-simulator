@@ -74,7 +74,8 @@
     "validate:starting-voltage-drop-model": "node engineering/ngspice/run-starting-voltage-drop-model.js && node scripts/verify-engineering-artifacts.js",
     "validate:charging-applicability": "npx jest tests/charging-reference-applicability.test.js --runInBand",
     "validate:multivoltage-domain-isolation": "npx jest tests/multivoltage-domain-isolation.test.js --runInBand",
-    "validate:browser-engineering-artifacts": "npx jest tests/browser-engineering-artifact-adapter.test.js --runInBand"
+    "validate:browser-engineering-artifacts": "npx jest tests/browser-engineering-artifact-adapter.test.js --runInBand",
+    "validate:dependency-security-exceptions": "node scripts/verify-dependency-security-exceptions.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
