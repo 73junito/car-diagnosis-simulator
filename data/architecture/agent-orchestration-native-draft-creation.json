@@ -19,6 +19,23 @@
     "private_store_policies": 0,
     "private_store_privileges": "service_role select+insert only"
   },
+  "containment_record": {
+    "workflow_run_id": 37407792289,
+    "workflow_head_sha": "ab90e039102df2ac9fc49971760ff2a0c140ad22",
+    "semantic_question_id": "charging-system-ai-draft-61fd4401912f",
+    "public_question_row_removed": true,
+    "draft_provenance_retained_for_audit": true,
+    "orchestration_audit_retained": true,
+    "citations": 0,
+    "citation_validations": 0,
+    "human_review_or_approval": false,
+    "assessment_eligibility": 0,
+    "attempt_question_refs": 0,
+    "attempt_answer_refs": 0,
+    "quality_score_refs": 0,
+    "active_leases": 0,
+    "quarantine_artifact_sha256": "d1d51283eeee7c4619a9e02986c78e3156f528987e1a2d4367f7d3738f7980ac"
+  },
   "workflow_order": [
     "generate exactly one evidence-bound draft in ollama environment",
     "verify draft-only and no synthesized review/approval",
