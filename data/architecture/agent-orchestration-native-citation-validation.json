@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-native-citation-validation",
+  "phase": "phase-10f-citation-validation",
+  "status": "prepared-not-deployed",
+  "governed_transition": {
+    "from": "technically_reviewed",
+    "to": "citation_validated",
+    "actor": "evidence-agent",
+    "ledger_action": "citation-validation-recorded"
+  },
+  "validation_contract": {
+    "exact_payload_sha_required": true,
+    "exact_persisted_citation_set_required": true,
+    "source_and_chunk_identity_required": true,
+    "approved_source_and_chunk_required": true,
+    "human_reviewed_rights_scope_rechecked": true,
+    "chunk_sha256_recomputed": true,
+    "excerpt_match_required": true,
+    "canonical_url_http_2xx_required": true,
+    "redirects_rejected": true,
+    "validator_version": "native-citation-validator-1.0"
+  },
+  "storage_boundary": {
+    "native_private_payload_write": false,
+    "question_citations_write": false,
+    "question_provenance_write": false,
+    "citation_validations_write": true,
+    "public_scenario_questions_write": false,
+    "assessment_eligibility_write": false,
+    "orchestration_ledger_write_on_valid": true
+  },
+  "authority_invariants": [
+    "Provenance status remains draft.",
+    "Human technical review remains bound to the exact payload.",
+    "No instructional review is synthesized.",
+    "No final content approval is synthesized.",
+    "No public scenario question is created.",
+    "No assessment eligibility, scoring, delivery, API, or release authority is created."
+  ]
+}

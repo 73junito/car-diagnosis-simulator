@@ -1,0 +1,57 @@
+name: Validate native question citations
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario_id:
+        description: Scenario question-bank ID
+        required: true
+        default: charging-system
+        type: string
+      governed_run_id:
+        description: Existing governed run at technically_reviewed
+        required: true
+        type: string
+      reviewed_payload_sha256:
+        description: Exact private payload SHA-256 already bound by technical review
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-citation-validation-${{ inputs.governed_run_id }}
+  cancel-in-progress: false
+
+jobs:
+  validate-citations:
+    name: Verify mapped evidence and advance to citation_validated
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      CITATION_VALIDATION_SCENARIO_ID: ${{ inputs.scenario_id }}
+      CITATION_VALIDATION_RUN_ID: ${{ inputs.governed_run_id }}
+      CITATION_VALIDATION_PAYLOAD_SHA256: ${{ inputs.reviewed_payload_sha256 }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+      - name: Validate exact mapped citations
+        run: node scripts/validate-native-question-citations.js
+      - name: Governance notice
+        run: |
+          echo "Citation validation verifies the exact technically-reviewed draft and mapped governed evidence."
+          echo "No instructional review, final approval, public question, assessment eligibility, scored delivery, or release authority is created."
