@@ -1,0 +1,70 @@
+name: Initialize governed question draft
+
+on:
+  workflow_dispatch:
+    inputs:
+      question_id:
+        description: Existing production semantic question ID with draft provenance
+        required: true
+        type: string
+      governed_run_id:
+        description: New empty governed run ID
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  initialize:
+    name: Initialize native governed draft
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate initialization inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ ! "${{ inputs.question_id }}" =~ ^[a-z0-9-]+$ ]]; then
+            echo "Invalid question_id"
+            exit 1
+          fi
+          if [[ ! "${{ inputs.governed_run_id }}" =~ ^[A-Za-z0-9._:-]+$ ]]; then
+            echo "Invalid governed_run_id"
+            exit 1
+          fi
+          if [[ -z "$SUPABASE_SERVICE_ROLE_KEY" ]]; then
+            echo "Environment secret SERVICE_ROLE_KEY is not configured"
+            exit 1
+          fi
+
+      - name: Initialize governed draft from production provenance
+        shell: bash
+        run: |
+          node scripts/initialize-question-draft-orchestration.js \
+            --question-id="${{ inputs.question_id }}" \
+            --run-id="${{ inputs.governed_run_id }}"
+
+      - name: Governance notice
+        run: |
+          echo "The governed run starts at drafted only."
+          echo "No technical review, instructional review, approval, assessment eligibility, or delivery authority is created."

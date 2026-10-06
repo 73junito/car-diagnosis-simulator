@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-native-draft-initialization",
+  "phase": "phase-10a-native-draft-initialization",
+  "status": "prepared-not-deployed",
+  "initial_state": "drafted",
+  "workflow": ".github/workflows/initialize-question-draft-orchestration.yml",
+  "script": "scripts/initialize-question-draft-orchestration.js",
+  "source_of_truth": "public.question_provenance",
+  "requirements": [
+    "question_provenance exists for the semantic question_id",
+    "question_provenance.status is draft",
+    "technical review fields are empty",
+    "instructional review fields are empty",
+    "approval fields are empty",
+    "target governed run is empty"
+  ],
+  "ledger_entry": {
+    "actor": "question-agent",
+    "action": "draft-initialized",
+    "state": "drafted",
+    "initial_state": true,
+    "human_approval": false
+  },
+  "authority_invariants": [
+    "Initialization is not a governance transition and cannot skip a state.",
+    "Initialization cannot synthesize human approval.",
+    "Initialization cannot create technical or instructional review evidence.",
+    "Initialization cannot create assessment eligibility.",
+    "Initialization cannot create scored-delivery authority.",
+    "Initialization cannot create production API eligibility or release authority."
+  ]
+}

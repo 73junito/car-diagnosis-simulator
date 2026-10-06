@@ -67,6 +67,46 @@ class PersistentGovernanceRuntime {
     return appended;
   }
 
+  async initializeDraft({ runId, actor = 'question-agent', provenanceId, questionId, createdAt, initializationEvidence }) {
+    if (!runId || !provenanceId || !questionId || !createdAt) {
+      throw new Error('Draft initialization record is incomplete');
+    }
+
+    const entries = await this.entries(runId);
+    const existing = entries.find((entry) =>
+      entry.action === 'draft-initialized' &&
+      entry.state === 'drafted' &&
+      entry.metadata &&
+      entry.metadata.provenanceId === provenanceId &&
+      entry.metadata.questionId === questionId
+    );
+    if (existing) return existing;
+    if (entries.length) {
+      throw new Error('Draft initialization requires an empty governed run');
+    }
+    if (actor !== 'question-agent') {
+      throw new Error('Draft initialization actor is not permitted');
+    }
+    if (!this.catalog.get(actor) || !this.catalog.can(actor, 'prepare')) {
+      throw new Error('Draft initialization actor is not governed');
+    }
+
+    return this.appendAndCheckpoint({
+      runId,
+      actor,
+      action: 'draft-initialized',
+      state: 'drafted',
+      recordedAt: createdAt,
+      metadata: {
+        provenanceId,
+        questionId,
+        initializationEvidence: initializationEvidence || `question_provenance:${provenanceId}`,
+        initialState: true,
+        humanApproval: false,
+      },
+    });
+  }
+
   async recordStart({ runId, agentId, capability, from, to, requestId }) {
     const existing = await this.findByRequest(runId, 'step-started', requestId);
     if (existing) return existing;
