@@ -5,6 +5,7 @@ const {
   ELIGIBLE_PROVISIONED_ROLE,
   normalizeReviewerEmail,
   assertReviewerProvisioningAttestations,
+  shouldResendInvite,
   validateExistingProfileForProvisioning,
 } = require('../src/ai/runtime/instructional-reviewer-provisioning');
 
@@ -82,6 +83,18 @@ async function findAuthUserByEmail(client, email) {
     requireCondition(promoted?.role === ELIGIBLE_PROVISIONED_ROLE, 'Fresh reviewer profile promotion failed.');
   }
 
+  let inviteResent = false;
+  if (shouldResendInvite({
+    createdByThisRun,
+    emailConfirmedAt: user.email_confirmed_at,
+    profileRole: profile.role,
+  })) {
+    const { data: resendData, error: resendError } = await client.auth.admin.inviteUserByEmail(reviewerEmail);
+    if (resendError) throw resendError;
+    requireCondition(resendData?.user?.id === user.id, 'Invite resend returned a different reviewer identity.');
+    inviteResent = true;
+  }
+
   const { count: technicalIdentityCount, error: technicalIdentityError } = await client
     .from('profiles')
     .select('id', { count: 'exact', head: true })
@@ -135,6 +148,7 @@ async function findAuthUserByEmail(client, email) {
     reviewerId: user.id,
     role: ELIGIBLE_PROVISIONED_ROLE,
     invitedByThisRun: createdByThisRun,
+    inviteResent,
     profileVerified: true,
     appMetadataVerified: true,
     independenceAttested: true,
