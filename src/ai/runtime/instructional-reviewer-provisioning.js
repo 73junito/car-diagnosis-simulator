@@ -23,6 +23,13 @@ function assertReviewerProvisioningAttestations({
   requireCondition(authorizationAttested === true, 'Reviewer provisioning authorization attestation is required.');
 }
 
+function isEmailSendRateLimitError(error) {
+  if (!error) return false;
+  const code = String(error.code || error.error_code || '').trim().toLowerCase();
+  const message = String(error.message || '').trim().toLowerCase();
+  return code === 'over_email_send_rate_limit' || message.includes('email rate limit exceeded');
+}
+
 function shouldResendInvite({ createdByThisRun, emailConfirmedAt, profileRole }) {
   if (createdByThisRun) return false;
   requireCondition(
@@ -65,6 +72,7 @@ module.exports = {
   ELIGIBLE_PROVISIONED_ROLE,
   normalizeReviewerEmail,
   assertReviewerProvisioningAttestations,
+  isEmailSendRateLimitError,
   shouldResendInvite,
   validateExistingProfileForProvisioning,
 };

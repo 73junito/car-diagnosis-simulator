@@ -6,6 +6,7 @@ const {
   ELIGIBLE_PROVISIONED_ROLE,
   normalizeReviewerEmail,
   assertReviewerProvisioningAttestations,
+  isEmailSendRateLimitError,
   shouldResendInvite,
   validateExistingProfileForProvisioning,
 } = require('../src/ai/runtime/instructional-reviewer-provisioning');
@@ -57,6 +58,13 @@ describe('production instructional reviewer provisioning', () => {
     })).toThrow(/cannot be repurposed/);
   });
 
+  test('recognizes only the Supabase email-send rate-limit condition', () => {
+    expect(isEmailSendRateLimitError({ code: 'over_email_send_rate_limit' })).toBe(true);
+    expect(isEmailSendRateLimitError({ message: 'email rate limit exceeded' })).toBe(true);
+    expect(isEmailSendRateLimitError({ code: 'user_already_exists', message: 'already registered' })).toBe(false);
+    expect(isEmailSendRateLimitError(null)).toBe(false);
+  });
+
   test('resends only for an existing unconfirmed instructional reviewer', () => {
     expect(shouldResendInvite({
       createdByThisRun: false,
@@ -88,6 +96,11 @@ describe('production instructional reviewer provisioning', () => {
     expect(workflow).toContain('independence_attested:');
     expect(workflow).toContain('qualification_attested:');
     expect(workflow).toContain('authorization_attested:');
+    expect(workflow).toContain('name: instructional-reviewer-invite-link');
+    expect(workflow).toContain('retention-days: 1');
+    expect(workflow).toContain('if-no-files-found: ignore');
+    expect(script).toContain("client.auth.admin.generateLink({ type: 'invite', email })");
+    expect(script).toContain("delivery: 'secure-link-artifact'");
     expect(script).toContain("governance_scope: 'native-question-instructional-review'");
     expect(script).toContain("technicalReviewAuthority: false");
     expect(script).toContain("assessmentAuthority: false");

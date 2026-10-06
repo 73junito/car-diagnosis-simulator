@@ -1,10 +1,13 @@
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 const {
   ELIGIBLE_PROVISIONED_ROLE,
   normalizeReviewerEmail,
   assertReviewerProvisioningAttestations,
+  isEmailSendRateLimitError,
   shouldResendInvite,
   validateExistingProfileForProvisioning,
 } = require('../src/ai/runtime/instructional-reviewer-provisioning');
@@ -14,6 +17,7 @@ const provisionedBy = process.env.GITHUB_ACTOR || process.env.REVIEWER_PROVISION
 const independenceAttested = process.env.REVIEWER_INDEPENDENCE_ATTESTED === 'true';
 const qualificationAttested = process.env.REVIEWER_QUALIFICATION_ATTESTED === 'true';
 const authorizationAttested = process.env.REVIEWER_AUTHORIZATION_ATTESTED === 'true';
+const inviteArtifactPath = process.env.INSTRUCTIONAL_REVIEWER_INVITE_ARTIFACT_PATH || '';
 
 function requireCondition(condition, message) {
   if (!condition) throw new Error(message);
@@ -32,6 +36,42 @@ async function findAuthUserByEmail(client, email) {
   throw new Error('Auth user scan exceeded the supported pagination bound.');
 }
 
+function writeInviteArtifact(actionLink) {
+  requireCondition(inviteArtifactPath.length > 0, 'Secure invite artifact path is required for SMTP rate-limit fallback.');
+  requireCondition(typeof actionLink === 'string' && actionLink.startsWith('https://'), 'Generated invite action link is invalid.');
+  fs.mkdirSync(path.dirname(inviteArtifactPath), { recursive: true });
+  fs.writeFileSync(inviteArtifactPath, `${actionLink}\n`, { encoding: 'utf8', mode: 0o600 });
+}
+
+async function generateInviteLinkFallback(client, email, expectedUserId = null) {
+  const { data, error } = await client.auth.admin.generateLink({ type: 'invite', email });
+  if (error) throw error;
+  const generatedUser = data?.user || null;
+  const actionLink = data?.properties?.action_link || '';
+  requireCondition(generatedUser?.id, 'Supabase did not return the generated invite reviewer identity.');
+  if (expectedUserId) {
+    requireCondition(generatedUser.id === expectedUserId, 'Generated invite link returned a different reviewer identity.');
+  }
+  writeInviteArtifact(actionLink);
+  return generatedUser;
+}
+
+async function inviteWithRateLimitFallback(client, email, expectedUserId = null) {
+  const { data, error } = await client.auth.admin.inviteUserByEmail(email);
+  if (!error) {
+    const invitedUser = data?.user || null;
+    requireCondition(invitedUser?.id, 'Supabase did not return the invited reviewer identity.');
+    if (expectedUserId) {
+      requireCondition(invitedUser.id === expectedUserId, 'Invite returned a different reviewer identity.');
+    }
+    return { user: invitedUser, delivery: 'email' };
+  }
+
+  if (!isEmailSendRateLimitError(error)) throw error;
+  const generatedUser = await generateInviteLinkFallback(client, email, expectedUserId);
+  return { user: generatedUser, delivery: 'secure-link-artifact' };
+}
+
 (async () => {
   requireCondition(process.env.TORQUEMIND_ENVIRONMENT === 'production', 'Reviewer provisioning is production-only.');
   requireCondition(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY, 'Production Supabase credentials are required.');
@@ -48,12 +88,12 @@ async function findAuthUserByEmail(client, email) {
 
   let user = await findAuthUserByEmail(client, reviewerEmail);
   const createdByThisRun = !user;
+  let inviteDelivery = 'not-required';
 
   if (!user) {
-    const { data, error } = await client.auth.admin.inviteUserByEmail(reviewerEmail);
-    if (error) throw error;
-    user = data?.user || null;
-    requireCondition(user?.id, 'Supabase did not return the invited reviewer identity.');
+    const inviteResult = await inviteWithRateLimitFallback(client, reviewerEmail);
+    user = inviteResult.user;
+    inviteDelivery = inviteResult.delivery;
   }
 
   const { data: profile, error: profileError } = await client
@@ -89,9 +129,8 @@ async function findAuthUserByEmail(client, email) {
     emailConfirmedAt: user.email_confirmed_at,
     profileRole: profile.role,
   })) {
-    const { data: resendData, error: resendError } = await client.auth.admin.inviteUserByEmail(reviewerEmail);
-    if (resendError) throw resendError;
-    requireCondition(resendData?.user?.id === user.id, 'Invite resend returned a different reviewer identity.');
+    const resendResult = await inviteWithRateLimitFallback(client, reviewerEmail, user.id);
+    inviteDelivery = resendResult.delivery;
     inviteResent = true;
   }
 
@@ -149,6 +188,8 @@ async function findAuthUserByEmail(client, email) {
     role: ELIGIBLE_PROVISIONED_ROLE,
     invitedByThisRun: createdByThisRun,
     inviteResent,
+    inviteDelivery,
+    secureInviteArtifactCreated: inviteDelivery === 'secure-link-artifact',
     profileVerified: true,
     appMetadataVerified: true,
     independenceAttested: true,
