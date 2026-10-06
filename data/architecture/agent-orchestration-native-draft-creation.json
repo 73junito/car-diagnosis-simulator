@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-native-draft-creation",
+  "phase": "phase-10b-native-draft-creation",
+  "status": "prepared-not-deployed",
+  "workflow": ".github/workflows/create-native-governed-question-draft.yml",
+  "generation": {
+    "environment": "ollama",
+    "count": 1,
+    "persistence": "disabled",
+    "evidence_only": true,
+    "rights_verified_sources_only": true
+  },
+  "production_ingest": {
+    "environment": "pffdgqpynpbffbcnxmum_production",
+    "tables_written": [
+      "public.scenario_questions",
+      "public.question_provenance"
+    ],
+    "tables_explicitly_not_written": [
+      "public.question_citations",
+      "public.citation_validations",
+      "public.assessment_question_eligibility"
+    ],
+    "initial_governed_state": "drafted"
+  },
+  "authority_invariants": [
+    "Generated output remains draft-only.",
+    "Citation references may remain in the generation artifact but are not persisted as question_citations in Phase 10B.",
+    "Evidence mapping remains a later explicit governed transition.",
+    "No technical or instructional review is synthesized.",
+    "No human approval is synthesized.",
+    "No assessment eligibility or scored-delivery authority is created.",
+    "No production API eligibility or release authority is created.",
+    "Ollama and Supabase credentials remain isolated by GitHub environment."
+  ]
+}
