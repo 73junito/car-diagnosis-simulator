@@ -3,6 +3,7 @@ const HumanGateController = require('../src/ai/runtime/human-gate-controller');
 const { stableRightsEvidenceHash } = require('../src/ai/runtime/native-rights-review');
 const { stableTechnicalReviewEvidenceHash } = require('../src/ai/runtime/native-technical-review');
 const { stableCitationValidationEvidenceHash } = require('../src/ai/runtime/native-citation-validation');
+const { stableInstructionalReviewEvidenceHash } = require('../src/ai/runtime/native-instructional-review');
 const {
   createProductionAIOrchestrator,
 } = require('../src/ai/runtime/production-ai-runtime');
@@ -506,6 +507,112 @@ describe('Phase 9B production governed runtime binding', () => {
         ...validationEvidence, citationSetHash: 'c'.repeat(64),
       }),
     })).rejects.toThrow(/does not match current validation/);
+  });
+
+  test('native instructional review binds independent human evidence to the current citation validation', async () => {
+    const backend = createBackend();
+    const runtime = createProductionAIOrchestrator({
+      env: enabledEnv,
+      workerId: 'instructional-reviewer',
+      createClientImpl: () => ({ rpc: backend.rpc }),
+    });
+    const runId = 'native-instructional-run';
+    const provenanceId = 'prov-instructional-1';
+    const questionId = 'charging-system-native-instructional-01';
+
+    await runtime.governanceRuntime.initializeDraft({
+      runId, provenanceId, questionId, createdAt: '2026-10-06T18:00:00.000Z',
+    });
+    await runtime.governanceRuntime.recordEvidenceMapping({
+      runId, provenanceId, questionId, citationCount: 2,
+    });
+    const rightsEvidence = [{ sourceId: 'source-1' }];
+    await runtime.governanceRuntime.recordRightsReview({
+      runId, provenanceId, questionId, sourceCount: 1,
+      rightsEvidenceHash: stableRightsEvidenceHash(rightsEvidence),
+      rightsEvidence,
+    });
+    const technicalEvidence = {
+      provenanceId,
+      questionId,
+      payloadSha256: 'a'.repeat(64),
+      reviewerId: '22222222-2222-2222-2222-222222222222',
+      reviewedAt: '2026-10-06T18:30:00.000Z',
+      decision: 'pass',
+    };
+    await runtime.governanceRuntime.recordTechnicalReview({
+      runId, provenanceId, questionId,
+      reviewEvidenceHash: stableTechnicalReviewEvidenceHash(technicalEvidence),
+      reviewEvidence: technicalEvidence,
+    });
+    const validationEvidence = {
+      provenanceId,
+      questionId,
+      payloadSha256: 'a'.repeat(64),
+      citationCount: 2,
+      citationSetHash: 'b'.repeat(64),
+      sourceHashesVerified: true,
+      excerptsVerified: true,
+      urlsVerified: true,
+      result: 'valid',
+      validatorVersion: 'native-citation-validator-1.0',
+      validatedAt: '2026-10-06T20:00:00.000Z',
+    };
+    const validationEvidenceHash = stableCitationValidationEvidenceHash(validationEvidence);
+    await runtime.governanceRuntime.recordCitationValidation({
+      runId, provenanceId, questionId, citationCount: 2,
+      citationSetHash: validationEvidence.citationSetHash,
+      validationEvidenceHash,
+      validationEvidence,
+    });
+
+    const reviewEvidence = {
+      provenanceId,
+      questionId,
+      payloadSha256: 'a'.repeat(64),
+      citationSetHash: 'b'.repeat(64),
+      citationValidationEvidenceHash: validationEvidenceHash,
+      reviewerId: '33333333-3333-3333-3333-333333333333',
+      reviewerRole: 'instructional_reviewer',
+      technicalReviewerId: '22222222-2222-2222-2222-222222222222',
+      reviewedAt: '2026-10-06T21:00:00.000Z',
+      decision: 'pass',
+    };
+    const args = {
+      runId, provenanceId, questionId,
+      reviewEvidenceHash: stableInstructionalReviewEvidenceHash(reviewEvidence),
+      reviewEvidence,
+    };
+
+    const first = await runtime.governanceRuntime.recordInstructionalReview(args);
+    expect(first).toMatchObject({
+      actor: 'instructional-review-agent',
+      action: 'instructional-review-recorded',
+      state: 'instructionally_reviewed',
+      metadata: expect.objectContaining({
+        payloadSha256: 'a'.repeat(64),
+        citationSetHash: 'b'.repeat(64),
+        humanInstructionalDecisionBound: true,
+        humanApproval: false,
+      }),
+    });
+    expect(backend.state.checkpoints.get(runId)).toMatchObject({
+      version: 6,
+      state: 'instructionally_reviewed',
+      action: 'instructional-review-recorded',
+      status: 'instructionally-reviewed',
+    });
+
+    const duplicate = await runtime.governanceRuntime.recordInstructionalReview(args);
+    expect(duplicate.integrityHash).toBe(first.integrityHash);
+    expect(backend.state.entries.get(runId)).toHaveLength(6);
+
+    const drifted = { ...reviewEvidence, citationSetHash: 'c'.repeat(64) };
+    await expect(runtime.governanceRuntime.recordInstructionalReview({
+      ...args,
+      reviewEvidence: drifted,
+      reviewEvidenceHash: stableInstructionalReviewEvidenceHash(drifted),
+    })).rejects.toThrow(/does not match current human review/);
   });
 
   test('native technical review fails closed on wrong state, non-pass, or evidence drift', async () => {

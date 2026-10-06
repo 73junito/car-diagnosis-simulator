@@ -1,0 +1,40 @@
+{
+  "phase": "10G",
+  "title": "Native instructional review",
+  "status": "prepared-not-deployed",
+  "transition": {
+    "from": "citation_validated",
+    "to": "instructionally_reviewed",
+    "actor": "instructional-review-agent"
+  },
+  "reviewerAuthority": {
+    "requiredProfileRole": "instructional_reviewer",
+    "requiredAuthScope": "native-question-instructional-review",
+    "independentFromTechnicalReviewer": true,
+    "humanDecisionRequired": true
+  },
+  "evidenceBinding": [
+    "exact private payload SHA-256",
+    "technical-review pass",
+    "citation-set SHA-256",
+    "citation-validation evidence SHA-256",
+    "valid persisted citation validation",
+    "human instructional checklist and decision"
+  ],
+  "storageBoundary": {
+    "nativePrivatePayloadWrite": false,
+    "questionCitationsWrite": false,
+    "citationValidationsWrite": false,
+    "questionProvenanceInstructionalReviewWrite": true,
+    "publicScenarioQuestionsWrite": false,
+    "assessmentEligibilityWrite": false,
+    "orchestrationLedgerWriteOnPassOnly": true
+  },
+  "authorityInvariants": {
+    "finalApproval": false,
+    "publicRelease": false,
+    "assessmentEligibility": false,
+    "scoringAuthority": false,
+    "deliveryAuthority": false
+  }
+}
