@@ -1,0 +1,86 @@
+name: Record native technical review
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario_id:
+        description: Scenario question-bank ID
+        required: true
+        default: charging-system
+        type: string
+      governed_run_id:
+        description: Existing governed run at rights_reviewed
+        required: true
+        type: string
+      reviewer_id:
+        description: Production reviewer profile UUID
+        required: true
+        type: string
+      reviewed_payload_sha256:
+        description: Exact private payload SHA-256 reviewed by the human
+        required: true
+        type: string
+      decision:
+        description: Human technical-review decision
+        required: true
+        type: choice
+        options:
+          - pass
+          - revise
+          - reject
+      checklist_completed:
+        description: I completed all five technical-review criteria against this exact payload
+        required: true
+        default: false
+        type: boolean
+      comments:
+        description: Human technical-review comments (no secrets)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-technical-review-${{ inputs.governed_run_id }}
+  cancel-in-progress: false
+
+jobs:
+  record-review:
+    name: Capture human technical review and bind governed transition
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      TECHNICAL_REVIEW_SCENARIO_ID: ${{ inputs.scenario_id }}
+      TECHNICAL_REVIEW_RUN_ID: ${{ inputs.governed_run_id }}
+      TECHNICAL_REVIEW_REVIEWER_ID: ${{ inputs.reviewer_id }}
+      TECHNICAL_REVIEW_PAYLOAD_SHA256: ${{ inputs.reviewed_payload_sha256 }}
+      TECHNICAL_REVIEW_DECISION: ${{ inputs.decision }}
+      TECHNICAL_REVIEW_CHECKLIST_COMPLETED: ${{ inputs.checklist_completed }}
+      TECHNICAL_REVIEW_COMMENTS: ${{ inputs.comments }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Record exact-payload human technical review
+        run: node scripts/record-native-question-technical-review.js
+
+      - name: Governance notice
+        run: |
+          echo "Only a human pass decision from an eligible production reviewer can advance rights_reviewed -> technically_reviewed."
+          echo "revise/reject remains rights_reviewed. No instructional review, citation validation, approval, public question, assessment eligibility, or delivery authority is created."

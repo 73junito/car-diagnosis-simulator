@@ -246,6 +246,85 @@ class PersistentGovernanceRuntime {
     });
   }
 
+  async recordTechnicalReview({
+    runId,
+    actor = 'technical-review-agent',
+    provenanceId,
+    questionId,
+    reviewEvidenceHash,
+    reviewEvidence,
+  }) {
+    if (
+      !runId ||
+      !provenanceId ||
+      !questionId ||
+      !/^[0-9a-f]{64}$/.test(reviewEvidenceHash || '') ||
+      !reviewEvidence ||
+      reviewEvidence.decision !== 'pass'
+    ) {
+      throw new Error('Technical review record is incomplete');
+    }
+
+    const computedHash = crypto.createHash('sha256')
+      .update(JSON.stringify(reviewEvidence))
+      .digest('hex');
+    if (computedHash !== reviewEvidenceHash) {
+      throw new Error('Technical review evidence hash does not match supplied evidence');
+    }
+
+    const entries = await this.entries(runId);
+    const existing = entries.find((entry) =>
+      entry.action === 'technical-review-recorded' &&
+      entry.state === 'technically_reviewed' &&
+      entry.metadata?.provenanceId === provenanceId &&
+      entry.metadata?.questionId === questionId
+    );
+    if (existing) {
+      if (existing.metadata?.reviewEvidenceHash !== reviewEvidenceHash) {
+        throw new Error('Existing technical review evidence does not match current human review');
+      }
+      return existing;
+    }
+
+    const latest = entries.length ? entries[entries.length - 1] : null;
+    if (!latest || latest.action !== 'rights-review-recorded' || latest.state !== 'rights_reviewed') {
+      throw new Error('Technical review requires the rights_reviewed state');
+    }
+    if (actor !== 'technical-review-agent') throw new Error('Technical review actor is not permitted');
+    if (
+      !this.catalog.get(actor) ||
+      !this.catalog.can(actor, 'prepare') ||
+      !this.catalog.provides(actor, 'technical-review-preparation')
+    ) {
+      throw new Error('Technical review actor is not governed');
+    }
+
+    const decision = this.stateMachine.canTransition({
+      from: 'rights_reviewed',
+      to: 'technically_reviewed',
+      actor,
+    });
+    if (!decision.allowed) throw new Error('Governed transition denied: ' + decision.reason);
+
+    return this.appendAndCheckpoint({
+      runId,
+      actor,
+      action: 'technical-review-recorded',
+      state: 'technically_reviewed',
+      metadata: {
+        provenanceId,
+        questionId,
+        reviewEvidenceHash,
+        reviewerIdentity: reviewEvidence.reviewerId,
+        reviewedAt: reviewEvidence.reviewedAt,
+        payloadSha256: reviewEvidence.payloadSha256,
+        humanTechnicalDecisionBound: true,
+        agentSynthesizedDecision: false,
+        humanApproval: false,
+      },
+    });
+  }
+
   async recordStart({ runId, agentId, capability, from, to, requestId }) {
     const existing = await this.findByRequest(runId, 'step-started', requestId);
     if (existing) return existing;
