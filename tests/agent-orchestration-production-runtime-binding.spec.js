@@ -1,5 +1,6 @@
 const { hashEntry } = require('../src/ai/governance/integrity-chain');
 const HumanGateController = require('../src/ai/runtime/human-gate-controller');
+const { stableRightsEvidenceHash } = require('../src/ai/runtime/native-rights-review');
 const {
   createProductionAIOrchestrator,
 } = require('../src/ai/runtime/production-ai-runtime');
@@ -214,6 +215,130 @@ describe('Phase 9B production governed runtime binding', () => {
     })).rejects.toThrow(/actor is not permitted/);
 
     expect(backend.state.entries.get('wrong-actor-run') || []).toHaveLength(0);
+  });
+
+  test('native rights review binds existing human rights evidence at rights_reviewed', async () => {
+    const backend = createBackend();
+    const runtime = createProductionAIOrchestrator({
+      env: enabledEnv,
+      workerId: 'rights-reviewer',
+      createClientImpl: () => ({ rpc: backend.rpc }),
+    });
+
+    await runtime.governanceRuntime.initializeDraft({
+      runId: 'native-rights-run',
+      provenanceId: 'prov-rights-1',
+      questionId: 'charging-system-native-rights-01',
+      createdAt: '2026-10-06T03:00:00.000Z',
+    });
+    await runtime.governanceRuntime.recordEvidenceMapping({
+      runId: 'native-rights-run',
+      provenanceId: 'prov-rights-1',
+      questionId: 'charging-system-native-rights-01',
+      citationCount: 2,
+    });
+
+    const evidence = [{
+      sourceId: 'source-1',
+      reviewerIdentity: '11111111-1111-1111-1111-111111111111',
+      reviewedAt: '2026-10-01T00:00:00Z',
+      licenseEvidenceReference: 'https://example.test/license',
+    }];
+
+    const first = await runtime.governanceRuntime.recordRightsReview({
+      runId: 'native-rights-run',
+      provenanceId: 'prov-rights-1',
+      questionId: 'charging-system-native-rights-01',
+      sourceCount: 1,
+      rightsEvidenceHash: stableRightsEvidenceHash(evidence),
+      rightsEvidence: evidence,
+    });
+
+    expect(first).toMatchObject({
+      actor: 'rights-agent',
+      action: 'rights-review-recorded',
+      state: 'rights_reviewed',
+      metadata: expect.objectContaining({
+        existingHumanRightsReviewsBound: true,
+        newHumanDecision: false,
+        humanApproval: false,
+      }),
+    });
+    expect(backend.state.entries.get('native-rights-run')).toHaveLength(3);
+    expect(backend.state.checkpoints.get('native-rights-run')).toMatchObject({
+      version: 3,
+      state: 'rights_reviewed',
+      action: 'rights-review-recorded',
+      status: 'rights-reviewed',
+    });
+    expect(backend.state.leases.size).toBe(0);
+
+    const duplicate = await runtime.governanceRuntime.recordRightsReview({
+      runId: 'native-rights-run',
+      provenanceId: 'prov-rights-1',
+      questionId: 'charging-system-native-rights-01',
+      sourceCount: 1,
+      rightsEvidenceHash: stableRightsEvidenceHash(evidence),
+      rightsEvidence: evidence,
+    });
+    expect(duplicate.integrityHash).toBe(first.integrityHash);
+    expect(backend.state.entries.get('native-rights-run')).toHaveLength(3);
+  });
+
+  test('native rights review fails closed on evidence drift or wrong state', async () => {
+    const backend = createBackend();
+    const runtime = createProductionAIOrchestrator({
+      env: enabledEnv,
+      workerId: 'rights-reviewer',
+      createClientImpl: () => ({ rpc: backend.rpc }),
+    });
+
+    await runtime.governanceRuntime.initializeDraft({
+      runId: 'native-rights-drift',
+      provenanceId: 'prov-rights-2',
+      questionId: 'charging-system-native-rights-02',
+      createdAt: '2026-10-06T03:00:00.000Z',
+    });
+    await runtime.governanceRuntime.recordEvidenceMapping({
+      runId: 'native-rights-drift',
+      provenanceId: 'prov-rights-2',
+      questionId: 'charging-system-native-rights-02',
+      citationCount: 2,
+    });
+    const originalEvidence = [{ sourceId: 'source-1' }];
+    await runtime.governanceRuntime.recordRightsReview({
+      runId: 'native-rights-drift',
+      provenanceId: 'prov-rights-2',
+      questionId: 'charging-system-native-rights-02',
+      sourceCount: 1,
+      rightsEvidenceHash: stableRightsEvidenceHash(originalEvidence),
+      rightsEvidence: originalEvidence,
+    });
+
+    const changedEvidence = [{ sourceId: 'source-1', reviewedAt: '2026-10-02T00:00:00Z' }];
+    await expect(runtime.governanceRuntime.recordRightsReview({
+      runId: 'native-rights-drift',
+      provenanceId: 'prov-rights-2',
+      questionId: 'charging-system-native-rights-02',
+      sourceCount: 1,
+      rightsEvidenceHash: stableRightsEvidenceHash(changedEvidence),
+      rightsEvidence: changedEvidence,
+    })).rejects.toThrow(/does not match current human-reviewed rights evidence/);
+
+    await runtime.governanceRuntime.initializeDraft({
+      runId: 'native-rights-wrong-state',
+      provenanceId: 'prov-rights-3',
+      questionId: 'charging-system-native-rights-03',
+      createdAt: '2026-10-06T03:00:00.000Z',
+    });
+    await expect(runtime.governanceRuntime.recordRightsReview({
+      runId: 'native-rights-wrong-state',
+      provenanceId: 'prov-rights-3',
+      questionId: 'charging-system-native-rights-03',
+      sourceCount: 1,
+      rightsEvidenceHash: stableRightsEvidenceHash([{ sourceId: 'source-1' }]),
+      rightsEvidence: [{ sourceId: 'source-1' }],
+    })).rejects.toThrow(/requires the evidence_mapped state/);
   });
 
   test('production persistent submission writes start, finish, and recovery checkpoint through Supabase RPC', async () => {

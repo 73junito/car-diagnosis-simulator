@@ -160,6 +160,92 @@ class PersistentGovernanceRuntime {
     });
   }
 
+  async recordRightsReview({
+    runId,
+    actor = 'rights-agent',
+    provenanceId,
+    questionId,
+    sourceCount,
+    rightsEvidenceHash,
+    rightsEvidence,
+  }) {
+    if (
+      !runId ||
+      !provenanceId ||
+      !questionId ||
+      !Number.isInteger(sourceCount) ||
+      sourceCount < 1 ||
+      !/^[0-9a-f]{64}$/.test(rightsEvidenceHash || '') ||
+      !Array.isArray(rightsEvidence) ||
+      rightsEvidence.length !== sourceCount
+    ) {
+      throw new Error('Rights review record is incomplete');
+    }
+
+    const computedRightsEvidenceHash = crypto
+      .createHash('sha256')
+      .update(JSON.stringify(rightsEvidence))
+      .digest('hex');
+    if (computedRightsEvidenceHash !== rightsEvidenceHash) {
+      throw new Error('Rights review evidence hash does not match the supplied evidence');
+    }
+
+    const entries = await this.entries(runId);
+    const existing = entries.find((entry) =>
+      entry.action === 'rights-review-recorded' &&
+      entry.state === 'rights_reviewed' &&
+      entry.metadata?.provenanceId === provenanceId &&
+      entry.metadata?.questionId === questionId
+    );
+    if (existing) {
+      if (
+        existing.metadata?.sourceCount !== sourceCount ||
+        existing.metadata?.rightsEvidenceHash !== rightsEvidenceHash
+      ) {
+        throw new Error('Existing rights review evidence does not match current human-reviewed rights evidence');
+      }
+      return existing;
+    }
+
+    const latest = entries.length ? entries[entries.length - 1] : null;
+    if (!latest) throw new Error('Rights review requires an initialized governed run');
+    if (latest.action !== 'evidence-mapping-recorded' || latest.state !== 'evidence_mapped') {
+      throw new Error('Rights review requires the evidence_mapped state');
+    }
+    if (actor !== 'rights-agent') throw new Error('Rights review actor is not permitted');
+    if (
+      !this.catalog.get(actor) ||
+      !this.catalog.can(actor, 'prepare') ||
+      !this.catalog.provides(actor, 'rights-review')
+    ) {
+      throw new Error('Rights review actor is not governed');
+    }
+
+    const decision = this.stateMachine.canTransition({
+      from: 'evidence_mapped',
+      to: 'rights_reviewed',
+      actor,
+    });
+    if (!decision.allowed) throw new Error('Governed transition denied: ' + decision.reason);
+
+    return this.appendAndCheckpoint({
+      runId,
+      actor,
+      action: 'rights-review-recorded',
+      state: 'rights_reviewed',
+      metadata: {
+        provenanceId,
+        questionId,
+        sourceCount,
+        rightsEvidenceHash,
+        rightsEvidence,
+        existingHumanRightsReviewsBound: true,
+        newHumanDecision: false,
+        humanApproval: false,
+      },
+    });
+  }
+
   async recordStart({ runId, agentId, capability, from, to, requestId }) {
     const existing = await this.findByRequest(runId, 'step-started', requestId);
     if (existing) return existing;
