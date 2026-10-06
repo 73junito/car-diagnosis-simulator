@@ -1,0 +1,71 @@
+name: Provision production technical reviewer
+
+on:
+  workflow_dispatch:
+    inputs:
+      independence_attested:
+        description: I confirm this reviewer is independent of the content-generation decision being reviewed
+        required: true
+        default: false
+        type: boolean
+      qualification_attested:
+        description: I confirm this reviewer is qualified to perform automotive technical review
+        required: true
+        default: false
+        type: boolean
+      authorization_attested:
+        description: I authorize creating this production technical-reviewer identity
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-technical-reviewer-provisioning
+  cancel-in-progress: false
+
+jobs:
+  provision:
+    name: Invite and provision production technical reviewer
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      TECHNICAL_REVIEWER_EMAIL: ${{ secrets.TECHNICAL_REVIEWER_EMAIL }}
+      REVIEWER_INDEPENDENCE_ATTESTED: ${{ inputs.independence_attested }}
+      REVIEWER_QUALIFICATION_ATTESTED: ${{ inputs.qualification_attested }}
+      REVIEWER_AUTHORIZATION_ATTESTED: ${{ inputs.authorization_attested }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate protected reviewer email
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$TECHNICAL_REVIEWER_EMAIL" ]]; then
+            echo "Production environment secret TECHNICAL_REVIEWER_EMAIL is not configured."
+            exit 1
+          fi
+
+      - name: Invite and provision reviewer
+        run: node scripts/provision-technical-reviewer.js
+
+      - name: Governance notice
+        run: |
+          echo "This workflow creates only a technical-reviewer identity."
+          echo "It does not record a technical-review decision, instructional review, content approval, assessment eligibility, scoring, release, or delivery authority."
