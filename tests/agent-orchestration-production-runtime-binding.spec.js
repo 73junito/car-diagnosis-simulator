@@ -1,6 +1,7 @@
 const { hashEntry } = require('../src/ai/governance/integrity-chain');
 const HumanGateController = require('../src/ai/runtime/human-gate-controller');
 const { stableRightsEvidenceHash } = require('../src/ai/runtime/native-rights-review');
+const { stableTechnicalReviewEvidenceHash } = require('../src/ai/runtime/native-technical-review');
 const {
   createProductionAIOrchestrator,
 } = require('../src/ai/runtime/production-ai-runtime');
@@ -339,6 +340,119 @@ describe('Phase 9B production governed runtime binding', () => {
       rightsEvidenceHash: stableRightsEvidenceHash([{ sourceId: 'source-1' }]),
       rightsEvidence: [{ sourceId: 'source-1' }],
     })).rejects.toThrow(/requires the evidence_mapped state/);
+  });
+
+  test('native technical review binds an exact human pass decision at technically_reviewed', async () => {
+    const backend = createBackend();
+    const runtime = createProductionAIOrchestrator({
+      env: enabledEnv,
+      workerId: 'technical-reviewer',
+      createClientImpl: () => ({ rpc: backend.rpc }),
+    });
+
+    await runtime.governanceRuntime.initializeDraft({
+      runId: 'native-technical-run',
+      provenanceId: 'prov-tech-1',
+      questionId: 'charging-system-native-tech-01',
+      createdAt: '2026-10-06T18:00:00.000Z',
+    });
+    await runtime.governanceRuntime.recordEvidenceMapping({
+      runId: 'native-technical-run',
+      provenanceId: 'prov-tech-1',
+      questionId: 'charging-system-native-tech-01',
+      citationCount: 2,
+    });
+    const rightsEvidence = [{ sourceId: 'source-1' }];
+    await runtime.governanceRuntime.recordRightsReview({
+      runId: 'native-technical-run',
+      provenanceId: 'prov-tech-1',
+      questionId: 'charging-system-native-tech-01',
+      sourceCount: 1,
+      rightsEvidenceHash: stableRightsEvidenceHash(rightsEvidence),
+      rightsEvidence,
+    });
+
+    const reviewEvidence = {
+      provenanceId: 'prov-tech-1',
+      questionId: 'charging-system-native-tech-01',
+      payloadSha256: 'a'.repeat(64),
+      reviewerId: '22222222-2222-2222-2222-222222222222',
+      reviewedAt: '2026-10-06T18:30:00.000Z',
+      decision: 'pass',
+    };
+    const first = await runtime.governanceRuntime.recordTechnicalReview({
+      runId: 'native-technical-run',
+      provenanceId: 'prov-tech-1',
+      questionId: 'charging-system-native-tech-01',
+      reviewEvidenceHash: stableTechnicalReviewEvidenceHash(reviewEvidence),
+      reviewEvidence,
+    });
+
+    expect(first).toMatchObject({
+      actor: 'technical-review-agent',
+      action: 'technical-review-recorded',
+      state: 'technically_reviewed',
+      metadata: expect.objectContaining({
+        humanTechnicalDecisionBound: true,
+        agentSynthesizedDecision: false,
+        humanApproval: false,
+      }),
+    });
+    expect(backend.state.entries.get('native-technical-run')).toHaveLength(4);
+    expect(backend.state.checkpoints.get('native-technical-run')).toMatchObject({
+      version: 4,
+      state: 'technically_reviewed',
+      action: 'technical-review-recorded',
+      status: 'technically-reviewed',
+    });
+    expect(backend.state.leases.size).toBe(0);
+
+    const duplicate = await runtime.governanceRuntime.recordTechnicalReview({
+      runId: 'native-technical-run',
+      provenanceId: 'prov-tech-1',
+      questionId: 'charging-system-native-tech-01',
+      reviewEvidenceHash: stableTechnicalReviewEvidenceHash(reviewEvidence),
+      reviewEvidence,
+    });
+    expect(duplicate.integrityHash).toBe(first.integrityHash);
+    expect(backend.state.entries.get('native-technical-run')).toHaveLength(4);
+  });
+
+  test('native technical review fails closed on wrong state, non-pass, or evidence drift', async () => {
+    const backend = createBackend();
+    const runtime = createProductionAIOrchestrator({
+      env: enabledEnv,
+      workerId: 'technical-reviewer',
+      createClientImpl: () => ({ rpc: backend.rpc }),
+    });
+
+    await runtime.governanceRuntime.initializeDraft({
+      runId: 'native-tech-wrong-state',
+      provenanceId: 'prov-tech-2',
+      questionId: 'charging-system-native-tech-02',
+      createdAt: '2026-10-06T18:00:00.000Z',
+    });
+    const passEvidence = {
+      payloadSha256: 'b'.repeat(64),
+      reviewerId: '22222222-2222-2222-2222-222222222222',
+      reviewedAt: '2026-10-06T18:30:00.000Z',
+      decision: 'pass',
+    };
+    await expect(runtime.governanceRuntime.recordTechnicalReview({
+      runId: 'native-tech-wrong-state',
+      provenanceId: 'prov-tech-2',
+      questionId: 'charging-system-native-tech-02',
+      reviewEvidenceHash: stableTechnicalReviewEvidenceHash(passEvidence),
+      reviewEvidence: passEvidence,
+    })).rejects.toThrow(/requires the rights_reviewed state/);
+
+    await expect(runtime.governanceRuntime.recordTechnicalReview({
+      runId: 'native-tech-wrong-state',
+      provenanceId: 'prov-tech-2',
+      questionId: 'charging-system-native-tech-02',
+      reviewEvidenceHash: stableTechnicalReviewEvidenceHash({ ...passEvidence, decision: 'revise' }),
+      reviewEvidence: { ...passEvidence, decision: 'revise' },
+    })).rejects.toThrow(/record is incomplete/);
   });
 
   test('production persistent submission writes start, finish, and recovery checkpoint through Supabase RPC', async () => {

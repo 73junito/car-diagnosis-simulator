@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "agent-orchestration-native-technical-review",
+  "phase": "phase-10e-human-technical-review-binding",
+  "status": "prepared-not-deployed",
+  "governed_transition": {
+    "from": "rights_reviewed",
+    "to": "technically_reviewed",
+    "actor": "technical-review-agent",
+    "ledger_action": "technical-review-recorded",
+    "requires_human_decision": "pass"
+  },
+  "human_review_contract": {
+    "decisions": ["pass", "revise", "reject"],
+    "checklist_version": "charging-system-technical-review-v1",
+    "criteria": [
+      "keyed answer is technically correct within approved evidence",
+      "explanation adds no claims beyond approved evidence",
+      "terminology is accurate and unambiguous",
+      "distractors do not create a second defensible answer",
+      "item is not materially duplicative"
+    ],
+    "exact_payload_sha_required": true,
+    "eligible_production_roles": ["developer_reviewer", "technical_reviewer"],
+    "pass_populates_canonical_reviewer_fields": true,
+    "revise_or_reject_advances_state": false
+  },
+  "decision_semantics": {
+    "human_decision_captured": true,
+    "agent_synthesized_decision": false,
+    "final_content_approval": false,
+    "description": "A named human reviewer evaluates the exact private payload. The technical-review-agent only verifies and binds a human pass decision to the governed ledger."
+  },
+  "storage_boundary": {
+    "native_private_payload_write": false,
+    "question_citations_write": false,
+    "question_provenance_technical_review_write": true,
+    "citation_validations_write": false,
+    "public_scenario_questions_write": false,
+    "assessment_eligibility_write": false,
+    "orchestration_ledger_write_on_pass": true
+  },
+  "authority_invariants": [
+    "Provenance status remains draft.",
+    "No instructional review is synthesized.",
+    "No citation validation is synthesized.",
+    "No final content approval is synthesized.",
+    "No public scenario question is created.",
+    "No assessment eligibility, scoring, delivery, API, or release authority is created.",
+    "Promotion into scenario_questions remains a later explicit governed phase."
+  ],
+  "recovery": {
+    "provenance_pass_persisted_but_ledger_missing": "safe; rerun with the same exact review evidence binds the missing governed transition",
+    "ledger_present_same_review_evidence": "idempotent success",
+    "ledger_present_review_evidence_drift": "fail closed",
+    "nonpass_same_payload_then_pass": "fail closed; revise or replace the content before a new pass review"
+  },
+  "production_precondition": "A real production profile with role developer_reviewer or technical_reviewer must exist. The current production role inventory contains only teacher, so no Phase 10E production transition is authorized yet."
+}
