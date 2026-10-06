@@ -93,6 +93,9 @@ describe('Phase 10E native human technical review', () => {
     expect(workflow).not.toContain('OLLAMA_API_KEY');
 
     expect(script).toContain(".from('profiles')");
+    expect(script).toContain('client.auth.admin.getUserById(reviewerId)');
+    expect(script).toContain('reviewerAuth.user.email_confirmed_at');
+    expect(script).toContain("reviewerAuth.user.app_metadata?.governance_scope === 'native-question-technical-review'");
     expect(script).toContain("reviewer.role === 'developer_reviewer' || reviewer.role === 'technical_reviewer'");
     expect(script).toContain("decision !== 'pass'");
     expect(script).toContain('recordTechnicalReview');
