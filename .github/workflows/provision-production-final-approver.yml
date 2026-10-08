@@ -1,0 +1,82 @@
+name: Provision production final approver
+
+on:
+  workflow_dispatch:
+    inputs:
+      independence_attested:
+        description: I confirm this final approver is independent of both the technical reviewer and instructional reviewer
+        required: true
+        default: false
+        type: boolean
+      qualification_attested:
+        description: I confirm this final approver is qualified to perform final content approval
+        required: true
+        default: false
+        type: boolean
+      authorization_attested:
+        description: I authorize creating this production final-approver identity
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-final-approver-provisioning
+  cancel-in-progress: false
+
+jobs:
+  provision:
+    name: Invite and provision production final approver
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      FINAL_APPROVER_EMAIL: ${{ secrets.FINAL_APPROVER_EMAIL }}
+      REVIEWER_INDEPENDENCE_ATTESTED: ${{ inputs.independence_attested }}
+      REVIEWER_QUALIFICATION_ATTESTED: ${{ inputs.qualification_attested }}
+      REVIEWER_AUTHORIZATION_ATTESTED: ${{ inputs.authorization_attested }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate protected reviewer email
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$FINAL_APPROVER_EMAIL" ]]; then
+            echo "Production environment secret FINAL_APPROVER_EMAIL is not configured."
+            exit 1
+          fi
+
+      - name: Invite and provision reviewer
+        env:
+          FINAL_APPROVER_INVITE_ARTIFACT_PATH: ${{ runner.temp }}/final-approver-invite.txt
+        run: node scripts/provision-final-approver.js
+
+      - name: Upload secure invite-link fallback
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: final-approver-invite-link
+          path: ${{ runner.temp }}/final-approver-invite.txt
+          if-no-files-found: ignore
+          retention-days: 1
+
+      - name: Governance notice
+        run: |
+          echo "This workflow creates only a final-approver identity."
+          echo "It does not record a technical review, instructional review, final content decision, public question, assessment eligibility, scoring, release, or delivery authority."
