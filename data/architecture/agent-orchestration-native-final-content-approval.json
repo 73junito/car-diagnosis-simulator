@@ -1,0 +1,72 @@
+{
+  "phase": "10H",
+  "title": "Native final content approval",
+  "status": "draft-non-dispatchable",
+  "control_commit": "34432bb1add96a66e772e081f8cba1143a67a367",
+  "purpose": "Non-production, fail-closed control plane for the human final content approval transition (instructionally_reviewed -> final_content_approved). Governance decisions are prepared, never guessed; no production state is written.",
+  "state_transition": {
+    "from": "instructionally_reviewed",
+    "to": "final_content_approved",
+    "actor": "human",
+    "requires_explicit_human_approval": true
+  },
+  "governance_constants": {
+    "FINAL_APPROVER_REQUIRED_ROLE": "UNRESOLVED_GOVERNANCE_DECISION",
+    "FINAL_APPROVER_REQUIRED_SCOPE": "UNRESOLVED_GOVERNANCE_DECISION",
+    "independencePolicy": {
+      "independentFromTechnicalReviewer": "UNRESOLVED_GOVERNANCE_DECISION",
+      "independentFromInstructionalReviewer": "UNRESOLVED_GOVERNANCE_DECISION"
+    },
+    "checklistVersion": "UNRESOLVED_GOVERNANCE_DECISION",
+    "checklistCriteria": "UNRESOLVED_GOVERNANCE_DECISION"
+  },
+  "unresolved_governance_decisions": [
+    "FINAL_APPROVER_REQUIRED_ROLE",
+    "FINAL_APPROVER_REQUIRED_SCOPE",
+    "independencePolicy.independentFromTechnicalReviewer",
+    "independencePolicy.independentFromInstructionalReviewer",
+    "checklistVersion",
+    "checklistCriteria"
+  ],
+  "referenced_10G_evidence": {
+    "governed_run_id": "native-draft:37418457881:charging-system",
+    "github_actions_run_id": 37703982461,
+    "workflow_run_conclusion": "success",
+    "state": "instructionally_reviewed",
+    "checkpoint_version": 6,
+    "status": "instructionally-reviewed",
+    "question_id": "charging-system-ai-draft-e9ac4b22b122",
+    "provenance_id": "c3b07430-db49-4216-9878-c3efb4ab0a54",
+    "payload_sha256": "1b833a88a6fc8a0a79feaaa3f8848ac4b8cb3573f158effa0a6593bebf7cf10e",
+    "citation_set_hash": "47bf8234e313be166026771ccf5cd6ab59b62f917422a51ce347eeaa6bb88a32",
+    "citation_validation_evidence_hash": "01a5a2a2f34fc47ca16417f8bfca43ff659aacaf8f0fa1b5dc930a3269617a3c",
+    "human_decision": "pass",
+    "human_instructional_decision_captured": true,
+    "agent_synthesized_decision": false,
+    "human_approval": false
+  },
+  "invariants": [
+    "Final content approval requires an explicit human decision; agents may prepare but never synthesize it.",
+    "Unresolved governance constants fail closed; no guessed role, scope, independence rule, or checklist is ever accepted.",
+    "Phase 10H performs no production writes: no question_provenance update, no orchestration ledger append, no Supabase mutation.",
+    "instructionally_reviewed is the only permitted source state for final content approval.",
+    "Final content approval does not create public scenario question rows, assessment eligibility, scoring, delivery, or release authority.",
+    "Existing assessment and release authority is unchanged by Phase 10H."
+  ],
+  "storage_boundary": {
+    "question_provenance_write": false,
+    "public_scenario_questions_write": false,
+    "assessment_eligibility_write": false,
+    "orchestration_ledger_write": false,
+    "supabase_write": false
+  },
+  "containment_after_10h": {
+    "public_scenario_question_rows": 0,
+    "assessment_eligibility_rows": 0,
+    "released_for_assessment": false,
+    "scored_delivery_authority": false,
+    "delivery_authority": false,
+    "release_authority": false,
+    "claims_02_and_12_blocked": true
+  }
+}

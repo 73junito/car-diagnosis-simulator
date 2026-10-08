@@ -1,0 +1,54 @@
+name: record-native-question-final-approval
+
+on:
+  workflow_dispatch:
+    inputs:
+      runId:
+        description: "Phase 10G governed run ID"
+        required: true
+      decision:
+        description: "Explicit human final content approval decision"
+        required: true
+      reviewer_identity:
+        description: "Final approver identity"
+        required: true
+      reviewed_at:
+        description: "Final approval timestamp"
+        required: true
+      checklist_completed:
+        description: "Explicit human checklist completion"
+        required: true
+      comments:
+        description: "Optional final approval comments"
+        required: false
+      approval_evidence:
+        description: "Final approval evidence reference"
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+
+# Policy:
+# DO NOT mark this workflow dispatchable until:
+#   FINAL_APPROVER_REQUIRED_ROLE is approved
+#   FINAL_APPROVER_REQUIRED_SCOPE is approved
+#   independentFromTechnicalReviewer is approved
+#   independentFromInstructionalReviewer is approved
+#   checklistVersion and checklistCriteria are approved
+# This workflow intentionally fails closed and records nothing in production.
+
+jobs:
+  record-final-content-approval:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Require governance decisions before dispatch
+        run: |
+          echo "record-native-question-final-approval is non-dispatchable until the Phase 10H governance decisions are approved."
+          exit 1
+
+      - name: Fail closed validation
+        run: |
+          echo "Phase 10H workflow requires approved role, scope, independence rule, and checklist contract."
+          exit 1

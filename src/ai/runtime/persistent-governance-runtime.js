@@ -2,6 +2,8 @@
 
 const crypto = require('crypto');
 const foundation = require('../../../data/architecture/agent-orchestration-foundation.json');
+const finalApprovalContract = require('../../../data/architecture/agent-orchestration-native-final-content-approval.json');
+const { assertGovernanceConstantsResolved } = require('./native-final-content-approval');
 const WorkflowStateMachine = require('../governance/workflow-state-machine');
 const AgentGovernanceCatalog = require('../governance/agent-governance-catalog');
 
@@ -520,6 +522,103 @@ class PersistentGovernanceRuntime {
         humanInstructionalDecisionBound: true,
         agentSynthesizedDecision: false,
         humanApproval: false,
+      },
+    });
+  }
+
+  async recordFinalContentApproval({
+    runId,
+    actor = 'human',
+    provenanceId,
+    questionId,
+    approvalEvidenceHash,
+    approvalEvidence,
+    contract = finalApprovalContract,
+  }) {
+    assertGovernanceConstantsResolved(contract);
+
+    if (
+      !runId ||
+      !provenanceId ||
+      !questionId ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidenceHash || '') ||
+      !approvalEvidence ||
+      approvalEvidence.decision !== 'approve' ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.payloadSha256 || '') ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.citationSetHash || '') ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.citationValidationEvidenceHash || '')
+    ) {
+      throw new Error('Final content approval record is incomplete');
+    }
+
+    const computedHash = crypto.createHash('sha256')
+      .update(JSON.stringify(approvalEvidence))
+      .digest('hex');
+    if (computedHash !== approvalEvidenceHash) {
+      throw new Error('Final content approval evidence hash does not match supplied evidence');
+    }
+    if (
+      approvalEvidence.reviewerId === approvalEvidence.technicalReviewerId ||
+      approvalEvidence.reviewerId === approvalEvidence.instructionalReviewerId
+    ) {
+      throw new Error('Final content approver must be independent from the technical and instructional reviewers');
+    }
+
+    const entries = await this.entries(runId);
+    const existing = entries.find((entry) =>
+      entry.action === 'final-content-approval-recorded' &&
+      entry.state === 'final_content_approved' &&
+      entry.metadata?.provenanceId === provenanceId &&
+      entry.metadata?.questionId === questionId
+    );
+    if (existing) {
+      if (existing.metadata?.approvalEvidenceHash !== approvalEvidenceHash) {
+        throw new Error('Existing final content approval evidence does not match the current human decision');
+      }
+      return existing;
+    }
+
+    const latest = entries.length ? entries[entries.length - 1] : null;
+    if (!latest || latest.action !== 'instructional-review-recorded' || latest.state !== 'instructionally_reviewed') {
+      throw new Error('Final content approval requires the instructionally_reviewed state');
+    }
+    if (
+      latest.metadata?.provenanceId !== provenanceId ||
+      latest.metadata?.questionId !== questionId ||
+      latest.metadata?.payloadSha256 !== approvalEvidence.payloadSha256 ||
+      latest.metadata?.citationSetHash !== approvalEvidence.citationSetHash ||
+      latest.metadata?.citationValidationEvidenceHash !== approvalEvidence.citationValidationEvidenceHash
+    ) {
+      throw new Error('Final content approval evidence is not bound to the current instructional review');
+    }
+    if (actor !== 'human') throw new Error('Final content approval actor must be the human approver');
+
+    const decision = this.stateMachine.canTransition({
+      from: 'instructionally_reviewed',
+      to: 'final_content_approved',
+      actor,
+      explicitHumanApproval: true,
+    });
+    if (!decision.allowed) throw new Error('Governed transition denied: ' + decision.reason);
+
+    return this.appendAndCheckpoint({
+      runId,
+      actor,
+      action: 'final-content-approval-recorded',
+      state: 'final_content_approved',
+      metadata: {
+        provenanceId,
+        questionId,
+        approvalEvidenceHash,
+        approverIdentity: approvalEvidence.reviewerId,
+        reviewedAt: approvalEvidence.reviewedAt,
+        checklistVersion: approvalEvidence.checklistVersion,
+        payloadSha256: approvalEvidence.payloadSha256,
+        citationSetHash: approvalEvidence.citationSetHash,
+        citationValidationEvidenceHash: approvalEvidence.citationValidationEvidenceHash,
+        humanFinalApprovalBound: true,
+        agentSynthesizedDecision: false,
+        humanApproval: true,
       },
     });
   }
