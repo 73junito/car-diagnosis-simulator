@@ -12,6 +12,8 @@ const {
   assertGovernanceConstantsResolved,
   assertFinalContentApprovalScaffoldGate,
   assertApprovedIndependencePolicy,
+  assertFinalContentApprovalEvidenceContract,
+  assertInstructionalReviewEvidenceBinding,
 } = require('../src/ai/runtime/native-final-content-approval');
 
 const contractPath = path.join(__dirname, '..', 'data', 'architecture', 'agent-orchestration-native-final-content-approval.json');
@@ -72,10 +74,14 @@ function buildApprovalEvidence(overrides = {}) {
     reviewerId: '2f14c3d5-6f9b-4f69-8f9f-3f6a9a1b2c3d',
     technicalReviewerId: '5a9e0d2c-1b3f-4c7e-9a1d-7e2b4c6f8a01',
     instructionalReviewerId: '9c3b7e1f-2a4d-4b8c-8e6a-1f5d9c7b3a22',
+    approverRole: 'content_approver',
+    approverScope: 'native-question-final-approval',
     reviewedAt: '2026-10-07T23:59:00Z',
     decision: 'approve',
     checklistVersion: 'native-final-content-approval-v1',
     checklistCompleted: true,
+    checklistCriteria: ['human-final-approval-checklist-criterion'],
+    instructionalReviewEvidenceHash: PHASE10G_REVIEW_EVIDENCE_HASH,
     submittedBy: 'phase10h-test',
     ...overrides,
   };
@@ -84,6 +90,14 @@ function buildApprovalEvidence(overrides = {}) {
 function hashEvidence(evidence) {
   return crypto.createHash('sha256').update(JSON.stringify(evidence)).digest('hex');
 }
+
+// Synthetic-but-consistent stand-in for the Phase 10G reviewEvidenceHash
+// written by the instructional-review-recorded ledger entry; the pairing
+// between evidence and ledger metadata is what the binding enforces.
+const PHASE10G_REVIEW_EVIDENCE_HASH = crypto
+  .createHash('sha256')
+  .update('phase10g-instructional-review-evidence')
+  .digest('hex');
 
 describe('Phase 10H native final content approval contract', () => {
   const contract = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
@@ -212,10 +226,6 @@ describe('Phase 10H runtime final content approval control plane', () => {
     const reads = [];
     const evidence = buildApprovalEvidence();
     const evidenceHash = hashEvidence(evidence);
-    const reviewEvidenceHash = crypto
-      .createHash('sha256')
-      .update('phase10g-instructional-review-evidence')
-      .digest('hex');
     // Fully valid prior state: the latest ledger entry is the Phase 10G
     // instructional review bound to the exact approval evidence below.
     const priorEntry = {
@@ -226,7 +236,7 @@ describe('Phase 10H runtime final content approval control plane', () => {
       metadata: {
         provenanceId: evidence.provenanceId,
         questionId: evidence.questionId,
-        reviewEvidenceHash,
+        reviewEvidenceHash: PHASE10G_REVIEW_EVIDENCE_HASH,
         reviewerIdentity: evidence.instructionalReviewerId,
         technicalReviewerIdentity: evidence.technicalReviewerId,
         reviewedAt: evidence.reviewedAt,
@@ -254,6 +264,120 @@ describe('Phase 10H runtime final content approval control plane', () => {
 
     expect(reads).toHaveLength(0);
     expect(appends).toHaveLength(0);
+  });
+
+  test('evidence contract enforces the resolved approver role and scope from the repository contract', () => {
+    const resolved = resolvedContractOverride();
+    const evidence = buildApprovalEvidence();
+    expect(() => assertFinalContentApprovalEvidenceContract(evidence, resolved)).not.toThrow();
+    expect(() =>
+      assertFinalContentApprovalEvidenceContract(
+        { ...evidence, approverRole: 'technical_reviewer' },
+        resolved
+      )
+    ).toThrow(/FINAL_APPROVER_REQUIRED_ROLE/);
+    expect(() =>
+      assertFinalContentApprovalEvidenceContract({ ...evidence, approverRole: undefined }, resolved)
+    ).toThrow(/carry the approver role/);
+    expect(() =>
+      assertFinalContentApprovalEvidenceContract(
+        { ...evidence, approverScope: 'technical-review' },
+        resolved
+      )
+    ).toThrow(/FINAL_APPROVER_REQUIRED_SCOPE/);
+  });
+
+  test('evidence contract enforces checklist completion, exact version, and complete approved criteria', () => {
+    const resolved = resolvedContractOverride();
+    const evidence = buildApprovalEvidence();
+    expect(() => assertFinalContentApprovalEvidenceContract(evidence, resolved)).not.toThrow();
+    expect(() =>
+      assertFinalContentApprovalEvidenceContract({ ...evidence, checklistCompleted: false }, resolved)
+    ).toThrow(/checklist must be completed/);
+    expect(() =>
+      assertFinalContentApprovalEvidenceContract(
+        { ...evidence, checklistVersion: 'native-final-content-approval-v0' },
+        resolved
+      )
+    ).toThrow(/checklist version/);
+    expect(() =>
+      assertFinalContentApprovalEvidenceContract({ ...evidence, checklistCriteria: [] }, resolved)
+    ).toThrow(/complete approved checklist criteria/);
+    expect(() =>
+      assertFinalContentApprovalEvidenceContract(
+        { ...evidence, checklistCriteria: ['some-other-criterion'] },
+        resolved
+      )
+    ).toThrow(/complete approved checklist criteria/);
+    expect(() =>
+      assertFinalContentApprovalEvidenceContract(
+        { ...evidence, instructionalReviewEvidenceHash: 'not-a-64-hex-hash' },
+        resolved
+      )
+    ).toThrow(/64-hex Phase 10G/);
+  });
+
+  test('final approval evidence binds the exact Phase 10G instructional review evidence hash', () => {
+    const evidence = buildApprovalEvidence();
+    const latestEntry = {
+      action: 'instructional-review-recorded',
+      state: 'instructionally_reviewed',
+      metadata: {
+        provenanceId: evidence.provenanceId,
+        questionId: evidence.questionId,
+        payloadSha256: evidence.payloadSha256,
+        citationSetHash: evidence.citationSetHash,
+        citationValidationEvidenceHash: evidence.citationValidationEvidenceHash,
+        reviewEvidenceHash: PHASE10G_REVIEW_EVIDENCE_HASH,
+      },
+    };
+    expect(() =>
+      assertInstructionalReviewEvidenceBinding({
+        provenanceId: evidence.provenanceId,
+        questionId: evidence.questionId,
+        approvalEvidence: evidence,
+        latestEntry,
+      })
+    ).not.toThrow();
+
+    expect(() =>
+      assertInstructionalReviewEvidenceBinding({
+        provenanceId: evidence.provenanceId,
+        questionId: evidence.questionId,
+        approvalEvidence: { ...evidence, instructionalReviewEvidenceHash: 'f'.repeat(64) },
+        latestEntry,
+      })
+    ).toThrow(/does not match the Phase 10G instructional review evidence/);
+
+    expect(() =>
+      assertInstructionalReviewEvidenceBinding({
+        provenanceId: evidence.provenanceId,
+        questionId: evidence.questionId,
+        approvalEvidence: { ...evidence, instructionalReviewEvidenceHash: undefined },
+        latestEntry,
+      })
+    ).toThrow(/does not match the Phase 10G instructional review evidence/);
+
+    expect(() =>
+      assertInstructionalReviewEvidenceBinding({
+        provenanceId: evidence.provenanceId,
+        questionId: evidence.questionId,
+        approvalEvidence: evidence,
+        latestEntry: {
+          ...latestEntry,
+          metadata: { ...latestEntry.metadata, reviewEvidenceHash: undefined },
+        },
+      })
+    ).toThrow(/must carry the Phase 10G review evidence hash/);
+
+    expect(() =>
+      assertInstructionalReviewEvidenceBinding({
+        provenanceId: evidence.provenanceId,
+        questionId: evidence.questionId,
+        approvalEvidence: evidence,
+        latestEntry: null,
+      })
+    ).toThrow(/requires the instructionally_reviewed state/);
   });
 });
 

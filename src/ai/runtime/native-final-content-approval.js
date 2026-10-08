@@ -93,6 +93,85 @@ function assertApprovedIndependencePolicy({
   }
 }
 
+function assertFinalContentApprovalEvidenceContract(approvalEvidence, contract) {
+  const constants = contract && contract.governance_constants;
+  requireCondition(
+    approvalEvidence && typeof approvalEvidence === 'object',
+    'Final content approval evidence is required.'
+  );
+  requireCondition(
+    typeof approvalEvidence.approverRole === 'string' && approvalEvidence.approverRole.length > 0,
+    'Final content approval evidence must carry the approver role.'
+  );
+  requireCondition(
+    approvalEvidence.approverRole === constants.FINAL_APPROVER_REQUIRED_ROLE,
+    'Final content approval approver role does not match the approved FINAL_APPROVER_REQUIRED_ROLE.'
+  );
+  requireCondition(
+    typeof approvalEvidence.approverScope === 'string' && approvalEvidence.approverScope.length > 0,
+    'Final content approval evidence must carry the approver scope.'
+  );
+  requireCondition(
+    approvalEvidence.approverScope === constants.FINAL_APPROVER_REQUIRED_SCOPE,
+    'Final content approval approver scope does not match the approved FINAL_APPROVER_REQUIRED_SCOPE.'
+  );
+  requireCondition(
+    approvalEvidence.checklistCompleted === true,
+    'The human final approval checklist must be completed.'
+  );
+  requireCondition(
+    approvalEvidence.checklistVersion === constants.checklistVersion,
+    'Final content approval checklist version does not match the approved checklist version.'
+  );
+  requireCondition(
+    Array.isArray(constants.checklistCriteria) && constants.checklistCriteria.length > 0,
+    'Approved checklist criteria must be a non-empty list.'
+  );
+  requireCondition(
+    Array.isArray(approvalEvidence.checklistCriteria) &&
+      approvalEvidence.checklistCriteria.length === constants.checklistCriteria.length &&
+      approvalEvidence.checklistCriteria.every(
+        (criterion, index) => criterion === constants.checklistCriteria[index]
+      ),
+    'Final content approval evidence does not carry the complete approved checklist criteria.'
+  );
+  requireCondition(
+    /^[0-9a-f]{64}$/.test(approvalEvidence.instructionalReviewEvidenceHash || ''),
+    'Final content approval evidence must carry the exact 64-hex Phase 10G instructional review evidence hash.'
+  );
+}
+
+function assertInstructionalReviewEvidenceBinding({
+  provenanceId,
+  questionId,
+  approvalEvidence,
+  latestEntry,
+} = {}) {
+  requireCondition(
+    latestEntry &&
+      latestEntry.action === 'instructional-review-recorded' &&
+      latestEntry.state === 'instructionally_reviewed',
+    'Final content approval requires the instructionally_reviewed state'
+  );
+  const metadata = latestEntry.metadata || {};
+  requireCondition(
+    metadata.provenanceId === provenanceId &&
+      metadata.questionId === questionId &&
+      metadata.payloadSha256 === approvalEvidence.payloadSha256 &&
+      metadata.citationSetHash === approvalEvidence.citationSetHash &&
+      metadata.citationValidationEvidenceHash === approvalEvidence.citationValidationEvidenceHash,
+    'Final content approval evidence is not bound to the current instructional review'
+  );
+  requireCondition(
+    typeof metadata.reviewEvidenceHash === 'string' && metadata.reviewEvidenceHash.length > 0,
+    'The instructional review record must carry the Phase 10G review evidence hash.'
+  );
+  requireCondition(
+    approvalEvidence.instructionalReviewEvidenceHash === metadata.reviewEvidenceHash,
+    'Final content approval instructionalReviewEvidenceHash does not match the Phase 10G instructional review evidence.'
+  );
+}
+
 function assertFinalContentApprovalContainment({
   scenarioQuestionCount,
   assessmentEligibilityCount,
@@ -130,5 +209,7 @@ module.exports = {
   assertGovernanceConstantsResolved,
   assertFinalContentApprovalScaffoldGate,
   assertApprovedIndependencePolicy,
+  assertFinalContentApprovalEvidenceContract,
+  assertInstructionalReviewEvidenceBinding,
   assertFinalContentApprovalContainment,
 };

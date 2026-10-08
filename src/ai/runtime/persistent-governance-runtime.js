@@ -6,6 +6,8 @@ const finalApprovalContract = require('../../../data/architecture/agent-orchestr
 const {
   assertFinalContentApprovalScaffoldGate,
   assertApprovedIndependencePolicy,
+  assertFinalContentApprovalEvidenceContract,
+  assertInstructionalReviewEvidenceBinding,
 } = require('./native-final-content-approval');
 const WorkflowStateMachine = require('../governance/workflow-state-machine');
 const AgentGovernanceCatalog = require('../governance/agent-governance-catalog');
@@ -551,7 +553,8 @@ class PersistentGovernanceRuntime {
       approvalEvidence.decision !== 'approve' ||
       !/^[0-9a-f]{64}$/.test(approvalEvidence.payloadSha256 || '') ||
       !/^[0-9a-f]{64}$/.test(approvalEvidence.citationSetHash || '') ||
-      !/^[0-9a-f]{64}$/.test(approvalEvidence.citationValidationEvidenceHash || '')
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.citationValidationEvidenceHash || '') ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.instructionalReviewEvidenceHash || '')
     ) {
       throw new Error('Final content approval record is incomplete');
     }
@@ -568,6 +571,10 @@ class PersistentGovernanceRuntime {
       technicalReviewerId: approvalEvidence.technicalReviewerId,
       instructionalReviewerId: approvalEvidence.instructionalReviewerId,
     });
+    // Pure evidence validation against the repository contract's approved
+    // role, scope, and checklist; runs before any ledger read. The actual
+    // Supabase Auth/profile verification is deferred to the activation PR.
+    assertFinalContentApprovalEvidenceContract(approvalEvidence, finalApprovalContract);
 
     const entries = await this.entries(runId);
     const existing = entries.find((entry) =>
@@ -584,18 +591,12 @@ class PersistentGovernanceRuntime {
     }
 
     const latest = entries.length ? entries[entries.length - 1] : null;
-    if (!latest || latest.action !== 'instructional-review-recorded' || latest.state !== 'instructionally_reviewed') {
-      throw new Error('Final content approval requires the instructionally_reviewed state');
-    }
-    if (
-      latest.metadata?.provenanceId !== provenanceId ||
-      latest.metadata?.questionId !== questionId ||
-      latest.metadata?.payloadSha256 !== approvalEvidence.payloadSha256 ||
-      latest.metadata?.citationSetHash !== approvalEvidence.citationSetHash ||
-      latest.metadata?.citationValidationEvidenceHash !== approvalEvidence.citationValidationEvidenceHash
-    ) {
-      throw new Error('Final content approval evidence is not bound to the current instructional review');
-    }
+    assertInstructionalReviewEvidenceBinding({
+      provenanceId,
+      questionId,
+      approvalEvidence,
+      latestEntry: latest,
+    });
     if (actor !== 'human') throw new Error('Final content approval actor must be the human approver');
 
     const decision = this.stateMachine.canTransition({
@@ -621,6 +622,7 @@ class PersistentGovernanceRuntime {
         payloadSha256: approvalEvidence.payloadSha256,
         citationSetHash: approvalEvidence.citationSetHash,
         citationValidationEvidenceHash: approvalEvidence.citationValidationEvidenceHash,
+        instructionalReviewEvidenceHash: approvalEvidence.instructionalReviewEvidenceHash,
         humanFinalApprovalBound: true,
         agentSynthesizedDecision: false,
         humanApproval: true,
