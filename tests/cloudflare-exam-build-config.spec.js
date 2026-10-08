@@ -10,18 +10,18 @@ describe('Cloudflare exam build configuration contract', () => {
     fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8')
   );
 
-  test('prepares exam assets through the exam Wrangler config', () => {
+  test('keeps the exam Wrangler config to runtime and assets only', () => {
     expect(examConfig.name).toBe('autolearnpro-exam');
     expect(examConfig.assets.directory).toBe('./exam-site');
-    expect(examConfig.build).toEqual({ command: 'npm run exam:prepare' });
+    expect(examConfig.build).toBeUndefined();
   });
 
   test('uses explicit exam config for production and Worker Previews', () => {
     expect(pkg.scripts['cloudflare:exam:deploy']).toBe(
-      'wrangler deploy --config wrangler.exam.jsonc'
+      'npm run exam:prepare && wrangler deploy --config wrangler.exam.jsonc'
     );
     expect(pkg.scripts['cloudflare:exam:preview']).toBe(
-      'wrangler preview --config wrangler.exam.jsonc'
+      'npm run exam:prepare && wrangler preview --config wrangler.exam.jsonc'
     );
   });
 });
