@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const foundation = require('../../../data/architecture/agent-orchestration-foundation.json');
 const finalApprovalContract = require('../../../data/architecture/agent-orchestration-native-final-content-approval.json');
 const {
-  assertFinalContentApprovalScaffoldGate,
+  assertFinalContentApprovalActivationGate,
   assertApprovedIndependencePolicy,
   assertFinalContentApprovalEvidenceContract,
   assertInstructionalReviewEvidenceBinding,
@@ -540,9 +540,9 @@ class PersistentGovernanceRuntime {
     approvalEvidence,
   }) {
     // Bound exclusively to the repository contract: callers cannot supply a
-    // replacement contract. Both scaffold gates (unresolved governance, then
-    // draft-non-dispatchable status) fire before any ledger read or append.
-    assertFinalContentApprovalScaffoldGate(finalApprovalContract);
+    // replacement contract. Governance resolution and the exact activation-ready
+    // status are required before any ledger read or append.
+    assertFinalContentApprovalActivationGate(finalApprovalContract);
 
     if (
       !runId ||
@@ -572,8 +572,8 @@ class PersistentGovernanceRuntime {
       instructionalReviewerId: approvalEvidence.instructionalReviewerId,
     });
     // Pure evidence validation against the repository contract's approved
-    // role, scope, and checklist; runs before any ledger read. The actual
-    // Supabase Auth/profile verification is deferred to the activation PR.
+    // role, scope, and checklist; production Auth/profile verification is
+    // performed by the activation script before this runtime method is called.
     assertFinalContentApprovalEvidenceContract(approvalEvidence, finalApprovalContract);
 
     const entries = await this.entries(runId);
@@ -617,8 +617,11 @@ class PersistentGovernanceRuntime {
         questionId,
         approvalEvidenceHash,
         approverIdentity: approvalEvidence.reviewerId,
+        approverRole: approvalEvidence.approverRole,
+        approverScope: approvalEvidence.approverScope,
         reviewedAt: approvalEvidence.reviewedAt,
         checklistVersion: approvalEvidence.checklistVersion,
+        checklistCriteria: approvalEvidence.checklistCriteria,
         payloadSha256: approvalEvidence.payloadSha256,
         citationSetHash: approvalEvidence.citationSetHash,
         citationValidationEvidenceHash: approvalEvidence.citationValidationEvidenceHash,
