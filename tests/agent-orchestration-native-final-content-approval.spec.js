@@ -176,7 +176,10 @@ describe('Phase 10H workflow and script fail closed', () => {
   const scriptSource = fs.readFileSync(scriptPath, 'utf8');
 
   test('workflow never grants production access and every job step exits 1', () => {
-    expect(workflow).toContain('workflow_dispatch');
+    // No manual dispatch entry may exist during the design phase; the only
+    // trigger is the governance-resolution tag gate, and steps still fail closed.
+    expect(workflow).not.toMatch(/^\s*workflow_dispatch:/m);
+    expect(workflow).toContain('phase10h-governance-resolved-*');
     expect(workflow).not.toContain('environment:');
     expect(workflow).not.toContain('SERVICE_ROLE_KEY');
     expect(workflow).not.toContain('SUPABASE_URL');

@@ -1,29 +1,13 @@
 name: record-native-question-final-approval
 
+# Phase 10H design phase: this workflow declares no manual-dispatch event,
+# so no dispatch entry exists in the Actions UI. The only trigger is a push
+# of a governance-resolution tag pattern that does not exist yet, and every
+# job step fails closed regardless, so no run can record anything.
 on:
-  workflow_dispatch:
-    inputs:
-      runId:
-        description: "Phase 10G governed run ID"
-        required: true
-      decision:
-        description: "Explicit human final content approval decision"
-        required: true
-      reviewer_identity:
-        description: "Final approver identity"
-        required: true
-      reviewed_at:
-        description: "Final approval timestamp"
-        required: true
-      checklist_completed:
-        description: "Explicit human checklist completion"
-        required: true
-      comments:
-        description: "Optional final approval comments"
-        required: false
-      approval_evidence:
-        description: "Final approval evidence reference"
-        required: true
+  push:
+    tags:
+      - 'phase10h-governance-resolved-*'
 
 permissions:
   contents: read
@@ -41,9 +25,9 @@ permissions:
 jobs:
   record-final-content-approval:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/phase10h-governance-resolved-')
     steps:
-      - name: Require governance decisions before dispatch
+      - name: Require governance decisions before any run
         run: |
           echo "record-native-question-final-approval is non-dispatchable until the Phase 10H governance decisions are approved."
           exit 1
