@@ -1,0 +1,78 @@
+'use strict';
+
+const ELIGIBLE_PROVISIONED_ROLE = 'final_approver';
+
+function requireCondition(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+function normalizeReviewerEmail(email) {
+  requireCondition(typeof email === 'string', 'Reviewer email is required.');
+  const normalized = email.trim().toLowerCase();
+  requireCondition(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized), 'Reviewer email is invalid.');
+  return normalized;
+}
+
+function assertReviewerProvisioningAttestations({
+  independenceAttested,
+  qualificationAttested,
+  authorizationAttested,
+}) {
+  requireCondition(independenceAttested === true, 'Reviewer independence attestation is required.');
+  requireCondition(qualificationAttested === true, 'Final approver qualification attestation is required.');
+  requireCondition(authorizationAttested === true, 'Reviewer provisioning authorization attestation is required.');
+}
+
+function isEmailSendRateLimitError(error) {
+  if (!error) return false;
+  const code = String(error.code || error.error_code || '').trim().toLowerCase();
+  const message = String(error.message || '').trim().toLowerCase();
+  return code === 'over_email_send_rate_limit' || message.includes('email rate limit exceeded');
+}
+
+function shouldResendInvite({ createdByThisRun, emailConfirmedAt, profileRole }) {
+  if (createdByThisRun) return false;
+  requireCondition(
+    profileRole === ELIGIBLE_PROVISIONED_ROLE,
+    'Invite resend requires an existing final approver profile.'
+  );
+  return !emailConfirmedAt;
+}
+
+function validateExistingProfileForProvisioning({
+  profile,
+  createdByThisRun,
+  expectedUserId,
+  expectedEmail,
+}) {
+  requireCondition(profile && profile.id === expectedUserId, 'Reviewer profile identity mismatch.');
+  if (profile.email) {
+    requireCondition(
+      String(profile.email).trim().toLowerCase() === expectedEmail,
+      'Reviewer profile email mismatch.'
+    );
+  }
+
+  if (createdByThisRun) {
+    requireCondition(
+      profile.role === 'student' || profile.role === ELIGIBLE_PROVISIONED_ROLE,
+      'Fresh invited reviewer profile has an unexpected role.'
+    );
+    return profile.role === ELIGIBLE_PROVISIONED_ROLE ? 'already-provisioned' : 'promote-fresh-invite';
+  }
+
+  requireCondition(
+    profile.role === ELIGIBLE_PROVISIONED_ROLE,
+    'Pre-existing Auth accounts cannot be repurposed as final approvers.'
+  );
+  return 'already-provisioned';
+}
+
+module.exports = {
+  ELIGIBLE_PROVISIONED_ROLE,
+  normalizeReviewerEmail,
+  assertReviewerProvisioningAttestations,
+  isEmailSendRateLimitError,
+  shouldResendInvite,
+  validateExistingProfileForProvisioning,
+};
