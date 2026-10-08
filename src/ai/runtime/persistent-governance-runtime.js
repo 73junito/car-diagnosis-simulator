@@ -3,7 +3,10 @@
 const crypto = require('crypto');
 const foundation = require('../../../data/architecture/agent-orchestration-foundation.json');
 const finalApprovalContract = require('../../../data/architecture/agent-orchestration-native-final-content-approval.json');
-const { assertGovernanceConstantsResolved } = require('./native-final-content-approval');
+const {
+  assertFinalContentApprovalScaffoldGate,
+  assertApprovedIndependencePolicy,
+} = require('./native-final-content-approval');
 const WorkflowStateMachine = require('../governance/workflow-state-machine');
 const AgentGovernanceCatalog = require('../governance/agent-governance-catalog');
 
@@ -533,9 +536,11 @@ class PersistentGovernanceRuntime {
     questionId,
     approvalEvidenceHash,
     approvalEvidence,
-    contract = finalApprovalContract,
   }) {
-    assertGovernanceConstantsResolved(contract);
+    // Bound exclusively to the repository contract: callers cannot supply a
+    // replacement contract. Both scaffold gates (unresolved governance, then
+    // draft-non-dispatchable status) fire before any ledger read or append.
+    assertFinalContentApprovalScaffoldGate(finalApprovalContract);
 
     if (
       !runId ||
@@ -557,12 +562,12 @@ class PersistentGovernanceRuntime {
     if (computedHash !== approvalEvidenceHash) {
       throw new Error('Final content approval evidence hash does not match supplied evidence');
     }
-    if (
-      approvalEvidence.reviewerId === approvalEvidence.technicalReviewerId ||
-      approvalEvidence.reviewerId === approvalEvidence.instructionalReviewerId
-    ) {
-      throw new Error('Final content approver must be independent from the technical and instructional reviewers');
-    }
+    assertApprovedIndependencePolicy({
+      independencePolicy: finalApprovalContract.governance_constants.independencePolicy,
+      approverId: approvalEvidence.reviewerId,
+      technicalReviewerId: approvalEvidence.technicalReviewerId,
+      instructionalReviewerId: approvalEvidence.instructionalReviewerId,
+    });
 
     const entries = await this.entries(runId);
     const existing = entries.find((entry) =>

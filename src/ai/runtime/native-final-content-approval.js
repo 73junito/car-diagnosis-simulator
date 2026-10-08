@@ -29,10 +29,10 @@ function collectUnresolvedGovernanceDecisions(contract) {
   if (isUnresolvedGovernanceString(constants.FINAL_APPROVER_REQUIRED_SCOPE)) {
     unresolved.push('FINAL_APPROVER_REQUIRED_SCOPE');
   }
-  if (independence.independentFromTechnicalReviewer !== true) {
+  if (typeof independence.independentFromTechnicalReviewer !== 'boolean') {
     unresolved.push('independencePolicy.independentFromTechnicalReviewer');
   }
-  if (independence.independentFromInstructionalReviewer !== true) {
+  if (typeof independence.independentFromInstructionalReviewer !== 'boolean') {
     unresolved.push('independencePolicy.independentFromInstructionalReviewer');
   }
   if (isUnresolvedGovernanceString(constants.checklistVersion)) {
@@ -55,6 +55,40 @@ function assertGovernanceConstantsResolved(contract) {
     throw new Error(
       'Final content approval fails closed; unresolved governance decisions: ' +
         unresolved.join(', ')
+    );
+  }
+}
+
+function assertFinalContentApprovalScaffoldGate(contract) {
+  assertGovernanceConstantsResolved(contract);
+  requireCondition(
+    contract.status !== 'draft-non-dispatchable',
+    'Final content approval is disabled while the contract status is draft-non-dispatchable (Phase 10H non-production scaffold).'
+  );
+}
+
+function assertApprovedIndependencePolicy({
+  independencePolicy,
+  approverId,
+  technicalReviewerId,
+  instructionalReviewerId,
+} = {}) {
+  requireCondition(
+    independencePolicy &&
+      typeof independencePolicy.independentFromTechnicalReviewer === 'boolean' &&
+      typeof independencePolicy.independentFromInstructionalReviewer === 'boolean',
+    'The independence policy must be an approved boolean decision.'
+  );
+  if (independencePolicy.independentFromTechnicalReviewer === true) {
+    requireCondition(
+      approverId !== technicalReviewerId,
+      'Final content approver must be independent from the technical reviewer under the approved policy.'
+    );
+  }
+  if (independencePolicy.independentFromInstructionalReviewer === true) {
+    requireCondition(
+      approverId !== instructionalReviewerId,
+      'Final content approver must be independent from the instructional reviewer under the approved policy.'
     );
   }
 }
@@ -94,5 +128,7 @@ module.exports = {
   UNRESOLVED_GOVERNANCE_SENTINEL,
   collectUnresolvedGovernanceDecisions,
   assertGovernanceConstantsResolved,
+  assertFinalContentApprovalScaffoldGate,
+  assertApprovedIndependencePolicy,
   assertFinalContentApprovalContainment,
 };

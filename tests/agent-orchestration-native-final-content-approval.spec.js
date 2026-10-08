@@ -10,6 +10,8 @@ const {
   UNRESOLVED_GOVERNANCE_SENTINEL,
   collectUnresolvedGovernanceDecisions,
   assertGovernanceConstantsResolved,
+  assertFinalContentApprovalScaffoldGate,
+  assertApprovedIndependencePolicy,
 } = require('../src/ai/runtime/native-final-content-approval');
 
 const contractPath = path.join(__dirname, '..', 'data', 'architecture', 'agent-orchestration-native-final-content-approval.json');
@@ -25,15 +27,15 @@ const EXPECTED_UNRESOLVED = [
   'checklistCriteria',
 ];
 
-function resolvedContractOverride() {
+function resolvedContractOverride(independenceRequired = true) {
   return {
     ...JSON.parse(fs.readFileSync(contractPath, 'utf8')),
     governance_constants: {
       FINAL_APPROVER_REQUIRED_ROLE: 'content_approver',
       FINAL_APPROVER_REQUIRED_SCOPE: 'native-question-final-approval',
       independencePolicy: {
-        independentFromTechnicalReviewer: true,
-        independentFromInstructionalReviewer: true,
+        independentFromTechnicalReviewer: independenceRequired,
+        independentFromInstructionalReviewer: independenceRequired,
       },
       checklistVersion: 'native-final-content-approval-v1',
       checklistCriteria: ['human-final-approval-checklist-criterion'],
@@ -41,14 +43,22 @@ function resolvedContractOverride() {
   };
 }
 
-function createStubCoordinator(entries = [], appends = []) {
+function createStubCoordinator(entries = [], appends = [], reads = []) {
   return {
-    store: { loadEntries: async () => entries },
+    store: {
+      loadEntries: async (...args) => {
+        reads.push({ method: 'loadEntries', args });
+        return entries;
+      },
+    },
     append: async (entry) => {
       appends.push(entry);
       return entry;
     },
-    recover: async () => null,
+    recover: async () => {
+      reads.push({ method: 'recover', args: [] });
+      return null;
+    },
   };
 }
 
@@ -96,6 +106,53 @@ describe('Phase 10H native final content approval contract', () => {
     expect(contract.unresolved_governance_decisions).toEqual(EXPECTED_UNRESOLVED);
     expect(collectUnresolvedGovernanceDecisions(contract)).toEqual(EXPECTED_UNRESOLVED);
     expect(() => assertGovernanceConstantsResolved(contract)).toThrow(/unresolved governance decisions/);
+  });
+
+  test('scaffold gate rejects the unresolved repository contract first and a resolved draft contract by status', () => {
+    const repositoryContract = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
+    expect(() => assertFinalContentApprovalScaffoldGate(repositoryContract)).toThrow(
+      /unresolved governance decisions/
+    );
+    expect(() => assertFinalContentApprovalScaffoldGate(resolvedContractOverride())).toThrow(
+      /draft-non-dispatchable/
+    );
+  });
+
+  test('independence policy accepts either approved boolean and the approved value is enforced', () => {
+    const notRequired = resolvedContractOverride(false);
+    expect(collectUnresolvedGovernanceDecisions(notRequired)).toEqual([]);
+    expect(() => assertGovernanceConstantsResolved(notRequired)).not.toThrow();
+
+    const sharedApprover = '2f14c3d5-6f9b-4f69-8f9f-3f6a9a1b2c3d';
+    expect(() =>
+      assertApprovedIndependencePolicy({
+        independencePolicy: notRequired.governance_constants.independencePolicy,
+        approverId: sharedApprover,
+        technicalReviewerId: sharedApprover,
+        instructionalReviewerId: sharedApprover,
+      })
+    ).not.toThrow();
+
+    expect(() =>
+      assertApprovedIndependencePolicy({
+        independencePolicy: resolvedContractOverride(true).governance_constants.independencePolicy,
+        approverId: sharedApprover,
+        technicalReviewerId: sharedApprover,
+        instructionalReviewerId: '5a9e0d2c-1b3f-4c7e-9a1d-7e2b4c6f8a01',
+      })
+    ).toThrow(/independent from the technical reviewer/);
+
+    expect(() =>
+      assertApprovedIndependencePolicy({
+        independencePolicy: {
+          independentFromTechnicalReviewer: 'UNRESOLVED_GOVERNANCE_DECISION',
+          independentFromInstructionalReviewer: true,
+        },
+        approverId: 'approver',
+        technicalReviewerId: 'technical',
+        instructionalReviewerId: 'instructional',
+      })
+    ).toThrow(/approved boolean/);
   });
 
   test('contract binds the exact 10G instructional review evidence', () => {
@@ -150,11 +207,40 @@ describe('Phase 10H runtime final content approval control plane', () => {
     expect(appends).toHaveLength(0);
   });
 
-  test('runtime with resolved constants still fails closed without the instructionally_reviewed state', async () => {
+  test('runtime rejects a fully valid instructionally_reviewed ledger state before reading or appending', async () => {
     const appends = [];
-    const runtime = new PersistentGovernanceRuntime({ coordinator: createStubCoordinator([], appends) });
+    const reads = [];
     const evidence = buildApprovalEvidence();
     const evidenceHash = hashEvidence(evidence);
+    const reviewEvidenceHash = crypto
+      .createHash('sha256')
+      .update('phase10g-instructional-review-evidence')
+      .digest('hex');
+    // Fully valid prior state: the latest ledger entry is the Phase 10G
+    // instructional review bound to the exact approval evidence below.
+    const priorEntry = {
+      runId: 'native-draft:37418457881:charging-system',
+      actor: 'human',
+      action: 'instructional-review-recorded',
+      state: 'instructionally_reviewed',
+      metadata: {
+        provenanceId: evidence.provenanceId,
+        questionId: evidence.questionId,
+        reviewEvidenceHash,
+        reviewerIdentity: evidence.instructionalReviewerId,
+        technicalReviewerIdentity: evidence.technicalReviewerId,
+        reviewedAt: evidence.reviewedAt,
+        payloadSha256: evidence.payloadSha256,
+        citationSetHash: evidence.citationSetHash,
+        citationValidationEvidenceHash: evidence.citationValidationEvidenceHash,
+        humanInstructionalDecisionBound: true,
+        agentSynthesizedDecision: false,
+        humanApproval: false,
+      },
+    };
+    const runtime = new PersistentGovernanceRuntime({
+      coordinator: createStubCoordinator([priorEntry], appends, reads),
+    });
 
     await expect(
       runtime.recordFinalContentApproval({
@@ -163,10 +249,10 @@ describe('Phase 10H runtime final content approval control plane', () => {
         questionId: evidence.questionId,
         approvalEvidenceHash: evidenceHash,
         approvalEvidence: evidence,
-        contract: resolvedContractOverride(),
       })
-    ).rejects.toThrow(/requires the instructionally_reviewed state/);
+    ).rejects.toThrow(/unresolved governance decisions/);
 
+    expect(reads).toHaveLength(0);
     expect(appends).toHaveLength(0);
   });
 });
