@@ -1,35 +1,35 @@
 {
   "phase": "10I",
-  "title": "Native publication governance preparation",
-  "status": "draft-non-dispatchable",
-  "control_commit": "ee754cae6fa945bdf2a8b387da17968e59bc33eb",
-  "purpose": "Prepare a separate human governance decision for publishing the exact Phase 10H-approved native charging-system question. This scaffold is intentionally non-dispatchable and grants no publication, assessment eligibility, scoring, delivery, grading, or release authority.",
+  "title": "Native publication governance",
+  "status": "governance-resolved-activation-ready",
+  "control_commit": "1fa26895bb68d7b8ff79e71566ad160db15174eb",
+  "purpose": "Production-capable, human-only publication gate for the exact Phase 10H-approved native charging-system question. Publication authority is explicitly human-approved; no publication decision is synthesized by an agent and assessment eligibility remains separate.",
   "state_transition": {
     "from": "final_content_approved",
-    "to": "UNRESOLVED_GOVERNANCE_DECISION",
+    "to": "public_question_published",
     "actor": "human",
     "requires_explicit_human_approval": true
   },
   "governance_constants": {
-    "PUBLICATION_APPROVER_REQUIRED_ROLE": "UNRESOLVED_GOVERNANCE_DECISION",
-    "PUBLICATION_APPROVER_REQUIRED_SCOPE": "UNRESOLVED_GOVERNANCE_DECISION",
+    "PUBLICATION_APPROVER_REQUIRED_ROLE": "publication_approver",
+    "PUBLICATION_APPROVER_REQUIRED_SCOPE": "native-question-publication",
     "independencePolicy": {
-      "independentFromFinalContentApprover": null
+      "independentFromFinalContentApprover": true
     },
-    "checklistVersion": "UNRESOLVED_GOVERNANCE_DECISION",
+    "checklistVersion": "native-question-publication-v1",
     "checklistCriteria": [
-      "UNRESOLVED_GOVERNANCE_DECISION"
+      "exact-phase10h-approved-payload-and-evidence-binding",
+      "approved-provenance-and-ledger-v7-binding",
+      "exact-question-identity-and-scenario-binding-preserved",
+      "approved-rights-and-citation-evidence-remain-valid",
+      "exactly-one-public-scenario-question-row",
+      "zero-assessment-eligibility-rows",
+      "no-scoring-grading-assessment-delivery-certification-high-stakes-api-or-broader-release-authority",
+      "blocked-claims-02-and-12-remain-excluded"
     ],
-    "publicationTarget": "UNRESOLVED_GOVERNANCE_DECISION"
+    "publicationTarget": "scenario_questions"
   },
-  "unresolved_governance_decisions": [
-    "PUBLICATION_APPROVER_REQUIRED_ROLE",
-    "PUBLICATION_APPROVER_REQUIRED_SCOPE",
-    "independencePolicy.independentFromFinalContentApprover",
-    "checklistVersion",
-    "checklistCriteria",
-    "publicationTarget"
-  ],
+  "unresolved_governance_decisions": [],
   "referenced_10H_evidence": {
     "governed_run_id": "native-draft:37418457881:charging-system",
     "github_actions_run_id": 37724308574,
@@ -51,23 +51,23 @@
     "human_approval": true
   },
   "invariants": [
-    "Phase 10H final content approval does not imply publication authority.",
-    "Publication requires a separate explicit human governance decision.",
-    "Publication must bind the exact approved payload and Phase 10H final-approval evidence hash.",
-    "This scaffold must not write scenario_questions or any other production content table.",
-    "Publication, if later approved, must not implicitly create assessment eligibility.",
-    "Assessment eligibility must remain a separate downstream governance decision after a public scenario_questions identity exists.",
-    "No scoring, grading, assessment delivery, institutional assessment, certification, high-stakes use, production assessment API access, or broad release is authorized.",
-    "Claims 02 and 12 remain blocked and are not changed by Phase 10I."
+    "Publication requires an explicit human approve or reject decision; agents may prepare but never synthesize it.",
+    "The publication approver must hold the approved production profile role and Auth governance scope.",
+    "The publication approver must be independent from the Phase 10H final content approver.",
+    "Publication must bind the exact approved payload, approved provenance, and Phase 10H final-approval evidence hash.",
+    "Approval may create exactly one scenario_questions row for the exact native question and no other public content row.",
+    "Publication must not create assessment_question_eligibility rows.",
+    "Publication does not create scoring, grading, assessment delivery, institutional assessment, certification, high-stakes, production assessment API, assessment-release, or broad-release authority.",
+    "Claims 02 and 12 remain blocked and excluded."
   ],
-  "current_storage_boundary": {
-    "public_scenario_questions_write": false,
+  "storage_boundary": {
+    "public_scenario_questions_write_on_approval": true,
     "assessment_eligibility_write": false,
     "question_provenance_write": false,
     "orchestration_ledger_write": false,
     "citation_validation_write": false
   },
-  "planned_effect_if_later_explicitly_approved": {
+  "required_containment_after_10i_approval": {
     "public_scenario_question_rows_for_exact_question": 1,
     "assessment_eligibility_rows_for_exact_question": 0,
     "assessment_eligible": false,
@@ -79,7 +79,8 @@
     "certification_eligible": false,
     "production_assessment_api_eligible": false,
     "assessment_release": false,
-    "broad_production_release": false
+    "broad_production_release": false,
+    "claims_02_and_12_blocked": true
   },
   "next_governance_boundary": {
     "after_publication": "separate assessment-eligibility decision",

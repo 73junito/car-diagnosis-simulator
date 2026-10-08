@@ -1,0 +1,78 @@
+name: Record native question publication decision
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario_id:
+        description: Native scenario ID
+        required: true
+        default: charging-system
+        type: string
+      governed_run_id:
+        description: Existing governed run at final_content_approved
+        required: true
+        default: native-draft:37418457881:charging-system
+        type: string
+      reviewed_payload_sha256:
+        description: Exact Phase 10H-approved private payload SHA-256
+        required: true
+        default: 1b833a88a6fc8a0a79feaaa3f8848ac4b8cb3573f158effa0a6593bebf7cf10e
+        type: string
+      reviewer_id:
+        description: UUID of the authorized publication approver
+        required: true
+        type: string
+      decision:
+        description: Explicit human publication decision
+        required: true
+        type: choice
+        options:
+          - approve
+          - reject
+      checklist_completed:
+        description: Attest that native-question-publication-v1 was completed against this exact payload and Phase 10H evidence
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-question-publication-${{ inputs.governed_run_id }}
+  cancel-in-progress: false
+
+jobs:
+  record:
+    name: Bind human native publication decision
+    runs-on: ubuntu-latest
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      PUBLICATION_SCENARIO_ID: ${{ inputs.scenario_id }}
+      PUBLICATION_RUN_ID: ${{ inputs.governed_run_id }}
+      PUBLICATION_PAYLOAD_SHA256: ${{ inputs.reviewed_payload_sha256 }}
+      PUBLICATION_REVIEWER_ID: ${{ inputs.reviewer_id }}
+      PUBLICATION_DECISION: ${{ inputs.decision }}
+      PUBLICATION_CHECKLIST_COMPLETED: ${{ inputs.checklist_completed }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+      - name: Record exact human native publication decision
+        run: node scripts/record-native-question-publication.js
+      - name: Governance notice
+        run: |
+          echo "Phase 10I may publish only the exact Phase 10H-approved native question after explicit human publication approval."
+          echo "Publication does not create assessment eligibility, scoring, grading, assessment delivery, certification, high-stakes, production assessment API, assessment-release, or broad-release authority."
