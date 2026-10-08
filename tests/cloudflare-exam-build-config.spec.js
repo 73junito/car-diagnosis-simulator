@@ -14,6 +14,7 @@ describe('Cloudflare exam build configuration contract', () => {
     expect(examConfig.name).toBe('autolearnpro-exam');
     expect(examConfig.assets.directory).toBe('./exam-site');
     expect(examConfig.build).toBeUndefined();
+    expect(examConfig.previews).toEqual({});
   });
 
   test('uses explicit exam config for production and Worker Previews', () => {
