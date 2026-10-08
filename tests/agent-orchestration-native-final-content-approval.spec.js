@@ -402,7 +402,16 @@ describe('Phase 10H production activation surfaces', () => {
     expect(scriptSource).toContain('FINAL_APPROVER_REQUIRED_ROLE');
     expect(scriptSource).toContain('FINAL_APPROVER_REQUIRED_SCOPE');
     expect(scriptSource).toContain('approvalPersistedLedgerMissing');
+    expect(scriptSource).toContain('validatedApprovalPreparation');
+    expect(scriptSource).toContain("action === 'rights-review-recorded'");
+    expect(scriptSource).toContain("action === 'citation-validation-recorded'");
     expect(scriptSource).toContain('prior final rejection exists for this exact payload');
+    expect(scriptSource).toContain("status: 'validated'");
+    expect(scriptSource).toContain('answer_verified: true');
+    expect(scriptSource).toContain('explanation_verified: true');
+    expect(scriptSource).toContain('citation_matches_excerpt: true');
+    expect(scriptSource).toContain('license_ok: true');
+    expect(scriptSource).toContain(".eq('status', 'validated')");
     expect(scriptSource).toContain("status: 'approved'");
     expect(scriptSource).toContain('approved_by: reviewerId');
     expect(scriptSource).toContain('approved_at: reviewedAt');

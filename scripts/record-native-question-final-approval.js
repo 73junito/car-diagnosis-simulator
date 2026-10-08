@@ -118,6 +118,14 @@ async function readContainment(client, questionId) {
 
   const entries = await runtime.governanceRuntime.getRun(runId);
   const latest = entries.length ? entries[entries.length - 1] : null;
+  const rightsReviewEntry = entries.find(
+    (entry) => entry.action === 'rights-review-recorded' && entry.state === 'rights_reviewed'
+  );
+  const citationValidationEntry = entries.find(
+    (entry) => entry.action === 'citation-validation-recorded' && entry.state === 'citation_validated'
+  );
+  requireCondition(rightsReviewEntry, 'Final approval requires the governed rights-review-recorded predecessor.');
+  requireCondition(citationValidationEntry, 'Final approval requires the governed citation-validation-recorded predecessor.');
   const existingFinal = latest?.action === 'final-content-approval-recorded' && latest?.state === 'final_content_approved';
 
   if (existingFinal) {
@@ -179,6 +187,14 @@ async function readContainment(client, questionId) {
     latest.action === 'instructional-review-recorded' &&
     latest.state === 'instructionally_reviewed';
 
+  const validatedApprovalPreparation =
+    provenance.status === 'validated' &&
+    !provenance.approved_by &&
+    !provenance.approved_at &&
+    checklist.final_approval_decision === 'approve' &&
+    checklist.final_approval_payload_sha256 === expectedPayloadSha &&
+    checklist.final_approval_reviewer_id === reviewerId;
+
   if (approvalPersistedLedgerMissing) {
     requireCondition(decision === 'approve', 'A persisted final approval may only recover the missing governed ledger transition.');
     requireCondition(provenance.approved_by === reviewerId, 'Persisted final approver identity mismatch.');
@@ -186,6 +202,12 @@ async function readContainment(client, questionId) {
     requireCondition(checklist.final_approval_payload_sha256 === expectedPayloadSha, 'Persisted final approval payload mismatch.');
     requireCondition(checklist.final_approval_instructional_review_evidence_hash === expected.instructional_review_evidence_hash, 'Persisted final approval Phase 10G evidence mismatch.');
     requireCondition(typeof checklist.final_approval_submitted_by === 'string' && checklist.final_approval_submitted_by.length > 0, 'Persisted final approval submission actor is missing.');
+  } else if (provenance.status === 'validated') {
+    requireCondition(decision === 'approve', 'Validated final-approval preparation may only resume the same approve decision.');
+    requireCondition(validatedApprovalPreparation, 'Validated provenance is not bound to the current final approver and payload.');
+    requireCondition(checklist.final_approval_instructional_review_evidence_hash === expected.instructional_review_evidence_hash, 'Validated final-approval preparation Phase 10G evidence mismatch.');
+    requireCondition(typeof checklist.final_approval_reviewed_at === 'string' && checklist.final_approval_reviewed_at.length > 0, 'Validated final-approval preparation timestamp is missing.');
+    requireCondition(typeof checklist.final_approval_submitted_by === 'string' && checklist.final_approval_submitted_by.length > 0, 'Validated final-approval preparation submission actor is missing.');
   } else {
     requireCondition(provenance.status === 'draft', 'Final approval requires draft provenance before the first approval.');
     requireCondition(!provenance.approved_by && !provenance.approved_at, 'Final approval cannot overwrite an existing approval.');
@@ -230,8 +252,12 @@ async function readContainment(client, questionId) {
   requireCondition(preContainment.scenarioQuestionCount === 0, 'Final approval requires zero public scenario_questions rows before the transition.');
   requireCondition(preContainment.assessmentEligibilityCount === 0, 'Final approval requires zero assessment eligibility rows before the transition.');
 
-  const reviewedAt = approvalPersistedLedgerMissing ? provenance.approved_at : new Date().toISOString();
-  const effectiveSubmittedBy = approvalPersistedLedgerMissing
+  const reviewedAt = approvalPersistedLedgerMissing
+    ? provenance.approved_at
+    : validatedApprovalPreparation
+      ? checklist.final_approval_reviewed_at
+      : new Date().toISOString();
+  const effectiveSubmittedBy = (approvalPersistedLedgerMissing || validatedApprovalPreparation)
     ? checklist.final_approval_submitted_by
     : submittedBy;
   const { evidence, evidenceHash } = buildFinalContentApprovalEvidence({
@@ -262,6 +288,12 @@ async function readContainment(client, questionId) {
 
   const finalChecklist = {
     ...checklist,
+    sources_linked: true,
+    citations_validated: true,
+    answer_verified: true,
+    explanation_verified: true,
+    citation_matches_excerpt: true,
+    license_ok: true,
     final_approval_complete: decision === 'approve',
     final_approval_decision: decision,
     final_approval_payload_sha256: expectedPayloadSha,
@@ -332,6 +364,32 @@ async function readContainment(client, questionId) {
       'Persisted final approval evidence hash does not match reconstructed approval evidence.'
     );
   } else {
+    if (validatedApprovalPreparation) {
+      requireCondition(
+        checklist.final_approval_evidence_hash === evidenceHash,
+        'Validated final-approval preparation evidence hash does not match reconstructed approval evidence.'
+      );
+    } else {
+      const { data: prepared, error: prepareError } = await client
+        .from('question_provenance')
+        .update({
+          status: 'validated',
+          validation_checklist: finalChecklist,
+        })
+        .eq('id', provenance.id)
+        .eq('status', 'draft')
+        .is('approved_by', null)
+        .eq('instructional_reviewer_id', provenance.instructional_reviewer_id)
+        .select('id,status,approved_by,approved_at,validation_checklist')
+        .maybeSingle();
+      if (prepareError) throw prepareError;
+      requireCondition(prepared, 'Final approval validation preparation lost an optimistic concurrency race.');
+      requireCondition(
+        prepared.status === 'validated' && !prepared.approved_by && !prepared.approved_at,
+        'Final approval validation preparation must not approve provenance.'
+      );
+    }
+
     const { data: updated, error: updateError } = await client
       .from('question_provenance')
       .update({
@@ -342,7 +400,7 @@ async function readContainment(client, questionId) {
         notes: appendNote(provenance.notes, note),
       })
       .eq('id', provenance.id)
-      .eq('status', 'draft')
+      .eq('status', 'validated')
       .is('approved_by', null)
       .eq('instructional_reviewer_id', provenance.instructional_reviewer_id)
       .select('id,status,approved_by,approved_at,validation_checklist')
