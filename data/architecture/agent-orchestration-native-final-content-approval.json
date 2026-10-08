@@ -1,9 +1,9 @@
 {
   "phase": "10H",
   "title": "Native final content approval",
-  "status": "draft-non-dispatchable",
-  "control_commit": "34432bb1add96a66e772e081f8cba1143a67a367",
-  "purpose": "Non-production, fail-closed control plane for the human final content approval transition (instructionally_reviewed -> final_content_approved). Governance decisions are prepared, never guessed; no production state is written.",
+  "status": "governance-resolved-activation-ready",
+  "control_commit": "bd29fb7171ae81822ac2a1eb8ff3a8c6e5e802a8",
+  "purpose": "Production-capable, human-only final content approval gate for instructionally_reviewed -> final_content_approved. The governance constants are explicitly human-approved; no final content decision is synthesized by an agent.",
   "state_transition": {
     "from": "instructionally_reviewed",
     "to": "final_content_approved",
@@ -11,23 +11,23 @@
     "requires_explicit_human_approval": true
   },
   "governance_constants": {
-    "FINAL_APPROVER_REQUIRED_ROLE": "UNRESOLVED_GOVERNANCE_DECISION",
-    "FINAL_APPROVER_REQUIRED_SCOPE": "UNRESOLVED_GOVERNANCE_DECISION",
+    "FINAL_APPROVER_REQUIRED_ROLE": "final_approver",
+    "FINAL_APPROVER_REQUIRED_SCOPE": "native-question-final-approval",
     "independencePolicy": {
-      "independentFromTechnicalReviewer": "UNRESOLVED_GOVERNANCE_DECISION",
-      "independentFromInstructionalReviewer": "UNRESOLVED_GOVERNANCE_DECISION"
+      "independentFromTechnicalReviewer": true,
+      "independentFromInstructionalReviewer": true
     },
-    "checklistVersion": "UNRESOLVED_GOVERNANCE_DECISION",
-    "checklistCriteria": "UNRESOLVED_GOVERNANCE_DECISION"
+    "checklistVersion": "native-final-content-approval-v1",
+    "checklistCriteria": [
+      "exact-payload-and-prior-evidence-binding",
+      "technical-citation-and-instructional-gates-complete",
+      "final-content-preserves-approved-scope-and-evidence",
+      "no-unsupported-thresholds-procedures-or-claims",
+      "no-assessment-scoring-delivery-or-release-authority",
+      "blocked-claims-and-containment-preserved"
+    ]
   },
-  "unresolved_governance_decisions": [
-    "FINAL_APPROVER_REQUIRED_ROLE",
-    "FINAL_APPROVER_REQUIRED_SCOPE",
-    "independencePolicy.independentFromTechnicalReviewer",
-    "independencePolicy.independentFromInstructionalReviewer",
-    "checklistVersion",
-    "checklistCriteria"
-  ],
+  "unresolved_governance_decisions": [],
   "referenced_10G_evidence": {
     "governed_run_id": "native-draft:37418457881:charging-system",
     "github_actions_run_id": 37703982461,
@@ -40,6 +40,7 @@
     "payload_sha256": "1b833a88a6fc8a0a79feaaa3f8848ac4b8cb3573f158effa0a6593bebf7cf10e",
     "citation_set_hash": "47bf8234e313be166026771ccf5cd6ab59b62f917422a51ce347eeaa6bb88a32",
     "citation_validation_evidence_hash": "01a5a2a2f34fc47ca16417f8bfca43ff659aacaf8f0fa1b5dc930a3269617a3c",
+    "instructional_review_evidence_hash": "68e06d5c99638bd6361d919eca0454261231c9f1fa8ab44fdc54f44e0841aecb",
     "human_decision": "pass",
     "human_instructional_decision_captured": true,
     "agent_synthesized_decision": false,
@@ -47,20 +48,22 @@
   },
   "invariants": [
     "Final content approval requires an explicit human decision; agents may prepare but never synthesize it.",
-    "Unresolved governance constants fail closed; no guessed role, scope, independence rule, or checklist is ever accepted.",
-    "Phase 10H performs no production writes: no question_provenance update, no orchestration ledger append, no Supabase mutation.",
+    "The final approver must hold the approved production profile role and Auth governance scope.",
+    "The final approver must be independent from both the technical and instructional reviewers.",
     "instructionally_reviewed is the only permitted source state for final content approval.",
+    "Final approval must bind the exact payload, citation evidence, and Phase 10G instructional review evidence hash.",
+    "Final content approval may update only question_provenance final-approval fields/checklist/notes and the governed orchestration ledger.",
     "Final content approval does not create public scenario question rows, assessment eligibility, scoring, delivery, or release authority.",
-    "Existing assessment and release authority is unchanged by Phase 10H."
+    "Claims 02 and 12 remain blocked at citation validation and are not changed by Phase 10H."
   ],
   "storage_boundary": {
-    "question_provenance_write": false,
+    "question_provenance_final_approval_write": true,
     "public_scenario_questions_write": false,
     "assessment_eligibility_write": false,
-    "orchestration_ledger_write": false,
-    "supabase_write": false
+    "orchestration_ledger_write_on_approval": true,
+    "citation_validation_write": false
   },
-  "required_containment_after_future_10h": {
+  "required_containment_after_10h": {
     "public_scenario_question_rows": 0,
     "assessment_eligibility_rows": 0,
     "released_for_assessment": false,

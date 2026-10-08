@@ -1,6 +1,12 @@
 'use strict';
 
+const crypto = require('crypto');
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const SHA256 = /^[0-9a-f]{64}$/;
 const UNRESOLVED_GOVERNANCE_SENTINEL = 'UNRESOLVED_GOVERNANCE_DECISION';
+const FINAL_CONTENT_APPROVAL_ACTIVE_STATUS = 'governance-resolved-activation-ready';
+const FINAL_APPROVAL_DECISIONS = new Set(['approve', 'reject']);
 
 function requireCondition(condition, message) {
   if (!condition) throw new Error(message);
@@ -51,19 +57,17 @@ function collectUnresolvedGovernanceDecisions(contract) {
 
 function assertGovernanceConstantsResolved(contract) {
   const unresolved = collectUnresolvedGovernanceDecisions(contract);
-  if (unresolved.length > 0) {
-    throw new Error(
-      'Final content approval fails closed; unresolved governance decisions: ' +
-        unresolved.join(', ')
-    );
-  }
+  requireCondition(
+    unresolved.length === 0,
+    'Final content approval fails closed; unresolved governance decisions: ' + unresolved.join(', ')
+  );
 }
 
-function assertFinalContentApprovalScaffoldGate(contract) {
+function assertFinalContentApprovalActivationGate(contract) {
   assertGovernanceConstantsResolved(contract);
   requireCondition(
-    contract.status !== 'draft-non-dispatchable',
-    'Final content approval is disabled while the contract status is draft-non-dispatchable (Phase 10H non-production scaffold).'
+    contract.status === FINAL_CONTENT_APPROVAL_ACTIVE_STATUS,
+    'Final content approval contract is not activation-ready.'
   );
 }
 
@@ -79,13 +83,13 @@ function assertApprovedIndependencePolicy({
       typeof independencePolicy.independentFromInstructionalReviewer === 'boolean',
     'The independence policy must be an approved boolean decision.'
   );
-  if (independencePolicy.independentFromTechnicalReviewer === true) {
+  if (independencePolicy.independentFromTechnicalReviewer) {
     requireCondition(
       approverId !== technicalReviewerId,
       'Final content approver must be independent from the technical reviewer under the approved policy.'
     );
   }
-  if (independencePolicy.independentFromInstructionalReviewer === true) {
+  if (independencePolicy.independentFromInstructionalReviewer) {
     requireCondition(
       approverId !== instructionalReviewerId,
       'Final content approver must be independent from the instructional reviewer under the approved policy.'
@@ -93,23 +97,20 @@ function assertApprovedIndependencePolicy({
   }
 }
 
+function stableFinalContentApprovalEvidenceHash(evidence) {
+  return crypto.createHash('sha256').update(JSON.stringify(evidence)).digest('hex');
+}
+
 function assertFinalContentApprovalEvidenceContract(approvalEvidence, contract) {
   const constants = contract && contract.governance_constants;
+  requireCondition(constants, 'Final content approval governance constants are required.');
   requireCondition(
     approvalEvidence && typeof approvalEvidence === 'object',
     'Final content approval evidence is required.'
   );
   requireCondition(
-    typeof approvalEvidence.approverRole === 'string' && approvalEvidence.approverRole.length > 0,
-    'Final content approval evidence must carry the approver role.'
-  );
-  requireCondition(
     approvalEvidence.approverRole === constants.FINAL_APPROVER_REQUIRED_ROLE,
     'Final content approval approver role does not match the approved FINAL_APPROVER_REQUIRED_ROLE.'
-  );
-  requireCondition(
-    typeof approvalEvidence.approverScope === 'string' && approvalEvidence.approverScope.length > 0,
-    'Final content approval evidence must carry the approver scope.'
   );
   requireCondition(
     approvalEvidence.approverScope === constants.FINAL_APPROVER_REQUIRED_SCOPE,
@@ -124,10 +125,6 @@ function assertFinalContentApprovalEvidenceContract(approvalEvidence, contract) 
     'Final content approval checklist version does not match the approved checklist version.'
   );
   requireCondition(
-    Array.isArray(constants.checklistCriteria) && constants.checklistCriteria.length > 0,
-    'Approved checklist criteria must be a non-empty list.'
-  );
-  requireCondition(
     Array.isArray(approvalEvidence.checklistCriteria) &&
       approvalEvidence.checklistCriteria.length === constants.checklistCriteria.length &&
       approvalEvidence.checklistCriteria.every(
@@ -136,9 +133,77 @@ function assertFinalContentApprovalEvidenceContract(approvalEvidence, contract) 
     'Final content approval evidence does not carry the complete approved checklist criteria.'
   );
   requireCondition(
-    /^[0-9a-f]{64}$/.test(approvalEvidence.instructionalReviewEvidenceHash || ''),
+    SHA256.test(approvalEvidence.instructionalReviewEvidenceHash || ''),
     'Final content approval evidence must carry the exact 64-hex Phase 10G instructional review evidence hash.'
   );
+}
+
+function buildFinalContentApprovalEvidence({
+  provenanceId,
+  questionId,
+  payloadSha256,
+  citationSetHash,
+  citationValidationEvidenceHash,
+  instructionalReviewEvidenceHash,
+  reviewerId,
+  approverRole,
+  approverScope,
+  technicalReviewerId,
+  instructionalReviewerId,
+  reviewedAt,
+  decision,
+  checklistCompleted,
+  submittedBy,
+  contract,
+}) {
+  assertFinalContentApprovalActivationGate(contract);
+  requireCondition(UUID.test(provenanceId || ''), 'A valid provenanceId is required.');
+  requireCondition(typeof questionId === 'string' && questionId.length > 0, 'A questionId is required.');
+  requireCondition(SHA256.test(payloadSha256 || ''), 'A valid payload SHA-256 is required.');
+  requireCondition(SHA256.test(citationSetHash || ''), 'A valid citation-set SHA-256 is required.');
+  requireCondition(SHA256.test(citationValidationEvidenceHash || ''), 'A valid citation-validation evidence SHA-256 is required.');
+  requireCondition(SHA256.test(instructionalReviewEvidenceHash || ''), 'A valid instructional-review evidence SHA-256 is required.');
+  requireCondition(UUID.test(reviewerId || ''), 'A valid final approver UUID is required.');
+  requireCondition(UUID.test(technicalReviewerId || ''), 'A valid technical reviewer UUID is required.');
+  requireCondition(UUID.test(instructionalReviewerId || ''), 'A valid instructional reviewer UUID is required.');
+  requireCondition(typeof reviewedAt === 'string' && !Number.isNaN(Date.parse(reviewedAt)), 'A valid final approval timestamp is required.');
+  requireCondition(FINAL_APPROVAL_DECISIONS.has(decision), 'Final approval decision must be approve or reject.');
+  requireCondition(checklistCompleted === true, 'The human final approval checklist must be completed.');
+  requireCondition(typeof submittedBy === 'string' && submittedBy.length > 0, 'Final approval submission actor is required.');
+
+  assertApprovedIndependencePolicy({
+    independencePolicy: contract.governance_constants.independencePolicy,
+    approverId: reviewerId,
+    technicalReviewerId,
+    instructionalReviewerId,
+  });
+
+  const evidence = {
+    provenanceId,
+    questionId,
+    payloadSha256,
+    citationSetHash,
+    citationValidationEvidenceHash,
+    instructionalReviewEvidenceHash,
+    reviewerId,
+    approverRole,
+    approverScope,
+    technicalReviewerId,
+    instructionalReviewerId,
+    reviewedAt,
+    decision,
+    checklistVersion: contract.governance_constants.checklistVersion,
+    checklistCompleted,
+    checklistCriteria: [...contract.governance_constants.checklistCriteria],
+    allCriteriaPassed: decision === 'approve',
+    submittedBy,
+  };
+
+  assertFinalContentApprovalEvidenceContract(evidence, contract);
+  return {
+    evidence,
+    evidenceHash: stableFinalContentApprovalEvidenceHash(evidence),
+  };
 }
 
 function assertInstructionalReviewEvidenceBinding({
@@ -151,7 +216,7 @@ function assertInstructionalReviewEvidenceBinding({
     latestEntry &&
       latestEntry.action === 'instructional-review-recorded' &&
       latestEntry.state === 'instructionally_reviewed',
-    'Final content approval requires the instructionally_reviewed state'
+    'Final content approval requires the instructionally_reviewed state.'
   );
   const metadata = latestEntry.metadata || {};
   requireCondition(
@@ -160,10 +225,10 @@ function assertInstructionalReviewEvidenceBinding({
       metadata.payloadSha256 === approvalEvidence.payloadSha256 &&
       metadata.citationSetHash === approvalEvidence.citationSetHash &&
       metadata.citationValidationEvidenceHash === approvalEvidence.citationValidationEvidenceHash,
-    'Final content approval evidence is not bound to the current instructional review'
+    'Final content approval evidence is not bound to the current instructional review.'
   );
   requireCondition(
-    typeof metadata.reviewEvidenceHash === 'string' && metadata.reviewEvidenceHash.length > 0,
+    SHA256.test(metadata.reviewEvidenceHash || ''),
     'The instructional review record must carry the Phase 10G review evidence hash.'
   );
   requireCondition(
@@ -175,9 +240,8 @@ function assertInstructionalReviewEvidenceBinding({
 function assertFinalContentApprovalContainment({
   scenarioQuestionCount,
   assessmentEligibilityCount,
-  releasedForAssessment,
-  scoredDeliveryAuthority,
   provenance,
+  reviewerId,
 } = {}) {
   requireCondition(
     scenarioQuestionCount === 0,
@@ -187,29 +251,22 @@ function assertFinalContentApprovalContainment({
     assessmentEligibilityCount === 0,
     'Final content approval must not create assessment eligibility.'
   );
-  requireCondition(
-    releasedForAssessment === false,
-    'Final content approval must not release content for assessment.'
-  );
-  requireCondition(
-    scoredDeliveryAuthority === false,
-    'Final content approval must not grant scored delivery authority.'
-  );
-  if (provenance) {
-    requireCondition(
-      !provenance.approved_by && !provenance.approved_at,
-      'Phase 10H must not write final approval fields to question_provenance.'
-    );
-  }
+  requireCondition(provenance?.status === 'approved', 'Final content approval must leave provenance approved.');
+  requireCondition(provenance?.approved_by === reviewerId, 'Final approver identity was not persisted exactly.');
+  requireCondition(Boolean(provenance?.approved_at), 'Final approval timestamp was not persisted.');
 }
 
 module.exports = {
   UNRESOLVED_GOVERNANCE_SENTINEL,
+  FINAL_CONTENT_APPROVAL_ACTIVE_STATUS,
+  FINAL_APPROVAL_DECISIONS,
   collectUnresolvedGovernanceDecisions,
   assertGovernanceConstantsResolved,
-  assertFinalContentApprovalScaffoldGate,
+  assertFinalContentApprovalActivationGate,
   assertApprovedIndependencePolicy,
+  stableFinalContentApprovalEvidenceHash,
   assertFinalContentApprovalEvidenceContract,
+  buildFinalContentApprovalEvidence,
   assertInstructionalReviewEvidenceBinding,
   assertFinalContentApprovalContainment,
 };

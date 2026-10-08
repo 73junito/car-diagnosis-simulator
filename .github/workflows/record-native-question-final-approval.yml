@@ -1,38 +1,78 @@
-name: record-native-question-final-approval
+name: Record native question final content approval
 
-# Phase 10H design phase: this workflow declares no manual-dispatch event,
-# so no dispatch entry exists in the Actions UI. The only trigger is a push
-# of a governance-resolution tag pattern that does not exist yet, and every
-# job step fails closed regardless, so no run can record anything.
 on:
-  push:
-    tags:
-      - 'phase10h-governance-resolved-*'
+  workflow_dispatch:
+    inputs:
+      scenario_id:
+        description: Native scenario ID
+        required: true
+        default: charging-system
+        type: string
+      governed_run_id:
+        description: Existing governed run currently at instructionally_reviewed
+        required: true
+        default: native-draft:37418457881:charging-system
+        type: string
+      reviewed_payload_sha256:
+        description: Exact private payload SHA-256 reviewed by the final approver
+        required: true
+        default: 1b833a88a6fc8a0a79feaaa3f8848ac4b8cb3573f158effa0a6593bebf7cf10e
+        type: string
+      reviewer_id:
+        description: UUID of the authorized final approver
+        required: true
+        type: string
+      decision:
+        description: Explicit human final-content decision
+        required: true
+        type: choice
+        options:
+          - approve
+          - reject
+      checklist_completed:
+        description: Attest that native-final-content-approval-v1 was completed against this exact payload and evidence chain
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
-  actions: read
 
-# Policy:
-# DO NOT mark this workflow dispatchable until:
-#   FINAL_APPROVER_REQUIRED_ROLE is approved
-#   FINAL_APPROVER_REQUIRED_SCOPE is approved
-#   independentFromTechnicalReviewer is approved
-#   independentFromInstructionalReviewer is approved
-#   checklistVersion and checklistCriteria are approved
-# This workflow intentionally fails closed and records nothing in production.
+concurrency:
+  group: native-final-content-approval-${{ inputs.governed_run_id }}
+  cancel-in-progress: false
 
 jobs:
-  record-final-content-approval:
+  record:
+    name: Bind human final content approval
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/phase10h-governance-resolved-')
-    steps:
-      - name: Require governance decisions before any run
-        run: |
-          echo "record-native-question-final-approval is non-dispatchable until the Phase 10H governance decisions are approved."
-          exit 1
+    environment: pffdgqpynpbffbcnxmum_production
+    timeout-minutes: 5
+    env:
+      TORQUEMIND_ENVIRONMENT: production
+      TORQUEMIND_ORCHESTRATION_PERSISTENCE: supabase
+      TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF: pffdgqpynpbffbcnxmum
+      SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+      FINAL_APPROVAL_SCENARIO_ID: ${{ inputs.scenario_id }}
+      FINAL_APPROVAL_RUN_ID: ${{ inputs.governed_run_id }}
+      FINAL_APPROVAL_PAYLOAD_SHA256: ${{ inputs.reviewed_payload_sha256 }}
+      FINAL_APPROVAL_REVIEWER_ID: ${{ inputs.reviewer_id }}
+      FINAL_APPROVAL_DECISION: ${{ inputs.decision }}
+      FINAL_APPROVAL_CHECKLIST_COMPLETED: ${{ inputs.checklist_completed }}
 
-      - name: Fail closed validation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Install runtime dependencies
+        run: npm ci --ignore-scripts
+      - name: Record exact human final content decision
+        run: node scripts/record-native-question-final-approval.js
+      - name: Governance notice
         run: |
-          echo "Phase 10H workflow requires approved role, scope, independence rule, and checklist contract."
-          exit 1
+          echo "Phase 10H may record only instructionally_reviewed -> final_content_approved after explicit human approval."
+          echo "Final content approval creates no public question, assessment eligibility, scoring, delivery, grading, or release authority."

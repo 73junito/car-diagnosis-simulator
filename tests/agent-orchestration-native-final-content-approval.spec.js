@@ -2,47 +2,44 @@
 
 const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
-const { spawnSync } = require('child_process');
 
 const PersistentGovernanceRuntime = require('../src/ai/runtime/persistent-governance-runtime');
 const {
   UNRESOLVED_GOVERNANCE_SENTINEL,
+  FINAL_CONTENT_APPROVAL_ACTIVE_STATUS,
   collectUnresolvedGovernanceDecisions,
-  assertGovernanceConstantsResolved,
-  assertFinalContentApprovalScaffoldGate,
+  assertFinalContentApprovalActivationGate,
   assertApprovedIndependencePolicy,
+  stableFinalContentApprovalEvidenceHash,
   assertFinalContentApprovalEvidenceContract,
+  buildFinalContentApprovalEvidence,
   assertInstructionalReviewEvidenceBinding,
+  assertFinalContentApprovalContainment,
 } = require('../src/ai/runtime/native-final-content-approval');
 
 const contractPath = path.join(__dirname, '..', 'data', 'architecture', 'agent-orchestration-native-final-content-approval.json');
 const workflowPath = path.join(__dirname, '..', '.github', 'workflows', 'record-native-question-final-approval.yml');
 const scriptPath = path.join(__dirname, '..', 'scripts', 'record-native-question-final-approval.js');
+const coordinatorPath = path.join(__dirname, '..', 'src', 'ai', 'governance', 'production-run-coordinator.js');
 
-const EXPECTED_UNRESOLVED = [
-  'FINAL_APPROVER_REQUIRED_ROLE',
-  'FINAL_APPROVER_REQUIRED_SCOPE',
-  'independencePolicy.independentFromTechnicalReviewer',
-  'independencePolicy.independentFromInstructionalReviewer',
-  'checklistVersion',
-  'checklistCriteria',
-];
+const contract = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
+const workflow = fs.readFileSync(workflowPath, 'utf8');
+const scriptSource = fs.readFileSync(scriptPath, 'utf8');
+const coordinatorSource = fs.readFileSync(coordinatorPath, 'utf8');
 
-function resolvedContractOverride(independenceRequired = true) {
-  return {
-    ...JSON.parse(fs.readFileSync(contractPath, 'utf8')),
-    governance_constants: {
-      FINAL_APPROVER_REQUIRED_ROLE: 'content_approver',
-      FINAL_APPROVER_REQUIRED_SCOPE: 'native-question-final-approval',
-      independencePolicy: {
-        independentFromTechnicalReviewer: independenceRequired,
-        independentFromInstructionalReviewer: independenceRequired,
-      },
-      checklistVersion: 'native-final-content-approval-v1',
-      checklistCriteria: ['human-final-approval-checklist-criterion'],
-    },
-  };
+const RUN_ID = 'native-draft:37418457881:charging-system';
+const PROVENANCE_ID = 'c3b07430-db49-4216-9878-c3efb4ab0a54';
+const QUESTION_ID = 'charging-system-ai-draft-e9ac4b22b122';
+const PAYLOAD_SHA = '1b833a88a6fc8a0a79feaaa3f8848ac4b8cb3573f158effa0a6593bebf7cf10e';
+const CITATION_SET_HASH = '47bf8234e313be166026771ccf5cd6ab59b62f917422a51ce347eeaa6bb88a32';
+const CITATION_VALIDATION_HASH = '01a5a2a2f34fc47ca16417f8bfca43ff659aacaf8f0fa1b5dc930a3269617a3c';
+const INSTRUCTIONAL_REVIEW_HASH = '68e06d5c99638bd6361d919eca0454261231c9f1fa8ab44fdc54f44e0841aecb';
+const TECHNICAL_REVIEWER_ID = '296a1f4f-17a4-4df8-b1e0-d16b72ce8e0f';
+const INSTRUCTIONAL_REVIEWER_ID = '6f3a699d-eadd-41b5-863f-8688dc02c731';
+const FINAL_APPROVER_ID = '2f14c3d5-6f9b-4f69-8f9f-3f6a9a1b2c3d';
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
 }
 
 function createStubCoordinator(entries = [], appends = [], reads = []) {
@@ -57,137 +54,118 @@ function createStubCoordinator(entries = [], appends = [], reads = []) {
       appends.push(entry);
       return entry;
     },
-    recover: async () => {
-      reads.push({ method: 'recover', args: [] });
+    recover: async (...args) => {
+      reads.push({ method: 'recover', args });
       return null;
     },
   };
 }
 
-function buildApprovalEvidence(overrides = {}) {
-  return {
-    provenanceId: 'c3b07430-db49-4216-9878-c3efb4ab0a54',
-    questionId: 'charging-system-ai-draft-e9ac4b22b122',
-    payloadSha256: '1b833a88a6fc8a0a79feaaa3f8848ac4b8cb3573f158effa0a6593bebf7cf10e',
-    citationSetHash: '47bf8234e313be166026771ccf5cd6ab59b62f917422a51ce347eeaa6bb88a32',
-    citationValidationEvidenceHash: '01a5a2a2f34fc47ca16417f8bfca43ff659aacaf8f0fa1b5dc930a3269617a3c',
-    reviewerId: '2f14c3d5-6f9b-4f69-8f9f-3f6a9a1b2c3d',
-    technicalReviewerId: '5a9e0d2c-1b3f-4c7e-9a1d-7e2b4c6f8a01',
-    instructionalReviewerId: '9c3b7e1f-2a4d-4b8c-8e6a-1f5d9c7b3a22',
-    approverRole: 'content_approver',
+function buildEvidence(overrides = {}) {
+  return buildFinalContentApprovalEvidence({
+    provenanceId: PROVENANCE_ID,
+    questionId: QUESTION_ID,
+    payloadSha256: PAYLOAD_SHA,
+    citationSetHash: CITATION_SET_HASH,
+    citationValidationEvidenceHash: CITATION_VALIDATION_HASH,
+    instructionalReviewEvidenceHash: INSTRUCTIONAL_REVIEW_HASH,
+    reviewerId: FINAL_APPROVER_ID,
+    approverRole: 'final_approver',
     approverScope: 'native-question-final-approval',
-    reviewedAt: '2026-10-07T23:59:00Z',
+    technicalReviewerId: TECHNICAL_REVIEWER_ID,
+    instructionalReviewerId: INSTRUCTIONAL_REVIEWER_ID,
+    reviewedAt: '2026-10-08T02:15:00.000Z',
     decision: 'approve',
-    checklistVersion: 'native-final-content-approval-v1',
     checklistCompleted: true,
-    checklistCriteria: ['human-final-approval-checklist-criterion'],
-    instructionalReviewEvidenceHash: PHASE10G_REVIEW_EVIDENCE_HASH,
-    submittedBy: 'phase10h-test',
+    submittedBy: 'phase10h-activation-test',
+    contract,
     ...overrides,
+  });
+}
+
+function priorInstructionalEntry() {
+  return {
+    runId: RUN_ID,
+    actor: 'instructional-review-agent',
+    action: 'instructional-review-recorded',
+    state: 'instructionally_reviewed',
+    metadata: {
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      reviewEvidenceHash: INSTRUCTIONAL_REVIEW_HASH,
+      reviewerIdentity: INSTRUCTIONAL_REVIEWER_ID,
+      technicalReviewerIdentity: TECHNICAL_REVIEWER_ID,
+      payloadSha256: PAYLOAD_SHA,
+      citationSetHash: CITATION_SET_HASH,
+      citationValidationEvidenceHash: CITATION_VALIDATION_HASH,
+      humanInstructionalDecisionBound: true,
+      agentSynthesizedDecision: false,
+      humanApproval: false,
+    },
   };
 }
 
-function hashEvidence(evidence) {
-  return crypto.createHash('sha256').update(JSON.stringify(evidence)).digest('hex');
-}
-
-// Synthetic-but-consistent stand-in for the Phase 10G reviewEvidenceHash
-// written by the instructional-review-recorded ledger entry; the pairing
-// between evidence and ledger metadata is what the binding enforces.
-const PHASE10G_REVIEW_EVIDENCE_HASH = crypto
-  .createHash('sha256')
-  .update('phase10g-instructional-review-evidence')
-  .digest('hex');
-
-describe('Phase 10H native final content approval contract', () => {
-  const contract = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
-
-  test('contract stays draft-non-dispatchable with unresolved governance decisions', () => {
-    expect(contract.phase).toBe('10H');
-    expect(contract.status).toBe('draft-non-dispatchable');
-    expect(contract.state_transition).toEqual({
-      from: 'instructionally_reviewed',
-      to: 'final_content_approved',
-      actor: 'human',
-      requires_explicit_human_approval: true,
+describe('Phase 10H governance resolution contract', () => {
+  test('resolves the six human-approved governance values exactly', () => {
+    expect(contract.status).toBe(FINAL_CONTENT_APPROVAL_ACTIVE_STATUS);
+    expect(contract.governance_constants).toEqual({
+      FINAL_APPROVER_REQUIRED_ROLE: 'final_approver',
+      FINAL_APPROVER_REQUIRED_SCOPE: 'native-question-final-approval',
+      independencePolicy: {
+        independentFromTechnicalReviewer: true,
+        independentFromInstructionalReviewer: true,
+      },
+      checklistVersion: 'native-final-content-approval-v1',
+      checklistCriteria: [
+        'exact-payload-and-prior-evidence-binding',
+        'technical-citation-and-instructional-gates-complete',
+        'final-content-preserves-approved-scope-and-evidence',
+        'no-unsupported-thresholds-procedures-or-claims',
+        'no-assessment-scoring-delivery-or-release-authority',
+        'blocked-claims-and-containment-preserved',
+      ],
     });
-    expect(contract.governance_constants.FINAL_APPROVER_REQUIRED_ROLE).toBe(UNRESOLVED_GOVERNANCE_SENTINEL);
-    expect(contract.governance_constants.FINAL_APPROVER_REQUIRED_SCOPE).toBe(UNRESOLVED_GOVERNANCE_SENTINEL);
-    expect(contract.governance_constants.independencePolicy.independentFromTechnicalReviewer).toBe(UNRESOLVED_GOVERNANCE_SENTINEL);
-    expect(contract.governance_constants.independencePolicy.independentFromInstructionalReviewer).toBe(UNRESOLVED_GOVERNANCE_SENTINEL);
-    expect(contract.governance_constants.checklistVersion).toBe(UNRESOLVED_GOVERNANCE_SENTINEL);
-    expect(contract.governance_constants.checklistCriteria).toBe(UNRESOLVED_GOVERNANCE_SENTINEL);
-    expect(contract.unresolved_governance_decisions).toEqual(EXPECTED_UNRESOLVED);
-    expect(collectUnresolvedGovernanceDecisions(contract)).toEqual(EXPECTED_UNRESOLVED);
-    expect(() => assertGovernanceConstantsResolved(contract)).toThrow(/unresolved governance decisions/);
+    expect(contract.unresolved_governance_decisions).toEqual([]);
+    expect(collectUnresolvedGovernanceDecisions(contract)).toEqual([]);
+    expect(() => assertFinalContentApprovalActivationGate(contract)).not.toThrow();
   });
 
-  test('scaffold gate rejects the unresolved repository contract first and a resolved draft contract by status', () => {
-    const repositoryContract = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
-    expect(() => assertFinalContentApprovalScaffoldGate(repositoryContract)).toThrow(
-      /unresolved governance decisions/
-    );
-    expect(() => assertFinalContentApprovalScaffoldGate(resolvedContractOverride())).toThrow(
-      /draft-non-dispatchable/
-    );
+  test('activation gate still fails closed for sentinels or any unapproved status', () => {
+    const unresolved = clone(contract);
+    unresolved.governance_constants.FINAL_APPROVER_REQUIRED_ROLE = UNRESOLVED_GOVERNANCE_SENTINEL;
+    expect(() => assertFinalContentApprovalActivationGate(unresolved)).toThrow(/unresolved governance decisions/);
+
+    const wrongStatus = clone(contract);
+    wrongStatus.status = 'draft-non-dispatchable';
+    expect(() => assertFinalContentApprovalActivationGate(wrongStatus)).toThrow(/not activation-ready/);
   });
 
-  test('independence policy accepts either approved boolean and the approved value is enforced', () => {
-    const notRequired = resolvedContractOverride(false);
-    expect(collectUnresolvedGovernanceDecisions(notRequired)).toEqual([]);
-    expect(() => assertGovernanceConstantsResolved(notRequired)).not.toThrow();
-
-    const sharedApprover = '2f14c3d5-6f9b-4f69-8f9f-3f6a9a1b2c3d';
-    expect(() =>
-      assertApprovedIndependencePolicy({
-        independencePolicy: notRequired.governance_constants.independencePolicy,
-        approverId: sharedApprover,
-        technicalReviewerId: sharedApprover,
-        instructionalReviewerId: sharedApprover,
-      })
-    ).not.toThrow();
-
-    expect(() =>
-      assertApprovedIndependencePolicy({
-        independencePolicy: resolvedContractOverride(true).governance_constants.independencePolicy,
-        approverId: sharedApprover,
-        technicalReviewerId: sharedApprover,
-        instructionalReviewerId: '5a9e0d2c-1b3f-4c7e-9a1d-7e2b4c6f8a01',
-      })
-    ).toThrow(/independent from the technical reviewer/);
-
-    expect(() =>
-      assertApprovedIndependencePolicy({
-        independencePolicy: {
-          independentFromTechnicalReviewer: 'UNRESOLVED_GOVERNANCE_DECISION',
-          independentFromInstructionalReviewer: true,
-        },
-        approverId: 'approver',
-        technicalReviewerId: 'technical',
-        instructionalReviewerId: 'instructional',
-      })
-    ).toThrow(/approved boolean/);
+  test('contract binds the exact successful Phase 10G control point including review evidence hash', () => {
+    expect(contract.control_commit).toBe('bd29fb7171ae81822ac2a1eb8ff3a8c6e5e802a8');
+    expect(contract.referenced_10G_evidence).toMatchObject({
+      governed_run_id: RUN_ID,
+      checkpoint_version: 6,
+      state: 'instructionally_reviewed',
+      status: 'instructionally-reviewed',
+      question_id: QUESTION_ID,
+      provenance_id: PROVENANCE_ID,
+      payload_sha256: PAYLOAD_SHA,
+      citation_set_hash: CITATION_SET_HASH,
+      citation_validation_evidence_hash: CITATION_VALIDATION_HASH,
+      instructional_review_evidence_hash: INSTRUCTIONAL_REVIEW_HASH,
+      human_approval: false,
+    });
   });
 
-  test('contract binds the exact 10G instructional review evidence', () => {
-    const evidence = contract.referenced_10G_evidence;
-    expect(evidence.governed_run_id).toBe('native-draft:37418457881:charging-system');
-    expect(evidence.github_actions_run_id).toBe(37703982461);
-    expect(evidence.state).toBe('instructionally_reviewed');
-    expect(evidence.checkpoint_version).toBe(6);
-    expect(evidence.status).toBe('instructionally-reviewed');
-    expect(evidence.question_id).toBe('charging-system-ai-draft-e9ac4b22b122');
-    expect(evidence.provenance_id).toBe('c3b07430-db49-4216-9878-c3efb4ab0a54');
-    expect(evidence.payload_sha256).toBe('1b833a88a6fc8a0a79feaaa3f8848ac4b8cb3573f158effa0a6593bebf7cf10e');
-    expect(evidence.citation_set_hash).toBe('47bf8234e313be166026771ccf5cd6ab59b62f917422a51ce347eeaa6bb88a32');
-    expect(evidence.citation_validation_evidence_hash).toBe('01a5a2a2f34fc47ca16417f8bfca43ff659aacaf8f0fa1b5dc930a3269617a3c');
-    expect(evidence.human_decision).toBe('pass');
-    expect(evidence.human_approval).toBe(false);
-    expect(evidence.agent_synthesized_decision).toBe(false);
-  });
-
-  test('contract requires containment after a future 10H transition that has not occurred', () => {
-    expect(contract.required_containment_after_future_10h).toEqual({
+  test('storage boundary allows only provenance final approval plus governed ledger write', () => {
+    expect(contract.storage_boundary).toEqual({
+      question_provenance_final_approval_write: true,
+      public_scenario_questions_write: false,
+      assessment_eligibility_write: false,
+      orchestration_ledger_write_on_approval: true,
+      citation_validation_write: false,
+    });
+    expect(contract.required_containment_after_10h).toMatchObject({
       public_scenario_question_rows: 0,
       assessment_eligibility_rows: 0,
       released_for_assessment: false,
@@ -196,242 +174,245 @@ describe('Phase 10H native final content approval contract', () => {
       release_authority: false,
       claims_02_and_12_blocked: true,
     });
-    expect(Object.values(contract.storage_boundary)).toEqual([false, false, false, false, false]);
-    expect(contract.invariants.length).toBeGreaterThanOrEqual(5);
   });
 });
 
-describe('Phase 10H runtime final content approval control plane', () => {
-  test('runtime fails closed on unresolved governance decisions before any ledger write', async () => {
-    const appends = [];
-    const runtime = new PersistentGovernanceRuntime({ coordinator: createStubCoordinator([], appends) });
-    const evidence = buildApprovalEvidence();
-    const evidenceHash = hashEvidence(evidence);
-
-    await expect(
-      runtime.recordFinalContentApproval({
-        runId: 'native-draft:37418457881:charging-system',
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        approvalEvidenceHash: evidenceHash,
-        approvalEvidence: evidence,
-      })
-    ).rejects.toThrow(/unresolved governance decisions/);
-
-    expect(appends).toHaveLength(0);
+describe('Phase 10H approval evidence contract', () => {
+  test('builds deterministic approval evidence from the approved role, scope, checklist and Phase 10G hash', () => {
+    const first = buildEvidence();
+    const second = buildEvidence();
+    expect(first).toEqual(second);
+    expect(first.evidenceHash).toBe(stableFinalContentApprovalEvidenceHash(first.evidence));
+    expect(first.evidence).toMatchObject({
+      approverRole: 'final_approver',
+      approverScope: 'native-question-final-approval',
+      instructionalReviewEvidenceHash: INSTRUCTIONAL_REVIEW_HASH,
+      checklistVersion: 'native-final-content-approval-v1',
+      checklistCompleted: true,
+      allCriteriaPassed: true,
+    });
+    expect(first.evidence.checklistCriteria).toEqual(contract.governance_constants.checklistCriteria);
+    expect(() => assertFinalContentApprovalEvidenceContract(first.evidence, contract)).not.toThrow();
   });
 
-  test('runtime rejects a fully valid instructionally_reviewed ledger state before reading or appending', async () => {
+  test('rejects wrong role, scope, checklist, or Phase 10G evidence hash', () => {
+    const valid = buildEvidence().evidence;
+    expect(() => assertFinalContentApprovalEvidenceContract({ ...valid, approverRole: 'technical_reviewer' }, contract))
+      .toThrow(/FINAL_APPROVER_REQUIRED_ROLE/);
+    expect(() => assertFinalContentApprovalEvidenceContract({ ...valid, approverScope: 'native-question-instructional-review' }, contract))
+      .toThrow(/FINAL_APPROVER_REQUIRED_SCOPE/);
+    expect(() => assertFinalContentApprovalEvidenceContract({ ...valid, checklistCompleted: false }, contract))
+      .toThrow(/checklist must be completed/);
+    expect(() => assertFinalContentApprovalEvidenceContract({ ...valid, checklistCriteria: valid.checklistCriteria.slice(0, 5) }, contract))
+      .toThrow(/complete approved checklist criteria/);
+    expect(() => assertFinalContentApprovalEvidenceContract({ ...valid, instructionalReviewEvidenceHash: 'f'.repeat(64) }, contract))
+      .not.toThrow();
+    expect(() => assertInstructionalReviewEvidenceBinding({
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      approvalEvidence: { ...valid, instructionalReviewEvidenceHash: 'f'.repeat(64) },
+      latestEntry: priorInstructionalEntry(),
+    })).toThrow(/does not match the Phase 10G instructional review evidence/);
+  });
+
+  test('enforces both approved independence requirements', () => {
+    expect(() => assertApprovedIndependencePolicy({
+      independencePolicy: contract.governance_constants.independencePolicy,
+      approverId: FINAL_APPROVER_ID,
+      technicalReviewerId: TECHNICAL_REVIEWER_ID,
+      instructionalReviewerId: INSTRUCTIONAL_REVIEWER_ID,
+    })).not.toThrow();
+
+    expect(() => assertApprovedIndependencePolicy({
+      independencePolicy: contract.governance_constants.independencePolicy,
+      approverId: TECHNICAL_REVIEWER_ID,
+      technicalReviewerId: TECHNICAL_REVIEWER_ID,
+      instructionalReviewerId: INSTRUCTIONAL_REVIEWER_ID,
+    })).toThrow(/technical reviewer/);
+
+    expect(() => assertApprovedIndependencePolicy({
+      independencePolicy: contract.governance_constants.independencePolicy,
+      approverId: INSTRUCTIONAL_REVIEWER_ID,
+      technicalReviewerId: TECHNICAL_REVIEWER_ID,
+      instructionalReviewerId: INSTRUCTIONAL_REVIEWER_ID,
+    })).toThrow(/instructional reviewer/);
+  });
+
+  test('requires exact binding to the latest Phase 10G instructional review entry', () => {
+    const evidence = buildEvidence().evidence;
+    expect(() => assertInstructionalReviewEvidenceBinding({
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      approvalEvidence: evidence,
+      latestEntry: priorInstructionalEntry(),
+    })).not.toThrow();
+
+    const drifted = priorInstructionalEntry();
+    drifted.metadata.citationSetHash = 'f'.repeat(64);
+    expect(() => assertInstructionalReviewEvidenceBinding({
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      approvalEvidence: evidence,
+      latestEntry: drifted,
+    })).toThrow(/not bound to the current instructional review/);
+  });
+});
+
+describe('Phase 10H persistent runtime', () => {
+  test('records exactly one human final-content transition with bound evidence metadata', async () => {
+    const entries = [priorInstructionalEntry()];
     const appends = [];
     const reads = [];
-    const evidence = buildApprovalEvidence();
-    const evidenceHash = hashEvidence(evidence);
-    // Fully valid prior state: the latest ledger entry is the Phase 10G
-    // instructional review bound to the exact approval evidence below.
-    const priorEntry = {
-      runId: 'native-draft:37418457881:charging-system',
-      actor: 'human',
-      action: 'instructional-review-recorded',
-      state: 'instructionally_reviewed',
-      metadata: {
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        reviewEvidenceHash: PHASE10G_REVIEW_EVIDENCE_HASH,
-        reviewerIdentity: evidence.instructionalReviewerId,
-        technicalReviewerIdentity: evidence.technicalReviewerId,
-        reviewedAt: evidence.reviewedAt,
-        payloadSha256: evidence.payloadSha256,
-        citationSetHash: evidence.citationSetHash,
-        citationValidationEvidenceHash: evidence.citationValidationEvidenceHash,
-        humanInstructionalDecisionBound: true,
-        agentSynthesizedDecision: false,
-        humanApproval: false,
-      },
-    };
     const runtime = new PersistentGovernanceRuntime({
-      coordinator: createStubCoordinator([priorEntry], appends, reads),
+      coordinator: createStubCoordinator(entries, appends, reads),
+    });
+    const { evidence, evidenceHash } = buildEvidence();
+
+    const recorded = await runtime.recordFinalContentApproval({
+      runId: RUN_ID,
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      approvalEvidenceHash: evidenceHash,
+      approvalEvidence: evidence,
     });
 
-    await expect(
-      runtime.recordFinalContentApproval({
-        runId: 'native-draft:37418457881:charging-system',
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        approvalEvidenceHash: evidenceHash,
-        approvalEvidence: evidence,
-      })
-    ).rejects.toThrow(/unresolved governance decisions/);
-
-    expect(reads).toHaveLength(0);
-    expect(appends).toHaveLength(0);
-  });
-
-  test('evidence contract enforces the resolved approver role and scope from the repository contract', () => {
-    const resolved = resolvedContractOverride();
-    const evidence = buildApprovalEvidence();
-    expect(() => assertFinalContentApprovalEvidenceContract(evidence, resolved)).not.toThrow();
-    expect(() =>
-      assertFinalContentApprovalEvidenceContract(
-        { ...evidence, approverRole: 'technical_reviewer' },
-        resolved
-      )
-    ).toThrow(/FINAL_APPROVER_REQUIRED_ROLE/);
-    expect(() =>
-      assertFinalContentApprovalEvidenceContract({ ...evidence, approverRole: undefined }, resolved)
-    ).toThrow(/carry the approver role/);
-    expect(() =>
-      assertFinalContentApprovalEvidenceContract(
-        { ...evidence, approverScope: 'technical-review' },
-        resolved
-      )
-    ).toThrow(/FINAL_APPROVER_REQUIRED_SCOPE/);
-  });
-
-  test('evidence contract enforces checklist completion, exact version, and complete approved criteria', () => {
-    const resolved = resolvedContractOverride();
-    const evidence = buildApprovalEvidence();
-    expect(() => assertFinalContentApprovalEvidenceContract(evidence, resolved)).not.toThrow();
-    expect(() =>
-      assertFinalContentApprovalEvidenceContract({ ...evidence, checklistCompleted: false }, resolved)
-    ).toThrow(/checklist must be completed/);
-    expect(() =>
-      assertFinalContentApprovalEvidenceContract(
-        { ...evidence, checklistVersion: 'native-final-content-approval-v0' },
-        resolved
-      )
-    ).toThrow(/checklist version/);
-    expect(() =>
-      assertFinalContentApprovalEvidenceContract({ ...evidence, checklistCriteria: [] }, resolved)
-    ).toThrow(/complete approved checklist criteria/);
-    expect(() =>
-      assertFinalContentApprovalEvidenceContract(
-        { ...evidence, checklistCriteria: ['some-other-criterion'] },
-        resolved
-      )
-    ).toThrow(/complete approved checklist criteria/);
-    expect(() =>
-      assertFinalContentApprovalEvidenceContract(
-        { ...evidence, instructionalReviewEvidenceHash: 'not-a-64-hex-hash' },
-        resolved
-      )
-    ).toThrow(/64-hex Phase 10G/);
-  });
-
-  test('final approval evidence binds the exact Phase 10G instructional review evidence hash', () => {
-    const evidence = buildApprovalEvidence();
-    const latestEntry = {
-      action: 'instructional-review-recorded',
-      state: 'instructionally_reviewed',
+    expect(appends).toHaveLength(1);
+    expect(recorded).toMatchObject({
+      actor: 'human',
+      action: 'final-content-approval-recorded',
+      state: 'final_content_approved',
       metadata: {
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        payloadSha256: evidence.payloadSha256,
-        citationSetHash: evidence.citationSetHash,
-        citationValidationEvidenceHash: evidence.citationValidationEvidenceHash,
-        reviewEvidenceHash: PHASE10G_REVIEW_EVIDENCE_HASH,
+        provenanceId: PROVENANCE_ID,
+        questionId: QUESTION_ID,
+        approvalEvidenceHash: evidenceHash,
+        approverIdentity: FINAL_APPROVER_ID,
+        approverRole: 'final_approver',
+        approverScope: 'native-question-final-approval',
+        checklistVersion: 'native-final-content-approval-v1',
+        payloadSha256: PAYLOAD_SHA,
+        citationSetHash: CITATION_SET_HASH,
+        citationValidationEvidenceHash: CITATION_VALIDATION_HASH,
+        instructionalReviewEvidenceHash: INSTRUCTIONAL_REVIEW_HASH,
+        humanFinalApprovalBound: true,
+        agentSynthesizedDecision: false,
+        humanApproval: true,
+      },
+    });
+    expect(recorded.metadata.checklistCriteria).toEqual(contract.governance_constants.checklistCriteria);
+    expect(reads.some((row) => row.method === 'loadEntries')).toBe(true);
+    expect(reads.some((row) => row.method === 'recover')).toBe(true);
+  });
+
+  test('fails closed on stale prior state, evidence drift, non-human actor, and duplicate evidence drift', async () => {
+    const { evidence, evidenceHash } = buildEvidence();
+
+    const staleRuntime = new PersistentGovernanceRuntime({
+      coordinator: createStubCoordinator([], [], []),
+    });
+    await expect(staleRuntime.recordFinalContentApproval({
+      runId: RUN_ID,
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      approvalEvidenceHash: evidenceHash,
+      approvalEvidence: evidence,
+    })).rejects.toThrow(/instructionally_reviewed state/);
+
+    const drifted = priorInstructionalEntry();
+    drifted.metadata.reviewEvidenceHash = 'f'.repeat(64);
+    const driftRuntime = new PersistentGovernanceRuntime({
+      coordinator: createStubCoordinator([drifted], [], []),
+    });
+    await expect(driftRuntime.recordFinalContentApproval({
+      runId: RUN_ID,
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      approvalEvidenceHash: evidenceHash,
+      approvalEvidence: evidence,
+    })).rejects.toThrow(/does not match the Phase 10G instructional review evidence/);
+
+    const actorRuntime = new PersistentGovernanceRuntime({
+      coordinator: createStubCoordinator([priorInstructionalEntry()], [], []),
+    });
+    await expect(actorRuntime.recordFinalContentApproval({
+      runId: RUN_ID,
+      actor: 'question-agent',
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      approvalEvidenceHash: evidenceHash,
+      approvalEvidence: evidence,
+    })).rejects.toThrow(/actor must be the human approver/);
+
+    const existing = {
+      action: 'final-content-approval-recorded',
+      state: 'final_content_approved',
+      metadata: {
+        provenanceId: PROVENANCE_ID,
+        questionId: QUESTION_ID,
+        approvalEvidenceHash: 'f'.repeat(64),
       },
     };
-    expect(() =>
-      assertInstructionalReviewEvidenceBinding({
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        approvalEvidence: evidence,
-        latestEntry,
-      })
-    ).not.toThrow();
+    const duplicateRuntime = new PersistentGovernanceRuntime({
+      coordinator: createStubCoordinator([priorInstructionalEntry(), existing], [], []),
+    });
+    await expect(duplicateRuntime.recordFinalContentApproval({
+      runId: RUN_ID,
+      provenanceId: PROVENANCE_ID,
+      questionId: QUESTION_ID,
+      approvalEvidenceHash: evidenceHash,
+      approvalEvidence: evidence,
+    })).rejects.toThrow(/Existing final content approval evidence/);
+  });
 
-    expect(() =>
-      assertInstructionalReviewEvidenceBinding({
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        approvalEvidence: { ...evidence, instructionalReviewEvidenceHash: 'f'.repeat(64) },
-        latestEntry,
-      })
-    ).toThrow(/does not match the Phase 10G instructional review evidence/);
-
-    expect(() =>
-      assertInstructionalReviewEvidenceBinding({
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        approvalEvidence: { ...evidence, instructionalReviewEvidenceHash: undefined },
-        latestEntry,
-      })
-    ).toThrow(/does not match the Phase 10G instructional review evidence/);
-
-    expect(() =>
-      assertInstructionalReviewEvidenceBinding({
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        approvalEvidence: evidence,
-        latestEntry: {
-          ...latestEntry,
-          metadata: { ...latestEntry.metadata, reviewEvidenceHash: undefined },
-        },
-      })
-    ).toThrow(/must carry the Phase 10G review evidence hash/);
-
-    expect(() =>
-      assertInstructionalReviewEvidenceBinding({
-        provenanceId: evidence.provenanceId,
-        questionId: evidence.questionId,
-        approvalEvidence: evidence,
-        latestEntry: null,
-      })
-    ).toThrow(/requires the instructionally_reviewed state/);
+  test('post-write containment requires approved provenance and still forbids public or assessment promotion', () => {
+    expect(() => assertFinalContentApprovalContainment({
+      scenarioQuestionCount: 0,
+      assessmentEligibilityCount: 0,
+      reviewerId: FINAL_APPROVER_ID,
+      provenance: {
+        status: 'approved',
+        approved_by: FINAL_APPROVER_ID,
+        approved_at: '2026-10-08T02:15:00.000Z',
+      },
+    })).not.toThrow();
+    expect(() => assertFinalContentApprovalContainment({
+      scenarioQuestionCount: 1,
+      assessmentEligibilityCount: 0,
+      reviewerId: FINAL_APPROVER_ID,
+      provenance: { status: 'approved', approved_by: FINAL_APPROVER_ID, approved_at: '2026-10-08T02:15:00.000Z' },
+    })).toThrow(/public scenario_questions/);
   });
 });
 
-describe('Phase 10H workflow and script fail closed', () => {
-  const workflow = fs.readFileSync(workflowPath, 'utf8');
-  const scriptSource = fs.readFileSync(scriptPath, 'utf8');
-
-  test('workflow never grants production access and every job step exits 1', () => {
-    // No manual dispatch entry may exist during the design phase; the only
-    // trigger is the governance-resolution tag gate, and steps still fail closed.
-    expect(workflow).not.toMatch(/^\s*workflow_dispatch:/m);
-    expect(workflow).toContain('phase10h-governance-resolved-*');
-    expect(workflow).not.toContain('environment:');
-    expect(workflow).not.toContain('SERVICE_ROLE_KEY');
-    expect(workflow).not.toContain('SUPABASE_URL');
-    const exitCount = (workflow.match(/exit 1/g) || []).length;
-    expect(exitCount).toBeGreaterThanOrEqual(2);
+describe('Phase 10H production activation surfaces', () => {
+  test('workflow is manually dispatchable only after governance resolution and binds production inputs explicitly', () => {
+    expect(workflow).toContain('workflow_dispatch:');
+    expect(workflow).not.toContain('phase10h-governance-resolved-*');
+    expect(workflow).toContain('environment: pffdgqpynpbffbcnxmum_production');
+    expect(workflow).toContain('SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}');
+    expect(workflow).toContain('FINAL_APPROVAL_REVIEWER_ID: ${{ inputs.reviewer_id }}');
+    expect(workflow).toContain('FINAL_APPROVAL_DECISION: ${{ inputs.decision }}');
+    expect(workflow).toContain('FINAL_APPROVAL_CHECKLIST_COMPLETED: ${{ inputs.checklist_completed }}');
+    expect(workflow).not.toContain('comments:');
   });
 
-  test('script fails closed on unresolved governance decisions without importing Supabase', () => {
-    expect(scriptSource).not.toContain('@supabase/supabase-js');
-    expect(scriptSource).not.toContain('createClient');
-    expect(scriptSource).not.toContain('question_provenance');
-
-    const result = spawnSync(process.execPath, [scriptPath], { encoding: 'utf8' });
-    expect(result.status).toBe(1);
-    const output = JSON.parse(result.stdout);
-    expect(output.failClosed).toBe(true);
-    expect(output.reason).toBe('unresolved-governance-decisions');
-    expect(output.productionWritePerformed).toBe(false);
-    expect(output.unresolved).toEqual(EXPECTED_UNRESOLVED);
+  test('production script verifies Auth/profile authority, exact control point, recovery, and containment without promotion writes', () => {
+    expect(scriptSource).toContain("require('@supabase/supabase-js')");
+    expect(scriptSource).toContain(".from('profiles')");
+    expect(scriptSource).toContain('client.auth.admin.getUserById(reviewerId)');
+    expect(scriptSource).toContain('FINAL_APPROVER_REQUIRED_ROLE');
+    expect(scriptSource).toContain('FINAL_APPROVER_REQUIRED_SCOPE');
+    expect(scriptSource).toContain('approvalPersistedLedgerMissing');
+    expect(scriptSource).toContain('prior final rejection exists for this exact payload');
+    expect(scriptSource).toContain("status: 'approved'");
+    expect(scriptSource).toContain('approved_by: reviewerId');
+    expect(scriptSource).toContain('approved_at: reviewedAt');
+    expect(scriptSource).toContain('recordFinalContentApproval');
+    expect(scriptSource).not.toMatch(/\.from\('scenario_questions'\)[\s\S]{0,300}\.(insert|update|upsert)\(/);
+    expect(scriptSource).not.toMatch(/\.from\('assessment_question_eligibility'\)[\s\S]{0,300}\.(insert|update|upsert)\(/);
+    expect(scriptSource).not.toMatch(/\.from\('citation_validations'\)[\s\S]{0,300}\.(insert|update|upsert)\(/);
   });
 
-  test('script still fails closed with a complete human attestation while governance is unresolved', () => {
-    const result = spawnSync(process.execPath, [scriptPath], {
-      encoding: 'utf8',
-      env: {
-        ...process.env,
-        FINAL_APPROVAL_DECISION: 'approve',
-        FINAL_APPROVAL_REVIEWER_ID: '2f14c3d5-6f9b-4f69-8f9f-3f6a9a1b2c3d',
-        FINAL_APPROVAL_REVIEWED_AT: '2026-10-07T23:59:00Z',
-        FINAL_APPROVAL_CHECKLIST_COMPLETED: 'true',
-        FINAL_APPROVAL_EVIDENCE: 'final-approval-evidence-ref',
-        FINAL_APPROVAL_SUBMITTED_BY: 'phase10h-test',
-      },
-    });
-    expect(result.status).toBe(1);
-    const output = JSON.parse(result.stdout);
-    expect(output.failClosed).toBe(true);
-    expect(output.reason).toBe('unresolved-governance-decisions');
-    expect(output.unresolved).toEqual(EXPECTED_UNRESOLVED);
-    expect(output.productionWritePerformed).toBe(false);
-    // Defense in depth: even if governance were resolved, the Phase 10H
-    // non-production containment branch keeps the write path closed.
-    expect(scriptSource).toContain('phase-10h-non-production-write-path-disabled');
+  test('checkpoint recovery recognizes the dedicated final-content approval ledger action', () => {
+    expect(coordinatorSource).toContain("'final-content-approval-recorded': 'final-content-approved'");
   });
 });
