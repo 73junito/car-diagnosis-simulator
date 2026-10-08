@@ -115,8 +115,8 @@ describe('Phase 10H native final content approval contract', () => {
     expect(evidence.agent_synthesized_decision).toBe(false);
   });
 
-  test('contract preserves containment after 10H', () => {
-    expect(contract.containment_after_10h).toEqual({
+  test('contract requires containment after a future 10H transition that has not occurred', () => {
+    expect(contract.required_containment_after_future_10h).toEqual({
       public_scenario_question_rows: 0,
       assessment_eligibility_rows: 0,
       released_for_assessment: false,

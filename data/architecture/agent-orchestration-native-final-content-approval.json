@@ -60,7 +60,7 @@
     "orchestration_ledger_write": false,
     "supabase_write": false
   },
-  "containment_after_10h": {
+  "required_containment_after_future_10h": {
     "public_scenario_question_rows": 0,
     "assessment_eligibility_rows": 0,
     "released_for_assessment": false,
