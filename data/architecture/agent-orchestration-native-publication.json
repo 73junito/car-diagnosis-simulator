@@ -1,0 +1,88 @@
+{
+  "phase": "10I",
+  "title": "Native publication governance preparation",
+  "status": "draft-non-dispatchable",
+  "control_commit": "ee754cae6fa945bdf2a8b387da17968e59bc33eb",
+  "purpose": "Prepare a separate human governance decision for publishing the exact Phase 10H-approved native charging-system question. This scaffold is intentionally non-dispatchable and grants no publication, assessment eligibility, scoring, delivery, grading, or release authority.",
+  "state_transition": {
+    "from": "final_content_approved",
+    "to": "UNRESOLVED_GOVERNANCE_DECISION",
+    "actor": "human",
+    "requires_explicit_human_approval": true
+  },
+  "governance_constants": {
+    "PUBLICATION_APPROVER_REQUIRED_ROLE": "UNRESOLVED_GOVERNANCE_DECISION",
+    "PUBLICATION_APPROVER_REQUIRED_SCOPE": "UNRESOLVED_GOVERNANCE_DECISION",
+    "independencePolicy": {
+      "independentFromFinalContentApprover": null
+    },
+    "checklistVersion": "UNRESOLVED_GOVERNANCE_DECISION",
+    "checklistCriteria": [
+      "UNRESOLVED_GOVERNANCE_DECISION"
+    ],
+    "publicationTarget": "UNRESOLVED_GOVERNANCE_DECISION"
+  },
+  "unresolved_governance_decisions": [
+    "PUBLICATION_APPROVER_REQUIRED_ROLE",
+    "PUBLICATION_APPROVER_REQUIRED_SCOPE",
+    "independencePolicy.independentFromFinalContentApprover",
+    "checklistVersion",
+    "checklistCriteria",
+    "publicationTarget"
+  ],
+  "referenced_10H_evidence": {
+    "governed_run_id": "native-draft:37418457881:charging-system",
+    "github_actions_run_id": 37724308574,
+    "workflow_run_conclusion": "success",
+    "state": "final_content_approved",
+    "checkpoint_version": 7,
+    "status": "final-content-approved",
+    "question_id": "charging-system-ai-draft-e9ac4b22b122",
+    "provenance_id": "c3b07430-db49-4216-9878-c3efb4ab0a54",
+    "payload_sha256": "1b833a88a6fc8a0a79feaaa3f8848ac4b8cb3573f158effa0a6593bebf7cf10e",
+    "citation_set_hash": "47bf8234e313be166026771ccf5cd6ab59b62f917422a51ce347eeaa6bb88a32",
+    "citation_validation_evidence_hash": "01a5a2a2f34fc47ca16417f8bfca43ff659aacaf8f0fa1b5dc930a3269617a3c",
+    "instructional_review_evidence_hash": "68e06d5c99638bd6361d919eca0454261231c9f1fa8ab44fdc54f44e0841aecb",
+    "final_approval_evidence_hash": "be5e7646827acfc26fc1f7d9d673f832622dab5b0838d0eadc8862db644f95fc",
+    "final_approver_id": "3739032e-01bc-48ca-b211-1ecdef38dbeb",
+    "human_final_decision": "approve",
+    "human_final_decision_captured": true,
+    "agent_synthesized_decision": false,
+    "human_approval": true
+  },
+  "invariants": [
+    "Phase 10H final content approval does not imply publication authority.",
+    "Publication requires a separate explicit human governance decision.",
+    "Publication must bind the exact approved payload and Phase 10H final-approval evidence hash.",
+    "This scaffold must not write scenario_questions or any other production content table.",
+    "Publication, if later approved, must not implicitly create assessment eligibility.",
+    "Assessment eligibility must remain a separate downstream governance decision after a public scenario_questions identity exists.",
+    "No scoring, grading, assessment delivery, institutional assessment, certification, high-stakes use, production assessment API access, or broad release is authorized.",
+    "Claims 02 and 12 remain blocked and are not changed by Phase 10I."
+  ],
+  "current_storage_boundary": {
+    "public_scenario_questions_write": false,
+    "assessment_eligibility_write": false,
+    "question_provenance_write": false,
+    "orchestration_ledger_write": false,
+    "citation_validation_write": false
+  },
+  "planned_effect_if_later_explicitly_approved": {
+    "public_scenario_question_rows_for_exact_question": 1,
+    "assessment_eligibility_rows_for_exact_question": 0,
+    "assessment_eligible": false,
+    "scored_delivery_authority": false,
+    "delivery_authority": false,
+    "grading_authority": false,
+    "institutional_assessment_eligible": false,
+    "high_stakes_eligible": false,
+    "certification_eligible": false,
+    "production_assessment_api_eligible": false,
+    "assessment_release": false,
+    "broad_production_release": false
+  },
+  "next_governance_boundary": {
+    "after_publication": "separate assessment-eligibility decision",
+    "automatic_advance": false
+  }
+}
