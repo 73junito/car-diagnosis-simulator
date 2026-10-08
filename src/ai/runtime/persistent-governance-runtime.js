@@ -2,6 +2,13 @@
 
 const crypto = require('crypto');
 const foundation = require('../../../data/architecture/agent-orchestration-foundation.json');
+const finalApprovalContract = require('../../../data/architecture/agent-orchestration-native-final-content-approval.json');
+const {
+  assertFinalContentApprovalScaffoldGate,
+  assertApprovedIndependencePolicy,
+  assertFinalContentApprovalEvidenceContract,
+  assertInstructionalReviewEvidenceBinding,
+} = require('./native-final-content-approval');
 const WorkflowStateMachine = require('../governance/workflow-state-machine');
 const AgentGovernanceCatalog = require('../governance/agent-governance-catalog');
 
@@ -520,6 +527,105 @@ class PersistentGovernanceRuntime {
         humanInstructionalDecisionBound: true,
         agentSynthesizedDecision: false,
         humanApproval: false,
+      },
+    });
+  }
+
+  async recordFinalContentApproval({
+    runId,
+    actor = 'human',
+    provenanceId,
+    questionId,
+    approvalEvidenceHash,
+    approvalEvidence,
+  }) {
+    // Bound exclusively to the repository contract: callers cannot supply a
+    // replacement contract. Both scaffold gates (unresolved governance, then
+    // draft-non-dispatchable status) fire before any ledger read or append.
+    assertFinalContentApprovalScaffoldGate(finalApprovalContract);
+
+    if (
+      !runId ||
+      !provenanceId ||
+      !questionId ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidenceHash || '') ||
+      !approvalEvidence ||
+      approvalEvidence.decision !== 'approve' ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.payloadSha256 || '') ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.citationSetHash || '') ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.citationValidationEvidenceHash || '') ||
+      !/^[0-9a-f]{64}$/.test(approvalEvidence.instructionalReviewEvidenceHash || '')
+    ) {
+      throw new Error('Final content approval record is incomplete');
+    }
+
+    const computedHash = crypto.createHash('sha256')
+      .update(JSON.stringify(approvalEvidence))
+      .digest('hex');
+    if (computedHash !== approvalEvidenceHash) {
+      throw new Error('Final content approval evidence hash does not match supplied evidence');
+    }
+    assertApprovedIndependencePolicy({
+      independencePolicy: finalApprovalContract.governance_constants.independencePolicy,
+      approverId: approvalEvidence.reviewerId,
+      technicalReviewerId: approvalEvidence.technicalReviewerId,
+      instructionalReviewerId: approvalEvidence.instructionalReviewerId,
+    });
+    // Pure evidence validation against the repository contract's approved
+    // role, scope, and checklist; runs before any ledger read. The actual
+    // Supabase Auth/profile verification is deferred to the activation PR.
+    assertFinalContentApprovalEvidenceContract(approvalEvidence, finalApprovalContract);
+
+    const entries = await this.entries(runId);
+    const existing = entries.find((entry) =>
+      entry.action === 'final-content-approval-recorded' &&
+      entry.state === 'final_content_approved' &&
+      entry.metadata?.provenanceId === provenanceId &&
+      entry.metadata?.questionId === questionId
+    );
+    if (existing) {
+      if (existing.metadata?.approvalEvidenceHash !== approvalEvidenceHash) {
+        throw new Error('Existing final content approval evidence does not match the current human decision');
+      }
+      return existing;
+    }
+
+    const latest = entries.length ? entries[entries.length - 1] : null;
+    assertInstructionalReviewEvidenceBinding({
+      provenanceId,
+      questionId,
+      approvalEvidence,
+      latestEntry: latest,
+    });
+    if (actor !== 'human') throw new Error('Final content approval actor must be the human approver');
+
+    const decision = this.stateMachine.canTransition({
+      from: 'instructionally_reviewed',
+      to: 'final_content_approved',
+      actor,
+      explicitHumanApproval: true,
+    });
+    if (!decision.allowed) throw new Error('Governed transition denied: ' + decision.reason);
+
+    return this.appendAndCheckpoint({
+      runId,
+      actor,
+      action: 'final-content-approval-recorded',
+      state: 'final_content_approved',
+      metadata: {
+        provenanceId,
+        questionId,
+        approvalEvidenceHash,
+        approverIdentity: approvalEvidence.reviewerId,
+        reviewedAt: approvalEvidence.reviewedAt,
+        checklistVersion: approvalEvidence.checklistVersion,
+        payloadSha256: approvalEvidence.payloadSha256,
+        citationSetHash: approvalEvidence.citationSetHash,
+        citationValidationEvidenceHash: approvalEvidence.citationValidationEvidenceHash,
+        instructionalReviewEvidenceHash: approvalEvidence.instructionalReviewEvidenceHash,
+        humanFinalApprovalBound: true,
+        agentSynthesizedDecision: false,
+        humanApproval: true,
       },
     });
   }
