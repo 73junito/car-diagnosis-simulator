@@ -11,6 +11,7 @@ describe('Semantic Scholar integration contract', () => {
   const appConfig = fs.readFileSync(path.join(root, 'wrangler.app.jsonc'), 'utf8')
   const publicConfig = fs.readFileSync(path.join(root, 'wrangler.jsonc'), 'utf8')
   const attribution = fs.readFileSync(path.join(root, 'public-site/research-sources/index.html'), 'utf8')
+  const integrationDocs = fs.readFileSync(path.join(root, 'docs/SEMANTIC_SCHOLAR_INTEGRATION.md'), 'utf8')
 
   test('routes are app-origin only and require bearer authentication', () => {
     expect(workerIndex).toContain("origin: 'https://app.autolearnpro.com'")
@@ -57,10 +58,19 @@ describe('Semantic Scholar integration contract', () => {
     expect(service).toContain("assessmentEligibility: 'none'")
   })
 
-  test('public site includes Semantic Scholar attribution and evidence boundary', () => {
+  test('public site includes Semantic Scholar attribution, logo, API UTM, and evidence boundary', () => {
     expect(attribution).toContain('Semantic Scholar')
     expect(attribution).toContain('Allen Institute for AI')
+    expect(attribution).toContain('https://www.semanticscholar.org/?utm_source=api')
+    expect(attribution).toContain('/assets/semantic-scholar-logo.svg')
+    expect(attribution).toContain('alt="Semantic Scholar"')
     expect(attribution).toContain('does not automatically become approved curriculum evidence')
     expect(attribution).toContain('does not use the Semantic Scholar API to republish full copyrighted articles')
+  })
+
+  test('documents that attribution does not replace license-scope authorization', () => {
+    expect(integrationDocs).toContain('Expanded License')
+    expect(integrationDocs).toContain('commercial use')
+    expect(integrationDocs).toContain('must not treat possession of an API key or attribution alone')
   })
 })
