@@ -39,33 +39,32 @@ jobs:
             fi
             echo "$label cannot access Workers Builds configuration API (HTTP $code)."
           done
-
           test -n "$token" || { echo "No repository secret has Workers Builds API access."; exit 1; }
           echo "Using $token_label for Workers Builds API."
 
-          bootstrap_build="b35e14c2-12bd-4265-bda7-5ac923f5f3cd"
-          build="$(curl --fail-with-body -sS \
+          prod_build="eef96dea-036b-4646-842f-6bc11498b242"
+          preview_build="cdff4cf9-cd1d-47fa-8012-ffb1babb5954"
+
+          prod_record="$(curl --fail-with-body -sS \
             -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$bootstrap_build")"
-          tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$build")"
-          test -n "$tag" || { echo "Exam Worker tag unavailable from known exam build."; exit 1; }
-          echo "Resolved autolearnpro-exam immutable Worker tag from known exam build."
-
-          triggers="$(curl --fail-with-body -sS \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$prod_build")"
+          preview_record="$(curl --fail-with-body -sS \
             -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$tag/triggers")"
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$preview_build")"
 
-          echo "Current trigger metadata:"
-          jq -r '.result[] | [.trigger_uuid,.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$triggers"
+          prod="$(jq -r '.result.trigger.trigger_uuid // empty' <<<"$prod_record")"
+          preview="$(jq -r '.result.trigger.trigger_uuid // empty' <<<"$preview_record")"
+          prod_tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$prod_record")"
+          preview_tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$preview_record")"
 
-          mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$triggers")
-          mapfile -t preview_ids < <(jq -r '.result[] | select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) | .trigger_uuid' <<<"$triggers")
+          test -n "$prod" || { echo "Production trigger UUID unavailable."; exit 1; }
+          test -n "$preview" || { echo "Preview trigger UUID unavailable."; exit 1; }
+          test -n "$prod_tag" && test "$prod_tag" = "$preview_tag" || { echo "Builds do not reference the same exam Worker."; exit 1; }
 
-          test "${#prod_ids[@]}" -eq 1 || { echo "Expected one production trigger, found ${#prod_ids[@]}"; exit 1; }
-          test "${#preview_ids[@]}" -eq 1 || { echo "Expected one preview trigger, found ${#preview_ids[@]}"; exit 1; }
-
-          prod="${prod_ids[0]}"
-          preview="${preview_ids[0]}"
+          echo "Resolved production and preview trigger UUIDs from known autolearnpro-exam builds."
+          echo "Before patch:"
+          jq -r '.result.trigger | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$prod_record"
+          jq -r '.result.trigger | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$preview_record"
 
           curl --fail-with-body -sS -o /tmp/prod.json \
             -X PATCH \
@@ -81,30 +80,40 @@ jobs:
             --data '{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler preview --config wrangler.exam.jsonc","root_directory":"/"}' \
             "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/$preview"
 
-          jq -e '.success == true' /tmp/prod.json >/dev/null
-          jq -e '.success == true' /tmp/preview.json >/dev/null
+          jq -e '.success == true and .result.build_command == "npm run exam:prepare" and .result.deploy_command == "npx wrangler deploy --config wrangler.exam.jsonc" and .result.root_directory == "/"' /tmp/prod.json >/dev/null
+          jq -e '.success == true and .result.build_command == "npm run exam:prepare" and .result.deploy_command == "npx wrangler preview --config wrangler.exam.jsonc" and .result.root_directory == "/"' /tmp/preview.json >/dev/null
 
-          verify="$(curl --fail-with-body -sS \
+          echo "Persisted PATCH responses:"
+          jq -r '.result | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' /tmp/prod.json
+          jq -r '.result | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' /tmp/preview.json
+
+          start="$(curl --fail-with-body -sS \
+            -X POST \
             -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$tag/triggers")"
+            -H "Content-Type: application/json" \
+            --data '{"branch":"ops/fix-exam-builds-config"}' \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/$preview/builds")"
+          jq -e '.success == true' <<<"$start" >/dev/null
+          build_uuid="$(jq -r '.result.build_uuid // empty' <<<"$start")"
+          test -n "$build_uuid" || { echo "Preview validation build UUID unavailable."; exit 1; }
+          echo "Started validation preview build $build_uuid."
 
-          jq -e '
-            [.result[] |
-              select((.branch_includes // []) | index("main")) |
-              select(.build_command == "npm run exam:prepare") |
-              select(.deploy_command == "npx wrangler deploy --config wrangler.exam.jsonc") |
-              select(.root_directory == "/")
-            ] | length == 1
-          ' <<<"$verify" >/dev/null
+          for attempt in $(seq 1 60); do
+            current="$(curl --fail-with-body -sS \
+              -H "Authorization: Bearer $token" \
+              "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$build_uuid")"
+            status="$(jq -r '.result.status // empty' <<<"$current")"
+            outcome="$(jq -r '.result.build_outcome // empty' <<<"$current")"
+            echo "Validation build: status=$status outcome=$outcome"
+            if [ "$status" = "stopped" ]; then
+              jq -e '.result.build_trigger_metadata.build_command == "npm run exam:prepare"' <<<"$current" >/dev/null
+              jq -e '.result.build_trigger_metadata.deploy_command == "npx wrangler preview --config wrangler.exam.jsonc"' <<<"$current" >/dev/null
+              test "$outcome" = "success" || { echo "Validation preview build did not succeed."; exit 1; }
+              echo "Validation preview build succeeded with deterministic exam commands."
+              exit 0
+            fi
+            sleep 5
+          done
 
-          jq -e '
-            [.result[] |
-              select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) |
-              select(.build_command == "npm run exam:prepare") |
-              select(.deploy_command == "npx wrangler preview --config wrangler.exam.jsonc") |
-              select(.root_directory == "/")
-            ] | length == 1
-          ' <<<"$verify" >/dev/null
-
-          echo "Persisted configuration verified:"
-          jq -r '.result[] | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$verify"
+          echo "Timed out waiting for validation preview build."
+          exit 1
