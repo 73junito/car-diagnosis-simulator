@@ -1,0 +1,115 @@
+name: One-off fix exam Workers Builds configuration
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/fix-exam-workers-builds.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  fix-exam-builds:
+    if: github.repository == '73junito/car-diagnosis-simulator' && github.head_ref == 'ops/fix-exam-builds-config'
+    runs-on: ubuntu-latest
+    env:
+      CF_ACCOUNT_ID: 0257b4518015b64bd28bca05b803de27
+      CF_API_TOKEN: ${{ secrets.WORKERS_AI_API_TOKEN }}
+      CF_API_BASE: https://api.cloudflare.com/client/v4
+    steps:
+      - name: Verify secret is present
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${CF_API_TOKEN:-}" || { echo "WORKERS_AI_API_TOKEN is unavailable"; exit 1; }
+
+      - name: Resolve exam Worker tag
+        id: worker
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(curl --fail-with-body -sS \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/workers/scripts")"
+          tag="$(jq -r '.result[] | select(.id=="autolearnpro-exam") | .tag' <<<"$response")"
+          test -n "$tag" && test "$tag" != "null" || { echo "autolearnpro-exam tag not found"; exit 1; }
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Resolved autolearnpro-exam Worker tag."
+
+      - name: Patch production and preview triggers
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.worker.outputs.tag }}"
+          response="$(curl --fail-with-body -sS \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/${tag}/triggers")"
+
+          mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$response")
+          mapfile -t preview_ids < <(jq -r '.result[] | select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) | .trigger_uuid' <<<"$response")
+
+          test "${#prod_ids[@]}" -eq 1 || { echo "Expected exactly one production trigger, found ${#prod_ids[@]}"; exit 1; }
+          test "${#preview_ids[@]}" -eq 1 || { echo "Expected exactly one preview trigger, found ${#preview_ids[@]}"; exit 1; }
+
+          prod="${prod_ids[0]}"
+          preview="${preview_ids[0]}"
+
+          prod_body='{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler deploy --config wrangler.exam.jsonc","root_directory":"/"}'
+          preview_body='{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler preview --config wrangler.exam.jsonc","root_directory":"/"}'
+
+          curl --fail-with-body -sS -o /tmp/prod.json \
+            -X PATCH \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "$prod_body" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/${prod}"
+
+          curl --fail-with-body -sS -o /tmp/preview.json \
+            -X PATCH \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "$preview_body" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/${preview}"
+
+          jq -e '.success == true' /tmp/prod.json >/dev/null
+          jq -e '.success == true' /tmp/preview.json >/dev/null
+          echo "Production and preview trigger patches accepted."
+
+      - name: Verify persisted trigger configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${{ steps.worker.outputs.tag }}"
+          response="$(curl --fail-with-body -sS \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/${tag}/triggers")"
+
+          jq -e '
+            [.result[] |
+              select((.branch_includes // []) | index("main")) |
+              select(.build_command == "npm run exam:prepare") |
+              select(.deploy_command == "npx wrangler deploy --config wrangler.exam.jsonc") |
+              select(.root_directory == "/")
+            ] | length == 1
+          ' <<<"$response" >/dev/null
+
+          jq -e '
+            [.result[] |
+              select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) |
+              select(.build_command == "npm run exam:prepare") |
+              select(.deploy_command == "npx wrangler preview --config wrangler.exam.jsonc") |
+              select(.root_directory == "/")
+            ] | length == 1
+          ' <<<"$response" >/dev/null
+
+          jq -r '.result[] | {
+            trigger_uuid,
+            trigger_name,
+            build_command,
+            deploy_command,
+            root_directory,
+            branch_includes,
+            branch_excludes
+          }' <<<"$response"
