@@ -19,7 +19,7 @@ jobs:
       CF_TOKEN_AI: ${{ secrets.WORKERS_AI_API_TOKEN }}
       CF_TOKEN_WRANGLER: ${{ secrets.WRANGLER }}
     steps:
-      - name: Patch and verify exam Workers Builds triggers
+      - name: Patch production trigger and verify preview configuration
         shell: bash
         run: |
           set -euo pipefail
@@ -37,33 +37,41 @@ jobs:
               token_label="$label"
               break
             fi
-            echo "$label cannot access Workers Builds configuration API (HTTP $code)."
           done
           test -n "$token" || { echo "No repository secret has Workers Builds API access."; exit 1; }
           echo "Using $token_label for Workers Builds API."
 
-          current_exam_preview_build="cdff4cf9-cd1d-47fa-8012-ffb1babb5954"
-          record="$(curl --fail-with-body -sS \
+          # Known main-branch exam build and fresh preview build provide the current
+          # production Worker tag and the effective Preview build configuration.
+          prod_build="eef96dea-036b-4646-842f-6bc11498b242"
+          preview_build="25313a05-e7a9-432c-8991-d84ad939297e"
+
+          prod_record="$(curl --fail-with-body -sS \
             -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$current_exam_preview_build")"
-          tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$record")"
-          test -n "$tag" || { echo "Current exam Worker tag unavailable."; exit 1; }
-          echo "Resolved current autolearnpro-exam Worker tag."
-
-          triggers="$(curl --fail-with-body -sS \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$prod_build")"
+          preview_record="$(curl --fail-with-body -sS \
             -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$tag/triggers")"
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$preview_build")"
 
-          echo "Current trigger metadata:"
-          jq -r '.result[] | [.trigger_uuid,.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$triggers"
+          prod_tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$prod_record")"
+          test -n "$prod_tag" || { echo "Production exam Worker tag unavailable."; exit 1; }
 
-          mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$triggers")
-          mapfile -t preview_ids < <(jq -r '.result[] | select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) | .trigger_uuid' <<<"$triggers")
+          echo "Effective Preview build configuration:"
+          jq -r '.result.trigger | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(","))] | @tsv' <<<"$preview_record"
+          jq -e '.result.trigger.build_command == "npm run exam:prepare"' <<<"$preview_record" >/dev/null
+          jq -e '.result.trigger.deploy_command == "npx wrangler preview --config wrangler.exam.jsonc"' <<<"$preview_record" >/dev/null
+          jq -e '.result.trigger.root_directory == "/"' <<<"$preview_record" >/dev/null
+          echo "Preview command configuration is already deterministic."
+
+          prod_triggers="$(curl --fail-with-body -sS \
+            -H "Authorization: Bearer $token" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$prod_tag/triggers")"
+          echo "Current production trigger metadata:"
+          jq -r '.result[] | [.trigger_uuid,.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$prod_triggers"
+
+          mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$prod_triggers")
           test "${#prod_ids[@]}" -eq 1 || { echo "Expected one production trigger, found ${#prod_ids[@]}"; exit 1; }
-          test "${#preview_ids[@]}" -eq 1 || { echo "Expected one preview trigger, found ${#preview_ids[@]}"; exit 1; }
-
           prod="${prod_ids[0]}"
-          preview="${preview_ids[0]}"
 
           curl --fail-with-body -sS -o /tmp/prod.json \
             -X PATCH \
@@ -72,30 +80,20 @@ jobs:
             --data '{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler deploy --config wrangler.exam.jsonc","root_directory":"/"}' \
             "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/$prod"
 
-          curl --fail-with-body -sS -o /tmp/preview.json \
-            -X PATCH \
-            -H "Authorization: Bearer $token" \
-            -H "Content-Type: application/json" \
-            --data '{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler preview --config wrangler.exam.jsonc","root_directory":"/"}' \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/$preview"
-
           jq -e '.success == true and .result.build_command == "npm run exam:prepare" and .result.deploy_command == "npx wrangler deploy --config wrangler.exam.jsonc" and .result.root_directory == "/"' /tmp/prod.json >/dev/null
-          jq -e '.success == true and .result.build_command == "npm run exam:prepare" and .result.deploy_command == "npx wrangler preview --config wrangler.exam.jsonc" and .result.root_directory == "/"' /tmp/preview.json >/dev/null
-
-          echo "Persisted PATCH responses:"
+          echo "Persisted production trigger:"
           jq -r '.result | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' /tmp/prod.json
-          jq -r '.result | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' /tmp/preview.json
 
           start="$(curl --fail-with-body -sS \
             -X POST \
             -H "Authorization: Bearer $token" \
             -H "Content-Type: application/json" \
-            --data '{"branch":"ops/fix-exam-builds-config"}' \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/$preview/builds")"
+            --data '{"branch":"main"}' \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/$prod/builds")"
           jq -e '.success == true' <<<"$start" >/dev/null
           build_uuid="$(jq -r '.result.build_uuid // empty' <<<"$start")"
-          test -n "$build_uuid" || { echo "Preview validation build UUID unavailable."; exit 1; }
-          echo "Started validation preview build $build_uuid."
+          test -n "$build_uuid" || { echo "Production validation build UUID unavailable."; exit 1; }
+          echo "Started production validation build $build_uuid."
 
           for attempt in $(seq 1 60); do
             current="$(curl --fail-with-body -sS \
@@ -106,13 +104,13 @@ jobs:
             echo "Validation build: status=$status outcome=$outcome"
             if [ "$status" = "stopped" ]; then
               jq -e '.result.build_trigger_metadata.build_command == "npm run exam:prepare"' <<<"$current" >/dev/null
-              jq -e '.result.build_trigger_metadata.deploy_command == "npx wrangler preview --config wrangler.exam.jsonc"' <<<"$current" >/dev/null
-              test "$outcome" = "success" || { echo "Validation preview build did not succeed."; exit 1; }
-              echo "Validation preview build succeeded with deterministic exam commands."
+              jq -e '.result.build_trigger_metadata.deploy_command == "npx wrangler deploy --config wrangler.exam.jsonc"' <<<"$current" >/dev/null
+              test "$outcome" = "success" || { echo "Production validation build did not succeed."; exit 1; }
+              echo "Production validation build succeeded with deterministic exam commands."
               exit 0
             fi
             sleep 5
           done
 
-          echo "Timed out waiting for validation preview build."
+          echo "Timed out waiting for production validation build."
           exit 1
