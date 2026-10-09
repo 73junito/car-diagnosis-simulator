@@ -95,7 +95,7 @@
     "eslint": "^10.11.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
-    "fast-xml-parser": "^5.11.1",
+    "fast-xml-parser": "^5.11.2",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
     "jest-circus": "^30.5.1",
