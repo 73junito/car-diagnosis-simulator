@@ -2,7 +2,9 @@
 -- SAGE permissions guidance permits ordinary paraphrasing/summarizing with attribution
 -- without separate permission, while substantial reuse, modification, database creation,
 -- and AI/LLM uses remain restricted absent authorization. The article itself is restricted
--- access and no independent open license was found for the author-hosted copy.
+-- access. An author-hosted manuscript is permitted under SAGE Green Open Access,
+-- but SAGE requires downstream user reuse terms for such copies to remain non-commercial
+-- and no-derivatives, so it does not expand platform reuse rights.
 
 update public.curriculum_reference_sources
 set
@@ -15,7 +17,7 @@ set
   commercial_use_allowed = false,
   attribution_required = true,
   share_alike_required = false,
-  rights_basis = 'SAGE identifies the article as restricted access. SAGE permissions guidance states that ordinary paraphrasing or summarizing does not require permission when it is not a close paraphrase and proper credit is given, while substantial reuse and modification require permission. SAGE Terms of Use also restrict database creation and prohibit use of SAGE services/materials for training large language models or generative AI absent authorization. An author-hosted PDF was located, but no independent open license or version-specific reuse grant was found. Therefore citation/linking and project-authored paraphrase/summary are allowed, while direct reproduction, database storage, AI/RAG ingestion, and commercial reuse remain disabled absent separate permission.',
+  rights_basis = 'SAGE identifies the article as restricted access. SAGE permissions guidance states that ordinary paraphrasing or summarizing does not require permission when it is not a close paraphrase and proper credit is given, while substantial reuse and modification require permission. SAGE Terms of Use also restrict database creation and prohibit use of SAGE services/materials for training large language models or generative AI absent authorization. An author-hosted manuscript was located. SAGE Green Open Access guidance permits authors to share Original Submissions and Accepted Manuscripts, but requires reuse terms for users of those posted copies to be non-commercial and no-derivatives; it does not create an unrestricted reuse license for this platform. Therefore citation/linking and project-authored paraphrase/summary are allowed, while direct reproduction, database storage, AI/RAG ingestion, and commercial reuse remain disabled absent separate permission.',
   updated_at = now()
 where id = 'automotive-engine-diagnostic-survey-2012';
 
