@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/fix-exam-workers-builds.yml"
-  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -16,75 +15,74 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CF_ACCOUNT_ID: 0257b4518015b64bd28bca05b803de27
-      CF_API_TOKEN: ${{ secrets.WORKERS_AI_API_TOKEN }}
       CF_API_BASE: https://api.cloudflare.com/client/v4
+      CF_TOKEN_AI: ${{ secrets.WORKERS_AI_API_TOKEN }}
+      CF_TOKEN_WRANGLER: ${{ secrets.WRANGLER }}
     steps:
-      - name: Verify secret is present
+      - name: Patch and verify exam Workers Builds triggers
         shell: bash
         run: |
           set -euo pipefail
-          test -n "${CF_API_TOKEN:-}" || { echo "WORKERS_AI_API_TOKEN is unavailable"; exit 1; }
 
-      - name: Resolve exam Worker tag
-        id: worker
-        shell: bash
-        run: |
-          set -euo pipefail
-          response="$(curl --fail-with-body -sS \
-            -H "Authorization: Bearer ${CF_API_TOKEN}" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/workers/workers")"
-          tag="$(jq -r '.result[] | select(.name=="autolearnpro-exam") | .id' <<<"$response")"
-          test -n "$tag" && test "$tag" != "null" || { echo "autolearnpro-exam tag not found"; exit 1; }
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "Resolved autolearnpro-exam Worker tag."
+          token=""
+          token_label=""
+          for label in WORKERS_AI_API_TOKEN WRANGLER; do
+            if [ "$label" = "WORKERS_AI_API_TOKEN" ]; then candidate="${CF_TOKEN_AI:-}"; else candidate="${CF_TOKEN_WRANGLER:-}"; fi
+            [ -n "$candidate" ] || continue
+            code="$(curl -sS -o /tmp/build-tokens.json -w '%{http_code}' \
+              -H "Authorization: Bearer $candidate" \
+              "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/tokens")"
+            if [ "$code" = "200" ] && jq -e '.success == true' /tmp/build-tokens.json >/dev/null 2>&1; then
+              token="$candidate"
+              token_label="$label"
+              break
+            fi
+            echo "$label cannot access Workers Builds configuration API (HTTP $code)."
+          done
 
-      - name: Patch production and preview triggers
-        shell: bash
-        run: |
-          set -euo pipefail
-          tag="${{ steps.worker.outputs.tag }}"
-          response="$(curl --fail-with-body -sS \
-            -H "Authorization: Bearer ${CF_API_TOKEN}" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/${tag}/triggers")"
+          test -n "$token" || { echo "No repository secret has Workers Builds API access."; exit 1; }
+          echo "Using $token_label for Workers Builds API."
 
-          mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$response")
-          mapfile -t preview_ids < <(jq -r '.result[] | select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) | .trigger_uuid' <<<"$response")
+          scripts="$(curl --fail-with-body -sS \
+            -H "Authorization: Bearer $token" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/workers/scripts")"
+          tag="$(jq -r '.result[] | select(.id=="autolearnpro-exam") | .tag // empty' <<<"$scripts")"
+          test -n "$tag" || { echo "$token_label lacks Workers Scripts Read or exam Worker tag is unavailable."; exit 1; }
+          echo "Resolved autolearnpro-exam immutable Worker tag."
 
-          test "${#prod_ids[@]}" -eq 1 || { echo "Expected exactly one production trigger, found ${#prod_ids[@]}"; exit 1; }
-          test "${#preview_ids[@]}" -eq 1 || { echo "Expected exactly one preview trigger, found ${#preview_ids[@]}"; exit 1; }
+          triggers="$(curl --fail-with-body -sS \
+            -H "Authorization: Bearer $token" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$tag/triggers")"
+
+          mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$triggers")
+          mapfile -t preview_ids < <(jq -r '.result[] | select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) | .trigger_uuid' <<<"$triggers")
+
+          test "${#prod_ids[@]}" -eq 1 || { echo "Expected one production trigger, found ${#prod_ids[@]}"; exit 1; }
+          test "${#preview_ids[@]}" -eq 1 || { echo "Expected one preview trigger, found ${#preview_ids[@]}"; exit 1; }
 
           prod="${prod_ids[0]}"
           preview="${preview_ids[0]}"
 
-          prod_body='{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler deploy --config wrangler.exam.jsonc","root_directory":"/"}'
-          preview_body='{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler preview --config wrangler.exam.jsonc","root_directory":"/"}'
-
           curl --fail-with-body -sS -o /tmp/prod.json \
             -X PATCH \
-            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Authorization: Bearer $token" \
             -H "Content-Type: application/json" \
-            --data "$prod_body" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/${prod}"
+            --data '{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler deploy --config wrangler.exam.jsonc","root_directory":"/"}' \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/$prod"
 
           curl --fail-with-body -sS -o /tmp/preview.json \
             -X PATCH \
-            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Authorization: Bearer $token" \
             -H "Content-Type: application/json" \
-            --data "$preview_body" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/${preview}"
+            --data '{"build_command":"npm run exam:prepare","deploy_command":"npx wrangler preview --config wrangler.exam.jsonc","root_directory":"/"}' \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/triggers/$preview"
 
           jq -e '.success == true' /tmp/prod.json >/dev/null
           jq -e '.success == true' /tmp/preview.json >/dev/null
-          echo "Production and preview trigger patches accepted."
 
-      - name: Verify persisted trigger configuration
-        shell: bash
-        run: |
-          set -euo pipefail
-          tag="${{ steps.worker.outputs.tag }}"
-          response="$(curl --fail-with-body -sS \
-            -H "Authorization: Bearer ${CF_API_TOKEN}" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/${tag}/triggers")"
+          verify="$(curl --fail-with-body -sS \
+            -H "Authorization: Bearer $token" \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$tag/triggers")"
 
           jq -e '
             [.result[] |
@@ -93,7 +91,7 @@ jobs:
               select(.deploy_command == "npx wrangler deploy --config wrangler.exam.jsonc") |
               select(.root_directory == "/")
             ] | length == 1
-          ' <<<"$response" >/dev/null
+          ' <<<"$verify" >/dev/null
 
           jq -e '
             [.result[] |
@@ -102,14 +100,7 @@ jobs:
               select(.deploy_command == "npx wrangler preview --config wrangler.exam.jsonc") |
               select(.root_directory == "/")
             ] | length == 1
-          ' <<<"$response" >/dev/null
+          ' <<<"$verify" >/dev/null
 
-          jq -r '.result[] | {
-            trigger_uuid,
-            trigger_name,
-            build_command,
-            deploy_command,
-            root_directory,
-            branch_includes,
-            branch_excludes
-          }' <<<"$response"
+          echo "Persisted configuration verified:"
+          jq -r '.result[] | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$verify"
