@@ -55,6 +55,9 @@ jobs:
             -H "Authorization: Bearer $token" \
             "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$tag/triggers")"
 
+          echo "Current trigger metadata:"
+          jq -r '.result[] | [.trigger_uuid,.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$triggers"
+
           mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$triggers")
           mapfile -t preview_ids < <(jq -r '.result[] | select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) | .trigger_uuid' <<<"$triggers")
 
