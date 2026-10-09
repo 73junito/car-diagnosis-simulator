@@ -53,8 +53,8 @@ jobs:
             -H "Authorization: Bearer $token" \
             "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$preview_build")"
 
-          prod_tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$prod_record")"
-          test -n "$prod_tag" || { echo "Production exam Worker tag unavailable."; exit 1; }
+          prod="$(jq -r '.result.trigger.trigger_uuid // empty' <<<"$prod_record")"
+          test -n "$prod" || { echo "Production trigger UUID unavailable."; exit 1; }
 
           echo "Effective Preview build configuration:"
           jq -r '.result.trigger | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(","))] | @tsv' <<<"$preview_record"
@@ -63,15 +63,8 @@ jobs:
           jq -e '.result.trigger.root_directory == "/"' <<<"$preview_record" >/dev/null
           echo "Preview command configuration is already deterministic."
 
-          prod_triggers="$(curl --fail-with-body -sS \
-            -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$prod_tag/triggers")"
-          echo "Current production trigger metadata:"
-          jq -r '.result[] | [.trigger_uuid,.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$prod_triggers"
-
-          mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$prod_triggers")
-          test "${#prod_ids[@]}" -eq 1 || { echo "Expected one production trigger, found ${#prod_ids[@]}"; exit 1; }
-          prod="${prod_ids[0]}"
+          echo "Production trigger before patch:"
+          jq -r '.result.trigger | [.trigger_uuid,.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$prod_record"
 
           curl --fail-with-body -sS -o /tmp/prod.json \
             -X PATCH \
