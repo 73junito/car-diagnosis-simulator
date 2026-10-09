@@ -43,12 +43,13 @@ jobs:
           test -n "$token" || { echo "No repository secret has Workers Builds API access."; exit 1; }
           echo "Using $token_label for Workers Builds API."
 
-          scripts="$(curl --fail-with-body -sS \
+          bootstrap_build="b35e14c2-12bd-4265-bda7-5ac923f5f3cd"
+          build="$(curl --fail-with-body -sS \
             -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/workers/scripts")"
-          tag="$(jq -r '.result[] | select(.id=="autolearnpro-exam") | .tag // empty' <<<"$scripts")"
-          test -n "$tag" || { echo "$token_label lacks Workers Scripts Read or exam Worker tag is unavailable."; exit 1; }
-          echo "Resolved autolearnpro-exam immutable Worker tag."
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$bootstrap_build")"
+          tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$build")"
+          test -n "$tag" || { echo "Exam Worker tag unavailable from known exam build."; exit 1; }
+          echo "Resolved autolearnpro-exam immutable Worker tag from known exam build."
 
           triggers="$(curl --fail-with-body -sS \
             -H "Authorization: Bearer $token" \
