@@ -21,6 +21,17 @@ describe('supplemental automotive authority batch 1', () => {
     ].forEach((id) => expect(migration).toContain(`'${id}'`));
   });
 
+  test('uses only source_kind values allowed by the current schema contract', () => {
+    const sourceInsert = migration.split(
+      'on conflict (id) do update set'
+    )[0];
+    expect(sourceInsert).not.toMatch(
+      /'regulatory-reference'|'regulatory-service-reference'|'regulatory-technical-reference'|'oer-course-reference'/
+    );
+    expect(sourceInsert.match(/'technical-reference'/g)).toHaveLength(4);
+    expect(sourceInsert.match(/'oer-textbook'/g)).toHaveLength(1);
+  });
+
   test('keeps all newly added source records non-ingestible', () => {
     const sourceInsert = migration.split(
       'on conflict (id) do update set'
