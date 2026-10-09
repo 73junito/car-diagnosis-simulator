@@ -8,7 +8,7 @@ const migration = fs.readFileSync(
     'supabase/migrations/20261001025048_expand_reference_coverage_batch_4.sql'
   ),
   'utf8'
-)
+).replace(/\r\n/g, '\n')
 
 describe('curriculum reference coverage expansion batch 4', () => {
   test('adds exactly 13 governed mappings across 9 undergraduate lessons', () => {

@@ -5,7 +5,7 @@ const root = path.resolve('.')
 const migration = fs.readFileSync(
   path.join(root, 'supabase/migrations/20260930011726_map_chemistry_additive_manufacturing_references.sql'),
   'utf8'
-)
+).replace(/\r\n/g, '\n')
 const page = fs.readFileSync(
   path.join(root, 'dashboard/student/learning-path/index.html'),
   'utf8'

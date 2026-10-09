@@ -11,7 +11,7 @@ describe('scenario challenge review artifact storage contract', () => {
       '20261003023000_add_scenario_challenge_review_artifacts.sql'
     ),
     'utf8'
-  ).toLowerCase();
+  ).replace(/\r\n/g, '\n').toLowerCase();
 
   test('creates an exact-payload review-only table with immutable provenance fields', () => {
     expect(migration).toContain('create table if not exists public.scenario_challenge_review_artifacts');
