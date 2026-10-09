@@ -1,6 +1,7 @@
 const {
   ageReview,
   authorityFamily,
+  authorityOrganization,
   buildQualityReport,
   isAutomotiveDomainSource,
   isDirectDomainAuthority,
@@ -56,11 +57,19 @@ describe('curriculum reference quality and depth audit', () => {
     expect(authorityFamily(references.data[0])).toBe('federal-government')
     expect(authorityFamily(references.data[1])).toBe('oer-foundation')
     expect(authorityFamily(references.data[3])).toBe('oem-industry')
+    expect(authorityOrganization(references.data[0])).toBe('nhtsa')
+    expect(authorityOrganization(references.data[1])).toBe('openstax')
   })
 
   test('distinguishes automotive-domain sources from generic foundations', () => {
     expect(isAutomotiveDomainSource(references.data[0])).toBe(true)
     expect(isAutomotiveDomainSource(references.data[1])).toBe(false)
+    expect(isAutomotiveDomainSource({
+      id: 'systems-engineering',
+      title: 'Systems Engineering Handbook',
+      publisher: 'National Aeronautics and Space Administration',
+      subjectArea: 'systems engineering'
+    })).toBe(false)
     expect(isGenericFoundation(references.data[1])).toBe(true)
     expect(isGenericFoundation(references.data[3])).toBe(false)
   })
@@ -78,10 +87,10 @@ describe('curriculum reference quality and depth audit', () => {
     expect(report.lessons.find((x) => x.lessonPlanId === 'domain-strong').rating).toBe('strong')
     const generic = report.lessons.find((x) => x.lessonPlanId === 'generic-review')
     expect(generic.rating).toBe('review')
-    expect(generic.flags).toEqual(expect.arrayContaining(['no-direct-domain-authority', 'single-authority-family', 'same-publisher-only', 'generic-foundation-only']))
+    expect(generic.flags).toEqual(expect.arrayContaining(['no-direct-domain-authority', 'single-authority-organization', 'same-publisher-only', 'generic-foundation-only']))
     const same = report.lessons.find((x) => x.lessonPlanId === 'same-family')
-    expect(same.rating).toBe('solid')
-    expect(same.flags).toContain('single-authority-family')
+    expect(same.rating).toBe('strong')
+    expect(same.flags).not.toContain('single-authority-organization')
     expect(report.lessons.find((x) => x.lessonPlanId === 'measurement').rating).toBe('strong')
     expect(report.lessons.find((x) => x.lessonPlanId === 'digital-twin').rating).toBe('strong')
   })
@@ -98,6 +107,7 @@ describe('curriculum reference quality and depth audit', () => {
     expect(markdown).toContain('# Curriculum Reference Quality & Depth Audit')
     expect(markdown).toContain('direct-domain authority')
     expect(markdown).toContain('Automotive refs')
+    expect(markdown).toContain('Authority organizations')
     expect(markdown).toContain('generic-review')
     expect(markdown).toContain('## Technical-source age review')
   })

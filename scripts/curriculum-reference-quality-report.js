@@ -37,6 +37,27 @@ function authorityFamily(source) {
   return 'technical-other'
 }
 
+function authorityOrganization(source) {
+  const publisher = normalize(source.publisher)
+  if (/u\.s\. department of energy|department of energy alternative fuels|department of energy transportation/.test(publisher)) return 'us-department-of-energy'
+  if (/national highway traffic safety/.test(publisher)) return 'nhtsa'
+  if (/national aeronautics and space administration/.test(publisher)) return 'nasa'
+  if (/national institute of standards and technology/.test(publisher)) return 'nist'
+  if (/environmental protection agency/.test(publisher)) return 'epa'
+  if (/occupational safety and health administration/.test(publisher)) return 'osha'
+  if (/department of education|institute of education sciences/.test(publisher)) return 'us-department-of-education-ies'
+  if (/openstax/.test(publisher)) return 'openstax'
+  if (/bccampus/.test(publisher)) return 'bccampus'
+  if (/open oregon|linn-benton/.test(publisher)) return 'open-oregon'
+  if (/general motors/.test(publisher)) return 'general-motors'
+  if (/robert bosch/.test(publisher)) return 'bosch'
+  if (/sae international/.test(publisher)) return 'sae-international'
+  if (/i-car/.test(publisher)) return 'i-car'
+  if (/sage/.test(publisher)) return 'sage'
+  if (/mdpi/.test(publisher)) return 'mdpi'
+  return publisher || 'unknown'
+}
+
 function sourceText(source) {
   return [source.id, source.title, source.publisher, source.subjectArea]
     .map(normalize)
@@ -51,7 +72,7 @@ function lessonText(lesson) {
 
 function isAutomotiveDomainSource(source) {
   const text = sourceText(source)
-  return /automotive|vehicle|engine|alternator|charging system|brake|stability control|drivetrain|transmission|refrigerant|mvac|obd|diagnostic|battery electric|hybrid electric|electric drive|power electronics|adas|automated driving|can network|ecu|software-defined|cybersecurity|collision repair/.test(text)
+  return /automotive|vehicle|\bengine\b|\bengines\b|alternator|charging system|brake|stability control|drivetrain|transmission|refrigerant|mvac|obd|diagnostic|battery electric|hybrid electric|electric drive|power electronics|adas|automated driving|can network|ecu|software-defined|cybersecurity|collision repair/.test(text)
 }
 
 function isDirectDomainAuthority(source, lesson) {
@@ -71,6 +92,22 @@ function isDirectDomainAuthority(source, lesson) {
   }
   if (/instructional leadership|technical instructional leadership/.test(l) &&
       /educational continuous improvement|continuous improvement in education/.test(s)) {
+    return true
+  }
+  if (/systems modeling|simulation|modeling/.test(l) &&
+      /systems modeling|sysml|digital twin/.test(s)) {
+    return true
+  }
+  if (/automotive math|mathematics|quantitative reasoning/.test(l) &&
+      /mathematics|algebra|trigonometry|si units|engineering calculations/.test(s)) {
+    return true
+  }
+  if (/electrical lab|electrical laboratory|circuit evidence/.test(l) &&
+      /electrical engineering|circuit analysis|electrical controls/.test(s)) {
+    return true
+  }
+  if (/capstone/.test(l) &&
+      /systems modeling|project planning|verification|validation|advanced manufacturing|prototyp/.test(s)) {
     return true
   }
 
@@ -130,6 +167,7 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
         subjectArea: source.subjectArea,
         role: mapping.role,
         family: authorityFamily(source),
+        organization: authorityOrganization(source),
         automotiveDomain: isAutomotiveDomainSource(source),
         directDomainAuthority,
         genericFoundation: isGenericFoundation(source) && !directDomainAuthority,
@@ -138,6 +176,7 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
     })
 
     const families = [...new Set(references.map((item) => item.family))].sort()
+    const organizations = [...new Set(references.map((item) => item.organization))].sort()
     const publishers = [...new Set(references.map((item) => item.publisher).filter(Boolean))].sort()
     const automotiveDomainCount = references.filter((item) => item.automotiveDomain).length
     const directDomainAuthorityCount = references.filter((item) => item.directDomainAuthority).length
@@ -145,14 +184,14 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
     const flags = []
     if (references.length < 2) flags.push('insufficient-reference-depth')
     if (directDomainAuthorityCount === 0) flags.push('no-direct-domain-authority')
-    if (families.length < 2) flags.push('single-authority-family')
+    if (organizations.length < 2) flags.push('single-authority-organization')
     if (references.length > 1 && publishers.length === 1) flags.push('same-publisher-only')
     if (references.length > 0 && genericFoundationCount === references.length) flags.push('generic-foundation-only')
     if (references.some((item) => item.ageReview)) flags.push('technical-source-age-review')
 
     let rating = 'strong'
     if (references.length < 2 || directDomainAuthorityCount === 0) rating = 'review'
-    else if (families.length < 2) rating = 'solid'
+    else if (organizations.length < 2) rating = 'solid'
 
     return {
       lessonPlanId: lesson.id,
@@ -164,6 +203,7 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
       directDomainAuthorityCount,
       genericFoundationCount,
       authorityFamilies: families,
+      authorityOrganizations: organizations,
       publishers,
       rating,
       flags,
@@ -230,16 +270,16 @@ function renderMarkdown(report) {
     '',
     '## Screening rules',
     '',
-    '- **Strong:** at least two references, at least one direct-domain authority, and at least two authority families.',
-    '- **Solid:** at least two references and at least one direct-domain authority, but only one authority family.',
+    '- **Strong:** at least two references, at least one direct-domain authority, and at least two independent authority organizations.',
+    '- **Solid:** at least two references and at least one direct-domain authority, but only one authority organization.',
     '- **Review:** fewer than two references or no direct-domain authority.',
     '- **Direct-domain authority:** normally an automotive technical source for automotive lessons; for measurement, digital twins, curriculum/assessment, and instructional leadership, a source directly authoritative in that discipline also qualifies.',
     '- **Age review:** technical-reference publication year is at least 10 years old. This is a freshness check only; foundational or still-current standards are not automatically stale.',
     '',
     '## Review queue',
     '',
-    '| Level | Lesson | Rating | Refs | Direct-domain refs | Automotive refs | Authority families | Flags |',
-    '| --- | --- | --- | ---: | ---: | ---: | --- | --- |'
+    '| Level | Lesson | Rating | Refs | Direct-domain refs | Automotive refs | Authority organizations | Authority families | Flags |',
+    '| --- | --- | --- | ---: | ---: | ---: | --- | --- | --- |'
   ]
 
   for (const row of report.lessons
@@ -254,8 +294,8 @@ function renderMarkdown(report) {
   }
 
   lines.push('', '## All lesson pairings', '')
-  lines.push('| Lesson | Rating | Reference | Publisher | Family | Direct domain | Automotive | Role |')
-  lines.push('| --- | --- | --- | --- | --- | --- | --- | --- |')
+  lines.push('| Lesson | Rating | Reference | Publisher | Organization | Family | Direct domain | Automotive | Role |')
+  lines.push('| --- | --- | --- | --- | --- | --- | --- | --- | --- |')
   for (const row of report.lessons.sort((a, b) => a.lessonPlanId.localeCompare(b.lessonPlanId))) {
     for (const ref of row.references) {
       lines.push(
@@ -330,6 +370,7 @@ if (require.main === module) main()
 module.exports = {
   ageReview,
   authorityFamily,
+  authorityOrganization,
   buildQualityReport,
   isAutomotiveDomainSource,
   isDirectDomainAuthority,
