@@ -3,7 +3,7 @@ const path = require('node:path');
 
 describe('Ollama configuration consistency', () => {
   test('production contains the protected Ollama gateway configuration', () => {
-    const configPath = path.resolve(__dirname, '..', 'wrangler.jsonc');
+    const configPath = path.resolve(__dirname, '..', 'wrangler.app.jsonc');
     const raw = fs.readFileSync(configPath, 'utf8');
 
     expect(raw).toContain('"TORQUEMIND_ENVIRONMENT": "production"');
@@ -16,7 +16,7 @@ describe('Ollama configuration consistency', () => {
   });
 
   test('staging contains the protected Ollama gateway configuration', () => {
-    const configPath = path.resolve(__dirname, '..', 'wrangler.jsonc');
+    const configPath = path.resolve(__dirname, '..', 'wrangler.app.jsonc');
     const raw = fs.readFileSync(configPath, 'utf8');
 
     expect(raw).toContain('"TORQUEMIND_AI_PROVIDER": "ollama"');
