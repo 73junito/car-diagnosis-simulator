@@ -98,7 +98,7 @@ describe('production instructional reviewer provisioning', () => {
     expect(workflow).toContain('authorization_attested:');
     expect(workflow).toContain('name: instructional-reviewer-invite-link');
     const artifactPathLines = workflow
-      .split('\n')
+      .split(/\r?\n/)
       .filter((line) => line.includes('INSTRUCTIONAL_REVIEWER_INVITE_ARTIFACT_PATH:'));
     expect(artifactPathLines).toEqual([
       '          INSTRUCTIONAL_REVIEWER_INVITE_ARTIFACT_PATH: ${{ runner.temp }}/instructional-reviewer-invite.txt',
