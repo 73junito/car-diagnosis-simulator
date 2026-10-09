@@ -76,7 +76,8 @@
     "validate:charging-applicability": "npx jest tests/charging-reference-applicability.test.js --runInBand",
     "validate:multivoltage-domain-isolation": "npx jest tests/multivoltage-domain-isolation.test.js --runInBand",
     "validate:browser-engineering-artifacts": "npx jest tests/browser-engineering-artifact-adapter.test.js --runInBand",
-    "validate:dependency-security-exceptions": "node scripts/verify-dependency-security-exceptions.js"
+    "validate:dependency-security-exceptions": "node scripts/verify-dependency-security-exceptions.js",
+    "validate:state-privacy-ai-overlays": "node scripts/verify-state-privacy-ai-overlays.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
