@@ -37,11 +37,44 @@ function authorityFamily(source) {
   return 'technical-other'
 }
 
-function isAutomotiveDomainSource(source) {
-  const text = [source.id, source.title, source.publisher, source.subjectArea]
+function sourceText(source) {
+  return [source.id, source.title, source.publisher, source.subjectArea]
     .map(normalize)
     .join(' ')
+}
+
+function lessonText(lesson) {
+  return [lesson.id, lesson.title, lesson.courseId]
+    .map(normalize)
+    .join(' ')
+}
+
+function isAutomotiveDomainSource(source) {
+  const text = sourceText(source)
   return /automotive|vehicle|engine|alternator|charging system|brake|stability control|drivetrain|transmission|refrigerant|mvac|obd|diagnostic|battery electric|hybrid electric|electric drive|power electronics|adas|automated driving|can network|ecu|software-defined|cybersecurity|collision repair/.test(text)
+}
+
+function isDirectDomainAuthority(source, lesson) {
+  if (isAutomotiveDomainSource(source)) return true
+
+  const s = sourceText(source)
+  const l = lessonText(lesson)
+
+  if (/measurement|instrument/.test(l) && /measurement uncertainty|si units|quantities|metrology/.test(s)) {
+    return true
+  }
+  if (/digital twin/.test(l) && /digital twin/.test(s)) {
+    return true
+  }
+  if (/curriculum|assessment design/.test(l) && /curriculum and assessment|curriculum development/.test(s)) {
+    return true
+  }
+  if (/instructional leadership|technical instructional leadership/.test(l) &&
+      /educational continuous improvement|continuous improvement in education/.test(s)) {
+    return true
+  }
+
+  return false
 }
 
 function isGenericFoundation(source) {
@@ -87,6 +120,7 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
     const lessonMappings = mappingsByLesson.get(lesson.id) || []
     const references = lessonMappings.map((mapping) => {
       const source = sourceById.get(mapping.reference_id)
+      const directDomainAuthority = isDirectDomainAuthority(source, lesson)
       return {
         referenceId: mapping.reference_id,
         title: source.title,
@@ -97,25 +131,27 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
         role: mapping.role,
         family: authorityFamily(source),
         automotiveDomain: isAutomotiveDomainSource(source),
-        genericFoundation: isGenericFoundation(source),
+        directDomainAuthority,
+        genericFoundation: isGenericFoundation(source) && !directDomainAuthority,
         ageReview: ageReview(source, currentYear)
       }
     })
 
     const families = [...new Set(references.map((item) => item.family))].sort()
     const publishers = [...new Set(references.map((item) => item.publisher).filter(Boolean))].sort()
-    const domainAuthorityCount = references.filter((item) => item.automotiveDomain).length
+    const automotiveDomainCount = references.filter((item) => item.automotiveDomain).length
+    const directDomainAuthorityCount = references.filter((item) => item.directDomainAuthority).length
     const genericFoundationCount = references.filter((item) => item.genericFoundation).length
     const flags = []
     if (references.length < 2) flags.push('insufficient-reference-depth')
-    if (domainAuthorityCount === 0) flags.push('no-automotive-domain-authority')
+    if (directDomainAuthorityCount === 0) flags.push('no-direct-domain-authority')
     if (families.length < 2) flags.push('single-authority-family')
     if (references.length > 1 && publishers.length === 1) flags.push('same-publisher-only')
     if (references.length > 0 && genericFoundationCount === references.length) flags.push('generic-foundation-only')
     if (references.some((item) => item.ageReview)) flags.push('technical-source-age-review')
 
     let rating = 'strong'
-    if (references.length < 2 || domainAuthorityCount === 0) rating = 'review'
+    if (references.length < 2 || directDomainAuthorityCount === 0) rating = 'review'
     else if (families.length < 2) rating = 'solid'
 
     return {
@@ -124,7 +160,8 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
       academicLevel: lesson.academicLevel,
       courseId: lesson.courseId,
       referenceCount: references.length,
-      domainAuthorityCount,
+      automotiveDomainCount,
+      directDomainAuthorityCount,
       genericFoundationCount,
       authorityFamilies: families,
       publishers,
@@ -151,8 +188,10 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
       solidLessons: ratingCounts.solid || 0,
       reviewLessons: ratingCounts.review || 0,
       allMultiSource: lessons.every((row) => row.referenceCount >= 2),
-      lessonsWithAutomotiveDomainAuthority: lessons.filter((row) => row.domainAuthorityCount > 0).length,
-      lessonsWithoutAutomotiveDomainAuthority: lessons.filter((row) => row.domainAuthorityCount === 0).length,
+      lessonsWithDirectDomainAuthority: lessons.filter((row) => row.directDomainAuthorityCount > 0).length,
+      lessonsWithoutDirectDomainAuthority: lessons.filter((row) => row.directDomainAuthorityCount === 0).length,
+      lessonsWithAutomotiveDomainAuthority: lessons.filter((row) => row.automotiveDomainCount > 0).length,
+      lessonsWithoutAutomotiveDomainAuthority: lessons.filter((row) => row.automotiveDomainCount === 0).length,
       flagCounts,
       technicalSourceAgeReviewCount: sourceAgeReview.length
     },
@@ -175,7 +214,7 @@ function renderMarkdown(report) {
     '',
     'Regenerate with: `npm run audit:curriculum-reference-quality`.',
     '',
-    '> This is a deterministic screening audit. A flag means “review this pairing,” not “the source is invalid.” It does not grant source rights, evidence approval, instructional approval, or assessment eligibility.',
+    '> This is a deterministic screening audit. A flag means "review this pairing," not "the source is invalid." It does not grant source rights, evidence approval, instructional approval, or assessment eligibility.',
     '',
     '## Executive summary',
     '',
@@ -184,21 +223,23 @@ function renderMarkdown(report) {
     `- Strong: **${summary.strongLessons}**`,
     `- Solid: **${summary.solidLessons}**`,
     `- Review: **${summary.reviewLessons}**`,
+    `- Lessons with at least one direct-domain authority: **${summary.lessonsWithDirectDomainAuthority}/${summary.totalLessons}**`,
+    `- Lessons with no direct-domain authority: **${summary.lessonsWithoutDirectDomainAuthority}**`,
     `- Lessons with at least one automotive-domain source: **${summary.lessonsWithAutomotiveDomainAuthority}/${summary.totalLessons}**`,
-    `- Lessons with no automotive-domain source: **${summary.lessonsWithoutAutomotiveDomainAuthority}**`,
     `- Technical sources meeting the age-review screen: **${summary.technicalSourceAgeReviewCount}**`,
     '',
     '## Screening rules',
     '',
-    '- **Strong:** at least two references, at least one automotive-domain source, and at least two authority families.',
-    '- **Solid:** at least two references and at least one automotive-domain source, but only one authority family.',
-    '- **Review:** fewer than two references or no automotive-domain source.',
+    '- **Strong:** at least two references, at least one direct-domain authority, and at least two authority families.',
+    '- **Solid:** at least two references and at least one direct-domain authority, but only one authority family.',
+    '- **Review:** fewer than two references or no direct-domain authority.',
+    '- **Direct-domain authority:** normally an automotive technical source for automotive lessons; for measurement, digital twins, curriculum/assessment, and instructional leadership, a source directly authoritative in that discipline also qualifies.',
     '- **Age review:** technical-reference publication year is at least 10 years old. This is a freshness check only; foundational or still-current standards are not automatically stale.',
     '',
     '## Review queue',
     '',
-    '| Level | Lesson | Rating | Refs | Domain refs | Authority families | Flags |',
-    '| --- | --- | --- | ---: | ---: | --- | --- |'
+    '| Level | Lesson | Rating | Refs | Direct-domain refs | Automotive refs | Authority families | Flags |',
+    '| --- | --- | --- | ---: | ---: | ---: | --- | --- |'
   ]
 
   for (const row of report.lessons
@@ -208,17 +249,17 @@ function renderMarkdown(report) {
       return rank[a.rating] - rank[b.rating] || a.lessonPlanId.localeCompare(b.lessonPlanId)
     })) {
     lines.push(
-      `| ${escapeCell(row.academicLevel)} | ${escapeCell(row.lessonPlanId)} - ${escapeCell(row.lessonTitle)} | ${row.rating} | ${row.referenceCount} | ${row.domainAuthorityCount} | ${escapeCell(row.authorityFamilies.join(', '))} | ${escapeCell(row.flags.join(', ') || 'none')} |`
+      `| ${escapeCell(row.academicLevel)} | ${escapeCell(row.lessonPlanId)} - ${escapeCell(row.lessonTitle)} | ${row.rating} | ${row.referenceCount} | ${row.directDomainAuthorityCount} | ${row.automotiveDomainCount} | ${escapeCell(row.authorityFamilies.join(', '))} | ${escapeCell(row.flags.join(', ') || 'none')} |`
     )
   }
 
   lines.push('', '## All lesson pairings', '')
-  lines.push('| Lesson | Rating | Reference | Publisher | Family | Domain | Role |')
-  lines.push('| --- | --- | --- | --- | --- | --- | --- |')
+  lines.push('| Lesson | Rating | Reference | Publisher | Family | Direct domain | Automotive | Role |')
+  lines.push('| --- | --- | --- | --- | --- | --- | --- | --- |')
   for (const row of report.lessons.sort((a, b) => a.lessonPlanId.localeCompare(b.lessonPlanId))) {
     for (const ref of row.references) {
       lines.push(
-        `| ${escapeCell(row.lessonPlanId)} | ${row.rating} | ${escapeCell(ref.referenceId)} | ${escapeCell(ref.publisher)} | ${escapeCell(ref.family)} | ${ref.automotiveDomain ? 'yes' : 'no'} | ${escapeCell(ref.role)} |`
+        `| ${escapeCell(row.lessonPlanId)} | ${row.rating} | ${escapeCell(ref.referenceId)} | ${escapeCell(ref.publisher)} | ${escapeCell(ref.family)} | ${ref.directDomainAuthority ? 'yes' : 'no'} | ${ref.automotiveDomain ? 'yes' : 'no'} | ${escapeCell(ref.role)} |`
       )
     }
   }
@@ -277,7 +318,7 @@ async function main() {
   }
 
   const s = report.summary
-  console.log(`[PASS] Curriculum reference quality screen: ${s.strongLessons} strong, ${s.solidLessons} solid, ${s.reviewLessons} review; automotive-domain authority ${s.lessonsWithAutomotiveDomainAuthority}/${s.totalLessons}`)
+  console.log(`[PASS] Curriculum reference quality screen: ${s.strongLessons} strong, ${s.solidLessons} solid, ${s.reviewLessons} review; direct-domain authority ${s.lessonsWithDirectDomainAuthority}/${s.totalLessons}; automotive-domain authority ${s.lessonsWithAutomotiveDomainAuthority}/${s.totalLessons}`)
   if (args.failOnReview && s.reviewLessons > 0) {
     console.error(`[FAIL] ${s.reviewLessons} lesson(s) remain in the quality review queue`)
     process.exit(1)
@@ -291,6 +332,7 @@ module.exports = {
   authorityFamily,
   buildQualityReport,
   isAutomotiveDomainSource,
+  isDirectDomainAuthority,
   isGenericFoundation,
   parseArgs,
   renderMarkdown
