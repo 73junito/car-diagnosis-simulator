@@ -17,7 +17,7 @@ describe('curriculum source-rights closure audit', () => {
 
   function compliantPayload() {
     const required = Object.entries(RESOLVED_SOURCES).map(([id, expected]) =>
-      source(id, expected.classification, expected.rights)
+      source(id, expected.classification, { ...expected.rights })
     )
 
     const filler = Array.from(
