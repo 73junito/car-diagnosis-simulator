@@ -42,29 +42,28 @@ jobs:
           test -n "$token" || { echo "No repository secret has Workers Builds API access."; exit 1; }
           echo "Using $token_label for Workers Builds API."
 
-          prod_build="eef96dea-036b-4646-842f-6bc11498b242"
-          preview_build="cdff4cf9-cd1d-47fa-8012-ffb1babb5954"
-
-          prod_record="$(curl --fail-with-body -sS \
+          current_exam_preview_build="cdff4cf9-cd1d-47fa-8012-ffb1babb5954"
+          record="$(curl --fail-with-body -sS \
             -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$prod_build")"
-          preview_record="$(curl --fail-with-body -sS \
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$current_exam_preview_build")"
+          tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$record")"
+          test -n "$tag" || { echo "Current exam Worker tag unavailable."; exit 1; }
+          echo "Resolved current autolearnpro-exam Worker tag."
+
+          triggers="$(curl --fail-with-body -sS \
             -H "Authorization: Bearer $token" \
-            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/builds/$preview_build")"
+            "${CF_API_BASE}/accounts/${CF_ACCOUNT_ID}/builds/workers/$tag/triggers")"
 
-          prod="$(jq -r '.result.trigger.trigger_uuid // empty' <<<"$prod_record")"
-          preview="$(jq -r '.result.trigger.trigger_uuid // empty' <<<"$preview_record")"
-          prod_tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$prod_record")"
-          preview_tag="$(jq -r '.result.trigger.external_script_id // empty' <<<"$preview_record")"
+          echo "Current trigger metadata:"
+          jq -r '.result[] | [.trigger_uuid,.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$triggers"
 
-          test -n "$prod" || { echo "Production trigger UUID unavailable."; exit 1; }
-          test -n "$preview" || { echo "Preview trigger UUID unavailable."; exit 1; }
-          test -n "$prod_tag" && test "$prod_tag" = "$preview_tag" || { echo "Builds do not reference the same exam Worker."; exit 1; }
+          mapfile -t prod_ids < <(jq -r '.result[] | select((.branch_includes // []) | index("main")) | .trigger_uuid' <<<"$triggers")
+          mapfile -t preview_ids < <(jq -r '.result[] | select(((.branch_includes // []) | index("*")) and ((.branch_excludes // []) | index("main"))) | .trigger_uuid' <<<"$triggers")
+          test "${#prod_ids[@]}" -eq 1 || { echo "Expected one production trigger, found ${#prod_ids[@]}"; exit 1; }
+          test "${#preview_ids[@]}" -eq 1 || { echo "Expected one preview trigger, found ${#preview_ids[@]}"; exit 1; }
 
-          echo "Resolved production and preview trigger UUIDs from known autolearnpro-exam builds."
-          echo "Before patch:"
-          jq -r '.result.trigger | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$prod_record"
-          jq -r '.result.trigger | [.trigger_name,.build_command,.deploy_command,.root_directory,((.branch_includes // [])|join(",")),((.branch_excludes // [])|join(","))] | @tsv' <<<"$preview_record"
+          prod="${prod_ids[0]}"
+          preview="${preview_ids[0]}"
 
           curl --fail-with-body -sS -o /tmp/prod.json \
             -X PATCH \
