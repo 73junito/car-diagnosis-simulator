@@ -51,8 +51,13 @@ describe('Semantic Scholar instructor research UI', () => {
     expect(js).not.toContain('scoredAssessmentEligible: true')
   })
 
-  test('includes Semantic Scholar attribution', () => {
+  test('includes Semantic Scholar name, official logo, and API attribution links', () => {
     expect(html).toContain('Semantic Scholar')
     expect(html).toContain('Allen Institute for AI')
+    expect(html).toContain('https://www.semanticscholar.org/?utm_source=api')
+    expect(html).toContain('./semantic-scholar-logo.svg')
+    expect(html).toContain('alt="Semantic Scholar"')
+    expect(js).toContain("url.searchParams.set('utm_source', 'api')")
+    expect(js).toContain('semanticScholarPublicUrl(paper.url)')
   })
 })
