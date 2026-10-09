@@ -80,7 +80,7 @@
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
-    "@cloudflare/workers-types": "^5.20260801.1",
+    "@cloudflare/workers-types": "^5.20261005.1",
     "@mermaid-js/mermaid-cli": "^12.0.0",
     "@playwright/test": "^1.63.0",
     "@supabase/supabase-js": "^2.117.2",
@@ -95,7 +95,7 @@
     "eslint": "^10.12.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
-    "fast-xml-parser": "^5.11.1",
+    "fast-xml-parser": "^5.11.2",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
     "jest-circus": "^30.5.1",
