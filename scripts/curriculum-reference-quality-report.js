@@ -3,6 +3,20 @@
 const fs = require('fs')
 const path = require('path')
 
+const DEFAULT_FRESHNESS_REVIEW_PATH = path.join(
+  __dirname,
+  '..',
+  'data',
+  'curriculum',
+  'reference-freshness-reviews.json'
+)
+
+const RESOLVED_FRESHNESS_STATUSES = new Set([
+  'current-authoritative',
+  'current-authoritative-with-companion-update',
+  'historical-supporting'
+])
+
 function parseArgs(argv) {
   const args = {
     baseUrl: 'https://app.autolearnpro.com',
@@ -128,11 +142,23 @@ function ageReview(source, currentYear = 2026) {
   return normalize(source.sourceKind) === 'technical-reference' && currentYear - year >= 10
 }
 
+function freshnessReviewMap(payload) {
+  const reviews = Array.isArray(payload?.reviews) ? payload.reviews : []
+  return new Map(reviews.map((review) => [review.referenceId, review]))
+}
+
+function loadFreshnessReviews(filePath = DEFAULT_FRESHNESS_REVIEW_PATH) {
+  if (!fs.existsSync(filePath)) return { reviewDate: null, reviews: [] }
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'))
+}
+
 function buildQualityReport(curriculum, referencePayload, options = {}) {
   const lessonPlans = Array.isArray(curriculum?.lessonPlans) ? curriculum.lessonPlans : []
   const sources = Array.isArray(referencePayload?.data) ? referencePayload.data : []
   const mappings = Array.isArray(referencePayload?.mappings) ? referencePayload.mappings : []
   const currentYear = options.currentYear || 2026
+  const freshnessPayload = options.freshnessReviews || { reviews: [] }
+  const freshnessById = freshnessReviewMap(freshnessPayload)
 
   const sourceById = new Map(sources.map((source) => [source.id, source]))
   const mappingsByLesson = new Map()
@@ -145,13 +171,27 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
 
   const sourceAgeReview = sources
     .filter((source) => ageReview(source, currentYear))
-    .map((source) => ({
-      referenceId: source.id,
-      title: source.title,
-      publisher: source.publisher,
-      publicationYear: source.publicationYear
-    }))
+    .map((source) => {
+      const freshness = freshnessById.get(source.id) || null
+      const freshnessStatus = freshness?.status || null
+      const ageReviewResolved = RESOLVED_FRESHNESS_STATUSES.has(freshnessStatus)
+      return {
+        referenceId: source.id,
+        title: source.title,
+        publisher: source.publisher,
+        publicationYear: source.publicationYear,
+        ageReviewResolved,
+        freshnessStatus,
+        freshnessReviewDate: freshness?.evidenceChecked || freshnessPayload.reviewDate || null,
+        evidenceUrl: freshness?.evidenceUrl || null,
+        companionUrl: freshness?.companionUrl || null,
+        rationale: freshness?.rationale || null,
+        usageConstraint: freshness?.usageConstraint || null
+      }
+    })
     .sort((a, b) => (a.publicationYear || 0) - (b.publicationYear || 0) || a.referenceId.localeCompare(b.referenceId))
+
+  const ageReviewById = new Map(sourceAgeReview.map((source) => [source.referenceId, source]))
 
   const lessons = lessonPlans.map((lesson) => {
     const lessonMappings = mappingsByLesson.get(lesson.id) || []
@@ -171,7 +211,9 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
         automotiveDomain: isAutomotiveDomainSource(source),
         directDomainAuthority,
         genericFoundation: isGenericFoundation(source) && !directDomainAuthority,
-        ageReview: ageReview(source, currentYear)
+        ageReview: ageReview(source, currentYear),
+        ageReviewResolved: ageReviewById.get(source.id)?.ageReviewResolved === true,
+        freshnessStatus: ageReviewById.get(source.id)?.freshnessStatus || null
       }
     })
 
@@ -187,7 +229,7 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
     if (organizations.length < 2) flags.push('single-authority-organization')
     if (references.length > 1 && publishers.length === 1) flags.push('same-publisher-only')
     if (references.length > 0 && genericFoundationCount === references.length) flags.push('generic-foundation-only')
-    if (references.some((item) => item.ageReview)) flags.push('technical-source-age-review')
+    if (references.some((item) => item.ageReview && !item.ageReviewResolved)) flags.push('technical-source-age-review')
 
     let rating = 'strong'
     if (references.length < 2 || directDomainAuthorityCount === 0) rating = 'review'
@@ -221,6 +263,12 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
     for (const flag of row.flags) flagCounts[flag] = (flagCounts[flag] || 0) + 1
   }
 
+  const freshnessStatusCounts = {}
+  for (const source of sourceAgeReview) {
+    const key = source.freshnessStatus || 'unresolved'
+    freshnessStatusCounts[key] = (freshnessStatusCounts[key] || 0) + 1
+  }
+
   return {
     summary: {
       totalLessons: lessons.length,
@@ -233,7 +281,10 @@ function buildQualityReport(curriculum, referencePayload, options = {}) {
       lessonsWithAutomotiveDomainAuthority: lessons.filter((row) => row.automotiveDomainCount > 0).length,
       lessonsWithoutAutomotiveDomainAuthority: lessons.filter((row) => row.automotiveDomainCount === 0).length,
       flagCounts,
-      technicalSourceAgeReviewCount: sourceAgeReview.length
+      technicalSourceAgeReviewCount: sourceAgeReview.length,
+      technicalSourceAgeReviewedCount: sourceAgeReview.filter((source) => source.ageReviewResolved).length,
+      technicalSourceAgeUnresolvedCount: sourceAgeReview.filter((source) => !source.ageReviewResolved).length,
+      freshnessStatusCounts
     },
     technicalSourceAgeReview: sourceAgeReview,
     lessons
@@ -267,6 +318,8 @@ function renderMarkdown(report) {
     `- Lessons with no direct-domain authority: **${summary.lessonsWithoutDirectDomainAuthority}**`,
     `- Lessons with at least one automotive-domain source: **${summary.lessonsWithAutomotiveDomainAuthority}/${summary.totalLessons}**`,
     `- Technical sources meeting the age-review screen: **${summary.technicalSourceAgeReviewCount}**`,
+    `- Age-screen sources with completed freshness review: **${summary.technicalSourceAgeReviewedCount}**`,
+    `- Unresolved age-review sources: **${summary.technicalSourceAgeUnresolvedCount}**`,
     '',
     '## Screening rules',
     '',
@@ -275,6 +328,7 @@ function renderMarkdown(report) {
     '- **Review:** fewer than two references or no direct-domain authority.',
     '- **Direct-domain authority:** normally an automotive technical source for automotive lessons; for measurement, digital twins, curriculum/assessment, and instructional leadership, a source directly authoritative in that discipline also qualifies.',
     '- **Age review:** technical-reference publication year is at least 10 years old. This is a freshness check only; foundational or still-current standards are not automatically stale.',
+    '- **Resolved age review:** a source-level freshness record with an approved disposition suppresses the unresolved-age flag while preserving publication age and usage constraints.',
     '',
     '## Review queue',
     '',
@@ -289,7 +343,7 @@ function renderMarkdown(report) {
       return rank[a.rating] - rank[b.rating] || a.lessonPlanId.localeCompare(b.lessonPlanId)
     })) {
     lines.push(
-      `| ${escapeCell(row.academicLevel)} | ${escapeCell(row.lessonPlanId)} - ${escapeCell(row.lessonTitle)} | ${row.rating} | ${row.referenceCount} | ${row.directDomainAuthorityCount} | ${row.automotiveDomainCount} | ${escapeCell(row.authorityFamilies.join(', '))} | ${escapeCell(row.flags.join(', ') || 'none')} |`
+      `| ${escapeCell(row.academicLevel)} | ${escapeCell(row.lessonPlanId)} - ${escapeCell(row.lessonTitle)} | ${row.rating} | ${row.referenceCount} | ${row.directDomainAuthorityCount} | ${row.automotiveDomainCount} | ${escapeCell(row.authorityOrganizations.join(', '))} | ${escapeCell(row.authorityFamilies.join(', '))} | ${escapeCell(row.flags.join(', ') || 'none')} |`
     )
   }
 
@@ -299,18 +353,18 @@ function renderMarkdown(report) {
   for (const row of report.lessons.sort((a, b) => a.lessonPlanId.localeCompare(b.lessonPlanId))) {
     for (const ref of row.references) {
       lines.push(
-        `| ${escapeCell(row.lessonPlanId)} | ${row.rating} | ${escapeCell(ref.referenceId)} | ${escapeCell(ref.publisher)} | ${escapeCell(ref.family)} | ${ref.directDomainAuthority ? 'yes' : 'no'} | ${ref.automotiveDomain ? 'yes' : 'no'} | ${escapeCell(ref.role)} |`
+        `| ${escapeCell(row.lessonPlanId)} | ${row.rating} | ${escapeCell(ref.referenceId)} | ${escapeCell(ref.publisher)} | ${escapeCell(ref.organization)} | ${escapeCell(ref.family)} | ${ref.directDomainAuthority ? 'yes' : 'no'} | ${ref.automotiveDomain ? 'yes' : 'no'} | ${escapeCell(ref.role)} |`
       )
     }
   }
 
   lines.push('', '## Technical-source age review', '')
-  lines.push('| Reference | Publisher | Year |')
-  lines.push('| --- | --- | ---: |')
+  lines.push('| Reference | Publisher | Year | Disposition | Reviewed | Usage constraint |')
+  lines.push('| --- | --- | ---: | --- | --- | --- |')
   for (const source of report.technicalSourceAgeReview) {
-    lines.push(`| ${escapeCell(source.referenceId)} - ${escapeCell(source.title)} | ${escapeCell(source.publisher)} | ${escapeCell(source.publicationYear)} |`)
+    lines.push(`| ${escapeCell(source.referenceId)} - ${escapeCell(source.title)} | ${escapeCell(source.publisher)} | ${escapeCell(source.publicationYear)} | ${escapeCell(source.freshnessStatus || 'unresolved')} | ${escapeCell(source.freshnessReviewDate || 'not reviewed')} | ${escapeCell(source.usageConstraint || 'human currency review required')} |`)
   }
-  lines.push('', '> Age-review entries require a human currency check before being described as outdated or current.', '')
+  lines.push('', '> Publication age remains visible even after review. A reviewed historical-supporting source is not current operational guidance.', '')
   return lines.join('\n')
 }
 
@@ -347,7 +401,15 @@ async function main() {
     process.exit(1)
   }
 
-  const report = buildQualityReport(curriculum, references)
+  let freshnessReviews
+  try {
+    freshnessReviews = loadFreshnessReviews()
+  } catch (error) {
+    console.error(`[FAIL] Curriculum reference freshness review data: ${error.message}`)
+    process.exit(1)
+  }
+
+  const report = buildQualityReport(curriculum, references, { freshnessReviews })
   if (args.jsonPath) {
     fs.mkdirSync(path.dirname(args.jsonPath), { recursive: true })
     fs.writeFileSync(args.jsonPath, JSON.stringify(report, null, 2) + '\n', 'utf8')
@@ -358,7 +420,7 @@ async function main() {
   }
 
   const s = report.summary
-  console.log(`[PASS] Curriculum reference quality screen: ${s.strongLessons} strong, ${s.solidLessons} solid, ${s.reviewLessons} review; direct-domain authority ${s.lessonsWithDirectDomainAuthority}/${s.totalLessons}; automotive-domain authority ${s.lessonsWithAutomotiveDomainAuthority}/${s.totalLessons}`)
+  console.log(`[PASS] Curriculum reference quality screen: ${s.strongLessons} strong, ${s.solidLessons} solid, ${s.reviewLessons} review; direct-domain authority ${s.lessonsWithDirectDomainAuthority}/${s.totalLessons}; automotive-domain authority ${s.lessonsWithAutomotiveDomainAuthority}/${s.totalLessons}; age review ${s.technicalSourceAgeReviewedCount}/${s.technicalSourceAgeReviewCount} resolved`)
   if (args.failOnReview && s.reviewLessons > 0) {
     console.error(`[FAIL] ${s.reviewLessons} lesson(s) remain in the quality review queue`)
     process.exit(1)
@@ -372,9 +434,11 @@ module.exports = {
   authorityFamily,
   authorityOrganization,
   buildQualityReport,
+  freshnessReviewMap,
   isAutomotiveDomainSource,
   isDirectDomainAuthority,
   isGenericFoundation,
+  loadFreshnessReviews,
   parseArgs,
   renderMarkdown
 }
