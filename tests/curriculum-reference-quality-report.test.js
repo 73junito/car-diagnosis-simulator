@@ -3,6 +3,7 @@ const {
   authorityFamily,
   authorityOrganization,
   buildQualityReport,
+  freshnessReviewMap,
   isAutomotiveDomainSource,
   isDirectDomainAuthority,
   isGenericFoundation,
@@ -95,11 +96,32 @@ describe('curriculum reference quality and depth audit', () => {
     expect(report.lessons.find((x) => x.lessonPlanId === 'digital-twin').rating).toBe('strong')
   })
 
-  test('screens older technical references for human currency review only', () => {
+  test('screens older technical references and resolves reviewed freshness dispositions', () => {
     expect(ageReview(references.data[4], 2026)).toBe(true)
     expect(ageReview(references.data[0], 2026)).toBe(false)
-    const report = buildQualityReport(curriculum, references, { currentYear: 2026 })
-    expect(report.technicalSourceAgeReview.map((x) => x.referenceId)).toContain('bosch')
+
+    const unresolved = buildQualityReport(curriculum, references, { currentYear: 2026 })
+    expect(unresolved.technicalSourceAgeReview.map((x) => x.referenceId)).toContain('bosch')
+    expect(unresolved.summary.technicalSourceAgeUnresolvedCount).toBe(2)
+    expect(unresolved.lessons.find((x) => x.lessonPlanId === 'same-family').flags)
+      .toContain('technical-source-age-review')
+
+    const freshnessReviews = {
+      reviewDate: '2026-10-09',
+      reviews: [
+        { referenceId: 'bosch', status: 'historical-supporting', evidenceChecked: '2026-10-09' },
+        { referenceId: 'nist-measurement', status: 'current-authoritative', evidenceChecked: '2026-10-09' }
+      ]
+    }
+    const reviewed = buildQualityReport(curriculum, references, {
+      currentYear: 2026,
+      freshnessReviews
+    })
+    expect(freshnessReviewMap(freshnessReviews).get('bosch').status).toBe('historical-supporting')
+    expect(reviewed.summary.technicalSourceAgeReviewedCount).toBe(2)
+    expect(reviewed.summary.technicalSourceAgeUnresolvedCount).toBe(0)
+    expect(reviewed.lessons.find((x) => x.lessonPlanId === 'same-family').flags)
+      .not.toContain('technical-source-age-review')
   })
 
   test('renders direct-domain and automotive-domain metrics separately', () => {
@@ -110,6 +132,7 @@ describe('curriculum reference quality and depth audit', () => {
     expect(markdown).toContain('Authority organizations')
     expect(markdown).toContain('generic-review')
     expect(markdown).toContain('## Technical-source age review')
+    expect(markdown).toContain('Unresolved age-review sources')
   })
 
   test('parses output and fail-on-review arguments', () => {
