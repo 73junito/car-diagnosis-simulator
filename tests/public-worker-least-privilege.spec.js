@@ -64,9 +64,10 @@ describe('public Worker least privilege', () => {
     ]);
   });
 
-  test('public Worker declares no database or AI bindings', () => {
+  test('public Worker declares no application runtime variables or secrets', () => {
     expect(publicConfig.secrets_store_secrets).toBeUndefined();
-    expect(publicConfig.vars.SUPABASE_URL).toBeUndefined();
+    expect(publicConfig.vars).toBeUndefined();
+    expect(publicConfig.env.staging.vars).toBeUndefined();
   });
 
   // ── Behavioural checks: routes removed from the public surface must now ──
