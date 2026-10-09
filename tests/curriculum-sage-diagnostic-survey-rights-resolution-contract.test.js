@@ -29,7 +29,8 @@ describe('SAGE diagnostic survey source-rights resolution', () => {
 
   test('records restricted access and the lack of an independent open license', () => {
     expect(migration).toContain('restricted access');
-    expect(migration).toContain('no independent open license');
+    expect(migration).toContain('SAGE Green Open Access guidance');
+    expect(migration).toContain('non-commercial and no-derivatives');
   });
 
   test('does not change assessment eligibility', () => {
