@@ -77,8 +77,7 @@
     "validate:multivoltage-domain-isolation": "npx jest tests/multivoltage-domain-isolation.test.js --runInBand",
     "validate:browser-engineering-artifacts": "npx jest tests/browser-engineering-artifact-adapter.test.js --runInBand",
     "validate:dependency-security-exceptions": "node scripts/verify-dependency-security-exceptions.js",
-    "audit:curriculum-source-rights": "node scripts/curriculum-source-rights-closure-audit.js",
-    "validate:state-privacy-ai-overlays": "node scripts/verify-state-privacy-ai-overlays.js"
+    "validate:curriculum-reference-coverage-baseline": "node scripts/verify-curriculum-reference-coverage-baseline.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
