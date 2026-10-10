@@ -10,9 +10,9 @@ const catalog = read('data/curriculum/course-catalog.json')
 const lessons = read('data/curriculum/lesson-plans.json')
 const architecture = read('data/curriculum/program-architecture.json')
 const delivery = read('data/curriculum/course-delivery-status.json')
-const plan = read('data/curriculum/course-delivery-batch006-plan.json')
+const plan = read('data/curriculum/course-delivery-batch007-plan.json')
 
-const BATCH = ['aut-535','aut-540','aut-555','aut-560','aut-570','aut-580','aut-585']
+const BATCH = ['aut-545','aut-565','aut-575']
 
 function verify() {
   const errors = []
@@ -21,9 +21,9 @@ function verify() {
   const mappingById = new Map((architecture.catalogDevelopmentMappings || []).map((m) => [m.catalogCourseId, m]))
   const aligned = new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
-  if (!['7F-J', '7F-K'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-J or later supported Phase 7F-K')
-  if ((delivery.baseline?.catalogAlignedDedicatedCoursePageCount || 0) < 24) errors.push('delivery status must retain at least the 24 Phase 7F-J catalog-aligned course pages')
-  if (plan.phase !== '7F-J' || plan.status !== 'page-built-verified') errors.push('Batch 006 execution must be page-built-verified in Phase 7F-J')
+  if (delivery.phase !== '7F-K') errors.push('delivery status must be Phase 7F-K')
+  if (delivery.baseline?.catalogAlignedDedicatedCoursePageCount !== 27) errors.push('Phase 7F-K must record 27 catalog-aligned course pages')
+  if (plan.phase !== '7F-K' || plan.status !== 'page-built-verified') errors.push('Batch 007 execution must be page-built-verified in Phase 7F-K')
 
   for (const id of BATCH) {
     const course = catalogById.get(id)
@@ -37,7 +37,7 @@ function verify() {
     }
     const lesson = lessonById.get(mapping.existingLessonPlanId)
     if (!lesson || lesson.courseId !== id || lesson.academicLevel !== 'graduate') errors.push('graduate lesson mismatch: ' + id)
-    if (!planned || planned.lessonPlanId !== mapping.existingLessonPlanId || planned.deliveryStatus !== 'page-built') errors.push('Batch 006 plan drift: ' + id)
+    if (!planned || planned.lessonPlanId !== mapping.existingLessonPlanId || planned.deliveryStatus !== 'page-built') errors.push('Batch 007 plan drift: ' + id)
     if (planned && planned.prerequisiteDisposition !== 'requires-human-or-institutional-verification') errors.push('institutional prerequisite boundary drift: ' + id)
 
     const file = path.join(ROOT, 'exam-site', 'courses', id, 'index.html')
@@ -68,11 +68,11 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-J Batch 006 graduate pages')
+    console.error('[FAIL] Phase 7F-K Batch 007 graduate pages')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-J Batch 006: AUT-535/540/555/560/570/580/585 pages are built, catalog-aligned, eligibility-bounded, and non-assessment')
+  console.log('[PASS] Phase 7F-K Batch 007: AUT-545/565/575 pages are built, catalog-aligned, eligibility-bounded, and non-assessment')
 }
 
 if (require.main === module) main()
