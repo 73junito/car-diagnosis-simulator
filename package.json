@@ -109,7 +109,8 @@
     "validate:batch011-delivery-pages": "node scripts/verify-batch011-delivery-pages.js",
     "validate:batch012-delivery-pages": "node scripts/verify-batch012-delivery-pages.js",
     "validate:batch013-delivery-pages": "node scripts/verify-batch013-delivery-pages.js",
-    "validate:batch014-delivery-pages": "node scripts/verify-batch014-delivery-pages.js"
+    "validate:batch014-delivery-pages": "node scripts/verify-batch014-delivery-pages.js",
+    "validate:batch015-delivery-pages": "node scripts/verify-batch015-delivery-pages.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

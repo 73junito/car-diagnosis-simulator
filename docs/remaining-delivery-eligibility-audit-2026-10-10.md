@@ -2,37 +2,28 @@
 
 ## Current re-audit state
 
-After Phase 7F-U Batch 014 delivers AUT-300, AUT-310, AUT-320, and AUT-330, the deterministic audit covers **23 remaining planning-catalog courses**.
+After Phase 7F-V Batch 015, the deterministic audit covers **16 remaining planning-catalog courses**.
 
 | Classification | Courses |
 | --- | ---: |
-| Ready to build now | **7** |
+| Ready to build now | **3** |
 | Blocked — missing canonical mapping/content | **9** |
-| Blocked — unresolved prerequisite chain | **5** |
+| Blocked — unresolved prerequisite chain | **2** |
 | Blocked — human/institutional verification | **2** |
-| **Total remaining** | **23** |
+| **Total remaining** | **16** |
 
-## Batch 015 candidates
+## Batch 016 candidates
 
-- AUT 301
-- AUT 321
-- AUT 331
-- AUT 340
-- AUT 350
-- AUT 360
-- AUT 370
-
-## Human/institutional gates
-
-- **AUT 400:** junior standing plus AUT 300. AUT 300 is now delivered, but junior standing remains an institutional determination.
-- **AUT 420:** verified industry employment or approved internship placement remains required.
-
-Neither gate may be auto-cleared.
+- AUT 380
+- AUT 390
+- AUT 410
 
 ## Continuing blockers
 
-Nine courses still lack identity-preserving canonical mapping/content. Five mapped courses remain behind unresolved prerequisite chains.
+- Missing canonical mapping/content: AUT-140, AUT-510, AUT-600, AUT-610, AUT-620, AUT-630, AUT-640, AUT-650, AUT-690
+- Prerequisite chain: AUT-450, AUT-451
+- Human/institutional: AUT-400 (junior standing), AUT-420 (verified employment or approved internship placement)
 
 ## Governance boundary
 
-The audit does not satisfy learner prerequisites or equivalencies, standing or placement conditions, change academic status, authorize assessment, scoring, grading, high-stakes use, accreditation, institutional approval, KBOR approval, or academic credit.
+The audit does not satisfy learner prerequisites, equivalencies, concurrent-enrollment conditions, standing or placement conditions, change academic status, authorize assessment, scoring, grading, high-stakes use, accreditation, institutional approval, KBOR approval, or academic credit.
