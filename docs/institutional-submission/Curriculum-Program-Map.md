@@ -66,10 +66,11 @@ The reference-coverage figures above describe **lesson-plan evidence governance*
 
 Phase 7F-C verifies:
 
-- dedicated course delivery pages: **5**;
-- current dedicated course pages: **AUT-101, AUT-105, AUT-110, AUT-115, and AUT-250**;
+- catalog-aligned dedicated course pages: **4**;
+- current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, and AUT-115**;
+- existing HEV formative-training package page: **AUT-250**, crosswalked from catalog **AUT-330**;
 - planning-catalog courses: **68**;
-- planning-catalog courses without a dedicated course page: **63**.
+- planning-catalog courses without a catalog-aligned dedicated course page: **64**.
 
 The existing academic/content `status` field is separate from delivery status. For example, `electrical-1` is marked `active` in the undergraduate curriculum data but does not have a dedicated `exam-site/courses/electrical-1/index.html` page. A course must not be represented as built or production-ready merely because its academic/content status is active.
 
