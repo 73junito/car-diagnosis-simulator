@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "phase": "7F-L",
   "purpose": "remaining-delivery-eligibility-audit",
-  "sourceDeliveryPhase": "7F-W",
-  "lastResolutionPhase": "7F-X",
+  "sourceDeliveryPhase": "7F-Y",
+  "lastResolutionPhase": "7F-Y",
   "generatedFrom": {
     "courseCatalog": "data/curriculum/course-catalog.json",
     "programArchitecture": "data/curriculum/program-architecture.json",
@@ -11,55 +11,35 @@
   },
   "scope": {
     "planningCatalogCourses": 68,
-    "catalogAlignedDedicatedCoursePages": 55,
-    "remainingCatalogCourses": 13
+    "catalogAlignedDedicatedCoursePages": 58,
+    "remainingCatalogCourses": 10
   },
   "summary": {
-    "readyToBuildNow": 3,
+    "readyToBuildNow": 2,
     "blockedMissingCanonicalMapping": 0,
-    "blockedPrerequisiteChain": 5,
-    "blockedHumanInstitutionalVerification": 5
+    "blockedPrerequisiteChain": 2,
+    "blockedHumanInstitutionalVerification": 6
   },
   "groups": {
     "readyToBuildNow": [
-      "aut-140",
-      "aut-510",
-      "aut-600"
+      "aut-610",
+      "aut-650"
     ],
     "blockedMissingCanonicalMapping": [],
     "blockedPrerequisiteChain": [
       "aut-450",
-      "aut-451",
-      "aut-610",
-      "aut-640",
-      "aut-650"
+      "aut-451"
     ],
     "blockedHumanInstitutionalVerification": [
       "aut-400",
       "aut-420",
       "aut-620",
       "aut-630",
+      "aut-640",
       "aut-690"
     ]
   },
   "records": [
-    {
-      "courseId": "aut-140",
-      "code": "AUT 140",
-      "title": "Automotive Brake Systems",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 120",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut140-brake-systems",
-      "referencedPrerequisiteCourseIds": [
-        "aut-120"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
     {
       "courseId": "aut-400",
       "code": "AUT 400",
@@ -131,40 +111,6 @@
       "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
     },
     {
-      "courseId": "aut-510",
-      "code": "AUT 510",
-      "title": "Advanced Vehicle Diagnostics",
-      "academicLevel": "graduate",
-      "prerequisitesText": "AUT 501 or equivalent",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "grad-aut510-advanced-vehicle-diagnostics",
-      "referencedPrerequisiteCourseIds": [
-        "aut-501"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
-      "courseId": "aut-600",
-      "code": "AUT 600",
-      "title": "Automotive Research Design",
-      "academicLevel": "graduate",
-      "prerequisitesText": "AUT 525",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "grad-aut600-research-design",
-      "referencedPrerequisiteCourseIds": [
-        "aut-525"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
       "courseId": "aut-610",
       "code": "AUT 610",
       "title": "Applied Automotive Research Project",
@@ -176,12 +122,10 @@
       "referencedPrerequisiteCourseIds": [
         "aut-600"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-600"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-620",
@@ -227,12 +171,10 @@
       "referencedPrerequisiteCourseIds": [
         "aut-600"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-600"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": true,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "blocked-human-institutional-verification",
+      "reason": "The catalog prerequisite requires a human or institutional standing, placement, approval, advanced-course selection, or equivalent governance decision."
     },
     {
       "courseId": "aut-650",
@@ -246,12 +188,10 @@
       "referencedPrerequisiteCourseIds": [
         "aut-600"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-600"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-690",
@@ -274,7 +214,7 @@
     "batch008Candidates": [
       "aut-120"
     ],
-    "reason": "Phase 7F-X resolved all canonical mapping/content blockers. The next delivery batch is limited to remaining courses whose mappings now exist, whose explicit AUT prerequisite pages are already delivered, and whose catalog text does not require unresolved standing, placement, approval, or unspecified advanced-course selection.",
+    "reason": "After Batch 017 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
     "highestLeverageCanonicalBlockers": [
       "aut-140",
       "aut-510",
@@ -287,9 +227,8 @@
       "aut-690"
     ],
     "notes": [
-      "Phase 7F-X resolves canonical mapping/content for AUT-140, AUT-510, AUT-600, AUT-610, AUT-620, AUT-630, AUT-640, AUT-650, and AUT-690.",
-      "AUT-630 remains human/institutional because its prerequisite requires selection of two advanced technology courses.",
-      "AUT-400, AUT-420, AUT-620, AUT-630, and AUT-690 remain direct human/institutional gates."
+      "AUT-140, AUT-510, and AUT-600 were delivered in Phase 7F-Y Batch 017.",
+      "Human/institutional standing, placement, approval, equivalency, and advanced-course selection gates remain non-automated."
     ],
     "batch009Ready": true,
     "batch009Candidates": [
@@ -347,6 +286,11 @@
       "aut-140",
       "aut-510",
       "aut-600"
+    ],
+    "batch018Ready": true,
+    "batch018Candidates": [
+      "aut-610",
+      "aut-650"
     ]
   },
   "boundaries": {

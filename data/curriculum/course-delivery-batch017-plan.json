@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-Y",
+  "purpose": "batch-017-post-canonical-resolution-delivery",
+  "sourceDeliveryPhase": "7F-Y",
+  "status": "page-built-verified",
+  "rationale": "Build the exact three Batch 017 candidates produced by the Phase 7F-X deterministic audit.",
+  "courses": [
+    {
+      "courseId": "aut-140",
+      "code": "AUT 140",
+      "title": "Automotive Brake Systems",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut140-brake-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 120",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-140/index.html",
+      "deliveryRoute": "/courses/aut-140/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-510",
+      "code": "AUT 510",
+      "title": "Advanced Vehicle Diagnostics",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut510-advanced-vehicle-diagnostics",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 501 or equivalent",
+      "prerequisiteType": "course-or-equivalency-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-510/index.html",
+      "deliveryRoute": "/courses/aut-510/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-600",
+      "code": "AUT 600",
+      "title": "Automotive Research Design",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut600-research-design",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 525",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-600/index.html",
+      "deliveryRoute": "/courses/aut-600/",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 3,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-W",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 3
+  },
+  "completedInPhase": "7F-Y"
+}

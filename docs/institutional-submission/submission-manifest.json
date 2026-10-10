@@ -29,7 +29,7 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "catalog_aligned_dedicated_course_pages": 55,
+    "catalog_aligned_dedicated_course_pages": 58,
     "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
@@ -39,6 +39,7 @@
       "aut-121",
       "aut-130",
       "aut-131",
+      "aut-140",
       "aut-150",
       "aut-160",
       "aut-170",
@@ -70,6 +71,7 @@
       "aut-390",
       "aut-410",
       "aut-501",
+      "aut-510",
       "aut-515",
       "aut-520",
       "aut-525",
@@ -85,7 +87,8 @@
       "aut-575",
       "aut-580",
       "aut-585",
-      "aut-590"
+      "aut-590",
+      "aut-600"
     ],
     "legacy_training_package_pages": 1,
     "legacy_training_package_page_ids": [
@@ -136,19 +139,19 @@
       "area": "course_delivery_status_data",
       "path": "data/curriculum/course-delivery-status.json",
       "status": "machine-readable-baseline",
-      "notes": "Machine-readable current Phase 7F-W delivery status used by deterministic validators."
+      "notes": "Machine-readable current Phase 7F-Y delivery status used by deterministic validators."
     },
     {
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-W verifies fifty-five catalog-aligned dedicated course pages plus the preserved legacy AUT-250 HEV package."
+      "notes": "Phase 7F-Y verifies fifty-eight catalog-aligned dedicated course pages plus the preserved legacy AUT-250 HEV package."
     },
     {
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Phase 7F-X resolves all canonical mapping/content blockers; post-resolution audit identifies AUT-140, AUT-510, and AUT-600 as the exact Batch 017 candidates."
+      "notes": "Post-Batch-017 re-audit identifies AUT-610 and AUT-650 as the exact Batch 018 candidates."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",
