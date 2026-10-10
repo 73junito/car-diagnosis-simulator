@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "phase": "7F-A",
-  "purpose": "course-delivery-status-baseline",
+  "phase": "7F-C",
+  "purpose": "current-course-delivery-status",
   "statusModel": {
     "academicStatusSource": [
       "data/curriculum/course-catalog.json",
@@ -35,11 +35,15 @@
     "graduateAcademicStatusCounts": {
       "planned": 21
     },
-    "dedicatedCoursePageCount": 1,
+    "dedicatedCoursePageCount": 5,
     "dedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
       "aut-250"
     ],
-    "catalogCoursesWithoutDedicatedPage": 67
+    "catalogCoursesWithoutDedicatedPage": 63
   },
   "boundaries": {
     "fullSyllabusCoverageClaim": false,
@@ -50,8 +54,17 @@
     "highStakesAuthorization": false
   },
   "notes": [
-    "AUT-250 is the only course with a dedicated exam-site course page at this baseline.",
+    "Phase 7F-C adds dedicated instructional course pages for AUT-101, AUT-105, AUT-110, and AUT-115.",
+    "AUT-250 remains the existing dedicated formative-training course experience.",
     "The 64/64 curriculum reference-coverage metric concerns lesson-plan evidence governance and must not be interpreted as 64 built online courses or 64 completed syllabi.",
-    "The undergraduate record electrical-1 is academically marked active but has no dedicated exam-site/courses/electrical-1/index.html page; this demonstrates why academic status cannot be used as delivery status."
-  ]
+    "Academic/content status remains independent from delivery-page status; building a page does not promote a course's academic status or authorize assessment."
+  ],
+  "previousBaseline": {
+    "phase": "7F-A",
+    "dedicatedCoursePageCount": 1,
+    "dedicatedCoursePageIds": [
+      "aut-250"
+    ],
+    "catalogCoursesWithoutDedicatedPage": 67
+  }
 }
