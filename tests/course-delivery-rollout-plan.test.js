@@ -1,6 +1,6 @@
 const { catalogPrerequisiteIds, verify } = require('../scripts/verify-course-delivery-rollout-plan.js')
 
-describe('Phase 7F-B course delivery rollout plan', () => {
+describe('Phase 7F-C course delivery rollout execution', () => {
   test('normalizes catalog prerequisite text', () => {
     expect(catalogPrerequisiteIds({ prerequisites: 'None' })).toEqual([])
     expect(catalogPrerequisiteIds({ prerequisites: 'AUT 110' })).toEqual(['aut-110'])
@@ -15,7 +15,7 @@ describe('Phase 7F-B course delivery rollout plan', () => {
     expect(verify().summary.blockers).toEqual(['aut-120', 'aut-150'])
   })
 
-  test('rollout plan validator passes', () => {
+  test('rollout execution validator passes', () => {
     expect(verify()).toMatchObject({ ok: true, errors: [] })
   })
 })
