@@ -24,9 +24,17 @@ function verify() {
     (ARCH.catalogDevelopmentMappings || []).map((mapping) => [mapping.catalogCourseId, mapping])
   )
   const built = new Set(STATUS.baseline?.dedicatedCoursePageIds || [])
+  const catalogAligned = new Set(STATUS.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
   if (STATUS.phase !== '7F-C') errors.push('delivery status must be Phase 7F-C')
-  if (STATUS.baseline?.dedicatedCoursePageCount !== 5) errors.push('Phase 7F-C must record 5 dedicated course pages')
+  if (STATUS.baseline?.dedicatedCoursePageCount !== 5) errors.push('Phase 7F-C must record 5 dedicated course/training page directories')
+  if (STATUS.baseline?.catalogAlignedDedicatedCoursePageCount !== 4) errors.push('Phase 7F-C must record 4 catalog-aligned Batch 001 course pages')
+  if (JSON.stringify([...catalogAligned].sort()) !== JSON.stringify(BATCH)) {
+    errors.push('catalog-aligned dedicated course pages must equal Batch 001')
+  }
+  if (JSON.stringify(STATUS.baseline?.legacyTrainingPackagePageIds || []) !== JSON.stringify(['aut-250'])) {
+    errors.push('AUT-250 must remain classified as the legacy HEV training package page')
+  }
 
   for (const id of BATCH) {
     const course = catalogById.get(id)
@@ -82,6 +90,7 @@ function verify() {
     }
 
     if (!built.has(id)) errors.push(`delivery status does not list built page: ${id}`)
+    if (!catalogAligned.has(id)) errors.push(`delivery status does not list catalog-aligned page: ${id}`)
   }
 
   const expectedBuilt = ['aut-101', 'aut-105', 'aut-110', 'aut-115', 'aut-250']
@@ -96,8 +105,10 @@ function verify() {
   }
 
   const catalogData = fs.readFileSync(path.join(ROOT, 'exam-site', 'catalog', 'catalog-data.js'), 'utf8')
-  if (!catalogData.includes('DELIVERY_STATUS_URL') || !catalogData.includes('course-page')) {
-    errors.push('catalog data loader must attach governed delivery-page availability')
+  if (!catalogData.includes('DELIVERY_STATUS_URL') ||
+      !catalogData.includes('catalogAlignedDedicatedCoursePageIds') ||
+      !catalogData.includes('course-page')) {
+    errors.push('catalog data loader must attach only governed catalog-aligned delivery-page availability')
   }
 
   const courseDetail = fs.readFileSync(path.join(ROOT, 'exam-site', 'catalog', 'course', 'course.js'), 'utf8')
