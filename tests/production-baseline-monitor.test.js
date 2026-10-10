@@ -12,6 +12,7 @@ describe('Phase 7A production baseline monitor', () => {
       'source-rights-closure',
       'state-privacy-ai-overlays',
       'curriculum-reference-coverage',
+      'curriculum-reference-quality',
       'assessment-governance-boundary',
       'production-surfaces',
       'google-crawler-access',
@@ -34,8 +35,8 @@ describe('Phase 7A production baseline monitor', () => {
 
     expect(report).toMatchObject({
       ok: true,
-      gates_total: 8,
-      gates_passed: 8,
+      gates_total: 9,
+      gates_passed: 9,
       gates_failed: 0
     })
     expect(fs.existsSync(REPORT_PATH)).toBe(true)
