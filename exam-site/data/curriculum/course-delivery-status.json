@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "phase": "7F-D",
+  "phase": "7F-F",
   "purpose": "current-course-delivery-status",
   "statusModel": {
     "academicStatusSource": [
@@ -35,8 +35,60 @@
     "graduateAcademicStatusCounts": {
       "planned": 21
     },
-    "dedicatedCoursePageCount": 9,
+    "dedicatedCoursePageCount": 12,
     "dedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
+      "aut-130",
+      "aut-131",
+      "aut-160",
+      "aut-180",
+      "aut-200",
+      "aut-201",
+      "aut-220",
+      "aut-250"
+    ],
+    "catalogAlignedDedicatedCoursePageCount": 11,
+    "catalogAlignedDedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
+      "aut-130",
+      "aut-131",
+      "aut-160",
+      "aut-180",
+      "aut-200",
+      "aut-201",
+      "aut-220"
+    ],
+    "legacyTrainingPackagePageCount": 1,
+    "legacyTrainingPackagePageIds": [
+      "aut-250"
+    ],
+    "catalogCoursesWithoutCatalogAlignedDedicatedPage": 57
+  },
+  "boundaries": {
+    "fullSyllabusCoverageClaim": false,
+    "fullCourseDeliveryCoverageClaim": false,
+    "assessmentAuthorization": false,
+    "scoringAuthorization": false,
+    "gradingAuthorization": false,
+    "highStakesAuthorization": false
+  },
+  "notes": [
+    "Phase 7F-F adds catalog-aligned dedicated instructional course pages for AUT-200, AUT-201, and AUT-220 in addition to Batches 001 and 002.",
+    "AUT-120 and AUT-150 remain intentionally blocked from canonical delivery until dedicated canonical curriculum content is approved.",
+    "The existing /courses/aut-250/ page remains the HEV formative-training package crosswalked from catalog AUT-330; it is not the delivery page for catalog AUT-250 Automotive Diagnostics I.",
+    "The filesystem contains twelve dedicated course/training page directories in total, of which eleven are catalog-aligned course pages.",
+    "Academic/content status remains independent from delivery-page status; building a page does not authorize assessment."
+  ],
+  "previousBaseline": {
+    "phase": "7F-D",
+    "dedicatedCourseOrTrainingPageCount": 9,
+    "dedicatedCourseOrTrainingPageIds": [
       "aut-101",
       "aut-105",
       "aut-110",
@@ -58,44 +110,6 @@
       "aut-160",
       "aut-180"
     ],
-    "legacyTrainingPackagePageCount": 1,
-    "legacyTrainingPackagePageIds": [
-      "aut-250"
-    ],
     "catalogCoursesWithoutCatalogAlignedDedicatedPage": 60
-  },
-  "boundaries": {
-    "fullSyllabusCoverageClaim": false,
-    "fullCourseDeliveryCoverageClaim": false,
-    "assessmentAuthorization": false,
-    "scoringAuthorization": false,
-    "gradingAuthorization": false,
-    "highStakesAuthorization": false
-  },
-  "notes": [
-    "Phase 7F-D adds catalog-aligned dedicated instructional course pages for AUT-130, AUT-131, AUT-160, and AUT-180 in addition to the Phase 7F-C Batch 001 pages.",
-    "The existing /courses/aut-250/ page remains the HEV formative-training package crosswalked from catalog AUT-330; it is not the delivery page for catalog AUT-250 Automotive Diagnostics I.",
-    "The filesystem contains nine dedicated course/training page directories in total, of which eight are catalog-aligned course pages.",
-    "The 64/64 curriculum reference-coverage metric concerns lesson-plan evidence governance and must not be interpreted as 64 built online courses or 64 completed syllabi.",
-    "Academic/content status remains independent from delivery-page status; building a page does not promote a course's academic status or authorize assessment."
-  ],
-  "previousBaseline": {
-    "phase": "7F-C",
-    "dedicatedCourseOrTrainingPageCount": 5,
-    "dedicatedCourseOrTrainingPageIds": [
-      "aut-101",
-      "aut-105",
-      "aut-110",
-      "aut-115",
-      "aut-250"
-    ],
-    "catalogAlignedDedicatedCoursePageCount": 4,
-    "catalogAlignedDedicatedCoursePageIds": [
-      "aut-101",
-      "aut-105",
-      "aut-110",
-      "aut-115"
-    ],
-    "catalogCoursesWithoutCatalogAlignedDedicatedPage": 64
   }
 }

@@ -37,11 +37,12 @@ function verify() {
   const baselineState = baseline.baseline || {}
   const sourceBaseline = plan.sourceBaseline || {}
   if (sourceBaseline.phase !== '7F-D') errors.push('rollout execution must match Phase 7F-D delivery status')
-  if (sourceBaseline.dedicatedCoursePageCount !== baselineState.dedicatedCoursePageCount) {
-    errors.push('source dedicated course page count does not match current Phase 7F-D status')
+  if (sourceBaseline.dedicatedCoursePageCount > baselineState.dedicatedCoursePageCount) {
+    errors.push('historical Phase 7F-D page count cannot exceed current delivery status')
   }
-  if (JSON.stringify(sourceBaseline.dedicatedCoursePageIds) !== JSON.stringify(baselineState.dedicatedCoursePageIds)) {
-    errors.push('source dedicated course page IDs do not match current Phase 7F-C status')
+  const currentPageIds = new Set(baselineState.dedicatedCoursePageIds || [])
+  for (const id of sourceBaseline.dedicatedCoursePageIds || []) {
+    if (!currentPageIds.has(id)) errors.push(`historical Phase 7F-D page missing from current delivery status: ${id}`)
   }
   if (sourceBaseline.catalogCourseCount !== baselineState.catalogCourseCount) {
     errors.push('source catalog count does not match current delivery status')
@@ -153,7 +154,7 @@ function verify() {
   }
 
   const boundaries = plan.boundaries || {}
-  if (boundaries.coursesBuiltByThisPhase !== 4) errors.push('coursesBuiltByThisPhase must be 4 in Phase 7F-C')
+  if (boundaries.coursesBuiltByThisPhase !== 4) errors.push('historical Phase 7F-D coursesBuiltByThisPhase must remain 4')
   for (const key of ['academicStatusChanges', 'assessmentEligibilityChanges', 'productionReadyClaims']) {
     if (boundaries[key] !== 0) errors.push(`governance boundary must remain zero: ${key}`)
   }
@@ -175,12 +176,12 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-D course delivery rollout execution')
+    console.error('[FAIL] Historical Phase 7F-D course delivery rollout execution')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
   console.log(
-    '[PASS] Phase 7F-D rollout execution: Batch 001 and Batch 002 pages are built and verified; aut-120/aut-150 remain blocked for canonical development mapping'
+    '[PASS] Historical Phase 7F-D rollout integrity: Batch 001 and Batch 002 remain built and verified; aut-120/aut-150 remain blocked'
   )
 }
 

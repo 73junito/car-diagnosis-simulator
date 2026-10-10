@@ -1,4 +1,4 @@
-# Phase 7F-E Mapping Blocker Reconciliation and Batch 003 Plan
+# Phase 7F-F Mapping Blocker Reconciliation and Batch 003 Execution
 
 ## Finding
 
@@ -30,9 +30,9 @@ The current canonical development table is identity-preserving: every canonical 
 
 Therefore AUT 150 also remains blocked until a dedicated canonical mapping/content decision is made.
 
-## Batch 003 — planned
+## Batch 003 — built and verified
 
-The next safe delivery-build batch is:
+Phase 7F-F built and verified:
 
 | Course | Title | Prerequisite disposition |
 | --- | --- | --- |
@@ -44,12 +44,12 @@ Each of these courses already has an identity-preserving `canonical-catalog-cour
 
 ## Governance
 
-Phase 7F-E is planning/audit only:
+The blocker audit remains active while Phase 7F-F executes Batch 003:
 
-- no new course page is created;
+- three new catalog-aligned course pages are created for AUT 200, AUT 201, and AUT 220;
 - no academic/content status changes;
 - no assessment eligibility changes;
 - no scored/high-stakes authorization;
 - no legacy crosswalk is promoted to canonical coverage merely to unblock page delivery.
 
-The correct next build step after this plan is **Phase 7F-F — Batch 003 Course Page Build**.
+AUT 120 and AUT 150 remain blocked from canonical delivery until dedicated canonical curriculum content is approved.

@@ -25,9 +25,9 @@ function verify() {
   )
   const catalogAligned = new Set(STATUS.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
-  if (STATUS.phase !== '7F-D') errors.push('delivery status must be Phase 7F-D')
-  if (STATUS.baseline?.catalogAlignedDedicatedCoursePageCount !== 8) {
-    errors.push('Phase 7F-D must record 8 catalog-aligned dedicated course pages')
+  if (!['7F-D', '7F-F'].includes(STATUS.phase)) errors.push('delivery status must be Phase 7F-D or later supported Phase 7F-F')
+  if ((STATUS.baseline?.catalogAlignedDedicatedCoursePageCount || 0) < 8) {
+    errors.push('current delivery status must retain at least the 8 Batch 001/002 catalog-aligned pages')
   }
 
   for (const id of BATCH) {

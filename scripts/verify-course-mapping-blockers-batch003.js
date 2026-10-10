@@ -56,8 +56,11 @@ function verify() {
     }
   }
 
-  if (batch3Plan.phase !== '7F-E' || batch3Plan.status !== 'planned-for-delivery-build') {
-    errors.push('Batch 003 plan must remain Phase 7F-E planning-only')
+  if (!['7F-E', '7F-F'].includes(batch3Plan.phase)) {
+    errors.push('Batch 003 plan phase must remain Phase 7F-E or completed Phase 7F-F')
+  }
+  if (batch3Plan.phase === '7F-F' && batch3Plan.status !== 'page-built-verified') {
+    errors.push('Batch 003 must be page-built-verified in Phase 7F-F')
   }
 
   const expectedBatch3 = ['aut-200', 'aut-201', 'aut-220']
@@ -97,13 +100,22 @@ function verify() {
       }
     }
 
-    if (fs.existsSync(path.join(ROOT, planned.targetPage))) {
+    if (batch3Plan.phase === '7F-E' && fs.existsSync(path.join(ROOT, planned.targetPage))) {
       errors.push(`Batch 003 target already exists while plan is still planning-only: ${planned.targetPage}`)
+    }
+    if (batch3Plan.phase === '7F-F') {
+      if (!fs.existsSync(path.join(ROOT, planned.targetPage))) {
+        errors.push(`Batch 003 verified target is missing: ${planned.targetPage}`)
+      }
+      if (planned.deliveryStatus !== 'page-built') {
+        errors.push(`Batch 003 deliveryStatus must be page-built: ${planned.courseId}`)
+      }
     }
   }
 
   const boundaries = batch3Plan.boundaries || {}
-  if (boundaries.coursesBuiltByThisPhase !== 0) errors.push('Phase 7F-E must build zero courses')
+  if (batch3Plan.phase === '7F-E' && boundaries.coursesBuiltByThisPhase !== 0) errors.push('Phase 7F-E must build zero courses')
+  if (batch3Plan.phase === '7F-F' && boundaries.coursesBuiltByThisPhase !== 3) errors.push('Phase 7F-F must record 3 built Batch 003 courses')
   if (boundaries.academicStatusChanges !== 0) errors.push('Phase 7F-E academicStatusChanges must remain zero')
   if (boundaries.assessmentEligibilityChanges !== 0) errors.push('Phase 7F-E assessmentEligibilityChanges must remain zero')
   if (boundaries.assessmentAuthorization !== false) errors.push('assessmentAuthorization must remain false')
@@ -128,7 +140,7 @@ function main() {
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-E: 54 canonical mappings, 14 unmapped catalog records, AUT-120/AUT-150 intentionally blocked, Batch 003 aut-200/aut-201/aut-220 ready for build planning')
+  console.log('[PASS] Phase 7F-E/F: 54 canonical mappings, 14 unmapped catalog records, AUT-120/AUT-150 intentionally blocked, Batch 003 aut-200/aut-201/aut-220 integrity verified')
 }
 
 if (require.main === module) main()

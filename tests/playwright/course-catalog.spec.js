@@ -57,6 +57,11 @@ test.describe("academic course catalog", () => {
     await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
     await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-130/");
 
+    await page.goto(examBase + "/catalog/course/?course=AUT-200");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Engine Systems II");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-200/");
+
     await page.goto(examBase + "/catalog/course/?course=AUT-250");
     await expect(page.locator(".catalog-detail-card h1")).toHaveText("Automotive Diagnostics I");
     await expect(page.locator(".catalog-training-link")).toHaveCount(0);
