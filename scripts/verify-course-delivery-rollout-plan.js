@@ -29,16 +29,16 @@ function verify() {
   const lessons = readJson(LESSONS_PATH)
   const architecture = readJson(ARCH_PATH)
 
-  if (plan.phase !== '7F-C') errors.push('rollout execution phase must remain 7F-C')
+  if (plan.phase !== '7F-D') errors.push('rollout execution phase must remain 7F-D')
   if (plan.purpose !== 'course-delivery-rollout-execution') {
     errors.push('plan purpose must remain course-delivery-rollout-execution')
   }
 
   const baselineState = baseline.baseline || {}
   const sourceBaseline = plan.sourceBaseline || {}
-  if (sourceBaseline.phase !== '7F-C') errors.push('rollout execution must match Phase 7F-C delivery status')
+  if (sourceBaseline.phase !== '7F-D') errors.push('rollout execution must match Phase 7F-D delivery status')
   if (sourceBaseline.dedicatedCoursePageCount !== baselineState.dedicatedCoursePageCount) {
-    errors.push('source dedicated course page count does not match current Phase 7F-C status')
+    errors.push('source dedicated course page count does not match current Phase 7F-D status')
   }
   if (JSON.stringify(sourceBaseline.dedicatedCoursePageIds) !== JSON.stringify(baselineState.dedicatedCoursePageIds)) {
     errors.push('source dedicated course page IDs do not match current Phase 7F-C status')
@@ -58,6 +58,7 @@ function verify() {
 
   const batches = [...(plan.batches || [])].sort((a, b) => a.sequence - b.sequence)
   const batch1 = batches.find((batch) => batch.id === 'batch-001-foundations')
+  const batch2 = batches.find((batch) => batch.id === 'batch-002-foundation-extension')
   if (!batch1) {
     errors.push('Batch 001 foundations is missing')
   } else {
@@ -67,7 +68,19 @@ function verify() {
       errors.push(`Batch 001 course order must remain ${expected.join(', ')}`)
     }
     if (batch1.status !== 'page-built-verified') {
-      errors.push('Batch 001 must be page-built-verified in Phase 7F-C')
+      errors.push('Batch 001 must remain page-built-verified')
+    }
+  }
+  if (!batch2) {
+    errors.push('Batch 002 foundation extension is missing')
+  } else {
+    const ids = batch2.courses.map((course) => course.courseId)
+    const expected = ['aut-130', 'aut-131', 'aut-160', 'aut-180']
+    if (JSON.stringify(ids) !== JSON.stringify(expected)) {
+      errors.push(`Batch 002 course order must remain ${expected.join(', ')}`)
+    }
+    if (batch2.status !== 'page-built-verified') {
+      errors.push('Batch 002 must be page-built-verified in Phase 7F-D')
     }
   }
 
@@ -109,12 +122,12 @@ function verify() {
         }
       }
 
-      if (batch.id === 'batch-001-foundations') {
+      if (batch.status === 'page-built-verified') {
         if (!planned.targetPage || !fs.existsSync(path.join(ROOT, planned.targetPage))) {
-          errors.push(`verified Batch 001 page is missing: ${planned.targetPage || planned.courseId}`)
+          errors.push(`verified rollout page is missing: ${planned.targetPage || planned.courseId}`)
         }
         if (planned.deliveryStatus !== 'page-built') {
-          errors.push(`Batch 001 deliveryStatus must be page-built: ${planned.courseId}`)
+          errors.push(`verified rollout deliveryStatus must be page-built: ${planned.courseId}`)
         }
       }
     }
@@ -162,12 +175,12 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-C course delivery rollout execution')
+    console.error('[FAIL] Phase 7F-D course delivery rollout execution')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
   console.log(
-    '[PASS] Phase 7F-C rollout execution: Batch 001 pages are built and verified; Batch 002 remains queued; aut-120/aut-150 remain blocked for canonical development mapping'
+    '[PASS] Phase 7F-D rollout execution: Batch 001 and Batch 002 pages are built and verified; aut-120/aut-150 remain blocked for canonical development mapping'
   )
 }
 
