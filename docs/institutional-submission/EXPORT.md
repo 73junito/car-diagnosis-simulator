@@ -1,5 +1,7 @@
 # Phase 7E - Institutional Submission Export & Reviewer Delivery
 
+> **Phase 7F-A delivery note:** The DOCX/PDF artifacts and SHA-256 values below remain the immutable historical Phase 7E export record. After the Phase 7F-A course-delivery clarification, these files should not be used for a new external reviewer submission until the packet is regenerated from the corrected source. The historical checksums are intentionally unchanged.
+
 Phase 7E records the final external reviewer deliverables generated from merged `main`.
 
 ## Source

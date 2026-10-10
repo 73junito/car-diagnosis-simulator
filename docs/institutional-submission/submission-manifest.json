@@ -11,7 +11,8 @@
     "institutional_adoption_claim": false,
     "assessment_authorized": false,
     "high_stakes_authorized": false,
-    "accessibility_certification_claim": false
+    "accessibility_certification_claim": false,
+    "full_course_delivery_coverage_claim": false
   },
   "verified_metrics": {
     "lesson_plans_total": 64,
@@ -27,7 +28,11 @@
     "governed_reference_sources": 38,
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
-    "production_monitor_gates": 9
+    "production_monitor_gates": 9,
+    "dedicated_course_delivery_pages": 1,
+    "dedicated_course_delivery_page_ids": [
+      "aut-250"
+    ]
   },
   "proposed_programs": [
     {
@@ -68,6 +73,18 @@
       "area": "course_catalog",
       "path": "data/curriculum/course-catalog.json",
       "status": "planning-inventory"
+    },
+    {
+      "area": "course_delivery_status_data",
+      "path": "data/curriculum/course-delivery-status.json",
+      "status": "machine-readable-baseline",
+      "notes": "Machine-readable Phase 7F-A delivery baseline used by the deterministic course-delivery validator."
+    },
+    {
+      "area": "course_delivery_status",
+      "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
+      "status": "verified-baseline",
+      "notes": "Phase 7F-A separates 64/64 lesson-plan reference coverage from actual dedicated course delivery pages; one dedicated course page exists (AUT-250)."
     },
     {
       "area": "production_release",
