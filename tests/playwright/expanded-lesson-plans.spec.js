@@ -15,7 +15,7 @@ test.describe('Expanded lesson plans', () => {
     await page.goto('/lesson-plans/');
     await expect(page.locator('html')).toHaveAttribute('data-lesson-plans', 'loaded');
 
-    await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(43);
+    await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(44);
     await expect(page.locator('#graduate-plan-list .expanded-plan')).toHaveCount(21);
     await expect(page.locator('.expanded-plan')).toHaveCount(64);
     await expect(page.locator('.expanded-plan .program-context')).toHaveCount(64);

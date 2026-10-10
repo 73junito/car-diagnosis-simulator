@@ -47,8 +47,8 @@ function verify() {
   if (sourceBaseline.catalogCourseCount !== baselineState.catalogCourseCount) {
     errors.push('source catalog count does not match current delivery status')
   }
-  if (sourceBaseline.lessonPlanCount !== baselineState.lessonPlanCount) {
-    errors.push('source lesson-plan count does not match current delivery status')
+  if (sourceBaseline.lessonPlanCount > baselineState.lessonPlanCount) {
+    errors.push('historical source lesson-plan count cannot exceed current delivery status')
   }
 
   const catalogById = new Map((catalog.courses || []).map((course) => [course.id, course]))
@@ -137,8 +137,11 @@ function verify() {
 
   const blockerById = new Map((plan.blockers || []).map((blocker) => [blocker.courseId, blocker]))
   for (const id of ['aut-120', 'aut-150']) {
-    if (!blockerById.has(id)) errors.push(`required mapping blocker missing from rollout plan: ${id}`)
-    if (mappings.has(id)) errors.push(`course marked as mapping blocker now has a canonical development mapping: ${id}`)
+    if (!blockerById.has(id)) errors.push(`historical mapping blocker missing from rollout plan: ${id}`)
+  }
+  const resolvedIds = new Set((readJson(path.join(ROOT, 'data', 'curriculum', 'course-mapping-blocker-audit.json')).resolvedSinceAudit || []).map((item) => item.courseId))
+  for (const id of blockerById.keys()) {
+    if (mappings.has(id) && !resolvedIds.has(id)) errors.push(`historical blocker gained canonical mapping without a recorded later resolution: ${id}`)
   }
 
   const policy = plan.policy || {}
@@ -168,7 +171,7 @@ function verify() {
     summary: {
       batch1: batch1 ? batch1.courses.map((course) => course.courseId) : [],
       batchCount: batches.length,
-      blockers: [...blockerById.keys()].sort()
+      blockers: [...blockerById.keys()].filter((id) => !mappings.has(id)).sort()
     }
   }
 }
@@ -181,7 +184,7 @@ function main() {
     process.exit(1)
   }
   console.log(
-    '[PASS] Historical Phase 7F-D rollout integrity: Batch 001 and Batch 002 remain built and verified; aut-120/aut-150 remain blocked'
+    '[PASS] Historical Phase 7F-D rollout integrity: Batch 001 and Batch 002 remain built and verified; later recorded blocker resolutions are accepted'
   )
 }
 
