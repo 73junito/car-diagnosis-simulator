@@ -1,6 +1,6 @@
 const { catalogPrerequisiteIds, verify } = require('../scripts/verify-course-delivery-rollout-plan.js')
 
-describe('Phase 7F-C course delivery rollout execution', () => {
+describe('Phase 7F-D course delivery rollout execution', () => {
   test('normalizes catalog prerequisite text', () => {
     expect(catalogPrerequisiteIds({ prerequisites: 'None' })).toEqual([])
     expect(catalogPrerequisiteIds({ prerequisites: 'AUT 110' })).toEqual(['aut-110'])
