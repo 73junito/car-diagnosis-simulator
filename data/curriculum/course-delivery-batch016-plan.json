@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-W",
+  "purpose": "batch-016-undergraduate-advanced-delivery-execution",
+  "sourceDeliveryPhase": "7F-W",
+  "status": "page-built-verified",
+  "rationale": "Build the exact three evidence-supported Batch 016 candidates produced by the post-Batch-015 deterministic audit.",
+  "courses": [
+    {
+      "courseId": "aut-380",
+      "code": "AUT 380",
+      "title": "Automotive Cybersecurity",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut380-cybersecurity",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 310, AUT 370",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-380/index.html",
+      "deliveryRoute": "/courses/aut-380/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-390",
+      "code": "AUT 390",
+      "title": "Connected and Software-Defined Vehicles",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut390-connected-sdv",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 310, AUT 370",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-390/index.html",
+      "deliveryRoute": "/courses/aut-390/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-410",
+      "code": "AUT 410",
+      "title": "Automotive Systems Integration",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut410-systems-integration",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 310, AUT 320 or AUT 330, AUT 350",
+      "prerequisiteType": "alternative-course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-410/index.html",
+      "deliveryRoute": "/courses/aut-410/",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 3,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-V",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 7
+  },
+  "completedInPhase": "7F-W"
+}

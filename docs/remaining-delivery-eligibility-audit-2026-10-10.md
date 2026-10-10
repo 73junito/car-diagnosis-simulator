@@ -1,29 +1,20 @@
 # Phase 7F-L Remaining Delivery Eligibility Audit
 
-## Current re-audit state
-
-After Phase 7F-V Batch 015, the deterministic audit covers **16 remaining planning-catalog courses**.
+After Phase 7F-W Batch 016, **13** planning-catalog courses remain.
 
 | Classification | Courses |
 | --- | ---: |
-| Ready to build now | **3** |
-| Blocked — missing canonical mapping/content | **9** |
-| Blocked — unresolved prerequisite chain | **2** |
-| Blocked — human/institutional verification | **2** |
-| **Total remaining** | **16** |
+| Ready to build now | **0** |
+| Missing canonical mapping/content | **9** |
+| Unresolved prerequisite chain | **2** |
+| Human/institutional verification | **2** |
 
-## Batch 016 candidates
+There is **no evidence-supported Batch 017** at this state.
 
-- AUT 380
-- AUT 390
-- AUT 410
+Missing mapping/content: AUT-140, AUT-510, AUT-600, AUT-610, AUT-620, AUT-630, AUT-640, AUT-650, AUT-690.
 
-## Continuing blockers
+Prerequisite-chain blocked: AUT-450, AUT-451.
 
-- Missing canonical mapping/content: AUT-140, AUT-510, AUT-600, AUT-610, AUT-620, AUT-630, AUT-640, AUT-650, AUT-690
-- Prerequisite chain: AUT-450, AUT-451
-- Human/institutional: AUT-400 (junior standing), AUT-420 (verified employment or approved internship placement)
+Human/institutional holds: AUT-400 (junior standing) and AUT-420 (verified employment or approved internship placement).
 
-## Governance boundary
-
-The audit does not satisfy learner prerequisites, equivalencies, concurrent-enrollment conditions, standing or placement conditions, change academic status, authorize assessment, scoring, grading, high-stakes use, accreditation, institutional approval, KBOR approval, or academic credit.
+The audit does not satisfy prerequisites, standing, placement, assessment eligibility, academic approval, accreditation, or credit authority.

@@ -16,7 +16,7 @@
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-V verifies fifty-two catalog-aligned course pages plus the preserved legacy AUT-250 HEV package."
+      "notes": "Phase 7F-W verifies fifty-five catalog-aligned course pages plus the preserved legacy AUT-250 HEV package."
     },
     {
       "area": "phase7fq_canonical_blocker_resolution",
@@ -34,7 +34,7 @@
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-015 re-audit classifies 16 remaining catalog courses and identifies AUT-380, AUT-390, and AUT-410 as the exact Batch 016 ready set."
+      "notes": "Post-Batch-016 re-audit classifies 13 remaining catalog courses and records zero ready-to-build candidates."
     },
     {
       "area": "institutional_submission",
@@ -116,7 +116,7 @@
     }
   ],
   "open_readiness_items": [
-    "Batch 016 may contain AUT-380, AUT-390, and AUT-410 only under the current deterministic prerequisite/mapping audit; rerun after delivery before defining another batch.",
+    "No Batch 017 is currently evidence-supported. Resolve canonical mapping/content blockers, prerequisite chains, or human/institutional gates before defining another delivery batch.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",

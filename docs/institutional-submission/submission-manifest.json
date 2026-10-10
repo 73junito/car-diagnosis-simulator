@@ -29,7 +29,7 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "catalog_aligned_dedicated_course_pages": 52,
+    "catalog_aligned_dedicated_course_pages": 55,
     "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
@@ -66,6 +66,9 @@
       "aut-350",
       "aut-360",
       "aut-370",
+      "aut-380",
+      "aut-390",
+      "aut-410",
       "aut-501",
       "aut-515",
       "aut-520",
@@ -133,19 +136,19 @@
       "area": "course_delivery_status_data",
       "path": "data/curriculum/course-delivery-status.json",
       "status": "machine-readable-baseline",
-      "notes": "Machine-readable current Phase 7F-V delivery status used by deterministic delivery validators."
+      "notes": "Machine-readable current Phase 7F-W delivery status used by deterministic validators."
     },
     {
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-V verifies fifty-two catalog-aligned dedicated course pages plus the preserved legacy AUT-250 HEV package."
+      "notes": "Phase 7F-W verifies fifty-five catalog-aligned dedicated course pages plus the preserved legacy AUT-250 HEV package."
     },
     {
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-015 re-audit identifies AUT-380, AUT-390, and AUT-410 as the exact Batch 016 candidates; AUT-400/AUT-420 remain human/institutional gates."
+      "notes": "Post-Batch-016 re-audit classifies 13 remaining courses and establishes that no evidence-supported Batch 017 is currently ready."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",
