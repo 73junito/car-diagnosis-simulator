@@ -29,8 +29,12 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "dedicated_course_delivery_pages": 1,
+    "dedicated_course_delivery_pages": 5,
     "dedicated_course_delivery_page_ids": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
       "aut-250"
     ]
   },
@@ -78,13 +82,13 @@
       "area": "course_delivery_status_data",
       "path": "data/curriculum/course-delivery-status.json",
       "status": "machine-readable-baseline",
-      "notes": "Machine-readable Phase 7F-A delivery baseline used by the deterministic course-delivery validator."
+      "notes": "Machine-readable current Phase 7F-C delivery status used by deterministic delivery validators."
     },
     {
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-A separates 64/64 lesson-plan reference coverage from actual dedicated course delivery pages; one dedicated course page exists (AUT-250)."
+      "notes": "Phase 7F-C separates 64/64 lesson-plan reference coverage from actual dedicated course delivery pages; five dedicated course pages now exist (AUT-101, AUT-105, AUT-110, AUT-115, AUT-250)."
     },
     {
       "area": "production_release",
