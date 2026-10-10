@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "phase": "7F-L",
   "purpose": "remaining-delivery-eligibility-audit",
-  "sourceDeliveryPhase": "7F-N",
-  "lastResolutionPhase": "7F-N",
+  "sourceDeliveryPhase": "7F-O",
+  "lastResolutionPhase": "7F-O",
   "generatedFrom": {
     "courseCatalog": "data/curriculum/course-catalog.json",
     "programArchitecture": "data/curriculum/program-architecture.json",
@@ -11,19 +11,19 @@
   },
   "scope": {
     "planningCatalogCourses": 68,
-    "catalogAlignedDedicatedCoursePages": 28,
-    "remainingCatalogCourses": 40
+    "catalogAlignedDedicatedCoursePages": 30,
+    "remainingCatalogCourses": 38
   },
   "summary": {
     "readyToBuildNow": 2,
     "blockedMissingCanonicalMapping": 13,
-    "blockedPrerequisiteChain": 24,
+    "blockedPrerequisiteChain": 22,
     "blockedHumanInstitutionalVerification": 1
   },
   "groups": {
     "readyToBuildNow": [
-      "aut-121",
-      "aut-170"
+      "aut-230",
+      "aut-240"
     ],
     "blockedMissingCanonicalMapping": [
       "aut-140",
@@ -42,8 +42,6 @@
     ],
     "blockedPrerequisiteChain": [
       "aut-211",
-      "aut-230",
-      "aut-240",
       "aut-250",
       "aut-251",
       "aut-260",
@@ -71,23 +69,6 @@
     ]
   },
   "records": [
-    {
-      "courseId": "aut-121",
-      "code": "AUT 121",
-      "title": "Automotive Electrical Systems I Laboratory",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "Concurrent enrollment in AUT 120",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut121-electrical-lab",
-      "referencedPrerequisiteCourseIds": [
-        "aut-120"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
     {
       "courseId": "aut-140",
       "code": "AUT 140",
@@ -121,23 +102,6 @@
       "humanInstitutionalCondition": false,
       "classification": "blocked-missing-canonical-mapping",
       "reason": "No identity-preserving canonical catalog-development mapping is recorded."
-    },
-    {
-      "courseId": "aut-170",
-      "code": "AUT 170",
-      "title": "Automotive HVAC Systems",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 120",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut170-hvac-systems",
-      "referencedPrerequisiteCourseIds": [
-        "aut-120"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-210",
@@ -189,12 +153,10 @@
         "aut-120",
         "aut-121"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-121"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-240",
@@ -209,12 +171,10 @@
         "aut-120",
         "aut-121"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-121"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-250",
@@ -840,7 +800,7 @@
     "batch008Candidates": [
       "aut-120"
     ],
-    "reason": "After Batch 008 AUT-120 delivery, the audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
+    "reason": "After Batch 009 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
     "highestLeverageCanonicalBlockers": [
       "aut-150",
       "aut-210",
@@ -848,14 +808,18 @@
       "aut-525"
     ],
     "notes": [
-      "AUT-120 was delivered in Phase 7F-N Batch 008.",
-      "AUT-121, AUT-170, AUT-230, and AUT-240 are re-evaluated against the new AUT-120 delivery state.",
+      "AUT-121 and AUT-170 were delivered in Phase 7F-O Batch 009.",
       "AUT-420 remains directly gated by verified employment or approved internship placement and must not be auto-cleared."
     ],
     "batch009Ready": true,
     "batch009Candidates": [
       "aut-121",
       "aut-170"
+    ],
+    "batch010Ready": true,
+    "batch010Candidates": [
+      "aut-230",
+      "aut-240"
     ]
   },
   "boundaries": {

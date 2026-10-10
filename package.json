@@ -103,7 +103,8 @@
     "validate:batch006-graduate-pages": "node scripts/verify-batch006-graduate-pages.js",
     "validate:batch007-graduate-pages": "node scripts/verify-batch007-graduate-pages.js",
     "validate:remaining-delivery-eligibility-audit": "node scripts/verify-remaining-delivery-eligibility-audit.js",
-    "validate:batch008-undergraduate-page": "node scripts/verify-batch008-undergraduate-page.js"
+    "validate:batch008-undergraduate-page": "node scripts/verify-batch008-undergraduate-page.js",
+    "validate:batch009-undergraduate-pages": "node scripts/verify-batch009-undergraduate-pages.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

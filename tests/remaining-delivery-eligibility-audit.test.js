@@ -1,23 +1,23 @@
 const { verify } = require('../scripts/verify-remaining-delivery-eligibility-audit.js')
 
-describe('Phase 7F-L remaining delivery eligibility audit after Phase 7F-N Batch 008', () => {
-  test('classifies all 40 remaining catalog courses deterministically', () => {
+describe('Phase 7F-L remaining delivery eligibility audit after Phase 7F-O Batch 009', () => {
+  test('classifies all 38 remaining catalog courses deterministically', () => {
     expect(verify()).toMatchObject({
       ok: true,
       errors: [],
       summary: {
         readyToBuildNow: 2,
         blockedMissingCanonicalMapping: 13,
-        blockedPrerequisiteChain: 24,
+        blockedPrerequisiteChain: 22,
         blockedHumanInstitutionalVerification: 1
       }
     })
   })
 
-  test('identifies AUT-121 and AUT-170 as the evidence-supported Batch 009 candidates', () => {
+  test('identifies AUT-230 and AUT-240 as the evidence-supported Batch 010 candidates', () => {
     expect(verify().conclusion).toMatchObject({
-      batch009Ready: true,
-      batch009Candidates: ['aut-121', 'aut-170']
+      batch010Ready: true,
+      batch010Candidates: ['aut-230', 'aut-240']
     })
   })
 })

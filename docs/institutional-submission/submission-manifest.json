@@ -29,16 +29,18 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "catalog_aligned_dedicated_course_pages": 28,
+    "catalog_aligned_dedicated_course_pages": 30,
     "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
       "aut-110",
       "aut-115",
       "aut-120",
+      "aut-121",
       "aut-130",
       "aut-131",
       "aut-160",
+      "aut-170",
       "aut-180",
       "aut-200",
       "aut-201",
@@ -115,13 +117,13 @@
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-N verifies twenty-eight catalog-aligned dedicated course pages, including Batch 008 AUT-120, plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
+      "notes": "Phase 7F-O verifies thirty catalog-aligned dedicated course pages, including Batch 009 AUT-121/AUT-170, plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
     },
     {
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-008 re-audit identifies AUT-121 and AUT-170 as the next evidence-supported Batch 009 candidates."
+      "notes": "Post-Batch-009 re-audit identifies AUT-230 and AUT-240 as the next evidence-supported Batch 010 candidates."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",
