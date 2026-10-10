@@ -17,7 +17,7 @@ function verify() {
   const mappingById=new Map((ARCH.catalogDevelopmentMappings||[]).map(m=>[m.catalogCourseId,m]))
   const aligned=new Set(STATUS.baseline?.catalogAlignedDedicatedCoursePageIds||[])
 
-  if (!['7F-F','7F-H', '7F-I', '7F-J', '7F-K', '7F-N', '7F-O'].includes(STATUS.phase)) errors.push('delivery status must be Phase 7F-F or later supported Phase 7F-O')
+  if (!['7F-F','7F-H', '7F-I', '7F-J', '7F-K', '7F-N', '7F-O', '7F-P'].includes(STATUS.phase)) errors.push('delivery status must be Phase 7F-F or later supported Phase 7F-P')
   if ((STATUS.baseline?.catalogAlignedDedicatedCoursePageCount||0)<11) errors.push('current delivery status must retain at least 11 catalog-aligned course pages')
   if (PLAN.phase!=='7F-F' || PLAN.status!=='page-built-verified') errors.push('Batch 003 execution must be page-built-verified in Phase 7F-F')
 

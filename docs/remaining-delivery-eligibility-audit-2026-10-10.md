@@ -2,26 +2,30 @@
 
 ## Current re-audit state
 
-After Phase 7F-O Batch 009 delivers AUT-121 and AUT-170, the deterministic audit covers **38 remaining planning-catalog courses**.
+After Phase 7F-P Batch 010 delivers AUT-230 and AUT-240, the deterministic audit covers **36 remaining planning-catalog courses**.
 
 | Classification | Courses |
 | --- | ---: |
-| Ready to build now | **2** |
+| Ready to build now | **0** |
 | Blocked — missing canonical mapping/content | **13** |
 | Blocked — unresolved prerequisite chain | **22** |
 | Blocked — human/institutional verification | **1** |
-| **Total remaining** | **38** |
+| **Total remaining** | **36** |
 
-## Batch 010 candidates
+## Batch 011 decision
 
-- **AUT 230 — Automatic Transmission and Transaxle Systems**
-- **AUT 240 — Manual Drivetrain and Axle Systems**
+**Not ready.** No remaining catalog course currently satisfies all deterministic delivery prerequisites.
 
-These are the only courses currently satisfying the canonical mapping and explicit AUT prerequisite delivery rules.
+The next phase should resolve at least one canonical-content/mapping blocker and rerun this audit before another delivery batch is defined.
 
-## Continuing blockers
+## Highest-leverage canonical blockers
 
-Thirteen courses still lack identity-preserving canonical mapping/content. Twenty-two mapped courses remain behind unresolved prerequisite chains. AUT-420 remains directly gated by verified industry employment or approved internship placement and must not be auto-cleared.
+- **AUT-150**
+- **AUT-210**
+- **AUT-330**
+- **AUT-525**
+
+AUT-420 remains directly gated by verified industry employment or approved internship placement and must not be auto-cleared.
 
 ## Governance boundary
 
