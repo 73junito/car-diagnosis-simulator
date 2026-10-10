@@ -38,14 +38,18 @@ function verify() {
     errors.push(`unmapped catalog set drift: expected ${expectedUnmapped.join(',')}, found ${unmapped.join(',')}`)
   }
 
-  for (const id of ['aut-120', 'aut-150']) {
-    if (mappingById.has(id)) errors.push(`${id} must remain non-canonical until dedicated canonical content is approved`)
-    const blocker = (blockerAudit.priorityBlockers || []).find((b) => b.courseId === id)
-    if (!blocker) errors.push(`priority blocker record missing: ${id}`)
-    if (blocker && blocker.blockerType !== 'missing-dedicated-canonical-catalog-content') {
-      errors.push(`unexpected blocker type for ${id}`)
-    }
+  if (!mappingById.has('aut-120')) errors.push('aut-120 canonical mapping must exist after Phase 7F-M resolution')
+  const aut120 = mappingById.get('aut-120')
+  if (aut120 && (aut120.existingCourseId !== 'aut-120' || aut120.existingLessonPlanId !== 'ug-aut120-electrical-fundamentals' || aut120.mappingType !== 'canonical-catalog-course')) {
+    errors.push('aut-120 canonical mapping identity drift after Phase 7F-M resolution')
   }
+  if (!(blockerAudit.resolvedSinceAudit || []).some((item) => item.courseId === 'aut-120' && item.resolutionPhase === '7F-M')) {
+    errors.push('aut-120 Phase 7F-M resolution record missing')
+  }
+  const aut150Blocker = (blockerAudit.priorityBlockers || []).find((b) => b.courseId === 'aut-150')
+  if (mappingById.has('aut-150')) errors.push('aut-150 must remain non-canonical until dedicated canonical content is approved')
+  if (!aut150Blocker) errors.push('priority blocker record missing: aut-150')
+  if (aut150Blocker && aut150Blocker.blockerType !== 'missing-dedicated-canonical-catalog-content') errors.push('unexpected blocker type for aut-150')
 
   for (const mapping of mappings) {
     if (mapping.mappingType !== 'canonical-catalog-course') {
@@ -127,7 +131,7 @@ function verify() {
     summary: {
       canonicalMappings: mappings.length,
       unmappedCatalogCourses: unmapped.length,
-      priorityBlockers: ['aut-120', 'aut-150'],
+      priorityBlockers: ['aut-150'],
       batch3: batch3Ids
     }
   }
@@ -140,7 +144,7 @@ function main() {
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-E/F: 54 canonical mappings, 14 unmapped catalog records, AUT-120/AUT-150 intentionally blocked, Batch 003 aut-200/aut-201/aut-220 integrity verified')
+  console.log('[PASS] Phase 7F-E/F with Phase 7F-M resolution: 55 canonical mappings, 13 unmapped catalog records, AUT-120 resolved, AUT-150 still blocked, Batch 003 integrity verified')
 }
 
 if (require.main === module) main()

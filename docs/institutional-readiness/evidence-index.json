@@ -19,10 +19,16 @@
       "notes": "Phase 7F-K verifies twenty-seven catalog-aligned dedicated course pages, including Batch 007 graduate advanced-systems pages, plus the separate AUT-250 HEV training package; graduate prerequisite decisions remain separate human/institutional decisions."
     },
     {
+      "area": "aut120_canonical_curriculum_resolution",
+      "path": "docs/aut120-canonical-curriculum-resolution-2026-10-10.md",
+      "status": "canonical-development-resolution",
+      "notes": "Phase 7F-M creates identity-preserving AUT-120 course, competency, lesson, content plan, migration, and governed reference mappings without promoting academic status or assessment eligibility."
+    },
+    {
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Phase 7F-L classifies all 41 remaining catalog courses: 0 ready now, 14 missing canonical mapping/content, 26 blocked by prerequisite chains, and 1 direct human/institutional hold (AUT-420)."
+      "notes": "Phase 7F-L re-audit after Phase 7F-M classifies all 41 remaining catalog courses: AUT-120 is the sole ready-to-build Batch 008 candidate; 13 lack canonical mapping/content, 26 remain prerequisite-chain blocked, and AUT-420 remains a direct human/institutional hold."
     },
     {
       "area": "institutional_submission",
@@ -104,7 +110,7 @@
     }
   ],
   "open_readiness_items": [
-    "Do not define Batch 008 until a Phase 7F-L blocker is resolved and the deterministic remaining-delivery eligibility audit yields at least one ready-to-build course.",
+    "Batch 008 may now contain AUT-120 only; downstream electrical-path courses remain blocked until AUT-120 receives a catalog-aligned dedicated delivery page.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",

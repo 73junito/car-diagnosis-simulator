@@ -82,10 +82,11 @@ function verify() {
   }
 
   const priorityBlockers = new Set((blockers.priorityBlockers || []).map((b) => b.courseId))
-  for (const id of ['aut-120', 'aut-150']) {
-    if (!priorityBlockers.has(id)) errors.push(`continuing priority blocker missing: ${id}`)
-    if (mappingById.has(id)) errors.push(`blocked course must not gain canonical mapping in Phase 7F-H: ${id}`)
-  }
+  if (!priorityBlockers.has('aut-150')) errors.push('continuing priority blocker missing: aut-150')
+  if (mappingById.has('aut-150')) errors.push('aut-150 must remain blocked until a later recorded canonical resolution')
+  const aut120Resolution = (blockers.resolvedSinceAudit || []).find((item) => item.courseId === 'aut-120' && item.resolutionPhase === '7F-M')
+  if (!aut120Resolution) errors.push('AUT-120 later Phase 7F-M resolution record missing')
+  if (!mappingById.has('aut-120')) errors.push('AUT-120 canonical mapping expected after Phase 7F-M')
 
   const boundaries = plan.boundaries || {}
   if (boundaries.coursesBuiltByThisPhase !== 3) errors.push('Phase 7F-H must record 3 built Batch 004 courses')
@@ -101,7 +102,7 @@ function verify() {
     summary: {
       batch4: ids,
       deferredUndergraduate: ['aut-420'],
-      continuingBlockers: ['aut-120','aut-150']
+      continuingBlockers: ['aut-150']
     }
   }
 }
@@ -113,7 +114,7 @@ function main() {
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-H: Batch 004 aut-501/aut-515/aut-590 pages are built and verified while institutional prerequisite verification remains external; aut-420 deferred; aut-120/aut-150 remain blocked')
+  console.log('[PASS] Phase 7F-H historical Batch 004 remains verified; aut-420 deferred; later AUT-120 Phase 7F-M resolution accepted; AUT-150 remains blocked')
 }
 
 if (require.main === module) main()

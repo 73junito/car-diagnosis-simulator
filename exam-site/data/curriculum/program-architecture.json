@@ -31,6 +31,12 @@
       "mappingType": "canonical-catalog-course"
     },
     {
+      "catalogCourseId": "aut-120",
+      "existingCourseId": "aut-120",
+      "existingLessonPlanId": "ug-aut120-electrical-fundamentals",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
       "catalogCourseId": "aut-121",
       "existingCourseId": "aut-121",
       "existingLessonPlanId": "ug-aut121-electrical-lab",
@@ -782,12 +788,6 @@
     }
   ],
   "catalogCourseCrosswalks": [
-    {
-      "catalogCourseId": "aut-120",
-      "existingCourseId": "electrical-1",
-      "existingLessonPlanId": "ug-electrical-charging-system",
-      "mappingType": "catalog-crosswalk"
-    },
     {
       "catalogCourseId": "aut-140",
       "existingCourseId": "brakes-1",

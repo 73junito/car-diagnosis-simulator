@@ -100,6 +100,13 @@
       "status": "planned"
     },
     {
+      "id": "ug-aut120-electrical-fundamentals",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-120",
+      "statement": "Explain foundational automotive electrical relationships, interpret generalized circuit measurements, and justify a safe next diagnostic step while distinguishing project-authored training models from vehicle-specific service information.",
+      "status": "planned"
+    },
+    {
       "id": "ug-aut121-electrical-lab-evidence",
       "academicLevel": "undergraduate",
       "courseId": "aut-121",

@@ -3,6 +3,7 @@
   "phase": "7F-L",
   "purpose": "remaining-delivery-eligibility-audit",
   "sourceDeliveryPhase": "7F-K",
+  "lastResolutionPhase": "7F-M",
   "generatedFrom": {
     "courseCatalog": "data/curriculum/course-catalog.json",
     "programArchitecture": "data/curriculum/program-architecture.json",
@@ -14,15 +15,16 @@
     "remainingCatalogCourses": 41
   },
   "summary": {
-    "readyToBuildNow": 0,
-    "blockedMissingCanonicalMapping": 14,
+    "readyToBuildNow": 1,
+    "blockedMissingCanonicalMapping": 13,
     "blockedPrerequisiteChain": 26,
     "blockedHumanInstitutionalVerification": 1
   },
   "groups": {
-    "readyToBuildNow": [],
+    "readyToBuildNow": [
+      "aut-120"
+    ],
     "blockedMissingCanonicalMapping": [
-      "aut-120",
       "aut-140",
       "aut-150",
       "aut-210",
@@ -76,16 +78,16 @@
       "title": "Automotive Electrical Systems I",
       "academicLevel": "undergraduate",
       "prerequisitesText": "AUT 110",
-      "canonicalMapping": false,
-      "mappingType": null,
-      "lessonPlanId": null,
+      "canonicalMapping": true,
+      "mappingType": "canonical-catalog-course",
+      "lessonPlanId": "ug-aut120-electrical-fundamentals",
       "referencedPrerequisiteCourseIds": [
         "aut-110"
       ],
       "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-missing-canonical-mapping",
-      "reason": "No identity-preserving canonical catalog-development mapping is recorded."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-121",
@@ -862,18 +864,20 @@
     }
   ],
   "conclusion": {
-    "batch008Ready": false,
-    "batch008Candidates": [],
-    "reason": "No remaining catalog course currently satisfies all delivery prerequisites without resolving a canonical-mapping/content blocker, a prerequisite-chain blocker, or a human/institutional verification condition.",
+    "batch008Ready": true,
+    "batch008Candidates": [
+      "aut-120"
+    ],
+    "reason": "AUT-120 canonical content/mapping resolution produces the first evidence-supported next delivery candidate; downstream courses remain blocked until AUT-120 itself has a catalog-aligned dedicated page.",
     "highestLeverageCanonicalBlockers": [
-      "aut-120",
       "aut-150",
       "aut-210",
       "aut-330",
       "aut-525"
     ],
     "notes": [
-      "AUT-120 unlocks multiple mapped undergraduate courses downstream.",
+      "AUT-120 canonical content and mapping were resolved in Phase 7F-M; AUT-120 is now ready to build as Batch 008.",
+      "AUT-121, AUT-170, AUT-230, and AUT-240 remain prerequisite-chain blocked until AUT-120 has a catalog-aligned dedicated delivery page.",
       "AUT-150 unlocks AUT-260.",
       "AUT-210 unlocks AUT-211 and AUT-270 and participates in the AUT-250 diagnostic chain.",
       "AUT-330 unlocks AUT-331 and AUT-340 and provides an alternative prerequisite path within AUT-410.",
