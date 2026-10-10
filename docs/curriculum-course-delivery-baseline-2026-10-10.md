@@ -1,6 +1,6 @@
 # Phase 7F-H Course Delivery Status
 
-**Current verified state:** Phase 7F-H Batch 004 graduate delivery implementation  
+**Current verified state:** Phase 7F-H Batch 004 graduate delivery implementation
 **Purpose:** separate curriculum/reference coverage from actual dedicated course delivery pages.
 
 ## Verified counts
