@@ -1,7 +1,7 @@
 # Production Release Baseline — 2026-10-09
 
 **Baseline ID:** `production-release-baseline-2026-10-09`  
-**Certified main SHA:** `9715aa014df2861531866895e3d81ce73585b22e2`  
+**Certified main SHA:** `9715aa014df2861531866895e3d81ce73585b22e`  
 **Status:** Prepared for release-baseline verification
 
 ## Scope
