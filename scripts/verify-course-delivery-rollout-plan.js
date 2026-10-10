@@ -29,25 +29,25 @@ function verify() {
   const lessons = readJson(LESSONS_PATH)
   const architecture = readJson(ARCH_PATH)
 
-  if (plan.phase !== '7F-B') errors.push('plan phase must remain 7F-B')
-  if (plan.purpose !== 'course-delivery-rollout-plan') {
-    errors.push('plan purpose must remain course-delivery-rollout-plan')
+  if (plan.phase !== '7F-C') errors.push('rollout execution phase must remain 7F-C')
+  if (plan.purpose !== 'course-delivery-rollout-execution') {
+    errors.push('plan purpose must remain course-delivery-rollout-execution')
   }
 
   const baselineState = baseline.baseline || {}
   const sourceBaseline = plan.sourceBaseline || {}
-  if (sourceBaseline.phase !== '7F-A') errors.push('rollout plan must derive from Phase 7F-A')
+  if (sourceBaseline.phase !== '7F-C') errors.push('rollout execution must match Phase 7F-C delivery status')
   if (sourceBaseline.dedicatedCoursePageCount !== baselineState.dedicatedCoursePageCount) {
-    errors.push('source dedicated course page count does not match Phase 7F-A baseline')
+    errors.push('source dedicated course page count does not match current Phase 7F-C status')
   }
   if (JSON.stringify(sourceBaseline.dedicatedCoursePageIds) !== JSON.stringify(baselineState.dedicatedCoursePageIds)) {
-    errors.push('source dedicated course page IDs do not match Phase 7F-A baseline')
+    errors.push('source dedicated course page IDs do not match current Phase 7F-C status')
   }
   if (sourceBaseline.catalogCourseCount !== baselineState.catalogCourseCount) {
-    errors.push('source catalog count does not match Phase 7F-A baseline')
+    errors.push('source catalog count does not match current delivery status')
   }
   if (sourceBaseline.lessonPlanCount !== baselineState.lessonPlanCount) {
-    errors.push('source lesson-plan count does not match Phase 7F-A baseline')
+    errors.push('source lesson-plan count does not match current delivery status')
   }
 
   const catalogById = new Map((catalog.courses || []).map((course) => [course.id, course]))
@@ -66,8 +66,8 @@ function verify() {
     if (JSON.stringify(ids) !== JSON.stringify(expected)) {
       errors.push(`Batch 001 course order must remain ${expected.join(', ')}`)
     }
-    if (batch1.status !== 'planned-for-delivery-build') {
-      errors.push('Batch 001 must remain planned-for-delivery-build until pages are actually built')
+    if (batch1.status !== 'page-built-verified') {
+      errors.push('Batch 001 must be page-built-verified in Phase 7F-C')
     }
   }
 
@@ -109,8 +109,13 @@ function verify() {
         }
       }
 
-      if (planned.targetPage && fs.existsSync(path.join(ROOT, planned.targetPage))) {
-        errors.push(`planned build target already exists but plan still claims planning-only: ${planned.targetPage}`)
+      if (batch.id === 'batch-001-foundations') {
+        if (!planned.targetPage || !fs.existsSync(path.join(ROOT, planned.targetPage))) {
+          errors.push(`verified Batch 001 page is missing: ${planned.targetPage || planned.courseId}`)
+        }
+        if (planned.deliveryStatus !== 'page-built') {
+          errors.push(`Batch 001 deliveryStatus must be page-built: ${planned.courseId}`)
+        }
       }
     }
     for (const course of batch.courses) completedPrior.add(course.courseId)
@@ -135,8 +140,9 @@ function verify() {
   }
 
   const boundaries = plan.boundaries || {}
-  for (const key of ['coursesBuiltByThisPhase', 'academicStatusChanges', 'assessmentEligibilityChanges', 'productionReadyClaims']) {
-    if (boundaries[key] !== 0) errors.push(`planning-only boundary must remain zero: ${key}`)
+  if (boundaries.coursesBuiltByThisPhase !== 4) errors.push('coursesBuiltByThisPhase must be 4 in Phase 7F-C')
+  for (const key of ['academicStatusChanges', 'assessmentEligibilityChanges', 'productionReadyClaims']) {
+    if (boundaries[key] !== 0) errors.push(`governance boundary must remain zero: ${key}`)
   }
   for (const key of ['assessmentAuthorization', 'scoringAuthorization', 'gradingAuthorization', 'highStakesAuthorization']) {
     if (boundaries[key] !== false) errors.push(`authorization boundary must remain false: ${key}`)
@@ -156,12 +162,12 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-B course delivery rollout plan')
+    console.error('[FAIL] Phase 7F-C course delivery rollout execution')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
   console.log(
-    '[PASS] Phase 7F-B rollout plan: Batch 001 aut-101/aut-105/aut-110/aut-115 is canonically mapped and prerequisite-contained; aut-120/aut-150 remain blocked for mapping'
+    '[PASS] Phase 7F-C rollout execution: Batch 001 pages are built and verified; Batch 002 remains queued; aut-120/aut-150 remain blocked for canonical development mapping'
   )
 }
 
