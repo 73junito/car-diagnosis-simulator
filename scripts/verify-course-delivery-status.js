@@ -108,20 +108,28 @@ function verify() {
 
   const expectedPages = [...(expected.dedicatedCoursePageIds || [])].sort()
   if (JSON.stringify(pageIds) !== JSON.stringify(expectedPages)) {
-    errors.push(`dedicated course pages expected ${expectedPages.join(',')}, found ${pageIds.join(',')}`)
+    errors.push(`dedicated course/training page directories expected ${expectedPages.join(',')}, found ${pageIds.join(',')}`)
   }
   if (pageIds.length !== expected.dedicatedCoursePageCount) {
-    errors.push(`dedicated course page count expected ${expected.dedicatedCoursePageCount}, found ${pageIds.length}`)
+    errors.push(`dedicated course/training page directory count expected ${expected.dedicatedCoursePageCount}, found ${pageIds.length}`)
+  }
+
+  const catalogAlignedPages = [...(expected.catalogAlignedDedicatedCoursePageIds || [])].sort()
+  if (catalogAlignedPages.length !== expected.catalogAlignedDedicatedCoursePageCount) {
+    errors.push('catalog-aligned dedicated course page count does not match its ID list')
+  }
+  for (const id of catalogAlignedPages) {
+    if (!pageIds.includes(id)) errors.push(`catalog-aligned page missing from filesystem page set: ${id}`)
   }
 
   const catalogIds = new Set(catalogCourses.map((item) => item.id))
-  for (const id of pageIds) {
-    if (!catalogIds.has(id)) errors.push(`built course page is not represented in planning catalog: ${id}`)
+  for (const id of catalogAlignedPages) {
+    if (!catalogIds.has(id)) errors.push(`catalog-aligned built page is not represented in planning catalog: ${id}`)
   }
 
-  const missingPageCount = catalogCourses.filter((item) => !pageIds.includes(item.id)).length
-  if (missingPageCount !== expected.catalogCoursesWithoutDedicatedPage) {
-    errors.push(`catalog courses without dedicated page expected ${expected.catalogCoursesWithoutDedicatedPage}, found ${missingPageCount}`)
+  const missingCatalogAlignedPageCount = catalogCourses.filter((item) => !catalogAlignedPages.includes(item.id)).length
+  if (missingCatalogAlignedPageCount !== expected.catalogCoursesWithoutCatalogAlignedDedicatedPage) {
+    errors.push(`catalog courses without catalog-aligned dedicated page expected ${expected.catalogCoursesWithoutCatalogAlignedDedicatedPage}, found ${missingCatalogAlignedPageCount}`)
   }
 
   const activeWithPage = activeUndergradIds.filter((id) => pageIds.includes(id))
@@ -148,6 +156,7 @@ function verify() {
       catalogCourses: catalogCourses.length,
       lessonPlans: lessonPlans.length,
       dedicatedCoursePages: pageIds,
+      catalogAlignedDedicatedCoursePages: [...(expected.catalogAlignedDedicatedCoursePageIds || [])].sort(),
       activeUndergraduateAcademicCourseIds: activeUndergradIds
     }
   }
@@ -161,7 +170,7 @@ function main() {
     process.exit(1)
   }
   console.log(
-    `[PASS] Phase 7F-C course delivery status: ${result.summary.dedicatedCoursePages.length} dedicated course pages (${result.summary.dedicatedCoursePages.join(', ')}); academic status remains separate from delivery status`
+    `[PASS] Phase 7F-C course delivery status: ${result.summary.catalogAlignedDedicatedCoursePages.length} catalog-aligned course pages plus ${result.summary.dedicatedCoursePages.length - result.summary.catalogAlignedDedicatedCoursePages.length} legacy training page; academic status remains separate from delivery status`
   )
 }
 
