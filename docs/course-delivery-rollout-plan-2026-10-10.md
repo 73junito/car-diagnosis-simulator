@@ -1,10 +1,10 @@
-# Phase 7F-B Course Delivery Rollout Plan
+# Phase 7F-C Course Delivery Rollout Execution
 
 ## Purpose
 
-Phase 7F-B selects the first course-delivery build sequence from the verified Phase 7F-A baseline. It is a **planning phase only**. No course is marked built, production-ready, assessment-eligible, or academically active by this plan.
+Phase 7F-C executes Batch 001 from the Phase 7F-B rollout plan. AUT 101, AUT 105, AUT 110, and AUT 115 now have dedicated instructional course pages. Building these pages does **not** make the courses production-ready for assessment, assessment-eligible, or academically active.
 
-## Batch 001 — Foundations
+## Batch 001 — Foundations — built and verified
 
 The first delivery-build batch is:
 
@@ -15,7 +15,7 @@ The first delivery-build batch is:
 | AUT 110 | Automotive Mathematics | `ug-aut110-automotive-math` | None |
 | AUT 115 | Automotive Measurement and Instrumentation | `ug-aut115-measurement-instrumentation` | AUT 110 |
 
-All four have canonical catalog-development mappings. AUT-115's only prerequisite is AUT-110, which is inside the same batch. This makes Batch 001 self-contained and suitable for the first repeatable page-build pattern.
+All four have canonical catalog-development mappings. AUT-115's only prerequisite is AUT-110, which is inside the same batch. Phase 7F-C has now built and verified the four dedicated course pages, with catalog navigation and non-assessment boundaries.
 
 ## Batch 002 — Foundation extension
 
@@ -54,6 +54,6 @@ A course can move from planned rollout to a verified built-page state only after
 
 ## Governance boundary
 
-Phase 7F-B builds **zero** new course pages and changes **zero** academic status or assessment-eligibility fields.
+Phase 7F-C builds **four** new dedicated instructional course pages and changes **zero** academic status or assessment-eligibility fields.
 
 The assessment hold remains unchanged. This plan does not authorize scoring, grading, high-stakes use, accreditation, Kansas Board of Regents approval, academic-credit authority, or institutional adoption.

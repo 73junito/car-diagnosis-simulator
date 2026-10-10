@@ -1,15 +1,29 @@
 {
   "schemaVersion": "1.0.0",
-  "phase": "7F-B",
-  "purpose": "course-delivery-rollout-plan",
+  "phase": "7F-C",
+  "purpose": "course-delivery-rollout-execution",
   "sourceBaseline": {
-    "phase": "7F-A",
-    "dedicatedCoursePageCount": 1,
+    "phase": "7F-C",
+    "dedicatedCoursePageCount": 5,
     "dedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
       "aut-250"
     ],
     "catalogCourseCount": 68,
-    "lessonPlanCount": 64
+    "lessonPlanCount": 64,
+    "catalogAlignedDedicatedCoursePageCount": 4,
+    "catalogAlignedDedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115"
+    ],
+    "legacyTrainingPackagePageIds": [
+      "aut-250"
+    ]
   },
   "policy": {
     "academicStatusIndependentFromDelivery": true,
@@ -23,7 +37,7 @@
     {
       "id": "batch-001-foundations",
       "sequence": 1,
-      "status": "planned-for-delivery-build",
+      "status": "page-built-verified",
       "rationale": "Start with foundational undergraduate courses that already have canonical catalog-to-lesson mappings and no prerequisite dependency outside this batch.",
       "courses": [
         {
@@ -33,7 +47,8 @@
           "lessonPlanId": "ug-aut101-foundations",
           "mappingType": "canonical-catalog-course",
           "prerequisites": [],
-          "targetPage": "exam-site/courses/aut-101/index.html"
+          "targetPage": "exam-site/courses/aut-101/index.html",
+          "deliveryStatus": "page-built"
         },
         {
           "courseId": "aut-105",
@@ -42,7 +57,8 @@
           "lessonPlanId": "ug-aut105-safety-professional-practice",
           "mappingType": "canonical-catalog-course",
           "prerequisites": [],
-          "targetPage": "exam-site/courses/aut-105/index.html"
+          "targetPage": "exam-site/courses/aut-105/index.html",
+          "deliveryStatus": "page-built"
         },
         {
           "courseId": "aut-110",
@@ -51,7 +67,8 @@
           "lessonPlanId": "ug-aut110-automotive-math",
           "mappingType": "canonical-catalog-course",
           "prerequisites": [],
-          "targetPage": "exam-site/courses/aut-110/index.html"
+          "targetPage": "exam-site/courses/aut-110/index.html",
+          "deliveryStatus": "page-built"
         },
         {
           "courseId": "aut-115",
@@ -62,9 +79,11 @@
           "prerequisites": [
             "aut-110"
           ],
-          "targetPage": "exam-site/courses/aut-115/index.html"
+          "targetPage": "exam-site/courses/aut-115/index.html",
+          "deliveryStatus": "page-built"
         }
-      ]
+      ],
+      "completedInPhase": "7F-C"
     },
     {
       "id": "batch-002-foundation-extension",
@@ -147,7 +166,7 @@
     "Academic/content status is not promoted solely because a page was built."
   ],
   "boundaries": {
-    "coursesBuiltByThisPhase": 0,
+    "coursesBuiltByThisPhase": 4,
     "academicStatusChanges": 0,
     "assessmentEligibilityChanges": 0,
     "assessmentAuthorization": false,
@@ -155,5 +174,10 @@
     "gradingAuthorization": false,
     "highStakesAuthorization": false,
     "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-B",
+    "batch001Status": "planned-for-delivery-build",
+    "coursesBuiltByPhase": 0
   }
 }

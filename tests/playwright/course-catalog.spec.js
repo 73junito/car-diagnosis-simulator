@@ -46,7 +46,12 @@ test.describe("academic course catalog", () => {
     await expect(page.locator(".catalog-course-card")).toHaveCount(68);
   });
 
-  test("AUT 250 resolves to Diagnostics I and EV training is crosswalked from AUT 330", async ({ page }) => {
+  test("Batch 001 course pages are linked while AUT 250/330 crosswalk remains correct", async ({ page }) => {
+    await page.goto(examBase + "/catalog/course/?course=AUT-101");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Introduction to Automotive Technology");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-101/");
+
     await page.goto(examBase + "/catalog/course/?course=AUT-250");
     await expect(page.locator(".catalog-detail-card h1")).toHaveText("Automotive Diagnostics I");
     await expect(page.locator(".catalog-training-link")).toHaveCount(0);
