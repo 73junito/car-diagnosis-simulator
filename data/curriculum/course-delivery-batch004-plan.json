@@ -47,7 +47,7 @@
     {
       "courseId": "aut-420",
       "code": "AUT 420",
-      "reason": "Industry proof of employment is required. Employment verification is an institutional eligibility condition and must not be inferred from repository delivery state."
+      "reason": "Verified industry employment or an approved internship placement is required. Employment or placement verification is an institutional eligibility condition and must not be inferred from repository delivery state."
     }
   ],
   "continuingCanonicalContentBlockers": [

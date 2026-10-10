@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "1.0.0",
+  "courseId": "aut-420",
+  "code": "AUT 420",
+  "title": "Automotive Technology Internship",
+  "prerequisite": "Verified industry employment or approved internship placement required",
+  "purpose": "internship-employment-or-placement-evidence-policy",
+  "humanReviewRequired": true,
+  "automaticApprovalAllowed": false,
+  "verificationStates": [
+    "verified",
+    "needs-additional-evidence",
+    "rejected"
+  ],
+  "decisionSeparation": {
+    "employmentOrPlacementVerified": true,
+    "internshipApproved": true,
+    "note": "Employment or placement verification and academic internship approval are separate decisions."
+  },
+  "acceptedEvidence": {
+    "preferredPrimary": [
+      {
+        "id": "employment-verification-letter",
+        "label": "Official employment verification letter",
+        "requirements": [
+          "student name",
+          "employer name",
+          "job title or role",
+          "employment status",
+          "start date",
+          "employer or supervisor contact or identifiable employer source"
+        ]
+      },
+      {
+        "id": "signed-internship-agreement",
+        "label": "Signed internship agreement or contract",
+        "requirements": [
+          "student name",
+          "employer name",
+          "internship role",
+          "start date",
+          "duration or placement terms",
+          "employer or supervisor identification"
+        ]
+      },
+      {
+        "id": "formal-offer-letter",
+        "label": "Formal offer letter",
+        "requirements": [
+          "student name",
+          "employer name",
+          "position or internship title",
+          "confirmed start date",
+          "identifiable employer source"
+        ]
+      }
+    ],
+    "acceptableAlternatives": [
+      {
+        "id": "onboarding-documentation",
+        "label": "Official employer onboarding documentation"
+      },
+      {
+        "id": "employer-confirmation-email",
+        "label": "Employer or HR confirmation email",
+        "requirements": [
+          "sent from identifiable employer source or company domain",
+          "student name",
+          "role or placement",
+          "confirmed start date"
+        ]
+      },
+      {
+        "id": "internship-assignment-letter",
+        "label": "Internship schedule or assignment letter",
+        "requirements": [
+          "student name",
+          "role",
+          "supervisor",
+          "work location or employer",
+          "expected start date"
+        ]
+      }
+    ],
+    "supportingOnly": [
+      "employee ID or company account",
+      "pay stub",
+      "payroll or direct-deposit documentation"
+    ],
+    "insufficientAlone": [
+      "bank deposit without identifiable employer documentation",
+      "screenshot without identifiable employer information",
+      "informal text message",
+      "self-written statement"
+    ]
+  },
+  "minimumEvidenceElements": [
+    "student name",
+    "employer name",
+    "position or role",
+    "employment or internship status",
+    "start date",
+    "employer/supervisor contact or identifiable employer source"
+  ],
+  "privacyAndRedaction": {
+    "unnecessarySensitivePayrollDataShouldNotBeRequired": true,
+    "redactionAllowed": true,
+    "recommendedRedactions": [
+      "compensation amount",
+      "bank account information",
+      "Social Security number",
+      "tax withholding information",
+      "unrelated personal information"
+    ]
+  },
+  "reviewerRecord": {
+    "requiredFields": [
+      "verification state",
+      "reviewer",
+      "review date",
+      "reason or notes"
+    ],
+    "documentDetailsMinimized": true
+  },
+  "boundaries": {
+    "employmentEvidenceDoesNotAutomaticallyApproveInternship": true,
+    "evidenceUploadDoesNotAuthorizeAssessment": true,
+    "evidenceUploadDoesNotChangeAcademicStatus": true,
+    "noAutomatedEligibilityDecision": true
+  }
+}

@@ -22,9 +22,9 @@ These prerequisite statements are **not repository course dependencies**. A dedi
 
 AUT 420 — Automotive Technology Internship is canonically mapped, but its catalog prerequisite is:
 
-> Industry proof of employment required
+> Verified industry employment or approved internship placement required
 
-Employment verification is a human/institutional eligibility decision. Because the current delivery system is intentionally not an employment-verification authority, AUT 420 is deferred rather than treating the absence of a course-code prerequisite as automatic eligibility.
+Employment or placement verification is a human/institutional eligibility decision. Because the current delivery system is intentionally not an employment-verification or internship-placement authority, AUT 420 is deferred rather than treating the absence of a course-code prerequisite as automatic eligibility. Detailed evidence requirements are governed by `data/curriculum/aut420-internship-evidence-policy.json`.
 
 ## Continuing blockers
 
