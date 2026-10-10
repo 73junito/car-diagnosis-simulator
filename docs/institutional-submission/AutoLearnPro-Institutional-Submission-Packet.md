@@ -49,7 +49,7 @@ Current live production result:
 - governed reference sources: **38**
 - unresolved source-rights classifications: **0**
 
-This evidence establishes the repository's current deterministic source-governance and reference-quality posture. **The 64/64 metric refers to governed lesson-plan reference coverage; it does not mean 64 fully built online courses, 64 completed syllabi, or 64 production-ready courses.** At the current Phase 7F-C baseline, the exam site contains **five dedicated course delivery pages: AUT-101, AUT-105, AUT-110, AUT-115, and AUT-250**. The broader course catalog remains planning data. This evidence does not substitute for an institution's own academic approval process.
+This evidence establishes the repository's current deterministic source-governance and reference-quality posture. **The 64/64 metric refers to governed lesson-plan reference coverage; it does not mean 64 fully built online courses, 64 completed syllabi, or 64 production-ready courses.** At the current Phase 7F-C baseline, the exam site contains **four catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, and AUT-115**, plus the existing **AUT-250 HEV formative-training package crosswalked from catalog AUT-330**. The broader course catalog remains planning data. This evidence does not substitute for an institution's own academic approval process.
 
 ## 3. Proposed academic program architecture
 
