@@ -48,7 +48,7 @@ function verify() {
 
   const expected = baseline.baseline || {}
 
-  if (baseline.phase !== '7F-R') errors.push('current delivery phase must remain 7F-R')
+  if (baseline.phase !== '7F-S') errors.push('current delivery phase must remain 7F-S')
   if (baseline.purpose !== 'current-course-delivery-status') {
     errors.push('delivery status purpose must remain current-course-delivery-status')
   }
@@ -118,9 +118,15 @@ function verify() {
   if (catalogAlignedPages.length !== expected.catalogAlignedDedicatedCoursePageCount) {
     errors.push('catalog-aligned dedicated course page count does not match its ID list')
   }
+  const pageRoutes = expected.catalogAlignedDedicatedCoursePageRoutes || {}
   for (const id of catalogAlignedPages) {
-    if (!pageIds.includes(id)) errors.push(`catalog-aligned page missing from filesystem page set: ${id}`)
+    const route = pageRoutes[id] || `/courses/${id}/`
+    const parts = route.split('/').filter(Boolean)
+    const dirId = parts[0] === 'courses' ? parts[1] : null
+    if (!dirId || !pageIds.includes(dirId)) errors.push(`catalog-aligned page missing from filesystem page set: ${id} -> ${route}`)
   }
+  if (pageRoutes['aut-250'] !== '/courses/aut-250-diagnostics/') errors.push('catalog AUT-250 must use the collision-safe /courses/aut-250-diagnostics/ route')
+  if (!pageIds.includes('aut-250')) errors.push('legacy AUT-250 HEV training route must remain present')
 
   const catalogIds = new Set(catalogCourses.map((item) => item.id))
   for (const id of catalogAlignedPages) {
@@ -165,12 +171,12 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-R course delivery status')
+    console.error('[FAIL] Phase 7F-S course delivery status')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
   console.log(
-    `[PASS] Phase 7F-R course delivery status: ${result.summary.catalogAlignedDedicatedCoursePages.length} catalog-aligned course pages plus ${result.summary.dedicatedCoursePages.length - result.summary.catalogAlignedDedicatedCoursePages.length} legacy training page; academic status remains separate from delivery status`
+    `[PASS] Phase 7F-S course delivery status: ${result.summary.catalogAlignedDedicatedCoursePages.length} catalog-aligned course pages plus ${result.summary.dedicatedCoursePages.length - result.summary.catalogAlignedDedicatedCoursePages.length} legacy training page; academic status remains separate from delivery status`
   )
 }
 

@@ -42,13 +42,14 @@ async function attachDeliveryStatus(courses) {
   try {
     const status = await loadDeliveryStatus();
     const built = new Set(status?.baseline?.catalogAlignedDedicatedCoursePageIds || []);
+    const routeOverrides = status?.baseline?.catalogAlignedDedicatedCoursePageRoutes || {};
     return courses.map((course) => {
       if (!built.has(course.id) || course.delivery?.trainingUrl) return course;
       return {
         ...course,
         delivery: {
           kind: "course-page",
-          trainingUrl: "/courses/" + course.id + "/",
+          trainingUrl: routeOverrides[course.id] || ("/courses/" + course.id + "/"),
           note: "A dedicated instructional course page is available. Academic catalog status and assessment authorization remain separate."
         }
       };

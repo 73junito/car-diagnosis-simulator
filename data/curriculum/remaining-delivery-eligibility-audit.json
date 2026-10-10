@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "phase": "7F-L",
   "purpose": "remaining-delivery-eligibility-audit",
-  "sourceDeliveryPhase": "7F-R",
-  "lastResolutionPhase": "7F-R",
+  "sourceDeliveryPhase": "7F-S",
+  "lastResolutionPhase": "7F-S",
   "generatedFrom": {
     "courseCatalog": "data/curriculum/course-catalog.json",
     "programArchitecture": "data/curriculum/program-architecture.json",
@@ -11,21 +11,19 @@
   },
   "scope": {
     "planningCatalogCourses": 68,
-    "catalogAlignedDedicatedCoursePages": 35,
-    "remainingCatalogCourses": 33
+    "catalogAlignedDedicatedCoursePages": 39,
+    "remainingCatalogCourses": 29
   },
   "summary": {
-    "readyToBuildNow": 4,
+    "readyToBuildNow": 2,
     "blockedMissingCanonicalMapping": 9,
-    "blockedPrerequisiteChain": 19,
+    "blockedPrerequisiteChain": 17,
     "blockedHumanInstitutionalVerification": 1
   },
   "groups": {
     "readyToBuildNow": [
-      "aut-211",
-      "aut-250",
-      "aut-260",
-      "aut-270"
+      "aut-251",
+      "aut-280"
     ],
     "blockedMissingCanonicalMapping": [
       "aut-140",
@@ -39,8 +37,6 @@
       "aut-690"
     ],
     "blockedPrerequisiteChain": [
-      "aut-251",
-      "aut-280",
       "aut-300",
       "aut-301",
       "aut-310",
@@ -82,41 +78,6 @@
       "reason": "No identity-preserving canonical catalog-development mapping is recorded."
     },
     {
-      "courseId": "aut-211",
-      "code": "AUT 211",
-      "title": "Engine Performance Laboratory",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "Concurrent enrollment in AUT 210",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut211-engine-performance-lab",
-      "referencedPrerequisiteCourseIds": [
-        "aut-210"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
-      "courseId": "aut-250",
-      "code": "AUT 250",
-      "title": "Automotive Diagnostics I",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 210, AUT 230",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut250-automotive-diagnostics-i",
-      "referencedPrerequisiteCourseIds": [
-        "aut-210",
-        "aut-230"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
       "courseId": "aut-251",
       "code": "AUT 251",
       "title": "Automotive Diagnostics I Laboratory",
@@ -127,43 +88,6 @@
       "lessonPlanId": "ug-aut251-diagnostics-lab",
       "referencedPrerequisiteCourseIds": [
         "aut-250"
-      ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-250"
-      ],
-      "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
-    },
-    {
-      "courseId": "aut-260",
-      "code": "AUT 260",
-      "title": "Vehicle Dynamics",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 110, AUT 150",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut260-vehicle-dynamics",
-      "referencedPrerequisiteCourseIds": [
-        "aut-110",
-        "aut-150"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
-      "courseId": "aut-270",
-      "code": "AUT 270",
-      "title": "Automotive Emissions and Environmental Systems",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 210",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut270-emissions-systems",
-      "referencedPrerequisiteCourseIds": [
-        "aut-210"
       ],
       "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
@@ -183,12 +107,10 @@
         "aut-230",
         "aut-250"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-250"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-300",
@@ -204,7 +126,6 @@
         "aut-280"
       ],
       "unresolvedPrerequisiteCourseIds": [
-        "aut-250",
         "aut-280"
       ],
       "humanInstitutionalCondition": false,
@@ -691,7 +612,7 @@
     "batch008Candidates": [
       "aut-120"
     ],
-    "reason": "After Batch 011 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
+    "reason": "After Batch 012 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
     "highestLeverageCanonicalBlockers": [
       "aut-140",
       "aut-510",
@@ -704,7 +625,8 @@
       "aut-690"
     ],
     "notes": [
-      "AUT-150, AUT-210, and AUT-525 were delivered in Phase 7F-R Batch 011.",
+      "AUT-211, AUT-250, AUT-260, and AUT-270 were delivered in Phase 7F-S Batch 012.",
+      "Catalog AUT-250 uses /courses/aut-250-diagnostics/ while /courses/aut-250/ remains the legacy HEV package crosswalked from AUT-330.",
       "AUT-420 remains directly gated by verified employment or approved internship placement and must not be auto-cleared."
     ],
     "batch009Ready": true,
@@ -729,6 +651,11 @@
       "aut-250",
       "aut-260",
       "aut-270"
+    ],
+    "batch013Ready": true,
+    "batch013Candidates": [
+      "aut-251",
+      "aut-280"
     ]
   },
   "boundaries": {

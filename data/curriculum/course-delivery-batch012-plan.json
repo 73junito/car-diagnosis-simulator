@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-S",
+  "purpose": "batch-012-undergraduate-delivery-execution",
+  "sourceDeliveryPhase": "7F-S",
+  "status": "page-built-verified",
+  "rationale": "Build the exact four evidence-supported Batch 012 candidates produced by the post-Batch-011 deterministic audit while preserving the legacy AUT-250 HEV route.",
+  "courses": [
+    {
+      "courseId": "aut-211",
+      "code": "AUT 211",
+      "title": "Engine Performance Laboratory",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut211-engine-performance-lab",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "Concurrent enrollment in AUT 210",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-211/index.html",
+      "deliveryRoute": "/courses/aut-211/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-250",
+      "code": "AUT 250",
+      "title": "Automotive Diagnostics I",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut250-automotive-diagnostics-i",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 210, AUT 230",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-250-diagnostics/index.html",
+      "deliveryRoute": "/courses/aut-250-diagnostics/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-260",
+      "code": "AUT 260",
+      "title": "Vehicle Dynamics",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut260-vehicle-dynamics",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 110, AUT 150",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-260/index.html",
+      "deliveryRoute": "/courses/aut-260/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-270",
+      "code": "AUT 270",
+      "title": "Automotive Emissions and Environmental Systems",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut270-emissions-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 210",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-270/index.html",
+      "deliveryRoute": "/courses/aut-270/",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 4,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0,
+    "legacyAut250HevRoutePreserved": true
+  },
+  "previousPlan": {
+    "phase": "7F-R",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 3
+  },
+  "completedInPhase": "7F-S"
+}
