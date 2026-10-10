@@ -41,7 +41,7 @@ async function loadDeliveryStatus() {
 async function attachDeliveryStatus(courses) {
   try {
     const status = await loadDeliveryStatus();
-    const built = new Set(status?.baseline?.dedicatedCoursePageIds || []);
+    const built = new Set(status?.baseline?.catalogAlignedDedicatedCoursePageIds || []);
     return courses.map((course) => {
       if (!built.has(course.id) || course.delivery?.trainingUrl) return course;
       return {
