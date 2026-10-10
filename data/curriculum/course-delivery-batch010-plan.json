@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-P",
+  "purpose": "batch-010-undergraduate-electronics-electrical-delivery-execution",
+  "sourceDeliveryPhase": "7F-P",
+  "status": "page-built-verified",
+  "rationale": "Build the two evidence-supported Batch 010 candidates produced by the Phase 7F-L re-audit after Batch 009 delivery.",
+  "courses": [
+    {
+      "courseId": "aut-230",
+      "code": "AUT 230",
+      "title": "Automotive Electronics",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut230-automotive-electronics",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 120, AUT 121",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-230/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-240",
+      "code": "AUT 240",
+      "title": "Automotive Electrical Systems II",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut240-electrical-systems-ii",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 120, AUT 121",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-240/index.html",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 2,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-O",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 2
+  },
+  "completedInPhase": "7F-P"
+}

@@ -16,7 +16,7 @@
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-O verifies thirty catalog-aligned dedicated course pages, including Batch 009 AUT-121/AUT-170, plus the separate AUT-250 HEV training package; prerequisite decisions remain separate human/institutional decisions."
+      "notes": "Phase 7F-P verifies thirty-two catalog-aligned dedicated course pages, including Batch 010 AUT-230/AUT-240, plus the separate AUT-250 HEV training package; prerequisite decisions remain separate human/institutional decisions."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",
@@ -28,7 +28,7 @@
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-009 re-audit classifies 38 remaining catalog courses and identifies AUT-230 and AUT-240 as the next ready-to-build set."
+      "notes": "Post-Batch-010 re-audit classifies 36 remaining catalog courses and finds no ready-to-build Batch 011 candidate."
     },
     {
       "area": "institutional_submission",
@@ -110,7 +110,7 @@
     }
   ],
   "open_readiness_items": [
-    "Batch 010 may contain AUT-230 and AUT-240 only under the current deterministic prerequisite/mapping audit; rerun the audit after their delivery before defining another batch.",
+    "Do not define Batch 011 until at least one current canonical-content/mapping or prerequisite-chain blocker is resolved and the deterministic audit yields a ready course.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",

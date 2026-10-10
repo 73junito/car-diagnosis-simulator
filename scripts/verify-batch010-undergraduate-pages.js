@@ -6,25 +6,25 @@ const catalog=read('data/curriculum/course-catalog.json')
 const lessons=read('data/curriculum/lesson-plans.json')
 const arch=read('data/curriculum/program-architecture.json')
 const delivery=read('data/curriculum/course-delivery-status.json')
-const plan=read('data/curriculum/course-delivery-batch009-plan.json')
-const BATCH=['aut-121','aut-170']
+const plan=read('data/curriculum/course-delivery-batch010-plan.json')
+const BATCH=['aut-230','aut-240']
 function verify(){
  const errors=[]
  const cb=new Map((catalog.courses||[]).map(c=>[c.id,c]))
  const mb=new Map((arch.catalogDevelopmentMappings||[]).map(m=>[m.catalogCourseId,m]))
  const lb=new Map((lessons.lessonPlans||[]).map(l=>[l.id,l]))
  const aligned=new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds||[])
- if(!['7F-O','7F-P'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-O or later supported Phase 7F-P')
- if((delivery.baseline?.catalogAlignedDedicatedCoursePageCount||0)<30) errors.push('delivery status must retain at least the 30 Phase 7F-O aligned pages')
- if((delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage||0)>38) errors.push('delivery status must not regress above the 38-course Phase 7F-O remaining baseline')
- if(plan.phase!=='7F-O'||plan.status!=='page-built-verified') errors.push('Batch 009 must be page-built-verified in Phase 7F-O')
+ if(delivery.phase!=='7F-P') errors.push('delivery status must be Phase 7F-P')
+ if(delivery.baseline?.catalogAlignedDedicatedCoursePageCount!==32) errors.push('Phase 7F-P must record 32 aligned pages')
+ if(delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage!==36) errors.push('Phase 7F-P must record 36 catalog courses without aligned pages')
+ if(plan.phase!=='7F-P'||plan.status!=='page-built-verified') errors.push('Batch 010 must be page-built-verified in Phase 7F-P')
  for(const id of BATCH){
   const c=cb.get(id),m=mb.get(id),l=lb.get(m?.existingLessonPlanId),p=(plan.courses||[]).find(x=>x.courseId===id)
-  if(!c) {errors.push('catalog course missing: '+id);continue}
+  if(!c){errors.push('catalog course missing: '+id);continue}
   if(c.academicLevel!=='undergraduate') errors.push('course must remain undergraduate: '+id)
   if(!m||m.mappingType!=='canonical-catalog-course'||m.existingCourseId!==id) errors.push('identity-preserving mapping missing: '+id)
   if(!l||l.courseId!==id||l.academicLevel!=='undergraduate') errors.push('lesson mismatch: '+id)
-  if(!p||p.lessonPlanId!==m?.existingLessonPlanId||p.deliveryStatus!=='page-built') errors.push('Batch 009 plan drift: '+id)
+  if(!p||p.lessonPlanId!==m?.existingLessonPlanId||p.deliveryStatus!=='page-built') errors.push('Batch 010 plan drift: '+id)
   if(p&&p.prerequisiteDisposition!=='requires-human-or-institutional-verification') errors.push('prerequisite boundary drift: '+id)
   const file=path.join(ROOT,'exam-site','courses',id,'index.html')
   if(!fs.existsSync(file)){errors.push('course page missing: '+id);continue}
@@ -37,5 +37,5 @@ function verify(){
  }
  return {ok:errors.length===0,errors,batch:BATCH}
 }
-if(require.main===module){const r=verify();if(!r.ok){console.error('[FAIL] Phase 7F-O Batch 009 undergraduate pages');for(const e of r.errors)console.error('  - '+e);process.exit(1)}console.log('[PASS] Phase 7F-O Batch 009: AUT-121/AUT-170 pages are built, catalog-aligned, prerequisite-bounded, and non-assessment')}
+if(require.main===module){const r=verify();if(!r.ok){console.error('[FAIL] Phase 7F-P Batch 010 undergraduate pages');for(const e of r.errors)console.error('  - '+e);process.exit(1)}console.log('[PASS] Phase 7F-P Batch 010: AUT-230/AUT-240 pages are built, catalog-aligned, prerequisite-bounded, and non-assessment')}
 module.exports={BATCH,verify}

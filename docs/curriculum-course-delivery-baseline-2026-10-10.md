@@ -1,6 +1,6 @@
 # Phase 7F-K Course Delivery Status
 
-**Current verified state:** Phase 7F-O Batch 009 AUT-121/AUT-170 undergraduate delivery implementation
+**Current verified state:** Phase 7F-P Batch 010 AUT-230/AUT-240 undergraduate delivery implementation
 **Purpose:** separate curriculum/reference coverage from actual dedicated course delivery pages.
 
 ## Verified counts
@@ -12,9 +12,9 @@
 | Developed lesson plans | 65 |
 | Undergraduate developed lesson plans | 44 |
 | Graduate lesson plans | 21 |
-| Dedicated course/training page directories | 31 |
-| Catalog-aligned dedicated course pages | 30 |
-| Catalog courses without a catalog-aligned dedicated course page | 38 |
+| Dedicated course/training page directories | 33 |
+| Catalog-aligned dedicated course pages | 32 |
+| Catalog courses without a catalog-aligned dedicated course page | 36 |
 
 The catalog-aligned dedicated course pages currently present are:
 
@@ -62,7 +62,7 @@ Phase 7F-K retains the delivery-evidence rule:
 
 The previously verified live **64/64** curriculum-reference metric applies to the production baseline before the Phase 7F-M AUT-120 development addition. The repository now contains **65 developed lesson plans**; the new AUT-120 lesson carries governed reference mappings in its migration but does not rewrite the historical live 64/64 evidence until deployment and baseline regeneration. Neither metric means fully built online courses, completed syllabi, production-ready courses, or assessment-authorized courses.
 
-At the current Phase 7F-O state, there are **30 catalog-aligned dedicated course pages**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
+At the current Phase 7F-P state, there are **32 catalog-aligned dedicated course pages**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
 
 AUT-120 now has dedicated canonical development content and is the sole evidence-supported Batch 008 candidate; no AUT-120 delivery page is built by Phase 7F-M. Graduate prerequisite determinations remain separate human or institutional decisions.
 
@@ -78,4 +78,4 @@ This baseline does not:
 - authorize high-stakes use; or
 - establish institutional approval, accreditation, or academic-credit authority.
 
-The Phase 7F-N twenty-eight-page catalog-aligned state is retained as `previousBaseline` in `data/curriculum/course-delivery-status.json`. The current delivery-status artifact is the source of truth for verified built pages.
+The Phase 7F-O thirty-page catalog-aligned state is retained as `previousBaseline` in `data/curriculum/course-delivery-status.json`. The current delivery-status artifact is the source of truth for verified built pages.
