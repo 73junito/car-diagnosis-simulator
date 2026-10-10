@@ -16,7 +16,7 @@
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-A verifies one dedicated course delivery page (AUT-250) and preserves the distinction between academic/content status and actual delivery-page implementation."
+      "notes": "Phase 7F-C verifies five dedicated course pages (AUT-101, AUT-105, AUT-110, AUT-115, AUT-250) while preserving the distinction between academic/content status and delivery-page implementation."
     },
     {
       "area": "institutional_submission",
