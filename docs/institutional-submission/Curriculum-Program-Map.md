@@ -64,13 +64,13 @@ Live production curriculum evidence currently reports:
 
 The reference-coverage figures above describe **lesson-plan evidence governance**, not completed online-course or syllabus coverage.
 
-Phase 7F-N verifies:
+Phase 7F-O verifies:
 
-- catalog-aligned dedicated course pages: **28**;
-- current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, AUT-115, AUT-120, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, AUT-520, AUT-530, AUT-535, AUT-540, AUT-545, AUT-550, AUT-555, AUT-560, AUT-565, AUT-570, AUT-575, AUT-580, AUT-585, and AUT-590**;
+- catalog-aligned dedicated course pages: **30**;
+- current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, AUT-115, AUT-120, AUT-121, AUT-130, AUT-131, AUT-160, AUT-170, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, AUT-520, AUT-530, AUT-535, AUT-540, AUT-545, AUT-550, AUT-555, AUT-560, AUT-565, AUT-570, AUT-575, AUT-580, AUT-585, and AUT-590**;
 - existing HEV formative-training package page: **AUT-250**, crosswalked from catalog **AUT-330**;
 - planning-catalog courses: **68**;
-- planning-catalog courses without a catalog-aligned dedicated course page: **40**.
+- planning-catalog courses without a catalog-aligned dedicated course page: **38**.
 - AUT-530 undergraduate EV-coursework equivalency remains a separate human/institutional determination.
 
 The existing academic/content `status` field is separate from delivery status. For example, `electrical-1` is marked `active` in the undergraduate curriculum data but does not have a dedicated `exam-site/courses/electrical-1/index.html` page. A course must not be represented as built or production-ready merely because its academic/content status is active.

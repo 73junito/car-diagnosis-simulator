@@ -16,7 +16,7 @@
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-N verifies twenty-eight catalog-aligned dedicated course pages, including Batch 008 AUT-120, plus the separate AUT-250 HEV training package; prerequisite decisions remain separate human/institutional decisions."
+      "notes": "Phase 7F-O verifies thirty catalog-aligned dedicated course pages, including Batch 009 AUT-121/AUT-170, plus the separate AUT-250 HEV training package; prerequisite decisions remain separate human/institutional decisions."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",
@@ -28,7 +28,7 @@
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-008 re-audit classifies 40 remaining catalog courses and identifies AUT-121 and AUT-170 as the next ready-to-build set."
+      "notes": "Post-Batch-009 re-audit classifies 38 remaining catalog courses and identifies AUT-230 and AUT-240 as the next ready-to-build set."
     },
     {
       "area": "institutional_submission",
@@ -110,7 +110,7 @@
     }
   ],
   "open_readiness_items": [
-    "Batch 009 may contain AUT-121 and AUT-170 only under the current deterministic prerequisite/mapping audit; rerun the audit after their delivery before defining another batch.",
+    "Batch 010 may contain AUT-230 and AUT-240 only under the current deterministic prerequisite/mapping audit; rerun the audit after their delivery before defining another batch.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",

@@ -34,17 +34,19 @@ function verify() {
   const auditById = new Map((audit.records || []).map((record) => [record.courseId, record]))
 
   if (audit.phase !== '7F-L') errors.push('audit phase must remain 7F-L')
-  if (audit.sourceDeliveryPhase !== '7F-N') errors.push('audit source delivery phase must remain 7F-N')
-  if (remaining.length !== 40) errors.push('remaining catalog course count must be 40 after Batch 008')
-  if ((audit.records || []).length !== 40) errors.push('audit must classify all 40 remaining catalog courses')
-  if (audit.summary?.readyToBuildNow !== 2) errors.push('ready-to-build-now count must be 2 after Batch 008 AUT-120 delivery')
+  if (audit.sourceDeliveryPhase !== '7F-O') errors.push('audit source delivery phase must remain 7F-O')
+  if (remaining.length !== 38) errors.push('remaining catalog course count must be 38 after Batch 009')
+  if ((audit.records || []).length !== 38) errors.push('audit must classify all 38 remaining catalog courses')
+  if (audit.summary?.readyToBuildNow !== 2) errors.push('ready-to-build-now count must be 2 after Batch 009 delivery')
   if (audit.summary?.blockedMissingCanonicalMapping !== 13) errors.push('missing canonical mapping count must be 13 after AUT-120 resolution')
-  if (audit.summary?.blockedPrerequisiteChain !== 24) errors.push('prerequisite-chain count must be 24 after Batch 008')
+  if (audit.summary?.blockedPrerequisiteChain !== 22) errors.push('prerequisite-chain count must be 22 after Batch 009')
   if (audit.summary?.blockedHumanInstitutionalVerification !== 1) errors.push('human/institutional count must remain 1')
   if (audit.conclusion?.batch008Ready !== true) errors.push('historical Batch 008 readiness must remain recorded')
   if (JSON.stringify(audit.conclusion?.batch008Candidates || []) !== JSON.stringify(['aut-120'])) errors.push('historical Batch 008 candidate list must remain [aut-120]')
-  if (audit.conclusion?.batch009Ready !== true) errors.push('Batch 009 must be ready after AUT-120 delivery')
-  if (JSON.stringify(audit.conclusion?.batch009Candidates || []) !== JSON.stringify(['aut-121','aut-170'])) errors.push('Batch 009 candidate list must be exactly [aut-121,aut-170]')
+  if (audit.conclusion?.batch009Ready !== true) errors.push('historical Batch 009 readiness must remain recorded')
+  if (JSON.stringify(audit.conclusion?.batch009Candidates || []) !== JSON.stringify(['aut-121','aut-170'])) errors.push('historical Batch 009 candidate list must remain [aut-121,aut-170]')
+  if (audit.conclusion?.batch010Ready !== true) errors.push('Batch 010 must be ready after Batch 009 delivery')
+  if (JSON.stringify(audit.conclusion?.batch010Candidates || []) !== JSON.stringify(['aut-230','aut-240'])) errors.push('Batch 010 candidate list must be exactly [aut-230,aut-240]')
 
   const expectedCounts = {
     'ready-to-build-now': 0,
@@ -67,7 +69,7 @@ function verify() {
   }
 
   if (expectedCounts['blocked-missing-canonical-mapping'] !== 13 ||
-      expectedCounts['blocked-prerequisite-chain'] !== 24 ||
+      expectedCounts['blocked-prerequisite-chain'] !== 22 ||
       expectedCounts['blocked-human-institutional-verification'] !== 1 ||
       expectedCounts['ready-to-build-now'] !== 2) {
     errors.push('recomputed eligibility partition does not match locked Phase 7F-L counts')
@@ -86,7 +88,7 @@ function main() {
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-L re-audit after Phase 7F-N: 40 remaining = 2 ready (AUT-121/AUT-170), 13 mapping-blocked, 24 prerequisite-chain-blocked, 1 human/institutional hold')
+  console.log('[PASS] Phase 7F-L re-audit after Phase 7F-O: 38 remaining = 2 ready (AUT-230/AUT-240), 13 mapping-blocked, 22 prerequisite-chain-blocked, 1 human/institutional hold')
 }
 
 if (require.main === module) main()
