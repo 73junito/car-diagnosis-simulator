@@ -25,6 +25,12 @@
       "notes": "Daily read-only release-gate monitoring."
     },
     {
+      "area": "curriculum_reference_quality_historical_audit",
+      "path": "docs/curriculum-reference-quality-audit-2026-10-09.md",
+      "status": "historical_gap_record",
+      "notes": "Historical audit that identified the supplemental technical-authority backlog later closed by Phase 7C."
+    },
+    {
       "area": "curriculum_reference_quality",
       "path": "docs/curriculum-reference-quality-baseline-2026-10-10.md",
       "status": "verified_screen",
