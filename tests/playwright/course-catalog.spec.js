@@ -152,8 +152,21 @@ test.describe("academic course catalog", () => {
     await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
     await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-280/");
 
+    await page.goto(examBase + "/catalog/course/?course=AUT-300");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Advanced Automotive Diagnostics");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-300/");
+
+    await page.goto(examBase + "/catalog/course/?course=AUT-310");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Vehicle Network Communications");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-310/");
+
+    await page.goto(examBase + "/catalog/course/?course=AUT-320");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Hybrid Vehicle Technology");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-320/");
+
     await page.goto(examBase + "/catalog/course/?course=AUT-330");
     await expect(page.locator(".catalog-detail-card h1")).toHaveText("Electric Vehicle Technology");
-    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-250/");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-330/");
   });
 });

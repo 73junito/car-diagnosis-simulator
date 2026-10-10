@@ -14,9 +14,9 @@ function verify(){
  const mb=new Map((arch.catalogDevelopmentMappings||[]).map(m=>[m.catalogCourseId,m]))
  const lb=new Map((lessons.lessonPlans||[]).map(l=>[l.id,l]))
  const aligned=new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds||[])
- if(delivery.phase!=='7F-T') errors.push('delivery status must be Phase 7F-T')
- if(delivery.baseline?.catalogAlignedDedicatedCoursePageCount!==41) errors.push('Phase 7F-T must record 41 aligned pages')
- if(delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage!==27) errors.push('Phase 7F-T must record 27 catalog courses without aligned pages')
+ if(!['7F-T','7F-U'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-T or later supported Phase 7F-U')
+ if((delivery.baseline?.catalogAlignedDedicatedCoursePageCount||0)<41) errors.push('delivery status must retain at least the 41 Phase 7F-T aligned pages')
+ if((delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage||0)>27) errors.push('delivery status must not regress above the 27-course Phase 7F-T remaining baseline')
  if(plan.phase!=='7F-T'||plan.status!=='page-built-verified') errors.push('Batch 013 must be page-built-verified in Phase 7F-T')
  for(const id of BATCH){
   const c=cb.get(id),m=mb.get(id),l=lb.get(m?.existingLessonPlanId),p=(plan.courses||[]).find(x=>x.courseId===id)
