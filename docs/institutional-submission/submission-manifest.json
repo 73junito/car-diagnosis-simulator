@@ -29,7 +29,7 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "catalog_aligned_dedicated_course_pages": 14,
+    "catalog_aligned_dedicated_course_pages": 17,
     "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
@@ -44,6 +44,9 @@
       "aut-220",
       "aut-501",
       "aut-515",
+      "aut-520",
+      "aut-530",
+      "aut-550",
       "aut-590"
     ],
     "legacy_training_package_pages": 1,
@@ -95,13 +98,13 @@
       "area": "course_delivery_status_data",
       "path": "data/curriculum/course-delivery-status.json",
       "status": "machine-readable-baseline",
-      "notes": "Machine-readable current Phase 7F-H delivery status used by deterministic delivery validators."
+      "notes": "Machine-readable current Phase 7F-I delivery status used by deterministic delivery validators."
     },
     {
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-H verifies fourteen catalog-aligned dedicated course pages, including graduate foundation pages AUT-501, AUT-515, and AUT-590, plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
+      "notes": "Phase 7F-I verifies seventeen catalog-aligned dedicated course pages, including graduate extension pages AUT-520, AUT-530, and AUT-550, plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
     },
     {
       "area": "production_release",

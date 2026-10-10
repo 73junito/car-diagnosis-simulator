@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "phase": "7F-H",
+  "phase": "7F-I",
   "purpose": "current-course-delivery-status",
   "statusModel": {
     "academicStatusSource": [
@@ -35,8 +35,75 @@
     "graduateAcademicStatusCounts": {
       "planned": 21
     },
-    "dedicatedCoursePageCount": 15,
+    "dedicatedCoursePageCount": 18,
     "dedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
+      "aut-130",
+      "aut-131",
+      "aut-160",
+      "aut-180",
+      "aut-200",
+      "aut-201",
+      "aut-220",
+      "aut-250",
+      "aut-501",
+      "aut-515",
+      "aut-520",
+      "aut-530",
+      "aut-550",
+      "aut-590"
+    ],
+    "catalogAlignedDedicatedCoursePageCount": 17,
+    "catalogAlignedDedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
+      "aut-130",
+      "aut-131",
+      "aut-160",
+      "aut-180",
+      "aut-200",
+      "aut-201",
+      "aut-220",
+      "aut-501",
+      "aut-515",
+      "aut-520",
+      "aut-530",
+      "aut-550",
+      "aut-590"
+    ],
+    "legacyTrainingPackagePageCount": 1,
+    "legacyTrainingPackagePageIds": [
+      "aut-250"
+    ],
+    "catalogCoursesWithoutCatalogAlignedDedicatedPage": 51
+  },
+  "boundaries": {
+    "fullSyllabusCoverageClaim": false,
+    "fullCourseDeliveryCoverageClaim": false,
+    "assessmentAuthorization": false,
+    "scoringAuthorization": false,
+    "gradingAuthorization": false,
+    "highStakesAuthorization": false
+  },
+  "notes": [
+    "Phase 7F-I adds catalog-aligned graduate instructional course pages for AUT-520, AUT-530, and AUT-550.",
+    "AUT-530 page availability does not establish undergraduate EV coursework equivalency; that condition requires human or institutional verification.",
+    "Graduate page availability does not establish admissions eligibility, degree equivalency, mathematics preparation, graduate standing, or prerequisite satisfaction.",
+    "AUT-420 remains deferred pending human/institutional verification of industry employment or approved internship placement.",
+    "AUT-120 and AUT-150 remain intentionally blocked from canonical delivery until dedicated canonical curriculum content is approved.",
+    "The existing /courses/aut-250/ page remains the HEV formative-training package crosswalked from catalog AUT-330; it is not the delivery page for catalog AUT-250 Automotive Diagnostics I.",
+    "Academic/content status remains independent from delivery-page status; building a page does not authorize assessment.",
+    "The filesystem contains eighteen dedicated course/training page directories in total, of which seventeen are catalog-aligned course pages."
+  ],
+  "previousBaseline": {
+    "phase": "7F-H",
+    "dedicatedCourseOrTrainingPageCount": 15,
+    "dedicatedCourseOrTrainingPageIds": [
       "aut-101",
       "aut-105",
       "aut-110",
@@ -70,60 +137,6 @@
       "aut-515",
       "aut-590"
     ],
-    "legacyTrainingPackagePageCount": 1,
-    "legacyTrainingPackagePageIds": [
-      "aut-250"
-    ],
     "catalogCoursesWithoutCatalogAlignedDedicatedPage": 54
-  },
-  "boundaries": {
-    "fullSyllabusCoverageClaim": false,
-    "fullCourseDeliveryCoverageClaim": false,
-    "assessmentAuthorization": false,
-    "scoringAuthorization": false,
-    "gradingAuthorization": false,
-    "highStakesAuthorization": false
-  },
-  "notes": [
-    "Phase 7F-H adds catalog-aligned graduate instructional course pages for AUT-501, AUT-515, and AUT-590.",
-    "Graduate page availability does not establish admissions eligibility, degree equivalency, mathematics preparation, graduate standing, or prerequisite satisfaction.",
-    "AUT-420 remains deferred pending human/institutional verification of industry employment or approved internship placement.",
-    "AUT-120 and AUT-150 remain intentionally blocked from canonical delivery until dedicated canonical curriculum content is approved.",
-    "The existing /courses/aut-250/ page remains the HEV formative-training package crosswalked from catalog AUT-330; it is not the delivery page for catalog AUT-250 Automotive Diagnostics I.",
-    "The filesystem contains fifteen dedicated course/training page directories in total, of which fourteen are catalog-aligned course pages.",
-    "Academic/content status remains independent from delivery-page status; building a page does not authorize assessment."
-  ],
-  "previousBaseline": {
-    "phase": "7F-F",
-    "dedicatedCourseOrTrainingPageCount": 12,
-    "dedicatedCourseOrTrainingPageIds": [
-      "aut-101",
-      "aut-105",
-      "aut-110",
-      "aut-115",
-      "aut-130",
-      "aut-131",
-      "aut-160",
-      "aut-180",
-      "aut-200",
-      "aut-201",
-      "aut-220",
-      "aut-250"
-    ],
-    "catalogAlignedDedicatedCoursePageCount": 11,
-    "catalogAlignedDedicatedCoursePageIds": [
-      "aut-101",
-      "aut-105",
-      "aut-110",
-      "aut-115",
-      "aut-130",
-      "aut-131",
-      "aut-160",
-      "aut-180",
-      "aut-200",
-      "aut-201",
-      "aut-220"
-    ],
-    "catalogCoursesWithoutCatalogAlignedDedicatedPage": 57
   }
 }
