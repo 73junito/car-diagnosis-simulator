@@ -29,7 +29,7 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "catalog_aligned_dedicated_course_pages": 35,
+    "catalog_aligned_dedicated_course_pages": 39,
     "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
@@ -46,9 +46,13 @@
       "aut-200",
       "aut-201",
       "aut-210",
+      "aut-211",
       "aut-220",
       "aut-230",
       "aut-240",
+      "aut-250",
+      "aut-260",
+      "aut-270",
       "aut-501",
       "aut-515",
       "aut-520",
@@ -116,19 +120,19 @@
       "area": "course_delivery_status_data",
       "path": "data/curriculum/course-delivery-status.json",
       "status": "machine-readable-baseline",
-      "notes": "Machine-readable current Phase 7F-R delivery status used by deterministic delivery validators."
+      "notes": "Machine-readable current Phase 7F-S delivery status used by deterministic delivery validators, including the catalog AUT-250 route override."
     },
     {
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-R verifies thirty-five catalog-aligned dedicated course pages, including Batch 011 AUT-150/AUT-210/AUT-525, plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
+      "notes": "Phase 7F-S verifies thirty-nine catalog-aligned dedicated course pages plus the separate legacy AUT-250 HEV package; catalog AUT-250 Diagnostics I uses /courses/aut-250-diagnostics/."
     },
     {
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-011 re-audit identifies AUT-211, AUT-250, AUT-260, and AUT-270 as the exact Batch 012 candidates."
+      "notes": "Post-Batch-012 re-audit identifies AUT-251 and AUT-280 as the exact Batch 013 candidates."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",

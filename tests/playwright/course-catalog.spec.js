@@ -122,9 +122,25 @@ test.describe("academic course catalog", () => {
     await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
     await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-545/");
 
+    await page.goto(examBase + "/catalog/course/?course=AUT-211");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Engine Performance Laboratory");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-211/");
+
     await page.goto(examBase + "/catalog/course/?course=AUT-250");
     await expect(page.locator(".catalog-detail-card h1")).toHaveText("Automotive Diagnostics I");
-    await expect(page.locator(".catalog-training-link")).toHaveCount(0);
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-250-diagnostics/");
+
+    await page.goto(examBase + "/catalog/course/?course=AUT-260");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Vehicle Dynamics");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-260/");
+
+    await page.goto(examBase + "/catalog/course/?course=AUT-270");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Automotive Emissions and Environmental Systems");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-270/");
 
     await page.goto(examBase + "/catalog/course/?course=AUT-330");
     await expect(page.locator(".catalog-detail-card h1")).toHaveText("Electric Vehicle Technology");
