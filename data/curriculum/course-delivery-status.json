@@ -43,7 +43,18 @@
       "aut-115",
       "aut-250"
     ],
-    "catalogCoursesWithoutDedicatedPage": 63
+    "catalogCoursesWithoutDedicatedPage": 63,
+    "catalogAlignedDedicatedCoursePageCount": 4,
+    "catalogAlignedDedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115"
+    ],
+    "legacyTrainingPackagePageCount": 1,
+    "legacyTrainingPackagePageIds": [
+      "aut-250"
+    ]
   },
   "boundaries": {
     "fullSyllabusCoverageClaim": false,
@@ -54,8 +65,9 @@
     "highStakesAuthorization": false
   },
   "notes": [
-    "Phase 7F-C adds dedicated instructional course pages for AUT-101, AUT-105, AUT-110, and AUT-115.",
-    "AUT-250 remains the existing dedicated formative-training course experience.",
+    "Phase 7F-C adds catalog-aligned dedicated instructional course pages for AUT-101, AUT-105, AUT-110, and AUT-115.",
+    "The existing /courses/aut-250/ page is the HEV formative-training package crosswalked from catalog AUT-330; it is not the delivery page for catalog AUT-250 Automotive Diagnostics I.",
+    "The filesystem contains five dedicated course/training page directories in total, but only four are catalog-aligned Phase 7F-C course pages.",
     "The 64/64 curriculum reference-coverage metric concerns lesson-plan evidence governance and must not be interpreted as 64 built online courses or 64 completed syllabi.",
     "Academic/content status remains independent from delivery-page status; building a page does not promote a course's academic status or authorize assessment."
   ],
