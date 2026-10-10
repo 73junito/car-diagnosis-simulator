@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "phase": "7E",
+  "package": "institutional-submission-export",
+  "source_main_sha": "051935051b072349c6284be422854f27ac62981a",
+  "evidence_baseline_sha": "53222a91ba3d82770b20f778c4e5a0134873eef1",
+  "generated_on": "2026-10-10",
+  "page_count": 13,
+  "qa": {
+    "docx_render_pages_checked": "13/13",
+    "pdf_render_pages_checked": "13/13",
+    "blank_pages": false,
+    "clipped_text": false,
+    "overlapping_content": false,
+    "broken_tables": false
+  },
+  "artifacts": [
+    {
+      "filename": "AutoLearnPro_Institutional_Submission_Package.docx",
+      "format": "docx",
+      "sha256": "ee93673e3b7e1236793618c437980d0ca57290d4de57f43f2c7874d622eb13fc"
+    },
+    {
+      "filename": "AutoLearnPro_Institutional_Submission_Package.pdf",
+      "format": "pdf",
+      "sha256": "ae39c98cfdcd5cf81f3ee27b293128101eece0bb491c55ff5783a2173f30e34e"
+    }
+  ],
+  "submission_boundaries": {
+    "accreditation_claim": false,
+    "kbor_approval_claim": false,
+    "academic_credit_authority_claim": false,
+    "institutional_adoption_claim": false,
+    "assessment_authorized": false,
+    "high_stakes_authorized": false,
+    "accessibility_certification_claim": false
+  }
+}
