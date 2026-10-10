@@ -1,8 +1,8 @@
-# Phase 7F-C Course Delivery Rollout Execution
+# Phase 7F-D Course Delivery Rollout Execution
 
 ## Purpose
 
-Phase 7F-C executes Batch 001 from the Phase 7F-B rollout plan. AUT 101, AUT 105, AUT 110, and AUT 115 now have dedicated instructional course pages. Building these pages does **not** make the courses production-ready for assessment, assessment-eligible, or academically active.
+Phase 7F-D executes Batch 002 after the verified Phase 7F-C Batch 001 build. AUT 130, AUT 131, AUT 160, and AUT 180 now have dedicated instructional course pages in addition to the four Batch 001 pages. Building these pages does **not** make the courses production-ready for assessment, assessment-eligible, or academically active.
 
 ## Batch 001 — Foundations — built and verified
 
@@ -17,16 +17,16 @@ The first delivery-build batch is:
 
 All four have canonical catalog-development mappings. AUT-115's only prerequisite is AUT-110, which is inside the same batch. Phase 7F-C has now built and verified the four dedicated course pages, with catalog navigation and non-assessment boundaries.
 
-## Batch 002 — Foundation extension
+## Batch 002 — Foundation extension — built and verified
 
-After Batch 001 is built and verified, the next queued set is:
+Phase 7F-D has built and verified:
 
 - AUT 130 — Engine Systems I
 - AUT 131 — Engine Systems I Laboratory
 - AUT 160 — Manual Transmissions and Drivetrain Systems
 - AUT 180 — Automotive Technical Documentation and Service Information
 
-These courses already have canonical lesson mappings and depend only on Batch 001 or another course in Batch 002.
+These courses have canonical lesson mappings and depend only on Batch 001 or another course in Batch 002. AUT 131 preserves its concurrent-enrollment relationship with AUT 130.
 
 ## Deferred mapping blockers
 
@@ -54,6 +54,6 @@ A course can move from planned rollout to a verified built-page state only after
 
 ## Governance boundary
 
-Phase 7F-C builds **four** new dedicated instructional course pages and changes **zero** academic status or assessment-eligibility fields.
+Phase 7F-D builds **four additional** dedicated instructional course pages (eight catalog-aligned pages total) and changes **zero** academic status or assessment-eligibility fields.
 
 The assessment hold remains unchanged. This plan does not authorize scoring, grading, high-stakes use, accreditation, Kansas Board of Regents approval, academic-credit authority, or institutional adoption.

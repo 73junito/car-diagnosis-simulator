@@ -1,25 +1,33 @@
 {
   "schemaVersion": "1.0.0",
-  "phase": "7F-C",
+  "phase": "7F-D",
   "purpose": "course-delivery-rollout-execution",
   "sourceBaseline": {
-    "phase": "7F-C",
-    "dedicatedCoursePageCount": 5,
+    "phase": "7F-D",
+    "dedicatedCoursePageCount": 9,
     "dedicatedCoursePageIds": [
       "aut-101",
       "aut-105",
       "aut-110",
       "aut-115",
+      "aut-130",
+      "aut-131",
+      "aut-160",
+      "aut-180",
       "aut-250"
     ],
     "catalogCourseCount": 68,
     "lessonPlanCount": 64,
-    "catalogAlignedDedicatedCoursePageCount": 4,
+    "catalogAlignedDedicatedCoursePageCount": 8,
     "catalogAlignedDedicatedCoursePageIds": [
       "aut-101",
       "aut-105",
       "aut-110",
-      "aut-115"
+      "aut-115",
+      "aut-130",
+      "aut-131",
+      "aut-160",
+      "aut-180"
     ],
     "legacyTrainingPackagePageIds": [
       "aut-250"
@@ -88,7 +96,7 @@
     {
       "id": "batch-002-foundation-extension",
       "sequence": 2,
-      "status": "queued-after-batch-001",
+      "status": "page-built-verified",
       "rationale": "Mapped courses whose prerequisites are satisfied by Batch 001 or within this batch.",
       "courses": [
         {
@@ -99,7 +107,9 @@
           "mappingType": "canonical-catalog-course",
           "prerequisites": [
             "aut-101"
-          ]
+          ],
+          "targetPage": "exam-site/courses/aut-130/index.html",
+          "deliveryStatus": "page-built"
         },
         {
           "courseId": "aut-131",
@@ -110,7 +120,9 @@
           "prerequisites": [
             "aut-130"
           ],
-          "prerequisiteMode": "concurrent"
+          "prerequisiteMode": "concurrent",
+          "targetPage": "exam-site/courses/aut-131/index.html",
+          "deliveryStatus": "page-built"
         },
         {
           "courseId": "aut-160",
@@ -120,7 +132,9 @@
           "mappingType": "canonical-catalog-course",
           "prerequisites": [
             "aut-115"
-          ]
+          ],
+          "targetPage": "exam-site/courses/aut-160/index.html",
+          "deliveryStatus": "page-built"
         },
         {
           "courseId": "aut-180",
@@ -130,9 +144,12 @@
           "mappingType": "canonical-catalog-course",
           "prerequisites": [
             "aut-101"
-          ]
+          ],
+          "targetPage": "exam-site/courses/aut-180/index.html",
+          "deliveryStatus": "page-built"
         }
-      ]
+      ],
+      "completedInPhase": "7F-D"
     }
   ],
   "blockers": [
@@ -176,8 +193,9 @@
     "productionReadyClaims": 0
   },
   "previousPlan": {
-    "phase": "7F-B",
-    "batch001Status": "planned-for-delivery-build",
-    "coursesBuiltByPhase": 0
+    "phase": "7F-C",
+    "batch001Status": "page-built-verified",
+    "batch002Status": "queued-after-batch-001",
+    "catalogAlignedDedicatedCoursePageCount": 4
   }
 }
