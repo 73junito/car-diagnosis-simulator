@@ -2,7 +2,7 @@
 
 **Phase:** 7B — Institutional Readiness  
 **Review posture:** Evidence package for institutional/regulatory review  
-**Current production baseline:** `3db8efd3d9365de31716845731d6439423d250f0`  
+**Current production baseline:** `07c1b6716791df4389fb1e0dbeea28b893791d3c`  
 Assessment authorization: Not granted
 
 ## Purpose
@@ -21,7 +21,7 @@ AutoLearnPro is operating as an evidence-aware automotive learning and diagnosti
 
 The current release baseline verifies source-rights closure, state privacy/AI overlays, 64/64 quantitative curriculum-reference coverage, assessment-governance boundaries, production surface health, Google crawler access, and public indexability.
 
-The platform is **not yet institution-ready in every curriculum-reference-quality dimension**. The curriculum-quality audit explicitly distinguishes complete reference coverage from sufficient automotive-domain authority. Multiple specialized lessons still need supplemental automotive, standards, manufacturer, government, or peer-reviewed technical sources.
+The live Phase 7C curriculum-reference quality screen now reports **64 strong, 0 solid, 0 review, with direct-domain authority 64/64**. This closes the previously identified supplemental technical-authority backlog. A strong deterministic source-quality screen is not, by itself, institutional approval, accreditation, academic-credit authority, or assessment authorization.
 
 ## What is verified today
 
@@ -39,6 +39,7 @@ The platform is **not yet institution-ready in every curriculum-reference-qualit
 - Graduate coverage is 21/21.
 - Source-rights metadata is governed with source-specific permissions and fail-closed reuse controls.
 - External discovery results do not automatically become approved instructional evidence or assessment evidence.
+- Phase 7C live reference-quality screen: 64 strong, 0 solid, 0 review; direct-domain authority 64/64.
 
 ### Privacy and AI governance
 
@@ -72,13 +73,7 @@ The same page correctly states that this is not a certification that every page 
 
 ## Known readiness gaps
 
-### 1. Curriculum technical-authority quality
-
-The curriculum-reference quality audit reports complete coverage but identifies substantial single-source concentration and multiple specialized automotive lessons where broad foundational sources do not yet provide sufficient automotive-domain authority.
-
-This is the principal current academic-content readiness gap.
-
-### 2. Institutional contracting and deployment context
+### 1. Institutional contracting and deployment context
 
 Institution-specific obligations can depend on:
 
@@ -92,11 +87,11 @@ Institution-specific obligations can depend on:
 
 Those must be resolved during institutional onboarding and are not implied by the production release baseline.
 
-### 3. Assessment authorization
+### 2. Assessment authorization
 
 Assessment governance remains intentionally closed pending separate legal, academic, item-level, fairness, and human-approval review.
 
-### 4. Accessibility conformance evidence
+### 3. Accessibility conformance evidence
 
 Current design practices are documented, but formal third-party or institution-specific conformance testing is not claimed by this package.
 
@@ -111,6 +106,7 @@ Primary evidence includes:
 - `docs/releases/production-release-baseline-2026-10-09.md`
 - `docs/releases/phase7a-production-baseline-monitor.md`
 - `docs/curriculum-reference-quality-audit-2026-10-09.md`
+- `docs/curriculum-reference-quality-baseline-2026-10-10.md`
 - `docs/compliance/education-privacy-ai-control-matrix.md`
 - `docs/compliance/student-data-inventory.md`
 - `docs/compliance/student-data-inventory.json`
