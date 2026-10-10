@@ -1,6 +1,6 @@
-# Phase 7F-H Course Delivery Status
+# Phase 7F-I Course Delivery Status
 
-**Current verified state:** Phase 7F-H Batch 004 graduate delivery implementation
+**Current verified state:** Phase 7F-I Batch 005 graduate extension delivery implementation
 **Purpose:** separate curriculum/reference coverage from actual dedicated course delivery pages.
 
 ## Verified counts
@@ -12,9 +12,9 @@
 | Lesson plans | 64 |
 | Undergraduate lesson plans | 43 |
 | Graduate lesson plans | 21 |
-| Dedicated course/training page directories | 15 |
-| Catalog-aligned dedicated course pages | 14 |
-| Catalog courses without a catalog-aligned dedicated course page | 54 |
+| Dedicated course/training page directories | 18 |
+| Catalog-aligned dedicated course pages | 17 |
+| Catalog courses without a catalog-aligned dedicated course page | 51 |
 
 The catalog-aligned dedicated course pages currently present are:
 
@@ -31,6 +31,9 @@ The catalog-aligned dedicated course pages currently present are:
 - `aut-220`
 - `aut-501`
 - `aut-515`
+- `aut-520`
+- `aut-530`
+- `aut-550`
 - `aut-590`
 
 The existing `/courses/aut-250/` route is a separate HEV formative-training package crosswalked from catalog AUT-330. It is not the delivery page for catalog AUT-250 Automotive Diagnostics I.
@@ -43,9 +46,9 @@ The existing academic/content `status` field cannot be treated as delivery statu
 
 - `electrical-1`
 
-There is no corresponding dedicated `exam-site/courses/electrical-1/index.html` page. Conversely, AUT-250 has a dedicated delivery page while the planning catalog still records AUT-250 as `planned`.
+There is no corresponding dedicated `exam-site/courses/electrical-1/index.html` page. Conversely, AUT-250 has a dedicated training page while the planning catalog still records AUT-250 as `planned`.
 
-Phase 7F-H continues to keep the existing academic/content statuses unchanged and applies the same separate delivery-evidence rule:
+Phase 7F-I keeps existing academic/content statuses unchanged and applies the separate delivery-evidence rule:
 
 - **planned** — no dedicated course delivery page is asserted;
 - **page-built** — `exam-site/courses/<course-id>/index.html` exists;
@@ -63,7 +66,9 @@ It does **not** mean:
 - 64 production-ready courses; or
 - 64 assessment-authorized courses.
 
-At the current Phase 7F-H state, there are **14 catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, and AUT-590**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
+At the current Phase 7F-I state, there are **17 catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, AUT-520, AUT-530, AUT-550, and AUT-590**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
+
+AUT-530 page availability does not establish undergraduate EV-coursework equivalency. That determination remains a separate human or institutional decision.
 
 ## Governance boundary
 
@@ -71,9 +76,10 @@ This baseline does not:
 
 - change any existing course or pathway `status`;
 - make another course active;
+- automate admissions, prerequisite, or equivalency determinations;
 - authorize assessment question display;
 - authorize scoring or grading;
 - authorize high-stakes use; or
 - establish institutional approval, accreditation, or academic-credit authority.
 
-The prior Phase 7F-C four-page catalog-aligned state is retained as `previousBaseline`; the original Phase 7F-A one-page state remains historically documented in `data/curriculum/course-delivery-status.json` as `previousBaseline`. The current delivery-status artifact is the source of truth for verified built pages.
+The Phase 7F-H fourteen-page catalog-aligned state is retained as `previousBaseline` in `data/curriculum/course-delivery-status.json`. The current delivery-status artifact is the source of truth for verified built pages.

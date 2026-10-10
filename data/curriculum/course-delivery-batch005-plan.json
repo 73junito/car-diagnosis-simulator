@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-I",
+  "purpose": "batch-005-graduate-extension-delivery-execution",
+  "sourceDeliveryPhase": "7F-I",
+  "status": "page-built-verified",
+  "rationale": "Continue the graduate delivery sequence with identity-preserving canonical mappings whose course prerequisites depend on Batch 004. Preserve equivalency and prior-coursework determinations as human/institutional eligibility conditions.",
+  "courses": [
+    {
+      "courseId": "aut-520",
+      "code": "AUT 520",
+      "title": "Advanced Vehicle Data Analytics",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut520-data-analytics",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 515 or equivalent",
+      "prerequisiteType": "course-or-equivalency-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-520/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-530",
+      "code": "AUT 530",
+      "title": "Advanced Electric Vehicle Systems",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut530-advanced-ev-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 501 and undergraduate EV coursework or equivalent",
+      "prerequisiteType": "mixed-course-and-institutional-equivalency-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-530/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-550",
+      "code": "AUT 550",
+      "title": "Advanced Automotive Networks",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut550-automotive-networks",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 501 or equivalent",
+      "prerequisiteType": "course-or-equivalency-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-550/index.html",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "deferred": [
+    {
+      "courseId": "aut-525",
+      "code": "AUT 525",
+      "reason": "No identity-preserving canonical catalog-development mapping is currently recorded."
+    },
+    {
+      "courseId": "aut-420",
+      "code": "AUT 420",
+      "reason": "Verified industry employment or approved internship placement remains a human/institutional eligibility condition."
+    }
+  ],
+  "continuingCanonicalContentBlockers": [
+    "aut-120",
+    "aut-150"
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 3,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "equivalencyAutomation": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-H",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 3
+  },
+  "completedInPhase": "7F-I"
+}
