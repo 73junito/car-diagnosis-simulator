@@ -48,9 +48,9 @@ function verify() {
 
   const expected = baseline.baseline || {}
 
-  if (baseline.phase !== '7F-A') errors.push('baseline phase must remain 7F-A')
-  if (baseline.purpose !== 'course-delivery-status-baseline') {
-    errors.push('baseline purpose must remain course-delivery-status-baseline')
+  if (baseline.phase !== '7F-C') errors.push('current delivery phase must remain 7F-C')
+  if (baseline.purpose !== 'current-course-delivery-status') {
+    errors.push('delivery status purpose must remain current-course-delivery-status')
   }
 
   if (catalog.catalogStatus !== expected.catalogStatus) {
@@ -156,12 +156,12 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-A course delivery status baseline')
+    console.error('[FAIL] Phase 7F-C course delivery status')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
   console.log(
-    '[PASS] Phase 7F-A course delivery baseline: 68 planning-catalog courses; 64 lesson plans; 1 dedicated course page (aut-250); academic status remains separate from delivery status'
+    `[PASS] Phase 7F-C course delivery status: ${result.summary.dedicatedCoursePages.length} dedicated course pages (${result.summary.dedicatedCoursePages.join(', ')}); academic status remains separate from delivery status`
   )
 }
 
