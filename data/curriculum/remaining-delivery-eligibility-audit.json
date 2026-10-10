@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "phase": "7F-L",
   "purpose": "remaining-delivery-eligibility-audit",
-  "sourceDeliveryPhase": "7F-V",
-  "lastResolutionPhase": "7F-V",
+  "sourceDeliveryPhase": "7F-W",
+  "lastResolutionPhase": "7F-W",
   "generatedFrom": {
     "courseCatalog": "data/curriculum/course-catalog.json",
     "programArchitecture": "data/curriculum/program-architecture.json",
@@ -11,21 +11,17 @@
   },
   "scope": {
     "planningCatalogCourses": 68,
-    "catalogAlignedDedicatedCoursePages": 52,
-    "remainingCatalogCourses": 16
+    "catalogAlignedDedicatedCoursePages": 55,
+    "remainingCatalogCourses": 13
   },
   "summary": {
-    "readyToBuildNow": 3,
+    "readyToBuildNow": 0,
     "blockedMissingCanonicalMapping": 9,
     "blockedPrerequisiteChain": 2,
     "blockedHumanInstitutionalVerification": 2
   },
   "groups": {
-    "readyToBuildNow": [
-      "aut-380",
-      "aut-390",
-      "aut-410"
-    ],
+    "readyToBuildNow": [],
     "blockedMissingCanonicalMapping": [
       "aut-140",
       "aut-510",
@@ -65,42 +61,6 @@
       "reason": "No identity-preserving canonical catalog-development mapping is recorded."
     },
     {
-      "courseId": "aut-380",
-      "code": "AUT 380",
-      "title": "Automotive Cybersecurity",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 310, AUT 370",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut380-cybersecurity",
-      "referencedPrerequisiteCourseIds": [
-        "aut-310",
-        "aut-370"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
-      "courseId": "aut-390",
-      "code": "AUT 390",
-      "title": "Connected and Software-Defined Vehicles",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 310, AUT 370",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut390-connected-sdv",
-      "referencedPrerequisiteCourseIds": [
-        "aut-310",
-        "aut-370"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
       "courseId": "aut-400",
       "code": "AUT 400",
       "title": "Automotive Technology Research Methods",
@@ -116,26 +76,6 @@
       "humanInstitutionalCondition": true,
       "classification": "blocked-human-institutional-verification",
       "reason": "The catalog prerequisite requires a human or institutional standing, placement, employment, approval, or equivalent governance decision."
-    },
-    {
-      "courseId": "aut-410",
-      "code": "AUT 410",
-      "title": "Automotive Systems Integration",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 310, AUT 320 or AUT 330, AUT 350",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut410-systems-integration",
-      "referencedPrerequisiteCourseIds": [
-        "aut-310",
-        "aut-320",
-        "aut-330",
-        "aut-350"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-420",
@@ -334,7 +274,7 @@
     "batch008Candidates": [
       "aut-120"
     ],
-    "reason": "After Batch 015 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
+    "reason": "After Batch 016 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
     "highestLeverageCanonicalBlockers": [
       "aut-140",
       "aut-510",
@@ -347,7 +287,7 @@
       "aut-690"
     ],
     "notes": [
-      "AUT-301, AUT-321, AUT-331, AUT-340, AUT-350, AUT-360, and AUT-370 were delivered in Phase 7F-V Batch 015.",
+      "AUT-380, AUT-390, and AUT-410 were delivered in Phase 7F-W Batch 016.",
       "AUT-400 remains gated by junior standing; AUT-420 remains gated by verified employment or approved internship placement."
     ],
     "batch009Ready": true,
@@ -400,7 +340,9 @@
       "aut-380",
       "aut-390",
       "aut-410"
-    ]
+    ],
+    "batch017Ready": false,
+    "batch017Candidates": []
   },
   "boundaries": {
     "academicStatusChanges": 0,
