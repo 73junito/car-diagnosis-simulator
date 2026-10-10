@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "phase": "7F-L",
   "purpose": "remaining-delivery-eligibility-audit",
-  "sourceDeliveryPhase": "7F-P",
-  "lastResolutionPhase": "7F-Q",
+  "sourceDeliveryPhase": "7F-R",
+  "lastResolutionPhase": "7F-R",
   "generatedFrom": {
     "courseCatalog": "data/curriculum/course-catalog.json",
     "programArchitecture": "data/curriculum/program-architecture.json",
@@ -11,20 +11,21 @@
   },
   "scope": {
     "planningCatalogCourses": 68,
-    "catalogAlignedDedicatedCoursePages": 32,
-    "remainingCatalogCourses": 36
+    "catalogAlignedDedicatedCoursePages": 35,
+    "remainingCatalogCourses": 33
   },
   "summary": {
-    "readyToBuildNow": 3,
+    "readyToBuildNow": 4,
     "blockedMissingCanonicalMapping": 9,
-    "blockedPrerequisiteChain": 23,
+    "blockedPrerequisiteChain": 19,
     "blockedHumanInstitutionalVerification": 1
   },
   "groups": {
     "readyToBuildNow": [
-      "aut-150",
-      "aut-210",
-      "aut-525"
+      "aut-211",
+      "aut-250",
+      "aut-260",
+      "aut-270"
     ],
     "blockedMissingCanonicalMapping": [
       "aut-140",
@@ -38,11 +39,7 @@
       "aut-690"
     ],
     "blockedPrerequisiteChain": [
-      "aut-211",
-      "aut-250",
       "aut-251",
-      "aut-260",
-      "aut-270",
       "aut-280",
       "aut-300",
       "aut-301",
@@ -85,41 +82,6 @@
       "reason": "No identity-preserving canonical catalog-development mapping is recorded."
     },
     {
-      "courseId": "aut-150",
-      "code": "AUT 150",
-      "title": "Steering, Suspension, and Wheel Alignment",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 115",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut150-steering-suspension-alignment",
-      "referencedPrerequisiteCourseIds": [
-        "aut-115"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
-      "courseId": "aut-210",
-      "code": "AUT 210",
-      "title": "Engine Performance and Fuel Systems",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 200, AUT 120",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut210-engine-performance-fuel-systems",
-      "referencedPrerequisiteCourseIds": [
-        "aut-200",
-        "aut-120"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
       "courseId": "aut-211",
       "code": "AUT 211",
       "title": "Engine Performance Laboratory",
@@ -131,12 +93,10 @@
       "referencedPrerequisiteCourseIds": [
         "aut-210"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-210"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-250",
@@ -151,12 +111,10 @@
         "aut-210",
         "aut-230"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-210"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-251",
@@ -190,12 +148,10 @@
         "aut-110",
         "aut-150"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-150"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-270",
@@ -209,12 +165,10 @@
       "referencedPrerequisiteCourseIds": [
         "aut-210"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-210"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-280",
@@ -611,23 +565,6 @@
       "reason": "No identity-preserving canonical catalog-development mapping is recorded."
     },
     {
-      "courseId": "aut-525",
-      "code": "AUT 525",
-      "title": "Experimental Methods in Automotive Technology",
-      "academicLevel": "graduate",
-      "prerequisitesText": "AUT 501",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "grad-aut525-experimental-methods",
-      "referencedPrerequisiteCourseIds": [
-        "aut-501"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
       "courseId": "aut-600",
       "code": "AUT 600",
       "title": "Automotive Research Design",
@@ -639,9 +576,7 @@
       "referencedPrerequisiteCourseIds": [
         "aut-525"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-525"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
       "classification": "blocked-missing-canonical-mapping",
       "reason": "No identity-preserving canonical catalog-development mapping is recorded."
@@ -756,7 +691,7 @@
     "batch008Candidates": [
       "aut-120"
     ],
-    "reason": "Phase 7F-Q resolves canonical development blockers for AUT-150, AUT-210, AUT-330, and AUT-525. AUT-150, AUT-210, and AUT-525 now satisfy delivery prerequisites; AUT-330 remains blocked by the unresolved AUT-280 prerequisite page.",
+    "reason": "After Batch 011 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
     "highestLeverageCanonicalBlockers": [
       "aut-140",
       "aut-510",
@@ -769,8 +704,7 @@
       "aut-690"
     ],
     "notes": [
-      "Phase 7F-Q adds dedicated canonical development content/mappings for AUT-150, AUT-210, AUT-330, and AUT-525 without building delivery pages.",
-      "AUT-330 remains prerequisite-chain blocked because AUT-280 lacks an aligned delivery page.",
+      "AUT-150, AUT-210, and AUT-525 were delivered in Phase 7F-R Batch 011.",
       "AUT-420 remains directly gated by verified employment or approved internship placement and must not be auto-cleared."
     ],
     "batch009Ready": true,
@@ -788,6 +722,13 @@
       "aut-150",
       "aut-210",
       "aut-525"
+    ],
+    "batch012Ready": true,
+    "batch012Candidates": [
+      "aut-211",
+      "aut-250",
+      "aut-260",
+      "aut-270"
     ]
   },
   "boundaries": {

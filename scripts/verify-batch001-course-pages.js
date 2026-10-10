@@ -26,7 +26,7 @@ function verify() {
   const built = new Set(STATUS.baseline?.dedicatedCoursePageIds || [])
   const catalogAligned = new Set(STATUS.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
-  if (!['7F-C', '7F-D', '7F-F', '7F-H', '7F-I', '7F-J', '7F-K', '7F-N', '7F-O', '7F-P'].includes(STATUS.phase)) errors.push('delivery status must be Phase 7F-C or later supported Phase 7F-P')
+  if (!['7F-C', '7F-D', '7F-F', '7F-H', '7F-I', '7F-J', '7F-K', '7F-N', '7F-O', '7F-P', '7F-R'].includes(STATUS.phase)) errors.push('delivery status must be Phase 7F-C or later supported Phase 7F-R')
   for (const id of BATCH) {
     if (!catalogAligned.has(id)) errors.push(`Batch 001 catalog-aligned page missing from current delivery status: ${id}`)
   }

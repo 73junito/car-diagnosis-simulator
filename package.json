@@ -105,7 +105,8 @@
     "validate:remaining-delivery-eligibility-audit": "node scripts/verify-remaining-delivery-eligibility-audit.js",
     "validate:batch008-undergraduate-page": "node scripts/verify-batch008-undergraduate-page.js",
     "validate:batch009-undergraduate-pages": "node scripts/verify-batch009-undergraduate-pages.js",
-    "validate:batch010-undergraduate-pages": "node scripts/verify-batch010-undergraduate-pages.js"
+    "validate:batch010-undergraduate-pages": "node scripts/verify-batch010-undergraduate-pages.js",
+    "validate:batch011-delivery-pages": "node scripts/verify-batch011-delivery-pages.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
