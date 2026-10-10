@@ -1,6 +1,6 @@
 # Phase 7F-K Course Delivery Status
 
-**Current verified state:** Phase 7F-T Batch 013 AUT-251/AUT-280 delivery implementation
+**Current verified state:** Phase 7F-U Batch 014 AUT-300/AUT-310/AUT-320/AUT-330 delivery implementation
 **Purpose:** separate curriculum/reference coverage from actual dedicated course delivery pages.
 
 ## Verified counts
@@ -12,9 +12,9 @@
 | Developed lesson plans | 69 |
 | Undergraduate developed lesson plans | 47 |
 | Graduate lesson plans | 21 |
-| Dedicated course/training page directories | 42 |
-| Catalog-aligned dedicated course pages | 41 |
-| Catalog courses without a catalog-aligned dedicated course page | 27 |
+| Dedicated course/training page directories | 46 |
+| Catalog-aligned dedicated course pages | 45 |
+| Catalog courses without a catalog-aligned dedicated course page | 23 |
 
 The catalog-aligned dedicated course pages currently present are:
 
@@ -62,7 +62,7 @@ Phase 7F-K retains the delivery-evidence rule:
 
 The previously verified live **64/64** curriculum-reference metric applies to the production baseline before the Phase 7F-M AUT-120 development addition. The repository now contains **69 developed lesson plans** after Phase 7F-Q. AUT-120, AUT-150, AUT-210, AUT-330, and AUT-525 canonical lessons carry governed reference mappings in migrations, but the historical live 64/64 evidence remains unchanged until deployment and baseline regeneration. Neither metric means fully built online courses, completed syllabi, production-ready courses, or assessment-authorized courses.
 
-At the current Phase 7F-T state, there are **41 catalog-aligned dedicated course pages**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
+At the current Phase 7F-U state, there are **45 catalog-aligned dedicated course pages**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
 
 AUT-120 now has dedicated canonical development content and is the sole evidence-supported Batch 008 candidate; no AUT-120 delivery page is built by Phase 7F-M. Graduate prerequisite determinations remain separate human or institutional decisions.
 
@@ -78,8 +78,12 @@ This baseline does not:
 - authorize high-stakes use; or
 - establish institutional approval, accreditation, or academic-credit authority.
 
-The Phase 7F-S thirty-nine-page catalog-aligned state is retained as `previousBaseline` in `data/curriculum/course-delivery-status.json`. The current delivery-status artifact is the source of truth for verified built pages.
+The Phase 7F-T forty-one-page catalog-aligned state is retained as `previousBaseline` in `data/curriculum/course-delivery-status.json`. The current delivery-status artifact is the source of truth for verified built pages.
 
 ## AUT-250 route identity
 
 Catalog AUT-250 Automotive Diagnostics I is delivered at `/courses/aut-250-diagnostics/`. The historical `/courses/aut-250/` route remains the legacy HEV formative-training package crosswalked from catalog AUT-330.
+
+## AUT-330 route identity
+
+Catalog AUT-330 Electric Vehicle Technology is delivered at `/courses/aut-330/`. The historical `/courses/aut-250/` HEV formative-training package remains preserved as related training and is not renamed.
