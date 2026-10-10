@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0.0",
+  "phase": "7B",
+  "package": "institutional-readiness",
+  "current_main_sha": "3db8efd3d9365de31716845731d6439423d250f0",
+  "posture": {
+    "institutional_review_package": true,
+    "accreditation_claim": false,
+    "kbor_approval_claim": false,
+    "assessment_authorized": false,
+    "high_stakes_authorized": false,
+    "full_reference_quality_institution_ready": false
+  },
+  "evidence": [
+    {
+      "area": "production_release",
+      "path": "docs/releases/production-release-baseline-2026-10-09.md",
+      "status": "verified",
+      "notes": "Release baseline and assessment hold."
+    },
+    {
+      "area": "production_monitoring",
+      "path": "docs/releases/phase7a-production-baseline-monitor.md",
+      "status": "verified",
+      "notes": "Daily read-only release-gate monitoring."
+    },
+    {
+      "area": "curriculum_reference_quality",
+      "path": "docs/curriculum-reference-quality-audit-2026-10-09.md",
+      "status": "gap_open",
+      "notes": "64/64 quantitative coverage; qualitative automotive-domain authority supplementation still required."
+    },
+    {
+      "area": "privacy_ai",
+      "path": "docs/compliance/education-privacy-ai-control-matrix.md",
+      "status": "governance_baseline",
+      "notes": "Federal/Kansas baseline plus CA/IL/TX overlays; engineering/compliance planning artifact, not legal advice."
+    },
+    {
+      "area": "student_data",
+      "path": "docs/compliance/student-data-inventory.md",
+      "status": "verified_inventory",
+      "notes": "Student-data inventory and classifications."
+    },
+    {
+      "area": "student_data_machine_readable",
+      "path": "docs/compliance/student-data-inventory.json",
+      "status": "verified_inventory",
+      "notes": "Machine-readable student-data inventory."
+    },
+    {
+      "area": "retention_deletion",
+      "path": "docs/compliance/retention-deletion-contract.md",
+      "status": "governance_baseline",
+      "notes": "Retention/deletion control contract."
+    },
+    {
+      "area": "privacy_public",
+      "path": "public-site/privacy.html",
+      "status": "published",
+      "notes": "Public privacy notice."
+    },
+    {
+      "area": "accessibility_public",
+      "path": "public-site/accessibility/index.html",
+      "status": "published_with_limitation",
+      "notes": "Current design practices; no blanket conformance certification."
+    },
+    {
+      "area": "institutional_public",
+      "path": "public-site/institutions/index.html",
+      "status": "published_information_only",
+      "notes": "Institutional information page; no enrollment/payment/access activation."
+    },
+    {
+      "area": "research_sources_public",
+      "path": "public-site/research-sources/index.html",
+      "status": "published",
+      "notes": "Discovery metadata does not automatically become approved evidence or assessment eligibility."
+    }
+  ],
+  "open_readiness_items": [
+    "Supplement automotive-domain technical authority for specialized lessons identified by the curriculum-reference quality audit.",
+    "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
+    "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",
+    "Obtain additional accessibility conformance evidence if an institution requires a specific standard or formal audit."
+  ]
+}

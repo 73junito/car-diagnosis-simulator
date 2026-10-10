@@ -85,7 +85,8 @@
     "validate:curriculum-reference-coverage-baseline": "node scripts/verify-curriculum-reference-coverage-baseline.js",
     "validate:production-surfaces": "node scripts/verify-production-surfaces.js",
     "validate:production-release-baseline": "node scripts/verify-production-release-baseline.js",
-    "monitor:production-baseline": "node scripts/monitor-production-baseline.js"
+    "monitor:production-baseline": "node scripts/monitor-production-baseline.js",
+    "validate:institutional-readiness-package": "node scripts/verify-institutional-readiness-package.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
