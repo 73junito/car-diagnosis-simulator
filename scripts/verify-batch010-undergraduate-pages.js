@@ -14,7 +14,7 @@ function verify(){
  const mb=new Map((arch.catalogDevelopmentMappings||[]).map(m=>[m.catalogCourseId,m]))
  const lb=new Map((lessons.lessonPlans||[]).map(l=>[l.id,l]))
  const aligned=new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds||[])
- if(!['7F-P','7F-R','7F-S'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-P or later supported Phase 7F-S')
+ if(!['7F-P','7F-R','7F-S', '7F-T'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-P or later supported Phase 7F-T')
  if((delivery.baseline?.catalogAlignedDedicatedCoursePageCount||0)<32) errors.push('delivery status must retain at least the 32 Phase 7F-P aligned pages')
  if((delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage||0)>36) errors.push('delivery status must not regress above the 36-course Phase 7F-P remaining baseline')
  if(plan.phase!=='7F-P'||plan.status!=='page-built-verified') errors.push('Batch 010 must be page-built-verified in Phase 7F-P')

@@ -16,9 +16,9 @@ function verify(){
  const lb=new Map((lessons.lessonPlans||[]).map(l=>[l.id,l]))
  const aligned=new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds||[])
  const overrides=delivery.baseline?.catalogAlignedDedicatedCoursePageRoutes||{}
- if(delivery.phase!=='7F-S') errors.push('delivery status must be Phase 7F-S')
- if(delivery.baseline?.catalogAlignedDedicatedCoursePageCount!==39) errors.push('Phase 7F-S must record 39 aligned pages')
- if(delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage!==29) errors.push('Phase 7F-S must record 29 catalog courses without aligned pages')
+ if(!['7F-S','7F-T'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-S or later supported Phase 7F-T')
+ if((delivery.baseline?.catalogAlignedDedicatedCoursePageCount||0)<39) errors.push('delivery status must retain at least the 39 Phase 7F-S aligned pages')
+ if((delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage||0)>29) errors.push('delivery status must not regress above the 29-course Phase 7F-S remaining baseline')
  if(plan.phase!=='7F-S'||plan.status!=='page-built-verified') errors.push('Batch 012 must be page-built-verified in Phase 7F-S')
  if(overrides['aut-250']!=='/courses/aut-250-diagnostics/') errors.push('AUT-250 catalog route override must preserve legacy route collision boundary')
  for(const id of BATCH){
