@@ -3,7 +3,7 @@
 **Phase:** 7D — Institutional Submission  
 **Repository baseline:** `53222a91ba3d82770b20f778c4e5a0134873eef1`  
 **Submission posture:** External review packet for institutional/regulatory consideration  
-**Assessment authorization:** Not granted
+Assessment authorization: Not granted
 
 ## 1. Purpose of this submission
 
