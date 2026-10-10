@@ -17,12 +17,12 @@ test.describe('Expanded lesson plans', () => {
 
     await expect(page.locator('#undergraduate-plan-list .expanded-plan')).toHaveCount(44);
     await expect(page.locator('#graduate-plan-list .expanded-plan')).toHaveCount(21);
-    await expect(page.locator('.expanded-plan')).toHaveCount(64);
-    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(64);
+    await expect(page.locator('.expanded-plan')).toHaveCount(65);
+    await expect(page.locator('.expanded-plan .program-context')).toHaveCount(65);
 
-    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(193);
-    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(706);
-    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(258);
+    await expect(page.locator('.expanded-plan .objective-list > li')).toHaveCount(196);
+    await expect(page.locator('.expanded-plan .instruction-block-list > li')).toHaveCount(717);
+    await expect(page.locator('.expanded-plan .lesson-visual-grid > article')).toHaveCount(261);
 
     expect(pageErrors).toEqual([]);
   });
@@ -423,7 +423,7 @@ test.describe('Expanded lesson plans', () => {
     const pageErrors = collectPageErrors(page);
 
     await page.goto('/learning-path/');
-    await expect(page.locator('.lesson-detail-link')).toHaveCount(64);
+    await expect(page.locator('.lesson-detail-link')).toHaveCount(65);
 
     const electrical = page.locator('#electrical-1');
     await electrical.locator('summary').click();
