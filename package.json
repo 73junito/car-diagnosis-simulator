@@ -95,7 +95,9 @@
     "validate:batch001-course-pages": "node scripts/verify-batch001-course-pages.js",
     "validate:batch002-course-pages": "node scripts/verify-batch002-course-pages.js",
     "validate:course-mapping-blockers-batch003": "node scripts/verify-course-mapping-blockers-batch003.js",
-    "validate:batch003-course-pages": "node scripts/verify-batch003-course-pages.js"
+    "validate:batch003-course-pages": "node scripts/verify-batch003-course-pages.js",
+    "validate:batch004-graduate-plan": "node scripts/verify-batch004-graduate-plan.js",
+    "validate:aut420-internship-evidence-policy": "node scripts/verify-aut420-internship-evidence-policy.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
