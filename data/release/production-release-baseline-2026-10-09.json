@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "baseline_id": "production-release-baseline-2026-10-09",
-  "certified_main_sha": "9715aa014df2861531866895e3d81ce73585b22e2",
+  "certified_main_sha": "9715aa014df2861531866895e3d81ce73585b22e",
   "verified_date": "2026-10-09",
   "status": "release-baseline-prepared",
   "production_surfaces": {
