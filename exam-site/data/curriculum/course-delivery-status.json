@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-C",
+  "purpose": "current-course-delivery-status",
+  "statusModel": {
+    "academicStatusSource": [
+      "data/curriculum/course-catalog.json",
+      "data/curriculum/undergraduate-courses.json",
+      "data/curriculum/graduate-courses.json"
+    ],
+    "deliveryEvidenceSource": "exam-site/courses/<course-id>/index.html",
+    "rule": "Academic/content status and delivery-page status are independent. An academic status of active does not imply that a dedicated course delivery page exists.",
+    "deliveryStates": {
+      "planned": "No dedicated course delivery page is asserted.",
+      "page_built": "A dedicated exam-site/courses/<course-id>/index.html page exists.",
+      "production_ready": "Reserved for a future explicit release decision; not inferred from page existence."
+    }
+  },
+  "baseline": {
+    "catalogStatus": "planning",
+    "catalogCourseCount": 68,
+    "catalogPlannedCount": 68,
+    "lessonPlanCount": 64,
+    "undergraduateLessonPlanCount": 43,
+    "graduateLessonPlanCount": 21,
+    "undergraduateCourseRecordCount": 43,
+    "undergraduateAcademicStatusCounts": {
+      "planned": 42,
+      "active": 1
+    },
+    "activeUndergraduateAcademicCourseIds": [
+      "electrical-1"
+    ],
+    "graduateCourseRecordCount": 21,
+    "graduateAcademicStatusCounts": {
+      "planned": 21
+    },
+    "dedicatedCoursePageCount": 5,
+    "dedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
+      "aut-250"
+    ],
+    "catalogCoursesWithoutDedicatedPage": 63
+  },
+  "boundaries": {
+    "fullSyllabusCoverageClaim": false,
+    "fullCourseDeliveryCoverageClaim": false,
+    "assessmentAuthorization": false,
+    "scoringAuthorization": false,
+    "gradingAuthorization": false,
+    "highStakesAuthorization": false
+  },
+  "notes": [
+    "Phase 7F-C adds dedicated instructional course pages for AUT-101, AUT-105, AUT-110, and AUT-115.",
+    "AUT-250 remains the existing dedicated formative-training course experience.",
+    "The 64/64 curriculum reference-coverage metric concerns lesson-plan evidence governance and must not be interpreted as 64 built online courses or 64 completed syllabi.",
+    "Academic/content status remains independent from delivery-page status; building a page does not promote a course's academic status or authorize assessment."
+  ],
+  "previousBaseline": {
+    "phase": "7F-A",
+    "dedicatedCoursePageCount": 1,
+    "dedicatedCoursePageIds": [
+      "aut-250"
+    ],
+    "catalogCoursesWithoutDedicatedPage": 67
+  }
+}
