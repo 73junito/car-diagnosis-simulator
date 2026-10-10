@@ -21,7 +21,7 @@ function verify() {
   const mappingById = new Map((architecture.catalogDevelopmentMappings || []).map((m) => [m.catalogCourseId, m]))
   const aligned = new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
-  if (!['7F-H', '7F-I'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-H or later supported Phase 7F-I')
+  if (!['7F-H', '7F-I', '7F-J'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-H or later supported Phase 7F-J')
   if ((delivery.baseline?.catalogAlignedDedicatedCoursePageCount || 0) < 14) {
     errors.push('delivery status must retain at least the 14 Phase 7F-H catalog-aligned course pages')
   }
