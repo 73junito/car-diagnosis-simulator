@@ -1,12 +1,28 @@
-﻿import argparse
+import argparse
 import json
 import math
 import re
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-import cadquery as cq
-import ezdxf
+cq = None
+ezdxf = None
+
+
+def require_export_dependencies():
+    global cq, ezdxf
+    try:
+        import cadquery as _cq
+        import ezdxf as _ezdxf
+    except ModuleNotFoundError as exc:
+        raise SystemExit(
+            "CAD export dependencies are unavailable in this Python environment. "
+            "Use the documented CadQuery interpreter: "
+            r"C:\Users\rod63\miniforge3\envs\cadquery\python.exe"
+        ) from exc
+    cq = _cq
+    ezdxf = _ezdxf
+
 
 SVG_NS = "http://www.w3.org/2000/svg"
 ET.register_namespace("", SVG_NS)
@@ -173,6 +189,7 @@ def main():
     parser.add_argument("--root", default=".")
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
+    require_export_dependencies()
     root = Path(args.root).resolve()
     data = root / "data" / "symbols"
     out = Path(args.out).resolve()
