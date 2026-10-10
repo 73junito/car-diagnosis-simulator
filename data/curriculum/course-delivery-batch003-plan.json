@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
-  "phase": "7F-E",
-  "purpose": "batch-003-delivery-build-plan",
-  "sourceDeliveryPhase": "7F-D",
-  "status": "planned-for-delivery-build",
+  "phase": "7F-F",
+  "purpose": "batch-003-delivery-build-execution",
+  "sourceDeliveryPhase": "7F-F",
+  "status": "page-built-verified",
   "courses": [
     {
       "courseId": "aut-200",
@@ -15,7 +15,8 @@
         "aut-130"
       ],
       "prerequisiteDisposition": "satisfied-by-built-page",
-      "targetPage": "exam-site/courses/aut-200/index.html"
+      "targetPage": "exam-site/courses/aut-200/index.html",
+      "deliveryStatus": "page-built"
     },
     {
       "courseId": "aut-201",
@@ -28,7 +29,8 @@
       ],
       "prerequisiteMode": "concurrent",
       "prerequisiteDisposition": "satisfied-within-batch",
-      "targetPage": "exam-site/courses/aut-201/index.html"
+      "targetPage": "exam-site/courses/aut-201/index.html",
+      "deliveryStatus": "page-built"
     },
     {
       "courseId": "aut-220",
@@ -40,7 +42,8 @@
         "aut-160"
       ],
       "prerequisiteDisposition": "satisfied-by-built-page",
-      "targetPage": "exam-site/courses/aut-220/index.html"
+      "targetPage": "exam-site/courses/aut-220/index.html",
+      "deliveryStatus": "page-built"
     }
   ],
   "deferredPriorityBlockers": [
@@ -49,10 +52,16 @@
   ],
   "rationale": "Continue undergraduate delivery with identity-preserving canonical mappings whose prerequisites are already satisfied by built pages or within Batch 003, while keeping AUT-120/AUT-150 blocked until dedicated canonical curriculum content exists.",
   "boundaries": {
-    "coursesBuiltByThisPhase": 0,
+    "coursesBuiltByThisPhase": 3,
     "academicStatusChanges": 0,
     "assessmentEligibilityChanges": 0,
     "assessmentAuthorization": false,
     "productionReadyClaims": 0
-  }
+  },
+  "previousPlan": {
+    "phase": "7F-E",
+    "status": "planned-for-delivery-build",
+    "coursesBuiltByThisPhase": 0
+  },
+  "completedInPhase": "7F-F"
 }
