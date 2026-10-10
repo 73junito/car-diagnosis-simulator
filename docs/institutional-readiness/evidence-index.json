@@ -13,6 +13,12 @@
   },
   "evidence": [
     {
+      "area": "institutional_submission",
+      "path": "docs/institutional-submission/AutoLearnPro-Institutional-Submission-Packet.md",
+      "status": "external-review-packet",
+      "notes": "Phase 7D external institutional submission packet; review artifact only and not an approval decision."
+    },
+    {
       "area": "production_release",
       "path": "docs/releases/production-release-baseline-2026-10-09.md",
       "status": "verified",
