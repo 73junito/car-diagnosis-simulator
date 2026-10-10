@@ -26,11 +26,9 @@ function verify() {
   const built = new Set(STATUS.baseline?.dedicatedCoursePageIds || [])
   const catalogAligned = new Set(STATUS.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
-  if (STATUS.phase !== '7F-C') errors.push('delivery status must be Phase 7F-C')
-  if (STATUS.baseline?.dedicatedCoursePageCount !== 5) errors.push('Phase 7F-C must record 5 dedicated course/training page directories')
-  if (STATUS.baseline?.catalogAlignedDedicatedCoursePageCount !== 4) errors.push('Phase 7F-C must record 4 catalog-aligned Batch 001 course pages')
-  if (JSON.stringify([...catalogAligned].sort()) !== JSON.stringify(BATCH)) {
-    errors.push('catalog-aligned dedicated course pages must equal Batch 001')
+  if (!['7F-C', '7F-D'].includes(STATUS.phase)) errors.push('delivery status must be Phase 7F-C or later supported Phase 7F-D')
+  for (const id of BATCH) {
+    if (!catalogAligned.has(id)) errors.push(`Batch 001 catalog-aligned page missing from current delivery status: ${id}`)
   }
   if (JSON.stringify(STATUS.baseline?.legacyTrainingPackagePageIds || []) !== JSON.stringify(['aut-250'])) {
     errors.push('AUT-250 must remain classified as the legacy HEV training package page')
@@ -93,10 +91,8 @@ function verify() {
     if (!catalogAligned.has(id)) errors.push(`delivery status does not list catalog-aligned page: ${id}`)
   }
 
-  const expectedBuilt = ['aut-101', 'aut-105', 'aut-110', 'aut-115', 'aut-250']
-  const actualBuilt = [...built].sort()
-  if (JSON.stringify(actualBuilt) !== JSON.stringify(expectedBuilt)) {
-    errors.push(`built page set expected ${expectedBuilt.join(',')}, found ${actualBuilt.join(',')}`)
+  for (const id of [...BATCH, 'aut-250']) {
+    if (!built.has(id)) errors.push(`required historical built page missing from current delivery state: ${id}`)
   }
 
   const syncScript = fs.readFileSync(path.join(ROOT, 'scripts', 'sync-exam-curriculum.js'), 'utf8')
