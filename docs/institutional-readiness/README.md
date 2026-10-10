@@ -3,7 +3,7 @@
 **Phase:** 7B — Institutional Readiness  
 **Review posture:** Evidence package for institutional/regulatory review  
 **Current production baseline:** `3db8efd3d9365de31716845731d6439423d250f0`  
-**Assessment authorization:** Not granted
+Assessment authorization: Not granted
 
 ## Purpose
 
