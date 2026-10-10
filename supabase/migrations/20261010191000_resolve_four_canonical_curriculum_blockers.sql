@@ -4,7 +4,7 @@ insert into public.curriculum_courses (id, program_id, academic_level, cip_code,
   ('aut-150','automotive-technology','undergraduate','47.0604','Steering, Suspension, and Wheel Alignment','planned'),
   ('aut-210','automotive-technology','undergraduate','47.0604','Engine Performance and Fuel Systems','planned'),
   ('aut-330','automotive-technology','undergraduate','47.0604','Electric Vehicle Technology','planned'),
-  ('aut-525','advanced-automotive-technology','graduate','15.0803','Experimental Methods in Automotive Technology','planned')
+  ('aut-525','automotive-engineering-technology','graduate','15.0803','Experimental Methods in Automotive Technology','planned')
 on conflict (id) do update set
   program_id=excluded.program_id,
   academic_level=excluded.academic_level,

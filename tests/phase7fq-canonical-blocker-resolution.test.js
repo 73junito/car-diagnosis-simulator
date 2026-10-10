@@ -40,6 +40,8 @@ describe('Phase 7F-Q canonical curriculum blocker resolution', () => {
       expect(sql).toContain(courseId)
       expect(sql).toContain(lessonId)
     }
+    expect(sql).toContain("'aut-525','automotive-engineering-technology','graduate','15.0803'")
+    expect(sql).not.toContain("'aut-525','advanced-automotive-technology','graduate','15.0803'")
     for (const ref of [
       'openstax-university-physics-v1-2026',
       'nhtsa-fmvss-126-electronic-stability-control',
