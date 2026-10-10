@@ -1,20 +1,23 @@
 # Phase 7F-L Remaining Delivery Eligibility Audit
 
-After Phase 7F-W Batch 016, **13** planning-catalog courses remain.
+After Phase 7F-Y Batch 017, **10** planning-catalog courses remain.
 
 | Classification | Courses |
 | --- | ---: |
-| Ready to build now | **0** |
-| Missing canonical mapping/content | **9** |
+| Ready to build now | **2** |
+| Missing canonical mapping/content | **0** |
 | Unresolved prerequisite chain | **2** |
-| Human/institutional verification | **2** |
+| Human/institutional verification | **6** |
 
-There is **no evidence-supported Batch 017** at this state.
+## Batch 018 candidates
 
-Missing mapping/content: AUT-140, AUT-510, AUT-600, AUT-610, AUT-620, AUT-630, AUT-640, AUT-650, AUT-690.
+- AUT 610
+- AUT 650
 
-Prerequisite-chain blocked: AUT-450, AUT-451.
+## Continuing blockers
 
-Human/institutional holds: AUT-400 (junior standing) and AUT-420 (verified employment or approved internship placement).
+- Prerequisite-chain blocked: AUT-450, AUT-451
+- Human/institutional: AUT-400, AUT-420, AUT-620, AUT-630, AUT-640, AUT-690
+- Missing canonical mapping/content: none
 
-The audit does not satisfy prerequisites, standing, placement, assessment eligibility, academic approval, accreditation, or credit authority.
+The audit does not satisfy prerequisites, equivalencies, standing, placement, approvals, assessment eligibility, academic approval, accreditation, or credit authority.

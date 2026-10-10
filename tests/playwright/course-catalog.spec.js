@@ -179,7 +179,10 @@ test.describe("academic course catalog", () => {
       ["AUT-370", "Automotive Embedded Systems", "/courses/aut-370/"],
       ["AUT-380", "Automotive Cybersecurity", "/courses/aut-380/"],
       ["AUT-390", "Connected and Software-Defined Vehicles", "/courses/aut-390/"],
-      ["AUT-410", "Automotive Systems Integration", "/courses/aut-410/"]
+      ["AUT-410", "Automotive Systems Integration", "/courses/aut-410/"],
+      ["AUT-140", "Automotive Brake Systems", "/courses/aut-140/"],
+      ["AUT-510", "Advanced Vehicle Diagnostics", "/courses/aut-510/"],
+      ["AUT-600", "Automotive Research Design", "/courses/aut-600/"]
     ]) {
       await page.goto(examBase + "/catalog/course/?course=" + code);
       await expect(page.locator(".catalog-detail-card h1")).toHaveText(title);
