@@ -1,0 +1,77 @@
+name: Production Baseline Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 13 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-baseline-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    name: Verify production baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GITHUB_SHA: ${{ github.sha }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run production baseline monitor
+        id: production_monitor
+        continue-on-error: true
+        run: npm run monitor:production-baseline
+
+      - name: Upload monitor report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-baseline-monitor-${{ github.run_id }}
+          path: reports/production-baseline-monitor.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Write monitor summary
+        if: always()
+        shell: bash
+        run: |
+          node <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs')
+          const path = 'reports/production-baseline-monitor.json'
+          if (!fs.existsSync(path)) {
+            console.log('## Production baseline monitor\n\nReport was not generated.')
+            process.exit(0)
+          }
+          const report = JSON.parse(fs.readFileSync(path, 'utf8'))
+          console.log('## Production baseline monitor')
+          console.log('')
+          console.log(`**Result:** ${report.ok ? 'PASS' : 'FAIL'} — ${report.gates_passed}/${report.gates_total} gates passed`)
+          console.log('')
+          console.log('| Gate | Status |')
+          console.log('| --- | --- |')
+          for (const item of report.results) {
+            console.log(`| ${item.id} | ${item.ok ? 'PASS' : 'FAIL'} |`)
+          }
+          NODE
+
+      - name: Fail on production regression
+        if: steps.production_monitor.outcome == 'failure'
+        run: |
+          echo "Production baseline regression detected. See the uploaded monitor report."
+          exit 1
