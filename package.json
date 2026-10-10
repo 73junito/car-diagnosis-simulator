@@ -87,7 +87,8 @@
     "validate:production-release-baseline": "node scripts/verify-production-release-baseline.js",
     "monitor:production-baseline": "node scripts/monitor-production-baseline.js",
     "validate:institutional-readiness-package": "node scripts/verify-institutional-readiness-package.js",
-    "validate:curriculum-reference-quality-baseline": "node scripts/verify-curriculum-reference-quality-baseline.js"
+    "validate:curriculum-reference-quality-baseline": "node scripts/verify-curriculum-reference-quality-baseline.js",
+    "validate:institutional-submission-package": "node scripts/verify-institutional-submission-package.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
