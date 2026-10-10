@@ -19,11 +19,11 @@ const GATES = [
 ]
 
 function defaultRunner(gate) {
-  const command = process.platform === 'win32' ? 'npm.cmd' : 'npm'
-  return spawnSync(command, ['run', gate.script], {
+  return spawnSync('npm', ['run', gate.script], {
     cwd: ROOT,
     encoding: 'utf8',
-    env: process.env
+    env: process.env,
+    shell: process.platform === 'win32'
   })
 }
 
@@ -40,7 +40,7 @@ function runMonitor(runner = defaultRunner, now = () => new Date()) {
       ok: status === 0,
       exit_code: status,
       stdout: (result.stdout || '').trim(),
-      stderr: (result.stderr || '').trim()
+      stderr: (result.stderr || result.error?.message || '').trim()
     })
   }
 
