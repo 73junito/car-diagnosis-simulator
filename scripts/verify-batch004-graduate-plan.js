@@ -22,9 +22,9 @@ function verify() {
   const mappingById = new Map((architecture.catalogDevelopmentMappings || []).map((m) => [m.catalogCourseId, m]))
   const built = new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
-  if (plan.phase !== '7F-G') errors.push('Batch 004 plan phase must remain 7F-G')
-  if (plan.status !== 'planned-for-delivery-build') errors.push('Batch 004 must remain planning-only before pages are built')
-  if (plan.sourceDeliveryPhase !== '7F-F') errors.push('Batch 004 must derive from Phase 7F-F delivery state')
+  if (plan.phase !== '7F-H') errors.push('Batch 004 execution phase must remain 7F-H')
+  if (plan.status !== 'page-built-verified') errors.push('Batch 004 must be page-built-verified in Phase 7F-H')
+  if (plan.sourceDeliveryPhase !== '7F-H') errors.push('Batch 004 execution must match Phase 7F-H delivery state')
 
   const ids = (plan.courses || []).map((c) => c.courseId)
   if (JSON.stringify(ids) !== JSON.stringify(EXPECTED)) {
@@ -64,11 +64,14 @@ function verify() {
     if (planned.prerequisiteDisposition !== 'requires-human-or-institutional-verification') {
       errors.push(`Batch 004 prerequisite must require human/institutional verification: ${planned.courseId}`)
     }
-    if (built.has(planned.courseId)) {
-      errors.push(`Batch 004 course already appears in built delivery status while plan is planning-only: ${planned.courseId}`)
+    if (!built.has(planned.courseId)) {
+      errors.push(`Batch 004 course missing from built delivery status: ${planned.courseId}`)
     }
-    if (fs.existsSync(path.join(ROOT, planned.targetPage))) {
-      errors.push(`Batch 004 target page already exists while plan is planning-only: ${planned.targetPage}`)
+    if (!fs.existsSync(path.join(ROOT, planned.targetPage))) {
+      errors.push(`Batch 004 verified target page is missing: ${planned.targetPage}`)
+    }
+    if (planned.deliveryStatus !== 'page-built') {
+      errors.push(`Batch 004 deliveryStatus must be page-built: ${planned.courseId}`)
     }
   }
 
@@ -81,12 +84,13 @@ function verify() {
   const priorityBlockers = new Set((blockers.priorityBlockers || []).map((b) => b.courseId))
   for (const id of ['aut-120', 'aut-150']) {
     if (!priorityBlockers.has(id)) errors.push(`continuing priority blocker missing: ${id}`)
-    if (mappingById.has(id)) errors.push(`blocked course must not gain canonical mapping in Phase 7F-G: ${id}`)
+    if (mappingById.has(id)) errors.push(`blocked course must not gain canonical mapping in Phase 7F-H: ${id}`)
   }
 
   const boundaries = plan.boundaries || {}
-  for (const key of ['coursesBuiltByThisPhase','academicStatusChanges','assessmentEligibilityChanges','productionReadyClaims']) {
-    if (boundaries[key] !== 0) errors.push(`planning boundary must remain zero: ${key}`)
+  if (boundaries.coursesBuiltByThisPhase !== 3) errors.push('Phase 7F-H must record 3 built Batch 004 courses')
+  for (const key of ['academicStatusChanges','assessmentEligibilityChanges','productionReadyClaims']) {
+    if (boundaries[key] !== 0) errors.push(`governance boundary must remain zero: ${key}`)
   }
   if (boundaries.assessmentAuthorization !== false) errors.push('assessmentAuthorization must remain false')
   if (boundaries.admissionsEligibilityAutomation !== false) errors.push('admissionsEligibilityAutomation must remain false')
@@ -105,11 +109,11 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-G Batch 004 graduate foundation plan')
+    console.error('[FAIL] Phase 7F-H Batch 004 graduate foundation execution')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-G: Batch 004 aut-501/aut-515/aut-590 is canonically mapped and preserves institutional prerequisite verification; aut-420 deferred; aut-120/aut-150 remain blocked')
+  console.log('[PASS] Phase 7F-H: Batch 004 aut-501/aut-515/aut-590 pages are built and verified while institutional prerequisite verification remains external; aut-420 deferred; aut-120/aut-150 remain blocked')
 }
 
 if (require.main === module) main()

@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
-  "phase": "7F-G",
-  "purpose": "batch-004-graduate-foundation-delivery-plan",
-  "sourceDeliveryPhase": "7F-F",
-  "status": "planned-for-delivery-build",
+  "phase": "7F-H",
+  "purpose": "batch-004-graduate-foundation-delivery-execution",
+  "sourceDeliveryPhase": "7F-H",
+  "status": "page-built-verified",
   "rationale": "Start the graduate delivery sequence with identity-preserving canonical mappings that do not depend on unresolved undergraduate catalog-course blockers. Preserve admissions/standing prerequisites as human/institutional eligibility conditions rather than inferring satisfaction from page availability.",
   "courses": [
     {
@@ -16,7 +16,8 @@
       "prerequisitesText": "Bachelor's degree in automotive technology, engineering, applied technology, or related field",
       "prerequisiteType": "institutional-admissions-condition",
       "prerequisiteDisposition": "requires-human-or-institutional-verification",
-      "targetPage": "exam-site/courses/aut-501/index.html"
+      "targetPage": "exam-site/courses/aut-501/index.html",
+      "deliveryStatus": "page-built"
     },
     {
       "courseId": "aut-515",
@@ -28,7 +29,8 @@
       "prerequisitesText": "Graduate-level mathematics or equivalent",
       "prerequisiteType": "academic-preparation-condition",
       "prerequisiteDisposition": "requires-human-or-institutional-verification",
-      "targetPage": "exam-site/courses/aut-515/index.html"
+      "targetPage": "exam-site/courses/aut-515/index.html",
+      "deliveryStatus": "page-built"
     },
     {
       "courseId": "aut-590",
@@ -40,7 +42,8 @@
       "prerequisitesText": "Graduate standing",
       "prerequisiteType": "institutional-standing-condition",
       "prerequisiteDisposition": "requires-human-or-institutional-verification",
-      "targetPage": "exam-site/courses/aut-590/index.html"
+      "targetPage": "exam-site/courses/aut-590/index.html",
+      "deliveryStatus": "page-built"
     }
   ],
   "deferredUndergraduate": [
@@ -55,11 +58,17 @@
     "aut-150"
   ],
   "boundaries": {
-    "coursesBuiltByThisPhase": 0,
+    "coursesBuiltByThisPhase": 3,
     "academicStatusChanges": 0,
     "assessmentEligibilityChanges": 0,
     "assessmentAuthorization": false,
     "admissionsEligibilityAutomation": false,
     "productionReadyClaims": 0
-  }
+  },
+  "previousPlan": {
+    "phase": "7F-G",
+    "status": "planned-for-delivery-build",
+    "coursesBuiltByThisPhase": 0
+  },
+  "completedInPhase": "7F-H"
 }

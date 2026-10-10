@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "phase": "7F-F",
+  "phase": "7F-H",
   "purpose": "current-course-delivery-status",
   "statusModel": {
     "academicStatusSource": [
@@ -35,8 +35,68 @@
     "graduateAcademicStatusCounts": {
       "planned": 21
     },
-    "dedicatedCoursePageCount": 12,
+    "dedicatedCoursePageCount": 15,
     "dedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
+      "aut-130",
+      "aut-131",
+      "aut-160",
+      "aut-180",
+      "aut-200",
+      "aut-201",
+      "aut-220",
+      "aut-250",
+      "aut-501",
+      "aut-515",
+      "aut-590"
+    ],
+    "catalogAlignedDedicatedCoursePageCount": 14,
+    "catalogAlignedDedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
+      "aut-130",
+      "aut-131",
+      "aut-160",
+      "aut-180",
+      "aut-200",
+      "aut-201",
+      "aut-220",
+      "aut-501",
+      "aut-515",
+      "aut-590"
+    ],
+    "legacyTrainingPackagePageCount": 1,
+    "legacyTrainingPackagePageIds": [
+      "aut-250"
+    ],
+    "catalogCoursesWithoutCatalogAlignedDedicatedPage": 54
+  },
+  "boundaries": {
+    "fullSyllabusCoverageClaim": false,
+    "fullCourseDeliveryCoverageClaim": false,
+    "assessmentAuthorization": false,
+    "scoringAuthorization": false,
+    "gradingAuthorization": false,
+    "highStakesAuthorization": false
+  },
+  "notes": [
+    "Phase 7F-H adds catalog-aligned graduate instructional course pages for AUT-501, AUT-515, and AUT-590.",
+    "Graduate page availability does not establish admissions eligibility, degree equivalency, mathematics preparation, graduate standing, or prerequisite satisfaction.",
+    "AUT-420 remains deferred pending human/institutional verification of industry employment or approved internship placement.",
+    "AUT-120 and AUT-150 remain intentionally blocked from canonical delivery until dedicated canonical curriculum content is approved.",
+    "The existing /courses/aut-250/ page remains the HEV formative-training package crosswalked from catalog AUT-330; it is not the delivery page for catalog AUT-250 Automotive Diagnostics I.",
+    "The filesystem contains fifteen dedicated course/training page directories in total, of which fourteen are catalog-aligned course pages.",
+    "Academic/content status remains independent from delivery-page status; building a page does not authorize assessment."
+  ],
+  "previousBaseline": {
+    "phase": "7F-F",
+    "dedicatedCourseOrTrainingPageCount": 12,
+    "dedicatedCourseOrTrainingPageIds": [
       "aut-101",
       "aut-105",
       "aut-110",
@@ -64,52 +124,6 @@
       "aut-201",
       "aut-220"
     ],
-    "legacyTrainingPackagePageCount": 1,
-    "legacyTrainingPackagePageIds": [
-      "aut-250"
-    ],
     "catalogCoursesWithoutCatalogAlignedDedicatedPage": 57
-  },
-  "boundaries": {
-    "fullSyllabusCoverageClaim": false,
-    "fullCourseDeliveryCoverageClaim": false,
-    "assessmentAuthorization": false,
-    "scoringAuthorization": false,
-    "gradingAuthorization": false,
-    "highStakesAuthorization": false
-  },
-  "notes": [
-    "Phase 7F-F adds catalog-aligned dedicated instructional course pages for AUT-200, AUT-201, and AUT-220 in addition to Batches 001 and 002.",
-    "AUT-120 and AUT-150 remain intentionally blocked from canonical delivery until dedicated canonical curriculum content is approved.",
-    "The existing /courses/aut-250/ page remains the HEV formative-training package crosswalked from catalog AUT-330; it is not the delivery page for catalog AUT-250 Automotive Diagnostics I.",
-    "The filesystem contains twelve dedicated course/training page directories in total, of which eleven are catalog-aligned course pages.",
-    "Academic/content status remains independent from delivery-page status; building a page does not authorize assessment."
-  ],
-  "previousBaseline": {
-    "phase": "7F-D",
-    "dedicatedCourseOrTrainingPageCount": 9,
-    "dedicatedCourseOrTrainingPageIds": [
-      "aut-101",
-      "aut-105",
-      "aut-110",
-      "aut-115",
-      "aut-130",
-      "aut-131",
-      "aut-160",
-      "aut-180",
-      "aut-250"
-    ],
-    "catalogAlignedDedicatedCoursePageCount": 8,
-    "catalogAlignedDedicatedCoursePageIds": [
-      "aut-101",
-      "aut-105",
-      "aut-110",
-      "aut-115",
-      "aut-130",
-      "aut-131",
-      "aut-160",
-      "aut-180"
-    ],
-    "catalogCoursesWithoutCatalogAlignedDedicatedPage": 60
   }
 }

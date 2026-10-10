@@ -48,7 +48,7 @@ function verify() {
 
   const expected = baseline.baseline || {}
 
-  if (baseline.phase !== '7F-F') errors.push('current delivery phase must remain 7F-F')
+  if (baseline.phase !== '7F-H') errors.push('current delivery phase must remain 7F-H')
   if (baseline.purpose !== 'current-course-delivery-status') {
     errors.push('delivery status purpose must remain current-course-delivery-status')
   }
@@ -165,12 +165,12 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-F course delivery status')
+    console.error('[FAIL] Phase 7F-H course delivery status')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
   console.log(
-    `[PASS] Phase 7F-F course delivery status: ${result.summary.catalogAlignedDedicatedCoursePages.length} catalog-aligned course pages plus ${result.summary.dedicatedCoursePages.length - result.summary.catalogAlignedDedicatedCoursePages.length} legacy training page; academic status remains separate from delivery status`
+    `[PASS] Phase 7F-H course delivery status: ${result.summary.catalogAlignedDedicatedCoursePages.length} catalog-aligned course pages plus ${result.summary.dedicatedCoursePages.length - result.summary.catalogAlignedDedicatedCoursePages.length} legacy training page; academic status remains separate from delivery status`
   )
 }
 
