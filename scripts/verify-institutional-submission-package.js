@@ -38,7 +38,7 @@ const REQUIRED_PACKET_PHRASES = [
   '64 strong / 0 solid / 0 review',
   'direct-domain authority: **64/64**',
   'it does not mean 64 fully built online courses, 64 completed syllabi, or 64 production-ready courses',
-  'eleven catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, and AUT-220',
+  'fourteen catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, and AUT-590',
   'AUT-250 HEV formative-training package crosswalked from catalog AUT-330',
   'The submission package itself does not make or pre-empt those decisions.'
 ]
@@ -69,8 +69,8 @@ function verify() {
   if (!curriculum.includes('planning') || !curriculum.includes('not identical to either proposed credential structure')) {
     errors.push('curriculum map must preserve the planning-catalog distinction')
   }
-  if (!curriculum.includes('catalog-aligned dedicated course pages: **11**') ||
-      !curriculum.includes('current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, and AUT-220**') ||
+  if (!curriculum.includes('catalog-aligned dedicated course pages: **14**') ||
+      !curriculum.includes('current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, and AUT-590**') ||
       !curriculum.includes('existing HEV formative-training package page: **AUT-250**, crosswalked from catalog **AUT-330**')) {
     errors.push('curriculum map must preserve the Phase 7F-C catalog-aligned delivery state')
   }
@@ -113,9 +113,9 @@ function verify() {
   if (metrics.unresolved_source_rights !== 0) errors.push('unresolved_source_rights must remain 0')
   if (metrics.technical_source_age_reviews !== '5/5') errors.push('technical_source_age_reviews must remain 5/5')
   if (metrics.production_monitor_gates !== 9) errors.push('production_monitor_gates must remain 9')
-  if (metrics.catalog_aligned_dedicated_course_pages !== 11) errors.push('catalog_aligned_dedicated_course_pages must remain 11')
-  if (JSON.stringify(metrics.catalog_aligned_dedicated_course_page_ids) !== JSON.stringify(['aut-101', 'aut-105', 'aut-110', 'aut-115', 'aut-130', 'aut-131', 'aut-160', 'aut-180', 'aut-200', 'aut-201', 'aut-220'])) {
-    errors.push('catalog_aligned_dedicated_course_page_ids must remain Batches 001-003')
+  if (metrics.catalog_aligned_dedicated_course_pages !== 14) errors.push('catalog_aligned_dedicated_course_pages must remain 14')
+  if (JSON.stringify(metrics.catalog_aligned_dedicated_course_page_ids) !== JSON.stringify(['aut-101', 'aut-105', 'aut-110', 'aut-115', 'aut-130', 'aut-131', 'aut-160', 'aut-180', 'aut-200', 'aut-201', 'aut-220', 'aut-501', 'aut-515', 'aut-590'])) {
+    errors.push('catalog_aligned_dedicated_course_page_ids must remain Batches 001-004')
   }
   if (metrics.legacy_training_package_pages !== 1) errors.push('legacy_training_package_pages must remain 1')
   if (JSON.stringify(metrics.legacy_training_package_page_ids) !== JSON.stringify(['aut-250'])) {
