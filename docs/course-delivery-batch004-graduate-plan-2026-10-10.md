@@ -22,9 +22,9 @@ These prerequisite statements are **not repository course dependencies**. A dedi
 
 AUT 420 — Automotive Technology Internship is canonically mapped, but its catalog prerequisite is:
 
-> Senior standing and department approval
+> Industry proof of employment required
 
-Those are human/institutional decisions. Because the current delivery system is intentionally not an admissions or academic-standing authority, AUT 420 is deferred rather than treating the absence of a course-code prerequisite as automatic eligibility.
+Employment verification is a human/institutional eligibility decision. Because the current delivery system is intentionally not an employment-verification authority, AUT 420 is deferred rather than treating the absence of a course-code prerequisite as automatic eligibility.
 
 ## Continuing blockers
 

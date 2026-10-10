@@ -74,8 +74,8 @@ function verify() {
 
   const deferred = (plan.deferredUndergraduate || []).find((x) => x.courseId === 'aut-420')
   if (!deferred) errors.push('AUT-420 must remain explicitly deferred')
-  if (catalogById.get('aut-420')?.prerequisites !== 'Senior standing and department approval') {
-    errors.push('AUT-420 institutional prerequisite text drift')
+  if (catalogById.get('aut-420')?.prerequisites !== 'Industry proof of employment required') {
+    errors.push('AUT-420 industry employment-proof prerequisite text drift')
   }
 
   const priorityBlockers = new Set((blockers.priorityBlockers || []).map((b) => b.courseId))
