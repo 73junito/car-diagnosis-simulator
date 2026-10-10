@@ -48,10 +48,10 @@ Evidence:
 - `docs/curriculum-reference-quality-audit-2026-10-09.md`
 
 Review:
-- [ ] Reviewer understands that 64/64 is quantitative reference coverage.
-- [ ] Reviewer understands that 64/64 does not prove complete automotive-domain technical authority.
-- [ ] Specialized lessons requiring supplemental authority are reviewed.
-- [ ] Required institutional textbook/standards/manufacturer sources are identified.
+- [ ] Reviewer understands that quantitative reference coverage is 64/64.
+- [ ] Reviewer has reviewed the Phase 7C deterministic result: 64 strong, 0 solid, 0 review; direct-domain authority 64/64.
+- [ ] Reviewer understands that the deterministic source-quality screen does not itself create institutional approval, accreditation, or academic-credit authority.
+- [ ] Any institution-required textbook, standards, manufacturer, or local curriculum sources are identified separately.
 
 Decision:
 - [ ] Accepted for current non-assessment instructional use

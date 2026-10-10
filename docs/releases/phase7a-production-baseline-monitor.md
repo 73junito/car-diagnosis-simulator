@@ -9,16 +9,17 @@ Phase 7A continuously checks the production baseline established by the 2026-10-
 
 ## Monitored gates
 
-The monitor runs these release contracts:
+The monitor runs these release and quality contracts:
 
 1. curriculum source-rights closure
 2. California / Illinois / Texas privacy and AI overlays
 3. 64/64 curriculum reference coverage
-4. assessment governance boundary
-5. three-surface production smoke
-6. Google crawler access
-7. public sitemap/indexability and internal-link integrity
-8. production release-baseline integrity
+4. Phase 7C curriculum reference-quality baseline
+5. assessment governance boundary
+6. three-surface production smoke
+7. Google crawler access
+8. public sitemap/indexability and internal-link integrity
+9. production release-baseline integrity
 
 A failure in any gate makes the scheduled workflow fail.
 

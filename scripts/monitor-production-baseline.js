@@ -11,6 +11,7 @@ const GATES = [
   { id: 'source-rights-closure', script: 'audit:curriculum-source-rights' },
   { id: 'state-privacy-ai-overlays', script: 'validate:state-privacy-ai-overlays' },
   { id: 'curriculum-reference-coverage', script: 'validate:curriculum-reference-coverage-baseline' },
+  { id: 'curriculum-reference-quality', script: 'validate:curriculum-reference-quality-baseline' },
   { id: 'assessment-governance-boundary', script: 'validate:assessment-governance-boundary' },
   { id: 'production-surfaces', script: 'validate:production-surfaces' },
   { id: 'google-crawler-access', script: 'validate:google-crawler-access' },

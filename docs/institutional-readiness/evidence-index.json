@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "phase": "7B",
   "package": "institutional-readiness",
-  "current_main_sha": "3db8efd3d9365de31716845731d6439423d250f0",
+  "current_main_sha": "07c1b6716791df4389fb1e0dbeea28b893791d3c",
   "posture": {
     "institutional_review_package": true,
     "accreditation_claim": false,
@@ -25,10 +25,16 @@
       "notes": "Daily read-only release-gate monitoring."
     },
     {
-      "area": "curriculum_reference_quality",
+      "area": "curriculum_reference_quality_historical_audit",
       "path": "docs/curriculum-reference-quality-audit-2026-10-09.md",
-      "status": "gap_open",
-      "notes": "64/64 quantitative coverage; qualitative automotive-domain authority supplementation still required."
+      "status": "historical_gap_record",
+      "notes": "Historical audit that identified the supplemental technical-authority backlog later closed by Phase 7C."
+    },
+    {
+      "area": "curriculum_reference_quality",
+      "path": "docs/curriculum-reference-quality-baseline-2026-10-10.md",
+      "status": "verified_screen",
+      "notes": "Live deterministic quality screen: 64 strong, 0 solid, 0 review; direct-domain authority 64/64. This does not itself establish institutional approval."
     },
     {
       "area": "privacy_ai",
@@ -80,7 +86,7 @@
     }
   ],
   "open_readiness_items": [
-    "Supplement automotive-domain technical authority for specialized lessons identified by the curriculum-reference quality audit.",
+    "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",
     "Obtain additional accessibility conformance evidence if an institution requires a specific standard or formal audit."

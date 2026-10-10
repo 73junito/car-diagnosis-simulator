@@ -13,6 +13,7 @@ const REQUIRED_EVIDENCE = [
   'docs/releases/production-release-baseline-2026-10-09.md',
   'docs/releases/phase7a-production-baseline-monitor.md',
   'docs/curriculum-reference-quality-audit-2026-10-09.md',
+  'docs/curriculum-reference-quality-baseline-2026-10-10.md',
   'docs/compliance/education-privacy-ai-control-matrix.md',
   'docs/compliance/student-data-inventory.md',
   'docs/compliance/student-data-inventory.json',
@@ -35,8 +36,8 @@ const FORBIDDEN_APPROVAL_CLAIMS = [
 
 const REQUIRED_BOUNDARY_PHRASES = [
   'Assessment authorization: Not granted',
-  'not yet institution-ready in every curriculum-reference-quality dimension',
   '64/64 quantitative curriculum-reference coverage',
+  '64 strong, 0 solid, 0 review, with direct-domain authority 64/64',
   'The package itself does not make those institutional decisions.'
 ]
 
@@ -88,8 +89,14 @@ function verify() {
   }
 
   const quality = (index.evidence || []).find((item) => item.area === 'curriculum_reference_quality')
-  if (!quality || quality.status !== 'gap_open') {
-    errors.push('curriculum reference-quality gap must remain explicitly open')
+  if (!quality || quality.status !== 'verified_screen') {
+    errors.push('curriculum reference-quality evidence must remain a verified deterministic screen')
+  }
+  if (!/64 strong, 0 solid, 0 review/i.test(quality.notes || '')) {
+    errors.push('curriculum reference-quality evidence must preserve the 64 strong / 0 review result')
+  }
+  if (!/does not itself establish institutional approval/i.test(quality.notes || '')) {
+    errors.push('curriculum reference-quality evidence must preserve the no-automatic-institutional-approval boundary')
   }
 
   if (!/Completing this checklist does not by itself create accreditation/i.test(checklist)) {
@@ -108,7 +115,7 @@ function main() {
   }
 
   console.log(
-    '[PASS] Phase 7B institutional readiness package: evidence indexed; open reference-quality gap preserved; assessment authorization remains closed'
+    '[PASS] Institutional readiness package: Phase 7C quality screen verified; assessment authorization remains closed'
   )
 }
 
