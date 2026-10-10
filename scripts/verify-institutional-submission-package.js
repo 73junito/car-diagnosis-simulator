@@ -19,9 +19,11 @@ const REQUIRED_FILES = [
   'data/curriculum/program-architecture.json',
   'data/curriculum/academic-pathways.json',
   'data/curriculum/course-catalog.json',
+  'data/curriculum/course-delivery-status.json',
   'docs/releases/production-release-baseline-2026-10-09.md',
   'docs/releases/phase7a-production-baseline-monitor.md',
   'docs/curriculum-reference-quality-baseline-2026-10-10.md',
+  'docs/curriculum-course-delivery-baseline-2026-10-10.md',
   'docs/compliance/education-privacy-ai-control-matrix.md',
   'docs/compliance/student-data-inventory.md',
   'docs/compliance/student-data-inventory.json',
@@ -35,6 +37,8 @@ const REQUIRED_PACKET_PHRASES = [
   'Assessment authorization: Not granted',
   '64 strong / 0 solid / 0 review',
   'direct-domain authority: **64/64**',
+  'it does not mean 64 fully built online courses, 64 completed syllabi, or 64 production-ready courses',
+  'one dedicated course delivery page: AUT-250',
   'The submission package itself does not make or pre-empt those decisions.'
 ]
 
@@ -64,6 +68,9 @@ function verify() {
   if (!curriculum.includes('planning') || !curriculum.includes('not identical to either proposed credential structure')) {
     errors.push('curriculum map must preserve the planning-catalog distinction')
   }
+  if (!curriculum.includes('dedicated course delivery pages: **1**') || !curriculum.includes('current dedicated course page: **AUT-250**')) {
+    errors.push('curriculum map must preserve the Phase 7F course-delivery baseline')
+  }
 
   if (manifest.phase !== '7D' || manifest.package !== 'institutional-submission') {
     errors.push('submission manifest identity must remain Phase 7D institutional-submission')
@@ -81,7 +88,8 @@ function verify() {
     'institutional_adoption_claim',
     'assessment_authorized',
     'high_stakes_authorized',
-    'accessibility_certification_claim'
+    'accessibility_certification_claim',
+    'full_course_delivery_coverage_claim'
   ]
   for (const key of mustRemainFalse) {
     if (posture[key] !== false) errors.push('submission posture must remain false: ' + key)
@@ -102,6 +110,10 @@ function verify() {
   if (metrics.unresolved_source_rights !== 0) errors.push('unresolved_source_rights must remain 0')
   if (metrics.technical_source_age_reviews !== '5/5') errors.push('technical_source_age_reviews must remain 5/5')
   if (metrics.production_monitor_gates !== 9) errors.push('production_monitor_gates must remain 9')
+  if (metrics.dedicated_course_delivery_pages !== 1) errors.push('dedicated_course_delivery_pages must remain 1')
+  if (JSON.stringify(metrics.dedicated_course_delivery_page_ids) !== JSON.stringify(['aut-250'])) {
+    errors.push('dedicated_course_delivery_page_ids must remain [aut-250]')
+  }
 
   const programs = new Map((manifest.proposed_programs || []).map((p) => [p.id, p]))
   const aas = programs.get('undergraduate-automotive-technology-aas')
