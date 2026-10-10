@@ -64,12 +64,12 @@ Live production curriculum evidence currently reports:
 
 The reference-coverage figures above describe **lesson-plan evidence governance**, not completed online-course or syllabus coverage.
 
-Phase 7F-A verifies:
+Phase 7F-C verifies:
 
-- dedicated course delivery pages: **1**;
-- current dedicated course page: **AUT-250**;
+- dedicated course delivery pages: **5**;
+- current dedicated course pages: **AUT-101, AUT-105, AUT-110, AUT-115, and AUT-250**;
 - planning-catalog courses: **68**;
-- planning-catalog courses without a dedicated course page: **67**.
+- planning-catalog courses without a dedicated course page: **63**.
 
 The existing academic/content `status` field is separate from delivery status. For example, `electrical-1` is marked `active` in the undergraduate curriculum data but does not have a dedicated `exam-site/courses/electrical-1/index.html` page. A course must not be represented as built or production-ready merely because its academic/content status is active.
 
