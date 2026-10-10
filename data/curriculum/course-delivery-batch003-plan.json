@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-E",
+  "purpose": "batch-003-delivery-build-plan",
+  "sourceDeliveryPhase": "7F-D",
+  "status": "planned-for-delivery-build",
+  "courses": [
+    {
+      "courseId": "aut-200",
+      "code": "AUT 200",
+      "title": "Engine Systems II",
+      "lessonPlanId": "ug-aut200-engine-systems-ii",
+      "mappingType": "canonical-catalog-course",
+      "prerequisites": [
+        "aut-130"
+      ],
+      "prerequisiteDisposition": "satisfied-by-built-page",
+      "targetPage": "exam-site/courses/aut-200/index.html"
+    },
+    {
+      "courseId": "aut-201",
+      "code": "AUT 201",
+      "title": "Engine Systems II Laboratory",
+      "lessonPlanId": "ug-aut201-engine-systems-ii-lab",
+      "mappingType": "canonical-catalog-course",
+      "prerequisites": [
+        "aut-200"
+      ],
+      "prerequisiteMode": "concurrent",
+      "prerequisiteDisposition": "satisfied-within-batch",
+      "targetPage": "exam-site/courses/aut-201/index.html"
+    },
+    {
+      "courseId": "aut-220",
+      "code": "AUT 220",
+      "title": "Automatic Transmissions and Transaxles",
+      "lessonPlanId": "ug-aut220-automatic-transmissions",
+      "mappingType": "canonical-catalog-course",
+      "prerequisites": [
+        "aut-160"
+      ],
+      "prerequisiteDisposition": "satisfied-by-built-page",
+      "targetPage": "exam-site/courses/aut-220/index.html"
+    }
+  ],
+  "deferredPriorityBlockers": [
+    "aut-120",
+    "aut-150"
+  ],
+  "rationale": "Continue undergraduate delivery with identity-preserving canonical mappings whose prerequisites are already satisfied by built pages or within Batch 003, while keeping AUT-120/AUT-150 blocked until dedicated canonical curriculum content exists.",
+  "boundaries": {
+    "coursesBuiltByThisPhase": 0,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  }
+}

@@ -93,7 +93,8 @@
     "validate:course-delivery-status": "node scripts/verify-course-delivery-status.js",
     "validate:course-delivery-rollout-plan": "node scripts/verify-course-delivery-rollout-plan.js",
     "validate:batch001-course-pages": "node scripts/verify-batch001-course-pages.js",
-    "validate:batch002-course-pages": "node scripts/verify-batch002-course-pages.js"
+    "validate:batch002-course-pages": "node scripts/verify-batch002-course-pages.js",
+    "validate:course-mapping-blockers-batch003": "node scripts/verify-course-mapping-blockers-batch003.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

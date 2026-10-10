@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-E",
+  "purpose": "catalog-development-mapping-blocker-audit",
+  "catalogCourseCount": 68,
+  "canonicalCatalogDevelopmentMappingCount": 54,
+  "unmappedCatalogCourseCount": 14,
+  "priorityBlockers": [
+    {
+      "courseId": "aut-120",
+      "code": "AUT 120",
+      "title": "Automotive Electrical Systems I",
+      "catalogPrerequisites": [
+        "aut-110"
+      ],
+      "blockerType": "missing-dedicated-canonical-catalog-content",
+      "legacyCrosswalkEvidence": {
+        "programCourseId": "AAS-AUT-120",
+        "programCourseTitle": "Electrical I",
+        "existingCourseId": "electrical-1",
+        "existingLessonPlanId": "ug-electrical-charging-system"
+      },
+      "whyLegacyCrosswalkIsInsufficient": "The existing lesson is centered on charging-system evidence and diagnostic decisions, while AUT 120 is a broader electrical-fundamentals course covering voltage, current, resistance, circuits, wiring, relays, fuses, grounding, and electrical testing.",
+      "resolutionRequired": "Create or approve dedicated canonical AUT-120 curriculum content and lesson mapping before delivery-page build.",
+      "blocks": [
+        "aut-121",
+        "aut-140",
+        "aut-170",
+        "aut-210",
+        "aut-230",
+        "aut-240"
+      ]
+    },
+    {
+      "courseId": "aut-150",
+      "code": "AUT 150",
+      "title": "Steering, Suspension, and Wheel Alignment",
+      "catalogPrerequisites": [
+        "aut-115"
+      ],
+      "blockerType": "missing-dedicated-canonical-catalog-content",
+      "legacyCrosswalkEvidence": {
+        "programCourseId": "AAS-AUT-140",
+        "programCourseTitle": "Suspension & Steering I",
+        "existingCourseId": "suspension-steering-1",
+        "existingLessonPlanId": "ug-suspension-steering-foundations"
+      },
+      "whyLegacyCrosswalkIsInsufficient": "The existing legacy common-course lesson is not identity-preserving with catalog AUT-150, and the canonical catalog-development mapping table currently requires catalogCourseId to equal existingCourseId.",
+      "resolutionRequired": "Create or approve dedicated canonical AUT-150 curriculum content and lesson mapping before delivery-page build.",
+      "blocks": [
+        "aut-260"
+      ]
+    }
+  ],
+  "allUnmappedCatalogCourseIds": [
+    "aut-120",
+    "aut-140",
+    "aut-150",
+    "aut-210",
+    "aut-330",
+    "aut-510",
+    "aut-525",
+    "aut-600",
+    "aut-610",
+    "aut-620",
+    "aut-630",
+    "aut-640",
+    "aut-650",
+    "aut-690"
+  ],
+  "governance": {
+    "noCanonicalAliasFabrication": true,
+    "noAcademicStatusChange": true,
+    "noAssessmentEligibilityChange": true,
+    "legacyCrosswalkDoesNotEqualCanonicalCoverage": true
+  }
+}
