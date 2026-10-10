@@ -84,7 +84,8 @@
     "validate:state-privacy-ai-overlays": "node scripts/verify-state-privacy-ai-overlays.js",
     "validate:curriculum-reference-coverage-baseline": "node scripts/verify-curriculum-reference-coverage-baseline.js",
     "validate:production-surfaces": "node scripts/verify-production-surfaces.js",
-    "validate:production-release-baseline": "node scripts/verify-production-release-baseline.js"
+    "validate:production-release-baseline": "node scripts/verify-production-release-baseline.js",
+    "monitor:production-baseline": "node scripts/monitor-production-baseline.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
