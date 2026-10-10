@@ -43,7 +43,6 @@
       "aut-115",
       "aut-250"
     ],
-    "catalogCoursesWithoutDedicatedPage": 63,
     "catalogAlignedDedicatedCoursePageCount": 4,
     "catalogAlignedDedicatedCoursePageIds": [
       "aut-101",
@@ -54,7 +53,8 @@
     "legacyTrainingPackagePageCount": 1,
     "legacyTrainingPackagePageIds": [
       "aut-250"
-    ]
+    ],
+    "catalogCoursesWithoutCatalogAlignedDedicatedPage": 64
   },
   "boundaries": {
     "fullSyllabusCoverageClaim": false,
@@ -73,10 +73,12 @@
   ],
   "previousBaseline": {
     "phase": "7F-A",
-    "dedicatedCoursePageCount": 1,
-    "dedicatedCoursePageIds": [
+    "dedicatedCourseOrTrainingPageCount": 1,
+    "dedicatedCourseOrTrainingPageIds": [
       "aut-250"
     ],
-    "catalogCoursesWithoutDedicatedPage": 67
+    "catalogAlignedDedicatedCoursePageCount": 0,
+    "catalogAlignedDedicatedCoursePageIds": [],
+    "catalogCoursesWithoutCatalogAlignedDedicatedPage": 68
   }
 }
