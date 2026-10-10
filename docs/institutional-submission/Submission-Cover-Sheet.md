@@ -4,7 +4,7 @@
 **Repository baseline:** `53222a91ba3d82770b20f778c4e5a0134873eef1`  
 **Submission type:** Institutional/regulatory review packet  
 **Current use posture:** Non-assessment instructional / formative use  
-**Assessment authorization:** Not granted
+Assessment authorization: Not granted
 
 ## Submitted for review
 
