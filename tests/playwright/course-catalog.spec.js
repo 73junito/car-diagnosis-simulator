@@ -77,6 +77,21 @@ test.describe("academic course catalog", () => {
     await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
     await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-200/");
 
+    await page.goto(examBase + "/catalog/course/?course=AUT-150");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Steering, Suspension, and Wheel Alignment");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-150/");
+
+    await page.goto(examBase + "/catalog/course/?course=AUT-210");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Engine Performance and Fuel Systems");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-210/");
+
+    await page.goto(examBase + "/catalog/course/?course=AUT-525");
+    await expect(page.locator(".catalog-detail-card h1")).toHaveText("Experimental Methods in Automotive Technology");
+    await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+    await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-525/");
+
     await page.goto(examBase + "/catalog/course/?course=AUT-230");
     await expect(page.locator(".catalog-detail-card h1")).toHaveText("Automotive Electronics");
     await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");

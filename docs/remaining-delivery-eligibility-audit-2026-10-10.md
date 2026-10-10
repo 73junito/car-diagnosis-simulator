@@ -2,39 +2,28 @@
 
 ## Current re-audit state
 
-After Phase 7F-Q resolves four canonical curriculum blockers, the deterministic audit still covers **36 remaining planning-catalog courses** because no delivery page was added in this phase.
+After Phase 7F-R Batch 011 delivers AUT-150, AUT-210, and AUT-525, the deterministic audit covers **33 remaining planning-catalog courses**.
 
 | Classification | Courses |
 | --- | ---: |
-| Ready to build now | **3** |
+| Ready to build now | **4** |
 | Blocked — missing canonical mapping/content | **9** |
-| Blocked — unresolved prerequisite chain | **23** |
+| Blocked — unresolved prerequisite chain | **19** |
 | Blocked — human/institutional verification | **1** |
-| **Total remaining** | **36** |
+| **Total remaining** | **33** |
 
-## Batch 011 candidates
+## Batch 012 candidates
 
-The exact ready set is:
+- **AUT 211**
+- **AUT 250**
+- **AUT 260**
+- **AUT 270**
 
-- **AUT 150 — Steering, Suspension, and Wheel Alignment**
-- **AUT 210 — Engine Performance and Fuel Systems**
-- **AUT 525 — Experimental Methods in Automotive Technology**
+These are the only courses currently satisfying the canonical mapping and explicit AUT prerequisite delivery rules.
 
-AUT-330 now has canonical development content but remains prerequisite-chain blocked by AUT-280.
+## Continuing blockers
 
-## Remaining canonical blockers
-
-- AUT-140
-- AUT-510
-- AUT-600
-- AUT-610
-- AUT-620
-- AUT-630
-- AUT-640
-- AUT-650
-- AUT-690
-
-AUT-420 remains directly gated by verified industry employment or approved internship placement and must not be auto-cleared.
+Nine courses still lack identity-preserving canonical mapping/content. Nineteen mapped courses remain behind unresolved prerequisite chains. AUT-420 remains directly gated by verified industry employment or approved internship placement and must not be auto-cleared.
 
 ## Governance boundary
 
