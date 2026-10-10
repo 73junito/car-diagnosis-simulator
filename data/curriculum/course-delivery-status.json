@@ -20,12 +20,12 @@
     "catalogStatus": "planning",
     "catalogCourseCount": 68,
     "catalogPlannedCount": 68,
-    "lessonPlanCount": 64,
-    "undergraduateLessonPlanCount": 43,
+    "lessonPlanCount": 65,
+    "undergraduateLessonPlanCount": 44,
     "graduateLessonPlanCount": 21,
-    "undergraduateCourseRecordCount": 43,
+    "undergraduateCourseRecordCount": 44,
     "undergraduateAcademicStatusCounts": {
-      "planned": 42,
+      "planned": 43,
       "active": 1
     },
     "activeUndergraduateAcademicCourseIds": [
@@ -113,11 +113,11 @@
   "notes": [
     "Phase 7F-K adds catalog-aligned graduate instructional course pages for AUT-545, AUT-565, and AUT-575.",
     "Graduate page availability does not establish learner prerequisite satisfaction; those decisions remain human/institutional.",
+    "Phase 7F-M resolves AUT-120 canonical development content and mapping without building a delivery page; AUT-150 remains a canonical-content blocker.",
     "Graduate page availability does not establish learner prerequisite satisfaction or course equivalency; those decisions remain human/institutional.",
     "AUT-530 page availability does not establish undergraduate EV coursework equivalency; that condition requires human or institutional verification.",
     "Graduate page availability does not establish admissions eligibility, degree equivalency, mathematics preparation, graduate standing, or prerequisite satisfaction.",
     "AUT-420 remains deferred pending human/institutional verification of industry employment or approved internship placement.",
-    "AUT-120 and AUT-150 remain intentionally blocked from canonical delivery until dedicated canonical curriculum content is approved.",
     "The existing /courses/aut-250/ page remains the HEV formative-training package crosswalked from catalog AUT-330; it is not the delivery page for catalog AUT-250 Automotive Diagnostics I.",
     "Academic/content status remains independent from delivery-page status; building a page does not authorize assessment.",
     "The filesystem contains twenty-eight dedicated course/training page directories in total, of which twenty-seven are catalog-aligned course pages."

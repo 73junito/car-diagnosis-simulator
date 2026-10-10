@@ -37,12 +37,12 @@ function verify() {
   if (audit.sourceDeliveryPhase !== '7F-K') errors.push('audit source delivery phase must remain 7F-K')
   if (remaining.length !== 41) errors.push('remaining catalog course count must be 41')
   if ((audit.records || []).length !== 41) errors.push('audit must classify all 41 remaining catalog courses')
-  if (audit.summary?.readyToBuildNow !== 0) errors.push('ready-to-build-now count must remain 0')
-  if (audit.summary?.blockedMissingCanonicalMapping !== 14) errors.push('missing canonical mapping count must remain 14')
+  if (audit.summary?.readyToBuildNow !== 1) errors.push('ready-to-build-now count must be 1 after AUT-120 resolution')
+  if (audit.summary?.blockedMissingCanonicalMapping !== 13) errors.push('missing canonical mapping count must be 13 after AUT-120 resolution')
   if (audit.summary?.blockedPrerequisiteChain !== 26) errors.push('prerequisite-chain count must remain 26')
   if (audit.summary?.blockedHumanInstitutionalVerification !== 1) errors.push('human/institutional count must remain 1')
-  if (audit.conclusion?.batch008Ready !== false) errors.push('Batch 008 must not be represented as ready')
-  if ((audit.conclusion?.batch008Candidates || []).length !== 0) errors.push('Batch 008 candidate list must remain empty until a blocker is resolved')
+  if (audit.conclusion?.batch008Ready !== true) errors.push('Batch 008 must be represented as ready after AUT-120 canonical resolution')
+  if (JSON.stringify(audit.conclusion?.batch008Candidates || []) !== JSON.stringify(['aut-120'])) errors.push('Batch 008 candidate list must be exactly [aut-120]')
 
   const expectedCounts = {
     'ready-to-build-now': 0,
@@ -64,10 +64,10 @@ function verify() {
     if (JSON.stringify(record.unresolvedPrerequisiteCourseIds) !== JSON.stringify(expectedUnresolved)) errors.push('unresolved prerequisite drift: ' + course.id)
   }
 
-  if (expectedCounts['blocked-missing-canonical-mapping'] !== 14 ||
+  if (expectedCounts['blocked-missing-canonical-mapping'] !== 13 ||
       expectedCounts['blocked-prerequisite-chain'] !== 26 ||
       expectedCounts['blocked-human-institutional-verification'] !== 1 ||
-      expectedCounts['ready-to-build-now'] !== 0) {
+      expectedCounts['ready-to-build-now'] !== 1) {
     errors.push('recomputed eligibility partition does not match locked Phase 7F-L counts')
   }
 
@@ -84,7 +84,7 @@ function main() {
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-L eligibility audit: 41 remaining = 0 ready, 14 mapping-blocked, 26 prerequisite-chain-blocked, 1 human/institutional hold')
+  console.log('[PASS] Phase 7F-L re-audit after Phase 7F-M: 41 remaining = 1 ready (AUT-120), 13 mapping-blocked, 26 prerequisite-chain-blocked, 1 human/institutional hold')
 }
 
 if (require.main === module) main()

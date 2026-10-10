@@ -1018,6 +1018,235 @@
       "structureExceptions": []
     },
     {
+      "lessonPlanId": "ug-aut120-electrical-fundamentals",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-120",
+        "catalogCourseCode": "AUT 120",
+        "catalogCourseTitle": "Automotive Electrical Systems I",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop automotive electrical foundations through circuit relationships, wiring and protection concepts, switching and load paths, grounding, measurement planning, and evidence-based testing while keeping vehicle-specific values and procedures source-controlled.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 110",
+        "Orientation to electrical measurement safety and applicable service-information boundaries"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut120-electrical-fundamentals-lo-1",
+          "statement": "Explain voltage, current, resistance, power, and basic circuit relationships using correct electrical units and generalized automotive examples.",
+          "cognitiveLevel": "understand"
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-lo-2",
+          "statement": "Trace generalized automotive power, protection, switching, load, and ground paths and identify appropriate conceptual measurement points.",
+          "cognitiveLevel": "apply"
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-lo-3",
+          "statement": "Interpret generalized electrical measurements and voltage-drop evidence to justify a safe diagnostic next step without inventing vehicle-specific specifications or procedures.",
+          "cognitiveLevel": "analyze"
+        }
+      ],
+      "keyConcepts": [
+        "voltage current resistance and power",
+        "series parallel and combined circuit relationships",
+        "power protection switching loads and grounds",
+        "wiring connectors relays and fuses",
+        "electrical measurement and voltage-drop evidence",
+        "vehicle-specific service-information boundaries"
+      ],
+      "contentBlocks": [
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-1",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1"
+          ],
+          "description": "Frame the lesson around foundational electrical relationships, safe testing boundaries, and evidence-based reasoning."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-2",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "reflect",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-2"
+          ],
+          "description": "Recall units, measurement concepts, circuit symbols, and the difference between a measured value and a vehicle-specific specification."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-3",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Explain voltage, current, resistance, power, continuity, open circuits, short circuits, and series/parallel relationships without assigning universal vehicle values."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-4",
+          "type": "visual-or-model",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Use a project-authored generalized circuit model to show source, protection, switching, load, conductors, and return/ground relationships."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-5",
+          "type": "worked-example",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Walk through a generalized circuit concern by separating symptom, circuit path, test point, observation, and supported conclusion."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-6",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Practice choosing a meter function and conceptual test location for a generalized low-voltage circuit while preserving safety and applicability boundaries."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-7",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Analyze a generalized electrical concern involving source, fuse/protection, switch/relay, load, wiring, connector, and ground possibilities."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-8",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Check whether the learner can distinguish electrical relationships, observed evidence, hypotheses, and information that must come from applicable service documentation."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-9",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Provide reasoning-focused feedback that corrects unsafe assumptions, unit errors, and unsupported replacement decisions, then allow retry."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-10",
+          "type": "evidence-reference",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Connect circuit-theory and automotive-domain reference roles while making clear that vehicle-specific procedures, limits, and wiring remain source-controlled."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-block-11",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "description": "Summarize circuit relationships, test-planning logic, evidence interpretation, and the requirement to verify vehicle-specific information before service decisions."
+        }
+      ],
+      "visuals": [
+        {
+          "id": "ug-aut120-electrical-fundamentals-visual-1",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Generalized source-protection-switch-load-return circuit relationship diagram."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-visual-2",
+          "type": "flowchart",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-2",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Evidence-first electrical test-planning flow from concern to circuit path, test point, observation, and next step."
+        },
+        {
+          "id": "ug-aut120-electrical-fundamentals-visual-3",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "supportsObjectiveIds": [
+            "ug-aut120-electrical-fundamentals-lo-1",
+            "ug-aut120-electrical-fundamentals-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Comparison of electrical quantities, units, measurement intent, and interpretation limits."
+        }
+      ],
+      "practiceTasks": [
+        "Trace the functional path through a generalized protected switched load circuit",
+        "Choose an appropriate conceptual meter function and test point for a stated electrical question",
+        "Classify sample findings as observation, measurement, hypothesis, source requirement, or conclusion",
+        "Write a safe next-step rationale that identifies what vehicle-specific information must still be verified"
+      ],
+      "assessmentPlan": [
+        "Low-stakes electrical relationship check",
+        "Generalized circuit-tracing exercise",
+        "Formative measurement and voltage-drop reasoning scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "Foundational circuit theory and units",
+        "Automotive electrical component and charging-system context",
+        "Measurement planning and voltage-drop reasoning",
+        "Vehicle-specific information and safety boundaries"
+      ],
+      "evidenceExpectation": "General electrical relationships may use approved theory references and project-authored generalized models. Automotive examples require approved domain references, and vehicle-specific wiring, procedures, specifications, limits, and safety requirements must come from applicable authoritative service information.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment, grading, prerequisite satisfaction, and high-stakes authorization remain separate governed states.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
       "lessonPlanId": "ug-aut121-electrical-lab",
       "status": "planned",
       "programMapping": {

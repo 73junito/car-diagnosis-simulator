@@ -1,23 +1,23 @@
 const { verify } = require('../scripts/verify-remaining-delivery-eligibility-audit.js')
 
-describe('Phase 7F-L remaining delivery eligibility audit', () => {
+describe('Phase 7F-L remaining delivery eligibility audit after Phase 7F-M AUT-120 resolution', () => {
   test('classifies all 41 remaining catalog courses deterministically', () => {
     expect(verify()).toMatchObject({
       ok: true,
       errors: [],
       summary: {
-        readyToBuildNow: 0,
-        blockedMissingCanonicalMapping: 14,
+        readyToBuildNow: 1,
+        blockedMissingCanonicalMapping: 13,
         blockedPrerequisiteChain: 26,
         blockedHumanInstitutionalVerification: 1
       }
     })
   })
 
-  test('does not claim a Batch 008 candidate before a blocker is resolved', () => {
+  test('identifies AUT-120 as the sole evidence-supported Batch 008 candidate', () => {
     expect(verify().conclusion).toMatchObject({
-      batch008Ready: false,
-      batch008Candidates: []
+      batch008Ready: true,
+      batch008Candidates: ['aut-120']
     })
   })
 })

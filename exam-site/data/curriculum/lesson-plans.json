@@ -238,6 +238,24 @@
       "status": "planned"
     },
     {
+      "id": "ug-aut120-electrical-fundamentals",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-120",
+      "competencyId": "ug-aut120-electrical-fundamentals",
+      "title": "Automotive Electrical Fundamentals, Circuits, and Testing",
+      "sequence": [
+        "Establish electrical safety and information boundaries",
+        "Relate voltage current resistance and power",
+        "Distinguish series parallel and combined circuit relationships",
+        "Identify power protection switching load and ground roles",
+        "Trace generalized automotive circuit paths",
+        "Select measurement points and meter functions conceptually",
+        "Interpret voltage resistance current and voltage-drop evidence",
+        "Diagnose a generalized electrical concern using evidence"
+      ],
+      "status": "planned"
+    },
+    {
       "id": "ug-aut121-electrical-lab",
       "academicLevel": "undergraduate",
       "courseId": "aut-121",

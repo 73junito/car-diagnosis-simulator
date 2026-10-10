@@ -120,7 +120,13 @@
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Phase 7F-L records 41 remaining planning-catalog courses with no Batch 008 candidate currently eligible for delivery."
+      "notes": "Phase 7F-L re-audit after the Phase 7F-M AUT-120 canonical-content resolution identifies AUT-120 as the sole current Batch 008 delivery candidate."
+    },
+    {
+      "area": "aut120_canonical_curriculum_resolution",
+      "path": "docs/aut120-canonical-curriculum-resolution-2026-10-10.md",
+      "status": "canonical-development-resolution",
+      "notes": "Development-only canonical AUT-120 content and mapping resolution. Existing live 64/64 reference baseline remains historical until deployment/regeneration."
     },
     {
       "area": "production_release",

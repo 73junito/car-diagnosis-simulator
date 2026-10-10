@@ -9,8 +9,8 @@
 | --- | ---: |
 | Planning-catalog courses | 68 |
 | Catalog records marked planned | 68 |
-| Lesson plans | 64 |
-| Undergraduate lesson plans | 43 |
+| Developed lesson plans | 65 |
+| Undergraduate developed lesson plans | 44 |
 | Graduate lesson plans | 21 |
 | Dedicated course/training page directories | 28 |
 | Catalog-aligned dedicated course pages | 27 |
@@ -60,11 +60,11 @@ Phase 7F-K retains the delivery-evidence rule:
 
 ## Important interpretation boundary
 
-The existing **64/64** curriculum metric means all 64 lesson plans satisfy the governed reference-coverage baseline. It does **not** mean 64 fully built online courses, completed syllabi, production-ready courses, or assessment-authorized courses.
+The previously verified live **64/64** curriculum-reference metric applies to the production baseline before the Phase 7F-M AUT-120 development addition. The repository now contains **65 developed lesson plans**; the new AUT-120 lesson carries governed reference mappings in its migration but does not rewrite the historical live 64/64 evidence until deployment and baseline regeneration. Neither metric means fully built online courses, completed syllabi, production-ready courses, or assessment-authorized courses.
 
 At the current Phase 7F-K state, there are **27 catalog-aligned dedicated course pages**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
 
-Graduate prerequisite determinations remain separate human or institutional decisions.
+AUT-120 now has dedicated canonical development content and is the sole evidence-supported Batch 008 candidate; no AUT-120 delivery page is built by Phase 7F-M. Graduate prerequisite determinations remain separate human or institutional decisions.
 
 ## Governance boundary
 
