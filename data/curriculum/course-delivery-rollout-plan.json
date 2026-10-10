@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-B",
+  "purpose": "course-delivery-rollout-plan",
+  "sourceBaseline": {
+    "phase": "7F-A",
+    "dedicatedCoursePageCount": 1,
+    "dedicatedCoursePageIds": [
+      "aut-250"
+    ],
+    "catalogCourseCount": 68,
+    "lessonPlanCount": 64
+  },
+  "policy": {
+    "academicStatusIndependentFromDelivery": true,
+    "planningDoesNotChangeAcademicStatus": true,
+    "pageExistenceDoesNotImplyProductionReady": true,
+    "assessmentAuthorizationRemainsClosed": true,
+    "requireCanonicalCatalogLessonMappingForPlannedBuild": true,
+    "requirePrerequisitesSatisfiedByPriorOrSameBatch": true
+  },
+  "batches": [
+    {
+      "id": "batch-001-foundations",
+      "sequence": 1,
+      "status": "planned-for-delivery-build",
+      "rationale": "Start with foundational undergraduate courses that already have canonical catalog-to-lesson mappings and no prerequisite dependency outside this batch.",
+      "courses": [
+        {
+          "courseId": "aut-101",
+          "code": "AUT 101",
+          "title": "Introduction to Automotive Technology",
+          "lessonPlanId": "ug-aut101-foundations",
+          "mappingType": "canonical-catalog-course",
+          "prerequisites": [],
+          "targetPage": "exam-site/courses/aut-101/index.html"
+        },
+        {
+          "courseId": "aut-105",
+          "code": "AUT 105",
+          "title": "Automotive Safety and Professional Practices",
+          "lessonPlanId": "ug-aut105-safety-professional-practice",
+          "mappingType": "canonical-catalog-course",
+          "prerequisites": [],
+          "targetPage": "exam-site/courses/aut-105/index.html"
+        },
+        {
+          "courseId": "aut-110",
+          "code": "AUT 110",
+          "title": "Automotive Mathematics",
+          "lessonPlanId": "ug-aut110-automotive-math",
+          "mappingType": "canonical-catalog-course",
+          "prerequisites": [],
+          "targetPage": "exam-site/courses/aut-110/index.html"
+        },
+        {
+          "courseId": "aut-115",
+          "code": "AUT 115",
+          "title": "Automotive Measurement and Instrumentation",
+          "lessonPlanId": "ug-aut115-measurement-instrumentation",
+          "mappingType": "canonical-catalog-course",
+          "prerequisites": [
+            "aut-110"
+          ],
+          "targetPage": "exam-site/courses/aut-115/index.html"
+        }
+      ]
+    },
+    {
+      "id": "batch-002-foundation-extension",
+      "sequence": 2,
+      "status": "queued-after-batch-001",
+      "rationale": "Mapped courses whose prerequisites are satisfied by Batch 001 or within this batch.",
+      "courses": [
+        {
+          "courseId": "aut-130",
+          "code": "AUT 130",
+          "title": "Engine Systems I",
+          "lessonPlanId": "ug-aut130-engine-systems",
+          "mappingType": "canonical-catalog-course",
+          "prerequisites": [
+            "aut-101"
+          ]
+        },
+        {
+          "courseId": "aut-131",
+          "code": "AUT 131",
+          "title": "Engine Systems I Laboratory",
+          "lessonPlanId": "ug-aut131-engine-lab",
+          "mappingType": "canonical-catalog-course",
+          "prerequisites": [
+            "aut-130"
+          ],
+          "prerequisiteMode": "concurrent"
+        },
+        {
+          "courseId": "aut-160",
+          "code": "AUT 160",
+          "title": "Manual Transmissions and Drivetrain Systems",
+          "lessonPlanId": "ug-aut160-drivetrain-systems",
+          "mappingType": "canonical-catalog-course",
+          "prerequisites": [
+            "aut-115"
+          ]
+        },
+        {
+          "courseId": "aut-180",
+          "code": "AUT 180",
+          "title": "Automotive Technical Documentation and Service Information",
+          "lessonPlanId": "ug-aut180-service-information",
+          "mappingType": "canonical-catalog-course",
+          "prerequisites": [
+            "aut-101"
+          ]
+        }
+      ]
+    }
+  ],
+  "blockers": [
+    {
+      "courseId": "aut-120",
+      "code": "AUT 120",
+      "blocker": "missing-canonical-catalog-development-mapping",
+      "impact": [
+        "aut-121",
+        "aut-140",
+        "aut-170"
+      ],
+      "resolutionRequiredBeforeDeliveryBuild": true
+    },
+    {
+      "courseId": "aut-150",
+      "code": "AUT 150",
+      "blocker": "missing-canonical-catalog-development-mapping",
+      "impact": [],
+      "resolutionRequiredBeforeDeliveryBuild": true
+    }
+  ],
+  "buildAcceptanceCriteria": [
+    "A dedicated exam-site/courses/<course-id>/index.html page exists.",
+    "The course has a canonical catalog-to-lesson mapping and the referenced lesson plan exists.",
+    "Prerequisites are represented consistently with the planning catalog.",
+    "The page clearly identifies instructional/formative use and does not imply assessment authorization.",
+    "Accessibility and navigation checks pass.",
+    "Reference/evidence links are rendered from governed curriculum data rather than copied ad hoc.",
+    "The Phase 7F delivery baseline is updated only after the page is actually built and verified.",
+    "Academic/content status is not promoted solely because a page was built."
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 0,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "scoringAuthorization": false,
+    "gradingAuthorization": false,
+    "highStakesAuthorization": false,
+    "productionReadyClaims": 0
+  }
+}
