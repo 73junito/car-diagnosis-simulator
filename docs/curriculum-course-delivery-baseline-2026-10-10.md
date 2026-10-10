@@ -1,6 +1,6 @@
-# Phase 7F-F Course Delivery Status
+# Phase 7F-H Course Delivery Status
 
-**Current verified state:** Phase 7F-F Batch 003 delivery implementation  
+**Current verified state:** Phase 7F-H Batch 004 graduate delivery implementation  
 **Purpose:** separate curriculum/reference coverage from actual dedicated course delivery pages.
 
 ## Verified counts
@@ -12,9 +12,9 @@
 | Lesson plans | 64 |
 | Undergraduate lesson plans | 43 |
 | Graduate lesson plans | 21 |
-| Dedicated course/training page directories | 12 |
-| Catalog-aligned dedicated course pages | 11 |
-| Catalog courses without a catalog-aligned dedicated course page | 57 |
+| Dedicated course/training page directories | 15 |
+| Catalog-aligned dedicated course pages | 14 |
+| Catalog courses without a catalog-aligned dedicated course page | 54 |
 
 The catalog-aligned dedicated course pages currently present are:
 
@@ -29,6 +29,9 @@ The catalog-aligned dedicated course pages currently present are:
 - `aut-200`
 - `aut-201`
 - `aut-220`
+- `aut-501`
+- `aut-515`
+- `aut-590`
 
 The existing `/courses/aut-250/` route is a separate HEV formative-training package crosswalked from catalog AUT-330. It is not the delivery page for catalog AUT-250 Automotive Diagnostics I.
 
@@ -42,7 +45,7 @@ The existing academic/content `status` field cannot be treated as delivery statu
 
 There is no corresponding dedicated `exam-site/courses/electrical-1/index.html` page. Conversely, AUT-250 has a dedicated delivery page while the planning catalog still records AUT-250 as `planned`.
 
-Phase 7F-F continues to keep the existing academic/content statuses unchanged and applies the same separate delivery-evidence rule:
+Phase 7F-H continues to keep the existing academic/content statuses unchanged and applies the same separate delivery-evidence rule:
 
 - **planned** — no dedicated course delivery page is asserted;
 - **page-built** — `exam-site/courses/<course-id>/index.html` exists;
@@ -60,7 +63,7 @@ It does **not** mean:
 - 64 production-ready courses; or
 - 64 assessment-authorized courses.
 
-At the current Phase 7F-F state, there are **11 catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, and AUT-220**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
+At the current Phase 7F-H state, there are **14 catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, and AUT-590**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
 
 ## Governance boundary
 
