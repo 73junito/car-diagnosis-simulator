@@ -1,6 +1,6 @@
-# Phase 7F-I Course Delivery Status
+# Phase 7F-J Course Delivery Status
 
-**Current verified state:** Phase 7F-I Batch 005 graduate extension delivery implementation
+**Current verified state:** Phase 7F-J Batch 006 graduate systems delivery implementation
 **Purpose:** separate curriculum/reference coverage from actual dedicated course delivery pages.
 
 ## Verified counts
@@ -12,9 +12,9 @@
 | Lesson plans | 64 |
 | Undergraduate lesson plans | 43 |
 | Graduate lesson plans | 21 |
-| Dedicated course/training page directories | 18 |
-| Catalog-aligned dedicated course pages | 17 |
-| Catalog courses without a catalog-aligned dedicated course page | 51 |
+| Dedicated course/training page directories | 25 |
+| Catalog-aligned dedicated course pages | 24 |
+| Catalog courses without a catalog-aligned dedicated course page | 44 |
 
 The catalog-aligned dedicated course pages currently present are:
 
@@ -33,22 +33,23 @@ The catalog-aligned dedicated course pages currently present are:
 - `aut-515`
 - `aut-520`
 - `aut-530`
+- `aut-535`
+- `aut-540`
 - `aut-550`
+- `aut-555`
+- `aut-560`
+- `aut-570`
+- `aut-580`
+- `aut-585`
 - `aut-590`
 
 The existing `/courses/aut-250/` route is a separate HEV formative-training package crosswalked from catalog AUT-330. It is not the delivery page for catalog AUT-250 Automotive Diagnostics I.
 
 ## Status-model finding
 
-The existing academic/content `status` field cannot be treated as delivery status.
+Academic/content status and delivery status remain separate. Building a dedicated page does not activate a course academically, establish learner prerequisite satisfaction, or authorize assessment.
 
-`undergraduate-courses.json` contains one record marked `active`:
-
-- `electrical-1`
-
-There is no corresponding dedicated `exam-site/courses/electrical-1/index.html` page. Conversely, AUT-250 has a dedicated training page while the planning catalog still records AUT-250 as `planned`.
-
-Phase 7F-I keeps existing academic/content statuses unchanged and applies the separate delivery-evidence rule:
+Phase 7F-J retains the delivery-evidence rule:
 
 - **planned** — no dedicated course delivery page is asserted;
 - **page-built** — `exam-site/courses/<course-id>/index.html` exists;
@@ -56,19 +57,11 @@ Phase 7F-I keeps existing academic/content statuses unchanged and applies the se
 
 ## Important interpretation boundary
 
-The existing **64/64** curriculum metric means all 64 lesson plans satisfy the governed reference-coverage baseline.
+The existing **64/64** curriculum metric means all 64 lesson plans satisfy the governed reference-coverage baseline. It does **not** mean 64 fully built online courses, completed syllabi, production-ready courses, or assessment-authorized courses.
 
-It does **not** mean:
+At the current Phase 7F-J state, there are **24 catalog-aligned dedicated course pages**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
 
-- 64 fully built online courses;
-- 64 completed course pages;
-- 64 completed syllabi;
-- 64 production-ready courses; or
-- 64 assessment-authorized courses.
-
-At the current Phase 7F-I state, there are **17 catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, AUT-520, AUT-530, AUT-550, and AUT-590**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
-
-AUT-530 page availability does not establish undergraduate EV-coursework equivalency. That determination remains a separate human or institutional decision.
+Graduate prerequisite and equivalency determinations remain separate human or institutional decisions.
 
 ## Governance boundary
 
@@ -82,4 +75,4 @@ This baseline does not:
 - authorize high-stakes use; or
 - establish institutional approval, accreditation, or academic-credit authority.
 
-The Phase 7F-H fourteen-page catalog-aligned state is retained as `previousBaseline` in `data/curriculum/course-delivery-status.json`. The current delivery-status artifact is the source of truth for verified built pages.
+The Phase 7F-I seventeen-page catalog-aligned state is retained as `previousBaseline` in `data/curriculum/course-delivery-status.json`. The current delivery-status artifact is the source of truth for verified built pages.

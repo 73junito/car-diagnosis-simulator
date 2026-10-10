@@ -10,9 +10,9 @@ const catalog = read('data/curriculum/course-catalog.json')
 const lessons = read('data/curriculum/lesson-plans.json')
 const architecture = read('data/curriculum/program-architecture.json')
 const delivery = read('data/curriculum/course-delivery-status.json')
-const plan = read('data/curriculum/course-delivery-batch005-plan.json')
+const plan = read('data/curriculum/course-delivery-batch006-plan.json')
 
-const BATCH = ['aut-520', 'aut-530', 'aut-550']
+const BATCH = ['aut-535','aut-540','aut-555','aut-560','aut-570','aut-580','aut-585']
 
 function verify() {
   const errors = []
@@ -21,27 +21,27 @@ function verify() {
   const mappingById = new Map((architecture.catalogDevelopmentMappings || []).map((m) => [m.catalogCourseId, m]))
   const aligned = new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
-  if (!['7F-I', '7F-J'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-I or later supported Phase 7F-J')
-  if ((delivery.baseline?.catalogAlignedDedicatedCoursePageCount || 0) < 17) errors.push('delivery status must retain at least the 17 Phase 7F-I catalog-aligned course pages')
-  if (plan.phase !== '7F-I' || plan.status !== 'page-built-verified') errors.push('Batch 005 execution must be page-built-verified in Phase 7F-I')
+  if (delivery.phase !== '7F-J') errors.push('delivery status must be Phase 7F-J')
+  if (delivery.baseline?.catalogAlignedDedicatedCoursePageCount !== 24) errors.push('Phase 7F-J must record 24 catalog-aligned course pages')
+  if (plan.phase !== '7F-J' || plan.status !== 'page-built-verified') errors.push('Batch 006 execution must be page-built-verified in Phase 7F-J')
 
   for (const id of BATCH) {
     const course = catalogById.get(id)
     const mapping = mappingById.get(id)
     const planned = (plan.courses || []).find((c) => c.courseId === id)
-    if (!course) { errors.push(`catalog course missing: ${id}`); continue }
-    if (course.academicLevel !== 'graduate') errors.push(`catalog course must remain graduate: ${id}`)
+    if (!course) { errors.push('catalog course missing: ' + id); continue }
+    if (course.academicLevel !== 'graduate') errors.push('catalog course must remain graduate: ' + id)
     if (!mapping || mapping.mappingType !== 'canonical-catalog-course' || mapping.existingCourseId !== id) {
-      errors.push(`identity-preserving canonical mapping missing: ${id}`)
+      errors.push('identity-preserving canonical mapping missing: ' + id)
       continue
     }
     const lesson = lessonById.get(mapping.existingLessonPlanId)
-    if (!lesson || lesson.courseId !== id || lesson.academicLevel !== 'graduate') errors.push(`graduate lesson mismatch: ${id}`)
-    if (!planned || planned.lessonPlanId !== mapping.existingLessonPlanId || planned.deliveryStatus !== 'page-built') errors.push(`Batch 005 plan drift: ${id}`)
-    if (planned && planned.prerequisiteDisposition !== 'requires-human-or-institutional-verification') errors.push(`institutional prerequisite boundary drift: ${id}`)
+    if (!lesson || lesson.courseId !== id || lesson.academicLevel !== 'graduate') errors.push('graduate lesson mismatch: ' + id)
+    if (!planned || planned.lessonPlanId !== mapping.existingLessonPlanId || planned.deliveryStatus !== 'page-built') errors.push('Batch 006 plan drift: ' + id)
+    if (planned && planned.prerequisiteDisposition !== 'requires-human-or-institutional-verification') errors.push('institutional prerequisite boundary drift: ' + id)
 
     const file = path.join(ROOT, 'exam-site', 'courses', id, 'index.html')
-    if (!fs.existsSync(file)) { errors.push(`dedicated graduate course page missing: ${id}`); continue }
+    if (!fs.existsSync(file)) { errors.push('dedicated graduate course page missing: ' + id); continue }
     const html = fs.readFileSync(file, 'utf8')
     const required = [
       course.code, course.title, course.description, course.credits, course.prerequisites,
@@ -58,13 +58,8 @@ function verify() {
       const escaped = step.replace(/&/g, '&amp;')
       if (!html.includes(step) && !html.includes(escaped)) errors.push(`${id} page missing lesson sequence step: ${step}`)
     }
-    if (!html.includes('<meta name="robots" content="noindex, nofollow">')) errors.push(`${id} page must remain noindex,nofollow`)
-    if (!aligned.has(id)) errors.push(`delivery status missing catalog-aligned graduate page: ${id}`)
-  }
-
-  const aut530 = fs.readFileSync(path.join(ROOT, 'exam-site', 'courses', 'aut-530', 'index.html'), 'utf8')
-  if (!aut530.includes('Undergraduate EV coursework or equivalent requires separate human or institutional verification.')) {
-    errors.push('AUT-530 must preserve the undergraduate EV coursework/equivalency human-verification boundary')
+    if (!html.includes('<meta name="robots" content="noindex, nofollow">')) errors.push(id + ' page must remain noindex,nofollow')
+    if (!aligned.has(id)) errors.push('delivery status missing catalog-aligned graduate page: ' + id)
   }
 
   return { ok: errors.length === 0, errors, batch: BATCH }
@@ -73,11 +68,11 @@ function verify() {
 function main() {
   const result = verify()
   if (!result.ok) {
-    console.error('[FAIL] Phase 7F-I Batch 005 graduate pages')
+    console.error('[FAIL] Phase 7F-J Batch 006 graduate pages')
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-I Batch 005: AUT-520/AUT-530/AUT-550 pages are built, catalog-aligned, eligibility-bounded, and non-assessment')
+  console.log('[PASS] Phase 7F-J Batch 006: AUT-535/540/555/560/570/580/585 pages are built, catalog-aligned, eligibility-bounded, and non-assessment')
 }
 
 if (require.main === module) main()
