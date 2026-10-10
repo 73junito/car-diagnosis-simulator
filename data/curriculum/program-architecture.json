@@ -335,6 +335,30 @@
       "existingCourseId": "aut-590",
       "existingLessonPlanId": "grad-aut590-technology-seminar",
       "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-150",
+      "existingCourseId": "aut-150",
+      "existingLessonPlanId": "ug-aut150-steering-suspension-alignment",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-210",
+      "existingCourseId": "aut-210",
+      "existingLessonPlanId": "ug-aut210-engine-performance-fuel-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-330",
+      "existingCourseId": "aut-330",
+      "existingLessonPlanId": "ug-aut330-electric-vehicle-technology",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-525",
+      "existingCourseId": "aut-525",
+      "existingLessonPlanId": "grad-aut525-experimental-methods",
+      "mappingType": "canonical-catalog-course"
     }
   ],
   "authorityReferences": [
@@ -795,33 +819,9 @@
       "mappingType": "catalog-crosswalk"
     },
     {
-      "catalogCourseId": "aut-210",
-      "existingCourseId": "engine-performance-1",
-      "existingLessonPlanId": "ug-engine-performance-foundations",
-      "mappingType": "catalog-crosswalk"
-    },
-    {
-      "catalogCourseId": "aut-150",
-      "existingCourseId": "suspension-steering-1",
-      "existingLessonPlanId": "ug-suspension-steering-foundations",
-      "mappingType": "catalog-crosswalk"
-    },
-    {
-      "catalogCourseId": "aut-330",
-      "existingCourseId": "hybrid-electric-vehicle-technology",
-      "existingLessonPlanId": "ug-hev-foundations",
-      "mappingType": "legacy-training-crosswalk"
-    },
-    {
       "catalogCourseId": "aut-510",
       "existingCourseId": "advanced-diagnostic-analysis",
       "existingLessonPlanId": "grad-diagnostic-evidence-analysis",
-      "mappingType": "catalog-crosswalk"
-    },
-    {
-      "catalogCourseId": "aut-525",
-      "existingCourseId": "vehicle-systems-testing",
-      "existingLessonPlanId": "grad-vehicle-systems-testing",
       "mappingType": "catalog-crosswalk"
     }
   ]

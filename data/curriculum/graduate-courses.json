@@ -149,6 +149,13 @@
       "cipCode": "15.0803",
       "title": "Advanced Automotive Technology Seminar",
       "status": "planned"
+    },
+    {
+      "id": "aut-525",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Experimental Methods in Automotive Technology",
+      "status": "planned"
     }
   ]
 }

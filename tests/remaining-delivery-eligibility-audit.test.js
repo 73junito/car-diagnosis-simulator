@@ -1,23 +1,5 @@
 const { verify } = require('../scripts/verify-remaining-delivery-eligibility-audit.js')
-
-describe('Phase 7F-L remaining delivery eligibility audit after Phase 7F-P Batch 010', () => {
-  test('classifies all 36 remaining catalog courses deterministically', () => {
-    expect(verify()).toMatchObject({
-      ok: true,
-      errors: [],
-      summary: {
-        readyToBuildNow: 0,
-        blockedMissingCanonicalMapping: 13,
-        blockedPrerequisiteChain: 22,
-        blockedHumanInstitutionalVerification: 1
-      }
-    })
-  })
-
-  test('keeps Batch 011 closed until a blocker is resolved', () => {
-    expect(verify().conclusion).toMatchObject({
-      batch011Ready: false,
-      batch011Candidates: []
-    })
-  })
+describe('Phase 7F-L audit after Phase 7F-Q canonical resolutions',()=>{
+ test('classifies all 36 remaining catalog courses',()=>expect(verify()).toMatchObject({ok:true,errors:[],summary:{readyToBuildNow:3,blockedMissingCanonicalMapping:9,blockedPrerequisiteChain:23,blockedHumanInstitutionalVerification:1}}))
+ test('identifies the exact Batch 011 candidates',()=>expect(verify().conclusion).toMatchObject({batch011Ready:true,batch011Candidates:['aut-150','aut-210','aut-525']}))
 })

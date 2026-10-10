@@ -9,8 +9,8 @@
 | --- | ---: |
 | Planning-catalog courses | 68 |
 | Catalog records marked planned | 68 |
-| Developed lesson plans | 65 |
-| Undergraduate developed lesson plans | 44 |
+| Developed lesson plans | 69 |
+| Undergraduate developed lesson plans | 47 |
 | Graduate lesson plans | 21 |
 | Dedicated course/training page directories | 33 |
 | Catalog-aligned dedicated course pages | 32 |
@@ -54,13 +54,13 @@ Academic/content status and delivery status remain separate. Building a dedicate
 
 Phase 7F-K retains the delivery-evidence rule:
 
-- **planned** Ã¢â‚¬â€ no dedicated course delivery page is asserted;
-- **page-built** Ã¢â‚¬â€ `exam-site/courses/<course-id>/index.html` exists;
-- **production-ready** Ã¢â‚¬â€ reserved for a future explicit release decision and never inferred from page existence alone.
+- **planned** ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â no dedicated course delivery page is asserted;
+- **page-built** ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â `exam-site/courses/<course-id>/index.html` exists;
+- **production-ready** ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â reserved for a future explicit release decision and never inferred from page existence alone.
 
 ## Important interpretation boundary
 
-The previously verified live **64/64** curriculum-reference metric applies to the production baseline before the Phase 7F-M AUT-120 development addition. The repository now contains **65 developed lesson plans**; the new AUT-120 lesson carries governed reference mappings in its migration but does not rewrite the historical live 64/64 evidence until deployment and baseline regeneration. Neither metric means fully built online courses, completed syllabi, production-ready courses, or assessment-authorized courses.
+The previously verified live **64/64** curriculum-reference metric applies to the production baseline before the Phase 7F-M AUT-120 development addition. The repository now contains **69 developed lesson plans** after Phase 7F-Q. AUT-120, AUT-150, AUT-210, AUT-330, and AUT-525 canonical lessons carry governed reference mappings in migrations, but the historical live 64/64 evidence remains unchanged until deployment and baseline regeneration. Neither metric means fully built online courses, completed syllabi, production-ready courses, or assessment-authorized courses.
 
 At the current Phase 7F-P state, there are **32 catalog-aligned dedicated course pages**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
 

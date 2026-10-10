@@ -13946,6 +13946,936 @@
         "lesson-summary"
       ],
       "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut150-steering-suspension-alignment",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-150",
+        "catalogCourseCode": "AUT 150",
+        "catalogCourseTitle": "Steering, Suspension, and Wheel Alignment",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop evidence-based reasoning across steering and suspension components, tire-wear patterns, wheel-alignment geometry, electric power steering, and stability-system interactions without treating generalized values as vehicle-specific specifications.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 115",
+        "Applicable alignment, tire, steering, and suspension service-information boundaries"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut150-steering-suspension-alignment-lo-1",
+          "statement": "Explain and organize the major system, measurement, and evidence relationships represented in Steering, Suspension, and Wheel Alignment.",
+          "cognitiveLevel": "understand"
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-lo-2",
+          "statement": "Apply an evidence-producing inspection, measurement, test, or experimental approach while preserving safety and source applicability boundaries.",
+          "cognitiveLevel": "apply"
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-lo-3",
+          "statement": "Analyze findings, uncertainty, and alternative explanations to justify a technically defensible next step without inventing vehicle-specific limits or procedures.",
+          "cognitiveLevel": "analyze"
+        }
+      ],
+      "keyConcepts": [
+        "steering and suspension architecture",
+        "wheel-alignment geometry",
+        "tire wear and load relationships",
+        "electric power steering",
+        "vehicle stability system interactions",
+        "inspection and measurement evidence",
+        "vehicle-specific alignment specifications"
+      ],
+      "contentBlocks": [
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-1",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1"
+          ],
+          "description": "Frame the lesson around governed objectives, safety, source applicability, and evidence-based reasoning."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-2",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "reflect",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-2"
+          ],
+          "description": "Activate prerequisite knowledge and distinguish prior assumptions from information that must be verified."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-3",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Explain the governing system, measurement, and evidence relationships without assigning unsupported universal values."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-4",
+          "type": "visual-or-model",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Use a project-authored generalized model, diagram, flow, or test structure to make relationships visible."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-5",
+          "type": "worked-example",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Work through an evidence chain from question or concern to observation, measurement, interpretation, limitation, and next step."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-6",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Practice selecting and applying an evidence-producing method while maintaining source and safety boundaries."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-7",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Analyze an independent automotive scenario or experimental problem with competing explanations and incomplete evidence."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-8",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Check whether the learner can distinguish observations, measurements, hypotheses, uncertainty, source requirements, and conclusions."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-9",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Provide reasoning-focused feedback and retry when assumptions, safety boundaries, or evidence interpretation are weak."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-10",
+          "type": "evidence-reference",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Connect approved theory and automotive-domain references while keeping vehicle-specific procedures and limits source-controlled."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-block-11",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "description": "Summarize the system relationships, evidence logic, uncertainty, and source-controlled next-step requirements."
+        }
+      ],
+      "visuals": [
+        {
+          "id": "ug-aut150-steering-suspension-alignment-visual-1",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Generalized system and evidence relationship diagram for Steering, Suspension, and Wheel Alignment."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-visual-2",
+          "type": "flowchart",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-2",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Evidence-first flow from question or concern through test selection, observation, interpretation, and next step."
+        },
+        {
+          "id": "ug-aut150-steering-suspension-alignment-visual-3",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "supportsObjectiveIds": [
+            "ug-aut150-steering-suspension-alignment-lo-1",
+            "ug-aut150-steering-suspension-alignment-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Comparison of evidence types, interpretation limits, uncertainty, and source requirements."
+        }
+      ],
+      "practiceTasks": [
+        "Trace the relevant system or experimental relationships using a generalized model",
+        "Select an evidence-producing test, measurement, inspection, or experimental step for a stated question",
+        "Classify findings as observation, measurement, hypothesis, uncertainty, source requirement, or conclusion",
+        "Write a defensible next-step rationale that identifies what authoritative information must still be verified"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept and evidence check",
+        "Guided system or experimental reasoning exercise",
+        "Formative evidence-interpretation scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "System or experimental relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Safe verification or validation design"
+      ],
+      "evidenceExpectation": "General concepts may use approved references and project-authored generalized models. Vehicle-specific procedures, specifications, limits, hazards, and service decisions must come from applicable authoritative information.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment, grading, prerequisite satisfaction, and high-stakes authorization remain separate governed states.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut210-engine-performance-fuel-systems",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-210",
+        "catalogCourseCode": "AUT 210",
+        "catalogCourseTitle": "Engine Performance and Fuel Systems",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop engine-performance reasoning across fuel delivery, ignition, air induction, electronic throttle control, sensors, actuators, operating data, and diagnostic test evidence without converting one code or symptom into proof of component failure.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 200",
+        "AUT 120",
+        "Applicable engine-performance service-information and emissions/safety boundaries"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-lo-1",
+          "statement": "Explain and organize the major system, measurement, and evidence relationships represented in Engine Performance and Fuel Systems.",
+          "cognitiveLevel": "understand"
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-lo-2",
+          "statement": "Apply an evidence-producing inspection, measurement, test, or experimental approach while preserving safety and source applicability boundaries.",
+          "cognitiveLevel": "apply"
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-lo-3",
+          "statement": "Analyze findings, uncertainty, and alternative explanations to justify a technically defensible next step without inventing vehicle-specific limits or procedures.",
+          "cognitiveLevel": "analyze"
+        }
+      ],
+      "keyConcepts": [
+        "fuel injection",
+        "ignition systems",
+        "air induction",
+        "electronic throttle control",
+        "sensors and actuators",
+        "operating-data interpretation",
+        "evidence-based engine diagnosis"
+      ],
+      "contentBlocks": [
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-1",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1"
+          ],
+          "description": "Frame the lesson around governed objectives, safety, source applicability, and evidence-based reasoning."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-2",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "reflect",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-2"
+          ],
+          "description": "Activate prerequisite knowledge and distinguish prior assumptions from information that must be verified."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-3",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Explain the governing system, measurement, and evidence relationships without assigning unsupported universal values."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-4",
+          "type": "visual-or-model",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Use a project-authored generalized model, diagram, flow, or test structure to make relationships visible."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-5",
+          "type": "worked-example",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Work through an evidence chain from question or concern to observation, measurement, interpretation, limitation, and next step."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-6",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Practice selecting and applying an evidence-producing method while maintaining source and safety boundaries."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-7",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Analyze an independent automotive scenario or experimental problem with competing explanations and incomplete evidence."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-8",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Check whether the learner can distinguish observations, measurements, hypotheses, uncertainty, source requirements, and conclusions."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-9",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Provide reasoning-focused feedback and retry when assumptions, safety boundaries, or evidence interpretation are weak."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-10",
+          "type": "evidence-reference",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Connect approved theory and automotive-domain references while keeping vehicle-specific procedures and limits source-controlled."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-block-11",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "description": "Summarize the system relationships, evidence logic, uncertainty, and source-controlled next-step requirements."
+        }
+      ],
+      "visuals": [
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-visual-1",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Generalized system and evidence relationship diagram for Engine Performance and Fuel Systems."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-visual-2",
+          "type": "flowchart",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-2",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Evidence-first flow from question or concern through test selection, observation, interpretation, and next step."
+        },
+        {
+          "id": "ug-aut210-engine-performance-fuel-systems-visual-3",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "supportsObjectiveIds": [
+            "ug-aut210-engine-performance-fuel-systems-lo-1",
+            "ug-aut210-engine-performance-fuel-systems-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Comparison of evidence types, interpretation limits, uncertainty, and source requirements."
+        }
+      ],
+      "practiceTasks": [
+        "Trace the relevant system or experimental relationships using a generalized model",
+        "Select an evidence-producing test, measurement, inspection, or experimental step for a stated question",
+        "Classify findings as observation, measurement, hypothesis, uncertainty, source requirement, or conclusion",
+        "Write a defensible next-step rationale that identifies what authoritative information must still be verified"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept and evidence check",
+        "Guided system or experimental reasoning exercise",
+        "Formative evidence-interpretation scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "System or experimental relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Safe verification or validation design"
+      ],
+      "evidenceExpectation": "General concepts may use approved references and project-authored generalized models. Vehicle-specific procedures, specifications, limits, hazards, and service decisions must come from applicable authoritative information.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment, grading, prerequisite satisfaction, and high-stakes authorization remain separate governed states.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "ug-aut330-electric-vehicle-technology",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-330",
+        "catalogCourseCode": "AUT 330",
+        "catalogCourseTitle": "Electric Vehicle Technology",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop battery-electric vehicle systems reasoning across traction batteries, electric machines, inverters, charging, regenerative braking, thermal management, low/high-voltage domains, and safe diagnostic evidence.",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "AUT 240",
+        "AUT 280",
+        "Applicable high-voltage safety training and vehicle-specific service information"
+      ],
+      "learningObjectives": [
+        {
+          "id": "ug-aut330-electric-vehicle-technology-lo-1",
+          "statement": "Explain and organize the major system, measurement, and evidence relationships represented in Electric Vehicle Technology.",
+          "cognitiveLevel": "understand"
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-lo-2",
+          "statement": "Apply an evidence-producing inspection, measurement, test, or experimental approach while preserving safety and source applicability boundaries.",
+          "cognitiveLevel": "apply"
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-lo-3",
+          "statement": "Analyze findings, uncertainty, and alternative explanations to justify a technically defensible next step without inventing vehicle-specific limits or procedures.",
+          "cognitiveLevel": "analyze"
+        }
+      ],
+      "keyConcepts": [
+        "battery-electric architecture",
+        "traction batteries",
+        "motors and inverters",
+        "charging systems",
+        "regenerative braking",
+        "thermal management",
+        "high-voltage safety and diagnostic boundaries"
+      ],
+      "contentBlocks": [
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-1",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1"
+          ],
+          "description": "Frame the lesson around governed objectives, safety, source applicability, and evidence-based reasoning."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-2",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "reflect",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-2"
+          ],
+          "description": "Activate prerequisite knowledge and distinguish prior assumptions from information that must be verified."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-3",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Explain the governing system, measurement, and evidence relationships without assigning unsupported universal values."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-4",
+          "type": "visual-or-model",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Use a project-authored generalized model, diagram, flow, or test structure to make relationships visible."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-5",
+          "type": "worked-example",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Work through an evidence chain from question or concern to observation, measurement, interpretation, limitation, and next step."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-6",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Practice selecting and applying an evidence-producing method while maintaining source and safety boundaries."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-7",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Analyze an independent automotive scenario or experimental problem with competing explanations and incomplete evidence."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-8",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Check whether the learner can distinguish observations, measurements, hypotheses, uncertainty, source requirements, and conclusions."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-9",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Provide reasoning-focused feedback and retry when assumptions, safety boundaries, or evidence interpretation are weak."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-10",
+          "type": "evidence-reference",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Connect approved theory and automotive-domain references while keeping vehicle-specific procedures and limits source-controlled."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-block-11",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "description": "Summarize the system relationships, evidence logic, uncertainty, and source-controlled next-step requirements."
+        }
+      ],
+      "visuals": [
+        {
+          "id": "ug-aut330-electric-vehicle-technology-visual-1",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Generalized system and evidence relationship diagram for Electric Vehicle Technology."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-visual-2",
+          "type": "flowchart",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-2",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Evidence-first flow from question or concern through test selection, observation, interpretation, and next step."
+        },
+        {
+          "id": "ug-aut330-electric-vehicle-technology-visual-3",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "supportsObjectiveIds": [
+            "ug-aut330-electric-vehicle-technology-lo-1",
+            "ug-aut330-electric-vehicle-technology-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Comparison of evidence types, interpretation limits, uncertainty, and source requirements."
+        }
+      ],
+      "practiceTasks": [
+        "Trace the relevant system or experimental relationships using a generalized model",
+        "Select an evidence-producing test, measurement, inspection, or experimental step for a stated question",
+        "Classify findings as observation, measurement, hypothesis, uncertainty, source requirement, or conclusion",
+        "Write a defensible next-step rationale that identifies what authoritative information must still be verified"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept and evidence check",
+        "Guided system or experimental reasoning exercise",
+        "Formative evidence-interpretation scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "System or experimental relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Safe verification or validation design"
+      ],
+      "evidenceExpectation": "General concepts may use approved references and project-authored generalized models. Vehicle-specific procedures, specifications, limits, hazards, and service decisions must come from applicable authoritative information.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment, grading, prerequisite satisfaction, and high-stakes authorization remain separate governed states.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
+    },
+    {
+      "lessonPlanId": "grad-aut525-experimental-methods",
+      "status": "planned",
+      "programMapping": {
+        "programId": "academic-course-catalog",
+        "relationship": "catalog-course",
+        "catalogCourseId": "aut-525",
+        "catalogCourseCode": "AUT 525",
+        "catalogCourseTitle": "Experimental Methods in Automotive Technology",
+        "mappingType": "canonical-catalog-course"
+      },
+      "lessonSummary": "Develop graduate-level experimental-methods reasoning across test objectives, instrumentation, controls, data acquisition, uncertainty, repeatability, validation, and technical reporting for automotive systems.",
+      "estimatedMinutes": 210,
+      "prerequisites": [
+        "AUT 501",
+        "Graduate-level evidence, measurement, and research-method expectations"
+      ],
+      "learningObjectives": [
+        {
+          "id": "grad-aut525-experimental-methods-lo-1",
+          "statement": "Explain and organize the major system, measurement, and evidence relationships represented in Experimental Methods in Automotive Technology.",
+          "cognitiveLevel": "understand"
+        },
+        {
+          "id": "grad-aut525-experimental-methods-lo-2",
+          "statement": "Apply an evidence-producing inspection, measurement, test, or experimental approach while preserving safety and source applicability boundaries.",
+          "cognitiveLevel": "apply"
+        },
+        {
+          "id": "grad-aut525-experimental-methods-lo-3",
+          "statement": "Analyze findings, uncertainty, and alternative explanations to justify a technically defensible next step without inventing vehicle-specific limits or procedures.",
+          "cognitiveLevel": "analyze"
+        }
+      ],
+      "keyConcepts": [
+        "experimental design",
+        "instrumentation and calibration",
+        "measurement uncertainty",
+        "data acquisition",
+        "repeatability and reproducibility",
+        "validation",
+        "technical reporting"
+      ],
+      "contentBlocks": [
+        {
+          "id": "grad-aut525-experimental-methods-block-1",
+          "type": "learning-objective",
+          "instructionalPurpose": "introduce",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1"
+          ],
+          "description": "Frame the lesson around governed objectives, safety, source applicability, and evidence-based reasoning."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-2",
+          "type": "prior-knowledge",
+          "instructionalPurpose": "reflect",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-2"
+          ],
+          "description": "Activate prerequisite knowledge and distinguish prior assumptions from information that must be verified."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-3",
+          "type": "concept-explanation",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Explain the governing system, measurement, and evidence relationships without assigning unsupported universal values."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-4",
+          "type": "visual-or-model",
+          "instructionalPurpose": "demonstrate",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Use a project-authored generalized model, diagram, flow, or test structure to make relationships visible."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-5",
+          "type": "worked-example",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Work through an evidence chain from question or concern to observation, measurement, interpretation, limitation, and next step."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-6",
+          "type": "guided-practice",
+          "instructionalPurpose": "practice",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Practice selecting and applying an evidence-producing method while maintaining source and safety boundaries."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-7",
+          "type": "independent-scenario",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Analyze an independent automotive scenario or experimental problem with competing explanations and incomplete evidence."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-8",
+          "type": "knowledge-or-reasoning-check",
+          "instructionalPurpose": "assess",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Check whether the learner can distinguish observations, measurements, hypotheses, uncertainty, source requirements, and conclusions."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-9",
+          "type": "feedback-and-retry",
+          "instructionalPurpose": "remediate",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Provide reasoning-focused feedback and retry when assumptions, safety boundaries, or evidence interpretation are weak."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-10",
+          "type": "evidence-reference",
+          "instructionalPurpose": "interpret-evidence",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Connect approved theory and automotive-domain references while keeping vehicle-specific procedures and limits source-controlled."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-block-11",
+          "type": "lesson-summary",
+          "instructionalPurpose": "summarize",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "description": "Summarize the system relationships, evidence logic, uncertainty, and source-controlled next-step requirements."
+        }
+      ],
+      "visuals": [
+        {
+          "id": "grad-aut525-experimental-methods-visual-1",
+          "type": "concept-diagram",
+          "instructionalPurpose": "explain",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-2"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Generalized system and evidence relationship diagram for Experimental Methods in Automotive Technology."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-visual-2",
+          "type": "flowchart",
+          "instructionalPurpose": "diagnose",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-2",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Evidence-first flow from question or concern through test selection, observation, interpretation, and next step."
+        },
+        {
+          "id": "grad-aut525-experimental-methods-visual-3",
+          "type": "table",
+          "instructionalPurpose": "compare",
+          "supportsObjectiveIds": [
+            "grad-aut525-experimental-methods-lo-1",
+            "grad-aut525-experimental-methods-lo-3"
+          ],
+          "accessibilityTextRequired": true,
+          "description": "Comparison of evidence types, interpretation limits, uncertainty, and source requirements."
+        }
+      ],
+      "practiceTasks": [
+        "Trace the relevant system or experimental relationships using a generalized model",
+        "Select an evidence-producing test, measurement, inspection, or experimental step for a stated question",
+        "Classify findings as observation, measurement, hypothesis, uncertainty, source requirement, or conclusion",
+        "Write a defensible next-step rationale that identifies what authoritative information must still be verified"
+      ],
+      "assessmentPlan": [
+        "Low-stakes concept and evidence check",
+        "Guided system or experimental reasoning exercise",
+        "Formative evidence-interpretation scenario",
+        "Reasoning-focused feedback and retry"
+      ],
+      "evidenceFocus": [
+        "System or experimental relationships",
+        "Evidence quality and uncertainty",
+        "Source applicability and provenance",
+        "Safe verification or validation design"
+      ],
+      "evidenceExpectation": "General concepts may use approved references and project-authored generalized models. Vehicle-specific procedures, specifications, limits, hazards, and service decisions must come from applicable authoritative information.",
+      "assessmentBoundary": "Training checks may coach, explain, and allow retry. Scored assessment, grading, prerequisite satisfaction, and high-stakes authorization remain separate governed states.",
+      "structure": [
+        "learning-objective",
+        "prior-knowledge",
+        "concept-explanation",
+        "visual-or-model",
+        "worked-example",
+        "guided-practice",
+        "independent-scenario",
+        "knowledge-or-reasoning-check",
+        "feedback-and-retry",
+        "evidence-reference",
+        "lesson-summary"
+      ],
+      "structureExceptions": []
     }
   ]
 }
