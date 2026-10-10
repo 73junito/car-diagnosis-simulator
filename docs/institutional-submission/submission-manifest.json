@@ -29,12 +29,15 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "dedicated_course_delivery_pages": 5,
-    "dedicated_course_delivery_page_ids": [
+    "catalog_aligned_dedicated_course_pages": 4,
+    "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
       "aut-110",
-      "aut-115",
+      "aut-115"
+    ],
+    "legacy_training_package_pages": 1,
+    "legacy_training_package_page_ids": [
       "aut-250"
     ]
   },
@@ -88,7 +91,7 @@
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-C separates 64/64 lesson-plan reference coverage from actual dedicated course delivery pages; five dedicated course pages now exist (AUT-101, AUT-105, AUT-110, AUT-115, AUT-250)."
+      "notes": "Phase 7F-C verifies four catalog-aligned dedicated course pages (AUT-101, AUT-105, AUT-110, AUT-115) plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
     },
     {
       "area": "production_release",
