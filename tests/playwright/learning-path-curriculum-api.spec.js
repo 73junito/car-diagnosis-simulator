@@ -197,8 +197,8 @@ function trackStaticReads(page) {
 }
 
 async function expectCoreRendering(page) {
-  await expect(page.locator('#undergraduate-content .course-grid article')).toHaveCount(47);
-  await expect(page.locator('#graduate-content .graduate-grid article')).toHaveCount(22);
+  await expect(page.locator('#undergraduate-content .course-grid article')).toHaveCount(48);
+  await expect(page.locator('#graduate-content .graduate-grid article')).toHaveCount(30);
 
   const body = await page.locator('body').innerText();
   expect(body).toContain('CIP 47.0604');

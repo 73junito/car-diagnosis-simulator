@@ -9,7 +9,7 @@ insert into public.curriculum_courses (id, program_id, academic_level, cip_code,
   ('aut-630','automotive-engineering-technology','graduate','15.0803','Advanced Automotive Systems Integration','planned'),
   ('aut-640','automotive-engineering-technology','graduate','15.0803','Automotive Technology Thesis','planned'),
   ('aut-650','automotive-engineering-technology','graduate','15.0803','Applied Automotive Technology Capstone','planned'),
-  ('aut-690','automotive-engineering-technology','graduate','15.0803','Graduate Research Seminar','planned');
+  ('aut-690','automotive-engineering-technology','graduate','15.0803','Graduate Research Seminar','planned')
 on conflict (id) do update set program_id=excluded.program_id, academic_level=excluded.academic_level, cip_code=excluded.cip_code, title=excluded.title, status=excluded.status, updated_at=now();
 
 insert into public.curriculum_competencies (id, course_id, academic_level, competency_area_id, statement, status) values
@@ -21,7 +21,7 @@ insert into public.curriculum_competencies (id, course_id, academic_level, compe
   ('grad-aut630-systems-integration','aut-630','graduate',null,'Analyze and evaluate integrated mechanical, electrical, electronic, software, communication, energy, and control-system interfaces using systems-engineering and verification evidence.','planned'),
   ('grad-aut640-thesis','aut-640','graduate',null,'Conduct and defend original automotive technology research using approved scholarly methods, transparent provenance, rigorous analysis, uncertainty treatment, and thesis-quality technical communication.','planned'),
   ('grad-aut650-capstone','aut-650','graduate',null,'Plan, develop, test, evaluate, and communicate an advanced automotive technology solution using systems reasoning, measurable requirements, validation evidence, and documented limitations.','planned'),
-  ('grad-aut690-research-seminar','aut-690','graduate',null,'Critically evaluate and communicate current automotive research and emerging technology literature using transparent source provenance, methodological critique, uncertainty, and professional scholarly discussion.','planned');
+  ('grad-aut690-research-seminar','aut-690','graduate',null,'Critically evaluate and communicate current automotive research and emerging technology literature using transparent source provenance, methodological critique, uncertainty, and professional scholarly discussion.','planned')
 on conflict (id) do update set course_id=excluded.course_id, academic_level=excluded.academic_level, competency_area_id=excluded.competency_area_id, statement=excluded.statement, status=excluded.status, updated_at=now();
 
 insert into public.curriculum_lesson_plans (id, course_id, competency_id, academic_level, title, status) values
@@ -33,7 +33,7 @@ insert into public.curriculum_lesson_plans (id, course_id, competency_id, academ
   ('grad-aut630-systems-integration','aut-630','grad-aut630-systems-integration','graduate','Advanced Automotive Systems Integration, Interfaces, and Verification','planned'),
   ('grad-aut640-thesis','aut-640','grad-aut640-thesis','graduate','Automotive Thesis Research, Validation, Documentation, and Defense','planned'),
   ('grad-aut650-capstone','aut-650','grad-aut650-capstone','graduate','Applied Automotive Technology Capstone Design, Test, and Evaluation','planned'),
-  ('grad-aut690-research-seminar','aut-690','grad-aut690-research-seminar','graduate','Graduate Automotive Research Seminar, Literature Critique, and Scholarly Communication','planned');
+  ('grad-aut690-research-seminar','aut-690','grad-aut690-research-seminar','graduate','Graduate Automotive Research Seminar, Literature Critique, and Scholarly Communication','planned')
 on conflict (id) do update set course_id=excluded.course_id, competency_id=excluded.competency_id, academic_level=excluded.academic_level, title=excluded.title, status=excluded.status, updated_at=now();
 
 delete from public.curriculum_lesson_steps where lesson_plan_id in ('ug-aut140-brake-systems','grad-aut510-advanced-vehicle-diagnostics','grad-aut600-research-design','grad-aut610-applied-research-project','grad-aut620-internship','grad-aut630-systems-integration','grad-aut640-thesis','grad-aut650-capstone','grad-aut690-research-seminar');
@@ -130,7 +130,7 @@ insert into public.curriculum_reference_mappings (reference_id, lesson_plan_id, 
   ('nasa-systems-engineering-handbook-2016','grad-aut650-capstone','systems-engineering-foundation','Governed supporting reference for Applied Automotive Technology Capstone. Source rights and applicability boundaries remain unchanged; vehicle-specific or institution-specific decisions require applicable authoritative information.'),
   ('nist-tn1900-measurement-uncertainty','grad-aut650-capstone','test-uncertainty','Governed supporting reference for Applied Automotive Technology Capstone. Source rights and applicability boundaries remain unchanged; vehicle-specific or institution-specific decisions require applicable authoritative information.'),
   ('technical-writing-for-technicians-2019','grad-aut690-research-seminar','scholarly-communication','Governed supporting reference for Graduate Research Seminar. Source rights and applicability boundaries remain unchanged; vehicle-specific or institution-specific decisions require applicable authoritative information.'),
-  ('openstax-principles-data-science-2025','grad-aut690-research-seminar','research-data-literacy','Governed supporting reference for Graduate Research Seminar. Source rights and applicability boundaries remain unchanged; vehicle-specific or institution-specific decisions require applicable authoritative information.');
+  ('openstax-principles-data-science-2025','grad-aut690-research-seminar','research-data-literacy','Governed supporting reference for Graduate Research Seminar. Source rights and applicability boundaries remain unchanged; vehicle-specific or institution-specific decisions require applicable authoritative information.')
 on conflict (reference_id, lesson_plan_id, role) do update set notes=excluded.notes;
 
 commit;
