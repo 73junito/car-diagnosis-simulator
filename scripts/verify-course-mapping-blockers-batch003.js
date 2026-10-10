@@ -46,10 +46,18 @@ function verify() {
   if (!(blockerAudit.resolvedSinceAudit || []).some((item) => item.courseId === 'aut-120' && item.resolutionPhase === '7F-M')) {
     errors.push('aut-120 Phase 7F-M resolution record missing')
   }
-  const aut150Blocker = (blockerAudit.priorityBlockers || []).find((b) => b.courseId === 'aut-150')
-  if (mappingById.has('aut-150')) errors.push('aut-150 must remain non-canonical until dedicated canonical content is approved')
-  if (!aut150Blocker) errors.push('priority blocker record missing: aut-150')
-  if (aut150Blocker && aut150Blocker.blockerType !== 'missing-dedicated-canonical-catalog-content') errors.push('unexpected blocker type for aut-150')
+  const phase7qExpected = new Map([
+    ['aut-150','ug-aut150-steering-suspension-alignment'],
+    ['aut-210','ug-aut210-engine-performance-fuel-systems'],
+    ['aut-330','ug-aut330-electric-vehicle-technology'],
+    ['aut-525','grad-aut525-experimental-methods']
+  ])
+  for (const [id, lessonId] of phase7qExpected) {
+    const mapping = mappingById.get(id)
+    if (!mapping || mapping.existingCourseId !== id || mapping.existingLessonPlanId !== lessonId || mapping.mappingType !== 'canonical-catalog-course') errors.push('Phase 7F-Q canonical mapping identity drift: '+id)
+    if (!(blockerAudit.resolvedSinceAudit || []).some((item) => item.courseId === id && item.resolutionPhase === '7F-Q')) errors.push('Phase 7F-Q resolution record missing: '+id)
+  }
+  if ((blockerAudit.priorityBlockers || []).length !== 0) errors.push('priorityBlockers must be empty after Phase 7F-Q resolution')
 
   for (const mapping of mappings) {
     if (mapping.mappingType !== 'canonical-catalog-course') {
@@ -131,7 +139,7 @@ function verify() {
     summary: {
       canonicalMappings: mappings.length,
       unmappedCatalogCourses: unmapped.length,
-      priorityBlockers: ['aut-150'],
+      priorityBlockers: [],
       batch3: batch3Ids
     }
   }
@@ -144,7 +152,7 @@ function main() {
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-E/F with Phase 7F-M resolution: 55 canonical mappings, 13 unmapped catalog records, AUT-120 resolved, AUT-150 still blocked, Batch 003 integrity verified')
+  console.log('[PASS] Phase 7F-E/F with Phase 7F-Q resolutions: 59 canonical mappings, 9 unmapped catalog records, AUT-120/150/210/330/525 resolved, Batch 003 integrity verified')
 }
 
 if (require.main === module) main()

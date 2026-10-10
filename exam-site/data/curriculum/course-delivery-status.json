@@ -20,20 +20,20 @@
     "catalogStatus": "planning",
     "catalogCourseCount": 68,
     "catalogPlannedCount": 68,
-    "lessonPlanCount": 65,
-    "undergraduateLessonPlanCount": 44,
-    "graduateLessonPlanCount": 21,
-    "undergraduateCourseRecordCount": 44,
+    "lessonPlanCount": 69,
+    "undergraduateLessonPlanCount": 47,
+    "graduateLessonPlanCount": 22,
+    "undergraduateCourseRecordCount": 47,
     "undergraduateAcademicStatusCounts": {
-      "planned": 43,
+      "planned": 46,
       "active": 1
     },
     "activeUndergraduateAcademicCourseIds": [
       "electrical-1"
     ],
-    "graduateCourseRecordCount": 21,
+    "graduateCourseRecordCount": 22,
     "graduateAcademicStatusCounts": {
-      "planned": 21
+      "planned": 22
     },
     "dedicatedCoursePageCount": 33,
     "dedicatedCoursePageIds": [
@@ -121,6 +121,7 @@
     "highStakesAuthorization": false
   },
   "notes": [
+    "Phase 7F-Q resolves canonical development blockers for AUT-150, AUT-210, AUT-330, and AUT-525 without building delivery pages.",
     "Phase 7F-P Batch 010 adds catalog-aligned undergraduate instructional pages for AUT-230 and AUT-240.",
     "AUT-230/AUT-240 prerequisite verification remains a human/institutional decision.",
     "Phase 7F-O Batch 009 adds catalog-aligned undergraduate instructional pages for AUT-121 and AUT-170.",

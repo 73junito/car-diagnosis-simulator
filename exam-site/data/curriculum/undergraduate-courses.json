@@ -310,6 +310,27 @@
       "cipCode": "47.0604",
       "title": "Automotive Technology Capstone II",
       "status": "planned"
+    },
+    {
+      "id": "aut-150",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Steering, Suspension, and Wheel Alignment",
+      "status": "planned"
+    },
+    {
+      "id": "aut-210",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Engine Performance and Fuel Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-330",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Electric Vehicle Technology",
+      "status": "planned"
     }
   ]
 }

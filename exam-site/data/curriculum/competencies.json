@@ -455,6 +455,34 @@
       "courseId": "aut-590",
       "statement": "Critically synthesize current automotive research and technical publications, compare competing claims, and communicate evidence-supported conclusions with explicit uncertainty and source provenance.",
       "status": "planned"
+    },
+    {
+      "id": "ug-aut150-steering-suspension-alignment",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-150",
+      "statement": "Analyze steering, suspension, tire-wear, wheel-alignment, electric power steering, and vehicle-stability evidence to justify a safe next diagnostic or service step while preserving vehicle-specific specification and procedure boundaries.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut210-engine-performance-fuel-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-210",
+      "statement": "Interpret fuel, ignition, air-induction, throttle-control, sensor, actuator, and engine-operating evidence to distinguish observations from hypotheses and justify a source-controlled next diagnostic step.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut330-electric-vehicle-technology",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-330",
+      "statement": "Analyze battery-electric vehicle architecture, traction energy flow, motors, inverters, charging, regenerative braking, thermal management, and diagnostic evidence while maintaining high-voltage and vehicle-specific service-information boundaries.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut525-experimental-methods",
+      "academicLevel": "graduate",
+      "courseId": "aut-525",
+      "statement": "Design and critique automotive experiments using explicit objectives, instrumentation, controls, data acquisition, uncertainty analysis, repeatability, validation, and technically defensible reporting.",
+      "status": "planned"
     }
   ]
 }

@@ -3,37 +3,12 @@
   "phase": "7F-E",
   "purpose": "catalog-development-mapping-blocker-audit",
   "catalogCourseCount": 68,
-  "canonicalCatalogDevelopmentMappingCount": 55,
-  "unmappedCatalogCourseCount": 13,
-  "priorityBlockers": [
-    {
-      "courseId": "aut-150",
-      "code": "AUT 150",
-      "title": "Steering, Suspension, and Wheel Alignment",
-      "catalogPrerequisites": [
-        "aut-115"
-      ],
-      "blockerType": "missing-dedicated-canonical-catalog-content",
-      "legacyCrosswalkEvidence": {
-        "programCourseId": "AAS-AUT-140",
-        "programCourseTitle": "Suspension & Steering I",
-        "existingCourseId": "suspension-steering-1",
-        "existingLessonPlanId": "ug-suspension-steering-foundations"
-      },
-      "whyLegacyCrosswalkIsInsufficient": "The existing legacy common-course lesson is not identity-preserving with catalog AUT-150, and the canonical catalog-development mapping table currently requires catalogCourseId to equal existingCourseId.",
-      "resolutionRequired": "Create or approve dedicated canonical AUT-150 curriculum content and lesson mapping before delivery-page build.",
-      "blocks": [
-        "aut-260"
-      ]
-    }
-  ],
+  "canonicalCatalogDevelopmentMappingCount": 59,
+  "unmappedCatalogCourseCount": 9,
+  "priorityBlockers": [],
   "allUnmappedCatalogCourseIds": [
     "aut-140",
-    "aut-150",
-    "aut-210",
-    "aut-330",
     "aut-510",
-    "aut-525",
     "aut-600",
     "aut-610",
     "aut-620",
@@ -53,6 +28,26 @@
       "courseId": "aut-120",
       "resolutionPhase": "7F-M",
       "resolution": "Dedicated identity-preserving AUT-120 developed course, competency, lesson, and catalog mapping created; legacy electrical-1 crosswalk retained only in the A.A.S. proposal evidence path."
+    },
+    {
+      "courseId": "aut-150",
+      "resolutionPhase": "7F-Q",
+      "resolution": "Dedicated identity-preserving AUT 150 developed course, competency, lesson, content plan, and canonical catalog mapping created; legacy crosswalk content remains historical evidence only."
+    },
+    {
+      "courseId": "aut-210",
+      "resolutionPhase": "7F-Q",
+      "resolution": "Dedicated identity-preserving AUT 210 developed course, competency, lesson, content plan, and canonical catalog mapping created; legacy crosswalk content remains historical evidence only."
+    },
+    {
+      "courseId": "aut-330",
+      "resolutionPhase": "7F-Q",
+      "resolution": "Dedicated identity-preserving AUT 330 developed course, competency, lesson, content plan, and canonical catalog mapping created; legacy crosswalk content remains historical evidence only."
+    },
+    {
+      "courseId": "aut-525",
+      "resolutionPhase": "7F-Q",
+      "resolution": "Dedicated identity-preserving AUT 525 developed course, competency, lesson, content plan, and canonical catalog mapping created; legacy crosswalk content remains historical evidence only."
     }
   ]
 }

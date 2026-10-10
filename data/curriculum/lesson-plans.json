@@ -1154,6 +1154,78 @@
         "Document provenance limitations and open questions"
       ],
       "status": "planned"
+    },
+    {
+      "id": "ug-aut150-steering-suspension-alignment",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-150",
+      "competencyId": "ug-aut150-steering-suspension-alignment",
+      "title": "Steering, Suspension, Alignment, and Stability Evidence",
+      "sequence": [
+        "Establish steering suspension and alignment safety boundaries",
+        "Identify steering and suspension system roles",
+        "Relate tire wear to geometry and component condition",
+        "Interpret camber caster toe and thrust relationships",
+        "Recognize electric power steering system interactions",
+        "Connect steering inputs to stability-control context",
+        "Analyze inspection and alignment evidence",
+        "Justify a source-controlled next diagnostic or service step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut210-engine-performance-fuel-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-210",
+      "competencyId": "ug-aut210-engine-performance-fuel-systems",
+      "title": "Engine Performance, Fuel, Ignition, and Control-System Evidence",
+      "sequence": [
+        "Define the engine-performance concern and operating context",
+        "Map fuel ignition air and control-system relationships",
+        "Identify sensor and actuator evidence paths",
+        "Interpret operating data without overclaiming causality",
+        "Form competing system-level hypotheses",
+        "Select an evidence-producing diagnostic test",
+        "Compare results with applicable service information",
+        "Document the supported next diagnostic step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut330-electric-vehicle-technology",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-330",
+      "competencyId": "ug-aut330-electric-vehicle-technology",
+      "title": "Battery-Electric Vehicle Architecture, Energy Flow, and Diagnostic Evidence",
+      "sequence": [
+        "Establish high-voltage safety and information boundaries",
+        "Trace battery-electric vehicle energy flow",
+        "Distinguish low-voltage and high-voltage domains",
+        "Analyze traction motor inverter and DC/DC roles",
+        "Relate charging and regenerative-braking energy paths",
+        "Connect thermal management to battery and power-electronics operation",
+        "Interpret safe diagnostic evidence and isolation controls",
+        "Justify a vehicle-specific next diagnostic step"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut525-experimental-methods",
+      "academicLevel": "graduate",
+      "courseId": "aut-525",
+      "competencyId": "grad-aut525-experimental-methods",
+      "title": "Automotive Experimental Design, Measurement, Uncertainty, and Validation",
+      "sequence": [
+        "Define the experimental question and measurable outcome",
+        "Choose instrumentation and measurement architecture",
+        "Establish controls calibration and acquisition conditions",
+        "Plan repeatability reproducibility and uncertainty treatment",
+        "Collect and quality-check experimental data",
+        "Analyze uncertainty and compare competing explanations",
+        "Validate findings against objectives and limitations",
+        "Report methods evidence uncertainty and conclusions"
+      ],
+      "status": "planned"
     }
   ]
 }

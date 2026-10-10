@@ -19,6 +19,12 @@
       "notes": "Phase 7F-P verifies thirty-two catalog-aligned dedicated course pages, including Batch 010 AUT-230/AUT-240, plus the separate AUT-250 HEV training package; prerequisite decisions remain separate human/institutional decisions."
     },
     {
+      "area": "phase7fq_canonical_blocker_resolution",
+      "path": "docs/phase7fq-canonical-blocker-resolution-2026-10-10.md",
+      "status": "canonical-development-resolution",
+      "notes": "Phase 7F-Q creates identity-preserving canonical development content and mappings for AUT-150, AUT-210, AUT-330, and AUT-525 without building delivery pages or changing assessment eligibility."
+    },
+    {
       "area": "aut120_canonical_curriculum_resolution",
       "path": "docs/aut120-canonical-curriculum-resolution-2026-10-10.md",
       "status": "canonical-development-resolution",
@@ -28,7 +34,7 @@
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-010 re-audit classifies 36 remaining catalog courses and finds no ready-to-build Batch 011 candidate."
+      "notes": "Post-Phase-7F-Q re-audit classifies 36 remaining catalog courses and identifies AUT-150, AUT-210, and AUT-525 as the exact Batch 011 ready set; AUT-330 remains prerequisite-chain blocked by AUT-280."
     },
     {
       "area": "institutional_submission",
@@ -110,7 +116,7 @@
     }
   ],
   "open_readiness_items": [
-    "Do not define Batch 011 until at least one current canonical-content/mapping or prerequisite-chain blocker is resolved and the deterministic audit yields a ready course.",
+    "Batch 011 may contain AUT-150, AUT-210, and AUT-525 only under the current deterministic mapping/prerequisite audit; rerun after delivery before defining another batch.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",

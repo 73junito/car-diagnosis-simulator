@@ -9,7 +9,7 @@ describe('Phase 7F-G Batch 004 graduate foundation plan', () => {
     expect(verify().summary).toEqual({
       batch4: ['aut-501', 'aut-515', 'aut-590'],
       deferredUndergraduate: ['aut-420'],
-      continuingBlockers: ['aut-150']
+      continuingBlockers: []
     })
   })
 

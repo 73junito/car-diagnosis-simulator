@@ -12,7 +12,7 @@ describe('Phase 7F-D course delivery rollout execution', () => {
   })
 
   test('keeps unresolved mapping blockers out of rollout batches', () => {
-    expect(verify().summary.blockers).toEqual(['aut-150'])
+    expect(verify().summary.blockers).toEqual([])
   })
 
   test('rollout execution validator passes', () => {
