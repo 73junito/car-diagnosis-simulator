@@ -12,16 +12,18 @@
 | Lesson plans | 64 |
 | Undergraduate lesson plans | 43 |
 | Graduate lesson plans | 21 |
-| Dedicated course delivery pages | 5 |
-| Catalog courses without a dedicated course page | 63 |
+| Dedicated course/training page directories | 5 |
+| Catalog-aligned dedicated course pages | 4 |
+| Catalog courses without a catalog-aligned dedicated course page | 64 |
 
-The dedicated course pages currently present under `exam-site/courses/<course-id>/index.html` are:
+The catalog-aligned dedicated course pages currently present are:
 
 - `aut-101`
 - `aut-105`
 - `aut-110`
 - `aut-115`
-- `aut-250`
+
+The existing `/courses/aut-250/` route is a separate HEV formative-training package crosswalked from catalog AUT-330. It is not the delivery page for catalog AUT-250 Automotive Diagnostics I.
 
 ## Status-model finding
 
@@ -51,7 +53,7 @@ It does **not** mean:
 - 64 production-ready courses; or
 - 64 assessment-authorized courses.
 
-At the current Phase 7F-C state, there are **5 dedicated course delivery pages: AUT-101, AUT-105, AUT-110, AUT-115, and AUT-250**.
+At the current Phase 7F-C state, there are **4 catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, and AUT-115**, plus the separate **AUT-250 HEV training package crosswalked from AUT-330**.
 
 ## Governance boundary
 
