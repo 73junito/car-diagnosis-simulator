@@ -1,12 +1,12 @@
-# Phase 7F-G Batch 004 Graduate Foundation Plan
+# Phase 7F-H Batch 004 Graduate Foundation Execution
 
 ## Purpose
 
-Phase 7F-G selects the next delivery batch after the Phase 7F-F undergraduate build while preserving the distinction between **course-page availability** and **institutional eligibility**.
+Phase 7F-H executes the graduate foundation batch selected in Phase 7F-G while preserving the distinction between **course-page availability** and **institutional eligibility**.
 
-No new course page is created in this phase.
+AUT 501, AUT 515, and AUT 590 now have dedicated graduate instructional course pages.
 
-## Batch 004 — graduate foundation
+## Batch 004 — graduate foundation — built and verified
 
 | Course | Title | Prerequisite | Disposition |
 | --- | --- | --- | --- |
@@ -32,13 +32,13 @@ AUT 120 and AUT 150 remain intentionally blocked from canonical delivery until d
 
 ## Governance boundary
 
-Phase 7F-G is planning-only:
+Phase 7F-H delivery execution:
 
-- zero new course pages;
+- three new graduate instructional course pages;
 - zero academic-status changes;
 - zero assessment-eligibility changes;
 - no admissions or standing eligibility automation;
 - no scored/high-stakes authorization;
 - no accreditation, KBOR, or academic-credit authority claim.
 
-After this plan is merged, the next implementation step is **Phase 7F-H — Batch 004 Graduate Foundation Course Page Build**.
+Page availability does not establish admissions eligibility, prerequisite satisfaction, degree equivalency, mathematics preparation, or graduate standing.
