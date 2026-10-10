@@ -1,2 +1,5 @@
-const {verify}=require('../scripts/verify-remaining-delivery-eligibility-audit.js')
-describe('Phase 7F-W post-Batch-016 audit',()=>{test('classifies all 13 remaining courses',()=>expect(verify()).toMatchObject({ok:true,errors:[],summary:{readyToBuildNow:0,blockedMissingCanonicalMapping:9,blockedPrerequisiteChain:2,blockedHumanInstitutionalVerification:2}}));test('records no Batch 017',()=>expect(verify().conclusion).toMatchObject({batch017Ready:false,batch017Candidates:[]}))})
+const { verify } = require('../scripts/verify-remaining-delivery-eligibility-audit.js')
+describe('Phase 7F-X post-resolution delivery eligibility audit',()=>{
+  test('classifies all 13 remaining catalog courses',()=>expect(verify()).toMatchObject({ok:true,errors:[],summary:{readyToBuildNow:3,blockedMissingCanonicalMapping:0,blockedPrerequisiteChain:5,blockedHumanInstitutionalVerification:5}}))
+  test('identifies exact Batch 017 candidates',()=>expect(verify().conclusion).toMatchObject({batch017Ready:true,batch017Candidates:['aut-140','aut-510','aut-600']}))
+})

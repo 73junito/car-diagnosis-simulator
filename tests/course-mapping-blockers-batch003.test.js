@@ -8,8 +8,8 @@ describe('Phase 7F-E mapping blockers with Phase 7F-Q canonical resolutions', ()
 
   test('records the expanded canonical mapping set', () => {
     expect(verify().summary).toEqual({
-      canonicalMappings: 59,
-      unmappedCatalogCourses: 9,
+      canonicalMappings: 68,
+      unmappedCatalogCourses: 0,
       priorityBlockers: [],
       batch3: ['aut-200','aut-201','aut-220']
     })
