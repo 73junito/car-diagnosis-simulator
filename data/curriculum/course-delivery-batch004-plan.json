@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-G",
+  "purpose": "batch-004-graduate-foundation-delivery-plan",
+  "sourceDeliveryPhase": "7F-F",
+  "status": "planned-for-delivery-build",
+  "rationale": "Start the graduate delivery sequence with identity-preserving canonical mappings that do not depend on unresolved undergraduate catalog-course blockers. Preserve admissions/standing prerequisites as human/institutional eligibility conditions rather than inferring satisfaction from page availability.",
+  "courses": [
+    {
+      "courseId": "aut-501",
+      "code": "AUT 501",
+      "title": "Advanced Automotive Systems",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut501-integrated-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "Bachelor's degree in automotive technology, engineering, applied technology, or related field",
+      "prerequisiteType": "institutional-admissions-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-501/index.html"
+    },
+    {
+      "courseId": "aut-515",
+      "code": "AUT 515",
+      "title": "Automotive Systems Modeling",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut515-systems-modeling",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "Graduate-level mathematics or equivalent",
+      "prerequisiteType": "academic-preparation-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-515/index.html"
+    },
+    {
+      "courseId": "aut-590",
+      "code": "AUT 590",
+      "title": "Advanced Automotive Technology Seminar",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut590-technology-seminar",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "Graduate standing",
+      "prerequisiteType": "institutional-standing-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-590/index.html"
+    }
+  ],
+  "deferredUndergraduate": [
+    {
+      "courseId": "aut-420",
+      "code": "AUT 420",
+      "reason": "Senior standing and department approval are institutional eligibility conditions. Do not infer eligibility from repository delivery state."
+    }
+  ],
+  "continuingCanonicalContentBlockers": [
+    "aut-120",
+    "aut-150"
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 0,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "admissionsEligibilityAutomation": false,
+    "productionReadyClaims": 0
+  }
+}
