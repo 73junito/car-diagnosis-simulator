@@ -3,20 +3,10 @@
   "phase": "7F-E",
   "purpose": "catalog-development-mapping-blocker-audit",
   "catalogCourseCount": 68,
-  "canonicalCatalogDevelopmentMappingCount": 59,
-  "unmappedCatalogCourseCount": 9,
+  "canonicalCatalogDevelopmentMappingCount": 68,
+  "unmappedCatalogCourseCount": 0,
   "priorityBlockers": [],
-  "allUnmappedCatalogCourseIds": [
-    "aut-140",
-    "aut-510",
-    "aut-600",
-    "aut-610",
-    "aut-620",
-    "aut-630",
-    "aut-640",
-    "aut-650",
-    "aut-690"
-  ],
+  "allUnmappedCatalogCourseIds": [],
   "governance": {
     "noCanonicalAliasFabrication": true,
     "noAcademicStatusChange": true,
@@ -48,6 +38,51 @@
       "courseId": "aut-525",
       "resolutionPhase": "7F-Q",
       "resolution": "Dedicated identity-preserving AUT 525 developed course, competency, lesson, content plan, and canonical catalog mapping created; legacy crosswalk content remains historical evidence only."
+    },
+    {
+      "courseId": "aut-140",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
+    },
+    {
+      "courseId": "aut-510",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
+    },
+    {
+      "courseId": "aut-600",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
+    },
+    {
+      "courseId": "aut-610",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
+    },
+    {
+      "courseId": "aut-620",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
+    },
+    {
+      "courseId": "aut-630",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
+    },
+    {
+      "courseId": "aut-640",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
+    },
+    {
+      "courseId": "aut-650",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
+    },
+    {
+      "courseId": "aut-690",
+      "resolutionPhase": "7F-X",
+      "resolution": "Dedicated identity-preserving canonical developed course, competency, lesson, content plan, and catalog mapping created; any legacy crosswalk/content remains preserved as historical or supplemental evidence."
     }
   ]
 }

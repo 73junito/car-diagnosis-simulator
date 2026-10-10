@@ -359,6 +359,60 @@
       "existingCourseId": "aut-525",
       "existingLessonPlanId": "grad-aut525-experimental-methods",
       "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-140",
+      "existingCourseId": "aut-140",
+      "existingLessonPlanId": "ug-aut140-brake-systems",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-510",
+      "existingCourseId": "aut-510",
+      "existingLessonPlanId": "grad-aut510-advanced-vehicle-diagnostics",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-600",
+      "existingCourseId": "aut-600",
+      "existingLessonPlanId": "grad-aut600-research-design",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-610",
+      "existingCourseId": "aut-610",
+      "existingLessonPlanId": "grad-aut610-applied-research-project",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-620",
+      "existingCourseId": "aut-620",
+      "existingLessonPlanId": "grad-aut620-internship",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-630",
+      "existingCourseId": "aut-630",
+      "existingLessonPlanId": "grad-aut630-systems-integration",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-640",
+      "existingCourseId": "aut-640",
+      "existingLessonPlanId": "grad-aut640-thesis",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-650",
+      "existingCourseId": "aut-650",
+      "existingLessonPlanId": "grad-aut650-capstone",
+      "mappingType": "canonical-catalog-course"
+    },
+    {
+      "catalogCourseId": "aut-690",
+      "existingCourseId": "aut-690",
+      "existingLessonPlanId": "grad-aut690-research-seminar",
+      "mappingType": "canonical-catalog-course"
     }
   ],
   "authorityReferences": [
@@ -811,18 +865,5 @@
       ]
     }
   ],
-  "catalogCourseCrosswalks": [
-    {
-      "catalogCourseId": "aut-140",
-      "existingCourseId": "brakes-1",
-      "existingLessonPlanId": "ug-brakes-foundations",
-      "mappingType": "catalog-crosswalk"
-    },
-    {
-      "catalogCourseId": "aut-510",
-      "existingCourseId": "advanced-diagnostic-analysis",
-      "existingLessonPlanId": "grad-diagnostic-evidence-analysis",
-      "mappingType": "catalog-crosswalk"
-    }
-  ]
+  "catalogCourseCrosswalks": []
 }

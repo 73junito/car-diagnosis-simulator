@@ -200,10 +200,10 @@ describe('GET /api/curriculum', () => {
     expect(errors).toEqual([]);
 
     expect(payload.pathways).toHaveLength(2);
-    expect(payload.courses).toHaveLength(69);
+    expect(payload.courses).toHaveLength(78);
     expect(payload.catalogCourses).toHaveLength(68);
-    expect(payload.competencies).toHaveLength(69);
-    expect(payload.lessonPlans).toHaveLength(69);
+    expect(payload.competencies).toHaveLength(78);
+    expect(payload.lessonPlans).toHaveLength(78);
     expect(payload.scenarioMappings).toHaveLength(2);
   });
 
@@ -385,7 +385,7 @@ describe('verify-curriculum-api-contract CLI', () => {
 
     expect(output).toContain('[PASS] Curriculum API contract verified');
     expect(output).toContain('2 pathways');
-    expect(output).toContain('69 developed courses');
+    expect(output).toContain('78 developed courses');
     expect(output).toContain('68 catalog courses');
   });
 

@@ -20,20 +20,20 @@
     "catalogStatus": "planning",
     "catalogCourseCount": 68,
     "catalogPlannedCount": 68,
-    "lessonPlanCount": 69,
-    "undergraduateLessonPlanCount": 47,
-    "graduateLessonPlanCount": 22,
-    "undergraduateCourseRecordCount": 47,
+    "lessonPlanCount": 78,
+    "undergraduateLessonPlanCount": 48,
+    "graduateLessonPlanCount": 30,
+    "undergraduateCourseRecordCount": 48,
     "undergraduateAcademicStatusCounts": {
-      "planned": 46,
+      "planned": 47,
       "active": 1
     },
     "activeUndergraduateAcademicCourseIds": [
       "electrical-1"
     ],
-    "graduateCourseRecordCount": 22,
+    "graduateCourseRecordCount": 30,
     "graduateAcademicStatusCounts": {
-      "planned": 22
+      "planned": 30
     },
     "dedicatedCoursePageCount": 56,
     "dedicatedCoursePageIds": [

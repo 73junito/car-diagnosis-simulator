@@ -26,7 +26,7 @@ function verify() {
   const lessonById = new Map((lessons.lessonPlans || []).map((l) => [l.id, l]))
   const built = new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds || [])
 
-  if (blockerAudit.phase !== '7F-E') errors.push('blocker audit phase must be 7F-E')
+  if (blockerAudit.phase !== '7F-E') errors.push('blocker audit phase must remain 7F-E historical audit identity')
   if (blockerAudit.catalogCourseCount !== 68) errors.push('catalogCourseCount must remain 68')
   if (mappings.length !== blockerAudit.canonicalCatalogDevelopmentMappingCount) {
     errors.push(`canonical mapping count expected ${blockerAudit.canonicalCatalogDevelopmentMappingCount}, found ${mappings.length}`)
@@ -152,7 +152,7 @@ function main() {
     for (const error of result.errors) console.error('  - ' + error)
     process.exit(1)
   }
-  console.log('[PASS] Phase 7F-E/F with Phase 7F-Q resolutions: 59 canonical mappings, 9 unmapped catalog records, AUT-120/150/210/330/525 resolved, Batch 003 integrity verified')
+  console.log('[PASS] Phase 7F-E/F with Phase 7F-X resolutions: 68 canonical mappings, 0 unmapped catalog records; all catalog identities canonical, Batch 003 integrity verified')
 }
 
 if (require.main === module) main()

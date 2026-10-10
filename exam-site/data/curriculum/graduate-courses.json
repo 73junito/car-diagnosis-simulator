@@ -11,20 +11,6 @@
       "status": "planned"
     },
     {
-      "id": "vehicle-systems-testing",
-      "academicLevel": "graduate",
-      "cipCode": "15.0803",
-      "title": "Vehicle Systems and Testing",
-      "status": "planned"
-    },
-    {
-      "id": "curriculum-assessment-design",
-      "academicLevel": "graduate",
-      "cipCode": "15.0803",
-      "title": "Curriculum & Assessment Design",
-      "status": "planned"
-    },
-    {
       "id": "applied-research",
       "academicLevel": "graduate",
       "cipCode": "15.0803",
@@ -32,17 +18,17 @@
       "status": "planned"
     },
     {
-      "id": "technical-instructional-leadership",
-      "academicLevel": "graduate",
-      "cipCode": "15.0803",
-      "title": "Technical Instructional Leadership",
-      "status": "planned"
-    },
-    {
       "id": "aut-501",
       "academicLevel": "graduate",
       "cipCode": "15.0803",
       "title": "Advanced Automotive Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-510",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Vehicle Diagnostics",
       "status": "planned"
     },
     {
@@ -57,6 +43,13 @@
       "academicLevel": "graduate",
       "cipCode": "15.0803",
       "title": "Advanced Vehicle Data Analytics",
+      "status": "planned"
+    },
+    {
+      "id": "aut-525",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Experimental Methods in Automotive Technology",
       "status": "planned"
     },
     {
@@ -151,10 +144,73 @@
       "status": "planned"
     },
     {
-      "id": "aut-525",
+      "id": "aut-600",
       "academicLevel": "graduate",
       "cipCode": "15.0803",
-      "title": "Experimental Methods in Automotive Technology",
+      "title": "Automotive Research Design",
+      "status": "planned"
+    },
+    {
+      "id": "aut-610",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Applied Automotive Research Project",
+      "status": "planned"
+    },
+    {
+      "id": "aut-620",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Graduate Automotive Technology Internship",
+      "status": "planned"
+    },
+    {
+      "id": "aut-630",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Advanced Automotive Systems Integration",
+      "status": "planned"
+    },
+    {
+      "id": "aut-640",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Automotive Technology Thesis",
+      "status": "planned"
+    },
+    {
+      "id": "aut-650",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Applied Automotive Technology Capstone",
+      "status": "planned"
+    },
+    {
+      "id": "aut-690",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Graduate Research Seminar",
+      "status": "planned"
+    },
+    {
+      "id": "curriculum-assessment-design",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Curriculum & Assessment Design",
+      "status": "planned"
+    },
+    {
+      "id": "technical-instructional-leadership",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Technical Instructional Leadership",
+      "status": "planned"
+    },
+    {
+      "id": "vehicle-systems-testing",
+      "academicLevel": "graduate",
+      "cipCode": "15.0803",
+      "title": "Vehicle Systems and Testing",
       "status": "planned"
     }
   ]

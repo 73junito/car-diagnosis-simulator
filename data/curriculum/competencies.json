@@ -2,59 +2,10 @@
   "schemaVersion": "1.0.0",
   "competencies": [
     {
-      "id": "ug-aut101-systems-professional-foundations",
-      "academicLevel": "undergraduate",
-      "courseId": "aut-101",
-      "statement": "Explain major vehicle-system roles, distinguish observations from diagnostic conclusions, and use safety, professional practice, and technical information to plan an evidence-based next step.",
-      "status": "planned"
-    },
-    {
-      "id": "ug-electrical-evidence-diagnosis",
-      "academicLevel": "undergraduate",
-      "courseId": "electrical-1",
-      "statement": "Use observed electrical symptoms and appropriate measurements to plan a vehicle-specific diagnostic check.",
-      "status": "draft"
-    },
-    {
-      "id": "ug-brakes-evidence-diagnosis",
-      "academicLevel": "undergraduate",
-      "courseId": "brakes-1",
-      "statement": "Use inspection findings and measurements to diagnose brake-system concerns and verify corrective action.",
-      "status": "planned"
-    },
-    {
-      "id": "ug-engine-performance-analysis",
-      "academicLevel": "undergraduate",
-      "courseId": "engine-performance-1",
-      "statement": "Interpret operating data and test results to diagnose engine-performance concerns and verify repairs.",
-      "status": "planned"
-    },
-    {
-      "id": "ug-suspension-steering-analysis",
-      "academicLevel": "undergraduate",
-      "courseId": "suspension-steering-1",
-      "statement": "Use inspection, geometry, and component evidence to diagnose suspension and steering concerns.",
-      "status": "planned"
-    },
-    {
       "id": "grad-advanced-diagnostic-analysis",
       "academicLevel": "graduate",
       "courseId": "advanced-diagnostic-analysis",
       "statement": "Evaluate complex vehicle-system evidence, uncertainty, competing hypotheses, and verification strategies.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-vehicle-systems-testing",
-      "academicLevel": "graduate",
-      "courseId": "vehicle-systems-testing",
-      "statement": "Design and evaluate advanced vehicle-system tests using appropriate instrumentation, controls, and technical evidence.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-curriculum-assessment-design",
-      "academicLevel": "graduate",
-      "courseId": "curriculum-assessment-design",
-      "statement": "Design aligned technical curriculum, authentic assessments, rubrics, and feedback systems using measurable outcomes.",
       "status": "planned"
     },
     {
@@ -65,6 +16,188 @@
       "status": "planned"
     },
     {
+      "id": "grad-aut501-integrated-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-501",
+      "statement": "Analyze interactions among advanced automotive system domains, identify interface evidence and uncertainty, and design a traceable system-level verification strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut510-advanced-vehicle-diagnostics",
+      "academicLevel": "graduate",
+      "courseId": "aut-510",
+      "statement": "Integrate model-based, network, waveform, data, and fault-isolation evidence to evaluate competing diagnostic hypotheses and validate technically defensible conclusions.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut515-systems-modeling",
+      "academicLevel": "graduate",
+      "courseId": "aut-515",
+      "statement": "Construct and evaluate automotive system models, justify parameter choices and assumptions, and assess model validity against appropriate evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut520-data-analytics",
+      "academicLevel": "graduate",
+      "courseId": "aut-520",
+      "statement": "Evaluate vehicle datasets using appropriate analytical methods, distinguish statistical patterns from supported technical conclusions, and document uncertainty and validation needs.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut525-experimental-methods",
+      "academicLevel": "graduate",
+      "courseId": "aut-525",
+      "statement": "Design and critique automotive experiments using explicit objectives, instrumentation, controls, data acquisition, uncertainty analysis, repeatability, validation, and technically defensible reporting.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut530-advanced-ev-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-530",
+      "statement": "Analyze advanced EV subsystem interactions, evaluate operating evidence across energy-conversion domains, and design a source-supported verification strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut535-battery-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-535",
+      "statement": "Evaluate battery-system models and diagnostic evidence, distinguish estimated states from measured observations, and justify a validation strategy that respects safety and source boundaries.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut540-power-electronics",
+      "academicLevel": "graduate",
+      "courseId": "aut-540",
+      "statement": "Analyze vehicle power-electronic energy conversion and control relationships, interpret evidence across electrical and thermal domains, and identify applicable source requirements for validation.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut545-energy-management",
+      "academicLevel": "graduate",
+      "courseId": "aut-545",
+      "statement": "Evaluate vehicle energy-flow strategies, articulate optimization objectives and constraints, and justify conclusions using traceable operating evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut550-automotive-networks",
+      "academicLevel": "graduate",
+      "courseId": "aut-550",
+      "statement": "Analyze advanced vehicle-network behavior and topology evidence, distinguish communication symptoms from root-cause conclusions, and design a traceable network verification strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut555-embedded-ecu",
+      "academicLevel": "graduate",
+      "courseId": "aut-555",
+      "statement": "Evaluate embedded automotive architecture and software/hardware interactions, identify interface evidence and timing constraints conceptually, and design an applicable validation approach.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut560-adas-perception",
+      "academicLevel": "graduate",
+      "courseId": "aut-560",
+      "statement": "Evaluate multi-sensor perception evidence, explain sensor-fusion and calibration dependencies, and design a validation strategy that documents environment and configuration limitations.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut565-autonomous-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-565",
+      "statement": "Analyze autonomous-system functional chains, identify cross-domain dependencies and failure evidence, and design a traceable simulation or test validation strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut570-cybersecurity",
+      "academicLevel": "graduate",
+      "courseId": "aut-570",
+      "statement": "Evaluate automotive cybersecurity risks and controls using threat-model evidence, distinguish defensive verification from exploit development, and document residual risk and validation needs.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut575-software-defined-vehicle",
+      "academicLevel": "graduate",
+      "courseId": "aut-575",
+      "statement": "Evaluate software-defined vehicle architecture tradeoffs, trace software/data dependencies, and design a configuration-aware verification and lifecycle strategy.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut580-control-systems",
+      "academicLevel": "graduate",
+      "courseId": "aut-580",
+      "statement": "Evaluate advanced automotive control-system models and evidence, assess stability and estimation assumptions, and justify a validation strategy against system requirements.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut585-digital-twins",
+      "academicLevel": "graduate",
+      "courseId": "aut-585",
+      "statement": "Evaluate a vehicle digital-twin architecture, distinguish model state from observed vehicle state, and design calibration and validation activities using traceable data.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut590-technology-seminar",
+      "academicLevel": "graduate",
+      "courseId": "aut-590",
+      "statement": "Critically synthesize current automotive research and technical publications, compare competing claims, and communicate evidence-supported conclusions with explicit uncertainty and source provenance.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut600-research-design",
+      "academicLevel": "graduate",
+      "courseId": "aut-600",
+      "statement": "Design automotive research using focused questions, hypotheses, experimental protocols, analytical methods, uncertainty controls, validation strategies, and proposal-quality technical communication.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut610-applied-research-project",
+      "academicLevel": "graduate",
+      "courseId": "aut-610",
+      "statement": "Execute and evaluate an applied automotive research project through controlled data collection, analysis, validation, technical reporting, and explicit treatment of limitations and provenance.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut620-internship",
+      "academicLevel": "graduate",
+      "courseId": "aut-620",
+      "statement": "Document and critically evaluate advanced automotive professional practice using approved objectives, evidence, reflection, technical communication, and explicit institutional supervision boundaries.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut630-systems-integration",
+      "academicLevel": "graduate",
+      "courseId": "aut-630",
+      "statement": "Analyze and evaluate integrated mechanical, electrical, electronic, software, communication, energy, and control-system interfaces using systems-engineering and verification evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut640-thesis",
+      "academicLevel": "graduate",
+      "courseId": "aut-640",
+      "statement": "Conduct and defend original automotive technology research using approved scholarly methods, transparent provenance, rigorous analysis, uncertainty treatment, and thesis-quality technical communication.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut650-capstone",
+      "academicLevel": "graduate",
+      "courseId": "aut-650",
+      "statement": "Plan, develop, test, evaluate, and communicate an advanced automotive technology solution using systems reasoning, measurable requirements, validation evidence, and documented limitations.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-aut690-research-seminar",
+      "academicLevel": "graduate",
+      "courseId": "aut-690",
+      "statement": "Critically evaluate and communicate current automotive research and emerging technology literature using transparent source provenance, methodological critique, uncertainty, and professional scholarly discussion.",
+      "status": "planned"
+    },
+    {
+      "id": "grad-curriculum-assessment-design",
+      "academicLevel": "graduate",
+      "courseId": "curriculum-assessment-design",
+      "statement": "Design aligned technical curriculum, authentic assessments, rubrics, and feedback systems using measurable outcomes.",
+      "status": "planned"
+    },
+    {
       "id": "grad-technical-instructional-leadership",
       "academicLevel": "graduate",
       "courseId": "technical-instructional-leadership",
@@ -72,10 +205,17 @@
       "status": "planned"
     },
     {
-      "id": "ug-hev-safe-diagnostic-reasoning",
+      "id": "grad-vehicle-systems-testing",
+      "academicLevel": "graduate",
+      "courseId": "vehicle-systems-testing",
+      "statement": "Design and evaluate advanced vehicle-system tests using appropriate instrumentation, controls, and technical evidence.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut101-systems-professional-foundations",
       "academicLevel": "undergraduate",
-      "courseId": "hybrid-electric-vehicle-technology",
-      "statement": "Explain electrified-vehicle energy flow, distinguish voltage domains and system roles, and use documented evidence to select safe, vehicle-specific diagnostic next steps without treating one symptom, code, or measurement as proof of component failure.",
+      "courseId": "aut-101",
+      "statement": "Explain major vehicle-system roles, distinguish observations from diagnostic conclusions, and use safety, professional practice, and technical information to plan an evidence-based next step.",
       "status": "planned"
     },
     {
@@ -128,6 +268,20 @@
       "status": "planned"
     },
     {
+      "id": "ug-aut140-brake-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-140",
+      "statement": "Analyze hydraulic and electronic brake-system operation, inspection findings, measurements, ABS/control evidence, and applicable service information to justify a safe diagnostic or service decision.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut150-steering-suspension-alignment",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-150",
+      "statement": "Analyze steering, suspension, tire-wear, wheel-alignment, electric power steering, and vehicle-stability evidence to justify a safe next diagnostic or service step while preserving vehicle-specific specification and procedure boundaries.",
+      "status": "planned"
+    },
+    {
       "id": "ug-aut160-drivetrain-systems",
       "academicLevel": "undergraduate",
       "courseId": "aut-160",
@@ -160,6 +314,13 @@
       "academicLevel": "undergraduate",
       "courseId": "aut-201",
       "statement": "Organize engine mechanical laboratory evidence, select an appropriate measurement or inspection approach, and justify a next step using applicable specifications and documented observations.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-aut210-engine-performance-fuel-systems",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-210",
+      "statement": "Interpret fuel, ignition, air-induction, throttle-control, sensor, actuator, and engine-operating evidence to distinguish observations from hypotheses and justify a source-controlled next diagnostic step.",
       "status": "planned"
     },
     {
@@ -261,6 +422,13 @@
       "status": "planned"
     },
     {
+      "id": "ug-aut330-electric-vehicle-technology",
+      "academicLevel": "undergraduate",
+      "courseId": "aut-330",
+      "statement": "Analyze battery-electric vehicle architecture, traction energy flow, motors, inverters, charging, regenerative braking, thermal management, and diagnostic evidence while maintaining high-voltage and vehicle-specific service-information boundaries.",
+      "status": "planned"
+    },
+    {
       "id": "ug-aut331-ev-lab",
       "academicLevel": "undergraduate",
       "courseId": "aut-331",
@@ -345,143 +513,38 @@
       "status": "planned"
     },
     {
-      "id": "grad-aut501-integrated-systems",
-      "academicLevel": "graduate",
-      "courseId": "aut-501",
-      "statement": "Analyze interactions among advanced automotive system domains, identify interface evidence and uncertainty, and design a traceable system-level verification strategy.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut515-systems-modeling",
-      "academicLevel": "graduate",
-      "courseId": "aut-515",
-      "statement": "Construct and evaluate automotive system models, justify parameter choices and assumptions, and assess model validity against appropriate evidence.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut520-data-analytics",
-      "academicLevel": "graduate",
-      "courseId": "aut-520",
-      "statement": "Evaluate vehicle datasets using appropriate analytical methods, distinguish statistical patterns from supported technical conclusions, and document uncertainty and validation needs.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut530-advanced-ev-systems",
-      "academicLevel": "graduate",
-      "courseId": "aut-530",
-      "statement": "Analyze advanced EV subsystem interactions, evaluate operating evidence across energy-conversion domains, and design a source-supported verification strategy.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut535-battery-systems",
-      "academicLevel": "graduate",
-      "courseId": "aut-535",
-      "statement": "Evaluate battery-system models and diagnostic evidence, distinguish estimated states from measured observations, and justify a validation strategy that respects safety and source boundaries.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut540-power-electronics",
-      "academicLevel": "graduate",
-      "courseId": "aut-540",
-      "statement": "Analyze vehicle power-electronic energy conversion and control relationships, interpret evidence across electrical and thermal domains, and identify applicable source requirements for validation.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut545-energy-management",
-      "academicLevel": "graduate",
-      "courseId": "aut-545",
-      "statement": "Evaluate vehicle energy-flow strategies, articulate optimization objectives and constraints, and justify conclusions using traceable operating evidence.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut550-automotive-networks",
-      "academicLevel": "graduate",
-      "courseId": "aut-550",
-      "statement": "Analyze advanced vehicle-network behavior and topology evidence, distinguish communication symptoms from root-cause conclusions, and design a traceable network verification strategy.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut555-embedded-ecu",
-      "academicLevel": "graduate",
-      "courseId": "aut-555",
-      "statement": "Evaluate embedded automotive architecture and software/hardware interactions, identify interface evidence and timing constraints conceptually, and design an applicable validation approach.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut560-adas-perception",
-      "academicLevel": "graduate",
-      "courseId": "aut-560",
-      "statement": "Evaluate multi-sensor perception evidence, explain sensor-fusion and calibration dependencies, and design a validation strategy that documents environment and configuration limitations.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut565-autonomous-systems",
-      "academicLevel": "graduate",
-      "courseId": "aut-565",
-      "statement": "Analyze autonomous-system functional chains, identify cross-domain dependencies and failure evidence, and design a traceable simulation or test validation strategy.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut570-cybersecurity",
-      "academicLevel": "graduate",
-      "courseId": "aut-570",
-      "statement": "Evaluate automotive cybersecurity risks and controls using threat-model evidence, distinguish defensive verification from exploit development, and document residual risk and validation needs.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut575-software-defined-vehicle",
-      "academicLevel": "graduate",
-      "courseId": "aut-575",
-      "statement": "Evaluate software-defined vehicle architecture tradeoffs, trace software/data dependencies, and design a configuration-aware verification and lifecycle strategy.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut580-control-systems",
-      "academicLevel": "graduate",
-      "courseId": "aut-580",
-      "statement": "Evaluate advanced automotive control-system models and evidence, assess stability and estimation assumptions, and justify a validation strategy against system requirements.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut585-digital-twins",
-      "academicLevel": "graduate",
-      "courseId": "aut-585",
-      "statement": "Evaluate a vehicle digital-twin architecture, distinguish model state from observed vehicle state, and design calibration and validation activities using traceable data.",
-      "status": "planned"
-    },
-    {
-      "id": "grad-aut590-technology-seminar",
-      "academicLevel": "graduate",
-      "courseId": "aut-590",
-      "statement": "Critically synthesize current automotive research and technical publications, compare competing claims, and communicate evidence-supported conclusions with explicit uncertainty and source provenance.",
-      "status": "planned"
-    },
-    {
-      "id": "ug-aut150-steering-suspension-alignment",
+      "id": "ug-brakes-evidence-diagnosis",
       "academicLevel": "undergraduate",
-      "courseId": "aut-150",
-      "statement": "Analyze steering, suspension, tire-wear, wheel-alignment, electric power steering, and vehicle-stability evidence to justify a safe next diagnostic or service step while preserving vehicle-specific specification and procedure boundaries.",
+      "courseId": "brakes-1",
+      "statement": "Use inspection findings and measurements to diagnose brake-system concerns and verify corrective action.",
       "status": "planned"
     },
     {
-      "id": "ug-aut210-engine-performance-fuel-systems",
+      "id": "ug-electrical-evidence-diagnosis",
       "academicLevel": "undergraduate",
-      "courseId": "aut-210",
-      "statement": "Interpret fuel, ignition, air-induction, throttle-control, sensor, actuator, and engine-operating evidence to distinguish observations from hypotheses and justify a source-controlled next diagnostic step.",
-      "status": "planned"
+      "courseId": "electrical-1",
+      "statement": "Use observed electrical symptoms and appropriate measurements to plan a vehicle-specific diagnostic check.",
+      "status": "draft"
     },
     {
-      "id": "ug-aut330-electric-vehicle-technology",
+      "id": "ug-engine-performance-analysis",
       "academicLevel": "undergraduate",
-      "courseId": "aut-330",
-      "statement": "Analyze battery-electric vehicle architecture, traction energy flow, motors, inverters, charging, regenerative braking, thermal management, and diagnostic evidence while maintaining high-voltage and vehicle-specific service-information boundaries.",
+      "courseId": "engine-performance-1",
+      "statement": "Interpret operating data and test results to diagnose engine-performance concerns and verify repairs.",
       "status": "planned"
     },
     {
-      "id": "grad-aut525-experimental-methods",
-      "academicLevel": "graduate",
-      "courseId": "aut-525",
-      "statement": "Design and critique automotive experiments using explicit objectives, instrumentation, controls, data acquisition, uncertainty analysis, repeatability, validation, and technically defensible reporting.",
+      "id": "ug-hev-safe-diagnostic-reasoning",
+      "academicLevel": "undergraduate",
+      "courseId": "hybrid-electric-vehicle-technology",
+      "statement": "Explain electrified-vehicle energy flow, distinguish voltage domains and system roles, and use documented evidence to select safe, vehicle-specific diagnostic next steps without treating one symptom, code, or measurement as proof of component failure.",
+      "status": "planned"
+    },
+    {
+      "id": "ug-suspension-steering-analysis",
+      "academicLevel": "undergraduate",
+      "courseId": "suspension-steering-1",
+      "statement": "Use inspection, geometry, and component evidence to diagnose suspension and steering concerns.",
       "status": "planned"
     }
   ]

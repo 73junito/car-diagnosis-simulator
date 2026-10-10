@@ -11,41 +11,6 @@
       "status": "planned"
     },
     {
-      "id": "electrical-1",
-      "academicLevel": "undergraduate",
-      "cipCode": "47.0604",
-      "title": "Electrical 1",
-      "status": "active"
-    },
-    {
-      "id": "brakes-1",
-      "academicLevel": "undergraduate",
-      "cipCode": "47.0604",
-      "title": "Brakes 1",
-      "status": "planned"
-    },
-    {
-      "id": "engine-performance-1",
-      "academicLevel": "undergraduate",
-      "cipCode": "47.0604",
-      "title": "Engine Performance 1",
-      "status": "planned"
-    },
-    {
-      "id": "suspension-steering-1",
-      "academicLevel": "undergraduate",
-      "cipCode": "47.0604",
-      "title": "Suspension & Steering 1",
-      "status": "planned"
-    },
-    {
-      "id": "hybrid-electric-vehicle-technology",
-      "academicLevel": "undergraduate",
-      "cipCode": "47.0604",
-      "title": "Hybrid & Electric Vehicle Technology",
-      "status": "planned"
-    },
-    {
       "id": "aut-105",
       "academicLevel": "undergraduate",
       "cipCode": "47.0604",
@@ -95,6 +60,20 @@
       "status": "planned"
     },
     {
+      "id": "aut-140",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Automotive Brake Systems",
+      "status": "planned"
+    },
+    {
+      "id": "aut-150",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Steering, Suspension, and Wheel Alignment",
+      "status": "planned"
+    },
+    {
       "id": "aut-160",
       "academicLevel": "undergraduate",
       "cipCode": "47.0604",
@@ -127,6 +106,13 @@
       "academicLevel": "undergraduate",
       "cipCode": "47.0604",
       "title": "Engine Systems II Laboratory",
+      "status": "planned"
+    },
+    {
+      "id": "aut-210",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Engine Performance and Fuel Systems",
       "status": "planned"
     },
     {
@@ -228,6 +214,13 @@
       "status": "planned"
     },
     {
+      "id": "aut-330",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Electric Vehicle Technology",
+      "status": "planned"
+    },
+    {
       "id": "aut-331",
       "academicLevel": "undergraduate",
       "cipCode": "47.0604",
@@ -312,24 +305,38 @@
       "status": "planned"
     },
     {
-      "id": "aut-150",
+      "id": "brakes-1",
       "academicLevel": "undergraduate",
       "cipCode": "47.0604",
-      "title": "Steering, Suspension, and Wheel Alignment",
+      "title": "Brakes 1",
       "status": "planned"
     },
     {
-      "id": "aut-210",
+      "id": "electrical-1",
       "academicLevel": "undergraduate",
       "cipCode": "47.0604",
-      "title": "Engine Performance and Fuel Systems",
+      "title": "Electrical 1",
+      "status": "active"
+    },
+    {
+      "id": "engine-performance-1",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Engine Performance 1",
       "status": "planned"
     },
     {
-      "id": "aut-330",
+      "id": "hybrid-electric-vehicle-technology",
       "academicLevel": "undergraduate",
       "cipCode": "47.0604",
-      "title": "Electric Vehicle Technology",
+      "title": "Hybrid & Electric Vehicle Technology",
+      "status": "planned"
+    },
+    {
+      "id": "suspension-steering-1",
+      "academicLevel": "undergraduate",
+      "cipCode": "47.0604",
+      "title": "Suspension & Steering 1",
       "status": "planned"
     }
   ]

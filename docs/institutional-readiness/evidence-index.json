@@ -34,7 +34,7 @@
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-016 re-audit classifies 13 remaining catalog courses and records zero ready-to-build candidates."
+      "notes": "Phase 7F-X resolves all nine canonical mapping/content blockers. Post-resolution audit identifies AUT-140, AUT-510, and AUT-600 as the exact Batch 017 ready set; five courses remain prerequisite-chain blocked and five remain human/institutional."
     },
     {
       "area": "institutional_submission",
@@ -116,7 +116,7 @@
     }
   ],
   "open_readiness_items": [
-    "No Batch 017 is currently evidence-supported. Resolve canonical mapping/content blockers, prerequisite chains, or human/institutional gates before defining another delivery batch.",
+    "Batch 017 may contain AUT-140, AUT-510, and AUT-600 only under the Phase 7F-X deterministic audit; rerun after delivery before defining another batch.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",

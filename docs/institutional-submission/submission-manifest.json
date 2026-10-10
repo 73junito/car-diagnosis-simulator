@@ -148,7 +148,7 @@
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-016 re-audit classifies 13 remaining courses and establishes that no evidence-supported Batch 017 is currently ready."
+      "notes": "Phase 7F-X resolves all canonical mapping/content blockers; post-resolution audit identifies AUT-140, AUT-510, and AUT-600 as the exact Batch 017 candidates."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",
