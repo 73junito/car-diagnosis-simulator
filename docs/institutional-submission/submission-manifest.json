@@ -117,6 +117,12 @@
       "notes": "Phase 7F-K verifies twenty-seven catalog-aligned dedicated course pages, including Batch 007 graduate advanced-systems pages, plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
     },
     {
+      "area": "remaining_delivery_eligibility_audit",
+      "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
+      "status": "verified-audit",
+      "notes": "Phase 7F-L records 41 remaining planning-catalog courses with no Batch 008 candidate currently eligible for delivery."
+    },
+    {
       "area": "production_release",
       "path": "docs/releases/production-release-baseline-2026-10-09.md",
       "status": "verified"
@@ -178,6 +184,7 @@
     }
   ],
   "open_external_review_items": [
+    "Resolve remaining delivery blockers before representing additional planning-catalog courses as catalog-aligned dedicated delivery pages.",
     "Institution-specific academic approval and deployment decision.",
     "Contract, data-processing, subprocessor, retention/deletion, incident-response, and jurisdiction-specific requirements.",
     "Institution-specific accessibility evidence or formal conformance documentation if required.",

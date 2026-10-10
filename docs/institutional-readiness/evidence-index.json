@@ -19,6 +19,12 @@
       "notes": "Phase 7F-K verifies twenty-seven catalog-aligned dedicated course pages, including Batch 007 graduate advanced-systems pages, plus the separate AUT-250 HEV training package; graduate prerequisite decisions remain separate human/institutional decisions."
     },
     {
+      "area": "remaining_delivery_eligibility_audit",
+      "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
+      "status": "verified-audit",
+      "notes": "Phase 7F-L classifies all 41 remaining catalog courses: 0 ready now, 14 missing canonical mapping/content, 26 blocked by prerequisite chains, and 1 direct human/institutional hold (AUT-420)."
+    },
+    {
       "area": "institutional_submission",
       "path": "docs/institutional-submission/AutoLearnPro-Institutional-Submission-Packet.md",
       "status": "external-review-packet",
@@ -98,6 +104,7 @@
     }
   ],
   "open_readiness_items": [
+    "Do not define Batch 008 until a Phase 7F-L blocker is resolved and the deterministic remaining-delivery eligibility audit yields at least one ready-to-build course.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",
