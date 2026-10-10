@@ -38,7 +38,7 @@ const REQUIRED_PACKET_PHRASES = [
   '64 strong / 0 solid / 0 review',
   'direct-domain authority: **64/64**',
   'it does not mean 64 fully built online courses, 64 completed syllabi, or 64 production-ready courses',
-  'twenty-seven catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, AUT-520, AUT-530, AUT-535, AUT-540, AUT-545, AUT-550, AUT-555, AUT-560, AUT-565, AUT-570, AUT-575, AUT-580, AUT-585, and AUT-590',
+  'twenty-eight catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, AUT-115, AUT-120, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, AUT-520, AUT-530, AUT-535, AUT-540, AUT-545, AUT-550, AUT-555, AUT-560, AUT-565, AUT-570, AUT-575, AUT-580, AUT-585, and AUT-590',
   'AUT-250 HEV formative-training package crosswalked from catalog AUT-330',
   'The submission package itself does not make or pre-empt those decisions.'
 ]
@@ -69,10 +69,10 @@ function verify() {
   if (!curriculum.includes('planning') || !curriculum.includes('not identical to either proposed credential structure')) {
     errors.push('curriculum map must preserve the planning-catalog distinction')
   }
-  if (!curriculum.includes('catalog-aligned dedicated course pages: **27**') ||
-      !curriculum.includes('current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, AUT-115, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, AUT-520, AUT-530, AUT-535, AUT-540, AUT-545, AUT-550, AUT-555, AUT-560, AUT-565, AUT-570, AUT-575, AUT-580, AUT-585, and AUT-590**') ||
+  if (!curriculum.includes('catalog-aligned dedicated course pages: **28**') ||
+      !curriculum.includes('current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, AUT-115, AUT-120, AUT-130, AUT-131, AUT-160, AUT-180, AUT-200, AUT-201, AUT-220, AUT-501, AUT-515, AUT-520, AUT-530, AUT-535, AUT-540, AUT-545, AUT-550, AUT-555, AUT-560, AUT-565, AUT-570, AUT-575, AUT-580, AUT-585, and AUT-590**') ||
       !curriculum.includes('existing HEV formative-training package page: **AUT-250**, crosswalked from catalog **AUT-330**')) {
-    errors.push('curriculum map must preserve the current Phase 7F-K catalog-aligned delivery state')
+    errors.push('curriculum map must preserve the current Phase 7F-N catalog-aligned delivery state')
   }
 
   if (manifest.phase !== '7D' || manifest.package !== 'institutional-submission') {
@@ -113,8 +113,8 @@ function verify() {
   if (metrics.unresolved_source_rights !== 0) errors.push('unresolved_source_rights must remain 0')
   if (metrics.technical_source_age_reviews !== '5/5') errors.push('technical_source_age_reviews must remain 5/5')
   if (metrics.production_monitor_gates !== 9) errors.push('production_monitor_gates must remain 9')
-  if (metrics.catalog_aligned_dedicated_course_pages !== 27) errors.push('catalog_aligned_dedicated_course_pages must remain 27')
-  if (JSON.stringify(metrics.catalog_aligned_dedicated_course_page_ids) !== JSON.stringify(['aut-101', 'aut-105', 'aut-110', 'aut-115', 'aut-130', 'aut-131', 'aut-160', 'aut-180', 'aut-200', 'aut-201', 'aut-220', 'aut-501', 'aut-515', 'aut-520', 'aut-530', 'aut-535', 'aut-540', 'aut-545', 'aut-550', 'aut-555', 'aut-560', 'aut-565', 'aut-570', 'aut-575', 'aut-580', 'aut-585', 'aut-590'])) {
+  if (metrics.catalog_aligned_dedicated_course_pages !== 28) errors.push('catalog_aligned_dedicated_course_pages must remain 28')
+  if (JSON.stringify(metrics.catalog_aligned_dedicated_course_page_ids) !== JSON.stringify(['aut-101', 'aut-105', 'aut-110', 'aut-115', 'aut-120', 'aut-130', 'aut-131', 'aut-160', 'aut-180', 'aut-200', 'aut-201', 'aut-220', 'aut-501', 'aut-515', 'aut-520', 'aut-530', 'aut-535', 'aut-540', 'aut-545', 'aut-550', 'aut-555', 'aut-560', 'aut-565', 'aut-570', 'aut-575', 'aut-580', 'aut-585', 'aut-590'])) {
     errors.push('catalog_aligned_dedicated_course_page_ids must remain Batches 001-007')
   }
   if (metrics.legacy_training_package_pages !== 1) errors.push('legacy_training_package_pages must remain 1')

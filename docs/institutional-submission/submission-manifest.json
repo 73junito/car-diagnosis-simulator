@@ -29,12 +29,13 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "catalog_aligned_dedicated_course_pages": 27,
+    "catalog_aligned_dedicated_course_pages": 28,
     "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
       "aut-110",
       "aut-115",
+      "aut-120",
       "aut-130",
       "aut-131",
       "aut-160",
@@ -114,13 +115,13 @@
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-K verifies twenty-seven catalog-aligned dedicated course pages, including Batch 007 graduate advanced-systems pages, plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
+      "notes": "Phase 7F-N verifies twenty-eight catalog-aligned dedicated course pages, including Batch 008 AUT-120, plus the separate AUT-250 HEV formative-training package crosswalked from catalog AUT-330."
     },
     {
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Phase 7F-L re-audit after the Phase 7F-M AUT-120 canonical-content resolution identifies AUT-120 as the sole current Batch 008 delivery candidate."
+      "notes": "Post-Batch-008 re-audit identifies AUT-121 and AUT-170 as the next evidence-supported Batch 009 candidates."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",

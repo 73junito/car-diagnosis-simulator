@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "phase": "7F-L",
   "purpose": "remaining-delivery-eligibility-audit",
-  "sourceDeliveryPhase": "7F-K",
-  "lastResolutionPhase": "7F-M",
+  "sourceDeliveryPhase": "7F-N",
+  "lastResolutionPhase": "7F-N",
   "generatedFrom": {
     "courseCatalog": "data/curriculum/course-catalog.json",
     "programArchitecture": "data/curriculum/program-architecture.json",
@@ -11,18 +11,19 @@
   },
   "scope": {
     "planningCatalogCourses": 68,
-    "catalogAlignedDedicatedCoursePages": 27,
-    "remainingCatalogCourses": 41
+    "catalogAlignedDedicatedCoursePages": 28,
+    "remainingCatalogCourses": 40
   },
   "summary": {
-    "readyToBuildNow": 1,
+    "readyToBuildNow": 2,
     "blockedMissingCanonicalMapping": 13,
-    "blockedPrerequisiteChain": 26,
+    "blockedPrerequisiteChain": 24,
     "blockedHumanInstitutionalVerification": 1
   },
   "groups": {
     "readyToBuildNow": [
-      "aut-120"
+      "aut-121",
+      "aut-170"
     ],
     "blockedMissingCanonicalMapping": [
       "aut-140",
@@ -40,8 +41,6 @@
       "aut-690"
     ],
     "blockedPrerequisiteChain": [
-      "aut-121",
-      "aut-170",
       "aut-211",
       "aut-230",
       "aut-240",
@@ -73,23 +72,6 @@
   },
   "records": [
     {
-      "courseId": "aut-120",
-      "code": "AUT 120",
-      "title": "Automotive Electrical Systems I",
-      "academicLevel": "undergraduate",
-      "prerequisitesText": "AUT 110",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "ug-aut120-electrical-fundamentals",
-      "referencedPrerequisiteCourseIds": [
-        "aut-110"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
       "courseId": "aut-121",
       "code": "AUT 121",
       "title": "Automotive Electrical Systems I Laboratory",
@@ -101,12 +83,10 @@
       "referencedPrerequisiteCourseIds": [
         "aut-120"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-120"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-140",
@@ -120,9 +100,7 @@
       "referencedPrerequisiteCourseIds": [
         "aut-120"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-120"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
       "classification": "blocked-missing-canonical-mapping",
       "reason": "No identity-preserving canonical catalog-development mapping is recorded."
@@ -156,12 +134,10 @@
       "referencedPrerequisiteCourseIds": [
         "aut-120"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-120"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
-      "classification": "blocked-prerequisite-chain",
-      "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
+      "classification": "ready-to-build-now",
+      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
     },
     {
       "courseId": "aut-210",
@@ -176,9 +152,7 @@
         "aut-200",
         "aut-120"
       ],
-      "unresolvedPrerequisiteCourseIds": [
-        "aut-120"
-      ],
+      "unresolvedPrerequisiteCourseIds": [],
       "humanInstitutionalCondition": false,
       "classification": "blocked-missing-canonical-mapping",
       "reason": "No identity-preserving canonical catalog-development mapping is recorded."
@@ -216,7 +190,6 @@
         "aut-121"
       ],
       "unresolvedPrerequisiteCourseIds": [
-        "aut-120",
         "aut-121"
       ],
       "humanInstitutionalCondition": false,
@@ -237,7 +210,6 @@
         "aut-121"
       ],
       "unresolvedPrerequisiteCourseIds": [
-        "aut-120",
         "aut-121"
       ],
       "humanInstitutionalCondition": false,
@@ -868,7 +840,7 @@
     "batch008Candidates": [
       "aut-120"
     ],
-    "reason": "AUT-120 canonical content/mapping resolution produces the first evidence-supported next delivery candidate; downstream courses remain blocked until AUT-120 itself has a catalog-aligned dedicated page.",
+    "reason": "After Batch 008 AUT-120 delivery, the audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
     "highestLeverageCanonicalBlockers": [
       "aut-150",
       "aut-210",
@@ -876,13 +848,14 @@
       "aut-525"
     ],
     "notes": [
-      "AUT-120 canonical content and mapping were resolved in Phase 7F-M; AUT-120 is now ready to build as Batch 008.",
-      "AUT-121, AUT-170, AUT-230, and AUT-240 remain prerequisite-chain blocked until AUT-120 has a catalog-aligned dedicated delivery page.",
-      "AUT-150 unlocks AUT-260.",
-      "AUT-210 unlocks AUT-211 and AUT-270 and participates in the AUT-250 diagnostic chain.",
-      "AUT-330 unlocks AUT-331 and AUT-340 and provides an alternative prerequisite path within AUT-410.",
-      "AUT-525 is the direct prerequisite for AUT-600 and anchors the unmapped graduate research sequence.",
+      "AUT-120 was delivered in Phase 7F-N Batch 008.",
+      "AUT-121, AUT-170, AUT-230, and AUT-240 are re-evaluated against the new AUT-120 delivery state.",
       "AUT-420 remains directly gated by verified employment or approved internship placement and must not be auto-cleared."
+    ],
+    "batch009Ready": true,
+    "batch009Candidates": [
+      "aut-121",
+      "aut-170"
     ]
   },
   "boundaries": {
