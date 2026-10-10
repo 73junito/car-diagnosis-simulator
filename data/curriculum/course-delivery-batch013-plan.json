@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-T",
+  "purpose": "batch-013-undergraduate-delivery-execution",
+  "sourceDeliveryPhase": "7F-T",
+  "status": "page-built-verified",
+  "rationale": "Build the exact two evidence-supported Batch 013 candidates produced by the post-Batch-012 deterministic audit.",
+  "courses": [
+    {
+      "courseId": "aut-251",
+      "code": "AUT 251",
+      "title": "Automotive Diagnostics I Laboratory",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut251-diagnostics-lab",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "Concurrent enrollment in AUT 250",
+      "prerequisiteType": "concurrent-enrollment-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-251/index.html",
+      "deliveryRoute": "/courses/aut-251/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-280",
+      "code": "AUT 280",
+      "title": "Automotive Control Systems",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut280-control-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 230, AUT 250",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-280/index.html",
+      "deliveryRoute": "/courses/aut-280/",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 2,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-S",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 4
+  },
+  "completedInPhase": "7F-T"
+}

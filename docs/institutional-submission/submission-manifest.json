@@ -29,7 +29,7 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "catalog_aligned_dedicated_course_pages": 39,
+    "catalog_aligned_dedicated_course_pages": 41,
     "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
@@ -51,8 +51,10 @@
       "aut-230",
       "aut-240",
       "aut-250",
+      "aut-251",
       "aut-260",
       "aut-270",
+      "aut-280",
       "aut-501",
       "aut-515",
       "aut-520",
@@ -120,19 +122,19 @@
       "area": "course_delivery_status_data",
       "path": "data/curriculum/course-delivery-status.json",
       "status": "machine-readable-baseline",
-      "notes": "Machine-readable current Phase 7F-S delivery status used by deterministic delivery validators, including the catalog AUT-250 route override."
+      "notes": "Machine-readable current Phase 7F-T delivery status used by deterministic delivery validators."
     },
     {
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-S verifies thirty-nine catalog-aligned dedicated course pages plus the separate legacy AUT-250 HEV package; catalog AUT-250 Diagnostics I uses /courses/aut-250-diagnostics/."
+      "notes": "Phase 7F-T verifies forty-one catalog-aligned dedicated course pages plus the separate legacy AUT-250 HEV package; catalog AUT-250 Diagnostics I remains on /courses/aut-250-diagnostics/."
     },
     {
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-012 re-audit identifies AUT-251 and AUT-280 as the exact Batch 013 candidates."
+      "notes": "Post-Batch-013 re-audit identifies AUT-300, AUT-310, AUT-320, and AUT-330 as the exact Batch 014 candidates."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",

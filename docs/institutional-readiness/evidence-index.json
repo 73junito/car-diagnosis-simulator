@@ -16,7 +16,7 @@
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-S verifies thirty-nine catalog-aligned course pages plus the legacy AUT-250 HEV package; catalog AUT-250 Diagnostics I uses the collision-safe /courses/aut-250-diagnostics/ route."
+      "notes": "Phase 7F-T verifies forty-one catalog-aligned course pages plus the legacy AUT-250 HEV package; catalog AUT-250 Diagnostics I remains on its collision-safe route."
     },
     {
       "area": "phase7fq_canonical_blocker_resolution",
@@ -34,7 +34,7 @@
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-012 re-audit classifies 29 remaining catalog courses and identifies AUT-251 and AUT-280 as the exact Batch 013 ready set."
+      "notes": "Post-Batch-013 re-audit classifies 27 remaining catalog courses and identifies AUT-300, AUT-310, AUT-320, and AUT-330 as the exact Batch 014 ready set."
     },
     {
       "area": "institutional_submission",
@@ -116,7 +116,7 @@
     }
   ],
   "open_readiness_items": [
-    "Batch 013 may contain AUT-251 and AUT-280 only under the current deterministic prerequisite/mapping audit; rerun after delivery before defining another batch.",
+    "Batch 014 may contain AUT-300, AUT-310, AUT-320, and AUT-330 only under the current deterministic prerequisite/mapping audit; rerun after delivery before defining another batch.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",
