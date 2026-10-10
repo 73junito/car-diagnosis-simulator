@@ -15,9 +15,9 @@ function verify(){
  const lb=new Map((lessons.lessonPlans||[]).map(l=>[l.id,l]))
  const aligned=new Set(delivery.baseline?.catalogAlignedDedicatedCoursePageIds||[])
  const routes=delivery.baseline?.catalogAlignedDedicatedCoursePageRoutes||{}
- if(delivery.phase!=='7F-U') errors.push('delivery status must be Phase 7F-U')
- if(delivery.baseline?.catalogAlignedDedicatedCoursePageCount!==45) errors.push('Phase 7F-U must record 45 aligned pages')
- if(delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage!==23) errors.push('Phase 7F-U must record 23 catalog courses without aligned pages')
+ if(!['7F-U','7F-V'].includes(delivery.phase)) errors.push('delivery status must be Phase 7F-U or later supported Phase 7F-V')
+ if((delivery.baseline?.catalogAlignedDedicatedCoursePageCount||0)<45) errors.push('delivery status must retain at least the 45 Phase 7F-U aligned pages')
+ if((delivery.baseline?.catalogCoursesWithoutCatalogAlignedDedicatedPage||0)>23) errors.push('delivery status must not regress above the 23-course Phase 7F-U remaining baseline')
  if(plan.phase!=='7F-U'||plan.status!=='page-built-verified') errors.push('Batch 014 must be page-built-verified in Phase 7F-U')
  if(routes['aut-250']!=='/courses/aut-250-diagnostics/') errors.push('catalog AUT-250 collision-safe route must remain unchanged')
  if(routes['aut-330']!=='/courses/aut-330/') errors.push('catalog AUT-330 must now use its canonical /courses/aut-330/ route')

@@ -168,5 +168,20 @@ test.describe("academic course catalog", () => {
     await expect(page.locator(".catalog-detail-card h1")).toHaveText("Electric Vehicle Technology");
     await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
     await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", "/courses/aut-330/");
+
+    for (const [code, title, href] of [
+      ["AUT-301", "Advanced Automotive Diagnostics Laboratory", "/courses/aut-301/"],
+      ["AUT-321", "Hybrid Vehicle Laboratory", "/courses/aut-321/"],
+      ["AUT-331", "Electric Vehicle Laboratory", "/courses/aut-331/"],
+      ["AUT-340", "Battery Systems and Battery Management", "/courses/aut-340/"],
+      ["AUT-350", "Advanced Driver Assistance Systems", "/courses/aut-350/"],
+      ["AUT-360", "Automotive Data Acquisition and Analysis", "/courses/aut-360/"],
+      ["AUT-370", "Automotive Embedded Systems", "/courses/aut-370/"]
+    ]) {
+      await page.goto(examBase + "/catalog/course/?course=" + code);
+      await expect(page.locator(".catalog-detail-card h1")).toHaveText(title);
+      await expect(page.locator(".catalog-training-link strong")).toHaveText("Dedicated instructional course page available");
+      await expect(page.locator(".catalog-training-link a")).toHaveAttribute("href", href);
+    }
   });
 });
