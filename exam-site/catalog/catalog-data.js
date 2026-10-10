@@ -1,5 +1,6 @@
 const API_URL = "https://app.autolearnpro.com/api/curriculum";
 const STATIC_URL = "/data/curriculum/course-catalog.json";
+const DELIVERY_STATUS_URL = "/data/curriculum/course-delivery-status.json";
 const EXPECTED_SCHEMA_VERSION = "1.0.0";
 const EXPECTED_COURSE_COUNT = 68;
 const API_TIMEOUT_MS = 5000;
@@ -31,13 +32,40 @@ async function loadFromStatic() {
   return validateCourses(payload.courses);
 }
 
-export async function loadCatalogCourses() {
+async function loadDeliveryStatus() {
+  const response = await fetch(DELIVERY_STATUS_URL, { cache: "no-store" });
+  if (!response.ok) throw new Error("Delivery status returned " + response.status);
+  return response.json();
+}
+
+async function attachDeliveryStatus(courses) {
   try {
-    return { courses: await loadFromApi(), source: "api" };
-  } catch (apiError) {
-    console.warn("Catalog API unavailable; using static fallback", apiError);
-    return { courses: await loadFromStatic(), source: "static" };
+    const status = await loadDeliveryStatus();
+    const built = new Set(status?.baseline?.dedicatedCoursePageIds || []);
+    return courses.map((course) => {
+      if (!built.has(course.id) || course.delivery?.trainingUrl) return course;
+      return {
+        ...course,
+        delivery: {
+          kind: "course-page",
+          trainingUrl: "/courses/" + course.id + "/",
+          note: "A dedicated instructional course page is available. Academic catalog status and assessment authorization remain separate."
+        }
+      };
+    });
+  } catch (error) {
+    console.warn("Delivery status unavailable; catalog will omit dedicated-page links", error);
+    return courses;
   }
 }
 
-export { API_URL, STATIC_URL, EXPECTED_COURSE_COUNT };
+export async function loadCatalogCourses() {
+  try {
+    return { courses: await attachDeliveryStatus(await loadFromApi()), source: "api" };
+  } catch (apiError) {
+    console.warn("Catalog API unavailable; using static fallback", apiError);
+    return { courses: await attachDeliveryStatus(await loadFromStatic()), source: "static" };
+  }
+}
+
+export { API_URL, STATIC_URL, DELIVERY_STATUS_URL, EXPECTED_COURSE_COUNT };
