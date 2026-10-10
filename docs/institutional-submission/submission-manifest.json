@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0.0",
+  "phase": "7D",
+  "package": "institutional-submission",
+  "repository_baseline_sha": "53222a91ba3d82770b20f778c4e5a0134873eef1",
+  "submission_posture": {
+    "external_review_packet": true,
+    "accreditation_claim": false,
+    "kbor_approval_claim": false,
+    "academic_credit_authority_claim": false,
+    "institutional_adoption_claim": false,
+    "assessment_authorized": false,
+    "high_stakes_authorized": false,
+    "accessibility_certification_claim": false
+  },
+  "verified_metrics": {
+    "lesson_plans_total": 64,
+    "undergraduate_lesson_plans": 43,
+    "graduate_lesson_plans": 21,
+    "reference_coverage": "64/64",
+    "reference_quality": {
+      "strong": 64,
+      "solid": 0,
+      "review": 0
+    },
+    "direct_domain_authority": "64/64",
+    "governed_reference_sources": 38,
+    "unresolved_source_rights": 0,
+    "technical_source_age_reviews": "5/5",
+    "production_monitor_gates": 9
+  },
+  "proposed_programs": [
+    {
+      "id": "undergraduate-automotive-technology-aas",
+      "credential": "Associate of Applied Science",
+      "program_name": "Automotive Technology",
+      "cip_code": "47.0604",
+      "total_credits": 68,
+      "status": "proposed-with-verified-kansas-core"
+    },
+    {
+      "id": "graduate-automotive-engineering-technology",
+      "credential": "Master of Applied Automotive Engineering Technology",
+      "program_name": "Automotive Engineering Technology",
+      "cip_code": "15.0803",
+      "total_credits": 30,
+      "status": "proposed"
+    }
+  ],
+  "submission_documents": [
+    "docs/institutional-submission/Submission-Cover-Sheet.md",
+    "docs/institutional-submission/AutoLearnPro-Institutional-Submission-Packet.md",
+    "docs/institutional-submission/Curriculum-Program-Map.md",
+    "docs/institutional-readiness/reviewer-checklist.md"
+  ],
+  "evidence": [
+    {
+      "area": "program_architecture",
+      "path": "data/curriculum/program-architecture.json",
+      "status": "canonical-repository-data"
+    },
+    {
+      "area": "academic_pathways",
+      "path": "data/curriculum/academic-pathways.json",
+      "status": "canonical-repository-data"
+    },
+    {
+      "area": "course_catalog",
+      "path": "data/curriculum/course-catalog.json",
+      "status": "planning-inventory"
+    },
+    {
+      "area": "production_release",
+      "path": "docs/releases/production-release-baseline-2026-10-09.md",
+      "status": "verified"
+    },
+    {
+      "area": "production_monitoring",
+      "path": "docs/releases/phase7a-production-baseline-monitor.md",
+      "status": "verified"
+    },
+    {
+      "area": "reference_quality",
+      "path": "docs/curriculum-reference-quality-baseline-2026-10-10.md",
+      "status": "verified-screen"
+    },
+    {
+      "area": "institutional_readiness",
+      "path": "docs/institutional-readiness/README.md",
+      "status": "review-package"
+    },
+    {
+      "area": "institutional_evidence_index",
+      "path": "docs/institutional-readiness/evidence-index.json",
+      "status": "verified-index"
+    },
+    {
+      "area": "privacy_ai",
+      "path": "docs/compliance/education-privacy-ai-control-matrix.md",
+      "status": "governance-baseline"
+    },
+    {
+      "area": "student_data",
+      "path": "docs/compliance/student-data-inventory.md",
+      "status": "verified-inventory"
+    },
+    {
+      "area": "student_data_machine_readable",
+      "path": "docs/compliance/student-data-inventory.json",
+      "status": "verified-inventory"
+    },
+    {
+      "area": "retention_deletion",
+      "path": "docs/compliance/retention-deletion-contract.md",
+      "status": "governance-baseline"
+    },
+    {
+      "area": "public_privacy",
+      "path": "public-site/privacy.html",
+      "status": "published"
+    },
+    {
+      "area": "public_accessibility",
+      "path": "public-site/accessibility/index.html",
+      "status": "published-with-limitation"
+    },
+    {
+      "area": "public_institutions",
+      "path": "public-site/institutions/index.html",
+      "status": "published-information-only"
+    }
+  ],
+  "open_external_review_items": [
+    "Institution-specific academic approval and deployment decision.",
+    "Contract, data-processing, subprocessor, retention/deletion, incident-response, and jurisdiction-specific requirements.",
+    "Institution-specific accessibility evidence or formal conformance documentation if required.",
+    "Separate assessment-authorization review for any future scored, grading, credential, or high-stakes use."
+  ]
+}
