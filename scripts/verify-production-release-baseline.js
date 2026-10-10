@@ -7,7 +7,7 @@ const ROOT = path.resolve(__dirname, '..')
 const BASELINE_PATH = path.join(ROOT, 'data', 'release', 'production-release-baseline-2026-10-09.json')
 const PACKAGE_PATH = path.join(ROOT, 'package.json')
 
-const EXPECTED_SHA = '9715aa014df2861531866895e3d81ce73585b22e2'
+const EXPECTED_SHA = '9715aa014df2861531866895e3d81ce73585b22e'
 const REQUIRED_SCRIPTS = {
   'audit:curriculum-source-rights': 'node scripts/curriculum-source-rights-closure-audit.js',
   'validate:state-privacy-ai-overlays': 'node scripts/verify-state-privacy-ai-overlays.js',
