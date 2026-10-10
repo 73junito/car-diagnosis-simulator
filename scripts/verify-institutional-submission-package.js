@@ -38,7 +38,8 @@ const REQUIRED_PACKET_PHRASES = [
   '64 strong / 0 solid / 0 review',
   'direct-domain authority: **64/64**',
   'it does not mean 64 fully built online courses, 64 completed syllabi, or 64 production-ready courses',
-  'five dedicated course delivery pages: AUT-101, AUT-105, AUT-110, AUT-115, and AUT-250',
+  'four catalog-aligned dedicated course pages: AUT-101, AUT-105, AUT-110, and AUT-115',
+  'AUT-250 HEV formative-training package crosswalked from catalog AUT-330',
   'The submission package itself does not make or pre-empt those decisions.'
 ]
 
@@ -68,9 +69,10 @@ function verify() {
   if (!curriculum.includes('planning') || !curriculum.includes('not identical to either proposed credential structure')) {
     errors.push('curriculum map must preserve the planning-catalog distinction')
   }
-  if (!curriculum.includes('dedicated course delivery pages: **5**') ||
-      !curriculum.includes('current dedicated course pages: **AUT-101, AUT-105, AUT-110, AUT-115, and AUT-250**')) {
-    errors.push('curriculum map must preserve the Phase 7F-C course-delivery state')
+  if (!curriculum.includes('catalog-aligned dedicated course pages: **4**') ||
+      !curriculum.includes('current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, and AUT-115**') ||
+      !curriculum.includes('existing HEV formative-training package page: **AUT-250**, crosswalked from catalog **AUT-330**')) {
+    errors.push('curriculum map must preserve the Phase 7F-C catalog-aligned delivery state')
   }
 
   if (manifest.phase !== '7D' || manifest.package !== 'institutional-submission') {
@@ -111,9 +113,13 @@ function verify() {
   if (metrics.unresolved_source_rights !== 0) errors.push('unresolved_source_rights must remain 0')
   if (metrics.technical_source_age_reviews !== '5/5') errors.push('technical_source_age_reviews must remain 5/5')
   if (metrics.production_monitor_gates !== 9) errors.push('production_monitor_gates must remain 9')
-  if (metrics.dedicated_course_delivery_pages !== 5) errors.push('dedicated_course_delivery_pages must remain 5')
-  if (JSON.stringify(metrics.dedicated_course_delivery_page_ids) !== JSON.stringify(['aut-101', 'aut-105', 'aut-110', 'aut-115', 'aut-250'])) {
-    errors.push('dedicated_course_delivery_page_ids must remain Batch 001 plus aut-250')
+  if (metrics.catalog_aligned_dedicated_course_pages !== 4) errors.push('catalog_aligned_dedicated_course_pages must remain 4')
+  if (JSON.stringify(metrics.catalog_aligned_dedicated_course_page_ids) !== JSON.stringify(['aut-101', 'aut-105', 'aut-110', 'aut-115'])) {
+    errors.push('catalog_aligned_dedicated_course_page_ids must remain Batch 001')
+  }
+  if (metrics.legacy_training_package_pages !== 1) errors.push('legacy_training_package_pages must remain 1')
+  if (JSON.stringify(metrics.legacy_training_package_page_ids) !== JSON.stringify(['aut-250'])) {
+    errors.push('legacy_training_package_page_ids must remain [aut-250]')
   }
 
   const programs = new Map((manifest.proposed_programs || []).map((p) => [p.id, p]))
