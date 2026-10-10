@@ -13,7 +13,17 @@
       "aut-250"
     ],
     "catalogCourseCount": 68,
-    "lessonPlanCount": 64
+    "lessonPlanCount": 64,
+    "catalogAlignedDedicatedCoursePageCount": 4,
+    "catalogAlignedDedicatedCoursePageIds": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115"
+    ],
+    "legacyTrainingPackagePageIds": [
+      "aut-250"
+    ]
   },
   "policy": {
     "academicStatusIndependentFromDelivery": true,
