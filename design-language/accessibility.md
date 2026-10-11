@@ -64,7 +64,7 @@ Visible focus is mandatory.
 
 The existing amber focus treatment is retained temporarily because it is coupled to legacy component dependencies. Its measured contrast is below the desired 3:1 non-text target on current light surfaces, so it is a documented remediation item rather than an approved end state.
 
-The component-migration workstream must introduce and validate a dedicated `--tm-focus-ring` treatment before retiring the existing amber dependency.
+This legacy-theme migration introduces and validates dedicated `--tm-focus-ring` and `--tm-focus-ring-inverse` treatments for the migrated surfaces. Remaining amber focus dependencies must be retired only when their owning components migrate.
 
 ### Borders and control boundaries
 

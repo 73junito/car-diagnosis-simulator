@@ -63,7 +63,7 @@ Brand and semantic roles are intentionally separate.
 - topbar accent treatment;
 - design-token contract expectations.
 
-Do not replace amber with blue or teal during documentation or visual cleanup. The component-migration workstream should introduce and validate a dedicated focus token before any focus-ring replacement.
+Do not replace amber with blue or teal during documentation or visual cleanup. This legacy-theme migration introduces and validates dedicated `--tm-focus-ring` and `--tm-focus-ring-inverse` tokens for migrated surfaces. Remaining legacy amber focus usages are retired only when their owning components migrate.
 
 ## Known contrast exceptions
 

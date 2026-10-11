@@ -1,0 +1,316 @@
+{
+  "capturedAt": "2026-10-11T02:25:23.047Z",
+  "base": "http://127.0.0.1:4173",
+  "pages": {
+    "assessment/index.html": {
+      "stylesheets": [
+        "/theme.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(11, 17, 23)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "24px",
+          "maxWidth": "none"
+        },
+        ".assessment-entry": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "32px",
+          "maxWidth": "720px"
+        },
+        "#beginAssessment": {
+          "backgroundColor": "rgb(203, 213, 225)",
+          "color": "rgb(100, 116, 139)",
+          "borderColor": "rgb(100, 116, 139)",
+          "fontFamily": "Arial",
+          "display": "inline-block",
+          "padding": "16px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "INPUT",
+        "id": "attestation",
+        "className": "",
+        "outline": "rgb(16, 16, 16) auto 1px",
+        "outlineColor": "rgb(16, 16, 16)",
+        "boxShadow": "none"
+      }
+    },
+    "dashboard/live-session.html": {
+      "stylesheets": [
+        "../theme.css",
+        "./live-session.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(11, 17, 23)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "24px",
+          "maxWidth": "none"
+        },
+        ".container": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "0px 24px",
+          "maxWidth": "1120px"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "16px",
+          "maxWidth": "none"
+        }
+      }
+    },
+    "dashboard_live.html": {
+      "stylesheets": [
+        "../theme.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(11, 17, 23)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "24px",
+          "maxWidth": "none"
+        },
+        ".container": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "0px 24px",
+          "maxWidth": "1120px"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "16px",
+          "maxWidth": "none"
+        },
+        ".btn": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Arial",
+          "display": "inline-flex",
+          "padding": "10px 14px",
+          "maxWidth": "none"
+        },
+        ".tm-table": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "table",
+          "padding": "0px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "BUTTON",
+        "id": "download-csv",
+        "className": "btn btn-ghost",
+        "outline": "rgb(56, 189, 248) solid 3px",
+        "outlineColor": "rgb(56, 189, 248)",
+        "boxShadow": "none"
+      }
+    },
+    "dashboard_test.html": {
+      "stylesheets": [
+        "../theme.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(11, 17, 23)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "24px",
+          "maxWidth": "none"
+        },
+        ".container": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "0px 24px",
+          "maxWidth": "1120px"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "16px",
+          "maxWidth": "none"
+        },
+        ".btn": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Arial",
+          "display": "inline-flex",
+          "padding": "10px 14px",
+          "maxWidth": "none"
+        },
+        ".tm-table": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "table",
+          "padding": "0px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "BUTTON",
+        "id": "download-csv",
+        "className": "btn btn-ghost",
+        "outline": "rgb(56, 189, 248) solid 3px",
+        "outlineColor": "rgb(56, 189, 248)",
+        "boxShadow": "none"
+      }
+    },
+    "main_index.html": {
+      "stylesheets": [
+        "./style.css",
+        "./theme.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(11, 17, 23)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "flex",
+          "padding": "24px",
+          "maxWidth": "none"
+        },
+        ".topnav": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251) rgb(249, 250, 251) rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "0px",
+          "maxWidth": "none"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "14px",
+          "maxWidth": "420px"
+        },
+        ".btn": {
+          "backgroundColor": "rgb(249, 115, 22)",
+          "color": "rgb(7, 18, 26)",
+          "borderColor": "rgb(7, 18, 26)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "inline-flex",
+          "padding": "10px 14px",
+          "maxWidth": "none"
+        },
+        ".tm-hero": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251) rgb(249, 250, 251) rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "32px 24px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "outline": "rgb(16, 16, 16) auto 1px",
+        "outlineColor": "rgb(16, 16, 16)",
+        "boxShadow": "none"
+      }
+    },
+    "temp_home.html": {
+      "stylesheets": [
+        "./style.css",
+        "./theme.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(11, 17, 23)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "flex",
+          "padding": "24px",
+          "maxWidth": "none"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "14px",
+          "maxWidth": "420px"
+        },
+        ".btn": {
+          "backgroundColor": "rgb(245, 158, 11)",
+          "color": "rgb(7, 18, 26)",
+          "borderColor": "rgb(7, 18, 26)",
+          "fontFamily": "Arial",
+          "display": "inline-flex",
+          "padding": "10px 14px",
+          "maxWidth": "none"
+        },
+        ".tm-hero": {
+          "backgroundColor": "rgb(17, 24, 39)",
+          "color": "rgb(249, 250, 251)",
+          "borderColor": "rgb(249, 250, 251) rgb(249, 250, 251) rgba(255, 255, 255, 0.03)",
+          "fontFamily": "Inter, \"Segoe UI\", system-ui, -apple-system, \"Helvetica Neue\", Arial",
+          "display": "block",
+          "padding": "32px 24px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "outline": "rgb(56, 189, 248) solid 3px",
+        "outlineColor": "rgb(56, 189, 248)",
+        "boxShadow": "none"
+      }
+    }
+  }
+}

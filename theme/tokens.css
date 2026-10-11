@@ -34,6 +34,12 @@
    * only. Use --tm-teal-text for text and white-on-fill combinations. */
   --tm-teal: #26a889;
   --tm-teal-text: #1b8069;
+  /* Dedicated focus indicator. Uses the text-safe blue so it clears the
+   * 3:1 non-text contrast requirement on canonical light surfaces. */
+  --tm-focus-ring: var(--tm-primary-2-text);
+  --tm-focus-ring-inverse: #93c5fd;
+  --tm-focus-ring-width: 3px;
+  --tm-focus-ring-offset: 3px;
   /* Amber retained: dependency audit (Phase 8A token PR) confirmed semantic
    * usage — dark-theme --tm-warning, focus-visible outlines
    * (dashboard/student/student.css), progress gradients, topbar accent. */
@@ -75,6 +81,10 @@
   --tm-primary-2-text: #2d6ac9;
   --tm-teal: #26a889;
   --tm-teal-text: #1b8069;
+  --tm-focus-ring: #93c5fd;
+  --tm-focus-ring-inverse: #93c5fd;
+  --tm-focus-ring-width: 3px;
+  --tm-focus-ring-offset: 3px;
   --tm-accent: #f59e0b;
   --tm-accent-2: #38bdf8;
   --tm-success: #22c55e;
