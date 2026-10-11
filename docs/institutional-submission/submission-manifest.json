@@ -29,7 +29,7 @@
     "unresolved_source_rights": 0,
     "technical_source_age_reviews": "5/5",
     "production_monitor_gates": 9,
-    "catalog_aligned_dedicated_course_pages": 58,
+    "catalog_aligned_dedicated_course_pages": 60,
     "catalog_aligned_dedicated_course_page_ids": [
       "aut-101",
       "aut-105",
@@ -88,7 +88,9 @@
       "aut-580",
       "aut-585",
       "aut-590",
-      "aut-600"
+      "aut-600",
+      "aut-610",
+      "aut-650"
     ],
     "legacy_training_package_pages": 1,
     "legacy_training_package_page_ids": [
@@ -139,19 +141,19 @@
       "area": "course_delivery_status_data",
       "path": "data/curriculum/course-delivery-status.json",
       "status": "machine-readable-baseline",
-      "notes": "Machine-readable current Phase 7F-Y delivery status used by deterministic validators."
+      "notes": "Machine-readable current Phase 7F-Z delivery status used by deterministic validators."
     },
     {
       "area": "course_delivery_status",
       "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
       "status": "verified-baseline",
-      "notes": "Phase 7F-Y verifies fifty-eight catalog-aligned dedicated course pages plus the preserved legacy AUT-250 HEV package."
+      "notes": "Phase 7F-Z verifies sixty catalog-aligned dedicated course pages plus the preserved legacy AUT-250 HEV package."
     },
     {
       "area": "remaining_delivery_eligibility_audit",
       "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
       "status": "verified-audit",
-      "notes": "Post-Batch-017 re-audit identifies AUT-610 and AUT-650 as the exact Batch 018 candidates."
+      "notes": "Post-Batch-018 re-audit classifies 8 remaining courses and establishes that no evidence-supported Batch 019 is currently ready."
     },
     {
       "area": "aut120_canonical_curriculum_resolution",

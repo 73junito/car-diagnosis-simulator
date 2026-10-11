@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "phase": "7F-L",
   "purpose": "remaining-delivery-eligibility-audit",
-  "sourceDeliveryPhase": "7F-Y",
-  "lastResolutionPhase": "7F-Y",
+  "sourceDeliveryPhase": "7F-Z",
+  "lastResolutionPhase": "7F-Z",
   "generatedFrom": {
     "courseCatalog": "data/curriculum/course-catalog.json",
     "programArchitecture": "data/curriculum/program-architecture.json",
@@ -11,20 +11,17 @@
   },
   "scope": {
     "planningCatalogCourses": 68,
-    "catalogAlignedDedicatedCoursePages": 58,
-    "remainingCatalogCourses": 10
+    "catalogAlignedDedicatedCoursePages": 60,
+    "remainingCatalogCourses": 8
   },
   "summary": {
-    "readyToBuildNow": 2,
+    "readyToBuildNow": 0,
     "blockedMissingCanonicalMapping": 0,
     "blockedPrerequisiteChain": 2,
     "blockedHumanInstitutionalVerification": 6
   },
   "groups": {
-    "readyToBuildNow": [
-      "aut-610",
-      "aut-650"
-    ],
+    "readyToBuildNow": [],
     "blockedMissingCanonicalMapping": [],
     "blockedPrerequisiteChain": [
       "aut-450",
@@ -111,23 +108,6 @@
       "reason": "One or more catalog prerequisite courses do not yet have catalog-aligned dedicated delivery pages."
     },
     {
-      "courseId": "aut-610",
-      "code": "AUT 610",
-      "title": "Applied Automotive Research Project",
-      "academicLevel": "graduate",
-      "prerequisitesText": "AUT 600",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "grad-aut610-applied-research-project",
-      "referencedPrerequisiteCourseIds": [
-        "aut-600"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
       "courseId": "aut-620",
       "code": "AUT 620",
       "title": "Graduate Automotive Technology Internship",
@@ -177,23 +157,6 @@
       "reason": "The catalog prerequisite requires a human or institutional standing, placement, approval, advanced-course selection, or equivalent governance decision."
     },
     {
-      "courseId": "aut-650",
-      "code": "AUT 650",
-      "title": "Applied Automotive Technology Capstone",
-      "academicLevel": "graduate",
-      "prerequisitesText": "AUT 600",
-      "canonicalMapping": true,
-      "mappingType": "canonical-catalog-course",
-      "lessonPlanId": "grad-aut650-capstone",
-      "referencedPrerequisiteCourseIds": [
-        "aut-600"
-      ],
-      "unresolvedPrerequisiteCourseIds": [],
-      "humanInstitutionalCondition": false,
-      "classification": "ready-to-build-now",
-      "reason": "Canonical mapping exists and all explicit AUT prerequisite dependencies have catalog-aligned dedicated delivery pages."
-    },
-    {
       "courseId": "aut-690",
       "code": "AUT 690",
       "title": "Graduate Research Seminar",
@@ -214,7 +177,7 @@
     "batch008Candidates": [
       "aut-120"
     ],
-    "reason": "After Batch 017 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
+    "reason": "After Batch 018 delivery, the deterministic audit identifies the next evidence-supported courses whose canonical mappings exist and whose explicit AUT prerequisites now have aligned delivery pages.",
     "highestLeverageCanonicalBlockers": [
       "aut-140",
       "aut-510",
@@ -227,7 +190,7 @@
       "aut-690"
     ],
     "notes": [
-      "AUT-140, AUT-510, and AUT-600 were delivered in Phase 7F-Y Batch 017.",
+      "AUT-610 and AUT-650 were delivered in Phase 7F-Z Batch 018.",
       "Human/institutional standing, placement, approval, equivalency, and advanced-course selection gates remain non-automated."
     ],
     "batch009Ready": true,
@@ -291,7 +254,9 @@
     "batch018Candidates": [
       "aut-610",
       "aut-650"
-    ]
+    ],
+    "batch019Ready": false,
+    "batch019Candidates": []
   },
   "boundaries": {
     "academicStatusChanges": 0,
