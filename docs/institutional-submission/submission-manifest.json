@@ -226,6 +226,12 @@
       "area": "public_institutions",
       "path": "public-site/institutions/index.html",
       "status": "published-information-only"
+    },
+    {
+      "area": "final_eight_governance_review",
+      "path": "data/curriculum/final-eight-governance-review.json",
+      "status": "verified-governance-review",
+      "notes": "Final eight-course governance matrix; no automatic delivery candidates and no assessment eligibility changes."
     }
   ],
   "open_external_review_items": [

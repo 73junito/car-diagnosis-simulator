@@ -113,10 +113,16 @@
       "path": "public-site/research-sources/index.html",
       "status": "published",
       "notes": "Discovery metadata does not automatically become approved evidence or assessment eligibility."
+    },
+    {
+      "area": "final_eight_governance_review",
+      "path": "data/curriculum/final-eight-governance-review.json",
+      "status": "verified-governance-review",
+      "notes": "Phase 7F-ZA records exact resolution authority and blocker type for all eight remaining catalog courses; Batch 019 remains closed."
     }
   ],
   "open_readiness_items": [
-    "No Batch 019 is currently evidence-supported. Remaining courses require prerequisite-chain resolution or human/institutional determinations.",
+    "Phase 7F-ZA confirms no Batch 019 is evidence-supported. Seven courses have direct human/institutional conditions; AUT-450 also has an AUT-400 chain dependency, and AUT-451 remains downstream of AUT-450.",
     "Maintain the 64/64 strong reference-quality screen and resolve any future source freshness or domain-authority regression.",
     "Resolve institution-specific contracting, data-flow, subprocessor, age, jurisdiction, and academic-policy requirements.",
     "Keep assessment authorization closed until separately approved through legal, academic, item-level, fairness, and human-review governance.",
