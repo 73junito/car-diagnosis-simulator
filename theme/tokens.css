@@ -1,3 +1,13 @@
+/* TorqueMind / AutoLearnPro design tokens — SINGLE CANONICAL SOURCE.
+ *
+ * The light theme below is the default. Dark surfaces are an explicit,
+ * opt-in variant applied via [data-theme="dark"] (see the block after :root).
+ *
+ * The legacy root `theme.css` is a deprecated dark "monolith" that both
+ * defines a second set of --tm-* color values and ships component classes.
+ * It must NOT be treated as a second token source. New work sources every
+ * color from this file. See design-language/colors.md.
+ */
 :root {
   --tm-bg: #f5f7fb;
   --tm-surface: #ffffff;
@@ -21,6 +31,30 @@
 
   --tm-font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --tm-max-width: 1180px;
+}
+
+/*
+ * Explicit dark-surface variant (opt-in).
+ * Apply by setting data-theme="dark" on <html> or any ancestor element.
+ * No existing page sets this yet, so this block is additive and changes no
+ * current rendering. These values are a starting point ported from the legacy
+ * theme.css dark palette and MUST be validated against WCAG 2.2 AA contrast
+ * (including hover/focus/disabled/error states) before any page opts in.
+ */
+:root[data-theme="dark"] {
+  --tm-bg: #0b1117;
+  --tm-surface: #111827;
+  --tm-surface-2: #1f2937;
+  --tm-text: #f9fafb;
+  --tm-muted: #9ca3af;
+  --tm-border: rgba(255, 255, 255, 0.12);
+  --tm-primary: #0f3d5e;
+  --tm-primary-2: #2f7fb5;
+  --tm-accent: #f59e0b;
+  --tm-accent-2: #38bdf8;
+  --tm-success: #22c55e;
+  --tm-warning: #f59e0b;
+  --tm-danger: #ef4444;
 }
 
 body {

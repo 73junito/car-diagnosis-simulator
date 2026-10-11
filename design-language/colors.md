@@ -14,6 +14,14 @@ TorqueMind uses a restrained, professional color system designed for clarity, le
 
 ## Implementation
 
-Use CSS custom properties from `theme/tokens.css`.
+`theme/tokens.css` is the **single canonical source** for design tokens.
 
-Do not hard-code colors inside dashboard files unless a new semantic token is first added to the theme.
+- The default `:root` block defines the **light** theme (content surfaces).
+- Dark surfaces are an explicit, **opt-in** variant under `:root[data-theme="dark"]`.
+  A page opts in by setting `data-theme="dark"` on `<html>` or an ancestor.
+- The legacy root `theme.css` is deprecated as a token source. It still ships a
+  second `--tm-*` palette plus some component classes for pages not yet migrated,
+  but new work must source every color from `theme/tokens.css`. Do not add new
+  tokens to `theme.css`.
+
+Do not hard-code colors inside dashboard files unless a new semantic token is first added to `theme/tokens.css`.
