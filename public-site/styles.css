@@ -522,7 +522,29 @@ body:not(.home-page) .site-footer .container{
 body:not(.home-page) .footer-nav{display:flex;gap:16px;flex-wrap:wrap}
 body:not(.home-page) .footer-nav a{color:#a8b8c8;text-decoration:none}
 
+
+/* Shared Phase 2 public content pages. */
+.public-page-nav{position:relative}
+.public-page-links{margin-left:auto}
+.public-page-hero{padding:72px 0 34px}
+.public-page-hero h1{max-width:16ch;margin:10px 0 18px;color:#fff;font-size:clamp(2.6rem,7vw,4.6rem);line-height:.98;letter-spacing:-.04em}
+.public-page-content{padding-bottom:84px}
+.public-page-content .cards{margin-top:18px}
+.public-page-content .card p{margin-bottom:0;color:#a9bbcc}
+.public-page-notice{margin:30px 0 0;padding:18px 20px;border:1px solid rgba(99,180,255,.22);border-left:4px solid var(--blue-500);border-radius:10px;background:rgba(47,140,255,.06);color:#c7d5e3}
+.public-page-notice strong{color:#fff}
+.public-page-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.public-step-list{display:grid;gap:12px;margin:18px 0 0;padding:0;list-style:none}
+.public-step-list li{display:grid;grid-template-columns:52px 1fr;gap:18px;padding:22px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(19,36,58,.72),rgba(11,23,40,.70))}
+.public-step-list li>span{display:grid;width:42px;height:42px;place-items:center;border:1px solid var(--line-blue);border-radius:50%;color:#8dccff;font-weight:850}
+.public-step-list h2{margin:0 0 6px;font-size:1.15rem}
+.public-step-list p{margin:0;color:#a9bbcc}
+.public-page-footer{flex-wrap:wrap}
+
 @media(max-width:1020px){
+  .public-page-nav .nav-inner{align-items:flex-start;flex-direction:column}
+  .public-page-links{margin-left:0}
+
   .menu-toggle{display:inline-block}
   .home-page #mainNav{
     display:none;
@@ -549,6 +571,12 @@ body:not(.home-page) .footer-nav a{color:#a8b8c8;text-decoration:none}
   .footer-grid{grid-template-columns:1fr 1fr}.footer-grid small{grid-column:1/-1}
 }
 @media(max-width:760px){
+  .public-page-links{gap:8px 14px}
+  .public-page-hero{padding:54px 0 28px}
+  .public-page-content{padding-bottom:64px}
+  .public-page-actions{align-items:stretch;flex-direction:column}
+  .public-page-actions .btn{width:100%}
+
   .shell{width:min(calc(100% - 30px),var(--shell))}
   .hero-section{padding:58px 0 42px}
   .hero-copy h1{font-size:clamp(3rem,15vw,4.8rem)}

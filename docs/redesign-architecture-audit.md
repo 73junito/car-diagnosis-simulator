@@ -103,7 +103,7 @@ Multiple candidate homepages and legal pages exist at the repo root **and** unde
 
 | # | Concept area | Existing | Gap (needs new product functionality) |
 | --- | --- | --- | --- |
-| 01 | Public website | `public-site/` pages exist | Missing concept pages: About, How It Works, For Students, For Instructors, For Institutions, Help Center. Interactive demo case is a new build. Mostly *content + visual*. |
+| 01 | Public website | `public-site/` pages exist | Core concept pages now exist: About, How It Works, For Students, For Instructors, Institutions, and Help Center. Interactive demo case remains a new build. |
 | 02 | Student learning portal | Strong (dashboard, scenario, labs, coach, transcript, learning-path) | The concept's 5-step reasoning sequence (concern → evidence → evaluate → test → verify) is a **UX model** the current scenario UI should be refactored toward; not fully absent. Assignments + instructor feedback surfaces are thin. |
 | 03 | Instructor workspace | `dashboard/instructor/` (analytics, live-session, session-history, research) | Missing: classroom management, case assignment with due dates/attempt limits, structured assessment review, "skills to review" analytics. **Real functional gap.** |
 | 04 | Institutional portal | Only backend (institution-search) + `public-site/institutions/` marketing page | **No in-app institutional portal exists.** Programs, cohort management, access control, reporting, org settings are all net-new. |
@@ -156,7 +156,7 @@ Decision required: adopt concept values as canonical, or keep `theme/tokens.css`
 
 1. [x] **Confirm deployment entry point** for the public site. Confirmed: `wrangler.jsonc` publishes `./public-site`; root `main_index.html` and `temp_home.html` were retired after Phase 8A migration evidence was captured. `public-site/index.html` is the canonical public homepage.
 2. **Token consolidation PR** (Phase 1): unify on `theme/tokens.css`, re-point the colliding root `theme.css`, and decide the palette per Section 6. This is the highest-leverage, lowest-risk change and unlocks every later phase.
-3. **Public site content pass** (Phase 2): add the missing marketing/help pages reusing the existing `public-site/styles.css` shell.
+3. [x] **Public site content pass** (Phase 2): added About, How It Works, For Students, For Instructors, and Help Center pages using the existing `public-site/styles.css` shell.
 4. **Student reasoning-sequence refactor** (Phase 3): model the scenario UI on the 5-step sequence using existing coach/scenario components.
 5. **Instructor / institutional / admin** (Phase 4): scope the genuine functional gaps in Section 4; these require worker/API and Supabase work, not just styling — separate them into their own branches per the one-concern-per-commit rule.
 
