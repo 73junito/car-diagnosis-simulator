@@ -87,6 +87,31 @@ Note: there are **two** analytics implementations — Cloudflare Worker routes u
 - `api/telemetry/access.js` `requireInstructor` has a header-only fast path (`x-torquemind-role === 'instructor'`) plus a `resolveUserRole` check.
 - Implication (matches the "affiliation ≠ authorization" rule): none of these enforce the **verified-affiliation** signal from `instructor-verification.js`. Role and affiliation are separate concepts and are currently checked in different places, if at all.
 
+### 2.6 Deployment topology determination (repo-grounded; environment still to confirm)
+
+**Evidence from within this repository (all verified):**
+
+| Check | Finding |
+| --- | --- |
+| Production runtime | Cloudflare Workers only (`wrangler.app.jsonc`, `wrangler.exam.jsonc`, `wrangler.jsonc`). |
+| Does the Worker serve `/api/analytics/*`? | **No** — `worker/index.js` registers no analytics route. |
+| Is `torquemind-api` deployed by any workflow? | **No** — CI (`api-smoke.yml`, `smoke.yml`) only starts it locally (`nohup npm start`) to run smoke tests. No `wrangler deploy`/host/render/fly/railway/heroku reference exists. |
+| Is `torquemind-api` (or `api/`) shipped in the deployed bundle? | **No** — `scripts/build-static-site.js` lists both `api` and `torquemind-api` in `prohibitedOutputEntries`; `validateOutput()` throws if either leaks into `dist/`. |
+| Self-description | `torquemind-api/README.md` calls it a *"minimal Express-based backend scaffold"* and states *"For production, add authentication checks, role validation, and input validation."* |
+| Maintenance signal | Still referenced by CI and recently dependabot-bumped, so it is **not** deleted/abandoned — it is an **intentionally supported development/legacy scaffold**. |
+
+**Conclusion (repo-grounded):** `torquemind-api` and its unauthenticated `/api/analytics/*` routes are **not part of the deployed production backend**. They are a development/legacy scaffold exercised only in CI. Therefore the unauthenticated analytics routes are a **latent security weakness in an undeployed application — not a live production data leak.** The deployed Worker simply does not expose them.
+
+**What still requires environment verification (outside this repo):**
+- Whether `torquemind-api` is deployed to any external host (Railway/Render/Fly/VPS/etc.) whose config lives outside this repository. Absence of config here is strong evidence but not conclusive.
+- Whether any external reverse proxy or legacy host still routes `/api/analytics/*` to the Express app.
+
+**Decision gate (per the topology):**
+- **If Workers are the only production backend** (current repo evidence): the remediation is to **not promote the scaffold as-is** — either keep the routes fail-closed-by-default for any future use, or retire them. Do **not** rely on them for instructor reporting.
+- **If `torquemind-api` is deployed elsewhere** (needs your confirmation): treat the unauthenticated routes as a live security fix — fail closed, remove spoofable header auth, add regression tests.
+
+Either way, instructor-level reporting stays **blocked** until an instructor→student ownership model exists, and `ase_readiness_summary` stays unverified until its DB grants/RLS are confirmed.
+
 ---
 
 ## 3. Existing data contracts and UI components
