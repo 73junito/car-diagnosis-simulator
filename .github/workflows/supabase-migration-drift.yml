@@ -1,0 +1,59 @@
+name: Supabase Migration Drift
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - "scripts/verify-supabase-migration-drift.js"
+      - "supabase/migration-drift-exceptions.json"
+      - ".github/workflows/supabase-migration-drift.yml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - "scripts/verify-supabase-migration-drift.js"
+      - "supabase/migration-drift-exceptions.json"
+      - ".github/workflows/supabase-migration-drift.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  staging-drift:
+    name: staging migration parity
+    if: github.actor != 'dependabot[bot]'
+    environment: jchfruprqpeypdttvlam_staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+
+      - name: Verify staging destination
+        env:
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+        run: node scripts/assert-staging-supabase.js
+
+      - name: Check staging migration parity with main baseline
+        if: github.event_name == 'pull_request'
+        env:
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
+          EXPECTED_SUPABASE_REF: jchfruprqpeypdttvlam
+        run: node scripts/verify-supabase-migration-drift.js --ref origin/${{ github.base_ref }}
+
+      - name: Check staging migration parity with deployed main
+        if: github.event_name != 'pull_request'
+        env:
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
+          EXPECTED_SUPABASE_REF: jchfruprqpeypdttvlam
+        run: node scripts/verify-supabase-migration-drift.js --ref HEAD
