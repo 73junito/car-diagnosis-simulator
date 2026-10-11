@@ -29,8 +29,6 @@ describe('Cloudflare-only production runtime contract', () => {
   test('active runtime wiring contains no Render or Vercel deployment dependency', () => {
     const files = [
       '_headers',
-      'main_index.html',
-      'temp_home.html',
       'api/_utils/app-version.js',
       'api/health.js',
       'scripts/write-version.js',
@@ -45,5 +43,7 @@ describe('Cloudflare-only production runtime contract', () => {
 
     expect(fs.existsSync(path.join(root, 'render.yaml'))).toBe(false);
     expect(fs.existsSync(path.join(root, 'vercel.disabled.json'))).toBe(false);
+    expect(fs.existsSync(path.join(root, 'main_index.html'))).toBe(false);
+    expect(fs.existsSync(path.join(root, 'temp_home.html'))).toBe(false);
   });
 });
