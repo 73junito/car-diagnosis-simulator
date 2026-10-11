@@ -1,0 +1,9 @@
+{
+  "jchfruprqpeypdttvlam": {
+    "cleanup_historical_smoke_classes": {
+      "allowedMissing": 1,
+      "classification": "staging-data-cleanup-shape",
+      "reason": "Canonical cleanup expects 2,206 smoke classes plus scenario_assignments. Staging has 964 smoke-only classes, no enrollment/assignment links, and no scenario_assignments table; the canonical guard correctly aborts before deletion."
+    }
+  }
+}

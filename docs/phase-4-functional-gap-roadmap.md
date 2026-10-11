@@ -81,10 +81,15 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** active capabilities are split among Worker routes, Node/Vercel-style `api/`, and `torquemind-api` Express routes.
 **Gap:** tests can pass against handlers that are not reachable on the production app Worker, creating false confidence about feature availability.
 **Required outcome:** define `worker/index.js` as the canonical production API boundary for `app.autolearnpro.com`; add a CI contract that every browser-called `/api/*` route is either registered on that Worker or explicitly routed to another documented production service.
-### G18 - Supabase migration deployment parity and environment drift - **P0**
-**Evidence:** connected staging migration history does not include the instructor verification / institution-email migrations that are present in production, and the PR workflow named `Apply DB Migrations (PR)` applies only `db/migrations/*.sql`. The Supabase provenance workflow watches `supabase/migrations/**` but does not apply the full Supabase migration chain.
-**Gap:** a PR can add or depend on `supabase/migrations/**` while staging remains on an older schema, so preview/API checks can appear green without exercising the schema required by the feature.
-**Required outcome:** synchronize staging to the repository Supabase migration chain, add deterministic drift detection, and add a CI/deployment path that validates schema-dependent PRs against the intended Supabase migration set before they can be considered production-ready. Schema-dependent endpoints must fail closed when their required migration is absent.
+### G18 - Supabase migration deployment parity and environment drift - **P0 - completed**
+**Evidence:** the audit found staging at 44 recorded migrations while production and the repository were at 107. G18 synchronized the missing logical schema/governance chain to staging, restored the 6,547-row federal school-code seed, added a service-role-only migration-history RPC to staging and production, and added deterministic CI drift detection against the repository baseline. Staging retains one documented exception: the production-specific historical smoke-data cleanup whose fail-closed guard expects 2,206 smoke classes plus `scenario_assignments`, while staging has 964 smoke-only classes, no enrollment/assignment links, and no `scenario_assignments` table.
+**Gap:** closed for the current staging baseline. PR CI now fails when staging is missing any non-exempt logical migration already present on `main`; post-merge/main checks compare staging against `HEAD`.
+**Required outcome:** completed with staging logical migration synchronization, one count-limited documented exception, locked-down migration-history RPCs, a project-ref-pinned drift verifier, and a staging CI workflow. Schema-dependent endpoints continue to fail closed when their required migration is absent.
+
+### G19 - Supabase SECURITY DEFINER RPC exposure hardening - **P0**
+**Evidence:** the post-sync Supabase security advisor reports `public.capture_student_institution_claim()` and `public.handle_new_auth_user()` as `SECURITY DEFINER` functions directly executable by both `anon` and `authenticated`. It also reports one mutable-search-path function, `public.set_external_data_resource_updated_at`.
+**Gap:** trigger/helper functions with elevated execution context remain directly callable through the exposed API roles, expanding the attack surface beyond their intended trigger/helper use.
+**Required outcome:** revoke direct `anon`/`authenticated` execute rights from trigger-only `SECURITY DEFINER` functions, verify required triggers continue to operate, pin safe `search_path` on the external-data timestamp helper, and add regression/security-advisor checks without broadening application data access.
 
 ## Recommended execution order
 ### Phase 4A — Authorization and runtime foundation
@@ -92,6 +97,8 @@ The repository already contains useful foundations, but several exist outside th
 2. Production API route inventory contract.
 3. [x] Instructor verification decision API + audit record.
 4. [x] Admin verification-review minimum UI.
+5. [x] Supabase migration drift detection and staging synchronization (G18).
+6. Supabase SECURITY DEFINER RPC exposure hardening (G19).
 **Why first:** every later institutional/instructor/admin capability depends on trusted authorization and a real operational approval path.
 ### Phase 4B — Instructor classroom core
 1. Port classes/list/create to Worker.
@@ -158,4 +165,4 @@ Use one concern per branch/PR. Suggested first branches:
 - Empty/unavailable states must be truthful; do not substitute sample data on authenticated production dashboards.
 - Generated reports/files remain unstaged unless they are intentional evidence artifacts.
 ## First implementation target
-G1 and G3 are complete. Next close **G18 - Supabase migration deployment parity and environment drift**, then finish the Phase 4A production API route inventory contract before beginning the Phase 4B classroom ports.
+G1, G3, and G18 are complete. Next close **G19 - Supabase SECURITY DEFINER RPC exposure hardening**, then finish the Phase 4A production API route inventory contract before beginning the Phase 4B classroom ports.
