@@ -40,18 +40,6 @@ try {
   if (DEBUG_API) console.warn('Live-session access middleware not available:', e && e.message);
 }
 
-// Register analytics routes (serve aggregated reports from repo `reports/`)
-try {
-  const { registerSessionsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'sessions'));
-  const { registerStudentsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'students'));
-  const { registerExportRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'export'));
-  registerSessionsRoutes(app);
-  registerStudentsRoutes(app);
-  registerExportRoutes(app);
-} catch (e) {
-  if (DEBUG_API) console.warn('Analytics routes not available:', e && e.message);
-}
-
 // Register telemetry export routes if present
 try {
   const { registerTelemetryExportRoutes } = require(path.join(__dirname, '..', 'api', 'telemetry', 'export'));
@@ -102,6 +90,51 @@ app.use(apiLimiter);
 
 // Auth middleware populates `req.user` on every request when Supabase is configured.
 app.use((req, res, next) => authMiddleware(req, res, next));
+
+// Register analytics routes (serve aggregated reports from repo `reports/`).
+//
+// Security boundary: every /api/analytics/* route is instructor-only. The gate
+// is applied HERE, at route registration, and nowhere else — shared auth
+// utilities (middleware/auth.js, middleware/requireRole.js) are intentionally
+// left unchanged so their local-dev fail-open behavior is preserved.
+//
+// This block MUST be registered after the global auth middleware above: Express
+// matches layers in registration order, so routes registered before
+// app.use(authMiddleware) would never have `req.user` populated and would fail
+// closed for everyone (including valid teachers).
+//
+// requireRole('teacher') enforces the role when Supabase is configured (401 for
+// no user, 403 for a non-teacher role) and falls through only in local dev when
+// Supabase is not configured — matching the existing /api/classes/:classId/
+// students route. This is defense-in-depth for a development scaffold: the
+// deployed production backend is Cloudflare Workers, which does not mount these
+// routes. NOTE: role authorization is NOT verified instructor affiliation, and
+// these routes are not scoped to any instructor's students (no such model
+// exists yet) — instructor-specific reporting remains blocked by design.
+try {
+  const { registerSessionsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'sessions'));
+  const { registerStudentsRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'students'));
+  const { registerExportRoutes } = require(path.join(__dirname, '..', 'api', 'analytics', 'export'));
+
+  // Single instructor gate applied uniformly to all five analytics routes.
+  const analyticsGate = requireRole('teacher');
+  const gatedApp = {
+    get: (route, ...handlers) => app.get(route, analyticsGate, ...handlers)
+  };
+
+  registerSessionsRoutes(gatedApp);
+  registerStudentsRoutes(gatedApp);
+  registerExportRoutes(gatedApp);
+
+  // cohort and heatmap are not otherwise mounted; register them under the same
+  // gate so the entire /api/analytics/* surface shares one authorization policy.
+  const cohortHandler = require(path.join(__dirname, '..', 'api', 'analytics', 'cohort'));
+  const heatmapHandler = require(path.join(__dirname, '..', 'api', 'analytics', 'heatmap'));
+  gatedApp.get('/api/analytics/cohort', cohortHandler);
+  gatedApp.get('/api/analytics/heatmap', heatmapHandler);
+} catch (e) {
+  if (DEBUG_API) console.warn('Analytics routes not available:', e && e.message);
+}
 
 // Basic health
 app.get('/', (req, res) => {

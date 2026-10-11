@@ -102,6 +102,9 @@ Note: there are **two** analytics implementations — Cloudflare Worker routes u
 
 **Conclusion (repo-grounded):** `torquemind-api` and its unauthenticated `/api/analytics/*` routes are **not part of the deployed production backend**. They are a development/legacy scaffold exercised only in CI. Therefore the unauthenticated analytics routes are a **latent security weakness in an undeployed application — not a live production data leak.** The deployed Worker simply does not expose them.
 
+> **CONFIRMED (2026-10-10): Cloudflare Workers are the only production backend; `torquemind-api` is deployed nowhere.** Remediation applied accordingly (defense-in-depth for a dev scaffold): all five `/api/analytics/*` routes are registered behind `requireRole('teacher')` at the registration site only (`torquemind-api/index.js`), with regression tests in `torquemind-api/__tests__/analytics-authorization.test.js`. Shared auth utilities untouched; local-dev fail-open preserved.
+
+
 **What still requires environment verification (outside this repo):**
 - Whether `torquemind-api` is deployed to any external host (Railway/Render/Fly/VPS/etc.) whose config lives outside this repository. Absence of config here is strong evidence but not conclusive.
 - Whether any external reverse proxy or legacy host still routes `/api/analytics/*` to the Express app.
