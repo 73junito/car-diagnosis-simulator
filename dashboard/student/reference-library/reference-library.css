@@ -1,0 +1,245 @@
+/* Reference Library — three-panel discovery surface.
+   Sources colors from canonical theme/tokens.css. No theme.css. */
+
+.ref-intro {
+  max-width: 70ch;
+  margin: 0 0 20px;
+  color: var(--tm-muted);
+}
+
+/* Desktop: filter / results / details */
+.ref-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+  align-items: start;
+}
+
+.ref-filters {
+  position: sticky;
+  top: 16px;
+}
+
+.ref-filters h2,
+.ref-results-head h2,
+.ref-detail h2 {
+  margin-top: 0;
+}
+
+.ref-field {
+  margin-bottom: 16px;
+}
+
+.ref-field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.ref-field input[type="search"] {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-sm);
+  padding: 10px 12px;
+  font: inherit;
+  background: #fff;
+  color: var(--tm-text);
+}
+
+.ref-fieldset {
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.ref-fieldset legend {
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.ref-facets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ref-facet {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ref-facet label {
+  font-weight: 500;
+}
+
+.ref-clear {
+  width: 100%;
+}
+
+/* Results */
+.ref-results-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ref-results-head h2 {
+  margin: 0;
+}
+
+.ref-results-head p {
+  margin: 0;
+  color: var(--tm-muted);
+}
+
+.ref-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ref-result {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--tm-text);
+  cursor: pointer;
+  border: 1px solid var(--tm-border);
+}
+
+.ref-result:hover {
+  border-color: var(--tm-primary-2);
+}
+
+.ref-result.is-selected {
+  border-color: var(--tm-primary);
+  box-shadow: 0 0 0 2px var(--tm-primary-2);
+}
+
+.ref-result-title {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.ref-result-rights {
+  margin-bottom: 0;
+}
+
+/* Details */
+.ref-detail {
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+}
+
+.ref-detail h3 {
+  margin: 18px 0 8px;
+  font-size: 1rem;
+}
+
+.ref-detail-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.ref-rights {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 16px;
+}
+
+.ref-rights dt {
+  font-weight: 600;
+}
+
+.ref-rights dd {
+  margin: 0;
+  text-align: right;
+}
+
+.ref-detail ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.ref-error {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--tm-danger);
+  border-radius: var(--tm-radius-sm);
+}
+
+.ref-error p {
+  margin: 0 0 12px;
+  color: var(--tm-danger);
+}
+
+/* Focus visibility (keyboard) */
+.ref-result:focus-visible,
+.ref-field input:focus-visible,
+.ref-facet input:focus-visible,
+.ref-clear:focus-visible,
+.ref-back:focus-visible,
+.ref-error button:focus-visible {
+  outline: 3px solid var(--tm-primary-2);
+  outline-offset: 2px;
+}
+
+.ref-detail:focus {
+  outline: none;
+}
+
+/* Tablet: stack details under results, collapsible filter */
+@media (max-width: 1024px) {
+  .ref-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .ref-filters,
+  .ref-detail {
+    position: static;
+    max-height: none;
+  }
+
+  /* On small screens, selecting a reference shows the detail view and hides
+     the list until the learner returns. */
+  .ref-layout.is-detail .ref-filters,
+  .ref-layout.is-detail .ref-results-col {
+    display: none;
+  }
+
+  .ref-layout:not(.is-detail) .ref-detail {
+    display: none;
+  }
+
+  .ref-back {
+    margin-bottom: 12px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .ref-back {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ref-result {
+    transition: none;
+  }
+}

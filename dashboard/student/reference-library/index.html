@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reference Library - TorqueMind</title>
+
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
+  <link rel="stylesheet" href="/dashboard/student/student.css">
+  <link rel="stylesheet" href="./reference-library.css">
+</head>
+<body>
+  <div data-theme-shell></div>
+
+  <main class="tm-main wrapper">
+    <p class="tm-eyebrow">Student Workspace</p>
+    <h1 id="refLibraryTitle">Reference Library</h1>
+    <p class="ref-intro">Browse governed supplemental references. Rights vary by source; the details panel shows exactly what the platform may reuse.</p>
+
+    <nav class="tm-filter-toolbar" aria-label="Student workspace navigation">
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/">Scenarios</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/learning-path/">Learning Path</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/transcript/">Transcript</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/coach/">Coach</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/activity/">Activity</a>
+    </nav>
+
+    <div class="ref-layout" id="refLayout">
+      <section class="ref-filters tm-panel" aria-labelledby="refFiltersTitle">
+        <h2 id="refFiltersTitle">Filters</h2>
+
+        <div class="ref-field">
+          <label for="refSearch">Search</label>
+          <input id="refSearch" class="filter-input" type="search" placeholder="Title, publisher, or subject" autocomplete="off">
+        </div>
+
+        <fieldset class="ref-fieldset">
+          <legend>Academic subject</legend>
+          <div id="refSubjectFacets" class="ref-facets"></div>
+        </fieldset>
+
+        <fieldset class="ref-fieldset">
+          <legend>Source type</legend>
+          <div id="refKindFacets" class="ref-facets"></div>
+        </fieldset>
+
+        <button id="refClearFilters" class="tm-btn tm-btn-secondary ref-clear" type="button">Clear filters</button>
+      </section>
+
+      <section class="ref-results-col" aria-labelledby="refResultsTitle">
+        <div class="ref-results-head">
+          <h2 id="refResultsTitle">Results</h2>
+          <p id="refStatus" role="status" aria-live="polite">Loading references…</p>
+        </div>
+        <ul id="refResults" class="ref-results" aria-label="Reference results"></ul>
+        <div id="refError" class="ref-error" hidden>
+          <p id="refErrorText" role="alert"></p>
+          <button id="refRetry" class="tm-btn tm-btn-secondary" type="button">Try again</button>
+        </div>
+      </section>
+
+      <section id="refDetail" class="ref-detail tm-panel" aria-labelledby="refDetailHeading" tabindex="-1">
+        <button id="refBack" class="tm-btn tm-btn-secondary ref-back" type="button">Back to results</button>
+        <h2 id="refDetailHeading" tabindex="-1">Source information</h2>
+        <div id="refDetailBody">
+          <p class="fine-print">Select a reference to see its source information, permissions, and where it applies.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+
+    const layout = document.getElementById('refLayout');
+    const statusEl = document.getElementById('refStatus');
+    const resultsEl = document.getElementById('refResults');
+    const errorEl = document.getElementById('refError');
+    const errorTextEl = document.getElementById('refErrorText');
+    const retryEl = document.getElementById('refRetry');
+    const searchEl = document.getElementById('refSearch');
+    const subjectFacetsEl = document.getElementById('refSubjectFacets');
+    const kindFacetsEl = document.getElementById('refKindFacets');
+    const clearEl = document.getElementById('refClearFilters');
+    const detailHeadingEl = document.getElementById('refDetailHeading');
+    const detailBodyEl = document.getElementById('refDetailBody');
+    const backEl = document.getElementById('refBack');
+
+    // Rights summary label reused verbatim from the student learning path so the
+    // two surfaces never diverge. Do not change these strings here.
+    function rightsLabel(source) {
+      const rights = source.rights || {};
+      if (
+        rights.aiRagIngestionAllowed === true &&
+        rights.commercialUseAllowed === true &&
+        rights.directReproductionAllowed === true
+      ) {
+        return 'Reusable with attribution under the recorded license.';
+      }
+      return 'Reference only: citation/linking permitted; platform AI ingestion, direct reproduction, and commercial reuse are disabled.';
+    }
+
+    // Explicit, non-inferred permission list sourced only from the API rights object.
+    const RIGHTS_ITEMS = [
+      { key: 'citationLinkAllowed', label: 'Citation / linking', kind: 'allowed' },
+      { key: 'paraphraseSummaryAllowed', label: 'Paraphrase / summary', kind: 'allowed' },
+      { key: 'directReproductionAllowed', label: 'Direct reproduction', kind: 'allowed' },
+      { key: 'databaseStorageAllowed', label: 'Database storage', kind: 'allowed' },
+      { key: 'aiRagIngestionAllowed', label: 'Platform AI ingestion', kind: 'allowed' },
+      { key: 'commercialUseAllowed', label: 'Commercial use', kind: 'allowed' },
+      { key: 'attributionRequired', label: 'Attribution required', kind: 'required' },
+      { key: 'shareAlikeRequired', label: 'Share-alike required', kind: 'required' }
+    ];
+
+    function textElement(tag, value, className) {
+      const element = document.createElement(tag);
+      element.textContent = value;
+      if (className) element.className = className;
+      return element;
+    }
+
+    let sources = [];
+    let mappings = [];
+    let lessonTitles = new Map();
+    let selectedId = null;
+
+    function metaLine(source) {
+      return [
+        source.publisher,
+        source.publicationYear ? String(source.publicationYear) : '',
+        source.subjectArea
+      ].filter(Boolean).join(' · ');
+    }
+
+    function checkedValues(container) {
+      return [...container.querySelectorAll('input:checked')].map((input) => input.value);
+    }
+
+    function matches(source) {
+      const query = searchEl.value.trim().toLowerCase();
+      if (query) {
+        const haystack = [source.title, source.publisher, source.subjectArea, source.sourceKind]
+          .filter(Boolean).join(' ').toLowerCase();
+        if (!haystack.includes(query)) return false;
+      }
+      const subjects = checkedValues(subjectFacetsEl);
+      if (subjects.length && !subjects.includes(source.subjectArea)) return false;
+      const kinds = checkedValues(kindFacetsEl);
+      if (kinds.length && !kinds.includes(source.sourceKind)) return false;
+      return true;
+    }
+
+    function slug(value) {
+      return String(value).replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+    }
+
+    function buildFacetGroup(container, legendValues, prefix) {
+      container.replaceChildren();
+      legendValues.forEach((value) => {
+        const id = prefix + slug(value);
+        const wrap = document.createElement('div');
+        wrap.className = 'ref-facet';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.id = id;
+        input.value = value;
+        input.addEventListener('change', renderResults);
+        const label = document.createElement('label');
+        label.setAttribute('for', id);
+        label.textContent = value;
+        wrap.append(input, label);
+        container.appendChild(wrap);
+      });
+    }
+
+    function buildFacets() {
+      const subjects = [...new Set(sources.map((s) => s.subjectArea).filter(Boolean))].sort();
+      const kinds = [...new Set(sources.map((s) => s.sourceKind).filter(Boolean))].sort();
+      buildFacetGroup(subjectFacetsEl, subjects, 'ref-subject-');
+      buildFacetGroup(kindFacetsEl, kinds, 'ref-kind-');
+    }
+
+    function renderResults() {
+      const filtered = sources.filter(matches);
+      resultsEl.replaceChildren();
+
+      if (!filtered.length) {
+        // Distinguish "nothing mapped at all" from "nothing matches the filters".
+        statusEl.textContent = sources.length
+          ? 'No references match your filters.'
+          : 'No supplemental references are mapped yet.';
+        return;
+      }
+
+      statusEl.textContent = 'Showing ' + filtered.length +
+        ' governed supplemental reference' + (filtered.length === 1 ? '.' : 's.');
+
+      filtered.forEach((source) => {
+        const item = document.createElement('li');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ref-result tm-card';
+        button.setAttribute('aria-controls', 'refDetail');
+        if (source.id === selectedId) {
+          button.classList.add('is-selected');
+          button.setAttribute('aria-current', 'true');
+        }
+
+        button.appendChild(textElement('h3', source.title || source.id, 'ref-result-title'));
+        const meta = metaLine(source);
+        if (meta) button.appendChild(textElement('p', meta, 'fine-print'));
+        button.appendChild(textElement('p', rightsLabel(source), 'fine-print ref-result-rights'));
+
+        button.addEventListener('click', () => selectReference(source.id));
+        item.appendChild(button);
+        resultsEl.appendChild(item);
+      });
+    }
+
+    function renderRightsList(rights) {
+      const list = document.createElement('dl');
+      list.className = 'ref-rights';
+      RIGHTS_ITEMS.forEach((item) => {
+        const value = rights ? rights[item.key] : undefined;
+        const term = document.createElement('dt');
+        term.textContent = item.label;
+        const desc = document.createElement('dd');
+        desc.textContent = item.kind === 'allowed'
+          ? (value === true ? 'Allowed' : 'Not allowed')
+          : (value === true ? 'Required' : 'Not required');
+        list.append(term, desc);
+      });
+      return list;
+    }
+
+    function selectReference(id, options = {}) {
+      selectedId = id;
+      const source = sources.find((s) => s.id === id);
+      if (!source) return;
+
+      renderResults();
+      renderDetail(source);
+
+      if (window.matchMedia('(max-width: 1024px)').matches) {
+        layout.classList.add('is-detail');
+      }
+      if (options.moveFocus !== false) detailHeadingEl.focus();
+    }
+
+    function renderDetail(source) {
+      detailBodyEl.replaceChildren();
+
+      const meta = metaLine(source);
+      detailBodyEl.appendChild(textElement('p', meta || source.id, 'fine-print'));
+      detailBodyEl.appendChild(textElement('p', 'Source type: ' + (source.sourceKind || 'unspecified'), 'fine-print'));
+      detailBodyEl.appendChild(textElement('p', 'License classification: ' + (source.licenseClassification || 'unspecified'), 'fine-print'));
+      detailBodyEl.appendChild(textElement('p', rightsLabel(source), 'fine-print'));
+
+      if (source.canonicalUrl) {
+        const wrap = document.createElement('p');
+        wrap.className = 'ref-detail-link';
+        const link = document.createElement('a');
+        link.href = source.canonicalUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = 'tm-btn tm-btn-secondary';
+        link.textContent = 'Open reference';
+        const note = document.createElement('span');
+        note.className = 'fine-print';
+        note.textContent = ' (opens in a new tab)';
+        wrap.append(link, note);
+        detailBodyEl.appendChild(wrap);
+      }
+
+      detailBodyEl.appendChild(textElement('h3', 'Permissions'));
+      detailBodyEl.appendChild(renderRightsList(source.rights));
+
+      const mapped = mappings.filter((mapping) => mapping.reference_id === source.id);
+      if (mapped.length) {
+        detailBodyEl.appendChild(textElement('h3', 'Where it applies'));
+        const list = document.createElement('ul');
+        mapped.forEach((mapping) => {
+          const title = lessonTitles.get(mapping.lesson_plan_id) || mapping.lesson_plan_id;
+          const item = document.createElement('li');
+          item.appendChild(document.createTextNode(title + (mapping.role ? ' — ' + mapping.role : '')));
+          if (mapping.notes) item.appendChild(document.createTextNode(': ' + mapping.notes));
+          list.appendChild(item);
+        });
+        detailBodyEl.appendChild(list);
+      }
+    }
+
+    function showError(message) {
+      resultsEl.replaceChildren();
+      statusEl.textContent = '';
+      errorTextEl.textContent = message;
+      errorEl.hidden = false;
+    }
+
+    async function load() {
+      statusEl.textContent = 'Loading references…';
+      errorEl.hidden = true;
+      resultsEl.replaceChildren();
+
+      try {
+        const [curriculumResponse, referencesResponse] = await Promise.all([
+          fetch('/api/curriculum', { headers: { Accept: 'application/json' } }),
+          fetch('/api/curriculum/references', { headers: { Accept: 'application/json' } })
+        ]);
+
+        if (!curriculumResponse.ok || !referencesResponse.ok) {
+          throw new Error('Reference services are unavailable.');
+        }
+
+        const curriculum = await curriculumResponse.json();
+        const references = await referencesResponse.json();
+
+        lessonTitles = new Map(
+          (Array.isArray(curriculum.lessonPlans) ? curriculum.lessonPlans : []).map((lesson) => [lesson.id, lesson.title])
+        );
+        sources = Array.isArray(references.data) ? references.data : [];
+        mappings = Array.isArray(references.mappings) ? references.mappings : [];
+
+        buildFacets();
+        renderResults();
+      } catch (error) {
+        showError(error instanceof Error ? error.message : 'References could not be loaded.');
+      }
+    }
+
+    searchEl.addEventListener('input', renderResults);
+    clearEl.addEventListener('click', () => {
+      searchEl.value = '';
+      subjectFacetsEl.querySelectorAll('input').forEach((input) => { input.checked = false; });
+      kindFacetsEl.querySelectorAll('input').forEach((input) => { input.checked = false; });
+      renderResults();
+      searchEl.focus();
+    });
+    retryEl.addEventListener('click', load);
+    backEl.addEventListener('click', () => {
+      layout.classList.remove('is-detail');
+      const selectedButton = resultsEl.querySelector('.ref-result.is-selected') || resultsEl.querySelector('.ref-result');
+      if (selectedButton) selectedButton.focus();
+    });
+
+    load();
+  </script>
+</body>
+</html>
