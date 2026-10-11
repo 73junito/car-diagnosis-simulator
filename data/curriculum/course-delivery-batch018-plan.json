@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-Z",
+  "purpose": "batch-018-post-batch017-delivery",
+  "sourceDeliveryPhase": "7F-Z",
+  "status": "page-built-verified",
+  "rationale": "Build the exact two Batch 018 candidates produced by the post-Batch-017 deterministic audit.",
+  "courses": [
+    {
+      "courseId": "aut-610",
+      "code": "AUT 610",
+      "title": "Applied Automotive Research Project",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut610-applied-research-project",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 600",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-610/index.html",
+      "deliveryRoute": "/courses/aut-610/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-650",
+      "code": "AUT 650",
+      "title": "Applied Automotive Technology Capstone",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut650-capstone",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 600",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-650/index.html",
+      "deliveryRoute": "/courses/aut-650/",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 2,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-Y",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 3
+  },
+  "completedInPhase": "7F-Z"
+}

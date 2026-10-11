@@ -182,7 +182,9 @@ test.describe("academic course catalog", () => {
       ["AUT-410", "Automotive Systems Integration", "/courses/aut-410/"],
       ["AUT-140", "Automotive Brake Systems", "/courses/aut-140/"],
       ["AUT-510", "Advanced Vehicle Diagnostics", "/courses/aut-510/"],
-      ["AUT-600", "Automotive Research Design", "/courses/aut-600/"]
+      ["AUT-600", "Automotive Research Design", "/courses/aut-600/"],
+      ["AUT-610", "Applied Automotive Research Project", "/courses/aut-610/"],
+      ["AUT-650", "Applied Automotive Technology Capstone", "/courses/aut-650/"]
     ]) {
       await page.goto(examBase + "/catalog/course/?course=" + code);
       await expect(page.locator(".catalog-detail-card h1")).toHaveText(title);

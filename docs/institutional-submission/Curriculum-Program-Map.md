@@ -64,13 +64,13 @@ Live production curriculum evidence currently reports:
 
 The reference-coverage figures above describe **lesson-plan evidence governance**, not completed online-course or syllabus coverage.
 
-Phase 7F-Y verifies:
+Phase 7F-Z verifies:
 
-- catalog-aligned dedicated course pages: **58**;
-- current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, AUT-115, AUT-120, AUT-121, AUT-130, AUT-131, AUT-140, AUT-150, AUT-160, AUT-170, AUT-180, AUT-200, AUT-201, AUT-210, AUT-211, AUT-220, AUT-230, AUT-240, AUT-250, AUT-251, AUT-260, AUT-270, AUT-280, AUT-300, AUT-301, AUT-310, AUT-320, AUT-321, AUT-330, AUT-331, AUT-340, AUT-350, AUT-360, AUT-370, AUT-380, AUT-390, AUT-410, AUT-501, AUT-510, AUT-515, AUT-520, AUT-525, AUT-530, AUT-535, AUT-540, AUT-545, AUT-550, AUT-555, AUT-560, AUT-565, AUT-570, AUT-575, AUT-580, AUT-585, AUT-590, and AUT-600**;
+- catalog-aligned dedicated course pages: **60**;
+- current catalog-aligned course pages: **AUT-101, AUT-105, AUT-110, AUT-115, AUT-120, AUT-121, AUT-130, AUT-131, AUT-140, AUT-150, AUT-160, AUT-170, AUT-180, AUT-200, AUT-201, AUT-210, AUT-211, AUT-220, AUT-230, AUT-240, AUT-250, AUT-251, AUT-260, AUT-270, AUT-280, AUT-300, AUT-301, AUT-310, AUT-320, AUT-321, AUT-330, AUT-331, AUT-340, AUT-350, AUT-360, AUT-370, AUT-380, AUT-390, AUT-410, AUT-501, AUT-510, AUT-515, AUT-520, AUT-525, AUT-530, AUT-535, AUT-540, AUT-545, AUT-550, AUT-555, AUT-560, AUT-565, AUT-570, AUT-575, AUT-580, AUT-585, AUT-590, AUT-600, AUT-610, and AUT-650**;
 - existing HEV formative-training package page: **AUT-250**, crosswalked from catalog **AUT-330**;
 - planning-catalog courses: **68**;
-- planning-catalog courses without a catalog-aligned dedicated course page: **10**.
+- planning-catalog courses without a catalog-aligned dedicated course page: **8**.
 - AUT-530 undergraduate EV-coursework equivalency remains a separate human/institutional determination.
 
 The existing academic/content `status` field is separate from delivery status. For example, `electrical-1` is marked `active` in the undergraduate curriculum data but does not have a dedicated `exam-site/courses/electrical-1/index.html` page. A course must not be represented as built or production-ready merely because its academic/content status is active.
