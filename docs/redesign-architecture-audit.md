@@ -155,9 +155,9 @@ Decision required: adopt concept values as canonical, or keep `theme/tokens.css`
 ## 8. Recommended next steps
 
 1. [x] **Confirm deployment entry point** for the public site. Confirmed: `wrangler.jsonc` publishes `./public-site`; root `main_index.html` and `temp_home.html` were retired after Phase 8A migration evidence was captured. `public-site/index.html` is the canonical public homepage.
-2. **Token consolidation PR** (Phase 1): unify on `theme/tokens.css`, re-point the colliding root `theme.css`, and decide the palette per Section 6. This is the highest-leverage, lowest-risk change and unlocks every later phase.
+2. [x] **Token consolidation PR** (Phase 1): completed in Phase 8A. `theme/tokens.css` is the documented single canonical token source, with contrast evidence in `docs/phase-8a-token-contrast-report.md`.
 3. [x] **Public site content pass** (Phase 2): added About, How It Works, For Students, For Instructors, and Help Center pages using the existing `public-site/styles.css` shell.
-4. **Student reasoning-sequence refactor** (Phase 3): model the scenario UI on the 5-step sequence using existing coach/scenario components.
+4. [x] **Student reasoning-sequence refactor** (Phase 3): the existing scenario surface now presents the five-stage Concern ? Evidence ? Evaluate ? Test ? Verify model without changing grading, attempts, or assessment/training semantics.
 5. **Instructor / institutional / admin** (Phase 4): scope the genuine functional gaps in Section 4; these require worker/API and Supabase work, not just styling — separate them into their own branches per the one-concern-per-commit rule.
 
 ---

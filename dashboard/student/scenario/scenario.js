@@ -1,4 +1,4 @@
-(function(){
+﻿(function(){
   const QUESTIONS_PER_ATTEMPT = 20;
   const REGENERATE_AFTER_FAILED_ATTEMPTS = 3;
   const PASSING_SCORE_PERCENT = 80;
@@ -151,7 +151,7 @@
   }
 
   function shuffleQuestions(list) {
-    // Fisher–Yates shuffle using secure randomness to avoid Math.random()
+    // Fisherâ€“Yates shuffle using secure randomness to avoid Math.random()
     const arr = list.slice();
     for (let i = arr.length - 1; i > 0; i--) {
       const j = secureRandomInt(i + 1);
@@ -270,7 +270,7 @@
             return json;
           }
         } catch (e) {
-          // ignore – we'll fallback to existing `window.APPROVED_SOURCES` if present
+          // ignore â€“ we'll fallback to existing `window.APPROVED_SOURCES` if present
         }
       }
     } catch (_) {
@@ -469,6 +469,25 @@
     return slugMatches.length === 1 ? slugMatches[0] : null;
   }
 
+  function renderReasoningSequence(isAssessmentMode) {
+    const modeLabel = isAssessmentMode ? 'Assessment' : 'Training';
+    return `
+      <section class="reasoning-sequence" aria-labelledby="reasoning-sequence-title">
+        <div class="reasoning-sequence__header">
+          <p class="reasoning-sequence__eyebrow">Diagnostic reasoning sequence</p>
+          <h2 id="reasoning-sequence-title">Concern &rarr; Evidence &rarr; Evaluate &rarr; Test &rarr; Verify</h2>
+          <p>${modeLabel} mode keeps the same diagnostic sequence while preserving its existing feedback and grading rules.</p>
+        </div>
+        <ol class="reasoning-steps">
+          <li data-reasoning-step="concern"><span>01</span><div><strong>Concern</strong><p>Define the symptom, operating condition, and system context before choosing a path.</p></div></li>
+          <li data-reasoning-step="evidence"><span>02</span><div><strong>Evidence</strong><p>Identify the observations, system information, and source material relevant to the concern.</p></div></li>
+          <li data-reasoning-step="evaluate"><span>03</span><div><strong>Evaluate</strong><p>Compare plausible causes against the available evidence and identify what remains uncertain.</p></div></li>
+          <li data-reasoning-step="test"><span>04</span><div><strong>Test</strong><p>Select the next diagnostic check or response that best separates the remaining possibilities.</p></div></li>
+          <li data-reasoning-step="verify"><span>05</span><div><strong>Verify</strong><p>Confirm the result using submitted evidence, feedback, and the scenario outcome before closing the process.</p></div></li>
+        </ol>
+      </section>`;
+  }
+
   function renderCurriculum(scenarioId) {
     const mapping = window.SCENARIO_CURRICULUM && window.SCENARIO_CURRICULUM[scenarioId];
     if (!mapping) return '';
@@ -605,6 +624,8 @@
         )}
       </p>
     </section>
+
+    ${renderReasoningSequence(isAssessmentMode)}
 
     ${renderCurriculum(evidenceScenarioId)}
 
@@ -748,7 +769,9 @@
         <p class="note"><strong>Topic:</strong> ${escapeHtml(scenario.trainingFocus || item.category || "Diagnostic training")}</p>
       </section>
 
-      ${renderCurriculum(evidenceScenarioId)}
+      ${renderReasoningSequence(isAssessmentMode)}
+
+    ${renderCurriculum(evidenceScenarioId)}
 
       <section class="scenario-card">
         <h2>Systems Involved</h2>
@@ -816,7 +839,7 @@
                   <p class="answer-feedback" aria-live="polite">${answer ? (answer.isCorrect ? "Correct." : "Incorrect.") : ""}</p>
 
                   <div class="torquemind-feedback" hidden>
-                    <h4>🧠 TorqueMind AI Tutor</h4>
+                    <h4>ðŸ§  TorqueMind AI Tutor</h4>
                     <div class="torquemind-body">
                       Generating explanation...
                     </div>
