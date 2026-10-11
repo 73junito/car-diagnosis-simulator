@@ -1,7 +1,7 @@
-﻿# AutoLearnPro Functional Gap Roadmap
+# AutoLearnPro Functional Gap Roadmap
 **Date:** 2026-10-11
 **Scope:** Post-Phase-3 functional gap audit across the production app, instructor, institutional, administration, student residuals, authoring, reference/evidence, and public demo surfaces.
-**Production app runtime:** `wrangler.app.jsonc` → `worker/index.js` with `./dist` assets.
+**Production app runtime:** `wrangler.app.jsonc` -> `worker/index.js` with `./dist` assets.
 ## Executive finding
 Phases 1–3 closed the shared design-token, public-content, and student reasoning-sequence work. The remaining work is no longer primarily visual. The largest gaps are **runtime/API parity, authorization, workflow persistence, institutional tenancy, and administrative review tooling**.
 The repository already contains useful foundations, but several exist outside the production Worker or only as browser-local/static shells. The roadmap therefore prioritizes **making existing capabilities production-authoritative before adding net-new portal breadth**.
@@ -13,7 +13,7 @@ The repository already contains useful foundations, but several exist outside th
 - Curriculum/reference persistence, evidence governance, assessment eligibility separation, and source-rights controls.
 - Classroom tables (`classes`, `enrollments`, `assignments`) and a legacy Express implementation of classroom endpoints.
 ## Gap inventory
-### G1 — Canonical role and authorization model — **P0**
+### G1 - Canonical role and authorization model - **P0 - completed**
 **Evidence:** runtime code currently uses overlapping role names: `teacher`, `instructor`, `professor`, and `admin`. The live-session page checks browser `localStorage` for `instructor`; the legacy classroom API requires `teacher`; Worker research accepts multiple aliases.
 **Gap:** there is no single canonical role vocabulary and shared server-side authorization policy across all production routes.
 **Required outcome:** define canonical roles and trusted-role resolution once, map legacy aliases explicitly, and make every privileged production route use server-verified identity/role rather than browser state.
@@ -21,7 +21,7 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** `/api/classes`, `/api/classes/:classId/students`, `/api/classes/:classId/enroll`, `/api/assign`, and `/api/teacher/data` exist in `torquemind-api/index.js`, but are not registered in `worker/index.js`, which is the production app Worker.
 **Gap:** classroom persistence exists in Supabase and legacy API code, but the production app surface cannot rely on those endpoints.
 **Required outcome:** implement Worker-native, authenticated, ownership-scoped classroom routes using the existing `classes`, `enrollments`, and `assignments` schema; retire or clearly demote the legacy Express routes after parity tests pass.
-### G3 — Instructor verification review/decision workflow — **P0**
+### G3 - Instructor verification review/decision workflow - **P0 - completed**
 **Evidence:** production Worker supports lookup, request, and status. `instructor_verification_requests` supports `pending/approved/rejected`, but no app route was found that writes the review decision.
 **Gap:** pending instructor affiliation cannot be approved/rejected through a governed application workflow.
 **Required outcome:** admin-only review queue, decision endpoint, reviewer identity/timestamp/note enforcement, immutable audit evidence, and tests proving non-admin users cannot decide requests.
@@ -81,12 +81,17 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** active capabilities are split among Worker routes, Node/Vercel-style `api/`, and `torquemind-api` Express routes.
 **Gap:** tests can pass against handlers that are not reachable on the production app Worker, creating false confidence about feature availability.
 **Required outcome:** define `worker/index.js` as the canonical production API boundary for `app.autolearnpro.com`; add a CI contract that every browser-called `/api/*` route is either registered on that Worker or explicitly routed to another documented production service.
+### G18 - Supabase migration deployment parity and environment drift - **P0**
+**Evidence:** connected staging migration history does not include the instructor verification / institution-email migrations that are present in production, and the PR workflow named `Apply DB Migrations (PR)` applies only `db/migrations/*.sql`. The Supabase provenance workflow watches `supabase/migrations/**` but does not apply the full Supabase migration chain.
+**Gap:** a PR can add or depend on `supabase/migrations/**` while staging remains on an older schema, so preview/API checks can appear green without exercising the schema required by the feature.
+**Required outcome:** synchronize staging to the repository Supabase migration chain, add deterministic drift detection, and add a CI/deployment path that validates schema-dependent PRs against the intended Supabase migration set before they can be considered production-ready. Schema-dependent endpoints must fail closed when their required migration is absent.
+
 ## Recommended execution order
 ### Phase 4A — Authorization and runtime foundation
 1. [x] Canonical role taxonomy + shared trusted-role resolver.
 2. Production API route inventory contract.
-3. Instructor verification decision API + audit record.
-4. Admin verification-review minimum UI.
+3. [x] Instructor verification decision API + audit record.
+4. [x] Admin verification-review minimum UI.
 **Why first:** every later institutional/instructor/admin capability depends on trusted authorization and a real operational approval path.
 ### Phase 4B — Instructor classroom core
 1. Port classes/list/create to Worker.
@@ -153,4 +158,4 @@ Use one concern per branch/PR. Suggested first branches:
 - Empty/unavailable states must be truthful; do not substitute sample data on authenticated production dashboards.
 - Generated reports/files remain unstaged unless they are intentional evidence artifacts.
 ## First implementation target
-G1 is complete. Next implement **Phase 4A / G3**: the missing admin-only instructor-verification decision workflow, using the shared canonical role policy established by G1.
+G1 and G3 are complete. Next close **G18 - Supabase migration deployment parity and environment drift**, then finish the Phase 4A production API route inventory contract before beginning the Phase 4B classroom ports.

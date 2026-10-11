@@ -27,7 +27,9 @@ import {
 import {
   handleInstitutionLookup,
   handleInstructorVerificationRequest,
-  handleInstructorVerificationStatus
+  handleInstructorVerificationStatus,
+  handleAdminInstructorVerificationQueue,
+  handleAdminInstructorVerificationDecision
 } from "./routes/instructor-verification.js";
 import { handleInstitutionSearch } from "./routes/institution-search.js";
 import { createRequestContext } from './middleware/request-context.js'
@@ -132,6 +134,17 @@ app.use('/api/instructor/verification/*', cors({
 app.get('/api/instructor/verification/institution', handleInstitutionLookup)
 app.post('/api/instructor/verification/request', handleInstructorVerificationRequest)
 app.get('/api/instructor/verification/status', handleInstructorVerificationStatus)
+
+// Admin-only instructor affiliation review. The Worker authorizes the reviewer;
+// the database trigger appends immutable audit evidence for every final decision.
+app.use('/api/admin/instructor-verification/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/admin/instructor-verification/requests', handleAdminInstructorVerificationQueue)
+app.patch('/api/admin/instructor-verification/requests/:requestId', handleAdminInstructorVerificationDecision)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.

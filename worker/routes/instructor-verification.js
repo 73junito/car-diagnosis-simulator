@@ -210,6 +210,180 @@ export async function handleInstructorVerificationRequest(c) {
   }, 202)
 }
 
+async function authorizeAdmin(c) {
+  const auth = await authorize(c)
+  if (auth.response) return auth
+
+  const role = await resolveTrustedRole(auth.user, auth.supabase)
+  if (!isAdminRole(role)) {
+    return { response: c.json({ error: 'Admin access required' }, 403) }
+  }
+
+  return { ...auth, role }
+}
+
+function publicVerification(row, institution = null) {
+  if (!row) return null
+  return {
+    id: row.id,
+    userId: row.user_id,
+    schoolCode: row.school_code,
+    status: row.status,
+    verificationMethod: row.verification_method,
+    requestedAt: row.requested_at,
+    reviewedAt: row.reviewed_at,
+    reviewedBy: row.reviewed_by,
+    reviewNote: row.review_note,
+    institution: publicInstitution(institution)
+  }
+}
+
+function validRequestId(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || '').trim())
+}
+
+export async function handleAdminInstructorVerificationQueue(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAdmin(c)
+  if (auth.response) return auth.response
+
+  const status = String(c.req.query('status') || 'pending').trim().toLowerCase()
+  if (!['pending', 'approved', 'rejected'].includes(status)) {
+    return c.json({ error: 'status must be pending, approved, or rejected' }, 400)
+  }
+
+  const requestedLimit = Number.parseInt(c.req.query('limit') || '50', 10)
+  const limit = Number.isInteger(requestedLimit) ? Math.max(1, Math.min(requestedLimit, 100)) : 50
+
+  const { data: requests, error } = await auth.supabase
+    .from('instructor_verification_requests')
+    .select('id,user_id,school_code,status,verification_method,requested_at,reviewed_at,reviewed_by,review_note')
+    .eq('status', status)
+    .order('requested_at', { ascending: true })
+    .limit(limit)
+
+  if (error) {
+    console.error('Instructor verification admin queue failed:', error.message || error)
+    return c.json({ error: 'Unable to read instructor verification queue' }, 500)
+  }
+
+  const schoolCodes = [...new Set((requests || []).map((row) => row.school_code).filter(Boolean))]
+  let institutions = []
+  if (schoolCodes.length) {
+    const { data, error: institutionError } = await auth.supabase
+      .from('institutions')
+      .select('school_code,school_name,address,city,state_code,zip_code,province,country,postal_code')
+      .in('school_code', schoolCodes)
+    if (institutionError) {
+      console.error('Instructor verification institution queue lookup failed:', institutionError.message || institutionError)
+      return c.json({ error: 'Unable to read instructor verification queue' }, 500)
+    }
+    institutions = data || []
+  }
+
+  const institutionByCode = new Map(institutions.map((row) => [row.school_code, row]))
+  return c.json({
+    status,
+    requests: (requests || []).map((row) => publicVerification(row, institutionByCode.get(row.school_code) || null))
+  }, 200)
+}
+
+export async function handleAdminInstructorVerificationDecision(c) {
+  if (c.req.method !== 'PATCH') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAdmin(c)
+  if (auth.response) return auth.response
+
+  const requestId = String(c.req.param('requestId') || '').trim()
+  if (!validRequestId(requestId)) {
+    return c.json({ error: 'Valid verification request ID required' }, 400)
+  }
+
+  let body
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+
+  const decision = String(body?.decision || '').trim().toLowerCase()
+  const reviewNote = typeof body?.reviewNote === 'string' ? body.reviewNote.trim() : ''
+  if (!['approved', 'rejected'].includes(decision)) {
+    return c.json({ error: 'decision must be approved or rejected' }, 400)
+  }
+  if (reviewNote.length > 1000) {
+    return c.json({ error: 'reviewNote must be 1000 characters or fewer' }, 400)
+  }
+  if (decision === 'rejected' && !reviewNote) {
+    return c.json({ error: 'reviewNote is required when rejecting a verification request' }, 400)
+  }
+
+  // Fail closed if the append-only audit migration has not been deployed.
+  // This prevents an application-first deployment from finalizing a decision
+  // without the database trigger that records immutable audit evidence.
+  const { error: auditReadyError } = await auth.supabase
+    .from('instructor_verification_decisions')
+    .select('id')
+    .limit(1)
+
+  if (auditReadyError) {
+    console.error('Instructor verification audit readiness check failed:', auditReadyError.message || auditReadyError)
+    return c.json({ error: 'Instructor verification review audit unavailable' }, 503)
+  }
+
+  const { data: current, error: currentError } = await auth.supabase
+    .from('instructor_verification_requests')
+    .select('id,user_id,school_code,status,verification_method,requested_at,reviewed_at,reviewed_by,review_note')
+    .eq('id', requestId)
+    .maybeSingle()
+
+  if (currentError) {
+    console.error('Instructor verification admin lookup failed:', currentError.message || currentError)
+    return c.json({ error: 'Unable to read instructor verification request' }, 500)
+  }
+  if (!current) return c.json({ error: 'Instructor verification request not found' }, 404)
+  if (current.status !== 'pending') {
+    return c.json({ error: 'Instructor verification decision is already final' }, 409)
+  }
+
+  const reviewedAt = new Date().toISOString()
+  const { data, error } = await auth.supabase
+    .from('instructor_verification_requests')
+    .update({
+      status: decision,
+      reviewed_at: reviewedAt,
+      reviewed_by: auth.user.id,
+      review_note: reviewNote || null
+    })
+    .eq('id', requestId)
+    .eq('status', 'pending')
+    .select('id,user_id,school_code,status,verification_method,requested_at,reviewed_at,reviewed_by,review_note')
+    .maybeSingle()
+
+  if (error) {
+    console.error('Instructor verification admin decision failed:', error.message || error)
+    return c.json({ error: 'Unable to save instructor verification decision' }, 500)
+  }
+  if (!data) {
+    return c.json({ error: 'Instructor verification decision is already final' }, 409)
+  }
+
+  const { data: institution } = await auth.supabase
+    .from('institutions')
+    .select('school_code,school_name,address,city,state_code,zip_code,province,country,postal_code')
+    .eq('school_code', data.school_code)
+    .maybeSingle()
+
+  return c.json({
+    verification: publicVerification(data, institution),
+    authorizationGranted: false,
+    message: decision === 'approved'
+      ? 'Instructor affiliation approved. A trusted instructor role is still required for privileged access.'
+      : 'Instructor affiliation rejected.'
+  }, 200)
+}
+
 export async function handleInstructorVerificationStatus(c) {
   if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
 
