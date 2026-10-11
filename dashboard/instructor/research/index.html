@@ -4,13 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Research Discovery | AutoLearnPro</title>
-  <link rel="stylesheet" href="/theme.css" />
   <link rel="stylesheet" href="/theme/tokens.css" />
   <link rel="stylesheet" href="/theme/layout.css" />
   <link rel="stylesheet" href="/theme/dashboard.css" />
+  <link rel="stylesheet" href="./research.css" />
 </head>
 <body>
-  <main class="container tm-main">
+  <main class="tm-main">
     <section class="tm-hero-banner">
       <div>
         <p class="tm-hero-banner__eyebrow">Instructor Tools</p>
@@ -33,15 +33,15 @@
       <p>Create a curriculum gap before saving scholarly evidence. The lesson relationship is verified by the server.</p>
       <form id="research-gap-form">
         <label for="research-lesson">Lesson or module</label>
-        <select id="research-lesson" name="lessonPlanId" required>
+        <select id="research-lesson" class="tm-select" name="lessonPlanId" required>
           <option value="">Loading curriculum…</option>
         </select>
         <label for="research-gap-summary">Gap description</label>
-        <textarea id="research-gap-summary" name="gapSummary" rows="3" maxlength="1000" required
+        <textarea id="research-gap-summary" class="tm-textarea" name="gapSummary" rows="3" maxlength="1000" required
           placeholder="Describe the missing, outdated, or weakly supported content."></textarea>
-        <div style="display:flex;gap:.75rem;align-items:end;flex-wrap:wrap">
+        <div class="research-inline-controls">
           <label for="research-gap-type">Gap type
-            <select id="research-gap-type" name="gapType">
+            <select id="research-gap-type" class="tm-select" name="gapType">
               <option value="evidence" selected>Evidence</option>
               <option value="coverage">Coverage</option>
               <option value="currency">Currency</option>
@@ -51,7 +51,7 @@
             </select>
           </label>
           <label for="research-gap-priority">Priority
-            <select id="research-gap-priority" name="priority">
+            <select id="research-gap-priority" class="tm-select" name="priority">
               <option value="low">Low</option>
               <option value="medium" selected>Medium</option>
               <option value="high">High</option>
@@ -61,10 +61,10 @@
         </div>
       </form>
       <p id="research-gap-status" role="status" aria-live="polite">No active evidence gap.</p>
-      <div style="margin-top:1rem">
+      <div class="research-existing-gaps">
         <label for="research-existing-gap">Existing evidence gaps for selected lesson</label>
-        <div style="display:flex;gap:.75rem;align-items:end;flex-wrap:wrap">
-          <select id="research-existing-gap">
+        <div class="research-inline-controls">
+          <select id="research-existing-gap" class="tm-select">
             <option value="">Select a lesson to load existing gaps</option>
           </select>
           <button id="research-use-gap" class="tm-btn tm-btn-secondary" type="button">Use selected gap</button>
@@ -76,11 +76,11 @@
       <h2 id="research-search-title">Search papers</h2>
       <form id="research-form">
         <label for="research-query">Research topic or keywords</label>
-        <div style="display:flex;gap:.75rem;align-items:end;flex-wrap:wrap">
-          <input id="research-query" name="q" type="search" minlength="3" maxlength="300" required
-            placeholder="Example: electric vehicle battery diagnostics" style="min-width:min(100%,34rem)" />
+        <div class="research-inline-controls">
+          <input id="research-query" class="tm-input research-query-input" name="q" type="search" minlength="3" maxlength="300" required
+            placeholder="Example: electric vehicle battery diagnostics" />
           <label for="research-limit">Results
-            <select id="research-limit" name="limit">
+            <select id="research-limit" class="tm-select" name="limit">
               <option value="5" selected>5</option>
               <option value="10">10</option>
             </select>
@@ -107,11 +107,11 @@
       <h2 id="enhancement-drafts-title">AI-assisted curriculum enhancement drafts</h2>
       <p>Generate instructor-review drafts only from approved evidence whose source explicitly permits AI/RAG use. Drafts cannot publish curriculum or generate scored assessment content.</p>
       <label for="enhancement-goal">Enhancement goal</label>
-      <textarea id="enhancement-goal" rows="3" maxlength="1000"
+      <textarea id="enhancement-goal" class="tm-textarea" rows="3" maxlength="1000"
         placeholder="Describe the instructional improvement you want the draft to propose."></textarea>
-      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-top:.75rem">
+      <div class="research-draft-actions">
         <button id="generate-enhancement-draft" class="tm-btn tm-btn-primary" type="button">Generate enhancement draft</button>
-        <span id="enhancement-selection-count" class="fine-print">0 eligible evidence records selected.</span>
+        <span id="enhancement-selection-count" class="research-fine-print">0 eligible evidence records selected.</span>
       </div>
       <p id="enhancement-draft-status" role="status" aria-live="polite">Select eligible approved evidence above to enable drafting.</p>
       <div id="enhancement-draft-list"></div>
@@ -119,7 +119,7 @@
 
     <p>
       <a href="https://www.semanticscholar.org/?utm_source=api" rel="noopener noreferrer">
-        <img src="./semantic-scholar-logo.svg" alt="Semantic Scholar" style="height:2rem;width:auto;vertical-align:middle" />
+        <img src="./semantic-scholar-logo.svg" alt="Semantic Scholar" class="research-provider-logo" />
       </a>
     </p>
     <p><small>Research discovery metadata powered in part by <a href="https://www.semanticscholar.org/?utm_source=api" rel="noopener noreferrer">Semantic Scholar</a>, a project of the Allen Institute for AI (Ai2).</small></p>
