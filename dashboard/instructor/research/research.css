@@ -1,0 +1,35 @@
+.research-inline-controls {
+  display: flex;
+  gap: .75rem;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.research-existing-gaps {
+  margin-top: 1rem;
+}
+
+.research-query-input {
+  min-width: min(100%, 34rem);
+}
+
+.research-draft-actions {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: .75rem;
+}
+
+.research-fine-print,
+.fine-print {
+  color: var(--tm-muted);
+  font-size: .88rem;
+  line-height: 1.45;
+}
+
+.research-provider-logo {
+  height: 2rem;
+  width: auto;
+  vertical-align: middle;
+}
