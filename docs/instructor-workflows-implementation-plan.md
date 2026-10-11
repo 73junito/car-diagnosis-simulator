@@ -76,6 +76,17 @@ Note: there are **two** analytics implementations — Cloudflare Worker routes u
 ### 2.3 Data model relevant to progress (verified)
 - Current attempt/progress data lives in `attempts` / `attempt_answers` (server-authoritative grading). The legacy `question_attempts` table was **retired** by `20260930153300_retire_legacy_student_progress.sql` (fail-closed, dependency-checked drop). Instructor reporting, if built, must read from the current attempt model — **not** the local `analytics-report.json` and **not** the retired table.
 
+### 2.4 Deployment architecture (verified — decisive for the fix)
+- **Production runs on Cloudflare Workers** (`wrangler.app.jsonc`, `wrangler.exam.jsonc`, `wrangler.jsonc`). The Worker (`worker/index.js`) registers **no** `/api/analytics/*` route.
+- The unauthenticated `/api/analytics/*` handlers are mounted **only** by `torquemind-api/index.js` — a **separate Express app** with its own `package.json` (`"start": "node index.js"`) and **no deploy config in this repo** (no `vercel.json`, `Procfile`, `Dockerfile`, `render.yaml`; only `wrangler.*` exist).
+- Consequence: in the deployed Worker, the instructor analytics page's `fetch('/api/analytics/...')` most likely **404s**; the page silently shows placeholders (`—`, `0`). The `analytics-report.json` the handlers read is **not committed**. So today this is a **latent** exposure in a non-deployed Express app, not a live production leak — but it is still a fail-open auth boundary that must be corrected before that app is ever deployed or promoted.
+
+### 2.5 Fail-open authorization in `torquemind-api` (verified)
+- `middleware/auth.js`: when **no** `Authorization` header is present it sets `req.user = null` and calls `next()` — it does **not** reject unauthenticated requests (by design, for public assets/health).
+- `middleware/requireRole.js`: when Supabase is **not** configured it calls `next()` regardless of user/role; `__tests__/requireRole.test.js` **asserts this fail-open behavior**. When configured, it enforces `req.user.role === role` (401/403).
+- `api/telemetry/access.js` `requireInstructor` has a header-only fast path (`x-torquemind-role === 'instructor'`) plus a `resolveUserRole` check.
+- Implication (matches the "affiliation ≠ authorization" rule): none of these enforce the **verified-affiliation** signal from `instructor-verification.js`. Role and affiliation are separate concepts and are currently checked in different places, if at all.
+
 ---
 
 ## 3. Existing data contracts and UI components
