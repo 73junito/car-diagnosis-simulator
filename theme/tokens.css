@@ -1,5 +1,10 @@
 /* TorqueMind / AutoLearnPro design tokens — SINGLE CANONICAL SOURCE.
  *
+ * Phase 8A palette (docs/phase-8a-ux-architecture-baseline.md decision D2):
+ *   Navy #14233C (primary/nav) · Blue #377DE0 (interactive) ·
+ *   Teal #26A889 (secondary interactive / verified) · Surface #F4F7FB.
+ * Contrast validated to WCAG 2.2 AA — see docs/phase-8a-token-contrast-report.md.
+ *
  * The light theme below is the default. Dark surfaces are an explicit,
  * opt-in variant applied via [data-theme="dark"] (see the block after :root).
  *
@@ -9,14 +14,29 @@
  * color from this file. See design-language/colors.md.
  */
 :root {
-  --tm-bg: #f5f7fb;
+  --tm-bg: #f4f7fb;
   --tm-surface: #ffffff;
   --tm-surface-2: #eef3f8;
   --tm-text: #102033;
   --tm-muted: #5f6f82;
   --tm-border: #d7e0ea;
-  --tm-primary: #0f3d5e;
-  --tm-primary-2: #145f8f;
+  --tm-primary: #14233c;
+  --tm-primary-2: #377de0;
+  /* Text-safe interactive blue. Brand blue #377de0 measures 4.06:1 on white —
+   * fine for fills with large/bold text and non-text UI (≥3:1), but it fails
+   * AA for normal-size text. Use --tm-primary-2-text for normal-size text on
+   * light surfaces and as the fill beneath small white text. */
+  --tm-primary-2-text: #2d6ac9;
+  /* Teal is for secondary-interactive emphasis and "verified" status only.
+   * It is NOT interchangeable with --tm-success (semantic correct/completed
+   * green). Never use teal where the meaning is "passed" or "succeeded".
+   * Brand teal #26a889 measures 2.98:1 on white — decorative/large-fill use
+   * only. Use --tm-teal-text for text and white-on-fill combinations. */
+  --tm-teal: #26a889;
+  --tm-teal-text: #1b8069;
+  /* Amber retained: dependency audit (Phase 8A token PR) confirmed semantic
+   * usage — dark-theme --tm-warning, focus-visible outlines
+   * (dashboard/student/student.css), progress gradients, topbar accent. */
   --tm-accent: #f59e0b;
   --tm-success: #15803d;
   --tm-warning: #b45309;
@@ -37,9 +57,11 @@
  * Explicit dark-surface variant (opt-in).
  * Apply by setting data-theme="dark" on <html> or any ancestor element.
  * No existing page sets this yet, so this block is additive and changes no
- * current rendering. These values are a starting point ported from the legacy
- * theme.css dark palette and MUST be validated against WCAG 2.2 AA contrast
- * (including hover/focus/disabled/error states) before any page opts in.
+ * current rendering (locked by tests/design-token-contract.spec.js).
+ * Primary/primary-2/teal are synced to the Phase 8A brand palette, but the
+ * whole dark variant remains a starting point and MUST be validated against
+ * WCAG 2.2 AA contrast (including hover/focus/disabled/error states) before
+ * any page opts in — see docs/phase-8a-token-contrast-report.md.
  */
 :root[data-theme="dark"] {
   --tm-bg: #0b1117;
@@ -48,8 +70,11 @@
   --tm-text: #f9fafb;
   --tm-muted: #9ca3af;
   --tm-border: rgba(255, 255, 255, 0.12);
-  --tm-primary: #0f3d5e;
-  --tm-primary-2: #2f7fb5;
+  --tm-primary: #14233c;
+  --tm-primary-2: #377de0;
+  --tm-primary-2-text: #2d6ac9;
+  --tm-teal: #26a889;
+  --tm-teal-text: #1b8069;
   --tm-accent: #f59e0b;
   --tm-accent-2: #38bdf8;
   --tm-success: #22c55e;
