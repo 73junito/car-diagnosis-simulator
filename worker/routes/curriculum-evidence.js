@@ -1,9 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import { authorizeResearch } from './semantic-scholar-research.js'
+import { isInstructorOrAdminRole } from '../auth/role-policy.js'
 
 const GAP_TYPES = new Set(['coverage', 'currency', 'evidence', 'practice', 'visual', 'other'])
 const PRIORITIES = new Set(['low', 'medium', 'high'])
-const EVIDENCE_REVIEW_ROLES = new Set(['teacher', 'instructor', 'professor', 'admin'])
 const LICENSE_STATUSES = new Set(['verified-for-use', 'restricted', 'unknown'])
 const RIGHTS_SCOPE_KEYS = [
   'citation_link_allowed',
@@ -224,7 +224,7 @@ export async function handleCurriculumApprovedSources(c) {
 
   const auth = await authorizeResearch(c, { requireSemanticScholarEnabled: false })
   if (auth.response) return auth.response
-  if (!EVIDENCE_REVIEW_ROLES.has(String(auth.role || '').trim().toLowerCase())) {
+  if (!isInstructorOrAdminRole(auth.role)) {
     return c.json({ error: 'Teacher, instructor, professor, or admin access required' }, 403)
   }
 
@@ -263,7 +263,7 @@ export async function handleCurriculumApprovedSourceRightsReview(c) {
 
   const auth = await authorizeResearch(c, { requireSemanticScholarEnabled: false })
   if (auth.response) return auth.response
-  if (!EVIDENCE_REVIEW_ROLES.has(String(auth.role || '').trim().toLowerCase())) {
+  if (!isInstructorOrAdminRole(auth.role)) {
     return c.json({ error: 'Teacher, instructor, professor, or admin access required' }, 403)
   }
 
@@ -334,7 +334,7 @@ export async function handleCurriculumEvidenceRecordReview(c) {
 
   const auth = await authorizeResearch(c, { requireSemanticScholarEnabled: false })
   if (auth.response) return auth.response
-  if (!EVIDENCE_REVIEW_ROLES.has(String(auth.role || '').trim().toLowerCase())) {
+  if (!isInstructorOrAdminRole(auth.role)) {
     return c.json({ error: 'Teacher, instructor, professor, or admin access required' }, 403)
   }
 
