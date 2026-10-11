@@ -83,7 +83,7 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** define `worker/index.js` as the canonical production API boundary for `app.autolearnpro.com`; add a CI contract that every browser-called `/api/*` route is either registered on that Worker or explicitly routed to another documented production service.
 ## Recommended execution order
 ### Phase 4A — Authorization and runtime foundation
-1. Canonical role taxonomy + shared trusted-role resolver.
+1. [x] Canonical role taxonomy + shared trusted-role resolver.
 2. Production API route inventory contract.
 3. Instructor verification decision API + audit record.
 4. Admin verification-review minimum UI.
@@ -153,4 +153,4 @@ Use one concern per branch/PR. Suggested first branches:
 - Empty/unavailable states must be truthful; do not substitute sample data on authenticated production dashboards.
 - Generated reports/files remain unstaged unless they are intentional evidence artifacts.
 ## First implementation target
-Start with **Phase 4A / G1 + G3**: canonicalize privileged-role resolution and add the missing admin-only instructor-verification decision workflow. This is the smallest change that unlocks real instructor onboarding while establishing the authorization pattern needed by all later portals.
+G1 is complete. Next implement **Phase 4A / G3**: the missing admin-only instructor-verification decision workflow, using the shared canonical role policy established by G1.

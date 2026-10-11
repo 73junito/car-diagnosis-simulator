@@ -7,45 +7,7 @@ import {
   searchSemanticScholar,
   getSemanticScholarPaper
 } from '../services/semantic-scholar.js'
-
-const RESEARCH_ROLES = new Set(['teacher', 'instructor', 'professor', 'admin'])
-
-function isResearchRole(role) {
-  return RESEARCH_ROLES.has(String(role || '').trim().toLowerCase())
-}
-
-async function resolveResearchRole(user, supabaseUrl, serviceRoleKey) {
-  const appMetadataRole = user?.app_metadata?.role
-  if (isResearchRole(appMetadataRole)) return appMetadataRole
-
-  if (!user?.id) return null
-
-  try {
-    const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false
-      }
-    })
-
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .maybeSingle()
-
-    if (error) {
-      console.error('Research role lookup failed:', error.message || error)
-      return null
-    }
-
-    return isResearchRole(data?.role) ? data.role : null
-  } catch (error) {
-    console.error('Research role lookup failed:', error?.message || error)
-    return null
-  }
-}
+import { isAdminRole, isInstructorOrAdminRole, resolveTrustedRole } from '../auth/role-policy.js'
 
 function errorResponse(c, error) {
   if (error?.code === 'INVALID_QUERY' || error?.code === 'INVALID_PAPER_ID') {
@@ -96,19 +58,16 @@ export async function authorizeResearch(c, { requireSemanticScholarEnabled = tru
     return { response: c.json({ error: 'Authentication required' }, 401) }
   }
 
-  const role = await resolveResearchRole(user, supabaseUrl, serviceRoleKey)
-  if (!role) {
+  const roleSupabase = createClient(supabaseUrl, serviceRoleKey, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  })
+  const role = await resolveTrustedRole(user, roleSupabase)
+  if (!isInstructorOrAdminRole(role)) {
     return { response: c.json({ error: 'Teacher, instructor, professor, or admin access required' }, 403) }
   }
 
-  if (String(role).toLowerCase() !== 'admin') {
-    const supabase = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false
-      }
-    })
+  if (!isAdminRole(role)) {
+    const supabase = roleSupabase
     const { data, error: verificationError } = await supabase
       .from('instructor_verification_requests')
       .select('status')

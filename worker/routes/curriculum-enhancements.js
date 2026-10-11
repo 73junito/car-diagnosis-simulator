@@ -1,10 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
 import { authorizeResearch } from './semantic-scholar-research.js'
+import { isInstructorOrAdminRole } from '../auth/role-policy.js'
 import { requestOllama } from '../services/ollama.js'
 import { requestOpenAI } from '../services/openai-compatible.js'
 import { validateProviderConfig, DEFAULTS } from '../config/ai-config.js'
 
-const DRAFT_ROLES = new Set(['teacher', 'instructor', 'professor', 'admin'])
 const MAX_EVIDENCE = 6
 const PROMPT_VERSION = 'curriculum-enhancement-v1'
 const DRAFT_FIELDS = [
@@ -103,7 +103,7 @@ function databaseError(c, label, error) {
 async function authorizeDrafts(c) {
   const auth = await authorizeResearch(c, { requireSemanticScholarEnabled: false })
   if (auth.response) return auth
-  if (!DRAFT_ROLES.has(String(auth.role || '').trim().toLowerCase())) {
+  if (!isInstructorOrAdminRole(auth.role)) {
     return { response: c.json({ error: 'Teacher, instructor, professor, or admin access required' }, 403) }
   }
   return auth

@@ -3,19 +3,10 @@ import {
   extractBearerToken,
   verifySupabaseToken
 } from '../../api/_utils/auth-utils.js'
-
-const INSTRUCTOR_ROLES = new Set(['teacher', 'instructor', 'professor'])
+import { isAdminRole, isInstructorRole, resolveTrustedRole } from '../auth/role-policy.js'
 
 function normalizeSchoolCode(value) {
   return String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '')
-}
-
-function normalizedRole(value) {
-  return String(value || '').trim().toLowerCase()
-}
-
-function isInstructorRole(value) {
-  return INSTRUCTOR_ROLES.has(normalizedRole(value))
 }
 
 function emailDomain(value) {
@@ -76,26 +67,6 @@ async function authorize(c) {
     user,
     supabase: createServiceClient(supabaseUrl, serviceRoleKey)
   }
-}
-
-async function resolveTrustedRole(user, supabase) {
-  const metadataRole = normalizedRole(user?.app_metadata?.role)
-  if (metadataRole === 'admin' || isInstructorRole(metadataRole)) {
-    return metadataRole
-  }
-
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .maybeSingle()
-
-  if (error) {
-    console.error('Instructor role lookup failed:', error.message || error)
-    return null
-  }
-
-  return normalizedRole(data?.role)
 }
 
 function publicInstitution(row) {
@@ -246,7 +217,7 @@ export async function handleInstructorVerificationStatus(c) {
   if (auth.response) return auth.response
 
   const role = await resolveTrustedRole(auth.user, auth.supabase)
-  const isAdmin = role === 'admin'
+  const isAdmin = isAdminRole(role)
 
   const { data, error } = await auth.supabase
     .from('instructor_verification_requests')
