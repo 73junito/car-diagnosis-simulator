@@ -114,7 +114,8 @@
     "validate:batch016-delivery-pages": "node scripts/verify-batch016-delivery-pages.js",
     "validate:batch017-delivery-pages": "node scripts/verify-batch017-delivery-pages.js",
     "validate:batch018-delivery-pages": "node scripts/verify-batch018-delivery-pages.js",
-    "validate:final-eight-governance-review": "node scripts/verify-final-eight-governance-review.js"
+    "validate:final-eight-governance-review": "node scripts/verify-final-eight-governance-review.js",
+    "validate:institutional-decision-package": "node scripts/verify-institutional-decision-package.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

@@ -232,6 +232,18 @@
       "path": "data/curriculum/final-eight-governance-review.json",
       "status": "verified-governance-review",
       "notes": "Final eight-course governance matrix; no automatic delivery candidates and no assessment eligibility changes."
+    },
+    {
+      "area": "institutional_decision_package_final_eight",
+      "path": "data/curriculum/institutional-decision-package-final-eight.json",
+      "status": "prepared-for-external-human-review",
+      "notes": "Eight pending decision records; no automatic approval, delivery unlock, or assessment eligibility change."
+    },
+    {
+      "area": "institutional_decision_worksheet_final_eight",
+      "path": "docs/institutional-submission/Final-Eight-Institutional-Decision-Worksheet.md",
+      "status": "reviewer-ready",
+      "notes": "Human/institutional decision worksheet for the final eight courses."
     }
   ],
   "open_external_review_items": [
