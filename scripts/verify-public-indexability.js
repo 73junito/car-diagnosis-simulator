@@ -9,6 +9,11 @@ const SITEMAP = path.join(PUBLIC, 'sitemap.xml')
 
 const EXPECTED_URLS = [
   'https://autolearnpro.com/',
+  'https://autolearnpro.com/about/',
+  'https://autolearnpro.com/how-it-works/',
+  'https://autolearnpro.com/students/',
+  'https://autolearnpro.com/instructors/',
+  'https://autolearnpro.com/help/',
   'https://autolearnpro.com/institutions/',
   'https://autolearnpro.com/research-sources/',
   'https://autolearnpro.com/privacy',
