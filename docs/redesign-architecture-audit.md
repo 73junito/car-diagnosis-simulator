@@ -154,7 +154,7 @@ Decision required: adopt concept values as canonical, or keep `theme/tokens.css`
 
 ## 8. Recommended next steps
 
-1. **Confirm deployment entry point** for the public site, then archive root scratch homepages so there is one canonical public `index.html`.
+1. [x] **Confirm deployment entry point** for the public site. Confirmed: `wrangler.jsonc` publishes `./public-site`; root `main_index.html` and `temp_home.html` were retired after Phase 8A migration evidence was captured. `public-site/index.html` is the canonical public homepage.
 2. **Token consolidation PR** (Phase 1): unify on `theme/tokens.css`, re-point the colliding root `theme.css`, and decide the palette per Section 6. This is the highest-leverage, lowest-risk change and unlocks every later phase.
 3. **Public site content pass** (Phase 2): add the missing marketing/help pages reusing the existing `public-site/styles.css` shell.
 4. **Student reasoning-sequence refactor** (Phase 3): model the scenario UI on the 5-step sequence using existing coach/scenario components.
