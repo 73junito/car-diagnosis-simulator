@@ -38,7 +38,7 @@ The Student Dashboard is the primary landing page for learners. It provides an o
 ## Accessibility
 - Full keyboard navigation
 - Screen reader compatible
-- WCAG 2.1 AA
+- WCAG 2.2 AA
 
 ## Performance Targets
 - First render < 2 seconds

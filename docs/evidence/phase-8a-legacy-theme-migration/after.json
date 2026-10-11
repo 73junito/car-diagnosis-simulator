@@ -1,0 +1,333 @@
+{
+  "capturedAt": "2026-10-11T02:30:51.707Z",
+  "base": "http://127.0.0.1:4173",
+  "pages": {
+    "assessment/index.html": {
+      "stylesheets": [
+        "/theme/tokens.css",
+        "/theme/layout.css",
+        "/theme/legacy-light-bridge.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(244, 247, 251)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "0px",
+          "maxWidth": "none"
+        },
+        ".assessment-entry": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "32px",
+          "maxWidth": "720px"
+        },
+        "#beginAssessment": {
+          "backgroundColor": "rgb(203, 213, 225)",
+          "color": "rgb(100, 116, 139)",
+          "borderColor": "rgb(100, 116, 139)",
+          "fontFamily": "Arial",
+          "display": "inline-block",
+          "padding": "16px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "INPUT",
+        "id": "attestation",
+        "className": "",
+        "outline": "rgb(45, 106, 201) solid 3px",
+        "outlineColor": "rgb(45, 106, 201)",
+        "boxShadow": "none"
+      }
+    },
+    "dashboard/live-session.html": {
+      "stylesheets": [
+        "../theme/tokens.css",
+        "../theme/layout.css",
+        "../theme/dashboard.css",
+        "./live-session.css",
+        "../theme/legacy-light-bridge.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(244, 247, 251)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "0px",
+          "maxWidth": "none"
+        },
+        ".container": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "32px 0px 56px",
+          "maxWidth": "none"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(215, 224, 234)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "20px",
+          "maxWidth": "none"
+        }
+      }
+    },
+    "dashboard_live.html": {
+      "stylesheets": [
+        "./theme/tokens.css",
+        "./theme/layout.css",
+        "./theme/dashboard.css",
+        "./theme/legacy-light-bridge.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(244, 247, 251)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "0px",
+          "maxWidth": "none"
+        },
+        ".container": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "32px 0px 56px",
+          "maxWidth": "none"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(215, 224, 234)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "20px",
+          "maxWidth": "none"
+        },
+        ".btn": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(45, 106, 201)",
+          "borderColor": "rgb(45, 106, 201)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "inline-flex",
+          "padding": "10px 14px",
+          "maxWidth": "none"
+        },
+        ".tm-table": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "table",
+          "padding": "0px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "BUTTON",
+        "id": "download-csv",
+        "className": "btn btn-ghost",
+        "outline": "rgb(45, 106, 201) solid 3px",
+        "outlineColor": "rgb(45, 106, 201)",
+        "boxShadow": "none"
+      }
+    },
+    "dashboard_test.html": {
+      "stylesheets": [
+        "./theme/tokens.css",
+        "./theme/layout.css",
+        "./theme/dashboard.css",
+        "./theme/legacy-light-bridge.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(244, 247, 251)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "0px",
+          "maxWidth": "none"
+        },
+        ".container": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "32px 0px 56px",
+          "maxWidth": "none"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(215, 224, 234)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "20px",
+          "maxWidth": "none"
+        },
+        ".btn": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(45, 106, 201)",
+          "borderColor": "rgb(45, 106, 201)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "inline-flex",
+          "padding": "10px 14px",
+          "maxWidth": "none"
+        },
+        ".tm-table": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "table",
+          "padding": "0px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "BUTTON",
+        "id": "download-csv",
+        "className": "btn btn-ghost",
+        "outline": "rgb(45, 106, 201) solid 3px",
+        "outlineColor": "rgb(45, 106, 201)",
+        "boxShadow": "none"
+      }
+    },
+    "main_index.html": {
+      "stylesheets": [
+        "./style.css",
+        "./theme/tokens.css",
+        "./theme/layout.css",
+        "./theme/dashboard.css",
+        "./theme/legacy-light-bridge.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(244, 247, 251)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "flex",
+          "padding": "20px",
+          "maxWidth": "none"
+        },
+        ".topnav": {
+          "backgroundColor": "rgb(20, 35, 60)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51) rgb(16, 32, 51) rgb(27, 128, 105)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "0px",
+          "maxWidth": "none"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(215, 224, 234)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "20px",
+          "maxWidth": "420px"
+        },
+        ".btn": {
+          "backgroundColor": "rgb(45, 106, 201)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgba(0, 0, 0, 0)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "inline-flex",
+          "padding": "10px 14px",
+          "maxWidth": "none"
+        },
+        ".tm-hero": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(215, 224, 234)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "0px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "outline": "rgb(147, 197, 253) solid 3px",
+        "outlineColor": "rgb(147, 197, 253)",
+        "boxShadow": "none"
+      }
+    },
+    "temp_home.html": {
+      "stylesheets": [
+        "./style.css",
+        "./theme/tokens.css",
+        "./theme/layout.css",
+        "./theme/dashboard.css",
+        "./theme/legacy-light-bridge.css"
+      ],
+      "computed": {
+        "body": {
+          "backgroundColor": "rgb(244, 247, 251)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(16, 32, 51)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "flex",
+          "padding": "20px",
+          "maxWidth": "none"
+        },
+        ".tm-card": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(215, 224, 234)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "20px",
+          "maxWidth": "420px"
+        },
+        ".btn": {
+          "backgroundColor": "rgb(20, 35, 60)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgba(0, 0, 0, 0)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "inline-flex",
+          "padding": "10px 14px",
+          "maxWidth": "none"
+        },
+        ".tm-hero": {
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(16, 32, 51)",
+          "borderColor": "rgb(215, 224, 234)",
+          "fontFamily": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+          "display": "block",
+          "padding": "0px",
+          "maxWidth": "none"
+        }
+      },
+      "focus": {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "outline": "rgb(45, 106, 201) solid 3px",
+        "outlineColor": "rgb(45, 106, 201)",
+        "boxShadow": "none"
+      }
+    }
+  }
+}

@@ -1,0 +1,300 @@
+/*
+ * Phase 8A legacy light-theme migration bridge.
+ *
+ * Scope: only pages explicitly migrating off root /theme.css.
+ * This file preserves legacy class names while sourcing all visual roles from
+ * theme/tokens.css. New pages/components must use canonical tm-* classes
+ * directly rather than extending this compatibility layer.
+ */
+
+:root {
+  /* Legacy variable aliases still referenced by style.css. */
+  --bg: var(--tm-bg);
+  --card: var(--tm-surface);
+  --accent: var(--tm-primary-2-text);
+  --muted: var(--tm-muted);
+  --text: var(--tm-text);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--tm-bg) !important;
+  color: var(--tm-text) !important;
+  font-family: var(--tm-font) !important;
+}
+
+.container {
+  width: min(100% - 32px, var(--tm-max-width));
+  margin-inline: auto;
+  padding: 32px 0 56px;
+}
+
+.tm-card,
+.card,
+.panel {
+  background: var(--tm-surface) !important;
+  color: var(--tm-text) !important;
+  border: 1px solid var(--tm-border) !important;
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-soft);
+}
+
+.tm-card {
+  padding: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.card .label,
+.muted,
+.metric-small {
+  color: var(--tm-muted) !important;
+}
+
+.card .value,
+.metric,
+.metric-large {
+  color: var(--tm-text) !important;
+}
+
+.btn,
+button.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--tm-radius-sm);
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.btn-primary,
+.primary-cta {
+  background: var(--tm-primary);
+  color: #fff !important;
+}
+
+.btn-secondary {
+  background: var(--tm-surface-2);
+  color: var(--tm-text);
+  border-color: var(--tm-primary-2-text);
+}
+
+.btn-ghost,
+.ghost,
+.ghost-cta {
+  background: var(--tm-surface);
+  color: var(--tm-primary-2-text) !important;
+  border-color: var(--tm-primary-2-text) !important;
+}
+
+.btn-danger {
+  background: var(--tm-danger);
+  color: #fff;
+}
+
+.btn-success {
+  background: var(--tm-success);
+  color: #fff;
+}
+
+.btn:focus-visible,
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: var(--tm-focus-ring-width) solid var(--tm-focus-ring) !important;
+  outline-offset: var(--tm-focus-ring-offset);
+  box-shadow: none;
+}
+
+.badge,
+.tm-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: var(--tm-surface-2) !important;
+  color: var(--tm-text) !important;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.badge-success,
+#conn-status.badge-success {
+  background: var(--tm-success) !important;
+  color: #fff !important;
+}
+
+.badge-warn,
+#conn-status.badge-warn {
+  background: var(--tm-warning) !important;
+  color: #fff !important;
+}
+
+.badge-danger,
+#conn-status.badge-danger {
+  background: var(--tm-danger) !important;
+  color: #fff !important;
+}
+
+.badge-accent,
+.badge--accent {
+  background: var(--tm-teal-text) !important;
+  color: #fff !important;
+}
+
+.tm-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--tm-surface);
+  color: var(--tm-text);
+}
+
+.tm-table th,
+.tm-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--tm-border);
+  text-align: left;
+}
+
+.tm-table th,
+.tm-table-header {
+  background: var(--tm-primary) !important;
+  color: #fff !important;
+}
+
+.exports,
+.students,
+.ase-weakness {
+  margin-top: 18px;
+}
+
+#ase-chart {
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border: 1px dashed var(--tm-primary-2-text) !important;
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-surface-2) !important;
+  color: var(--tm-muted) !important;
+}
+
+/* Root legacy homepage/scratch surfaces retain their layout but use the
+ * canonical light palette. */
+.topnav {
+  background: var(--tm-primary) !important;
+  border-bottom: 4px solid var(--tm-teal-text) !important;
+}
+
+.nav-brand,
+.topnav a {
+  color: #fff !important;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  background: rgba(255,255,255,.12) !important;
+  color: #fff !important;
+}
+
+.topnav a:focus-visible {
+  outline-color: var(--tm-focus-ring-inverse) !important;
+}
+
+.tm-hero,
+.tm-instructor-cta {
+  background: var(--tm-surface) !important;
+  color: var(--tm-text) !important;
+  border-color: var(--tm-border) !important;
+}
+
+.tm-hero-title,
+.tm-scenario-card h3,
+.tm-instructor-preview h3,
+.tm-feature h3 {
+  color: var(--tm-text) !important;
+}
+
+.tm-hero-subtitle,
+.tm-section-subtitle,
+.tm-card-text,
+.tm-diagnostic-key,
+.tm-diagnostic-next,
+.tm-footer,
+.tm-footer-inner,
+.mini-score-label,
+.mini-key,
+.mini-row {
+  color: var(--tm-muted) !important;
+}
+
+.tm-diagnostic-card,
+.tm-scenario-card,
+.tm-instructor-preview {
+  background: var(--tm-surface) !important;
+  border-color: var(--tm-border) !important;
+  box-shadow: var(--tm-shadow-soft) !important;
+}
+
+.tm-card-footer,
+.tm-diagnostic-footer,
+.tm-footer {
+  border-color: var(--tm-border) !important;
+}
+
+.tm-bar-fill,
+.mini-chart .bar .bar-fill {
+  background: linear-gradient(180deg, var(--tm-primary-2-text), var(--tm-teal-text)) !important;
+}
+
+.filter-pill,
+.badge--pill,
+.badge-soft {
+  background: var(--tm-surface-2) !important;
+  color: var(--tm-text) !important;
+}
+
+.overlay {
+  background: rgba(20, 35, 60, .78) !important;
+}
+
+.overlay-card {
+  background: var(--tm-surface) !important;
+  color: var(--tm-text) !important;
+}
+
+.overlay-card .muted {
+  color: var(--tm-muted) !important;
+}
+
+@media (max-width: 720px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    width: min(100% - 24px, var(--tm-max-width));
+    padding-top: 24px;
+  }
+}
