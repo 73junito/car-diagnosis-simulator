@@ -167,6 +167,27 @@ List any required conditions before deployment:
 2.
 3.
 
+
+## 8A. Final-eight course governance decisions
+
+Evidence:
+- `data/curriculum/institutional-decision-package-final-eight.json`
+- `docs/institutional-submission/Final-Eight-Institutional-Decision-Worksheet.md`
+
+Review:
+- [ ] Reviewer understands that all eight course decisions default to pending.
+- [ ] Standing, placement, program/advisor approval, and advanced-course-selection decisions are made only by the identified institutional authority.
+- [ ] No blank or incomplete decision unlocks a delivery page.
+- [ ] Any approved decision will be recorded in repository governance evidence and followed by a deterministic re-audit before a new batch is defined.
+
+Decision:
+- [ ] Decision worksheet accepted for institutional use
+- [ ] Accepted with conditions
+- [ ] Additional evidence required
+- [ ] Not approved
+
+Notes:
+
 ## 9. Final institutional disposition
 
 - [ ] Accepted for current non-assessment instructional use
