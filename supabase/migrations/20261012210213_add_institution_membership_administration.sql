@@ -201,7 +201,7 @@ returns trigger
 language plpgsql
 security invoker
 set search_path = ''
-as $
+as $$
 declare
   v_existing public.institution_memberships%rowtype;
   v_role text;
@@ -261,7 +261,7 @@ begin
 
   return new;
 end;
-$;
+$$;
 
 revoke all on function private.accept_institution_invitation_membership()
   from public, anon, authenticated;
@@ -281,7 +281,7 @@ returns trigger
 language plpgsql
 security invoker
 set search_path = ''
-as $
+as $$
 begin
   if old.status is distinct from new.status and new.status = 'suspended' then
     insert into public.institution_membership_events (
@@ -299,7 +299,7 @@ begin
 
   return new;
 end;
-$;
+$$;
 
 revoke all on function private.capture_institution_membership_status_event()
   from public, anon, authenticated;
