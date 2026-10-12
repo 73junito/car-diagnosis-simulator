@@ -61,3 +61,11 @@ describe('production API route inventory', () => {
     expect(refs.get('/api/instructor/verification/status')).toContain('dashboard/instructor/index.js')
   })
 })
+
+
+test('G5 analytics has no remaining known production gaps', () => {
+  const g5 = inventory.knownUnregisteredRoutes.filter((entry) => entry.gap === 'G5')
+  expect(g5).toEqual([])
+  const refs = extractBrowserApiReferences()
+  expect(refs.has('/api/analytics/summary')).toBe(false)
+})
