@@ -17,9 +17,9 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** runtime code currently uses overlapping role names: `teacher`, `instructor`, `professor`, and `admin`. The live-session page checks browser `localStorage` for `instructor`; the legacy classroom API requires `teacher`; Worker research accepts multiple aliases.
 **Gap:** there is no single canonical role vocabulary and shared server-side authorization policy across all production routes.
 **Required outcome:** define canonical roles and trusted-role resolution once, map legacy aliases explicitly, and make every privileged production route use server-verified identity/role rather than browser state.
-### G2 — Production API parity for instructor classroom features — **P0**
+### G2 — Production API parity for instructor classroom features — **P0 - in progress**
 **Evidence:** `/api/classes`, `/api/classes/:classId/students`, `/api/classes/:classId/enroll`, `/api/assign`, and `/api/teacher/data` exist in `torquemind-api/index.js`, but are not registered in `worker/index.js`, which is the production app Worker.
-**Gap:** classroom persistence exists in Supabase and legacy API code, but the production app surface cannot rely on those endpoints.
+**Gap:** class list/create is now Worker-native and owner-scoped. Roster/enrollment, assignments, and the legacy teacher aggregate remain outside the production Worker.
 **Required outcome:** implement Worker-native, authenticated, ownership-scoped classroom routes using the existing `classes`, `enrollments`, and `assignments` schema; retire or clearly demote the legacy Express routes after parity tests pass.
 ### G3 - Instructor verification review/decision workflow - **P0 - completed**
 **Evidence:** production Worker supports lookup, request, and status. `instructor_verification_requests` supports `pending/approved/rejected`, but no app route was found that writes the review decision.
@@ -79,8 +79,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** write role-specific dashboard specs before broad UI implementation, including authorization states, empty/error states, destructive-action confirmation, audit visibility, and responsive behavior.
 ### G17 — Duplicate runtime/API architecture — **P1 architectural debt**
 **Evidence:** active capabilities are split among Worker routes, Node/Vercel-style `api/`, and `torquemind-api` Express routes.
-**Gap:** the production route inventory is now enforced, but the runtime split remains. The current contract finds 41 browser API references: 23 resolve to 25 canonical Worker registrations and 18 are explicit known gaps mapped to G2/G5/G6/G14/G17. Tests can no longer add an unclassified production `/api/*` reference without failing CI.
-**Required outcome:** inventory/CI contract completed. `worker/index.js` is treated as the canonical production API boundary for `app.autolearnpro.com`; every API literal shipped by the production build must either match a Worker registration or an explicit roadmap-gap entry in `config/production-api-route-inventory.json`. The remaining architectural outcome is to eliminate the 18 known gaps as their owning roadmap items are implemented.
+**Gap:** the production route inventory is now enforced, but the runtime split remains. The current contract finds 41 browser API references: 24 resolve to 27 canonical Worker registrations and 17 are explicit known gaps mapped to G2/G5/G6/G14/G17. Tests can no longer add an unclassified production `/api/*` reference without failing CI.
+**Required outcome:** inventory/CI contract completed. `worker/index.js` is treated as the canonical production API boundary for `app.autolearnpro.com`; every API literal shipped by the production build must either match a Worker registration or an explicit roadmap-gap entry in `config/production-api-route-inventory.json`. The remaining architectural outcome is to eliminate the 17 known gaps as their owning roadmap items are implemented.
 ### G18 - Supabase migration deployment parity and environment drift - **P0 - completed**
 **Evidence:** the audit found staging at 44 recorded migrations while production and the repository were at 107. G18 synchronized the missing logical schema/governance chain to staging, restored the 6,547-row federal school-code seed, added a service-role-only migration-history RPC to staging and production, and added deterministic CI drift detection against the repository baseline. Staging retains one documented exception: the production-specific historical smoke-data cleanup whose fail-closed guard expects 2,206 smoke classes plus `scenario_assignments`, while staging has 964 smoke-only classes, no enrollment/assignment links, and no `scenario_assignments` table.
 **Gap:** closed for the current staging baseline. PR CI now fails when staging is missing any non-exempt logical migration already present on `main`; post-merge/main checks compare staging against `HEAD`.
@@ -107,7 +107,7 @@ The repository already contains useful foundations, but several exist outside th
 7. Provenance RLS helper isolation and legacy DB parity (G20).
 **Why first:** every later institutional/instructor/admin capability depends on trusted authorization and a real operational approval path.
 ### Phase 4B — Instructor classroom core
-1. Port classes/list/create to Worker.
+1. [x] Port classes/list/create to Worker.
 2. Port enroll/roster to Worker.
 3. Port assignments to Worker.
 4. Build instructor Classes/Roster/Assignments UI.
@@ -171,4 +171,4 @@ Use one concern per branch/PR. Suggested first branches:
 - Empty/unavailable states must be truthful; do not substitute sample data on authenticated production dashboards.
 - Generated reports/files remain unstaged unless they are intentional evidence artifacts.
 ## First implementation target
-G1, G3, G18, G19, and the Phase 4A production API route inventory contract are complete. Next begin **Phase 4B / G2 ? instructor classroom core**, starting with Worker-native class list/create before roster/enrollment and assignments. Track G20 separately as provenance/RLS security architecture work before broader institutional rollout.
+G1, G3, G18, G19, and the Phase 4A production API route inventory contract are complete. **Phase 4B / G2 is in progress:** Worker-native class list/create is implemented; next port roster/enrollment, then assignments. Track G20 separately as provenance/RLS security architecture work before broader institutional rollout.
