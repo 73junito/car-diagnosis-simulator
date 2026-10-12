@@ -45,6 +45,8 @@ describe('production API route inventory', () => {
       '/api/attempts/save',
       '/api/approved-sources'
     ]) expect(patterns).toContain(expected)
+    expect(patterns).not.toContain('/api/attempts/load')
+    expect(patterns).not.toContain('/api/auth/role')
     expect(patterns).not.toContain('/api/classes')
     expect(patterns).not.toContain('/api/classes/by-code/:param')
     expect(patterns).not.toContain('/api/classes/:param/enroll')
@@ -62,6 +64,8 @@ describe('production API route inventory', () => {
   test('scanner includes browser assets that are actually copied by the production build', () => {
     const refs = extractBrowserApiReferences()
     expect(refs.has('/api/teacher/data')).toBe(false)
+    expect(refs.has('/api/attempts/load')).toBe(false)
+    expect(refs.has('/api/auth/role')).toBe(false)
     expect(refs.get('/api/student/progress')).toContain('dashboard/student/student.js')
     expect(refs.get('/api/instructor/verification/status')).toContain('dashboard/instructor/index.js')
   })
