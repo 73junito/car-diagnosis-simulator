@@ -654,7 +654,7 @@ export async function handleAuthorDraftReviewRequest(c) {
     .eq('owner_id', auth.user.id)
     .eq('status', 'draft')
     .in('review_status', ['not_requested', 'changes_requested'])
-    .in('publication_status', ['unpublished', 'changes_requested'])
+    .eq('publication_status', 'unpublished')
     .eq('version', version)
     .select('id,scenario_key,title,version,status,review_status,review_requested_at,reviewed_at,reviewed_by,review_note,publication_status,publication_requested_at,published_at,published_by,publication_note,created_at,updated_at,payload_json')
     .maybeSingle()
