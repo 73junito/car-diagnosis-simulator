@@ -31,8 +31,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** verified-instructor shell that links only capabilities backed by production APIs; add Classes, Roster, Assignments, Live Session, Session History, Analytics, Research, and Authoring progressively as each backend is authoritative.
 ### G5 — Instructor analytics production data boundary — **P0/P1**
 **Evidence:** `dashboard/instructor/analytics.js` calls `/api/analytics/students` and `/api/analytics/export`; these implementations are Node/CommonJS handlers under `api/analytics/` and are not registered in `worker/index.js`. They aggregate local report files and include fallback empty exports.
-**Gap:** student analytics and session summary are now Worker-native and class-scoped through instructor-owned classes. Export still relies on the non-Worker legacy analytics surface.
-**Required outcome:** partially complete. Student analytics and session summary are derived from authorized Supabase enrollment/attempt data and scoped to instructor-owned classes. Remaining work is Worker-native export with no static report fallback, plus export/privacy tests.
+**Gap:** student analytics, session summary, and analytics export are now Worker-native and class-scoped through instructor-owned classes. The optional CTA summary caller remains on the legacy `/api/analytics/summary` surface.
+**Required outcome:** nearly complete. Student analytics, session summary, and CSV/xAPI export are derived from authorized Supabase enrollment/attempt data and scoped to instructor-owned classes. Remaining G5 work is to port or remove the optional production `/api/analytics/summary` caller.
 ### G6 — Live session and session history authorization/runtime — **P0/P1**
 **Evidence:** live-session access is gated by `localStorage.getItem('torquemindRole')`; it opens `/api/telemetry/stream`. Session history calls `/api/telemetry/history` and export endpoints. No telemetry routes are registered in `worker/index.js`.
 **Gap:** privileged monitoring/history relies on browser role state and non-Worker API surfaces.
@@ -79,8 +79,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** write role-specific dashboard specs before broad UI implementation, including authorization states, empty/error states, destructive-action confirmation, audit visibility, and responsive behavior.
 ### G17 — Duplicate runtime/API architecture — **P1 architectural debt**
 **Evidence:** active capabilities are split among Worker routes, Node/Vercel-style `api/`, and `torquemind-api` Express routes.
-**Gap:** the production route inventory is now enforced, but the runtime split remains. The current contract finds 42 browser API references: 30 resolve to 33 canonical Worker registrations and 12 are explicit known gaps mapped to G5/G6/G14/G17. Tests can no longer add an unclassified production `/api/*` reference without failing CI.
-**Required outcome:** inventory/CI contract completed. `worker/index.js` is treated as the canonical production API boundary for `app.autolearnpro.com`; every API literal shipped by the production build must either match a Worker registration or an explicit roadmap-gap entry in `config/production-api-route-inventory.json`. The remaining architectural outcome is to eliminate the 12 known gaps as their owning roadmap items are implemented.
+**Gap:** the production route inventory is now enforced, but the runtime split remains. The current contract finds 42 browser API references: 31 resolve to 34 canonical Worker registrations and 11 are explicit known gaps mapped to G5/G6/G14/G17. Tests can no longer add an unclassified production `/api/*` reference without failing CI.
+**Required outcome:** inventory/CI contract completed. `worker/index.js` is treated as the canonical production API boundary for `app.autolearnpro.com`; every API literal shipped by the production build must either match a Worker registration or an explicit roadmap-gap entry in `config/production-api-route-inventory.json`. The remaining architectural outcome is to eliminate the 11 known gaps as their owning roadmap items are implemented.
 ### G18 - Supabase migration deployment parity and environment drift - **P0 - completed**
 **Evidence:** the audit found staging at 44 recorded migrations while production and the repository were at 107. G18 synchronized the missing logical schema/governance chain to staging, restored the 6,547-row federal school-code seed, added a service-role-only migration-history RPC to staging and production, and added deterministic CI drift detection against the repository baseline. Staging retains one documented exception: the production-specific historical smoke-data cleanup whose fail-closed guard expects 2,206 smoke classes plus `scenario_assignments`, while staging has 964 smoke-only classes, no enrollment/assignment links, and no `scenario_assignments` table.
 **Gap:** closed for the current staging baseline. PR CI now fails when staging is missing any non-exempt logical migration already present on `main`; post-merge/main checks compare staging against `HEAD`.
@@ -113,7 +113,7 @@ The repository already contains useful foundations, but several exist outside th
 4. [x] Build instructor Classes/Roster/Assignments UI.
 5. [x] Add ownership and cross-class isolation tests.
 ### Phase 4C — Instructor analytics and monitoring
-1. Worker-native scoped analytics: [x] students; [x] session summary; export remaining.
+1. Worker-native scoped analytics: [x] students; [x] session summary; [x] export; optional summary caller remaining.
 2. Worker-native telemetry history/export/stream.
 3. Replace live-session browser role gate.
 4. Integrate Live Session and Session History into instructor home.
