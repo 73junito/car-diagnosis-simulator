@@ -70,6 +70,27 @@ describe('Worker instructor student analytics contract', () => {
     expect(route).not.toContain('safetyMisses: 0')
   })
 
+  test('exports only class-scoped attempt/session fields', () => {
+    expect(route).toContain('function buildAnalyticsCsv(classId, profiles, attempts)')
+    expect(route).toContain('function buildAnalyticsXapi(profiles, attempts)')
+    expect(route).toContain("format must be csv or xapi")
+    expect(route).toContain("Content-Disposition': 'attachment; filename=\"student-performance.csv\"'")
+    expect(route).toContain("Content-Disposition': 'attachment; filename=\"xapi-statements.json\"'")
+    expect(route).toContain("Cache-Control': 'private, no-store'")
+    expect(route).not.toContain('student_answer')
+    expect(route).not.toContain('question_id')
+  })
+
+  test('requires a selected class and bearer token for browser exports', () => {
+    expect(ui).toContain("const classId = classSelect.value")
+    expect(ui).toContain("Select a class before exporting analytics.")
+    expect(ui).toContain("const token = window.getAccessToken ? window.getAccessToken() : null")
+    expect(ui).toContain("Authorization: 'Bearer ' + token")
+    expect(ui).toContain("'&classId=' + encodeURIComponent(classId)")
+    expect(ui).toContain("downloadCsv.disabled = true")
+    expect(ui).toContain("downloadXapi.disabled = true")
+  })
+
   test('removes implemented analytics routes from known production gaps', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     expect(patterns).not.toContain('/api/analytics/students')
