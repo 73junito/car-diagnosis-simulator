@@ -17,7 +17,7 @@ function parseMigrationPath(file) {
 
 function readMigrationContent(ref, file) {
   if (ref === 'WORKTREE') return fs.readFileSync(path.join(process.cwd(), file), 'utf8');
-  return execFileSync('git', ['show', `${ref}:${file}`], { encoding: 'utf8' });
+  return execFileSync('git', ['show', `${ref}:${file}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
 }
 
 function canonicalRepositoryMigrations(ref = 'WORKTREE') {
