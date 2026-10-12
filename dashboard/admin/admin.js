@@ -196,6 +196,7 @@
         : 'Initial institution-owner bootstrap is disabled.'
     } catch (error) {
       operationalStatus.textContent = error.message || 'Operational configuration unavailable.'
+      ownerBootstrapForm.querySelector('button[type="submit"]').disabled = true
       ownerBootstrapEnabled.disabled = true
       operationsNote.disabled = true
       operationalForm.querySelector('button[type="submit"]').disabled = true
