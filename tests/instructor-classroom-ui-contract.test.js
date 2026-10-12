@@ -24,7 +24,7 @@ describe('Instructor classroom UI contract', () => {
     expect(home).toContain('Analytics')
     expect(home).toContain('Research Discovery')
     expect(home).toContain('Authoring Studio')
-    expect(home).toContain('Review and publication are not yet available.')
+    expect(home).toContain('evidence linkage, human review, and explicit publication approval')
   })
 
   test('ships classroom assets in the production static build', () => {
