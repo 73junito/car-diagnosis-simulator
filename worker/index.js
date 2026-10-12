@@ -51,7 +51,13 @@ import {
   handleInstructorTelemetryStream
 } from "./routes/instructor-telemetry.js";
 import { handleTelemetryEventIngest } from "./routes/telemetry-ingest.js";
-import { handleAuthorDrafts, handleAuthorDraft } from "./routes/author-drafts.js";
+import {
+  handleAuthorDrafts,
+  handleAuthorDraft,
+  handleAuthorDraftReviewRequest,
+  handleAdminAuthorDraftReviews,
+  handleAdminAuthorDraftReviewDecision
+} from "./routes/author-drafts.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
@@ -228,6 +234,18 @@ app.use('/api/author/drafts', authorDraftCors)
 app.use('/api/author/drafts/*', authorDraftCors)
 app.all('/api/author/drafts', handleAuthorDrafts)
 app.all('/api/author/drafts/:draftId', handleAuthorDraft)
+app.post('/api/author/drafts/:draftId/review-request', handleAuthorDraftReviewRequest)
+
+const adminAuthorReviewCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/admin/author-drafts/reviews', adminAuthorReviewCors)
+app.use('/api/admin/author-drafts/reviews/*', adminAuthorReviewCors)
+app.get('/api/admin/author-drafts/reviews', handleAdminAuthorDraftReviews)
+app.patch('/api/admin/author-drafts/reviews/:draftId', handleAdminAuthorDraftReviewDecision)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
