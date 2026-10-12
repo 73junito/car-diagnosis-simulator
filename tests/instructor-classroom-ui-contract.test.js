@@ -8,9 +8,21 @@ const js = fs.readFileSync(path.join(root, 'dashboard', 'instructor', 'classroom
 const build = fs.readFileSync(path.join(root, 'scripts', 'build-static-site.js'), 'utf8')
 
 describe('Instructor classroom UI contract', () => {
-  test('links the classroom workspace from the verified instructor home', () => {
-    expect(home).toContain('href="/dashboard/instructor/classroom.html"')
+  test('links all production-backed instructor tools from the verified instructor home', () => {
+    for (const expected of [
+      'href="/dashboard/instructor/classroom.html"',
+      'href="/dashboard/instructor/live-session.html"',
+      'href="/dashboard/instructor/session-history.html"',
+      'href="/dashboard/instructor/analytics.html"',
+      'href="/dashboard/instructor/research/"'
+    ]) expect(home).toContain(expected)
+
     expect(home).toContain('Classes & Assignments')
+    expect(home).toContain('Live Session')
+    expect(home).toContain('Session History')
+    expect(home).toContain('Analytics')
+    expect(home).toContain('Research Discovery')
+    expect(home).not.toContain('href="/dashboard/author/')
   })
 
   test('ships classroom assets in the production static build', () => {
