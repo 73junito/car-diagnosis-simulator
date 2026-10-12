@@ -68,6 +68,6 @@ describe('Worker telemetry ingestion contract', () => {
   test('removes telemetry ingestion from known production gaps', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     expect(patterns).not.toContain('/api/telemetry/events')
-    expect(patterns).toContain('/api/telemetry/stream')
+    expect(patterns).not.toContain('/api/telemetry/stream')
   })
 })
