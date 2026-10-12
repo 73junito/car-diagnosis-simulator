@@ -13,8 +13,11 @@
   const librarySearchInput = document.getElementById("librarySearchInput");
   const scenarioLibraryList = document.getElementById("scenarioLibraryList");
   const authorAccessStatus = document.getElementById("authorAccessStatus");
+  const requestReviewButton = document.getElementById("requestReviewBtn");
+  const draftLifecycleStatus = document.getElementById("draftLifecycleStatus");
   let currentDraft = null;
   let serverDrafts = [];
+  let autosaveTimer = null;
 
   const fields = {
     title: document.getElementById("scenarioTitle"),
@@ -119,6 +122,42 @@
 
   function setStatus(message) {
     if (validationStatus) validationStatus.textContent = message;
+  }
+
+  function setLifecycleStatus(message) {
+    if (draftLifecycleStatus) draftLifecycleStatus.textContent = message;
+  }
+
+  function reviewEditable(draft) {
+    return !draft || draft.reviewStatus === "not_requested" || draft.reviewStatus === "changes_requested";
+  }
+
+  function applyDraftLifecycle() {
+    const editable = reviewEditable(currentDraft);
+    Object.values(fields).forEach((field) => {
+      if (field) field.disabled = !editable;
+    });
+    if (saveButton) saveButton.disabled = !editable;
+    if (saveToLibraryButton) saveToLibraryButton.disabled = !editable;
+    if (requestReviewButton) {
+      requestReviewButton.disabled = !currentDraft || !editable;
+    }
+
+    if (!currentDraft) {
+      setLifecycleStatus("Unsaved draft. Autosave begins after the first explicit save.");
+      return;
+    }
+
+    const status = currentDraft.reviewStatus || "not_requested";
+    if (status === "pending") {
+      setLifecycleStatus("Review pending. Editing and autosave are locked until an administrator responds.");
+    } else if (status === "changes_requested") {
+      setLifecycleStatus("Changes requested" + (currentDraft.reviewNote ? ": " + currentDraft.reviewNote : "") + ". Editing and autosave are enabled.");
+    } else if (status === "review_complete") {
+      setLifecycleStatus("Review complete. This draft remains private and unpublished.");
+    } else {
+      setLifecycleStatus("Private draft v" + currentDraft.version + ". Autosave is active after changes.");
+    }
   }
 
   function renderChecklist(items) {
@@ -301,7 +340,7 @@
       title.textContent = draft.title || "Untitled Scenario";
 
       const version = document.createElement("span");
-      version.textContent = " v" + String(draft.version || 1);
+      version.textContent = " v" + String(draft.version || 1) + " · " + String(draft.reviewStatus || "not_requested").replaceAll("_", " ");
 
       const load = document.createElement("button");
       load.type = "button";
@@ -312,6 +351,7 @@
           const response = await window.apiGet("/api/author/drafts/" + encodeURIComponent(draft.id));
           currentDraft = response.draft;
           loadScenario(currentDraft.scenario);
+          applyDraftLifecycle();
           setStatus("Draft Loaded · v" + currentDraft.version);
         } catch (error) {
           setStatus(error && error.status === 404 ? "Draft Not Found" : "Load Failed");
@@ -322,6 +362,7 @@
       remove.type = "button";
       remove.className = "tm-btn tm-btn-secondary";
       remove.textContent = "Delete";
+      remove.disabled = draft.reviewStatus !== "not_requested";
       remove.addEventListener("click", async () => {
         try {
           await window.apiDelete("/api/author/drafts/" + encodeURIComponent(draft.id));
@@ -350,9 +391,22 @@
     renderLibrary();
   }
 
-  async function saveDraft() {
+  function syncDraftSummary(draft) {
+    if (!draft) return;
+    serverDrafts = [draft, ...serverDrafts.filter((item) => item.id !== draft.id)];
+    renderLibrary();
+  }
+
+  async function saveDraft(options = {}) {
+    const autosave = Boolean(options.autosave);
+    if (currentDraft && !reviewEditable(currentDraft)) {
+      setLifecycleStatus("This draft is locked while review is pending or complete.");
+      return false;
+    }
+
     const scenario = buildScenario();
     try {
+      if (autosave) setLifecycleStatus("Autosaving private draft…");
       const response = currentDraft
         ? await window.apiPatch("/api/author/drafts/" + encodeURIComponent(currentDraft.id), {
             version: currentDraft.version,
@@ -361,14 +415,60 @@
         : await window.apiPost("/api/author/drafts", { scenario });
 
       currentDraft = response.draft;
-      await loadDraftLibrary();
-      setStatus("Saved Draft · v" + currentDraft.version);
+      syncDraftSummary(currentDraft);
+      applyDraftLifecycle();
+      setStatus((autosave ? "Autosaved" : "Saved Draft") + " · v" + currentDraft.version);
+      return true;
     } catch (error) {
       if (error && error.status === 409) {
         setStatus("Draft Changed · Reload Required");
+        setLifecycleStatus("Autosave stopped because the server draft changed. Reload before editing.");
+        return false;
+      }
+      setStatus(autosave ? "Autosave Failed" : "Save Failed");
+      return false;
+    }
+  }
+
+  function scheduleAutosave() {
+    if (!currentDraft || !reviewEditable(currentDraft)) return;
+    if (autosaveTimer) window.clearTimeout(autosaveTimer);
+    autosaveTimer = window.setTimeout(() => {
+      autosaveTimer = null;
+      saveDraft({ autosave: true });
+    }, 1500);
+  }
+
+  async function requestReview() {
+    if (!validateScenario()) {
+      setLifecycleStatus("Complete the validation checklist before requesting review.");
+      return;
+    }
+
+    if (autosaveTimer) {
+      window.clearTimeout(autosaveTimer);
+      autosaveTimer = null;
+    }
+
+    const saved = await saveDraft();
+    if (!saved || !currentDraft) return;
+
+    try {
+      const response = await window.apiPost(
+        "/api/author/drafts/" + encodeURIComponent(currentDraft.id) + "/review-request",
+        { version: currentDraft.version }
+      );
+      currentDraft = response.draft;
+      syncDraftSummary(currentDraft);
+      applyDraftLifecycle();
+      setStatus("Review Requested");
+    } catch (error) {
+      if (error && error.status === 409) {
+        setStatus("Review Request Conflict");
+        setLifecycleStatus("Reload the server draft before requesting review.");
         return;
       }
-      setStatus("Save Failed");
+      setStatus("Review Request Failed");
     }
   }
 
@@ -386,8 +486,14 @@
   }
 
   Object.values(fields).forEach((field) => {
-    if (field) field.addEventListener("input", renderPreview);
-    if (field) field.addEventListener("change", renderPreview);
+    if (field) field.addEventListener("input", () => {
+      renderPreview();
+      scheduleAutosave();
+    });
+    if (field) field.addEventListener("change", () => {
+      renderPreview();
+      scheduleAutosave();
+    });
   });
 
   if (validateButton) {
@@ -403,7 +509,11 @@
   }
 
   if (saveButton) {
-    saveButton.addEventListener("click", saveDraft);
+    saveButton.addEventListener("click", () => saveDraft());
+  }
+
+  if (requestReviewButton) {
+    requestReviewButton.addEventListener("click", requestReview);
   }
 
   if (exportButton) {
@@ -440,6 +550,7 @@
       await loadDraftLibrary();
       if (authorAccessStatus) authorAccessStatus.textContent = "Verified author · private drafts";
       renderPreview();
+      applyDraftLifecycle();
       document.body.dataset.authoringStudioReady = "true";
     } catch (error) {
       if (error && (error.status === 401 || error.status === 403)) {
