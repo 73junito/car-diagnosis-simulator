@@ -29,6 +29,9 @@
   const domainSourceInput = document.getElementById('institutionDomainSource')
   const domainAddButton = document.getElementById('institutionDomainAddButton')
   const domainList = document.getElementById('institutionDomainList')
+  const reportRefresh = document.getElementById('institutionReportRefresh')
+  const reportSummary = document.getElementById('institutionReportSummary')
+  const classReportList = document.getElementById('institutionClassReportList')
   let activeSchoolCode = null
   let activeActorRole = null
 
@@ -102,6 +105,62 @@
   function roleCanManage(actorRole, targetRole){
     if (actorRole === 'institution_owner') return true
     return targetRole === 'member' || targetRole === 'instructor'
+  }
+
+  function metric(label, value){
+    const row = document.createElement('p')
+    row.textContent = label + ': ' + value
+    return row
+  }
+
+  async function loadInstitutionReport(schoolCode){
+    clear(reportSummary)
+    clear(classReportList)
+    try {
+      const report = await window.apiGet('/api/institution/admin/report?schoolCode=' + encodeURIComponent(schoolCode))
+      const activity = report.activity || {}
+      const roles = report.membershipCounts || {}
+
+      reportSummary.appendChild(metric('Active memberships', report.activeMemberships ?? 0))
+      reportSummary.appendChild(metric('Members', roles.member ?? 0))
+      reportSummary.appendChild(metric('Instructors', roles.instructor ?? 0))
+      reportSummary.appendChild(metric('Institution admins', roles.institution_admin ?? 0))
+      reportSummary.appendChild(metric('Institution owners', roles.institution_owner ?? 0))
+      reportSummary.appendChild(metric('Programs', (report.programs?.active ?? 0) + ' active / ' + (report.programs?.total ?? 0) + ' total'))
+      reportSummary.appendChild(metric('Cohorts', (report.cohorts?.active ?? 0) + ' active / ' + (report.cohorts?.total ?? 0) + ' total'))
+      reportSummary.appendChild(metric('Classes', report.classes ?? 0))
+      reportSummary.appendChild(metric('Enrollments', report.enrollments ?? 0))
+      reportSummary.appendChild(metric('Unique enrolled students', report.uniqueStudents ?? 0))
+      reportSummary.appendChild(metric('Attempt records', activity.attempts ?? 0))
+      reportSummary.appendChild(metric('Completed attempts', activity.completedAttempts ?? 0))
+      reportSummary.appendChild(metric('Completion rate', activity.completionRate == null ? 'Unavailable' : activity.completionRate + '%'))
+      reportSummary.appendChild(metric('Average score', activity.averageScore == null ? 'Unavailable' : activity.averageScore))
+
+      const interpretation = document.createElement('p')
+      interpretation.textContent = report.interpretation || 'Operational learning activity only.'
+      reportSummary.appendChild(interpretation)
+
+      const summaries = Array.isArray(report.classSummaries) ? report.classSummaries : []
+      if (!summaries.length) {
+        classReportList.appendChild(item('No tenant-scoped class activity is available.'))
+      } else {
+        summaries.forEach((summary) => {
+          const card = document.createElement('div')
+          card.className = 'tm-card'
+          const title = document.createElement('h4')
+          title.textContent = summary.name || 'Class'
+          card.appendChild(title)
+          card.appendChild(metric('Students', summary.studentCount ?? 0))
+          card.appendChild(metric('Attempts', summary.attempts ?? 0))
+          card.appendChild(metric('Completed', summary.completedAttempts ?? 0))
+          card.appendChild(metric('Completion rate', summary.completionRate == null ? 'Unavailable' : summary.completionRate + '%'))
+          card.appendChild(metric('Average score', summary.averageScore == null ? 'Unavailable' : summary.averageScore))
+          classReportList.appendChild(card)
+        })
+      }
+    } catch (error) {
+      reportSummary.appendChild(metric('Report status', error?.message || 'Institution report unavailable.'))
+    }
   }
 
   async function loadAdministration(schoolCode){
@@ -274,6 +333,7 @@
       adminPanel.hidden = !payload.administrationGranted
       if (payload.administrationGranted) {
         await loadAdministration(schoolCode)
+        await loadInstitutionReport(schoolCode)
       }
       overview.hidden = false
       status.textContent = 'Institution tenant loaded.'
@@ -370,6 +430,13 @@
     } catch (error) {
       status.textContent = error?.message || 'Unable to add verified domain.'
     }
+  })
+
+  reportRefresh.addEventListener('click', async () => {
+    if (!activeSchoolCode) return
+    status.textContent = 'Refreshing institution report…'
+    await loadInstitutionReport(activeSchoolCode)
+    status.textContent = 'Institution report refreshed.'
   })
 
   init()
