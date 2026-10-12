@@ -49,6 +49,7 @@ import {
   handleInstructorTelemetryHistory,
   handleInstructorTelemetryExport
 } from "./routes/instructor-telemetry.js";
+import { handleTelemetryEventIngest } from "./routes/telemetry-ingest.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
@@ -204,6 +205,14 @@ app.use('/api/telemetry/history', instructorTelemetryCors)
 app.use('/api/telemetry/export.:format', instructorTelemetryCors)
 app.get('/api/telemetry/history', handleInstructorTelemetryHistory)
 app.get('/api/telemetry/export.:format', handleInstructorTelemetryExport)
+
+app.use('/api/telemetry/events', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.post('/api/telemetry/events', handleTelemetryEventIngest)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
