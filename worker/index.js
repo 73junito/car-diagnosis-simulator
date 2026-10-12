@@ -42,7 +42,8 @@ import {
 import { handleCreateAssignment } from "./routes/classroom-assignments.js";
 import {
   handleInstructorStudentAnalytics,
-  handleInstructorSessionAnalytics
+  handleInstructorSessionAnalytics,
+  handleInstructorAnalyticsExport
 } from "./routes/instructor-analytics.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
@@ -184,8 +185,10 @@ const instructorAnalyticsCors = cors({
 })
 app.use('/api/analytics/students', instructorAnalyticsCors)
 app.use('/api/analytics/sessions', instructorAnalyticsCors)
+app.use('/api/analytics/export', instructorAnalyticsCors)
 app.get('/api/analytics/students', handleInstructorStudentAnalytics)
 app.get('/api/analytics/sessions', handleInstructorSessionAnalytics)
+app.get('/api/analytics/export', handleInstructorAnalyticsExport)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
