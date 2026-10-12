@@ -45,7 +45,10 @@ import {
   handleInstructorSessionAnalytics,
   handleInstructorAnalyticsExport
 } from "./routes/instructor-analytics.js";
-import { handleInstructorTelemetryHistory } from "./routes/instructor-telemetry.js";
+import {
+  handleInstructorTelemetryHistory,
+  handleInstructorTelemetryExport
+} from "./routes/instructor-telemetry.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
@@ -198,7 +201,9 @@ const instructorTelemetryCors = cors({
   maxAge: 86400
 })
 app.use('/api/telemetry/history', instructorTelemetryCors)
+app.use('/api/telemetry/export.:format', instructorTelemetryCors)
 app.get('/api/telemetry/history', handleInstructorTelemetryHistory)
+app.get('/api/telemetry/export.:format', handleInstructorTelemetryExport)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
