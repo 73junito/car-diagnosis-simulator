@@ -146,7 +146,7 @@ describe('G8 institution tenant isolation security suite', () => {
 
     test('class creation resolves institution authority from active membership rather than identifiers alone', () => {
       expect(classroom).toContain(".from('institution_memberships')")
-      expect(classroom).toContain(".eq('user_id', user.id)")
+      expect(classroom).toContain(".eq('user_id', auth.user.id)")
       expect(classroom).toContain(".eq('status', 'active')")
       expect(classroom).toContain("['instructor', 'institution_admin', 'institution_owner']")
     })
