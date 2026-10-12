@@ -18,6 +18,17 @@
   const inviteNote = document.getElementById('institutionInviteNote')
   const memberList = document.getElementById('institutionMemberList')
   const pendingInvitationList = document.getElementById('institutionPendingInvitationList')
+  const settingsForm = document.getElementById('institutionSettingsForm')
+  const displayNameInput = document.getElementById('institutionDisplayName')
+  const websiteUrlInput = document.getElementById('institutionWebsiteUrl')
+  const supportEmailInput = document.getElementById('institutionSupportEmail')
+  const timezoneInput = document.getElementById('institutionTimezone')
+  const localeInput = document.getElementById('institutionLocale')
+  const domainForm = document.getElementById('institutionDomainForm')
+  const domainNameInput = document.getElementById('institutionDomainName')
+  const domainSourceInput = document.getElementById('institutionDomainSource')
+  const domainAddButton = document.getElementById('institutionDomainAddButton')
+  const domainList = document.getElementById('institutionDomainList')
   let activeSchoolCode = null
   let activeActorRole = null
 
@@ -97,12 +108,20 @@
     clear(memberList)
     clear(pendingInvitationList)
     try {
-      const [memberPayload, invitationPayload] = await Promise.all([
+      const [memberPayload, invitationPayload, settingsPayload, domainPayload] = await Promise.all([
         window.apiGet('/api/institution/admin/members?schoolCode=' + encodeURIComponent(schoolCode)),
-        window.apiGet('/api/institution/admin/invitations?schoolCode=' + encodeURIComponent(schoolCode) + '&status=pending')
+        window.apiGet('/api/institution/admin/invitations?schoolCode=' + encodeURIComponent(schoolCode) + '&status=pending'),
+        window.apiGet('/api/institution/admin/settings?schoolCode=' + encodeURIComponent(schoolCode)),
+        window.apiGet('/api/institution/admin/domains?schoolCode=' + encodeURIComponent(schoolCode))
       ])
 
       activeActorRole = memberPayload.actorRole
+      const settings = settingsPayload.settings || {}
+      displayNameInput.value = settings.displayName || ''
+      websiteUrlInput.value = settings.websiteUrl || ''
+      supportEmailInput.value = settings.supportEmail || ''
+      timezoneInput.value = settings.timezone || ''
+      localeInput.value = settings.locale || 'en-US'
       const members = Array.isArray(memberPayload.members) ? memberPayload.members : []
       if (!members.length) {
         memberList.appendChild(item('No institution memberships.'))
@@ -156,6 +175,66 @@
         })
       }
 
+      clear(domainList)
+      const domains = Array.isArray(domainPayload.domains) ? domainPayload.domains : []
+      if (!domains.length) {
+        domainList.appendChild(item('No verified institutional domains configured.'))
+      } else {
+        domains.forEach((domain) => {
+          const row = document.createElement('div')
+          row.className = 'tm-card'
+          const summary = document.createElement('p')
+          summary.textContent = domain.domain + ' · ' + (domain.active ? 'active' : 'inactive') +
+            ' · source: ' + domain.sourceReference
+          row.appendChild(summary)
+
+          if (activeActorRole === 'institution_owner') {
+            const sourceLabel = document.createElement('label')
+            sourceLabel.textContent = 'Verification source'
+            const source = document.createElement('textarea')
+            source.maxLength = 1000
+            source.value = domain.sourceReference || ''
+            sourceLabel.appendChild(source)
+            row.appendChild(sourceLabel)
+
+            row.appendChild(button('Save Verification Source', async () => {
+              try {
+                await window.apiPatch(
+                  '/api/institution/admin/domains/' + encodeURIComponent(domain.domain) +
+                    '?schoolCode=' + encodeURIComponent(schoolCode),
+                  { sourceReference: source.value }
+                )
+                status.textContent = 'Verified-domain source updated.'
+                await loadAdministration(schoolCode)
+              } catch (error) {
+                status.textContent = error?.message || 'Unable to update verified domain.'
+              }
+            }))
+
+            row.appendChild(button(domain.active ? 'Deactivate Domain' : 'Reactivate Domain', async () => {
+              const action = domain.active ? 'deactivate' : 'reactivate'
+              if (!window.confirm('Confirm ' + action + ' for ' + domain.domain + '?')) return
+              try {
+                await window.apiPatch(
+                  '/api/institution/admin/domains/' + encodeURIComponent(domain.domain) +
+                    '?schoolCode=' + encodeURIComponent(schoolCode),
+                  { active: !domain.active }
+                )
+                status.textContent = 'Verified-domain state updated.'
+                await loadAdministration(schoolCode)
+              } catch (error) {
+                status.textContent = error?.message || 'Unable to update verified domain.'
+              }
+            }))
+          }
+          domainList.appendChild(row)
+        })
+      }
+
+      domainNameInput.disabled = activeActorRole !== 'institution_owner'
+      domainSourceInput.disabled = activeActorRole !== 'institution_owner'
+      domainAddButton.disabled = activeActorRole !== 'institution_owner'
+
       inviteRole.querySelector('option[value="institution_admin"]').disabled = activeActorRole !== 'institution_owner'
       inviteRole.querySelector('option[value="institution_owner"]').disabled = activeActorRole !== 'institution_owner'
     } catch (error) {
@@ -190,7 +269,7 @@
 
       activeSchoolCode = schoolCode
       adminNotice.textContent = payload.administrationGranted
-        ? 'Institution administration authorization is active. Settings, verified-domain administration, and reporting remain later G8 slices.'
+        ? 'Institution administration authorization is active. Institution reporting and the broader tenant-isolation suite remain later G8 slices.'
         : 'Institution administration requires an institution admin or owner membership.'
       adminPanel.hidden = !payload.administrationGranted
       if (payload.administrationGranted) {
@@ -254,6 +333,42 @@
       await loadAdministration(activeSchoolCode)
     } catch (error) {
       status.textContent = error?.message || 'Unable to create institution invitation.'
+    }
+  })
+
+  settingsForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    if (!activeSchoolCode) return
+    try {
+      await window.apiPatch('/api/institution/admin/settings', {
+        schoolCode: activeSchoolCode,
+        displayName: displayNameInput.value,
+        websiteUrl: websiteUrlInput.value,
+        supportEmail: supportEmailInput.value,
+        timezone: timezoneInput.value,
+        locale: localeInput.value
+      })
+      status.textContent = 'Institution settings saved.'
+      await loadAdministration(activeSchoolCode)
+    } catch (error) {
+      status.textContent = error?.message || 'Unable to save institution settings.'
+    }
+  })
+
+  domainForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    if (!activeSchoolCode || activeActorRole !== 'institution_owner') return
+    try {
+      await window.apiPost('/api/institution/admin/domains', {
+        schoolCode: activeSchoolCode,
+        domain: domainNameInput.value,
+        sourceReference: domainSourceInput.value
+      })
+      domainForm.reset()
+      status.textContent = 'Verified domain added as affiliation evidence.'
+      await loadAdministration(activeSchoolCode)
+    } catch (error) {
+      status.textContent = error?.message || 'Unable to add verified domain.'
     }
   })
 
