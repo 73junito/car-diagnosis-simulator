@@ -75,6 +75,39 @@
 
       <h3>Pending Invitations</h3>
       <div id="institutionPendingInvitationList"></div>
+
+      <h3>Institution Settings</h3>
+      <form id="institutionSettingsForm">
+        <label for="institutionDisplayName">Display name
+          <input id="institutionDisplayName" maxlength="160">
+        </label>
+        <label for="institutionWebsiteUrl">Website URL
+          <input id="institutionWebsiteUrl" type="url" maxlength="500" placeholder="https://example.edu">
+        </label>
+        <label for="institutionSupportEmail">Support email
+          <input id="institutionSupportEmail" type="email" maxlength="320">
+        </label>
+        <label for="institutionTimezone">Timezone
+          <input id="institutionTimezone" maxlength="100" placeholder="America/Chicago">
+        </label>
+        <label for="institutionLocale">Locale
+          <input id="institutionLocale" maxlength="35" value="en-US">
+        </label>
+        <button class="tm-btn tm-btn-primary" type="submit">Save Institution Settings</button>
+      </form>
+
+      <h3>Verified Domains</h3>
+      <p>Verified domains are affiliation evidence only. They never grant institution membership, administrator access, or assessment eligibility.</p>
+      <form id="institutionDomainForm">
+        <label for="institutionDomainName">Domain
+          <input id="institutionDomainName" maxlength="253" placeholder="example.edu">
+        </label>
+        <label for="institutionDomainSource">Verification source
+          <textarea id="institutionDomainSource" maxlength="1000" placeholder="Document the authoritative source used to verify institutional ownership."></textarea>
+        </label>
+        <button id="institutionDomainAddButton" class="tm-btn tm-btn-primary" type="submit">Add Verified Domain</button>
+      </form>
+      <div id="institutionDomainList"></div>
     </section>
   </main>
 
