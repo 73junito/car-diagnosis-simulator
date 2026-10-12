@@ -49,10 +49,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** student signup creates self-asserted `student_institution_claims`; the production Worker now exposes authenticated self-status plus tenant-scoped/platform-admin review queues and terminal review decisions.
 **Gap:** closed. Students can read only their own claim status; institution admins/owners may review only claims for their active tenants; platform admins may review globally; every final decision records append-only audit evidence; and only a verified claim can establish an active basic `member` relationship. Verification never grants instructor/admin roles or assessment eligibility.
 **Required outcome:** completed. Student claim-status read, institution/admin review queue, decision API, reviewer audit metadata, and verified-only membership linkage are operational.
-### G10 — Platform administration dashboard — **P1/P2**
-**Evidence:** `dashboard/admin` does not exist; `design-language/dashboards/administrator.md` is currently empty. Admin is recognized by some backend authorization checks but has no operational UI.
-**Gap:** no central surface for privileged operations.
-**Required outcome:** `/dashboard/admin/` with least-privilege modules for instructor verification, student institution claims, users/roles, institution/domain administration, content/evidence review queues, audit history, and operational configuration. High-risk actions require explicit confirmation and server audit records.
+### G10 — Platform administration dashboard — **P1/P2 - completed**
+**Evidence:** `/dashboard/admin/` is now the central platform-admin console and `design-language/dashboards/administrator.md` defines its authorization, information architecture, interaction, audit, responsive, and failure-state contract.
+**Gap:** closed. The dashboard exposes platform overview metrics; a bounded read-only user/trusted-role directory with authoritative role-source visibility; institution inventory with membership/owner/admin/domain coverage; instructor and student affiliation queues; authoring review/publication queues; unified read-only audit history; first-owner bootstrap; and audited operational configuration. High-risk owner-bootstrap availability changes require explicit browser and server confirmation. Privileged role mutation remains intentionally excluded until one authoritative role-write path exists.
+**Required outcome:** completed with least-privilege platform-admin modules, server authorization, explicit confirmation for high-risk operational changes, append-only operational audit evidence, and continued separation from assessment eligibility/release authority.
 ### G11 — Student transcript is a static shell — **P2**
 **Evidence:** `/dashboard/student/transcript/` renders hard-coded zero/placeholder metrics and has no live fetch.
 **Gap:** no authoritative student transcript/progress-history presentation.
@@ -74,9 +74,9 @@ The repository already contains useful foundations, but several exist outside th
 **Gap:** public visitors cannot experience a safe sample of the reasoning model before sign-in.
 **Required outcome:** one deterministic, non-graded, non-personalized demo using public-safe synthetic/cleared content. It must not expose assessment banks, answer keys, private telemetry, or imply accreditation/credit.
 ### G16 — Empty instructor/admin design specifications — **P2 documentation dependency**
-**Evidence:** `design-language/dashboards/instructor.md` and `administrator.md` are zero-byte files.
-**Gap:** functional implementation lacks an authoritative information architecture/interaction contract for the two highest-privilege surfaces.
-**Required outcome:** write role-specific dashboard specs before broad UI implementation, including authorization states, empty/error states, destructive-action confirmation, audit visibility, and responsive behavior.
+**Evidence:** `design-language/dashboards/administrator.md` is now complete; `design-language/dashboards/instructor.md` remains empty.
+**Gap:** the administrator information architecture/interaction contract is closed, but the instructor workspace still lacks its authoritative role-specific design specification.
+**Required outcome:** complete the instructor dashboard spec with authorization states, empty/error states, destructive-action confirmation, audit visibility, and responsive behavior.
 ### G17 — Duplicate runtime/API architecture — **P1 - completed**
 **Evidence:** active capabilities are split among Worker routes, Node/Vercel-style `api/`, and `torquemind-api` Express routes.
 **Gap:** closed for production browser API parity. The client-authored `/api/attempts/save`, `/api/complete`, and `/api/replay` writes were retired instead of ported because they depended on browser-controlled identity, result, or score data. Training progress/replay remains browser-assisted where allowed; assessment attempt creation, grading, and finalization boundaries remain server-authoritative.
@@ -131,11 +131,11 @@ The repository already contains useful foundations, but several exist outside th
 4. Institution reporting/settings/domain management.
 5. [x] Tenant-isolation security suite.
 ### Phase 6 — Platform administration
-1. Admin dashboard shell/spec.
-2. Verification/claim queues.
-3. Users/roles/institutions.
-4. Governance review queues and audit history.
-5. Operational settings with audited changes.
+1. [x] Admin dashboard shell/spec.
+2. [x] Verification/claim queues.
+3. [x] Users/roles/institutions.
+4. [x] Governance review queues and audit history.
+5. [x] Operational settings with audited changes.
 ### Phase 7 — Student residual functionality
 1. Live Coach recommendations.
 2. Live Transcript.
