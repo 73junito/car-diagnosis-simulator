@@ -29,7 +29,9 @@ describe('production API route inventory', () => {
       '/api/curriculum',
       '/api/admin/instructor-verification/requests',
       '/api/research/curriculum-evidence/records',
-      '/api/analytics/students'
+      '/api/analytics/students',
+      '/api/analytics/sessions',
+      '/api/analytics/export'
     ]) expect(routes).toContain(expected)
   })
 
@@ -60,12 +62,19 @@ describe('production API route inventory', () => {
     expect(refs.get('/api/student/progress')).toContain('dashboard/student/student.js')
     expect(refs.get('/api/instructor/verification/status')).toContain('dashboard/instructor/index.js')
   })
-})
+  test('G5 analytics has no remaining known production gaps', () => {
+    const g5 = inventory.knownUnregisteredRoutes.filter((entry) => entry.gap === 'G5')
+    expect(g5).toEqual([])
+    const refs = extractBrowserApiReferences()
+    expect(refs.has('/api/analytics/summary')).toBe(false)
+  })
 
-
-test('G5 analytics has no remaining known production gaps', () => {
-  const g5 = inventory.knownUnregisteredRoutes.filter((entry) => entry.gap === 'G5')
-  expect(g5).toEqual([])
-  const refs = extractBrowserApiReferences()
-  expect(refs.has('/api/analytics/summary')).toBe(false)
+  test('CTA analytics does not auto-fetch unscoped learner analytics', () => {
+    const cta = fs.readFileSync(path.join(root, 'js', 'cta-analytics.js'), 'utf8')
+    expect(cta).not.toContain('/api/analytics/summary')
+    expect(cta).not.toContain('/api/analytics/sessions')
+    expect(cta).not.toContain('/api/analytics/students')
+    expect(cta).not.toContain('avgScore: 82')
+    expect(cta).toContain('window.updateCTAAnalytics')
+  })
 })
