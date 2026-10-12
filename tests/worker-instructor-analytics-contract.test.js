@@ -14,6 +14,7 @@ describe('Worker instructor student analytics contract', () => {
     expect(worker).toContain("app.use('/api/analytics/students', instructorAnalyticsCors)")
     expect(worker).toContain("app.get('/api/analytics/students', handleInstructorStudentAnalytics)")
     expect(worker).toContain("app.get('/api/analytics/sessions', handleInstructorSessionAnalytics)")
+    expect(worker).toContain("app.get('/api/analytics/export', handleInstructorAnalyticsExport)")
     expect(worker).toContain("allowHeaders: ['Content-Type', 'Authorization']")
   })
 
@@ -73,6 +74,6 @@ describe('Worker instructor student analytics contract', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     expect(patterns).not.toContain('/api/analytics/students')
     expect(patterns).not.toContain('/api/analytics/sessions')
-    expect(patterns).toContain('/api/analytics/export')
+    expect(patterns).not.toContain('/api/analytics/export')
   })
 })
