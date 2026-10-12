@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const studentTbody = document.querySelector('#student-table tbody')
   const downloadCsv = document.getElementById('download-csv')
   const downloadXapi = document.getElementById('download-xapi')
+  const classSelect = document.getElementById('analytics-class')
+  const classStatus = document.getElementById('analytics-class-status')
 
   async function fetchJson(path){
     const res = await fetch(path);
@@ -73,50 +75,89 @@ document.addEventListener('DOMContentLoaded', ()=>{
     cardSafety.textContent = summary.safetyMisses ?? '0'
   }).catch(e=>{ console.warn('sessions fetch failed', e); });
 
-  // students
-  fetchJson('/api/analytics/students').then(data=>{
-    if (!data || !data.ok) return
-    while (studentTbody.firstChild) studentTbody.removeChild(studentTbody.firstChild);
-    (data.students||[]).forEach(s=>{
-      const tr = document.createElement('tr')
-      tr.className = 'tm-table-row'
+  async function loadStudentAnalytics(classId){
+    while (studentTbody.firstChild) studentTbody.removeChild(studentTbody.firstChild)
+    if (!classId){
+      classStatus.textContent = 'Select a class to load student analytics.'
+      return
+    }
 
-      const name = document.createElement('td'); name.textContent = s.name || s.id || '—'
+    classStatus.textContent = 'Loading class analytics…'
+    try {
+      const data = await window.apiGet('/api/analytics/students?classId=' + encodeURIComponent(classId))
+      const students = Array.isArray(data?.students) ? data.students : []
+      classStatus.textContent = students.length
+        ? students.length + ' enrolled student' + (students.length === 1 ? '' : 's') + ' loaded.'
+        : 'No enrolled students have analytics for this class.'
 
-      const sessions = document.createElement('td');
-      sessions.className = 'metric-small';
-      sessions.textContent = (s.sessions||0)
+      for (const s of students){
+        const tr = document.createElement('tr')
+        tr.className = 'tm-table-row'
 
-      const avgScoreValue = s.averageScore != null ? s.averageScore : s.avgScore
-      const avgConfidenceValue = s.averageConfidence != null ? s.averageConfidence : s.avgConfidence
+        const name = document.createElement('td'); name.textContent = s.name || s.id || '—'
+        const sessions = document.createElement('td'); sessions.className = 'metric-small'; sessions.textContent = s.sessions || 0
 
-      const avgScore = document.createElement('td');
-      const scoreSpan = document.createElement('span');
-      if (avgScoreValue == null) { scoreSpan.textContent = '—'; scoreSpan.className='metric' }
-      else { scoreSpan.textContent = fmtNumber(avgScoreValue)+'%'; scoreSpan.className='metric'; }
-      // badge color by thresholds
-      if (avgScoreValue != null){
-        if (avgScoreValue >= 85) scoreSpan.classList.add('badge-success')
-        else if (avgScoreValue >= 70) scoreSpan.classList.add('badge-warn')
-        else scoreSpan.classList.add('badge-danger')
+        const avgScore = document.createElement('td')
+        const scoreSpan = document.createElement('span')
+        scoreSpan.className='metric'
+        scoreSpan.textContent = s.averageScore == null ? '—' : fmtNumber(s.averageScore) + '%'
+        if (s.averageScore != null){
+          if (s.averageScore >= 85) scoreSpan.classList.add('badge-success')
+          else if (s.averageScore >= 70) scoreSpan.classList.add('badge-warn')
+          else scoreSpan.classList.add('badge-danger')
+        }
+        avgScore.appendChild(scoreSpan)
+
+        const avgConfidence = document.createElement('td')
+        const confSpan = document.createElement('span')
+        confSpan.className='metric'
+        confSpan.textContent = '—'
+        confSpan.title = 'Confidence analytics are not yet available from the governed Worker data source.'
+        avgConfidence.appendChild(confSpan)
+
+        tr.appendChild(name); tr.appendChild(sessions); tr.appendChild(avgScore); tr.appendChild(avgConfidence)
+        studentTbody.appendChild(tr)
       }
-      avgScore.appendChild(scoreSpan)
+    } catch (e) {
+      classStatus.textContent = e?.body?.error || 'Unable to load class analytics.'
+      console.warn('students fetch failed', e)
+    }
+  }
 
-      const avgConfidence = document.createElement('td');
-      const confSpan = document.createElement('span');
-      if (avgConfidenceValue == null) { confSpan.textContent = '—'; confSpan.className='metric' }
-      else { confSpan.textContent = fmtNumber(avgConfidenceValue)+'%'; confSpan.className='metric' }
-      if (avgConfidenceValue != null){
-        if (avgConfidenceValue >= 80) confSpan.classList.add('badge-success')
-        else if (avgConfidenceValue >= 60) confSpan.classList.add('badge-warn')
-        else confSpan.classList.add('badge-danger')
+  async function loadOwnedClasses(){
+    const token = window.getAccessToken ? window.getAccessToken() : null
+    if (!token){
+      window.location.replace('/sign-in/instructor/')
+      return
+    }
+    try {
+      const data = await window.apiGet('/api/classes')
+      const classes = Array.isArray(data?.classes) ? data.classes : []
+      classSelect.replaceChildren()
+      const placeholder = document.createElement('option')
+      placeholder.value = ''
+      placeholder.textContent = classes.length ? 'Select a class' : 'No classes available'
+      classSelect.appendChild(placeholder)
+      for (const cls of classes){
+        const option = document.createElement('option')
+        option.value = cls.id
+        option.textContent = cls.name
+        classSelect.appendChild(option)
       }
-      avgConfidence.appendChild(confSpan)
+      if (classes.length === 1){
+        classSelect.value = classes[0].id
+        await loadStudentAnalytics(classes[0].id)
+      } else {
+        classStatus.textContent = classes.length ? 'Select a class to load student analytics.' : 'Create a class before using student analytics.'
+      }
+    } catch (e) {
+      if (e?.status === 401 || e?.status === 403) window.location.replace('/sign-in/instructor/')
+      else classStatus.textContent = 'Unable to load owned classes.'
+    }
+  }
 
-      tr.appendChild(name); tr.appendChild(sessions); tr.appendChild(avgScore); tr.appendChild(avgConfidence)
-      studentTbody.appendChild(tr)
-    })
-  }).catch(e=>{ console.warn('students fetch failed', e); });
+  classSelect.addEventListener('change', () => loadStudentAnalytics(classSelect.value))
+  loadOwnedClasses()
 
   // download helpers
   async function download(path, filename){

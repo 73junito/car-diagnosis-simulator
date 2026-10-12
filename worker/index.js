@@ -40,6 +40,7 @@ import {
   handleClassRoster
 } from "./routes/classroom-classes.js";
 import { handleCreateAssignment } from "./routes/classroom-assignments.js";
+import { handleInstructorStudentAnalytics } from "./routes/instructor-analytics.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
@@ -171,6 +172,15 @@ app.get('/api/classes/by-code/:code', handleFindClassByCode)
 app.post('/api/classes/:classId/enroll', handleEnrollInClass)
 app.get('/api/classes/:classId/students', handleClassRoster)
 app.post('/api/assign', handleCreateAssignment)
+
+const instructorAnalyticsCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/analytics/students', instructorAnalyticsCors)
+app.get('/api/analytics/students', handleInstructorStudentAnalytics)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
