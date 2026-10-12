@@ -8,11 +8,12 @@ const html = fs.readFileSync(path.join(root, 'dashboard', 'instructor', 'session
 const ui = fs.readFileSync(path.join(root, 'dashboard', 'session-history.js'), 'utf8')
 const inventory = JSON.parse(fs.readFileSync(path.join(root, 'config', 'production-api-route-inventory.json'), 'utf8'))
 
-describe('Worker instructor telemetry history contract', () => {
+describe('Worker instructor telemetry history/export contract', () => {
   test('registers the canonical Worker history route with authenticated CORS', () => {
     expect(worker).toContain('handleInstructorTelemetryHistory')
     expect(worker).toContain("app.use('/api/telemetry/history', instructorTelemetryCors)")
     expect(worker).toContain("app.get('/api/telemetry/history', handleInstructorTelemetryHistory)")
+    expect(worker).toContain("app.get('/api/telemetry/export.:format', handleInstructorTelemetryExport)")
     expect(worker).toContain("allowHeaders: ['Content-Type', 'Authorization']")
   })
 
@@ -59,16 +60,24 @@ describe('Worker instructor telemetry history contract', () => {
     expect(ui).toContain("window.location.replace('/sign-in/instructor/')")
   })
 
-  test('keeps legacy export disabled until its separate G6 migration', () => {
-    expect(html).toContain('id="export-json-btn" class="tm-btn tm-btn-secondary" disabled')
-    expect(html).toContain('id="export-csv-btn" class="tm-btn tm-btn-secondary" disabled')
-    expect(ui).toContain('Secure class-scoped export is pending migration.')
+  test('uses authenticated class-scoped telemetry export downloads', () => {
+    expect(route).toContain('handleInstructorTelemetryExport')
+    expect(route).toContain("c.req.param('format')")
+    expect(route).toContain("format must be json or csv")
+    expect(route).toContain("Content-Disposition': 'attachment; filename=\"session-history.csv\"'")
+    expect(route).toContain("Content-Disposition': 'attachment; filename=\"session-history.json\"'")
+    expect(route).toContain("Cache-Control': 'private, no-store'")
+    expect(route).toContain('buildTelemetryCsv(result.rows)')
+    expect(ui).toContain("q.set('classId', classId)")
+    expect(ui).toContain("headers: { Authorization: 'Bearer ' + token }")
+    expect(ui).toContain("downloadTelemetry('json')")
+    expect(ui).toContain("downloadTelemetry('csv')")
   })
 
   test('removes telemetry history from known production gaps', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     expect(patterns).not.toContain('/api/telemetry/history')
-    expect(patterns).toContain('/api/telemetry/export.:param')
+    expect(patterns).not.toContain('/api/telemetry/export.:param')
     expect(patterns).toContain('/api/telemetry/stream')
     expect(patterns).toContain('/api/telemetry/events')
   })

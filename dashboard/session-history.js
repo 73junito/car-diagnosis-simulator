@@ -134,13 +134,63 @@
 
   // buildExportUrl is available at module scope so tests can import it
   function buildExportUrl(kind){
+    const classId = (typeof document !== 'undefined' && $id('history-class')) ? $id('history-class').value : '';
     const session = (typeof document !== 'undefined' && $id('session-filter')) ? $id('session-filter').value.trim() : '';
     const limit = (typeof document !== 'undefined' && $id('limit-select')) ? Number($id('limit-select').value) || 50 : 50;
     const q = new URLSearchParams();
+    if (classId) q.set('classId', classId);
     if (session) q.set('session', session);
     if (limit) q.set('limit', String(limit));
     const ext = kind === 'csv' ? 'csv' : 'json';
     return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
+  }
+
+  async function downloadTelemetry(kind){
+    const classId = $id('history-class')?.value || '';
+    const exportStatus = $id('export-status');
+    if (!classId){
+      if (exportStatus) exportStatus.textContent = 'Select a class before exporting.';
+      return;
+    }
+
+    const token = window.getAccessToken ? window.getAccessToken() : null;
+    if (!token){
+      window.location.replace('/sign-in/instructor/');
+      return;
+    }
+
+    const base = window.API_BASE_URL ? String(window.API_BASE_URL).replace(/\/$/, '') : '';
+    const url = base + buildExportUrl(kind);
+    if (exportStatus) exportStatus.textContent = 'Preparing download…';
+
+    try {
+      const res = await fetch(url, {
+        headers: { Authorization: 'Bearer ' + token },
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+      if (res.status === 401 || res.status === 403){
+        window.location.replace('/sign-in/instructor/');
+        return;
+      }
+      if (!res.ok){
+        if (exportStatus) exportStatus.textContent = 'Export failed (' + res.status + ').';
+        return;
+      }
+
+      const blob = await res.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = objectUrl;
+      a.download = kind === 'csv' ? 'session-history.csv' : 'session-history.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(objectUrl);
+      if (exportStatus) exportStatus.textContent = 'Export ready.';
+    } catch (err) {
+      if (exportStatus) exportStatus.textContent = 'Unable to export telemetry.';
+    }
   }
 
   async function initSessionHistory(){
@@ -154,16 +204,23 @@
       const classSelect = $id('history-class');
       const sessionInput = $id('session-filter');
       const limitSelect = $id('limit-select');
+      const exportJson = $id('export-json-btn');
+      const exportCsv = $id('export-csv-btn');
       const exportStatus = $id('export-status');
 
       sessionInput.addEventListener('input', scheduleFetch);
       limitSelect.addEventListener('change', scheduleFetch);
       classSelect.addEventListener('change', () => {
-        sessionInput.disabled = !classSelect.value;
+        const hasClass = Boolean(classSelect.value);
+        sessionInput.disabled = !hasClass;
+        if (exportJson) exportJson.disabled = !hasClass;
+        if (exportCsv) exportCsv.disabled = !hasClass;
         scheduleFetch();
       });
 
-      if (exportStatus) exportStatus.textContent = 'Secure class-scoped export is pending migration.';
+      if (exportJson) exportJson.addEventListener('click', () => downloadTelemetry('json'));
+      if (exportCsv) exportCsv.addEventListener('click', () => downloadTelemetry('csv'));
+      if (exportStatus) exportStatus.textContent = '';
 
       try {
         const result = await window.apiGet('/api/classes');
@@ -184,8 +241,12 @@
         if (classes.length === 1){
           classSelect.value = classes[0].id;
           sessionInput.disabled = false;
+          if (exportJson) exportJson.disabled = false;
+          if (exportCsv) exportCsv.disabled = false;
           scheduleFetch();
         } else {
+          if (exportJson) exportJson.disabled = true;
+          if (exportCsv) exportCsv.disabled = true;
           setEmpty(true);
         }
       } catch (err) {

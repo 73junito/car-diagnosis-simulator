@@ -70,6 +70,48 @@ function normalizeTelemetryEvent(row) {
   }
 }
 
+async function loadScopedTelemetry(auth, classId, sessionId, limit) {
+  const scope = await loadOwnedClassUserIds(auth, classId)
+  if (scope.error) return { error: scope.error }
+  if (scope.notFound) return { notFound: true }
+  if (scope.userIds.length === 0) return { classId: scope.classId, rows: [] }
+
+  let query = auth.supabase
+    .from('telemetry_events')
+    .select('created_at,event_type,session_id,payload_json,user_id,expires_at')
+    .in('user_id', scope.userIds)
+    .gt('expires_at', new Date().toISOString())
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (sessionId) query = query.eq('session_id', sessionId)
+
+  const { data, error } = await query
+  if (error) return { error }
+
+  return {
+    classId: scope.classId,
+    rows: (data || []).map(normalizeTelemetryEvent)
+  }
+}
+
+function csvEscape(value) {
+  if (value == null) return ''
+  const text = String(value)
+  return /[",\n\r]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text
+}
+
+function buildTelemetryCsv(rows) {
+  const header = ['created_at', 'event_type', 'session_id', 'payload']
+  const body = (rows || []).map((row) => [
+    row.created_at,
+    row.event_type,
+    row.session_id,
+    JSON.stringify(row.payload || {})
+  ])
+  return [header, ...body].map((row) => row.map(csvEscape).join(',')).join('\n') + '\n'
+}
+
 export async function handleInstructorTelemetryHistory(c) {
   if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
 
@@ -85,38 +127,71 @@ export async function handleInstructorTelemetryHistory(c) {
 
   if (!classId) return c.json({ error: 'classId is required' }, 400)
 
-  const scope = await loadOwnedClassUserIds(auth, classId)
-  if (scope.error) {
-    console.error('Instructor telemetry history scope lookup failed:', scope.error.message || scope.error)
+  const result = await loadScopedTelemetry(auth, classId, sessionId, limit)
+  if (result.error) {
+    console.error('Instructor telemetry history lookup failed:', result.error.message || result.error)
     return c.json({ error: 'Unable to load telemetry history' }, 500)
   }
-  if (scope.notFound) return c.json({ error: 'Class not found' }, 404)
-
-  if (scope.userIds.length === 0) {
-    return c.json({ ok: true, classId: scope.classId, data: [] }, 200)
-  }
-
-  let query = auth.supabase
-    .from('telemetry_events')
-    .select('created_at,event_type,session_id,payload_json,user_id,expires_at')
-    .in('user_id', scope.userIds)
-    .gt('expires_at', new Date().toISOString())
-    .order('created_at', { ascending: false })
-    .limit(limit)
-
-  if (sessionId) query = query.eq('session_id', sessionId)
-
-  const { data, error } = await query
-  if (error) {
-    console.error('Instructor telemetry history lookup failed:', error.message || error)
-    return c.json({ error: 'Unable to load telemetry history' }, 500)
-  }
+  if (result.notFound) return c.json({ error: 'Class not found' }, 404)
 
   return c.json({
     ok: true,
-    classId: scope.classId,
-    data: (data || []).map(normalizeTelemetryEvent)
+    classId: result.classId,
+    data: result.rows
   }, 200)
 }
 
-export { normalizeTelemetryEvent }
+
+
+export async function handleInstructorTelemetryExport(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeInstructor(c)
+  if (auth.response) return auth.response
+
+  const format = String(c.req.param('format') || '').trim().toLowerCase()
+  const classId = String(c.req.query('classId') || '').trim()
+  const sessionId = String(c.req.query('session') || c.req.query('sessionId') || '').trim()
+  const requestedLimit = Number.parseInt(String(c.req.query('limit') || '50'), 10)
+  const limit = Number.isFinite(requestedLimit)
+    ? Math.min(Math.max(requestedLimit, 1), 500)
+    : 50
+
+  if (!classId) return c.json({ error: 'classId is required' }, 400)
+  if (!['json', 'csv'].includes(format)) {
+    return c.json({ error: 'format must be json or csv' }, 400)
+  }
+
+  const result = await loadScopedTelemetry(auth, classId, sessionId, limit)
+  if (result.error) {
+    console.error('Instructor telemetry export lookup failed:', result.error.message || result.error)
+    return c.json({ error: 'Unable to export telemetry' }, 500)
+  }
+  if (result.notFound) return c.json({ error: 'Class not found' }, 404)
+
+  if (format === 'csv') {
+    return new Response(buildTelemetryCsv(result.rows), {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': 'attachment; filename="session-history.csv"',
+        'Cache-Control': 'private, no-store'
+      }
+    })
+  }
+
+  return new Response(JSON.stringify({
+    ok: true,
+    classId: result.classId,
+    data: result.rows
+  }, null, 2), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Content-Disposition': 'attachment; filename="session-history.json"',
+      'Cache-Control': 'private, no-store'
+    }
+  })
+}
+
+export { normalizeTelemetryEvent, buildTelemetryCsv }
