@@ -27,8 +27,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** admin-only review queue, decision endpoint, reviewer identity/timestamp/note enforcement, immutable audit evidence, and tests proving non-admin users cannot decide requests.
 ### G4 — Instructor workspace completeness — **P1 - completed**
 **Evidence:** `/dashboard/instructor/` exposes Analytics and Research only. Live Session and Session History exist separately. Classroom/assignment/roster UI is absent.
-**Gap:** closed for currently authoritative instructor capabilities. The verified instructor home now links Classes & Assignments, Live Session, Session History, Analytics, and Research Discovery from one operational shell. Authoring remains intentionally absent until G7 provides a server-backed authoring boundary.
-**Required outcome:** completed for production-backed capabilities. The shell exposes only verified, governed instructor features and does not link the browser-local Authoring Studio prematurely.
+**Gap:** closed for currently authoritative instructor capabilities. The verified instructor home links Classes & Assignments, Live Session, Session History, Analytics, Research Discovery, and the G7 private-draft Authoring Studio from one operational shell. Authoring is explicitly draft-only until the remaining G7 review/publication controls exist.
+**Required outcome:** completed for production-backed capabilities. The shell exposes only verified, governed instructor features and labels Authoring as private drafts with review/publication unavailable.
 ### G5 — Instructor analytics production data boundary — **P0/P1 - completed**
 **Evidence:** `dashboard/instructor/analytics.js` calls `/api/analytics/students` and `/api/analytics/export`; these implementations are Node/CommonJS handlers under `api/analytics/` and are not registered in `worker/index.js`. They aggregate local report files and include fallback empty exports.
 **Gap:** closed. Student analytics, session summary, and analytics export are Worker-native and class-scoped through instructor-owned classes. The optional legacy CTA summary caller and its unscoped fallbacks have been retired.
@@ -39,8 +39,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** completed. History/export and live stream use verified instructor authorization plus owned-class enrollment scope; ingestion enforces the approved scenario_started-only payload contract and derives authenticated identity server-side. The live browser uses authenticated fetch-based SSE snapshots with cursor reconnects instead of localStorage role trust or an in-memory Worker broadcast bus.
 ### G7 — Server-backed Authoring Studio — **P1**
 **Evidence:** `dashboard/author/` is a substantial UI, but its scenario library is stored in `localStorage`; no production auth gate or server draft/publish API was found.
-**Gap:** drafts are browser-local, not collaborative/auditable, and the page cannot participate in governed review/publication.
-**Required outcome:** verified-author role boundary; Supabase-backed drafts/versions; autosave; ownership; review state; evidence/source linkage; explicit publish approval; publication must never silently grant assessment eligibility.
+**Gap:** partially closed. Browser-local draft persistence has been retired. Verified instructors and admins now receive an owner-scoped, service-role-mediated scenario draft API backed by `scenario_authoring_drafts`, with server versions and private draft-only state. The remaining G7 work is autosave, evidence/source linkage, review state, and explicit publication approval.
+**Required outcome:** verified-author access decision completed for the current instructor/admin model; Supabase-backed ownership/versioning completed. Remaining: autosave, governed review/evidence linkage, and publication workflow. Publication must never silently grant assessment eligibility.
 ### G8 — Institutional tenant model and portal — **P1/P2**
 **Evidence:** `institutions`, email domains, verification requests, student institution claims, classroom tables, and institution search exist. No `/dashboard/institution/` portal or institution-membership/tenant administration model exists.
 **Gap:** an institution is currently a directory/verification record, not an administrable tenant.
@@ -118,8 +118,8 @@ The repository already contains useful foundations, but several exist outside th
 3. [x] Replace live-session browser role gate.
 4. [x] Integrate Live Session and Session History into instructor home.
 ### Phase 4D — Governed authoring
-1. Author role/access decision.
-2. Server-backed drafts and versioning.
+1. [x] Author role/access decision: verified instructor or admin; no new browser-trusted role.
+2. [x] Server-backed private drafts and optimistic versioning.
 3. Evidence linkage and review states.
 4. Explicit publication workflow separate from assessment eligibility.
 ### Phase 5 — Institutional portal
