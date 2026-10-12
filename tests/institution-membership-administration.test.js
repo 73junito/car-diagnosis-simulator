@@ -34,8 +34,8 @@ describe('G8 institution membership administration', () => {
 
   test('acceptance is email-bound, confirmed-email gated, and atomic with membership creation', () => {
     expect(route).toContain('Confirmed account email required to accept institution invitation')
-    expect(route).toContain("invitation.email !== userEmail")
     expect(route).toContain(".eq('email', userEmail)")
+    expect(route).not.toContain("invitation.email !== userEmail")
     expect(migration).toContain('create or replace function private.accept_institution_invitation_membership()')
     expect(migration).toContain("new.status = 'accepted'")
     expect(migration).toContain("status = 'active'")
