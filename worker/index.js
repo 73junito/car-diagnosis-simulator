@@ -50,6 +50,7 @@ import {
   handleInstitutionAdminDomains,
   handleInstitutionAdminDomainDecision
 } from "./routes/institution-settings-domains.js";
+import { handleInstitutionAdminReport } from "./routes/institution-reporting.js";
 import {
   handleListClasses,
   handleCreateClass,
@@ -191,6 +192,7 @@ app.patch('/api/institution/admin/members/:membershipId', handleInstitutionAdmin
 app.all('/api/institution/admin/settings', handleInstitutionAdminSettings)
 app.all('/api/institution/admin/domains', handleInstitutionAdminDomains)
 app.patch('/api/institution/admin/domains/:domain', handleInstitutionAdminDomainDecision)
+app.get('/api/institution/admin/report', handleInstitutionAdminReport)
 
 app.use('/api/admin/institutions/*', cors({
   origin: 'https://app.autolearnpro.com',
