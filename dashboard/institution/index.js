@@ -10,6 +10,16 @@
   const cohorts = document.getElementById('institutionCohorts')
   const classes = document.getElementById('institutionClasses')
   const adminNotice = document.getElementById('institutionAdminNotice')
+  const myInvitationList = document.getElementById('myInvitationList')
+  const adminPanel = document.getElementById('institutionAdminPanel')
+  const inviteForm = document.getElementById('institutionInviteForm')
+  const inviteEmail = document.getElementById('institutionInviteEmail')
+  const inviteRole = document.getElementById('institutionInviteRole')
+  const inviteNote = document.getElementById('institutionInviteNote')
+  const memberList = document.getElementById('institutionMemberList')
+  const pendingInvitationList = document.getElementById('institutionPendingInvitationList')
+  let activeSchoolCode = null
+  let activeActorRole = null
 
   function clear(node){
     while (node.firstChild) node.removeChild(node.firstChild)
@@ -34,6 +44,123 @@
       return
     }
     rows.forEach((row) => node.appendChild(item(formatter(row))))
+  }
+
+  function button(label, onClick, className){
+    const element = document.createElement('button')
+    element.type = 'button'
+    element.className = className || 'tm-btn tm-btn-secondary'
+    element.textContent = label
+    element.addEventListener('click', onClick)
+    return element
+  }
+
+  async function loadMyInvitations(){
+    clear(myInvitationList)
+    try {
+      const payload = await window.apiGet('/api/institution/invitations')
+      const invitations = Array.isArray(payload.invitations) ? payload.invitations : []
+      if (!invitations.length) {
+        myInvitationList.appendChild(item('No pending invitations for this account.'))
+        return
+      }
+
+      invitations.forEach((invitation) => {
+        const row = document.createElement('div')
+        row.className = 'tm-card'
+        const institutionName = invitation.institution?.school_name || invitation.schoolCode
+        const summary = document.createElement('p')
+        summary.textContent = institutionName + ' · ' + String(invitation.role || 'member').replaceAll('_', ' ')
+        row.appendChild(summary)
+        row.appendChild(button('Accept Invitation', async () => {
+          try {
+            await window.apiPost('/api/institution/invitations/' + encodeURIComponent(invitation.id) + '/accept', {})
+            status.textContent = 'Institution invitation accepted.'
+            await init()
+          } catch (error) {
+            status.textContent = error?.message || 'Unable to accept institution invitation.'
+          }
+        }, 'tm-btn tm-btn-primary'))
+        myInvitationList.appendChild(row)
+      })
+    } catch (error) {
+      myInvitationList.appendChild(item(error?.message || 'Unable to load invitations.'))
+    }
+  }
+
+  function roleCanManage(actorRole, targetRole){
+    if (actorRole === 'institution_owner') return true
+    return targetRole === 'member' || targetRole === 'instructor'
+  }
+
+  async function loadAdministration(schoolCode){
+    clear(memberList)
+    clear(pendingInvitationList)
+    try {
+      const [memberPayload, invitationPayload] = await Promise.all([
+        window.apiGet('/api/institution/admin/members?schoolCode=' + encodeURIComponent(schoolCode)),
+        window.apiGet('/api/institution/admin/invitations?schoolCode=' + encodeURIComponent(schoolCode) + '&status=pending')
+      ])
+
+      activeActorRole = memberPayload.actorRole
+      const members = Array.isArray(memberPayload.members) ? memberPayload.members : []
+      if (!members.length) {
+        memberList.appendChild(item('No institution memberships.'))
+      } else {
+        members.forEach((member) => {
+          const row = document.createElement('div')
+          row.className = 'tm-card'
+          const label = document.createElement('p')
+          label.textContent = (member.email || member.userId) + ' · ' +
+            String(member.role || 'member').replaceAll('_', ' ') + ' · ' + member.status
+          row.appendChild(label)
+          if (member.status === 'active' && roleCanManage(activeActorRole, member.role)) {
+            row.appendChild(button('Remove Membership', async () => {
+              if (!window.confirm('Remove this institution membership by suspending access?')) return
+              try {
+                await window.apiPatch('/api/institution/admin/members/' + encodeURIComponent(member.id), { action: 'suspend' })
+                status.textContent = 'Institution membership removed.'
+                await loadAdministration(schoolCode)
+              } catch (error) {
+                status.textContent = error?.message || 'Unable to remove institution membership.'
+              }
+            }))
+          }
+          memberList.appendChild(row)
+        })
+      }
+
+      const invitations = Array.isArray(invitationPayload.invitations) ? invitationPayload.invitations : []
+      if (!invitations.length) {
+        pendingInvitationList.appendChild(item('No pending institution invitations.'))
+      } else {
+        invitations.forEach((invitation) => {
+          const row = document.createElement('div')
+          row.className = 'tm-card'
+          const label = document.createElement('p')
+          label.textContent = invitation.email + ' · ' + String(invitation.role || 'member').replaceAll('_', ' ')
+          row.appendChild(label)
+          if (roleCanManage(activeActorRole, invitation.role)) {
+            row.appendChild(button('Revoke Invitation', async () => {
+              if (!window.confirm('Revoke this pending invitation?')) return
+              try {
+                await window.apiPatch('/api/institution/admin/invitations/' + encodeURIComponent(invitation.id), {})
+                status.textContent = 'Institution invitation revoked.'
+                await loadAdministration(schoolCode)
+              } catch (error) {
+                status.textContent = error?.message || 'Unable to revoke institution invitation.'
+              }
+            }))
+          }
+          pendingInvitationList.appendChild(row)
+        })
+      }
+
+      inviteRole.querySelector('option[value="institution_admin"]').disabled = activeActorRole !== 'institution_owner'
+      inviteRole.querySelector('option[value="institution_owner"]').disabled = activeActorRole !== 'institution_owner'
+    } catch (error) {
+      status.textContent = error?.message || 'Institution administration unavailable.'
+    }
   }
 
   async function loadPortal(schoolCode){
@@ -61,9 +188,14 @@
         ? 'Class visibility is not granted for member-only access.'
         : 'No tenant-scoped classes available.')
 
+      activeSchoolCode = schoolCode
       adminNotice.textContent = payload.administrationGranted
-        ? 'Institution administration authorization is active. Membership invitations, removal, settings, and reporting will be added in later G8 slices.'
-        : 'This foundation is read-only. Institution administration requires an institution admin or owner membership.'
+        ? 'Institution administration authorization is active. Settings, verified-domain administration, and reporting remain later G8 slices.'
+        : 'Institution administration requires an institution admin or owner membership.'
+      adminPanel.hidden = !payload.administrationGranted
+      if (payload.administrationGranted) {
+        await loadAdministration(schoolCode)
+      }
       overview.hidden = false
       status.textContent = 'Institution tenant loaded.'
     } catch (error) {
@@ -77,10 +209,13 @@
     }
 
     try {
+      await loadMyInvitations()
       const payload = await window.apiGet('/api/institution/memberships')
       const memberships = Array.isArray(payload.memberships) ? payload.memberships : []
       if (!memberships.length) {
         status.textContent = 'No active institution membership is available for this account.'
+        overview.hidden = true
+        adminPanel.hidden = true
         return
       }
 
@@ -102,6 +237,24 @@
 
   select.addEventListener('change', () => {
     if (select.value) loadPortal(select.value)
+  })
+
+  inviteForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    if (!activeSchoolCode) return
+    try {
+      await window.apiPost('/api/institution/admin/invitations', {
+        schoolCode: activeSchoolCode,
+        email: inviteEmail.value,
+        role: inviteRole.value,
+        note: inviteNote.value
+      })
+      inviteForm.reset()
+      status.textContent = 'Institution invitation created.'
+      await loadAdministration(activeSchoolCode)
+    } catch (error) {
+      status.textContent = error?.message || 'Unable to create institution invitation.'
+    }
   })
 
   init()
