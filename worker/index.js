@@ -39,6 +39,7 @@ import {
   handleEnrollInClass,
   handleClassRoster
 } from "./routes/classroom-classes.js";
+import { handleCreateAssignment } from "./routes/classroom-assignments.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
@@ -168,6 +169,7 @@ app.post('/api/classes', handleCreateClass)
 app.get('/api/classes/by-code/:code', handleFindClassByCode)
 app.post('/api/classes/:classId/enroll', handleEnrollInClass)
 app.get('/api/classes/:classId/students', handleClassRoster)
+app.post('/api/assign', handleCreateAssignment)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
