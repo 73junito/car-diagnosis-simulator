@@ -13,6 +13,7 @@ describe('Worker instructor student analytics contract', () => {
     expect(worker).toContain('handleInstructorStudentAnalytics')
     expect(worker).toContain("app.use('/api/analytics/students', instructorAnalyticsCors)")
     expect(worker).toContain("app.get('/api/analytics/students', handleInstructorStudentAnalytics)")
+    expect(worker).toContain("app.get('/api/analytics/sessions', handleInstructorSessionAnalytics)")
     expect(worker).toContain("allowHeaders: ['Content-Type', 'Authorization']")
   })
 
@@ -53,13 +54,14 @@ describe('Worker instructor student analytics contract', () => {
     expect(html).toContain('<script src="/apiClient.js"></script>')
     expect(ui).toContain("window.apiGet('/api/classes')")
     expect(ui).toContain("window.apiGet('/api/analytics/students?classId=' + encodeURIComponent(classId))")
+    expect(ui).toContain("window.apiGet('/api/analytics/sessions?classId=' + encodeURIComponent(classId))")
     expect(ui).toContain("window.location.replace('/sign-in/instructor/')")
   })
 
   test('removes student analytics from known production gaps', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     expect(patterns).not.toContain('/api/analytics/students')
-    expect(patterns).toContain('/api/analytics/sessions')
+    expect(patterns).not.toContain('/api/analytics/sessions')
     expect(patterns).toContain('/api/analytics/export')
   })
 })
