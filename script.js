@@ -317,40 +317,28 @@ function clearTeacherError(){ const el = document.getElementById('teacherErrorMs
 function escapeHtml(str){ if (!str) return ''; return String(str).replace(/[&<>\\"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
 
 async function ensureTeacherAuthAndRender(){
-  // Called when navigating to teacherScreen. Ensures token exists and is valid.
+  // Legacy compatibility screen: authorize against the canonical Worker classroom boundary.
   const token = getAccessToken();
   if (!token){
-    // no token: prompt sign-in inline
-    showTeacherError('You must sign in as a teacher to view this dashboard.');
+    showTeacherError('You must sign in as an instructor to view this dashboard.');
     return;
   }
-  // token present: verify by calling protected endpoint
   try {
-    // if authenticated, clear any local fallback class ids
     try { clearLocalFallbackOnAuth(); } catch(e){ void e; }
-    const path = '/api/teacher/data' + (currentClassId ? ('?classId=' + encodeURIComponent(currentClassId)) : '');
-      try {
-      const data = await apiGet(path);
-      if (!data){
-        showTeacherError('Unable to fetch teacher data. Retry or sign in.');
-        return;
-      }
-      clearTeacherError();
-      try { if (document.getElementById('teacherClassesSelect') && typeof window.loadTeacherClasses === 'function') await window.loadTeacherClasses(); } catch(e){ /* ignore: optional teacher class refresh */ }
-      renderTeacherData(data);
-      return;
-    } catch (e){
-      if (e && (e.status === 401 || e.status === 403)){
-        try { supabaseSignOut(); } catch(_){ void _; }
-        showTeacherError('Authentication failed. Please sign in again.');
-        return;
-      }
-      showTeacherError('Unable to fetch teacher data (' + (e && e.status ? e.status : 'network') + '). Retry or sign in.');
+    const list = await apiGet('/api/classes');
+    if (!list || !Array.isArray(list.classes)){
+      showTeacherError('Unable to load instructor classes. Retry or sign in.');
       return;
     }
-    // removed duplicate unreachable rendering block
+    clearTeacherError();
+    await loadTeacherData();
   } catch (e){
-    showTeacherError('Network error while loading teacher data. Check connection and retry.');
+    if (e && (e.status === 401 || e.status === 403)){
+      try { supabaseSignOut(); } catch(_){ void _; }
+      showTeacherError('Authentication failed. Please sign in again.');
+      return;
+    }
+    showTeacherError('Unable to load instructor classes (' + (e && e.status ? e.status : 'network') + '). Retry or sign in.');
   }
 }
 
@@ -1655,67 +1643,43 @@ function logout(){
 
 async function loadTeacherData(){
   const container = document.getElementById('studentList');
+  if (!container) return;
   while (container.firstChild) container.removeChild(container.firstChild);
-  if (useFirestore && db) {
-    try {
-      const snapshot = await db.collection('students').get();
-      if (snapshot.empty) { const p = document.createElement('p'); p.innerText = 'No student data yet.'; container.appendChild(p); return; }
-      snapshot.forEach(doc => {
-        const s = doc.data();
-        const card = document.createElement('div'); card.style.border = '1px solid rgba(255,255,255,0.06)'; card.style.padding = '10px'; card.style.margin = '8px'; card.style.background = 'rgba(255,255,255,0.01)';
-        const h3 = document.createElement('h3'); h3.innerText = s.name || '';
-        const pScore = document.createElement('p'); pScore.innerText = 'Score: ' + (s.score || 0);
-        const pAcc = document.createElement('p'); pAcc.innerText = 'Accuracy: ' + (s.correct || 0) + ' / ' + ((s.correct || 0) + (s.wrong || 0));
-        const pLevel = document.createElement('p'); pLevel.innerText = 'Level: ' + ((s.currentLevel || 0) + 1) + '/' + total;
-        const pStatus = document.createElement('p'); pStatus.innerText = 'Status: ' + (s.completed ? 'Completed' : 'In Progress');
-        const pLast = document.createElement('p'); pLast.innerText = 'Last: ' + (s.lastUpdated || '—');
-        const pEx = document.createElement('p'); pEx.innerText = 'Explanations: ' + (s.explanations ? s.explanations.length : 0);
-        card.appendChild(h3); card.appendChild(pScore); card.appendChild(pAcc); card.appendChild(pLevel); card.appendChild(pStatus); card.appendChild(pLast); card.appendChild(pEx);
-        container.appendChild(card);
-      });
-      return;
-    } catch (e) {
-      console.warn('Failed to load teacher data from Firestore', e);
-    }
-  }
-  // If currentClassId is set, try to load class-scoped teacher data from backend
-  if (currentClassId) {
-    try {
-      const resp = await apiGet(`/api/teacher/data?classId=${encodeURIComponent(currentClassId)}`);
-      if (resp && resp.users && resp.replays) {
-        // transform API data into classData shape used by UI
-        const users = resp.users || [];
-        const replays = resp.replays || [];
-        const completions = resp.completions || [];
-        const enrolls = resp.enrollments || [];
-        // mark `enrolls` used to avoid linter false-positive when it's optional
-        void enrolls;
-        const classData = users.map(u => {
-          const uid = u.id || u.user_id || '';
-          const name = u.email || u.name || uid;
-          const userReplays = replays.filter(r => String(r.user_id) === String(uid)).map(r => ({ scenario: r.scenario_id, actions: r.actions || [], savedAt: r.created_at }));
-          return { name, id: uid, replays: userReplays, explanations: [], studentProfile: {}, completed: completions.some(c => String(c.user_id) === String(uid)) };
-        });
-        if (!classData.length) { while (container.firstChild) container.removeChild(container.firstChild); const p = document.createElement('p'); p.innerText = 'No student data yet.'; container.appendChild(p); }
-        // attach to local rendering functions
-        try { renderFilteredStudents(classData); } catch(e){ renderFilteredStudents(); }
-        try { renderConfidenceChart(classData); } catch(e) { console.warn('Confidence chart render failed', e); }
-        try { renderSystemHeatmap(classData); } catch(e) { console.warn('System heatmap render failed', e); }
-        try { renderAutoRecommendations(classData); } catch(e) { console.warn('Auto recommendations render failed', e); }
-        return;
-      }
-    } catch (e) { console.warn('Failed to load class-scoped teacher data', e); }
-  }
 
-  // Fallback to localStorage when backend not available or class not selected
-  const classData = JSON.parse(localStorage.getItem('carSim_class')) || [];
-  if (classData.length === 0){ while (container.firstChild) container.removeChild(container.firstChild); const p = document.createElement('p'); p.innerText = 'No student data yet.'; container.appendChild(p); return; }
-  // render student list (supports active system filter)
-  renderFilteredStudents();
-  // render confidence chart for class
-  try { renderConfidenceChart(classData); } catch(e) { console.warn('Confidence chart render failed', e); }
-  try { renderSystemHeatmap(classData); } catch(e) { console.warn('System heatmap render failed', e); }
-  try { renderAutoRecommendations(classData); } catch(e) { console.warn('Auto recommendations render failed', e); }
+  try {
+    if (!currentClassId){
+      const list = await apiGet('/api/classes');
+      const classes = Array.isArray(list && list.classes) ? list.classes : [];
+      if (classes.length){
+        currentClassId = classes[0].id;
+        currentClassCode = classes[0].class_code || null;
+      }
+    }
+
+    if (!currentClassId){
+      renderTeacherData({ students: [] });
+      return;
+    }
+
+    const roster = await apiGet('/api/classes/' + encodeURIComponent(currentClassId) + '/students');
+    const students = Array.isArray(roster && roster.students)
+      ? roster.students.map((student) => ({
+          id: student.id,
+          email: student.email || student.id,
+          name: student.email || student.id,
+          class: 'Enrolled'
+        }))
+      : [];
+
+    renderTeacherData({ students });
+  } catch (e) {
+    if (e && (e.status === 401 || e.status === 403)){
+      try { supabaseSignOut(); } catch(_){ void _; }
+      showTeacherError('Authentication failed. Please sign in again.');
+      return;
+    }
+    showTeacherError('Unable to load the selected class roster. Use the Instructor Classroom workspace for current class management.');
+  }
 }
 
 // Open student detail and show latest replay (if present)
