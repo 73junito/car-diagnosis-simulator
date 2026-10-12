@@ -35,7 +35,6 @@ describe('production API route inventory', () => {
   test('known production gaps stay mapped to roadmap work', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     for (const expected of [
-      '/api/teacher/data',
       '/api/analytics/students',
       '/api/telemetry/stream',
       '/api/attempts/save',
@@ -57,7 +56,7 @@ describe('production API route inventory', () => {
 
   test('scanner includes browser assets that are actually copied by the production build', () => {
     const refs = extractBrowserApiReferences()
-    expect(refs.get('/api/teacher/data')).toContain('script.js')
+    expect(refs.has('/api/teacher/data')).toBe(false)
     expect(refs.get('/api/student/progress')).toContain('dashboard/student/student.js')
     expect(refs.get('/api/instructor/verification/status')).toContain('dashboard/instructor/index.js')
   })
