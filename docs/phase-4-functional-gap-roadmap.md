@@ -27,7 +27,7 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** admin-only review queue, decision endpoint, reviewer identity/timestamp/note enforcement, immutable audit evidence, and tests proving non-admin users cannot decide requests.
 ### G4 — Instructor workspace completeness — **P1**
 **Evidence:** `/dashboard/instructor/` exposes Analytics and Research only. Live Session and Session History exist separately. Classroom/assignment/roster UI is absent.
-**Gap:** no coherent instructor home for class creation, roster, assignments, session monitoring/history, and existing research/analytics tools.
+**Gap:** the instructor home now includes a production-backed Classes/Roster/Assignments workspace, but Live Session, Session History, Analytics, and Research remain separate surfaces rather than one coherent operational shell.
 **Required outcome:** verified-instructor shell that links only capabilities backed by production APIs; add Classes, Roster, Assignments, Live Session, Session History, Analytics, Research, and Authoring progressively as each backend is authoritative.
 ### G5 — Instructor analytics production data boundary — **P0/P1**
 **Evidence:** `dashboard/instructor/analytics.js` calls `/api/analytics/students` and `/api/analytics/export`; these implementations are Node/CommonJS handlers under `api/analytics/` and are not registered in `worker/index.js`. They aggregate local report files and include fallback empty exports.
@@ -79,7 +79,7 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** write role-specific dashboard specs before broad UI implementation, including authorization states, empty/error states, destructive-action confirmation, audit visibility, and responsive behavior.
 ### G17 — Duplicate runtime/API architecture — **P1 architectural debt**
 **Evidence:** active capabilities are split among Worker routes, Node/Vercel-style `api/`, and `torquemind-api` Express routes.
-**Gap:** the production route inventory is now enforced, but the runtime split remains. The current contract finds 41 browser API references: 26 resolve to 31 canonical Worker registrations and 15 are explicit known gaps mapped to G2/G5/G6/G14/G17. Tests can no longer add an unclassified production `/api/*` reference without failing CI.
+**Gap:** the production route inventory is now enforced, but the runtime split remains. The current contract finds 43 browser API references: 28 resolve to 31 canonical Worker registrations and 15 are explicit known gaps mapped to G2/G5/G6/G14/G17. Tests can no longer add an unclassified production `/api/*` reference without failing CI.
 **Required outcome:** inventory/CI contract completed. `worker/index.js` is treated as the canonical production API boundary for `app.autolearnpro.com`; every API literal shipped by the production build must either match a Worker registration or an explicit roadmap-gap entry in `config/production-api-route-inventory.json`. The remaining architectural outcome is to eliminate the 15 known gaps as their owning roadmap items are implemented.
 ### G18 - Supabase migration deployment parity and environment drift - **P0 - completed**
 **Evidence:** the audit found staging at 44 recorded migrations while production and the repository were at 107. G18 synchronized the missing logical schema/governance chain to staging, restored the 6,547-row federal school-code seed, added a service-role-only migration-history RPC to staging and production, and added deterministic CI drift detection against the repository baseline. Staging retains one documented exception: the production-specific historical smoke-data cleanup whose fail-closed guard expects 2,206 smoke classes plus `scenario_assignments`, while staging has 964 smoke-only classes, no enrollment/assignment links, and no `scenario_assignments` table.
@@ -110,7 +110,7 @@ The repository already contains useful foundations, but several exist outside th
 1. [x] Port classes/list/create to Worker.
 2. [x] Port enroll/roster to Worker.
 3. [x] Port assignments to Worker.
-4. Build instructor Classes/Roster/Assignments UI.
+4. [x] Build instructor Classes/Roster/Assignments UI.
 5. Add ownership and cross-class isolation tests.
 ### Phase 4C — Instructor analytics and monitoring
 1. Worker-native scoped analytics summary/students/export.
@@ -171,4 +171,4 @@ Use one concern per branch/PR. Suggested first branches:
 - Empty/unavailable states must be truthful; do not substitute sample data on authenticated production dashboards.
 - Generated reports/files remain unstaged unless they are intentional evidence artifacts.
 ## First implementation target
-G1, G3, G18, G19, and the Phase 4A production API route inventory contract are complete. **Phase 4B / G2 is in progress:** Worker-native class list/create, authenticated lookup, self-enrollment, owner-scoped roster, and assignment creation are implemented; next build the instructor Classes/Roster/Assignments UI. Track G20 separately as provenance/RLS security architecture work before broader institutional rollout.
+G1, G3, G18, G19, and the Phase 4A production API route inventory contract are complete. **Phase 4B / G2 classroom core is implemented end-to-end:** Worker-native class list/create, authenticated lookup, self-enrollment, owner-scoped roster, assignment creation, and the instructor Classes/Roster/Assignments UI are in place. Next add broader isolation coverage and retire or demote the legacy teacher aggregate before closing G2. Track G20 separately as provenance/RLS security architecture work before broader institutional rollout.
