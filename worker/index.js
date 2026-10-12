@@ -40,6 +40,7 @@ import {
   handleInstitutionAdminMembers,
   handleInstitutionAdminInvitations,
   handleInstitutionAdminInvitationDecision,
+  handleInstitutionMyInvitations,
   handleInstitutionInvitationAccept,
   handleInstitutionAdminMemberDecision
 } from "./routes/institution-membership-admin.js";
@@ -178,6 +179,7 @@ app.get('/api/institution/portal', handleInstitutionPortal)
 app.get('/api/institution/admin/members', handleInstitutionAdminMembers)
 app.all('/api/institution/admin/invitations', handleInstitutionAdminInvitations)
 app.patch('/api/institution/admin/invitations/:invitationId', handleInstitutionAdminInvitationDecision)
+app.get('/api/institution/invitations', handleInstitutionMyInvitations)
 app.post('/api/institution/invitations/:invitationId/accept', handleInstitutionInvitationAccept)
 app.patch('/api/institution/admin/members/:membershipId', handleInstitutionAdminMemberDecision)
 
