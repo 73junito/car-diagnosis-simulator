@@ -43,7 +43,7 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** completed. Verified-author access, server-backed ownership/versioning, autosave, governed evidence/source linkage, review lifecycle, and explicit publication approval are operational while assessment eligibility remains a separate authority boundary.
 ### G8 — Institutional tenant model and portal — **P1/P2**
 **Evidence:** `institutions`, email domains, verification requests, student institution claims, classroom tables, and institution search exist. The first tenant foundation now adds active institution memberships/roles, tenant-scoped program/cohort primitives, tenant-linked classes, and a read-only `/dashboard/institution/` portal.
-**Gap:** partially closed. Active membership is now the institution authorization object; approved instructor verification can establish instructor membership; programs/cohorts/classes can be institution-scoped; the portal exposes only the caller's authorized tenant; institution admins/owners can create/revoke email-bound invitations and remove memberships by suspension with last-owner protection; tenant settings plus verified-domain administration are governed and audited; and institution admins/owners now have aggregate tenant reporting derived strictly from tenant-scoped class/enrollment populations. Reporting excludes student identity and answer-level correctness data and is explicitly non-transcript/non-credit. Remaining G8 work is the broader tenant-isolation security suite.
+**Gap:** closed. Active membership is the institution authorization object; approved instructor verification can establish instructor membership; programs/cohorts/classes are tenant-scoped; the portal exposes only the caller's authorized tenant; institution admins/owners can create/revoke email-bound invitations and remove memberships by suspension with last-owner protection; tenant settings and verified-domain administration are governed and audited; and institution admins/owners have aggregate tenant reporting derived strictly from tenant-scoped class/enrollment populations. The G8 isolation suite now verifies portal/report scoping, membership/invitation non-disclosure across tenants, owner-only domain mutation, same-tenant program/cohort/class constraints, service-role-only administration tables, and continued separation from assessment eligibility.
 **Required outcome:** institution memberships and roles; organization-scoped programs/cohorts/classes; institution administrators; membership invitations/removal; institution settings; verified domains; institution-level reporting; strict tenant isolation/RLS.
 ### G9 — Student institution-claim review/status workflow — **P1/P2**
 **Evidence:** student signup can create `student_institution_claims`, which support `claimed/verified/rejected`; no production review/status UI or decision endpoint was found.
@@ -129,7 +129,7 @@ The repository already contains useful foundations, but several exist outside th
 2. Student-claim review and instructor-request administration.
 3. Programs/cohorts/classes aggregation.
 4. Institution reporting/settings/domain management.
-5. Tenant-isolation security suite.
+5. [x] Tenant-isolation security suite.
 ### Phase 6 — Platform administration
 1. Admin dashboard shell/spec.
 2. Verification/claim queues.

@@ -95,6 +95,23 @@ async function loadActiveAdminMembership(auth, schoolCode) {
   return { membership: data }
 }
 
+async function loadAuthorizedAdminMemberships(auth) {
+  const { data, error } = await auth.supabase
+    .from('institution_memberships')
+    .select('id,school_code,user_id,role,status')
+    .eq('user_id', auth.user.id)
+    .eq('status', 'active')
+
+  if (error) return { error }
+
+  const memberships = (data || []).filter((row) => ADMIN_ROLES.has(row.role))
+  return {
+    memberships,
+    bySchoolCode: new Map(memberships.map((row) => [row.school_code, row])),
+    schoolCodes: memberships.map((row) => row.school_code)
+  }
+}
+
 function canManageRole(actorRole, targetRole) {
   if (actorRole === 'institution_owner') return true
   return targetRole === 'member' || targetRole === 'instructor'
@@ -330,10 +347,20 @@ export async function handleInstitutionAdminInvitationDecision(c) {
     return c.json({ error: 'Valid invitation ID required' }, 400)
   }
 
+  const authorized = await loadAuthorizedAdminMemberships(auth)
+  if (authorized.error) {
+    console.error('Institution invitation revoke authorization failed:', authorized.error.message || authorized.error)
+    return c.json({ error: 'Unable to authorize institution administration' }, 500)
+  }
+  if (!authorized.schoolCodes.length) {
+    return c.json({ error: 'Institution invitation not found' }, 404)
+  }
+
   const { data: invitation, error: lookupError } = await auth.supabase
     .from('institution_membership_invitations')
     .select('id,school_code,email,role,status,invited_by,invited_at,expires_at,accepted_at,revoked_at,note')
     .eq('id', invitationId)
+    .in('school_code', authorized.schoolCodes)
     .maybeSingle()
 
   if (lookupError) {
@@ -342,12 +369,8 @@ export async function handleInstitutionAdminInvitationDecision(c) {
   }
   if (!invitation) return c.json({ error: 'Institution invitation not found' }, 404)
 
-  const admin = await loadActiveAdminMembership(auth, invitation.school_code)
-  if (admin.error) {
-    console.error('Institution invitation revoke authorization failed:', admin.error.message || admin.error)
-    return c.json({ error: 'Unable to authorize institution administration' }, 500)
-  }
-  if (admin.forbidden) return c.json({ error: 'Institution administrator access required' }, 403)
+  const admin = { membership: authorized.bySchoolCode.get(invitation.school_code) }
+
   if (!canManageRole(admin.membership.role, invitation.role)) {
     return c.json({ error: 'Only an institution owner may revoke administrator or owner invitations' }, 403)
   }
@@ -364,6 +387,7 @@ export async function handleInstitutionAdminInvitationDecision(c) {
       revoked_at: now
     })
     .eq('id', invitation.id)
+    .eq('school_code', invitation.school_code)
     .eq('status', 'pending')
     .select('id,school_code,email,role,status,invited_by,invited_at,expires_at,accepted_at,revoked_at,note')
     .maybeSingle()
@@ -445,6 +469,7 @@ export async function handleInstitutionInvitationAccept(c) {
     .from('institution_membership_invitations')
     .select('id,school_code,email,role,status,invited_by,invited_at,expires_at,accepted_at,revoked_at,note')
     .eq('id', invitationId)
+    .eq('email', userEmail)
     .maybeSingle()
 
   if (lookupError) {
@@ -453,7 +478,6 @@ export async function handleInstitutionInvitationAccept(c) {
   }
   if (!invitation) return c.json({ error: 'Institution invitation not found' }, 404)
   if (invitation.status !== 'pending') return c.json({ error: 'Invitation is no longer pending' }, 409)
-  if (invitation.email !== userEmail) return c.json({ error: 'Invitation does not match the authenticated account email' }, 403)
 
   const now = new Date()
   if (new Date(invitation.expires_at) <= now) {
@@ -514,10 +538,20 @@ export async function handleInstitutionAdminMemberDecision(c) {
   const action = String(body?.action || '').trim().toLowerCase()
   if (action !== 'suspend') return c.json({ error: 'action must be suspend' }, 400)
 
+  const authorized = await loadAuthorizedAdminMemberships(auth)
+  if (authorized.error) {
+    console.error('Institution member removal authorization failed:', authorized.error.message || authorized.error)
+    return c.json({ error: 'Unable to authorize institution administration' }, 500)
+  }
+  if (!authorized.schoolCodes.length) {
+    return c.json({ error: 'Institution membership not found' }, 404)
+  }
+
   const { data: target, error: targetError } = await auth.supabase
     .from('institution_memberships')
     .select('id,school_code,user_id,role,status,created_at,updated_at')
     .eq('id', membershipId)
+    .in('school_code', authorized.schoolCodes)
     .maybeSingle()
 
   if (targetError) {
@@ -526,12 +560,8 @@ export async function handleInstitutionAdminMemberDecision(c) {
   }
   if (!target) return c.json({ error: 'Institution membership not found' }, 404)
 
-  const admin = await loadActiveAdminMembership(auth, target.school_code)
-  if (admin.error) {
-    console.error('Institution member removal authorization failed:', admin.error.message || admin.error)
-    return c.json({ error: 'Unable to authorize institution administration' }, 500)
-  }
-  if (admin.forbidden) return c.json({ error: 'Institution administrator access required' }, 403)
+  const admin = { membership: authorized.bySchoolCode.get(target.school_code) }
+
   if (!canManageRole(admin.membership.role, target.role)) {
     return c.json({ error: 'Only an institution owner may remove institution administrators or owners' }, 403)
   }
@@ -544,6 +574,7 @@ export async function handleInstitutionAdminMemberDecision(c) {
     .from('institution_memberships')
     .update({ status: 'suspended', updated_by: auth.user.id, updated_at: now })
     .eq('id', target.id)
+    .eq('school_code', target.school_code)
     .eq('status', 'active')
     .select('id,school_code,user_id,role,status,created_at,updated_at')
     .maybeSingle()
