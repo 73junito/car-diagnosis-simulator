@@ -91,10 +91,10 @@ The repository already contains useful foundations, but several exist outside th
 **Gap:** closed for the three trigger/helper functions identified by the staging advisor. Direct `PUBLIC`/`anon`/`authenticated` execution is revoked and all three functions have an empty pinned `search_path`.
 **Required outcome:** completed. Staging transactional verification confirmed profile creation, student institution-claim creation, and external-resource timestamp trigger execution still work; staging and production security-advisor/privilege checks confirm the original G19 warnings are cleared.
 
-### G20 - Provenance RLS helper isolation and legacy DB parity - **P1**
-**Evidence:** after G19, production security advisor still reports `public.is_provenance_admin()` and `public.is_provenance_reviewer()` as authenticated-executable `SECURITY DEFINER` functions. Existing `db/migrations` intentionally grant that access because RLS policies call the helpers, while staging does not contain either helper.
-**Gap:** provenance role helpers are intentionally required by production RLS but remain in the exposed `public` schema, and the `db/migrations` provenance surface is not represented on staging.
-**Required outcome:** move or recreate the helpers in a non-exposed/private schema with pinned empty `search_path`, update dependent RLS policies, preserve reviewer/admin semantics, and reconcile the legacy `db/migrations` provenance surface with staging before removing the production advisor warnings.
+### G20 - Provenance RLS helper isolation and legacy DB parity - **P1 - completed**
+**Evidence:** production previously retained legacy `authenticated` provenance RLS policies backed by `public.is_provenance_admin()` and `public.is_provenance_reviewer()`, while the active Worker already accessed the governed provenance tables only through the service role and staging already used a service-role-only table boundary.
+**Gap:** closed. The legacy direct-browser provenance policy surface was retired rather than copied into staging. Both staging and production now revoke `anon`/`authenticated` table privileges on the governed provenance tables, expose no provenance role-check `SECURITY DEFINER` RPCs, and record the same canonical G20 migration. The empty production `provenance_audit` table is preserved as legacy data structure pending separate disposition review.
+**Required outcome:** completed. Active provenance reads/writes remain Worker/service-role mediated; the legacy `db/migrations` helper/policy surface is historical only and is superseded by the canonical `supabase/migrations/20261012083703_retire_provenance_rls_helpers.sql` hardening migration.
 
 ## Recommended execution order
 ### Phase 4A — Authorization and runtime foundation
@@ -104,7 +104,7 @@ The repository already contains useful foundations, but several exist outside th
 4. [x] Admin verification-review minimum UI.
 5. [x] Supabase migration drift detection and staging synchronization (G18).
 6. [x] Supabase SECURITY DEFINER RPC exposure hardening (G19).
-7. Provenance RLS helper isolation and legacy DB parity (G20).
+7. [x] Provenance RLS helper isolation and legacy DB parity (G20).
 **Why first:** every later institutional/instructor/admin capability depends on trusted authorization and a real operational approval path.
 ### Phase 4B — Instructor classroom core
 1. [x] Port classes/list/create to Worker.
@@ -171,4 +171,4 @@ Use one concern per branch/PR. Suggested first branches:
 - Empty/unavailable states must be truthful; do not substitute sample data on authenticated production dashboards.
 - Generated reports/files remain unstaged unless they are intentional evidence artifacts.
 ## First implementation target
-G1, G3, G18, G19, and the Phase 4A production API route inventory contract are complete. **Phase 4B / G2 is complete:** Worker-native class list/create, authenticated lookup, self-enrollment, owner-scoped roster, assignment creation, instructor classroom UI, isolation contracts, and production retirement of the legacy teacher aggregate are in place. G17 production route parity is complete; legacy completion/replay tables remain separate data-disposition work and are not active browser persistence targets. Track G20 separately as provenance/RLS security architecture work before broader institutional rollout.
+G1, G3, G18, G19, and the Phase 4A production API route inventory contract are complete. **Phase 4B / G2 is complete:** Worker-native class list/create, authenticated lookup, self-enrollment, owner-scoped roster, assignment creation, instructor classroom UI, isolation contracts, and production retirement of the legacy teacher aggregate are in place. G17 production route parity is complete; legacy completion/replay tables remain separate data-disposition work and are not active browser persistence targets. G20 provenance/RLS helper exposure is closed; broader institutional rollout should continue from the service-role-only governed provenance boundary.
