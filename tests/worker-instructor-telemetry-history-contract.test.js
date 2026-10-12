@@ -79,6 +79,6 @@ describe('Worker instructor telemetry history/export contract', () => {
     expect(patterns).not.toContain('/api/telemetry/history')
     expect(patterns).not.toContain('/api/telemetry/export.:param')
     expect(patterns).toContain('/api/telemetry/stream')
-    expect(patterns).toContain('/api/telemetry/events')
+    expect(patterns).not.toContain('/api/telemetry/events')
   })
 })
