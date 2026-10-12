@@ -3,12 +3,6 @@
   "canonicalRuntime": "wrangler.app.jsonc -> worker/index.js",
   "knownUnregisteredRoutes": [
     {
-      "pattern": "/api/approved-sources",
-      "gap": "G14",
-      "category": "reference-library",
-      "disposition": "Replace the legacy approved-sources call with the governed curriculum reference/evidence boundary."
-    },
-    {
       "pattern": "/api/attempts/save",
       "gap": "G17",
       "category": "legacy-attempt-api",

@@ -42,9 +42,9 @@ describe('production API route inventory', () => {
   test('known production gaps stay mapped to roadmap work', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     for (const expected of [
-      '/api/attempts/save',
-      '/api/approved-sources'
+      '/api/attempts/save'
     ]) expect(patterns).toContain(expected)
+    expect(patterns).not.toContain('/api/approved-sources')
     expect(patterns).not.toContain('/api/attempts/load')
     expect(patterns).not.toContain('/api/auth/role')
     expect(patterns).not.toContain('/api/classes')
@@ -64,6 +64,7 @@ describe('production API route inventory', () => {
   test('scanner includes browser assets that are actually copied by the production build', () => {
     const refs = extractBrowserApiReferences()
     expect(refs.has('/api/teacher/data')).toBe(false)
+    expect(refs.has('/api/approved-sources')).toBe(false)
     expect(refs.has('/api/attempts/load')).toBe(false)
     expect(refs.has('/api/auth/role')).toBe(false)
     expect(refs.get('/api/student/progress')).toContain('dashboard/student/student.js')
