@@ -3,7 +3,7 @@ const path = require("path");
 const { JSDOM } = require("jsdom");
 
 describe("authoring studio", () => {
-  test("loads demo scenario preview and JSON export scaffold", () => {
+  test("starts blank and loads user-authored scenario content behind auth", async () => {
     const htmlPath = path.join(process.cwd(), "dashboard", "author", "index.html");
     const jsPath = path.join(process.cwd(), "dashboard", "author", "author.js");
 
@@ -16,26 +16,32 @@ describe("authoring studio", () => {
       pretendToBeVisual: true
     });
 
+    dom.window.getAccessToken = () => "test-token";
+    dom.window.apiGet = async (requestPath) => {
+      if (requestPath === "/api/author/drafts?limit=100") return { drafts: [] };
+      throw new Error("unexpected GET " + requestPath);
+    };
+    dom.window.apiPost = async () => { throw new Error("not expected"); };
+    dom.window.apiPatch = async () => { throw new Error("not expected"); };
+    dom.window.apiDelete = async () => { throw new Error("not expected"); };
+
     dom.window.eval(script);
+    await Promise.resolve();
+    await Promise.resolve();
 
     const document = dom.window.document;
 
     expect(document.body.dataset.authoringStudioReady).toBe("true");
-    expect(document.querySelector("#previewTitle").textContent).toContain("No-start after overnight soak");
-    expect(document.querySelector("#previewVehicle").textContent).toContain("2018 Ford F-150");
-    expect(document.querySelector("#previewDtcs").textContent).toContain("P0335");
-    expect(document.querySelector("#previewLiveData").textContent).toContain("12.1V");
-    expect(document.querySelector("#previewAse").textContent).toContain("A8 Engine Performance");
+    expect(document.querySelector("#authorAccessStatus").textContent).toContain("Verified author");
+    expect(document.querySelector("#previewTitle").textContent).toBe("Untitled Diagnostic Scenario");
+    expect(document.querySelector("#previewVehicle").textContent).toBe("Not configured");
+    expect(document.querySelector("#scenarioLibraryList").textContent).toContain("No saved drafts yet.");
 
-    const json = JSON.parse(document.querySelector("#scenarioJsonPreview").value);
-    expect(json.id).toBe("no-start-after-overnight-soak");
-    expect(json.vehicle.make).toBe("Ford");
-    expect(json.evidence.dtcs[0].code).toBe("P0335");
-    expect(json.rubric.aseArea).toBe("A8 Engine Performance");
-
-    const checklist = Array.from(document.querySelectorAll("#validationChecklist li"));
-    expect(checklist).toHaveLength(5);
-    expect(checklist.every((item) => item.dataset.valid === "true")).toBe(true);
+    const initialJson = JSON.parse(document.querySelector("#scenarioJsonPreview").value);
+    expect(initialJson.id).toBe("untitled-scenario");
+    expect(initialJson.title).toBe("");
+    expect(script).not.toContain("seedDemoData");
+    expect(script).not.toContain("localStorage");
 
     const importedScenario = {
       title: "Imported EVAP leak scenario",
@@ -89,4 +95,3 @@ describe("authoring studio", () => {
     dom.window.close();
   });
 });
-
