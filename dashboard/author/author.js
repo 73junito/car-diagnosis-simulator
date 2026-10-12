@@ -12,6 +12,9 @@
   const saveToLibraryButton = document.getElementById("saveToLibraryBtn");
   const librarySearchInput = document.getElementById("librarySearchInput");
   const scenarioLibraryList = document.getElementById("scenarioLibraryList");
+  const authorAccessStatus = document.getElementById("authorAccessStatus");
+  let currentDraft = null;
+  let serverDrafts = [];
 
   const fields = {
     title: document.getElementById("scenarioTitle"),
@@ -132,38 +135,6 @@
     }
   }
 
-  function seedDemoData() {
-    const demoValues = {
-      title: "No-start after overnight soak",
-      complaint: "Customer states the vehicle cranks but will not start after sitting overnight.",
-      year: "2018",
-      make: "Ford",
-      model: "F-150",
-      engine: "5.0L V8",
-      mileage: "84200",
-      system: "Engine Performance",
-      primaryDtc: "P0335",
-      dtcDescription: "Crankshaft Position Sensor A Circuit",
-      freezeFrame: "RPM 0, ECT 42°F, battery voltage 12.1V during crank.",
-      rpm: "0",
-      voltage: "12.1",
-      coolant: "42°F",
-      fuelTrim: "+18%",
-      initialTest: "Verify crank signal while cranking",
-      expectedFinding: "No RPM signal during crank",
-      rootCause: "Failed crankshaft position sensor",
-      recommendedRepair: "Replace crankshaft position sensor, clear codes, and verify restart.",
-      aseArea: "A8 Engine Performance",
-      safetyCriteria: "Uses safe test procedures and avoids unnecessary part replacement.",
-      diagnosticCriteria: "Uses evidence to isolate the fault before repair.",
-      verificationCriteria: "Confirms repair with restart, code clear, and no returning faults."
-    };
-
-    Object.entries(demoValues).forEach(([key, demoValue]) => {
-      const field = fields[key];
-      if (field && !value(field)) field.value = demoValue;
-    });
-  }
   function renderPreview() {
     const title = value(fields.title);
     const complaint = value(fields.complaint);
@@ -298,28 +269,10 @@
     setStatus("Template Loaded");
   }
 
-  const libraryStorageKey = "torquemind.scenarioLibrary";
-
-  function readLibrary() {
-    try {
-      return JSON.parse(localStorage.getItem(libraryStorageKey) || "[]");
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function writeLibrary(items) {
-    localStorage.setItem(libraryStorageKey, JSON.stringify(items));
-  }
-
-  function scenarioSearchText(scenario) {
+  function scenarioSearchText(draft) {
     return [
-      scenario.title,
-      scenario.vehicle && scenario.vehicle.year,
-      scenario.vehicle && scenario.vehicle.make,
-      scenario.vehicle && scenario.vehicle.model,
-      scenario.evidence && scenario.evidence.dtcs && scenario.evidence.dtcs[0] && scenario.evidence.dtcs[0].code,
-      scenario.rubric && scenario.rubric.aseArea
+      draft.title,
+      draft.scenarioKey
     ].filter(Boolean).join(" ").toLowerCase();
   }
 
@@ -327,47 +280,61 @@
     if (!scenarioLibraryList) return;
 
     const query = librarySearchInput ? librarySearchInput.value.trim().toLowerCase() : "";
-    const library = readLibrary();
     const filtered = query
-      ? library.filter((scenario) => scenarioSearchText(scenario).includes(query))
-      : library;
+      ? serverDrafts.filter((draft) => scenarioSearchText(draft).includes(query))
+      : serverDrafts;
 
     scenarioLibraryList.innerHTML = "";
 
     if (!filtered.length) {
       const empty = document.createElement("li");
-      empty.textContent = library.length ? "No matching scenarios." : "No saved scenarios yet.";
+      empty.textContent = serverDrafts.length ? "No matching drafts." : "No saved drafts yet.";
       scenarioLibraryList.appendChild(empty);
       return;
     }
 
-    filtered.forEach((scenario) => {
+    filtered.forEach((draft) => {
       const item = document.createElement("li");
-      item.dataset.scenarioId = scenario.id;
+      item.dataset.draftId = draft.id;
 
       const title = document.createElement("strong");
-      title.textContent = scenario.title || "Untitled Scenario";
+      title.textContent = draft.title || "Untitled Scenario";
+
+      const version = document.createElement("span");
+      version.textContent = " v" + String(draft.version || 1);
 
       const load = document.createElement("button");
       load.type = "button";
       load.className = "tm-btn tm-btn-secondary";
       load.textContent = "Load";
-      load.addEventListener("click", () => {
-        loadScenario(scenario);
-        setStatus("Library Loaded");
+      load.addEventListener("click", async () => {
+        try {
+          const response = await window.apiGet("/api/author/drafts/" + encodeURIComponent(draft.id));
+          currentDraft = response.draft;
+          loadScenario(currentDraft.scenario);
+          setStatus("Draft Loaded · v" + currentDraft.version);
+        } catch (error) {
+          setStatus(error && error.status === 404 ? "Draft Not Found" : "Load Failed");
+        }
       });
 
       const remove = document.createElement("button");
       remove.type = "button";
       remove.className = "tm-btn tm-btn-secondary";
       remove.textContent = "Delete";
-      remove.addEventListener("click", () => {
-        writeLibrary(readLibrary().filter((saved) => saved.id !== scenario.id));
-        renderLibrary();
-        setStatus("Library Updated");
+      remove.addEventListener("click", async () => {
+        try {
+          await window.apiDelete("/api/author/drafts/" + encodeURIComponent(draft.id));
+          if (currentDraft && currentDraft.id === draft.id) currentDraft = null;
+          await loadDraftLibrary();
+          setStatus("Draft Deleted");
+        } catch (error) {
+          setStatus("Delete Failed");
+        }
       });
 
       item.appendChild(title);
+      item.appendChild(version);
       item.appendChild(document.createTextNode(" "));
       item.appendChild(load);
       item.appendChild(document.createTextNode(" "));
@@ -377,19 +344,34 @@
     });
   }
 
-  function saveToLibrary() {
-    const scenario = buildScenario();
-    const library = readLibrary().filter((saved) => saved.id !== scenario.id);
-
-    library.unshift({
-      ...scenario,
-      savedAt: new Date().toISOString()
-    });
-
-    writeLibrary(library);
+  async function loadDraftLibrary() {
+    const response = await window.apiGet("/api/author/drafts?limit=100");
+    serverDrafts = Array.isArray(response && response.drafts) ? response.drafts : [];
     renderLibrary();
-    setStatus("Saved to Library");
   }
+
+  async function saveDraft() {
+    const scenario = buildScenario();
+    try {
+      const response = currentDraft
+        ? await window.apiPatch("/api/author/drafts/" + encodeURIComponent(currentDraft.id), {
+            version: currentDraft.version,
+            scenario
+          })
+        : await window.apiPost("/api/author/drafts", { scenario });
+
+      currentDraft = response.draft;
+      await loadDraftLibrary();
+      setStatus("Saved Draft · v" + currentDraft.version);
+    } catch (error) {
+      if (error && error.status === 409) {
+        setStatus("Draft Changed · Reload Required");
+        return;
+      }
+      setStatus("Save Failed");
+    }
+  }
+
   function exportScenario() {
     const scenario = buildScenario();
     const blob = new Blob([JSON.stringify(scenario, null, 2)], {
@@ -413,7 +395,7 @@
   }
 
   if (saveToLibraryButton) {
-    saveToLibraryButton.addEventListener("click", saveToLibrary);
+    saveToLibraryButton.addEventListener("click", saveDraft);
   }
 
   if (librarySearchInput) {
@@ -421,10 +403,7 @@
   }
 
   if (saveButton) {
-    saveButton.addEventListener("click", () => {
-      renderJsonPreview();
-      setStatus("Saved");
-    });
+    saveButton.addEventListener("click", saveDraft);
   }
 
   if (exportButton) {
@@ -450,10 +429,29 @@
     loadSelectedTemplate
   };
 
-  seedDemoData();
-  renderPreview();
-  renderLibrary();
-  document.body.dataset.authoringStudioReady = "true";
+  async function initializeAuthoring() {
+    const token = window.getAccessToken ? window.getAccessToken() : null;
+    if (!token) {
+      window.location.replace("/sign-in/instructor/");
+      return;
+    }
+
+    try {
+      await loadDraftLibrary();
+      if (authorAccessStatus) authorAccessStatus.textContent = "Verified author · private drafts";
+      renderPreview();
+      document.body.dataset.authoringStudioReady = "true";
+    } catch (error) {
+      if (error && (error.status === 401 || error.status === 403)) {
+        window.location.replace("/sign-in/instructor/");
+        return;
+      }
+      if (authorAccessStatus) authorAccessStatus.textContent = "Authoring unavailable";
+      setStatus("Unavailable");
+    }
+  }
+
+  initializeAuthoring();
 })();
 
 
