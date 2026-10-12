@@ -26,8 +26,7 @@ describe("authoring studio", () => {
     dom.window.apiDelete = async () => { throw new Error("not expected"); };
 
     dom.window.eval(script);
-    await Promise.resolve();
-    await Promise.resolve();
+    await new Promise((resolve) => dom.window.setTimeout(resolve, 0));
 
     const document = dom.window.document;
 
