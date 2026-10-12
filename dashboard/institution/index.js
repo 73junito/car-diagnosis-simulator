@@ -17,6 +17,7 @@
   const inviteRole = document.getElementById('institutionInviteRole')
   const inviteNote = document.getElementById('institutionInviteNote')
   const memberList = document.getElementById('institutionMemberList')
+  const studentClaimList = document.getElementById('institutionStudentClaimList')
   const pendingInvitationList = document.getElementById('institutionPendingInvitationList')
   const settingsForm = document.getElementById('institutionSettingsForm')
   const displayNameInput = document.getElementById('institutionDisplayName')
@@ -163,8 +164,68 @@
     }
   }
 
+  async function decideStudentClaim(claim, decision, note, schoolCode){
+    const confirmed = window.confirm(decision === 'verified'
+      ? 'Verify this student institution claim? This creates only a basic institution member relationship.'
+      : 'Reject this student institution claim?')
+    if (!confirmed) return
+
+    try {
+      await window.apiPatch(
+        '/api/institution/admin/student-claims/' + encodeURIComponent(claim.userId),
+        { decision, reviewNote: note }
+      )
+      status.textContent = 'Student institution claim decision saved.'
+      await loadAdministration(schoolCode)
+    } catch (error) {
+      status.textContent = error?.message || 'Unable to save student institution claim decision.'
+    }
+  }
+
+  async function loadStudentClaims(schoolCode){
+    clear(studentClaimList)
+    const payload = await window.apiGet('/api/institution/admin/student-claims?status=claimed')
+    const claims = (Array.isArray(payload.claims) ? payload.claims : [])
+      .filter((claim) => claim.schoolCode === schoolCode)
+
+    if (!claims.length) {
+      studentClaimList.appendChild(item('No pending student institution claims.'))
+      return
+    }
+
+    claims.forEach((claim) => {
+      const row = document.createElement('div')
+      row.className = 'tm-card'
+      const label = document.createElement('p')
+      label.textContent = 'Student ' + claim.userId + ' · ' + (claim.institution?.schoolName || claim.schoolCode)
+      row.appendChild(label)
+
+      const note = document.createElement('textarea')
+      note.maxLength = 1000
+      note.placeholder = 'Required for rejection; optional for verification.'
+      row.appendChild(note)
+
+      row.appendChild(button('Verify Claim', () =>
+        decideStudentClaim(claim, 'verified', note.value.trim(), schoolCode),
+      'tm-btn tm-btn-primary'))
+
+      row.appendChild(button('Reject Claim', () => {
+        const value = note.value.trim()
+        if (!value) {
+          status.textContent = 'A review note is required for rejection.'
+          note.focus()
+          return
+        }
+        decideStudentClaim(claim, 'rejected', value, schoolCode)
+      }))
+
+      studentClaimList.appendChild(row)
+    })
+  }
+
   async function loadAdministration(schoolCode){
     clear(memberList)
+    clear(studentClaimList)
     clear(pendingInvitationList)
     try {
       const [memberPayload, invitationPayload, settingsPayload, domainPayload] = await Promise.all([
@@ -175,6 +236,7 @@
       ])
 
       activeActorRole = memberPayload.actorRole
+      await loadStudentClaims(schoolCode)
       const settings = settingsPayload.settings || {}
       displayNameInput.value = settings.displayName || ''
       websiteUrlInput.value = settings.websiteUrl || ''
