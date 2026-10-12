@@ -148,7 +148,7 @@ describe('Session history UI', ()=>{
     jest.useRealTimers();
   });
 
-  test('legacy export buttons remain disabled while URL builder preserves filters', async ()=>{
+  test('secure export buttons enable for owned class and URL builder preserves class/session/limit', async ()=>{
     mockOwnedClassAndHistory({ ok:true, data: [] });
     const { initSessionHistory, buildExportUrl } = require('../dashboard/session-history.js');
     await initSessionHistory();
@@ -159,12 +159,13 @@ describe('Session history UI', ()=>{
     const jsonUrl = buildExportUrl('json');
     const csvUrl = buildExportUrl('csv');
 
-    expect(document.getElementById('export-json-btn').disabled).toBe(true);
-    expect(document.getElementById('export-csv-btn').disabled).toBe(true);
-    expect(document.getElementById('export-status').textContent).toMatch(/pending migration/i);
+    expect(document.getElementById('export-json-btn').disabled).toBe(false);
+    expect(document.getElementById('export-csv-btn').disabled).toBe(false);
     expect(jsonUrl).toMatch(/\/api\/telemetry\/export\.json/);
     expect(csvUrl).toMatch(/\/api\/telemetry\/export\.csv/);
+    expect(jsonUrl).toMatch(/classId=class-1/);
     expect(jsonUrl).toMatch(/session=session-42/);
+    expect(csvUrl).toMatch(/classId=class-1/);
     expect(csvUrl).toMatch(/limit=25/);
   });
 
