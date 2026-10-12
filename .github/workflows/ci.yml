@@ -26,6 +26,9 @@ jobs:
       - name: Verify lockfile sync
         run: npm ci --dry-run --ignore-scripts
 
+      - name: Enforce dependency runtime compatibility
+        run: npm run validate:dependency-runtime-compatibility
+
       - name: Enforce dependency security exceptions
         run: npm run validate:dependency-security-exceptions
 
