@@ -16,6 +16,10 @@
   const ownerBootstrapEmail = document.getElementById('institution-owner-email')
   const ownerBootstrapNote = document.getElementById('institution-owner-note')
   const ownerBootstrapStatus = document.getElementById('institution-owner-bootstrap-status')
+  const studentClaimQueue = document.getElementById('student-claim-review-queue')
+  const studentClaimStatus = document.getElementById('student-claim-review-status')
+  const studentClaimStatusSelect = document.getElementById('student-claim-review-status-select')
+  const studentClaimRefresh = document.getElementById('student-claim-review-refresh')
 
   function token(){ return typeof window.getAccessToken === 'function' ? window.getAccessToken() : null }
   function clear(node){ while(node.firstChild) node.removeChild(node.firstChild) }
@@ -124,6 +128,89 @@
     } catch (error) {
       queue.appendChild(text('p', error.message || 'Queue unavailable.', 'admin-empty'))
       status.textContent = error.message || 'Queue unavailable.'
+    }
+  }
+
+  async function decideStudentClaim(claim, decision, note, card){
+    const confirmed = window.confirm(decision === 'verified'
+      ? 'Verify this student institution claim? This creates only a basic institution member relationship.'
+      : 'Reject this student institution claim?')
+    if (!confirmed) return
+
+    card.querySelectorAll('button').forEach((button) => { button.disabled = true })
+    studentClaimStatus.textContent = 'Saving student institution claim decision…'
+    try {
+      await api('/api/admin/student-institution-claims/' + encodeURIComponent(claim.userId), {
+        method: 'PATCH',
+        body: JSON.stringify({ decision, reviewNote: note })
+      })
+      studentClaimStatus.textContent = 'Student institution claim decision saved and audit evidence recorded.'
+      await loadStudentClaimQueue()
+    } catch (error) {
+      studentClaimStatus.textContent = error.message || 'Student institution claim decision could not be saved.'
+      card.querySelectorAll('button').forEach((button) => { button.disabled = false })
+    }
+  }
+
+  function renderStudentClaim(claim){
+    const card = text('article', '', 'admin-card')
+    card.appendChild(text('h3', displayInstitution(claim)))
+
+    const meta = text('div', '', 'admin-meta')
+    meta.appendChild(text('div', 'Student user ID: ' + claim.userId))
+    meta.appendChild(text('div', 'School code: ' + claim.schoolCode))
+    meta.appendChild(text('div', 'Claimed: ' + new Date(claim.claimedAt).toLocaleString()))
+    meta.appendChild(text('div', 'Status: ' + claim.status))
+    if (claim.reviewedAt) meta.appendChild(text('div', 'Reviewed: ' + new Date(claim.reviewedAt).toLocaleString()))
+    if (claim.reviewedBy) meta.appendChild(text('div', 'Reviewer user ID: ' + claim.reviewedBy))
+    card.appendChild(meta)
+
+    if (claim.reviewNote) card.appendChild(text('p', 'Review note: ' + claim.reviewNote))
+
+    if (claim.status === 'claimed') {
+      const actions = text('div', '', 'admin-actions')
+      const label = text('label', 'Review note')
+      const note = document.createElement('textarea')
+      note.className = 'tm-textarea'
+      note.maxLength = 1000
+      note.placeholder = 'Required for rejection; optional for verification.'
+      label.appendChild(note)
+      actions.appendChild(label)
+
+      const row = text('div', '', 'admin-action-row')
+      const verify = text('button', 'Verify Claim', 'tm-btn tm-btn-primary')
+      verify.type = 'button'
+      verify.addEventListener('click', () => decideStudentClaim(claim, 'verified', note.value.trim(), card))
+      const reject = text('button', 'Reject Claim', 'tm-btn tm-btn-secondary')
+      reject.type = 'button'
+      reject.addEventListener('click', () => {
+        const value = note.value.trim()
+        if (!value) { studentClaimStatus.textContent = 'A review note is required for rejection.'; note.focus(); return }
+        decideStudentClaim(claim, 'rejected', value, card)
+      })
+      row.append(verify, reject)
+      actions.appendChild(row)
+      card.appendChild(actions)
+    }
+
+    return card
+  }
+
+  async function loadStudentClaimQueue(){
+    clear(studentClaimQueue)
+    studentClaimStatus.textContent = 'Loading ' + studentClaimStatusSelect.value + ' claims…'
+    try {
+      const payload = await api('/api/admin/student-institution-claims?status=' + encodeURIComponent(studentClaimStatusSelect.value))
+      const claims = Array.isArray(payload.claims) ? payload.claims : []
+      if (!claims.length) {
+        studentClaimQueue.appendChild(text('p', 'No ' + studentClaimStatusSelect.value + ' student institution claims.', 'admin-empty'))
+      } else {
+        claims.forEach((claim) => studentClaimQueue.appendChild(renderStudentClaim(claim)))
+      }
+      studentClaimStatus.textContent = claims.length + ' claim' + (claims.length === 1 ? '' : 's') + '.'
+    } catch (error) {
+      studentClaimQueue.appendChild(text('p', error.message || 'Student institution claim queue unavailable.', 'admin-empty'))
+      studentClaimStatus.textContent = error.message || 'Student institution claim queue unavailable.'
     }
   }
 
@@ -348,6 +435,8 @@
     }
   })
 
+  studentClaimStatusSelect.addEventListener('change', loadStudentClaimQueue)
+  studentClaimRefresh.addEventListener('click', loadStudentClaimQueue)
   queueStatus.addEventListener('change', loadQueue)
   refresh.addEventListener('click', loadQueue)
   authorStatusSelect.addEventListener('change', loadAuthorQueue)
@@ -355,6 +444,7 @@
   publicationStatusSelect.addEventListener('change', loadPublicationQueue)
   publicationRefresh.addEventListener('click', loadPublicationQueue)
   loadQueue()
+  loadStudentClaimQueue()
   loadAuthorQueue()
   loadPublicationQueue()
 })()
