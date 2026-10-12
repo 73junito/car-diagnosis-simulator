@@ -32,6 +32,7 @@ import {
   handleAdminInstructorVerificationDecision
 } from "./routes/instructor-verification.js";
 import { handleInstitutionSearch } from "./routes/institution-search.js";
+import { handleListClasses, handleCreateClass } from "./routes/classroom-classes.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
@@ -145,6 +146,17 @@ app.use('/api/admin/instructor-verification/*', cors({
 }))
 app.get('/api/admin/instructor-verification/requests', handleAdminInstructorVerificationQueue)
 app.patch('/api/admin/instructor-verification/requests/:requestId', handleAdminInstructorVerificationDecision)
+
+// Instructor-owned classroom core. The Worker verifies the bearer token and
+// trusted instructor role, then scopes all persistence to the authenticated owner.
+app.use('/api/classes*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/classes', handleListClasses)
+app.post('/api/classes', handleCreateClass)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
