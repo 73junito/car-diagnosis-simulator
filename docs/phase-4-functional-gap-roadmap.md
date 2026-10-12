@@ -61,10 +61,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** `/dashboard/student/activity/` now consumes the authenticated Worker-native `/api/student/activity` feed.
 **Gap:** closed. The feed merges only the authenticated learner's attempt activity and server-attributed `scenario_started` telemetry, sorts it by event time, bounds page size/page depth, excludes expired telemetry according to `telemetry_events.expires_at`, and returns no answer-level correctness, answer keys, scores, or explanations.
 **Required outcome:** completed. Student activity is authenticated and learner-scoped, uses approved server-side sources, has bounded pagination and explicit retention behavior, and exposes no grading secrets.
-### G13 — Student Coach is static while recommendation API exists — **P2**
-**Evidence:** Coach currently displays a fixed “Recommended next: Charging System” message; production Worker already exposes `/api/student/recommendations`.
-**Gap:** the UI does not consume the server recommendation boundary.
-**Required outcome:** authenticated recommendation rendering with unavailable/empty states, provenance/context labels, and no client exposure of protected correctness/audit fields.
+### G13 — Student Coach is static while recommendation API exists — **P2 - completed**
+**Evidence:** the dedicated Coach and existing student dashboard both consume the authenticated Worker-native `/api/student/recommendations` boundary.
+**Gap:** closed. Recommendations are now derived deterministically from the authenticated learner's server-recorded training-mode aggregate performance only; assessment data is excluded; output is capped at three recommendations; and each recommendation carries explicit server-rule provenance/context without exposing raw correctness counts, answer fields, or audit data.
+**Required outcome:** completed. Coach rendering is authenticated, provides truthful signed-out/empty/unavailable states, displays provenance/context labels, links directly back to practice scenarios, and exposes no protected correctness or assessment fields.
 ### G14 — Dedicated governed reference-library experience — **P2**
 **Evidence:** curriculum references are available through `/api/curriculum/references` and instructor research has discovery/review tooling; public Research Sources is informational. There is no dedicated browse/search library for permitted learner/instructor references.
 **Gap:** governed references are data-backed but not exposed as a coherent library experience. The dead student `/api/approved-sources` compatibility fetch has been retired; G14 remains open for the dedicated browse/search library experience and should use the existing `/api/curriculum/references` boundary rather than restoring that legacy route.
@@ -137,7 +137,7 @@ The repository already contains useful foundations, but several exist outside th
 4. [x] Governance review queues and audit history.
 5. [x] Operational settings with audited changes.
 ### Phase 7 — Student residual functionality
-1. Live Coach recommendations.
+1. [x] Live Coach recommendations.
 2. [x] Live Transcript.
 3. [x] Live Activity.
 4. [x] Institution claim status.

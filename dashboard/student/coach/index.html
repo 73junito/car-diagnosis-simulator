@@ -25,21 +25,31 @@
       <a class="tm-btn tm-btn-secondary" href="/dashboard/student/activity/">Activity</a>
     </nav>
 
-    <section id="moduleContent" class="dashboard-card"><div class="tm-coach-panel">
-  <p><strong>Recommended next:</strong> Charging System</p>
-  <p>Continue electrical diagnostics before advancing to network faults.</p>
-  <ul>
-    <li><strong>Strength:</strong> Symptom recognition</li>
-    <li><strong>Focus area:</strong> Voltage-drop reasoning</li>
-    <li><strong>Daily goal:</strong> Complete one intermediate scenario</li>
-  </ul>
-</div></section>
+    <section class="tm-panel" aria-labelledby="coach-heading">
+      <div class="tm-toolbar">
+        <div>
+          <h2 id="coach-heading">Recommended practice</h2>
+          <p id="coachStatus" role="status" aria-live="polite">Loading recommendations…</p>
+        </div>
+        <button id="coachRefresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <div id="coachRecommendations" class="tm-card-grid"></div>
+      <p id="coachContext">
+        Recommendations use only your server-recorded training activity and are not grades or assessment decisions.
+      </p>
+    </section>
   </main>
 
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
   <script type="module">
     import { mountShell } from "/theme/shell.js";
     mountShell();
   </script>
+  <script src="./coach.js" defer></script>
 </body>
 </html>
 
