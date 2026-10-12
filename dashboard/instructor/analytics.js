@@ -9,61 +9,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const classSelect = document.getElementById('analytics-class')
   const classStatus = document.getElementById('analytics-class-status')
 
-  async function fetchJson(path){
-    const res = await fetch(path);
-    if (!res.ok) throw new Error('Fetch failed: '+res.status)
-    return res.json()
-  }
-
   function fmtNumber(n, digits=1){ return (Math.round(n*10**digits)/10**digits).toString() }
-
-  function isFiniteNumber(value){
-    return typeof value === 'number' && Number.isFinite(value)
-  }
-
-  function readFirstNumber(source, keys){
-    for (const key of keys){
-      if (isFiniteNumber(source?.[key])) return source[key]
-    }
-    return null
-  }
-
-  function deriveSessionSummary(data){
-    const summary = {
-      averageTime: isFiniteNumber(data?.averageTime) ? data.averageTime : null,
-      safetyMisses: isFiniteNumber(data?.safetyMisses) ? data.safetyMisses : null,
-    }
-
-    if (summary.averageTime != null && summary.safetyMisses != null) return summary
-
-    const sessions = Array.isArray(data?.sessions)
-      ? data.sessions
-      : Array.isArray(data?.items)
-        ? data.items
-        : []
-
-    if (!sessions.length) return summary
-
-    if (summary.averageTime == null){
-      const durations = sessions
-        .map(session=>readFirstNumber(session, ['averageTime', 'duration', 'durationSeconds', 'timeSeconds', 'timeSpent']))
-        .filter(value=>value != null)
-      if (durations.length){
-        summary.averageTime = durations.reduce((total, value)=>total + value, 0) / durations.length
-      }
-    }
-
-    if (summary.safetyMisses == null){
-      const misses = sessions
-        .map(session=>readFirstNumber(session, ['safetyMisses', 'misses', 'safetyErrors', 'unsafeActions']))
-        .filter(value=>value != null)
-      if (misses.length){
-        summary.safetyMisses = misses.reduce((total, value)=>total + value, 0)
-      }
-    }
-
-    return summary
-  }
 
   async function loadSessionSummary(classId){
     if (!classId){
