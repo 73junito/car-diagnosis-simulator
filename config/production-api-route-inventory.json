@@ -1,18 +1,5 @@
 {
   "version": 1,
   "canonicalRuntime": "wrangler.app.jsonc -> worker/index.js",
-  "knownUnregisteredRoutes": [
-    {
-      "pattern": "/api/complete",
-      "gap": "G17",
-      "category": "legacy-attempt-api",
-      "disposition": "Retire or port the legacy completion write into the governed Worker progress/attempt model."
-    },
-    {
-      "pattern": "/api/replay",
-      "gap": "G17",
-      "category": "legacy-attempt-api",
-      "disposition": "Retire or port the legacy replay write into the governed Worker progress/attempt model."
-    }
-  ]
+  "knownUnregisteredRoutes": []
 }

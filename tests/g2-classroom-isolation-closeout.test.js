@@ -39,9 +39,9 @@ describe('G2 classroom isolation closeout', () => {
     expect(g2).toEqual([])
   })
 
-  test('legacy completion and replay debt remains visible under G17', () => {
-    const byPattern = new Map(inventory.knownUnregisteredRoutes.map((entry) => [entry.pattern, entry]))
-    expect(byPattern.get('/api/complete')?.gap).toBe('G17')
-    expect(byPattern.get('/api/replay')?.gap).toBe('G17')
+  test('legacy completion and replay browser writes are retired', () => {
+    expect(script).not.toContain('/api/complete')
+    expect(script).not.toContain('/api/replay')
+    expect(inventory.knownUnregisteredRoutes).toEqual([])
   })
 })

@@ -1152,12 +1152,8 @@ function markScenarioComplete(student, scenarioId){
       if (!a.completed.includes(scenarioId)) a.completed.push(scenarioId);
     }
   });
-  // attempt to record completion to backend
-  try {
-    if (typeof currentUser !== 'undefined' && currentUser && !demoMode){
-      apiPost('/api/complete', { userId: currentUser, scenarioId, classId: currentClassId });
-    }
-  } catch(e){ void e; }
+  // Completion remains in browser-assisted training state.
+  // Do not persist browser-authored identity/completion into legacy tables.
 }
 
 function getStudentRecord(name){
@@ -1392,12 +1388,8 @@ async function saveProgress(){
   else classData.push(student);
   localStorage.setItem('carSim_class', JSON.stringify(classData));
   // attempt to send replay to backend (best-effort)
-  try {
-    if (!demoMode && currentUser){
-      const payload = { userId: currentUser, scenarioId: currentIndex, actions: student.replays && student.replays.length ? student.replays[student.replays.length-1].actions : [], result: (lastExplanation && lastExplanation.final) || null, confidence: (lastExplanation && lastExplanation.confidence) || null, classId: currentClassId };
-      apiPost('/api/replay', payload);
-    }
-  } catch(e){ void e; }
+  // Replay remains a browser-assisted training artifact.
+  // Do not persist browser-authored replay identity/result into legacy tables.
 }
 
 async function loadUserData(){
