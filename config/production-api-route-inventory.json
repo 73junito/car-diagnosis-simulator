@@ -2,7 +2,6 @@
   "version": 1,
   "canonicalRuntime": "wrangler.app.jsonc -> worker/index.js",
   "knownUnregisteredRoutes": [
-    { "pattern": "/api/analytics/summary", "gap": "G5", "category": "analytics-summary", "disposition": "Either port the summary endpoint to the Worker or remove the optional production caller." },
     { "pattern": "/api/approved-sources", "gap": "G14", "category": "reference-library", "disposition": "Replace the legacy approved-sources call with the governed curriculum reference/evidence boundary." },
     { "pattern": "/api/attempts/load", "gap": "G17", "category": "legacy-attempt-api", "disposition": "Retire or port the legacy attempts API; it is not registered on the production Worker." },
     { "pattern": "/api/attempts/save", "gap": "G17", "category": "legacy-attempt-api", "disposition": "Retire or port the legacy attempts API; current scenario delivery must not rely on an unreachable save route." },
