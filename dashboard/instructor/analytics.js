@@ -99,13 +99,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
         const avgScore = document.createElement('td')
         const scoreSpan = document.createElement('span')
-        scoreSpan.className = 'metric'
+        scoreSpan.className='metric'
         scoreSpan.textContent = s.averageScore == null ? '—' : fmtNumber(s.averageScore) + '%'
+        if (s.averageScore != null){
+          if (s.averageScore >= 85) scoreSpan.classList.add('badge-success')
+          else if (s.averageScore >= 70) scoreSpan.classList.add('badge-warn')
+          else scoreSpan.classList.add('badge-danger')
+        }
         avgScore.appendChild(scoreSpan)
 
         const avgConfidence = document.createElement('td')
         const confSpan = document.createElement('span')
-        confSpan.className = 'metric'
+        confSpan.className='metric'
         confSpan.textContent = '—'
         confSpan.title = 'Confidence analytics are not yet available from the governed Worker data source.'
         avgConfidence.appendChild(confSpan)
