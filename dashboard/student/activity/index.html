@@ -25,22 +25,34 @@
       <a class="tm-btn tm-btn-secondary" href="/dashboard/student/activity/">Activity</a>
     </nav>
 
-    <section id="moduleContent" class="dashboard-card"><ol class="tm-timeline">
-  <li class="tm-timeline__item">
-    <strong>Progress updated</strong>
-    <span>Student dashboard refreshed with current scenario status.</span>
-  </li>
-  <li class="tm-timeline__item">
-    <strong>Coach recommendation</strong>
-    <span>Continue electrical diagnostics before advanced network faults.</span>
-  </li>
-</ol></section>
+    <section class="tm-panel" aria-labelledby="activity-heading">
+      <div class="tm-toolbar">
+        <div>
+          <h2 id="activity-heading">Your recent learning activity</h2>
+          <p id="activityStatus" role="status" aria-live="polite">Loading recent activity…</p>
+        </div>
+        <button id="activityRefresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <ol id="activityTimeline" class="tm-timeline"></ol>
+      <div class="tm-toolbar">
+        <button id="activityPrevious" class="tm-btn tm-btn-secondary" type="button" disabled>Previous</button>
+        <span id="activityPage">Page 1</span>
+        <button id="activityNext" class="tm-btn tm-btn-secondary" type="button" disabled>Next</button>
+      </div>
+      <p>Activity is limited to your server-recorded learning events. Expired telemetry is excluded, and grading secrets are not shown.</p>
+    </section>
   </main>
 
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
   <script type="module">
     import { mountShell } from "/theme/shell.js";
     mountShell();
   </script>
+  <script src="./activity.js" defer></script>
 </body>
 </html>
 
