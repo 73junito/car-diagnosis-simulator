@@ -377,7 +377,7 @@ function publicEvidenceLink(row, sources = new Map(), chunks = new Map()) {
 async function loadOwnedDraft(auth, draftId) {
   return auth.supabase
     .from('scenario_authoring_drafts')
-    .select('id,owner_id,status,review_status')
+    .select('id,owner_id,status,review_status,publication_status,version')
     .eq('id', draftId)
     .eq('owner_id', auth.user.id)
     .maybeSingle()
@@ -693,6 +693,19 @@ export async function handleAuthorDraftPublicationRequest(c) {
   const version = Number.parseInt(body?.version, 10)
   if (!Number.isInteger(version) || version < 1) {
     return c.json({ error: 'Current draft version required' }, 400)
+  }
+
+  const { data: draft, error: draftError } = await loadOwnedDraft(auth, draftId)
+  if (draftError) {
+    console.error('Author publication draft lookup failed:', draftError.message || draftError)
+    return c.json({ error: 'Unable to read author draft' }, 500)
+  }
+  if (!draft) return c.json({ error: 'Author draft not found' }, 404)
+  if (draft.status !== 'draft' ||
+      draft.review_status !== 'review_complete' ||
+      draft.publication_status !== 'unpublished' ||
+      draft.version !== version) {
+    return c.json({ error: 'Draft changed, review is incomplete, or publication was already requested' }, 409)
   }
 
   const { count: evidenceCount, error: evidenceError } = await auth.supabase
