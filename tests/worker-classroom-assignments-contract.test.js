@@ -8,6 +8,7 @@ const route = fs.readFileSync(path.join(root, 'worker', 'routes', 'classroom-ass
 describe('Worker classroom assignment contract', () => {
   test('registers assignment creation on the canonical production Worker', () => {
     expect(worker).toContain('handleCreateAssignment')
+    expect(worker).toContain("app.use('/api/assign', classroomCors)")
     expect(worker).toContain("app.post('/api/assign', handleCreateAssignment)")
     expect(worker).toContain("allowHeaders: ['Content-Type', 'Authorization']")
   })
