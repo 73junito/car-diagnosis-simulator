@@ -79,8 +79,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** write role-specific dashboard specs before broad UI implementation, including authorization states, empty/error states, destructive-action confirmation, audit visibility, and responsive behavior.
 ### G17 — Duplicate runtime/API architecture — **P1 architectural debt**
 **Evidence:** active capabilities are split among Worker routes, Node/Vercel-style `api/`, and `torquemind-api` Express routes.
-**Gap:** tests can pass against handlers that are not reachable on the production app Worker, creating false confidence about feature availability.
-**Required outcome:** define `worker/index.js` as the canonical production API boundary for `app.autolearnpro.com`; add a CI contract that every browser-called `/api/*` route is either registered on that Worker or explicitly routed to another documented production service.
+**Gap:** the production route inventory is now enforced, but the runtime split remains. The current contract finds 41 browser API references: 23 resolve to 25 canonical Worker registrations and 18 are explicit known gaps mapped to G2/G5/G6/G14/G17. Tests can no longer add an unclassified production `/api/*` reference without failing CI.
+**Required outcome:** inventory/CI contract completed. `worker/index.js` is treated as the canonical production API boundary for `app.autolearnpro.com`; every API literal shipped by the production build must either match a Worker registration or an explicit roadmap-gap entry in `config/production-api-route-inventory.json`. The remaining architectural outcome is to eliminate the 18 known gaps as their owning roadmap items are implemented.
 ### G18 - Supabase migration deployment parity and environment drift - **P0 - completed**
 **Evidence:** the audit found staging at 44 recorded migrations while production and the repository were at 107. G18 synchronized the missing logical schema/governance chain to staging, restored the 6,547-row federal school-code seed, added a service-role-only migration-history RPC to staging and production, and added deterministic CI drift detection against the repository baseline. Staging retains one documented exception: the production-specific historical smoke-data cleanup whose fail-closed guard expects 2,206 smoke classes plus `scenario_assignments`, while staging has 964 smoke-only classes, no enrollment/assignment links, and no `scenario_assignments` table.
 **Gap:** closed for the current staging baseline. PR CI now fails when staging is missing any non-exempt logical migration already present on `main`; post-merge/main checks compare staging against `HEAD`.
@@ -99,7 +99,7 @@ The repository already contains useful foundations, but several exist outside th
 ## Recommended execution order
 ### Phase 4A — Authorization and runtime foundation
 1. [x] Canonical role taxonomy + shared trusted-role resolver.
-2. Production API route inventory contract.
+2. [x] Production API route inventory contract.
 3. [x] Instructor verification decision API + audit record.
 4. [x] Admin verification-review minimum UI.
 5. [x] Supabase migration drift detection and staging synchronization (G18).
@@ -171,4 +171,4 @@ Use one concern per branch/PR. Suggested first branches:
 - Empty/unavailable states must be truthful; do not substitute sample data on authenticated production dashboards.
 - Generated reports/files remain unstaged unless they are intentional evidence artifacts.
 ## First implementation target
-G1, G3, G18, and G19 are complete. Next finish the **Phase 4A production API route inventory contract**. Track G20 separately as provenance/RLS security architecture work before broader institutional rollout.
+G1, G3, G18, G19, and the Phase 4A production API route inventory contract are complete. Next begin **Phase 4B / G2 ? instructor classroom core**, starting with Worker-native class list/create before roster/enrollment and assignments. Track G20 separately as provenance/RLS security architecture work before broader institutional rollout.
