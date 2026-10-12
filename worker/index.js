@@ -118,7 +118,7 @@ app.get('/__ping', (c) => c.json({ ok: true }));
 app.use('/api/torquemind-feedback/*', cors({
   origin: 'https://app.autolearnpro.com',
   allowMethods: ['POST', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'Authorization'],
+  allowHeaders: ['Content-Type'],
   maxAge: 86400
 }))
 // attach request context middleware for observability
@@ -380,7 +380,7 @@ app.use('/api/curriculum/*', cors({
     'https://exam.autolearnpro.com'
   ],
   allowMethods: ['GET', 'OPTIONS'],
-  allowHeaders: ['Content-Type'],
+  allowHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400
 }))
 app.all('/api/curriculum', handleCurriculumRead)
