@@ -73,6 +73,6 @@ describe('Worker classroom contract', () => {
     expect(patterns).not.toContain('/api/classes')
     expect(patterns).not.toContain('/api/classes/by-code/:param')
     expect(patterns).not.toContain('/api/classes/:param/enroll')
-    expect(patterns).toContain('/api/teacher/data')
+    expect(patterns).not.toContain('/api/teacher/data')
   })
 })
