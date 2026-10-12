@@ -57,10 +57,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** `/dashboard/student/transcript/` now consumes the authenticated Worker-native `/api/student/transcript` boundary. The endpoint reads only the authenticated learner's server-recorded attempts/answers and returns bounded learning-history records.
 **Gap:** closed. Practice and independent assessment records are explicitly separated; practice correctness is reduced to aggregate accuracy; assessment scores appear only when the server attempt is terminal and contains a trusted score; unsupported certificate/training-hour placeholders are removed; and empty/error states are truthful.
 **Required outcome:** completed. The student transcript is authenticated and student-scoped, derives from trusted attempt records, distinguishes practice from assessment, exposes no answer keys/per-answer correctness, and explicitly states that it is not an academic transcript, credential, certificate, or record of institutional credit.
-### G12 — Student activity is a static shell — **P2**
-**Evidence:** `/dashboard/student/activity/` contains hard-coded timeline entries and no live data fetch.
-**Gap:** recent activity is illustrative rather than user-specific.
-**Required outcome:** authenticated student-scoped activity feed from approved event/progress sources, with pagination/retention boundaries and no exposure of grading secrets.
+### G12 — Student activity is a static shell — **P2 - completed**
+**Evidence:** `/dashboard/student/activity/` now consumes the authenticated Worker-native `/api/student/activity` feed.
+**Gap:** closed. The feed merges only the authenticated learner's attempt activity and server-attributed `scenario_started` telemetry, sorts it by event time, bounds page size/page depth, excludes expired telemetry according to `telemetry_events.expires_at`, and returns no answer-level correctness, answer keys, scores, or explanations.
+**Required outcome:** completed. Student activity is authenticated and learner-scoped, uses approved server-side sources, has bounded pagination and explicit retention behavior, and exposes no grading secrets.
 ### G13 — Student Coach is static while recommendation API exists — **P2**
 **Evidence:** Coach currently displays a fixed “Recommended next: Charging System” message; production Worker already exposes `/api/student/recommendations`.
 **Gap:** the UI does not consume the server recommendation boundary.
@@ -139,7 +139,7 @@ The repository already contains useful foundations, but several exist outside th
 ### Phase 7 — Student residual functionality
 1. Live Coach recommendations.
 2. [x] Live Transcript.
-3. Live Activity.
+3. [x] Live Activity.
 4. [x] Institution claim status.
 5. Dedicated governed Reference Library.
 ### Phase 8 — Public interactive demo
