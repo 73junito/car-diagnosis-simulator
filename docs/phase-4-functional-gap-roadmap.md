@@ -45,10 +45,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** `institutions`, email domains, verification requests, student institution claims, classroom tables, and institution search exist. The first tenant foundation now adds active institution memberships/roles, tenant-scoped program/cohort primitives, tenant-linked classes, and a read-only `/dashboard/institution/` portal.
 **Gap:** closed. Active membership is the institution authorization object; approved instructor verification can establish instructor membership; programs/cohorts/classes are tenant-scoped; the portal exposes only the caller's authorized tenant; institution admins/owners can create/revoke email-bound invitations and remove memberships by suspension with last-owner protection; tenant settings and verified-domain administration are governed and audited; and institution admins/owners have aggregate tenant reporting derived strictly from tenant-scoped class/enrollment populations. The G8 isolation suite now verifies portal/report scoping, membership/invitation non-disclosure across tenants, owner-only domain mutation, same-tenant program/cohort/class constraints, service-role-only administration tables, and continued separation from assessment eligibility.
 **Required outcome:** institution memberships and roles; organization-scoped programs/cohorts/classes; institution administrators; membership invitations/removal; institution settings; verified domains; institution-level reporting; strict tenant isolation/RLS.
-### G9 — Student institution-claim review/status workflow — **P1/P2**
-**Evidence:** student signup can create `student_institution_claims`, which support `claimed/verified/rejected`; no production review/status UI or decision endpoint was found.
-**Gap:** student institution affiliation is captured but not operationally managed end-to-end.
-**Required outcome:** student claim-status read, institution/admin review queue, decision API, reviewer audit metadata, and linkage to institution membership only after approval.
+### G9 — Student institution-claim review/status workflow — **P1/P2 - completed**
+**Evidence:** student signup creates self-asserted `student_institution_claims`; the production Worker now exposes authenticated self-status plus tenant-scoped/platform-admin review queues and terminal review decisions.
+**Gap:** closed. Students can read only their own claim status; institution admins/owners may review only claims for their active tenants; platform admins may review globally; every final decision records append-only audit evidence; and only a verified claim can establish an active basic `member` relationship. Verification never grants instructor/admin roles or assessment eligibility.
+**Required outcome:** completed. Student claim-status read, institution/admin review queue, decision API, reviewer audit metadata, and verified-only membership linkage are operational.
 ### G10 — Platform administration dashboard — **P1/P2**
 **Evidence:** `dashboard/admin` does not exist; `design-language/dashboards/administrator.md` is currently empty. Admin is recognized by some backend authorization checks but has no operational UI.
 **Gap:** no central surface for privileged operations.
@@ -126,7 +126,7 @@ The repository already contains useful foundations, but several exist outside th
 6. [x] Explicit publication workflow separate from assessment eligibility.
 ### Phase 5 — Institutional portal
 1. Institution membership/role schema.
-2. Student-claim review and instructor-request administration.
+2. [x] Student-claim review and instructor-request administration.
 3. Programs/cohorts/classes aggregation.
 4. Institution reporting/settings/domain management.
 5. [x] Tenant-isolation security suite.
