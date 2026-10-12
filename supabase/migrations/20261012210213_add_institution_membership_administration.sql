@@ -2,6 +2,9 @@
 -- Invitations are tenant-scoped and email-bound. Membership removal is a
 -- reversible suspension; the final active institution owner cannot be removed.
 
+alter table public.institution_memberships
+  add column if not exists updated_by uuid references auth.users(id);
+
 create table if not exists public.institution_membership_invitations (
   id uuid primary key default gen_random_uuid(),
   school_code text not null references public.institutions(school_code) on delete cascade,
@@ -230,6 +233,7 @@ begin
       update public.institution_memberships
       set role = v_role,
           status = 'active',
+          updated_by = new.accepted_by,
           updated_at = now()
       where id = v_existing.id;
     else
@@ -239,6 +243,7 @@ begin
         role,
         status,
         created_by,
+        updated_by,
         created_at,
         updated_at
       ) values (
@@ -247,6 +252,7 @@ begin
         new.role,
         'active',
         new.invited_by,
+        new.accepted_by,
         now(),
         now()
       );
@@ -269,6 +275,44 @@ create trigger accept_institution_invitation_membership
 before update of status on public.institution_membership_invitations
 for each row
 execute function private.accept_institution_invitation_membership();
+
+create or replace function private.capture_institution_membership_status_event()
+returns trigger
+language plpgsql
+security invoker
+set search_path = ''
+as $
+begin
+  if old.status is distinct from new.status and new.status = 'suspended' then
+    insert into public.institution_membership_events (
+      school_code, membership_id, actor_id, subject_user_id, action, role
+    ) values (
+      new.school_code, new.id, new.updated_by, new.user_id, 'membership_suspended', new.role
+    );
+  elsif old.status is distinct from new.status and new.status = 'active' then
+    insert into public.institution_membership_events (
+      school_code, membership_id, actor_id, subject_user_id, action, role
+    ) values (
+      new.school_code, new.id, new.updated_by, new.user_id, 'membership_reactivated', new.role
+    );
+  end if;
+
+  return new;
+end;
+$;
+
+revoke all on function private.capture_institution_membership_status_event()
+  from public, anon, authenticated;
+grant execute on function private.capture_institution_membership_status_event()
+  to service_role;
+
+drop trigger if exists capture_institution_membership_status_event
+  on public.institution_memberships;
+
+create trigger capture_institution_membership_status_event
+after update of status on public.institution_memberships
+for each row
+execute function private.capture_institution_membership_status_event();
 
 comment on table public.institution_membership_invitations is
   'Tenant-scoped email-bound invitations. A directory match or invitation alone does not grant institution access until the matching authenticated user accepts and an active membership is created.';
