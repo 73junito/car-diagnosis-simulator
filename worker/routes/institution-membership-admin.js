@@ -355,7 +355,10 @@ export async function handleInstitutionInvitationAccept(c) {
   }
 
   const userEmail = normalizeEmail(auth.user.email)
-  if (!userEmail) return c.json({ error: 'Verified account email required to accept institution invitation' }, 409)
+  const emailConfirmed = Boolean(auth.user.email_confirmed_at || auth.user.confirmed_at)
+  if (!userEmail || !emailConfirmed) {
+    return c.json({ error: 'Confirmed account email required to accept institution invitation' }, 409)
+  }
 
   const { data: invitation, error: lookupError } = await auth.supabase
     .from('institution_membership_invitations')
