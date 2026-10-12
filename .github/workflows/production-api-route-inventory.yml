@@ -1,0 +1,56 @@
+name: Production API Route Inventory
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "worker/**"
+      - "assessment/**"
+      - "config/**"
+      - "dashboard/**"
+      - "js/**"
+      - "sign-in/**"
+      - "sign-up/**"
+      - "script.js"
+      - "apiClient.js"
+      - "auth.js"
+      - "scripts/build-static-site.js"
+      - "scripts/verify-production-api-route-inventory.js"
+      - "tests/production-api-route-inventory.test.js"
+      - ".github/workflows/production-api-route-inventory.yml"
+  push:
+    branches: [main]
+    paths:
+      - "worker/**"
+      - "assessment/**"
+      - "config/**"
+      - "dashboard/**"
+      - "js/**"
+      - "sign-in/**"
+      - "sign-up/**"
+      - "script.js"
+      - "apiClient.js"
+      - "auth.js"
+      - "scripts/build-static-site.js"
+      - "scripts/verify-production-api-route-inventory.js"
+      - "tests/production-api-route-inventory.test.js"
+      - ".github/workflows/production-api-route-inventory.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  route-inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm ci
+      - name: Verify production API route inventory
+        run: npm run validate:production-api-route-inventory
+      - name: Run inventory contract tests
+        run: npx jest tests/production-api-route-inventory.test.js --runInBand --silent
