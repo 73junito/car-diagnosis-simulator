@@ -13,6 +13,7 @@ const migration = fs.readFileSync(
 
 describe('G8 institution membership administration', () => {
   test('registers tenant-scoped membership administration routes', () => {
+    expect(worker).toContain("app.post('/api/admin/institutions/owner-invitations', handlePlatformAdminInstitutionOwnerInvitation)")
     expect(worker).toContain("app.get('/api/institution/admin/members', handleInstitutionAdminMembers)")
     expect(worker).toContain("app.all('/api/institution/admin/invitations', handleInstitutionAdminInvitations)")
     expect(worker).toContain("app.patch('/api/institution/admin/invitations/:invitationId', handleInstitutionAdminInvitationDecision)")
@@ -39,6 +40,16 @@ describe('G8 institution membership administration', () => {
     expect(migration).toContain("new.status = 'accepted'")
     expect(migration).toContain("status = 'active'")
     expect(migration).toContain('create trigger accept_institution_invitation_membership')
+  })
+
+  test('platform admin can bootstrap only the first owner through an invitation', () => {
+    expect(route).toContain('handlePlatformAdminInstitutionOwnerInvitation')
+    expect(route).toContain('resolveTrustedRole')
+    expect(route).toContain('isAdminRole')
+    expect(route).toContain("role: 'institution_owner'")
+    expect(route).toContain("eq('role', 'institution_owner')")
+    expect(route).toContain('Institution already has an active owner; use tenant membership administration')
+    expect(route).toContain('No tenant access exists until the matching confirmed account accepts')
   })
 
   test('tenant admins cannot manage administrator or owner roles', () => {
@@ -81,5 +92,17 @@ describe('G8 institution membership administration', () => {
     expect(route).not.toContain('assessment_question_eligibility')
     expect(migration).not.toContain('student_institution_claims')
     expect(migration).not.toContain('assessment_question_eligibility')
+  })
+})
+
+describe('G8 platform owner bootstrap UI', () => {
+  const adminHtml = fs.readFileSync(path.join(root, 'dashboard', 'admin', 'index.html'), 'utf8')
+  const adminUi = fs.readFileSync(path.join(root, 'dashboard', 'admin', 'admin.js'), 'utf8')
+
+  test('platform admin UI exposes the initial owner invitation workflow', () => {
+    expect(adminHtml).toContain('id="institution-owner-bootstrap-form"')
+    expect(adminHtml).toContain('Create Initial Owner Invitation')
+    expect(adminUi).toContain("'/api/admin/institutions/owner-invitations'")
+    expect(adminUi).toContain('initial institution owner invitation')
   })
 })
