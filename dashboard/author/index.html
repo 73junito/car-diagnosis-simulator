@@ -42,7 +42,7 @@
       <article class="tm-stat-card">
         <span class="tm-stat-card__label">Validation</span>
         <strong class="tm-stat-card__value" id="validationStatus">Draft</strong>
-        <small class="tm-stat-card__hint">Not ready to publish</small>
+        <small class="tm-stat-card__hint">Private draft lifecycle only</small>
       </article>
 
       <article class="tm-stat-card">
@@ -178,10 +178,12 @@
           <div class="author-actions">
   <button id="validateScenarioBtn" class="tm-btn tm-btn-primary" type="button">Validate Scenario</button>
   <button id="saveDraftBtn" class="tm-btn tm-btn-secondary" type="button">Save Draft</button>
+  <button id="requestReviewBtn" class="tm-btn tm-btn-secondary" type="button" disabled>Request Review</button>
   <button id="exportDraftBtn" class="tm-btn tm-btn-secondary" type="button">Export JSON</button>
   <button id="importDraftBtn" class="tm-btn tm-btn-secondary" type="button">Import JSON</button>
   <input id="importScenarioInput" type="file" accept=".json,application/json" hidden>
 </div>
+<p id="draftLifecycleStatus" role="status" aria-live="polite">Unsaved draft. Autosave begins after the first explicit save.</p>
 
 <ul id="validationChecklist" class="author-checklist" aria-live="polite"></ul>
 
