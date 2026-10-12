@@ -4,14 +4,23 @@ test.use({ baseURL: 'http://127.0.0.1:3003' });
 
 test('instructor live session preserves status semantics on canonical Phase 8A styling', async ({ page }) => {
   await page.addInitScript(() => {
-    localStorage.setItem('torquemindRole', 'instructor');
-    class MockEventSource {
-      constructor() {
-        setTimeout(() => { if (this.onopen) this.onopen(); }, 0);
-      }
-      close() {}
-    }
-    window.EventSource = MockEventSource;
+    localStorage.setItem('supabase_access_token', 'playwright-instructor-token');
+  });
+
+  await page.route('**/api/classes', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ classes: [{ id: 'class-1', name: 'AUT 250' }] })
+    });
+  });
+
+  await page.route('**/api/telemetry/stream?**', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'text/event-stream',
+      body: 'retry: 3000\n\n'
+    });
   });
 
   await page.goto('/dashboard/instructor/live-session.html', { waitUntil: 'domcontentloaded' });
