@@ -193,8 +193,8 @@
       "purpose": [
         "historical_completion_and_replay_tracking"
       ],
-      "status": "production_data_exists_active_path_not_confirmed",
-      "retention": "not_yet_defined"
+      "status": "legacy_data_retained_no_active_production_browser_writer",
+      "retention": "review_required_no_new_writes"
     }
   ],
   "legacy_review_assets": [
