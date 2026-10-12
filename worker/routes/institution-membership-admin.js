@@ -411,7 +411,7 @@ export async function handleInstitutionAdminMemberDecision(c) {
   const now = new Date().toISOString()
   const { data, error } = await auth.supabase
     .from('institution_memberships')
-    .update({ status: 'suspended', updated_at: now })
+    .update({ status: 'suspended', updated_by: auth.user.id, updated_at: now })
     .eq('id', target.id)
     .eq('status', 'active')
     .select('id,school_code,user_id,role,status,created_at,updated_at')
@@ -426,20 +426,7 @@ export async function handleInstitutionAdminMemberDecision(c) {
   }
   if (!data) return c.json({ error: 'Membership is no longer active' }, 409)
 
-  const { error: eventError } = await auth.supabase
-    .from('institution_membership_events')
-    .insert({
-      school_code: data.school_code,
-      membership_id: data.id,
-      actor_id: auth.user.id,
-      subject_user_id: data.user_id,
-      action: 'membership_suspended',
-      role: data.role
-    })
-
-  if (eventError) {
-    console.error('Institution membership removal audit insert failed:', eventError.message || eventError)
-    return c.json({ error: 'Membership removed but audit evidence could not be recorded' }, 500)
+  return c.json({ error: 'Membership removed but audit evidence could not be recorded' }, 500)
   }
 
   return c.json({
