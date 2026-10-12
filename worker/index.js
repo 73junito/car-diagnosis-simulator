@@ -7,6 +7,7 @@ import { handleStartAssessmentAttempt } from "./routes/assessment-attempts-start
 import { handleAssessmentAttemptQuestions } from "./routes/assessment-attempt-questions.js";
 import { handleStudentRecommendations } from "./routes/student-recommendations.js";
 import { handleStudentProgress } from "./routes/student-progress.js";
+import { handleStudentTranscript } from "./routes/student-transcript.js";
 import { handleCurriculumRead } from "./routes/curriculum-read.js";
 import { handleCurriculumReferences } from "./routes/curriculum-references.js";
 import {
@@ -174,6 +175,14 @@ app.use('/api/student/progress/*', cors({
   maxAge: 86400
 }))
 app.get('/api/student/progress', handleStudentProgress)
+
+app.use('/api/student/transcript/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/student/transcript', handleStudentTranscript)
 
 app.use('/api/student/institution-claim/*', cors({
   origin: 'https://app.autolearnpro.com',
