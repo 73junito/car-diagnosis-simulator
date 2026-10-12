@@ -53,10 +53,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** `/dashboard/admin/` is now the central platform-admin console and `design-language/dashboards/administrator.md` defines its authorization, information architecture, interaction, audit, responsive, and failure-state contract.
 **Gap:** closed. The dashboard exposes platform overview metrics; a bounded read-only user/trusted-role directory with authoritative role-source visibility; institution inventory with membership/owner/admin/domain coverage; instructor and student affiliation queues; authoring review/publication queues; unified read-only audit history; first-owner bootstrap; and audited operational configuration. High-risk owner-bootstrap availability changes require explicit browser and server confirmation. Privileged role mutation remains intentionally excluded until one authoritative role-write path exists.
 **Required outcome:** completed with least-privilege platform-admin modules, server authorization, explicit confirmation for high-risk operational changes, append-only operational audit evidence, and continued separation from assessment eligibility/release authority.
-### G11 — Student transcript is a static shell — **P2**
-**Evidence:** `/dashboard/student/transcript/` renders hard-coded zero/placeholder metrics and has no live fetch.
-**Gap:** no authoritative student transcript/progress-history presentation.
-**Required outcome:** authenticated student-scoped transcript endpoint/UI derived from trusted progress/attempt records; distinguish practice from assessment; do not imply credentials or academic credit unless separately authorized.
+### G11 — Student transcript — **P2 - completed**
+**Evidence:** `/dashboard/student/transcript/` now consumes the authenticated Worker-native `/api/student/transcript` boundary. The endpoint reads only the authenticated learner's server-recorded attempts/answers and returns bounded learning-history records.
+**Gap:** closed. Practice and independent assessment records are explicitly separated; practice correctness is reduced to aggregate accuracy; assessment scores appear only when the server attempt is terminal and contains a trusted score; unsupported certificate/training-hour placeholders are removed; and empty/error states are truthful.
+**Required outcome:** completed. The student transcript is authenticated and student-scoped, derives from trusted attempt records, distinguishes practice from assessment, exposes no answer keys/per-answer correctness, and explicitly states that it is not an academic transcript, credential, certificate, or record of institutional credit.
 ### G12 — Student activity is a static shell — **P2**
 **Evidence:** `/dashboard/student/activity/` contains hard-coded timeline entries and no live data fetch.
 **Gap:** recent activity is illustrative rather than user-specific.
@@ -138,9 +138,9 @@ The repository already contains useful foundations, but several exist outside th
 5. [x] Operational settings with audited changes.
 ### Phase 7 — Student residual functionality
 1. Live Coach recommendations.
-2. Live Transcript.
+2. [x] Live Transcript.
 3. Live Activity.
-4. Institution claim status.
+4. [x] Institution claim status.
 5. Dedicated governed Reference Library.
 ### Phase 8 — Public interactive demo
 Build only after the production reasoning flow and reference/authorization boundaries are stable.
