@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const downloadXapi = document.getElementById('download-xapi')
   const classSelect = document.getElementById('analytics-class')
   const classStatus = document.getElementById('analytics-class-status')
+  downloadCsv.disabled = true
+  downloadXapi.disabled = true
 
   function fmtNumber(n, digits=1){ return (Math.round(n*10**digits)/10**digits).toString() }
 
@@ -107,11 +109,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
       }
       if (classes.length === 1){
         classSelect.value = classes[0].id
+        downloadCsv.disabled = false
+        downloadXapi.disabled = false
         await Promise.all([
           loadStudentAnalytics(classes[0].id),
           loadSessionSummary(classes[0].id)
         ])
       } else {
+        downloadCsv.disabled = true
+        downloadXapi.disabled = true
         classStatus.textContent = classes.length ? 'Select a class to load student analytics.' : 'Create a class before using student analytics.'
       }
     } catch (e) {
@@ -121,16 +127,44 @@ document.addEventListener('DOMContentLoaded', ()=>{
   }
 
   classSelect.addEventListener('change', () => {
-    loadStudentAnalytics(classSelect.value)
-    loadSessionSummary(classSelect.value)
+    const classId = classSelect.value
+    downloadCsv.disabled = !classId
+    downloadXapi.disabled = !classId
+    loadStudentAnalytics(classId)
+    loadSessionSummary(classId)
   })
   loadOwnedClasses()
 
-  // download helpers
-  async function download(path, filename){
+  // authenticated, class-scoped download helpers
+  async function downloadAnalytics(format, filename){
+    const classId = classSelect.value
+    if (!classId){
+      classStatus.textContent = 'Select a class before exporting analytics.'
+      return
+    }
+
+    const token = window.getAccessToken ? window.getAccessToken() : null
+    if (!token){
+      window.location.replace('/sign-in/instructor/')
+      return
+    }
+
+    const base = window.API_BASE_URL ? String(window.API_BASE_URL).replace(/\/$/, '') : ''
+    const path = '/api/analytics/export?format=' + encodeURIComponent(format) + '&classId=' + encodeURIComponent(classId)
+
     try{
-      const res = await fetch(path)
-      if (!res.ok) { alert('Download failed: '+res.status); return }
+      const res = await fetch(base + path, {
+        headers: { Authorization: 'Bearer ' + token },
+        credentials: 'same-origin'
+      })
+      if (res.status === 401 || res.status === 403){
+        window.location.replace('/sign-in/instructor/')
+        return
+      }
+      if (!res.ok) {
+        classStatus.textContent = 'Export failed (' + res.status + ').'
+        return
+      }
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -140,14 +174,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
       a.click()
       a.remove()
       URL.revokeObjectURL(url)
-    }catch(err){ alert('Download error') }
+      classStatus.textContent = 'Analytics export ready.'
+    }catch(err){
+      classStatus.textContent = 'Unable to export analytics.'
+    }
   }
 
   downloadCsv.addEventListener('click', ()=>{
-    download('/api/analytics/export?format=csv','student-performance.csv')
+    downloadAnalytics('csv','student-performance.csv')
   });
   downloadXapi.addEventListener('click', ()=>{
-    download('/api/analytics/export?format=xapi','xapi-statements.json')
+    downloadAnalytics('xapi','xapi-statements.json')
   });
 
   // --- Live telemetry (SSE) hookup ---

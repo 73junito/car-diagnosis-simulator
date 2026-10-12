@@ -179,6 +179,150 @@ export async function handleInstructorSessionAnalytics(c) {
   }, 200)
 }
 
+
+function csvEscape(value) {
+  if (value == null) return ''
+  const text = String(value)
+  return /[",\n\r]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text
+}
+
+function buildAnalyticsCsv(classId, profiles, attempts) {
+  const profileById = new Map((profiles || []).map((row) => [row.id, row]))
+  const header = [
+    'classId',
+    'studentId',
+    'student',
+    'scenario',
+    'status',
+    'score',
+    'createdAt',
+    'updatedAt'
+  ]
+
+  const rows = (attempts || []).map((attempt) => {
+    const profile = profileById.get(attempt.user_id)
+    return [
+      classId,
+      attempt.user_id,
+      profile?.email || attempt.user_id,
+      attempt.scenario,
+      attempt.status,
+      attempt.score,
+      attempt.created_at,
+      attempt.updated_at
+    ]
+  })
+
+  return [header, ...rows].map((row) => row.map(csvEscape).join(',')).join('\n') + '\n'
+}
+
+function buildAnalyticsXapi(profiles, attempts) {
+  const profileById = new Map((profiles || []).map((row) => [row.id, row]))
+  return (attempts || []).map((attempt) => {
+    const profile = profileById.get(attempt.user_id)
+    const completed = attempt.status === 'completed'
+    return {
+      actor: {
+        objectType: 'Agent',
+        account: {
+          homePage: 'https://app.autolearnpro.com',
+          name: attempt.user_id
+        },
+        ...(profile?.email ? { name: profile.email } : {})
+      },
+      verb: {
+        id: completed
+          ? 'http://adlnet.gov/expapi/verbs/completed'
+          : 'http://adlnet.gov/expapi/verbs/attempted',
+        display: {
+          'en-US': completed ? 'completed' : 'attempted'
+        }
+      },
+      object: {
+        id: 'https://app.autolearnpro.com/scenarios/' + encodeURIComponent(String(attempt.scenario || 'unknown')),
+        objectType: 'Activity',
+        definition: {
+          name: {
+            'en-US': String(attempt.scenario || 'Scenario')
+          }
+        }
+      },
+      result: {
+        completion: completed,
+        ...(Number.isFinite(Number(attempt.score))
+          ? { score: { raw: Number(attempt.score) } }
+          : {})
+      },
+      timestamp: attempt.updated_at || attempt.created_at
+    }
+  })
+}
+
+export async function handleInstructorAnalyticsExport(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeInstructor(c)
+  if (auth.response) return auth.response
+
+  const classId = String(c.req.query('classId') || '').trim()
+  const format = String(c.req.query('format') || 'csv').trim().toLowerCase()
+  if (!classId) return c.json({ error: 'classId is required' }, 400)
+  if (!['csv', 'xapi'].includes(format)) {
+    return c.json({ error: 'format must be csv or xapi' }, 400)
+  }
+
+  const scope = await loadOwnedClassPopulation(auth, classId)
+  if (scope.error) {
+    console.error('Instructor analytics export scope lookup failed:', scope.error.message || scope.error)
+    return c.json({ error: 'Unable to export analytics' }, 500)
+  }
+  if (scope.notFound) return c.json({ error: 'Class not found' }, 404)
+
+  let profiles = []
+  let attempts = []
+  if (scope.userIds.length > 0) {
+    const [profilesResult, attemptsResult] = await Promise.all([
+      auth.supabase.from('profiles').select('id,email').in('id', scope.userIds),
+      auth.supabase
+        .from('attempts')
+        .select('id,user_id,scenario,status,score,created_at,updated_at')
+        .in('user_id', scope.userIds)
+    ])
+
+    if (profilesResult.error || attemptsResult.error) {
+      console.error(
+        'Instructor analytics export source lookup failed:',
+        profilesResult.error?.message || attemptsResult.error?.message || profilesResult.error || attemptsResult.error
+      )
+      return c.json({ error: 'Unable to export analytics' }, 500)
+    }
+
+    profiles = profilesResult.data || []
+    attempts = attemptsResult.data || []
+  }
+
+  if (format === 'xapi') {
+    const body = JSON.stringify(buildAnalyticsXapi(profiles, attempts), null, 2)
+    return new Response(body, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Disposition': 'attachment; filename="xapi-statements.json"',
+        'Cache-Control': 'private, no-store'
+      }
+    })
+  }
+
+  return new Response(buildAnalyticsCsv(scope.cls.id, profiles, attempts), {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/csv; charset=utf-8',
+      'Content-Disposition': 'attachment; filename="student-performance.csv"',
+      'Cache-Control': 'private, no-store'
+    }
+  })
+}
+
 export async function handleInstructorStudentAnalytics(c) {
   if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
 
@@ -238,4 +382,9 @@ export async function handleInstructorStudentAnalytics(c) {
   }, 200)
 }
 
-export { buildStudentAnalytics, buildSessionSummary }
+export {
+  buildStudentAnalytics,
+  buildSessionSummary,
+  buildAnalyticsCsv,
+  buildAnalyticsXapi
+}
