@@ -192,6 +192,8 @@ const requiredOutputFiles = [
   "dashboard/instructor/classroom.html",
   "dashboard/instructor/classroom.css",
   "dashboard/instructor/classroom.js",
+  "dashboard/institution/index.html",
+  "dashboard/institution/index.js",
   "dashboard/author/index.html",
   "dashboard/author/author.css",
   "dashboard/author/author.js",

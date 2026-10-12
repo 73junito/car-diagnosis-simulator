@@ -33,6 +33,10 @@ import {
 } from "./routes/instructor-verification.js";
 import { handleInstitutionSearch } from "./routes/institution-search.js";
 import {
+  handleInstitutionMemberships,
+  handleInstitutionPortal
+} from "./routes/institution-portal.js";
+import {
   handleListClasses,
   handleCreateClass,
   handleFindClassByCode,
@@ -154,6 +158,16 @@ app.use('/api/institutions/*', cors({
   maxAge: 86400
 }))
 app.get('/api/institutions/search', handleInstitutionSearch)
+
+const institutionPortalCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/institution/*', institutionPortalCors)
+app.get('/api/institution/memberships', handleInstitutionMemberships)
+app.get('/api/institution/portal', handleInstitutionPortal)
 
 // Instructor institution verification. Federal School Code resolves the institution,
 // while a separate affiliation review controls instructor authorization.

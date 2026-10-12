@@ -86,8 +86,36 @@ function publicClass(row) {
     name: row.name,
     owner_id: row.owner_id,
     class_code: row.class_code,
+    institution_school_code: row.institution_school_code || null,
+    institution_program_id: row.institution_program_id || null,
+    institution_cohort_id: row.institution_cohort_id || null,
     created_at: row.created_at
   }
+}
+
+async function resolveInstructorInstitution(auth, requestedSchoolCode = null) {
+  let query = auth.supabase
+    .from('institution_memberships')
+    .select('school_code,role,status')
+    .eq('user_id', auth.user.id)
+    .eq('status', 'active')
+    .in('role', ['instructor', 'institution_admin', 'institution_owner'])
+
+  if (requestedSchoolCode) query = query.eq('school_code', requestedSchoolCode)
+
+  const { data, error } = await query.order('school_code', { ascending: true })
+  if (error) return { error }
+
+  const memberships = data || []
+  if (requestedSchoolCode) {
+    return memberships.length === 1
+      ? { schoolCode: memberships[0].school_code }
+      : { forbidden: true }
+  }
+
+  if (memberships.length === 1) return { schoolCode: memberships[0].school_code }
+  if (memberships.length === 0) return { schoolCode: null }
+  return { selectionRequired: true }
 }
 
 function joinableClass(row) {
@@ -106,7 +134,7 @@ export async function handleListClasses(c) {
 
   const { data, error } = await auth.supabase
     .from('classes')
-    .select('id,name,owner_id,class_code,created_at')
+    .select('id,name,owner_id,class_code,institution_school_code,institution_program_id,institution_cohort_id,created_at')
     .eq('owner_id', auth.user.id)
     .order('created_at', { ascending: false })
 
@@ -136,17 +164,37 @@ export async function handleCreateClass(c) {
     return c.json({ error: 'name is required and must be 120 characters or fewer' }, 400)
   }
 
+  const requestedSchoolCode = typeof body?.schoolCode === 'string'
+    ? body.schoolCode.trim().toUpperCase()
+    : null
+  if (requestedSchoolCode && !/^[A-Z0-9]{6}$/.test(requestedSchoolCode)) {
+    return c.json({ error: 'Valid schoolCode required' }, 400)
+  }
+
+  const institution = await resolveInstructorInstitution(auth, requestedSchoolCode)
+  if (institution.error) {
+    console.error('Class institution membership lookup failed:', institution.error.message || institution.error)
+    return c.json({ error: 'Unable to verify institution membership' }, 500)
+  }
+  if (institution.forbidden) {
+    return c.json({ error: 'Active instructor institution membership required' }, 403)
+  }
+  if (institution.selectionRequired) {
+    return c.json({ error: 'schoolCode is required when the instructor belongs to multiple institutions' }, 400)
+  }
+
   for (let attempt = 0; attempt < MAX_CLASS_CODE_ATTEMPTS; attempt += 1) {
     const payload = {
       name,
       owner_id: auth.user.id,
-      class_code: makeClassCode()
+      class_code: makeClassCode(),
+      institution_school_code: institution.schoolCode
     }
 
     const { data, error } = await auth.supabase
       .from('classes')
       .insert(payload)
-      .select('id,name,owner_id,class_code,created_at')
+      .select('id,name,owner_id,class_code,institution_school_code,institution_program_id,institution_cohort_id,created_at')
       .single()
 
     if (!error) {

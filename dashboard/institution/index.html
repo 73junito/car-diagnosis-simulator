@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Institution Portal | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/dashboard.css">
+</head>
+<body>
+  <main class="tm-main">
+    <section class="tm-hero-banner">
+      <div>
+        <p class="tm-eyebrow">Authorized institution membership</p>
+        <h1>Institution Portal</h1>
+        <p id="institutionAccessStatus" role="status" aria-live="polite">Checking institution membership…</p>
+      </div>
+    </section>
+
+    <section class="tm-panel">
+      <label for="institutionSelect">Institution
+        <select id="institutionSelect" class="tm-select" disabled>
+          <option value="">Select institution</option>
+        </select>
+      </label>
+      <p>Institution access is granted only by an active membership record. School codes, domains, and directory matches alone do not grant tenant access.</p>
+    </section>
+
+    <section id="institutionOverview" class="tm-panel" hidden>
+      <h2 id="institutionName">Institution</h2>
+      <p id="institutionRole"></p>
+
+      <h3>Programs</h3>
+      <ul id="institutionPrograms"></ul>
+
+      <h3>Cohorts</h3>
+      <ul id="institutionCohorts"></ul>
+
+      <h3>Classes</h3>
+      <ul id="institutionClasses"></ul>
+
+      <p id="institutionAdminNotice"></p>
+    </section>
+  </main>
+
+  <script src="/auth.js"></script>
+  <script src="/apiClient.js"></script>
+  <script src="/dashboard/institution/index.js"></script>
+</body>
+</html>
