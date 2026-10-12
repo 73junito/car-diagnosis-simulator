@@ -557,8 +557,6 @@ export async function handleInstitutionAdminMemberDecision(c) {
   }
   if (!data) return c.json({ error: 'Membership is no longer active' }, 409)
 
-  return c.json({ error: 'Membership removed but audit evidence could not be recorded' }, 500)
-  }
 
   return c.json({
     member: publicMember(data),
