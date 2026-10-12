@@ -92,6 +92,30 @@ async function authorizeAuthor(c) {
   return { user, supabase, role }
 }
 
+async function authorizeAdmin(c) {
+  const supabaseUrl = c.env?.SUPABASE_URL
+  const serviceRoleKey = c.env?.SUPABASE_SERVICE_ROLE_KEY
+  if (!supabaseUrl || !serviceRoleKey) {
+    return { response: c.json({ error: 'Server configuration incomplete' }, 500) }
+  }
+
+  const token = extractBearerToken(c.req.header('authorization'))
+  if (!token) return { response: c.json({ error: 'Authentication required' }, 401) }
+
+  const { user, error } = await verifySupabaseToken(token, supabaseUrl, serviceRoleKey)
+  if (error || !user?.id) {
+    return { response: c.json({ error: 'Authentication required' }, 401) }
+  }
+
+  const supabase = createServiceClient(supabaseUrl, serviceRoleKey)
+  const role = await resolveTrustedRole(user, supabase)
+  if (!isAdminRole(role)) {
+    return { response: c.json({ error: 'Admin access required' }, 403) }
+  }
+
+  return { user, supabase, role }
+}
+
 function validDraftId(value) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || '').trim())
 }
@@ -136,6 +160,11 @@ function publicDraft(row, includePayload = false) {
     title: row.title,
     version: row.version,
     status: row.status,
+    reviewStatus: row.review_status,
+    reviewRequestedAt: row.review_requested_at,
+    reviewedAt: row.reviewed_at,
+    reviewedBy: row.reviewed_by,
+    reviewNote: row.review_note,
     createdAt: row.created_at,
     updatedAt: row.updated_at
   }
@@ -153,7 +182,7 @@ export async function handleAuthorDrafts(c) {
 
     const { data, error } = await auth.supabase
       .from('scenario_authoring_drafts')
-      .select('id,scenario_key,title,version,status,created_at,updated_at')
+      .select('id,scenario_key,title,version,status,review_status,review_requested_at,reviewed_at,reviewed_by,review_note,created_at,updated_at')
       .eq('owner_id', auth.user.id)
       .order('updated_at', { ascending: false })
       .limit(limit)
@@ -187,10 +216,11 @@ export async function handleAuthorDrafts(c) {
         payload_json: normalized.payload,
         version: 1,
         status: 'draft',
+        review_status: 'not_requested',
         created_at: now,
         updated_at: now
       })
-      .select('id,scenario_key,title,version,status,created_at,updated_at,payload_json')
+      .select('id,scenario_key,title,version,status,review_status,review_requested_at,reviewed_at,reviewed_by,review_note,created_at,updated_at,payload_json')
       .single()
 
     if (error) {
@@ -217,7 +247,7 @@ export async function handleAuthorDraft(c) {
   if (c.req.method === 'GET') {
     const { data, error } = await auth.supabase
       .from('scenario_authoring_drafts')
-      .select('id,scenario_key,title,version,status,created_at,updated_at,payload_json')
+      .select('id,scenario_key,title,version,status,review_status,review_requested_at,reviewed_at,reviewed_by,review_note,created_at,updated_at,payload_json')
       .eq('id', draftId)
       .eq('owner_id', auth.user.id)
       .maybeSingle()
@@ -259,8 +289,9 @@ export async function handleAuthorDraft(c) {
       .eq('id', draftId)
       .eq('owner_id', auth.user.id)
       .eq('status', 'draft')
+      .in('review_status', ['not_requested', 'changes_requested'])
       .eq('version', version)
-      .select('id,scenario_key,title,version,status,created_at,updated_at,payload_json')
+      .select('id,scenario_key,title,version,status,review_status,review_requested_at,reviewed_at,reviewed_by,review_note,created_at,updated_at,payload_json')
       .maybeSingle()
 
     if (error) {
@@ -284,6 +315,7 @@ export async function handleAuthorDraft(c) {
       .eq('id', draftId)
       .eq('owner_id', auth.user.id)
       .eq('status', 'draft')
+      .eq('review_status', 'not_requested')
       .select('id')
       .maybeSingle()
 
@@ -297,4 +329,156 @@ export async function handleAuthorDraft(c) {
   }
 
   return c.json({ error: 'Method not allowed' }, 405)
+}
+
+
+export async function handleAuthorDraftReviewRequest(c) {
+  if (c.req.method !== 'POST') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAuthor(c)
+  if (auth.response) return auth.response
+
+  const draftId = String(c.req.param('draftId') || '').trim()
+  if (!validDraftId(draftId)) return c.json({ error: 'Valid draft ID required' }, 400)
+
+  let body
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+
+  const version = Number.parseInt(body?.version, 10)
+  if (!Number.isInteger(version) || version < 1) {
+    return c.json({ error: 'Current draft version required' }, 400)
+  }
+
+  const now = new Date().toISOString()
+  const { data, error } = await auth.supabase
+    .from('scenario_authoring_drafts')
+    .update({
+      review_status: 'pending',
+      review_requested_at: now,
+      reviewed_at: null,
+      reviewed_by: null,
+      review_note: null,
+      version: version + 1,
+      updated_at: now
+    })
+    .eq('id', draftId)
+    .eq('owner_id', auth.user.id)
+    .eq('status', 'draft')
+    .in('review_status', ['not_requested', 'changes_requested'])
+    .eq('version', version)
+    .select('id,scenario_key,title,version,status,review_status,review_requested_at,reviewed_at,reviewed_by,review_note,created_at,updated_at,payload_json')
+    .maybeSingle()
+
+  if (error) {
+    console.error('Author review request failed:', error.message || error)
+    return c.json({ error: 'Unable to request draft review' }, 500)
+  }
+  if (!data) {
+    return c.json({ error: 'Draft changed or is already under review; reload before requesting review' }, 409)
+  }
+
+  return c.json({
+    draft: publicDraft(data, true),
+    message: 'Draft review requested. This does not publish the scenario or grant learner/assessment eligibility.'
+  }, 200)
+}
+
+export async function handleAdminAuthorDraftReviews(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAdmin(c)
+  if (auth.response) return auth.response
+
+  const status = String(c.req.query('status') || 'pending').trim().toLowerCase()
+  if (!['pending', 'changes_requested', 'review_complete'].includes(status)) {
+    return c.json({ error: 'status must be pending, changes_requested, or review_complete' }, 400)
+  }
+
+  const requestedLimit = Number.parseInt(c.req.query('limit') || '50', 10)
+  const limit = Number.isInteger(requestedLimit) ? Math.max(1, Math.min(requestedLimit, 100)) : 50
+
+  const { data, error } = await auth.supabase
+    .from('scenario_authoring_drafts')
+    .select('id,owner_id,scenario_key,title,version,status,review_status,review_requested_at,reviewed_at,reviewed_by,review_note,created_at,updated_at,payload_json')
+    .eq('review_status', status)
+    .order('review_requested_at', { ascending: true, nullsFirst: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('Admin author review queue failed:', error.message || error)
+    return c.json({ error: 'Unable to read author review queue' }, 500)
+  }
+
+  return c.json({
+    status,
+    drafts: (data || []).map((row) => ({
+      ...publicDraft(row, true),
+      ownerId: row.owner_id
+    }))
+  }, 200)
+}
+
+export async function handleAdminAuthorDraftReviewDecision(c) {
+  if (c.req.method !== 'PATCH') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAdmin(c)
+  if (auth.response) return auth.response
+
+  const draftId = String(c.req.param('draftId') || '').trim()
+  if (!validDraftId(draftId)) return c.json({ error: 'Valid draft ID required' }, 400)
+
+  let body
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+
+  const decision = String(body?.decision || '').trim().toLowerCase()
+  const reviewNote = typeof body?.reviewNote === 'string' ? body.reviewNote.trim() : ''
+  if (!['changes_requested', 'review_complete'].includes(decision)) {
+    return c.json({ error: 'decision must be changes_requested or review_complete' }, 400)
+  }
+  if (reviewNote.length > 2000) {
+    return c.json({ error: 'reviewNote must be 2000 characters or fewer' }, 400)
+  }
+  if (decision === 'changes_requested' && !reviewNote) {
+    return c.json({ error: 'reviewNote is required when requesting changes' }, 400)
+  }
+
+  const now = new Date().toISOString()
+  const { data, error } = await auth.supabase
+    .from('scenario_authoring_drafts')
+    .update({
+      review_status: decision,
+      reviewed_at: now,
+      reviewed_by: auth.user.id,
+      review_note: reviewNote || null,
+      updated_at: now
+    })
+    .eq('id', draftId)
+    .eq('status', 'draft')
+    .eq('review_status', 'pending')
+    .select('id,owner_id,scenario_key,title,version,status,review_status,review_requested_at,reviewed_at,reviewed_by,review_note,created_at,updated_at,payload_json')
+    .maybeSingle()
+
+  if (error) {
+    console.error('Admin author review decision failed:', error.message || error)
+    return c.json({ error: 'Unable to save author review decision' }, 500)
+  }
+  if (!data) return c.json({ error: 'Draft review is no longer pending' }, 409)
+
+  return c.json({
+    draft: {
+      ...publicDraft(data, true),
+      ownerId: data.owner_id
+    },
+    message: decision === 'review_complete'
+      ? 'Draft review completed. The scenario remains unpublished and has no learner or assessment eligibility.'
+      : 'Changes requested. The author can edit and resubmit the private draft.'
+  }, 200)
 }

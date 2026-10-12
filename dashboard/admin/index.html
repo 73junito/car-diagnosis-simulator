@@ -38,6 +38,25 @@
       </div>
       <div id="verification-queue" class="admin-queue" aria-live="polite"></div>
     </section>
+
+    <section class="tm-panel" aria-labelledby="author-review-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="author-review-heading">Authoring draft review</h2>
+          <p id="author-review-status" role="status" aria-live="polite">Loading pending drafts…</p>
+        </div>
+        <label for="author-review-status-select">Status
+          <select id="author-review-status-select" class="tm-select">
+            <option value="pending" selected>Pending</option>
+            <option value="changes_requested">Changes requested</option>
+            <option value="review_complete">Review complete</option>
+          </select>
+        </label>
+        <button id="author-review-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <p>Review completion records governance evidence only. It does not publish a scenario or grant learner or assessment eligibility.</p>
+      <div id="author-review-queue" class="admin-queue" aria-live="polite"></div>
+    </section>
   </main>
 
   <script>
