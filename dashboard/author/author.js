@@ -194,7 +194,7 @@
   function validateScenario() {
     const items = getValidationItems();
     const ready = items.every(([, valid]) => Boolean(valid));
-    setStatus(ready ? "Ready" : "Needs Data");
+    setStatus(ready ? "Draft Valid" : "Draft Needs Data");
     renderChecklist(items);
     renderJsonPreview();
     return ready;
