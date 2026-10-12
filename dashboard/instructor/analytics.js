@@ -9,71 +9,32 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const classSelect = document.getElementById('analytics-class')
   const classStatus = document.getElementById('analytics-class-status')
 
-  async function fetchJson(path){
-    const res = await fetch(path);
-    if (!res.ok) throw new Error('Fetch failed: '+res.status)
-    return res.json()
-  }
-
   function fmtNumber(n, digits=1){ return (Math.round(n*10**digits)/10**digits).toString() }
 
-  function isFiniteNumber(value){
-    return typeof value === 'number' && Number.isFinite(value)
+  async function loadSessionSummary(classId){
+    if (!classId){
+      cardTotal.textContent = '—'
+      cardConfidence.textContent = '—'
+      cardTime.textContent = '—'
+      cardSafety.textContent = '—'
+      return
+    }
+
+    try {
+      const data = await window.apiGet('/api/analytics/sessions?classId=' + encodeURIComponent(classId))
+      if (!data?.ok) return
+      cardTotal.textContent = data.totalSessions ?? '0'
+      cardConfidence.textContent = data.averageConfidence == null ? '—' : fmtNumber(data.averageConfidence) + '%'
+      cardTime.textContent = data.averageTime == null ? '—' : Math.round(data.averageTime) + 's'
+      cardSafety.textContent = data.safetyMisses == null ? '—' : data.safetyMisses
+    } catch (e) {
+      cardTotal.textContent = '—'
+      cardConfidence.textContent = '—'
+      cardTime.textContent = '—'
+      cardSafety.textContent = '—'
+      console.warn('sessions fetch failed', e)
+    }
   }
-
-  function readFirstNumber(source, keys){
-    for (const key of keys){
-      if (isFiniteNumber(source?.[key])) return source[key]
-    }
-    return null
-  }
-
-  function deriveSessionSummary(data){
-    const summary = {
-      averageTime: isFiniteNumber(data?.averageTime) ? data.averageTime : null,
-      safetyMisses: isFiniteNumber(data?.safetyMisses) ? data.safetyMisses : null,
-    }
-
-    if (summary.averageTime != null && summary.safetyMisses != null) return summary
-
-    const sessions = Array.isArray(data?.sessions)
-      ? data.sessions
-      : Array.isArray(data?.items)
-        ? data.items
-        : []
-
-    if (!sessions.length) return summary
-
-    if (summary.averageTime == null){
-      const durations = sessions
-        .map(session=>readFirstNumber(session, ['averageTime', 'duration', 'durationSeconds', 'timeSeconds', 'timeSpent']))
-        .filter(value=>value != null)
-      if (durations.length){
-        summary.averageTime = durations.reduce((total, value)=>total + value, 0) / durations.length
-      }
-    }
-
-    if (summary.safetyMisses == null){
-      const misses = sessions
-        .map(session=>readFirstNumber(session, ['safetyMisses', 'misses', 'safetyErrors', 'unsafeActions']))
-        .filter(value=>value != null)
-      if (misses.length){
-        summary.safetyMisses = misses.reduce((total, value)=>total + value, 0)
-      }
-    }
-
-    return summary
-  }
-
-  // populate summary
-  fetchJson('/api/analytics/sessions').then(data=>{
-    if (!data || !data.ok) return
-    const summary = deriveSessionSummary(data)
-    cardTotal.textContent = data.totalSessions ?? '0'
-    cardConfidence.textContent = (data.averageConfidence!=null) ? (fmtNumber(data.averageConfidence)+'%') : '—'
-    cardTime.textContent = (summary.averageTime!=null) ? `${Math.round(summary.averageTime)}s` : '—'
-    cardSafety.textContent = summary.safetyMisses ?? '0'
-  }).catch(e=>{ console.warn('sessions fetch failed', e); });
 
   async function loadStudentAnalytics(classId){
     while (studentTbody.firstChild) studentTbody.removeChild(studentTbody.firstChild)
@@ -146,7 +107,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
       }
       if (classes.length === 1){
         classSelect.value = classes[0].id
-        await loadStudentAnalytics(classes[0].id)
+        await Promise.all([
+          loadStudentAnalytics(classes[0].id),
+          loadSessionSummary(classes[0].id)
+        ])
       } else {
         classStatus.textContent = classes.length ? 'Select a class to load student analytics.' : 'Create a class before using student analytics.'
       }
@@ -156,7 +120,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   }
 
-  classSelect.addEventListener('change', () => loadStudentAnalytics(classSelect.value))
+  classSelect.addEventListener('change', () => {
+    loadStudentAnalytics(classSelect.value)
+    loadSessionSummary(classSelect.value)
+  })
   loadOwnedClasses()
 
   // download helpers
@@ -218,7 +185,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 // Expose a summary function so other pages (homepage CTA) can consume
-window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummary(){
+window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummary(classId){
   async function safeFetchJson(path){
     try{
       const res = await fetch(path);
@@ -230,8 +197,10 @@ window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummar
   function isFiniteNumber(value){ return typeof value === 'number' && Number.isFinite(value) }
 
   try{
-    const sessionsData = await safeFetchJson('/api/analytics/sessions')
-    const studentsData = await safeFetchJson('/api/analytics/students')
+    if (!classId) return null
+    const encodedClassId = encodeURIComponent(classId)
+    const sessionsData = await safeFetchJson('/api/analytics/sessions?classId=' + encodedClassId)
+    const studentsData = await safeFetchJson('/api/analytics/students?classId=' + encodedClassId)
 
     let avgScore = null
     let completionRate = null

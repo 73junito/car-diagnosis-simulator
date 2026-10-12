@@ -89,6 +89,96 @@ function buildStudentAnalytics(enrollments, profiles, attempts, answers) {
   })
 }
 
+function buildSessionSummary(attempts) {
+  const rows = Array.isArray(attempts) ? attempts : []
+  const completed = rows.filter((attempt) => attempt.status === 'completed')
+  const scored = completed.map((attempt) => Number(attempt.score)).filter(Number.isFinite)
+  const durations = completed
+    .map((attempt) => {
+      const start = Date.parse(attempt.created_at || '')
+      const end = Date.parse(attempt.updated_at || '')
+      if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null
+      return (end - start) / 1000
+    })
+    .filter(Number.isFinite)
+
+  return {
+    totalSessions: rows.length,
+    completedSessions: completed.length,
+    averageScore: scored.length ? round(scored.reduce((sum, value) => sum + value, 0) / scored.length) : null,
+    completionRate: rows.length ? round((completed.length / rows.length) * 100) : null,
+    averageTime: durations.length ? round(durations.reduce((sum, value) => sum + value, 0) / durations.length) : null,
+    averageConfidence: null,
+    safetyMisses: null
+  }
+}
+
+async function loadOwnedClassPopulation(auth, classId) {
+  const { data: cls, error: classError } = await auth.supabase
+    .from('classes')
+    .select('id')
+    .eq('id', classId)
+    .eq('owner_id', auth.user.id)
+    .maybeSingle()
+
+  if (classError) return { error: classError }
+  if (!cls) return { notFound: true }
+
+  const { data: enrollments, error: enrollmentError } = await auth.supabase
+    .from('enrollments')
+    .select('user_id')
+    .eq('class_id', cls.id)
+
+  if (enrollmentError) return { error: enrollmentError }
+
+  return {
+    cls,
+    enrollments: enrollments || [],
+    userIds: (enrollments || []).map((row) => row.user_id).filter(Boolean)
+  }
+}
+
+export async function handleInstructorSessionAnalytics(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeInstructor(c)
+  if (auth.response) return auth.response
+
+  const classId = String(c.req.query('classId') || '').trim()
+  if (!classId) return c.json({ error: 'classId is required' }, 400)
+
+  const scope = await loadOwnedClassPopulation(auth, classId)
+  if (scope.error) {
+    console.error('Instructor session analytics scope lookup failed:', scope.error.message || scope.error)
+    return c.json({ error: 'Unable to load analytics' }, 500)
+  }
+  if (scope.notFound) return c.json({ error: 'Class not found' }, 404)
+
+  if (scope.userIds.length === 0) {
+    return c.json({
+      ok: true,
+      classId: scope.cls.id,
+      ...buildSessionSummary([])
+    }, 200)
+  }
+
+  const { data: attempts, error: attemptsError } = await auth.supabase
+    .from('attempts')
+    .select('id,user_id,status,score,created_at,updated_at')
+    .in('user_id', scope.userIds)
+
+  if (attemptsError) {
+    console.error('Instructor session analytics attempt lookup failed:', attemptsError.message || attemptsError)
+    return c.json({ error: 'Unable to load analytics' }, 500)
+  }
+
+  return c.json({
+    ok: true,
+    classId: scope.cls.id,
+    ...buildSessionSummary(attempts || [])
+  }, 200)
+}
+
 export async function handleInstructorStudentAnalytics(c) {
   if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
 
@@ -98,30 +188,14 @@ export async function handleInstructorStudentAnalytics(c) {
   const classId = String(c.req.query('classId') || '').trim()
   if (!classId) return c.json({ error: 'classId is required' }, 400)
 
-  const { data: cls, error: classError } = await auth.supabase
-    .from('classes')
-    .select('id')
-    .eq('id', classId)
-    .eq('owner_id', auth.user.id)
-    .maybeSingle()
-
-  if (classError) {
-    console.error('Instructor analytics class lookup failed:', classError.message || classError)
+  const scope = await loadOwnedClassPopulation(auth, classId)
+  if (scope.error) {
+    console.error('Instructor analytics scope lookup failed:', scope.error.message || scope.error)
     return c.json({ error: 'Unable to load analytics' }, 500)
   }
-  if (!cls) return c.json({ error: 'Class not found' }, 404)
+  if (scope.notFound) return c.json({ error: 'Class not found' }, 404)
 
-  const { data: enrollments, error: enrollmentError } = await auth.supabase
-    .from('enrollments')
-    .select('user_id')
-    .eq('class_id', cls.id)
-
-  if (enrollmentError) {
-    console.error('Instructor analytics enrollment lookup failed:', enrollmentError.message || enrollmentError)
-    return c.json({ error: 'Unable to load analytics' }, 500)
-  }
-
-  const userIds = (enrollments || []).map((row) => row.user_id).filter(Boolean)
+  const { cls, enrollments, userIds } = scope
   if (userIds.length === 0) {
     return c.json({ ok: true, classId: cls.id, totalStudents: 0, students: [] }, 200)
   }
@@ -164,4 +238,4 @@ export async function handleInstructorStudentAnalytics(c) {
   }, 200)
 }
 
-export { buildStudentAnalytics }
+export { buildStudentAnalytics, buildSessionSummary }

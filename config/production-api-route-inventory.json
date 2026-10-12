@@ -3,7 +3,6 @@
   "canonicalRuntime": "wrangler.app.jsonc -> worker/index.js",
   "knownUnregisteredRoutes": [
     { "pattern": "/api/analytics/export", "gap": "G5", "category": "instructor-analytics", "disposition": "Port analytics export to the production Worker with instructor/class/institution scoping." },
-    { "pattern": "/api/analytics/sessions", "gap": "G5", "category": "instructor-analytics", "disposition": "Port session analytics to the production Worker; remove local report-file fallback from production." },
     { "pattern": "/api/analytics/summary", "gap": "G5", "category": "analytics-summary", "disposition": "Either port the summary endpoint to the Worker or remove the optional production caller." },
     { "pattern": "/api/approved-sources", "gap": "G14", "category": "reference-library", "disposition": "Replace the legacy approved-sources call with the governed curriculum reference/evidence boundary." },
     { "pattern": "/api/attempts/load", "gap": "G17", "category": "legacy-attempt-api", "disposition": "Retire or port the legacy attempts API; it is not registered on the production Worker." },
