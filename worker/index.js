@@ -47,7 +47,8 @@ import {
 } from "./routes/instructor-analytics.js";
 import {
   handleInstructorTelemetryHistory,
-  handleInstructorTelemetryExport
+  handleInstructorTelemetryExport,
+  handleInstructorTelemetryStream
 } from "./routes/instructor-telemetry.js";
 import { handleTelemetryEventIngest } from "./routes/telemetry-ingest.js";
 import { createRequestContext } from './middleware/request-context.js'
@@ -203,8 +204,10 @@ const instructorTelemetryCors = cors({
 })
 app.use('/api/telemetry/history', instructorTelemetryCors)
 app.use('/api/telemetry/export.:format', instructorTelemetryCors)
+app.use('/api/telemetry/stream', instructorTelemetryCors)
 app.get('/api/telemetry/history', handleInstructorTelemetryHistory)
 app.get('/api/telemetry/export.:format', handleInstructorTelemetryExport)
+app.get('/api/telemetry/stream', handleInstructorTelemetryStream)
 
 app.use('/api/telemetry/events', cors({
   origin: 'https://app.autolearnpro.com',
