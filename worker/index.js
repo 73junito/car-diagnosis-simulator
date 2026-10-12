@@ -149,12 +149,14 @@ app.patch('/api/admin/instructor-verification/requests/:requestId', handleAdminI
 
 // Instructor-owned classroom core. The Worker verifies the bearer token and
 // trusted instructor role, then scopes all persistence to the authenticated owner.
-app.use('/api/classes*', cors({
+const classroomCors = cors({
   origin: 'https://app.autolearnpro.com',
   allowMethods: ['GET', 'POST', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400
-}))
+})
+app.use('/api/classes', classroomCors)
+app.use('/api/classes/*', classroomCors)
 app.get('/api/classes', handleListClasses)
 app.post('/api/classes', handleCreateClass)
 
