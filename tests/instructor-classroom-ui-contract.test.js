@@ -14,7 +14,8 @@ describe('Instructor classroom UI contract', () => {
       'href="/dashboard/instructor/live-session.html"',
       'href="/dashboard/instructor/session-history.html"',
       'href="/dashboard/instructor/analytics.html"',
-      'href="/dashboard/instructor/research/"'
+      'href="/dashboard/instructor/research/"',
+      'href="/dashboard/author/"'
     ]) expect(home).toContain(expected)
 
     expect(home).toContain('Classes & Assignments')
@@ -22,7 +23,8 @@ describe('Instructor classroom UI contract', () => {
     expect(home).toContain('Session History')
     expect(home).toContain('Analytics')
     expect(home).toContain('Research Discovery')
-    expect(home).not.toContain('href="/dashboard/author/')
+    expect(home).toContain('Authoring Studio')
+    expect(home).toContain('Review and publication are not yet available.')
   })
 
   test('ships classroom assets in the production static build', () => {
