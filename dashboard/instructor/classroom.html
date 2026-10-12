@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Classes | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css" />
+  <link rel="stylesheet" href="/theme/layout.css" />
+  <link rel="stylesheet" href="/theme/dashboard.css" />
+  <link rel="stylesheet" href="./classroom.css" />
+</head>
+<body>
+  <main class="tm-main">
+    <section class="tm-hero-banner">
+      <div>
+        <p class="tm-hero-banner__eyebrow">Verified instructor workspace</p>
+        <h1 class="tm-hero-banner__title">Classes, Roster & Assignments</h1>
+        <p class="tm-hero-banner__subtitle">Create classes, review enrolled learners, and assign training scenarios through the production classroom API.</p>
+        <span id="classroomAccessStatus" class="tm-hero-banner__status">Checking access…</span>
+      </div>
+      <div class="tm-hero-banner__actions">
+        <a class="tm-btn tm-btn-secondary" href="/dashboard/instructor/">Instructor Home</a>
+        <a class="tm-btn tm-btn-secondary" href="/dashboard/instructor/analytics.html">Analytics</a>
+      </div>
+    </section>
+
+    <section id="classroomWorkspace" hidden>
+      <section class="tm-panel" aria-labelledby="classes-title">
+        <div class="classroom-heading-row">
+          <div>
+            <h2 id="classes-title">Classes</h2>
+            <p>Create a class or select an existing class to manage its roster and assignments.</p>
+          </div>
+          <button id="refreshClasses" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+        </div>
+
+        <form id="createClassForm" class="classroom-inline-form">
+          <label for="className">Class name</label>
+          <input id="className" class="tm-input" name="name" type="text" maxlength="120" required placeholder="Example: AUT 250 — Engine Performance" />
+          <button class="tm-btn tm-btn-primary" type="submit">Create class</button>
+        </form>
+
+        <p id="classStatus" role="status" aria-live="polite">Loading classes…</p>
+        <div id="classList" class="classroom-list"></div>
+      </section>
+
+      <section class="tm-panel" aria-labelledby="roster-title">
+        <div class="classroom-heading-row">
+          <div>
+            <h2 id="roster-title">Roster</h2>
+            <p id="rosterContext">Select a class to load enrolled learners.</p>
+          </div>
+          <button id="refreshRoster" class="tm-btn tm-btn-secondary" type="button" disabled>Refresh roster</button>
+        </div>
+        <p id="rosterStatus" role="status" aria-live="polite">No class selected.</p>
+        <div class="classroom-table-wrap">
+          <table class="classroom-table">
+            <thead>
+              <tr><th scope="col">Student</th><th scope="col">Enrolled</th></tr>
+            </thead>
+            <tbody id="rosterBody">
+              <tr><td colspan="2">Select a class to view its roster.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tm-panel" aria-labelledby="assignment-title">
+        <h2 id="assignment-title">Create assignment</h2>
+        <p>Assignments are training visibility only. Creating an assignment does not grant scored-assessment eligibility.</p>
+
+        <form id="assignmentForm">
+          <label for="assignmentSystem">System or topic</label>
+          <input id="assignmentSystem" class="tm-input" type="text" maxlength="120" required placeholder="Example: Charging System" />
+
+          <label for="assignmentScenarioIds">Scenario IDs</label>
+          <textarea id="assignmentScenarioIds" class="tm-textarea" rows="3" required
+            placeholder="Enter scenario IDs separated by commas, for example: 101, 102, charging-03"></textarea>
+          <p class="classroom-help">Numeric-looking IDs are sent as numbers; other IDs remain strings after trimming.</p>
+
+          <fieldset class="classroom-fieldset">
+            <legend>Target</legend>
+            <label><input type="radio" name="assignmentTarget" value="class" checked /> Entire selected class</label>
+            <label><input type="radio" name="assignmentTarget" value="students" /> Selected students</label>
+          </fieldset>
+
+          <div id="studentTargetList" class="classroom-target-list" hidden></div>
+
+          <button id="createAssignment" class="tm-btn tm-btn-primary" type="submit" disabled>Create assignment</button>
+        </form>
+        <p id="assignmentStatus" role="status" aria-live="polite">Select a class before creating an assignment.</p>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
+  <script src="/apiClient.js"></script>
+  <script src="./classroom.js"></script>
+</body>
+</html>
