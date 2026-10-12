@@ -28,14 +28,14 @@ describe('production API route inventory', () => {
       '/api/student/progress',
       '/api/curriculum',
       '/api/admin/instructor-verification/requests',
-      '/api/research/curriculum-evidence/records'
+      '/api/research/curriculum-evidence/records',
+      '/api/analytics/students'
     ]) expect(routes).toContain(expected)
   })
 
   test('known production gaps stay mapped to roadmap work', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     for (const expected of [
-      '/api/analytics/students',
       '/api/telemetry/stream',
       '/api/attempts/save',
       '/api/approved-sources'
