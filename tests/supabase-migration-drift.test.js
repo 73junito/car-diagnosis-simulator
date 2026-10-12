@@ -3,6 +3,7 @@ const path = require('path')
 const {
   parseMigrationPath,
   compareMigrationHistories,
+  canonicalRepositoryMigrations,
   projectRefFromUrl
 } = require('../scripts/verify-supabase-migration-drift.js')
 
@@ -15,52 +16,37 @@ describe('Supabase migration drift detector', () => {
     })
   })
 
-  test('accepts timestamp-renamed logical equivalents', () => {
+  test('rejects timestamp-renamed logical equivalents', () => {
     const result = compareMigrationHistories(
       [{ version: '20260924180000', name: 'repair_question_provenance_semantic_ids' }],
       [{ version: '20260924180303', name: 'repair_question_provenance_semantic_ids' }]
     )
-    expect(result.missing).toEqual([])
-    expect(result.timestampAliases).toHaveLength(1)
-  })
-
-  test('detects missing duplicate logical migrations by count', () => {
-    const result = compareMigrationHistories(
-      [
-        { version: '1', name: 'duplicate' },
-        { version: '2', name: 'duplicate' }
-      ],
-      [{ version: '9', name: 'duplicate' }]
-    )
-    expect(result.missing).toEqual([{ version: '2', name: 'duplicate' }])
-  })
-
-  test('applies narrowly counted missing-migration exceptions', () => {
-    const result = compareMigrationHistories(
-      [{ version: '1', name: 'cleanup' }, { version: '2', name: 'required' }],
-      [{ version: '9', name: 'required' }],
-      { cleanup: { allowedMissing: 1, reason: 'staging-only data shape' } }
-    )
-    expect(result.missing).toEqual([])
-    expect(result.exceptionsUsed).toEqual([expect.objectContaining({ name: 'cleanup', count: 1 })])
-  })
-
-  test('does not let an exception mask more missing copies than allowed', () => {
-    const result = compareMigrationHistories(
-      [{ version: '1', name: 'duplicate' }, { version: '2', name: 'duplicate' }],
-      [],
-      { duplicate: { allowedMissing: 1, reason: 'one permitted' } }
-    )
     expect(result.missing).toHaveLength(1)
+    expect(result.extra).toHaveLength(1)
+    expect(result.timestampAliases).toEqual([
+      {
+        name: 'repair_question_provenance_semantic_ids',
+        repository: ['20260924180000'],
+        remote: ['20260924180303']
+      }
+    ])
   })
 
-  test('reports remote-only migrations without treating them as missing', () => {
+  test('detects remote-only migration records', () => {
     const result = compareMigrationHistories(
       [{ version: '1', name: 'canonical' }],
       [{ version: '1', name: 'canonical' }, { version: '2', name: 'staging_only' }]
     )
     expect(result.missing).toEqual([])
-    expect(result.extra).toEqual([{ name: 'staging_only', count: 1 }])
+    expect(result.extra).toEqual([{ version: '2', name: 'staging_only' }])
+  })
+
+  test('requires exact version and name parity', () => {
+    const result = compareMigrationHistories(
+      [{ version: '1', name: 'a' }, { version: '2', name: 'b' }],
+      [{ version: '1', name: 'a' }, { version: '2', name: 'b' }]
+    )
+    expect(result).toEqual({ missing: [], extra: [], timestampAliases: [] })
   })
 
   test('extracts and validates Supabase project refs from URLs', () => {
@@ -68,30 +54,35 @@ describe('Supabase migration drift detector', () => {
     expect(projectRefFromUrl('https://example.com')).toBeNull()
   })
 
-  test('repository drift exceptions are narrow and auditable', () => {
-    const root = path.resolve('.')
-    const doc = JSON.parse(fs.readFileSync(path.join(root, 'supabase/migration-drift-exceptions.json'), 'utf8'))
-    const staging = doc.jchfruprqpeypdttvlam
-    expect(Object.keys(staging)).toEqual(['cleanup_historical_smoke_classes'])
-    expect(staging.cleanup_historical_smoke_classes.allowedMissing).toBe(1)
-    expect(staging).not.toHaveProperty('seed_federal_school_codes_2026_27_q4')
+  test('repository contains no migration bloat after reconciliation', () => {
+    const result = canonicalRepositoryMigrations('WORKTREE')
+    expect(result.ignoredBloat).toEqual([])
+    expect(result.migrations).toHaveLength(94)
 
-    const seed = fs.readFileSync(path.join(root, 'supabase/migrations/20261001041910_seed_federal_school_codes_2026_27_q4.sql'), 'utf8')
-    expect(seed).toContain('record-count: 6547')
-    expect(seed).toContain('59fac0beb0aa9c66f3237c2a22d16a32bdfc64deb390002b008e98c2e5bf136a')
+    const versions = result.migrations.map((m) => m.version)
+    expect(new Set(versions).size).toBe(94)
+    expect(versions).toContain('20260930210756')
+    expect(versions).toContain('20261011220034')
+    expect(versions).toContain('20261012031851')
+    expect(versions).not.toContain('20260930025324')
+  })
 
-    const cleanup = fs.readFileSync(path.join(root, 'supabase/migrations/20260930210756_cleanup_historical_smoke_classes.sql'), 'utf8')
+  test('cleanup migration remains guarded and destructive only to smoke fixtures', () => {
+    const cleanup = fs.readFileSync(path.join(
+      path.resolve('.'),
+      'supabase/migrations/20260930210756_cleanup_historical_smoke_classes.sql'
+    ), 'utf8')
     expect(cleanup).toContain('delete from public.classes')
+    expect(cleanup).toContain("name ~ '^Smoke Test Class [0-9]+$'")
     expect(cleanup).not.toMatch(/create\s+table|alter\s+table|create\s+(or\s+replace\s+)?function/i)
   })
 
-  test('CI checks the main baseline on PRs and HEAD after merge', () => {
+  test('CI verifies both staging and production migration parity', () => {
     const workflow = fs.readFileSync(path.resolve('.github/workflows/supabase-migration-drift.yml'), 'utf8')
-    expect(workflow).toContain('fetch-depth: 0')
-    expect(workflow).toContain('secrets.STAGING_SECRET')
+    expect(workflow).toContain('environment: jchfruprqpeypdttvlam_staging')
     expect(workflow).toContain('EXPECTED_SUPABASE_REF: jchfruprqpeypdttvlam')
-    expect(workflow).toContain('--ref origin/${{ github.base_ref }}')
-    expect(workflow).toContain('--ref HEAD')
-    expect(workflow).toContain('supabase/migration-drift-exceptions.json')
+    expect(workflow).toContain('environment: pffdgqpynpbffbcnxmum_production')
+    expect(workflow).toContain('EXPECTED_SUPABASE_REF: pffdgqpynpbffbcnxmum')
+    expect(workflow).not.toContain('migration-drift-exceptions.json')
   })
 })
