@@ -78,7 +78,7 @@ describe('Worker instructor telemetry history/export contract', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     expect(patterns).not.toContain('/api/telemetry/history')
     expect(patterns).not.toContain('/api/telemetry/export.:param')
-    expect(patterns).toContain('/api/telemetry/stream')
+    expect(patterns).not.toContain('/api/telemetry/stream')
     expect(patterns).not.toContain('/api/telemetry/events')
   })
 })
