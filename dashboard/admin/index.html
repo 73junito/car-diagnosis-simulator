@@ -57,6 +57,25 @@
       <p>Review completion records governance evidence only. It does not publish a scenario or grant learner or assessment eligibility.</p>
       <div id="author-review-queue" class="admin-queue" aria-live="polite"></div>
     </section>
+
+    <section class="tm-panel" aria-labelledby="author-publication-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="author-publication-heading">Authoring publication approval</h2>
+          <p id="author-publication-status" role="status" aria-live="polite">Loading pending publication requests…</p>
+        </div>
+        <label for="author-publication-status-select">Status
+          <select id="author-publication-status-select" class="tm-select">
+            <option value="pending" selected>Pending</option>
+            <option value="changes_requested">Changes requested</option>
+            <option value="published">Published</option>
+          </select>
+        </label>
+        <button id="author-publication-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <p>Publication approval requires completed review and governed evidence. Approval does not grant learner delivery, scoring, or assessment eligibility.</p>
+      <div id="author-publication-queue" class="admin-queue" aria-live="polite"></div>
+    </section>
   </main>
 
   <script>
