@@ -58,7 +58,18 @@ describe('Worker instructor student analytics contract', () => {
     expect(ui).toContain("window.location.replace('/sign-in/instructor/')")
   })
 
-  test('removes student analytics from known production gaps', () => {
+  test('session summary is truthful about governed source availability', () => {
+    expect(route).toContain('function buildSessionSummary(attempts)')
+    expect(route).toContain("attempt.status === 'completed'")
+    expect(route).toContain('completionRate:')
+    expect(route).toContain('averageTime:')
+    expect(route).toContain('averageConfidence: null')
+    expect(route).toContain('safetyMisses: null')
+    expect(route).not.toContain('confidence: 0')
+    expect(route).not.toContain('safetyMisses: 0')
+  })
+
+  test('removes implemented analytics routes from known production gaps', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     expect(patterns).not.toContain('/api/analytics/students')
     expect(patterns).not.toContain('/api/analytics/sessions')
