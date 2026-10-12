@@ -29,8 +29,8 @@ alter table public.scenario_authoring_drafts
 alter table public.scenario_authoring_drafts
   add constraint scenario_authoring_drafts_publication_review_gate_check
   check (
-    publication_status not in ('pending', 'published')
-    or review_status = 'review_complete'
+    (publication_status not in ('pending', 'published') or review_status = 'review_complete')
+    and (publication_status <> 'changes_requested' or review_status = 'changes_requested')
   );
 
 create table if not exists public.scenario_authoring_publication_events (
@@ -139,7 +139,7 @@ begin
     values (
       new.id,
       case
-        when new.publication_status = 'pending' then new.owner_id
+        when new.publication_status in ('pending', 'unpublished') then new.owner_id
         else new.published_by
       end,
       old.publication_status,
