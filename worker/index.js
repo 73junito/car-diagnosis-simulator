@@ -52,6 +52,11 @@ import {
 } from "./routes/institution-settings-domains.js";
 import { handleInstitutionAdminReport } from "./routes/institution-reporting.js";
 import {
+  handleStudentInstitutionClaimStatus,
+  handleStudentInstitutionClaimQueue,
+  handleStudentInstitutionClaimDecision
+} from "./routes/student-institution-claims.js";
+import {
   handleListClasses,
   handleCreateClass,
   handleFindClassByCode,
@@ -163,6 +168,14 @@ app.use('/api/student/progress/*', cors({
 }))
 app.get('/api/student/progress', handleStudentProgress)
 
+app.use('/api/student/institution-claim/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/student/institution-claim/status', handleStudentInstitutionClaimStatus)
+
 // Public institution search for account creation. Results expose only the
 // institution identity fields needed for a student or instructor to select
 // the correct school; selection itself never proves affiliation.
@@ -193,6 +206,8 @@ app.all('/api/institution/admin/settings', handleInstitutionAdminSettings)
 app.all('/api/institution/admin/domains', handleInstitutionAdminDomains)
 app.patch('/api/institution/admin/domains/:domain', handleInstitutionAdminDomainDecision)
 app.get('/api/institution/admin/report', handleInstitutionAdminReport)
+app.get('/api/institution/admin/student-claims', handleStudentInstitutionClaimQueue)
+app.patch('/api/institution/admin/student-claims/:userId', handleStudentInstitutionClaimDecision)
 
 app.use('/api/admin/institutions/*', cors({
   origin: 'https://app.autolearnpro.com',
@@ -224,6 +239,15 @@ app.use('/api/admin/instructor-verification/*', cors({
 }))
 app.get('/api/admin/instructor-verification/requests', handleAdminInstructorVerificationQueue)
 app.patch('/api/admin/instructor-verification/requests/:requestId', handleAdminInstructorVerificationDecision)
+
+app.use('/api/admin/student-institution-claims/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/admin/student-institution-claims', handleStudentInstitutionClaimQueue)
+app.patch('/api/admin/student-institution-claims/:userId', handleStudentInstitutionClaimDecision)
 
 // Instructor-owned classroom core. The Worker verifies the bearer token and
 // trusted instructor role, then scopes all persistence to the authenticated owner.
