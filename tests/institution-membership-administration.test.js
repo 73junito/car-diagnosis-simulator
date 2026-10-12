@@ -82,7 +82,7 @@ describe('G8 institution membership administration', () => {
     expect(html).toContain('id="institutionMemberList"')
     expect(ui).toContain("window.apiGet('/api/institution/invitations')")
     expect(ui).toContain('Accept Invitation')
-    expect(ui).toContain('Create Invitation')
+    expect(html).toContain('Create Invitation')
     expect(ui).toContain('Revoke Invitation')
     expect(ui).toContain('Remove Membership')
   })
