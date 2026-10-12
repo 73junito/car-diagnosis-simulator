@@ -107,8 +107,17 @@ export async function handleInstitutionAdminSettings(c) {
   const auth = await authorizeAuthenticated(c)
   if (auth.response) return auth.response
 
+  let body = null
+  if (c.req.method === 'PATCH') {
+    try {
+      body = await c.req.json()
+    } catch {
+      return c.json({ error: 'Invalid JSON body' }, 400)
+    }
+  }
+
   const schoolCode = normalizeSchoolCode(
-    c.req.method === 'GET' ? c.req.query('schoolCode') : (await c.req.json().catch(() => null))?.schoolCode
+    c.req.method === 'GET' ? c.req.query('schoolCode') : body?.schoolCode
   )
   if (!schoolCode) return c.json({ error: 'Valid institution schoolCode required' }, 400)
 
@@ -138,13 +147,6 @@ export async function handleInstitutionAdminSettings(c) {
   }
 
   if (c.req.method !== 'PATCH') return c.json({ error: 'Method not allowed' }, 405)
-
-  let body
-  try {
-    body = await c.req.json()
-  } catch {
-    return c.json({ error: 'Invalid JSON body' }, 400)
-  }
 
   const displayName = normalizeNullableText(body?.displayName, 160)
   const websiteUrl = normalizeNullableText(body?.websiteUrl, 500)
