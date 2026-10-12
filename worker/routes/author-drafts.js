@@ -55,6 +55,7 @@ async function authorizeAuthor(c) {
     .from('instructor_verification_requests')
     .select('school_code,status')
     .eq('user_id', user.id)
+    .eq('status', 'approved')
     .maybeSingle()
 
   if (verificationError) {
