@@ -35,13 +35,15 @@ describe('production API route inventory', () => {
   test('known production gaps stay mapped to roadmap work', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     for (const expected of [
-      '/api/classes',
+      '/api/classes/by-code/:param',
+      '/api/classes/:param/enroll',
       '/api/teacher/data',
       '/api/analytics/students',
       '/api/telemetry/stream',
       '/api/attempts/save',
       '/api/approved-sources'
     ]) expect(patterns).toContain(expected)
+    expect(patterns).not.toContain('/api/classes')
     for (const entry of inventory.knownUnregisteredRoutes) {
       expect(entry.gap).toMatch(/^G\d+$/)
       expect(entry.disposition.length).toBeGreaterThan(20)
