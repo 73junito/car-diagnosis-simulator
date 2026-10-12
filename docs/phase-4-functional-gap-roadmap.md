@@ -86,10 +86,15 @@ The repository already contains useful foundations, but several exist outside th
 **Gap:** closed for the current staging baseline. PR CI now fails when staging is missing any non-exempt logical migration already present on `main`; post-merge/main checks compare staging against `HEAD`.
 **Required outcome:** completed with staging logical migration synchronization, one count-limited documented exception, locked-down migration-history RPCs, a project-ref-pinned drift verifier, and a staging CI workflow. Schema-dependent endpoints continue to fail closed when their required migration is absent.
 
-### G19 - Supabase SECURITY DEFINER RPC exposure hardening - **P0**
+### G19 - Supabase SECURITY DEFINER RPC exposure hardening - **P0 - completed**
 **Evidence:** the post-sync Supabase security advisor reports `public.capture_student_institution_claim()` and `public.handle_new_auth_user()` as `SECURITY DEFINER` functions directly executable by both `anon` and `authenticated`. It also reports one mutable-search-path function, `public.set_external_data_resource_updated_at`.
-**Gap:** trigger/helper functions with elevated execution context remain directly callable through the exposed API roles, expanding the attack surface beyond their intended trigger/helper use.
-**Required outcome:** revoke direct `anon`/`authenticated` execute rights from trigger-only `SECURITY DEFINER` functions, verify required triggers continue to operate, pin safe `search_path` on the external-data timestamp helper, and add regression/security-advisor checks without broadening application data access.
+**Gap:** closed for the three trigger/helper functions identified by the staging advisor. Direct `PUBLIC`/`anon`/`authenticated` execution is revoked and all three functions have an empty pinned `search_path`.
+**Required outcome:** completed. Staging transactional verification confirmed profile creation, student institution-claim creation, and external-resource timestamp trigger execution still work; staging and production security-advisor/privilege checks confirm the original G19 warnings are cleared.
+
+### G20 - Provenance RLS helper isolation and legacy DB parity - **P1**
+**Evidence:** after G19, production security advisor still reports `public.is_provenance_admin()` and `public.is_provenance_reviewer()` as authenticated-executable `SECURITY DEFINER` functions. Existing `db/migrations` intentionally grant that access because RLS policies call the helpers, while staging does not contain either helper.
+**Gap:** provenance role helpers are intentionally required by production RLS but remain in the exposed `public` schema, and the `db/migrations` provenance surface is not represented on staging.
+**Required outcome:** move or recreate the helpers in a non-exposed/private schema with pinned empty `search_path`, update dependent RLS policies, preserve reviewer/admin semantics, and reconcile the legacy `db/migrations` provenance surface with staging before removing the production advisor warnings.
 
 ## Recommended execution order
 ### Phase 4A — Authorization and runtime foundation
@@ -98,7 +103,8 @@ The repository already contains useful foundations, but several exist outside th
 3. [x] Instructor verification decision API + audit record.
 4. [x] Admin verification-review minimum UI.
 5. [x] Supabase migration drift detection and staging synchronization (G18).
-6. Supabase SECURITY DEFINER RPC exposure hardening (G19).
+6. [x] Supabase SECURITY DEFINER RPC exposure hardening (G19).
+7. Provenance RLS helper isolation and legacy DB parity (G20).
 **Why first:** every later institutional/instructor/admin capability depends on trusted authorization and a real operational approval path.
 ### Phase 4B — Instructor classroom core
 1. Port classes/list/create to Worker.
@@ -165,4 +171,4 @@ Use one concern per branch/PR. Suggested first branches:
 - Empty/unavailable states must be truthful; do not substitute sample data on authenticated production dashboards.
 - Generated reports/files remain unstaged unless they are intentional evidence artifacts.
 ## First implementation target
-G1, G3, and G18 are complete. Next close **G19 - Supabase SECURITY DEFINER RPC exposure hardening**, then finish the Phase 4A production API route inventory contract before beginning the Phase 4B classroom ports.
+G1, G3, G18, and G19 are complete. Next finish the **Phase 4A production API route inventory contract**. Track G20 separately as provenance/RLS security architecture work before broader institutional rollout.
