@@ -12,6 +12,14 @@ const migration = fs.readFileSync(
   path.join(root, 'supabase', 'migrations', '20261012092021_add_authoring_review_lifecycle.sql'),
   'utf8'
 )
+const reviewRequestRoute = route.slice(
+  route.indexOf('export async function handleAuthorDraftReviewRequest'),
+  route.indexOf('export async function handleAuthorDraftPublicationRequest')
+)
+const adminReviewRoute = route.slice(
+  route.indexOf('export async function handleAdminAuthorDraftReviews'),
+  route.indexOf('export async function handleAdminAuthorDraftReviewDecision')
+)
 
 describe('G7 authoring autosave and review lifecycle', () => {
   test('registers author review request and admin review routes', () => {
@@ -23,11 +31,11 @@ describe('G7 authoring autosave and review lifecycle', () => {
   test('keeps review state separate from draft publication state', () => {
     expect(migration).toContain("review_status in ('not_requested', 'pending', 'changes_requested', 'review_complete')")
     expect(migration).toContain('Review completion does not publish content or grant training/assessment eligibility.')
-    expect(route).toContain("review_status: 'pending'")
-    expect(route).toContain("decision === 'review_complete'")
-    expect(route).not.toContain("status: 'published'")
-    expect(route).not.toContain("status: 'approved'")
-    expect(route).not.toContain('assessment_question_eligibility')
+    expect(reviewRequestRoute).toContain("review_status: 'pending'")
+    expect(adminReviewRoute).toContain("'review_complete'")
+    expect(reviewRequestRoute).not.toContain("publication_status: 'published'")
+    expect(reviewRequestRoute).not.toContain('assessment_question_eligibility')
+    expect(adminReviewRoute).not.toContain('assessment_question_eligibility')
   })
 
   test('locks edits during pending/completed review but permits requested changes', () => {
@@ -35,7 +43,7 @@ describe('G7 authoring autosave and review lifecycle', () => {
     expect(route).toContain(".eq('review_status', 'not_requested')")
     expect(authorUi).toContain('draft.reviewStatus === "not_requested" || draft.reviewStatus === "changes_requested"')
     expect(authorUi).toContain('Review pending. Editing and autosave are locked')
-    expect(authorUi).toContain('Review complete. This draft remains private and unpublished.')
+    expect(authorUi).toContain('Review complete with governed evidence. Publication approval may now be requested.')
   })
 
   test('records append-only lifecycle evidence through a private trigger helper', () => {
@@ -70,7 +78,6 @@ describe('G7 authoring autosave and review lifecycle', () => {
     expect(adminHtml).toContain('does not publish a scenario or grant learner or assessment eligibility')
     expect(adminUi).toContain("'review_complete'")
     expect(adminUi).toContain("'changes_requested'")
-    expect(adminUi).not.toContain("'published'")
     expect(adminUi).not.toContain("decideAuthorDraft(draft, 'approved'")
     expect(adminUi).not.toContain("decideAuthorDraft(draft, 'published'")
     expect(adminUi).toContain('A review note is required when requesting changes.')

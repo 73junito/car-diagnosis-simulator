@@ -55,11 +55,14 @@ import {
   handleAuthorDrafts,
   handleAuthorDraft,
   handleAuthorDraftReviewRequest,
+  handleAuthorDraftPublicationRequest,
   handleAuthorEvidenceSources,
   handleAuthorDraftEvidence,
   handleAuthorDraftEvidenceLink,
   handleAdminAuthorDraftReviews,
-  handleAdminAuthorDraftReviewDecision
+  handleAdminAuthorDraftReviewDecision,
+  handleAdminAuthorDraftPublications,
+  handleAdminAuthorDraftPublicationDecision
 } from "./routes/author-drafts.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
@@ -239,6 +242,7 @@ app.use('/api/author/evidence-sources', authorDraftCors)
 app.all('/api/author/drafts', handleAuthorDrafts)
 app.all('/api/author/drafts/:draftId', handleAuthorDraft)
 app.post('/api/author/drafts/:draftId/review-request', handleAuthorDraftReviewRequest)
+app.post('/api/author/drafts/:draftId/publication-request', handleAuthorDraftPublicationRequest)
 app.get('/api/author/evidence-sources', handleAuthorEvidenceSources)
 app.all('/api/author/drafts/:draftId/evidence', handleAuthorDraftEvidence)
 app.delete('/api/author/drafts/:draftId/evidence/:linkId', handleAuthorDraftEvidenceLink)
@@ -253,6 +257,10 @@ app.use('/api/admin/author-drafts/reviews', adminAuthorReviewCors)
 app.use('/api/admin/author-drafts/reviews/*', adminAuthorReviewCors)
 app.get('/api/admin/author-drafts/reviews', handleAdminAuthorDraftReviews)
 app.patch('/api/admin/author-drafts/reviews/:draftId', handleAdminAuthorDraftReviewDecision)
+app.use('/api/admin/author-drafts/publications', adminAuthorReviewCors)
+app.use('/api/admin/author-drafts/publications/*', adminAuthorReviewCors)
+app.get('/api/admin/author-drafts/publications', handleAdminAuthorDraftPublications)
+app.patch('/api/admin/author-drafts/publications/:draftId', handleAdminAuthorDraftPublicationDecision)
 
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.

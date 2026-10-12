@@ -10,6 +10,10 @@ const migration = fs.readFileSync(
   path.join(root, 'supabase', 'migrations', '20261012094800_add_authoring_evidence_linkage.sql'),
   'utf8'
 )
+const evidenceRoute = route.slice(
+  route.indexOf('function validEvidenceRole'),
+  route.indexOf('export async function handleAuthorDraftReviewRequest')
+)
 
 describe('G7 authoring evidence/source linkage', () => {
   test('registers approved evidence search and draft evidence routes', () => {
@@ -55,10 +59,9 @@ describe('G7 authoring evidence/source linkage', () => {
     expect(authorUi).toContain('Supports diagnosis')
   })
 
-  test('evidence linkage does not add publication or assessment eligibility paths', () => {
-    expect(route).not.toContain("status: 'published'")
-    expect(route).not.toContain("status: 'approved'")
-    expect(route).not.toContain('assessment_question_eligibility')
+  test('evidence linkage does not itself publish or grant assessment eligibility', () => {
+    expect(evidenceRoute).not.toContain("publication_status: 'published'")
+    expect(evidenceRoute).not.toContain('assessment_question_eligibility')
     expect(migration).toContain('does not publish or grant assessment eligibility')
   })
 })

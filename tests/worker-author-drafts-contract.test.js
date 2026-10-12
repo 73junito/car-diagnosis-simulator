@@ -10,6 +10,10 @@ const migration = fs.readFileSync(
   path.join(root, 'supabase', 'migrations', '20261012090441_add_scenario_authoring_drafts.sql'),
   'utf8'
 )
+const draftPersistenceRoute = route.slice(
+  route.indexOf('export async function handleAuthorDrafts'),
+  route.indexOf('function validEvidenceRole')
+)
 
 describe('G7 server-backed authoring draft contract', () => {
   test('registers authenticated draft routes on the production Worker', () => {
@@ -64,9 +68,9 @@ describe('G7 server-backed authoring draft contract', () => {
 
   test('draft persistence has no publish or assessment eligibility side effect', () => {
     expect(migration).toContain('Draft persistence does not grant review, publication, training, scoring')
-    expect(route).not.toContain('assessment_question_eligibility')
-    expect(route).not.toContain('scenario_questions')
-    expect(route).not.toContain("status: 'approved'")
-    expect(route).not.toContain("status: 'published'")
+    expect(draftPersistenceRoute).not.toContain('assessment_question_eligibility')
+    expect(draftPersistenceRoute).not.toContain('scenario_questions')
+    expect(draftPersistenceRoute).not.toContain("publication_status: 'published'")
+    expect(draftPersistenceRoute).not.toContain("status: 'approved'")
   })
 })

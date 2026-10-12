@@ -14,6 +14,7 @@
   const scenarioLibraryList = document.getElementById("scenarioLibraryList");
   const authorAccessStatus = document.getElementById("authorAccessStatus");
   const requestReviewButton = document.getElementById("requestReviewBtn");
+  const requestPublicationButton = document.getElementById("requestPublicationBtn");
   const draftLifecycleStatus = document.getElementById("draftLifecycleStatus");
   const evidenceSearchInput = document.getElementById("evidenceSearchInput");
   const evidenceSearchButton = document.getElementById("evidenceSearchBtn");
@@ -148,6 +149,12 @@
     if (requestReviewButton) {
       requestReviewButton.disabled = !currentDraft || !editable;
     }
+    if (requestPublicationButton) {
+      requestPublicationButton.disabled = !currentDraft ||
+        currentDraft.reviewStatus !== "review_complete" ||
+        (currentDraft.publicationStatus || "unpublished") !== "unpublished" ||
+        linkedEvidence.length < 1;
+    }
     if (evidenceSearchButton) evidenceSearchButton.disabled = !currentDraft || !editable;
     if (evidenceSearchInput) evidenceSearchInput.disabled = !currentDraft || !editable;
 
@@ -157,12 +164,21 @@
     }
 
     const status = currentDraft.reviewStatus || "not_requested";
-    if (status === "pending") {
+    const publicationStatus = currentDraft.publicationStatus || "unpublished";
+    if (publicationStatus === "pending") {
+      setLifecycleStatus("Publication approval pending. The reviewed draft is locked; publication approval does not grant assessment eligibility.");
+    } else if (publicationStatus === "published") {
+      setLifecycleStatus("Publication approved. This governed approval does not grant learner delivery, scoring, or assessment eligibility.");
+    } else if (publicationStatus === "changes_requested") {
+      setLifecycleStatus("Publication changes requested" + (currentDraft.publicationNote ? ": " + currentDraft.publicationNote : "") + ". Review is reopened before publication can be requested again.");
+    } else if (status === "pending") {
       setLifecycleStatus("Review pending. Editing and autosave are locked until an administrator responds.");
     } else if (status === "changes_requested") {
       setLifecycleStatus("Changes requested" + (currentDraft.reviewNote ? ": " + currentDraft.reviewNote : "") + ". Editing and autosave are enabled.");
     } else if (status === "review_complete") {
-      setLifecycleStatus("Review complete. This draft remains private and unpublished.");
+      setLifecycleStatus(linkedEvidence.length
+        ? "Review complete with governed evidence. Publication approval may now be requested."
+        : "Review complete. Link at least one governed evidence source before requesting publication approval.");
     } else {
       setLifecycleStatus("Private draft v" + currentDraft.version + ". Autosave is active after changes.");
     }
@@ -228,6 +244,7 @@
     );
     linkedEvidence = Array.isArray(response && response.links) ? response.links : [];
     renderLinkedEvidence();
+    applyDraftLifecycle();
   }
 
   function renderEvidenceSearchResults(results) {
@@ -503,7 +520,9 @@
       title.textContent = draft.title || "Untitled Scenario";
 
       const version = document.createElement("span");
-      version.textContent = " v" + String(draft.version || 1) + " · " + String(draft.reviewStatus || "not_requested").replaceAll("_", " ");
+      version.textContent = " v" + String(draft.version || 1) +
+        " · review " + String(draft.reviewStatus || "not_requested").replaceAll("_", " ") +
+        " · publication " + String(draft.publicationStatus || "unpublished").replaceAll("_", " ");
 
       const load = document.createElement("button");
       load.type = "button";
@@ -637,6 +656,35 @@
     }
   }
 
+  async function requestPublication() {
+    if (!currentDraft || currentDraft.reviewStatus !== "review_complete") {
+      setLifecycleStatus("Complete governed review before requesting publication approval.");
+      return;
+    }
+    if (!linkedEvidence.length) {
+      setLifecycleStatus("Link at least one governed evidence source before requesting publication approval.");
+      return;
+    }
+
+    try {
+      const response = await window.apiPost(
+        "/api/author/drafts/" + encodeURIComponent(currentDraft.id) + "/publication-request",
+        { version: currentDraft.version }
+      );
+      currentDraft = response.draft;
+      syncDraftSummary(currentDraft);
+      applyDraftLifecycle();
+      setStatus("Publication Approval Requested");
+    } catch (error) {
+      if (error && error.status === 409) {
+        setStatus("Publication Request Conflict");
+        setLifecycleStatus("Reload the server draft and confirm review/evidence state before requesting publication.");
+        return;
+      }
+      setStatus("Publication Request Failed");
+    }
+  }
+
   function exportScenario() {
     const scenario = buildScenario();
     const blob = new Blob([JSON.stringify(scenario, null, 2)], {
@@ -679,6 +727,10 @@
 
   if (requestReviewButton) {
     requestReviewButton.addEventListener("click", requestReview);
+  }
+
+  if (requestPublicationButton) {
+    requestPublicationButton.addEventListener("click", requestPublication);
   }
 
   if (evidenceSearchButton) {
@@ -725,7 +777,7 @@
 
     try {
       await loadDraftLibrary();
-      if (authorAccessStatus) authorAccessStatus.textContent = "Verified author · private drafts";
+      if (authorAccessStatus) authorAccessStatus.textContent = "Verified author · governed review and publication";
       renderPreview();
       applyDraftLifecycle();
       renderLinkedEvidence();
