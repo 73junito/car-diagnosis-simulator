@@ -39,6 +39,25 @@
       <div id="verification-queue" class="admin-queue" aria-live="polite"></div>
     </section>
 
+    <section class="tm-panel" aria-labelledby="student-claim-review-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="student-claim-review-heading">Student institution claims</h2>
+          <p id="student-claim-review-status" role="status" aria-live="polite">Loading pending claims…</p>
+        </div>
+        <label for="student-claim-review-status-select">Status
+          <select id="student-claim-review-status-select" class="tm-select">
+            <option value="claimed" selected>Claimed</option>
+            <option value="verified">Verified</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </label>
+        <button id="student-claim-review-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <p>Verification establishes only a basic institution member relationship. It does not grant instructor/admin roles or assessment eligibility.</p>
+      <div id="student-claim-review-queue" class="admin-queue" aria-live="polite"></div>
+    </section>
+
     <section class="tm-panel" aria-labelledby="institution-owner-bootstrap-heading">
       <h2 id="institution-owner-bootstrap-heading">Institution owner bootstrap</h2>
       <p>Create the first owner invitation for an institution that does not yet have an active owner. The recipient must accept using the matching confirmed account email.</p>
