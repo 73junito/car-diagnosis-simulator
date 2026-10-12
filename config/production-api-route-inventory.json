@@ -7,6 +7,6 @@
     { "pattern": "/api/attempts/save", "gap": "G17", "category": "legacy-attempt-api", "disposition": "Retire or port the legacy attempts API; current scenario delivery must not rely on an unreachable save route." },
     { "pattern": "/api/auth/role", "gap": "G17", "category": "legacy-auth-api", "disposition": "Remove the unused legacy browser route constant or implement a Worker-native trusted role endpoint if required." },
     { "pattern": "/api/complete", "gap": "G17", "category": "legacy-attempt-api", "disposition": "Retire or port the legacy completion write into the governed Worker progress/attempt model." },
-    { "pattern": "/api/replay", "gap": "G17", "category": "legacy-attempt-api", "disposition": "Retire or port the legacy replay write into the governed Worker progress/attempt model." },
+    { "pattern": "/api/replay", "gap": "G17", "category": "legacy-attempt-api", "disposition": "Retire or port the legacy replay write into the governed Worker progress/attempt model." }
   ]
 }
