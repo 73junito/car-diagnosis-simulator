@@ -20,6 +20,24 @@
   const studentClaimStatus = document.getElementById('student-claim-review-status')
   const studentClaimStatusSelect = document.getElementById('student-claim-review-status-select')
   const studentClaimRefresh = document.getElementById('student-claim-review-refresh')
+  const overviewCards = document.getElementById('platform-overview-cards')
+  const overviewStatus = document.getElementById('platform-overview-status')
+  const overviewRefresh = document.getElementById('platform-overview-refresh')
+  const usersList = document.getElementById('platform-users-list')
+  const usersStatus = document.getElementById('platform-users-status')
+  const usersRefresh = document.getElementById('platform-users-refresh')
+  const institutionsList = document.getElementById('platform-institutions-list')
+  const institutionsStatus = document.getElementById('platform-institutions-status')
+  const institutionSearchForm = document.getElementById('platform-institution-search-form')
+  const institutionSearch = document.getElementById('platform-institution-search')
+  const auditList = document.getElementById('platform-audit-list')
+  const auditStatus = document.getElementById('platform-audit-status')
+  const auditRefresh = document.getElementById('platform-audit-refresh')
+  const operationalForm = document.getElementById('platform-operational-form')
+  const ownerBootstrapEnabled = document.getElementById('platform-owner-bootstrap-enabled')
+  const operationsNote = document.getElementById('platform-operations-note')
+  const operationalStatus = document.getElementById('platform-operational-status')
+  let currentOwnerBootstrapEnabled = null
 
   function token(){ return typeof window.getAccessToken === 'function' ? window.getAccessToken() : null }
   function clear(node){ while(node.firstChild) node.removeChild(node.firstChild) }
@@ -40,6 +58,148 @@
     const payload = await response.json().catch(() => ({}))
     if (!response.ok) throw new Error(payload.error || 'Request failed.')
     return payload
+  }
+
+  function summaryCard(label, value){
+    const card = text('article', '', 'admin-card')
+    card.appendChild(text('div', label, 'admin-meta'))
+    card.appendChild(text('strong', String(value ?? 0)))
+    return card
+  }
+
+  async function loadPlatformOverview(){
+    clear(overviewCards)
+    overviewStatus.textContent = 'Loading platform status…'
+    try {
+      const payload = await api('/api/admin/platform/overview')
+      overviewCards.append(
+        summaryCard('Users', payload.users),
+        summaryCard('Institutions', payload.institutions),
+        summaryCard('Active memberships', payload.activeMemberships),
+        summaryCard('Pending instructor reviews', payload.pending?.instructorVerification),
+        summaryCard('Pending student claims', payload.pending?.studentInstitutionClaims),
+        summaryCard('Pending author reviews', payload.pending?.authoringReview),
+        summaryCard('Pending publications', payload.pending?.publicationApproval)
+      )
+      overviewStatus.textContent = 'Platform administration status loaded.'
+    } catch (error) {
+      overviewStatus.textContent = error.message || 'Platform status unavailable.'
+    }
+  }
+
+  async function loadPlatformUsers(){
+    clear(usersList)
+    usersStatus.textContent = 'Loading user directory…'
+    try {
+      const payload = await api('/api/admin/platform/users?limit=100')
+      const users = Array.isArray(payload.users) ? payload.users : []
+      if (!users.length) {
+        usersList.appendChild(text('p', 'No users returned.', 'admin-empty'))
+      } else {
+        users.forEach((user) => {
+          const card = text('article', '', 'admin-card')
+          card.appendChild(text('h3', user.email || user.id))
+          const meta = text('div', '', 'admin-meta')
+          meta.appendChild(text('div', 'User ID: ' + user.id))
+          meta.appendChild(text('div', 'Trusted role: ' + user.role))
+          meta.appendChild(text('div', 'Role source: ' + user.roleSource))
+          if (user.profileRole && user.profileRole !== user.role) {
+            meta.appendChild(text('div', 'Profile role: ' + user.profileRole))
+          }
+          if (user.emailConfirmedAt) {
+            meta.appendChild(text('div', 'Email confirmed: ' + new Date(user.emailConfirmedAt).toLocaleString()))
+          }
+          if (user.lastSignInAt) {
+            meta.appendChild(text('div', 'Last sign in: ' + new Date(user.lastSignInAt).toLocaleString()))
+          }
+          card.appendChild(meta)
+          usersList.appendChild(card)
+        })
+      }
+      usersStatus.textContent = users.length + ' user' + (users.length === 1 ? '' : 's') + ' shown.'
+    } catch (error) {
+      usersStatus.textContent = error.message || 'User directory unavailable.'
+    }
+  }
+
+  async function loadPlatformInstitutions(){
+    clear(institutionsList)
+    institutionsStatus.textContent = 'Loading institutions…'
+    try {
+      const q = institutionSearch.value.trim()
+      const payload = await api('/api/admin/platform/institutions?limit=100' + (q ? '&q=' + encodeURIComponent(q) : ''))
+      const institutions = Array.isArray(payload.institutions) ? payload.institutions : []
+      if (!institutions.length) {
+        institutionsList.appendChild(text('p', 'No institutions matched.', 'admin-empty'))
+      } else {
+        institutions.forEach((institution) => {
+          const card = text('article', '', 'admin-card')
+          card.appendChild(text('h3', institution.schoolName || institution.schoolCode))
+          const place = [institution.city, institution.stateCode || institution.country].filter(Boolean).join(', ')
+          const meta = text('div', '', 'admin-meta')
+          meta.appendChild(text('div', 'School code: ' + institution.schoolCode))
+          if (place) meta.appendChild(text('div', place))
+          meta.appendChild(text('div', 'Directory status: ' + (institution.active ? 'active' : 'inactive')))
+          meta.appendChild(text('div', 'Active memberships: ' + institution.activeMemberships))
+          meta.appendChild(text('div', 'Owners: ' + institution.owners + ' · Admins: ' + institution.admins))
+          meta.appendChild(text('div', 'Active verified domains: ' + institution.activeDomains))
+          card.appendChild(meta)
+          institutionsList.appendChild(card)
+        })
+      }
+      institutionsStatus.textContent = institutions.length + ' institution' + (institutions.length === 1 ? '' : 's') + ' shown.'
+    } catch (error) {
+      institutionsStatus.textContent = error.message || 'Institution directory unavailable.'
+    }
+  }
+
+  async function loadPlatformAudit(){
+    clear(auditList)
+    auditStatus.textContent = 'Loading audit history…'
+    try {
+      const payload = await api('/api/admin/platform/audit?limit=100')
+      const events = Array.isArray(payload.events) ? payload.events : []
+      if (!events.length) {
+        auditList.appendChild(text('p', 'No audit events are available.', 'admin-empty'))
+      } else {
+        events.forEach((event) => {
+          const card = text('article', '', 'admin-card')
+          card.appendChild(text('h3', String(event.type || 'event').replaceAll('_', ' ')))
+          const meta = text('div', '', 'admin-meta')
+          meta.appendChild(text('div', 'Action: ' + (event.action || 'recorded')))
+          if (event.schoolCode) meta.appendChild(text('div', 'School code: ' + event.schoolCode))
+          if (event.subjectId) meta.appendChild(text('div', 'Subject: ' + event.subjectId))
+          if (event.actorId) meta.appendChild(text('div', 'Actor: ' + event.actorId))
+          if (event.createdAt) meta.appendChild(text('div', 'Time: ' + new Date(event.createdAt).toLocaleString()))
+          card.appendChild(meta)
+          if (event.note) card.appendChild(text('p', 'Note: ' + event.note))
+          auditList.appendChild(card)
+        })
+      }
+      auditStatus.textContent = events.length + ' recent audit event' + (events.length === 1 ? '' : 's') + '.'
+    } catch (error) {
+      auditStatus.textContent = error.message || 'Audit history unavailable.'
+    }
+  }
+
+  async function loadOperationalSettings(){
+    operationalStatus.textContent = 'Loading operational configuration…'
+    try {
+      const payload = await api('/api/admin/platform/operational-settings')
+      const settings = payload.settings || {}
+      currentOwnerBootstrapEnabled = Boolean(settings.ownerBootstrapEnabled)
+      ownerBootstrapEnabled.checked = currentOwnerBootstrapEnabled
+      operationsNote.value = settings.operationsNote || ''
+      ownerBootstrapForm.querySelector('button[type="submit"]').disabled = !currentOwnerBootstrapEnabled
+      operationalStatus.textContent = currentOwnerBootstrapEnabled
+        ? 'Initial institution-owner bootstrap is enabled.'
+        : 'Initial institution-owner bootstrap is disabled.'
+    } catch (error) {
+      operationalStatus.textContent = error.message || 'Operational configuration unavailable.'
+      ownerBootstrapEnabled.disabled = true
+      operationsNote.disabled = true
+      operationalForm.querySelector('button[type="submit"]').disabled = true
+    }
   }
 
   function displayInstitution(request){
@@ -408,6 +568,54 @@
     }
   }
 
+  overviewRefresh.addEventListener('click', loadPlatformOverview)
+  usersRefresh.addEventListener('click', loadPlatformUsers)
+  institutionSearchForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+    loadPlatformInstitutions()
+  })
+  auditRefresh.addEventListener('click', loadPlatformAudit)
+
+  operationalForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    const desired = ownerBootstrapEnabled.checked
+    const changingHighRiskSetting =
+      currentOwnerBootstrapEnabled !== null &&
+      desired !== currentOwnerBootstrapEnabled
+
+    if (changingHighRiskSetting) {
+      const confirmed = window.confirm(
+        desired
+          ? 'Enable creation of initial institution-owner invitations?'
+          : 'Disable creation of initial institution-owner invitations? Existing memberships and invitations are not changed.'
+      )
+      if (!confirmed) {
+        ownerBootstrapEnabled.checked = currentOwnerBootstrapEnabled
+        return
+      }
+    }
+
+    operationalStatus.textContent = 'Saving operational configuration…'
+    try {
+      const payload = await api('/api/admin/platform/operational-settings', {
+        method: 'PATCH',
+        body: JSON.stringify({
+          ownerBootstrapEnabled: desired,
+          operationsNote: operationsNote.value.trim(),
+          confirmed: changingHighRiskSetting
+        })
+      })
+      currentOwnerBootstrapEnabled = Boolean(payload.settings?.ownerBootstrapEnabled)
+      ownerBootstrapEnabled.checked = currentOwnerBootstrapEnabled
+      ownerBootstrapForm.querySelector('button[type="submit"]').disabled = !currentOwnerBootstrapEnabled
+      operationalStatus.textContent = payload.message || 'Operational configuration saved.'
+      await loadPlatformAudit()
+    } catch (error) {
+      ownerBootstrapEnabled.checked = currentOwnerBootstrapEnabled
+      operationalStatus.textContent = error.message || 'Operational configuration could not be saved.'
+    }
+  })
+
   ownerBootstrapForm.addEventListener('submit', async (event) => {
     event.preventDefault()
     const schoolCode = ownerBootstrapSchoolCode.value.trim().toUpperCase()
@@ -443,6 +651,11 @@
   authorRefresh.addEventListener('click', loadAuthorQueue)
   publicationStatusSelect.addEventListener('change', loadPublicationQueue)
   publicationRefresh.addEventListener('click', loadPublicationQueue)
+  loadPlatformOverview()
+  loadPlatformUsers()
+  loadPlatformInstitutions()
+  loadOperationalSettings()
+  loadPlatformAudit()
   loadQueue()
   loadStudentClaimQueue()
   loadAuthorQueue()
