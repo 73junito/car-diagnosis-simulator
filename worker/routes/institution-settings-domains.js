@@ -152,9 +152,9 @@ export async function handleInstitutionAdminSettings(c) {
   const websiteUrl = normalizeNullableText(body?.websiteUrl, 500)
   const supportEmail = normalizeNullableText(body?.supportEmail, 320)
   const timezone = normalizeNullableText(body?.timezone, 100)
-  const locale = normalizeNullableText(body?.locale, 35) || 'en-US'
+  const localeValue = normalizeNullableText(body?.locale, 35)
 
-  if ([displayName, websiteUrl, supportEmail, timezone].some((value) => value === undefined)) {
+  if ([displayName, websiteUrl, supportEmail, timezone, localeValue].some((value) => value === undefined)) {
     return c.json({ error: 'Institution setting exceeds allowed length' }, 400)
   }
   if (websiteUrl && !/^https:\/\/[^\s]+$/.test(websiteUrl)) {
@@ -173,7 +173,7 @@ export async function handleInstitutionAdminSettings(c) {
       website_url: websiteUrl,
       support_email: supportEmail ? supportEmail.toLowerCase() : null,
       timezone,
-      locale,
+      locale: localeValue || 'en-US',
       updated_by: auth.user.id,
       updated_at: now
     }, { onConflict: 'school_code' })
