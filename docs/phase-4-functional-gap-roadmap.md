@@ -25,10 +25,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** production Worker supports lookup, request, and status. `instructor_verification_requests` supports `pending/approved/rejected`, but no app route was found that writes the review decision.
 **Gap:** pending instructor affiliation cannot be approved/rejected through a governed application workflow.
 **Required outcome:** admin-only review queue, decision endpoint, reviewer identity/timestamp/note enforcement, immutable audit evidence, and tests proving non-admin users cannot decide requests.
-### G4 — Instructor workspace completeness — **P1**
+### G4 — Instructor workspace completeness — **P1 - completed**
 **Evidence:** `/dashboard/instructor/` exposes Analytics and Research only. Live Session and Session History exist separately. Classroom/assignment/roster UI is absent.
-**Gap:** the instructor home now includes a production-backed Classes/Roster/Assignments workspace, but Live Session, Session History, Analytics, and Research remain separate surfaces rather than one coherent operational shell.
-**Required outcome:** verified-instructor shell that links only capabilities backed by production APIs; add Classes, Roster, Assignments, Live Session, Session History, Analytics, Research, and Authoring progressively as each backend is authoritative.
+**Gap:** closed for currently authoritative instructor capabilities. The verified instructor home now links Classes & Assignments, Live Session, Session History, Analytics, and Research Discovery from one operational shell. Authoring remains intentionally absent until G7 provides a server-backed authoring boundary.
+**Required outcome:** completed for production-backed capabilities. The shell exposes only verified, governed instructor features and does not link the browser-local Authoring Studio prematurely.
 ### G5 — Instructor analytics production data boundary — **P0/P1 - completed**
 **Evidence:** `dashboard/instructor/analytics.js` calls `/api/analytics/students` and `/api/analytics/export`; these implementations are Node/CommonJS handlers under `api/analytics/` and are not registered in `worker/index.js`. They aggregate local report files and include fallback empty exports.
 **Gap:** closed. Student analytics, session summary, and analytics export are Worker-native and class-scoped through instructor-owned classes. The optional legacy CTA summary caller and its unscoped fallbacks have been retired.
@@ -115,8 +115,8 @@ The repository already contains useful foundations, but several exist outside th
 ### Phase 4C — Instructor analytics and monitoring
 1. [x] Worker-native scoped analytics: students, session summary, export, and legacy summary-caller retirement.
 2. Worker-native telemetry: [x] history; [x] export; [x] ingestion; [x] live stream.
-3. Replace live-session browser role gate.
-4. Integrate Live Session and Session History into instructor home.
+3. [x] Replace live-session browser role gate.
+4. [x] Integrate Live Session and Session History into instructor home.
 ### Phase 4D — Governed authoring
 1. Author role/access decision.
 2. Server-backed drafts and versioning.
