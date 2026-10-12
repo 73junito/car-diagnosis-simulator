@@ -193,35 +193,82 @@ after insert or update of status on public.institution_membership_invitations
 for each row
 execute function private.capture_institution_invitation_event();
 
-create or replace function private.capture_institution_membership_status_event()
+create or replace function private.accept_institution_invitation_membership()
 returns trigger
 language plpgsql
 security invoker
 set search_path = ''
-as $$
+as $
+declare
+  v_existing public.institution_memberships%rowtype;
+  v_role text;
 begin
-  if old.status is distinct from new.status and new.status = 'suspended' then
-    insert into public.institution_membership_events (
-      school_code, membership_id, actor_id, subject_user_id, action, role
-    ) values (
-      new.school_code, new.id, new.created_by, new.user_id, 'membership_suspended', new.role
-    );
-  elsif old.status is distinct from new.status and new.status = 'active' then
-    insert into public.institution_membership_events (
-      school_code, membership_id, actor_id, subject_user_id, action, role
-    ) values (
-      new.school_code, new.id, new.created_by, new.user_id, 'membership_reactivated', new.role
-    );
+  if old.status is distinct from new.status and new.status = 'accepted' then
+    if new.accepted_by is null or new.accepted_at is null then
+      raise exception 'institution_invitation_rejected: accepted invitation requires authenticated recipient';
+    end if;
+
+    if new.expires_at <= now() then
+      raise exception 'institution_invitation_rejected: invitation expired';
+    end if;
+
+    select *
+      into v_existing
+    from public.institution_memberships membership
+    where membership.school_code = new.school_code
+      and membership.user_id = new.accepted_by
+    for update;
+
+    if found then
+      v_role := case
+        when v_existing.role = 'institution_owner' then 'institution_owner'
+        when v_existing.role = 'institution_admin' and new.role <> 'institution_owner' then 'institution_admin'
+        when v_existing.role = 'instructor' and new.role = 'member' then 'instructor'
+        else new.role
+      end;
+
+      update public.institution_memberships
+      set role = v_role,
+          status = 'active',
+          updated_at = now()
+      where id = v_existing.id;
+    else
+      insert into public.institution_memberships (
+        school_code,
+        user_id,
+        role,
+        status,
+        created_by,
+        created_at,
+        updated_at
+      ) values (
+        new.school_code,
+        new.accepted_by,
+        new.role,
+        'active',
+        new.invited_by,
+        now(),
+        now()
+      );
+    end if;
   end if;
 
   return new;
 end;
-$$;
+$;
 
-revoke all on function private.capture_institution_membership_status_event()
+revoke all on function private.accept_institution_invitation_membership()
   from public, anon, authenticated;
-grant execute on function private.capture_institution_membership_status_event()
+grant execute on function private.accept_institution_invitation_membership()
   to service_role;
+
+drop trigger if exists accept_institution_invitation_membership
+  on public.institution_membership_invitations;
+
+create trigger accept_institution_invitation_membership
+before update of status on public.institution_membership_invitations
+for each row
+execute function private.accept_institution_invitation_membership();
 
 comment on table public.institution_membership_invitations is
   'Tenant-scoped email-bound invitations. A directory match or invitation alone does not grant institution access until the matching authenticated user accepts and an active membership is created.';
