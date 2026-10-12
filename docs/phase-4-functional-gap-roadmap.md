@@ -73,10 +73,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** the redesign audit explicitly leaves the interactive demo case as a new build.
 **Gap:** public visitors cannot experience a safe sample of the reasoning model before sign-in.
 **Required outcome:** one deterministic, non-graded, non-personalized demo using public-safe synthetic/cleared content. It must not expose assessment banks, answer keys, private telemetry, or imply accreditation/credit.
-### G16 — Empty instructor/admin design specifications — **P2 documentation dependency**
-**Evidence:** `design-language/dashboards/administrator.md` is now complete; `design-language/dashboards/instructor.md` remains empty.
-**Gap:** the administrator information architecture/interaction contract is closed, but the instructor workspace still lacks its authoritative role-specific design specification.
-**Required outcome:** complete the instructor dashboard spec with authorization states, empty/error states, destructive-action confirmation, audit visibility, and responsive behavior.
+### G16 — Instructor/admin design specifications — **P2 documentation dependency - completed**
+**Evidence:** both `design-language/dashboards/administrator.md` and `design-language/dashboards/instructor.md` now define authoritative role-specific dashboard contracts.
+**Gap:** closed. The instructor specification covers server-side authorization, classroom/live/history/analytics/research/authoring/institution information architecture, loading/empty/error states, destructive-action confirmation, audit visibility, accessibility, responsive behavior, and the assessment-eligibility boundary.
+**Required outcome:** completed for both high-privilege dashboard surfaces.
 ### G17 — Duplicate runtime/API architecture — **P1 - completed**
 **Evidence:** active capabilities are split among Worker routes, Node/Vercel-style `api/`, and `torquemind-api` Express routes.
 **Gap:** closed for production browser API parity. The client-authored `/api/attempts/save`, `/api/complete`, and `/api/replay` writes were retired instead of ported because they depended on browser-controlled identity, result, or score data. Training progress/replay remains browser-assisted where allowed; assessment attempt creation, grading, and finalization boundaries remain server-authoritative.
