@@ -29,7 +29,7 @@ function normalizeClassName(value) {
 
 function makeClassCode() {
   const values = new Uint32Array(CLASS_CODE_LENGTH)
-  crypto.getRandomValues(values)
+  globalThis.crypto.getRandomValues(values)
   let code = ''
   for (const value of values) {
     code += CLASS_CODE_ALPHABET[value % CLASS_CODE_ALPHABET.length]
