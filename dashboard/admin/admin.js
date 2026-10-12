@@ -11,6 +11,11 @@
   const publicationStatus = document.getElementById('author-publication-status')
   const publicationStatusSelect = document.getElementById('author-publication-status-select')
   const publicationRefresh = document.getElementById('author-publication-refresh')
+  const ownerBootstrapForm = document.getElementById('institution-owner-bootstrap-form')
+  const ownerBootstrapSchoolCode = document.getElementById('institution-owner-school-code')
+  const ownerBootstrapEmail = document.getElementById('institution-owner-email')
+  const ownerBootstrapNote = document.getElementById('institution-owner-note')
+  const ownerBootstrapStatus = document.getElementById('institution-owner-bootstrap-status')
 
   function token(){ return typeof window.getAccessToken === 'function' ? window.getAccessToken() : null }
   function clear(node){ while(node.firstChild) node.removeChild(node.firstChild) }
@@ -315,6 +320,33 @@
       publicationStatus.textContent = error.message || 'Publication queue unavailable.'
     }
   }
+
+  ownerBootstrapForm.addEventListener('submit', async (event) => {
+    event.preventDefault()
+    const schoolCode = ownerBootstrapSchoolCode.value.trim().toUpperCase()
+    const email = ownerBootstrapEmail.value.trim().toLowerCase()
+    if (!/^[A-Z0-9]{6}$/.test(schoolCode)) {
+      ownerBootstrapStatus.textContent = 'Enter a valid six-character school code.'
+      ownerBootstrapSchoolCode.focus()
+      return
+    }
+
+    ownerBootstrapStatus.textContent = 'Creating initial institution owner invitation…'
+    try {
+      const payload = await api('/api/admin/institutions/owner-invitations', {
+        method: 'POST',
+        body: JSON.stringify({
+          schoolCode,
+          email,
+          note: ownerBootstrapNote.value.trim()
+        })
+      })
+      ownerBootstrapStatus.textContent = payload.message || 'Initial institution owner invitation created.'
+      ownerBootstrapForm.reset()
+    } catch (error) {
+      ownerBootstrapStatus.textContent = error.message || 'Institution owner invitation could not be created.'
+    }
+  })
 
   queueStatus.addEventListener('change', loadQueue)
   refresh.addEventListener('click', loadQueue)
