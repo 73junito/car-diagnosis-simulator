@@ -60,9 +60,23 @@ describe('provenance CI gates (local fixtures)', () => {
     expect(mig).not.toMatch(/create policy .*provenance_audit.*for delete/);
   });
 
-  test('migration contains helper role-check functions', () => {
+  test('historical migration contains the original helper role-check functions', () => {
     const mig = fs.readFileSync(path.resolve(__dirname, '..', 'db', 'migrations', '20260805_approved_sources_large_chunks.sql'), 'utf8');
     expect(mig).toMatch(/create or replace function public.is_provenance_reviewer/);
     expect(mig).toMatch(/create or replace function public.is_provenance_admin/);
+  });
+
+  test('canonical G20 migration retires exposed provenance helpers and direct browser grants', () => {
+    const mig = fs.readFileSync(
+      path.resolve(__dirname, '..', 'supabase', 'migrations', '20261012083703_retire_provenance_rls_helpers.sql'),
+      'utf8'
+    );
+    expect(mig).toContain("drop function if exists public.is_provenance_admin()");
+    expect(mig).toContain("drop function if exists public.is_provenance_reviewer()");
+    expect(mig).toContain("revoke all privileges on table public.%I from anon, authenticated");
+    expect(mig).toContain("'approved_sources_insert_reviewers'");
+    expect(mig).toContain("'question_provenance_update_reviewers'");
+    expect(mig).toContain("'provenance_audit_select_reviewers'");
+    expect(mig).not.toContain('create or replace function public.is_provenance_');
   });
 });

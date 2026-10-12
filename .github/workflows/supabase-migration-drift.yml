@@ -40,13 +40,13 @@ jobs:
           SUPABASE_URL: ${{ secrets.STAGING_URL }}
         run: node scripts/assert-staging-supabase.js
 
-      - name: Check staging migration parity with main baseline
+      - name: Check staging migration parity with PR head
         if: github.event_name == 'pull_request'
         env:
           SUPABASE_URL: ${{ secrets.STAGING_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
           EXPECTED_SUPABASE_REF: jchfruprqpeypdttvlam
-        run: node scripts/verify-supabase-migration-drift.js --ref origin/${{ github.base_ref }}
+        run: node scripts/verify-supabase-migration-drift.js --ref HEAD
 
       - name: Check staging migration parity with deployed main
         if: github.event_name != 'pull_request'
@@ -72,13 +72,13 @@ jobs:
         with:
           node-version: 22
 
-      - name: Check production migration parity with main baseline
+      - name: Check production migration parity with PR head
         if: github.event_name == 'pull_request'
         env:
           SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
           EXPECTED_SUPABASE_REF: pffdgqpynpbffbcnxmum
-        run: node scripts/verify-supabase-migration-drift.js --ref origin/${{ github.base_ref }}
+        run: node scripts/verify-supabase-migration-drift.js --ref HEAD
 
       - name: Check production migration parity with deployed main
         if: github.event_name != 'pull_request'
