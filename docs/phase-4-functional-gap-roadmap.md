@@ -27,8 +27,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** admin-only review queue, decision endpoint, reviewer identity/timestamp/note enforcement, immutable audit evidence, and tests proving non-admin users cannot decide requests.
 ### G4 — Instructor workspace completeness — **P1 - completed**
 **Evidence:** `/dashboard/instructor/` exposes Analytics and Research only. Live Session and Session History exist separately. Classroom/assignment/roster UI is absent.
-**Gap:** closed for currently authoritative instructor capabilities. The verified instructor home links Classes & Assignments, Live Session, Session History, Analytics, Research Discovery, and the G7 private-draft Authoring Studio from one operational shell. Authoring is explicitly draft-only until the remaining G7 review/publication controls exist.
-**Required outcome:** completed for production-backed capabilities. The shell exposes only verified, governed instructor features and labels Authoring as private drafts with review/publication unavailable.
+**Gap:** closed for currently authoritative instructor capabilities. The verified instructor home links Classes & Assignments, Live Session, Session History, Analytics, Research Discovery, and the G7 private-draft Authoring Studio from one operational shell. Authoring uses governed review and explicit publication approval; publication remains separate from assessment eligibility.
+**Required outcome:** completed for production-backed capabilities. The shell exposes only verified, governed instructor features and links the operational Authoring Studio with review and publication approval.
 ### G5 — Instructor analytics production data boundary — **P0/P1 - completed**
 **Evidence:** `dashboard/instructor/analytics.js` calls `/api/analytics/students` and `/api/analytics/export`; these implementations are Node/CommonJS handlers under `api/analytics/` and are not registered in `worker/index.js`. They aggregate local report files and include fallback empty exports.
 **Gap:** closed. Student analytics, session summary, and analytics export are Worker-native and class-scoped through instructor-owned classes. The optional legacy CTA summary caller and its unscoped fallbacks have been retired.
@@ -39,8 +39,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** completed. History/export and live stream use verified instructor authorization plus owned-class enrollment scope; ingestion enforces the approved scenario_started-only payload contract and derives authenticated identity server-side. The live browser uses authenticated fetch-based SSE snapshots with cursor reconnects instead of localStorage role trust or an in-memory Worker broadcast bus.
 ### G7 — Server-backed Authoring Studio — **P1**
 **Evidence:** `dashboard/author/` is a substantial UI, but its scenario library is stored in `localStorage`; no production auth gate or server draft/publish API was found.
-**Gap:** partially closed. Browser-local draft persistence is retired. Verified instructors/admins have owner-scoped service-role-mediated drafts with optimistic versioning; saved drafts autosave after the first explicit save; authors can link approved governed source chunks to claims in editable drafts; authors can request review; admins can request changes or mark review complete; and every review-state transition is captured in append-only audit evidence. Review completion remains private and has no publication, learner-delivery, or assessment-eligibility effect. Remaining G7 work is explicit publication approval.
-**Required outcome:** verified-author access, server-backed ownership/versioning, autosave, governed evidence/source linkage, and governed review states are complete. Remaining: explicit publication workflow. Publication must never silently grant assessment eligibility.
+**Gap:** closed. Browser-local draft persistence is retired. Verified instructors/admins have owner-scoped service-role-mediated drafts with optimistic versioning and autosave; authors can link approved governed source chunks; governed review decisions and explicit publication approval are separate human gates with append-only audit evidence. Publication requests require completed review plus governed evidence. Publication changes reopen review, and publication approval never grants learner delivery, scoring, or assessment eligibility.
+**Required outcome:** completed. Verified-author access, server-backed ownership/versioning, autosave, governed evidence/source linkage, review lifecycle, and explicit publication approval are operational while assessment eligibility remains a separate authority boundary.
 ### G8 — Institutional tenant model and portal — **P1/P2**
 **Evidence:** `institutions`, email domains, verification requests, student institution claims, classroom tables, and institution search exist. No `/dashboard/institution/` portal or institution-membership/tenant administration model exists.
 **Gap:** an institution is currently a directory/verification record, not an administrable tenant.
@@ -123,7 +123,7 @@ The repository already contains useful foundations, but several exist outside th
 3. [x] Autosave for existing server drafts.
 4. [x] Governed draft review states with append-only transition evidence.
 5. [x] Evidence/source linkage.
-6. Explicit publication workflow separate from assessment eligibility.
+6. [x] Explicit publication workflow separate from assessment eligibility.
 ### Phase 5 — Institutional portal
 1. Institution membership/role schema.
 2. Student-claim review and instructor-request administration.
