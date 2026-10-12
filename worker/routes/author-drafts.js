@@ -332,6 +332,281 @@ export async function handleAuthorDraft(c) {
 }
 
 
+
+function validEvidenceRole(value) {
+  return ['supports-scenario', 'supports-diagnosis', 'supports-repair', 'research-reference'].includes(String(value || '').trim())
+}
+
+function publicEvidenceLink(row, sources = new Map(), chunks = new Map()) {
+  const source = sources.get(row.source_id) || {}
+  const chunk = chunks.get(row.chunk_id) || {}
+  return {
+    id: row.id,
+    draftId: row.draft_id,
+    sourceId: row.source_id,
+    chunkId: row.chunk_id,
+    evidenceRole: row.evidence_role,
+    claimText: row.claim_text,
+    createdAt: row.created_at,
+    source: {
+      title: source.title || null,
+      publisher: source.publisher || null,
+      publicationYear: source.publication_year || null,
+      license: source.license || null
+    },
+    chunk: {
+      title: chunk.title || null,
+      section: chunk.section || null,
+      pageStart: chunk.page_start || null,
+      pageEnd: chunk.page_end || null,
+      locator: chunk.locator || null
+    }
+  }
+}
+
+async function loadOwnedDraft(auth, draftId) {
+  return auth.supabase
+    .from('scenario_authoring_drafts')
+    .select('id,owner_id,status,review_status')
+    .eq('id', draftId)
+    .eq('owner_id', auth.user.id)
+    .maybeSingle()
+}
+
+async function hydrateEvidenceLinks(supabase, rows) {
+  const links = rows || []
+  if (!links.length) return []
+
+  const sourceIds = [...new Set(links.map((row) => row.source_id))]
+  const chunkIds = [...new Set(links.map((row) => row.chunk_id))]
+  const [{ data: sources, error: sourceError }, { data: chunks, error: chunkError }] = await Promise.all([
+    supabase
+      .from('approved_sources')
+      .select('id,title,publisher,publication_year,license,status')
+      .in('id', sourceIds),
+    supabase
+      .from('source_chunks')
+      .select('chunk_id,source_id,title,section,page_start,page_end,locator,status,approved')
+      .in('chunk_id', chunkIds)
+  ])
+
+  if (sourceError || chunkError) throw sourceError || chunkError
+
+  const sourceMap = new Map((sources || []).map((row) => [row.id, row]))
+  const chunkMap = new Map((chunks || []).map((row) => [row.chunk_id, row]))
+  return links.map((row) => publicEvidenceLink(row, sourceMap, chunkMap))
+}
+
+export async function handleAuthorEvidenceSources(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAuthor(c)
+  if (auth.response) return auth.response
+
+  const query = String(c.req.query('query') || '').trim()
+  if (query.length > 120) return c.json({ error: 'query must be 120 characters or fewer' }, 400)
+
+  let request = auth.supabase
+    .from('source_chunks')
+    .select('chunk_id,source_id,title,section,page_start,page_end,locator,status,approved')
+    .eq('status', 'approved')
+    .eq('approved', true)
+    .order('chunk_id', { ascending: true })
+    .limit(30)
+
+  if (query) {
+    const escaped = query.replace(/[%_,]/g, '')
+    request = request.or(
+      'chunk_id.ilike.%' + escaped + '%,source_id.ilike.%' + escaped +
+      '%,title.ilike.%' + escaped + '%,section.ilike.%' + escaped +
+      '%,locator.ilike.%' + escaped + '%'
+    )
+  }
+
+  const { data: chunks, error } = await request
+  if (error) {
+    console.error('Author evidence source search failed:', error.message || error)
+    return c.json({ error: 'Unable to search approved evidence' }, 500)
+  }
+
+  const sourceIds = [...new Set((chunks || []).map((row) => row.source_id))]
+  let sources = []
+  if (sourceIds.length) {
+    const { data, error: sourceError } = await auth.supabase
+      .from('approved_sources')
+      .select('id,title,publisher,publication_year,license,status')
+      .in('id', sourceIds)
+      .eq('status', 'approved')
+    if (sourceError) {
+      console.error('Author evidence source metadata failed:', sourceError.message || sourceError)
+      return c.json({ error: 'Unable to search approved evidence' }, 500)
+    }
+    sources = data || []
+  }
+
+  const sourceMap = new Map(sources.map((row) => [row.id, row]))
+  const results = (chunks || [])
+    .filter((chunk) => sourceMap.has(chunk.source_id))
+    .map((chunk) => {
+      const source = sourceMap.get(chunk.source_id)
+      return {
+        sourceId: source.id,
+        sourceTitle: source.title,
+        publisher: source.publisher,
+        publicationYear: source.publication_year,
+        license: source.license,
+        chunkId: chunk.chunk_id,
+        chunkTitle: chunk.title,
+        section: chunk.section,
+        pageStart: chunk.page_start,
+        pageEnd: chunk.page_end,
+        locator: chunk.locator
+      }
+    })
+
+  return c.json({ results }, 200)
+}
+
+export async function handleAuthorDraftEvidence(c) {
+  const auth = await authorizeAuthor(c)
+  if (auth.response) return auth.response
+
+  const draftId = String(c.req.param('draftId') || '').trim()
+  if (!validDraftId(draftId)) return c.json({ error: 'Valid draft ID required' }, 400)
+
+  const { data: draft, error: draftError } = await loadOwnedDraft(auth, draftId)
+  if (draftError) {
+    console.error('Author evidence draft lookup failed:', draftError.message || draftError)
+    return c.json({ error: 'Unable to read author draft' }, 500)
+  }
+  if (!draft) return c.json({ error: 'Author draft not found' }, 404)
+
+  if (c.req.method === 'GET') {
+    const { data, error } = await auth.supabase
+      .from('scenario_authoring_draft_evidence')
+      .select('id,draft_id,source_id,chunk_id,evidence_role,claim_text,created_by,created_at')
+      .eq('draft_id', draftId)
+      .order('created_at', { ascending: true })
+
+    if (error) {
+      console.error('Author evidence list failed:', error.message || error)
+      return c.json({ error: 'Unable to read draft evidence' }, 500)
+    }
+
+    try {
+      return c.json({ links: await hydrateEvidenceLinks(auth.supabase, data) }, 200)
+    } catch (error) {
+      console.error('Author evidence metadata hydration failed:', error.message || error)
+      return c.json({ error: 'Unable to read draft evidence' }, 500)
+    }
+  }
+
+  if (c.req.method === 'POST') {
+    if (!['not_requested', 'changes_requested'].includes(draft.review_status)) {
+      return c.json({ error: 'Evidence links are locked while review is pending or complete' }, 409)
+    }
+
+    let body
+    try {
+      body = await c.req.json()
+    } catch {
+      return c.json({ error: 'Invalid JSON body' }, 400)
+    }
+
+    const sourceId = String(body?.sourceId || '').trim()
+    const chunkId = String(body?.chunkId || '').trim()
+    const evidenceRole = String(body?.evidenceRole || '').trim()
+    const claimText = String(body?.claimText || '').trim()
+
+    if (!sourceId || sourceId.length > 200 || !chunkId || chunkId.length > 240) {
+      return c.json({ error: 'Approved sourceId and chunkId are required' }, 400)
+    }
+    if (!validEvidenceRole(evidenceRole)) {
+      return c.json({ error: 'Invalid evidenceRole' }, 400)
+    }
+    if (!claimText || claimText.length > 1000) {
+      return c.json({ error: 'claimText is required and must be 1000 characters or fewer' }, 400)
+    }
+
+    const { data, error } = await auth.supabase
+      .from('scenario_authoring_draft_evidence')
+      .insert({
+        draft_id: draftId,
+        source_id: sourceId,
+        chunk_id: chunkId,
+        evidence_role: evidenceRole,
+        claim_text: claimText,
+        created_by: auth.user.id
+      })
+      .select('id,draft_id,source_id,chunk_id,evidence_role,claim_text,created_by,created_at')
+      .single()
+
+    if (error) {
+      if (error.code === '23505') return c.json({ error: 'This evidence link already exists' }, 409)
+      if (error.code === 'P0001' || /authoring_evidence_rejected/i.test(error.message || '')) {
+        return c.json({ error: error.message || 'Evidence link rejected' }, 409)
+      }
+      console.error('Author evidence link failed:', error.message || error)
+      return c.json({ error: 'Unable to link approved evidence' }, 500)
+    }
+
+    try {
+      const [link] = await hydrateEvidenceLinks(auth.supabase, [data])
+      return c.json({
+        link,
+        message: 'Approved evidence linked to the private draft. This does not publish the scenario or grant assessment eligibility.'
+      }, 201)
+    } catch (hydrateError) {
+      console.error('Author evidence metadata hydration failed:', hydrateError.message || hydrateError)
+      return c.json({ error: 'Evidence linked but metadata could not be read' }, 500)
+    }
+  }
+
+  return c.json({ error: 'Method not allowed' }, 405)
+}
+
+export async function handleAuthorDraftEvidenceLink(c) {
+  if (c.req.method !== 'DELETE') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAuthor(c)
+  if (auth.response) return auth.response
+
+  const draftId = String(c.req.param('draftId') || '').trim()
+  const linkId = String(c.req.param('linkId') || '').trim()
+  if (!validDraftId(draftId) || !validDraftId(linkId)) {
+    return c.json({ error: 'Valid draft and evidence-link IDs required' }, 400)
+  }
+
+  const { data: draft, error: draftError } = await loadOwnedDraft(auth, draftId)
+  if (draftError) {
+    console.error('Author evidence draft lookup failed:', draftError.message || draftError)
+    return c.json({ error: 'Unable to read author draft' }, 500)
+  }
+  if (!draft) return c.json({ error: 'Author draft not found' }, 404)
+  if (!['not_requested', 'changes_requested'].includes(draft.review_status)) {
+    return c.json({ error: 'Evidence links are locked while review is pending or complete' }, 409)
+  }
+
+  const { data, error } = await auth.supabase
+    .from('scenario_authoring_draft_evidence')
+    .delete()
+    .eq('id', linkId)
+    .eq('draft_id', draftId)
+    .select('id')
+    .maybeSingle()
+
+  if (error) {
+    if (error.code === 'P0001' || /authoring_evidence_rejected/i.test(error.message || '')) {
+      return c.json({ error: error.message || 'Evidence link removal rejected' }, 409)
+    }
+    console.error('Author evidence unlink failed:', error.message || error)
+    return c.json({ error: 'Unable to remove draft evidence' }, 500)
+  }
+  if (!data) return c.json({ error: 'Evidence link not found' }, 404)
+
+  return c.json({ deleted: true, id: data.id }, 200)
+}
+
 export async function handleAuthorDraftReviewRequest(c) {
   if (c.req.method !== 'POST') return c.json({ error: 'Method not allowed' }, 405)
 

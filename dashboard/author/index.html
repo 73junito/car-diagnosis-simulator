@@ -62,6 +62,7 @@
           <a href="#live-data">Live Data</a>
           <a href="#diagnostic-path">Diagnostic Path</a>
           <a href="#rubric">Rubric</a>
+          <a href="#evidence-sources">Evidence Sources</a>
           <a href="#draft">Draft & Validate</a>
         </nav>
       </aside>
@@ -170,6 +171,21 @@
   <label>Diagnostic Criteria <textarea id="diagnosticCriteria" rows="2" placeholder="Uses evidence to isolate the fault before repair."></textarea></label>
   <label>Verification Criteria <textarea id="verificationCriteria" rows="2" placeholder="Confirms repair with restart, code clear, and no returning faults."></textarea></label>
 </form>
+        </article>
+
+        <article class="tm-panel" id="evidence-sources">
+          <h2>Evidence & Source Linkage</h2>
+          <p>Link only governed, approved source chunks to this private draft. Source linkage does not publish the scenario or grant assessment eligibility.</p>
+          <div class="author-form">
+            <label>Search approved evidence
+              <input id="evidenceSearchInput" type="search" maxlength="120" placeholder="Search source ID, chunk, section, or locator">
+            </label>
+            <button id="evidenceSearchBtn" class="tm-btn tm-btn-secondary" type="button">Search Approved Evidence</button>
+          </div>
+          <p id="evidenceStatus" role="status" aria-live="polite">Save the draft before linking evidence.</p>
+          <ul id="evidenceSearchResults" class="author-checklist" aria-live="polite"></ul>
+          <h3>Linked Evidence</h3>
+          <ul id="linkedEvidenceList" class="author-checklist" aria-live="polite"></ul>
         </article>
 
         <article class="tm-panel" id="draft">

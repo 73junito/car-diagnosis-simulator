@@ -55,6 +55,9 @@ import {
   handleAuthorDrafts,
   handleAuthorDraft,
   handleAuthorDraftReviewRequest,
+  handleAuthorEvidenceSources,
+  handleAuthorDraftEvidence,
+  handleAuthorDraftEvidenceLink,
   handleAdminAuthorDraftReviews,
   handleAdminAuthorDraftReviewDecision
 } from "./routes/author-drafts.js";
@@ -232,9 +235,13 @@ const authorDraftCors = cors({
 })
 app.use('/api/author/drafts', authorDraftCors)
 app.use('/api/author/drafts/*', authorDraftCors)
+app.use('/api/author/evidence-sources', authorDraftCors)
 app.all('/api/author/drafts', handleAuthorDrafts)
 app.all('/api/author/drafts/:draftId', handleAuthorDraft)
 app.post('/api/author/drafts/:draftId/review-request', handleAuthorDraftReviewRequest)
+app.get('/api/author/evidence-sources', handleAuthorEvidenceSources)
+app.all('/api/author/drafts/:draftId/evidence', handleAuthorDraftEvidence)
+app.delete('/api/author/drafts/:draftId/evidence/:linkId', handleAuthorDraftEvidenceLink)
 
 const adminAuthorReviewCors = cors({
   origin: 'https://app.autolearnpro.com',

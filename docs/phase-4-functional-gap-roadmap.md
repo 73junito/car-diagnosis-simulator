@@ -39,8 +39,8 @@ The repository already contains useful foundations, but several exist outside th
 **Required outcome:** completed. History/export and live stream use verified instructor authorization plus owned-class enrollment scope; ingestion enforces the approved scenario_started-only payload contract and derives authenticated identity server-side. The live browser uses authenticated fetch-based SSE snapshots with cursor reconnects instead of localStorage role trust or an in-memory Worker broadcast bus.
 ### G7 — Server-backed Authoring Studio — **P1**
 **Evidence:** `dashboard/author/` is a substantial UI, but its scenario library is stored in `localStorage`; no production auth gate or server draft/publish API was found.
-**Gap:** partially closed. Browser-local draft persistence is retired. Verified instructors/admins have owner-scoped service-role-mediated drafts with optimistic versioning; saved drafts now autosave after the first explicit save; authors can request review; admins can request changes or mark review complete; and every review-state transition is captured in append-only audit evidence. Review completion remains private and has no publication, learner-delivery, or assessment-eligibility effect. Remaining G7 work is evidence/source linkage and explicit publication approval.
-**Required outcome:** verified-author access, server-backed ownership/versioning, autosave, and governed review states are complete. Remaining: evidence/source linkage and explicit publication workflow. Publication must never silently grant assessment eligibility.
+**Gap:** partially closed. Browser-local draft persistence is retired. Verified instructors/admins have owner-scoped service-role-mediated drafts with optimistic versioning; saved drafts autosave after the first explicit save; authors can link approved governed source chunks to claims in editable drafts; authors can request review; admins can request changes or mark review complete; and every review-state transition is captured in append-only audit evidence. Review completion remains private and has no publication, learner-delivery, or assessment-eligibility effect. Remaining G7 work is explicit publication approval.
+**Required outcome:** verified-author access, server-backed ownership/versioning, autosave, governed evidence/source linkage, and governed review states are complete. Remaining: explicit publication workflow. Publication must never silently grant assessment eligibility.
 ### G8 — Institutional tenant model and portal — **P1/P2**
 **Evidence:** `institutions`, email domains, verification requests, student institution claims, classroom tables, and institution search exist. No `/dashboard/institution/` portal or institution-membership/tenant administration model exists.
 **Gap:** an institution is currently a directory/verification record, not an administrable tenant.
@@ -122,7 +122,7 @@ The repository already contains useful foundations, but several exist outside th
 2. [x] Server-backed private drafts and optimistic versioning.
 3. [x] Autosave for existing server drafts.
 4. [x] Governed draft review states with append-only transition evidence.
-5. Evidence/source linkage.
+5. [x] Evidence/source linkage.
 6. Explicit publication workflow separate from assessment eligibility.
 ### Phase 5 — Institutional portal
 1. Institution membership/role schema.

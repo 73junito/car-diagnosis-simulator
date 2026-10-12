@@ -15,7 +15,13 @@
   const authorAccessStatus = document.getElementById("authorAccessStatus");
   const requestReviewButton = document.getElementById("requestReviewBtn");
   const draftLifecycleStatus = document.getElementById("draftLifecycleStatus");
+  const evidenceSearchInput = document.getElementById("evidenceSearchInput");
+  const evidenceSearchButton = document.getElementById("evidenceSearchBtn");
+  const evidenceSearchResults = document.getElementById("evidenceSearchResults");
+  const linkedEvidenceList = document.getElementById("linkedEvidenceList");
+  const evidenceStatus = document.getElementById("evidenceStatus");
   let currentDraft = null;
+  let linkedEvidence = [];
   let serverDrafts = [];
   let autosaveTimer = null;
 
@@ -142,6 +148,8 @@
     if (requestReviewButton) {
       requestReviewButton.disabled = !currentDraft || !editable;
     }
+    if (evidenceSearchButton) evidenceSearchButton.disabled = !currentDraft || !editable;
+    if (evidenceSearchInput) evidenceSearchInput.disabled = !currentDraft || !editable;
 
     if (!currentDraft) {
       setLifecycleStatus("Unsaved draft. Autosave begins after the first explicit save.");
@@ -157,6 +165,161 @@
       setLifecycleStatus("Review complete. This draft remains private and unpublished.");
     } else {
       setLifecycleStatus("Private draft v" + currentDraft.version + ". Autosave is active after changes.");
+    }
+  }
+
+  function evidenceLocation(item) {
+    const parts = [item.section, item.locator].filter(Boolean);
+    if (item.pageStart) parts.push("p. " + item.pageStart + (item.pageEnd && item.pageEnd !== item.pageStart ? "–" + item.pageEnd : ""));
+    return parts.join(" · ");
+  }
+
+  function renderLinkedEvidence() {
+    if (!linkedEvidenceList) return;
+    linkedEvidenceList.innerHTML = "";
+    if (!linkedEvidence.length) {
+      const empty = document.createElement("li");
+      empty.textContent = currentDraft ? "No approved evidence linked yet." : "Save a draft before linking evidence.";
+      linkedEvidenceList.appendChild(empty);
+      return;
+    }
+
+    linkedEvidence.forEach((link) => {
+      const item = document.createElement("li");
+      const title = document.createElement("strong");
+      title.textContent = (link.source && link.source.title) || link.sourceId;
+      const detail = document.createElement("span");
+      const location = evidenceLocation(link.chunk || {});
+      detail.textContent = " · " + link.evidenceRole.replaceAll("-", " ") + " · " + link.claimText +
+        (location ? " · " + location : "");
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "tm-btn tm-btn-secondary";
+      remove.textContent = "Unlink";
+      remove.disabled = !reviewEditable(currentDraft);
+      remove.addEventListener("click", async () => {
+        if (!currentDraft) return;
+        try {
+          await window.apiDelete(
+            "/api/author/drafts/" + encodeURIComponent(currentDraft.id) +
+            "/evidence/" + encodeURIComponent(link.id)
+          );
+          await loadLinkedEvidence();
+          if (evidenceStatus) evidenceStatus.textContent = "Evidence link removed.";
+        } catch (error) {
+          if (evidenceStatus) evidenceStatus.textContent = "Unable to remove evidence link.";
+        }
+      });
+
+      item.append(title, detail, document.createTextNode(" "), remove);
+      linkedEvidenceList.appendChild(item);
+    });
+  }
+
+  async function loadLinkedEvidence() {
+    if (!currentDraft) {
+      linkedEvidence = [];
+      renderLinkedEvidence();
+      return;
+    }
+    const response = await window.apiGet(
+      "/api/author/drafts/" + encodeURIComponent(currentDraft.id) + "/evidence"
+    );
+    linkedEvidence = Array.isArray(response && response.links) ? response.links : [];
+    renderLinkedEvidence();
+  }
+
+  function renderEvidenceSearchResults(results) {
+    if (!evidenceSearchResults) return;
+    evidenceSearchResults.innerHTML = "";
+    if (!results.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "No approved evidence matched the search.";
+      evidenceSearchResults.appendChild(empty);
+      return;
+    }
+
+    results.forEach((result) => {
+      const item = document.createElement("li");
+      const title = document.createElement("strong");
+      title.textContent = result.sourceTitle || result.sourceId;
+      const detail = document.createElement("span");
+      const location = evidenceLocation(result);
+      detail.textContent = " · " + result.chunkId + (location ? " · " + location : "");
+
+      const role = document.createElement("select");
+      [
+        ["supports-scenario", "Supports scenario"],
+        ["supports-diagnosis", "Supports diagnosis"],
+        ["supports-repair", "Supports repair"],
+        ["research-reference", "Research reference"]
+      ].forEach(([value, label]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        role.appendChild(option);
+      });
+
+      const claim = document.createElement("input");
+      claim.type = "text";
+      claim.maxLength = 1000;
+      claim.placeholder = "Claim or decision this source supports";
+
+      const linkButton = document.createElement("button");
+      linkButton.type = "button";
+      linkButton.className = "tm-btn tm-btn-primary";
+      linkButton.textContent = "Link";
+      linkButton.disabled = !currentDraft || !reviewEditable(currentDraft);
+      linkButton.addEventListener("click", async () => {
+        if (!currentDraft) return;
+        const claimText = claim.value.trim();
+        if (!claimText) {
+          if (evidenceStatus) evidenceStatus.textContent = "Describe the claim this evidence supports.";
+          claim.focus();
+          return;
+        }
+        try {
+          await window.apiPost(
+            "/api/author/drafts/" + encodeURIComponent(currentDraft.id) + "/evidence",
+            {
+              sourceId: result.sourceId,
+              chunkId: result.chunkId,
+              evidenceRole: role.value,
+              claimText
+            }
+          );
+          claim.value = "";
+          await loadLinkedEvidence();
+          if (evidenceStatus) evidenceStatus.textContent = "Approved evidence linked to the private draft.";
+        } catch (error) {
+          if (evidenceStatus) {
+            evidenceStatus.textContent = error && error.status === 409
+              ? "Evidence link rejected or already exists."
+              : "Unable to link approved evidence.";
+          }
+        }
+      });
+
+      item.append(title, detail, document.createElement("br"), role, document.createTextNode(" "), claim, document.createTextNode(" "), linkButton);
+      evidenceSearchResults.appendChild(item);
+    });
+  }
+
+  async function searchApprovedEvidence() {
+    if (!currentDraft) {
+      if (evidenceStatus) evidenceStatus.textContent = "Save the draft before linking evidence.";
+      return;
+    }
+    const query = evidenceSearchInput ? evidenceSearchInput.value.trim() : "";
+    try {
+      if (evidenceStatus) evidenceStatus.textContent = "Searching approved evidence…";
+      const response = await window.apiGet("/api/author/evidence-sources?query=" + encodeURIComponent(query));
+      const results = Array.isArray(response && response.results) ? response.results : [];
+      renderEvidenceSearchResults(results);
+      if (evidenceStatus) evidenceStatus.textContent = results.length + " approved evidence result" + (results.length === 1 ? "" : "s") + ".";
+    } catch (error) {
+      if (evidenceStatus) evidenceStatus.textContent = "Approved evidence search unavailable.";
     }
   }
 
@@ -352,6 +515,7 @@
           currentDraft = response.draft;
           loadScenario(currentDraft.scenario);
           applyDraftLifecycle();
+          await loadLinkedEvidence();
           setStatus("Draft Loaded · v" + currentDraft.version);
         } catch (error) {
           setStatus(error && error.status === 404 ? "Draft Not Found" : "Load Failed");
@@ -417,6 +581,7 @@
       currentDraft = response.draft;
       syncDraftSummary(currentDraft);
       applyDraftLifecycle();
+      if (!autosave) await loadLinkedEvidence();
       setStatus((autosave ? "Autosaved" : "Saved Draft") + " · v" + currentDraft.version);
       return true;
     } catch (error) {
@@ -516,6 +681,18 @@
     requestReviewButton.addEventListener("click", requestReview);
   }
 
+  if (evidenceSearchButton) {
+    evidenceSearchButton.addEventListener("click", searchApprovedEvidence);
+  }
+  if (evidenceSearchInput) {
+    evidenceSearchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        searchApprovedEvidence();
+      }
+    });
+  }
+
   if (exportButton) {
     exportButton.addEventListener("click", exportScenario);
   }
@@ -551,6 +728,7 @@
       if (authorAccessStatus) authorAccessStatus.textContent = "Verified author · private drafts";
       renderPreview();
       applyDraftLifecycle();
+      renderLinkedEvidence();
       document.body.dataset.authoringStudioReady = "true";
     } catch (error) {
       if (error && (error.status === 401 || error.status === 403)) {
