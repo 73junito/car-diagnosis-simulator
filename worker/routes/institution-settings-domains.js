@@ -104,6 +104,8 @@ function publicDomain(row) {
 }
 
 export async function handleInstitutionAdminSettings(c) {
+  if (!['GET', 'PATCH'].includes(c.req.method)) return c.json({ error: 'Method not allowed' }, 405)
+
   const auth = await authorizeAuthenticated(c)
   if (auth.response) return auth.response
 
