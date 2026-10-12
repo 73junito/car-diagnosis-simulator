@@ -55,10 +55,10 @@ test('all expected verification and evidence-gate files exist', () => {
   }
 });
 
-test('historical empty migrations remain preserved', () => {
+test('migration directory contains no zero-byte migration bloat', () => {
   const directory = path.join(root, 'migrations');
   const empty = fs.readdirSync(directory)
     .filter((name) => name.endsWith('.sql'))
     .filter((name) => fs.statSync(path.join(directory, name)).size === 0);
-  assert.equal(empty.length, 14);
+  assert.deepEqual(empty, []);
 });
