@@ -202,29 +202,6 @@
     };
   }
 
-  async function saveAttemptSummary(entry) {
-    try {
-      const payload = {
-        user_id: entry.studentId,
-        scenario: entry.moduleId,
-        workflow_type: "scenario",
-        payload_json: entry,
-        score: entry.score,
-        completion_state: entry.passed ? "passed" : "failed"
-      };
-
-      await fetch("/api/attempts/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-    } catch (e) {
-      console.warn("Attempt summary save failed.", e);
-    }
-  }
-
   async function loadScenarioQuestions(scenarioId) {
     try {
       // Always use the API endpoint to prevent answer key exposure
@@ -938,8 +915,6 @@
             correctCount,
             totalQuestions
           });
-
-          await saveAttemptSummary(entry);
 
           const restartBtn = document.createElement("button");
           restartBtn.type = "button";

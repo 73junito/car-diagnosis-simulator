@@ -68,6 +68,16 @@ async function flush() {
 }
 
 describe('scenario attempt lifecycle', () => {
+  test('does not persist browser-computed training scores through legacy attempts/save', () => {
+    const source = fs.readFileSync(
+      path.resolve(process.cwd(), 'dashboard/student/scenario/scenario.js'),
+      'utf8'
+    );
+    expect(source).not.toContain('/api/attempts/save');
+    expect(source).not.toContain('saveAttemptSummary');
+    expect(source).toContain('writeAttemptState(key, studentId, state)');
+  });
+
   beforeAll(() => {
     if (!globalThis.crypto?.getRandomValues) {
       Object.defineProperty(globalThis, 'crypto', {
@@ -179,9 +189,6 @@ describe('scenario attempt lifecycle', () => {
             }
           })
         };
-      }
-      if (typeof url === 'string' && url.includes('/api/attempts/save')) {
-        return { ok: true, json: async () => ({ ok: true, id: 'attempt-1' }) };
       }
       if (typeof url === 'string' && url.includes('/api/torquemind-feedback')) {
         return {

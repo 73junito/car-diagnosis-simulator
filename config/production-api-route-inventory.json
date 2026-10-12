@@ -3,12 +3,6 @@
   "canonicalRuntime": "wrangler.app.jsonc -> worker/index.js",
   "knownUnregisteredRoutes": [
     {
-      "pattern": "/api/attempts/save",
-      "gap": "G17",
-      "category": "legacy-attempt-api",
-      "disposition": "Retire or port the legacy attempts API; current scenario delivery must not rely on an unreachable save route."
-    },
-    {
       "pattern": "/api/complete",
       "gap": "G17",
       "category": "legacy-attempt-api",
