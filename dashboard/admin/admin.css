@@ -10,3 +10,6 @@
 .admin-action-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .admin-empty { padding: 1.5rem; text-align: center; border: 1px dashed var(--tm-border); border-radius: var(--tm-radius-lg); }
 @media (max-width: 640px) { .admin-shell { padding: 1rem; } .admin-action-row .tm-btn { width: 100%; } }
+
+.admin-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1rem; margin-top: 1rem; }
+.admin-summary-grid .admin-card strong { display: block; font-size: 1.5rem; }

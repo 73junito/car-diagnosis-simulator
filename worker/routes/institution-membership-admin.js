@@ -128,6 +128,20 @@ export async function handlePlatformAdminInstitutionOwnerInvitation(c) {
     return c.json({ error: 'Platform administrator access required' }, 403)
   }
 
+  const { data: operationalSettings, error: operationalSettingsError } = await auth.supabase
+    .from('platform_operational_settings')
+    .select('owner_bootstrap_enabled')
+    .eq('setting_key', 'global')
+    .maybeSingle()
+
+  if (operationalSettingsError || !operationalSettings) {
+    console.error('Institution owner bootstrap operational setting lookup failed:', operationalSettingsError?.message || operationalSettingsError)
+    return c.json({ error: 'Institution owner bootstrap configuration unavailable' }, 503)
+  }
+  if (!operationalSettings.owner_bootstrap_enabled) {
+    return c.json({ error: 'Institution owner bootstrap is temporarily disabled by platform operations' }, 503)
+  }
+
   let body
   try {
     body = await c.req.json()
