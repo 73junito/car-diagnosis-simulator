@@ -3,6 +3,7 @@ import {
   extractBearerToken,
   verifySupabaseToken
 } from '../../api/_utils/auth-utils.js'
+import { isAdminRole, resolveTrustedRole } from '../auth/role-policy.js'
 
 const ADMIN_ROLES = new Set(['institution_admin', 'institution_owner'])
 const INVITABLE_ROLES = new Set(['member', 'instructor', 'institution_admin', 'institution_owner'])
@@ -97,6 +98,86 @@ async function loadActiveAdminMembership(auth, schoolCode) {
 function canManageRole(actorRole, targetRole) {
   if (actorRole === 'institution_owner') return true
   return targetRole === 'member' || targetRole === 'instructor'
+}
+
+export async function handlePlatformAdminInstitutionOwnerInvitation(c) {
+  if (c.req.method !== 'POST') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAuthenticated(c)
+  if (auth.response) return auth.response
+
+  const trustedRole = await resolveTrustedRole(auth.user, auth.supabase)
+  if (!isAdminRole(trustedRole)) {
+    return c.json({ error: 'Platform administrator access required' }, 403)
+  }
+
+  let body
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+
+  const schoolCode = normalizeSchoolCode(body?.schoolCode)
+  const email = normalizeEmail(body?.email)
+  const note = typeof body?.note === 'string' ? body.note.trim() : ''
+  if (!schoolCode) return c.json({ error: 'Valid institution schoolCode required' }, 400)
+  if (!email) return c.json({ error: 'Valid invitation email required' }, 400)
+  if (note.length > 1000) return c.json({ error: 'note must be 1000 characters or fewer' }, 400)
+
+  const { count: ownerCount, error: ownerError } = await auth.supabase
+    .from('institution_memberships')
+    .select('id', { count: 'exact', head: true })
+    .eq('school_code', schoolCode)
+    .eq('status', 'active')
+    .eq('role', 'institution_owner')
+
+  if (ownerError) {
+    console.error('Institution owner bootstrap lookup failed:', ownerError.message || ownerError)
+    return c.json({ error: 'Unable to verify institution owner state' }, 500)
+  }
+  if (ownerCount) {
+    return c.json({ error: 'Institution already has an active owner; use tenant membership administration' }, 409)
+  }
+
+  const { data: institution, error: institutionError } = await auth.supabase
+    .from('institutions')
+    .select('school_code')
+    .eq('school_code', schoolCode)
+    .eq('active', true)
+    .maybeSingle()
+
+  if (institutionError) {
+    console.error('Institution owner bootstrap directory lookup failed:', institutionError.message || institutionError)
+    return c.json({ error: 'Unable to verify institution' }, 500)
+  }
+  if (!institution) return c.json({ error: 'Active institution not found' }, 404)
+
+  const { data, error } = await auth.supabase
+    .from('institution_membership_invitations')
+    .insert({
+      school_code: schoolCode,
+      email,
+      role: 'institution_owner',
+      status: 'pending',
+      invited_by: auth.user.id,
+      note: note || 'Initial institution owner invitation'
+    })
+    .select('id,school_code,email,role,status,invited_by,invited_at,expires_at,accepted_at,revoked_at,note')
+    .single()
+
+  if (error) {
+    if (error.code === '23505') {
+      return c.json({ error: 'A pending invitation already exists for this email and institution' }, 409)
+    }
+    console.error('Institution owner bootstrap invitation failed:', error.message || error)
+    return c.json({ error: 'Unable to create institution owner invitation' }, 500)
+  }
+
+  return c.json({
+    invitation: publicInvitation(data),
+    message: 'Initial institution owner invitation created. No tenant access exists until the matching confirmed account accepts.'
+  }, 201)
 }
 
 export async function handleInstitutionAdminMembers(c) {
