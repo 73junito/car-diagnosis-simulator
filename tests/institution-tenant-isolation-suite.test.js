@@ -139,9 +139,9 @@ describe('G8 institution tenant isolation security suite', () => {
     })
 
     test('class trigger rejects cross-tenant program and cohort references', () => {
-      expect(tenantFoundation).toContain('institution_class_rejected: program belongs to a different institution')
-      expect(tenantFoundation).toContain('institution_class_rejected: cohort belongs to a different institution')
-      expect(tenantFoundation).toContain('institution_class_rejected: cohort program mismatch')
+      expect(tenantFoundation).toContain('institution_scope_rejected: program belongs to another institution')
+      expect(tenantFoundation).toContain('institution_scope_rejected: cohort belongs to another institution')
+      expect(tenantFoundation).toContain('institution_scope_rejected: cohort belongs to another program')
     })
 
     test('class creation resolves institution authority from active membership rather than identifiers alone', () => {
