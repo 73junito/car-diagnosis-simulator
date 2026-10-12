@@ -39,6 +39,24 @@
       <div id="verification-queue" class="admin-queue" aria-live="polite"></div>
     </section>
 
+    <section class="tm-panel" aria-labelledby="institution-owner-bootstrap-heading">
+      <h2 id="institution-owner-bootstrap-heading">Institution owner bootstrap</h2>
+      <p>Create the first owner invitation for an institution that does not yet have an active owner. The recipient must accept using the matching confirmed account email.</p>
+      <form id="institution-owner-bootstrap-form" class="admin-actions">
+        <label for="institution-owner-school-code">School code
+          <input id="institution-owner-school-code" maxlength="6" required>
+        </label>
+        <label for="institution-owner-email">Owner email
+          <input id="institution-owner-email" type="email" maxlength="320" required>
+        </label>
+        <label for="institution-owner-note">Note
+          <textarea id="institution-owner-note" class="tm-textarea" maxlength="1000"></textarea>
+        </label>
+        <button class="tm-btn tm-btn-primary" type="submit">Create Initial Owner Invitation</button>
+      </form>
+      <p id="institution-owner-bootstrap-status" role="status" aria-live="polite"></p>
+    </section>
+
     <section class="tm-panel" aria-labelledby="author-review-heading">
       <div class="admin-toolbar">
         <div>
