@@ -25,6 +25,15 @@
   </div>
 </section>
 
+    <section class="tm-panel analytics-section" aria-labelledby="analytics-class-title">
+      <h2 id="analytics-class-title">Class scope</h2>
+      <label for="analytics-class">Owned class</label>
+      <select id="analytics-class" class="tm-select">
+        <option value="">Loading classes…</option>
+      </select>
+      <p id="analytics-class-status" role="status" aria-live="polite">Select a class to load student analytics.</p>
+    </section>
+
     <section class="tm-dashboard-grid tm-dashboard-grid-4" id="summary-cards">
       <div class="tm-card tm-stat-card" id="card-total">
         <div class="tm-stat-card__label">Total Sessions</div>
@@ -69,6 +78,8 @@
     window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
     window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
   </script>
+  <script src="/auth.js"></script>
+  <script src="/apiClient.js"></script>
   <script src="./analytics.js"></script>
 </body>
 </html>
