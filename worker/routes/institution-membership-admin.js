@@ -296,6 +296,53 @@ export async function handleInstitutionAdminInvitationDecision(c) {
   return c.json({ invitation: publicInvitation(data) }, 200)
 }
 
+export async function handleInstitutionMyInvitations(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAuthenticated(c)
+  if (auth.response) return auth.response
+
+  const userEmail = normalizeEmail(auth.user.email)
+  if (!userEmail) return c.json({ invitations: [] }, 200)
+
+  const now = new Date().toISOString()
+  const { data, error } = await auth.supabase
+    .from('institution_membership_invitations')
+    .select('id,school_code,email,role,status,invited_by,invited_at,expires_at,accepted_at,revoked_at,note')
+    .eq('email', userEmail)
+    .eq('status', 'pending')
+    .gt('expires_at', now)
+    .order('invited_at', { ascending: false })
+
+  if (error) {
+    console.error('Institution personal invitation list failed:', error.message || error)
+    return c.json({ error: 'Unable to load institution invitations' }, 500)
+  }
+
+  const rows = data || []
+  const schoolCodes = [...new Set(rows.map((row) => row.school_code))]
+  let institutions = []
+  if (schoolCodes.length) {
+    const institutionResult = await auth.supabase
+      .from('institutions')
+      .select('school_code,school_name,city,state_code,province,country')
+      .in('school_code', schoolCodes)
+    if (institutionResult.error) {
+      console.error('Institution invitation directory lookup failed:', institutionResult.error.message || institutionResult.error)
+      return c.json({ error: 'Unable to load institution invitations' }, 500)
+    }
+    institutions = institutionResult.data || []
+  }
+
+  const institutionByCode = new Map(institutions.map((row) => [row.school_code, row]))
+  return c.json({
+    invitations: rows.map((row) => ({
+      ...publicInvitation(row),
+      institution: institutionByCode.get(row.school_code) || null
+    }))
+  }, 200)
+}
+
 export async function handleInstitutionInvitationAccept(c) {
   if (c.req.method !== 'POST') return c.json({ error: 'Method not allowed' }, 405)
 
