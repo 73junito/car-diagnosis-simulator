@@ -164,6 +164,7 @@ const classroomCors = cors({
 })
 app.use('/api/classes', classroomCors)
 app.use('/api/classes/*', classroomCors)
+app.use('/api/assign', classroomCors)
 app.get('/api/classes', handleListClasses)
 app.post('/api/classes', handleCreateClass)
 app.get('/api/classes/by-code/:code', handleFindClassByCode)
