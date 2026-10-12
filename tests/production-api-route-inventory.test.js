@@ -33,7 +33,8 @@ describe('production API route inventory', () => {
       '/api/analytics/sessions',
       '/api/analytics/export',
       '/api/telemetry/history',
-      '/api/telemetry/export.:format'
+      '/api/telemetry/export.:format',
+      '/api/telemetry/events'
     ]) expect(routes).toContain(expected)
   })
 
