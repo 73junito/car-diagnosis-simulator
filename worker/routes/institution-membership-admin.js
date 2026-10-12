@@ -387,6 +387,7 @@ export async function handleInstitutionAdminInvitationDecision(c) {
       revoked_at: now
     })
     .eq('id', invitation.id)
+    .eq('school_code', invitation.school_code)
     .eq('status', 'pending')
     .select('id,school_code,email,role,status,invited_by,invited_at,expires_at,accepted_at,revoked_at,note')
     .maybeSingle()
@@ -573,6 +574,7 @@ export async function handleInstitutionAdminMemberDecision(c) {
     .from('institution_memberships')
     .update({ status: 'suspended', updated_by: auth.user.id, updated_at: now })
     .eq('id', target.id)
+    .eq('school_code', target.school_code)
     .eq('status', 'active')
     .select('id,school_code,user_id,role,status,created_at,updated_at')
     .maybeSingle()
