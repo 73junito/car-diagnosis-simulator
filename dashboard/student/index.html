@@ -48,6 +48,12 @@
       </details>
     </section>
 
+    <section class="tm-panel" aria-labelledby="student-institution-claim-heading">
+      <h2 id="student-institution-claim-heading">Institution Affiliation</h2>
+      <p id="studentInstitutionClaimStatus" role="status" aria-live="polite">Checking institution affiliation…</p>
+      <div id="studentInstitutionClaimDetails"></div>
+    </section>
+
     <section class="student-progress-overview" aria-label="Student progress summary">
       <article class="student-progress-summary-card">
         <span>Completed</span>
@@ -143,6 +149,7 @@
     mountShell();
   </script>
   <script src="../api-origin.js" defer></script>
+  <script src="./institution-claim.js" defer></script>
   <script src="./student.js" defer></script>
   <script>
     // render full scenario grid on student dashboard using SCENARIO_REGISTRY
