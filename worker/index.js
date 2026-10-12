@@ -37,6 +37,7 @@ import {
   handleInstitutionPortal
 } from "./routes/institution-portal.js";
 import {
+  handlePlatformAdminInstitutionOwnerInvitation,
   handleInstitutionAdminMembers,
   handleInstitutionAdminInvitations,
   handleInstitutionAdminInvitationDecision,
@@ -182,6 +183,14 @@ app.patch('/api/institution/admin/invitations/:invitationId', handleInstitutionA
 app.get('/api/institution/invitations', handleInstitutionMyInvitations)
 app.post('/api/institution/invitations/:invitationId/accept', handleInstitutionInvitationAccept)
 app.patch('/api/institution/admin/members/:membershipId', handleInstitutionAdminMemberDecision)
+
+app.use('/api/admin/institutions/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.post('/api/admin/institutions/owner-invitations', handlePlatformAdminInstitutionOwnerInvitation)
 
 // Instructor institution verification. Federal School Code resolves the institution,
 // while a separate affiliation review controls instructor authorization.
