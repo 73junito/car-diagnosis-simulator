@@ -46,6 +46,11 @@ import {
   handleInstitutionAdminMemberDecision
 } from "./routes/institution-membership-admin.js";
 import {
+  handleInstitutionAdminSettings,
+  handleInstitutionAdminDomains,
+  handleInstitutionAdminDomainDecision
+} from "./routes/institution-settings-domains.js";
+import {
   handleListClasses,
   handleCreateClass,
   handleFindClassByCode,
@@ -183,6 +188,9 @@ app.patch('/api/institution/admin/invitations/:invitationId', handleInstitutionA
 app.get('/api/institution/invitations', handleInstitutionMyInvitations)
 app.post('/api/institution/invitations/:invitationId/accept', handleInstitutionInvitationAccept)
 app.patch('/api/institution/admin/members/:membershipId', handleInstitutionAdminMemberDecision)
+app.all('/api/institution/admin/settings', handleInstitutionAdminSettings)
+app.all('/api/institution/admin/domains', handleInstitutionAdminDomains)
+app.patch('/api/institution/admin/domains/:domain', handleInstitutionAdminDomainDecision)
 
 app.use('/api/admin/institutions/*', cors({
   origin: 'https://app.autolearnpro.com',
