@@ -6,14 +6,12 @@ on:
     paths:
       - "supabase/migrations/**"
       - "scripts/verify-supabase-migration-drift.js"
-      - "supabase/migration-drift-exceptions.json"
       - ".github/workflows/supabase-migration-drift.yml"
   push:
     branches: [main]
     paths:
       - "supabase/migrations/**"
       - "scripts/verify-supabase-migration-drift.js"
-      - "supabase/migration-drift-exceptions.json"
       - ".github/workflows/supabase-migration-drift.yml"
   workflow_dispatch: {}
 
@@ -56,4 +54,36 @@ jobs:
           SUPABASE_URL: ${{ secrets.STAGING_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
           EXPECTED_SUPABASE_REF: jchfruprqpeypdttvlam
+        run: node scripts/verify-supabase-migration-drift.js --ref HEAD
+
+  production-drift:
+    name: production migration parity
+    if: github.actor != 'dependabot[bot]'
+    environment: pffdgqpynpbffbcnxmum_production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+
+      - name: Check production migration parity with main baseline
+        if: github.event_name == 'pull_request'
+        env:
+          SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+          EXPECTED_SUPABASE_REF: pffdgqpynpbffbcnxmum
+        run: node scripts/verify-supabase-migration-drift.js --ref origin/${{ github.base_ref }}
+
+      - name: Check production migration parity with deployed main
+        if: github.event_name != 'pull_request'
+        env:
+          SUPABASE_URL: https://pffdgqpynpbffbcnxmum.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SERVICE_ROLE_KEY }}
+          EXPECTED_SUPABASE_REF: pffdgqpynpbffbcnxmum
         run: node scripts/verify-supabase-migration-drift.js --ref HEAD

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
@@ -14,58 +15,12 @@ function parseMigrationPath(file) {
   return { version: match[1], name: match[2], file: file.replace(/\\/g, '/') };
 }
 
-function countByName(items) {
-  const counts = new Map();
-  for (const item of items) counts.set(item.name, (counts.get(item.name) || 0) + 1);
-  return counts;
+function readMigrationContent(ref, file) {
+  if (ref === 'WORKTREE') return fs.readFileSync(path.join(process.cwd(), file), 'utf8');
+  return execFileSync('git', ['show', `${ref}:${file}`], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
 }
 
-function compareMigrationHistories(repository, remote, exceptions = {}) {
-  const repoCounts = countByName(repository);
-  const remoteCounts = countByName(remote);
-  const missing = [];
-  const extra = [];
-  const timestampAliases = []
-  const exceptionsUsed = [];
-
-  for (const [name, count] of repoCounts) {
-    const remoteCount = remoteCounts.get(name) || 0;
-    if (remoteCount < count) {
-      const configured = Number(exceptions[name]?.allowedMissing || 0)
-      const deficit = count - remoteCount
-      const exempted = Math.min(deficit, Math.max(0, configured))
-      if (exempted > 0) {
-        exceptionsUsed.push({ name, count: exempted, ...exceptions[name] })
-      }
-      let remaining = deficit - exempted
-      for (const item of repository.filter((entry) => entry.name === name).reverse()) {
-        if (!remaining) break
-        missing.unshift(item)
-        remaining -= 1
-      }
-    }
-  }
-
-  for (const [name, count] of remoteCounts) {
-    const repoCount = repoCounts.get(name) || 0;
-    if (count > repoCount) {
-      extra.push({ name, count: count - repoCount });
-    }
-  }
-
-  for (const name of repoCounts.keys()) {
-    if ((repoCounts.get(name) || 0) !== (remoteCounts.get(name) || 0)) continue;
-    const repoVersions = repository.filter((x) => x.name === name).map((x) => x.version).sort();
-    const remoteVersions = remote.filter((x) => x.name === name).map((x) => x.version).sort();
-    if (JSON.stringify(repoVersions) !== JSON.stringify(remoteVersions)) {
-      timestampAliases.push({ name, repository: repoVersions, remote: remoteVersions });
-    }
-  }
-
-  return { missing, extra, timestampAliases, exceptionsUsed };
-}
-
-function repositoryMigrations(ref = 'WORKTREE') {
+function canonicalRepositoryMigrations(ref = 'WORKTREE') {
   let files;
   if (ref === 'WORKTREE') {
     const dir = path.join(process.cwd(), 'supabase', 'migrations');
@@ -74,7 +29,65 @@ function repositoryMigrations(ref = 'WORKTREE') {
     const output = execFileSync('git', ['ls-tree', '-r', '--name-only', ref, '--', 'supabase/migrations'], { encoding: 'utf8' });
     files = output.split(/\r?\n/).filter(Boolean);
   }
-  return files.map(parseMigrationPath).filter(Boolean).sort((a, b) => a.version.localeCompare(b.version));
+
+  const seenHashes = new Set();
+  const ignoredBloat = [];
+  const migrations = [];
+
+  for (const file of files.map(parseMigrationPath).filter(Boolean).sort((a, b) => a.version.localeCompare(b.version))) {
+    const content = readMigrationContent(ref, file.file);
+    if (!content.trim()) {
+      ignoredBloat.push({ ...file, reason: 'empty' });
+      continue;
+    }
+    const hash = crypto.createHash('sha256').update(content).digest('hex');
+    if (seenHashes.has(hash)) {
+      ignoredBloat.push({ ...file, reason: 'duplicate-content', hash });
+      continue;
+    }
+    seenHashes.add(hash);
+    migrations.push({ ...file, hash });
+  }
+
+  return { migrations, ignoredBloat };
+}
+
+function compareMigrationHistories(repository, remote) {
+  const repoKeys = new Set(repository.map((x) => `${x.version}:${x.name}`));
+  const remoteKeys = new Set(remote.map((x) => `${x.version}:${x.name}`));
+
+  const missing = repository.filter((x) => !remoteKeys.has(`${x.version}:${x.name}`));
+  const extra = remote.filter((x) => !repoKeys.has(`${x.version}:${x.name}`));
+
+  const timestampAliases = [];
+  const missingByName = new Map();
+  for (const item of missing) {
+    const a = missingByName.get(item.name) || [];
+    a.push(item.version);
+    missingByName.set(item.name, a);
+  }
+  const extraByName = new Map();
+  for (const item of extra) {
+    const a = extraByName.get(item.name) || [];
+    a.push(item.version);
+    extraByName.set(item.name, a);
+  }
+  for (const [name, repoVersions] of missingByName) {
+    const remoteVersions = extraByName.get(name);
+    if (remoteVersions?.length) {
+      timestampAliases.push({
+        name,
+        repository: repoVersions.sort(),
+        remote: remoteVersions.sort()
+      });
+    }
+  }
+
+  return { missing, extra, timestampAliases };
+}
+
+function repositoryMigrations(ref = 'WORKTREE') {
+  return canonicalRepositoryMigrations(ref).migrations;
 }
 
 function projectRefFromUrl(raw) {
@@ -117,36 +130,37 @@ async function main() {
     throw new Error(`Supabase project mismatch: expected ${expectedRef || 'a valid project ref'}, got ${actualRef || 'invalid URL'}.`);
   }
 
-  const repository = repositoryMigrations(ref)
-  const remote = await remoteMigrations(url, key)
-  const exceptionPath = path.join(process.cwd(), 'supabase', 'migration-drift-exceptions.json')
-  const exceptionDocument = fs.existsSync(exceptionPath) ? JSON.parse(fs.readFileSync(exceptionPath, 'utf8')) : {}
-  const exceptions = exceptionDocument[actualRef] || {}
-  const result = compareMigrationHistories(repository, remote, exceptions)
+  const { migrations: repository, ignoredBloat } = canonicalRepositoryMigrations(ref);
+  const remote = await remoteMigrations(url, key);
+  const result = compareMigrationHistories(repository, remote);
 
-  console.log(`Repository baseline (${ref}): ${repository.length} migrations.`);
+  console.log(`Repository canonical baseline (${ref}): ${repository.length} migrations.`);
+  if (ignoredBloat.length) {
+    console.log(`Ignored repository migration bloat: ${ignoredBloat.length} file(s).`);
+    for (const item of ignoredBloat) console.log(`  ~ ${item.version}_${item.name}.sql (${item.reason})`);
+  }
   console.log(`Remote ${actualRef}: ${remote.length} migrations.`);
+
   if (result.timestampAliases.length) {
-    console.log(`Timestamp aliases accepted: ${result.timestampAliases.length}.`);
+    console.error(`FAIL: timestamp-renamed migrations detected: ${result.timestampAliases.length}.`);
     for (const alias of result.timestampAliases) {
-      console.log(`  ~ ${alias.name}: repo=${alias.repository.join(',')} remote=${alias.remote.join(',')}`);
+      console.error(`  ~ ${alias.name}: repo=${alias.repository.join(',')} remote=${alias.remote.join(',')}`);
     }
   }
-  if (result.exceptionsUsed.length) {
-    console.warn(`Approved missing-migration exceptions used: ${result.exceptionsUsed.length}.`)
-    for (const item of result.exceptionsUsed) console.warn(`  ! ${item.name} x${item.count}: ${item.reason}`)
-  }
   if (result.extra.length) {
-    console.warn(`Remote-only logical migrations: ${result.extra.length}.`);
-    for (const item of result.extra) console.warn(`  + ${item.name} x${item.count}`);
+    console.error(`FAIL: remote-only migration records: ${result.extra.length}.`);
+    for (const item of result.extra) console.error(`  + ${item.version}_${item.name}`);
   }
   if (result.missing.length) {
-    console.error(`FAIL: remote is missing ${result.missing.length} canonical logical migration(s):`);
+    console.error(`FAIL: remote is missing ${result.missing.length} canonical migration(s):`);
     for (const item of result.missing) console.error(`  - ${item.version}_${item.name}.sql`);
+  }
+
+  if (result.missing.length || result.extra.length || result.timestampAliases.length) {
     process.exitCode = 1;
     return;
   }
-  console.log('PASS: remote contains every canonical logical migration in the selected repository baseline.');
+  console.log('PASS: remote migration history exactly matches the canonical repository baseline.');
 }
 
 if (require.main === module) {
@@ -156,4 +170,10 @@ if (require.main === module) {
   });
 }
 
-module.exports = { parseMigrationPath, compareMigrationHistories, repositoryMigrations, projectRefFromUrl };
+module.exports = {
+  parseMigrationPath,
+  compareMigrationHistories,
+  canonicalRepositoryMigrations,
+  repositoryMigrations,
+  projectRefFromUrl
+};
