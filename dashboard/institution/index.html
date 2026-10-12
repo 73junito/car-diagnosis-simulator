@@ -26,6 +26,12 @@
       <p>Institution access is granted only by an active membership record. School codes, domains, and directory matches alone do not grant tenant access.</p>
     </section>
 
+    <section id="institutionInvitations" class="tm-panel">
+      <h2>My Invitations</h2>
+      <p>Only invitations matching your authenticated account email appear here.</p>
+      <div id="myInvitationList"></div>
+    </section>
+
     <section id="institutionOverview" class="tm-panel" hidden>
       <h2 id="institutionName">Institution</h2>
       <p id="institutionRole"></p>
@@ -40,6 +46,35 @@
       <ul id="institutionClasses"></ul>
 
       <p id="institutionAdminNotice"></p>
+    </section>
+
+    <section id="institutionAdminPanel" class="tm-panel" hidden>
+      <h2>Membership Administration</h2>
+      <p>Institution admins can manage members and instructors. Institution owners can also manage administrator and owner roles.</p>
+
+      <form id="institutionInviteForm">
+        <label for="institutionInviteEmail">Email
+          <input id="institutionInviteEmail" type="email" maxlength="320" required>
+        </label>
+        <label for="institutionInviteRole">Role
+          <select id="institutionInviteRole" class="tm-select">
+            <option value="member">Member</option>
+            <option value="instructor">Instructor</option>
+            <option value="institution_admin">Institution admin</option>
+            <option value="institution_owner">Institution owner</option>
+          </select>
+        </label>
+        <label for="institutionInviteNote">Note
+          <textarea id="institutionInviteNote" maxlength="1000"></textarea>
+        </label>
+        <button class="tm-btn tm-btn-primary" type="submit">Create Invitation</button>
+      </form>
+
+      <h3>Members</h3>
+      <div id="institutionMemberList"></div>
+
+      <h3>Pending Invitations</h3>
+      <div id="institutionPendingInvitationList"></div>
     </section>
   </main>
 
