@@ -27,6 +27,13 @@ function normalizeClassName(value) {
   return name
 }
 
+function normalizeClassCode(value) {
+  if (typeof value !== 'string') return null
+  const code = value.trim().toUpperCase()
+  if (!new RegExp(`^[A-Z0-9]{${CLASS_CODE_LENGTH}}$`).test(code)) return null
+  return code
+}
+
 function makeClassCode() {
   const values = new Uint32Array(CLASS_CODE_LENGTH)
   globalThis.crypto.getRandomValues(values)
@@ -37,7 +44,7 @@ function makeClassCode() {
   return code
 }
 
-async function authorizeInstructor(c) {
+async function authorizeAuthenticated(c) {
   const supabaseUrl = c.env?.SUPABASE_URL
   const serviceRoleKey = c.env?.SUPABASE_SERVICE_ROLE_KEY
   if (!supabaseUrl || !serviceRoleKey) {
@@ -54,13 +61,22 @@ async function authorizeInstructor(c) {
     return { response: c.json({ error: 'Authentication required' }, 401) }
   }
 
-  const supabase = createServiceClient(supabaseUrl, serviceRoleKey)
-  const role = await resolveTrustedRole(user, supabase)
+  return {
+    user,
+    supabase: createServiceClient(supabaseUrl, serviceRoleKey)
+  }
+}
+
+async function authorizeInstructor(c) {
+  const auth = await authorizeAuthenticated(c)
+  if (auth.response) return auth
+
+  const role = await resolveTrustedRole(auth.user, auth.supabase)
   if (!isInstructorRole(role)) {
     return { response: c.json({ error: 'Instructor access required' }, 403) }
   }
 
-  return { user, role, supabase }
+  return { ...auth, role }
 }
 
 function publicClass(row) {
@@ -71,6 +87,14 @@ function publicClass(row) {
     owner_id: row.owner_id,
     class_code: row.class_code,
     created_at: row.created_at
+  }
+}
+
+function joinableClass(row) {
+  if (!row) return null
+  return {
+    id: row.id,
+    name: row.name
   }
 }
 
@@ -140,8 +164,156 @@ export async function handleCreateClass(c) {
   return c.json({ error: 'Unable to create class' }, 409)
 }
 
+export async function handleFindClassByCode(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAuthenticated(c)
+  if (auth.response) return auth.response
+
+  const code = normalizeClassCode(c.req.param('code'))
+  if (!code) {
+    return c.json({ error: 'Valid class code required' }, 400)
+  }
+
+  const { data, error } = await auth.supabase
+    .from('classes')
+    .select('id,name')
+    .eq('class_code', code)
+    .maybeSingle()
+
+  if (error) {
+    console.error('Class lookup failed:', error.message || error)
+    return c.json({ error: 'Unable to look up class' }, 500)
+  }
+
+  return c.json({ class: joinableClass(data) }, 200)
+}
+
+export async function handleEnrollInClass(c) {
+  if (c.req.method !== 'POST') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeAuthenticated(c)
+  if (auth.response) return auth.response
+
+  let body
+  try {
+    body = await c.req.json()
+  } catch {
+    return c.json({ error: 'Invalid JSON body' }, 400)
+  }
+
+  const classId = c.req.param('classId')
+  const code = normalizeClassCode(body?.code)
+  if (!classId || !code) {
+    return c.json({ error: 'class code required to join' }, 400)
+  }
+
+  const { data: cls, error: classError } = await auth.supabase
+    .from('classes')
+    .select('id,class_code')
+    .eq('id', classId)
+    .maybeSingle()
+
+  if (classError) {
+    console.error('Class enrollment lookup failed:', classError.message || classError)
+    return c.json({ error: 'Unable to enroll in class' }, 500)
+  }
+  if (!cls) return c.json({ error: 'Class not found' }, 404)
+  if (code !== cls.class_code) return c.json({ error: 'Invalid class code' }, 403)
+
+  const payload = {
+    class_id: cls.id,
+    user_id: auth.user.id
+  }
+
+  const { data, error } = await auth.supabase
+    .from('enrollments')
+    .insert(payload)
+    .select('id,class_id,user_id,created_at')
+    .single()
+
+  if (!error) {
+    return c.json({ success: true, enrollment: data }, 201)
+  }
+
+  if (error.code === '23505') {
+    const { data: existing, error: existingError } = await auth.supabase
+      .from('enrollments')
+      .select('id,class_id,user_id,created_at')
+      .eq('class_id', cls.id)
+      .eq('user_id', auth.user.id)
+      .maybeSingle()
+
+    if (!existingError && existing) {
+      return c.json({ success: true, enrollment: existing, already_enrolled: true }, 200)
+    }
+  }
+
+  console.error('Class enrollment failed:', error.message || error)
+  return c.json({ error: 'Unable to enroll in class' }, 500)
+}
+
+export async function handleClassRoster(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeInstructor(c)
+  if (auth.response) return auth.response
+
+  const classId = c.req.param('classId')
+  const { data: cls, error: classError } = await auth.supabase
+    .from('classes')
+    .select('id')
+    .eq('id', classId)
+    .eq('owner_id', auth.user.id)
+    .maybeSingle()
+
+  if (classError) {
+    console.error('Class roster ownership check failed:', classError.message || classError)
+    return c.json({ error: 'Unable to load class roster' }, 500)
+  }
+  if (!cls) return c.json({ error: 'Class not found' }, 404)
+
+  const { data: enrollments, error: enrollmentError } = await auth.supabase
+    .from('enrollments')
+    .select('user_id,created_at')
+    .eq('class_id', cls.id)
+    .order('created_at', { ascending: true })
+
+  if (enrollmentError) {
+    console.error('Class roster enrollment lookup failed:', enrollmentError.message || enrollmentError)
+    return c.json({ error: 'Unable to load class roster' }, 500)
+  }
+
+  const rows = enrollments || []
+  const userIds = rows.map((row) => row.user_id).filter(Boolean)
+  if (userIds.length === 0) return c.json({ students: [] }, 200)
+
+  const { data: profiles, error: profileError } = await auth.supabase
+    .from('profiles')
+    .select('id,email')
+    .in('id', userIds)
+
+  if (profileError) {
+    console.error('Class roster profile lookup failed:', profileError.message || profileError)
+    return c.json({ error: 'Unable to load class roster' }, 500)
+  }
+
+  const byId = new Map((profiles || []).map((profile) => [profile.id, profile]))
+  const students = rows.map((row) => {
+    const profile = byId.get(row.user_id)
+    return {
+      id: row.user_id,
+      email: profile?.email || null,
+      enrolled_at: row.created_at
+    }
+  })
+
+  return c.json({ students }, 200)
+}
+
 export {
   MAX_CLASS_NAME_LENGTH,
   normalizeClassName,
+  normalizeClassCode,
   makeClassCode
 }
