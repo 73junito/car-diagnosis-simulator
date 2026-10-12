@@ -3,6 +3,10 @@
   const status = document.getElementById('admin-status')
   const queueStatus = document.getElementById('queue-status')
   const refresh = document.getElementById('refresh-queue')
+  const authorQueue = document.getElementById('author-review-queue')
+  const authorStatus = document.getElementById('author-review-status')
+  const authorStatusSelect = document.getElementById('author-review-status-select')
+  const authorRefresh = document.getElementById('author-review-refresh')
 
   function token(){ return typeof window.getAccessToken === 'function' ? window.getAccessToken() : null }
   function clear(node){ while(node.firstChild) node.removeChild(node.firstChild) }
@@ -114,7 +118,103 @@
     }
   }
 
+  async function decideAuthorDraft(draft, decision, note, card){
+    const confirmed = window.confirm(decision === 'review_complete'
+      ? 'Mark this private draft review complete? This does not publish the scenario.'
+      : 'Request changes to this private draft?')
+    if (!confirmed) return
+
+    card.querySelectorAll('button').forEach((button) => { button.disabled = true })
+    authorStatus.textContent = 'Saving authoring review decision…'
+    try {
+      await api('/api/admin/author-drafts/reviews/' + encodeURIComponent(draft.id), {
+        method: 'PATCH',
+        body: JSON.stringify({ decision, reviewNote: note })
+      })
+      authorStatus.textContent = 'Authoring review decision saved and audit evidence recorded.'
+      await loadAuthorQueue()
+    } catch (error) {
+      authorStatus.textContent = error.message || 'Authoring review decision could not be saved.'
+      card.querySelectorAll('button').forEach((button) => { button.disabled = false })
+    }
+  }
+
+  function renderAuthorDraft(draft){
+    const card = text('article', '', 'admin-card')
+    card.appendChild(text('h3', draft.title || 'Untitled Scenario'))
+
+    const meta = text('div', '', 'admin-meta')
+    meta.appendChild(text('div', 'Author user ID: ' + draft.ownerId))
+    meta.appendChild(text('div', 'Scenario key: ' + draft.scenarioKey))
+    meta.appendChild(text('div', 'Version: ' + draft.version))
+    meta.appendChild(text('div', 'Review status: ' + draft.reviewStatus))
+    if (draft.reviewRequestedAt) meta.appendChild(text('div', 'Requested: ' + new Date(draft.reviewRequestedAt).toLocaleString()))
+    if (draft.reviewedAt) meta.appendChild(text('div', 'Reviewed: ' + new Date(draft.reviewedAt).toLocaleString()))
+    if (draft.reviewedBy) meta.appendChild(text('div', 'Reviewer user ID: ' + draft.reviewedBy))
+    card.appendChild(meta)
+
+    if (draft.reviewNote) card.appendChild(text('p', 'Review note: ' + draft.reviewNote))
+
+    if (draft.scenario) {
+      const details = document.createElement('details')
+      details.appendChild(text('summary', 'Review scenario draft'))
+      const preview = document.createElement('pre')
+      preview.textContent = JSON.stringify(draft.scenario, null, 2)
+      details.appendChild(preview)
+      card.appendChild(details)
+    }
+
+    if (draft.reviewStatus === 'pending') {
+      const actions = text('div', '', 'admin-actions')
+      const label = text('label', 'Review note')
+      const note = document.createElement('textarea')
+      note.className = 'tm-textarea'
+      note.maxLength = 2000
+      note.placeholder = 'Required when requesting changes; optional when completing review.'
+      label.appendChild(note)
+      actions.appendChild(label)
+
+      const row = text('div', '', 'admin-action-row')
+      const complete = text('button', 'Complete Review', 'tm-btn tm-btn-primary')
+      complete.type = 'button'
+      complete.addEventListener('click', () => decideAuthorDraft(draft, 'review_complete', note.value.trim(), card))
+      const changes = text('button', 'Request Changes', 'tm-btn tm-btn-secondary')
+      changes.type = 'button'
+      changes.addEventListener('click', () => {
+        const value = note.value.trim()
+        if (!value) { authorStatus.textContent = 'A review note is required when requesting changes.'; note.focus(); return }
+        decideAuthorDraft(draft, 'changes_requested', value, card)
+      })
+      row.append(complete, changes)
+      actions.appendChild(row)
+      card.appendChild(actions)
+    }
+
+    return card
+  }
+
+  async function loadAuthorQueue(){
+    clear(authorQueue)
+    authorStatus.textContent = 'Loading ' + authorStatusSelect.value.replaceAll('_', ' ') + ' drafts…'
+    try {
+      const payload = await api('/api/admin/author-drafts/reviews?status=' + encodeURIComponent(authorStatusSelect.value))
+      const drafts = Array.isArray(payload.drafts) ? payload.drafts : []
+      if (!drafts.length) {
+        authorQueue.appendChild(text('p', 'No ' + authorStatusSelect.value.replaceAll('_', ' ') + ' authoring drafts.', 'admin-empty'))
+      } else {
+        drafts.forEach((draft) => authorQueue.appendChild(renderAuthorDraft(draft)))
+      }
+      authorStatus.textContent = drafts.length + ' draft' + (drafts.length === 1 ? '' : 's') + '.'
+    } catch (error) {
+      authorQueue.appendChild(text('p', error.message || 'Authoring review queue unavailable.', 'admin-empty'))
+      authorStatus.textContent = error.message || 'Authoring review queue unavailable.'
+    }
+  }
+
   queueStatus.addEventListener('change', loadQueue)
   refresh.addEventListener('click', loadQueue)
+  authorStatusSelect.addEventListener('change', loadAuthorQueue)
+  authorRefresh.addEventListener('click', loadAuthorQueue)
   loadQueue()
+  loadAuthorQueue()
 })()
