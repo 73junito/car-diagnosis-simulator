@@ -95,6 +95,76 @@ async function loadScopedTelemetry(auth, classId, sessionId, limit) {
   }
 }
 
+async function loadScopedTelemetrySince(auth, classId, since, limit) {
+  const scope = await loadOwnedClassUserIds(auth, classId)
+  if (scope.error) return { error: scope.error }
+  if (scope.notFound) return { notFound: true }
+  if (scope.userIds.length === 0) return { classId: scope.classId, rows: [] }
+
+  let query = auth.supabase
+    .from('telemetry_events')
+    .select('created_at,event_type,session_id,payload_json,user_id,expires_at')
+    .in('user_id', scope.userIds)
+    .gt('expires_at', new Date().toISOString())
+    .order('created_at', { ascending: true })
+    .limit(limit)
+
+  if (since) query = query.gt('created_at', since)
+
+  const { data, error } = await query
+  if (error) return { error }
+
+  return {
+    classId: scope.classId,
+    rows: (data || []).map(normalizeTelemetryEvent)
+  }
+}
+
+function buildSseSnapshot(rows) {
+  const lines = ['retry: 3000', '']
+  for (const row of rows || []) {
+    lines.push('event: telemetry')
+    lines.push('data: ' + JSON.stringify(row))
+    lines.push('')
+  }
+  return lines.join('\n') + '\n'
+}
+
+export async function handleInstructorTelemetryStream(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeInstructor(c)
+  if (auth.response) return auth.response
+
+  const classId = String(c.req.query('classId') || '').trim()
+  const since = String(c.req.query('since') || '').trim()
+  const requestedLimit = Number.parseInt(String(c.req.query('limit') || '100'), 10)
+  const limit = Number.isFinite(requestedLimit)
+    ? Math.min(Math.max(requestedLimit, 1), 250)
+    : 100
+
+  if (!classId) return c.json({ error: 'classId is required' }, 400)
+  if (since && Number.isNaN(Date.parse(since))) {
+    return c.json({ error: 'since must be an ISO timestamp' }, 400)
+  }
+
+  const result = await loadScopedTelemetrySince(auth, classId, since, limit)
+  if (result.error) {
+    console.error('Instructor telemetry stream lookup failed:', result.error.message || result.error)
+    return c.json({ error: 'Unable to load telemetry stream' }, 500)
+  }
+  if (result.notFound) return c.json({ error: 'Class not found' }, 404)
+
+  return new Response(buildSseSnapshot(result.rows), {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/event-stream; charset=utf-8',
+      'Cache-Control': 'private, no-store',
+      'X-Accel-Buffering': 'no'
+    }
+  })
+}
+
 function csvEscape(value) {
   if (value == null) return ''
   const text = String(value)
@@ -194,4 +264,4 @@ export async function handleInstructorTelemetryExport(c) {
   })
 }
 
-export { normalizeTelemetryEvent, buildTelemetryCsv }
+export { normalizeTelemetryEvent, buildTelemetryCsv, buildSseSnapshot }

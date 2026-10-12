@@ -34,14 +34,14 @@ describe('production API route inventory', () => {
       '/api/analytics/export',
       '/api/telemetry/history',
       '/api/telemetry/export.:format',
-      '/api/telemetry/events'
+      '/api/telemetry/events',
+      '/api/telemetry/stream'
     ]) expect(routes).toContain(expected)
   })
 
   test('known production gaps stay mapped to roadmap work', () => {
     const patterns = inventory.knownUnregisteredRoutes.map((entry) => entry.pattern)
     for (const expected of [
-      '/api/telemetry/stream',
       '/api/attempts/save',
       '/api/approved-sources'
     ]) expect(patterns).toContain(expected)

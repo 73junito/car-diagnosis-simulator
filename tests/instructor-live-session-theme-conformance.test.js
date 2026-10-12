@@ -24,12 +24,22 @@ describe('Instructor live-session theme conformance', () => {
     expect(liveCss).toContain('#live-summary')
   })
 
-  test('keeps runtime status behavior unchanged and bridge-backed', () => {
-    expect(js).toContain("status.className = 'badge ' + (s.cls||'badge-warn')")
-    expect(js).toContain("cls: 'badge-success'")
-    expect(js).toContain("cls: 'badge-danger'")
+  test('keeps runtime status behavior bridge-backed', () => {
+    expect(js).toContain("status.className = 'badge ' + (cls || 'badge-warn')")
+    expect(js).toContain("'badge-success'")
+    expect(js).toContain("'badge-danger'")
     expect(bridge).toContain('#conn-status.badge-success')
     expect(bridge).toContain('#conn-status.badge-warn')
     expect(bridge).toContain('#conn-status.badge-danger')
+  })
+
+  test('uses canonical auth and owned-class controls instead of browser role trust', () => {
+    expect(html).toContain('id="live-class"')
+    expect(html).toContain('src="/auth.js"')
+    expect(html).toContain('src="/apiClient.js"')
+    expect(js).toContain("window.apiGet('/api/classes')")
+    expect(js).toContain("Authorization: 'Bearer ' + token")
+    expect(js).not.toContain("localStorage.getItem('torquemindRole')")
+    expect(js).not.toContain('new EventSource')
   })
 })
