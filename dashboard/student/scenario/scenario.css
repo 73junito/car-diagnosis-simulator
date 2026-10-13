@@ -1,79 +1,171 @@
-body {
-  margin: 0;
-  background: #050b14;
-  color: #f8fafc;
-  font-family: Arial, sans-serif;
-}
-
-.scenario-shell {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-.back {
-  color: #38bdf8;
-  display: inline-block;
-  margin-bottom: 18px;
-}
+/* Student Scenario — shared AutoLearnPro theme conformance.
+ *
+ * Presentation only. All class names below are emitted by scenario.js and are
+ * load-bearing for its behavior/selectors — do NOT rename them. This file only
+ * restyles the existing scenario classes onto the shared design tokens so the
+ * page belongs to the same application as the Student Dashboard and Reference
+ * Library. No dark "monolith" theme, no Arial, no isolated palette. */
 
 .scenario-page {
   display: grid;
-  gap: 18px;
+  gap: 20px;
 }
 
+/* Context / hero — maps to the shared hero-banner language. */
 .scenario-hero {
-  border: 1px solid #334155;
-  border-radius: 12px;
-  padding: 22px;
-  background: linear-gradient(135deg, #07111f, #0f172a);
+  background: linear-gradient(135deg, var(--tm-primary), var(--tm-primary-2));
+  color: #fff;
+  border-radius: var(--tm-radius-lg);
+  box-shadow: var(--tm-shadow);
+  padding: 28px;
+}
+
+.scenario-hero > * {
+  min-width: 0;
+}
+
+.scenario-hero h1 {
+  margin: 6px 0 10px;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  line-height: 1.1;
+}
+
+.scenario-hero p {
+  color: #e6eefb;
+  margin: 0 0 8px;
 }
 
 .scenario-label {
-  color: #fde047;
-  font-weight: 700;
+  color: #dbeafe;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  margin: 0 0 6px;
 }
 
+.note {
+  border-left: 4px solid var(--tm-accent);
+  background: var(--tm-surface-2);
+  border-radius: var(--tm-radius-sm);
+  padding: 12px 14px;
+  color: var(--tm-text);
+  margin: 12px 0 0;
+}
+
+.note strong {
+  color: var(--tm-primary);
+}
+
+/* Primary content cards — shared panel treatment. */
 .scenario-card {
-  background: #f8fafc;
-  color: #111827;
-  border-radius: 10px;
+  background: var(--tm-surface);
+  color: var(--tm-text);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-soft);
   padding: 22px;
+}
+
+.scenario-card h2 {
+  margin: 0 0 12px;
+  color: var(--tm-primary);
+  font-size: 1.15rem;
+}
+
+.scenario-card ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.scenario-card li {
+  margin: 4px 0;
+}
+
+/* Question presentation. */
+.question-card {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-soft);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.question-options {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
 }
 
 .question-option {
   display: block;
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-sm);
+  cursor: pointer;
+}
+
+.question-option:hover {
+  border-color: var(--tm-primary-2);
+}
+
+.question-option input {
+  margin-right: 8px;
+}
+
+.submit-answer {
+  margin-top: 10px;
+}
+
+/* Feedback / result areas. */
+.answer-feedback {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--tm-radius-sm);
+  border-left: 4px solid var(--tm-primary-2);
+  background: var(--tm-surface-2);
+}
+
+.torquemind-feedback {
+  margin-top: 16px;
+  padding: 16px;
+  border-left: 4px solid var(--tm-primary-2);
+  background: var(--tm-surface-2);
+  border-radius: var(--tm-radius-sm);
+  color: var(--tm-text);
+}
+
+.torquemind-feedback h4 {
+  margin: 0 0 10px;
+  color: var(--tm-primary);
+}
+
+.torquemind-body p {
+  margin: 8px 0;
+  color: var(--tm-text);
+}
+
+.attempt-summary {
+  background: var(--tm-surface-2);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-sm);
+  padding: 14px 16px;
   margin: 12px 0;
 }
 
-.note {
-  border-left: 4px solid #fde047;
-  padding-left: 12px;
-  color: #e5e7eb;
+.attempt-summary strong {
+  color: var(--tm-primary);
 }
 
-.torquemind-feedback{
-    margin-top:16px;
-    padding:16px;
-    border-left:4px solid #2563eb;
-    background:#eff6ff;
-    border-radius:8px;
-}
-
-.torquemind-feedback h4{
-    margin-bottom:10px;
-}
-
-.torquemind-body p{
-    margin:8px 0;
-}
-
-
+/* Diagnostic reasoning sequence — shared panel + step grid. */
 .reasoning-sequence {
-  background: #0b1525;
-  border: 1px solid #334155;
-  border-radius: 12px;
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-soft);
   padding: 22px;
 }
 
@@ -83,18 +175,20 @@ body {
 
 .reasoning-sequence__header h2 {
   margin: 6px 0 8px;
+  color: var(--tm-primary);
+  font-size: 1.2rem;
 }
 
 .reasoning-sequence__header p {
-  color: #cbd5e1;
+  color: var(--tm-muted);
   line-height: 1.55;
 }
 
 .reasoning-sequence__eyebrow {
-  color: #7dd3fc !important;
-  font-size: .78rem;
-  font-weight: 700;
-  letter-spacing: .08em;
+  color: var(--tm-primary-2-text) !important;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   margin: 0;
   text-transform: uppercase;
 }
@@ -109,34 +203,46 @@ body {
 }
 
 .reasoning-steps li {
-  background: #111c2d;
-  border: 1px solid #334155;
-  border-radius: 10px;
+  background: var(--tm-surface-2);
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-sm);
   min-width: 0;
   padding: 16px;
 }
 
 .reasoning-steps li > span {
-  color: #7dd3fc;
+  color: var(--tm-primary-2-text);
   display: block;
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: 800;
   margin-bottom: 8px;
 }
 
 .reasoning-steps strong {
-  color: #f8fafc;
+  color: var(--tm-primary);
   display: block;
   margin-bottom: 6px;
 }
 
 .reasoning-steps p {
-  color: #cbd5e1;
-  font-size: .9rem;
+  color: var(--tm-muted);
+  font-size: 0.9rem;
   line-height: 1.45;
   margin: 0;
 }
 
+/* Context navigation. */
+.scenario-context-nav {
+  margin-bottom: 4px;
+}
+
+.scenario-back-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* Responsive reflow. */
 @media (max-width: 900px) {
   .reasoning-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -144,11 +250,27 @@ body {
 }
 
 @media (max-width: 560px) {
-  .scenario-shell {
-    padding: 16px;
+  .scenario-hero,
+  .scenario-card,
+  .reasoning-sequence {
+    padding: 18px;
   }
 
   .reasoning-steps {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Respect reduced-motion: no meaningful animation is introduced, but ensure
+ * any inherited transitions settle immediately for users who prefer reduced
+ * motion. */
+@media (prefers-reduced-motion: reduce) {
+  .scenario-page *,
+  .scenario-hero,
+  .scenario-card,
+  .reasoning-steps li,
+  .question-option {
+    transition: none !important;
+    animation: none !important;
   }
 }
