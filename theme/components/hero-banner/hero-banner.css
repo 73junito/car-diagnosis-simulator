@@ -10,6 +10,10 @@
   padding:28px;
 }
 
+.tm-hero-banner > *{
+  min-width:0;
+}
+
 .tm-hero-banner__eyebrow{
   margin:0 0 6px;
   color:#dbeafe;
