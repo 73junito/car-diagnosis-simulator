@@ -25,6 +25,18 @@
     if (status === 401){
       try { if (window.supabaseSignOut) window.supabaseSignOut(); } catch(e){ /* ignore: best-effort sign-out */ }
       try { window.dispatchEvent(new CustomEvent('supabase:authExpired', { detail: { status } })); } catch(e){ /* ignore: best-effort event dispatch */ }
+
+      const path = String(window.location.pathname || '');
+      if (path.startsWith('/dashboard/student/')){
+        window.location.replace('/sign-in/student/');
+      } else if (
+        path.startsWith('/dashboard/instructor/') ||
+        path.startsWith('/dashboard/admin/') ||
+        path.startsWith('/dashboard/institution/') ||
+        path.startsWith('/dashboard/author/')
+      ){
+        window.location.replace('/sign-in/instructor/');
+      }
       return;
     }
     if (status === 403){
@@ -40,7 +52,6 @@
     const opts = { method, headers, credentials: 'same-origin' };
     if (body) opts.body = JSON.stringify(body);
     const res = await fetch(url, opts);
-    handleAuthResponse(res.status, url);
     const text = await res.text();
     let json = null;
     try { json = text ? JSON.parse(text) : null; } catch(e){ json = text; }
