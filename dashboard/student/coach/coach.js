@@ -58,7 +58,11 @@
       const payload=await response.json().catch(()=>({}))
       if(!response.ok) throw new Error(payload.error || 'Unable to load recommendations.')
       const rows=Array.isArray(payload.recommendations)?payload.recommendations:[]
-      if(payload.context?.statement) context.textContent=payload.context.statement
+      if(payload.coachSummary?.summary){
+        context.textContent=payload.coachSummary.summary+' Recommendations remain practice-only and are not grades or assessment decisions.'
+      }else if(payload.context?.statement){
+        context.textContent=payload.context.statement
+      }
       if(!rows.length){
         status.textContent='No recommendation is available yet.'
         empty('Complete training activity to give the Coach enough history for a recommendation.')
