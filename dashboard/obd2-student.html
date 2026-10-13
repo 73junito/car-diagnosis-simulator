@@ -3,23 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>OBD-II Student Diagnostic Workflow</title>
+  <title>OBD-II Student Diagnostic Workflow | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="/dashboard/obd2-student.css">
 </head>
 <body>
-  <main class="student-workflow">
+  <div data-theme-shell></div>
+
+  <main class="student-workflow tm-main wrapper">
+    <nav class="obd2-context-nav" aria-label="Diagnostic navigation">
+      <a class="obd2-back-link tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a>
+    </nav>
     <header>
       <h1>Student Diagnostic Workflow</h1>
       <div class="controls">
         <label for="scenario-select">Scenario</label>
-        <select id="scenario-select"></select>
+        <select id="scenario-select" class="tm-select"></select>
       </div>
     </header>
 
     <section class="symptoms">
       <h2>Symptom Review</h2>
       <label for="symptom-text">Observed symptoms</label>
-      <textarea id="symptom-text" placeholder="Describe observed symptoms"></textarea>
+      <textarea id="symptom-text" class="tm-textarea" placeholder="Describe observed symptoms"></textarea>
     </section>
 
     <section class="tests">
@@ -30,8 +38,8 @@
     <section class="diagnosis">
       <h2>Diagnosis</h2>
       <label for="diagnosis-input">Your diagnosis</label>
-      <input id="diagnosis-input" placeholder="Enter your diagnosis" />
-      <button id="submit-diagnosis">Submit Diagnosis</button>
+      <input id="diagnosis-input" class="tm-input" placeholder="Enter your diagnosis" />
+      <button id="submit-diagnosis" class="tm-btn tm-btn-primary">Submit Diagnosis</button>
       <div id="diagnosis-feedback" class="feedback" aria-live="polite">No submission yet.</div>
       <div id="score-summary" class="score-summary" aria-live="polite" hidden>
         <div id="score-value">Score: --</div>
@@ -43,6 +51,10 @@
   <script src="/data/scenarios.js"></script>
 <script src="/data/scenario-content-map.js"></script>
 <script src="/data/scenario-registry.js"></script>
+<script type="module">
+  import { mountShell } from "/theme/shell.js";
+  mountShell();
+</script>
 <script src="/dashboard/obd2-student.js"></script>
 </body>
 </html>

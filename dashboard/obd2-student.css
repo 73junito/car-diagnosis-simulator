@@ -1,16 +1,162 @@
-.student-workflow{font-family:system-ui,Segoe UI,Arial,sans-serif;padding:18px;max-width:900px;margin:0 auto}
-.student-workflow header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.symptoms textarea{width:100%;height:80px;padding:8px;border-radius:6px;border:1px solid #e6e6e6}
-.test-checklist{list-style:none;padding:8px;border:1px solid #eee;border-radius:6px;background:#fff;max-height:160px;overflow:auto}
-.test-checklist li{padding:8px;border-bottom:1px solid #f6f6f6}
-.diagnosis{margin-top:12px}
-#diagnosis-input{width:100%;padding:8px;border:1px solid #e6e6e6;border-radius:6px;margin-bottom:8px}
-#submit-diagnosis{padding:8px 12px;border-radius:6px;background:#1976d2;color:#fff;border:none;cursor:pointer}
-.feedback{margin-top:8px;padding:8px;border-radius:6px;background:#f8f9fa;border:1px solid #eee}
+/* OBD-II Student Diagnostic Workflow — shared AutoLearnPro theme conformance.
+ * Presentation only. Every ID/class below is load-bearing for
+ * obd2-student.js and the OBD-II tests — do NOT rename them. This file only
+ * restyles the existing structure onto the shared design tokens. */
 
-.score-summary{margin-top:10px;padding:10px;border-radius:6px;background:#fff;border:1px solid #e0e0e0}
-.score-summary.pass{border-left:4px solid #4caf50}
-.score-summary.fail{border-left:4px solid #f44336}
-.score-summary #score-value{font-weight:800;margin-bottom:6px}
-.score-summary #score-breakdown{font-size:13px;color:#444;margin-bottom:6px}
-.score-summary #score-state{font-weight:700}
+/* Context navigation back to the student workspace. */
+.obd2-context-nav {
+  margin-bottom: 4px;
+}
+
+.obd2-back-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.student-workflow header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.student-workflow h1 {
+  margin: 0;
+  color: var(--tm-primary);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.controls label {
+  font-weight: 700;
+  color: var(--tm-text);
+}
+
+.student-workflow section {
+  margin-top: 16px;
+}
+
+.student-workflow h2 {
+  color: var(--tm-primary);
+  font-size: 1.15rem;
+  margin: 0 0 10px;
+}
+
+.symptoms label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--tm-text);
+}
+
+.symptoms textarea {
+  height: 80px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.test-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+  color: var(--tm-text);
+  max-height: 160px;
+  overflow: auto;
+}
+
+.test-checklist li {
+  padding: 8px;
+  border-bottom: 1px solid var(--tm-border);
+}
+
+.test-checklist li:last-child {
+  border-bottom: none;
+}
+
+.diagnosis label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--tm-text);
+}
+
+#diagnosis-input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+
+.feedback {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-surface-2);
+  border: 1px solid var(--tm-border);
+  color: var(--tm-text);
+}
+
+.score-summary {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+  color: var(--tm-text);
+}
+
+.score-summary.pass {
+  border-left: 4px solid var(--tm-success);
+}
+
+.score-summary.fail {
+  border-left: 4px solid var(--tm-danger);
+}
+
+.score-summary #score-value {
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--tm-primary);
+}
+
+.score-summary #score-breakdown {
+  font-size: 0.85rem;
+  color: var(--tm-muted);
+  margin-bottom: 6px;
+}
+
+.score-summary #score-state {
+  font-weight: 700;
+}
+
+/* Responsive reflow. */
+@media (max-width: 560px) {
+  .student-workflow header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .student-workflow h1 {
+    font-size: 1.35rem;
+  }
+
+  .controls {
+    width: 100%;
+  }
+
+  .controls select {
+    flex: 1;
+    min-width: 0;
+  }
+}
