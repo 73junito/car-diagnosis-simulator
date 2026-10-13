@@ -121,7 +121,9 @@
     "validate:phase8a-legacy-theme-migration": "node scripts/phase-8a-legacy-theme-migration-check.js",
     "validate:production-api-route-inventory": "node scripts/verify-production-api-route-inventory.js",
     "validate:dependency-runtime-compatibility": "node scripts/verify-dependency-runtime-compatibility.js",
-    "validate:text-normalization-policy": "node scripts/verify-text-normalization-policy.js"
+    "validate:text-normalization-policy": "node scripts/verify-text-normalization-policy.js",
+    "build:animation-starting-review": "node scripts/build-starting-system-animation-review.js",
+    "validate:animation-starting-review": "node scripts/verify-starting-system-animation-review.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

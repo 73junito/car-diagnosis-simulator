@@ -11,3 +11,5 @@
 *.ico binary
 *.pdf binary
 *.zip binary
+
+*.glb binary

@@ -1,0 +1,55 @@
+{
+  "agentMayApprove": false,
+  "agentMayRelease": false,
+  "animationId": "starting-system-voltage-drop-review",
+  "assessmentEligible": false,
+  "assetStatus": "engineering-derived-review-only",
+  "blenderVersion": "5.2.2",
+  "classification": "engineering-derived",
+  "componentMappings": {
+    "battery": "BAT1",
+    "control-protection": "FUSE1",
+    "ground-path": "GND1",
+    "start-command-switch": "SW1",
+    "starter-motor": "MTR1",
+    "starter-solenoid-coil": "SOL_COIL",
+    "starter-solenoid-contact": "SOL_CONTACT"
+  },
+  "connectionDerivedComponents": [
+    "positive-path",
+    "ground-path"
+  ],
+  "engineeringTemplateId": "automotive-12v-starting-system",
+  "engineeringTemplateSha256": "b8707963ab29d48aa3c69d5eab60fe867ceb613cd84b33754fc6fe0fa050b363",
+  "fallbackSha256": "213cc6fd03fb62187f6f93b633c0d8374391bce7e54c266c17cdc3a8b2f2d61f",
+  "faultIds": [
+    "FAULT_OPEN_CONTROL",
+    "FAULT_OPEN_POWER",
+    "FAULT_HIGH_RES_GROUND",
+    "FAULT_HIGH_RES_POWER"
+  ],
+  "generatorScriptSha256": "1038459bffd290c0c839587cba8fd419596812d0e4abc887ad5f752fd618305d",
+  "humanApprovalRequired": true,
+  "instructionalOverlays": [
+    "digital-multimeter"
+  ],
+  "manifestSha256": "b512baac53d79cbb93085c95c9f85896b50f935ed21d23d0c544d6d98a512049",
+  "numericPolicy": "No vehicle-specific acceptable measurement or limit is embedded in the 3D review asset.",
+  "operatingStateIds": [
+    "key-off",
+    "key-on",
+    "crank"
+  ],
+  "outputBytes": 72716,
+  "outputSha256": "c159ab3a2e779898467840018fef3c85062d19e04eef77796e7f234a97ac1303",
+  "publicationAllowed": false,
+  "schemaVersion": "1.0.0",
+  "scoredAssessmentApproved": false,
+  "testPointIds": [
+    "TP_BAT_POS",
+    "TP_START_CMD",
+    "TP_SOLENOID_OUT",
+    "TP_MOTOR_GND"
+  ],
+  "vehicleSpecificClaims": false
+}
