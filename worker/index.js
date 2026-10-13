@@ -85,7 +85,8 @@ import { handleCreateAssignment } from "./routes/classroom-assignments.js";
 import {
   handleInstructorStudentAnalytics,
   handleInstructorSessionAnalytics,
-  handleInstructorAnalyticsExport
+  handleInstructorAnalyticsExport,
+  handleInstructorIntelligence
 } from "./routes/instructor-analytics.js";
 import {
   handleInstructorTelemetryHistory,
@@ -340,6 +341,7 @@ app.use('/api/analytics/export', instructorAnalyticsCors)
 app.get('/api/analytics/students', handleInstructorStudentAnalytics)
 app.get('/api/analytics/sessions', handleInstructorSessionAnalytics)
 app.get('/api/analytics/export', handleInstructorAnalyticsExport)
+app.get('/api/analytics/intelligence', handleInstructorIntelligence)
 
 const instructorTelemetryCors = cors({
   origin: 'https://app.autolearnpro.com',
