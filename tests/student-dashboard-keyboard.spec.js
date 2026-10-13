@@ -96,3 +96,111 @@ describe('Student dashboard keyboard interactions', ()=>{
     }
   });
 });
+
+// Faithful focus-lifecycle regression: exercises the REAL inline card renderer
+// (createCard + the fixed Details handler) and the REAL student.js detail
+// controller (showScenarioDetail / closeDetail) instead of a stub renderer.
+describe('Student dashboard scenario detail focus restoration (real handlers)', ()=>{
+  const REPO = path.resolve(__dirname, '..');
+  const INDEX = path.join(REPO, 'dashboard', 'student', 'index.html');
+
+  // Extract the inline (non-src) <script> block that defines createCard.
+  function extractInlineGridScript(html){
+    const scripts = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)];
+    const grid = scripts.map(m => m[1]).find(code => /function createCard/.test(code));
+    if(!grid) throw new Error('inline createCard script not found in index.html');
+    return grid;
+  }
+
+  function loadRealDashboard(){
+    const html = fs.readFileSync(INDEX, 'utf8');
+    document.documentElement.innerHTML = html;
+
+    loadScriptIntoWindow(path.join(REPO, 'data', 'scenarios.js'), window);
+    loadScriptIntoWindow(path.join(REPO, 'data', 'scenario-registry.js'), window);
+    loadScriptIntoWindow(path.join(REPO, 'dashboard', 'student-progress.js'), window);
+
+    // Real detail controller + explicit init (wired on DOMContentLoaded in browser).
+    loadScriptIntoWindow(path.join(REPO, 'dashboard', 'student', 'student.js'), window);
+    if(window.initStudentDashboard) window.initStudentDashboard();
+
+    // Execute the REAL inline grid renderer so createCard() builds real cards
+    // with the actual (fixed) Details handler wired to showScenarioDetail.
+    const inline = extractInlineGridScript(html);
+    const run = new Function('window','document','self','location','history',
+      inline + '\n//# sourceURL=inline-grid');
+    run(window, window.document, window, window.location, window.history);
+  }
+
+  beforeEach(()=>{ loadRealDashboard(); });
+
+  const getDetail = () => document.getElementById('detail');
+  const getBackBtn = () => document.getElementById('backBtn');
+  const getDetailsButtons = () => Array.from(document.querySelectorAll('.student-text-button'));
+  const click = (el) => el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  test('Details -> detail opens -> Back to dashboard focused', ()=>{
+    const detailsButtons = getDetailsButtons();
+    expect(detailsButtons.length).toBeGreaterThan(0);
+
+    const detailsBtn = detailsButtons[0];
+    detailsBtn.focus();
+    expect(document.activeElement).toBe(detailsBtn);
+
+    click(detailsBtn);
+
+    expect(getDetail().classList.contains('hidden')).toBe(false);
+    // showDetail() moves focus to the back button.
+    expect(document.activeElement).toBe(getBackBtn());
+  });
+
+  test('Back to dashboard returns focus to the EXACT originating Details button', ()=>{
+    const detailsBtn = getDetailsButtons()[0];
+    detailsBtn.focus();
+    click(detailsBtn);
+    expect(getDetail().classList.contains('hidden')).toBe(false);
+    expect(document.activeElement).toBe(getBackBtn());
+
+    click(getBackBtn());
+
+    expect(getDetail().classList.contains('hidden')).toBe(true);
+    // Regression contract: focus returns to the same originating Details button,
+    // NOT to <body> (bug: the non-focusable <article> card was stored as opener).
+    expect(document.activeElement).toBe(detailsBtn);
+  });
+
+  test('Escape closes the detail and returns focus to the originating Details button', ()=>{
+    const detailsBtn = getDetailsButtons()[0];
+    detailsBtn.focus();
+    click(detailsBtn);
+    expect(getDetail().classList.contains('hidden')).toBe(false);
+    expect(document.activeElement).toBe(getBackBtn());
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+    expect(getDetail().classList.contains('hidden')).toBe(true);
+    expect(document.activeElement).toBe(detailsBtn);
+  });
+
+  test('opening a second scenario restores focus to that scenario\'s own Details button', ()=>{
+    const detailsButtons = getDetailsButtons();
+    expect(detailsButtons.length).toBeGreaterThan(1);
+
+    const first = detailsButtons[0];
+    const second = detailsButtons[1];
+
+    first.focus();
+    click(first);
+    expect(document.activeElement).toBe(getBackBtn());
+    click(getBackBtn());
+    expect(document.activeElement).toBe(first);
+
+    second.focus();
+    click(second);
+    expect(document.activeElement).toBe(getBackBtn());
+    click(getBackBtn());
+
+    // Focus must return to the second Details button, not the first.
+    expect(document.activeElement).toBe(second);
+    expect(document.activeElement).not.toBe(first);
+  });
+});
