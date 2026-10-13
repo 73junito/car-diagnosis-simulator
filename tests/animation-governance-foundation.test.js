@@ -94,10 +94,10 @@ describe('ANIM-1A governed animation foundation', () => {
     finally { fs.rmSync(dir, { recursive: true, force: true }) }
   })
 
-  test('does not introduce a runtime framework or 3D dependency in ANIM-1A', () => {
+  test('preserves the no-React architecture as ANIM-1B introduces governed Three.js', () => {
     const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
     const dependencies = { ...pkg.dependencies, ...pkg.devDependencies }
-    expect(dependencies.three).toBeUndefined()
+    expect(dependencies.three).toBe('^0.186.1')
     expect(dependencies.react).toBeUndefined()
     expect(dependencies['@react-three/fiber']).toBeUndefined()
   })

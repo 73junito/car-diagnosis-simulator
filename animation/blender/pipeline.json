@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "ANIM-1C",
+  "purpose": "deterministic-headless-glb-export",
+  "minimumBlenderVersion": "5.2",
+  "allowedInputClassification": [
+    "conceptual",
+    "engineering-derived",
+    "vehicle-specific"
+  ],
+  "export": {
+    "format": "GLB",
+    "coordinateSystem": "glTF-standard",
+    "applyTransforms": true,
+    "includeAnimations": true,
+    "includeCameras": false,
+    "includeLights": false
+  },
+  "governance": {
+    "generatedAssetStatus": "pipeline-validation-only",
+    "mayPublish": false,
+    "mayAttachToProductionLesson": false,
+    "assessmentEligible": false,
+    "scoredAssessmentApproved": false,
+    "humanApprovalRequired": true,
+    "agentMayApprove": false,
+    "agentMayRelease": false
+  },
+  "metadataRequired": [
+    "animationId",
+    "manifestSha256",
+    "generatorScriptSha256",
+    "blenderVersion",
+    "outputSha256",
+    "outputBytes",
+    "componentIds",
+    "generatedAtPolicy"
+  ],
+  "generatedAtPolicy": "not-recorded-in-deterministic-sidecar"
+}

@@ -35,3 +35,29 @@ Every interactive animation manifest requires keyboard operation, reduced-motion
 - ANIM-1E: governed agentic preparation workflow.
 
 No later phase may bypass evidence, rights, technical review, instructional review, or explicit human approval.
+
+
+## ANIM-1B runtime
+
+The reusable browser player lives under theme/components/animation-player/.
+
+ANIM-1B adds Three.js as the only 3D runtime dependency. The static build packages a minimal same-origin vendor surface from the installed MIT-licensed three package: the core ES module, GLTFLoader, OrbitControls, required loader utilities, and the upstream license. No CDN or remote script origin is required.
+
+The player is fail-closed by default. Draft manifests are not rendered unless a caller explicitly opts into allowDraft for development or review. Published interactive 3D manifests must have final human approval, publication permission, a deployable model asset, and a static fallback.
+
+ANIM-1B does not attach an animation to any production lesson and does not change scoring, grading, assessment eligibility, exam release, authentication, authorization, or curriculum governance.
+
+
+## ANIM-1C Blender pipeline
+
+ANIM-1C adds a deterministic headless Blender 5.2+ export pipeline. The Node runner discovers Blender through BLENDER_EXE or standard installation paths and invokes Blender with --background --factory-startup.
+
+The first generator creates only deterministic proxy component geometry for pipeline validation. Proxy outputs are marked pipeline-validation-only, cannot be published or attached to a production lesson, remain assessment-ineligible, and require human approval before any later instructional use.
+
+Generated GLB and sidecar metadata under animation/blender/output are intentionally ignored by Git. The deterministic sidecar omits wall-clock timestamps and records manifest/script/output SHA-256 values, Blender version, component IDs, output size, and governance boundaries.
+
+Local validation commands:
+- npm run validate:animation-blender
+- npm run build:animation-proxy
+
+ANIM-1D will replace proxy geometry with the first governed starting-system instructional model. ANIM-1C itself does not make vehicle-specific claims and does not alter lesson delivery, scoring, grading, assessment eligibility, exam release, authentication, authorization, RLS, or curriculum.
