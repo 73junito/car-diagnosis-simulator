@@ -51,7 +51,7 @@ INSERT INTO public.approved_sources (
   'fixture-no-crank-source-3',
   'Starter Motor and Solenoid Failures',
   '["Garcia, Maria", "Lee, Robert"]'::jsonb,
-  'ASEPress',
+  'DiagnosticsPress',
   2024,
   'd4735fea8e8416bd6edd1dfedfda6ca6c8cd98fe8d04d00b9a2b2c77f2c62627',
   'sha256',

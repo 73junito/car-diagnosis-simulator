@@ -46,7 +46,7 @@
     expectedFinding: document.getElementById("expectedFinding"),
     rootCause: document.getElementById("rootCause"),
     recommendedRepair: document.getElementById("recommendedRepair"),
-    aseArea: document.getElementById("aseArea"),
+    diagnosticArea: document.getElementById("diagnosticArea"),
     safetyCriteria: document.getElementById("safetyCriteria"),
     diagnosticCriteria: document.getElementById("diagnosticCriteria"),
     verificationCriteria: document.getElementById("verificationCriteria")
@@ -58,7 +58,7 @@
     vehicle: document.getElementById("previewVehicle"),
     dtcs: document.getElementById("previewDtcs"),
     liveData: document.getElementById("previewLiveData"),
-    ase: document.getElementById("previewAse")
+    diagnostic: document.getElementById("previewDiagnosticArea")
   };
 
   function value(field) {
@@ -109,7 +109,7 @@
         recommendedRepair: value(fields.recommendedRepair)
       },
       rubric: {
-        aseArea: value(fields.aseArea),
+        diagnosticArea: value(fields.diagnosticArea),
         safety: value(fields.safetyCriteria),
         diagnosis: value(fields.diagnosticCriteria),
         verification: value(fields.verificationCriteria)
@@ -123,7 +123,7 @@
       ["Scenario title and customer complaint", value(fields.title) && value(fields.complaint)],
       ["Evidence: DTC or live data", value(fields.primaryDtc) || value(fields.rpm) || value(fields.voltage)],
       ["Diagnostic path and root cause", value(fields.initialTest) && value(fields.rootCause) && value(fields.recommendedRepair)],
-      ["ASE area and diagnostic rubric", value(fields.aseArea) && value(fields.diagnosticCriteria)]
+      ["diagnostic area and diagnostic rubric", value(fields.diagnosticArea) && value(fields.diagnosticCriteria)]
     ];
   }
 
@@ -400,10 +400,10 @@
       preview.liveData.textContent = liveData.length ? liveData.join(" • ") : "Not configured";
     }
 
-    if (preview.ase) {
-      const ase = value(fields.aseArea);
+    if (preview.diagnostic) {
+      const diagnostic = value(fields.diagnosticArea);
       const root = value(fields.rootCause);
-      preview.ase.textContent = ase ? `${ase}${root ? ` • Root cause: ${root}` : ""}` : "Not mapped";
+      preview.diagnostic.textContent = diagnostic ? `${diagnostic}${root ? ` • Root cause: ${root}` : ""}` : "Not mapped";
     }
 
     renderChecklist(getValidationItems());
@@ -449,7 +449,7 @@
     setField(fields.expectedFinding, scenario.diagnosticPath && scenario.diagnosticPath.expectedFinding);
     setField(fields.rootCause, scenario.diagnosticPath && scenario.diagnosticPath.rootCause);
     setField(fields.recommendedRepair, scenario.diagnosticPath && scenario.diagnosticPath.recommendedRepair);
-    setField(fields.aseArea, scenario.rubric && scenario.rubric.aseArea);
+    setField(fields.diagnosticArea, scenario.rubric && scenario.rubric.diagnosticArea);
     setField(fields.safetyCriteria, scenario.rubric && scenario.rubric.safety);
     setField(fields.diagnosticCriteria, scenario.rubric && scenario.rubric.diagnosis);
     setField(fields.verificationCriteria, scenario.rubric && scenario.rubric.verification);

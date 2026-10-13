@@ -666,7 +666,7 @@ module.exports = (req, res) => {
       totalSessions:     data.totalSessions || 0,
       averageConfidence: data.averageConfidence || 0,
       totalStudents:     Array.isArray(data.students) ? data.students.length : 0,
-      aseWeaknesses:     data.aseWeaknesses || [],
+      diagnosticWeaknesses:     data.diagnosticWeaknesses || [],
     });
   } catch (err) {
     console.error('[/api/analytics/summary]', err);
@@ -930,9 +930,9 @@ module.exports = { resolveUserRole };
       </table>
     </section>
 
-    <section class="ase-weakness">
-      <h2>ASE Weaknesses</h2>
-      <div id="ase-chart">(Chart placeholder)</div>
+    <section class="diagnostic-weakness">
+      <h2>Diagnostic Weaknesses</h2>
+      <div id="diagnostic-chart">(Chart placeholder)</div>
     </section>
   </main>
 
@@ -1162,7 +1162,7 @@ ashboardAnalyticsSummary = async function getDashboardAnalyticsSummary(){
     if (sessionsData && sessionsData.ok){
       if (isFiniteNumber(sessionsData.averageScore)) avgScore = sessionsData.averageScore
       completionRate = sessionsData.completionRate ?? sessionsData.completion ?? null
-      weakAreas = sessionsData.weakAreas ?? sessionsData.aseWeaknessesCount ?? null
+      weakAreas = sessionsData.weakAreas ?? sessionsData.diagnosticWeaknessesCount ?? null
     }
 
     if (avgScore == null && studentsData && Array.isArray(studentsData.students)){

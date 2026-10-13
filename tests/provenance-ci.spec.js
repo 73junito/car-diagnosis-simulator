@@ -42,7 +42,7 @@ describe('provenance CI gates (local fixtures)', () => {
   });
 
   test('chunk locator is non-empty for approved chunk', () => {
-    expect(fixturesSql).toMatch(/'A6 > Starting System > Starter Circuit Testing'/);
+    expect(fixturesSql).toMatch(/'Electrical Diagnostics > Starting System > Starter Circuit Testing'/);
   });
 
   test('migration enables RLS and includes status transition guard', () => {

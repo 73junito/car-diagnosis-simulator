@@ -10,8 +10,8 @@ const matchesFilter = (s, filters) => {
   if(filters.difficulty && filters.difficulty !== 'all'){
     if(String((s.difficulty||'')).toLowerCase() !== String(filters.difficulty).toLowerCase()) return false;
   }
-  if(filters.ase && filters.ase !== 'all'){
-    if(String((s.aseArea||'')).toLowerCase() !== String(filters.ase).toLowerCase()) return false;
+  if(filters.diagnostic && filters.diagnostic !== 'all'){
+    if(String((s.diagnosticArea||'')).toLowerCase() !== String(filters.diagnostic).toLowerCase()) return false;
   }
   if(filters.q && filters.q.trim() !== ''){
     const q = filters.q.trim().toLowerCase();
@@ -28,40 +28,40 @@ describe('matchesFilter pure function', () => {
     shortSymptom: 'Clicking sound when key is turned',
     category: 'no-crank',
     difficulty: 'intermediate',
-    aseArea: 'A8'
+    diagnosticArea: 'Engine Performance'
   };
 
   test('empty filters return true', () => {
-    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'all', ase: 'all' })).toBe(true);
+    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'all', diagnostic: 'all' })).toBe(true);
   });
 
   test('search term matches title', () => {
-    expect(matchesFilter(base, { q: 'engine', category: 'all', difficulty: 'all', ase: 'all' })).toBe(true);
-    expect(matchesFilter(base, { q: 'clicking', category: 'all', difficulty: 'all', ase: 'all' })).toBe(true);
-    expect(matchesFilter(base, { q: 'no-such-term', category: 'all', difficulty: 'all', ase: 'all' })).toBe(false);
+    expect(matchesFilter(base, { q: 'engine', category: 'all', difficulty: 'all', diagnostic: 'all' })).toBe(true);
+    expect(matchesFilter(base, { q: 'clicking', category: 'all', difficulty: 'all', diagnostic: 'all' })).toBe(true);
+    expect(matchesFilter(base, { q: 'no-such-term', category: 'all', difficulty: 'all', diagnostic: 'all' })).toBe(false);
   });
 
   test('category filtering works', () => {
-    expect(matchesFilter(base, { q: '', category: 'no-crank', difficulty: 'all', ase: 'all' })).toBe(true);
-    expect(matchesFilter(base, { q: '', category: 'other', difficulty: 'all', ase: 'all' })).toBe(false);
+    expect(matchesFilter(base, { q: '', category: 'no-crank', difficulty: 'all', diagnostic: 'all' })).toBe(true);
+    expect(matchesFilter(base, { q: '', category: 'other', difficulty: 'all', diagnostic: 'all' })).toBe(false);
   });
 
   test('difficulty filtering works', () => {
-    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'intermediate', ase: 'all' })).toBe(true);
-    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'advanced', ase: 'all' })).toBe(false);
+    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'intermediate', diagnostic: 'all' })).toBe(true);
+    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'advanced', diagnostic: 'all' })).toBe(false);
   });
 
-  test('ASE filtering works', () => {
-    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'all', ase: 'A8' })).toBe(true);
-    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'all', ase: 'A1' })).toBe(false);
+  test('diagnostic filtering works', () => {
+    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'all', diagnostic: 'Engine Performance' })).toBe(true);
+    expect(matchesFilter(base, { q: '', category: 'all', difficulty: 'all', diagnostic: 'Engine Repair' })).toBe(false);
   });
 
   test('combined filters use logical AND', () => {
-    expect(matchesFilter(base, { q: 'engine', category: 'no-crank', difficulty: 'intermediate', ase: 'A8' })).toBe(true);
-    expect(matchesFilter(base, { q: 'engine', category: 'no-crank', difficulty: 'advanced', ase: 'A8' })).toBe(false);
+    expect(matchesFilter(base, { q: 'engine', category: 'no-crank', difficulty: 'intermediate', diagnostic: 'Engine Performance' })).toBe(true);
+    expect(matchesFilter(base, { q: 'engine', category: 'no-crank', difficulty: 'advanced', diagnostic: 'Engine Performance' })).toBe(false);
   });
 
   test('unknown filter values behave correctly (no match)', () => {
-    expect(matchesFilter(base, { q: '', category: 'unknown-cat', difficulty: 'all', ase: 'all' })).toBe(false);
+    expect(matchesFilter(base, { q: '', category: 'unknown-cat', difficulty: 'all', diagnostic: 'all' })).toBe(false);
   });
 });

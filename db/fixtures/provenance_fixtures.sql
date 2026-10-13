@@ -3,9 +3,9 @@
 INSERT INTO public.approved_sources (id, title, publisher, storage_path, checksum, checksum_algorithm, status, version, uploaded_by)
 VALUES (
   'fixture-approved-source',
-  'ASE A6 2024 (fixture)',
-  'ASE Foundation',
-  '/fixtures/ase-a6-2024.pdf',
+  'Electrical Diagnostics 2024 (fixture)',
+  'external automotive education source',
+  '/fixtures/electrical-diagnostics-2024.pdf',
   'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
   'sha256',
   'draft',
@@ -23,7 +23,7 @@ VALUES (
   'Starter Circuit Testing',
   118,
   123,
-  'A6 > Starting System > Starter Circuit Testing',
+  'Electrical Diagnostics > Starting System > Starter Circuit Testing',
   'Fixture excerpt: check battery voltage at rest and under crank.',
   50,
   'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',

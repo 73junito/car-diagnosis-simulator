@@ -62,7 +62,7 @@ select
   sq.id,
   sq.scenario_id,
   sq.topic,
-  sq.ase_area,
+  sq.diagnostic_area,
   coalesce(qp.status, 'missing') as provenance_status,
   sq.question_text,
   sq.correct_answer
@@ -77,7 +77,7 @@ select
   sq.id,
   sq.scenario_id,
   sq.topic,
-  sq.ase_area,
+  sq.diagnostic_area,
   coalesce(qp.status, 'missing') as provenance_status,
   sq.question_text,
   null::text as correct_answer

@@ -11,7 +11,7 @@
       "explanation": "A healthy alternator should maintain a steady output of around 13.5V under load, not dropping below 12V which indicates an insufficient charge or potential failure.",
       "difficulty": "intermediate",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-      "ase_area": "A6 Electrical/Electronic Systems"
+      "diagnostic_area": "Electrical/Electronic Systems"
     },
     {
       "question_text": "What symptom would you expect to observe if there is a poor ground connection in the electrical system?",
@@ -23,7 +23,7 @@
       "explanation": "A poor ground connection can cause electrical noise, leading to issues like static in the radio. The headlights and engine performance are not directly related to a bad ground.",
       "difficulty": "intermediate",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-      "ase_area": "A6 Electrical/Electronic Systems"
+      "diagnostic_area": "Electrical/Electronic Systems"
     },
     {
       "question_text": "During a voltmeter check while driving, what reading would suggest a weak or failing battery?",
@@ -35,7 +35,7 @@
       "explanation": "A battery that is weak or failing will show a lower voltage reading, especially when under load. A healthy battery should maintain around 12.5-13.5V even during moderate loads.",
       "difficulty": "intermediate",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-      "ase_area": "A6 Electrical/Electronic Systems"
+      "diagnostic_area": "Electrical/Electronic Systems"
     },
     {
       "question_text": "What would you expect to see on a scan tool when the headlights are dim and flickering while driving?",
@@ -47,7 +47,7 @@
       "explanation": "Dimming headlights can indicate a charging system issue, often seen as fluctuating voltage readings on the scan tool, suggesting an alternator or battery problem.",
       "difficulty": "intermediate",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-      "ase_area": "A6 Electrical/Electronic Systems"
+      "diagnostic_area": "Electrical/Electronic Systems"
     },
     {
       "question_text": "Which of the following would be a likely test result when checking for voltage drop in the wiring harness?",
@@ -59,7 +59,7 @@
       "explanation": "A voltage drop in the wiring harness can be indicative of a poor connection or damaged wire, leading to reduced voltage at certain points during high electrical demand like driving with headlights on.",
       "difficulty": "intermediate",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-      "ase_area": "A6 Electrical/Electronic Systems"
+      "diagnostic_area": "Electrical/Electronic Systems"
     },
     {
       "question_text": "What would be a plausible reason for dimming headlights while driving?",
@@ -71,7 +71,7 @@
       "explanation": "Dimming headlights can be a sign of an overloaded electrical system, where the alternator cannot keep up with the increased load from multiple accessories running at once.",
       "difficulty": "intermediate",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-      "ase_area": "A6 Electrical/Electronic Systems"
+      "diagnostic_area": "Electrical/Electronic Systems"
     },
     {
       "question_text": "During a visual inspection of the electrical system, what would you be looking for to identify potential issues?",
@@ -83,7 +83,7 @@
       "explanation": "A thorough visual inspection should include checking for loose, corroded, or damaged connections as well as ensuring clean wiring and a sealed battery to prevent issues like voltage drops or poor ground connections.",
       "difficulty": "intermediate",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-      "ase_area": "A6 Electrical/Electronic Systems"
+      "diagnostic_area": "Electrical/Electronic Systems"
     },
     {
       "question_text": "What would be the expected outcome of a battery capacity test if the headlights are dim and flickering?",
@@ -95,7 +95,7 @@
       "explanation": "A failing battery would show quick discharge, leading to dimming headlights and other electrical issues under load. A healthy battery should maintain its charge and voltage levels during a load test.",
       "difficulty": "intermediate",
       "topic": "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-      "ase_area": "A6 Electrical/Electronic Systems"
+      "diagnostic_area": "Electrical/Electronic Systems"
     }
   ]
 }

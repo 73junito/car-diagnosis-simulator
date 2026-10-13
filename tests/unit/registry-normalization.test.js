@@ -59,15 +59,15 @@ describe('scenario-registry normalization', () => {
     expect(byId[302].difficulty.toLowerCase()).toBe('advanced');
   });
 
-  test('aseArea preserved when provided and defaults to empty string when missing', () => {
-    const scenarios = [ { id: 401, symptoms: 'Ase present', aseArea: 'A6' }, { id: 402, symptoms: 'No ase' } ];
+  test('diagnosticArea preserved when provided and defaults to empty string when missing', () => {
+    const scenarios = [ { id: 401, symptoms: 'Diagnostic present', diagnosticArea: 'Electrical/Electronic Systems' }, { id: 402, symptoms: 'No diagnostic' } ];
     window.scenarios = scenarios;
     loadScriptIntoWindow(path.resolve(__dirname, '../../data/scenario-registry.js'), window);
     const reg = window.SCENARIO_REGISTRY;
     const a401 = reg.find(r=>r.numericId===401);
     const a402 = reg.find(r=>r.numericId===402);
-    expect(a401.aseArea).toBe('A6');
-    expect(a402.aseArea).toBe('');
+    expect(a401.diagnosticArea).toBe('Electrical/Electronic Systems');
+    expect(a402.diagnosticArea).toBe('');
   });
 
   test('additive analysis fields derive from canonical module without touching legacy difficulty', () => {

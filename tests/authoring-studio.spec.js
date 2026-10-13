@@ -72,7 +72,7 @@ describe("authoring studio", () => {
         recommendedRepair: "Tighten or replace fuel cap and run EVAP monitor."
       },
       rubric: {
-        aseArea: "A8 Engine Performance",
+        diagnosticArea: "Engine Performance",
         safety: "Uses safe EVAP testing procedures.",
         diagnosis: "Confirms leak before repair.",
         verification: "Verifies monitor readiness."

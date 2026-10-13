@@ -50,7 +50,7 @@ describe('TTED805: Answer-Key Security - Design Contracts', () => {
 
     test('selects safe columns only (correct_answer excluded)', async () => {
       // Design contract: Endpoint SELECT query must exclude correct_answer
-      // Expected safe columns: id, question_text, option_a-d, difficulty, topic, ase_area, quote
+      // Expected safe columns: id, question_text, option_a-d, difficulty, topic, diagnostic_area, quote
       // Forbidden columns: correct_answer, exact_quote (should be "quote"), content_hash (should be text_hash)
 
       const endpointPath = '../api/scenario-questions-approved';

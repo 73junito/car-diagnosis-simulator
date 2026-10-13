@@ -8,10 +8,10 @@
 
   function chooseRoute(s){
     // Phase 4 routing rules:
-    // - ASE procedural scenarios (contain `steps`) -> /dashboard/obd2-ase?scenario=
+    // - procedural diagnostic scenarios (contain `steps`) -> /dashboard/obd2-procedural?scenario=
     // - Live diagnostic / high-voltage / hybrid -> /dashboard/obd2?scenario=
     // - Default student scenarios -> /dashboard/obd2-student?scenario=
-    if(s && Array.isArray(s.steps) && s.steps.length) return '/dashboard/obd2-ase?scenario=';
+    if(s && Array.isArray(s.steps) && s.steps.length) return '/dashboard/obd2-procedural?scenario=';
     if(s && (s.safetyLevel==='high-voltage' || s.vehicleType==='hybrid' || s.symptomCategory==='hybrid-ev')) return '/dashboard/obd2?scenario=';
     return '/dashboard/obd2-student?scenario=';
   }
@@ -37,7 +37,7 @@
     const shortSymptom = (s.symptoms && (s.symptoms.length>120 ? s.symptoms.slice(0,117)+'...' : s.symptoms)) || s.trainingFocus || '';
     const difficulty = (s.difficultyLevel || (typeof s.difficulty==='number' ? (s.difficulty>=4?'advanced':(s.difficulty>=3?'intermediate':'beginner')) : s.difficulty)) || 'intermediate';
     const estimatedTime = s.timeLimit ? Math.ceil(s.timeLimit/60) + ' min' : (s.estimatedTime || '10-20 min');
-    const aseArea = s.aseArea || '';
+    const diagnosticArea = s.diagnosticArea || '';
     const category = s.symptomCategory || s.primarySystem || '';
     const image = resolveScenarioImage(`/assets/images/scenarios/${slug}.svg`);
     const routeBase = chooseRoute(s);
@@ -51,7 +51,7 @@
       shortSymptom: shortSymptom,
       difficulty: difficulty,
       estimatedTime: estimatedTime,
-      aseArea: aseArea,
+      diagnosticArea: diagnosticArea,
       route: route,
       raw: s
     };
