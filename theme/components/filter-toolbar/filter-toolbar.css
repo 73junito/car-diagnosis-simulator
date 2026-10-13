@@ -25,8 +25,9 @@
   letter-spacing:.04em;
 }
 
-.tm-filter-toolbar__field input,
-.tm-filter-toolbar__field select{
+.tm-filter-toolbar input,
+.tm-filter-toolbar select,
+.tm-filter-toolbar button{
   width:100%;
   max-width:100%;
   min-width:0;
@@ -39,6 +40,7 @@
 }
 
 .tm-filter-toolbar__actions{
+  min-width:0;
   display:flex;
   gap:8px;
 }
