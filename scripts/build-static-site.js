@@ -13,6 +13,7 @@ const output = path.join(root, "dist");
  * JavaScript modules, dynamic imports, or runtime fetch calls.
  */
 const runtimeDirectories = [
+  "animation",
   "assessment",
   "assets",
   "components",
@@ -203,6 +204,17 @@ const requiredOutputFiles = [
   "dashboard/instructor/research/index.html",
   "dashboard/instructor/research/research.js",
   "dashboard/student/scenario/index.html",
+  "animation/manifests/starting-system-voltage-drop-foundation.json",
+  "theme/components/animation-player/animation-player.js",
+  "theme/components/animation-player/three-runtime.js",
+  "theme/components/animation-player/animation-player.css",
+  "vendor/three/three.module.js",
+  "vendor/three/three.core.js",
+  "vendor/three/LICENSE",
+  "vendor/three/addons/loaders/GLTFLoader.js",
+  "vendor/three/addons/controls/OrbitControls.js",
+  "vendor/three/addons/utils/BufferGeometryUtils.js",
+  "vendor/three/addons/utils/SkeletonUtils.js",
   "dashboard/student/circuit-lab/index.html",
   "dashboard/student/starting-system-lab/index.html",
   "dashboard/student/relay-load-lab/index.html",
@@ -439,6 +451,45 @@ function copyAdditionalEntry(entry, stats) {
   stats.bytes += sourceStats.size;
 }
 
+
+const threeRuntimeEntries = [
+  { source: "node_modules/three/build/three.module.js", destination: "vendor/three/three.module.js", rewriteBareThree: false },
+  { source: "node_modules/three/build/three.core.js", destination: "vendor/three/three.core.js", rewriteBareThree: false },
+  { source: "node_modules/three/LICENSE", destination: "vendor/three/LICENSE", rewriteBareThree: false },
+  { source: "node_modules/three/examples/jsm/loaders/GLTFLoader.js", destination: "vendor/three/addons/loaders/GLTFLoader.js", rewriteBareThree: true },
+  { source: "node_modules/three/examples/jsm/controls/OrbitControls.js", destination: "vendor/three/addons/controls/OrbitControls.js", rewriteBareThree: true },
+  { source: "node_modules/three/examples/jsm/utils/BufferGeometryUtils.js", destination: "vendor/three/addons/utils/BufferGeometryUtils.js", rewriteBareThree: true },
+  { source: "node_modules/three/examples/jsm/utils/SkeletonUtils.js", destination: "vendor/three/addons/utils/SkeletonUtils.js", rewriteBareThree: true }
+];
+
+function copyThreeRuntime(stats) {
+  for (const entry of threeRuntimeEntries) {
+    const source = path.join(root, entry.source);
+    const destination = path.join(output, entry.destination);
+    if (!fs.existsSync(source)) {
+      throw new Error("Required Three.js runtime source is missing: " + entry.source);
+    }
+    ensureInsideOutput(destination);
+    fs.mkdirSync(path.dirname(destination), { recursive: true });
+    if (entry.rewriteBareThree) {
+      const relativeCore = path.relative(path.dirname(destination), path.join(output, "vendor/three/three.module.js")).replaceAll("\\", "/");
+      const specifier = relativeCore.startsWith(".") ? relativeCore : "./" + relativeCore;
+      const content = fs.readFileSync(source, "utf8").replaceAll("from 'three'", "from '" + specifier + "'");
+      if (content.includes("from 'three'")) {
+        throw new Error("Three.js addon still contains a bare import after packaging: " + entry.source);
+      }
+      fs.writeFileSync(destination, content, "utf8");
+      stats.files += 1;
+      stats.bytes += Buffer.byteLength(content);
+    } else {
+      fs.copyFileSync(source, destination);
+      const sourceStats = fs.statSync(source);
+      stats.files += 1;
+      stats.bytes += sourceStats.size;
+    }
+  }
+}
+
 function validateOutput() {
   const missing = requiredOutputFiles.filter(
     (relativePath) => !fs.existsSync(path.join(output, relativePath))
@@ -546,6 +597,8 @@ function build() {
   for (const entry of additionalRuntimeEntries) {
     copyAdditionalEntry(entry, stats);
   }
+
+  copyThreeRuntime(stats);
 
   validateOutput();
 

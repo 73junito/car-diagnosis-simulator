@@ -153,8 +153,9 @@
     "wrangler": "^4.143.1"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "hono": "^4.13.13",
-    "@supabase/supabase-js": "^2.117.2"
+    "three": "^0.186.1"
   },
   "description": "Evidence-aware automotive technology learning, diagnostic scenario, and lab platform",
   "homepage": "https://autolearnpro.com/",
