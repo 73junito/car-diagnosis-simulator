@@ -374,7 +374,7 @@ export async function handleDiagnosticSession(c) {
       testsPerformed: body.testsPerformed === undefined ? previous.testsPerformed : stringArray(body.testsPerformed),
       evidenceIds: previous.evidenceIds,
       technicianDecisions: previous.technicianDecisions,
-      finalVerification: body.finalVerification === undefined ? previous.finalVerification : body.finalVerification
+      finalVerification: body.finalVerification === undefined ? previous.finalVerification : (text(body.finalVerification, 2000) || null)
     })
   } catch (error) {
     return c.json({ error: error.message }, 400)
