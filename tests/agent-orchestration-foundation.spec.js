@@ -13,10 +13,14 @@ describe('agent orchestration foundation', () => {
 
   test('agent catalog fails closed for unknown permissions and never grants human approval', () => {
     const catalog = new AgentGovernanceCatalog(definition);
-    expect(catalog.list()).toHaveLength(11);
+    expect(catalog.list()).toHaveLength(14);
     expect(catalog.can('diagnostic-copilot-agent', 'prepare')).toBe(true);
     expect(catalog.can('diagnostic-copilot-agent', 'humanApprove')).toBe(false);
     expect(catalog.can('diagnostic-copilot-agent', 'release')).toBe(false);
+    expect(catalog.can('student-coach-agent', 'prepare')).toBe(true);
+    expect(catalog.can('student-coach-agent', 'humanApprove')).toBe(false);
+    expect(catalog.can('instructor-intelligence-agent', 'release')).toBe(false);
+    expect(catalog.can('engineering-maintenance-agent', 'release')).toBe(false);
     expect(catalog.can('question-agent', 'prepare')).toBe(true);
     expect(catalog.can('question-agent', 'humanApprove')).toBe(false);
     expect(catalog.can('release-agent', 'release')).toBe(false);
