@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-K",
+  "purpose": "batch-007-graduate-advanced-systems-delivery-execution",
+  "sourceDeliveryPhase": "7F-K",
+  "status": "page-built-verified",
+  "rationale": "Build the next graduate prerequisite layer unlocked by Phase 7F-J while preserving learner prerequisite verification as a human/institutional decision.",
+  "courses": [
+    {
+      "courseId": "aut-545",
+      "code": "AUT 545",
+      "title": "Advanced Vehicle Energy Management",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut545-energy-management",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 530, AUT 535",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-545/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-565",
+      "code": "AUT 565",
+      "title": "Autonomous Vehicle Systems",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut565-autonomous-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 560",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-565/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-575",
+      "code": "AUT 575",
+      "title": "Software-Defined Vehicle Architecture",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut575-software-defined-vehicle",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 555, AUT 550",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-575/index.html",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "deferred": [
+    {
+      "courseId": "aut-525",
+      "code": "AUT 525",
+      "reason": "No identity-preserving canonical catalog-development mapping is currently recorded."
+    },
+    {
+      "courseId": "aut-420",
+      "code": "AUT 420",
+      "reason": "Verified industry employment or approved internship placement remains a human/institutional eligibility condition."
+    }
+  ],
+  "continuingCanonicalContentBlockers": [
+    "aut-120",
+    "aut-150"
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 3,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-J",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 7
+  },
+  "completedInPhase": "7F-K"
+}

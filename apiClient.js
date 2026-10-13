@@ -1,5 +1,5 @@
 // Minimal API client helpers used by the frontend.
-// Exposes global functions: apiGet(path), apiPost(path, body)
+// Exposes global functions: apiGet(path), apiPost(path, body), apiPatch(path, body), apiDelete(path)
 (function(){
   const API_BASE = (typeof window.API_BASE_URL !== 'undefined' && window.API_BASE_URL) ? String(window.API_BASE_URL).replace(/\/$/, '') : '';
 
@@ -60,4 +60,6 @@
 
   window.apiGet = async function(path){ return apiFetch('GET', path); };
   window.apiPost = async function(path, body){ return apiFetch('POST', path, body); };
+  window.apiPatch = async function(path, body){ return apiFetch('PATCH', path, body); };
+  window.apiDelete = async function(path){ return apiFetch('DELETE', path); };
 })();

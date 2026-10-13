@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-U",
+  "purpose": "batch-014-undergraduate-advanced-delivery-execution",
+  "sourceDeliveryPhase": "7F-U",
+  "status": "page-built-verified",
+  "rationale": "Build the exact four evidence-supported Batch 014 candidates produced by the post-Batch-013 deterministic audit.",
+  "courses": [
+    {
+      "courseId": "aut-300",
+      "code": "AUT 300",
+      "title": "Advanced Automotive Diagnostics",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut300-advanced-diagnostics",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 250, AUT 280",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-300/index.html",
+      "deliveryRoute": "/courses/aut-300/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-310",
+      "code": "AUT 310",
+      "title": "Vehicle Network Communications",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut310-network-communications",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 230, AUT 280",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-310/index.html",
+      "deliveryRoute": "/courses/aut-310/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-320",
+      "code": "AUT 320",
+      "title": "Hybrid Vehicle Technology",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut320-hybrid-vehicle-technology",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 240, AUT 280",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-320/index.html",
+      "deliveryRoute": "/courses/aut-320/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-330",
+      "code": "AUT 330",
+      "title": "Electric Vehicle Technology",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut330-electric-vehicle-technology",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 240, AUT 280",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-330/index.html",
+      "deliveryRoute": "/courses/aut-330/",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 4,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0,
+    "legacyAut250HevRoutePreserved": true
+  },
+  "previousPlan": {
+    "phase": "7F-T",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 2
+  },
+  "completedInPhase": "7F-U"
+}

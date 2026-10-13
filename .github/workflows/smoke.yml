@@ -71,6 +71,8 @@ jobs:
 
       - name: Install API dependencies
         working-directory: torquemind-api
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
         run: npm ci
 
       - name: Start API server

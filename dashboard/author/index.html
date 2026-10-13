@@ -18,7 +18,7 @@
         <p class="tm-hero-banner__subtitle">
           Build diagnostic scenarios with vehicles, complaints, DTCs, live data, ASE objectives, rubrics, and student previews.
         </p>
-        <span class="tm-hero-banner__status">v0.6 preview</span>
+        <span class="tm-hero-banner__status" id="authorAccessStatus">Checking author access…</span>
       </div>
       <div class="tm-hero-banner__actions">
         <a class="tm-btn tm-btn-secondary" href="/docs">Docs</a>
@@ -42,7 +42,7 @@
       <article class="tm-stat-card">
         <span class="tm-stat-card__label">Validation</span>
         <strong class="tm-stat-card__value" id="validationStatus">Draft</strong>
-        <small class="tm-stat-card__hint">Not ready to publish</small>
+        <small class="tm-stat-card__hint">Private draft lifecycle only</small>
       </article>
 
       <article class="tm-stat-card">
@@ -62,7 +62,8 @@
           <a href="#live-data">Live Data</a>
           <a href="#diagnostic-path">Diagnostic Path</a>
           <a href="#rubric">Rubric</a>
-          <a href="#publish">Publish</a>
+          <a href="#evidence-sources">Evidence Sources</a>
+          <a href="#draft">Draft & Validate</a>
         </nav>
       </aside>
 
@@ -172,23 +173,42 @@
 </form>
         </article>
 
-        <article class="tm-panel" id="publish">
-          <h2>Publish</h2>
-          <p>Validate scenario completeness and prepare it for students.</p>
+        <article class="tm-panel" id="evidence-sources">
+          <h2>Evidence & Source Linkage</h2>
+          <p>Link only governed, approved source chunks to this private draft. Source linkage does not publish the scenario or grant assessment eligibility.</p>
+          <div class="author-form">
+            <label>Search approved evidence
+              <input id="evidenceSearchInput" type="search" maxlength="120" placeholder="Search source ID, chunk, section, or locator">
+            </label>
+            <button id="evidenceSearchBtn" class="tm-btn tm-btn-secondary" type="button">Search Approved Evidence</button>
+          </div>
+          <p id="evidenceStatus" role="status" aria-live="polite">Save the draft before linking evidence.</p>
+          <ul id="evidenceSearchResults" class="author-checklist" aria-live="polite"></ul>
+          <h3>Linked Evidence</h3>
+          <ul id="linkedEvidenceList" class="author-checklist" aria-live="polite"></ul>
+        </article>
+
+        <article class="tm-panel" id="draft">
+          <h2>Draft & Validate</h2>
+          <p>Validate completeness and save a private draft. Validation does not publish content or grant training or assessment eligibility.</p>
           <div class="author-actions">
   <button id="validateScenarioBtn" class="tm-btn tm-btn-primary" type="button">Validate Scenario</button>
   <button id="saveDraftBtn" class="tm-btn tm-btn-secondary" type="button">Save Draft</button>
+  <button id="requestReviewBtn" class="tm-btn tm-btn-secondary" type="button" disabled>Request Review</button>
+  <button id="requestPublicationBtn" class="tm-btn tm-btn-primary" type="button" disabled>Request Publication Approval</button>
   <button id="exportDraftBtn" class="tm-btn tm-btn-secondary" type="button">Export JSON</button>
   <button id="importDraftBtn" class="tm-btn tm-btn-secondary" type="button">Import JSON</button>
   <input id="importScenarioInput" type="file" accept=".json,application/json" hidden>
 </div>
+<p id="draftLifecycleStatus" role="status" aria-live="polite">Unsaved draft. Autosave begins after the first explicit save.</p>
+<p>Publication approval is a separate governance decision and never grants assessment eligibility.</p>
 
 <ul id="validationChecklist" class="author-checklist" aria-live="polite"></ul>
 
 
 <div class="author-library">
   <h3>Scenario Library</h3>
-  <p>Save scenarios locally in this browser and reload them later.</p>
+  <p>Save private drafts to your verified AutoLearnPro account and reload them later.</p>
   <div class="author-actions">
     <button id="saveToLibraryBtn" class="tm-btn tm-btn-primary" type="button">Save to Library</button>
     <input id="librarySearchInput" type="search" placeholder="Search title, vehicle, DTC, or ASE">
@@ -217,6 +237,8 @@
     </section>
   </main>
 
+  <script src="/auth.js"></script>
+  <script src="/apiClient.js"></script>
   <script src="/dashboard/author/author.js"></script>
 </body>
 </html>

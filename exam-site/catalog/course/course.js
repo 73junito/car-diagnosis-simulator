@@ -22,10 +22,15 @@ async function init() {
     document.title = course.code + " — " + course.title + " | AutoLearnPro";
     const canonical = document.querySelector("[data-course-canonical]");
     if (canonical) canonical.href = course.canonicalUrl;
-    const training = course.delivery && course.delivery.trainingUrl
-      ? '<aside class="catalog-training-link"><strong>Related formative training available</strong>' +
-        '<p>' + escapeHtml(course.delivery.note || "") + '</p>' +
-        '<a class="button secondary-button" href="' + escapeHtml(course.delivery.trainingUrl) + '">Open training package</a></aside>'
+    const delivery = course.delivery && course.delivery.trainingUrl
+      ? '<aside class="catalog-training-link"><strong>' +
+        escapeHtml(course.delivery.kind === "course-page"
+          ? "Dedicated instructional course page available"
+          : "Related formative training available") +
+        '</strong><p>' + escapeHtml(course.delivery.note || "") + '</p>' +
+        '<a class="button secondary-button" href="' + escapeHtml(course.delivery.trainingUrl) + '">' +
+        escapeHtml(course.delivery.kind === "course-page" ? "Open course page" : "Open training package") +
+        '</a></aside>'
       : "";
 
     root.innerHTML = '<article class="catalog-detail-card">' +
@@ -40,7 +45,7 @@ async function init() {
       '</dd></div><div><dt>Program CIP metadata</dt><dd>' + escapeHtml(course.cipCode) +
       '</dd></div><div><dt>Catalog status</dt><dd>' + escapeHtml(course.status) +
       '</dd></div><div><dt>Source</dt><dd>' + escapeHtml(course.source && course.source.file) +
-      '</dd></div></dl>' + training + '</article>';
+      '</dd></div></dl>' + delivery + '</article>';
     document.documentElement.dataset.courseCatalogRecord = course.id;
   } catch (error) {
     root.innerHTML = '<div class="pathway-load-error" role="alert">Course details could not be loaded. Please try again later.</div>';

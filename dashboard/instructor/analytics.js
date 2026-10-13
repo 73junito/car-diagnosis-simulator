@@ -6,123 +6,165 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const studentTbody = document.querySelector('#student-table tbody')
   const downloadCsv = document.getElementById('download-csv')
   const downloadXapi = document.getElementById('download-xapi')
-
-  async function fetchJson(path){
-    const res = await fetch(path);
-    if (!res.ok) throw new Error('Fetch failed: '+res.status)
-    return res.json()
-  }
+  const classSelect = document.getElementById('analytics-class')
+  const classStatus = document.getElementById('analytics-class-status')
+  downloadCsv.disabled = true
+  downloadXapi.disabled = true
 
   function fmtNumber(n, digits=1){ return (Math.round(n*10**digits)/10**digits).toString() }
 
-  function isFiniteNumber(value){
-    return typeof value === 'number' && Number.isFinite(value)
+  async function loadSessionSummary(classId){
+    if (!classId){
+      cardTotal.textContent = '—'
+      cardConfidence.textContent = '—'
+      cardTime.textContent = '—'
+      cardSafety.textContent = '—'
+      return
+    }
+
+    try {
+      const data = await window.apiGet('/api/analytics/sessions?classId=' + encodeURIComponent(classId))
+      if (!data?.ok) return
+      cardTotal.textContent = data.totalSessions ?? '0'
+      cardConfidence.textContent = data.averageConfidence == null ? '—' : fmtNumber(data.averageConfidence) + '%'
+      cardTime.textContent = data.averageTime == null ? '—' : Math.round(data.averageTime) + 's'
+      cardSafety.textContent = data.safetyMisses == null ? '—' : data.safetyMisses
+    } catch (e) {
+      cardTotal.textContent = '—'
+      cardConfidence.textContent = '—'
+      cardTime.textContent = '—'
+      cardSafety.textContent = '—'
+      console.warn('sessions fetch failed', e)
+    }
   }
 
-  function readFirstNumber(source, keys){
-    for (const key of keys){
-      if (isFiniteNumber(source?.[key])) return source[key]
+  async function loadStudentAnalytics(classId){
+    while (studentTbody.firstChild) studentTbody.removeChild(studentTbody.firstChild)
+    if (!classId){
+      classStatus.textContent = 'Select a class to load student analytics.'
+      return
     }
-    return null
+
+    classStatus.textContent = 'Loading class analytics…'
+    try {
+      const data = await window.apiGet('/api/analytics/students?classId=' + encodeURIComponent(classId))
+      const students = Array.isArray(data?.students) ? data.students : []
+      classStatus.textContent = students.length
+        ? students.length + ' enrolled student' + (students.length === 1 ? '' : 's') + ' loaded.'
+        : 'No enrolled students have analytics for this class.'
+
+      for (const s of students){
+        const tr = document.createElement('tr')
+        tr.className = 'tm-table-row'
+
+        const name = document.createElement('td'); name.textContent = s.name || s.id || '—'
+        const sessions = document.createElement('td'); sessions.className = 'metric-small'; sessions.textContent = s.sessions || 0
+
+        const avgScore = document.createElement('td')
+        const scoreSpan = document.createElement('span')
+        scoreSpan.className='metric'
+        scoreSpan.textContent = s.averageScore == null ? '—' : fmtNumber(s.averageScore) + '%'
+        if (s.averageScore != null){
+          if (s.averageScore >= 85) scoreSpan.classList.add('badge-success')
+          else if (s.averageScore >= 70) scoreSpan.classList.add('badge-warn')
+          else scoreSpan.classList.add('badge-danger')
+        }
+        avgScore.appendChild(scoreSpan)
+
+        const avgConfidence = document.createElement('td')
+        const confSpan = document.createElement('span')
+        confSpan.className='metric'
+        confSpan.textContent = '—'
+        confSpan.title = 'Confidence analytics are not yet available from the governed Worker data source.'
+        avgConfidence.appendChild(confSpan)
+
+        tr.appendChild(name); tr.appendChild(sessions); tr.appendChild(avgScore); tr.appendChild(avgConfidence)
+        studentTbody.appendChild(tr)
+      }
+    } catch (e) {
+      classStatus.textContent = e?.body?.error || 'Unable to load class analytics.'
+      console.warn('students fetch failed', e)
+    }
   }
 
-  function deriveSessionSummary(data){
-    const summary = {
-      averageTime: isFiniteNumber(data?.averageTime) ? data.averageTime : null,
-      safetyMisses: isFiniteNumber(data?.safetyMisses) ? data.safetyMisses : null,
+  async function loadOwnedClasses(){
+    const token = window.getAccessToken ? window.getAccessToken() : null
+    if (!token){
+      window.location.replace('/sign-in/instructor/')
+      return
     }
-
-    if (summary.averageTime != null && summary.safetyMisses != null) return summary
-
-    const sessions = Array.isArray(data?.sessions)
-      ? data.sessions
-      : Array.isArray(data?.items)
-        ? data.items
-        : []
-
-    if (!sessions.length) return summary
-
-    if (summary.averageTime == null){
-      const durations = sessions
-        .map(session=>readFirstNumber(session, ['averageTime', 'duration', 'durationSeconds', 'timeSeconds', 'timeSpent']))
-        .filter(value=>value != null)
-      if (durations.length){
-        summary.averageTime = durations.reduce((total, value)=>total + value, 0) / durations.length
+    try {
+      const data = await window.apiGet('/api/classes')
+      const classes = Array.isArray(data?.classes) ? data.classes : []
+      classSelect.replaceChildren()
+      const placeholder = document.createElement('option')
+      placeholder.value = ''
+      placeholder.textContent = classes.length ? 'Select a class' : 'No classes available'
+      classSelect.appendChild(placeholder)
+      for (const cls of classes){
+        const option = document.createElement('option')
+        option.value = cls.id
+        option.textContent = cls.name
+        classSelect.appendChild(option)
       }
-    }
-
-    if (summary.safetyMisses == null){
-      const misses = sessions
-        .map(session=>readFirstNumber(session, ['safetyMisses', 'misses', 'safetyErrors', 'unsafeActions']))
-        .filter(value=>value != null)
-      if (misses.length){
-        summary.safetyMisses = misses.reduce((total, value)=>total + value, 0)
+      if (classes.length === 1){
+        classSelect.value = classes[0].id
+        downloadCsv.disabled = false
+        downloadXapi.disabled = false
+        await Promise.all([
+          loadStudentAnalytics(classes[0].id),
+          loadSessionSummary(classes[0].id)
+        ])
+      } else {
+        downloadCsv.disabled = true
+        downloadXapi.disabled = true
+        classStatus.textContent = classes.length ? 'Select a class to load student analytics.' : 'Create a class before using student analytics.'
       }
+    } catch (e) {
+      if (e?.status === 401 || e?.status === 403) window.location.replace('/sign-in/instructor/')
+      else classStatus.textContent = 'Unable to load owned classes.'
     }
-
-    return summary
   }
 
-  // populate summary
-  fetchJson('/api/analytics/sessions').then(data=>{
-    if (!data || !data.ok) return
-    const summary = deriveSessionSummary(data)
-    cardTotal.textContent = data.totalSessions ?? '0'
-    cardConfidence.textContent = (data.averageConfidence!=null) ? (fmtNumber(data.averageConfidence)+'%') : '—'
-    cardTime.textContent = (summary.averageTime!=null) ? `${Math.round(summary.averageTime)}s` : '—'
-    cardSafety.textContent = summary.safetyMisses ?? '0'
-  }).catch(e=>{ console.warn('sessions fetch failed', e); });
+  classSelect.addEventListener('change', () => {
+    const classId = classSelect.value
+    downloadCsv.disabled = !classId
+    downloadXapi.disabled = !classId
+    loadStudentAnalytics(classId)
+    loadSessionSummary(classId)
+  })
+  loadOwnedClasses()
 
-  // students
-  fetchJson('/api/analytics/students').then(data=>{
-    if (!data || !data.ok) return
-    while (studentTbody.firstChild) studentTbody.removeChild(studentTbody.firstChild);
-    (data.students||[]).forEach(s=>{
-      const tr = document.createElement('tr')
-      tr.className = 'tm-table-row'
+  // authenticated, class-scoped download helpers
+  async function downloadAnalytics(format, filename){
+    const classId = classSelect.value
+    if (!classId){
+      classStatus.textContent = 'Select a class before exporting analytics.'
+      return
+    }
 
-      const name = document.createElement('td'); name.textContent = s.name || s.id || '—'
+    const token = window.getAccessToken ? window.getAccessToken() : null
+    if (!token){
+      window.location.replace('/sign-in/instructor/')
+      return
+    }
 
-      const sessions = document.createElement('td');
-      sessions.className = 'metric-small';
-      sessions.textContent = (s.sessions||0)
+    const base = window.API_BASE_URL ? String(window.API_BASE_URL).replace(/\/$/, '') : ''
+    const path = '/api/analytics/export?format=' + encodeURIComponent(format) + '&classId=' + encodeURIComponent(classId)
 
-      const avgScoreValue = s.averageScore != null ? s.averageScore : s.avgScore
-      const avgConfidenceValue = s.averageConfidence != null ? s.averageConfidence : s.avgConfidence
-
-      const avgScore = document.createElement('td');
-      const scoreSpan = document.createElement('span');
-      if (avgScoreValue == null) { scoreSpan.textContent = '—'; scoreSpan.className='metric' }
-      else { scoreSpan.textContent = fmtNumber(avgScoreValue)+'%'; scoreSpan.className='metric'; }
-      // badge color by thresholds
-      if (avgScoreValue != null){
-        if (avgScoreValue >= 85) scoreSpan.classList.add('badge-success')
-        else if (avgScoreValue >= 70) scoreSpan.classList.add('badge-warn')
-        else scoreSpan.classList.add('badge-danger')
-      }
-      avgScore.appendChild(scoreSpan)
-
-      const avgConfidence = document.createElement('td');
-      const confSpan = document.createElement('span');
-      if (avgConfidenceValue == null) { confSpan.textContent = '—'; confSpan.className='metric' }
-      else { confSpan.textContent = fmtNumber(avgConfidenceValue)+'%'; confSpan.className='metric' }
-      if (avgConfidenceValue != null){
-        if (avgConfidenceValue >= 80) confSpan.classList.add('badge-success')
-        else if (avgConfidenceValue >= 60) confSpan.classList.add('badge-warn')
-        else confSpan.classList.add('badge-danger')
-      }
-      avgConfidence.appendChild(confSpan)
-
-      tr.appendChild(name); tr.appendChild(sessions); tr.appendChild(avgScore); tr.appendChild(avgConfidence)
-      studentTbody.appendChild(tr)
-    })
-  }).catch(e=>{ console.warn('students fetch failed', e); });
-
-  // download helpers
-  async function download(path, filename){
     try{
-      const res = await fetch(path)
-      if (!res.ok) { alert('Download failed: '+res.status); return }
+      const res = await fetch(base + path, {
+        headers: { Authorization: 'Bearer ' + token },
+        credentials: 'same-origin'
+      })
+      if (res.status === 401 || res.status === 403){
+        window.location.replace('/sign-in/instructor/')
+        return
+      }
+      if (!res.ok) {
+        classStatus.textContent = 'Export failed (' + res.status + ').'
+        return
+      }
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -132,52 +174,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
       a.click()
       a.remove()
       URL.revokeObjectURL(url)
-    }catch(err){ alert('Download error') }
+      classStatus.textContent = 'Analytics export ready.'
+    }catch(err){
+      classStatus.textContent = 'Unable to export analytics.'
+    }
   }
 
   downloadCsv.addEventListener('click', ()=>{
-    download('/api/analytics/export?format=csv','student-performance.csv')
+    downloadAnalytics('csv','student-performance.csv')
   });
   downloadXapi.addEventListener('click', ()=>{
-    download('/api/analytics/export?format=xapi','xapi-statements.json')
+    downloadAnalytics('xapi','xapi-statements.json')
   });
 
-  // --- Live telemetry (SSE) hookup ---
-  (function attachLiveTelemetry(){
-    try{
-      const wrapper = document.createElement('div');
-      wrapper.id = 'telemetry-panel';
-      wrapper.style.marginTop = '1rem';
-      const title = document.createElement('h3'); title.textContent = 'Live Telemetry';
-      wrapper.appendChild(title);
-      const list = document.createElement('ul'); list.id = 'telemetry-events-list'; list.style.maxHeight = '200px'; list.style.overflow = 'auto'; list.style.fontSize = '0.9rem';
-      wrapper.appendChild(list);
-      document.body.appendChild(wrapper);
+  // Live telemetry moved to the class-scoped instructor Live Session surface.
 
-      const s = document.createElement('script');
-      s.src = '/dashboard/live-telemetry.js';
-      s.onload = function(){
-        try{
-          const live = (window.liveTelemetry || {}).initLiveTelemetry(function(evt){
-            const li = document.createElement('li');
-            const ts = evt.timestamp || (new Date()).toISOString();
-            li.textContent = `[${ts}] ${evt.type} ${evt.id ? '('+evt.id+')' : ''} ` + (evt.payload ? JSON.stringify(evt.payload) : JSON.stringify(evt));
-            list.insertBefore(li, list.firstChild);
-            // cap UI list to 200
-            while(list.children.length > 200) list.removeChild(list.lastChild);
-          });
-          // expose for debugging
-          window._liveTelemetryHandle = live;
-        }catch(e){ console.warn('live telemetry init failed', e) }
-      };
-      document.body.appendChild(s);
-    }catch(e){ /* ignore */ }
-  })();
 
 });
 
 // Expose a summary function so other pages (homepage CTA) can consume
-window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummary(){
+window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummary(classId){
   async function safeFetchJson(path){
     try{
       const res = await fetch(path);
@@ -189,8 +205,10 @@ window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummar
   function isFiniteNumber(value){ return typeof value === 'number' && Number.isFinite(value) }
 
   try{
-    const sessionsData = await safeFetchJson('/api/analytics/sessions')
-    const studentsData = await safeFetchJson('/api/analytics/students')
+    if (!classId) return null
+    const encodedClassId = encodeURIComponent(classId)
+    const sessionsData = await safeFetchJson('/api/analytics/sessions?classId=' + encodedClassId)
+    const studentsData = await safeFetchJson('/api/analytics/students?classId=' + encodedClassId)
 
     let avgScore = null
     let completionRate = null

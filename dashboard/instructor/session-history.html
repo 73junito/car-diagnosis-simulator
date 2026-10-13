@@ -20,7 +20,12 @@
 </section>
 
     <section id="controls" class="tm-panel">
-      <label>Session filter: <input id="session-filter" placeholder="Enter session id" /></label>
+      <label>Class:
+        <select id="history-class">
+          <option value="">Loading classes…</option>
+        </select>
+      </label>
+      <label>Session filter: <input id="session-filter" placeholder="Enter session id" disabled /></label>
       <label>Limit: 
         <select id="limit-select">
           <option value="10">10</option>
@@ -30,8 +35,8 @@
         </select>
       </label>
       <div id="export-controls" style="display:inline-block;margin-left:1em;">
-        <button id="export-json-btn" class="tm-btn tm-btn-secondary">Export JSON</button>
-        <button id="export-csv-btn" class="tm-btn tm-btn-secondary">Export CSV</button>
+        <button id="export-json-btn" class="tm-btn tm-btn-secondary" disabled>Export JSON</button>
+        <button id="export-csv-btn" class="tm-btn tm-btn-secondary" disabled>Export CSV</button>
         <span id="export-status" aria-live="polite" style="margin-left:.5em"></span>
       </div>
     </section>
@@ -51,6 +56,8 @@
     </section>
   </main>
 
+  <script src="/auth.js"></script>
+  <script src="/apiClient.js"></script>
   <script src="/dashboard/session-history.js"></script>
 </body>
 </html>

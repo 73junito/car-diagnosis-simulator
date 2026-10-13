@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-ZA",
+  "purpose": "final-eight-governance-blocker-review",
+  "sourceDeliveryPhase": "7F-Z",
+  "status": "review-complete",
+  "summary": {
+    "remainingCatalogCourses": 8,
+    "automaticDeliveryEligible": 0,
+    "coursesWithHumanInstitutionalBlockers": 7,
+    "coursesWithPrerequisiteChainBlockers": 2,
+    "coursesWithMultipleBlockerTypes": 1,
+    "canonicalMappingBlocked": 0
+  },
+  "records": [
+    {
+      "courseId": "aut-400",
+      "code": "AUT 400",
+      "title": "Automotive Technology Research Methods",
+      "academicLevel": "undergraduate",
+      "prerequisitesText": "Junior standing, AUT 300",
+      "canonicalMapping": true,
+      "lessonPlanId": "ug-aut400-research-methods",
+      "catalogAlignedDeliveryPageBuilt": false,
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Junior standing",
+          "authority": "institution/advisor/registrar"
+        }
+      ],
+      "resolutionPath": "Institution verifies junior standing. AUT 300 delivery already exists; page delivery must not imply learner eligibility.",
+      "automaticDeliveryEligible": false,
+      "assessmentEligibilityChanges": false
+    },
+    {
+      "courseId": "aut-420",
+      "code": "AUT 420",
+      "title": "Automotive Technology Internship",
+      "academicLevel": "undergraduate",
+      "prerequisitesText": "Verified industry employment or approved internship placement required",
+      "canonicalMapping": true,
+      "lessonPlanId": "ug-aut420-internship",
+      "catalogAlignedDeliveryPageBuilt": false,
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Verified industry employment or approved internship placement",
+          "authority": "institution/program/internship coordinator"
+        }
+      ],
+      "resolutionPath": "Institution verifies employment or approves placement.",
+      "automaticDeliveryEligible": false,
+      "assessmentEligibilityChanges": false
+    },
+    {
+      "courseId": "aut-450",
+      "code": "AUT 450",
+      "title": "Automotive Technology Capstone I",
+      "academicLevel": "undergraduate",
+      "prerequisitesText": "AUT 400 and senior standing",
+      "canonicalMapping": true,
+      "lessonPlanId": "ug-aut450-capstone-i",
+      "catalogAlignedDeliveryPageBuilt": false,
+      "blockers": [
+        {
+          "type": "prerequisite-chain",
+          "condition": "AUT 400 catalog-aligned delivery page is not yet available",
+          "authority": "delivery program after AUT-400 governance resolution"
+        },
+        {
+          "type": "human-institutional",
+          "condition": "Senior standing",
+          "authority": "institution/advisor/registrar"
+        }
+      ],
+      "resolutionPath": "AUT-400 must first be governance-cleared and delivered; senior standing remains institution-verified.",
+      "automaticDeliveryEligible": false,
+      "assessmentEligibilityChanges": false
+    },
+    {
+      "courseId": "aut-451",
+      "code": "AUT 451",
+      "title": "Automotive Technology Capstone II",
+      "academicLevel": "undergraduate",
+      "prerequisitesText": "AUT 450",
+      "canonicalMapping": true,
+      "lessonPlanId": "ug-aut451-capstone-ii",
+      "catalogAlignedDeliveryPageBuilt": false,
+      "blockers": [
+        {
+          "type": "prerequisite-chain",
+          "condition": "AUT 450 catalog-aligned delivery page is not yet available",
+          "authority": "delivery program after AUT-450 governance resolution"
+        }
+      ],
+      "resolutionPath": "AUT-450 must first be governance-cleared and delivered.",
+      "automaticDeliveryEligible": false,
+      "assessmentEligibilityChanges": false
+    },
+    {
+      "courseId": "aut-620",
+      "code": "AUT 620",
+      "title": "Graduate Automotive Technology Internship",
+      "academicLevel": "graduate",
+      "prerequisitesText": "Graduate standing and program approval",
+      "canonicalMapping": true,
+      "lessonPlanId": "grad-aut620-internship",
+      "catalogAlignedDeliveryPageBuilt": false,
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Graduate standing",
+          "authority": "institution/graduate program"
+        },
+        {
+          "type": "human-institutional",
+          "condition": "Program approval",
+          "authority": "graduate program"
+        }
+      ],
+      "resolutionPath": "Graduate program verifies standing and grants approval.",
+      "automaticDeliveryEligible": false,
+      "assessmentEligibilityChanges": false
+    },
+    {
+      "courseId": "aut-630",
+      "code": "AUT 630",
+      "title": "Advanced Automotive Systems Integration",
+      "academicLevel": "graduate",
+      "prerequisitesText": "AUT 515 and two advanced technology courses",
+      "canonicalMapping": true,
+      "lessonPlanId": "grad-aut630-systems-integration",
+      "catalogAlignedDeliveryPageBuilt": false,
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Selection/completion of two advanced technology courses",
+          "authority": "graduate program/advisor"
+        }
+      ],
+      "resolutionPath": "Program identifies and verifies which two advanced technology courses satisfy the catalog condition. AUT 515 delivery already exists.",
+      "automaticDeliveryEligible": false,
+      "assessmentEligibilityChanges": false
+    },
+    {
+      "courseId": "aut-640",
+      "code": "AUT 640",
+      "title": "Automotive Technology Thesis",
+      "academicLevel": "graduate",
+      "prerequisitesText": "AUT 600 and thesis-advisor approval",
+      "canonicalMapping": true,
+      "lessonPlanId": "grad-aut640-thesis",
+      "catalogAlignedDeliveryPageBuilt": false,
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Thesis-advisor approval",
+          "authority": "thesis advisor/graduate program"
+        }
+      ],
+      "resolutionPath": "Thesis advisor/program grants approval. AUT 600 delivery now exists.",
+      "automaticDeliveryEligible": false,
+      "assessmentEligibilityChanges": false
+    },
+    {
+      "courseId": "aut-690",
+      "code": "AUT 690",
+      "title": "Graduate Research Seminar",
+      "academicLevel": "graduate",
+      "prerequisitesText": "Graduate standing",
+      "canonicalMapping": true,
+      "lessonPlanId": "grad-aut690-research-seminar",
+      "catalogAlignedDeliveryPageBuilt": false,
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Graduate standing",
+          "authority": "institution/graduate program"
+        }
+      ],
+      "resolutionPath": "Graduate program verifies standing.",
+      "automaticDeliveryEligible": false,
+      "assessmentEligibilityChanges": false
+    }
+  ],
+  "boundaries": {
+    "changesDeliveryStatus": false,
+    "changesAcademicStatus": false,
+    "changesAssessmentEligibility": false,
+    "changesInstitutionalAuthority": false,
+    "createsBatch019": false
+  },
+  "conclusion": {
+    "batch019Ready": false,
+    "batch019Candidates": [],
+    "nextAction": "Obtain or define institution-authorized resolution criteria for human/institutional conditions before any additional delivery batch is defined.",
+    "notes": [
+      "AUT-450 has both an unresolved AUT-400 delivery dependency and a senior-standing institutional condition.",
+      "AUT-451 is downstream of AUT-450.",
+      "The other six courses are blocked directly by standing, placement, approval, or program-selection conditions."
+    ]
+  }
+}

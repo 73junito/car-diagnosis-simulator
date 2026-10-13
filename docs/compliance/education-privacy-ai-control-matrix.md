@@ -1,7 +1,7 @@
 # AutoLearn Pro Education Privacy & AI Control Matrix
 
 Status: Draft governance baseline
-Scope: Federal + Kansas controls first; state expansion roadmap follows.
+Scope: Federal + Kansas baseline with implemented California, Illinois, and Texas privacy/AI overlays.
 Implementation posture: documentation/governance only in this PR. No runtime behavior, assessment eligibility, authentication, analytics, or data-retention behavior is changed by this document.
 
 ## Purpose
@@ -125,9 +125,9 @@ These are research/implementation queues, not a conclusion that every listed law
 
 | Jurisdiction | Primary trigger to evaluate | Current planning posture |
 | --- | --- | --- |
-| California | CCPA/CPRA, risk assessments, significant-decision ADMT | Evaluate business-threshold applicability; keep consequential AI disabled. ADMT compliance deadline for significant decisions begins Jan. 1, 2027. |
-| Illinois | BIPA biometric identifiers including voiceprints and face geometry | Keep biometric identification disabled; require explicit review before any biometric feature. |
-| Texas | Chapter 503 biometrics + TRAIGA | Keep biometric capture/identification and high-risk AI uses separately gated; AI law effective Jan. 1, 2026. |
+| California | CCPA/CPRA + final CPPA risk-assessment/ADMT regulations | Applicability remains threshold- and processing-dependent. Regulations are effective Jan. 1, 2026; significant-decision ADMT compliance begins Jan. 1, 2027. Consequential AI remains disabled. |
+| Illinois | BIPA, 740 ILCS 14 | Biometric identification remains disabled. If BIPA-covered biometrics are ever collected, written release/notice and public retention-destruction policy controls must be implemented first. |
+| Texas | Business & Commerce Code Ch. 503 + TRAIGA | Commercial biometric capture requires notice/consent under Ch. 503. TRAIGA is effective Jan. 1, 2026; do not misstate its disclosure rule as a general private educational chatbot requirement. |
 | Washington | Biometric identifiers + My Health My Data | Keep biometric identification disabled; avoid collecting health/physiological inference unless separately approved. |
 | Colorado | ADMT consequential decisions + chatbot safety | Track 2026 rulemaking; new ADMT provisions effective Jan. 1, 2027. |
 
@@ -180,4 +180,4 @@ A feature PR must receive a compliance review before merge if it introduces any 
 
 Review this matrix at least quarterly, and before any launch into a new institutional market, student age band, jurisdiction, or materially new AI/data-processing capability.
 
-Last legal-source verification: 2026-09-29.
+Last legal-source verification: 2026-10-09.

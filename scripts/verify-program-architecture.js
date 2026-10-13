@@ -157,15 +157,13 @@ for (const item of architecture.catalogCourseCrosswalks || []) {
   seenCatalogCrosswalks.add(item.catalogCourseId);
 }
 
-assert(!developedUndergraduateById.has("aut-330"),
-  "AUT 330 must remain a catalog crosswalk and must not duplicate the historical EV development");
-const aut330Crosswalk = (architecture.catalogCourseCrosswalks || [])
+const aut330Canonical = (architecture.catalogDevelopmentMappings || [])
   .find((item) => item.catalogCourseId === "aut-330");
-assert(aut330Crosswalk &&
-  aut330Crosswalk.existingCourseId === "hybrid-electric-vehicle-technology" &&
-  aut330Crosswalk.existingLessonPlanId === "ug-hev-foundations" &&
-  aut330Crosswalk.mappingType === "legacy-training-crosswalk",
-  "AUT 330 must retain the historical EV training crosswalk");
+assert(developedUndergraduateById.has("aut-330") && aut330Canonical &&
+  aut330Canonical.existingCourseId === "aut-330" &&
+  aut330Canonical.existingLessonPlanId === "ug-aut330-electric-vehicle-technology" &&
+  aut330Canonical.mappingType === "canonical-catalog-course",
+  "AUT 330 must use the dedicated Phase 7F-Q canonical catalog identity while the historical EV training package remains separate delivery evidence");
 
 const undergraduateCatalogIds = new Set(
   catalogCourses

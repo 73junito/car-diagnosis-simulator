@@ -1,0 +1,476 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-ZB",
+  "purpose": "institutional-decision-package-final-eight",
+  "sourceGovernancePhase": "7F-ZA",
+  "status": "prepared-for-external-human-review",
+  "defaults": {
+    "decisionState": "pending-institutional-review",
+    "automaticApprovalAllowed": false,
+    "softwareMayInferDecision": false,
+    "blankDecisionDoesNotUnlockDelivery": true
+  },
+  "decisions": [
+    {
+      "courseId": "aut-400",
+      "code": "AUT 400",
+      "title": "Automotive Technology Research Methods",
+      "academicLevel": "undergraduate",
+      "prerequisitesText": "Junior standing, AUT 300",
+      "decisionState": "pending-institutional-review",
+      "authorizedDecisionStates": [
+        "approved",
+        "approved-with-conditions",
+        "additional-evidence-required",
+        "not-approved"
+      ],
+      "requiredAuthority": [
+        "institution/advisor/registrar"
+      ],
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Junior standing",
+          "authority": "institution/advisor/registrar"
+        }
+      ],
+      "reviewerRecord": {
+        "institution": null,
+        "reviewerName": null,
+        "reviewerRole": null,
+        "reviewDate": null,
+        "decisionReference": null,
+        "decisionState": "pending-institutional-review",
+        "conditions": [],
+        "notes": null
+      },
+      "evidenceRecord": {
+        "evidenceReceived": false,
+        "evidenceTypes": [],
+        "evidenceReferences": [],
+        "sensitiveDetailsStored": false
+      },
+      "downstreamEffect": {
+        "automaticDeliveryUnlock": false,
+        "requiresGovernanceRecordUpdate": true,
+        "requiresDeterministicReaudit": true,
+        "assessmentEligibilityChange": false
+      }
+    },
+    {
+      "courseId": "aut-420",
+      "code": "AUT 420",
+      "title": "Automotive Technology Internship",
+      "academicLevel": "undergraduate",
+      "prerequisitesText": "Verified industry employment or approved internship placement required",
+      "decisionState": "pending-institutional-review",
+      "authorizedDecisionStates": [
+        "approved",
+        "approved-with-conditions",
+        "additional-evidence-required",
+        "not-approved"
+      ],
+      "requiredAuthority": [
+        "institution/program/internship coordinator"
+      ],
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Verified industry employment or approved internship placement",
+          "authority": "institution/program/internship coordinator"
+        }
+      ],
+      "reviewerRecord": {
+        "institution": null,
+        "reviewerName": null,
+        "reviewerRole": null,
+        "reviewDate": null,
+        "decisionReference": null,
+        "decisionState": "pending-institutional-review",
+        "conditions": [],
+        "notes": null
+      },
+      "evidenceRecord": {
+        "evidenceReceived": false,
+        "evidenceTypes": [],
+        "evidenceReferences": [],
+        "sensitiveDetailsStored": false
+      },
+      "downstreamEffect": {
+        "automaticDeliveryUnlock": false,
+        "requiresGovernanceRecordUpdate": true,
+        "requiresDeterministicReaudit": true,
+        "assessmentEligibilityChange": false
+      }
+    },
+    {
+      "courseId": "aut-450",
+      "code": "AUT 450",
+      "title": "Automotive Technology Capstone I",
+      "academicLevel": "undergraduate",
+      "prerequisitesText": "AUT 400 and senior standing",
+      "decisionState": "pending-institutional-review",
+      "authorizedDecisionStates": [
+        "approved",
+        "approved-with-conditions",
+        "additional-evidence-required",
+        "not-approved"
+      ],
+      "requiredAuthority": [
+        "delivery program after AUT-400 governance resolution",
+        "institution/advisor/registrar"
+      ],
+      "blockers": [
+        {
+          "type": "prerequisite-chain",
+          "condition": "AUT 400 catalog-aligned delivery page is not yet available",
+          "authority": "delivery program after AUT-400 governance resolution"
+        },
+        {
+          "type": "human-institutional",
+          "condition": "Senior standing",
+          "authority": "institution/advisor/registrar"
+        }
+      ],
+      "reviewerRecord": {
+        "institution": null,
+        "reviewerName": null,
+        "reviewerRole": null,
+        "reviewDate": null,
+        "decisionReference": null,
+        "decisionState": "pending-institutional-review",
+        "conditions": [],
+        "notes": null
+      },
+      "evidenceRecord": {
+        "evidenceReceived": false,
+        "evidenceTypes": [],
+        "evidenceReferences": [],
+        "sensitiveDetailsStored": false
+      },
+      "downstreamEffect": {
+        "automaticDeliveryUnlock": false,
+        "requiresGovernanceRecordUpdate": true,
+        "requiresDeterministicReaudit": true,
+        "assessmentEligibilityChange": false
+      }
+    },
+    {
+      "courseId": "aut-451",
+      "code": "AUT 451",
+      "title": "Automotive Technology Capstone II",
+      "academicLevel": "undergraduate",
+      "prerequisitesText": "AUT 450",
+      "decisionState": "pending-institutional-review",
+      "authorizedDecisionStates": [
+        "approved",
+        "approved-with-conditions",
+        "additional-evidence-required",
+        "not-approved"
+      ],
+      "requiredAuthority": [
+        "delivery program after AUT-450 governance resolution"
+      ],
+      "blockers": [
+        {
+          "type": "prerequisite-chain",
+          "condition": "AUT 450 catalog-aligned delivery page is not yet available",
+          "authority": "delivery program after AUT-450 governance resolution"
+        }
+      ],
+      "reviewerRecord": {
+        "institution": null,
+        "reviewerName": null,
+        "reviewerRole": null,
+        "reviewDate": null,
+        "decisionReference": null,
+        "decisionState": "pending-institutional-review",
+        "conditions": [],
+        "notes": null
+      },
+      "evidenceRecord": {
+        "evidenceReceived": false,
+        "evidenceTypes": [],
+        "evidenceReferences": [],
+        "sensitiveDetailsStored": false
+      },
+      "downstreamEffect": {
+        "automaticDeliveryUnlock": false,
+        "requiresGovernanceRecordUpdate": true,
+        "requiresDeterministicReaudit": true,
+        "assessmentEligibilityChange": false
+      }
+    },
+    {
+      "courseId": "aut-620",
+      "code": "AUT 620",
+      "title": "Graduate Automotive Technology Internship",
+      "academicLevel": "graduate",
+      "prerequisitesText": "Graduate standing and program approval",
+      "decisionState": "pending-institutional-review",
+      "authorizedDecisionStates": [
+        "approved",
+        "approved-with-conditions",
+        "additional-evidence-required",
+        "not-approved"
+      ],
+      "requiredAuthority": [
+        "institution/graduate program",
+        "graduate program"
+      ],
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Graduate standing",
+          "authority": "institution/graduate program"
+        },
+        {
+          "type": "human-institutional",
+          "condition": "Program approval",
+          "authority": "graduate program"
+        }
+      ],
+      "reviewerRecord": {
+        "institution": null,
+        "reviewerName": null,
+        "reviewerRole": null,
+        "reviewDate": null,
+        "decisionReference": null,
+        "decisionState": "pending-institutional-review",
+        "conditions": [],
+        "notes": null
+      },
+      "evidenceRecord": {
+        "evidenceReceived": false,
+        "evidenceTypes": [],
+        "evidenceReferences": [],
+        "sensitiveDetailsStored": false
+      },
+      "downstreamEffect": {
+        "automaticDeliveryUnlock": false,
+        "requiresGovernanceRecordUpdate": true,
+        "requiresDeterministicReaudit": true,
+        "assessmentEligibilityChange": false
+      }
+    },
+    {
+      "courseId": "aut-630",
+      "code": "AUT 630",
+      "title": "Advanced Automotive Systems Integration",
+      "academicLevel": "graduate",
+      "prerequisitesText": "AUT 515 and two advanced technology courses",
+      "decisionState": "pending-institutional-review",
+      "authorizedDecisionStates": [
+        "approved",
+        "approved-with-conditions",
+        "additional-evidence-required",
+        "not-approved"
+      ],
+      "requiredAuthority": [
+        "graduate program/advisor"
+      ],
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Selection/completion of two advanced technology courses",
+          "authority": "graduate program/advisor"
+        }
+      ],
+      "reviewerRecord": {
+        "institution": null,
+        "reviewerName": null,
+        "reviewerRole": null,
+        "reviewDate": null,
+        "decisionReference": null,
+        "decisionState": "pending-institutional-review",
+        "conditions": [],
+        "notes": null
+      },
+      "evidenceRecord": {
+        "evidenceReceived": false,
+        "evidenceTypes": [],
+        "evidenceReferences": [],
+        "sensitiveDetailsStored": false
+      },
+      "downstreamEffect": {
+        "automaticDeliveryUnlock": false,
+        "requiresGovernanceRecordUpdate": true,
+        "requiresDeterministicReaudit": true,
+        "assessmentEligibilityChange": false
+      }
+    },
+    {
+      "courseId": "aut-640",
+      "code": "AUT 640",
+      "title": "Automotive Technology Thesis",
+      "academicLevel": "graduate",
+      "prerequisitesText": "AUT 600 and thesis-advisor approval",
+      "decisionState": "pending-institutional-review",
+      "authorizedDecisionStates": [
+        "approved",
+        "approved-with-conditions",
+        "additional-evidence-required",
+        "not-approved"
+      ],
+      "requiredAuthority": [
+        "thesis advisor/graduate program"
+      ],
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Thesis-advisor approval",
+          "authority": "thesis advisor/graduate program"
+        }
+      ],
+      "reviewerRecord": {
+        "institution": null,
+        "reviewerName": null,
+        "reviewerRole": null,
+        "reviewDate": null,
+        "decisionReference": null,
+        "decisionState": "pending-institutional-review",
+        "conditions": [],
+        "notes": null
+      },
+      "evidenceRecord": {
+        "evidenceReceived": false,
+        "evidenceTypes": [],
+        "evidenceReferences": [],
+        "sensitiveDetailsStored": false
+      },
+      "downstreamEffect": {
+        "automaticDeliveryUnlock": false,
+        "requiresGovernanceRecordUpdate": true,
+        "requiresDeterministicReaudit": true,
+        "assessmentEligibilityChange": false
+      }
+    },
+    {
+      "courseId": "aut-690",
+      "code": "AUT 690",
+      "title": "Graduate Research Seminar",
+      "academicLevel": "graduate",
+      "prerequisitesText": "Graduate standing",
+      "decisionState": "pending-institutional-review",
+      "authorizedDecisionStates": [
+        "approved",
+        "approved-with-conditions",
+        "additional-evidence-required",
+        "not-approved"
+      ],
+      "requiredAuthority": [
+        "institution/graduate program"
+      ],
+      "blockers": [
+        {
+          "type": "human-institutional",
+          "condition": "Graduate standing",
+          "authority": "institution/graduate program"
+        }
+      ],
+      "reviewerRecord": {
+        "institution": null,
+        "reviewerName": null,
+        "reviewerRole": null,
+        "reviewDate": null,
+        "decisionReference": null,
+        "decisionState": "pending-institutional-review",
+        "conditions": [],
+        "notes": null
+      },
+      "evidenceRecord": {
+        "evidenceReceived": false,
+        "evidenceTypes": [],
+        "evidenceReferences": [],
+        "sensitiveDetailsStored": false
+      },
+      "downstreamEffect": {
+        "automaticDeliveryUnlock": false,
+        "requiresGovernanceRecordUpdate": true,
+        "requiresDeterministicReaudit": true,
+        "assessmentEligibilityChange": false
+      }
+    }
+  ],
+  "courseSpecificGuidance": {
+    "aut-400": {
+      "decisionQuestion": "Has the institution verified junior standing for the learner/population to which this course would apply?",
+      "minimumRecord": [
+        "decision state",
+        "authorized reviewer",
+        "review date",
+        "decision reference or notes"
+      ]
+    },
+    "aut-420": {
+      "decisionQuestion": "Has verified industry employment or an approved internship placement been established under the AUT-420 evidence policy?",
+      "policyPath": "data/curriculum/aut420-internship-evidence-policy.json",
+      "minimumRecord": [
+        "verification state",
+        "reviewer",
+        "review date",
+        "reason or notes"
+      ]
+    },
+    "aut-450": {
+      "decisionQuestion": "After AUT-400 is governance-cleared and delivered, has the institution verified senior standing?",
+      "dependency": "aut-400",
+      "minimumRecord": [
+        "AUT-400 delivery dependency resolved",
+        "senior-standing decision state",
+        "authorized reviewer",
+        "review date"
+      ]
+    },
+    "aut-451": {
+      "decisionQuestion": "Has AUT-450 been governance-cleared and delivered?",
+      "dependency": "aut-450",
+      "minimumRecord": [
+        "AUT-450 delivery dependency resolved"
+      ]
+    },
+    "aut-620": {
+      "decisionQuestion": "Has the graduate program verified graduate standing and granted program approval?",
+      "minimumRecord": [
+        "graduate-standing decision",
+        "program-approval decision",
+        "authorized reviewer",
+        "review date"
+      ]
+    },
+    "aut-630": {
+      "decisionQuestion": "Which two advanced technology courses does the graduate program recognize for this prerequisite, and has completion/satisfaction been verified?",
+      "minimumRecord": [
+        "two identified course codes/titles",
+        "verification decision",
+        "advisor/program reviewer",
+        "review date"
+      ]
+    },
+    "aut-640": {
+      "decisionQuestion": "Has the thesis advisor or graduate program granted thesis approval?",
+      "minimumRecord": [
+        "approval decision",
+        "authorized thesis/program reviewer",
+        "review date"
+      ]
+    },
+    "aut-690": {
+      "decisionQuestion": "Has the graduate program verified graduate standing?",
+      "minimumRecord": [
+        "graduate-standing decision",
+        "authorized reviewer",
+        "review date"
+      ]
+    }
+  },
+  "boundaries": {
+    "createsEnrollmentEligibility": false,
+    "createsAssessmentEligibility": false,
+    "createsAcademicCredit": false,
+    "createsAccreditation": false,
+    "createsInstitutionalApproval": false,
+    "createsBatch019": false
+  },
+  "nextStepAfterAuthorizedDecision": "Update the corresponding governance decision record from documentary institutional evidence, then rerun the final-eight governance validator and remaining-delivery eligibility audit before defining any delivery batch."
+}

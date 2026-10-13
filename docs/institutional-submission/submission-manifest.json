@@ -1,0 +1,256 @@
+{
+  "schema_version": "1.0.0",
+  "phase": "7D",
+  "package": "institutional-submission",
+  "repository_baseline_sha": "53222a91ba3d82770b20f778c4e5a0134873eef1",
+  "submission_posture": {
+    "external_review_packet": true,
+    "accreditation_claim": false,
+    "kbor_approval_claim": false,
+    "academic_credit_authority_claim": false,
+    "institutional_adoption_claim": false,
+    "assessment_authorized": false,
+    "high_stakes_authorized": false,
+    "accessibility_certification_claim": false,
+    "full_course_delivery_coverage_claim": false
+  },
+  "verified_metrics": {
+    "lesson_plans_total": 64,
+    "undergraduate_lesson_plans": 43,
+    "graduate_lesson_plans": 21,
+    "reference_coverage": "64/64",
+    "reference_quality": {
+      "strong": 64,
+      "solid": 0,
+      "review": 0
+    },
+    "direct_domain_authority": "64/64",
+    "governed_reference_sources": 38,
+    "unresolved_source_rights": 0,
+    "technical_source_age_reviews": "5/5",
+    "production_monitor_gates": 9,
+    "catalog_aligned_dedicated_course_pages": 60,
+    "catalog_aligned_dedicated_course_page_ids": [
+      "aut-101",
+      "aut-105",
+      "aut-110",
+      "aut-115",
+      "aut-120",
+      "aut-121",
+      "aut-130",
+      "aut-131",
+      "aut-140",
+      "aut-150",
+      "aut-160",
+      "aut-170",
+      "aut-180",
+      "aut-200",
+      "aut-201",
+      "aut-210",
+      "aut-211",
+      "aut-220",
+      "aut-230",
+      "aut-240",
+      "aut-250",
+      "aut-251",
+      "aut-260",
+      "aut-270",
+      "aut-280",
+      "aut-300",
+      "aut-301",
+      "aut-310",
+      "aut-320",
+      "aut-321",
+      "aut-330",
+      "aut-331",
+      "aut-340",
+      "aut-350",
+      "aut-360",
+      "aut-370",
+      "aut-380",
+      "aut-390",
+      "aut-410",
+      "aut-501",
+      "aut-510",
+      "aut-515",
+      "aut-520",
+      "aut-525",
+      "aut-530",
+      "aut-535",
+      "aut-540",
+      "aut-545",
+      "aut-550",
+      "aut-555",
+      "aut-560",
+      "aut-565",
+      "aut-570",
+      "aut-575",
+      "aut-580",
+      "aut-585",
+      "aut-590",
+      "aut-600",
+      "aut-610",
+      "aut-650"
+    ],
+    "legacy_training_package_pages": 1,
+    "legacy_training_package_page_ids": [
+      "aut-250"
+    ]
+  },
+  "proposed_programs": [
+    {
+      "id": "undergraduate-automotive-technology-aas",
+      "credential": "Associate of Applied Science",
+      "program_name": "Automotive Technology",
+      "cip_code": "47.0604",
+      "total_credits": 68,
+      "status": "proposed-with-verified-kansas-core"
+    },
+    {
+      "id": "graduate-automotive-engineering-technology",
+      "credential": "Master of Applied Automotive Engineering Technology",
+      "program_name": "Automotive Engineering Technology",
+      "cip_code": "15.0803",
+      "total_credits": 30,
+      "status": "proposed"
+    }
+  ],
+  "submission_documents": [
+    "docs/institutional-submission/Submission-Cover-Sheet.md",
+    "docs/institutional-submission/AutoLearnPro-Institutional-Submission-Packet.md",
+    "docs/institutional-submission/Curriculum-Program-Map.md",
+    "docs/institutional-readiness/reviewer-checklist.md"
+  ],
+  "evidence": [
+    {
+      "area": "program_architecture",
+      "path": "data/curriculum/program-architecture.json",
+      "status": "canonical-repository-data"
+    },
+    {
+      "area": "academic_pathways",
+      "path": "data/curriculum/academic-pathways.json",
+      "status": "canonical-repository-data"
+    },
+    {
+      "area": "course_catalog",
+      "path": "data/curriculum/course-catalog.json",
+      "status": "planning-inventory"
+    },
+    {
+      "area": "course_delivery_status_data",
+      "path": "data/curriculum/course-delivery-status.json",
+      "status": "machine-readable-baseline",
+      "notes": "Machine-readable current Phase 7F-Z delivery status used by deterministic validators."
+    },
+    {
+      "area": "course_delivery_status",
+      "path": "docs/curriculum-course-delivery-baseline-2026-10-10.md",
+      "status": "verified-baseline",
+      "notes": "Phase 7F-Z verifies sixty catalog-aligned dedicated course pages plus the preserved legacy AUT-250 HEV package."
+    },
+    {
+      "area": "remaining_delivery_eligibility_audit",
+      "path": "docs/remaining-delivery-eligibility-audit-2026-10-10.md",
+      "status": "verified-audit",
+      "notes": "Post-Batch-018 re-audit classifies 8 remaining courses and establishes that no evidence-supported Batch 019 is currently ready."
+    },
+    {
+      "area": "aut120_canonical_curriculum_resolution",
+      "path": "docs/aut120-canonical-curriculum-resolution-2026-10-10.md",
+      "status": "canonical-development-resolution",
+      "notes": "Development-only canonical AUT-120 content and mapping resolution. Existing live 64/64 reference baseline remains historical until deployment/regeneration."
+    },
+    {
+      "area": "phase7fq_canonical_blocker_resolution",
+      "path": "docs/phase7fq-canonical-blocker-resolution-2026-10-10.md",
+      "status": "canonical-development-resolution",
+      "notes": "Development-only identity-preserving canonical content/mapping resolution for AUT-150, AUT-210, AUT-330, and AUT-525. Historical live 64/64 evidence remains unchanged until deployment/regeneration."
+    },
+    {
+      "area": "production_release",
+      "path": "docs/releases/production-release-baseline-2026-10-09.md",
+      "status": "verified"
+    },
+    {
+      "area": "production_monitoring",
+      "path": "docs/releases/phase7a-production-baseline-monitor.md",
+      "status": "verified"
+    },
+    {
+      "area": "reference_quality",
+      "path": "docs/curriculum-reference-quality-baseline-2026-10-10.md",
+      "status": "verified-screen"
+    },
+    {
+      "area": "institutional_readiness",
+      "path": "docs/institutional-readiness/README.md",
+      "status": "review-package"
+    },
+    {
+      "area": "institutional_evidence_index",
+      "path": "docs/institutional-readiness/evidence-index.json",
+      "status": "verified-index"
+    },
+    {
+      "area": "privacy_ai",
+      "path": "docs/compliance/education-privacy-ai-control-matrix.md",
+      "status": "governance-baseline"
+    },
+    {
+      "area": "student_data",
+      "path": "docs/compliance/student-data-inventory.md",
+      "status": "verified-inventory"
+    },
+    {
+      "area": "student_data_machine_readable",
+      "path": "docs/compliance/student-data-inventory.json",
+      "status": "verified-inventory"
+    },
+    {
+      "area": "retention_deletion",
+      "path": "docs/compliance/retention-deletion-contract.md",
+      "status": "governance-baseline"
+    },
+    {
+      "area": "public_privacy",
+      "path": "public-site/privacy.html",
+      "status": "published"
+    },
+    {
+      "area": "public_accessibility",
+      "path": "public-site/accessibility/index.html",
+      "status": "published-with-limitation"
+    },
+    {
+      "area": "public_institutions",
+      "path": "public-site/institutions/index.html",
+      "status": "published-information-only"
+    },
+    {
+      "area": "final_eight_governance_review",
+      "path": "data/curriculum/final-eight-governance-review.json",
+      "status": "verified-governance-review",
+      "notes": "Final eight-course governance matrix; no automatic delivery candidates and no assessment eligibility changes."
+    },
+    {
+      "area": "institutional_decision_package_final_eight",
+      "path": "data/curriculum/institutional-decision-package-final-eight.json",
+      "status": "prepared-for-external-human-review",
+      "notes": "Eight pending decision records; no automatic approval, delivery unlock, or assessment eligibility change."
+    },
+    {
+      "area": "institutional_decision_worksheet_final_eight",
+      "path": "docs/institutional-submission/Final-Eight-Institutional-Decision-Worksheet.md",
+      "status": "reviewer-ready",
+      "notes": "Human/institutional decision worksheet for the final eight courses."
+    }
+  ],
+  "open_external_review_items": [
+    "Resolve remaining delivery blockers before representing additional planning-catalog courses as catalog-aligned dedicated delivery pages.",
+    "Institution-specific academic approval and deployment decision.",
+    "Contract, data-processing, subprocessor, retention/deletion, incident-response, and jurisdiction-specific requirements.",
+    "Institution-specific accessibility evidence or formal conformance documentation if required.",
+    "Separate assessment-authorization review for any future scored, grading, credential, or high-stakes use."
+  ]
+}

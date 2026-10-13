@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "baseline_id": "production-release-baseline-2026-10-09",
+  "certified_main_sha": "9715aa014df2861531866895e3d81ce73585b22e",
+  "verified_date": "2026-10-09",
+  "status": "release-baseline-prepared",
+  "production_surfaces": {
+    "public": "https://autolearnpro.com/",
+    "app": "https://app.autolearnpro.com/",
+    "exam": "https://exam.autolearnpro.com/"
+  },
+  "curriculum": {
+    "lesson_plans_total": 64,
+    "lesson_plans_with_reference_coverage": 64,
+    "undergraduate": {
+      "total": 43,
+      "covered": 43
+    },
+    "graduate": {
+      "total": 21,
+      "covered": 21
+    }
+  },
+  "source_rights": {
+    "expected_source_count": 38,
+    "unresolved_reuse_unverified": 0,
+    "original_seven_unresolved": 0
+  },
+  "assessment_governance": {
+    "assessment_eligibility_change": false,
+    "scored_enabled": false,
+    "institutional_assessment_enabled": false,
+    "high_stakes_enabled": false,
+    "production_assessment_release": false,
+    "question_display_unlock": false
+  },
+  "search_indexability": {
+    "sitemap_url": "https://autolearnpro.com/sitemap.xml",
+    "canonical_url_count": 7,
+    "google_search_console_live_test": "green",
+    "google_search_console_sitemap": "green",
+    "cloudflare_verified_bots_allowed": true
+  },
+  "gates": [
+    {
+      "id": "source-rights-closure",
+      "command": "npm run audit:curriculum-source-rights"
+    },
+    {
+      "id": "state-privacy-ai-overlays",
+      "command": "npm run validate:state-privacy-ai-overlays"
+    },
+    {
+      "id": "curriculum-reference-coverage",
+      "command": "npm run validate:curriculum-reference-coverage-baseline"
+    },
+    {
+      "id": "assessment-governance-boundary",
+      "command": "npm run validate:assessment-governance-boundary"
+    },
+    {
+      "id": "production-surfaces",
+      "command": "npm run validate:production-surfaces"
+    },
+    {
+      "id": "google-crawler-access",
+      "command": "npm run validate:google-crawler-access"
+    },
+    {
+      "id": "public-indexability",
+      "command": "npm run validate:public-indexability"
+    }
+  ],
+  "notes": [
+    "This baseline records the merged main state prior to the baseline documentation PR.",
+    "Assessment eligibility remains locked; this artifact does not authorize question display, scoring, grading, institutional assessment, high-stakes use, or production assessment release.",
+    "Google crawler access depends on Cloudflare verified-bot handling remaining enabled."
+  ]
+}

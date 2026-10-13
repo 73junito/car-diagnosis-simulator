@@ -1,0 +1,2 @@
+const {verify}=require('../scripts/verify-remaining-delivery-eligibility-audit.js')
+describe('Phase 7F-Z post-Batch-018 audit',()=>{test('classifies all 8 remaining courses',()=>expect(verify()).toMatchObject({ok:true,errors:[],summary:{readyToBuildNow:0,blockedMissingCanonicalMapping:0,blockedPrerequisiteChain:2,blockedHumanInstitutionalVerification:6}}));test('records no Batch 019',()=>expect(verify().conclusion).toMatchObject({batch019Ready:false,batch019Candidates:[]}))})

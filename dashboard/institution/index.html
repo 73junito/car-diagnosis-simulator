@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Institution Portal | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/dashboard.css">
+</head>
+<body>
+  <main class="tm-main">
+    <section class="tm-hero-banner">
+      <div>
+        <p class="tm-eyebrow">Authorized institution membership</p>
+        <h1>Institution Portal</h1>
+        <p id="institutionAccessStatus" role="status" aria-live="polite">Checking institution membership…</p>
+      </div>
+    </section>
+
+    <section class="tm-panel">
+      <label for="institutionSelect">Institution
+        <select id="institutionSelect" class="tm-select" disabled>
+          <option value="">Select institution</option>
+        </select>
+      </label>
+      <p>Institution access is granted only by an active membership record. School codes, domains, and directory matches alone do not grant tenant access.</p>
+    </section>
+
+    <section id="institutionInvitations" class="tm-panel">
+      <h2>My Invitations</h2>
+      <p>Only invitations matching your authenticated account email appear here.</p>
+      <div id="myInvitationList"></div>
+    </section>
+
+    <section id="institutionOverview" class="tm-panel" hidden>
+      <h2 id="institutionName">Institution</h2>
+      <p id="institutionRole"></p>
+
+      <h3>Programs</h3>
+      <ul id="institutionPrograms"></ul>
+
+      <h3>Cohorts</h3>
+      <ul id="institutionCohorts"></ul>
+
+      <h3>Classes</h3>
+      <ul id="institutionClasses"></ul>
+
+      <p id="institutionAdminNotice"></p>
+    </section>
+
+    <section id="institutionAdminPanel" class="tm-panel" hidden>
+      <h2>Membership Administration</h2>
+      <p>Institution admins can manage members and instructors. Institution owners can also manage administrator and owner roles.</p>
+
+      <form id="institutionInviteForm">
+        <label for="institutionInviteEmail">Email
+          <input id="institutionInviteEmail" type="email" maxlength="320" required>
+        </label>
+        <label for="institutionInviteRole">Role
+          <select id="institutionInviteRole" class="tm-select">
+            <option value="member">Member</option>
+            <option value="instructor">Instructor</option>
+            <option value="institution_admin">Institution admin</option>
+            <option value="institution_owner">Institution owner</option>
+          </select>
+        </label>
+        <label for="institutionInviteNote">Note
+          <textarea id="institutionInviteNote" maxlength="1000"></textarea>
+        </label>
+        <button class="tm-btn tm-btn-primary" type="submit">Create Invitation</button>
+      </form>
+
+      <h3>Student Institution Claims</h3>
+      <p>Institution admins and owners may review claims only for this tenant.</p>
+      <div id="institutionStudentClaimList"></div>
+
+      <h3>Members</h3>
+      <div id="institutionMemberList"></div>
+
+      <h3>Pending Invitations</h3>
+      <div id="institutionPendingInvitationList"></div>
+
+      <h3>Institution Settings</h3>
+      <form id="institutionSettingsForm">
+        <label for="institutionDisplayName">Display name
+          <input id="institutionDisplayName" maxlength="160">
+        </label>
+        <label for="institutionWebsiteUrl">Website URL
+          <input id="institutionWebsiteUrl" type="url" maxlength="500" placeholder="https://example.edu">
+        </label>
+        <label for="institutionSupportEmail">Support email
+          <input id="institutionSupportEmail" type="email" maxlength="320">
+        </label>
+        <label for="institutionTimezone">Timezone
+          <input id="institutionTimezone" maxlength="100" placeholder="America/Chicago">
+        </label>
+        <label for="institutionLocale">Locale
+          <input id="institutionLocale" maxlength="35" value="en-US">
+        </label>
+        <button class="tm-btn tm-btn-primary" type="submit">Save Institution Settings</button>
+      </form>
+
+      <h3>Verified Domains</h3>
+      <p>Verified domains are affiliation evidence only. They never grant institution membership, administrator access, or assessment eligibility.</p>
+      <form id="institutionDomainForm">
+        <label for="institutionDomainName">Domain
+          <input id="institutionDomainName" maxlength="253" placeholder="example.edu">
+        </label>
+        <label for="institutionDomainSource">Verification source
+          <textarea id="institutionDomainSource" maxlength="1000" placeholder="Document the authoritative source used to verify institutional ownership."></textarea>
+        </label>
+        <button id="institutionDomainAddButton" class="tm-btn tm-btn-primary" type="submit">Add Verified Domain</button>
+      </form>
+      <div id="institutionDomainList"></div>
+
+      <h3>Institution Report</h3>
+      <p>Operational learning activity only. This report is not a transcript, credential, academic-credit record, or institutional grade report.</p>
+      <button id="institutionReportRefresh" class="tm-btn tm-btn-secondary" type="button">Refresh Institution Report</button>
+      <div id="institutionReportSummary"></div>
+      <div id="institutionClassReportList"></div>
+    </section>
+  </main>
+
+  <script src="/auth.js"></script>
+  <script src="/apiClient.js"></script>
+  <script src="/dashboard/institution/index.js"></script>
+</body>
+</html>

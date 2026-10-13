@@ -14,6 +14,7 @@ The Student Dashboard is the primary landing page for learners. It provides an o
 - Launch scenarios
 - Review transcript
 - Receive AI recommendations
+- Browse governed learning references
 
 ## Layout
 1. Shell Header
@@ -26,6 +27,7 @@ The Student Dashboard is the primary landing page for learners. It provides an o
 8. Transcript
 9. Performance Summary
 10. Activity Timeline
+11. Governed Reference Library
 
 ## Required Widgets
 - Progress Card
@@ -34,6 +36,7 @@ The Student Dashboard is the primary landing page for learners. It provides an o
 - Transcript Card
 - KPI Cards
 - Timeline
+- Reference Library link
 
 ## Accessibility
 - Full keyboard navigation

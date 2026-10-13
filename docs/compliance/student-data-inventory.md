@@ -34,7 +34,7 @@ This document does not authorize new collection or reuse. Unknown or schemaless 
 | SDI-006 | AI tutor request transit | scenario, question, student answer, topic, provider/model request metadata | `student_restricted` | Training-mode instructional feedback | Confirmed transient processing; blocked in official assessment mode |
 | SDI-007 | Browser session/local storage | authentication session/token, assessment attempt ID, delivery mode | `authentication_secret` + `student_restricted` | Maintain authenticated session and attempt context | Confirmed active |
 | SDI-008 | Instructor analytics aggregation | student/user identifier, session count, average score, average confidence when source report exists | `student_restricted`; aggregate output may qualify as `deidentified_aggregate` only after review | Instructor analytics | Code path exists; current local report file absent |
-| SDI-009 | `public.completions` and `public.replays` | user UUID, scenario linkage, replay actions/results/confidence, timestamps | `student_restricted` + `review_required` | Historical completion/replay tracking | Production data exists; active application path not confirmed in this review |
+| SDI-009 | `public.completions` and `public.replays` | user UUID, scenario linkage, replay actions/results/confidence, timestamps | `student_restricted` + `review_required` | Historical completion/replay tracking | Legacy data retained; production browser writers retired; no new writes authorized |
 
 ## Legacy / review-required production assets
 

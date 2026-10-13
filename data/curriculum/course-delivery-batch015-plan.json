@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-V",
+  "purpose": "batch-015-undergraduate-advanced-delivery-execution",
+  "sourceDeliveryPhase": "7F-V",
+  "status": "page-built-verified",
+  "rationale": "Build the exact seven evidence-supported Batch 015 candidates produced by the post-Batch-014 deterministic audit.",
+  "courses": [
+    {
+      "courseId": "aut-301",
+      "code": "AUT 301",
+      "title": "Advanced Automotive Diagnostics Laboratory",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut301-advanced-diagnostics-lab",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "Concurrent enrollment in AUT 300",
+      "prerequisiteType": "concurrent-enrollment-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-301/index.html",
+      "deliveryRoute": "/courses/aut-301/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-321",
+      "code": "AUT 321",
+      "title": "Hybrid Vehicle Laboratory",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut321-hybrid-lab",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 320",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-321/index.html",
+      "deliveryRoute": "/courses/aut-321/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-331",
+      "code": "AUT 331",
+      "title": "Electric Vehicle Laboratory",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut331-electric-vehicle-lab",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 330",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-331/index.html",
+      "deliveryRoute": "/courses/aut-331/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-340",
+      "code": "AUT 340",
+      "title": "Battery Systems and Battery Management",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut340-battery-management",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 330",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-340/index.html",
+      "deliveryRoute": "/courses/aut-340/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-350",
+      "code": "AUT 350",
+      "title": "Advanced Driver Assistance Systems",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut350-adas",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 280, AUT 310",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-350/index.html",
+      "deliveryRoute": "/courses/aut-350/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-360",
+      "code": "AUT 360",
+      "title": "Automotive Data Acquisition and Analysis",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut360-data-analysis",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 110, AUT 300",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-360/index.html",
+      "deliveryRoute": "/courses/aut-360/",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-370",
+      "code": "AUT 370",
+      "title": "Automotive Embedded Systems",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut370-embedded-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 230, AUT 310",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-370/index.html",
+      "deliveryRoute": "/courses/aut-370/",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 7,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-U",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 4
+  },
+  "completedInPhase": "7F-V"
+}

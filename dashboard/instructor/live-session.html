@@ -4,14 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Live Session - Instructor</title>
-  <link rel="stylesheet" href="/theme.css" />
-<link rel="stylesheet" href="/theme/tokens.css" />
-<link rel="stylesheet" href="/theme/layout.css" />
-<link rel="stylesheet" href="/theme/dashboard.css" />
-  <link rel="stylesheet" href="./live-session.css" />
+  <link rel="stylesheet" href="/theme/tokens.css" />
+  <link rel="stylesheet" href="/theme/layout.css" />
+  <link rel="stylesheet" href="/theme/dashboard.css" />
+  <link rel="stylesheet" href="/dashboard/live-session.css" />
+  <link rel="stylesheet" href="/theme/legacy-light-bridge.css" />
 </head>
 <body>
-  <main class="container tm-main">
+  <main class="tm-main">
     <section class="tm-hero-banner">
   <div>
     <p class="tm-hero-banner__eyebrow">Instructor Tools</p>
@@ -23,6 +23,14 @@
         <button id="reconnect" class="tm-btn tm-btn-secondary">Reconnect</button>
         <button id="clear-feed" class="tm-btn tm-btn-secondary">Clear</button>
       </div></section>
+
+    <section id="live-controls" class="tm-panel">
+      <label>Class:
+        <select id="live-class">
+          <option value="">Loading classes…</option>
+        </select>
+      </label>
+    </section>
 
     <section id="live-summary" class="tm-panel">
       <div><strong>Active sessions:</strong> <span id="active-sessions">0</span></div>
@@ -36,6 +44,8 @@
 
   </main>
 
+  <script src="/auth.js"></script>
+  <script src="/apiClient.js"></script>
   <script src="./live-session.js"></script>
 </body>
 </html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Interactive Diagnostic Demo | AutoLearnPro</title>
+  <meta name="description" content="Try a public, non-graded AutoLearnPro diagnostic reasoning demo using synthetic automotive data." />
+  <link rel="canonical" href="https://autolearnpro.com/demo/" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-nav public-page-nav">
+    <div class="shell nav-shell">
+      <a class="brand" href="/" aria-label="AutoLearnPro home">
+        <img src="/assets/logo.svg" alt="AutoLearnPro" />
+      </a>
+      <nav class="main-nav public-page-links" aria-label="Primary navigation">
+        <a href="/how-it-works/">How It Works</a>
+        <a href="/students/">Students</a>
+        <a href="/instructors/">Instructors</a>
+        <a href="/research-sources/">Research Sources</a>
+        <a class="nav-primary" href="https://app.autolearnpro.com/sign-in/student/">Student Sign In</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="public-page-hero">
+      <p class="eyebrow">Public interactive demo</p>
+      <h1>Work one diagnostic case without signing in.</h1>
+      <p class="lede">
+        This demonstration uses synthetic, cleared content to show the AutoLearnPro reasoning flow.
+        It is not graded, does not save progress, does not create an assessment record, and does not award academic credit or credentials.
+      </p>
+    </section>
+
+    <section class="public-page-content">
+      <div class="public-page-notice" role="note">
+        <strong>Demo boundaries:</strong> no login, no personalization, no telemetry, no assessment bank, no answer keys, and no institutional record.
+      </div>
+
+      <section class="demo-case" aria-labelledby="demo-case-title">
+        <div class="demo-case__header">
+          <div>
+            <p class="eyebrow">Synthetic case</p>
+            <h2 id="demo-case-title">Slow cranking after an overnight cold soak</h2>
+            <p>
+              A fictional training vehicle cranks slowly on the first start of the day. The battery is fully charged before testing.
+            </p>
+          </div>
+          <span class="status-pill">Non-graded practice</span>
+        </div>
+
+        <div class="demo-metrics" aria-label="Synthetic measurements">
+          <article>
+            <span>Open-circuit battery</span>
+            <strong>12.62 V</strong>
+          </article>
+          <article>
+            <span>Cranking voltage</span>
+            <strong>9.25 V</strong>
+          </article>
+          <article>
+            <span>Positive cable drop</span>
+            <strong>0.18 V</strong>
+          </article>
+          <article>
+            <span>Ground cable drop</span>
+            <strong>0.92 V</strong>
+          </article>
+        </div>
+
+        <ol class="demo-steps" id="demoSteps">
+          <li class="demo-step is-active" data-step="0">
+            <button type="button" class="demo-step__button" aria-expanded="true">
+              <span>01</span>
+              <strong>Concern</strong>
+            </button>
+            <div class="demo-step__panel">
+              <p>Identify the customer concern before deciding what component might be at fault.</p>
+              <fieldset>
+                <legend>Which statement best defines the concern?</legend>
+                <label><input type="radio" name="concern" value="slow-crank" /> Slow cranking during the first cold start.</label>
+                <label><input type="radio" name="concern" value="charging" /> The charging system is overcharging.</label>
+                <label><input type="radio" name="concern" value="misfire" /> The engine has a warm idle misfire.</label>
+              </fieldset>
+              <button class="button button-primary demo-next" type="button">Continue to Evidence</button>
+            </div>
+          </li>
+
+          <li class="demo-step" data-step="1">
+            <button type="button" class="demo-step__button" aria-expanded="false">
+              <span>02</span>
+              <strong>Evidence</strong>
+            </button>
+            <div class="demo-step__panel" hidden>
+              <p>Compare the measured values before choosing a direction. The largest abnormal value is the ground-side voltage drop.</p>
+              <label for="evidenceNote">What evidence would you prioritize?</label>
+              <textarea id="evidenceNote" rows="4" maxlength="280" placeholder="Write a short observation from the synthetic measurements."></textarea>
+              <button class="button button-primary demo-next" type="button">Continue to Evaluate</button>
+            </div>
+          </li>
+
+          <li class="demo-step" data-step="2">
+            <button type="button" class="demo-step__button" aria-expanded="false">
+              <span>03</span>
+              <strong>Evaluate</strong>
+            </button>
+            <div class="demo-step__panel" hidden>
+              <p>Choose a hypothesis to investigate next. This choice is not scored.</p>
+              <label for="hypothesis">Working hypothesis</label>
+              <select id="hypothesis">
+                <option value="">Choose a hypothesis</option>
+                <option>High resistance in the starter ground path</option>
+                <option>Excessive resistance in the positive cable path</option>
+                <option>Charging voltage is too high</option>
+              </select>
+              <button class="button button-primary demo-next" type="button">Continue to Test</button>
+            </div>
+          </li>
+
+          <li class="demo-step" data-step="3">
+            <button type="button" class="demo-step__button" aria-expanded="false">
+              <span>04</span>
+              <strong>Test</strong>
+            </button>
+            <div class="demo-step__panel" hidden>
+              <p>Select the next check you would perform. The demo shows the reasoning workflow, not a hidden answer key.</p>
+              <label for="nextTest">Next diagnostic check</label>
+              <select id="nextTest">
+                <option value="">Choose a check</option>
+                <option>Inspect and voltage-drop test the starter ground path under load</option>
+                <option>Replace the battery without further testing</option>
+                <option>Measure refrigerant pressure</option>
+              </select>
+              <button class="button button-primary demo-next" type="button">Continue to Verify</button>
+            </div>
+          </li>
+
+          <li class="demo-step" data-step="4">
+            <button type="button" class="demo-step__button" aria-expanded="false">
+              <span>05</span>
+              <strong>Verify</strong>
+            </button>
+            <div class="demo-step__panel" hidden>
+              <p>
+                In a real repair workflow, verification would repeat the operating condition and confirm that the measured fault is no longer present.
+                This public demo intentionally stops before any graded result or stored completion record.
+              </p>
+              <button id="restartDemo" class="button button-secondary" type="button">Restart Demo</button>
+            </div>
+          </li>
+        </ol>
+
+        <p id="demoStatus" class="public-page-notice" role="status" aria-live="polite">
+          Start with the Concern step. Your selections remain only in this browser session and are not submitted anywhere.
+        </p>
+      </section>
+
+      <div class="public-page-actions">
+        <a class="btn primary" href="https://app.autolearnpro.com/sign-in/student/">Open Student Workspace</a>
+        <a class="btn ghost" href="/how-it-works/">See How AutoLearnPro Works</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container public-page-footer">
+      <small>© AutoLearnPro</small>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/accessibility/">Accessibility</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="/demo/demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Platform Administration | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+  <main class="tm-shell admin-shell">
+    <header class="tm-page-header">
+      <div>
+        <p class="tm-eyebrow">Platform administration</p>
+        <h1>Platform Administration</h1>
+        <p>Least-privilege operations for identity, institutions, governed review queues, audit evidence, and platform configuration.</p>
+      </div>
+      <a class="tm-btn tm-btn-secondary" href="/">Home</a>
+    </header>
+
+    <section class="tm-panel" aria-labelledby="platform-overview-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="platform-overview-heading">Operations overview</h2>
+          <p id="platform-overview-status" role="status" aria-live="polite">Loading platform status…</p>
+        </div>
+        <button id="platform-overview-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <div id="platform-overview-cards" class="admin-summary-grid"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="platform-users-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="platform-users-heading">Users and trusted roles</h2>
+          <p>Role visibility is authoritative; privileged role changes are intentionally not browser-managed.</p>
+        </div>
+        <button id="platform-users-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <p id="platform-users-status" role="status" aria-live="polite"></p>
+      <div id="platform-users-list" class="admin-queue"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="platform-institutions-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="platform-institutions-heading">Institutions</h2>
+          <p>Directory, owner/admin coverage, active memberships, and verified-domain coverage.</p>
+        </div>
+        <form id="platform-institution-search-form" class="admin-action-row">
+          <label for="platform-institution-search">Search
+            <input id="platform-institution-search" maxlength="120" placeholder="School name or 6-character code">
+          </label>
+          <button class="tm-btn tm-btn-secondary" type="submit">Search</button>
+        </form>
+      </div>
+      <p id="platform-institutions-status" role="status" aria-live="polite"></p>
+      <div id="platform-institutions-list" class="admin-queue"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="platform-operational-heading">
+      <h2 id="platform-operational-heading">Operational configuration</h2>
+      <p>Changes are platform-admin-only, server-enforced, explicitly confirmed when high-risk, and append-only audited.</p>
+      <form id="platform-operational-form" class="admin-actions">
+        <label>
+          <input id="platform-owner-bootstrap-enabled" type="checkbox">
+          Allow creation of initial institution-owner invitations
+        </label>
+        <label for="platform-operations-note">Operations note
+          <textarea id="platform-operations-note" class="tm-textarea" maxlength="2000"></textarea>
+        </label>
+        <button class="tm-btn tm-btn-primary" type="submit">Save Operational Configuration</button>
+      </form>
+      <p id="platform-operational-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="platform-audit-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="platform-audit-heading">Unified audit history</h2>
+          <p>Recent governance and institution administration events from existing append-only evidence sources.</p>
+        </div>
+        <button id="platform-audit-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <p id="platform-audit-status" role="status" aria-live="polite"></p>
+      <div id="platform-audit-list" class="admin-queue"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="queue-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="queue-heading">Instructor affiliation review</h2>
+          <p id="admin-status" role="status" aria-live="polite">Loading pending requests…</p>
+        </div>
+        <label for="queue-status">Status
+          <select id="queue-status" class="tm-select">
+            <option value="pending" selected>Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </label>
+        <button id="refresh-queue" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <div id="verification-queue" class="admin-queue" aria-live="polite"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="student-claim-review-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="student-claim-review-heading">Student institution claims</h2>
+          <p id="student-claim-review-status" role="status" aria-live="polite">Loading pending claims…</p>
+        </div>
+        <label for="student-claim-review-status-select">Status
+          <select id="student-claim-review-status-select" class="tm-select">
+            <option value="claimed" selected>Claimed</option>
+            <option value="verified">Verified</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </label>
+        <button id="student-claim-review-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <p>Verification establishes only a basic institution member relationship. It does not grant instructor/admin roles or assessment eligibility.</p>
+      <div id="student-claim-review-queue" class="admin-queue" aria-live="polite"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="institution-owner-bootstrap-heading">
+      <h2 id="institution-owner-bootstrap-heading">Institution owner bootstrap</h2>
+      <p>Create the first owner invitation for an institution that does not yet have an active owner. The recipient must accept using the matching confirmed account email.</p>
+      <form id="institution-owner-bootstrap-form" class="admin-actions">
+        <label for="institution-owner-school-code">School code
+          <input id="institution-owner-school-code" maxlength="6" required>
+        </label>
+        <label for="institution-owner-email">Owner email
+          <input id="institution-owner-email" type="email" maxlength="320" required>
+        </label>
+        <label for="institution-owner-note">Note
+          <textarea id="institution-owner-note" class="tm-textarea" maxlength="1000"></textarea>
+        </label>
+        <button class="tm-btn tm-btn-primary" type="submit">Create Initial Owner Invitation</button>
+      </form>
+      <p id="institution-owner-bootstrap-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="author-review-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="author-review-heading">Authoring draft review</h2>
+          <p id="author-review-status" role="status" aria-live="polite">Loading pending drafts…</p>
+        </div>
+        <label for="author-review-status-select">Status
+          <select id="author-review-status-select" class="tm-select">
+            <option value="pending" selected>Pending</option>
+            <option value="changes_requested">Changes requested</option>
+            <option value="review_complete">Review complete</option>
+          </select>
+        </label>
+        <button id="author-review-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <p>Review completion records governance evidence only. It does not publish a scenario or grant learner or assessment eligibility.</p>
+      <div id="author-review-queue" class="admin-queue" aria-live="polite"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="author-publication-heading">
+      <div class="admin-toolbar">
+        <div>
+          <h2 id="author-publication-heading">Authoring publication approval</h2>
+          <p id="author-publication-status" role="status" aria-live="polite">Loading pending publication requests…</p>
+        </div>
+        <label for="author-publication-status-select">Status
+          <select id="author-publication-status-select" class="tm-select">
+            <option value="pending" selected>Pending</option>
+            <option value="changes_requested">Changes requested</option>
+            <option value="published">Published</option>
+          </select>
+        </label>
+        <button id="author-publication-refresh" class="tm-btn tm-btn-secondary" type="button">Refresh</button>
+      </div>
+      <p>Publication approval requires completed review and governed evidence. Approval does not grant learner delivery, scoring, or assessment eligibility.</p>
+      <div id="author-publication-queue" class="admin-queue" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-J",
+  "purpose": "batch-006-graduate-systems-delivery-execution",
+  "sourceDeliveryPhase": "7F-J",
+  "status": "page-built-verified",
+  "rationale": "Build the next graduate prerequisite layer whose required AUT courses were already delivered in Batches 004-005. Keep learner prerequisite and equivalency verification outside repository delivery authority.",
+  "courses": [
+    {
+      "courseId": "aut-535",
+      "code": "AUT 535",
+      "title": "Advanced Battery Systems",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut535-battery-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 530",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-535/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-540",
+      "code": "AUT 540",
+      "title": "Power Electronics for Vehicle Systems",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut540-power-electronics",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 530 or equivalent",
+      "prerequisiteType": "course-or-equivalency-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-540/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-555",
+      "code": "AUT 555",
+      "title": "Automotive Embedded Systems and ECU Architecture",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut555-embedded-ecu",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 550 or equivalent",
+      "prerequisiteType": "course-or-equivalency-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-555/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-560",
+      "code": "AUT 560",
+      "title": "Advanced ADAS and Vehicle Perception",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut560-adas-perception",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 501, AUT 550",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-560/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-570",
+      "code": "AUT 570",
+      "title": "Automotive Cybersecurity Engineering",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut570-cybersecurity",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 550",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-570/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-580",
+      "code": "AUT 580",
+      "title": "Advanced Automotive Control Systems",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut580-control-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 515",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-580/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-585",
+      "code": "AUT 585",
+      "title": "Vehicle Digital Twins and Simulation",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut585-digital-twins",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 515, AUT 520",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-585/index.html",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "nextDependencyLayer": [
+    {
+      "courseId": "aut-545",
+      "code": "AUT 545",
+      "dependsOn": [
+        "aut-530",
+        "aut-535"
+      ]
+    },
+    {
+      "courseId": "aut-575",
+      "code": "AUT 575",
+      "dependsOn": [
+        "aut-555",
+        "aut-550"
+      ]
+    },
+    {
+      "courseId": "aut-565",
+      "code": "AUT 565",
+      "dependsOn": [
+        "aut-560"
+      ]
+    }
+  ],
+  "deferred": [
+    {
+      "courseId": "aut-525",
+      "code": "AUT 525",
+      "reason": "No identity-preserving canonical catalog-development mapping is currently recorded."
+    },
+    {
+      "courseId": "aut-420",
+      "code": "AUT 420",
+      "reason": "Verified industry employment or approved internship placement remains a human/institutional eligibility condition."
+    }
+  ],
+  "continuingCanonicalContentBlockers": [
+    "aut-120",
+    "aut-150"
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 7,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "equivalencyAutomation": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-I",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 3
+  },
+  "completedInPhase": "7F-J"
+}

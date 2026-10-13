@@ -1,5 +1,5 @@
 :root{--gap:12px;--card-bg:#fff;--card-border:#ddd}
-body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7f9;margin:0;padding:24px}
+body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f6f7f9;margin:0;padding:0}
 .wrapper{max-width:1200px;margin:0 auto}
 h1{margin:0 0 16px}
 

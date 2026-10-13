@@ -6,9 +6,7 @@ const TARGETS=[
   'assessment/index.html',
   'dashboard/live-session.html',
   'dashboard_live.html',
-  'dashboard_test.html',
-  'main_index.html',
-  'temp_home.html'
+  'dashboard_test.html'
 ];
 function read(p){return fs.readFileSync(path.join(ROOT,p),'utf8')}
 function hexToRgb(hex){const h=hex.replace('#','');return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16)/255)}
@@ -46,5 +44,5 @@ function verify(){
  if(student.includes('WCAG 2.1 AA')) errors.push('student dashboard spec still says WCAG 2.1 AA');
  return {ok:errors.length===0,errors,targets:TARGETS,contrast};
 }
-if(require.main===module){const r=verify();for(const c of r.contrast)console.log((c.pass?'PASS':'FAIL')+'\t'+c.ratio+':1\t(min '+c.min+')\t'+c.label);if(!r.ok){console.error('[FAIL] Phase 8A legacy theme migration');for(const e of r.errors)console.error('  - '+e);process.exit(1)}console.log('[PASS] Phase 8A legacy theme migration: 6/6 pages canonical, focus contrast verified, WCAG 2.2 spec aligned')}
+if(require.main===module){const r=verify();for(const c of r.contrast)console.log((c.pass?'PASS':'FAIL')+'\t'+c.ratio+':1\t(min '+c.min+')\t'+c.label);if(!r.ok){console.error('[FAIL] Phase 8A legacy theme migration');for(const e of r.errors)console.error('  - '+e);process.exit(1)}console.log('[PASS] Phase 8A legacy theme migration: 4/4 active pages canonical, focus contrast verified, WCAG 2.2 spec aligned')}
 module.exports={TARGETS,verify,ratio};

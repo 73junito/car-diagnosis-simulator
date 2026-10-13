@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-N",
+  "purpose": "batch-008-aut120-undergraduate-delivery-execution",
+  "sourceDeliveryPhase": "7F-N",
+  "status": "page-built-verified",
+  "rationale": "Build the sole evidence-supported Batch 008 candidate produced by the Phase 7F-L re-audit after Phase 7F-M canonical resolution.",
+  "courses": [
+    {
+      "courseId": "aut-120",
+      "code": "AUT 120",
+      "title": "Automotive Electrical Systems I",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut120-electrical-fundamentals",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 110",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-120/index.html",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 1,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-K",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 3
+  },
+  "completedInPhase": "7F-N"
+}

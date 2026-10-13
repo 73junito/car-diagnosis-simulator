@@ -173,4 +173,3 @@ Confirmed topology: **Cloudflare Workers is the only production backend**; `torq
 - No page-by-page redesign has begun; this document authorizes the foundation workstream only.
 - No claims are made about live traffic, performance, or analytics baselines.
 - Mermaid blocks deliberately avoided (matches prior audit; avoids the `docs:mermaid` coverage/render contract).
-

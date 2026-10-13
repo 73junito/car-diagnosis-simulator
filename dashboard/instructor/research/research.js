@@ -50,6 +50,18 @@
     return el
   }
 
+  function semanticScholarPublicUrl(rawUrl){
+    try {
+      const url = new URL(rawUrl, 'https://www.semanticscholar.org/')
+      if (url.hostname === 'www.semanticscholar.org' || url.hostname === 'semanticscholar.org') {
+        url.searchParams.set('utm_source', 'api')
+      }
+      return url.toString()
+    } catch {
+      return rawUrl
+    }
+  }
+
   async function apiRequest(url, options = {}){
     const token = accessToken()
     if (!token) throw new Error('AUTH_REQUIRED')
@@ -809,7 +821,7 @@
           publicationYear: paper.year,
           venue: paper.venue,
           doi,
-          sourceUrl: paper.url,
+          sourceUrl: semanticScholarPublicUrl(paper.url),
           abstract: paper.abstract,
           citationCount: paper.citationCount,
           providerMetadata: {
@@ -859,7 +871,7 @@
 
     if (paper.url) {
       const link = document.createElement('a')
-      link.href = paper.url
+      link.href = semanticScholarPublicUrl(paper.url)
       link.target = '_blank'
       link.rel = 'noopener noreferrer'
       link.textContent = 'View on Semantic Scholar'

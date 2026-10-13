@@ -1,0 +1,60 @@
+{
+  "reviewDate": "2026-10-09",
+  "policy": {
+    "ageReviewThresholdYears": 10,
+    "purpose": "Resolve age-screen findings through source-level currency review without changing source rights, evidence approval, instructional approval, or assessment eligibility.",
+    "statuses": [
+      "current-authoritative",
+      "current-authoritative-with-companion-update",
+      "historical-supporting"
+    ]
+  },
+  "reviews": [
+    {
+      "referenceId": "nhtsa-fmvss-126-electronic-stability-control",
+      "publicationYear": 2007,
+      "status": "current-authoritative",
+      "evidenceUrl": "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.126",
+      "evidenceChecked": "2026-10-09",
+      "rationale": "49 CFR 571.126 remains in the current eCFR and continues to establish ESC equipment and performance requirements for light vehicles.",
+      "usageConstraint": "Use the current codified text for regulatory requirements; the original 2007 rulemaking date does not make the standard obsolete."
+    },
+    {
+      "referenceId": "nist-tn1900-measurement-uncertainty",
+      "publicationYear": 2015,
+      "status": "current-authoritative",
+      "evidenceUrl": "https://www.nist.gov/director/nist-information-quality-standards",
+      "evidenceChecked": "2026-10-09",
+      "rationale": "Current NIST information-quality guidance still identifies Technical Note 1900 as guidance for evaluating and expressing measurement uncertainty.",
+      "usageConstraint": "Retain as current measurement-uncertainty guidance; apply it within its NIST measurement-results scope."
+    },
+    {
+      "referenceId": "nasa-systems-engineering-handbook-2016",
+      "publicationYear": 2016,
+      "status": "current-authoritative-with-companion-update",
+      "evidenceUrl": "https://www.nasa.gov/reference/systems-engineering-handbook/",
+      "companionUrl": "https://standards.nasa.gov/standard/NASA/NASA-HDBK-1009",
+      "evidenceChecked": "2026-10-09",
+      "rationale": "NASA continues to publish the 2016 Systems Engineering Handbook as current agency guidance. NASA-HDBK-1009A (2025) provides newer, narrower model-based systems engineering guidance and complements rather than generally replaces the handbook.",
+      "usageConstraint": "Retain for general systems-engineering foundations; use NASA-HDBK-1009A where model-based systems engineering or SysML-specific practice is the instructional focus."
+    },
+    {
+      "referenceId": "sae-nissan-can-diagnostic-flow-2014",
+      "publicationYear": 2014,
+      "status": "historical-supporting",
+      "evidenceUrl": "https://saemobilus.sae.org/papers/network-diagnostic-flow-chart-troubleshoot-vehicle-level-communication-diagnostic-issues-nissan-infinity-vehicles-2014-01-1978",
+      "evidenceChecked": "2026-10-09",
+      "rationale": "The SAE technical paper remains available and useful as a bounded Nissan/Infiniti CAN diagnostic-flow case study, but it is not a current universal OEM service procedure.",
+      "usageConstraint": "Use only as historical/supporting diagnostic-method context. Current vehicle diagnosis must defer to current OEM service information and vehicle-specific procedures."
+    },
+    {
+      "referenceId": "automotive-engine-diagnostic-survey-2012",
+      "publicationYear": 2012,
+      "status": "historical-supporting",
+      "evidenceUrl": "https://doi.org/10.1177/1468087411422851",
+      "evidenceChecked": "2026-10-09",
+      "rationale": "The peer-reviewed survey remains relevant as literature on model-based and data-driven automotive engine fault-detection methods, but its age makes it unsuitable as a standalone statement of current diagnostic practice.",
+      "usageConstraint": "Use as scholarly background, research-method context, and historical literature support; do not treat it as current service information or current regulatory guidance."
+    }
+  ]
+}

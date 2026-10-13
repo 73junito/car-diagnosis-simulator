@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "verified_at": "2026-10-09",
+  "scope": "California, Illinois, and Texas privacy/AI overlays for AutoLearn Pro",
+  "product_posture": {
+    "biometric_identification": "disabled",
+    "consequential_ai_decisions": "disabled",
+    "targeted_advertising_from_student_data": "prohibited",
+    "sale_or_rental_of_student_data": "prohibited",
+    "model_training_on_identifiable_student_records": "disabled_by_default"
+  },
+  "jurisdictions": [
+    {
+      "id": "CA",
+      "authority": "California CCPA/CPRA + CPPA regulations",
+      "applicability": "conditional_business_threshold_and_processing_scope_review",
+      "effective_state": "current_2026",
+      "controls": [
+        "do_not_assume_ccpa_business_status_without_threshold_analysis",
+        "keep_sale_share_and_targeted_advertising_controls_prohibited_for_student_data",
+        "perform_risk_assessment_before processing that presents significant risk where CCPA applies",
+        "keep_significant_decision_admt_disabled_until_2027_compliance_controls_are_implemented",
+        "if_significant_decision_admt_is_ever_enabled_add_pre_use_notice_access_and_opt_out_controls_as_applicable"
+      ],
+      "dates": {
+        "regulations_effective": "2026-01-01",
+        "significant_decision_admt_compliance": "2027-01-01"
+      },
+      "sources": [
+        "https://cppa.ca.gov/regulations/ccpa_updates.html",
+        "https://cppa.ca.gov/regulations/pdf/ccpa_statute_eff_20260101.pdf"
+      ]
+    },
+    {
+      "id": "IL",
+      "authority": "Illinois Biometric Information Privacy Act, 740 ILCS 14",
+      "applicability": "triggered_by_collection_or_possession_of_covered_biometric_identifiers_or_information",
+      "effective_state": "current_2026",
+      "controls": [
+        "keep_biometric_identification_disabled",
+        "before_collection_require_written_release_and_statutory_notice_if_bipa_applies",
+        "before_possession_publish_retention_and_destruction_policy_if_bipa_applies",
+        "do_not_sell_lease_trade_or_profit_from_covered_biometrics",
+        "destroy_covered_biometrics_when_initial_purpose_is_satisfied_or_within_three_years_of_last_interaction_whichever_is_first"
+      ],
+      "sources": [
+        "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=074000140K10",
+        "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=074000140K15"
+      ]
+    },
+    {
+      "id": "TX",
+      "authority": "Texas Business & Commerce Code Chapter 503 + TRAIGA",
+      "applicability": "chapter_503_triggered_by_commercial_biometric_capture;_traiga_applies_to_covered_ai_deployment",
+      "effective_state": "current_2026",
+      "controls": [
+        "keep_biometric_identification_disabled",
+        "before_commercial_biometric_capture_inform_individual_and_obtain_consent",
+        "do_not_infer_consent_from_publicly_available_media_except_as_statutorily_provided",
+        "keep_ai_uses_that_intentionally_manipulate_toward_harm_unlawful_discrimination_or_rights_violations_prohibited",
+        "do_not_treat_traiga_as_imposing_a_general_private_educational_chatbot_disclosure_duty",
+        "if_deployment_is_for_a_texas_governmental_entity_or_healthcare_use_reassess_traiga_disclosure_requirements"
+      ],
+      "dates": {
+        "traiga_effective": "2026-01-01",
+        "chapter_503_amendments_effective": "2026-01-01"
+      },
+      "sources": [
+        "https://statutes.capitol.texas.gov/Docs/BC/pdf/BC.503.pdf",
+        "https://www.texasattorneygeneral.gov/consumer-protection/file-consumer-complaint/consumer-ai-rights"
+      ]
+    }
+  ],
+  "invariants": [
+    "new_biometric_feature_requires_separate_legal_privacy_security_accessibility_review",
+    "jurisdictional_applicability_is_not_inferred_from_user_ip_or_location_alone",
+    "state_overlay_controls_do_not_grant_assessment_eligibility",
+    "consequential_ai_remains_disabled_until_separate_approval"
+  ]
+}

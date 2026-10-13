@@ -53,6 +53,10 @@ Every API response explicitly marks results:
 
 Downstream workflows must preserve paper ID, DOI/external IDs, title, authors, year, venue, Semantic Scholar URL, and retrieval time when a result is selected for evidence review.
 
-## Attribution
+## Attribution and license scope
 
-The public site includes `/research-sources/` with Semantic Scholar attribution. This supports the attribution requirement communicated with the approved API key.
+Public displays of Semantic Scholar API response data must identify Semantic Scholar, display the official Semantic Scholar logo, and link back to Semantic Scholar with the `utm_source=api` parameter. AutoLearnPro applies that attribution on the public research-sources page and the instructor research UI, and result links are normalized to retain the API attribution parameter.
+
+The logo asset committed with the integration is the official Semantic Scholar logo distributed from Semantic Scholar's own site/brand toolkit. Do not redraw, recolor, distort, or substitute an unofficial mark.
+
+Attribution is only one part of API-license compliance. The published API license limits the standard grant to the stated research/educational scope and directs users seeking other uses, including commercial use, to obtain an Expanded License or other written authorization. AutoLearnPro must not treat possession of an API key or attribution alone as proof that broader commercial use is authorized. The applicable API-key approval, Related Agreement, or written permission must be retained as compliance evidence before relying on Semantic Scholar API data for a use outside the standard grant.

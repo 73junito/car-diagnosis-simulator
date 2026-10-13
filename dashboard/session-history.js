@@ -33,14 +33,13 @@
     return String(ts);
   }
 
-  async function fetchEvents(sessionId, limit){
+  async function fetchEvents(classId, sessionId, limit){
+    if (!classId) return { ok: true, data: [] };
     const q = new URLSearchParams();
+    q.set('classId', classId);
     if (sessionId) q.set('session', sessionId);
     if (limit) q.set('limit', String(limit));
-    const path = '/api/telemetry/history?'+q.toString();
-    const res = await fetch(path, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Fetch failed: '+res.status);
-    return res.json();
+    return window.apiGet('/api/telemetry/history?' + q.toString());
   }
 
   function renderRows(events){
@@ -78,14 +77,23 @@
   function setEmpty(on){ $id('empty').hidden = !on }
 
   function doFetchAndRender(){
+    const classId = (typeof document !== 'undefined' && $id('history-class')) ? $id('history-class').value : '';
     const session = (typeof document !== 'undefined' && $id('session-filter')) ? $id('session-filter').value.trim() : null;
     const limit = (typeof document !== 'undefined' && $id('limit-select')) ? Number($id('limit-select').value) || 50 : 50;
+
+    if (!classId){
+      setLoading(false);
+      setError(null);
+      setEmpty(true);
+      renderRows([]);
+      return;
+    }
 
     setError(null);
     setEmpty(false);
     setLoading(true);
 
-    _inflight = fetchEvents(session, limit)
+    _inflight = fetchEvents(classId, session, limit)
       .then((data) => {
         _inflight = null;
         setLoading(false);
@@ -108,6 +116,10 @@
       .catch((err) => {
         _inflight = null;
         setLoading(false);
+        if (err?.status === 401 || err?.status === 403) {
+          window.location.replace('/sign-in/instructor/');
+          return;
+        }
         setError('Error fetching events');
         renderRows([]);
         setEmpty(true);
@@ -122,59 +134,128 @@
 
   // buildExportUrl is available at module scope so tests can import it
   function buildExportUrl(kind){
+    const classId = (typeof document !== 'undefined' && $id('history-class')) ? $id('history-class').value : '';
     const session = (typeof document !== 'undefined' && $id('session-filter')) ? $id('session-filter').value.trim() : '';
     const limit = (typeof document !== 'undefined' && $id('limit-select')) ? Number($id('limit-select').value) || 50 : 50;
     const q = new URLSearchParams();
+    if (classId) q.set('classId', classId);
     if (session) q.set('session', session);
     if (limit) q.set('limit', String(limit));
     const ext = kind === 'csv' ? 'csv' : 'json';
     return '/api/telemetry/export.' + ext + (q.toString() ? ('?' + q.toString()) : '');
   }
 
-  function initSessionHistory(){
+  async function downloadTelemetry(kind){
+    const classId = $id('history-class')?.value || '';
+    const exportStatus = $id('export-status');
+    if (!classId){
+      if (exportStatus) exportStatus.textContent = 'Select a class before exporting.';
+      return;
+    }
+
+    const token = window.getAccessToken ? window.getAccessToken() : null;
+    if (!token){
+      window.location.replace('/sign-in/instructor/');
+      return;
+    }
+
+    const base = window.API_BASE_URL ? String(window.API_BASE_URL).replace(/\/$/, '') : '';
+    const url = base + buildExportUrl(kind);
+    if (exportStatus) exportStatus.textContent = 'Preparing download…';
+
+    try {
+      const res = await fetch(url, {
+        headers: { Authorization: 'Bearer ' + token },
+        credentials: 'same-origin',
+        cache: 'no-store'
+      });
+      if (res.status === 401 || res.status === 403){
+        window.location.replace('/sign-in/instructor/');
+        return;
+      }
+      if (!res.ok){
+        if (exportStatus) exportStatus.textContent = 'Export failed (' + res.status + ').';
+        return;
+      }
+
+      const blob = await res.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = objectUrl;
+      a.download = kind === 'csv' ? 'session-history.csv' : 'session-history.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(objectUrl);
+      if (exportStatus) exportStatus.textContent = 'Export ready.';
+    } catch (err) {
+      if (exportStatus) exportStatus.textContent = 'Unable to export telemetry.';
+    }
+  }
+
+  async function initSessionHistory(){
     try{
+      const token = window.getAccessToken ? window.getAccessToken() : null;
+      if (!token){
+        window.location.replace('/sign-in/instructor/');
+        return;
+      }
+
+      const classSelect = $id('history-class');
       const sessionInput = $id('session-filter');
       const limitSelect = $id('limit-select');
-      sessionInput.addEventListener('input', scheduleFetch);
-      limitSelect.addEventListener('change', scheduleFetch);
-      // Export buttons
       const exportJson = $id('export-json-btn');
       const exportCsv = $id('export-csv-btn');
       const exportStatus = $id('export-status');
-      const setExportLoading = (on) => {
-        if (exportJson) exportJson.disabled = on;
-        if (exportCsv) exportCsv.disabled = on;
-        if (exportStatus) exportStatus.textContent = on ? 'Preparing download…' : '';
-      };
 
-      // buildExportUrl is defined at module scope
-
-      const triggerDownload = (url) => {
-        // create temporary anchor and click to trigger browser download/navigation
-        const a = document.createElement('a');
-        a.href = url;
-        a.rel = 'noopener';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        try{ a.click(); }catch(e){ window.location.href = url }
-        document.body.removeChild(a);
-      };
-
-      
-      if (exportJson) exportJson.addEventListener('click', async ()=>{
-        setExportLoading(true);
-        const url = buildExportUrl('json');
-        triggerDownload(url);
-        setExportLoading(false);
+      sessionInput.addEventListener('input', scheduleFetch);
+      limitSelect.addEventListener('change', scheduleFetch);
+      classSelect.addEventListener('change', () => {
+        const hasClass = Boolean(classSelect.value);
+        sessionInput.disabled = !hasClass;
+        if (exportJson) exportJson.disabled = !hasClass;
+        if (exportCsv) exportCsv.disabled = !hasClass;
+        scheduleFetch();
       });
-      if (exportCsv) exportCsv.addEventListener('click', async ()=>{
-        setExportLoading(true);
-        const url = buildExportUrl('csv');
-        triggerDownload(url);
-        setExportLoading(false);
-      });
-      // initial fetch
-      scheduleFetch();
+
+      if (exportJson) exportJson.addEventListener('click', () => downloadTelemetry('json'));
+      if (exportCsv) exportCsv.addEventListener('click', () => downloadTelemetry('csv'));
+      if (exportStatus) exportStatus.textContent = '';
+
+      try {
+        const result = await window.apiGet('/api/classes');
+        const classes = Array.isArray(result?.classes) ? result.classes : [];
+        classSelect.replaceChildren();
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = classes.length ? 'Select a class' : 'No classes available';
+        classSelect.appendChild(placeholder);
+
+        for (const cls of classes){
+          const option = document.createElement('option');
+          option.value = cls.id;
+          option.textContent = cls.name;
+          classSelect.appendChild(option);
+        }
+
+        if (classes.length === 1){
+          classSelect.value = classes[0].id;
+          sessionInput.disabled = false;
+          if (exportJson) exportJson.disabled = false;
+          if (exportCsv) exportCsv.disabled = false;
+          scheduleFetch();
+        } else {
+          if (exportJson) exportJson.disabled = true;
+          if (exportCsv) exportCsv.disabled = true;
+          setEmpty(true);
+        }
+      } catch (err) {
+        if (err?.status === 401 || err?.status === 403) {
+          window.location.replace('/sign-in/instructor/');
+          return;
+        }
+        setError('Unable to load owned classes');
+      }
     }catch(e){ void e; }
   }
 

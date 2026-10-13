@@ -24,8 +24,8 @@ describe('Curriculum evidence review API contract', () => {
   })
 
   test('restricts evidence review actions to instructor-level roles', () => {
-    expect(route).toContain("new Set(['teacher', 'instructor', 'professor', 'admin'])")
-    expect(route).toContain('EVIDENCE_REVIEW_ROLES.has')
+    expect(route).toContain("import { isInstructorOrAdminRole } from '../auth/role-policy.js'")
+    expect(route).toContain('isInstructorOrAdminRole(auth.role)')
     expect(route).toContain('Teacher, instructor, professor, or admin access required')
   })
 

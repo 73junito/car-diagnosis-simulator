@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "7F-R",
+  "purpose": "batch-011-canonical-blocker-resolution-delivery-execution",
+  "sourceDeliveryPhase": "7F-R",
+  "status": "page-built-verified",
+  "rationale": "Build the exact three evidence-supported Batch 011 candidates produced by the Phase 7F-Q re-audit.",
+  "courses": [
+    {
+      "courseId": "aut-150",
+      "code": "AUT 150",
+      "title": "Steering, Suspension, and Wheel Alignment",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut150-steering-suspension-alignment",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 115",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-150/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-210",
+      "code": "AUT 210",
+      "title": "Engine Performance and Fuel Systems",
+      "academicLevel": "undergraduate",
+      "lessonPlanId": "ug-aut210-engine-performance-fuel-systems",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 200, AUT 120",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-210/index.html",
+      "deliveryStatus": "page-built"
+    },
+    {
+      "courseId": "aut-525",
+      "code": "AUT 525",
+      "title": "Experimental Methods in Automotive Technology",
+      "academicLevel": "graduate",
+      "lessonPlanId": "grad-aut525-experimental-methods",
+      "mappingType": "canonical-catalog-course",
+      "prerequisitesText": "AUT 501",
+      "prerequisiteType": "course-prerequisite-condition",
+      "prerequisiteDisposition": "requires-human-or-institutional-verification",
+      "targetPage": "exam-site/courses/aut-525/index.html",
+      "deliveryStatus": "page-built"
+    }
+  ],
+  "boundaries": {
+    "coursesBuiltByThisPhase": 3,
+    "academicStatusChanges": 0,
+    "assessmentEligibilityChanges": 0,
+    "assessmentAuthorization": false,
+    "productionReadyClaims": 0
+  },
+  "previousPlan": {
+    "phase": "7F-P",
+    "status": "page-built-verified",
+    "coursesBuiltByThisPhase": 2
+  },
+  "completedInPhase": "7F-R"
+}

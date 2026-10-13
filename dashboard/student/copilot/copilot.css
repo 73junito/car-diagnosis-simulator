@@ -1,0 +1,59 @@
+.copilot-boundary {
+  max-width: 72ch;
+}
+
+.copilot-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.copilot-form label {
+  display: grid;
+  gap: .4rem;
+  font-weight: 600;
+}
+
+.copilot-form input,
+.copilot-form select,
+.copilot-form textarea {
+  width: 100%;
+  font: inherit;
+  padding: .7rem .8rem;
+  border: 1px solid var(--tm-border, #c7ced8);
+  border-radius: .6rem;
+  background: var(--tm-surface, #fff);
+  color: inherit;
+}
+
+.copilot-vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: .75rem;
+}
+
+.copilot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.copilot-verification {
+  font-weight: 700;
+}
+
+.copilot-model-status {
+  font-size: .9rem;
+  opacity: .8;
+}
+
+@media (max-width: 760px) {
+  .copilot-vehicle-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .copilot-vehicle-grid {
+    grid-template-columns: 1fr;
+  }
+}

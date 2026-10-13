@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Student Workspace - TorqueMind</title>
+  <title>Student Workspace | AutoLearnPro</title>
 
   <link rel="stylesheet" href="/theme/tokens.css">
   <link rel="stylesheet" href="/theme/layout.css">
@@ -19,40 +19,78 @@
 
     <nav class="tm-filter-toolbar" aria-label="Student workspace navigation">
       <a class="tm-btn tm-btn-secondary" href="/dashboard/student/">Scenarios</a>
-      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/transcript/">Transcript</a>
       <a class="tm-btn tm-btn-secondary" href="/dashboard/student/learning-path/">Learning Path</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/transcript/" aria-current="page">Transcript</a>
       <a class="tm-btn tm-btn-secondary" href="/dashboard/student/coach/">Coach</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/copilot/">Diagnostic Copilot</a>
       <a class="tm-btn tm-btn-secondary" href="/dashboard/student/activity/">Activity</a>
+      <a class="tm-btn tm-btn-secondary" href="/reference-library/">Reference Library</a>
     </nav>
 
-    <section id="moduleContent" class="dashboard-card"><div class="tm-transcript-card__grid">
-  <article>
-    <span>Completed</span>
-    <strong id="completedCount">0</strong>
-    <small>Scenarios finished</small>
-  </article>
-  <article>
-    <span>Average Score</span>
-    <strong id="averageScore">--</strong>
-    <small>Pending submissions</small>
-  </article>
-  <article>
-    <span>Certificates</span>
-    <strong id="certificateCount">0</strong>
-    <small>Earned credentials</small>
-  </article>
-  <article>
-    <span>Training Hours</span>
-    <strong id="trainingHours">0.0</strong>
-    <small>Total practice time</small>
-  </article>
-</div></section>
+    <section class="tm-panel" aria-labelledby="transcript-summary-heading">
+      <div>
+        <p class="tm-eyebrow">Learning history</p>
+        <h2 id="transcript-summary-heading">Progress summary</h2>
+        <p id="transcriptStatus" role="status" aria-live="polite">Loading your learning history…</p>
+      </div>
+
+      <div class="tm-transcript-card__grid">
+        <article>
+          <span>Total Records</span>
+          <strong id="totalRecordCount">0</strong>
+          <small>Practice and assessment records</small>
+        </article>
+        <article>
+          <span>Completed</span>
+          <strong id="completedCount">0</strong>
+          <small>Completed learning records</small>
+        </article>
+        <article>
+          <span>Practice</span>
+          <strong id="practiceCount">0</strong>
+          <small>Training-mode records</small>
+        </article>
+        <article>
+          <span>Assessment</span>
+          <strong id="assessmentCount">0</strong>
+          <small>Independent assessment records</small>
+        </article>
+      </div>
+
+      <p id="transcriptInterpretation">
+        This is an AutoLearnPro learning-history view, not an academic transcript, credential, certificate, or record of institutional credit.
+      </p>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="practice-history-heading">
+      <h2 id="practice-history-heading">Practice History</h2>
+      <p>Practice results are training records. They are not institutional grades or academic credit.</p>
+      <div id="practiceRecords" class="tm-card-grid"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="assessment-history-heading">
+      <h2 id="assessment-history-heading">Assessment History</h2>
+      <p>Assessment scores appear only when the server record is finalized and contains a trusted score.</p>
+      <div id="assessmentRecords" class="tm-card-grid"></div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="unclassified-history-heading" id="unclassifiedSection" hidden>
+      <h2 id="unclassified-history-heading">Other Learning Records</h2>
+      <p>These records use a delivery mode that AutoLearnPro does not currently classify as practice or assessment.</p>
+      <div id="unclassifiedRecords" class="tm-card-grid"></div>
+    </section>
   </main>
 
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
   <script type="module">
     import { mountShell } from "/theme/shell.js";
     mountShell();
   </script>
+  <script src="./transcript.js" defer></script>
 </body>
 </html>
 

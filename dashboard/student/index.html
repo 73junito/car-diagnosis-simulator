@@ -37,7 +37,9 @@
         <summary>More tools</summary>
         <nav class="student-more-tools__links" aria-label="Additional student tools">
           <a href="/dashboard/student/coach/">Coach</a>
+          <a href="/dashboard/student/copilot/">Diagnostic Copilot</a>
           <a href="/dashboard/student/activity/">Activity</a>
+          <a href="/reference-library/">Reference Library</a>
           <a href="/dashboard/student/starting-system-lab/">12 V Starting Lab</a>
           <a href="/dashboard/student/relay-load-lab/">12 V Relay Load Lab</a>
           <a href="/dashboard/student/sensor-lab/">12 V Sensor Lab</a>
@@ -46,6 +48,12 @@
           <a href="/dashboard/student/multivoltage-lab/">Electrified Multi-Voltage Lab</a>
         </nav>
       </details>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="student-institution-claim-heading">
+      <h2 id="student-institution-claim-heading">Institution Affiliation</h2>
+      <p id="studentInstitutionClaimStatus" role="status" aria-live="polite">Checking institution affiliation…</p>
+      <div id="studentInstitutionClaimDetails"></div>
     </section>
 
     <section class="student-progress-overview" aria-label="Student progress summary">
@@ -143,6 +151,7 @@
     mountShell();
   </script>
   <script src="../api-origin.js" defer></script>
+  <script src="./institution-claim.js" defer></script>
   <script src="./student.js" defer></script>
   <script>
     // render full scenario grid on student dashboard using SCENARIO_REGISTRY
@@ -483,7 +492,7 @@
 
 
 <div id="torquemindFeedback" class="dashboard-card" style="display:none;">
-    <h2>TorqueMind AI Tutor</h2>
+    <h2>AutoLearnPro AI Tutor</h2>
     <div id="torquemindContent"></div>
 </div>
 

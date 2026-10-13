@@ -12,6 +12,19 @@
   const saveToLibraryButton = document.getElementById("saveToLibraryBtn");
   const librarySearchInput = document.getElementById("librarySearchInput");
   const scenarioLibraryList = document.getElementById("scenarioLibraryList");
+  const authorAccessStatus = document.getElementById("authorAccessStatus");
+  const requestReviewButton = document.getElementById("requestReviewBtn");
+  const requestPublicationButton = document.getElementById("requestPublicationBtn");
+  const draftLifecycleStatus = document.getElementById("draftLifecycleStatus");
+  const evidenceSearchInput = document.getElementById("evidenceSearchInput");
+  const evidenceSearchButton = document.getElementById("evidenceSearchBtn");
+  const evidenceSearchResults = document.getElementById("evidenceSearchResults");
+  const linkedEvidenceList = document.getElementById("linkedEvidenceList");
+  const evidenceStatus = document.getElementById("evidenceStatus");
+  let currentDraft = null;
+  let linkedEvidence = [];
+  let serverDrafts = [];
+  let autosaveTimer = null;
 
   const fields = {
     title: document.getElementById("scenarioTitle"),
@@ -118,6 +131,215 @@
     if (validationStatus) validationStatus.textContent = message;
   }
 
+  function setLifecycleStatus(message) {
+    if (draftLifecycleStatus) draftLifecycleStatus.textContent = message;
+  }
+
+  function reviewEditable(draft) {
+    return !draft || draft.reviewStatus === "not_requested" || draft.reviewStatus === "changes_requested";
+  }
+
+  function applyDraftLifecycle() {
+    const editable = reviewEditable(currentDraft);
+    Object.values(fields).forEach((field) => {
+      if (field) field.disabled = !editable;
+    });
+    if (saveButton) saveButton.disabled = !editable;
+    if (saveToLibraryButton) saveToLibraryButton.disabled = !editable;
+    if (requestReviewButton) {
+      requestReviewButton.disabled = !currentDraft || !editable;
+    }
+    if (requestPublicationButton) {
+      requestPublicationButton.disabled = !currentDraft ||
+        currentDraft.reviewStatus !== "review_complete" ||
+        (currentDraft.publicationStatus || "unpublished") !== "unpublished" ||
+        linkedEvidence.length < 1;
+    }
+    if (evidenceSearchButton) evidenceSearchButton.disabled = !currentDraft || !editable;
+    if (evidenceSearchInput) evidenceSearchInput.disabled = !currentDraft || !editable;
+
+    if (!currentDraft) {
+      setLifecycleStatus("Unsaved draft. Autosave begins after the first explicit save.");
+      return;
+    }
+
+    const status = currentDraft.reviewStatus || "not_requested";
+    const publicationStatus = currentDraft.publicationStatus || "unpublished";
+    if (publicationStatus === "pending") {
+      setLifecycleStatus("Publication approval pending. The reviewed draft is locked; publication approval does not grant assessment eligibility.");
+    } else if (publicationStatus === "published") {
+      setLifecycleStatus("Publication approved. This governed approval does not grant learner delivery, scoring, or assessment eligibility.");
+    } else if (publicationStatus === "changes_requested") {
+      setLifecycleStatus("Publication changes requested" + (currentDraft.publicationNote ? ": " + currentDraft.publicationNote : "") + ". Review is reopened before publication can be requested again.");
+    } else if (status === "pending") {
+      setLifecycleStatus("Review pending. Editing and autosave are locked until an administrator responds.");
+    } else if (status === "changes_requested") {
+      setLifecycleStatus("Changes requested" + (currentDraft.reviewNote ? ": " + currentDraft.reviewNote : "") + ". Editing and autosave are enabled.");
+    } else if (status === "review_complete") {
+      setLifecycleStatus(linkedEvidence.length
+        ? "Review complete with governed evidence. Publication approval may now be requested."
+        : "Review complete. Link at least one governed evidence source before requesting publication approval.");
+    } else {
+      setLifecycleStatus("Private draft v" + currentDraft.version + ". Autosave is active after changes.");
+    }
+  }
+
+  function evidenceLocation(item) {
+    const parts = [item.section, item.locator].filter(Boolean);
+    if (item.pageStart) parts.push("p. " + item.pageStart + (item.pageEnd && item.pageEnd !== item.pageStart ? "–" + item.pageEnd : ""));
+    return parts.join(" · ");
+  }
+
+  function renderLinkedEvidence() {
+    if (!linkedEvidenceList) return;
+    linkedEvidenceList.innerHTML = "";
+    if (!linkedEvidence.length) {
+      const empty = document.createElement("li");
+      empty.textContent = currentDraft ? "No approved evidence linked yet." : "Save a draft before linking evidence.";
+      linkedEvidenceList.appendChild(empty);
+      return;
+    }
+
+    linkedEvidence.forEach((link) => {
+      const item = document.createElement("li");
+      const title = document.createElement("strong");
+      title.textContent = (link.source && link.source.title) || link.sourceId;
+      const detail = document.createElement("span");
+      const location = evidenceLocation(link.chunk || {});
+      detail.textContent = " · " + link.evidenceRole.replaceAll("-", " ") + " · " + link.claimText +
+        (location ? " · " + location : "");
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "tm-btn tm-btn-secondary";
+      remove.textContent = "Unlink";
+      remove.disabled = !reviewEditable(currentDraft);
+      remove.addEventListener("click", async () => {
+        if (!currentDraft) return;
+        try {
+          await window.apiDelete(
+            "/api/author/drafts/" + encodeURIComponent(currentDraft.id) +
+            "/evidence/" + encodeURIComponent(link.id)
+          );
+          await loadLinkedEvidence();
+          if (evidenceStatus) evidenceStatus.textContent = "Evidence link removed.";
+        } catch (error) {
+          if (evidenceStatus) evidenceStatus.textContent = "Unable to remove evidence link.";
+        }
+      });
+
+      item.append(title, detail, document.createTextNode(" "), remove);
+      linkedEvidenceList.appendChild(item);
+    });
+  }
+
+  async function loadLinkedEvidence() {
+    if (!currentDraft) {
+      linkedEvidence = [];
+      renderLinkedEvidence();
+      return;
+    }
+    const response = await window.apiGet(
+      "/api/author/drafts/" + encodeURIComponent(currentDraft.id) + "/evidence"
+    );
+    linkedEvidence = Array.isArray(response && response.links) ? response.links : [];
+    renderLinkedEvidence();
+    applyDraftLifecycle();
+  }
+
+  function renderEvidenceSearchResults(results) {
+    if (!evidenceSearchResults) return;
+    evidenceSearchResults.innerHTML = "";
+    if (!results.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "No approved evidence matched the search.";
+      evidenceSearchResults.appendChild(empty);
+      return;
+    }
+
+    results.forEach((result) => {
+      const item = document.createElement("li");
+      const title = document.createElement("strong");
+      title.textContent = result.sourceTitle || result.sourceId;
+      const detail = document.createElement("span");
+      const location = evidenceLocation(result);
+      detail.textContent = " · " + result.chunkId + (location ? " · " + location : "");
+
+      const role = document.createElement("select");
+      [
+        ["supports-scenario", "Supports scenario"],
+        ["supports-diagnosis", "Supports diagnosis"],
+        ["supports-repair", "Supports repair"],
+        ["research-reference", "Research reference"]
+      ].forEach(([value, label]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        role.appendChild(option);
+      });
+
+      const claim = document.createElement("input");
+      claim.type = "text";
+      claim.maxLength = 1000;
+      claim.placeholder = "Claim or decision this source supports";
+
+      const linkButton = document.createElement("button");
+      linkButton.type = "button";
+      linkButton.className = "tm-btn tm-btn-primary";
+      linkButton.textContent = "Link";
+      linkButton.disabled = !currentDraft || !reviewEditable(currentDraft);
+      linkButton.addEventListener("click", async () => {
+        if (!currentDraft) return;
+        const claimText = claim.value.trim();
+        if (!claimText) {
+          if (evidenceStatus) evidenceStatus.textContent = "Describe the claim this evidence supports.";
+          claim.focus();
+          return;
+        }
+        try {
+          await window.apiPost(
+            "/api/author/drafts/" + encodeURIComponent(currentDraft.id) + "/evidence",
+            {
+              sourceId: result.sourceId,
+              chunkId: result.chunkId,
+              evidenceRole: role.value,
+              claimText
+            }
+          );
+          claim.value = "";
+          await loadLinkedEvidence();
+          if (evidenceStatus) evidenceStatus.textContent = "Approved evidence linked to the private draft.";
+        } catch (error) {
+          if (evidenceStatus) {
+            evidenceStatus.textContent = error && error.status === 409
+              ? "Evidence link rejected or already exists."
+              : "Unable to link approved evidence.";
+          }
+        }
+      });
+
+      item.append(title, detail, document.createElement("br"), role, document.createTextNode(" "), claim, document.createTextNode(" "), linkButton);
+      evidenceSearchResults.appendChild(item);
+    });
+  }
+
+  async function searchApprovedEvidence() {
+    if (!currentDraft) {
+      if (evidenceStatus) evidenceStatus.textContent = "Save the draft before linking evidence.";
+      return;
+    }
+    const query = evidenceSearchInput ? evidenceSearchInput.value.trim() : "";
+    try {
+      if (evidenceStatus) evidenceStatus.textContent = "Searching approved evidence…";
+      const response = await window.apiGet("/api/author/evidence-sources?query=" + encodeURIComponent(query));
+      const results = Array.isArray(response && response.results) ? response.results : [];
+      renderEvidenceSearchResults(results);
+      if (evidenceStatus) evidenceStatus.textContent = results.length + " approved evidence result" + (results.length === 1 ? "" : "s") + ".";
+    } catch (error) {
+      if (evidenceStatus) evidenceStatus.textContent = "Approved evidence search unavailable.";
+    }
+  }
+
   function renderChecklist(items) {
     if (!checklist) return;
 
@@ -132,38 +354,6 @@
     }
   }
 
-  function seedDemoData() {
-    const demoValues = {
-      title: "No-start after overnight soak",
-      complaint: "Customer states the vehicle cranks but will not start after sitting overnight.",
-      year: "2018",
-      make: "Ford",
-      model: "F-150",
-      engine: "5.0L V8",
-      mileage: "84200",
-      system: "Engine Performance",
-      primaryDtc: "P0335",
-      dtcDescription: "Crankshaft Position Sensor A Circuit",
-      freezeFrame: "RPM 0, ECT 42°F, battery voltage 12.1V during crank.",
-      rpm: "0",
-      voltage: "12.1",
-      coolant: "42°F",
-      fuelTrim: "+18%",
-      initialTest: "Verify crank signal while cranking",
-      expectedFinding: "No RPM signal during crank",
-      rootCause: "Failed crankshaft position sensor",
-      recommendedRepair: "Replace crankshaft position sensor, clear codes, and verify restart.",
-      aseArea: "A8 Engine Performance",
-      safetyCriteria: "Uses safe test procedures and avoids unnecessary part replacement.",
-      diagnosticCriteria: "Uses evidence to isolate the fault before repair.",
-      verificationCriteria: "Confirms repair with restart, code clear, and no returning faults."
-    };
-
-    Object.entries(demoValues).forEach(([key, demoValue]) => {
-      const field = fields[key];
-      if (field && !value(field)) field.value = demoValue;
-    });
-  }
   function renderPreview() {
     const title = value(fields.title);
     const complaint = value(fields.complaint);
@@ -223,7 +413,7 @@
   function validateScenario() {
     const items = getValidationItems();
     const ready = items.every(([, valid]) => Boolean(valid));
-    setStatus(ready ? "Ready" : "Needs Data");
+    setStatus(ready ? "Draft Valid" : "Draft Needs Data");
     renderChecklist(items);
     renderJsonPreview();
     return ready;
@@ -298,28 +488,10 @@
     setStatus("Template Loaded");
   }
 
-  const libraryStorageKey = "torquemind.scenarioLibrary";
-
-  function readLibrary() {
-    try {
-      return JSON.parse(localStorage.getItem(libraryStorageKey) || "[]");
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function writeLibrary(items) {
-    localStorage.setItem(libraryStorageKey, JSON.stringify(items));
-  }
-
-  function scenarioSearchText(scenario) {
+  function scenarioSearchText(draft) {
     return [
-      scenario.title,
-      scenario.vehicle && scenario.vehicle.year,
-      scenario.vehicle && scenario.vehicle.make,
-      scenario.vehicle && scenario.vehicle.model,
-      scenario.evidence && scenario.evidence.dtcs && scenario.evidence.dtcs[0] && scenario.evidence.dtcs[0].code,
-      scenario.rubric && scenario.rubric.aseArea
+      draft.title,
+      draft.scenarioKey
     ].filter(Boolean).join(" ").toLowerCase();
   }
 
@@ -327,47 +499,66 @@
     if (!scenarioLibraryList) return;
 
     const query = librarySearchInput ? librarySearchInput.value.trim().toLowerCase() : "";
-    const library = readLibrary();
     const filtered = query
-      ? library.filter((scenario) => scenarioSearchText(scenario).includes(query))
-      : library;
+      ? serverDrafts.filter((draft) => scenarioSearchText(draft).includes(query))
+      : serverDrafts;
 
     scenarioLibraryList.innerHTML = "";
 
     if (!filtered.length) {
       const empty = document.createElement("li");
-      empty.textContent = library.length ? "No matching scenarios." : "No saved scenarios yet.";
+      empty.textContent = serverDrafts.length ? "No matching drafts." : "No saved drafts yet.";
       scenarioLibraryList.appendChild(empty);
       return;
     }
 
-    filtered.forEach((scenario) => {
+    filtered.forEach((draft) => {
       const item = document.createElement("li");
-      item.dataset.scenarioId = scenario.id;
+      item.dataset.draftId = draft.id;
 
       const title = document.createElement("strong");
-      title.textContent = scenario.title || "Untitled Scenario";
+      title.textContent = draft.title || "Untitled Scenario";
+
+      const version = document.createElement("span");
+      version.textContent = " v" + String(draft.version || 1) +
+        " · review " + String(draft.reviewStatus || "not_requested").replaceAll("_", " ") +
+        " · publication " + String(draft.publicationStatus || "unpublished").replaceAll("_", " ");
 
       const load = document.createElement("button");
       load.type = "button";
       load.className = "tm-btn tm-btn-secondary";
       load.textContent = "Load";
-      load.addEventListener("click", () => {
-        loadScenario(scenario);
-        setStatus("Library Loaded");
+      load.addEventListener("click", async () => {
+        try {
+          const response = await window.apiGet("/api/author/drafts/" + encodeURIComponent(draft.id));
+          currentDraft = response.draft;
+          loadScenario(currentDraft.scenario);
+          applyDraftLifecycle();
+          await loadLinkedEvidence();
+          setStatus("Draft Loaded · v" + currentDraft.version);
+        } catch (error) {
+          setStatus(error && error.status === 404 ? "Draft Not Found" : "Load Failed");
+        }
       });
 
       const remove = document.createElement("button");
       remove.type = "button";
       remove.className = "tm-btn tm-btn-secondary";
       remove.textContent = "Delete";
-      remove.addEventListener("click", () => {
-        writeLibrary(readLibrary().filter((saved) => saved.id !== scenario.id));
-        renderLibrary();
-        setStatus("Library Updated");
+      remove.disabled = draft.reviewStatus !== "not_requested";
+      remove.addEventListener("click", async () => {
+        try {
+          await window.apiDelete("/api/author/drafts/" + encodeURIComponent(draft.id));
+          if (currentDraft && currentDraft.id === draft.id) currentDraft = null;
+          await loadDraftLibrary();
+          setStatus("Draft Deleted");
+        } catch (error) {
+          setStatus("Delete Failed");
+        }
       });
 
       item.appendChild(title);
+      item.appendChild(version);
       item.appendChild(document.createTextNode(" "));
       item.appendChild(load);
       item.appendChild(document.createTextNode(" "));
@@ -377,19 +568,123 @@
     });
   }
 
-  function saveToLibrary() {
-    const scenario = buildScenario();
-    const library = readLibrary().filter((saved) => saved.id !== scenario.id);
-
-    library.unshift({
-      ...scenario,
-      savedAt: new Date().toISOString()
-    });
-
-    writeLibrary(library);
+  async function loadDraftLibrary() {
+    const response = await window.apiGet("/api/author/drafts?limit=100");
+    serverDrafts = Array.isArray(response && response.drafts) ? response.drafts : [];
     renderLibrary();
-    setStatus("Saved to Library");
   }
+
+  function syncDraftSummary(draft) {
+    if (!draft) return;
+    serverDrafts = [draft, ...serverDrafts.filter((item) => item.id !== draft.id)];
+    renderLibrary();
+  }
+
+  async function saveDraft(options = {}) {
+    const autosave = Boolean(options.autosave);
+    if (currentDraft && !reviewEditable(currentDraft)) {
+      setLifecycleStatus("This draft is locked while review is pending or complete.");
+      return false;
+    }
+
+    const scenario = buildScenario();
+    try {
+      if (autosave) setLifecycleStatus("Autosaving private draft…");
+      const response = currentDraft
+        ? await window.apiPatch("/api/author/drafts/" + encodeURIComponent(currentDraft.id), {
+            version: currentDraft.version,
+            scenario
+          })
+        : await window.apiPost("/api/author/drafts", { scenario });
+
+      currentDraft = response.draft;
+      syncDraftSummary(currentDraft);
+      applyDraftLifecycle();
+      if (!autosave) await loadLinkedEvidence();
+      setStatus((autosave ? "Autosaved" : "Saved Draft") + " · v" + currentDraft.version);
+      return true;
+    } catch (error) {
+      if (error && error.status === 409) {
+        setStatus("Draft Changed · Reload Required");
+        setLifecycleStatus("Autosave stopped because the server draft changed. Reload before editing.");
+        return false;
+      }
+      setStatus(autosave ? "Autosave Failed" : "Save Failed");
+      return false;
+    }
+  }
+
+  function scheduleAutosave() {
+    if (!currentDraft || !reviewEditable(currentDraft)) return;
+    if (autosaveTimer) window.clearTimeout(autosaveTimer);
+    autosaveTimer = window.setTimeout(() => {
+      autosaveTimer = null;
+      saveDraft({ autosave: true });
+    }, 1500);
+  }
+
+  async function requestReview() {
+    if (!validateScenario()) {
+      setLifecycleStatus("Complete the validation checklist before requesting review.");
+      return;
+    }
+
+    if (autosaveTimer) {
+      window.clearTimeout(autosaveTimer);
+      autosaveTimer = null;
+    }
+
+    const saved = await saveDraft();
+    if (!saved || !currentDraft) return;
+
+    try {
+      const response = await window.apiPost(
+        "/api/author/drafts/" + encodeURIComponent(currentDraft.id) + "/review-request",
+        { version: currentDraft.version }
+      );
+      currentDraft = response.draft;
+      syncDraftSummary(currentDraft);
+      applyDraftLifecycle();
+      setStatus("Review Requested");
+    } catch (error) {
+      if (error && error.status === 409) {
+        setStatus("Review Request Conflict");
+        setLifecycleStatus("Reload the server draft before requesting review.");
+        return;
+      }
+      setStatus("Review Request Failed");
+    }
+  }
+
+  async function requestPublication() {
+    if (!currentDraft || currentDraft.reviewStatus !== "review_complete") {
+      setLifecycleStatus("Complete governed review before requesting publication approval.");
+      return;
+    }
+    if (!linkedEvidence.length) {
+      setLifecycleStatus("Link at least one governed evidence source before requesting publication approval.");
+      return;
+    }
+
+    try {
+      const response = await window.apiPost(
+        "/api/author/drafts/" + encodeURIComponent(currentDraft.id) + "/publication-request",
+        { version: currentDraft.version }
+      );
+      currentDraft = response.draft;
+      syncDraftSummary(currentDraft);
+      applyDraftLifecycle();
+      setStatus("Publication Approval Requested");
+    } catch (error) {
+      if (error && error.status === 409) {
+        setStatus("Publication Request Conflict");
+        setLifecycleStatus("Reload the server draft and confirm review/evidence state before requesting publication.");
+        return;
+      }
+      setStatus("Publication Request Failed");
+    }
+  }
+
   function exportScenario() {
     const scenario = buildScenario();
     const blob = new Blob([JSON.stringify(scenario, null, 2)], {
@@ -404,8 +699,14 @@
   }
 
   Object.values(fields).forEach((field) => {
-    if (field) field.addEventListener("input", renderPreview);
-    if (field) field.addEventListener("change", renderPreview);
+    if (field) field.addEventListener("input", () => {
+      renderPreview();
+      scheduleAutosave();
+    });
+    if (field) field.addEventListener("change", () => {
+      renderPreview();
+      scheduleAutosave();
+    });
   });
 
   if (validateButton) {
@@ -413,7 +714,7 @@
   }
 
   if (saveToLibraryButton) {
-    saveToLibraryButton.addEventListener("click", saveToLibrary);
+    saveToLibraryButton.addEventListener("click", saveDraft);
   }
 
   if (librarySearchInput) {
@@ -421,9 +722,26 @@
   }
 
   if (saveButton) {
-    saveButton.addEventListener("click", () => {
-      renderJsonPreview();
-      setStatus("Saved");
+    saveButton.addEventListener("click", () => saveDraft());
+  }
+
+  if (requestReviewButton) {
+    requestReviewButton.addEventListener("click", requestReview);
+  }
+
+  if (requestPublicationButton) {
+    requestPublicationButton.addEventListener("click", requestPublication);
+  }
+
+  if (evidenceSearchButton) {
+    evidenceSearchButton.addEventListener("click", searchApprovedEvidence);
+  }
+  if (evidenceSearchInput) {
+    evidenceSearchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        searchApprovedEvidence();
+      }
     });
   }
 
@@ -450,10 +768,31 @@
     loadSelectedTemplate
   };
 
-  seedDemoData();
-  renderPreview();
-  renderLibrary();
-  document.body.dataset.authoringStudioReady = "true";
+  async function initializeAuthoring() {
+    const token = window.getAccessToken ? window.getAccessToken() : null;
+    if (!token) {
+      window.location.replace("/sign-in/instructor/");
+      return;
+    }
+
+    try {
+      await loadDraftLibrary();
+      if (authorAccessStatus) authorAccessStatus.textContent = "Verified author · governed review and publication";
+      renderPreview();
+      applyDraftLifecycle();
+      renderLinkedEvidence();
+      document.body.dataset.authoringStudioReady = "true";
+    } catch (error) {
+      if (error && (error.status === 401 || error.status === 403)) {
+        window.location.replace("/sign-in/instructor/");
+        return;
+      }
+      if (authorAccessStatus) authorAccessStatus.textContent = "Authoring unavailable";
+      setStatus("Unavailable");
+    }
+  }
+
+  initializeAuthoring();
 })();
 
 

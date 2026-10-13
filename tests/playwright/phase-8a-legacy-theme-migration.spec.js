@@ -7,13 +7,14 @@ const targets = [
   '/dashboard/live-session.html',
   '/dashboard_live.html',
   '/dashboard_test.html',
-  '/main_index.html',
-  '/temp_home.html',
 ];
 
 test.describe('Phase 8A legacy theme migration', () => {
   for (const route of targets) {
     test(route + ' uses canonical light rendering', async ({ page }) => {
+      if (route === '/dashboard/live-session.html') {
+        await page.route('**/dashboard/live-session.js', (request) => request.abort());
+      }
       await page.goto(route, { waitUntil: 'domcontentloaded' });
       const stylesheets = await page.locator('link[rel="stylesheet"]').evaluateAll((els) =>
         els.map((el) => el.getAttribute('href'))
@@ -43,17 +44,6 @@ test.describe('Phase 8A legacy theme migration', () => {
     expect(focus).toEqual({ color: 'rgb(45, 106, 201)', width: '3px', style: 'solid' });
   });
 
-  test('navy navigation uses the inverse focus ring', async ({ page }) => {
-    await page.goto('/main_index.html', { waitUntil: 'domcontentloaded' });
-    const link = page.locator('.topnav a[href]').first();
-    await link.focus();
-    await expect(link).toBeFocused();
-    const focus = await link.evaluate((el) => {
-      const s = getComputedStyle(el);
-      return { color: s.outlineColor, width: s.outlineWidth, style: s.outlineStyle };
-    });
-    expect(focus).toEqual({ color: 'rgb(147, 197, 253)', width: '3px', style: 'solid' });
-  });
 
   test('live-session status badges preserve semantic text plus color', async ({ page }) => {
     await page.route('**/dashboard/live-session.js', (route) => route.abort());

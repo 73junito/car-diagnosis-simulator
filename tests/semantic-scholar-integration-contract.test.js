@@ -8,20 +8,25 @@ describe('Semantic Scholar integration contract', () => {
   const workerIndex = fs.readFileSync(path.join(root, 'worker/index.js'), 'utf8')
   const route = fs.readFileSync(path.join(root, 'worker/routes/semantic-scholar-research.js'), 'utf8')
   const service = fs.readFileSync(path.join(root, 'worker/services/semantic-scholar.js'), 'utf8')
+  const rolePolicy = fs.readFileSync(path.join(root, 'worker/auth/role-policy.js'), 'utf8')
   const appConfig = fs.readFileSync(path.join(root, 'wrangler.app.jsonc'), 'utf8')
   const publicConfig = fs.readFileSync(path.join(root, 'wrangler.jsonc'), 'utf8')
   const attribution = fs.readFileSync(path.join(root, 'public-site/research-sources/index.html'), 'utf8')
+  const integrationDocs = fs.readFileSync(path.join(root, 'docs/SEMANTIC_SCHOLAR_INTEGRATION.md'), 'utf8')
 
   test('routes are app-origin only and require bearer authentication', () => {
     expect(workerIndex).toContain("origin: 'https://app.autolearnpro.com'")
     expect(workerIndex).toContain("allowHeaders: ['Content-Type', 'Authorization']")
     expect(route).toContain('extractBearerToken')
     expect(route).toContain('verifySupabaseToken')
-    expect(route).toContain('user?.app_metadata?.role')
-    expect(route).toContain("new Set(['teacher', 'instructor', 'professor', 'admin'])")
-    expect(route).toContain(".from('profiles')")
-    expect(route).toContain(".select('role')")
-    expect(route).toContain(".eq('id', user.id)")
+    expect(route).toContain("import { isAdminRole, isInstructorOrAdminRole, resolveTrustedRole } from '../auth/role-policy.js'")
+    expect(route).toContain('resolveTrustedRole(user, roleSupabase)')
+    expect(rolePolicy).toContain('user?.app_metadata?.role')
+    expect(rolePolicy).toContain("teacher: 'instructor'")
+    expect(rolePolicy).toContain("professor: 'instructor'")
+    expect(rolePolicy).toContain(".from('profiles')")
+    expect(rolePolicy).toContain(".select('role')")
+    expect(rolePolicy).toContain(".eq('id', user.id)")
     expect(route).toContain('Teacher, instructor, professor, or admin access required')
   })
 
@@ -57,10 +62,19 @@ describe('Semantic Scholar integration contract', () => {
     expect(service).toContain("assessmentEligibility: 'none'")
   })
 
-  test('public site includes Semantic Scholar attribution and evidence boundary', () => {
+  test('public site includes Semantic Scholar attribution, logo, API UTM, and evidence boundary', () => {
     expect(attribution).toContain('Semantic Scholar')
     expect(attribution).toContain('Allen Institute for AI')
+    expect(attribution).toContain('https://www.semanticscholar.org/?utm_source=api')
+    expect(attribution).toContain('/assets/semantic-scholar-logo.svg')
+    expect(attribution).toContain('alt="Semantic Scholar"')
     expect(attribution).toContain('does not automatically become approved curriculum evidence')
     expect(attribution).toContain('does not use the Semantic Scholar API to republish full copyrighted articles')
+  })
+
+  test('documents that attribution does not replace license-scope authorization', () => {
+    expect(integrationDocs).toContain('Expanded License')
+    expect(integrationDocs).toContain('commercial use')
+    expect(integrationDocs).toContain('must not treat possession of an API key or attribution alone')
   })
 })

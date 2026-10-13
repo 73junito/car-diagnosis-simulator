@@ -7,6 +7,17 @@ import { handleStartAssessmentAttempt } from "./routes/assessment-attempts-start
 import { handleAssessmentAttemptQuestions } from "./routes/assessment-attempt-questions.js";
 import { handleStudentRecommendations } from "./routes/student-recommendations.js";
 import { handleStudentProgress } from "./routes/student-progress.js";
+import { handleStudentTranscript } from "./routes/student-transcript.js";
+import { handleStudentActivity } from "./routes/student-activity.js";
+import {
+  handleDiagnosticSessions,
+  handleDiagnosticSession,
+  handleDiagnosticEvidence,
+  handleDiagnosticPlan,
+  handleDiagnosticReport,
+  handleDiagnosticCopilotHealth,
+  handleDiagnosticAdvice
+} from "./routes/diagnostic-copilot.js";
 import { handleCurriculumRead } from "./routes/curriculum-read.js";
 import { handleCurriculumReferences } from "./routes/curriculum-references.js";
 import {
@@ -27,9 +38,75 @@ import {
 import {
   handleInstitutionLookup,
   handleInstructorVerificationRequest,
-  handleInstructorVerificationStatus
+  handleInstructorVerificationStatus,
+  handleAdminInstructorVerificationQueue,
+  handleAdminInstructorVerificationDecision
 } from "./routes/instructor-verification.js";
 import { handleInstitutionSearch } from "./routes/institution-search.js";
+import {
+  handleInstitutionMemberships,
+  handleInstitutionPortal
+} from "./routes/institution-portal.js";
+import {
+  handlePlatformAdminInstitutionOwnerInvitation,
+  handleInstitutionAdminMembers,
+  handleInstitutionAdminInvitations,
+  handleInstitutionAdminInvitationDecision,
+  handleInstitutionMyInvitations,
+  handleInstitutionInvitationAccept,
+  handleInstitutionAdminMemberDecision
+} from "./routes/institution-membership-admin.js";
+import {
+  handleInstitutionAdminSettings,
+  handleInstitutionAdminDomains,
+  handleInstitutionAdminDomainDecision
+} from "./routes/institution-settings-domains.js";
+import { handleInstitutionAdminReport } from "./routes/institution-reporting.js";
+import {
+  handlePlatformAdminOverview,
+  handlePlatformAdminUsers,
+  handlePlatformAdminInstitutions,
+  handlePlatformAdminAudit,
+  handlePlatformAdminOperationalSettings
+} from "./routes/platform-admin-dashboard.js";
+import {
+  handleStudentInstitutionClaimStatus,
+  handleStudentInstitutionClaimQueue,
+  handleStudentInstitutionClaimDecision
+} from "./routes/student-institution-claims.js";
+import {
+  handleListClasses,
+  handleCreateClass,
+  handleFindClassByCode,
+  handleEnrollInClass,
+  handleClassRoster
+} from "./routes/classroom-classes.js";
+import { handleCreateAssignment } from "./routes/classroom-assignments.js";
+import {
+  handleInstructorStudentAnalytics,
+  handleInstructorSessionAnalytics,
+  handleInstructorAnalyticsExport,
+  handleInstructorIntelligence
+} from "./routes/instructor-analytics.js";
+import {
+  handleInstructorTelemetryHistory,
+  handleInstructorTelemetryExport,
+  handleInstructorTelemetryStream
+} from "./routes/instructor-telemetry.js";
+import { handleTelemetryEventIngest } from "./routes/telemetry-ingest.js";
+import {
+  handleAuthorDrafts,
+  handleAuthorDraft,
+  handleAuthorDraftReviewRequest,
+  handleAuthorDraftPublicationRequest,
+  handleAuthorEvidenceSources,
+  handleAuthorDraftEvidence,
+  handleAuthorDraftEvidenceLink,
+  handleAdminAuthorDraftReviews,
+  handleAdminAuthorDraftReviewDecision,
+  handleAdminAuthorDraftPublications,
+  handleAdminAuthorDraftPublicationDecision
+} from "./routes/author-drafts.js";
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
@@ -110,6 +187,45 @@ app.use('/api/student/progress/*', cors({
 }))
 app.get('/api/student/progress', handleStudentProgress)
 
+app.use('/api/student/transcript/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/student/transcript', handleStudentTranscript)
+
+app.use('/api/student/activity/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/student/activity', handleStudentActivity)
+
+const diagnosticCopilotCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'Idempotency-Key'],
+  maxAge: 86400
+})
+app.use('/api/copilot/*', diagnosticCopilotCors)
+app.all('/api/copilot/sessions', handleDiagnosticSessions)
+app.all('/api/copilot/sessions/:sessionId', handleDiagnosticSession)
+app.post('/api/copilot/sessions/:sessionId/evidence', handleDiagnosticEvidence)
+app.post('/api/copilot/sessions/:sessionId/plan', handleDiagnosticPlan)
+app.post('/api/copilot/sessions/:sessionId/report', handleDiagnosticReport)
+app.get('/api/copilot/health', handleDiagnosticCopilotHealth)
+app.post('/api/copilot/sessions/:sessionId/advice', handleDiagnosticAdvice)
+
+app.use('/api/student/institution-claim/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/student/institution-claim/status', handleStudentInstitutionClaimStatus)
+
 // Public institution search for account creation. Results expose only the
 // institution identity fields needed for a student or instructor to select
 // the correct school; selection itself never proves affiliation.
@@ -120,6 +236,48 @@ app.use('/api/institutions/*', cors({
   maxAge: 86400
 }))
 app.get('/api/institutions/search', handleInstitutionSearch)
+
+const institutionPortalCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/institution/*', institutionPortalCors)
+app.get('/api/institution/memberships', handleInstitutionMemberships)
+app.get('/api/institution/portal', handleInstitutionPortal)
+app.get('/api/institution/admin/members', handleInstitutionAdminMembers)
+app.all('/api/institution/admin/invitations', handleInstitutionAdminInvitations)
+app.patch('/api/institution/admin/invitations/:invitationId', handleInstitutionAdminInvitationDecision)
+app.get('/api/institution/invitations', handleInstitutionMyInvitations)
+app.post('/api/institution/invitations/:invitationId/accept', handleInstitutionInvitationAccept)
+app.patch('/api/institution/admin/members/:membershipId', handleInstitutionAdminMemberDecision)
+app.all('/api/institution/admin/settings', handleInstitutionAdminSettings)
+app.all('/api/institution/admin/domains', handleInstitutionAdminDomains)
+app.patch('/api/institution/admin/domains/:domain', handleInstitutionAdminDomainDecision)
+app.get('/api/institution/admin/report', handleInstitutionAdminReport)
+app.get('/api/institution/admin/student-claims', handleStudentInstitutionClaimQueue)
+app.patch('/api/institution/admin/student-claims/:userId', handleStudentInstitutionClaimDecision)
+
+app.use('/api/admin/institutions/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.post('/api/admin/institutions/owner-invitations', handlePlatformAdminInstitutionOwnerInvitation)
+
+app.use('/api/admin/platform/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/admin/platform/overview', handlePlatformAdminOverview)
+app.get('/api/admin/platform/users', handlePlatformAdminUsers)
+app.get('/api/admin/platform/institutions', handlePlatformAdminInstitutions)
+app.get('/api/admin/platform/audit', handlePlatformAdminAudit)
+app.all('/api/admin/platform/operational-settings', handlePlatformAdminOperationalSettings)
 
 // Instructor institution verification. Federal School Code resolves the institution,
 // while a separate affiliation review controls instructor authorization.
@@ -133,6 +291,111 @@ app.get('/api/instructor/verification/institution', handleInstitutionLookup)
 app.post('/api/instructor/verification/request', handleInstructorVerificationRequest)
 app.get('/api/instructor/verification/status', handleInstructorVerificationStatus)
 
+// Admin-only instructor affiliation review. The Worker authorizes the reviewer;
+// the database trigger appends immutable audit evidence for every final decision.
+app.use('/api/admin/instructor-verification/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/admin/instructor-verification/requests', handleAdminInstructorVerificationQueue)
+app.patch('/api/admin/instructor-verification/requests/:requestId', handleAdminInstructorVerificationDecision)
+
+app.use('/api/admin/student-institution-claims/*', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.get('/api/admin/student-institution-claims', handleStudentInstitutionClaimQueue)
+app.patch('/api/admin/student-institution-claims/:userId', handleStudentInstitutionClaimDecision)
+
+// Instructor-owned classroom core. The Worker verifies the bearer token and
+// trusted instructor role, then scopes all persistence to the authenticated owner.
+const classroomCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/classes', classroomCors)
+app.use('/api/classes/*', classroomCors)
+app.use('/api/assign', classroomCors)
+app.get('/api/classes', handleListClasses)
+app.post('/api/classes', handleCreateClass)
+app.get('/api/classes/by-code/:code', handleFindClassByCode)
+app.post('/api/classes/:classId/enroll', handleEnrollInClass)
+app.get('/api/classes/:classId/students', handleClassRoster)
+app.post('/api/assign', handleCreateAssignment)
+
+const instructorAnalyticsCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/analytics/students', instructorAnalyticsCors)
+app.use('/api/analytics/sessions', instructorAnalyticsCors)
+app.use('/api/analytics/export', instructorAnalyticsCors)
+app.get('/api/analytics/students', handleInstructorStudentAnalytics)
+app.get('/api/analytics/sessions', handleInstructorSessionAnalytics)
+app.get('/api/analytics/export', handleInstructorAnalyticsExport)
+app.get('/api/analytics/intelligence', handleInstructorIntelligence)
+
+const instructorTelemetryCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/telemetry/history', instructorTelemetryCors)
+app.use('/api/telemetry/export.:format', instructorTelemetryCors)
+app.use('/api/telemetry/stream', instructorTelemetryCors)
+app.get('/api/telemetry/history', handleInstructorTelemetryHistory)
+app.get('/api/telemetry/export.:format', handleInstructorTelemetryExport)
+app.get('/api/telemetry/stream', handleInstructorTelemetryStream)
+
+app.use('/api/telemetry/events', cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['POST', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+}))
+app.post('/api/telemetry/events', handleTelemetryEventIngest)
+
+const authorDraftCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/author/drafts', authorDraftCors)
+app.use('/api/author/drafts/*', authorDraftCors)
+app.use('/api/author/evidence-sources', authorDraftCors)
+app.all('/api/author/drafts', handleAuthorDrafts)
+app.all('/api/author/drafts/:draftId', handleAuthorDraft)
+app.post('/api/author/drafts/:draftId/review-request', handleAuthorDraftReviewRequest)
+app.post('/api/author/drafts/:draftId/publication-request', handleAuthorDraftPublicationRequest)
+app.get('/api/author/evidence-sources', handleAuthorEvidenceSources)
+app.all('/api/author/drafts/:draftId/evidence', handleAuthorDraftEvidence)
+app.delete('/api/author/drafts/:draftId/evidence/:linkId', handleAuthorDraftEvidenceLink)
+
+const adminAuthorReviewCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  maxAge: 86400
+})
+app.use('/api/admin/author-drafts/reviews', adminAuthorReviewCors)
+app.use('/api/admin/author-drafts/reviews/*', adminAuthorReviewCors)
+app.get('/api/admin/author-drafts/reviews', handleAdminAuthorDraftReviews)
+app.patch('/api/admin/author-drafts/reviews/:draftId', handleAdminAuthorDraftReviewDecision)
+app.use('/api/admin/author-drafts/publications', adminAuthorReviewCors)
+app.use('/api/admin/author-drafts/publications/*', adminAuthorReviewCors)
+app.get('/api/admin/author-drafts/publications', handleAdminAuthorDraftPublications)
+app.patch('/api/admin/author-drafts/publications/:draftId', handleAdminAuthorDraftPublicationDecision)
+
 // Curriculum read API: server-side service-role read boundary for the
 // curriculum tables. Response mirrors the static data/curriculum contract.
 // The exam site (exam.autolearnpro.com) consumes it cross-origin; the
@@ -143,7 +406,7 @@ app.use('/api/curriculum/*', cors({
     'https://exam.autolearnpro.com'
   ],
   allowMethods: ['GET', 'OPTIONS'],
-  allowHeaders: ['Content-Type'],
+  allowHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400
 }))
 app.all('/api/curriculum', handleCurriculumRead)

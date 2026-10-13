@@ -31,12 +31,25 @@ window.initStudentDashboard = function(){
     }
     history.replaceState(null,'',`?scenario=${encodeURIComponent(s.scenario_key || s.symptomCategory || s.symptoms || s.id)}`);
     try {
-      const payload = JSON.stringify({
+      const payload = {
         session_id: 'student-dashboard',
         event_type: 'scenario_started',
         payload_json: { scenario_id: s.id, scenario_key: s.scenario_key, symptom_category: s.symptomCategory }
-      });
-      navigator.sendBeacon('/api/telemetry/events', payload);
+      };
+      const token = getStudentDashboardAccessToken();
+      if (token) {
+        fetch('/api/telemetry/events', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          },
+          body: JSON.stringify(payload),
+          keepalive: true
+        }).catch(()=>{});
+      } else if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/telemetry/events', JSON.stringify(payload));
+      }
     } catch (e) {}
     // focus first meaningful control (back button)
     try{ backBtn.focus(); }catch(e){}
