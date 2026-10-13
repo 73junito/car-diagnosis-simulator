@@ -40,6 +40,14 @@ async function getApprovedCount(questionBankId) {
     const questionBankId = scenario.questionBankId;
     const staticBank = staticBanks[questionBankId] || [];
     const approved = await getApprovedCount(questionBankId);
+    const answerDistribution = staticBank.reduce((counts, question) => {
+      const key = String(question.correct_answer || '').toUpperCase();
+      if (Object.prototype.hasOwnProperty.call(counts, key)) counts[key] += 1;
+      return counts;
+    }, { A: 0, B: 0, C: 0, D: 0 });
+    const sourceMapped = staticBank.filter(
+      (q) => Array.isArray(q.sources) && q.sources.length > 0
+    ).length;
     rows.push({
       scenario_key: scenario.scenario_key,
       question_bank_id: questionBankId,
@@ -47,6 +55,9 @@ async function getApprovedCount(questionBankId) {
       required_questions: requiredPerScenario,
       static_records: staticBank.length,
       static_approved: staticBank.filter((q) => String(q.status || '').toLowerCase() === 'approved').length,
+      static_source_mapped: sourceMapped,
+      static_source_unmapped: staticBank.length - sourceMapped,
+      answer_distribution: answerDistribution,
       live_approved: approved,
       gap_to_20: approved === null ? null : Math.max(0, requiredPerScenario - approved),
       ready: approved === null ? null : approved >= requiredPerScenario
@@ -57,6 +68,9 @@ async function getApprovedCount(questionBankId) {
     scenarios: rows.length,
     required_per_scenario: requiredPerScenario,
     total_required: rows.length * requiredPerScenario,
+    total_static_records: rows.reduce((sum, row) => sum + row.static_records, 0),
+    static_source_mapped_total: rows.reduce((sum, row) => sum + row.static_source_mapped, 0),
+    static_source_unmapped_total: rows.reduce((sum, row) => sum + row.static_source_unmapped, 0),
     live_ready: rows.filter((row) => row.ready === true).length,
     live_approved_total: rows.reduce((sum, row) => sum + (row.live_approved || 0), 0)
   };
