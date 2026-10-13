@@ -103,6 +103,7 @@ function applyLibraryFilters(query, c) {
   if (rights === 'link-only') {
     request = request
       .eq('citation_link_allowed', true)
+      .eq('direct_reproduction_allowed', false)
       .eq('database_storage_allowed', false)
       .eq('ai_rag_ingestion_allowed', false)
   } else if (rights === 'rag-allowed') {
