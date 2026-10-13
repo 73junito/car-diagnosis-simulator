@@ -13,7 +13,6 @@ const output = path.join(root, "dist");
  * JavaScript modules, dynamic imports, or runtime fetch calls.
  */
 const runtimeDirectories = [
-  "animation",
   "assessment",
   "assets",
   "components",
@@ -69,6 +68,11 @@ const runtimeRootFiles = [
  * to contain files that should not automatically become public.
  */
 const additionalRuntimeEntries = [
+  {
+    source: "animation/manifests/starting-system-voltage-drop-foundation.json",
+    destination: "animation/manifests/starting-system-voltage-drop-foundation.json",
+    optional: false
+  },
   {
     source: "docs/index.html",
     destination: "docs/index.html",
