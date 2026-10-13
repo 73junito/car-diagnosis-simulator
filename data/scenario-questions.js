@@ -337,9 +337,9 @@ window.SCENARIO_QUESTIONS = {
 // Approved sources registry. Questions should reference entries here by `source_id`.
 window.APPROVED_SOURCES = {
   // Example entry (do not include placeholder page numbers):
-  // "ase-a6-approved-edition": {
-  //   title: "ASE Automobile Study Guide: A6 Electrical/Electronic Systems",
-  //   publisher: "ASE Education Foundation",
+  // "electrical-diagnostics-approved-edition": {
+  //   title: "Electrical/Electronic Systems study guide",
+  //   publisher: "external automotive education source",
   //   edition: "APPROVED_EDITION",
   //   publication_year: 2024,
   //   status: "approved",

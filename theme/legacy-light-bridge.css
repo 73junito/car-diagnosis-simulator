@@ -178,11 +178,11 @@ textarea:focus-visible,
 
 .exports,
 .students,
-.ase-weakness {
+.diagnostic-weakness {
   margin-top: 18px;
 }
 
-#ase-chart {
+#diagnostic-chart {
   min-height: 220px;
   display: flex;
   align-items: center;

@@ -2,7 +2,7 @@ export function filterToolbar({
   searchId = "searchInput",
   categoryId = "filterCategory",
   difficultyId = "filterDifficulty",
-  aseId = "filterAse"
+  diagnosticAreaId = "filterDiagnosticArea"
 } = {}) {
   return `
     <section class="tm-filter-toolbar" aria-label="Scenario filters">
@@ -26,8 +26,8 @@ export function filterToolbar({
         </select>
       </div>
       <div class="tm-filter-toolbar__field">
-        <label for="${aseId}">ASE Area</label>
-        <select id="${aseId}">
+        <label for="${diagnosticAreaId}">Diagnostic Area</label>
+        <select id="${diagnosticAreaId}">
           <option value="">All</option>
         </select>
       </div>

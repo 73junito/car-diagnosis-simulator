@@ -218,7 +218,7 @@ npx wrangler tail car-diagnosis-simulator-staging --format pretty
 
 Verification expectations:
 
-- The staging tutor request must return HTTP `200` with JSON including `reasonIncorrect`, `reasonCorrect`, `aseConcept`, and `nextStep`.
+- The staging tutor request must return HTTP `200` with JSON including `reasonIncorrect`, `reasonCorrect`, `diagnosticConcept`, and `nextStep`.
 - Preserve headers: `x-request-id`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`.
 - Do not merge PR #332 until this succeeds.
 

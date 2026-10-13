@@ -19,7 +19,7 @@ window.AuthoringTemplates = {
     expectedFinding: "No RPM signal during crank",
     rootCause: "Failed crankshaft position sensor",
     recommendedRepair: "Replace crankshaft position sensor, clear codes, and verify restart.",
-    aseArea: "A8 Engine Performance",
+    diagnosticArea: "Engine Performance",
     safetyCriteria: "Uses safe test procedures.",
     diagnosticCriteria: "Uses evidence to isolate the fault.",
     verificationCriteria: "Confirms restart and no returning DTC."
@@ -44,7 +44,7 @@ window.AuthoringTemplates = {
     expectedFinding: "Misfire follows the ignition coil",
     rootCause: "Failed ignition coil",
     recommendedRepair: "Replace failed ignition coil and verify misfire counter stays at zero.",
-    aseArea: "A8 Engine Performance",
+    diagnosticArea: "Engine Performance",
     safetyCriteria: "Uses safe ignition testing procedures.",
     diagnosticCriteria: "Confirms misfire source before replacement.",
     verificationCriteria: "Confirms no misfire after repair."
@@ -69,7 +69,7 @@ window.AuthoringTemplates = {
     expectedFinding: "Alternator output below specification",
     rootCause: "Alternator failure",
     recommendedRepair: "Replace alternator and verify 13.5–14.8V charging output.",
-    aseArea: "A6 Electrical",
+    diagnosticArea: "Electrical/Electronic Systems",
     safetyCriteria: "Uses safe battery and charging system procedures.",
     diagnosticCriteria: "Confirms low alternator output.",
     verificationCriteria: "Confirms charging voltage restored."

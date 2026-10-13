@@ -16,8 +16,8 @@
     "url": "/dashboard/obd2-student?scenario=no-crank"
   },
   {
-    "name": "obd2-ase",
-    "url": "/dashboard/obd2-ase?scenario=no-crank-11"
+    "name": "obd2-procedural",
+    "url": "/dashboard/obd2-procedural?scenario=no-crank-11"
   },
   {
     "name": "obd2-live",

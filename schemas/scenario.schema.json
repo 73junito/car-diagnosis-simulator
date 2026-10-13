@@ -2,33 +2,126 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "TorqueMind Scenario",
   "type": "object",
-  "required": ["id","symptoms","fault","tests","symptomCategory","schemaVersion","scoringWeights","safetyLevel","requiredTools"],
+  "required": [
+    "id",
+    "symptoms",
+    "fault",
+    "tests",
+    "symptomCategory",
+    "schemaVersion",
+    "scoringWeights",
+    "safetyLevel",
+    "requiredTools"
+  ],
   "properties": {
-    "id": { "type": ["integer","string"] },
-    "symptoms": { "type": "string", "minLength": 10 },
-    "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
-    "primarySystem": { "type": "string" },
-    "secondarySystems": { "type": "array" },
-    "symptomCategory": { "type": "string" },
-    "aseArea": { "type": "string", "pattern": "^A[1-9]$" },
-    "vehicleType": { "type": "string", "enum": ["gasoline","diesel","hybrid","ev"] },
-    "faultType": { "type": "string", "enum": ["hard-fault","intermittent","electrical","mechanical","network"] },
-    "diagnosticMode": { "type": "string", "enum": ["basic","scan-tool","waveform-analysis","guided-diagnostics"] },
-    "requiredTools": { "type": "array", "minItems": 1, "items": { "type": "string" } },
-    "safetyLevel": { "type": "string" },
-    "schemaVersion": { "type": "string", "pattern": "^1\\.2$" },
+    "id": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "symptoms": {
+      "type": "string",
+      "minLength": 10
+    },
+    "difficulty": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "primarySystem": {
+      "type": "string"
+    },
+    "secondarySystems": {
+      "type": "array"
+    },
+    "symptomCategory": {
+      "type": "string"
+    },
+    "diagnosticArea": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+    },
+    "vehicleType": {
+      "type": "string",
+      "enum": [
+        "gasoline",
+        "diesel",
+        "hybrid",
+        "ev"
+      ]
+    },
+    "faultType": {
+      "type": "string",
+      "enum": [
+        "hard-fault",
+        "intermittent",
+        "electrical",
+        "mechanical",
+        "network"
+      ]
+    },
+    "diagnosticMode": {
+      "type": "string",
+      "enum": [
+        "basic",
+        "scan-tool",
+        "waveform-analysis",
+        "guided-diagnostics"
+      ]
+    },
+    "requiredTools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "safetyLevel": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^1\\.2$"
+    },
     "scoringWeights": {
       "type": "object",
-      "required": ["diagnosticAccuracy","proceduralCorrectness","safetyCompliance","toolEfficiency"],
+      "required": [
+        "diagnosticAccuracy",
+        "proceduralCorrectness",
+        "safetyCompliance",
+        "toolEfficiency"
+      ],
       "properties": {
-        "diagnosticAccuracy": { "type": "number", "minimum": 0, "maximum": 100 },
-        "proceduralCorrectness": { "type": "number", "minimum": 0, "maximum": 100 },
-        "safetyCompliance": { "type": "number", "minimum": 0, "maximum": 100 },
-        "toolEfficiency": { "type": "number", "minimum": 0, "maximum": 100 }
+        "diagnosticAccuracy": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "proceduralCorrectness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "safetyCompliance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "toolEfficiency": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
       },
       "additionalProperties": false
     },
-    "fault": { "type": "string" },
-    "tests": { "type": "object" }
+    "fault": {
+      "type": "string"
+    },
+    "tests": {
+      "type": "object"
+    }
   }
 }

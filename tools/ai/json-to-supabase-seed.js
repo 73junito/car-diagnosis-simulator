@@ -10,14 +10,6 @@ function esc(value) {
   return String(value).replace(/'/g, "''");
 }
 
-function validateNoLegacyFields(obj, source) {
-  const legacyFields = ['ase_area', 'ase-area', 'supports-ase-concept'];
-  for (const field of legacyFields) {
-    if (obj.hasOwnProperty(field)) {
-      console.warn(`⚠️  WARNING: Legacy field '${field}' detected in ${source}. This should have been removed by the generator. Skipping field during insert.`);
-    }
-  }
-}
 
 const lines = [];
 
@@ -26,7 +18,6 @@ lines.push("delete from scenario_questions;");
 
 for (const [scenarioId, questions] of Object.entries(bank)) {
   for (const q of questions) {
-    validateNoLegacyFields(q, `question in scenario ${scenarioId}`);
 
     lines.push(`
 insert into scenario_questions

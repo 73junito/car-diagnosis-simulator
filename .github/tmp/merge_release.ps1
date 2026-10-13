@@ -55,7 +55,7 @@ gh workflow run release.yml --repo $repo -f version=v0.1.4 | Write-Host
 # Get latest run id for release workflow and wait
 Write-Host "Waiting for workflow to start..."
 Start-Sleep -Seconds 2
-$run = gh run list --workflow release.yml --repo $repo --limit 1 --json databaseId --jq '.[0].databaseId'
+$run = gh run list --workflow release.yml --repo $repo --limit 1 --json databdiagnosticAreaId --jq '.[0].databdiagnosticAreaId'
 if (-not $run) { Write-Host "Could not find workflow run id"; exit 1 }
 Write-Host "Watching workflow run: $run"
 gh run watch $run --repo $repo --exit-status

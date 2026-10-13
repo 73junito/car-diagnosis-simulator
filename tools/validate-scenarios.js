@@ -161,11 +161,11 @@ function validate() {
       if (e.instancePath === '/diagnosticMode') {
         sug.push(`Diagnostic mode invalid. Suggested values: ${allowedDiagnosticModes.join(', ')}`);
       }
-      if (e.instancePath === '/aseArea') {
-        // suggest a conservative ASE area
-        const map = { electrical: 'A6', engine: 'A8', fuel: 'A8', cooling: 'A6', hybrid: 'A6', transmission: 'A2' };
-        const hint = map[(s.primarySystem || '').toLowerCase()] || 'A6';
-        sug.push(`aseArea invalid. Suggested value: ${hint}`);
+      if (e.instancePath === '/diagnosticArea') {
+        // suggest a conservative diagnostic area
+        const map = { electrical: 'Electrical/Electronic Systems', engine: 'Engine Performance', fuel: 'Fuel System', cooling: 'Cooling System', hybrid: 'Hybrid/EV', transmission: 'Automatic Transmission' };
+        const hint = map[(s.primarySystem || '').toLowerCase()] || 'General Diagnostics';
+        sug.push(`diagnosticArea invalid. Suggested value: ${hint}`);
       }
       if (e.instancePath === '/requiredTools') {
         const FALLBACK_REQUIRED_TOOLS = ['DVOM','Scan Tool'];
@@ -183,7 +183,7 @@ function validate() {
       if (c.includes('duplicate symptoms/title')) sug.push('Duplicate symptoms/title — make the description unique');
       if (c.includes('missing metadata field')) {
       if (c.includes('requiredTools')) sug.push(`Add 'requiredTools': DVOM, Scan Tool`);
-        if (c.includes('aseArea')) sug.push('Add a valid `aseArea` like A6 or A8');
+        if (c.includes('diagnosticArea')) sug.push('Add a descriptive `diagnosticArea`, e.g. Electrical/Electronic Systems or Engine Performance');
         if (c.includes('faultType')) sug.push(`Set 'faultType' to one of: ${allowedFaultTypes.join(', ')}`);
       }
       if (c.includes('insufficient symptom description')) sug.push('Expand symptoms to be more descriptive (>=20 chars)');

@@ -60,7 +60,7 @@ function validateScenarioMetadata(s) {
   // ensure schema version and scoring weights exist
   if (s.schemaVersion === undefined) s.schemaVersion = DEFAULT_SCENARIO_METADATA.schemaVersion;
   if (s.scoringWeights === undefined || typeof s.scoringWeights !== 'object') s.scoringWeights = Object.assign({}, DEFAULT_SCENARIO_METADATA.scoringWeights);
-  if (s.aseArea === undefined && DEFAULT_SCENARIO_METADATA.aseArea) s.aseArea = DEFAULT_SCENARIO_METADATA.aseArea;
+  if (s.diagnosticArea === undefined && DEFAULT_SCENARIO_METADATA.diagnosticArea) s.diagnosticArea = DEFAULT_SCENARIO_METADATA.diagnosticArea;
   if (s.vehicleType === undefined && DEFAULT_SCENARIO_METADATA.vehicleType) s.vehicleType = DEFAULT_SCENARIO_METADATA.vehicleType;
   if (s.faultType === undefined && DEFAULT_SCENARIO_METADATA.faultType) s.faultType = DEFAULT_SCENARIO_METADATA.faultType;
   if (s.diagnosticMode === undefined && DEFAULT_SCENARIO_METADATA.diagnosticMode) s.diagnosticMode = DEFAULT_SCENARIO_METADATA.diagnosticMode;
@@ -122,7 +122,7 @@ window.scenarios = [
     primarySystem: 'fuel',
     secondarySystems: ['ignition'],
     symptomCategory: 'no-start',
-    aseArea: 'A8',
+    diagnosticArea: 'Engine Performance',
     vehicleType: 'gasoline',
     faultType: 'hard-fault',
     diagnosticMode: 'scan-tool',
@@ -265,7 +265,7 @@ window.scenarios = [
     }
   }
   ,
-  // New ASE-style procedural scenario (single-fault)
+  // New procedural diagnostic scenario (single-fault)
   {
     id: 11,
     scenario_key: 'no-crank-starter-click',
@@ -300,7 +300,7 @@ window.scenarios = [
   }
 
   ,
-  // New ASE-style procedural scenario (multi-fault: battery + starter interaction)
+  // New procedural diagnostic scenario (multi-fault: battery + starter interaction)
   {
     id: 12,
     scenario_key: 'intermittent-starting',
@@ -340,7 +340,7 @@ window.scenarios = [
     timeLimit: 900
   }
   ,
-  // Example: charging system (ASE A6)
+  // Example: charging system (electrical diagnostics)
   {
     id: 13,
     scenario_key: 'charging-system',
@@ -349,7 +349,7 @@ window.scenarios = [
     primarySystem: 'electrical',
     secondarySystems: ['charging','battery'],
     symptomCategory: 'charging-system',
-    aseArea: 'A6',
+    diagnosticArea: 'Electrical/Electronic Systems',
     vehicleType: 'gasoline',
     faultType: 'electrical',
     diagnosticMode: 'waveform-analysis',
@@ -371,7 +371,7 @@ window.scenarios = [
     primarySystem: 'network',
     secondarySystems: ['power','modules'],
     symptomCategory: 'can-bus-network',
-    aseArea: 'A6',
+    diagnosticArea: 'Electrical/Electronic Systems',
     vehicleType: 'gasoline',
     faultType: 'network',
     diagnosticMode: 'scan-tool',
@@ -393,7 +393,7 @@ window.scenarios = [
     primarySystem: 'hybrid',
     secondarySystems: ['inverter','battery'],
     symptomCategory: 'hybrid-ev',
-    aseArea: 'A6',
+    diagnosticArea: 'Electrical/Electronic Systems',
     vehicleType: 'hybrid',
     faultType: 'electrical',
     diagnosticMode: 'guided-diagnostics',
@@ -415,7 +415,7 @@ window.scenarios = [
     primarySystem: 'exhaust',
     secondarySystems: ['emissions','engine'],
     symptomCategory: 'diesel-aftertreatment',
-    aseArea: 'A8',
+    diagnosticArea: 'Engine Performance',
     vehicleType: 'diesel',
     faultType: 'mechanical',
     diagnosticMode: 'scan-tool',
@@ -438,7 +438,7 @@ window.scenarios = [
     primarySystem: 'hybrid',
     secondarySystems: ['battery','inverter'],
     symptomCategory: 'hybrid-ev',
-    aseArea: 'A6',
+    diagnosticArea: 'Electrical/Electronic Systems',
     vehicleType: 'hybrid',
     faultType: 'electrical',
     diagnosticMode: 'guided-diagnostics',
@@ -461,7 +461,7 @@ window.scenarios = [
     primarySystem: 'transmission',
     secondarySystems: ['hydraulic-control', 'transmission-fluid'],
     symptomCategory: 'automatic-transmission',
-    aseArea: 'A2',
+    diagnosticArea: 'Automatic Transmission',
     vehicleType: 'gasoline',
     faultType: 'mechanical',
     diagnosticMode: 'basic',
@@ -483,7 +483,7 @@ window.scenarios = [
     primarySystem: 'transmission',
     secondarySystems: ['clutch', 'driveline'],
     symptomCategory: 'manual-transmission',
-    aseArea: 'A3',
+    diagnosticArea: 'Manual Drive Train',
     vehicleType: 'gasoline',
     faultType: 'mechanical',
     diagnosticMode: 'basic',
@@ -505,7 +505,7 @@ window.scenarios = [
     primarySystem: 'driveline',
     secondarySystems: ['differential', 'wheel-bearings'],
     symptomCategory: 'differential',
-    aseArea: 'A3',
+    diagnosticArea: 'Manual Drive Train',
     vehicleType: 'gasoline',
     faultType: 'mechanical',
     diagnosticMode: 'basic',
@@ -527,7 +527,7 @@ window.scenarios = [
     primarySystem: 'transmission',
     secondarySystems: ['transaxle', 'transmission-fluid'],
     symptomCategory: 'transaxle',
-    aseArea: 'A3',
+    diagnosticArea: 'Manual Drive Train',
     vehicleType: 'gasoline',
     faultType: 'mechanical',
     diagnosticMode: 'scan-tool',

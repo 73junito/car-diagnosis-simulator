@@ -102,7 +102,7 @@ function nativeQuestion() {
     explanation: 'Rectifier diodes convert the alternator stator output from AC to DC for the vehicle electrical system.',
     difficulty: 'medium',
     topic: 'charging-system',
-    ase_area: null,
+    diagnostic_area: null,
   };
 }
 
@@ -250,7 +250,7 @@ describe('Phase 10I publication evidence and containment', () => {
       explanation: nativeQuestion().explanation,
       difficulty: 'medium',
       topic: 'charging-system',
-      ase_area: null,
+      diagnostic_area: null,
     });
   });
 

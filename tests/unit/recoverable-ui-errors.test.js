@@ -21,7 +21,7 @@ describe("recoverable UI error logging", () => {
     );
   });
 
-  test("analytics treats unavailable ASE readiness data as recoverable", () => {
+  test("analytics treats unavailable diagnostic readiness data as recoverable", () => {
     const source = fs.readFileSync(
       path.resolve(
         __dirname,
@@ -30,9 +30,9 @@ describe("recoverable UI error logging", () => {
       "utf8"
     );
 
-    expect(source).toContain("ASE readiness data unavailable:");
+    expect(source).toContain("diagnostic readiness data unavailable:");
     expect(source).not.toContain(
-      'console.error("ASE readiness load failed", err);'
+      'console.error("diagnostic readiness load failed", err);'
     );
   });
 });

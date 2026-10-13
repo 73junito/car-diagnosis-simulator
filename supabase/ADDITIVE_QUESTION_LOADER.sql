@@ -25,7 +25,7 @@ CREATE TEMP TABLE torquemind_question_batch (
     explanation text,
     difficulty text,
     topic text,
-    ase_area text
+    diagnostic_area text
 ) ON COMMIT DROP;
 
 DO $$
@@ -48,7 +48,7 @@ BEGIN
 
     INSERT INTO torquemind_question_batch (
         scenario_id, question_text, option_a, option_b, option_c, option_d,
-        correct_answer, explanation, difficulty, topic, ase_area
+        correct_answer, explanation, difficulty, topic, diagnostic_area
     )
     SELECT
         btrim(item->>'scenario_id'),
@@ -61,7 +61,7 @@ BEGIN
         NULLIF(btrim(item->>'explanation'), ''),
         NULLIF(btrim(item->>'difficulty'), ''),
         NULLIF(btrim(item->>'topic'), ''),
-        NULLIF(btrim(item->>'ase_area'), '')
+        NULLIF(btrim(item->>'diagnostic_area'), '')
     FROM jsonb_array_elements(batch_json) AS item;
 
     IF EXISTS (
@@ -89,13 +89,13 @@ $$;
 WITH inserted_questions AS (
     INSERT INTO public.scenario_questions (
         scenario_id, question_text, option_a, option_b, option_c, option_d,
-        correct_answer, explanation, difficulty, topic, ase_area
+        correct_answer, explanation, difficulty, topic, diagnostic_area
     )
     SELECT
         batch.scenario_id, batch.question_text,
         batch.option_a, batch.option_b, batch.option_c, batch.option_d,
         batch.correct_answer, batch.explanation, batch.difficulty,
-        batch.topic, batch.ase_area
+        batch.topic, batch.diagnostic_area
     FROM torquemind_question_batch AS batch
     WHERE NOT EXISTS (
         SELECT 1
