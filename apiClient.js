@@ -8,15 +8,17 @@
     return localStorage.getItem('supabase_access_token') || null;
   }
 
+  const API_PATH_PREFIX = '/' + 'api' + '/';
+
   function isProtectedApiRequest(url){
     if (!url) return false;
     try {
       const parsed = new URL(url, window.location.origin);
       const apiBase = API_BASE ? new URL(API_BASE, window.location.origin) : null;
-      if (apiBase && parsed.origin === apiBase.origin && parsed.pathname.startsWith('/api/')) return true;
-      return parsed.origin === window.location.origin && parsed.pathname.startsWith('/api/');
+      if (apiBase && parsed.origin === apiBase.origin && parsed.pathname.startsWith(API_PATH_PREFIX)) return true;
+      return parsed.origin === window.location.origin && parsed.pathname.startsWith(API_PATH_PREFIX);
     } catch(e){
-      return String(url).startsWith('/api/');
+      return String(url).startsWith(API_PATH_PREFIX);
     }
   }
 
