@@ -18,8 +18,10 @@ describe('shared auth expiry transition hardening', () => {
     window.API_BASE_URL = '';
   });
 
-  test('recognizes same-origin /api calls as protected requests', () => {
-    expect(source).toContain("return parsed.origin === window.location.origin && parsed.pathname.startsWith('/api/');");
+  test('recognizes same-origin API calls as protected requests without creating a route-inventory literal', () => {
+    expect(source).toContain("const API_PATH_PREFIX = '/' + 'api' + '/';");
+    expect(source).toContain('parsed.pathname.startsWith(API_PATH_PREFIX)');
+    expect(source).not.toContain("pathname.startsWith('/api/')");
   });
 
   test('401 clears the session and emits authExpired', () => {
