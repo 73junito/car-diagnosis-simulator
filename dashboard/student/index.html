@@ -234,7 +234,7 @@
         detailsBtn.addEventListener('click', (event) => {
           event.preventDefault();
           if(window.showScenarioDetail && typeof window.showScenarioDetail === 'function'){
-            window.showScenarioDetail(s.raw || s, card);
+            window.showScenarioDetail(s.raw || s, detailsBtn);
           }
         });
 
