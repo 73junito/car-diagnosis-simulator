@@ -51,11 +51,30 @@
     el.classList.remove('hidden');
   }
 
+  // Detach handle for the most recently bound procedural listeners. Rebinding
+  // on every initialization keeps direct-load auto-init plus later manual
+  // invocations (tests/tooling) from stacking duplicate handlers.
+  let unbindProceduralListeners = null;
+
   function initProceduralAssessment(initialScenario){
     const scenarios = [{slug:'no-start', displayName:'No Start'},{slug:'hybrid-ev', displayName:'Hybrid EV'}];
     populateScenarioSelect(scenarios);
-    const sel = document.getElementById('procedural-scenario-select'); if(sel){ sel.addEventListener('change', () => { const s = sel.value; const steps = PROCEDURE_STEPS[s] || []; populateSteps(steps); const safetyLabel = document.getElementById('procedural-safety-label'); if(safetyLabel) safetyLabel.classList.toggle('hidden', s!=='hybrid-ev'); document.getElementById('procedural-completion-state').classList.add('hidden'); loadAttemptState(s); }); }
-    const checkBtn = document.getElementById('procedural-check-complete'); if(checkBtn) checkBtn.addEventListener('click', () => { const res = checkCompletion(); const sel2 = document.getElementById('procedural-scenario-select'); const sc2 = sel2 ? sel2.value : null; saveAttemptState(sc2); return res; });
+    // Rebind shared-element handlers on every initialization; handlers from a
+    // previous initialization are removed first so listeners never stack.
+    if(unbindProceduralListeners){ unbindProceduralListeners(); unbindProceduralListeners = null; }
+    const removers = [];
+    const sel = document.getElementById('procedural-scenario-select');
+    if(sel){
+      const onScenarioChange = () => { const s = sel.value; const steps = PROCEDURE_STEPS[s] || []; populateSteps(steps); const safetyLabel = document.getElementById('procedural-safety-label'); if(safetyLabel) safetyLabel.classList.toggle('hidden', s!=='hybrid-ev'); document.getElementById('procedural-completion-state').classList.add('hidden'); loadAttemptState(s); };
+      sel.addEventListener('change', onScenarioChange);
+      removers.push(() => sel.removeEventListener('change', onScenarioChange));
+    }
+    const checkBtn = document.getElementById('procedural-check-complete');
+    if(checkBtn){
+      const onCheckComplete = () => { const res = checkCompletion(); const sel2 = document.getElementById('procedural-scenario-select'); const sc2 = sel2 ? sel2.value : null; saveAttemptState(sc2); return res; };
+      checkBtn.addEventListener('click', onCheckComplete);
+      removers.push(() => checkBtn.removeEventListener('click', onCheckComplete));
+    }
     // set initial
     const chosen = scenarios.find(s => s.slug===initialScenario) || scenarios[0]; if(chosen){ const selEl = document.getElementById('procedural-scenario-select'); selEl.value = chosen.slug; }
     // populate steps and safety
@@ -63,7 +82,13 @@
     populateSteps(PROCEDURE_STEPS[s] || []);
     const safetyLabel = document.getElementById('procedural-safety-label'); if(safetyLabel) safetyLabel.classList.toggle('hidden', s!=='hybrid-ev');
     // wire safety ack to save state
-    const ack = document.getElementById('procedural-safety-ack'); if(ack) ack.addEventListener('change', () => { const sel2 = document.getElementById('procedural-scenario-select'); const sc2 = sel2 ? sel2.value : null; saveAttemptState(sc2); });
+    const ack = document.getElementById('procedural-safety-ack');
+    if(ack){
+      const onAckChange = () => { const sel2 = document.getElementById('procedural-scenario-select'); const sc2 = sel2 ? sel2.value : null; saveAttemptState(sc2); };
+      ack.addEventListener('change', onAckChange);
+      removers.push(() => ack.removeEventListener('change', onAckChange));
+    }
+    unbindProceduralListeners = () => { removers.forEach((remove) => { remove(); }); };
   }
 
   // persistence helpers
@@ -110,4 +135,20 @@
 
   window._obd2Procedural = { initProceduralAssessment, populateSteps, checkCompletion, saveAttemptState, loadAttemptState, resetAttemptState };
   window.initProceduralAssessment = initProceduralAssessment;
+
+  // Direct-load initialization: a normal page load invokes the procedural
+  // assessment exactly once after the document is ready. Manual invocation of
+  // window.initProceduralAssessment() remains supported and rebinds handlers
+  // without stacking duplicate listeners.
+  let directLoadInitialized = false;
+  function initializeOnDirectLoad(){
+    if(directLoadInitialized) return;
+    directLoadInitialized = true;
+    window.initProceduralAssessment();
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initializeOnDirectLoad, { once: true });
+  } else {
+    initializeOnDirectLoad();
+  }
 })();
