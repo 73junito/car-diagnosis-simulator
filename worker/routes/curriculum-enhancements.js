@@ -4,6 +4,9 @@ import { isInstructorOrAdminRole } from '../auth/role-policy.js'
 import { requestOllama } from '../services/ollama.js'
 import { requestOpenAI } from '../services/openai-compatible.js'
 import { validateProviderConfig, DEFAULTS } from '../config/ai-config.js'
+import governedCurriculumAgent from '../../src/ai/curriculum/governed-curriculum-agent.js'
+
+const { prepareCurriculumEnhancement } = governedCurriculumAgent
 
 const MAX_EVIDENCE = 6
 const PROMPT_VERSION = 'curriculum-enhancement-v1'
@@ -285,6 +288,19 @@ export async function handleCurriculumEnhancementDrafts(c) {
     return c.json({ error: 'Curriculum drafting provider returned an invalid draft contract' }, 502)
   }
 
+  let agentPreparation
+  try {
+    agentPreparation = prepareCurriculumEnhancement({
+      lessonPlanId,
+      goal,
+      draftPayload,
+      evidence
+    })
+  } catch (error) {
+    console.error('Governed curriculum preparation rejected:', error?.message || error)
+    return c.json({ error: 'Curriculum draft failed the governed preparation contract' }, 409)
+  }
+
   const now = new Date().toISOString()
   const { data: draft, error: insertError } = await supabase
     .from('curriculum_enhancement_drafts')
@@ -323,6 +339,7 @@ export async function handleCurriculumEnhancementDrafts(c) {
 
   return c.json({
     data: draft,
+    agentPreparation,
     governance: {
       publication: 'not-granted',
       scoredAssessmentEligibility: 'not-granted',
