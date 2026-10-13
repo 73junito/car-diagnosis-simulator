@@ -14,6 +14,11 @@ def sha(path):
         for chunk in iter(lambda:f.read(1048576),b""): h.update(chunk)
     return h.hexdigest()
 
+def sha_text_canonical(path):
+    text=Path(path).read_text(encoding="utf-8")
+    canonical=text.replace("\r\n","\n").replace("\r","\n")
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
 def opts():
     raw=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
     out={}
@@ -101,7 +106,7 @@ def main():
     out.parent.mkdir(parents=True,exist_ok=True)
     bpy.ops.export_scene.gltf(filepath=str(out),export_format="GLB",use_selection=False,export_apply=True,export_animations=True,export_cameras=False,export_lights=False,export_extras=True)
     svg(template,fb)
-    md={"schemaVersion":"1.0.0","animationId":manifest["animationId"],"assetStatus":STATUS,"classification":"engineering-derived","vehicleSpecificClaims":False,"publicationAllowed":False,"assessmentEligible":False,"scoredAssessmentApproved":False,"humanApprovalRequired":True,"agentMayApprove":False,"agentMayRelease":False,"engineeringTemplateId":template["templateId"],"engineeringTemplateSha256":sha(tp),"manifestSha256":sha(mp),"generatorScriptSha256":sha(Path(__file__).resolve()),"blenderVersion":".".join(str(v) for v in bpy.app.version),"outputSha256":sha(out),"outputBytes":out.stat().st_size,"fallbackSha256":sha(fb),"componentMappings":{"battery":"BAT1","control-protection":"FUSE1","start-command-switch":"SW1","starter-solenoid-coil":"SOL_COIL","starter-solenoid-contact":"SOL_CONTACT","starter-motor":"MTR1","ground-path":"GND1"},"connectionDerivedComponents":["positive-path","ground-path"],"instructionalOverlays":["digital-multimeter"],"testPointIds":[x["id"] for x in template["testPoints"]],"operatingStateIds":[x["id"] for x in template["operatingStates"]],"faultIds":[x["id"] for x in template["faultCatalog"]],"numericPolicy":"No vehicle-specific acceptable measurement or limit is embedded in the 3D review asset."}
+    md={"schemaVersion":"1.0.0","animationId":manifest["animationId"],"assetStatus":STATUS,"classification":"engineering-derived","vehicleSpecificClaims":False,"publicationAllowed":False,"assessmentEligible":False,"scoredAssessmentApproved":False,"humanApprovalRequired":True,"agentMayApprove":False,"agentMayRelease":False,"engineeringTemplateId":template["templateId"],"engineeringTemplateSha256":sha(tp),"manifestSha256":sha_text_canonical(mp),"generatorScriptSha256":sha(Path(__file__).resolve()),"blenderVersion":".".join(str(v) for v in bpy.app.version),"outputSha256":sha(out),"outputBytes":out.stat().st_size,"fallbackSha256":sha_text_canonical(fb),"componentMappings":{"battery":"BAT1","control-protection":"FUSE1","start-command-switch":"SW1","starter-solenoid-coil":"SOL_COIL","starter-solenoid-contact":"SOL_CONTACT","starter-motor":"MTR1","ground-path":"GND1"},"connectionDerivedComponents":["positive-path","ground-path"],"instructionalOverlays":["digital-multimeter"],"testPointIds":[x["id"] for x in template["testPoints"]],"operatingStateIds":[x["id"] for x in template["operatingStates"]],"faultIds":[x["id"] for x in template["faultCatalog"]],"numericPolicy":"No vehicle-specific acceptable measurement or limit is embedded in the 3D review asset.","textHashPolicy":"sha256-utf8-lf-normalized"}
     meta.write_text(json.dumps(md,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print("ANIM1D_SHA256="+md["outputSha256"])
 

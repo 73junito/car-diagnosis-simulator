@@ -21,19 +21,19 @@
   ],
   "engineeringTemplateId": "automotive-12v-starting-system",
   "engineeringTemplateSha256": "b8707963ab29d48aa3c69d5eab60fe867ceb613cd84b33754fc6fe0fa050b363",
-  "fallbackSha256": "213cc6fd03fb62187f6f93b633c0d8374391bce7e54c266c17cdc3a8b2f2d61f",
+  "fallbackSha256": "1b1f1a2a51e6e37a7f63b5227ec0d585bb8dac2490f79b97aa0ae41613f69992",
   "faultIds": [
     "FAULT_OPEN_CONTROL",
     "FAULT_OPEN_POWER",
     "FAULT_HIGH_RES_GROUND",
     "FAULT_HIGH_RES_POWER"
   ],
-  "generatorScriptSha256": "1038459bffd290c0c839587cba8fd419596812d0e4abc887ad5f752fd618305d",
+  "generatorScriptSha256": "4e7143908bd1c666021d58aab690c9722e71f6974e9026b941b966722a7e777a",
   "humanApprovalRequired": true,
   "instructionalOverlays": [
     "digital-multimeter"
   ],
-  "manifestSha256": "b512baac53d79cbb93085c95c9f85896b50f935ed21d23d0c544d6d98a512049",
+  "manifestSha256": "580801fc6463146d4d1612154c33a66adb217fcad0a6ea36c512a52a93a74971",
   "numericPolicy": "No vehicle-specific acceptable measurement or limit is embedded in the 3D review asset.",
   "operatingStateIds": [
     "key-off",
@@ -51,5 +51,6 @@
     "TP_SOLENOID_OUT",
     "TP_MOTOR_GND"
   ],
+  "textHashPolicy": "sha256-utf8-lf-normalized",
   "vehicleSpecificClaims": false
 }
