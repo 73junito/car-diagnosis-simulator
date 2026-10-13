@@ -1,6 +1,6 @@
 # Hybrid Agentic Roadmap
 
-**Status:** Stage 3 activation controls and authenticated Copilot UI implemented; production remains default-off pending staging validation and explicit human-controlled enablement.
+**Status:** Stage 4 first expansion implemented: Student Coach augmentation, Instructor Intelligence, and Engineering Maintenance planning. Production Copilot remains human-controlled and subject to the Stage 3 activation gates.
 
 ## Product doctrine
 
@@ -90,13 +90,31 @@ Implemented:
 
 Production activation requires an explicit configuration change after staging validation; merging this stage alone does not turn the production Copilot on.
 
-## Stage 4 — broader agents
+## Stage 4 — broader agents — first expansion implemented
 
-Only after the diagnostic Copilot execution path is stable:
+Implemented:
 
-- Student Coach agent augmentation.
-- Instructor intelligence summaries.
-- Engineering-maintenance agent workflow.
-- Governed curriculum/evidence preparation agents.
+1. Student Coach agent
+   - prepares practice summaries from existing server-generated training recommendations,
+   - uses training data only,
+   - does not use assessment results to make recommendations,
+   - cannot grade, change eligibility, approve, or release.
 
-These agents inherit the same rule: preparation is not approval, publication, eligibility, deployment, or release authority.
+2. Instructor Intelligence agent
+   - prepares aggregate class training signals,
+   - reuses existing instructor authorization and owned-class scoping,
+   - excludes learner identity from the prepared intelligence output,
+   - remains read-only and cannot grade, change eligibility, approve, or release.
+
+3. Engineering Maintenance agent
+   - prepares bounded maintenance plans for tests, documentation, dependency review, CI, or application code,
+   - cannot commit, merge, deploy, or release,
+   - requires human execution approval.
+
+Still deferred within Stage 4:
+
+- governed curriculum/evidence agent product surfaces,
+- deeper diagnostic tool expansion beyond the current bounded allowlist,
+- any agent workflow that writes consequential state.
+
+All Stage 4 agents inherit the same rule: preparation is not approval, publication, eligibility, deployment, merge authority, or release authority.

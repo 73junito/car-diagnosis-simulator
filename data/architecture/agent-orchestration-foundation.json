@@ -117,6 +117,33 @@
       "may_prepare": true,
       "may_human_approve": false,
       "may_release": false
+    },
+    {
+      "id": "student-coach-agent",
+      "capabilities": [
+        "student-practice-summary-preparation"
+      ],
+      "may_prepare": true,
+      "may_human_approve": false,
+      "may_release": false
+    },
+    {
+      "id": "instructor-intelligence-agent",
+      "capabilities": [
+        "instructor-training-summary-preparation"
+      ],
+      "may_prepare": true,
+      "may_human_approve": false,
+      "may_release": false
+    },
+    {
+      "id": "engineering-maintenance-agent",
+      "capabilities": [
+        "engineering-maintenance-plan-preparation"
+      ],
+      "may_prepare": true,
+      "may_human_approve": false,
+      "may_release": false
     }
   ],
   "states": [
@@ -309,6 +336,9 @@
     "Assessment release does not imply institutional, high-stakes, certification, or licensure authority.",
     "Unknown agents, states, permissions, and transitions fail closed.",
     "Existing assessment and release authority is unchanged by Phase 1.",
-    "The diagnostic copilot is advisory-only and may not grade, publish, release, change assessment eligibility, or replace technician verification."
+    "The diagnostic copilot is advisory-only and may not grade, publish, release, change assessment eligibility, or replace technician verification.",
+    "Student Coach agent may prepare practice summaries from training data only and may not grade or change assessment eligibility.",
+    "Instructor Intelligence agent is read-only, class-scoped, and may not make grades, eligibility decisions, or release decisions.",
+    "Engineering Maintenance agent may prepare change plans but may not commit, merge, deploy, or release without human action."
   ]
 }

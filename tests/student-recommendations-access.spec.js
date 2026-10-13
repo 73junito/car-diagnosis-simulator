@@ -24,7 +24,7 @@ describe('student recommendation retirement boundary', () => {
     for (const code of [apiRoute, workerRoute]) {
       expect(code).toContain('extractBearerToken')
       expect(code).toContain('verifySupabaseToken')
-      expect(code).toContain('recommendations: []')
+      expect(code).toMatch(/recommendations\s*:\s*\[\]|recommendations\s*=\s*\[\]/)
       expect(code).not.toContain(".from('student_recommendations')")
     }
   })

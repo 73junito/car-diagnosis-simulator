@@ -1,6 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import { extractBearerToken, verifySupabaseToken } from '../../api/_utils/auth-utils.js'
 import { buildStudentProgress } from '../../api/_utils/student-progress.js'
+import studentCoachAgent from '../../src/ai/education/student-coach-agent.js'
+
+const { prepareStudentCoachSummary } = studentCoachAgent
 
 const PRACTICE_MODE = 'training'
 const MAX_RECOMMENDATIONS = 3
@@ -58,9 +61,14 @@ export async function handleStudentRecommendations(c) {
   const attemptIds = attemptRows.map((row) => row.id).filter(Boolean)
 
   if (!attemptIds.length) {
+    const recommendations = []
     return c.json({
-      recommendations: [],
+      recommendations,
       state: 'insufficient_training_history',
+      coachSummary: prepareStudentCoachSummary({
+        recommendations,
+        state: 'insufficient_training_history'
+      }),
       context: {
         source: 'training_progress',
         assessmentDataUsed: false,
@@ -84,9 +92,14 @@ export async function handleStudentRecommendations(c) {
   const performance = Array.isArray(progress.performance) ? progress.performance : []
 
   if (!performance.length) {
+    const recommendations = []
     return c.json({
-      recommendations: [],
+      recommendations,
       state: 'insufficient_training_history',
+      coachSummary: prepareStudentCoachSummary({
+        recommendations,
+        state: 'insufficient_training_history'
+      }),
       context: {
         source: 'training_progress',
         assessmentDataUsed: false,
@@ -95,9 +108,14 @@ export async function handleStudentRecommendations(c) {
     }, 200)
   }
 
+  const recommendations = performance.slice(0, MAX_RECOMMENDATIONS).map(toRecommendation)
   return c.json({
-    recommendations: performance.slice(0, MAX_RECOMMENDATIONS).map(toRecommendation),
+    recommendations,
     state: 'available',
+    coachSummary: prepareStudentCoachSummary({
+      recommendations,
+      state: 'available'
+    }),
     context: {
       source: 'training_progress',
       assessmentDataUsed: false,
