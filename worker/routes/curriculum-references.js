@@ -35,6 +35,10 @@ function cleanQuery(value, max = 120) {
   return String(value || '').trim().slice(0, max)
 }
 
+function cleanSearchTerm(value) {
+  return cleanQuery(value).replace(/[^A-Za-z0-9\s\-.:/]/g, '').trim()
+}
+
 function publicSource(source) {
   return {
     id: source.id,
@@ -81,17 +85,16 @@ async function authorizeInstructorAudience(c, supabase) {
 }
 
 function applyLibraryFilters(query, c) {
-  const q = cleanQuery(c.req.query('q'))
+  const q = cleanSearchTerm(c.req.query('q'))
   const subjectArea = cleanQuery(c.req.query('subjectArea'), 80)
   const sourceKind = cleanQuery(c.req.query('sourceKind'), 80)
   const rights = cleanQuery(c.req.query('rights'), 40)
 
   let request = query
   if (q) {
-    const escaped = q.replace(/[%_,]/g, '')
     request = request.or(
-      'title.ilike.%' + escaped + '%,publisher.ilike.%' + escaped +
-      '%,subject_area.ilike.%' + escaped + '%,source_kind.ilike.%' + escaped + '%'
+      'title.ilike.%' + q + '%,publisher.ilike.%' + q +
+      '%,subject_area.ilike.%' + q + '%,source_kind.ilike.%' + q + '%'
     )
   }
   if (subjectArea) request = request.eq('subject_area', subjectArea)
