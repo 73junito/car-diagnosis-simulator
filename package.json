@@ -117,7 +117,8 @@
     "validate:institutional-decision-package": "node scripts/verify-institutional-decision-package.js",
     "validate:phase8a-legacy-theme-migration": "node scripts/phase-8a-legacy-theme-migration-check.js",
     "validate:production-api-route-inventory": "node scripts/verify-production-api-route-inventory.js",
-    "validate:dependency-runtime-compatibility": "node scripts/verify-dependency-runtime-compatibility.js"
+    "validate:dependency-runtime-compatibility": "node scripts/verify-dependency-runtime-compatibility.js",
+    "validate:text-normalization-policy": "node scripts/verify-text-normalization-policy.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
