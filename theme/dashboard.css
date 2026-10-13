@@ -93,6 +93,12 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.tm-session-history-main {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 .tm-session-history-controls {
   display: flex;
   flex-wrap: wrap;
