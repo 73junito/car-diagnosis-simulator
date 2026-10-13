@@ -39,6 +39,7 @@
     "validate:evidence-approval": "node scripts/verify-evidence-approval-contract.js",
     "validate:external-technical-references": "node scripts/verify-external-technical-references.js",
     "validate:circuits": "node scripts/verify-circuit-models.js",
+    "validate:animations": "node scripts/verify-animation-manifests.js",
     "validate:compliance-authority": "node scripts/verify-compliance-authority.js",
     "validate:student-data-inventory": "node scripts/verify-student-data-inventory.js",
     "validate:subprocessor-register": "node scripts/verify-subprocessor-register.js",

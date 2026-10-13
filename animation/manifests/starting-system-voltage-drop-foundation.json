@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "1.0.0",
+  "animationId": "starting-system-voltage-drop-foundation",
+  "title": "Starting-System Voltage-Drop Trainer Foundation",
+  "type": "interactive-3d",
+  "classification": "engineering-derived",
+  "instructionalPurpose": "Provide a governed foundation for teaching how starting-circuit components and voltage-drop measurement points relate during a diagnostic workflow.",
+  "rendering": {
+    "renderer": "three-js",
+    "assetPath": null,
+    "fallbackImagePath": null
+  },
+  "components": [
+    {
+      "id": "battery",
+      "label": "Battery"
+    },
+    {
+      "id": "positive-cable",
+      "label": "Positive cable"
+    },
+    {
+      "id": "starter-relay",
+      "label": "Starter relay"
+    },
+    {
+      "id": "starter-solenoid",
+      "label": "Starter solenoid"
+    },
+    {
+      "id": "starter-motor",
+      "label": "Starter motor"
+    },
+    {
+      "id": "ground-path",
+      "label": "Ground path"
+    },
+    {
+      "id": "digital-multimeter",
+      "label": "Digital multimeter"
+    }
+  ],
+  "steps": [
+    {
+      "id": "observe-circuit",
+      "label": "Observe the starting circuit",
+      "description": "Identify the major current path and control components before selecting a measurement.",
+      "durationMs": null,
+      "componentIds": [
+        "battery",
+        "positive-cable",
+        "starter-relay",
+        "starter-solenoid",
+        "starter-motor",
+        "ground-path"
+      ]
+    },
+    {
+      "id": "select-test-points",
+      "label": "Select voltage-drop test points",
+      "description": "Choose measurement points appropriate to the part of the starting circuit being investigated.",
+      "durationMs": null,
+      "componentIds": [
+        "digital-multimeter",
+        "positive-cable",
+        "ground-path"
+      ]
+    },
+    {
+      "id": "interpret-measurement",
+      "label": "Interpret the measurement",
+      "description": "Use an approved engineering artifact or evidence source to interpret the measured relationship without inventing vehicle-specific limits.",
+      "durationMs": null,
+      "componentIds": [
+        "digital-multimeter",
+        "starter-motor"
+      ]
+    }
+  ],
+  "controls": {
+    "play": true,
+    "pause": true,
+    "stepForward": true,
+    "stepBackward": true,
+    "resetCamera": true,
+    "componentSelect": true
+  },
+  "evidence": {
+    "required": true,
+    "approvedEvidenceRefs": [],
+    "engineeringArtifactRefs": [
+      "data/circuit-templates/12v-starting-system.json"
+    ]
+  },
+  "governance": {
+    "status": "drafted",
+    "humanApprovalRequired": true,
+    "humanApprovalRecorded": false,
+    "publicationAllowed": false,
+    "assessmentEligible": false,
+    "scoredAssessmentApproved": false,
+    "vehicleSpecificClaims": false,
+    "agentMayApprove": false,
+    "agentMayRelease": false
+  },
+  "accessibility": {
+    "keyboardOperable": true,
+    "reducedMotionRequired": true,
+    "staticFallbackRequired": true,
+    "textAlternativeRequired": true
+  },
+  "provenance": {
+    "sourceRole": "project-authored-animation",
+    "authorityRegistry": "data/compliance/authority-registry.json",
+    "rule": "This draft may illustrate generic starting-system relationships and diagnostic workflow only. It may not establish vehicle-specific values, procedures, limits, wiring, pinouts, or assessment eligibility without separately approved evidence and human review."
+  }
+}
