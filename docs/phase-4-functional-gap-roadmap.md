@@ -69,10 +69,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** `/reference-library/` now uses the existing Worker-native `/api/curriculum/references` boundary in explicit library mode, with learner and instructor audience handling, search, subject/source-type filters, and rights filters.
 **Gap:** closed. Learner access is restricted to active `student` references; instructor/internal guidance requires a server-verified instructor/admin role. Link-only filtering requires citation/link permission while direct reproduction, database storage, and AI/RAG ingestion are all false. The UI displays recorded rights per source and opens only canonical links allowed for citation/linking; it never fetches or stores source body content.
 **Required outcome:** completed. The shared learner/instructor library is audience-aware, rights-aware, read-only, preserves link-only restrictions, exposes no unauthorized source content, and does not perform RAG/database ingestion or change assessment/publication authority.
-### G15 — Public interactive demo case — **P3**
-**Evidence:** the redesign audit explicitly leaves the interactive demo case as a new build.
-**Gap:** public visitors cannot experience a safe sample of the reasoning model before sign-in.
-**Required outcome:** one deterministic, non-graded, non-personalized demo using public-safe synthetic/cleared content. It must not expose assessment banks, answer keys, private telemetry, or imply accreditation/credit.
+### G15 — Public interactive demo case — **P3 - completed**
+**Evidence:** `public-site/demo/` now provides a deterministic five-stage Concern → Evidence → Evaluate → Test → Verify diagnostic walkthrough using synthetic, cleared measurements and local-only browser interactions.
+**Gap:** closed. The public demo requires no login, makes no network/API calls, stores no user state, emits no telemetry, reads no assessment/question-bank data, contains no grading or answer-key fields, and explicitly disclaims assessment records, institutional records, academic credit, credentials, and accreditation implications.
+**Required outcome:** completed. Public visitors can experience the reasoning model before sign-in through a non-graded, non-personalized, public-safe case that remains isolated from assessment, telemetry, identity, and institutional authority boundaries.
 ### G16 — Instructor/admin design specifications — **P2 documentation dependency - completed**
 **Evidence:** both `design-language/dashboards/administrator.md` and `design-language/dashboards/instructor.md` now define authoritative role-specific dashboard contracts.
 **Gap:** closed. The instructor specification covers server-side authorization, classroom/live/history/analytics/research/authoring/institution information architecture, loading/empty/error states, destructive-action confirmation, audit visibility, accessibility, responsive behavior, and the assessment-eligibility boundary.
@@ -143,7 +143,7 @@ The repository already contains useful foundations, but several exist outside th
 4. [x] Institution claim status.
 5. [x] Dedicated governed Reference Library.
 ### Phase 8 — Public interactive demo
-Build only after the production reasoning flow and reference/authorization boundaries are stable.
+[x] Deterministic public-safe interactive demo completed after production reasoning, reference, and authorization boundaries were stabilized.
 ## Branch plan
 Use one concern per branch/PR. Suggested first branches:
 - `security/canonical-role-policy`

@@ -607,3 +607,35 @@ body:not(.home-page) .footer-nav a{color:#a8b8c8;text-decoration:none}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
+
+
+/* Public diagnostic demo */
+.demo-case{margin-top:28px;padding:28px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(19,36,58,.76),rgba(11,23,40,.74))}
+.demo-case__header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}
+.demo-case__header h2{margin:0 0 12px}
+.demo-case__header p{margin:0;color:#a9bbcc}
+.demo-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}
+.demo-metrics article{padding:18px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03)}
+.demo-metrics span{display:block;color:#91a6ba;font-size:.82rem}
+.demo-metrics strong{display:block;margin-top:6px;color:#fff;font-size:1.35rem}
+.demo-steps{display:grid;gap:12px;padding:0;margin:0;list-style:none}
+.demo-step{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.demo-step.is-active{border-color:rgba(99,180,255,.36);background:rgba(47,140,255,.06)}
+.demo-step__button{width:100%;display:grid;grid-template-columns:44px 1fr;align-items:center;gap:12px;padding:16px 18px;border:0;border-radius:14px;color:#fff;background:transparent;text-align:left;cursor:pointer}
+.demo-step__button span{display:grid;width:34px;height:34px;place-items:center;border-radius:10px;color:#9bd7ff;background:rgba(47,140,255,.12);font-size:.78rem;font-weight:850}
+.demo-step__panel{padding:0 18px 20px 74px}
+.demo-step__panel p{color:#b3c3d2}
+.demo-step__panel fieldset{display:grid;gap:10px;margin:18px 0;padding:0;border:0}
+.demo-step__panel legend{margin-bottom:10px;color:#fff;font-weight:700}
+.demo-step__panel label{display:grid;gap:8px;color:#d8e4ef}
+.demo-step__panel fieldset label{grid-template-columns:auto 1fr;align-items:center}
+.demo-step__panel textarea,.demo-step__panel select{width:100%;max-width:720px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;color:#fff;background:#0b1728}
+.demo-step__panel .button{margin-top:18px}
+@media(max-width:760px){
+  .demo-case__header{flex-direction:column}
+  .demo-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .demo-step__panel{padding-left:18px}
+}
+@media(max-width:520px){
+  .demo-metrics{grid-template-columns:1fr}
+}
