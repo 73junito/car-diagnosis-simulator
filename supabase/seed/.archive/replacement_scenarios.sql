@@ -12,7 +12,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -26,7 +26,7 @@ values
   'A healthy alternator should maintain a steady output of around 13.5V under load, not dropping below 12V which indicates an insufficient charge or potential failure.',
   'intermediate',
   'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',
-  'A6 Electrical/Electronic Systems'
+  'Electrical/Electronic Systems'
 );
 
 insert into scenario_questions
@@ -41,7 +41,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -55,7 +55,7 @@ values
   'A poor ground connection can cause electrical noise, leading to issues like static in the radio. The headlights and engine performance are not directly related to a bad ground.',
   'intermediate',
   'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',
-  'A6 Electrical/Electronic Systems'
+  'Electrical/Electronic Systems'
 );
 
 insert into scenario_questions
@@ -70,7 +70,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -84,7 +84,7 @@ values
   'A battery that is weak or failing will show a lower voltage reading, especially when under load. A healthy battery should maintain around 12.5-13.5V even during moderate loads.',
   'intermediate',
   'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',
-  'A6 Electrical/Electronic Systems'
+  'Electrical/Electronic Systems'
 );
 
 insert into scenario_questions
@@ -99,7 +99,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -113,7 +113,7 @@ values
   'Dimming headlights can indicate a charging system issue, often seen as fluctuating voltage readings on the scan tool, suggesting an alternator or battery problem.',
   'intermediate',
   'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',
-  'A6 Electrical/Electronic Systems'
+  'Electrical/Electronic Systems'
 );
 
 insert into scenario_questions
@@ -128,7 +128,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -142,7 +142,7 @@ values
   'A voltage drop in the wiring harness can be indicative of a poor connection or damaged wire, leading to reduced voltage at certain points during high electrical demand like driving with headlights on.',
   'intermediate',
   'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',
-  'A6 Electrical/Electronic Systems'
+  'Electrical/Electronic Systems'
 );
 
 insert into scenario_questions
@@ -157,7 +157,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -171,7 +171,7 @@ values
   'Dimming headlights can be a sign of an overloaded electrical system, where the alternator cannot keep up with the increased load from multiple accessories running at once.',
   'intermediate',
   'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',
-  'A6 Electrical/Electronic Systems'
+  'Electrical/Electronic Systems'
 );
 
 insert into scenario_questions
@@ -186,7 +186,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -200,7 +200,7 @@ values
   'A thorough visual inspection should include checking for loose, corroded, or damaged connections as well as ensuring clean wiring and a sealed battery to prevent issues like voltage drops or poor ground connections.',
   'intermediate',
   'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',
-  'A6 Electrical/Electronic Systems'
+  'Electrical/Electronic Systems'
 );
 
 insert into scenario_questions
@@ -215,7 +215,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -229,7 +229,7 @@ values
   'A failing battery would show quick discharge, leading to dimming headlights and other electrical issues under load. A healthy battery should maintain its charge and voltage levels during a load test.',
   'intermediate',
   'automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition',
-  'A6 Electrical/Electronic Systems'
+  'Electrical/Electronic Systems'
 );
 delete from scenario_questions where scenario_id = 'hvac-cooling';
 
@@ -245,7 +245,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -259,7 +259,7 @@ values
   'A non-engaging compressor clutch can indicate a mechanical issue with the compressor itself, such as a failed relay or internal damage.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -274,7 +274,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -288,7 +288,7 @@ values
   'High low-side pressure can indicate an overcharged system, which could be due to excessive refrigerant.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -303,7 +303,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -317,7 +317,7 @@ values
   'Ice on the evaporator core is a clear sign of restricted airflow, possibly due to a clogged air filter or blocked ducts.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -332,7 +332,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -346,7 +346,7 @@ values
   'Soapy water can help identify small refrigerant leaks by creating bubbles where the leak is present.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -361,7 +361,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -375,7 +375,7 @@ values
   'A low high-side pressure can indicate a compressor issue, such as a failed compressor or internal damage.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -390,7 +390,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -404,7 +404,7 @@ values
   'A blocked or restricted grille can obstruct airflow to the condenser, affecting its performance.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -419,7 +419,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -433,7 +433,7 @@ values
   'If the compressor clutch is engaging but the fan does not operate, it suggests a problem with the electrical system controlling the blower.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -448,7 +448,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -462,7 +462,7 @@ values
   'Operating pressures help assess system performance, but pressures alone cannot establish the exact refrigerant quantity. Recovering and weighing the refrigerant provides the appropriate comparison with the manufacturer-specified charge.',
   'intermediate',
   'Automotive A/C cooling diagnostics',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 delete from scenario_questions where scenario_id = 'overheating';
 
@@ -478,7 +478,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -492,7 +492,7 @@ values
   'The thermostat is a critical component that regulates the flow of coolant through the engine. A stuck closed or partially open thermostat can cause the engine to overheat.',
   'intermediate',
   'cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -507,7 +507,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -521,7 +521,7 @@ values
   'If the thermostat is functioning correctly, the next step would be to check the water pump for proper operation as it is essential for coolant circulation.',
   'intermediate',
   'cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -536,7 +536,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -550,7 +550,7 @@ values
   'If the radiator is not a factor, the issue could be with the thermostat. A faulty thermostat can prevent proper coolant flow and lead to overheating.',
   'intermediate',
   'cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -565,7 +565,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -579,7 +579,7 @@ values
   'A failing water pump can prevent proper coolant circulation, leading to engine overheating.',
   'intermediate',
   'cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -594,7 +594,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -608,7 +608,7 @@ values
   'Dirty radiator fins can restrict air flow, leading to poor heat dissipation and engine overheating.',
   'intermediate',
   'cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -623,7 +623,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -637,7 +637,7 @@ values
   'A faulty cooling fan relay can prevent the fan from operating, leading to poor heat dissipation and engine overheating.',
   'intermediate',
   'cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -652,7 +652,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -666,7 +666,7 @@ values
   'A thermostat that does not function properly can lead to improper coolant flow, causing the engine to overheat.',
   'intermediate',
   'cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 
 insert into scenario_questions
@@ -681,7 +681,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -695,7 +695,7 @@ values
   'A water pump with a bearing or impeller issue can cause unusual noises and poor circulation, leading to engine overheating.',
   'intermediate',
   'cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation',
-  'A7 Heating and Air Conditioning'
+  'Heating and Air Conditioning'
 );
 delete from scenario_questions where scenario_id = 'power-loss';
 
@@ -711,7 +711,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -725,7 +725,7 @@ values
   'Fuel delivery issues can significantly affect the vehicle''s performance. A malfunctioning fuel pump or injectors could lead to insufficient fuel flow during acceleration, especially under load.',
   'intermediate',
   'engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 
 insert into scenario_questions
@@ -740,7 +740,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -754,7 +754,7 @@ values
   'A loose vacuum hose can cause an air intake restriction, leading to a leaner air-fuel mixture and reduced power output.',
   'intermediate',
   'engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 
 insert into scenario_questions
@@ -769,7 +769,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -783,7 +783,7 @@ values
   'A clogged air filter can restrict the airflow into the engine, leading to higher than normal MAP sensor readings.',
   'intermediate',
   'engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 
 insert into scenario_questions
@@ -798,7 +798,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -812,7 +812,7 @@ values
   'A faulty TPS can cause the engine to misinterpret throttle position signals, leading to improper fuel delivery and reduced acceleration.',
   'intermediate',
   'engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 
 insert into scenario_questions
@@ -827,7 +827,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -841,7 +841,7 @@ values
   'A malfunctioning fuel pump or regulator can result in lower than normal fuel pressure, affecting the vehicle''s performance during acceleration.',
   'intermediate',
   'engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 
 insert into scenario_questions
@@ -856,7 +856,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -870,7 +870,7 @@ values
   'A loose muffler can cause exhaust backpressure, reducing the engine''s efficiency and power output.',
   'intermediate',
   'engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 
 insert into scenario_questions
@@ -885,7 +885,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -899,7 +899,7 @@ values
   'Checking the fuel pressure can help determine if there is a fuel delivery issue affecting the vehicle''s performance.',
   'intermediate',
   'engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 
 insert into scenario_questions
@@ -914,7 +914,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -928,5 +928,5 @@ values
   'A faulty MAF sensor can cause the engine to misinterpret airflow signals, leading to improper fuel delivery and reduced acceleration.',
   'intermediate',
   'engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );

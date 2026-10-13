@@ -1,7 +1,7 @@
 # Supabase attempts table and RLS notes
 
 This document records the initial migration for the `attempts` table used
-for storing student and ASE workflow attempts in Supabase.
+for storing student and diagnostic workflow attempts in Supabase.
 
 Key points
 - Migration file: `db/migrations/002_create_attempts.sql`

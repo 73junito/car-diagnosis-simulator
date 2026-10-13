@@ -170,7 +170,7 @@ window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummar
     if (sessionsData && sessionsData.ok){
       if (isFiniteNumber(sessionsData.averageScore)) avgScore = sessionsData.averageScore
       completionRate = sessionsData.completionRate ?? sessionsData.completion ?? null
-      weakAreas = sessionsData.weakAreas ?? sessionsData.aseWeaknessesCount ?? null
+      weakAreas = sessionsData.weakAreas ?? sessionsData.diagnosticWeaknessesCount ?? null
     }
 
     if (avgScore == null && studentsData && Array.isArray(studentsData.students)){

@@ -11,9 +11,9 @@ const { isGroundedResponseShape } = require('../src/tutor/groundedResponseSchema
 describe('RALA contract validators', () => {
   const approvedSource = {
     id: 'fixture-approved-source',
-    title: 'ASE A6 2024 (fixture)',
-    publisher: 'ASE Foundation',
-    storage_path: '/fixtures/ase-a6-2024.pdf',
+    title: 'Electrical Diagnostics 2024 (fixture)',
+    publisher: 'external automotive education source',
+    storage_path: '/fixtures/electrical-diagnostics-2024.pdf',
     checksum: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
     checksum_algorithm: 'sha256',
     version: 1,
@@ -28,7 +28,7 @@ describe('RALA contract validators', () => {
     section: 'Starter Circuit Testing',
     page_start: 118,
     page_end: 123,
-    locator: 'A6 > Starting System > Starter Circuit Testing',
+    locator: 'Electrical Diagnostics > Starting System > Starter Circuit Testing',
     text_excerpt: 'Fixture excerpt: check battery voltage at rest and under crank.',
     token_count: 50,
     text_hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
@@ -42,7 +42,7 @@ describe('RALA contract validators', () => {
       chunkId: 'fixture-approved-chunk',
       sourceId: 'fixture-approved-source',
       sourceVersion: 1,
-      locator: 'A6 > Starting System > Starter Circuit Testing',
+      locator: 'Electrical Diagnostics > Starting System > Starter Circuit Testing',
       text: 'Fixture excerpt: check battery voltage at rest and under crank.',
       score: 0.99,
       embeddingId: 'fixture-embedding-1'
@@ -79,11 +79,11 @@ describe('RALA contract validators', () => {
     expect(validateRetrievalResult({ status: 'sufficient', evidence: retrievedEvidence })).toEqual({ ok: true, reason: null });
 
     expect(validateCitationsAgainstRetrievedEvidence([
-      { label: 'C1', sourceId: 'fixture-approved-source', chunkId: 'fixture-approved-chunk', locator: 'A6 > Starting System > Starter Circuit Testing' }
+      { label: 'C1', sourceId: 'fixture-approved-source', chunkId: 'fixture-approved-chunk', locator: 'Electrical Diagnostics > Starting System > Starter Circuit Testing' }
     ], retrievedEvidence)).toEqual({ ok: true, reason: null });
 
     expect(validateCitationsAgainstRetrievedEvidence([
-      { label: 'C1', sourceId: 'fixture-approved-source', chunkId: 'fixture-approved-chunk', locator: 'A6 > Starting System > Starter Circuit Testing' },
+      { label: 'C1', sourceId: 'fixture-approved-source', chunkId: 'fixture-approved-chunk', locator: 'Electrical Diagnostics > Starting System > Starter Circuit Testing' },
       { label: 'C2', sourceId: 'fixture-approved-source', chunkId: 'missing-chunk', locator: 'unknown' }
     ], retrievedEvidence)).toEqual({ ok: false, reason: 'CITATION_NOT_SUPPORTED_BY_RETRIEVED_CHUNKS', details: null });
   });
@@ -93,7 +93,7 @@ describe('RALA contract validators', () => {
       status: 'grounded',
       answer: 'Inspect starter control circuit first. [C1]',
       citations: [
-        { label: 'C1', sourceId: 'fixture-approved-source', chunkId: 'fixture-approved-chunk', locator: 'A6 > Starting System > Starter Circuit Testing' }
+        { label: 'C1', sourceId: 'fixture-approved-source', chunkId: 'fixture-approved-chunk', locator: 'Electrical Diagnostics > Starting System > Starter Circuit Testing' }
       ],
       reason: null
     };

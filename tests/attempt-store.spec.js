@@ -37,19 +37,19 @@ describe('Attempt store scaffold', () => {
     expect(document.getElementById('symptom-text').value).toBe('no crank');
   });
 
-  test('ASE save, restore and reset', () => {
-    const html = fs.readFileSync(path.resolve(process.cwd(),'dashboard/obd2-ase.html'),'utf8');
+  test('diagnostic save, restore and reset', () => {
+    const html = fs.readFileSync(path.resolve(process.cwd(),'dashboard/obd2-procedural.html'),'utf8');
     const doc = new DOMParser().parseFromString(html,'text/html');
     while(doc.body.firstChild) document.body.appendChild(doc.body.firstChild);
     const storeCode = fs.readFileSync(path.resolve(process.cwd(),'dashboard/attempt-store.js'),'utf8');
-    const aseCode = fs.readFileSync(path.resolve(process.cwd(),'dashboard/obd2-ase.js'),'utf8');
+    const proceduralCode = fs.readFileSync(path.resolve(process.cwd(),'dashboard/obd2-procedural.js'),'utf8');
     document.head.appendChild(Object.assign(document.createElement('script'),{textContent: storeCode}));
-    document.head.appendChild(Object.assign(document.createElement('script'),{textContent: aseCode}));
+    document.head.appendChild(Object.assign(document.createElement('script'),{textContent: proceduralCode}));
 
-    window.initAseAssessment('no-start');
-    const checks = document.querySelectorAll('#ase-step-list input[type=checkbox]');
+    window.initProceduralAssessment('no-start');
+    const checks = document.querySelectorAll('#procedural-step-list input[type=checkbox]');
     checks[0].checked = true; checks[0].dispatchEvent(new Event('change'));
-    document.getElementById('ase-check-complete').click();
+    document.getElementById('procedural-check-complete').click();
     const saved = window.attemptStore.loadAttempt('no-start');
     expect(saved).not.toBeNull();
     expect(Array.isArray(saved.steps)).toBe(true);

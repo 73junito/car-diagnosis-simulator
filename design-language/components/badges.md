@@ -3,7 +3,7 @@
 ## Uses
 
 - Difficulty
-- ASE Area
+- Diagnostic Area
 - Completion
 - Certification
 - XP

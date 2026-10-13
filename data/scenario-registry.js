@@ -50,7 +50,7 @@
     const analysisBand = levelsApi ? levelsApi.bandFor(analysisLevel) : undefined;
     const difficulty = (s.difficultyLevel || (typeof s.difficulty==='number' ? (s.difficulty>=4?'advanced':(s.difficulty>=3?'intermediate':'beginner')) : s.difficulty)) || 'intermediate';
     const estimatedTime = s.timeLimit ? Math.ceil(s.timeLimit/60) + ' min' : (s.estimatedTime || '10-20 min');
-    const aseArea = s.aseArea || '';
+    const diagnosticArea = s.diagnosticArea || '';
     const category = s.symptomCategory || s.primarySystem || '';
     const image = resolveScenarioImage(`/assets/images/scenarios/${slug}.svg`);
     const routeBase = chooseRoute();
@@ -71,7 +71,7 @@
       analysisLevel: analysisLevel,
       analysisBand: analysisBand,
       estimatedTime: estimatedTime,
-      aseArea: aseArea,
+      diagnosticArea: diagnosticArea,
       route: route,
       scenario_key: s.scenario_key,
       questionBankId: questionBankId,

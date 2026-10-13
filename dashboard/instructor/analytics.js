@@ -217,7 +217,7 @@ window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummar
     if (sessionsData && sessionsData.ok){
       if (isFiniteNumber(sessionsData.averageScore)) avgScore = sessionsData.averageScore
       completionRate = sessionsData.completionRate ?? sessionsData.completion ?? null
-      weakAreas = sessionsData.weakAreas ?? sessionsData.aseWeaknessesCount ?? null
+      weakAreas = sessionsData.weakAreas ?? sessionsData.diagnosticWeaknessesCount ?? null
     }
 
     if (avgScore == null && studentsData && Array.isArray(studentsData.students)){
@@ -253,20 +253,20 @@ window.getDashboardAnalyticsSummary = async function getDashboardAnalyticsSummar
   }catch(e){ return null }
 }
 
-async function loadAseReadinessSummary() {
-  const root = document.getElementById("aseReadinessSummary");
+async function loadDiagnosticReadinessSummary() {
+  const root = document.getElementById("diagnosticReadinessSummary");
   if (!root) return;
 
   try {
     if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
-      root.innerHTML = "<p>ASE readiness data unavailable.</p>";
+      root.innerHTML = "<p>diagnostic readiness data unavailable.</p>";
       return;
     }
 
     const url =
-      `${window.SUPABASE_URL}/rest/v1/ase_readiness_summary` +
-      `?select=ase_code,ase_name,attempts,correct_attempts,readiness_pct,avg_time_seconds` +
-      `&order=ase_code.asc`;
+      `${window.SUPABASE_URL}/rest/v1/diagnostic_readiness_summary` +
+      `?select=diagnostic_code,diagnostic_name,attempts,correct_attempts,readiness_pct,avg_time_seconds` +
+      `&order=diagnostic_code.asc`;
 
     const res = await fetch(url, {
       headers: {
@@ -280,7 +280,7 @@ async function loadAseReadinessSummary() {
     const rows = await res.json();
 
     if (!Array.isArray(rows) || !rows.length) {
-      root.innerHTML = "<p>No ASE readiness data available.</p>";
+      root.innerHTML = "<p>No diagnostic readiness data available.</p>";
       return;
     }
 
@@ -288,7 +288,7 @@ async function loadAseReadinessSummary() {
       <table class="analytics-table">
         <thead>
           <tr>
-            <th>ASE Area</th>
+            <th>Diagnostic Area</th>
             <th>Attempts</th>
             <th>Correct</th>
             <th>Readiness</th>
@@ -309,7 +309,7 @@ async function loadAseReadinessSummary() {
 
             return `
               <tr>
-                <td><strong>${row.ase_code}</strong> — ${row.ase_name}</td>
+                <td><strong>${row.diagnostic_code}</strong> — ${row.diagnostic_name}</td>
                 <td>${row.attempts}</td>
                 <td>${row.correct_attempts}</td>
                 <td>${readiness}</td>
@@ -322,15 +322,15 @@ async function loadAseReadinessSummary() {
     `;
   } catch (err) {
     console.warn(
-      "ASE readiness data unavailable:",
+      "diagnostic readiness data unavailable:",
       err && err.message ? err.message : err
     );
-    root.innerHTML = "<p>Unable to load ASE readiness.</p>";
+    root.innerHTML = "<p>Unable to load diagnostic readiness.</p>";
   }
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", loadAseReadinessSummary);
+  document.addEventListener("DOMContentLoaded", loadDiagnosticReadinessSummary);
 } else {
-  loadAseReadinessSummary();
+  loadDiagnosticReadinessSummary();
 }

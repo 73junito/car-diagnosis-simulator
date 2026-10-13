@@ -7,7 +7,7 @@ Car Diagnosis Simulator is a web-based automotive diagnostic training platform.
 Primary goals:
 
 * Student diagnostic simulations
-* ASE-aligned training scenarios
+* diagnostic-aligned training scenarios
 * Instructor analytics
 * Telemetry collection
 * Progress tracking

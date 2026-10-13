@@ -28,7 +28,7 @@ async function askQwen3(prompt) {
   );
 
   const prompt = `
-You are an ASE Master Automotive Technician.
+You are an experienced automotive diagnostic technician.
 
 Review this generated automotive question bank.
 Do not rewrite the full JSON.
@@ -38,7 +38,7 @@ Check:
 - wrong answers
 - duplicate questions
 - weak explanations
-- missing ASE area
+- missing diagnostic area
 - non-automotive wording
 - safety issues
 - scenarios with fewer than 5 questions

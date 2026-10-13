@@ -23,10 +23,10 @@ Source: `data/scenario-registry.js`
 
 ### 2. Filter Collection
 - **Function**: `getFilters()`
-- **Input**: Search input, Category selector, Difficulty selector, ASE selector
+- **Input**: Search input, Category selector, Difficulty selector, diagnostic selector
 - **Output**:
 ```json
-{ q, category, difficulty, ase }
+{ q, category, difficulty, diagnostic }
 ```
 - **Invariant**: Pure UI state read — this must not mutate the registry.
 
@@ -93,7 +93,7 @@ Tests must always wait for `grid:rendered` before reading `#scenarioGrid`.
 ### Jest (Unit)
 
 - **Registry tests**: Unique IDs, title fallback, image fallback, difficulty normalization.
-- **Filter tests**: `matchesFilter()` matrix covering empty, search, category, difficulty, ASE, and combined filters.
+- **Filter tests**: `matchesFilter()` matrix covering empty, search, category, difficulty, diagnostic, and combined filters.
 - **Diagnostic engine tests**: evidence application, useTool behavior, scoring and diagnosis evaluation for correct/incorrect/edge cases.
 
 Unit tests should be the first line of defense for logic that does not require a browser environment.

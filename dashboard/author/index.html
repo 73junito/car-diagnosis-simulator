@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TorqueMind Authoring Studio</title>
+  <title>AutoLearnPro Authoring Studio</title>
   <link rel="stylesheet" href="/theme/tokens.css" />
   <link rel="stylesheet" href="/theme/layout.css" />
   <link rel="stylesheet" href="/theme/dashboard.css" />
@@ -16,7 +16,7 @@
         <p class="tm-hero-banner__eyebrow">Instructor Tools</p>
         <h1 class="tm-hero-banner__title">Authoring Studio</h1>
         <p class="tm-hero-banner__subtitle">
-          Build diagnostic scenarios with vehicles, complaints, DTCs, live data, ASE objectives, rubrics, and student previews.
+          Build diagnostic scenarios with vehicles, complaints, DTCs, live data, diagnostic objectives, rubrics, and student previews.
         </p>
         <span class="tm-hero-banner__status" id="authorAccessStatus">Checking author access…</span>
       </div>
@@ -151,20 +151,20 @@
         </article>
 
         <article class="tm-panel" id="rubric">
-          <h2>Rubric & ASE Objectives</h2>
-          <p>Map the scenario to ASE areas and define scoring criteria.</p>
+          <h2>Rubric & Diagnostic Objectives</h2>
+          <p>Map the scenario to diagnostic areas and define scoring criteria.</p>
           <form class="author-form" id="rubricForm">
-  <label>ASE Area
-    <select id="aseArea">
-      <option value="">Select ASE area</option>
-      <option>A1 Engine Repair</option>
-      <option>A2 Automatic Transmission</option>
-      <option>A4 Suspension and Steering</option>
-      <option>A5 Brakes</option>
-      <option>A6 Electrical / Electronic Systems</option>
-      <option>A7 Heating and Air Conditioning</option>
-      <option>A8 Engine Performance</option>
-      <option>L3 Hybrid / Electric Vehicle</option>
+  <label>Diagnostic Area
+    <select id="diagnosticArea">
+      <option value="">Select diagnostic area</option>
+      <option>Engine Repair</option>
+      <option>Automatic Transmission</option>
+      <option>Suspension and Steering</option>
+      <option>Brakes</option>
+      <option>Electrical/Electronic Systems</option>
+      <option>Heating and Air Conditioning</option>
+      <option>Engine Performance</option>
+      <option>Hybrid / Electric Vehicle</option>
     </select>
   </label>
   <label>Safety Criteria <textarea id="safetyCriteria" rows="2" placeholder="Uses safe test procedures and avoids unnecessary part replacement."></textarea></label>
@@ -211,7 +211,7 @@
   <p>Save private drafts to your verified AutoLearnPro account and reload them later.</p>
   <div class="author-actions">
     <button id="saveToLibraryBtn" class="tm-btn tm-btn-primary" type="button">Save to Library</button>
-    <input id="librarySearchInput" type="search" aria-label="Search scenario library" placeholder="Search title, vehicle, DTC, or ASE">
+    <input id="librarySearchInput" type="search" aria-label="Search scenario library" placeholder="Search title, vehicle, DTC, or diagnostic">
   </div>
   <ul id="scenarioLibraryList" class="author-checklist" aria-live="polite"></ul>
 </div>
@@ -231,7 +231,7 @@
           <li>Vehicle: <span id="previewVehicle">Not configured</span></li>
           <li>DTCs: <span id="previewDtcs">None added</span></li>
           <li>Live Data: <span id="previewLiveData">Not configured</span></li>
-          <li>ASE: <span id="previewAse">Not mapped</span></li>
+          <li>diagnostic: <span id="previewDiagnosticArea">Not mapped</span></li>
         </ul>
       </aside>
     </section>

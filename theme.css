@@ -173,7 +173,7 @@ body{
 .card .value{font-size:20px;font-weight:600;margin-top:6px;color:var(--tm-text)}
 .students{margin-top:18px}
 .exports{margin:12px 0}
-#ase-chart{height:220px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:8px;padding:16px;display:flex;align-items:center;justify-content:center;color:var(--tm-muted);border:1px dashed rgba(255,255,255,0.03)}
+#diagnostic-chart{height:220px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:8px;padding:16px;display:flex;align-items:center;justify-content:center;color:var(--tm-muted);border:1px dashed rgba(255,255,255,0.03)}
 
 @media (max-width:720px){.cards{grid-template-columns:repeat(2,1fr)}}
 

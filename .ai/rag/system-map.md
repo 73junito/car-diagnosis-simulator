@@ -51,9 +51,9 @@ Generated: 2026-06-15T23:36:12.951Z
 - live-session.html
 - live-session.js
 - live-telemetry.js
-- obd2-ase.css
-- obd2-ase.html
-- obd2-ase.js
+- obd2-procedural.css
+- obd2-procedural.html
+- obd2-procedural.js
 - obd2-student.css
 - obd2-student.html
 - obd2-student.js
@@ -134,7 +134,7 @@ Generated: 2026-06-15T23:36:12.951Z
 - jest-setup.js
 - jest-undici-register.js
 - live-session-ui.test.js
-- obd2-ase.spec.js
+- obd2-procedural.spec.js
 - obd2-gauges.spec.js
 - obd2-live.spec.js
 - obd2-rendering.spec.js
