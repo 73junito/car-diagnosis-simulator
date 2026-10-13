@@ -13,7 +13,7 @@
 @import "./components/hero-banner/hero-banner.css";
 @import "./components/timeline/timeline.css";
 
-/* Base TorqueMind layout follows */
+/* Base AutoLearnPro workspace layout follows */
 
 .tm-shell {
   min-height: 100vh;
@@ -39,9 +39,42 @@
 }
 
 .tm-brand {
+  color: #fff;
   font-weight: 800;
   letter-spacing: 0.02em;
   font-size: 1.15rem;
+  text-decoration: none;
+}
+
+.tm-brand:focus-visible,
+.tm-nav a:focus-visible,
+.tm-btn:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: var(--tm-focus-ring-width) solid var(--tm-focus-ring);
+  outline-offset: var(--tm-focus-ring-offset);
+}
+
+.tm-skip-link {
+  position: fixed;
+  z-index: 9999;
+  top: 8px;
+  left: 8px;
+  transform: translateY(-160%);
+  padding: 10px 14px;
+  border-radius: var(--tm-radius-sm);
+  background: #fff;
+  color: var(--tm-primary);
+  font-weight: 800;
+  box-shadow: var(--tm-shadow);
+}
+
+.tm-skip-link:focus {
+  transform: translateY(0);
 }
 
 .tm-nav {
@@ -141,12 +174,40 @@
 
 @media (max-width: 800px) {
   .tm-topbar-inner {
-    align-items: flex-start;
+    align-items: stretch;
     flex-direction: column;
+    padding: 14px 16px;
+  }
+
+  .tm-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .tm-nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  .tm-main {
+    padding: 24px 16px 44px;
   }
 
   .tm-grid-3 {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
