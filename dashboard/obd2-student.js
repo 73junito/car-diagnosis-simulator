@@ -116,6 +116,11 @@
       String(scenario.id || "").toLowerCase() === target
     ) || null;
   }
+  // Detach handle for the most recently bound workflow listeners. Rebinding on
+  // every initialization keeps direct-load auto-init plus later manual
+  // invocations (tests/tooling) from stacking duplicate handlers.
+  let unbindWorkflowListeners = null;
+
   window.initObd2StudentWorkflow = function(initialScenario){
         const queryScenarioId = initialScenario || getScenarioFromQuery();
     const queryScenario = resolveScenarioFromRegistry(queryScenarioId);
@@ -126,13 +131,41 @@
     populateScenarioSelect(scenarios);
     populateTestChecklist(testsAvailable);
 
-    const sel = document.getElementById('scenario-select'); if(sel) sel.addEventListener('change', () => { resetWorkflow(); const s = sel.value; loadAttemptState(s); });
-    const submit = document.getElementById('submit-diagnosis'); if(submit) submit.addEventListener('click', submitDiagnosis);
+    // Rebind event handlers on every initialization. Handlers from a previous
+    // initialization (direct-load auto-init followed by a manual invocation in
+    // tests or tooling) are removed first so listeners never stack on the same
+    // elements.
+    if(unbindWorkflowListeners){ unbindWorkflowListeners(); unbindWorkflowListeners = null; }
+    const removers = [];
+    const sel = document.getElementById('scenario-select');
+    if(sel){
+      const onScenarioChange = () => { resetWorkflow(); const s = sel.value; loadAttemptState(s); };
+      sel.addEventListener('change', onScenarioChange);
+      removers.push(() => sel.removeEventListener('change', onScenarioChange));
+    }
+    const submit = document.getElementById('submit-diagnosis');
+    if(submit){
+      submit.addEventListener('click', submitDiagnosis);
+      removers.push(() => submit.removeEventListener('click', submitDiagnosis));
+    }
 
     // wire lightweight persistence hooks
-    const symptomInput = document.getElementById('symptom-text'); if(symptomInput) symptomInput.addEventListener('input', () => { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); });
-    const diagInput = document.getElementById('diagnosis-input'); if(diagInput) diagInput.addEventListener('input', () => { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); });
-    document.addEventListener('change', (e) => { if(e && e.target && e.target.closest && e.target.closest('#test-checklist')) { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); } });
+    const symptomInput = document.getElementById('symptom-text');
+    if(symptomInput){
+      const onSymptomInput = () => { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); };
+      symptomInput.addEventListener('input', onSymptomInput);
+      removers.push(() => symptomInput.removeEventListener('input', onSymptomInput));
+    }
+    const diagInput = document.getElementById('diagnosis-input');
+    if(diagInput){
+      const onDiagnosisInput = () => { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); };
+      diagInput.addEventListener('input', onDiagnosisInput);
+      removers.push(() => diagInput.removeEventListener('input', onDiagnosisInput));
+    }
+    const onChecklistChange = (e) => { if(e && e.target && e.target.closest && e.target.closest('#test-checklist')) { const s = (document.getElementById('scenario-select')||{}).value; saveAttemptState(s); } };
+    document.addEventListener('change', onChecklistChange);
+    removers.push(() => document.removeEventListener('change', onChecklistChange));
+    unbindWorkflowListeners = () => { removers.forEach((remove) => { remove(); }); };
 
     // set initial
         const chosen = queryScenario || scenarios.find(s =>
@@ -190,6 +223,22 @@
   }
 
   window._obd2Student = { resetWorkflow, submitDiagnosis, populateTestChecklist, calculateScore, renderScoreSummary, saveAttemptState, loadAttemptState, resetAttemptState };
+
+  // Direct-load initialization: a normal page load invokes the workflow
+  // exactly once after the document is ready. Manual invocation of
+  // window.initObd2StudentWorkflow() remains supported and rebinds handlers
+  // without stacking duplicate listeners.
+  let directLoadInitialized = false;
+  function initializeOnDirectLoad(){
+    if(directLoadInitialized) return;
+    directLoadInitialized = true;
+    window.initObd2StudentWorkflow();
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initializeOnDirectLoad, { once: true });
+  } else {
+    initializeOnDirectLoad();
+  }
 
 })();
 
