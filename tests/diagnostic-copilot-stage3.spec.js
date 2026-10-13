@@ -101,7 +101,7 @@ describe('Hybrid agentic roadmap Stage 3', () => {
   })
 
   test('stage 3 documentation keeps production activation human-controlled', () => {
-    expect(docs).toContain('production remains default-off')
+    expect(docs).toContain('Preview and production configuration remain disabled by default.')
     expect(docs).toContain('explicit configuration change after staging validation')
     expect(docs).toContain('No grading, publication, release, credential, or assessment-eligibility authority')
   })
