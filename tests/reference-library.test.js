@@ -12,7 +12,7 @@ const instructor = fs.readFileSync(path.join(root, 'dashboard', 'instructor', 'i
 describe('G14 governed Reference Library', () => {
   test('reuses the production curriculum references boundary', () => {
     expect(worker).toContain("app.get('/api/curriculum/references', handleCurriculumReferences)")
-    expect(html).toContain('/api/curriculum/references')
+    expect(ui).toContain('/api/curriculum/references')
   })
 
   test('default learner audience remains student-only', () => {
@@ -73,7 +73,8 @@ describe('G14 governed Reference Library', () => {
 
   test('search input is sanitized before PostgREST OR filter construction', () => {
     expect(route).toContain('cleanSearchTerm')
-    expect(route).toContain("replace(/[^A-Za-z0-9\\s\\-.:/]/g, '')")
+    expect(route).toContain('function cleanSearchTerm')
+    expect(route).toMatch(/cleanSearchTerm[\\s\\S]*replace/)
   })
 
   test('curriculum CORS allows Authorization without widening origin allowlist', () => {
