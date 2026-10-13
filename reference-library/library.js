@@ -121,6 +121,7 @@
 
     const headers={Accept:'application/json'}
     if(audience.value==='instructor'){
+      if(typeof window.waitForAuth==='function') await window.waitForAuth().catch(()=>null)
       const accessToken=token()
       if(!accessToken){
         status.textContent='Sign in with instructor access to view instructor/internal references.'
