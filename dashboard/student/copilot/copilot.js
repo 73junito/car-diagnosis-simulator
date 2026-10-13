@@ -55,6 +55,8 @@
 
   async function loadHealth(){
     health.textContent='Checking Copilot availability…'
+    health.setAttribute('aria-busy','true')
+    healthRefresh.disabled=true
     try{
       const accessToken=await authToken()
       if(!accessToken){
@@ -70,12 +72,18 @@
       runtimeReady=false
       health.textContent='Unable to verify Copilot availability.'
       adviceBtn.disabled=true
+    }finally{
+      health.setAttribute('aria-busy','false')
+      healthRefresh.disabled=false
     }
   }
 
   form.addEventListener('submit',async(event)=>{
     event.preventDefault()
     sessionStatus.textContent='Creating diagnostic session…'
+    sessionStatus.setAttribute('aria-busy','true')
+    const submitButton=form.querySelector('button[type="submit"]')
+    if(submitButton) submitButton.disabled=true
     advicePanel.hidden=true
     const yearText=document.getElementById('copilotYear').value.trim()
     const payload={
@@ -99,6 +107,10 @@
       sessionId=null
       adviceBtn.disabled=true
       sessionStatus.textContent=error.message
+    }finally{
+      sessionStatus.setAttribute('aria-busy','false')
+      const submitButton=form.querySelector('button[type="submit"]')
+      if(submitButton) submitButton.disabled=false
     }
   })
 
