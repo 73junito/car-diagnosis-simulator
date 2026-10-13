@@ -8,6 +8,30 @@
     return localStorage.getItem('supabase_access_token') || null;
   }
 
+  function isProtectedApiRequest(url){
+    if (!url) return false;
+    try {
+      const parsed = new URL(url, window.location.origin);
+      const apiBase = API_BASE ? new URL(API_BASE, window.location.origin) : null;
+      if (apiBase && parsed.origin === apiBase.origin && parsed.pathname.startsWith('/api/')) return true;
+      return parsed.origin === window.location.origin && parsed.pathname.startsWith('/api/');
+    } catch(e){
+      return String(url).startsWith('/api/');
+    }
+  }
+
+  function handleAuthResponse(status, url){
+    if (!isProtectedApiRequest(url)) return;
+    if (status === 401){
+      try { if (window.supabaseSignOut) window.supabaseSignOut(); } catch(e){ /* ignore: best-effort sign-out */ }
+      try { window.dispatchEvent(new CustomEvent('supabase:authExpired', { detail: { status } })); } catch(e){ /* ignore: best-effort event dispatch */ }
+      return;
+    }
+    if (status === 403){
+      try { window.dispatchEvent(new CustomEvent('supabase:authForbidden', { detail: { status } })); } catch(e){ /* ignore: best-effort event dispatch */ }
+    }
+  }
+
   async function apiFetch(method, path, body){
     const url = (path && path.startsWith('http')) ? path : (API_BASE ? (API_BASE + path) : path);
     const headers = new Headers({ 'Content-Type': 'application/json' });
@@ -16,6 +40,7 @@
     const opts = { method, headers, credentials: 'same-origin' };
     if (body) opts.body = JSON.stringify(body);
     const res = await fetch(url, opts);
+    handleAuthResponse(res.status, url);
     const text = await res.text();
     let json = null;
     try { json = text ? JSON.parse(text) : null; } catch(e){ json = text; }
@@ -46,11 +71,7 @@
           const resp = await origFetch(resource, init);
           try {
             const respUrl = (typeof resource === 'string') ? resource : (resource && resource.url) ? resource.url : '';
-            if (respUrl && API_BASE && respUrl.startsWith(API_BASE) && (resp.status === 401 || resp.status === 403)){
-              // on auth failure, clear local tokens and notify listeners
-              try { if (window.supabaseSignOut) window.supabaseSignOut(); } catch(e){ /* ignore: best-effort sign-out */ }
-              try { window.dispatchEvent(new CustomEvent('supabase:authExpired', { detail: { status: resp.status } })); } catch(e){ /* ignore: best-effort event dispatch */ }
-            }
+            handleAuthResponse(resp.status, respUrl);
           } catch(e){ /* ignore: non-fatal response handling error */ }
           return resp;
         } catch (e){ return Promise.reject(e); }
