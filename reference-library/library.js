@@ -43,6 +43,7 @@
   function isLinkOnly(source){
     const r=source.rights || {}
     return r.citationLinkAllowed===true &&
+      r.directReproductionAllowed!==true &&
       r.databaseStorageAllowed!==true &&
       r.aiRagIngestionAllowed!==true
   }
