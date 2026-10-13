@@ -65,10 +65,10 @@ The repository already contains useful foundations, but several exist outside th
 **Evidence:** the dedicated Coach and existing student dashboard both consume the authenticated Worker-native `/api/student/recommendations` boundary.
 **Gap:** closed. Recommendations are now derived deterministically from the authenticated learner's server-recorded training-mode aggregate performance only; assessment data is excluded; output is capped at three recommendations; and each recommendation carries explicit server-rule provenance/context without exposing raw correctness counts, answer fields, or audit data.
 **Required outcome:** completed. Coach rendering is authenticated, provides truthful signed-out/empty/unavailable states, displays provenance/context labels, links directly back to practice scenarios, and exposes no protected correctness or assessment fields.
-### G14 — Dedicated governed reference-library experience — **P2**
-**Evidence:** curriculum references are available through `/api/curriculum/references` and instructor research has discovery/review tooling; public Research Sources is informational. There is no dedicated browse/search library for permitted learner/instructor references.
-**Gap:** governed references are data-backed but not exposed as a coherent library experience. The dead student `/api/approved-sources` compatibility fetch has been retired; G14 remains open for the dedicated browse/search library experience and should use the existing `/api/curriculum/references` boundary rather than restoring that legacy route.
-**Required outcome:** audience-aware reference browse/search/filter UI using existing rights fields; link-only sources remain link-only; no unauthorized RAG/database use.
+### G14 — Dedicated governed reference-library experience — **P2 - completed**
+**Evidence:** `/reference-library/` now uses the existing Worker-native `/api/curriculum/references` boundary in explicit library mode, with learner and instructor audience handling, search, subject/source-type filters, and rights filters.
+**Gap:** closed. Learner access is restricted to active `student` references; instructor/internal guidance requires a server-verified instructor/admin role. Link-only filtering requires citation/link permission while direct reproduction, database storage, and AI/RAG ingestion are all false. The UI displays recorded rights per source and opens only canonical links allowed for citation/linking; it never fetches or stores source body content.
+**Required outcome:** completed. The shared learner/instructor library is audience-aware, rights-aware, read-only, preserves link-only restrictions, exposes no unauthorized source content, and does not perform RAG/database ingestion or change assessment/publication authority.
 ### G15 — Public interactive demo case — **P3**
 **Evidence:** the redesign audit explicitly leaves the interactive demo case as a new build.
 **Gap:** public visitors cannot experience a safe sample of the reasoning model before sign-in.
@@ -141,7 +141,7 @@ The repository already contains useful foundations, but several exist outside th
 2. [x] Live Transcript.
 3. [x] Live Activity.
 4. [x] Institution claim status.
-5. Dedicated governed Reference Library.
+5. [x] Dedicated governed Reference Library.
 ### Phase 8 — Public interactive demo
 Build only after the production reasoning flow and reference/authorization boundaries are stable.
 ## Branch plan

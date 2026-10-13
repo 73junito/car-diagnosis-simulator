@@ -380,7 +380,7 @@ app.use('/api/curriculum/*', cors({
     'https://exam.autolearnpro.com'
   ],
   allowMethods: ['GET', 'OPTIONS'],
-  allowHeaders: ['Content-Type'],
+  allowHeaders: ['Content-Type', 'Authorization'],
   maxAge: 86400
 }))
 app.all('/api/curriculum', handleCurriculumRead)
