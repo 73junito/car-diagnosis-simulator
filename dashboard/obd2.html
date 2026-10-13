@@ -3,16 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>OBD-II Live Dashboard</title>
+  <title>OBD-II Live Dashboard | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="/dashboard/obd2.css">
 </head>
 <body>
-  <main id="obd2-app" class="obd2-app">
+  <div data-theme-shell></div>
+
+  <main id="obd2-app" class="obd2-app tm-main wrapper">
+    <nav class="obd2-context-nav" aria-label="Diagnostic navigation">
+      <a class="obd2-back-link tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a>
+    </nav>
     <header class="obd2-header">
       <h1>OBD-II Live Dashboard</h1>
       <div class="obd2-controls">
         <label for="scenario-select">Scenario</label>
-        <select id="scenario-select" aria-label="Scenario select"></select>
+        <select id="scenario-select" aria-label="Scenario select" class="tm-select"></select>
       </div>
     </header>
 
@@ -52,8 +60,8 @@
     <section class="obd2-live">
       <h2>Live Scan Stream</h2>
       <div class="live-controls">
-        <button id="live-start">Start</button>
-        <button id="live-stop">Stop</button>
+        <button id="live-start" class="tm-btn tm-btn-primary">Start</button>
+        <button id="live-stop" class="tm-btn tm-btn-secondary">Stop</button>
       </div>
       <ul id="live-list" class="live-list" aria-live="polite"></ul>
     </section>
@@ -70,6 +78,10 @@
     </section>
 
   </main>
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+  </script>
   <script src="/dashboard/obd2.js"></script>
 </body>
 </html>
