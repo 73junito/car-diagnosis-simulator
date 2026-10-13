@@ -3,14 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Student Scenario</title>
-  <link rel="stylesheet" href="../student.css">
+  <title>Student Scenario | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="./scenario.css">
 </head>
 <body>
-  <main class="scenario-shell">
-    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
-    <section id="scenarioPage" class="scenario-page"></section>
+  <div data-theme-shell></div>
+
+  <main class="tm-main wrapper">
+    <nav class="scenario-context-nav" aria-label="Scenario navigation">
+      <a class="scenario-back-link tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a>
+    </nav>
+    <section id="scenarioPage" class="scenario-page" aria-live="polite"></section>
   </main>
 
   <script src="/data/scenarios.js"></script>
@@ -23,6 +29,10 @@
     window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
   </script>
   <script src="../../api-origin.js"></script>
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+  </script>
   <script src="./scenario.js"></script>
 </body>
 </html>
