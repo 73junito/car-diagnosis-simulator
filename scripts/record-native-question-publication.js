@@ -29,7 +29,7 @@ function requireCondition(condition, message) {
 async function readPublicRows(client, questionId) {
   const { data, error } = await client
     .from('scenario_questions')
-    .select('id,scenario_id,question_id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,difficulty,topic,ase_area')
+    .select('id,scenario_id,question_id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,difficulty,topic,diagnostic_area')
     .eq('question_id', questionId);
   if (error) throw error;
   return data || [];
@@ -193,7 +193,7 @@ async function readEligibilityCount(client, publicRows) {
     const { data: inserted, error: insertError } = await client
       .from('scenario_questions')
       .insert(expectedRow)
-      .select('id,scenario_id,question_id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,difficulty,topic,ase_area')
+      .select('id,scenario_id,question_id,question_text,option_a,option_b,option_c,option_d,correct_answer,explanation,difficulty,topic,diagnostic_area')
       .single();
     if (insertError) throw insertError;
     publishedRows = [inserted];

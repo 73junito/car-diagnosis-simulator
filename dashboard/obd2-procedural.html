@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OBD-II Procedural Diagnostic Workflow</title>
+  <link rel="stylesheet" href="/dashboard/obd2-procedural.css">
+</head>
+<body>
+  <main class="procedural-assessment">
+    <header>
+      <h1>Procedural Diagnostic Checklist</h1>
+      <div class="controls">
+        <label for="procedural-scenario-select">Scenario</label>
+        <select id="procedural-scenario-select"></select>
+      </div>
+    </header>
+
+    <section class="procedural-steps">
+      <h2>Procedure Steps</h2>
+      <ul id="procedural-step-list" class="procedural-step-list"></ul>
+    </section>
+
+    <section class="procedural-safety">
+      <label id="procedural-safety-label" class="hidden"><input type="checkbox" id="procedural-safety-ack" /> I acknowledge HV/EV safety procedures</label>
+    </section>
+
+    <section class="procedural-completion">
+      <button id="procedural-check-complete">Check Completion</button>
+      <div id="procedural-completion-state" class="hidden" aria-live="polite"></div>
+    </section>
+  </main>
+  <script src="/dashboard/obd2-procedural.js"></script>
+</body>
+</html>

@@ -7,7 +7,7 @@ SELECT expected.table_name, to_regclass('public.' || expected.table_name) IS NOT
 FROM (VALUES
     ('approved_sources'), ('source_chunks'), ('scenario_questions'),
     ('question_provenance'), ('question_citations'), ('citation_validations'),
-    ('attempts'), ('attempt_answers'), ('ase_domains'), ('scenario_ase_map'),
+    ('attempts'), ('attempt_answers'), ('diagnostic_domains'), ('scenario_diagnostic_area_map'),
     ('question_quality_scores'), ('external_data_resources')
 ) AS expected(table_name)
 ORDER BY expected.table_name;

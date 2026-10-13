@@ -7,22 +7,22 @@ const scenarioSpecs = {
   "power-loss": {
     title: "Vehicle struggles to accelerate uphill.",
     topic: "engine power loss under load, fuel delivery, air intake restriction, exhaust restriction, transmission slip, sensor diagnostics",
-    ase_area: "A8 Engine Performance"
+    diagnostic_area: "Engine Performance"
   },
   "overheating": {
     title: "Engine overheats after 10 minutes of driving.",
     topic: "cooling system diagnostics, thermostat, radiator airflow, coolant flow, water pump, cooling fan operation",
-    ase_area: "A7 Heating and Air Conditioning"
+    diagnostic_area: "Heating and Air Conditioning"
   },
   "electrical-load": {
     title: "Headlights are dim and flicker while driving.",
     topic: "automotive charging system load testing, alternator output, voltage drop, ground faults, battery condition",
-    ase_area: "A6 Electrical/Electronic Systems"
+    diagnostic_area: "Electrical/Electronic Systems"
   },
   "hvac-cooling": {
     title: "Air conditioning not cooling.",
     topic: "automotive A/C performance, refrigerant charge, compressor operation, condenser airflow, blend door operation, pressure testing",
-    ase_area: "A7 Heating and Air Conditioning"
+    diagnostic_area: "Heating and Air Conditioning"
   }
 };
 
@@ -55,14 +55,14 @@ function promptFor(id, spec) {
   return `
 Return only valid JSON.
 
-You are an ASE Master Automotive Technician and automotive instructor.
+You are an experienced automotive diagnostic technician and instructor.
 
 Generate exactly 8 multiple-choice diagnostic questions for this AUTOMOTIVE scenario.
 
 scenario_id: ${id}
 Scenario: ${spec.title}
 Topic: ${spec.topic}
-ASE area: ${spec.ase_area}
+diagnostic area: ${spec.diagnostic_area}
 
 Rules:
 - Automotive diagnostics only.
@@ -87,7 +87,7 @@ Required JSON shape:
       "explanation": "",
       "difficulty": "intermediate",
       "topic": "${spec.topic}",
-      "ase_area": "${spec.ase_area}"
+      "diagnostic_area": "${spec.diagnostic_area}"
     }
   ]
 }

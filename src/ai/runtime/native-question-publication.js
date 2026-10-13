@@ -133,12 +133,12 @@ function buildScenarioQuestionRow(question) {
     explanation: question.explanation,
     difficulty: question.difficulty || null,
     topic: question.topic || null,
-    ase_area: question.ase_area || null,
+    diagnostic_area: question.diagnostic_area || null,
   };
 }
 
 function assertExactPublishedRow(actual, expected) {
-  const keys = ['scenario_id','question_id','question_text','option_a','option_b','option_c','option_d','correct_answer','explanation','difficulty','topic','ase_area'];
+  const keys = ['scenario_id','question_id','question_text','option_a','option_b','option_c','option_d','correct_answer','explanation','difficulty','topic','diagnostic_area'];
   for (const key of keys) {
     requireCondition((actual?.[key] ?? null) === (expected?.[key] ?? null), 'Published scenario question mismatch: ' + key);
   }

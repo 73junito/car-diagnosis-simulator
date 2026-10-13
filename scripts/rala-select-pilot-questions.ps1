@@ -53,7 +53,7 @@ foreach ($Row in $Selected) {
     question_id = $Row.id
     scenario_id = $Row.scenario_id
     topic = $Row.topic
-    ase_area = $Row.ase_area
+    diagnostic_area = $Row.diagnostic_area
     provenance_status = $Row.provenance_status
     question_text = $Row.question_text
     provenance_version = 1

@@ -41,7 +41,7 @@ Checklist
 10. Verify a valid tutor request returns HTTP `200` and the tutor JSON contains all four fields:
     - `reasonIncorrect`
     - `reasonCorrect`
-    - `aseConcept`
+    - `diagnosticConcept`
     - `nextStep`
 
 11. Verify Durable Object rate limiting still functions — after hitting the limit the Worker should return `429`.

@@ -27,7 +27,7 @@ window.TorqueMindHome = Object.freeze({
       id: "instructor",
       title: "Instructor Tools",
       description:
-        "Review performance, identify ASE weaknesses, and manage classroom activities.",
+        "Review performance, identify diagnostic weaknesses, and manage classroom activities.",
       href: "/dashboard/analytics",
       action: "Open Instructor Tools"
     },

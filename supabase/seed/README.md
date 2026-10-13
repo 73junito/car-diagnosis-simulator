@@ -5,8 +5,8 @@ checks the foundation table and never creates assessment content.
 
 Three legacy reference files remain available for explicit human review:
 
-- `ase_domains.sql` requires `public.ase_domains`.
-- `scenario_ase_map.sql` requires `public.scenario_ase_map`.
+- `diagnostic_domains.sql` requires `public.diagnostic_domains`.
+- `scenario_diagnostic_area_map.sql` requires `public.scenario_diagnostic_area_map`.
 - `question_quality_review.sql` requires `public.question_quality_scores` and is
   not currently idempotent.
 

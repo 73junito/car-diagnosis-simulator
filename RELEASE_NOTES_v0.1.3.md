@@ -8,7 +8,7 @@
 
 ### Instructor Analytics Dashboard
 - Added lightweight static analytics dashboard route.
-- Added summary cards, student table, ASE weakness placeholder, and export actions.
+- Added summary cards, student table, diagnostic weakness placeholder, and export actions.
 - Integrated with existing analytics API endpoints.
 
 ### Security Hardening

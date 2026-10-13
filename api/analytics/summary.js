@@ -12,7 +12,7 @@ module.exports = (req, res) => {
       totalSessions:     data.totalSessions || 0,
       averageConfidence: data.averageConfidence || 0,
       totalStudents:     Array.isArray(data.students) ? data.students.length : 0,
-      aseWeaknesses:     data.aseWeaknesses || [],
+      diagnosticWeaknesses:     data.diagnosticWeaknesses || [],
     });
   } catch (err) {
     console.error('[/api/analytics/summary]', err);

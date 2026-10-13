@@ -11,7 +11,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -25,7 +25,7 @@ values
   'A faulty fuel pump can restrict the amount of fuel delivered to the engine, leading to power loss during acceleration.',
   'intermediate',
   'engine power loss under load',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 insert into scenario_questions
 (
@@ -39,7 +39,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -53,7 +53,7 @@ values
   'A clogged air filter can restrict the airflow into the engine, leading to reduced power and performance.',
   'intermediate',
   'air intake restriction',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 insert into scenario_questions
 (
@@ -67,7 +67,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -81,7 +81,7 @@ values
   'An exhaust manifold can become restricted or leaky, affecting the engine''s power output.',
   'intermediate',
   'exhaust restriction',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 insert into scenario_questions
 (
@@ -95,7 +95,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -109,7 +109,7 @@ values
   'Worn clutch plates can cause transmission slippage, leading to a loss of power and performance.',
   'intermediate',
   'transmission slip',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 insert into scenario_questions
 (
@@ -123,7 +123,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -137,7 +137,7 @@ values
   'The Mass Airflow Sensor (MAF) is crucial for accurate fuel and air mixture calculations, any issue here can lead to power loss.',
   'intermediate',
   'sensor diagnostics',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 insert into scenario_questions
 (
@@ -151,7 +151,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -165,7 +165,7 @@ values
   'A faulty oxygen sensor can provide incorrect readings, leading to a rich fuel mixture and power loss.',
   'intermediate',
   'fuel delivery',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 insert into scenario_questions
 (
@@ -179,7 +179,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -193,7 +193,7 @@ values
   'The air filter is the first point of entry for air into the engine, a clogged or dirty filter can restrict airflow and cause power loss.',
   'intermediate',
   'air intake restriction',
-  'A8 Engine Performance'
+  'Engine Performance'
 );
 insert into scenario_questions
 (
@@ -207,7 +207,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -221,5 +221,5 @@ values
   'Worn clutch plates can cause transmission slippage, leading to a loss of power and performance.',
   'intermediate',
   'transmission slip',
-  'A8 Engine Performance'
+  'Engine Performance'
 );

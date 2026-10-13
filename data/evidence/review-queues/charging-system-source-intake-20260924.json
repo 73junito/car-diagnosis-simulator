@@ -331,10 +331,10 @@
   },
   "discovery_leads": [
     {
-      "name": "Automotive Textbook, A6 Electrical and Electronic Systems",
+      "name": "Automotive Textbook, Electrical/Electronic Systems and Electronic Systems",
       "url": "https://www.automotivetextbook.com/a6/",
       "status": "discovery-only",
-      "observation": "Lists Drew Kleyweg's 2018 Charging System and a Charging System Service and Diagnostics heading, but neither is linked to a downloadable chapter on the observed A6 page; no per-chapter reuse license established.",
+      "observation": "Lists Drew Kleyweg's 2018 Charging System and a Charging System Service and Diagnostics heading, but neither is linked to a downloadable chapter on the observed charging-system page; no per-chapter reuse license established.",
       "next_step": "Obtain exact chapter artifact and its own copyright/license notice or explicit written permission before evidence intake."
     },
     {

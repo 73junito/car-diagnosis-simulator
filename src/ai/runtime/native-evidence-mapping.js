@@ -9,7 +9,6 @@ const ALLOWED_CITATION_ROLES = new Set([
   'supports-answer',
   'supports-explanation',
   'supports-next-step',
-  'supports-ase-concept',
 ]);
 const REQUIRED_CITATION_ROLES = ['supports-answer', 'supports-explanation'];
 

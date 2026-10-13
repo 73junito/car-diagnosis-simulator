@@ -13,7 +13,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -42,7 +42,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -71,7 +71,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -100,7 +100,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -129,7 +129,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -158,7 +158,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -187,7 +187,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -216,7 +216,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -245,7 +245,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -274,7 +274,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -303,7 +303,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -332,7 +332,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -361,7 +361,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -390,7 +390,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -419,7 +419,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -448,7 +448,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -477,7 +477,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -506,7 +506,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -535,7 +535,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -564,7 +564,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -593,7 +593,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -622,7 +622,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -651,7 +651,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -680,7 +680,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -709,7 +709,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -738,7 +738,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -767,7 +767,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -796,7 +796,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -825,7 +825,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -854,7 +854,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -883,7 +883,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -912,7 +912,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -941,7 +941,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -970,7 +970,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -999,7 +999,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1028,7 +1028,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1057,7 +1057,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1086,7 +1086,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1115,7 +1115,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1144,7 +1144,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1173,7 +1173,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1202,7 +1202,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1231,7 +1231,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1260,7 +1260,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1289,7 +1289,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1318,7 +1318,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1347,7 +1347,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1376,7 +1376,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1405,7 +1405,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1434,7 +1434,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1463,7 +1463,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1492,7 +1492,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1521,7 +1521,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1550,7 +1550,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1579,7 +1579,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1608,7 +1608,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1637,7 +1637,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1666,7 +1666,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1695,7 +1695,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1724,7 +1724,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1753,7 +1753,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1782,7 +1782,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1811,7 +1811,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1840,7 +1840,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1869,7 +1869,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1898,7 +1898,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1927,7 +1927,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1956,7 +1956,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -1985,7 +1985,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2014,7 +2014,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2043,7 +2043,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2072,7 +2072,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2101,7 +2101,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2130,7 +2130,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2159,7 +2159,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2188,7 +2188,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2217,7 +2217,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2246,7 +2246,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2275,7 +2275,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2304,7 +2304,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2333,7 +2333,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2362,7 +2362,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2391,7 +2391,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2420,7 +2420,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2449,7 +2449,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2478,7 +2478,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2507,7 +2507,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2536,7 +2536,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2565,7 +2565,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2594,7 +2594,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2623,7 +2623,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2652,7 +2652,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2681,7 +2681,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2710,7 +2710,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2739,7 +2739,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2768,7 +2768,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2797,7 +2797,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2826,7 +2826,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2855,7 +2855,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2884,7 +2884,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2913,7 +2913,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2942,7 +2942,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -2971,7 +2971,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3000,7 +3000,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3029,7 +3029,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3058,7 +3058,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3087,7 +3087,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3116,7 +3116,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3145,7 +3145,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3174,7 +3174,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3203,7 +3203,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3232,7 +3232,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3261,7 +3261,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3290,7 +3290,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3319,7 +3319,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3348,7 +3348,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3377,7 +3377,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3406,7 +3406,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3435,7 +3435,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3464,7 +3464,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3493,7 +3493,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3522,7 +3522,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3551,7 +3551,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3580,7 +3580,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3609,7 +3609,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3638,7 +3638,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3667,7 +3667,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3696,7 +3696,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3725,7 +3725,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3754,7 +3754,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3783,7 +3783,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3812,7 +3812,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3841,7 +3841,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3870,7 +3870,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
@@ -3899,7 +3899,7 @@ insert into scenario_questions
   explanation,
   difficulty,
   topic,
-  ase_area
+  diagnostic_area
 )
 values
 (
