@@ -14,14 +14,13 @@ const docs = fs.readFileSync(path.join(root,'docs/architecture/hybrid-agentic-ro
 
 describe('Hybrid agentic roadmap Stage 3', () => {
   test('production and preview stay default-off while staging is enabled for validation', () => {
-    const production = wrangler.match(/"vars":\s*\{[\s\S]*?"TORQUEMIND_ENVIRONMENT": "production"[\s\S]*?\n  \},/)
-    expect(production?.[0]).toContain('"TORQUEMIND_COPILOT_ENABLED": "false"')
-
-    const preview = wrangler.match(/"previews":[\s\S]*?"vars":\s*\{[\s\S]*?\n    \}/)
-    expect(preview?.[0]).toContain('"TORQUEMIND_COPILOT_ENABLED": "false"')
-
-    const staging = wrangler.match(/"staging":\s*\{[\s\S]*?"TORQUEMIND_ENVIRONMENT": "staging"[\s\S]*?\n      \}/)
-    expect(staging?.[0]).toContain('"TORQUEMIND_COPILOT_ENABLED": "true"')
+    const config = JSON.parse(wrangler)
+    expect(config.previews.vars.TORQUEMIND_COPILOT_ENABLED).toBe('false')
+    expect(config.vars.TORQUEMIND_COPILOT_ENABLED).toBe('false')
+    expect(config.env.staging.vars.TORQUEMIND_COPILOT_ENABLED).toBe('true')
+    expect(config.previews.vars.TORQUEMIND_COPILOT_KILL_SWITCH).toBe('false')
+    expect(config.vars.TORQUEMIND_COPILOT_KILL_SWITCH).toBe('false')
+    expect(config.env.staging.vars.TORQUEMIND_COPILOT_KILL_SWITCH).toBe('false')
   })
 
   test('activation requires feature flag, healthy persistence config, and no kill switch', () => {
@@ -64,11 +63,13 @@ describe('Hybrid agentic roadmap Stage 3', () => {
     expect(client).toContain('Technician verification is required')
   })
 
-  test('provider call is gated by authenticated self-owned session and persistence health', () => {
+  test('provider call is gated by auth, ownership, persistence health, and approved evidence', () => {
     expect(route).toContain('const auth = await authenticate(c)')
     expect(route).toContain('await persistenceHealth(supabase)')
     expect(route).toContain('await ownedSession(supabase, user.id, sessionId)')
     expect(route).toContain("row.status !== 'open'")
+    expect(route).toContain("plan.evidenceGate?.allowed !== true")
+    expect(route).toContain('Model assistance is blocked until the deterministic evidence gate is satisfied.')
   })
 
   test('provider latency is bounded and errors are observable', () => {
