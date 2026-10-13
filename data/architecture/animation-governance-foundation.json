@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "animation-governance-foundation",
+  "phase": "ANIM-1A",
+  "status": "foundation-only-no-runtime",
+  "default_policy": "deny",
+  "manifest_schema": "schemas/animation-manifest.schema.json",
+  "manifest_directory": "animation/manifests",
+  "agent_roles": [
+    {
+      "id": "animation-planning-agent",
+      "capabilities": [
+        "manifest-draft-preparation",
+        "instructional-sequence-preparation"
+      ],
+      "may_prepare": true,
+      "may_human_approve": false,
+      "may_release": false
+    },
+    {
+      "id": "evidence-agent",
+      "capabilities": [
+        "claim-source-mapping",
+        "citation-validation"
+      ],
+      "may_prepare": true,
+      "may_human_approve": false,
+      "may_release": false
+    },
+    {
+      "id": "engineering-parameter-agent",
+      "capabilities": [
+        "engineering-artifact-binding",
+        "parameter-mapping-preparation"
+      ],
+      "may_prepare": true,
+      "may_human_approve": false,
+      "may_release": false
+    },
+    {
+      "id": "animation-validation-agent",
+      "capabilities": [
+        "schema-validation",
+        "governance-validation",
+        "accessibility-contract-validation"
+      ],
+      "may_prepare": true,
+      "may_human_approve": false,
+      "may_release": false
+    }
+  ],
+  "human_gates": [
+    "technical-review",
+    "instructional-review",
+    "final-content-approval",
+    "publication-approval"
+  ],
+  "phase_invariants": {
+    "assessment_eligible": false,
+    "scored_assessment_approved": false,
+    "agent_approval_allowed": false,
+    "agent_release_allowed": false,
+    "vehicle_specific_claims_require_approved_evidence": true,
+    "engineering_derived_claims_require_existing_engineering_artifact": true,
+    "interactive_runtime_deferred": true,
+    "blender_execution_deferred": true
+  },
+  "next_phases": [
+    "ANIM-1B-three-js-player",
+    "ANIM-1C-blender-pipeline",
+    "ANIM-1D-starting-system-trainer",
+    "ANIM-1E-agentic-preparation"
+  ]
+}

@@ -1,0 +1,317 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://autolearnpro.com/schemas/animation-manifest.schema.json",
+  "title": "AutoLearnPro Governed Animation Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "animationId",
+    "title",
+    "type",
+    "classification",
+    "instructionalPurpose",
+    "rendering",
+    "components",
+    "steps",
+    "controls",
+    "evidence",
+    "governance",
+    "accessibility",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "animationId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "minLength": 3,
+      "maxLength": 120
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 160
+    },
+    "type": {
+      "enum": [
+        "interactive-3d",
+        "interactive-2d",
+        "video",
+        "static-diagram"
+      ]
+    },
+    "classification": {
+      "enum": [
+        "conceptual",
+        "engineering-derived",
+        "vehicle-specific"
+      ]
+    },
+    "instructionalPurpose": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "rendering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "renderer",
+        "assetPath",
+        "fallbackImagePath"
+      ],
+      "properties": {
+        "renderer": {
+          "enum": [
+            "three-js",
+            "svg",
+            "video",
+            "static"
+          ]
+        },
+        "assetPath": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fallbackImagePath": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "description",
+          "componentIds"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500
+          },
+          "durationMs": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 120000
+          },
+          "componentIds": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "play",
+        "pause",
+        "stepForward",
+        "stepBackward",
+        "resetCamera",
+        "componentSelect"
+      ],
+      "properties": {
+        "play": {
+          "type": "boolean"
+        },
+        "pause": {
+          "type": "boolean"
+        },
+        "stepForward": {
+          "type": "boolean"
+        },
+        "stepBackward": {
+          "type": "boolean"
+        },
+        "resetCamera": {
+          "type": "boolean"
+        },
+        "componentSelect": {
+          "type": "boolean"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required",
+        "approvedEvidenceRefs",
+        "engineeringArtifactRefs"
+      ],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "approvedEvidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "engineeringArtifactRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "humanApprovalRequired",
+        "humanApprovalRecorded",
+        "publicationAllowed",
+        "assessmentEligible",
+        "scoredAssessmentApproved",
+        "vehicleSpecificClaims",
+        "agentMayApprove",
+        "agentMayRelease"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "drafted",
+            "evidence_mapped",
+            "rights_reviewed",
+            "technically_reviewed",
+            "citation_validated",
+            "instructionally_reviewed",
+            "final_content_approved"
+          ]
+        },
+        "humanApprovalRequired": {
+          "const": true
+        },
+        "humanApprovalRecorded": {
+          "type": "boolean"
+        },
+        "publicationAllowed": {
+          "type": "boolean"
+        },
+        "assessmentEligible": {
+          "const": false
+        },
+        "scoredAssessmentApproved": {
+          "const": false
+        },
+        "vehicleSpecificClaims": {
+          "type": "boolean"
+        },
+        "agentMayApprove": {
+          "const": false
+        },
+        "agentMayRelease": {
+          "const": false
+        }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "keyboardOperable",
+        "reducedMotionRequired",
+        "staticFallbackRequired",
+        "textAlternativeRequired"
+      ],
+      "properties": {
+        "keyboardOperable": {
+          "const": true
+        },
+        "reducedMotionRequired": {
+          "const": true
+        },
+        "staticFallbackRequired": {
+          "const": true
+        },
+        "textAlternativeRequired": {
+          "const": true
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceRole",
+        "authorityRegistry",
+        "rule"
+      ],
+      "properties": {
+        "sourceRole": {
+          "const": "project-authored-animation"
+        },
+        "authorityRegistry": {
+          "const": "data/compliance/authority-registry.json"
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 40,
+          "maxLength": 1000
+        }
+      }
+    }
+  }
+}
