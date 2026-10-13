@@ -26,6 +26,9 @@ jobs:
       - name: Verify lockfile sync
         run: npm ci --dry-run --ignore-scripts
 
+      - name: Enforce text normalization policy
+        run: npm run validate:text-normalization-policy
+
       - name: Enforce dependency runtime compatibility
         run: npm run validate:dependency-runtime-compatibility
 
