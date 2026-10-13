@@ -36,6 +36,12 @@ describe('Hybrid agentic roadmap Stage 2', () => {
     expect(migration).toContain('idx_diagnostic_session_evidence_user_session')
     expect(migration).toContain('idx_diagnostic_executions_user_session')
     expect(migration).toContain('idx_diagnostic_reports_user_session')
+    expect(migration).toContain('diagnostic_session_evidence_owner_fkey')
+    expect(migration).toContain('diagnostic_executions_owner_fkey')
+    expect(migration).toContain('diagnostic_execution_events_owner_fkey')
+    expect(migration).toContain('diagnostic_reports_owner_fkey')
+    expect(migration).toContain('references public.diagnostic_sessions(id, user_id)')
+    expect(migration).toContain('references public.diagnostic_executions(id, session_id, user_id)')
   })
 
   test('execution ledger has bounded attempts, timeout and idempotency', () => {
