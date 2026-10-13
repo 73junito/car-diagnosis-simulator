@@ -34,6 +34,8 @@ const BoundedToolExecutor = require('./diagnostics/bounded-tool-executor');
 const StudentCoachAgent = require('./education/student-coach-agent');
 const InstructorIntelligenceAgent = require('./education/instructor-intelligence-agent');
 const EngineeringMaintenanceAgent = require('./engineering/maintenance-agent');
+const GovernedCurriculumAgent = require('./curriculum/governed-curriculum-agent');
+const ElectricalMeasurementAdapter = require('./diagnostics/electrical-measurement-adapter');
 
 module.exports = {
   AgentProcess,
@@ -70,4 +72,6 @@ module.exports = {
   StudentCoachAgent,
   InstructorIntelligenceAgent,
   EngineeringMaintenanceAgent,
+  GovernedCurriculumAgent,
+  ElectricalMeasurementAdapter,
 };
