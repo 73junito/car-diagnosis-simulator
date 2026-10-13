@@ -9,12 +9,13 @@ create table if not exists public.diagnostic_sessions (
   state_json jsonb not null default '{}'::jsonb,
   status text not null default 'open' check (status in ('open','closed','abandoned')),
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  unique (id, user_id)
 );
 
 create table if not exists public.diagnostic_session_evidence (
   id uuid primary key default gen_random_uuid(),
-  session_id uuid not null references public.diagnostic_sessions(id) on delete cascade,
+  session_id uuid not null,
   user_id uuid not null references auth.users(id) on delete cascade,
   chunk_id text not null references public.source_chunks(chunk_id) on delete restrict,
   claim_id text not null check (btrim(claim_id) <> ''),
@@ -23,12 +24,16 @@ create table if not exists public.diagnostic_session_evidence (
   directly_relevant boolean not null default false,
   current_enough boolean not null default true,
   created_at timestamptz not null default now(),
-  unique (session_id, chunk_id, claim_id)
+  unique (session_id, chunk_id, claim_id),
+  constraint diagnostic_session_evidence_owner_fkey
+    foreign key (session_id, user_id)
+    references public.diagnostic_sessions(id, user_id)
+    on delete cascade
 );
 
 create table if not exists public.diagnostic_executions (
   id uuid primary key default gen_random_uuid(),
-  session_id uuid not null references public.diagnostic_sessions(id) on delete cascade,
+  session_id uuid not null,
   user_id uuid not null references auth.users(id) on delete cascade,
   idempotency_key text not null check (char_length(idempotency_key) between 8 and 128),
   operation text not null check (operation in ('plan','report','tool')),
@@ -42,30 +47,43 @@ create table if not exists public.diagnostic_executions (
   error_code text,
   created_at timestamptz not null default now(),
   completed_at timestamptz,
-  unique (user_id, idempotency_key)
+  unique (user_id, idempotency_key),
+  unique (id, session_id, user_id),
+  constraint diagnostic_executions_owner_fkey
+    foreign key (session_id, user_id)
+    references public.diagnostic_sessions(id, user_id)
+    on delete cascade
 );
 
 create table if not exists public.diagnostic_execution_events (
   id bigint generated always as identity primary key,
-  execution_id uuid not null references public.diagnostic_executions(id) on delete cascade,
-  session_id uuid not null references public.diagnostic_sessions(id) on delete cascade,
+  execution_id uuid not null,
+  session_id uuid not null,
   user_id uuid not null references auth.users(id) on delete cascade,
   event_type text not null check (event_type in (
     'execution_started','attempt_started','attempt_succeeded','attempt_failed',
     'execution_succeeded','execution_failed','execution_timed_out'
   )),
   event_json jsonb not null default '{}'::jsonb,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  constraint diagnostic_execution_events_owner_fkey
+    foreign key (execution_id, session_id, user_id)
+    references public.diagnostic_executions(id, session_id, user_id)
+    on delete cascade
 );
 
 create table if not exists public.diagnostic_reports (
   id uuid primary key default gen_random_uuid(),
-  session_id uuid not null references public.diagnostic_sessions(id) on delete cascade,
-  execution_id uuid not null unique references public.diagnostic_executions(id) on delete cascade,
+  session_id uuid not null,
+  execution_id uuid not null unique,
   user_id uuid not null references auth.users(id) on delete cascade,
   report_json jsonb not null,
   evidence_chunk_ids text[] not null default '{}'::text[],
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  constraint diagnostic_reports_owner_fkey
+    foreign key (execution_id, session_id, user_id)
+    references public.diagnostic_executions(id, session_id, user_id)
+    on delete cascade
 );
 
 create index if not exists idx_diagnostic_sessions_user_updated
