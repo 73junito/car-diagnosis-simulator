@@ -28,6 +28,8 @@ const { buildModelContext } = require('./diagnostics/model-context');
 const { getResponsePolicy } = require('./diagnostics/mode-policy');
 const Provenance = require('./diagnostics/provenance');
 const CircuitToolAdapter = require('./diagnostics/circuit-tool-adapter');
+const DiagnosticCopilot = require('./diagnostics/diagnostic-copilot');
+const { createDiagnosticCopilotAgent } = require('./diagnostics/diagnostic-copilot-agent');
 
 module.exports = {
   AgentProcess,
@@ -58,4 +60,6 @@ module.exports = {
   getResponsePolicy,
   Provenance,
   CircuitToolAdapter,
+  DiagnosticCopilot,
+  createDiagnosticCopilotAgent,
 };
