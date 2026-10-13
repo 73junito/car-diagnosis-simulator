@@ -783,7 +783,7 @@
                   <p class="answer-feedback" aria-live="polite">${answer ? (answer.isCorrect ? "Correct." : "Incorrect.") : ""}</p>
 
                   <div class="torquemind-feedback" hidden>
-                    <h4>ðŸ§  TorqueMind AI Tutor</h4>
+                    <h4>AutoLearnPro AI Tutor</h4>
                     <div class="torquemind-body">
                       Generating explanation...
                     </div>
