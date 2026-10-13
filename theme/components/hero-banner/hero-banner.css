@@ -41,6 +41,10 @@
 .tm-hero-banner__status{
   display:inline-flex;
   width:max-content;
+  max-width:100%;
+  box-sizing:border-box;
+  white-space:normal;
+  overflow-wrap:anywhere;
   margin-top:14px;
   padding:5px 10px;
   border-radius:999px;
