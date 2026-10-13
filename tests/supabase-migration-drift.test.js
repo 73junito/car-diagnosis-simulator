@@ -57,10 +57,10 @@ describe('Supabase migration drift detector', () => {
   test('repository contains no migration bloat after reconciliation', () => {
     const result = canonicalRepositoryMigrations('WORKTREE')
     expect(result.ignoredBloat).toEqual([])
-    expect(result.migrations).toHaveLength(104)
+    expect(result.migrations).toHaveLength(105)
 
     const versions = result.migrations.map((m) => m.version)
-    expect(new Set(versions).size).toBe(104)
+    expect(new Set(versions).size).toBe(105)
     expect(versions).toContain('20260930210756')
     expect(versions).toContain('20261011220034')
     expect(versions).toContain('20261012031851')
@@ -74,6 +74,7 @@ describe('Supabase migration drift detector', () => {
     expect(versions).toContain('20261012212214')
     expect(versions).toContain('20261012223500')
     expect(versions).toContain('20261012224500')
+    expect(versions).toContain('20261013005905')
     expect(versions).not.toContain('20260930025324')
   })
 
