@@ -1,5 +1,5 @@
 export function coachPanel({
-  title = "TorqueMind Coach",
+  title = "Diagnostic Coach",
   recommendation = "",
   body = "",
   items = []
