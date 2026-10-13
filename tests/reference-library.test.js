@@ -72,9 +72,8 @@ describe('G14 governed Reference Library', () => {
   })
 
   test('search input is sanitized before PostgREST OR filter construction', () => {
-    expect(route).toContain('cleanSearchTerm')
     expect(route).toContain('function cleanSearchTerm')
-    expect(route).toMatch(/cleanSearchTerm[\\s\\S]*replace/)
+    expect(route).toContain("return cleanQuery(value).replace(/[^A-Za-z0-9\\s\\-.:/]/g, '').trim()")
   })
 
   test('curriculum CORS allows Authorization without widening origin allowlist', () => {
