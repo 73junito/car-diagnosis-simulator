@@ -662,13 +662,15 @@ export async function handleDiagnosticAdvice(c) {
     evidence
   })
 
-  if (!Array.isArray(plan.nextActions) || plan.nextActions.length === 0) {
+  if (plan.evidenceGate?.allowed !== true || !Array.isArray(plan.nextActions) || plan.nextActions.length === 0) {
     return c.json({
       modelUsed: false,
       deterministicPlan: plan,
       advice: {
-        summary: 'The deterministic Copilot cannot advance this session yet.',
-        nextAction: '',
+        summary: plan.evidenceGate?.allowed === true
+          ? 'The deterministic Copilot cannot advance this session yet.'
+          : 'Model assistance is blocked until the deterministic evidence gate is satisfied.',
+        nextAction: plan.nextActions?.[0] || '',
         verificationReminder: 'Technician verification is required before treating any diagnostic direction as final.'
       }
     }, 200)
