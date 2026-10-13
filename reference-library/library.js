@@ -7,6 +7,8 @@
   const rights=document.getElementById('referenceRights')
   const clearButton=document.getElementById('referenceClear')
   const status=document.getElementById('referenceStatus')
+  const requestedAudience=new URLSearchParams(window.location.search).get('audience')
+  if(requestedAudience==='instructor') audience.value='instructor'
   const results=document.getElementById('referenceResults')
 
   function token(){
