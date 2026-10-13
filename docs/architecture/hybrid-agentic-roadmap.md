@@ -1,6 +1,6 @@
 # Hybrid Agentic Roadmap
 
-**Status:** Stage 4 first expansion implemented: Student Coach augmentation, Instructor Intelligence, and Engineering Maintenance planning. Production Copilot remains human-controlled and subject to the Stage 3 activation gates.
+**Status:** Stage 4 broader-agent expansion implemented, including Student Coach, Instructor Intelligence, Engineering Maintenance planning, governed curriculum preparation, and deterministic electrical diagnostic tooling. Consequential authority remains human-controlled.
 
 ## Product doctrine
 
@@ -111,10 +111,24 @@ Implemented:
    - cannot commit, merge, deploy, or release,
    - requires human execution approval.
 
+Additional Stage 4 implementation:
+
+4. Governed Curriculum agent
+   - validates curriculum enhancement drafts after provider generation,
+   - accepts only approved, rights-cleared, non-assessment evidence,
+   - preserves evidence/source provenance in a deterministic preparation envelope,
+   - cannot approve evidence or rights, publish curriculum, enable assessment generation, or release content.
+
+5. Deterministic diagnostic tool expansion
+   - adds a read-only electrical measurement adapter for Ohm's law, voltage-drop percentage, and electrical power calculations,
+   - expands the explicit bounded-tool allowlist only to `circuit-engine` and `electrical-measurement`,
+   - never supplies vehicle specifications or diagnostic conclusions,
+   - cannot mutate vehicle truth, evidence state, or assessment state.
+
 Still deferred within Stage 4:
 
-- governed curriculum/evidence agent product surfaces,
-- deeper diagnostic tool expansion beyond the current bounded allowlist,
-- any agent workflow that writes consequential state.
+- any agent workflow that writes consequential state,
+- autonomous tool selection beyond explicit deterministic allowlists,
+- agent approval, publication, deployment, eligibility, or release authority.
 
 All Stage 4 agents inherit the same rule: preparation is not approval, publication, eligibility, deployment, merge authority, or release authority.
