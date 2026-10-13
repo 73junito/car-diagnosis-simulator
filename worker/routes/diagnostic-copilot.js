@@ -541,8 +541,6 @@ async function runPreparation(c, operation) {
       ? prepareDiagnosticReport({ session, evidence })
       : planDiagnosticCopilot({ intent: 'plan-next-check', session, evidence })
 
-    await finishExecution(supabase, begun.execution, result)
-
     if (operation === 'report') {
       const { error: reportError } = await supabase
         .from('diagnostic_reports')
@@ -555,6 +553,8 @@ async function runPreparation(c, operation) {
         })
       if (reportError) throw reportError
     }
+
+    await finishExecution(supabase, begun.execution, result)
 
     return c.json({
       executionId: begun.execution.id,
