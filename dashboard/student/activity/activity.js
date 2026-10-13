@@ -54,6 +54,8 @@
     }
     page=targetPage
     status.textContent='Loading recent activity…'
+    timeline.setAttribute('aria-busy','true')
+    refresh.disabled=true
     previous.disabled=true
     next.disabled=true
     try{
@@ -71,6 +73,9 @@
     }catch(error){
       status.textContent=error.message || 'Unable to load recent activity.'
       render([])
+    }finally{
+      timeline.setAttribute('aria-busy','false')
+      refresh.disabled=false
     }
   }
 

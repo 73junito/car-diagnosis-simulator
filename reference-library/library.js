@@ -111,6 +111,8 @@
   }
   async function load(){
     status.textContent='Loading governed references…'
+    results.setAttribute('aria-busy','true')
+    clearButton.disabled=true
     clear(results)
 
     const params=new URLSearchParams({view:'library',audience:audience.value})
@@ -126,6 +128,8 @@
       if(!accessToken){
         status.textContent='Sign in with instructor access to view instructor/internal references.'
         results.appendChild(el('p','Learner references remain available from the Learner audience filter.','empty-state'))
+        results.setAttribute('aria-busy','false')
+        clearButton.disabled=false
         return
       }
       headers.Authorization='Bearer '+accessToken
@@ -151,6 +155,9 @@
     }catch(error){
       results.appendChild(el('p','Reference results are currently unavailable.','empty-state'))
       status.textContent=error.message || 'Reference library unavailable.'
+    }finally{
+      results.setAttribute('aria-busy','false')
+      clearButton.disabled=false
     }
   }
 

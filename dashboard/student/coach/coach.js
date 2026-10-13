@@ -51,6 +51,8 @@
       return
     }
     status.textContent='Loading recommendations…'
+    root.setAttribute('aria-busy','true')
+    refresh.disabled=true
     try{
       const response=await fetch('/api/student/recommendations',{
         headers:{Authorization:'Bearer '+accessToken,Accept:'application/json'}
@@ -73,6 +75,9 @@
     }catch(error){
       status.textContent=error.message || 'Unable to load recommendations.'
       empty('Coach recommendations are currently unavailable.')
+    }finally{
+      root.setAttribute('aria-busy','false')
+      refresh.disabled=false
     }
   }
 

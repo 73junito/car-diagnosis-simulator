@@ -61,6 +61,26 @@ async function auditProductionSurfaces(fetcher = fetchText) {
     }
   }
 
+  for (const [name, url, requiredText] of [
+    ['reference-library', SURFACES.app + '/reference-library/', 'Reference Library'],
+    ['student-coach', SURFACES.app + '/dashboard/student/coach/', 'Diagnostic Coach'],
+    ['student-copilot', SURFACES.app + '/dashboard/student/copilot/', 'Automotive Diagnostic Copilot'],
+    ['public-help', SURFACES.public + '/help/', "platform's public explanation"],
+    ['public-privacy', SURFACES.public + '/privacy', '30 calendar days'],
+    ['public-research', SURFACES.public + '/research-sources/', 'How research becomes governed evidence']
+  ]) {
+    try {
+      const { response, text } = await fetcher(url)
+      observations.push({ surface: name, url, status: response.status })
+      if (!response.ok) failures.push(`${name} returned HTTP ${response.status}`)
+      if (!containsAny(text, [requiredText])) {
+        failures.push(`${name} is missing expected production content: ${requiredText}`)
+      }
+    } catch (error) {
+      failures.push(`${name} request failed: ${error.message}`)
+    }
+  }
+
   try {
     const url = SURFACES.app + '/api/curriculum'
     const { response, text } = await fetcher(url, { accept: 'application/json' })
@@ -93,7 +113,7 @@ async function main() {
     process.exit(1)
   }
 
-  console.log('[PASS] Production surface release smoke: public, app, exam, health, curriculum API')
+  console.log('[PASS] Production surface release smoke: public, app, exam, health, hardened UI routes, curriculum API')
   for (const item of result.observations) {
     console.log(`  - ${item.surface}: HTTP ${item.status} ${item.url}`)
   }

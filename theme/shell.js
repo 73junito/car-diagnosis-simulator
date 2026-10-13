@@ -1,15 +1,28 @@
-import { NAV_ITEMS } from './navigation.js';
+import { workspaceNavFor } from './navigation.js';
 
-export function renderShellHeader(activeHref = window.location.pathname) {
-  const current = activeHref.endsWith('/') ? activeHref : `${activeHref}/`;
+function normalizeHref(value) {
+  if (!value) return '/';
+  const url = String(value).split('?')[0].split('#')[0];
+  return url.endsWith('/') ? url : `${url}/`;
+}
+
+export function renderShellHeader(
+  activeHref = window.location.pathname,
+  search = window.location.search,
+  mainTarget = 'main-content'
+) {
+  const current = normalizeHref(activeHref);
+  const items = workspaceNavFor(activeHref, search);
+  const workspaceHome = items[0]?.href || '/';
 
   return `
+    <a class="tm-skip-link" href="#${mainTarget}">Skip to main content</a>
     <header class="tm-topbar">
       <div class="tm-topbar-inner">
-        <div class="tm-brand">TorqueMind</div>
-        <nav class="tm-nav" aria-label="Primary navigation">
-          ${NAV_ITEMS.map((item) => {
-            const href = item.href.endsWith('/') ? item.href : `${item.href}/`;
+        <a class="tm-brand" href="${workspaceHome}" aria-label="AutoLearnPro workspace home">AutoLearnPro</a>
+        <nav class="tm-nav" aria-label="Workspace navigation">
+          ${items.map((item) => {
+            const href = normalizeHref(item.href);
             const active = current === href ? ' aria-current="page"' : '';
             return `<a href="${item.href}"${active}>${item.label}</a>`;
           }).join('')}
@@ -21,7 +34,14 @@ export function renderShellHeader(activeHref = window.location.pathname) {
 
 export function mountShell() {
   const target = document.querySelector('[data-theme-shell]');
+  const main = document.querySelector('main');
+  if (main && !main.id) main.id = 'main-content';
+  if (main) main.setAttribute('tabindex', '-1');
   if (target) {
-    target.innerHTML = renderShellHeader();
+    target.innerHTML = renderShellHeader(
+      window.location.pathname,
+      window.location.search,
+      main?.id || 'main-content'
+    );
   }
 }
