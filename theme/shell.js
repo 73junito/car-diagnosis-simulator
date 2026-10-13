@@ -8,16 +8,18 @@ function normalizeHref(value) {
 
 export function renderShellHeader(
   activeHref = window.location.pathname,
-  search = window.location.search
+  search = window.location.search,
+  mainTarget = 'main-content'
 ) {
   const current = normalizeHref(activeHref);
   const items = workspaceNavFor(activeHref, search);
+  const workspaceHome = items[0]?.href || '/';
 
   return `
-    <a class="tm-skip-link" href="#main-content">Skip to main content</a>
+    <a class="tm-skip-link" href="#${mainTarget}">Skip to main content</a>
     <header class="tm-topbar">
       <div class="tm-topbar-inner">
-        <a class="tm-brand" href="/dashboard/student/" aria-label="AutoLearnPro workspace home">AutoLearnPro</a>
+        <a class="tm-brand" href="${workspaceHome}" aria-label="AutoLearnPro workspace home">AutoLearnPro</a>
         <nav class="tm-nav" aria-label="Workspace navigation">
           ${items.map((item) => {
             const href = normalizeHref(item.href);
@@ -34,10 +36,12 @@ export function mountShell() {
   const target = document.querySelector('[data-theme-shell]');
   const main = document.querySelector('main');
   if (main && !main.id) main.id = 'main-content';
-  if (main && main.id !== 'main-content') {
-    main.setAttribute('tabindex', '-1');
-  }
+  if (main) main.setAttribute('tabindex', '-1');
   if (target) {
-    target.innerHTML = renderShellHeader();
+    target.innerHTML = renderShellHeader(
+      window.location.pathname,
+      window.location.search,
+      main?.id || 'main-content'
+    );
   }
 }
