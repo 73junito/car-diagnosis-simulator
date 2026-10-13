@@ -4,6 +4,9 @@ import {
   verifySupabaseToken
 } from '../../api/_utils/auth-utils.js'
 import { isInstructorRole, resolveTrustedRole } from '../auth/role-policy.js'
+import instructorIntelligenceAgent from '../../src/ai/education/instructor-intelligence-agent.js'
+
+const { prepareInstructorIntelligence } = instructorIntelligenceAgent
 
 function createServiceClient(supabaseUrl, serviceRoleKey) {
   return createClient(supabaseUrl, serviceRoleKey, {
@@ -323,6 +326,87 @@ export async function handleInstructorAnalyticsExport(c) {
   })
 }
 
+export async function handleInstructorIntelligence(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const auth = await authorizeInstructor(c)
+  if (auth.response) return auth.response
+
+  const classId = String(c.req.query('classId') || '').trim()
+  if (!classId) return c.json({ error: 'classId is required' }, 400)
+
+  const scope = await loadOwnedClassPopulation(auth, classId)
+  if (scope.error) {
+    console.error('Instructor intelligence scope lookup failed:', scope.error.message || scope.error)
+    return c.json({ error: 'Unable to prepare instructor intelligence' }, 500)
+  }
+  if (scope.notFound) return c.json({ error: 'Class not found' }, 404)
+
+  if (scope.userIds.length === 0) {
+    return c.json({
+      ok: true,
+      intelligence: prepareInstructorIntelligence({
+        classId: scope.cls.id,
+        totalStudents: 0,
+        students: [],
+        sessions: buildSessionSummary([])
+      })
+    }, 200)
+  }
+
+  const [{ data: attempts, error: attemptsError }, { data: profiles, error: profileError }] = await Promise.all([
+    auth.supabase
+      .from('attempts')
+      .select('id,user_id,status,score,created_at,updated_at')
+      .in('user_id', scope.userIds),
+    auth.supabase
+      .from('profiles')
+      .select('id,email')
+      .in('id', scope.userIds)
+  ])
+
+  if (attemptsError || profileError) {
+    console.error(
+      'Instructor intelligence source lookup failed:',
+      attemptsError?.message || profileError?.message || attemptsError || profileError
+    )
+    return c.json({ error: 'Unable to prepare instructor intelligence' }, 500)
+  }
+
+  const attemptIds = (attempts || []).map((row) => row.id).filter(Boolean)
+  let answers = []
+  if (attemptIds.length) {
+    const { data, error } = await auth.supabase
+      .from('attempt_answers')
+      .select('attempt_id,is_correct')
+      .in('attempt_id', attemptIds)
+      .in('user_id', scope.userIds)
+
+    if (error) {
+      console.error('Instructor intelligence answer lookup failed:', error.message || error)
+      return c.json({ error: 'Unable to prepare instructor intelligence' }, 500)
+    }
+    answers = data || []
+  }
+
+  const students = buildStudentAnalytics(
+    scope.enrollments || [],
+    profiles || [],
+    attempts || [],
+    answers
+  )
+
+  return c.json({
+    ok: true,
+    intelligence: prepareInstructorIntelligence({
+      classId: scope.cls.id,
+      totalStudents: students.length,
+      students,
+      sessions: buildSessionSummary(attempts || [])
+    })
+  }, 200)
+}
+
 export async function handleInstructorStudentAnalytics(c) {
   if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
 
@@ -386,5 +470,6 @@ export {
   buildStudentAnalytics,
   buildSessionSummary,
   buildAnalyticsCsv,
+  prepareInstructorIntelligence,
   buildAnalyticsXapi
 }
