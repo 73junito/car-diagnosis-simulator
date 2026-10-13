@@ -26,6 +26,9 @@ const ElectricalMeasurementAdapter = Object.freeze({
       const count = [voltage, current, resistance].filter((value) => value !== null).length;
       if (count !== 2) throw new Error("ohms-law requires exactly two known values");
 
+      if (resistance === null && current === 0) {
+        throw new Error("current must be non-zero when solving resistance");
+      }
       normalizedData = {
         operation: "ohms-law",
         voltage: voltage ?? current * resistance,
