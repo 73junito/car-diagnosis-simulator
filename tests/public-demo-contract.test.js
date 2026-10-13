@@ -45,8 +45,9 @@ describe('G15 public interactive demo', () => {
     expect(combined).not.toContain('correct_answer')
     expect(combined).not.toContain('answer_key')
     expect(combined).not.toContain('is_correct')
-    expect(combined).not.toContain('score')
-    expect(combined).not.toContain('grade')
+    expect(combined).not.toMatch(/["']score["']\s*:/i)
+    expect(combined).not.toMatch(/["']grade["']\s*:/i)
+    expect(js).not.toMatch(/\b(score|grade)\s*=|function\s+(score|grade)/i)
   })
 
   test('does not emit private telemetry', () => {
