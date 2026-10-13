@@ -1,6 +1,6 @@
 # Hybrid Agentic Roadmap
 
-**Status:** Stage 2 implemented; production model/UI activation remains gated by Stage 3 validation and human-controlled rollout.
+**Status:** Stage 3 activation controls and authenticated Copilot UI implemented; production remains default-off pending staging validation and explicit human-controlled enablement.
 
 ## Product doctrine
 
@@ -71,16 +71,24 @@ Implemented:
 
 Stage 2 still does not activate external model execution or a user-facing Copilot UI. No tool may mutate vehicle truth, assessment truth, evidence approval, or institutional authority.
 
-## Stage 3 — production activation and observability
+## Stage 3 — production activation and observability — implemented, production default-off
 
-1. Authenticated Copilot UI.
-2. Model provider behind the deterministic contracts.
-3. Model context excludes raw account identity and raw VIN by default.
-4. Full request/run observability.
-5. Cost/latency/error budgets.
-6. Explicit production persistence health gate.
-7. Kill switch / disabled-by-default runtime configuration.
-8. Human verification UX before any diagnostic recommendation is treated as final.
+Implemented:
+
+1. Authenticated student Diagnostic Copilot workspace.
+2. Model-provider adapter behind the deterministic Stage 1/2 planner.
+3. Model context strips raw VIN and never includes authenticated account identity.
+4. Provider output cannot choose the actionable next step; the API returns the deterministic planner's first allowed action.
+5. Structured request/run logs for start, completion, duration, and failure type.
+6. Provider timeout budget capped at 30 seconds and defaulted to 12 seconds.
+7. Explicit persistence-health probe before provider execution.
+8. Hard kill switch plus environment activation flag.
+9. Preview and production configuration remain disabled by default.
+10. Staging configuration is enabled for validation.
+11. Human-facing verification reminder is always returned with model-assisted advice.
+12. No grading, publication, release, credential, or assessment-eligibility authority is introduced.
+
+Production activation requires an explicit configuration change after staging validation; merging this stage alone does not turn the production Copilot on.
 
 ## Stage 4 — broader agents
 

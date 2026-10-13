@@ -2,6 +2,9 @@ import { createClient } from '@supabase/supabase-js'
 import { extractBearerToken, verifySupabaseToken } from '../../api/_utils/auth-utils.js'
 import copilot from '../../src/ai/diagnostics/diagnostic-copilot.js'
 import contracts from '../../src/ai/diagnostics/contracts.js'
+import { resolveDiagnosticCopilotActivation } from '../runtime/diagnostic-copilot-activation.js'
+import { requestDiagnosticCopilotAdvice } from '../services/diagnostic-copilot-model.js'
+import { logCopilotStarted, logCopilotCompleted, logCopilotFailed } from '../utils/copilot-logger.js'
 
 const { planDiagnosticCopilot, prepareDiagnosticReport } = copilot
 const { createDiagnosticSession } = contracts
@@ -564,6 +567,185 @@ async function runPreparation(c, operation) {
   } catch (error) {
     try { await failExecution(supabase, begun.execution, error) } catch {}
     return c.json({ error: 'Copilot preparation failed' }, 500)
+  }
+}
+
+
+async function persistenceHealth(supabase) {
+  const { error } = await supabase
+    .from('diagnostic_sessions')
+    .select('id')
+    .limit(1)
+  return { ok: !error, error: error ? 'diagnostic_session_store_unavailable' : null }
+}
+
+function modelTimeoutMs(env = {}) {
+  const raw = Number.parseInt(env.TORQUEMIND_COPILOT_TIMEOUT_MS || '', 10)
+  if (!Number.isFinite(raw)) return 12000
+  return Math.min(Math.max(raw, 1000), 30000)
+}
+
+export async function handleDiagnosticCopilotHealth(c) {
+  if (c.req.method !== 'GET') return c.json({ error: 'Method not allowed' }, 405)
+
+  const activation = resolveDiagnosticCopilotActivation(c.env)
+  const auth = await authenticate(c)
+  if (auth.response) return auth.response
+
+  const persistence = await persistenceHealth(auth.supabase)
+  const ready = activation.enabled && persistence.ok
+
+  return c.json({
+    ready,
+    activation: {
+      configuredEnabled: activation.configuredEnabled,
+      enabled: activation.enabled,
+      killSwitch: activation.killSwitch,
+      environment: activation.environment,
+      persistenceHealthy: activation.persistenceHealthy && persistence.ok,
+      reason: !persistence.ok ? 'persistence-unhealthy' : activation.reason,
+      provider: activation.provider
+    },
+    boundary: {
+      advisoryOnly: true,
+      deterministicNextAction: true,
+      technicianVerificationRequired: true
+    }
+  }, ready ? 200 : 503)
+}
+
+export async function handleDiagnosticAdvice(c) {
+  if (c.req.method !== 'POST') return c.json({ error: 'Method not allowed' }, 405)
+
+  let activation
+  try {
+    activation = resolveDiagnosticCopilotActivation(c.env)
+  } catch (error) {
+    return c.json({ error: 'Diagnostic Copilot provider configuration invalid' }, 503)
+  }
+
+  if (!activation.enabled) {
+    return c.json({
+      error: 'Diagnostic Copilot is unavailable',
+      reason: activation.reason
+    }, 503)
+  }
+
+  const auth = await authenticate(c)
+  if (auth.response) return auth.response
+  const { user, supabase } = auth
+  const sessionId = text(c.req.param('sessionId'), 80)
+  if (!sessionId) return c.json({ error: 'Session id is required' }, 400)
+
+  const persistence = await persistenceHealth(supabase)
+  if (!persistence.ok) {
+    return c.json({ error: 'Diagnostic Copilot persistence health check failed' }, 503)
+  }
+
+  let row
+  let evidence
+  try {
+    row = await ownedSession(supabase, user.id, sessionId)
+    if (!row) return c.json({ error: 'Diagnostic session not found' }, 404)
+    if (row.status !== 'open') {
+      return c.json({ error: 'Only open diagnostic sessions can request Copilot advice' }, 409)
+    }
+    evidence = await loadEvidence(supabase, user.id, sessionId)
+  } catch {
+    return c.json({ error: 'Diagnostic session unavailable' }, 500)
+  }
+
+  const session = sessionContract(row)
+  const plan = planDiagnosticCopilot({
+    intent: 'plan-next-check',
+    session,
+    evidence
+  })
+
+  if (plan.evidenceGate?.allowed !== true || !Array.isArray(plan.nextActions) || plan.nextActions.length === 0) {
+    return c.json({
+      modelUsed: false,
+      deterministicPlan: plan,
+      advice: {
+        summary: plan.evidenceGate?.allowed === true
+          ? 'The deterministic Copilot cannot advance this session yet.'
+          : 'Model assistance is blocked until the deterministic evidence gate is satisfied.',
+        nextAction: plan.nextActions?.[0] || '',
+        verificationReminder: 'Technician verification is required before treating any diagnostic direction as final.'
+      }
+    }, 200)
+  }
+
+  const requestId = c.reqId || crypto.randomUUID()
+  const executionId = crypto.randomUUID()
+  const timeoutMs = modelTimeoutMs(c.env)
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  const startedAt = Date.now()
+
+  logCopilotStarted({
+    requestId,
+    executionId,
+    environment: activation.environment,
+    provider: activation.provider?.provider,
+    model: activation.provider?.model
+  })
+
+  try {
+    const modelAdvice = await requestDiagnosticCopilotAdvice({
+      env: c.env,
+      session: {
+        ...session,
+        vehicle: publicVehicle(session.vehicle)
+      },
+      plan,
+      signal: controller.signal
+    })
+
+    const advice = {
+      summary: text(modelAdvice.summary, 800),
+      nextAction: plan.nextActions[0],
+      verificationReminder: 'Technician verification is required before treating any diagnostic direction as final.'
+    }
+
+    logCopilotCompleted({
+      requestId,
+      executionId,
+      durationMs: Date.now() - startedAt,
+      provider: activation.provider?.provider,
+      model: activation.provider?.model
+    })
+
+    return c.json({
+      modelUsed: true,
+      requestId,
+      executionId,
+      deterministicPlan: plan,
+      advice,
+      boundary: {
+        advisoryOnly: true,
+        modelMayChooseNextAction: false,
+        technicianVerificationRequired: true
+      }
+    }, 200)
+  } catch (error) {
+    const errorType = error?.name === 'AbortError' ? 'timeout' : (error?.code || 'provider_error')
+    logCopilotFailed({
+      requestId,
+      executionId,
+      durationMs: Date.now() - startedAt,
+      errorType,
+      provider: activation.provider?.provider,
+      model: activation.provider?.model
+    })
+    return c.json({
+      error: error?.name === 'AbortError'
+        ? 'Diagnostic Copilot provider timed out'
+        : 'Diagnostic Copilot provider unavailable',
+      code: errorType
+    }, error?.name === 'AbortError' ? 504 : 503)
+  } finally {
+    clearTimeout(timer)
   }
 }
 

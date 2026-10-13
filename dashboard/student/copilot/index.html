@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Diagnostic Copilot - AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
+  <link rel="stylesheet" href="/dashboard/student/student.css">
+  <link rel="stylesheet" href="./copilot.css">
+</head>
+<body>
+  <div data-theme-shell></div>
+  <main class="tm-main wrapper">
+    <p class="tm-eyebrow">Student Workspace</p>
+    <h1>Automotive Diagnostic Copilot</h1>
+    <p class="copilot-boundary">
+      Advisory training support only. The Copilot does not grade, approve, certify, or replace technician verification.
+    </p>
+
+    <nav class="tm-filter-toolbar" aria-label="Student workspace navigation">
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/">Scenarios</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/coach/">Coach</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/copilot/" aria-current="page">Diagnostic Copilot</a>
+      <a class="tm-btn tm-btn-secondary" href="/dashboard/student/activity/">Activity</a>
+    </nav>
+
+    <section class="tm-panel" aria-labelledby="copilot-runtime-heading">
+      <div class="tm-toolbar">
+        <div>
+          <h2 id="copilot-runtime-heading">Runtime status</h2>
+          <p id="copilotHealth" role="status" aria-live="polite">Checking Copilot availability…</p>
+        </div>
+        <button id="copilotHealthRefresh" class="tm-btn tm-btn-secondary" type="button">Refresh status</button>
+      </div>
+    </section>
+
+    <section class="tm-panel" aria-labelledby="copilot-session-heading">
+      <h2 id="copilot-session-heading">Diagnostic session</h2>
+      <form id="copilotSessionForm" class="copilot-form">
+        <label>
+          Mode
+          <select id="copilotMode">
+            <option value="training">Training</option>
+            <option value="technician">Technician</option>
+          </select>
+        </label>
+        <div class="copilot-vehicle-grid">
+          <label>Year <input id="copilotYear" inputmode="numeric" maxlength="4"></label>
+          <label>Make <input id="copilotMake" maxlength="80"></label>
+          <label>Model <input id="copilotModel" maxlength="80"></label>
+          <label>Engine <input id="copilotEngine" maxlength="120"></label>
+        </div>
+        <label>
+          Customer concern
+          <textarea id="copilotComplaint" rows="3" maxlength="1200" required></textarea>
+        </label>
+        <label>
+          Symptoms or observations
+          <textarea id="copilotSymptoms" rows="3" maxlength="2000" placeholder="One item per line"></textarea>
+        </label>
+        <div class="copilot-actions">
+          <button class="tm-btn tm-btn-primary" type="submit">Start session</button>
+          <button id="copilotAdviceBtn" class="tm-btn tm-btn-secondary" type="button" disabled>Ask Copilot for next step</button>
+        </div>
+      </form>
+      <p id="copilotSessionStatus" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="copilotAdvicePanel" class="tm-panel" aria-labelledby="copilot-advice-heading" hidden>
+      <h2 id="copilot-advice-heading">Advisory guidance</h2>
+      <p id="copilotSummary"></p>
+      <h3>Next action</h3>
+      <p id="copilotNextAction"></p>
+      <p id="copilotVerification" class="copilot-verification"></p>
+      <p id="copilotModelStatus" class="copilot-model-status"></p>
+    </section>
+  </main>
+
+  <script>
+    window.SUPABASE_URL = "https://pffdgqpynpbffbcnxmum.supabase.co";
+    window.SUPABASE_ANON_KEY = "sb_publishable_izHdW-8uSXDyOoroubUoDA_ZqnW16cw";
+  </script>
+  <script src="/auth.js"></script>
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+  </script>
+  <script src="./copilot.js" defer></script>
+</body>
+</html>

@@ -14,7 +14,9 @@ import {
   handleDiagnosticSession,
   handleDiagnosticEvidence,
   handleDiagnosticPlan,
-  handleDiagnosticReport
+  handleDiagnosticReport,
+  handleDiagnosticCopilotHealth,
+  handleDiagnosticAdvice
 } from "./routes/diagnostic-copilot.js";
 import { handleCurriculumRead } from "./routes/curriculum-read.js";
 import { handleCurriculumReferences } from "./routes/curriculum-references.js";
@@ -212,6 +214,8 @@ app.all('/api/copilot/sessions/:sessionId', handleDiagnosticSession)
 app.post('/api/copilot/sessions/:sessionId/evidence', handleDiagnosticEvidence)
 app.post('/api/copilot/sessions/:sessionId/plan', handleDiagnosticPlan)
 app.post('/api/copilot/sessions/:sessionId/report', handleDiagnosticReport)
+app.get('/api/copilot/health', handleDiagnosticCopilotHealth)
+app.post('/api/copilot/sessions/:sessionId/advice', handleDiagnosticAdvice)
 
 app.use('/api/student/institution-claim/*', cors({
   origin: 'https://app.autolearnpro.com',
