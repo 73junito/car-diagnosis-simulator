@@ -1,9 +1,147 @@
-.procedural-assessment{font-family:system-ui,Segoe UI,Roboto,Arial;padding:16px}
-.procedural-step-list{list-style:none;padding:0}
-.procedural-step-list li{padding:8px;border:1px solid #eee;border-radius:6px;margin-bottom:6px;display:flex;align-items:center}
-.procedural-step-list li.pass{background:#e8f5e9}
-.procedural-step-list li.fail{background:#ffebee}
-.hidden{display:none}
-#procedural-completion-state{margin-top:8px;padding:10px;border-radius:6px;border:1px solid #ccc}
-.complete-pass{border-left:4px solid #4caf50}
-.complete-fail{border-left:4px solid #f44336}
+/* OBD-II Procedural Diagnostic Workflow — shared AutoLearnPro theme
+ * conformance. Presentation only. Every ID/class below is load-bearing for
+ * obd2-procedural.js and the OBD-II tests (including the .pass / .fail step
+ * states and .complete-pass / .complete-fail completion states) — do NOT
+ * rename them. This file only restyles the existing structure onto the
+ * shared design tokens. */
+
+/* Context navigation back to the student workspace. */
+.obd2-context-nav {
+  margin-bottom: 4px;
+}
+
+.obd2-back-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.procedural-assessment header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.procedural-assessment h1 {
+  margin: 0;
+  color: var(--tm-primary);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.controls label {
+  font-weight: 700;
+  color: var(--tm-text);
+}
+
+.procedural-assessment section {
+  margin-top: 16px;
+}
+
+.procedural-assessment h2 {
+  color: var(--tm-primary);
+  font-size: 1.15rem;
+  margin: 0 0 10px;
+}
+
+.procedural-step-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.procedural-step-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-surface);
+  color: var(--tm-text);
+}
+
+.procedural-step-list li.pass {
+  background: var(--tm-surface-2);
+  border-left: 4px solid var(--tm-success);
+}
+
+.procedural-step-list li.fail {
+  background: var(--tm-surface-2);
+  border-left: 4px solid var(--tm-danger);
+}
+
+/* Safety acknowledgement callout — only styled while visible; the shared
+ * .hidden utility keeps it display:none when JS toggles it off. */
+.procedural-safety label:not(.hidden) {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--tm-border);
+  border-left: 4px solid var(--tm-accent);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-surface-2);
+  color: var(--tm-text);
+  font-weight: 600;
+}
+
+.procedural-safety input {
+  margin-top: 3px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ID + state-class selectors so the completion state wins over the base ID
+ * border regardless of source order. */
+#procedural-completion-state {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--tm-border);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-surface);
+  color: var(--tm-text);
+  font-weight: 700;
+}
+
+#procedural-completion-state.complete-pass {
+  border-left: 4px solid var(--tm-success);
+}
+
+#procedural-completion-state.complete-fail {
+  border-left: 4px solid var(--tm-danger);
+}
+
+/* Responsive reflow. */
+@media (max-width: 560px) {
+  .procedural-assessment header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .procedural-assessment h1 {
+    font-size: 1.35rem;
+  }
+
+  .controls {
+    width: 100%;
+  }
+
+  .controls select {
+    flex: 1;
+    min-width: 0;
+  }
+}

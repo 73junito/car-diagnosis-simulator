@@ -3,16 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>OBD-II Procedural Diagnostic Workflow</title>
+  <title>OBD-II Procedural Diagnostic Workflow | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="/dashboard/obd2-procedural.css">
 </head>
 <body>
-  <main class="procedural-assessment">
+  <div data-theme-shell></div>
+
+  <main class="procedural-assessment tm-main wrapper">
+    <nav class="obd2-context-nav" aria-label="Diagnostic navigation">
+      <a class="obd2-back-link tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a>
+    </nav>
     <header>
       <h1>Procedural Diagnostic Checklist</h1>
       <div class="controls">
         <label for="procedural-scenario-select">Scenario</label>
-        <select id="procedural-scenario-select"></select>
+        <select id="procedural-scenario-select" class="tm-select"></select>
       </div>
     </header>
 
@@ -26,10 +34,14 @@
     </section>
 
     <section class="procedural-completion">
-      <button id="procedural-check-complete">Check Completion</button>
+      <button id="procedural-check-complete" class="tm-btn tm-btn-primary">Check Completion</button>
       <div id="procedural-completion-state" class="hidden" aria-live="polite"></div>
     </section>
   </main>
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+  </script>
   <script src="/dashboard/obd2-procedural.js"></script>
 </body>
 </html>
