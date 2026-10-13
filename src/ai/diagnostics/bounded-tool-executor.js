@@ -1,6 +1,6 @@
 "use strict";
 
-const DEFAULT_ALLOWED_TOOLS = Object.freeze(["circuit-engine"]);
+const DEFAULT_ALLOWED_TOOLS = Object.freeze(["circuit-engine", "electrical-measurement"]);
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
