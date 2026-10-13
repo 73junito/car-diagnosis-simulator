@@ -9,6 +9,13 @@ import { handleStudentRecommendations } from "./routes/student-recommendations.j
 import { handleStudentProgress } from "./routes/student-progress.js";
 import { handleStudentTranscript } from "./routes/student-transcript.js";
 import { handleStudentActivity } from "./routes/student-activity.js";
+import {
+  handleDiagnosticSessions,
+  handleDiagnosticSession,
+  handleDiagnosticEvidence,
+  handleDiagnosticPlan,
+  handleDiagnosticReport
+} from "./routes/diagnostic-copilot.js";
 import { handleCurriculumRead } from "./routes/curriculum-read.js";
 import { handleCurriculumReferences } from "./routes/curriculum-references.js";
 import {
@@ -192,6 +199,19 @@ app.use('/api/student/activity/*', cors({
   maxAge: 86400
 }))
 app.get('/api/student/activity', handleStudentActivity)
+
+const diagnosticCopilotCors = cors({
+  origin: 'https://app.autolearnpro.com',
+  allowMethods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'Idempotency-Key'],
+  maxAge: 86400
+})
+app.use('/api/copilot/*', diagnosticCopilotCors)
+app.all('/api/copilot/sessions', handleDiagnosticSessions)
+app.all('/api/copilot/sessions/:sessionId', handleDiagnosticSession)
+app.post('/api/copilot/sessions/:sessionId/evidence', handleDiagnosticEvidence)
+app.post('/api/copilot/sessions/:sessionId/plan', handleDiagnosticPlan)
+app.post('/api/copilot/sessions/:sessionId/report', handleDiagnosticReport)
 
 app.use('/api/student/institution-claim/*', cors({
   origin: 'https://app.autolearnpro.com',

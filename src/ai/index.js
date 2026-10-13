@@ -30,6 +30,7 @@ const Provenance = require('./diagnostics/provenance');
 const CircuitToolAdapter = require('./diagnostics/circuit-tool-adapter');
 const DiagnosticCopilot = require('./diagnostics/diagnostic-copilot');
 const { createDiagnosticCopilotAgent } = require('./diagnostics/diagnostic-copilot-agent');
+const BoundedToolExecutor = require('./diagnostics/bounded-tool-executor');
 
 module.exports = {
   AgentProcess,
@@ -62,4 +63,5 @@ module.exports = {
   CircuitToolAdapter,
   DiagnosticCopilot,
   createDiagnosticCopilotAgent,
+  BoundedToolExecutor,
 };
