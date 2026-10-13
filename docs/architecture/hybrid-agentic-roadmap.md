@@ -1,6 +1,6 @@
 # Hybrid Agentic Roadmap
 
-**Status:** Stage 1 implemented; later stages gated by validation and human-controlled rollout.
+**Status:** Stage 2 implemented; production model/UI activation remains gated by Stage 3 validation and human-controlled rollout.
 
 ## Product doctrine
 
@@ -53,20 +53,23 @@ That is intentional. Stage 1 does not enable:
 - production Copilot API routes,
 - user-facing Copilot UI.
 
-## Stage 2 — diagnostic session persistence and bounded execution — next
+## Stage 2 — diagnostic session persistence and bounded execution — implemented
 
-Required before product activation:
+Implemented:
 
-1. Server-authoritative diagnostic session persistence.
-2. Ownership/self-scope rules for user sessions.
-3. Bounded tool execution contract with explicit allowlist.
-4. Retry budget and timeout budget.
-5. Idempotent execution/run identifiers.
-6. Structured execution events and observable failure states.
-7. Safe report persistence with provenance references.
-8. Authenticated API boundary for plan/report preparation.
+1. Server-authoritative diagnostic sessions stored through the Worker service-role boundary.
+2. Every Worker read/write is self-scoped to the authenticated user id.
+3. Governed source chunks are resolved server-side; clients cannot self-declare source approval.
+4. Vehicle-specific source authority remains fail-closed until a server-authoritative authority classifier exists.
+5. Bounded tool executor with an explicit `circuit-engine` allowlist.
+6. Retry ceiling of two attempts and timeout ceiling of five seconds.
+7. User-scoped idempotency keys bound to session, operation, and deterministic input hash.
+8. Structured execution lifecycle events.
+9. Advisory report persistence with evidence chunk provenance references.
+10. Authenticated `/api/copilot/sessions` plan/report preparation boundary.
+11. RLS enabled on all Stage 2 tables with direct `anon` and `authenticated` access revoked.
 
-No tool may mutate vehicle truth, assessment truth, evidence approval, or institutional authority.
+Stage 2 still does not activate external model execution or a user-facing Copilot UI. No tool may mutate vehicle truth, assessment truth, evidence approval, or institutional authority.
 
 ## Stage 3 — production activation and observability
 
