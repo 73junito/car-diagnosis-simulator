@@ -10,6 +10,11 @@
   padding:18px;
 }
 
+.tm-filter-toolbar > *,
+.tm-filter-toolbar label{
+  min-width:0;
+}
+
 .tm-filter-toolbar__field label{
   display:block;
   margin-bottom:6px;
@@ -20,9 +25,12 @@
   letter-spacing:.04em;
 }
 
-.tm-filter-toolbar__field input,
-.tm-filter-toolbar__field select{
+.tm-filter-toolbar input,
+.tm-filter-toolbar select,
+.tm-filter-toolbar button{
   width:100%;
+  max-width:100%;
+  min-width:0;
   box-sizing:border-box;
   border:1px solid var(--tm-border);
   border-radius:var(--tm-radius-sm);
@@ -32,6 +40,7 @@
 }
 
 .tm-filter-toolbar__actions{
+  min-width:0;
   display:flex;
   gap:8px;
 }

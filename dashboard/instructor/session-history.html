@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
-  <main class="container tm-main">
+  <main class="container tm-main tm-session-history-main">
     <section class="tm-hero-banner">
   <div>
     <p class="tm-hero-banner__eyebrow">Instructor Tools</p>
@@ -19,7 +19,7 @@
   </div>
 </section>
 
-    <section id="controls" class="tm-panel">
+    <section id="controls" class="tm-panel tm-session-history-controls">
       <label>Class:
         <select id="history-class">
           <option value="">Loading classes…</option>
@@ -34,7 +34,7 @@
           <option value="100">100</option>
         </select>
       </label>
-      <div id="export-controls" style="display:inline-block;margin-left:1em;">
+      <div id="export-controls" class="tm-session-history-export">
         <button id="export-json-btn" class="tm-btn tm-btn-secondary" disabled>Export JSON</button>
         <button id="export-csv-btn" class="tm-btn tm-btn-secondary" disabled>Export CSV</button>
         <span id="export-status" aria-live="polite" style="margin-left:.5em"></span>
@@ -47,12 +47,15 @@
       <div id="empty" hidden>No events found.</div>
     </section>
 
-    <section class="tm-panel"><table id="session-history-table" class="tm-table">
-        <thead>
-          <tr><th>Timestamp</th><th>Type</th><th>Session</th><th>Payload</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <section class="tm-panel">
+      <div class="tm-table-scroll" tabindex="0" aria-label="Session history table">
+        <table id="session-history-table" class="tm-table">
+          <thead>
+            <tr><th>Timestamp</th><th>Type</th><th>Session</th><th>Payload</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
   </main>
 
