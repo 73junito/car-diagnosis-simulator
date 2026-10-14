@@ -4,22 +4,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>12 V Three-Wire Sensor Lab</title>
-  <link rel="stylesheet" href="../student.css">
+  <title>12 V Three-Wire Sensor Lab | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
   <link rel="stylesheet" href="./sensor-lab.css">
 </head>
 <body>
-  <main class="lab-shell">
-    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
-    <header>
-      <p class="eyebrow">Reusable circuit-template preview</p>
-      <h1>Interactive 12 V Three-Wire Sensor Lab</h1>
-      <p>Trace controller power, a clearly labeled 5 V nominal training reference, sensor signal, and reference ground without assuming vehicle-specific signal ranges or pinouts.</p>
+  <div data-theme-shell></div>
+
+  <main class="lab-shell tm-main">
+    <nav class="lab-nav" aria-label="Lab navigation">
+      <a class="lab-back tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a>
+    </nav>
+    <header class="tm-page-header">
+      <p class="tm-eyebrow">Reusable circuit-template preview</p>
+      <h1 class="tm-page-title">Interactive 12 V Three-Wire Sensor Lab</h1>
+      <p class="tm-page-subtitle">Trace controller power, a clearly labeled 5 V nominal training reference, sensor signal, and reference ground without assuming vehicle-specific signal ranges or pinouts.</p>
       <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltages"></div>
     </header>
 
-    <section class="learning-strip">
+    <section class="learning-strip" aria-label="Learning objective">
       <strong>Learning goal</strong>
       <span>Differentiate sensor supply, analog signal, and sensor ground/reference paths and observe how different faults affect each path.</span>
     </section>
@@ -28,15 +34,15 @@
       <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
       <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
       <div class="button-row">
-        <button id="showSystemFlow" type="button">Show system flow</button>
-        <button id="tracePower" type="button">Trace sensor supply</button>
-        <button id="traceSignal" type="button">Trace sensor signal</button>
-        <button id="traceGround" type="button">Trace ground/reference</button>
-        <button id="resetView" type="button">Reset</button>
+        <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system flow</button>
+        <button id="tracePower" type="button" class="tm-btn tm-btn-secondary">Trace sensor supply</button>
+        <button id="traceSignal" type="button" class="tm-btn tm-btn-secondary">Trace sensor signal</button>
+        <button id="traceGround" type="button" class="tm-btn tm-btn-secondary">Trace ground/reference</button>
+        <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset</button>
       </div>
     </section>
 
-    <section class="legend">
+    <section class="legend" aria-label="Schematic legend">
       <span><i class="legend-line power"></i> Power / reference supply</span>
       <span><i class="legend-line signal"></i> Analog signal</span>
       <span><i class="legend-line ground"></i> Ground / reference</span>
@@ -48,7 +54,7 @@
     <section class="engineering-panel" aria-labelledby="sensorEngineeringHeading">
       <div class="engineering-heading">
         <div>
-          <p class="eyebrow">Signal engineering example</p>
+          <p class="tm-eyebrow">Signal engineering example</p>
           <h2 id="sensorEngineeringHeading">Analog sensor transfer relationship</h2>
           <p>The transfer values below are generic training examples, not vehicle specifications.</p>
         </div>
@@ -99,10 +105,10 @@
     <section class="workspace">
       <div class="diagram-card">
         <div class="diagram-heading">
-          <div><p class="eyebrow">Powered sensor architecture</p><h2>Generic three-wire sensor schematic</h2></div>
+          <div><p class="tm-eyebrow">Powered sensor architecture</p><h2>Generic three-wire sensor schematic</h2></div>
           <div id="stateBadge" class="state-badge">Sensor active / signal present</div>
         </div>
-        <div class="diagram-scroll">
+        <div class="diagram-scroll" aria-label="Scrollable three-wire sensor schematic">
           <svg id="circuitSvg" viewBox="0 0 850 660" role="img" aria-labelledby="diagramTitle diagramDesc">
             <title id="diagramTitle">Generic 12 V three-wire powered sensor training schematic</title>
             <desc id="diagramDesc">Interactive powered-sensor circuit with explicit 12 V vehicle supply and 5 V nominal training reference, analog signal, ground, test points, and faults.</desc>
@@ -115,7 +121,7 @@
         <h2>Component inspector</h2>
         <div id="inspectorContent"><p>Select a symbol or test point to inspect its role.</p></div>
         <div class="guided-card">
-          <p class="eyebrow">Guided practice</p>
+          <p class="tm-eyebrow">Guided practice</p>
           <ol>
             <li>Identify the 12 V vehicle supply and the 5 V training reference.</li>
             <li>Trace reference supply from the regulator to the sensor.</li>
@@ -150,6 +156,10 @@
 <script src="/src/engineering/comparisons.js"></script>
   <script src="/src/engineering/artifacts.js"></script>
   <script src="/src/engineering/index.js"></script>
+<script type="module">
+  import { mountShell } from "/theme/shell.js";
+  mountShell();
+</script>
   <script src="./sensor-lab.js"></script>
 </body>
 </html>
