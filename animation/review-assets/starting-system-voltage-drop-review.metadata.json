@@ -33,7 +33,7 @@
   "instructionalOverlays": [
     "digital-multimeter"
   ],
-  "manifestSha256": "580801fc6463146d4d1612154c33a66adb217fcad0a6ea36c512a52a93a74971",
+  "manifestSha256": "ff32ae5101d67d546ce06304f385bb25f47d2e56ffc7538aa5b2a25fbea5495c",
   "numericPolicy": "No vehicle-specific acceptable measurement or limit is embedded in the 3D review asset.",
   "operatingStateIds": [
     "key-off",

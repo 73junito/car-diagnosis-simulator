@@ -35,6 +35,10 @@ describe('ANIM-1B Three.js player contract', () => {
     candidate.governance.status = 'final_content_approved'
     candidate.governance.humanApprovalRecorded = true
     candidate.governance.publicationAllowed = true
+    candidate.type = 'interactive-3d'
+    candidate.rendering.renderer = 'three-js'
+    candidate.rendering.assetPath = null
+    candidate.rendering.fallbackImagePath = null
     const missingAssets = validateAnimationRuntimeManifest(candidate)
     expect(missingAssets.ok).toBe(false)
     expect(missingAssets.errors.join('\n')).toMatch(/model asset/)

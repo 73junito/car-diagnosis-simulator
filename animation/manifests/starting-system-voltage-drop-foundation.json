@@ -1,14 +1,14 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "animationId": "starting-system-voltage-drop-foundation",
   "title": "Starting-System Voltage-Drop Trainer Foundation",
-  "type": "interactive-3d",
+  "type": "static-diagram",
   "classification": "engineering-derived",
   "instructionalPurpose": "Provide a governed foundation for teaching how starting-circuit components and voltage-drop measurement points relate during a diagnostic workflow.",
   "rendering": {
-    "renderer": "three-js",
+    "renderer": "static",
     "assetPath": null,
-    "fallbackImagePath": null
+    "fallbackImagePath": "animation/fallbacks/starting-system-voltage-drop.svg"
   },
   "components": [
     {
@@ -16,65 +16,138 @@
       "label": "Battery"
     },
     {
-      "id": "positive-cable",
-      "label": "Positive cable"
+      "id": "control-protection",
+      "label": "Start-control protection"
     },
     {
-      "id": "starter-relay",
-      "label": "Starter relay"
+      "id": "start-command-switch",
+      "label": "Start command switch"
     },
     {
-      "id": "starter-solenoid",
-      "label": "Starter solenoid"
+      "id": "starter-solenoid-coil",
+      "label": "Starter solenoid coil"
+    },
+    {
+      "id": "starter-solenoid-contact",
+      "label": "Starter solenoid main contact"
     },
     {
       "id": "starter-motor",
       "label": "Starter motor"
     },
     {
+      "id": "positive-path",
+      "label": "Positive current path"
+    },
+    {
       "id": "ground-path",
-      "label": "Ground path"
+      "label": "Ground return path"
     },
     {
       "id": "digital-multimeter",
-      "label": "Digital multimeter"
+      "label": "Digital multimeter instructional overlay"
     }
   ],
   "steps": [
     {
-      "id": "observe-circuit",
-      "label": "Observe the starting circuit",
-      "description": "Identify the major current path and control components before selecting a measurement.",
+      "id": "identify-current-path",
+      "label": "Identify the crank-current path",
+      "description": "Trace the generic battery-to-solenoid-contact-to-starter-motor path and its return through the ground path before selecting a measurement.",
       "durationMs": null,
       "componentIds": [
         "battery",
-        "positive-cable",
-        "starter-relay",
-        "starter-solenoid",
+        "starter-solenoid-contact",
         "starter-motor",
+        "positive-path",
         "ground-path"
-      ]
+      ],
+      "timeline": {
+        "kind": "static-interval",
+        "startSeconds": 0,
+        "endSeconds": 0
+      },
+      "highlightComponentIds": [
+        "battery",
+        "starter-solenoid-contact",
+        "starter-motor",
+        "positive-path",
+        "ground-path"
+      ],
+      "camera": {
+        "behavior": "frame-highlighted-components"
+      }
     },
     {
-      "id": "select-test-points",
-      "label": "Select voltage-drop test points",
-      "description": "Choose measurement points appropriate to the part of the starting circuit being investigated.",
+      "id": "identify-control-path",
+      "label": "Identify the start-control path",
+      "description": "Locate the generic control protection, start-command switch, and solenoid coil that establish a crank request without treating the diagram as vehicle-specific wiring.",
+      "durationMs": null,
+      "componentIds": [
+        "control-protection",
+        "start-command-switch",
+        "starter-solenoid-coil"
+      ],
+      "timeline": {
+        "kind": "static-interval",
+        "startSeconds": 0,
+        "endSeconds": 0
+      },
+      "highlightComponentIds": [
+        "control-protection",
+        "start-command-switch",
+        "starter-solenoid-coil"
+      ],
+      "camera": {
+        "behavior": "frame-highlighted-components"
+      }
+    },
+    {
+      "id": "select-measurement-path",
+      "label": "Select a voltage-drop measurement path",
+      "description": "Use the instructional meter overlay and governed test-point markers to choose the portion of the circuit being investigated; actual limits require separately applicable evidence.",
       "durationMs": null,
       "componentIds": [
         "digital-multimeter",
-        "positive-cable",
-        "ground-path"
-      ]
+        "positive-path",
+        "ground-path",
+        "starter-motor"
+      ],
+      "timeline": {
+        "kind": "static-interval",
+        "startSeconds": 0,
+        "endSeconds": 0
+      },
+      "highlightComponentIds": [
+        "digital-multimeter",
+        "positive-path",
+        "ground-path",
+        "starter-motor"
+      ],
+      "camera": {
+        "behavior": "frame-highlighted-components"
+      }
     },
     {
-      "id": "interpret-measurement",
-      "label": "Interpret the measurement",
-      "description": "Use an approved engineering artifact or evidence source to interpret the measured relationship without inventing vehicle-specific limits.",
+      "id": "interpret-with-evidence",
+      "label": "Interpret with applicable evidence",
+      "description": "Compare any measured or modeled value only through approved engineering artifacts or applicable evidence, never by inventing a vehicle-specific specification.",
       "durationMs": null,
       "componentIds": [
         "digital-multimeter",
         "starter-motor"
-      ]
+      ],
+      "timeline": {
+        "kind": "static-interval",
+        "startSeconds": 0,
+        "endSeconds": 0
+      },
+      "highlightComponentIds": [
+        "digital-multimeter",
+        "starter-motor"
+      ],
+      "camera": {
+        "behavior": "frame-highlighted-components"
+      }
     }
   ],
   "controls": {
@@ -113,5 +186,238 @@
     "sourceRole": "project-authored-animation",
     "authorityRegistry": "data/compliance/authority-registry.json",
     "rule": "This draft may illustrate generic starting-system relationships and diagnostic workflow only. It may not establish vehicle-specific values, procedures, limits, wiring, pinouts, or assessment eligibility without separately approved evidence and human review."
+  },
+  "presentation": {
+    "contractVersion": "1.0.0",
+    "mode": "static-2d",
+    "simulationSource": {
+      "engineeringArtifactRef": "data/circuit-templates/12v-starting-system.json"
+    },
+    "componentBindings": {
+      "battery": {
+        "sourceType": "engineering-component",
+        "engineeringComponentId": "BAT1"
+      },
+      "control-protection": {
+        "sourceType": "engineering-component",
+        "engineeringComponentId": "FUSE1"
+      },
+      "start-command-switch": {
+        "sourceType": "engineering-component",
+        "engineeringComponentId": "SW1"
+      },
+      "starter-solenoid-coil": {
+        "sourceType": "engineering-component",
+        "engineeringComponentId": "SOL_COIL"
+      },
+      "starter-solenoid-contact": {
+        "sourceType": "engineering-component",
+        "engineeringComponentId": "SOL_CONTACT"
+      },
+      "starter-motor": {
+        "sourceType": "engineering-component",
+        "engineeringComponentId": "MTR1"
+      },
+      "positive-path": {
+        "sourceType": "connection-derived",
+        "engineeringConnectionIds": [
+          "W_BAT_FUSE",
+          "W_FUSE_SWITCH",
+          "W_BAT_CONTACT",
+          "W_CONTACT_MOTOR"
+        ]
+      },
+      "ground-path": {
+        "sourceType": "engineering-component",
+        "engineeringComponentId": "GND1"
+      },
+      "digital-multimeter": {
+        "sourceType": "instructional-overlay"
+      }
+    },
+    "clips": [],
+    "stateMappings": [
+      {
+        "stateId": "key-off",
+        "componentStates": [
+          {
+            "componentId": "battery",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "control-protection",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "start-command-switch",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "starter-solenoid-coil",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "starter-solenoid-contact",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "starter-motor",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "positive-path",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "ground-path",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "digital-multimeter",
+            "visualState": "inactive"
+          }
+        ]
+      },
+      {
+        "stateId": "key-on",
+        "componentStates": [
+          {
+            "componentId": "battery",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "control-protection",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "start-command-switch",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "starter-solenoid-coil",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "starter-solenoid-contact",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "starter-motor",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "positive-path",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "ground-path",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "digital-multimeter",
+            "visualState": "inactive"
+          }
+        ]
+      },
+      {
+        "stateId": "crank",
+        "componentStates": [
+          {
+            "componentId": "battery",
+            "visualState": "active"
+          },
+          {
+            "componentId": "control-protection",
+            "visualState": "energized"
+          },
+          {
+            "componentId": "start-command-switch",
+            "visualState": "active"
+          },
+          {
+            "componentId": "starter-solenoid-coil",
+            "visualState": "energized"
+          },
+          {
+            "componentId": "starter-solenoid-contact",
+            "visualState": "energized"
+          },
+          {
+            "componentId": "starter-motor",
+            "visualState": "energized"
+          },
+          {
+            "componentId": "positive-path",
+            "visualState": "active"
+          },
+          {
+            "componentId": "ground-path",
+            "visualState": "active"
+          },
+          {
+            "componentId": "digital-multimeter",
+            "visualState": "inactive"
+          }
+        ]
+      }
+    ],
+    "faultMappings": [
+      {
+        "faultId": "FAULT_OPEN_CONTROL",
+        "componentStates": [
+          {
+            "componentId": "starter-solenoid-coil",
+            "visualState": "faulted"
+          },
+          {
+            "componentId": "starter-solenoid-contact",
+            "visualState": "inactive"
+          },
+          {
+            "componentId": "starter-motor",
+            "visualState": "inactive"
+          }
+        ]
+      },
+      {
+        "faultId": "FAULT_OPEN_POWER",
+        "componentStates": [
+          {
+            "componentId": "positive-path",
+            "visualState": "faulted"
+          },
+          {
+            "componentId": "starter-motor",
+            "visualState": "inactive"
+          }
+        ]
+      },
+      {
+        "faultId": "FAULT_HIGH_RES_GROUND",
+        "componentStates": [
+          {
+            "componentId": "ground-path",
+            "visualState": "degraded"
+          },
+          {
+            "componentId": "starter-motor",
+            "visualState": "degraded"
+          }
+        ]
+      },
+      {
+        "faultId": "FAULT_HIGH_RES_POWER",
+        "componentStates": [
+          {
+            "componentId": "positive-path",
+            "visualState": "degraded"
+          },
+          {
+            "componentId": "starter-motor",
+            "visualState": "degraded"
+          }
+        ]
+      }
+    ]
   }
 }

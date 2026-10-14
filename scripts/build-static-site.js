@@ -74,6 +74,11 @@ const additionalRuntimeEntries = [
     optional: false
   },
   {
+    source: "animation/fallbacks/starting-system-voltage-drop.svg",
+    destination: "animation/fallbacks/starting-system-voltage-drop.svg",
+    optional: false
+  },
+  {
     source: "docs/index.html",
     destination: "docs/index.html",
     optional: true
@@ -209,6 +214,7 @@ const requiredOutputFiles = [
   "dashboard/instructor/research/research.js",
   "dashboard/student/scenario/index.html",
   "animation/manifests/starting-system-voltage-drop-foundation.json",
+  "animation/fallbacks/starting-system-voltage-drop.svg",
   "data/architecture/student-lab-animation-source-of-truth.json",
   "data/architecture/animation-presentation-contract.json",
   "theme/components/animation-player/animation-player.js",
