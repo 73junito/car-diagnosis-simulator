@@ -4,17 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Interactive Circuit Lab</title>
-  <link rel="stylesheet" href="../student.css">
+  <title>Interactive Circuit Lab | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="./circuit-lab.css">
 </head>
 <body>
-  <main class="lab-shell">
-    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
-    <header>
-      <p class="eyebrow">Training preview</p>
-      <h1>Interactive Charging-System Circuit Lab</h1>
-      <p>Follow conventional current flow through a project-authored training schematic, inspect electrical symbols, and observe how faults interrupt or degrade a circuit.</p>
+  <div data-theme-shell></div>
+
+  <main class="lab-shell tm-main">
+    <nav class="lab-nav" aria-label="Lab navigation">
+      <a class="lab-back tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a>
+    </nav>
+    <header class="tm-page-header">
+      <p class="tm-eyebrow">Training preview</p>
+      <h1 class="tm-page-title">Interactive Charging-System Circuit Lab</h1>
+      <p class="tm-page-subtitle">Follow conventional current flow through a project-authored training schematic, inspect electrical symbols, and observe how faults interrupt or degrade a circuit.</p>
       <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
     </header>
 
@@ -37,10 +43,10 @@
         <select id="faultSelect"><option value="">No injected fault</option></select>
       </div>
       <div class="button-row">
-        <button id="showSystemFlow" type="button">Show system flow</button>
-        <button id="tracePower" type="button">Trace B+ path</button>
-        <button id="traceGround" type="button">Trace ground return</button>
-        <button id="resetView" type="button">Reset</button>
+        <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system flow</button>
+        <button id="tracePower" type="button" class="tm-btn tm-btn-secondary">Trace B+ path</button>
+        <button id="traceGround" type="button" class="tm-btn tm-btn-secondary">Trace ground return</button>
+        <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset</button>
       </div>
     </section>
 
@@ -56,7 +62,7 @@
     <section class="engineering-panel" aria-labelledby="chargingEngineeringHeading">
       <div class="engineering-heading">
         <div>
-          <p class="eyebrow">Source-backed charging reference</p>
+          <p class="tm-eyebrow">Source-backed charging reference</p>
           <h2 id="chargingEngineeringHeading">Charging-cable voltage-drop reference</h2>
           <p>Delco Remy source values are shown only within their stated applicability. Enter current only when you have a measured or intentionally chosen test value.</p>
         </div>
@@ -92,7 +98,7 @@
       <div class="diagram-card">
         <div class="diagram-heading">
           <div>
-            <p class="eyebrow">Conventional current flow</p>
+            <p class="tm-eyebrow">Conventional current flow</p>
             <h2>Generic charging-system schematic</h2>
           </div>
           <div id="stateBadge" class="state-badge">Engine running / charging</div>
@@ -112,7 +118,7 @@
           <p>Select an electrical symbol to inspect its role, terminals, connections, and available test points.</p>
         </div>
         <div class="guided-card">
-          <p class="eyebrow">Guided practice</p>
+          <p class="tm-eyebrow">Guided practice</p>
           <ol id="guidedSteps">
             <li class="active">Identify the battery as the electrical source.</li>
             <li>Locate the main charging protection.</li>
@@ -146,6 +152,10 @@
 <script src="/src/engineering/measurements.js"></script>
 <script src="/src/engineering/comparisons.js"></script>
   <script src="/src/engineering/index.js"></script>
+<script type="module">
+  import { mountShell } from "/theme/shell.js";
+  mountShell();
+</script>
   <script src="./circuit-lab.js"></script>
 </body>
 </html>

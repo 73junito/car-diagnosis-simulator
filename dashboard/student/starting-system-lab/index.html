@@ -4,18 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>12 V Starting-System Lab</title>
-  <link rel="stylesheet" href="../student.css">
+  <title>12 V Starting-System Lab | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
   <link rel="stylesheet" href="./starting-system-lab.css">
 </head>
 <body>
-  <main class="lab-shell">
-    <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
-    <header>
-      <p class="eyebrow">Reusable circuit-template preview</p>
-      <h1>Interactive 12 V Starting-System Lab</h1>
-      <p>Trace the protected start-command path and the separate high-current starter-motor path using the standardized electrical symbol, connection, and voltage-domain libraries.</p>
+  <div data-theme-shell></div>
+
+  <main class="lab-shell tm-main">
+    <nav class="lab-nav" aria-label="Lab navigation">
+      <a class="lab-back tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a>
+    </nav>
+    <header class="tm-page-header">
+      <p class="tm-eyebrow">Reusable circuit-template preview</p>
+      <h1 class="tm-page-title">Interactive 12 V Starting-System Lab</h1>
+      <p class="tm-page-subtitle">Trace the protected start-command path and the separate high-current starter-motor path using the standardized electrical symbol, connection, and voltage-domain libraries.</p>
       <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
     </header>
 
@@ -34,11 +40,11 @@
         <select id="faultSelect"><option value="">No injected fault</option></select>
       </div>
       <div class="button-row">
-        <button id="showSystemFlow" type="button">Show system flow</button>
-        <button id="traceControl" type="button">Trace start control</button>
-        <button id="tracePower" type="button">Trace motor power</button>
-        <button id="traceGround" type="button">Trace ground return</button>
-        <button id="resetView" type="button">Reset</button>
+        <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system flow</button>
+        <button id="traceControl" type="button" class="tm-btn tm-btn-secondary">Trace start control</button>
+        <button id="tracePower" type="button" class="tm-btn tm-btn-secondary">Trace motor power</button>
+        <button id="traceGround" type="button" class="tm-btn tm-btn-secondary">Trace ground return</button>
+        <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset</button>
       </div>
     </section>
 
@@ -54,7 +60,7 @@
     <section class="engineering-panel" aria-labelledby="startingEngineeringHeading">
       <div class="engineering-heading">
         <div>
-          <p class="eyebrow">Source-backed engineering reference</p>
+          <p class="tm-eyebrow">Source-backed engineering reference</p>
           <h2 id="startingEngineeringHeading">Battery capability and starter-cable test reference</h2>
           <p>Battery ratings and starter limits come from separate sources. Selecting both does not establish product compatibility.</p>
         </div>
@@ -111,7 +117,7 @@
       <div class="diagram-card">
         <div class="diagram-heading">
           <div>
-            <p class="eyebrow">Conventional current flow</p>
+            <p class="tm-eyebrow">Conventional current flow</p>
             <h2>Generic 12 V starting-system schematic</h2>
           </div>
           <div id="stateBadge" class="state-badge">Crank request</div>
@@ -131,7 +137,7 @@
           <p>Select a symbol or test point to inspect its role in the reusable training template.</p>
         </div>
         <div class="guided-card">
-          <p class="eyebrow">Guided practice</p>
+          <p class="tm-eyebrow">Guided practice</p>
           <ol id="guidedSteps">
             <li class="active">Identify the 12 V nominal battery source.</li>
             <li>Trace the protected start-command path.</li>
@@ -167,6 +173,10 @@
 <script src="/src/engineering/comparisons.js"></script>
   <script src="/src/engineering/artifacts.js"></script>
   <script src="/src/engineering/index.js"></script>
+<script type="module">
+  import { mountShell } from "/theme/shell.js";
+  mountShell();
+</script>
   <script src="./starting-system-lab.js"></script>
 </body>
 </html>
