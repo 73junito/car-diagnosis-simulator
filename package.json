@@ -123,7 +123,9 @@
     "validate:dependency-runtime-compatibility": "node scripts/verify-dependency-runtime-compatibility.js",
     "validate:text-normalization-policy": "node scripts/verify-text-normalization-policy.js",
     "build:animation-starting-review": "node scripts/build-starting-system-animation-review.js",
-    "validate:animation-starting-review": "node scripts/verify-starting-system-animation-review.js"
+    "validate:animation-starting-review": "node scripts/verify-starting-system-animation-review.js",
+    "prepare:animation-agent-review": "node scripts/prepare-animation-agent-review.js --write",
+    "validate:animation-agentic-prep": "node scripts/verify-animation-agentic-preparation.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

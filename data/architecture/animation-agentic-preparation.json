@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "animation-agentic-preparation-policy",
+  "phase": "ANIM-1E",
+  "status": "preparation-only-no-approval",
+  "default_policy": "deny",
+  "request_schema": "schemas/animation-agentic-preparation-request.schema.json",
+  "output_directory": "animation/agentic-prep/output",
+  "output_committed": false,
+  "runtime_deployment_allowed": false,
+  "allowed_agent_roles": [
+    {
+      "id": "animation-planning-agent",
+      "capabilities": [
+        "manifest-draft-preparation",
+        "instructional-sequence-preparation"
+      ]
+    },
+    {
+      "id": "evidence-agent",
+      "capabilities": [
+        "claim-source-mapping",
+        "citation-validation"
+      ]
+    },
+    {
+      "id": "engineering-parameter-agent",
+      "capabilities": [
+        "engineering-artifact-binding",
+        "parameter-mapping-preparation"
+      ]
+    },
+    {
+      "id": "animation-validation-agent",
+      "capabilities": [
+        "schema-validation",
+        "governance-validation",
+        "accessibility-contract-validation"
+      ]
+    }
+  ],
+  "allowed_manifest_statuses": [
+    "drafted",
+    "evidence_mapped",
+    "rights_reviewed",
+    "technically_reviewed",
+    "citation_validated",
+    "instructionally_reviewed"
+  ],
+  "human_gates": [
+    "technical-review",
+    "instructional-review",
+    "final-content-approval",
+    "publication-approval"
+  ],
+  "hard_boundaries": {
+    "agent_may_approve": false,
+    "agent_may_release": false,
+    "publication_allowed": false,
+    "assessment_eligible": false,
+    "scored_assessment_approved": false,
+    "may_change_auth_or_rls": false,
+    "may_change_curriculum_eligibility": false
+  },
+  "packet_contract": {
+    "status": "prepared_for_human_review",
+    "deterministic": true,
+    "records_source_hashes": true,
+    "records_unresolved_human_gates": true,
+    "may_mutate_source_manifest": false
+  }
+}

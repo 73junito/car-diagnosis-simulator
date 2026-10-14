@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0.0",
+  "requestId": "starting-system-voltage-drop-review-prep",
+  "animationManifest": "animation/manifests/starting-system-voltage-drop-review.json",
+  "requestedByAgentRole": "animation-planning-agent",
+  "operation": "prepare-review-package",
+  "purpose": "Prepare a deterministic human-review handoff packet for the generic starting-system voltage-drop review model without approving or publishing it.",
+  "constraints": {
+    "publicationAllowed": false,
+    "assessmentEligible": false,
+    "scoredAssessmentApproved": false,
+    "agentMayApprove": false,
+    "agentMayRelease": false,
+    "vehicleSpecificClaimsAllowed": false
+  }
+}
