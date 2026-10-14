@@ -22,7 +22,10 @@
   ],
   "properties": {
     "schemaVersion": {
-      "const": "1.0.0"
+      "enum": [
+        "1.0.0",
+        "1.1.0"
+      ]
     },
     "animationId": {
       "type": "string",
@@ -151,6 +154,88 @@
               "type": "string"
             },
             "uniqueItems": true
+          },
+          "timeline": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "clipId",
+                  "startSeconds",
+                  "endSeconds"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "clip"
+                  },
+                  "clipId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "startSeconds": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "endSeconds": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "startSeconds",
+                  "endSeconds"
+                ],
+                "properties": {
+                  "kind": {
+                    "const": "static-interval"
+                  },
+                  "startSeconds": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "endSeconds": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                }
+              }
+            ]
+          },
+          "highlightComponentIds": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "camera": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "behavior"
+            ],
+            "properties": {
+              "behavior": {
+                "enum": [
+                  "preserve",
+                  "frame-highlighted-components",
+                  "frame-component",
+                  "reset"
+                ]
+              },
+              "componentId": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
           }
         }
       }
@@ -312,6 +397,228 @@
           "maxLength": 1000
         }
       }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contractVersion",
+        "mode",
+        "simulationSource",
+        "componentBindings",
+        "clips",
+        "stateMappings",
+        "faultMappings"
+      ],
+      "properties": {
+        "contractVersion": {
+          "const": "1.0.0"
+        },
+        "mode": {
+          "enum": [
+            "animated",
+            "static-3d",
+            "static-2d"
+          ]
+        },
+        "simulationSource": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "engineeringArtifactRef"
+          ],
+          "properties": {
+            "engineeringArtifactRef": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "componentBindings": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "patternProperties": {
+            "^[A-Za-z0-9_-]+$": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sourceType"
+              ],
+              "properties": {
+                "sourceType": {
+                  "enum": [
+                    "engineering-component",
+                    "connection-derived",
+                    "instructional-overlay"
+                  ]
+                },
+                "engineeringComponentId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "engineeringConnectionIds": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "clips": {
+          "type": "array",
+          "uniqueItems": false,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "assetClipName",
+              "durationSeconds"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              },
+              "assetClipName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "durationSeconds": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 120
+              }
+            }
+          }
+        },
+        "stateMappings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "stateId",
+              "componentStates"
+            ],
+            "properties": {
+              "stateId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "componentStates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "componentId",
+                    "visualState"
+                  ],
+                  "properties": {
+                    "componentId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "visualState": {
+                      "enum": [
+                        "inactive",
+                        "active",
+                        "energized",
+                        "degraded",
+                        "faulted",
+                        "highlighted"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "faultMappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "faultId",
+              "componentStates"
+            ],
+            "properties": {
+              "faultId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "componentStates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "componentId",
+                    "visualState"
+                  ],
+                  "properties": {
+                    "componentId": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "visualState": {
+                      "enum": [
+                        "inactive",
+                        "active",
+                        "energized",
+                        "degraded",
+                        "faulted",
+                        "highlighted"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": "1.1.0"
+          }
+        },
+        "required": [
+          "schemaVersion"
+        ]
+      },
+      "then": {
+        "required": [
+          "presentation"
+        ],
+        "properties": {
+          "steps": {
+            "items": {
+              "required": [
+                "timeline",
+                "highlightComponentIds",
+                "camera"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
 }

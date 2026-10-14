@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv');
+const { validateAnimationPresentationContract } = require('./verify-animation-presentation-contract');
 
 const root = path.resolve(__dirname, '..');
 
@@ -63,6 +64,7 @@ function validateManifest(manifest, fileName, schemaValidate, rootDir = root) {
   }
   if (manifest.rendering.assetPath && path.isAbsolute(manifest.rendering.assetPath)) errors.push(fileName + ': assetPath must be repository-relative');
   if (manifest.rendering.fallbackImagePath && path.isAbsolute(manifest.rendering.fallbackImagePath)) errors.push(fileName + ': fallbackImagePath must be repository-relative');
+  errors.push(...validateAnimationPresentationContract(manifest, { rootDir }).map((error) => fileName + ': ' + error));
   return errors;
 }
 

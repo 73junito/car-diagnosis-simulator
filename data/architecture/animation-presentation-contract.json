@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "animation-presentation-contract",
+  "phase": "ANIM-2B",
+  "status": "contract-active-migration-pending",
+  "manifest_schema_version": "1.1.0",
+  "principles": {
+    "electrical_truth": "The circuit and engineering model remain authoritative for operating state, faults, and electrical behavior.",
+    "presentation_truth": "The animation presentation contract maps authoritative simulation state to component identity, visual states, instructional timing, highlights, camera behavior, and asset clips or validated static intervals.",
+    "release_authority": "Automated validation may reject an artifact or release candidate, but cannot record human approval, grant publication authorization, or release content."
+  },
+  "presentation_modes": {
+    "animated": {
+      "motion_required": true,
+      "declared_clips_required": true,
+      "exported_clips_required_when_asset_attached": true
+    },
+    "static-3d": {
+      "motion_required": false,
+      "declared_clips_required": false,
+      "exported_clips_required": false
+    },
+    "static-2d": {
+      "motion_required": false,
+      "declared_clips_required": false,
+      "exported_clips_required": false
+    }
+  },
+  "contract_requirements": {
+    "canonical_component_bindings": true,
+    "complete_operating_state_mapping": true,
+    "complete_fault_mapping": true,
+    "explicit_step_timeline": true,
+    "explicit_step_highlights": true,
+    "explicit_step_camera_behavior": true,
+    "static_fallback_required": true,
+    "same_origin_assets_only": true
+  },
+  "release_gates": [
+    "contract-validation",
+    "asset-validation",
+    "technical-review",
+    "instructional-review",
+    "final-content-approval",
+    "explicit-human-publication-authorization"
+  ],
+  "invariants": {
+    "assessment_eligible": false,
+    "scored_assessment_approved": false,
+    "agent_may_approve": false,
+    "agent_may_release": false
+  }
+}
