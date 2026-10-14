@@ -4,33 +4,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>12 V PWM Actuator Lab</title>
-  <link rel="stylesheet" href="../student.css">
+  <title>12 V PWM Actuator Lab | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
   <link rel="stylesheet" href="./actuator-lab.css">
 </head>
 <body>
-<main class="lab-shell">
+<div data-theme-shell></div>
+<main class="lab-shell tm-main">
   <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
   <header>
-    <p class="eyebrow">Reusable circuit-template preview</p>
+    <p class="tm-eyebrow">Reusable circuit-template preview</p>
     <h1>Interactive 12 V PWM-Controlled Actuator Lab</h1>
     <p>Separate actuator power, PWM command, and ground/return while avoiding vehicle-specific duty-cycle or frequency assumptions.</p>
     <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
   </header>
-  <section class="learning-strip"><strong>Learning goal</strong><span>Explain why actuator power and PWM command are different circuit functions and diagnose faults on each path independently.</span></section>
-  <section class="toolbar">
+  <section class="learning-strip" aria-label="Learning objective"><strong>Learning goal</strong><span>Explain why actuator power and PWM command are different circuit functions and diagnose faults on each path independently.</span></section>
+  <section class="toolbar" aria-label="Actuator circuit controls">
     <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
     <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
     <div class="button-row">
-      <button id="showSystemFlow" type="button">Show system flow</button>
-      <button id="tracePower" type="button">Trace actuator power</button>
-      <button id="tracePwm" type="button">Trace PWM command</button>
-      <button id="traceGround" type="button">Trace ground return</button>
-      <button id="resetView" type="button">Reset</button>
+      <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system flow</button>
+      <button id="tracePower" type="button" class="tm-btn tm-btn-secondary">Trace actuator power</button>
+      <button id="tracePwm" type="button" class="tm-btn tm-btn-secondary">Trace PWM command</button>
+      <button id="traceGround" type="button" class="tm-btn tm-btn-secondary">Trace ground return</button>
+      <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset</button>
     </div>
   </section>
-  <section class="legend">
+  <section class="legend" aria-label="Schematic legend">
     <span><i class="legend-line power"></i> 12 V power</span>
     <span><i class="legend-line control"></i> PWM command</span>
     <span><i class="legend-line ground"></i> Ground return</span>
@@ -41,7 +44,7 @@
   <section class="engineering-panel" aria-labelledby="actuatorEngineeringHeading">
     <div class="engineering-heading">
       <div>
-        <p class="eyebrow">PWM engineering example</p>
+        <p class="tm-eyebrow">PWM engineering example</p>
         <h2 id="actuatorEngineeringHeading">Commanded and observed PWM behavior</h2>
         <p>Duty-cycle values are generic training examples. They do not define actuator position, speed, force, flow, current, or frequency.</p>
       </div>
@@ -97,8 +100,8 @@
 
   <section class="workspace">
     <div class="diagram-card">
-      <div class="diagram-heading"><div><p class="eyebrow">Powered actuator architecture</p><h2>Generic 12 V PWM actuator schematic</h2></div><div id="stateBadge" class="state-badge">PWM command — low-duty example</div></div>
-      <div class="diagram-scroll"><svg id="circuitSvg" viewBox="0 0 820 650" role="img" aria-labelledby="diagramTitle diagramDesc"><title id="diagramTitle">Generic 12 V PWM actuator training schematic</title><desc id="diagramDesc">Interactive actuator circuit with separate power, PWM command, ground, test points, and faults.</desc></svg></div>
+      <div class="diagram-heading"><div><p class="tm-eyebrow">Powered actuator architecture</p><h2>Generic 12 V PWM actuator schematic</h2></div><div id="stateBadge" class="state-badge">PWM command — low-duty example</div></div>
+      <div class="diagram-scroll" aria-label="Scrollable PWM actuator schematic"><svg id="circuitSvg" viewBox="0 0 820 650" role="img" aria-labelledby="diagramTitle diagramDesc"><title id="diagramTitle">Generic 12 V PWM actuator training schematic</title><desc id="diagramDesc">Interactive actuator circuit with separate power, PWM command, ground, test points, and faults.</desc></svg></div>
       <p class="flow-note" id="flowNote"></p>
     </div>
     <aside class="inspector" aria-live="polite"><h2>Component inspector</h2><div id="inspectorContent"><p>Select a symbol or test point to inspect its role.</p></div></aside>
@@ -122,5 +125,9 @@
 <script src="/src/engineering/comparisons.js"></script>
 <script src="/src/engineering/artifacts.js"></script>
 <script src="/src/engineering/index.js"></script>
+<script type="module">
+  import { mountShell } from "/theme/shell.js";
+  mountShell();
+</script>
 <script src="./actuator-lab.js"></script>
 </body></html>
