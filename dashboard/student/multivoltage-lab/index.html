@@ -4,18 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Electrified Multi-Voltage Lab</title>
-  <link rel="stylesheet" href="../student.css">
+  <title>Electrified Multi-Voltage Lab | AutoLearnPro</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
   <link rel="stylesheet" href="./multivoltage-lab.css">
 </head>
 <body>
-<main class="lab-shell">
-  <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
-  <header>
-    <p class="eyebrow">Reusable circuit-template preview</p>
-    <h1>Interactive Electrified Multi-Voltage Lab</h1>
-    <p>Compare a 12 V low-voltage domain with a separately declared traction-voltage training domain and trace how generic control, conversion, and traction relationships remain distinct.</p>
+<div data-theme-shell></div>
+<main class="lab-shell tm-main">
+  <nav class="lab-nav" aria-label="Lab navigation"><a class="lab-back tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a></nav>
+  <header class="tm-page-header">
+    <p class="tm-eyebrow">Reusable circuit-template preview</p>
+    <h1 class="tm-page-title">Interactive Electrified Multi-Voltage Lab</h1>
+    <p class="tm-page-subtitle">Compare a 12 V low-voltage domain with a separately declared traction-voltage training domain and trace how generic control, conversion, and traction relationships remain distinct.</p>
     <div id="voltageProfile" class="voltage-profile" aria-label="Declared electrical voltage domains"></div>
   </header>
 
@@ -33,12 +36,12 @@
     <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
     <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
     <div class="button-row">
-      <button id="showSystemFlow" type="button">Show system</button>
-      <button id="traceLv" type="button">Trace 12 V</button>
-      <button id="traceControl" type="button">Trace control</button>
-      <button id="traceDcdc" type="button">Trace DC/DC relationship</button>
-      <button id="traceTraction" type="button">Trace traction domain</button>
-      <button id="resetView" type="button">Reset</button>
+      <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system</button>
+      <button id="traceLv" type="button" class="tm-btn tm-btn-secondary">Trace 12 V</button>
+      <button id="traceControl" type="button" class="tm-btn tm-btn-secondary">Trace control</button>
+      <button id="traceDcdc" type="button" class="tm-btn tm-btn-secondary">Trace DC/DC relationship</button>
+      <button id="traceTraction" type="button" class="tm-btn tm-btn-secondary">Trace traction domain</button>
+      <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset</button>
     </div>
   </section>
 
@@ -55,7 +58,7 @@
   <section class="engineering-panel" aria-labelledby="multiVoltageEngineeringHeading">
     <div class="engineering-heading">
       <div>
-        <p class="eyebrow">Declared-domain engineering</p>
+        <p class="tm-eyebrow">Declared-domain engineering</p>
         <h2 id="multiVoltageEngineeringHeading">Voltage-domain power relationship</h2>
         <p>Select a declared training domain and enter a current only when you intentionally want to evaluate P = V × I. No current is assumed from the operating state.</p>
       </div>
@@ -89,10 +92,10 @@
   <section class="workspace">
     <div class="diagram-card">
       <div class="diagram-heading">
-        <div><p class="eyebrow">Voltage-domain separation</p><h2>Generic electrified multi-voltage training architecture</h2></div>
+        <div><p class="tm-eyebrow">Voltage-domain separation</p><h2>Generic electrified multi-voltage training architecture</h2></div>
         <div id="stateBadge" class="state-badge">Traction drive — training example</div>
       </div>
-      <div class="diagram-scroll">
+      <div class="diagram-scroll" aria-label="Scrollable electrified multi-voltage training schematic">
         <svg id="circuitSvg" viewBox="0 0 900 670" role="img" aria-labelledby="diagramTitle diagramDesc">
           <title id="diagramTitle">Generic electrified multi-voltage training architecture</title>
           <desc id="diagramDesc">Interactive training diagram showing a 12 V low-voltage domain, a 400 V nominal example traction domain, a DC/DC converter, inverter, and traction motor.</desc>
@@ -130,6 +133,10 @@
 <script src="/src/engineering/measurements.js"></script>
 <script src="/src/engineering/comparisons.js"></script>
 <script src="/src/engineering/index.js"></script>
+<script type="module">
+  import { mountShell } from "/theme/shell.js";
+  mountShell();
+</script>
 <script src="./multivoltage-lab.js"></script>
 </body>
 </html>
