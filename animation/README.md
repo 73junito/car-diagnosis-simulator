@@ -61,3 +61,28 @@ Local validation commands:
 - npm run build:animation-proxy
 
 ANIM-1D will replace proxy geometry with the first governed starting-system instructional model. ANIM-1C itself does not make vehicle-specific claims and does not alter lesson delivery, scoring, grading, assessment eligibility, exam release, authentication, authorization, RLS, or curriculum.
+
+
+## ANIM-1D starting-system review model
+
+ANIM-1D adds the first engineering-derived 3D instructional review asset for the generic 12 V starting system. The model is generated directly from data/circuit-templates/12v-starting-system.json: component placement comes from its layout, conductor relationships come from its connections, test-point markers come from its test-point declarations, and the component identity mapping is recorded in a deterministic metadata sidecar.
+
+The digital multimeter is explicitly classified as an instructional overlay rather than an engineering-template vehicle component.
+
+The review GLB, fallback SVG, metadata sidecar, and review manifest are committed for human technical and instructional review but are deliberately excluded from the static production deployment. The production-facing foundation manifest remains unchanged and unpublished.
+
+The review asset contains no vehicle-specific acceptable measurements, limits, wiring, pinouts, or procedures. Numeric interpretation remains delegated to separately applicable engineering or evidence artifacts and human review.
+
+Commands:
+- npm run build:animation-starting-review
+- npm run validate:animation-starting-review
+
+## ANIM-1E governed agentic preparation
+
+ANIM-1E lets governed animation agents prepare deterministic human-review handoff packets from an existing animation manifest and its bound engineering/evidence artifacts. Preparation is read-only with respect to source manifests and records canonical source hashes, component/step identities, current governance state, and every unresolved human gate.
+
+Generated packets live under animation/agentic-prep/output/, are gitignored, and are not copied into the static deployment. Agents cannot use this workflow to record human approval, permit publication, change assessment eligibility, enable scored delivery, alter authentication/RLS, or release content.
+
+Commands:
+- npm run prepare:animation-agent-review
+- npm run validate:animation-agentic-prep

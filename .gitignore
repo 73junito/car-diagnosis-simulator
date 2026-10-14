@@ -73,3 +73,6 @@ data/engineering/generated/pwm-actuator-short-ground-ngspice.json
 data/engineering/generated/starting-cable-drop-*-ngspice.json
 animation/blender/output/*.glb
 animation/blender/output/*.metadata.json
+
+# ANIM-1E generated human-review packets
+animation/agentic-prep/output/
