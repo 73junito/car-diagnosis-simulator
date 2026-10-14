@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "1.0.0",
+  "animationId": "starting-system-voltage-drop-review",
+  "title": "Generic 12 V Starting-System Voltage-Drop Review Model",
+  "type": "interactive-3d",
+  "classification": "engineering-derived",
+  "instructionalPurpose": "Teach the generic relationship between a 12 V starting circuit, its crank-current path, and voltage-drop measurement locations without asserting vehicle-specific wiring, procedures, or limits.",
+  "rendering": {
+    "renderer": "three-js",
+    "assetPath": "animation/review-assets/starting-system-voltage-drop-review.glb",
+    "fallbackImagePath": "animation/review-assets/starting-system-voltage-drop-review.svg"
+  },
+  "components": [
+    {
+      "id": "battery",
+      "label": "Battery"
+    },
+    {
+      "id": "control-protection",
+      "label": "Start-control protection"
+    },
+    {
+      "id": "start-command-switch",
+      "label": "Start command switch"
+    },
+    {
+      "id": "starter-solenoid-coil",
+      "label": "Starter solenoid coil"
+    },
+    {
+      "id": "starter-solenoid-contact",
+      "label": "Starter solenoid main contact"
+    },
+    {
+      "id": "starter-motor",
+      "label": "Starter motor"
+    },
+    {
+      "id": "positive-path",
+      "label": "Positive current path"
+    },
+    {
+      "id": "ground-path",
+      "label": "Ground return path"
+    },
+    {
+      "id": "digital-multimeter",
+      "label": "Digital multimeter instructional overlay"
+    }
+  ],
+  "steps": [
+    {
+      "id": "identify-current-path",
+      "label": "Identify the crank-current path",
+      "description": "Trace the generic battery-to-solenoid-contact-to-starter-motor path and its return through the ground path before selecting a measurement.",
+      "durationMs": null,
+      "componentIds": [
+        "battery",
+        "starter-solenoid-contact",
+        "starter-motor",
+        "positive-path",
+        "ground-path"
+      ]
+    },
+    {
+      "id": "identify-control-path",
+      "label": "Identify the start-control path",
+      "description": "Locate the generic control protection, start-command switch, and solenoid coil that establish a crank request without treating the diagram as vehicle-specific wiring.",
+      "durationMs": null,
+      "componentIds": [
+        "control-protection",
+        "start-command-switch",
+        "starter-solenoid-coil"
+      ]
+    },
+    {
+      "id": "select-measurement-path",
+      "label": "Select a voltage-drop measurement path",
+      "description": "Use the instructional meter overlay and governed test-point markers to choose the portion of the circuit being investigated; actual limits require separately applicable evidence.",
+      "durationMs": null,
+      "componentIds": [
+        "digital-multimeter",
+        "positive-path",
+        "ground-path",
+        "starter-motor"
+      ]
+    },
+    {
+      "id": "interpret-with-evidence",
+      "label": "Interpret with applicable evidence",
+      "description": "Compare any measured or modeled value only through approved engineering artifacts or applicable evidence, never by inventing a vehicle-specific specification.",
+      "durationMs": null,
+      "componentIds": [
+        "digital-multimeter",
+        "starter-motor"
+      ]
+    }
+  ],
+  "controls": {
+    "play": true,
+    "pause": true,
+    "stepForward": true,
+    "stepBackward": true,
+    "resetCamera": true,
+    "componentSelect": true
+  },
+  "evidence": {
+    "required": true,
+    "approvedEvidenceRefs": [],
+    "engineeringArtifactRefs": [
+      "data/circuit-templates/12v-starting-system.json",
+      "data/engineering/generated/starting-cable-drop-within-candidate.json",
+      "data/engineering/generated/starting-cable-drop-exceeds-candidate.json",
+      "data/engineering/generated/starting-cable-open-unavailable.json"
+    ]
+  },
+  "governance": {
+    "status": "evidence_mapped",
+    "humanApprovalRequired": true,
+    "humanApprovalRecorded": false,
+    "publicationAllowed": false,
+    "assessmentEligible": false,
+    "scoredAssessmentApproved": false,
+    "vehicleSpecificClaims": false,
+    "agentMayApprove": false,
+    "agentMayRelease": false
+  },
+  "accessibility": {
+    "keyboardOperable": true,
+    "reducedMotionRequired": true,
+    "staticFallbackRequired": true,
+    "textAlternativeRequired": true
+  },
+  "provenance": {
+    "sourceRole": "project-authored-animation",
+    "authorityRegistry": "data/compliance/authority-registry.json",
+    "rule": "This review model is derived from project-authored generic starting-system engineering artifacts. It may teach relationships and measurement locations only; actual vehicle wiring, pinouts, procedures, acceptable measurements, and limits require separately applicable approved evidence and human review."
+  }
+}
