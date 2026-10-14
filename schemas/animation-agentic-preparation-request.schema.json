@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://autolearnpro.com/schemas/animation-agentic-preparation-request.schema.json",
+  "title": "AutoLearnPro Animation Agentic Preparation Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "animationManifest",
+    "requestedByAgentRole",
+    "operation",
+    "purpose",
+    "constraints"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]+$"
+    },
+    "animationManifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requestedByAgentRole": {
+      "type": "string",
+      "enum": [
+        "animation-planning-agent",
+        "evidence-agent",
+        "engineering-parameter-agent",
+        "animation-validation-agent"
+      ]
+    },
+    "operation": {
+      "type": "string",
+      "enum": [
+        "prepare-review-package",
+        "refresh-review-package"
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 20
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publicationAllowed",
+        "assessmentEligible",
+        "scoredAssessmentApproved",
+        "agentMayApprove",
+        "agentMayRelease",
+        "vehicleSpecificClaimsAllowed"
+      ],
+      "properties": {
+        "publicationAllowed": {
+          "const": false
+        },
+        "assessmentEligible": {
+          "const": false
+        },
+        "scoredAssessmentApproved": {
+          "const": false
+        },
+        "agentMayApprove": {
+          "const": false
+        },
+        "agentMayRelease": {
+          "const": false
+        },
+        "vehicleSpecificClaimsAllowed": {
+          "const": false
+        }
+      }
+    }
+  }
+}
