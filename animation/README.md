@@ -76,3 +76,13 @@ The review asset contains no vehicle-specific acceptable measurements, limits, w
 Commands:
 - npm run build:animation-starting-review
 - npm run validate:animation-starting-review
+
+## ANIM-1E governed agentic preparation
+
+ANIM-1E lets governed animation agents prepare deterministic human-review handoff packets from an existing animation manifest and its bound engineering/evidence artifacts. Preparation is read-only with respect to source manifests and records canonical source hashes, component/step identities, current governance state, and every unresolved human gate.
+
+Generated packets live under animation/agentic-prep/output/, are gitignored, and are not copied into the static deployment. Agents cannot use this workflow to record human approval, permit publication, change assessment eligibility, enable scored delivery, alter authentication/RLS, or release content.
+
+Commands:
+- npm run prepare:animation-agent-review
+- npm run validate:animation-agentic-prep
