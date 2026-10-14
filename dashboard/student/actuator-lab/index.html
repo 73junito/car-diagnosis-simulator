@@ -14,11 +14,11 @@
 <body>
 <div data-theme-shell></div>
 <main class="lab-shell tm-main">
-  <a class="back" href="/dashboard/student/">← Back to Dashboard</a>
-  <header>
+  <nav class="lab-nav" aria-label="Lab navigation"><a class="lab-back tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a></nav>
+  <header class="tm-page-header">
     <p class="tm-eyebrow">Reusable circuit-template preview</p>
-    <h1>Interactive 12 V PWM-Controlled Actuator Lab</h1>
-    <p>Separate actuator power, PWM command, and ground/return while avoiding vehicle-specific duty-cycle or frequency assumptions.</p>
+    <h1 class="tm-page-title">Interactive 12 V PWM-Controlled Actuator Lab</h1>
+    <p class="tm-page-subtitle">Separate actuator power, PWM command, and ground/return while avoiding vehicle-specific duty-cycle or frequency assumptions.</p>
     <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
   </header>
   <section class="learning-strip" aria-label="Learning objective"><strong>Learning goal</strong><span>Explain why actuator power and PWM command are different circuit functions and diagnose faults on each path independently.</span></section>
