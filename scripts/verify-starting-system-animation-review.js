@@ -1,6 +1,7 @@
 "use strict";
 const crypto=require("crypto"),fs=require("fs"),path=require("path"),Ajv=require("ajv");
 const {validateManifest}=require("./verify-animation-manifests");
+const {summarizeGlbAnimations}=require("./verify-animation-presentation-contract");
 const root=path.resolve(__dirname,".."),r=(p)=>path.join(root,p);
 const f={template:r("data/circuit-templates/12v-starting-system.json"),manifest:r("animation/manifests/starting-system-voltage-drop-review.json"),glb:r("animation/review-assets/starting-system-voltage-drop-review.glb"),metadata:r("animation/review-assets/starting-system-voltage-drop-review.metadata.json"),fallback:r("animation/review-assets/starting-system-voltage-drop-review.svg")};
 const hash=(x)=>crypto.createHash("sha256").update(fs.readFileSync(x)).digest("hex");
@@ -19,6 +20,13 @@ if(metadata.publicationAllowed!==false||metadata.assessmentEligible!==false||met
 if(metadata.agentMayApprove!==false||metadata.agentMayRelease!==false)errors.push("asset crossed agent boundary");
 if(metadata.engineeringTemplateSha256!==hash(f.template))errors.push("template hash mismatch");if(metadata.manifestSha256!==canonicalTextHash(f.manifest))errors.push("manifest hash mismatch");if(metadata.outputSha256!==hash(f.glb))errors.push("GLB hash mismatch");if(metadata.fallbackSha256!==canonicalTextHash(f.fallback))errors.push("fallback hash mismatch");if(metadata.outputBytes!==fs.statSync(f.glb).size)errors.push("GLB size mismatch");
 const g=glbJson(f.glb),assetIds=new Set((g.nodes||[]).map(n=>n.extras?.animationComponentId).filter(Boolean));for(const c of manifest.components)if(!assetIds.has(c.id))errors.push("GLB missing animation component: "+c.id);
+const summaries=summarizeGlbAnimations(g),declared=manifest.presentation?.clips||[],declaredNames=declared.map(c=>c.assetClipName),exportedNames=summaries.map(c=>c.name);
+if(manifest.presentation?.mode!=="animated")errors.push("review manifest must declare animated presentation once motion clips are generated");
+if(JSON.stringify(exportedNames)!==JSON.stringify(declaredNames))errors.push("GLB clip set/order does not match manifest");
+if(metadata.presentationMode!=="animated")errors.push("metadata presentation mode mismatch");
+if(metadata.animationClipCount!==declared.length)errors.push("metadata animation clip count mismatch");
+if(JSON.stringify(metadata.animationClipNames)!==JSON.stringify(declaredNames))errors.push("metadata animation clip names mismatch");
+for(const clip of declared){const exported=summaries.find(x=>x.name===clip.assetClipName);if(!exported||Math.abs((exported.durationSeconds??-1)-clip.durationSeconds)>0.001)errors.push("GLB clip duration mismatch: "+clip.assetClipName);}
 const expected={"battery":"BAT1","control-protection":"FUSE1","start-command-switch":"SW1","starter-solenoid-coil":"SOL_COIL","starter-solenoid-contact":"SOL_CONTACT","starter-motor":"MTR1","ground-path":"GND1"};for(const [a,e] of Object.entries(expected))if(metadata.componentMappings?.[a]!==e)errors.push("mapping mismatch: "+a);
 if(!metadata.instructionalOverlays?.includes("digital-multimeter"))errors.push("DMM overlay classification missing");if(metadata.testPointIds?.length!==template.testPoints.length)errors.push("test-point derivation mismatch");if(!String(metadata.numericPolicy||"").includes("No vehicle-specific"))errors.push("numeric policy missing");if(metadata.textHashPolicy!=="sha256-utf8-lf-normalized")errors.push("canonical text hash policy missing");
 if(!fs.readFileSync(f.fallback,"utf8").includes("vehicle-specific service information is required"))errors.push("fallback generic notice missing");
