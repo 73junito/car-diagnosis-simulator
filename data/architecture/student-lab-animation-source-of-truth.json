@@ -10,7 +10,10 @@
     "player_styles": "theme/components/animation-player/animation-player.css",
     "renderer": "three-js",
     "asset_pipeline": "animation/blender",
-    "policy": "All new student-lab instructional animation work must originate from the governed animation manifest/player/runtime stack. Legacy per-lab CSS/SVG motion is transitional fallback behavior and is not an authoritative animation source."
+    "policy": "All new student-lab instructional animation work must originate from the governed animation manifest/player/runtime stack. Legacy per-lab CSS/SVG motion is transitional fallback behavior and is not an authoritative animation source.",
+    "presentation_contract": "data/architecture/animation-presentation-contract.json",
+    "manifest_schema_target": "1.1.0",
+    "presentation_validator": "scripts/verify-animation-presentation-contract.js"
   },
   "global_invariants": {
     "default_policy": "deny",

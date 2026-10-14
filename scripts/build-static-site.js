@@ -210,6 +210,7 @@ const requiredOutputFiles = [
   "dashboard/student/scenario/index.html",
   "animation/manifests/starting-system-voltage-drop-foundation.json",
   "data/architecture/student-lab-animation-source-of-truth.json",
+  "data/architecture/animation-presentation-contract.json",
   "theme/components/animation-player/animation-player.js",
   "theme/components/animation-player/three-runtime.js",
   "theme/components/animation-player/animation-player.css",

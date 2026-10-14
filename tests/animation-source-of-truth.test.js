@@ -18,6 +18,11 @@ describe('ANIM-2A student-lab animation source-of-truth contract', () => {
     expect(exists(registry.source_of_truth.player_module)).toBe(true)
     expect(exists(registry.source_of_truth.runtime_module)).toBe(true)
     expect(exists(registry.source_of_truth.player_styles)).toBe(true)
+    expect(registry.source_of_truth.manifest_schema_target).toBe('1.1.0')
+    expect(registry.source_of_truth.presentation_contract).toBe('data/architecture/animation-presentation-contract.json')
+    expect(registry.source_of_truth.presentation_validator).toBe('scripts/verify-animation-presentation-contract.js')
+    expect(exists(registry.source_of_truth.presentation_contract)).toBe(true)
+    expect(exists(registry.source_of_truth.presentation_validator)).toBe(true)
   })
 
   test('keeps publication and assessment fail-closed', () => {
