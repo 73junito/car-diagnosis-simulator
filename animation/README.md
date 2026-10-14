@@ -86,3 +86,20 @@ Generated packets live under animation/agentic-prep/output/, are gitignored, and
 Commands:
 - npm run prepare:animation-agent-review
 - npm run validate:animation-agentic-prep
+
+## ANIM-2A student-lab source of truth
+
+ANIM-2A establishes the governed animation manifest/player/runtime stack as the single source of truth for all new student-lab instructional animation work.
+
+Authoritative layers:
+- schemas/animation-manifest.schema.json
+- animation/manifests/*.json
+- theme/components/animation-player/animation-player.js
+- theme/components/animation-player/three-runtime.js
+- theme/components/animation-player/animation-player.css
+- animation/blender/*
+- data/architecture/student-lab-animation-source-of-truth.json
+
+Legacy per-lab CSS/SVG motion may remain temporarily as a static/2D fallback during migration, but it is not an authoritative animation source and must not become a parallel animation architecture.
+
+The Starting System Lab is the first integration target. Its current review model remains fail-closed: no production 3D publication occurs until the manifest reaches final_content_approved, explicit human approval is recorded, publicationAllowed is true, and all existing accessibility/governance constraints pass. ANIM-2A does not alter assessment eligibility, scored assessment approval, authentication, authorization, RLS, curriculum eligibility, or any engineering limit.

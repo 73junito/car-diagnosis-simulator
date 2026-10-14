@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "student-lab-animation-source-of-truth",
+  "phase": "ANIM-2A",
+  "status": "active-source-of-truth",
+  "source_of_truth": {
+    "manifest_schema": "schemas/animation-manifest.schema.json",
+    "player_module": "theme/components/animation-player/animation-player.js",
+    "runtime_module": "theme/components/animation-player/three-runtime.js",
+    "player_styles": "theme/components/animation-player/animation-player.css",
+    "renderer": "three-js",
+    "asset_pipeline": "animation/blender",
+    "policy": "All new student-lab instructional animation work must originate from the governed animation manifest/player/runtime stack. Legacy per-lab CSS/SVG motion is transitional fallback behavior and is not an authoritative animation source."
+  },
+  "global_invariants": {
+    "default_policy": "deny",
+    "human_approval_required_for_publication": true,
+    "agent_may_approve": false,
+    "agent_may_release": false,
+    "assessment_eligible": false,
+    "scored_assessment_approved": false,
+    "same_origin_runtime_assets_only": true,
+    "keyboard_operation_required": true,
+    "reduced_motion_required": true,
+    "static_fallback_required": true,
+    "text_alternative_required": true
+  },
+  "lab_integrations": [
+    {
+      "lab_id": "starting-system-lab",
+      "surface": "dashboard/student/starting-system-lab/index.html",
+      "status": "integration-prepared-awaiting-human-publication-approval",
+      "production_manifest": "animation/manifests/starting-system-voltage-drop-foundation.json",
+      "review_manifest": "animation/manifests/starting-system-voltage-drop-review.json",
+      "engineering_source": "data/circuit-templates/12v-starting-system.json",
+      "legacy_visualization": {
+        "selector": "#circuitSvg",
+        "role": "transitional-static-and-2d-fallback",
+        "authoritative_animation_source": false
+      }
+    }
+  ],
+  "migration_queue": [
+    "circuit-lab",
+    "relay-load-lab",
+    "sensor-lab",
+    "actuator-lab",
+    "network-lab",
+    "multivoltage-lab"
+  ]
+}

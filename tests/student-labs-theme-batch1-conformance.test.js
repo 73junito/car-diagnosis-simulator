@@ -51,6 +51,8 @@ const pages = [
       'startingEngineeringHeading',
       'startingEngineeringStatus',
       'startingComparisonSummary',
+      'startingAnimationPlayer',
+      'startingLegacyVisualization',
     ],
     requiredClasses: ['.starting-system-note'],
     layeredClasses: ['.wire', '.component', '.test-point'],
@@ -153,14 +155,21 @@ describe('Student labs shared-theme conformance (Batch 1: circuit + starting-sys
     expect(combined.toLowerCase()).not.toContain(certificationClaim)
   })
 
-  test('introduces no animation workstream imports', () => {
-    const combined = pages
-      .map((page) => `${read(page.html)}\n${read(page.css)}\n${read(page.js)}`)
-      .join('\n')
-    expect(combined).not.toMatch(/three/i)
-    expect(combined).not.toContain('animation-manifest')
-    expect(combined).not.toContain('animation-player')
-    expect(combined).not.toContain('blender-animation-pipeline')
+  test('circuit lab remains outside the animation integration while Starting System uses ANIM-2A', () => {
+    const circuit = `${read('dashboard/student/circuit-lab/index.html')}\n${read('dashboard/student/circuit-lab/circuit-lab.css')}\n${read('dashboard/student/circuit-lab/circuit-lab.js')}`
+    expect(circuit).not.toContain('animation-player')
+    expect(circuit).not.toContain('animation-manifest')
+    expect(circuit).not.toContain('blender-animation-pipeline')
+
+    const startingHtml = read('dashboard/student/starting-system-lab/index.html')
+    const startingIntegration = read('dashboard/student/starting-system-lab/starting-system-animation.js')
+    expect(startingHtml).toContain('href="/theme/components/animation-player/animation-player.css"')
+    expect(startingHtml).toContain('src="./starting-system-animation.js"')
+    expect(startingIntegration).toContain('/data/architecture/student-lab-animation-source-of-truth.json')
+    expect(startingIntegration).toContain('/theme/components/animation-player/animation-player.js')
+    expect(startingIntegration).toContain('allowDraft: false')
+    expect(startingIntegration).toContain("dataset.animationPublicationState = 'fail-closed'")
+    expect(startingIntegration).not.toContain('allowDraft: true')
   })
 })
 
