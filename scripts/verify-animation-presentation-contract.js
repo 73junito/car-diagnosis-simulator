@@ -110,6 +110,20 @@ function validateAnimationPresentationContract(manifest, { rootDir, requireDeplo
     }
   }
 
+  const mode = presentation.mode
+  const renderer = manifest.rendering?.renderer
+  const manifestType = manifest.type
+  if (mode === 'animated' || mode === 'static-3d') {
+    if (manifestType !== 'interactive-3d' || renderer !== 'three-js') {
+      errors.push(mode + ' presentation requires interactive-3d with three-js renderer')
+    }
+  }
+  if (mode === 'static-2d') {
+    if (!['interactive-2d', 'static-diagram'].includes(manifestType) || !['svg', 'static'].includes(renderer)) {
+      errors.push('static-2d presentation requires interactive-2d/static-diagram with svg/static renderer')
+    }
+  }
+
   const clips = presentation.clips || []
   const clipIds = new Set()
   const clipNames = new Set()

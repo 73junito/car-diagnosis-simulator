@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 650" role="img" aria-labelledby="title desc">
+<title id="title">Generic 12 V starting-system voltage-drop instructional fallback</title>
+<desc id="desc">Non-vehicle-specific starting-system relationships and voltage-drop test points.</desc>
+<rect width="820" height="650" fill="#f8fafc"/>
+<line x1="95" y1="210" x2="280" y2="90" stroke="#9b2c2c" stroke-width="5"/>
+<line x1="280" y1="90" x2="470" y2="90" stroke="#9b2c2c" stroke-width="5"/>
+<line x1="470" y1="90" x2="680" y2="90" stroke="#1d4ed8" stroke-width="5"/>
+<line x1="680" y1="90" x2="500" y2="520" stroke="#334155" stroke-width="5"/>
+<line x1="95" y1="210" x2="355" y2="330" stroke="#9b2c2c" stroke-width="5"/>
+<line x1="355" y1="330" x2="650" y2="330" stroke="#9b2c2c" stroke-width="5"/>
+<line x1="650" y1="330" x2="500" y2="520" stroke="#334155" stroke-width="5"/>
+<line x1="95" y1="210" x2="500" y2="520" stroke="#334155" stroke-width="5"/>
+<rect x="40" y="182" width="110" height="56" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="95" y="214" text-anchor="middle" font-family="Arial" font-size="12">Battery</text>
+<rect x="225" y="62" width="110" height="56" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="280" y="94" text-anchor="middle" font-family="Arial" font-size="12">Start-Control Protection</text>
+<rect x="415" y="62" width="110" height="56" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="470" y="94" text-anchor="middle" font-family="Arial" font-size="12">Start Command Switch</text>
+<rect x="625" y="62" width="110" height="56" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="680" y="94" text-anchor="middle" font-family="Arial" font-size="12">Starter Solenoid Coil</text>
+<rect x="300" y="302" width="110" height="56" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="355" y="334" text-anchor="middle" font-family="Arial" font-size="12">Starter Solenoid Main Contact</text>
+<rect x="595" y="302" width="110" height="56" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="650" y="334" text-anchor="middle" font-family="Arial" font-size="12">Starter Motor</text>
+<rect x="445" y="492" width="110" height="56" rx="10" fill="white" stroke="#334155" stroke-width="2"/>
+<text x="500" y="524" text-anchor="middle" font-family="Arial" font-size="12">Engine / Chassis Ground</text>
+<circle cx="137" cy="174" r="8" fill="#facc15" stroke="#713f12" stroke-width="2"/>
+<circle cx="512" cy="54" r="8" fill="#facc15" stroke="#713f12" stroke-width="2"/>
+<circle cx="397" cy="294" r="8" fill="#facc15" stroke="#713f12" stroke-width="2"/>
+<circle cx="692" cy="294" r="8" fill="#facc15" stroke="#713f12" stroke-width="2"/>
+<text x="410" y="625" text-anchor="middle" font-family="Arial" font-size="13" fill="#475569">Generic training relationships only — vehicle-specific service information is required for actual wiring, procedures, specifications, and limits.</text>
+</svg>

@@ -32,7 +32,7 @@
     {
       "lab_id": "starting-system-lab",
       "surface": "dashboard/student/starting-system-lab/index.html",
-      "status": "integration-prepared-awaiting-human-publication-approval",
+      "status": "contract-migrated-awaiting-motion-generation-and-human-publication-approval",
       "production_manifest": "animation/manifests/starting-system-voltage-drop-foundation.json",
       "review_manifest": "animation/manifests/starting-system-voltage-drop-review.json",
       "engineering_source": "data/circuit-templates/12v-starting-system.json",
@@ -40,7 +40,9 @@
         "selector": "#circuitSvg",
         "role": "transitional-static-and-2d-fallback",
         "authoritative_animation_source": false
-      }
+      },
+      "manifest_schema_version": "1.1.0",
+      "presentation_contract_version": "1.0.0"
     }
   ],
   "migration_queue": [

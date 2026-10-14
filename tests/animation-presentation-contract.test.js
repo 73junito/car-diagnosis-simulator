@@ -61,8 +61,17 @@ function buildContract({ mode = 'animated', withAsset = false } = {}) {
 
 describe('ANIM-2B canonical presentation contract', () => {
   test('keeps 1.0.0 manifests backward-compatible while requiring presentation on 1.1.0', () => {
-    expect(validateSchema(review)).toBe(true)
-    const next = clone(review)
+    const legacy = clone(review)
+    legacy.schemaVersion = '1.0.0'
+    delete legacy.presentation
+    for (const step of legacy.steps) {
+      delete step.timeline
+      delete step.highlightComponentIds
+      delete step.camera
+    }
+    expect(validateSchema(legacy)).toBe(true)
+
+    const next = clone(legacy)
     next.schemaVersion = '1.1.0'
     expect(validateSchema(next)).toBe(false)
     expect(validateSchema.errors.some((issue) => issue.message === "must have required property 'presentation'")).toBe(true)
@@ -78,6 +87,14 @@ describe('ANIM-2B canonical presentation contract', () => {
     const manifest = buildContract({ mode: 'static-3d', withAsset: true })
     expect(validateSchema(manifest)).toBe(true)
     expect(validateAnimationPresentationContract(manifest, { rootDir: root })).toEqual([])
+  })
+
+  test('rejects presentation modes that are incompatible with the declared renderer', () => {
+    const manifest = buildContract({ mode: 'static-3d', withAsset: true })
+    manifest.type = 'static-diagram'
+    manifest.rendering.renderer = 'static'
+    const errors = validateAnimationPresentationContract(manifest, { rootDir: root })
+    expect(errors.join('\n')).toMatch(/static-3d presentation requires interactive-3d with three-js renderer/)
   })
 
   test('rejects unknown component references and incomplete canonical engineering bindings', () => {
