@@ -8,3 +8,10 @@
 @media (max-width:620px) {
   #circuitSvg { width:760px; min-width:760px; }
 }
+.animation-integration { margin:18px 0; min-width:0; }
+.animation-integration__heading { margin-bottom:12px; }
+.animation-integration__heading h2 { margin:4px 0 8px; }
+.animation-integration__heading p:last-child { margin:0; color:var(--tm-muted); max-width:860px; }
+@media (max-width:620px) {
+  .animation-integration { margin:14px 0; }
+}

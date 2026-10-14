@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/theme/layout.css">
   <link rel="stylesheet" href="/theme/dashboard.css">
   <link rel="stylesheet" href="/dashboard/student/circuit-lab/circuit-lab.css">
+  <link rel="stylesheet" href="/theme/components/animation-player/animation-player.css">
   <link rel="stylesheet" href="./starting-system-lab.css">
 </head>
 <body>
@@ -113,7 +114,16 @@
       <p class="engineering-formula" id="startingEngineeringFormula"></p>
     </section>
 
-    <section class="workspace">
+    <section class="animation-integration" aria-labelledby="startingAnimationHeading">
+      <div class="animation-integration__heading">
+        <p class="tm-eyebrow">Governed instructional animation</p>
+        <h2 id="startingAnimationHeading">Starting-system 3D learning model</h2>
+        <p>The governed animation stack is the source of truth for new instructional animation. Until the review model receives explicit human publication approval, the player remains fail-closed and the 2D schematic stays available as the transitional fallback.</p>
+      </div>
+      <div id="startingAnimationPlayer"></div>
+    </section>
+
+    <section class="workspace" id="startingLegacyVisualization">
       <div class="diagram-card">
         <div class="diagram-heading">
           <div>
@@ -178,5 +188,6 @@
   mountShell();
 </script>
   <script src="./starting-system-lab.js"></script>
+  <script type="module" src="./starting-system-animation.js"></script>
 </body>
 </html>
