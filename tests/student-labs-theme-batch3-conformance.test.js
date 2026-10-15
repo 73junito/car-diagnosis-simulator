@@ -19,7 +19,7 @@ const pages = [
       'engPowerAvailability','engGroundAvailability','actuatorEngineeringFormula',
       'stateBadge','circuitSvg','flowNote','inspectorContent',
     ],
-    jsMarkers: ['12v-pwm-actuator.json','actuator-training.json','nominal30','TP'],
+    jsMarkers: ['actuator-lab-lmf-runtime.json','nominal30','TP'],
   },
   {
     html: 'dashboard/student/network-lab/index.html',
