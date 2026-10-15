@@ -9,6 +9,57 @@
   if (runtime.labId !== "circuit-lab" || runtime.engineeringAdapterId !== "electrical-circuit") {
     throw new Error("Circuit Lab LMF runtime contract is invalid.");
   }
+
+  const humanizeId = (value) => String(value || "")
+    .replace(/^tool\./, "")
+    .replace(/^electrical\./, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+
+  function renderRuntimeCapabilities() {
+    const toolList = document.getElementById("labToolList");
+    const measurementList = document.getElementById("labMeasurementList");
+    const faultList = document.getElementById("labFaultList");
+    const modelStatus = document.getElementById("labModelStatus");
+
+    const populate = (target, values) => {
+      if (!target) return;
+      target.replaceChildren();
+      for (const value of values || []) {
+        const item = document.createElement("li");
+        item.textContent = humanizeId(value);
+        target.append(item);
+      }
+    };
+
+    populate(toolList, runtime.toolIds);
+    populate(measurementList, runtime.measurementTypes);
+    populate(faultList, runtime.faultClassIds);
+
+    if (modelStatus) {
+      modelStatus.replaceChildren();
+      const rows = [
+        ["Engineering adapter", humanizeId(runtime.engineeringAdapterId)],
+        ["Practice mode", runtime.directPracticeAllowed ? "Direct practice available" : "Direct practice unavailable"],
+        ["Assessment authority", humanizeId(runtime.assessmentEligibilityAuthority)],
+        ["Publication authority", humanizeId(runtime.publicationAuthority)]
+      ];
+      for (const [label, value] of rows) {
+        const row = document.createElement("div");
+        row.className = "lab-model-status__row";
+        const term = document.createElement("span");
+        term.className = "lab-model-status__label";
+        term.textContent = label;
+        const detail = document.createElement("strong");
+        detail.textContent = value;
+        row.append(term, detail);
+        modelStatus.append(row);
+      }
+    }
+  }
+
+  renderRuntimeCapabilities();
+
   const [response, delcoResponse] = await Promise.all([
     fetch(runtime.modelRef),
     fetch("/data/engineering/authoritative-specifications/delco-remy-starting-charging.json")

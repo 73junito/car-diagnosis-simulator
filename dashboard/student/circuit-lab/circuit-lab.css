@@ -170,3 +170,245 @@ header p { max-width: 850px; line-height: 1.6; }
 .engineering-comparison.unavailable,.engineering-comparison.not-comparable{border-left-color:#64748b;background:var(--tm-surface-2);color:var(--tm-muted)}
 .engineering-comparison.within{border-left-color:#1b5e20;background:#f1f8f2;color:#1b5e20}
 .engineering-comparison.exceeds{border-left-color:#b42318;background:#fff1f0;color:#8f1d14}
+
+/* Reference lab shell: presentation-only structure layered over existing lab behavior. */
+.lab-reference-hero {
+  display:grid;
+  grid-template-columns:minmax(0,1.7fr) minmax(240px,.6fr);
+  gap:24px;
+  align-items:end;
+  padding:24px;
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius-lg);
+  background:linear-gradient(135deg,var(--tm-surface),var(--tm-surface-2));
+  box-shadow:var(--tm-shadow-soft);
+}
+.lab-reference-hero .tm-page-title { margin-bottom:8px; }
+.lab-domain {
+  margin:0 0 10px;
+  color:var(--tm-muted);
+  font-weight:800;
+}
+.lab-reference-hero__profile {
+  display:grid;
+  gap:8px;
+  justify-items:start;
+  align-self:stretch;
+  align-content:end;
+  padding:16px;
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius);
+  background:var(--tm-surface);
+}
+.lab-reference-label,
+.lab-section-kicker {
+  font-size:.74rem;
+  font-weight:900;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--tm-muted);
+}
+.lab-safety {
+  display:grid;
+  grid-template-columns:minmax(220px,.65fr) minmax(0,1.35fr);
+  gap:20px;
+  align-items:start;
+  margin:14px 0 18px;
+  padding:16px 18px;
+  border:1px solid var(--tm-border);
+  border-left:4px solid var(--fault);
+  border-radius:var(--tm-radius);
+  background:var(--tm-surface);
+}
+.lab-safety h2,
+.lab-safety p { margin:0; }
+.lab-safety p { line-height:1.6; color:var(--tm-muted); }
+
+.lab-capability-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin:0 0 20px;
+}
+.lab-capability-card {
+  min-width:0;
+  padding:16px;
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius);
+  background:var(--tm-surface);
+  box-shadow:var(--tm-shadow-soft);
+}
+.lab-capability-card h2 {
+  margin:6px 0 12px;
+  font-size:1.05rem;
+}
+.lab-section-kicker {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+}
+.lab-contract-badge {
+  display:inline-flex;
+  align-items:center;
+  min-height:24px;
+  padding:3px 8px;
+  border:1px solid var(--tm-border);
+  border-radius:999px;
+  background:var(--tm-surface-2);
+  color:var(--tm-text);
+  font-size:.68rem;
+  letter-spacing:0;
+  text-transform:none;
+}
+.lab-chip-list {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:0;
+  margin:0;
+  list-style:none;
+}
+.lab-chip-list li {
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 9px;
+  border:1px solid var(--tm-border);
+  border-radius:999px;
+  background:var(--tm-surface-2);
+  color:var(--tm-text);
+  font-size:.78rem;
+  font-weight:750;
+}
+.lab-capability-note {
+  margin:12px 0 0;
+  color:var(--tm-muted);
+  font-size:.82rem;
+  line-height:1.5;
+}
+.lab-model-status {
+  display:grid;
+  gap:8px;
+}
+.lab-model-status__row {
+  display:grid;
+  grid-template-columns:minmax(112px,.75fr) minmax(0,1.25fr);
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid var(--tm-border);
+}
+.lab-model-status__row:last-child { border-bottom:0; }
+.lab-model-status__label {
+  color:var(--tm-muted);
+  font-size:.76rem;
+  font-weight:800;
+}
+.lab-model-status__row strong {
+  min-width:0;
+  overflow-wrap:anywhere;
+  font-size:.82rem;
+}
+
+.lab-region {
+  margin:20px 0;
+  padding:18px;
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius-lg);
+  background:var(--tm-surface-2);
+}
+.lab-region-heading {
+  display:flex;
+  justify-content:space-between;
+  gap:24px;
+  align-items:end;
+  margin-bottom:14px;
+}
+.lab-region-heading h2 { margin:2px 0 0; }
+.lab-region-heading > p {
+  max-width:520px;
+  margin:0;
+  color:var(--tm-muted);
+  line-height:1.5;
+}
+.lab-region .toolbar,
+.lab-region .legend,
+.lab-region .engineering-panel {
+  margin-left:0;
+  margin-right:0;
+}
+.lab-workspace {
+  grid-template-columns:minmax(0,2.25fr) minmax(300px,.75fr);
+}
+.lab-work-area {
+  min-width:0;
+}
+.lab-reasoning-panel {
+  top:16px;
+}
+.lab-reasoning-panel > .tm-eyebrow {
+  margin-bottom:4px;
+}
+.lab-reasoning-panel > h2 {
+  margin-top:0;
+}
+.lab-evidence-region {
+  background:var(--tm-surface);
+}
+.lab-evidence-region .engineering-panel {
+  margin-bottom:0;
+  box-shadow:none;
+}
+.lab-boundary {
+  display:grid;
+  grid-template-columns:minmax(220px,.55fr) minmax(0,1.45fr);
+  gap:18px 24px;
+  align-items:start;
+}
+.lab-boundary h2,
+.lab-boundary p { margin-top:0; }
+.lab-boundary > p {
+  color:var(--tm-muted);
+  line-height:1.6;
+}
+.lab-fault-contract {
+  grid-column:1/-1;
+  padding-top:14px;
+  border-top:1px solid var(--tm-border);
+}
+.lab-fault-contract > strong {
+  display:block;
+  margin-bottom:9px;
+}
+.lab-shell select:focus-visible,
+.lab-shell input:focus-visible,
+.lab-shell button:focus-visible,
+.lab-shell a:focus-visible {
+  outline:3px solid var(--tm-focus, #6a4bc3);
+  outline-offset:3px;
+}
+
+@media (max-width:1040px) {
+  .lab-capability-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .lab-capability-card:last-child { grid-column:1/-1; }
+  .lab-workspace { grid-template-columns:1fr; }
+  .lab-reasoning-panel { position:static; }
+}
+@media (max-width:760px) {
+  .lab-reference-hero,
+  .lab-safety,
+  .lab-boundary { grid-template-columns:1fr; }
+  .lab-reference-hero__profile { align-content:start; }
+  .lab-capability-grid { grid-template-columns:1fr; }
+  .lab-capability-card:last-child { grid-column:auto; }
+  .lab-region { padding:14px; }
+  .lab-region-heading { display:grid; gap:8px; align-items:start; }
+  .lab-model-status__row { grid-template-columns:1fr; gap:3px; }
+}
+@media (max-width:420px) {
+  .lab-reference-hero { padding:16px; }
+  .lab-region { padding:10px; }
+  .lab-capability-card { padding:13px; }
+  .lab-chip-list li { max-width:100%; }
+}

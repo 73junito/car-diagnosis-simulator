@@ -17,122 +17,189 @@
     <nav class="lab-nav" aria-label="Lab navigation">
       <a class="lab-back tm-btn tm-btn-secondary" href="/dashboard/student/">← Back to Dashboard</a>
     </nav>
-    <header class="tm-page-header">
-      <p class="tm-eyebrow">Training preview</p>
-      <h1 class="tm-page-title">Interactive Charging-System Circuit Lab</h1>
-      <p class="tm-page-subtitle">Follow conventional current flow through a project-authored training schematic, inspect electrical symbols, and observe how faults interrupt or degrade a circuit.</p>
-      <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
+
+    <header class="tm-page-header lab-reference-hero">
+      <div class="lab-reference-hero__copy">
+        <p class="tm-eyebrow">AutoLearnPro · Circuit Lab</p>
+        <h1 class="tm-page-title">Interactive Charging-System Circuit Lab</h1>
+        <p class="lab-domain">Lab domain · Electrical Circuit</p>
+        <p class="tm-page-subtitle">Investigate circuit behavior using the supported electrical model, diagnostic tools, operating states, and training faults exposed by the lab runtime.</p>
+      </div>
+      <div class="lab-reference-hero__profile">
+        <span class="lab-reference-label">Declared system profile</span>
+        <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
+      </div>
     </header>
 
     <section class="learning-strip" aria-label="Learning objective">
-      <strong>Learning goal</strong>
+      <strong>Learning objective</strong>
       <span>Trace the relationship among the battery, circuit protection, alternator, regulator, electrical loads, and ground.</span>
     </section>
 
-    <section class="toolbar" aria-label="Circuit controls">
-      <div class="control-group">
-        <label for="stateSelect">Operating state</label>
-        <select id="stateSelect">
-          <option value="key-off">Key off</option>
-          <option value="key-on">Key on</option>
-          <option value="engine-running" selected>Engine running / charging</option>
-        </select>
+    <section class="lab-safety" aria-labelledby="labSafetyHeading">
+      <div>
+        <p class="tm-eyebrow">Safety &amp; limitations</p>
+        <h2 id="labSafetyHeading">Training model, not a physical vehicle procedure</h2>
       </div>
-      <div class="control-group">
-        <label for="faultSelect">Training fault</label>
-        <select id="faultSelect"><option value="">No injected fault</option></select>
-      </div>
-      <div class="button-row">
-        <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system flow</button>
-        <button id="tracePower" type="button" class="tm-btn tm-btn-secondary">Trace B+ path</button>
-        <button id="traceGround" type="button" class="tm-btn tm-btn-secondary">Trace ground return</button>
-        <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset</button>
-      </div>
+      <p>This lab presents a governed training model. Line patterns, operating states, faults, and calculated values describe the modeled system only. Vehicle-specific service information and approved shop procedures remain authoritative for physical diagnosis and repair.</p>
     </section>
 
-    <section class="legend" aria-label="Schematic legend">
-      <span><i class="legend-line power"></i> Power / charging path</span>
-      <span><i class="legend-line ground"></i> Ground return</span>
-      <span><i class="legend-line control"></i> Control path</span>
-      <span><i class="legend-line fault"></i> Faulted / degraded</span>
-      <span><i class="legend-dot test"></i> Test point</span>
-      <span class="legend-note">Line patterns are training conventions; voltage is declared separately and does not imply manufacturer wire color.</span>
-    </section>
-
-    <section class="engineering-panel" aria-labelledby="chargingEngineeringHeading">
-      <div class="engineering-heading">
-        <div>
-          <p class="tm-eyebrow">Source-backed charging reference</p>
-          <h2 id="chargingEngineeringHeading">Charging-cable voltage-drop reference</h2>
-          <p>Delco Remy source values are shown only within their stated applicability. Enter current only when you have a measured or intentionally chosen test value.</p>
+    <section class="lab-capability-grid" aria-label="Circuit Lab capabilities">
+      <article class="lab-capability-card" aria-labelledby="diagnosticToolsHeading">
+        <div class="lab-section-kicker">
+          <span>Diagnostic tools</span>
+          <span class="lab-contract-badge">Contract driven</span>
         </div>
-        <span class="engineering-status" id="chargingEngineeringStatus">Reference loaded</span>
+        <h2 id="diagnosticToolsHeading">Available in this lab</h2>
+        <ul id="labToolList" class="lab-chip-list" aria-label="Available diagnostic tools"></ul>
+        <p class="lab-capability-note">Tools request or display measurements; they do not determine engineering truth, pass/fail status, or assessment outcomes.</p>
+      </article>
+
+      <article class="lab-capability-card" aria-labelledby="measurementsHeading">
+        <div class="lab-section-kicker"><span>Measurement support</span></div>
+        <h2 id="measurementsHeading">Declared measurement types</h2>
+        <ul id="labMeasurementList" class="lab-chip-list" aria-label="Supported measurement types"></ul>
+      </article>
+
+      <article class="lab-capability-card" aria-labelledby="modelStatusHeading">
+        <div class="lab-section-kicker"><span>Model status</span></div>
+        <h2 id="modelStatusHeading">Authoritative runtime boundary</h2>
+        <div id="labModelStatus" class="lab-model-status" aria-live="polite">Loading runtime capabilities…</div>
+      </article>
+    </section>
+
+    <section class="lab-region" aria-labelledby="scenarioWorkAreaHeading">
+      <div class="lab-region-heading">
+        <div>
+          <p class="tm-eyebrow">Scenario / work area</p>
+          <h2 id="scenarioWorkAreaHeading">Charging-system investigation</h2>
+        </div>
+        <p>Choose a supported operating state or training fault, then inspect the schematic and trace the declared paths.</p>
       </div>
 
-      <div class="reference-controls">
+      <section class="toolbar" aria-label="Circuit controls">
         <div class="control-group">
-          <label for="chargingReferenceSelect">Charging reference</label>
-          <select id="chargingReferenceSelect">
-            <option value="delco-charging-cable-new-vehicle-design-drop-12v">New-vehicle cable design basis</option>
-            <option value="delco-charging-cable-life-max-drop-12v">Vehicle-life cable maximum</option>
-            <option value="delco-charging-3wire-number2-lead-max-drop-12v">3-wire #2 lead maximum</option>
+          <label for="stateSelect">Operating state</label>
+          <select id="stateSelect">
+            <option value="key-off">Key off</option>
+            <option value="key-on">Key on</option>
+            <option value="engine-running" selected>Engine running / charging</option>
           </select>
         </div>
         <div class="control-group">
-          <label for="chargingCurrentInput">Measured / test current (A)</label>
-          <input id="chargingCurrentInput" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="Enter current">
+          <label for="faultSelect">Training fault</label>
+          <select id="faultSelect"><option value="">No injected fault</option></select>
         </div>
-      </div>
+        <div class="button-row" aria-label="Schematic trace controls">
+          <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system flow</button>
+          <button id="tracePower" type="button" class="tm-btn tm-btn-secondary">Trace B+ path</button>
+          <button id="traceGround" type="button" class="tm-btn tm-btn-secondary">Trace ground return</button>
+          <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset view</button>
+        </div>
+      </section>
 
-      <div id="chargingComparisonSummary" class="engineering-comparison">Selected charging value is a reference; no fault measurement is inferred.</div>
-      <div class="engineering-grid">
-        <article class="engineering-card"><span class="value-role declared">Declared system value</span><strong>12 V</strong><small>Generic lab architecture</small></article>
-        <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engChargingDrop">0.300 V</strong><small id="engChargingDropLabel">New-vehicle design basis</small></article>
-        <article class="engineering-card"><span class="value-role measured">Entered measurement</span><strong id="engChargingCurrent">—</strong><small>Current used for calculation</small></article>
-        <article class="engineering-card result"><span class="value-role calculated">Calculated value</span><strong id="engChargingResistance">—</strong><small>Equivalent path resistance at entered current</small></article>
-      </div>
-      <p class="engineering-formula" id="chargingEngineeringFormula"></p>
-    </section>
+      <section class="legend" aria-label="Schematic legend">
+        <span><i class="legend-line power"></i> Power / charging path</span>
+        <span><i class="legend-line ground"></i> Ground return</span>
+        <span><i class="legend-line control"></i> Control path</span>
+        <span><i class="legend-line fault"></i> Faulted / degraded</span>
+        <span><i class="legend-dot test"></i> Test point</span>
+        <span class="legend-note">Line patterns are training conventions; voltage is declared separately and does not imply manufacturer wire color.</span>
+      </section>
 
-    <section class="workspace">
-      <div class="diagram-card">
-        <div class="diagram-heading">
-          <div>
-            <p class="tm-eyebrow">Conventional current flow</p>
-            <h2>Generic charging-system schematic</h2>
+      <section class="workspace lab-workspace">
+        <div class="diagram-card lab-work-area">
+          <div class="diagram-heading">
+            <div>
+              <p class="tm-eyebrow">Conventional current flow</p>
+              <h2>Generic charging-system schematic</h2>
+            </div>
+            <div id="stateBadge" class="state-badge">Engine running / charging</div>
           </div>
-          <div id="stateBadge" class="state-badge">Engine running / charging</div>
+          <div class="diagram-scroll" aria-label="Scrollable circuit schematic">
+            <svg id="circuitSvg" viewBox="0 0 980 640" role="img" aria-labelledby="diagramTitle diagramDesc">
+              <title id="diagramTitle">Generic charging-system training schematic</title>
+              <desc id="diagramDesc">Interactive charging-system diagram rendered from the standardized electrical symbol library, with external labels, test points, faults, and animated conventional current flow.</desc>
+            </svg>
+          </div>
+          <p class="flow-note" id="flowNote">Animated arrows show conventional current direction. They are conceptual training aids, not measured current magnitude.</p>
         </div>
-        <div class="diagram-scroll" aria-label="Scrollable circuit schematic">
-          <svg id="circuitSvg" viewBox="0 0 980 640" role="img" aria-labelledby="diagramTitle diagramDesc">
-            <title id="diagramTitle">Generic charging-system training schematic</title>
-            <desc id="diagramDesc">Interactive charging-system diagram rendered from the standardized electrical symbol library, with external labels, test points, faults, and animated conventional current flow.</desc>
-          </svg>
-        </div>
-        <p class="flow-note" id="flowNote">Animated arrows show conventional current direction. They are conceptual training aids, not measured current magnitude.</p>
-      </div>
 
-      <aside class="inspector" aria-live="polite">
-        <h2>Component inspector</h2>
-        <div id="inspectorContent">
-          <p>Select an electrical symbol to inspect its role, terminals, connections, and available test points.</p>
-        </div>
-        <div class="guided-card">
-          <p class="tm-eyebrow">Guided practice</p>
-          <ol id="guidedSteps">
-            <li class="active">Identify the battery as the electrical source.</li>
-            <li>Locate the main charging protection.</li>
-            <li>Trace the B+ connection between battery and alternator.</li>
-            <li>Trace the alternator ground return.</li>
-            <li>Inject an open charging-feed fault and trace the path again.</li>
-          </ol>
-        </div>
-      </aside>
+        <aside class="inspector lab-reasoning-panel" aria-labelledby="diagnosticReasoningHeading" aria-live="polite">
+          <p class="tm-eyebrow">Diagnostic reasoning</p>
+          <h2 id="diagnosticReasoningHeading">Inspect, observe, explain</h2>
+          <div id="inspectorContent">
+            <p>Select an electrical symbol to inspect its role, terminals, connections, and available test points.</p>
+          </div>
+          <div class="guided-card">
+            <p class="tm-eyebrow">Guided practice</p>
+            <ol id="guidedSteps">
+              <li class="active">Identify the battery as the electrical source.</li>
+              <li>Locate the main charging protection.</li>
+              <li>Trace the B+ connection between battery and alternator.</li>
+              <li>Trace the alternator ground return.</li>
+              <li>Inject an open charging-feed fault and trace the path again.</li>
+            </ol>
+          </div>
+        </aside>
+      </section>
     </section>
 
-    <section class="boundary">
-      <h2>Evidence boundary</h2>
+    <section class="lab-region lab-evidence-region" aria-labelledby="evidenceObservationsHeading">
+      <div class="lab-region-heading">
+        <div>
+          <p class="tm-eyebrow">Evidence &amp; observations</p>
+          <h2 id="evidenceObservationsHeading">Keep source roles visible</h2>
+        </div>
+        <p>Authoritative reference values, student-entered/test values, and calculated values remain visually distinct. No fault measurement is manufactured when the model does not provide one.</p>
+      </div>
+
+      <section class="engineering-panel" aria-labelledby="chargingEngineeringHeading">
+        <div class="engineering-heading">
+          <div>
+            <p class="tm-eyebrow">Source-backed charging reference</p>
+            <h2 id="chargingEngineeringHeading">Charging-cable voltage-drop reference</h2>
+            <p>Delco Remy source values are shown only within their stated applicability. Enter current only when you have a measured or intentionally chosen test value.</p>
+          </div>
+          <span class="engineering-status" id="chargingEngineeringStatus">Reference loaded</span>
+        </div>
+
+        <div class="reference-controls">
+          <div class="control-group">
+            <label for="chargingReferenceSelect">Charging reference</label>
+            <select id="chargingReferenceSelect">
+              <option value="delco-charging-cable-new-vehicle-design-drop-12v">New-vehicle cable design basis</option>
+              <option value="delco-charging-cable-life-max-drop-12v">Vehicle-life cable maximum</option>
+              <option value="delco-charging-3wire-number2-lead-max-drop-12v">3-wire #2 lead maximum</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="chargingCurrentInput">Measured / test current (A)</label>
+            <input id="chargingCurrentInput" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="Enter current">
+          </div>
+        </div>
+
+        <div id="chargingComparisonSummary" class="engineering-comparison">Selected charging value is a reference; no fault measurement is inferred.</div>
+        <div class="engineering-grid">
+          <article class="engineering-card"><span class="value-role declared">Declared system value</span><strong>12 V</strong><small>Generic lab architecture</small></article>
+          <article class="engineering-card"><span class="value-role authoritative">Authoritative specification</span><strong id="engChargingDrop">0.300 V</strong><small id="engChargingDropLabel">New-vehicle design basis</small></article>
+          <article class="engineering-card"><span class="value-role measured">Entered measurement</span><strong id="engChargingCurrent">—</strong><small>Current used for calculation</small></article>
+          <article class="engineering-card result"><span class="value-role calculated">Calculated value</span><strong id="engChargingResistance">—</strong><small>Equivalent path resistance at entered current</small></article>
+        </div>
+        <p class="engineering-formula" id="chargingEngineeringFormula"></p>
+      </section>
+    </section>
+
+    <section class="boundary lab-boundary" aria-labelledby="evidenceBoundaryHeading">
+      <div>
+        <p class="tm-eyebrow">Model status · explicit limitations</p>
+        <h2 id="evidenceBoundaryHeading">Evidence boundary</h2>
+      </div>
       <p>The charging-cable references above are source-specific Delco Remy values and are not universal charging-system limits. The current field is user-entered and no current is assumed. Open circuits and unrelated ground-path faults do not receive fabricated numeric voltage-drop results. Vehicle-specific authoritative service information is still required for actual charging voltage, alternator output, wiring, procedures, and component limits.</p>
+      <div class="lab-fault-contract">
+        <strong>Supported fault classes</strong>
+        <ul id="labFaultList" class="lab-chip-list" aria-label="Supported fault classes"></ul>
+      </div>
     </section>
   </main>
 
@@ -149,13 +216,13 @@
   <script src="/src/engineering/profiles.js"></script>
   <script src="/src/engineering/calculator.js"></script>
   <script src="/src/engineering/specifications.js"></script>
-<script src="/src/engineering/measurements.js"></script>
-<script src="/src/engineering/comparisons.js"></script>
+  <script src="/src/engineering/measurements.js"></script>
+  <script src="/src/engineering/comparisons.js"></script>
   <script src="/src/engineering/index.js"></script>
-<script type="module">
-  import { mountShell } from "/theme/shell.js";
-  mountShell();
-</script>
+  <script type="module">
+    import { mountShell } from "/theme/shell.js";
+    mountShell();
+  </script>
   <script src="./circuit-lab.js"></script>
 </body>
 </html>
