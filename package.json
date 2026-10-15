@@ -148,7 +148,7 @@
     "@babel/preset-env": "^7.24.0",
     "@cloudflare/workers-types": "^5.20261005.1",
     "@mermaid-js/mermaid-cli": "^12.0.0",
-    "@playwright/test": "^1.63.0",
+    "@playwright/test": "^1.64.0",
     "acorn": "^8.18.0",
     "adm-zip": "^0.6.1",
     "ajv": "^8.20.0",
