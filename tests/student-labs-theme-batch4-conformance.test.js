@@ -17,7 +17,7 @@ const page = {
     'domainCurrentInput','engDomainVoltage','engDomainVoltageLabel','engDomainCurrent','engDomainPower',
     'engDomainRole','engDomainBoundary','multiVoltageComparisonSummary','multiVoltageEngineeringFormula',
   ],
-  jsMarkers: ['electrified-multivoltage.json','LV12','TP_','multiVoltageEngineeringStatus'],
+  jsMarkers: ['multivoltage-lab-lmf-runtime.json','LV12','TP_','multiVoltageEngineeringStatus'],
   // Safety / voltage-domain content that must survive the theme migration verbatim.
   safetyMarkers: [
     'Training safety boundary',

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "runtimeRole": "lmf-derived-multivoltage-lab-runtime",
+  "sourceContracts": [
+    "/data/lmf/lab-registry.json",
+    "/data/lmf/engineering-model-adapters.json",
+    "/data/lmf/diagnostic-tools.json",
+    "/data/lmf/measurement-contract.json",
+    "/data/lmf/fault-taxonomy.json"
+  ],
+  "labId": "multivoltage-lab",
+  "route": "/dashboard/student/multivoltage-lab/",
+  "engineeringAdapterId": "electrified-multivoltage",
+  "modelRef": "/data/circuit-templates/electrified-multivoltage.json",
+  "toolIds": ["tool.dmm", "tool.current-clamp", "tool.scan-tool", "tool.temperature-probe"],
+  "measurementTypes": ["voltage", "voltage_drop", "resistance", "continuity", "frequency", "duty_cycle", "current", "waveform", "diagnostic_data", "rpm", "temperature", "pressure", "speed", "position", "command_state"],
+  "faultClassIds": ["electrical.open", "electrical.high-resistance"],
+  "directPracticeAllowed": true,
+  "assessmentEligibilityAuthority": "external-governance-only",
+  "publicationAuthority": "external-human-governance-only"
+}
