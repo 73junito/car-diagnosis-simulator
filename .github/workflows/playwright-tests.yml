@@ -38,6 +38,9 @@ jobs:
       - name: Run Playwright tests
         run: npm run test:playwright --silent
 
+      - name: Run animation review harness
+        run: npm run test:animation-review-harness --silent
+
       - name: Upload Playwright report (on failure)
         if: failure()
         uses: actions/upload-artifact@v7

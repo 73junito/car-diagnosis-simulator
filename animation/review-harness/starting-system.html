@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Starting System Animation Review Harness</title>
+  <link rel="stylesheet" href="/theme/tokens.css">
+  <link rel="stylesheet" href="/theme/layout.css">
+  <link rel="stylesheet" href="/theme/components/animation-player/animation-player.css">
+  <link rel="stylesheet" href="./review-harness.css">
+</head>
+<body>
+  <main class="tm-review-harness" data-review-harness>
+    <header class="tm-review-harness__header">
+      <p class="tm-review-harness__eyebrow">Internal review surface</p>
+      <h1>Starting System Animation Review Harness</h1>
+      <p>This page exercises the governed review-only GLB and its manifest-declared instructional clips. It is not a student production surface and does not grant publication or assessment approval.</p>
+    </header>
+
+    <section class="tm-review-harness__guard" aria-label="Review governance">
+      <strong>REVIEW ONLY</strong>
+      <span data-review-governance>Loading governance state…</span>
+    </section>
+
+    <section aria-labelledby="player-heading">
+      <h2 id="player-heading">Governed animation player</h2>
+      <div id="starting-system-review-player"></div>
+    </section>
+
+    <section class="tm-review-harness__diagnostics" aria-labelledby="diagnostics-heading">
+      <h2 id="diagnostics-heading">Review diagnostics</h2>
+      <dl>
+        <div><dt>Animation ID</dt><dd data-review-animation-id>—</dd></div>
+        <div><dt>Presentation mode</dt><dd data-review-presentation-mode>—</dd></div>
+        <div><dt>Declared clips</dt><dd data-review-clip-count>—</dd></div>
+        <div><dt>Runtime clips</dt><dd data-review-runtime-clips>—</dd></div>
+        <div><dt>Publication allowed</dt><dd data-review-publication>—</dd></div>
+        <div><dt>Assessment eligible</dt><dd data-review-assessment>—</dd></div>
+      </dl>
+      <ol data-review-clip-list aria-label="Declared instructional clips"></ol>
+    </section>
+
+    <p class="tm-review-harness__note">Electrical behavior remains authoritative in the engineering artifact. Motion on this page is presentation-only.</p>
+  </main>
+  <script type="module" src="./review-harness.js"></script>
+</body>
+</html>

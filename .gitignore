@@ -24,6 +24,7 @@ reports
 .checkpoints/checkpoints.json
 .vercel/
 dist/
+review-dist/
 production-stress-results.txt
 
 # Local framework installation package
