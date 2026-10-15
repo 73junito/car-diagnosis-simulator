@@ -86,6 +86,7 @@
     "validate:state-privacy-ai-overlays": "node scripts/verify-state-privacy-ai-overlays.js",
     "validate:curriculum-reference-coverage-baseline": "node scripts/verify-curriculum-reference-coverage-baseline.js",
     "validate:production-surfaces": "node scripts/verify-production-surfaces.js",
+    "monitor:production-runtime": "node scripts/monitor-production-runtime.js",
     "validate:production-release-baseline": "node scripts/verify-production-release-baseline.js",
     "monitor:production-baseline": "node scripts/monitor-production-baseline.js",
     "validate:institutional-readiness-package": "node scripts/verify-institutional-readiness-package.js",
