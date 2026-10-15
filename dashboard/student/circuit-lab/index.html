@@ -68,6 +68,37 @@
       </article>
     </section>
 
+    <section class="lab-equipment-bay" aria-labelledby="lab3dHeading">
+      <div class="lab-region-heading">
+        <div>
+          <p class="tm-eyebrow">3D Equipment Bay</p>
+          <h2 id="lab3dHeading">Reusable training equipment</h2>
+        </div>
+        <div class="lab-3d-authority">
+          <span class="lab-contract-badge">Presentation only</span>
+          <p>3D assets do not create measurements, faults, scoring, or diagnostic conclusions.</p>
+        </div>
+      </div>
+      <div class="lab-3d-layout">
+        <div class="lab-3d-viewer">
+          <div class="lab-3d-viewer__heading">
+            <div>
+              <strong id="lab3dModelTitle">3D equipment</strong>
+              <span id="lab3dModelRole">Loading governed equipment metadata…</span>
+            </div>
+            <span class="lab-3d-hint">Drag to rotate · wheel or +/- to zoom · arrow keys rotate</span>
+          </div>
+          <canvas id="lab3dCanvas" class="lab-3d-canvas" tabindex="0" role="img" aria-label="Interactive 3D equipment viewer"></canvas>
+          <p id="lab3dStatus" class="lab-3d-status" aria-live="polite">Loading 3D equipment…</p>
+        </div>
+        <aside class="lab-3d-library" aria-labelledby="lab3dLibraryHeading">
+          <h3 id="lab3dLibraryHeading">Equipment &amp; scene assets</h3>
+          <ul id="lab3dAssetList" class="lab-3d-asset-list"></ul>
+          <p class="lab-capability-note">Only diagnostic tools declared in the authoritative Circuit Lab runtime are enabled as tools. Other models are visual training assets only.</p>
+        </aside>
+      </div>
+    </section>
+
     <section class="lab-region" aria-labelledby="scenarioWorkAreaHeading">
       <div class="lab-region-heading">
         <div>
@@ -219,6 +250,8 @@
   <script src="/src/engineering/measurements.js"></script>
   <script src="/src/engineering/comparisons.js"></script>
   <script src="/src/engineering/index.js"></script>
+  <script src="/src/presentation/glb-viewer.js"></script>
+  <script src="./circuit-lab-3d.js"></script>
   <script type="module">
     import { mountShell } from "/theme/shell.js";
     mountShell();

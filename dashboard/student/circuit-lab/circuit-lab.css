@@ -412,3 +412,145 @@ header p { max-width: 850px; line-height: 1.6; }
   .lab-capability-card { padding:13px; }
   .lab-chip-list li { max-width:100%; }
 }
+
+.lab-equipment-bay {
+  margin:20px 0;
+  padding:18px;
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius-lg);
+  background:var(--tm-surface);
+  box-shadow:var(--tm-shadow-soft);
+}
+.lab-3d-authority {
+  display:grid;
+  justify-items:end;
+  gap:6px;
+  max-width:440px;
+}
+.lab-3d-authority p {
+  margin:0;
+  color:var(--tm-muted);
+  font-size:.8rem;
+  line-height:1.45;
+  text-align:right;
+}
+.lab-3d-layout {
+  display:grid;
+  grid-template-columns:minmax(0,1.75fr) minmax(260px,.75fr);
+  gap:16px;
+  align-items:stretch;
+}
+.lab-3d-viewer,
+.lab-3d-library {
+  min-width:0;
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius);
+  background:var(--tm-surface-2);
+}
+.lab-3d-viewer {
+  overflow:hidden;
+}
+.lab-3d-viewer__heading {
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding:13px 14px;
+  border-bottom:1px solid var(--tm-border);
+  background:var(--tm-surface);
+}
+.lab-3d-viewer__heading > div {
+  display:grid;
+  gap:3px;
+}
+.lab-3d-viewer__heading strong {
+  font-size:1rem;
+}
+.lab-3d-viewer__heading span,
+.lab-3d-hint {
+  color:var(--tm-muted);
+  font-size:.76rem;
+  line-height:1.4;
+}
+.lab-3d-hint {
+  max-width:260px;
+  text-align:right;
+}
+.lab-3d-canvas {
+  display:block;
+  width:100%;
+  height:420px;
+  max-width:100%;
+  background:var(--tm-surface-2);
+  touch-action:none;
+  cursor:grab;
+}
+.lab-3d-canvas:active { cursor:grabbing; }
+.lab-3d-status {
+  margin:0;
+  min-height:42px;
+  padding:10px 14px;
+  border-top:1px solid var(--tm-border);
+  color:var(--tm-muted);
+  font-size:.8rem;
+}
+.lab-3d-status[data-state="ready"] { color:var(--tm-success); }
+.lab-3d-status[data-state="unavailable"] { color:var(--fault); }
+.lab-3d-library {
+  padding:14px;
+  background:var(--tm-surface);
+}
+.lab-3d-library h3 {
+  margin:0 0 10px;
+  font-size:1rem;
+}
+.lab-3d-asset-list {
+  display:grid;
+  gap:7px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.lab-3d-asset__button {
+  width:100%;
+  display:grid;
+  gap:3px;
+  padding:10px 11px;
+  border:1px solid var(--tm-border);
+  border-radius:var(--tm-radius-sm);
+  background:var(--tm-surface);
+  color:var(--tm-text);
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.lab-3d-asset__button:hover:not(:disabled),
+.lab-3d-asset__button[aria-pressed="true"] {
+  border-color:var(--tm-focus, #6a4bc3);
+  box-shadow:inset 3px 0 0 var(--tm-focus, #6a4bc3);
+}
+.lab-3d-asset__button:disabled {
+  opacity:.58;
+  cursor:not-allowed;
+  background:var(--tm-surface-2);
+}
+.lab-3d-asset__state {
+  color:var(--tm-muted);
+  font-size:.72rem;
+}
+.lab-3d-asset[data-enabled="false"] .lab-3d-asset__state {
+  color:var(--fault);
+}
+@media (max-width:900px) {
+  .lab-3d-layout { grid-template-columns:1fr; }
+  .lab-3d-library { order:-1; }
+  .lab-3d-asset-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:620px) {
+  .lab-equipment-bay { padding:14px; }
+  .lab-3d-authority { justify-items:start; max-width:none; }
+  .lab-3d-authority p,
+  .lab-3d-hint { text-align:left; }
+  .lab-3d-viewer__heading { display:grid; }
+  .lab-3d-canvas { height:320px; }
+  .lab-3d-asset-list { grid-template-columns:1fr; }
+}
