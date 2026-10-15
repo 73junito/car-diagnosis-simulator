@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractRole": "shared-diagnostic-tool-registry",
+  "invariant": "Tools request or display measurements; they do not own engineering truth, thresholds, scoring, or diagnostic conclusions.",
+  "tools": [
+    {
+      "toolId": "tool.dmm",
+      "title": "Digital Multimeter",
+      "measurementTypes": [
+        "voltage",
+        "voltage_drop",
+        "resistance",
+        "continuity",
+        "frequency",
+        "duty_cycle"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.oscilloscope",
+      "title": "Oscilloscope",
+      "measurementTypes": [
+        "voltage",
+        "frequency",
+        "duty_cycle",
+        "waveform"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.scan-tool",
+      "title": "Scan Tool",
+      "measurementTypes": [
+        "diagnostic_data",
+        "rpm",
+        "temperature",
+        "pressure",
+        "speed",
+        "position",
+        "command_state"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.current-clamp",
+      "title": "Current Clamp",
+      "measurementTypes": [
+        "current",
+        "waveform"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.pressure-gauge",
+      "title": "Pressure Gauge",
+      "measurementTypes": [
+        "pressure",
+        "vacuum"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.temperature-probe",
+      "title": "Temperature Probe",
+      "measurementTypes": [
+        "temperature"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.compression-tester",
+      "title": "Compression Tester",
+      "measurementTypes": [
+        "compression_pressure"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.leak-down-tester",
+      "title": "Cylinder Leak-Down Tester",
+      "measurementTypes": [
+        "leakdown_percent"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.vacuum-gauge",
+      "title": "Vacuum Gauge",
+      "measurementTypes": [
+        "vacuum"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.network-analyzer",
+      "title": "Vehicle Network Analyzer",
+      "measurementTypes": [
+        "network_voltage",
+        "bus_resistance",
+        "network_activity"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    },
+    {
+      "toolId": "tool.alignment-system",
+      "title": "Wheel Alignment System",
+      "measurementTypes": [
+        "angle",
+        "distance"
+      ],
+      "status": "registered",
+      "engineeringAuthority": false,
+      "assessmentAuthority": false
+    }
+  ]
+}

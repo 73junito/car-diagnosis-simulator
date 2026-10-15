@@ -1,0 +1,287 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryRole": "canonical-lab-workspace-registry",
+  "authority": {
+    "instructionalRouting": "LMF-2 scenario-to-lab mapping",
+    "engineeringBehavior": "LMF-3 engineering model adapter and referenced engineering artifact",
+    "presentationBehavior": "presentation layer only",
+    "assessmentEligibility": "external governance only",
+    "publicationApproval": "external human governance only"
+  },
+  "domains": [
+    {
+      "id": "electrical-electronics",
+      "title": "Electrical & Electronics"
+    },
+    {
+      "id": "powertrain",
+      "title": "Powertrain"
+    },
+    {
+      "id": "chassis",
+      "title": "Chassis"
+    },
+    {
+      "id": "climate-thermal",
+      "title": "Climate & Thermal"
+    },
+    {
+      "id": "electrified-vehicle",
+      "title": "Electrified Vehicle"
+    },
+    {
+      "id": "intelligent-vehicle",
+      "title": "Intelligent Vehicle"
+    },
+    {
+      "id": "integrated-diagnostics",
+      "title": "Integrated Diagnostics"
+    }
+  ],
+  "labs": [
+    {
+      "labId": "circuit-lab",
+      "title": "Charging-System / Circuit Workspace",
+      "domainId": "electrical-electronics",
+      "lifecycle": "existing",
+      "route": "/dashboard/student/circuit-lab/",
+      "engineeringAdapterId": "electrical-circuit",
+      "toolIds": [
+        "tool.dmm",
+        "tool.current-clamp"
+      ],
+      "directPracticeAllowed": true
+    },
+    {
+      "labId": "starting-system-lab",
+      "title": "Starting-System Workspace",
+      "domainId": "electrical-electronics",
+      "lifecycle": "existing",
+      "route": "/dashboard/student/starting-system-lab/",
+      "engineeringAdapterId": "electrical-circuit",
+      "toolIds": [
+        "tool.dmm",
+        "tool.current-clamp"
+      ],
+      "directPracticeAllowed": true
+    },
+    {
+      "labId": "relay-load-lab",
+      "title": "Relay & Load Workspace",
+      "domainId": "electrical-electronics",
+      "lifecycle": "existing",
+      "route": "/dashboard/student/relay-load-lab/",
+      "engineeringAdapterId": "electrical-circuit",
+      "toolIds": [
+        "tool.dmm",
+        "tool.current-clamp"
+      ],
+      "directPracticeAllowed": true
+    },
+    {
+      "labId": "sensor-lab",
+      "title": "Sensor Diagnostics Workspace",
+      "domainId": "electrical-electronics",
+      "lifecycle": "existing",
+      "route": "/dashboard/student/sensor-lab/",
+      "engineeringAdapterId": "electrical-circuit",
+      "toolIds": [
+        "tool.dmm",
+        "tool.oscilloscope",
+        "tool.scan-tool"
+      ],
+      "directPracticeAllowed": true
+    },
+    {
+      "labId": "actuator-lab",
+      "title": "Actuator Diagnostics Workspace",
+      "domainId": "electrical-electronics",
+      "lifecycle": "existing",
+      "route": "/dashboard/student/actuator-lab/",
+      "engineeringAdapterId": "electrical-circuit",
+      "toolIds": [
+        "tool.dmm",
+        "tool.oscilloscope",
+        "tool.scan-tool",
+        "tool.current-clamp"
+      ],
+      "directPracticeAllowed": true
+    },
+    {
+      "labId": "network-lab",
+      "title": "Vehicle Network Workspace",
+      "domainId": "electrical-electronics",
+      "lifecycle": "existing",
+      "route": "/dashboard/student/network-lab/",
+      "engineeringAdapterId": "network-communications",
+      "toolIds": [
+        "tool.dmm",
+        "tool.oscilloscope",
+        "tool.scan-tool",
+        "tool.network-analyzer"
+      ],
+      "directPracticeAllowed": true
+    },
+    {
+      "labId": "multivoltage-lab",
+      "title": "Electrified Multi-Voltage Workspace",
+      "domainId": "electrified-vehicle",
+      "lifecycle": "existing",
+      "route": "/dashboard/student/multivoltage-lab/",
+      "engineeringAdapterId": "electrified-multivoltage",
+      "toolIds": [
+        "tool.dmm",
+        "tool.current-clamp",
+        "tool.scan-tool",
+        "tool.temperature-probe"
+      ],
+      "directPracticeAllowed": true
+    },
+    {
+      "labId": "engine-mechanical-lab",
+      "title": "Engine Mechanical Workspace",
+      "domainId": "powertrain",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "mechanical-engine",
+      "toolIds": [
+        "tool.compression-tester",
+        "tool.leak-down-tester",
+        "tool.vacuum-gauge",
+        "tool.temperature-probe"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "brake-systems-lab",
+      "title": "Brake Systems Workspace",
+      "domainId": "chassis",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "hydraulic-brake",
+      "toolIds": [
+        "tool.pressure-gauge",
+        "tool.scan-tool",
+        "tool.dmm"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "steering-suspension-alignment-lab",
+      "title": "Steering / Suspension / Alignment Workspace",
+      "domainId": "chassis",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "vehicle-dynamics",
+      "toolIds": [
+        "tool.alignment-system",
+        "tool.scan-tool",
+        "tool.dmm"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "drivetrain-manual-lab",
+      "title": "Drivetrain & Manual Transmission Workspace",
+      "domainId": "powertrain",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "drivetrain-mechanical",
+      "toolIds": [
+        "tool.dmm",
+        "tool.scan-tool"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "automatic-transmission-lab",
+      "title": "Automatic Transmission Workspace",
+      "domainId": "powertrain",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "drivetrain-hydraulic-control",
+      "toolIds": [
+        "tool.pressure-gauge",
+        "tool.scan-tool",
+        "tool.dmm"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "hvac-thermal-lab",
+      "title": "HVAC / Thermal Systems Workspace",
+      "domainId": "climate-thermal",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "thermal-fluid",
+      "toolIds": [
+        "tool.pressure-gauge",
+        "tool.temperature-probe",
+        "tool.scan-tool",
+        "tool.dmm"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "engine-performance-lab",
+      "title": "Engine Performance Workspace",
+      "domainId": "powertrain",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "engine-performance",
+      "toolIds": [
+        "tool.scan-tool",
+        "tool.oscilloscope",
+        "tool.dmm",
+        "tool.pressure-gauge",
+        "tool.vacuum-gauge"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "emissions-lab",
+      "title": "Emissions Diagnostics Workspace",
+      "domainId": "powertrain",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "emissions-control",
+      "toolIds": [
+        "tool.scan-tool",
+        "tool.oscilloscope",
+        "tool.dmm",
+        "tool.temperature-probe"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "adas-vehicle-dynamics-lab",
+      "title": "ADAS / Vehicle Dynamics Workspace",
+      "domainId": "intelligent-vehicle",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "adas-dynamics",
+      "toolIds": [
+        "tool.scan-tool",
+        "tool.alignment-system",
+        "tool.dmm"
+      ],
+      "directPracticeAllowed": false
+    },
+    {
+      "labId": "advanced-diagnostics-integration-lab",
+      "title": "Advanced Diagnostics / Systems Integration Workspace",
+      "domainId": "integrated-diagnostics",
+      "lifecycle": "planned",
+      "route": null,
+      "engineeringAdapterId": "systems-integration",
+      "toolIds": [
+        "tool.scan-tool",
+        "tool.oscilloscope",
+        "tool.dmm",
+        "tool.current-clamp",
+        "tool.network-analyzer"
+      ],
+      "directPracticeAllowed": false
+    }
+  ]
+}

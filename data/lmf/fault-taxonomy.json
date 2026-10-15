@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractRole": "canonical-fault-taxonomy",
+  "invariant": "Fault taxonomy classifies governed faults; it does not create engineering behavior. Concrete fault behavior remains in the referenced engineering model.",
+  "categories": [
+    {
+      "faultClassId": "electrical.open",
+      "domain": "electrical",
+      "label": "Open circuit"
+    },
+    {
+      "faultClassId": "electrical.high-resistance",
+      "domain": "electrical",
+      "label": "High resistance"
+    },
+    {
+      "faultClassId": "electrical.short-to-ground",
+      "domain": "electrical",
+      "label": "Short to ground"
+    },
+    {
+      "faultClassId": "electrical.short-to-power",
+      "domain": "electrical",
+      "label": "Short to power"
+    },
+    {
+      "faultClassId": "electrical.short-between-lines",
+      "domain": "electrical",
+      "label": "Short between conductors"
+    },
+    {
+      "faultClassId": "mechanical.wear",
+      "domain": "mechanical",
+      "label": "Wear"
+    },
+    {
+      "faultClassId": "mechanical.leakage",
+      "domain": "mechanical",
+      "label": "Mechanical leakage"
+    },
+    {
+      "faultClassId": "mechanical.binding",
+      "domain": "mechanical",
+      "label": "Binding / restricted motion"
+    },
+    {
+      "faultClassId": "mechanical.misalignment",
+      "domain": "mechanical",
+      "label": "Mechanical misalignment"
+    },
+    {
+      "faultClassId": "hydraulic.restriction",
+      "domain": "hydraulic",
+      "label": "Hydraulic restriction"
+    },
+    {
+      "faultClassId": "hydraulic.external-leak",
+      "domain": "hydraulic",
+      "label": "External hydraulic leak"
+    },
+    {
+      "faultClassId": "hydraulic.internal-leak",
+      "domain": "hydraulic",
+      "label": "Internal hydraulic leak"
+    },
+    {
+      "faultClassId": "hydraulic.air-ingress",
+      "domain": "hydraulic",
+      "label": "Air in hydraulic circuit"
+    },
+    {
+      "faultClassId": "hydraulic.pressure-loss",
+      "domain": "hydraulic",
+      "label": "Pressure loss"
+    },
+    {
+      "faultClassId": "thermal.restricted-flow",
+      "domain": "thermal",
+      "label": "Restricted thermal-fluid flow"
+    },
+    {
+      "faultClassId": "thermal.insufficient-heat-transfer",
+      "domain": "thermal",
+      "label": "Insufficient heat transfer"
+    },
+    {
+      "faultClassId": "thermal.improper-pressure",
+      "domain": "thermal",
+      "label": "Improper system pressure"
+    },
+    {
+      "faultClassId": "communications.open-bus",
+      "domain": "communications",
+      "label": "Open communication path"
+    },
+    {
+      "faultClassId": "communications.short-bus",
+      "domain": "communications",
+      "label": "Shorted communication path"
+    },
+    {
+      "faultClassId": "communications.node-offline",
+      "domain": "communications",
+      "label": "Node offline"
+    },
+    {
+      "faultClassId": "communications.data-integrity",
+      "domain": "communications",
+      "label": "Communication data integrity fault"
+    },
+    {
+      "faultClassId": "control.sensor-bias",
+      "domain": "control",
+      "label": "Sensor bias / offset"
+    },
+    {
+      "faultClassId": "control.actuator-response",
+      "domain": "control",
+      "label": "Actuator response fault"
+    },
+    {
+      "faultClassId": "drivetrain.slip",
+      "domain": "drivetrain",
+      "label": "Slip"
+    },
+    {
+      "faultClassId": "drivetrain.engagement",
+      "domain": "drivetrain",
+      "label": "Engagement fault"
+    },
+    {
+      "faultClassId": "calibration.out-of-tolerance",
+      "domain": "calibration",
+      "label": "Calibration outside governed tolerance"
+    }
+  ],
+  "legacyMappings": [
+    {
+      "legacyType": "open_circuit",
+      "faultClassId": "electrical.open"
+    },
+    {
+      "legacyType": "high_resistance",
+      "faultClassId": "electrical.high-resistance"
+    },
+    {
+      "legacyType": "short_to_ground",
+      "faultClassId": "electrical.short-to-ground"
+    },
+    {
+      "legacyType": "short_to_power",
+      "faultClassId": "electrical.short-to-power"
+    },
+    {
+      "legacyType": "short_between_lines",
+      "faultClassId": "electrical.short-between-lines"
+    }
+  ]
+}

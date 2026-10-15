@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractRole": "universal-measurement-contract",
+  "authorityRules": {
+    "measurementValueSourceMustBeDeclared": true,
+    "thresholdsBelongToEvidenceOrEngineeringModels": true,
+    "toolDoesNotDeterminePassFail": true,
+    "presentationDoesNotDeterminePassFail": true
+  },
+  "sourceRoles": [
+    "student-entered",
+    "simulation-derived",
+    "engineering-model-derived",
+    "authoritative-specification",
+    "external-measurement"
+  ],
+  "measurementTypes": [
+    {
+      "measurementType": "voltage",
+      "family": "electrical",
+      "canonicalUnit": "V"
+    },
+    {
+      "measurementType": "voltage_drop",
+      "family": "electrical",
+      "canonicalUnit": "V"
+    },
+    {
+      "measurementType": "current",
+      "family": "electrical",
+      "canonicalUnit": "A"
+    },
+    {
+      "measurementType": "resistance",
+      "family": "electrical",
+      "canonicalUnit": "ohm"
+    },
+    {
+      "measurementType": "continuity",
+      "family": "electrical",
+      "canonicalUnit": "boolean"
+    },
+    {
+      "measurementType": "frequency",
+      "family": "signal",
+      "canonicalUnit": "Hz"
+    },
+    {
+      "measurementType": "duty_cycle",
+      "family": "signal",
+      "canonicalUnit": "%"
+    },
+    {
+      "measurementType": "waveform",
+      "family": "signal",
+      "canonicalUnit": "series"
+    },
+    {
+      "measurementType": "network_voltage",
+      "family": "communications",
+      "canonicalUnit": "V"
+    },
+    {
+      "measurementType": "bus_resistance",
+      "family": "communications",
+      "canonicalUnit": "ohm"
+    },
+    {
+      "measurementType": "network_activity",
+      "family": "communications",
+      "canonicalUnit": "series"
+    },
+    {
+      "measurementType": "pressure",
+      "family": "fluid",
+      "canonicalUnit": "pressure-unit"
+    },
+    {
+      "measurementType": "vacuum",
+      "family": "fluid",
+      "canonicalUnit": "pressure-unit"
+    },
+    {
+      "measurementType": "compression_pressure",
+      "family": "mechanical",
+      "canonicalUnit": "pressure-unit"
+    },
+    {
+      "measurementType": "leakdown_percent",
+      "family": "mechanical",
+      "canonicalUnit": "%"
+    },
+    {
+      "measurementType": "temperature",
+      "family": "thermal",
+      "canonicalUnit": "temperature-unit"
+    },
+    {
+      "measurementType": "rpm",
+      "family": "motion",
+      "canonicalUnit": "rpm"
+    },
+    {
+      "measurementType": "torque",
+      "family": "mechanical",
+      "canonicalUnit": "torque-unit"
+    },
+    {
+      "measurementType": "speed",
+      "family": "motion",
+      "canonicalUnit": "speed-unit"
+    },
+    {
+      "measurementType": "angle",
+      "family": "geometry",
+      "canonicalUnit": "degree"
+    },
+    {
+      "measurementType": "distance",
+      "family": "geometry",
+      "canonicalUnit": "length-unit"
+    },
+    {
+      "measurementType": "position",
+      "family": "geometry",
+      "canonicalUnit": "position-unit"
+    },
+    {
+      "measurementType": "command_state",
+      "family": "control",
+      "canonicalUnit": "state"
+    },
+    {
+      "measurementType": "diagnostic_data",
+      "family": "diagnostic",
+      "canonicalUnit": "typed-value"
+    }
+  ],
+  "recordShape": {
+    "required": [
+      "measurementId",
+      "measurementType",
+      "sourceRole",
+      "operatingStateId",
+      "value",
+      "unit",
+      "provenance"
+    ],
+    "optional": [
+      "toolId",
+      "location",
+      "from",
+      "to",
+      "faultId",
+      "timestamp",
+      "context"
+    ],
+    "prohibited": [
+      "correctAnswer",
+      "score",
+      "points",
+      "assessmentEligible",
+      "publicationApproved",
+      "diagnosticConclusion"
+    ]
+  }
+}

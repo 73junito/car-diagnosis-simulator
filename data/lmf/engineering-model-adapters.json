@@ -1,0 +1,218 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractRole": "engineering-model-adapter-registry",
+  "invariant": "Adapters normalize access to authoritative engineering models; they do not transfer engineering authority to scenarios, questions, presentation assets, or UI state.",
+  "interface": {
+    "requiredInputs": [
+      "modelRef",
+      "operatingStateId"
+    ],
+    "optionalInputs": [
+      "faultId",
+      "measurementRequest",
+      "context"
+    ],
+    "requiredOutputs": [
+      "modelIdentity",
+      "resolvedState",
+      "provenance"
+    ],
+    "optionalOutputs": [
+      "quantities",
+      "connections",
+      "components",
+      "measurementResult",
+      "warnings"
+    ],
+    "prohibitedOutputs": [
+      "correctAnswer",
+      "score",
+      "assessmentEligible",
+      "publicationApproved"
+    ]
+  },
+  "adapters": [
+    {
+      "adapterId": "electrical-circuit",
+      "family": "electrical",
+      "status": "existing-model-family",
+      "authoritativeSourceKinds": [
+        "circuit-template",
+        "engineering-artifact"
+      ],
+      "supportedCapabilities": [
+        "component-topology",
+        "connection-topology",
+        "operating-state",
+        "fault-selection",
+        "electrical-measurement"
+      ]
+    },
+    {
+      "adapterId": "network-communications",
+      "family": "communications",
+      "status": "existing-model-family",
+      "authoritativeSourceKinds": [
+        "circuit-template",
+        "engineering-artifact"
+      ],
+      "supportedCapabilities": [
+        "network-topology",
+        "operating-state",
+        "fault-selection",
+        "network-measurement"
+      ]
+    },
+    {
+      "adapterId": "electrified-multivoltage",
+      "family": "electrified",
+      "status": "existing-model-family",
+      "authoritativeSourceKinds": [
+        "circuit-template",
+        "engineering-artifact"
+      ],
+      "supportedCapabilities": [
+        "voltage-domain-isolation",
+        "component-topology",
+        "operating-state",
+        "fault-selection"
+      ]
+    },
+    {
+      "adapterId": "mechanical-engine",
+      "family": "mechanical",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "geometry-state",
+        "rotational-state",
+        "mechanical-measurement"
+      ]
+    },
+    {
+      "adapterId": "hydraulic-brake",
+      "family": "hydraulic",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "hydraulic-path",
+        "pressure-state",
+        "actuator-state",
+        "hydraulic-measurement"
+      ]
+    },
+    {
+      "adapterId": "vehicle-dynamics",
+      "family": "vehicle-dynamics",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "geometry-state",
+        "force-state",
+        "alignment-measurement"
+      ]
+    },
+    {
+      "adapterId": "drivetrain-mechanical",
+      "family": "drivetrain",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "gear-state",
+        "torque-path",
+        "speed-state"
+      ]
+    },
+    {
+      "adapterId": "drivetrain-hydraulic-control",
+      "family": "drivetrain",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "gear-state",
+        "hydraulic-path",
+        "control-state",
+        "pressure-measurement"
+      ]
+    },
+    {
+      "adapterId": "thermal-fluid",
+      "family": "thermal-fluid",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "thermal-state",
+        "pressure-state",
+        "flow-state",
+        "temperature-measurement"
+      ]
+    },
+    {
+      "adapterId": "engine-performance",
+      "family": "engine-performance",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "sensor-state",
+        "actuator-state",
+        "air-fuel-state",
+        "diagnostic-data"
+      ]
+    },
+    {
+      "adapterId": "emissions-control",
+      "family": "emissions",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "exhaust-state",
+        "sensor-state",
+        "control-state",
+        "diagnostic-data"
+      ]
+    },
+    {
+      "adapterId": "adas-dynamics",
+      "family": "adas-dynamics",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "future-engineering-model"
+      ],
+      "supportedCapabilities": [
+        "sensor-field",
+        "target-state",
+        "calibration-state",
+        "vehicle-motion"
+      ]
+    },
+    {
+      "adapterId": "systems-integration",
+      "family": "integration",
+      "status": "planned",
+      "authoritativeSourceKinds": [
+        "composed-governed-models"
+      ],
+      "supportedCapabilities": [
+        "multi-domain-reference",
+        "diagnostic-data",
+        "cross-system-observation"
+      ]
+    }
+  ]
+}

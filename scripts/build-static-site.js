@@ -167,6 +167,7 @@ const blockedExtensions = new Set([
 const blockedPathSegments = new Set([
   "__snapshots__",
   "coverage",
+  "lmf",
   "node_modules",
   "playwright-report",
   "test-results",

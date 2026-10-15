@@ -1,0 +1,251 @@
+{
+  "schemaVersion": "1.0.0",
+  "contractRole": "scenario-to-lab-routing",
+  "selectorPolicy": {
+    "preferredSelector": "scenario-key",
+    "scenarioKeysMustBeExactAndStable": true,
+    "symptomCategoriesAreNotRoutingIdentifiers": true,
+    "curriculumScenarioIdsRequireExplicitSelectorKind": true
+  },
+  "rules": {
+    "scenarioProvidesInstructionalContextOnly": true,
+    "mappingMaySelectWorkspace": true,
+    "mappingMaySelectEngineeringReference": true,
+    "mappingMayDefineEngineeringBehavior": false,
+    "mappingMayGrantAssessmentEligibility": false,
+    "mappingMayGrantPublication": false,
+    "failClosedOnUnknownLab": true,
+    "failClosedOnAmbiguousSelector": true
+  },
+  "unmappedSelectors": [
+    {
+      "selector": {
+        "kind": "scenario-key",
+        "value": "power-loss"
+      },
+      "reason": "Legacy scenario identifies transmission slip but does not establish an automatic-versus-manual workspace. LMF routing remains fail-closed until that instructional context is governed explicitly."
+    }
+  ],
+  "mappings": [
+    {
+      "mappingId": "scenario-key.no-crank-clicking.to.starting-system-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "no-crank-clicking"
+      },
+      "labId": "starting-system-lab",
+      "status": "active",
+      "basis": "Existing no-crank electrical scenario",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.no-crank-starter-click.to.starting-system-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "no-crank-starter-click"
+      },
+      "labId": "starting-system-lab",
+      "status": "active",
+      "basis": "Existing procedural starting scenario",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.intermittent-starting.to.starting-system-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "intermittent-starting"
+      },
+      "labId": "starting-system-lab",
+      "status": "active",
+      "basis": "Existing procedural starting scenario",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.charging-system.to.circuit-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "charging-system"
+      },
+      "labId": "circuit-lab",
+      "status": "active",
+      "basis": "Existing charging-system scenario",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.electrical-load.to.circuit-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "electrical-load"
+      },
+      "labId": "circuit-lab",
+      "status": "active",
+      "basis": "Existing scenario explicitly focused on charging-system output/load testing",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.can-bus-network.to.network-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "can-bus-network"
+      },
+      "labId": "network-lab",
+      "status": "active",
+      "basis": "Existing CAN bus network scenario",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.hybrid-ev-isolation.to.multivoltage-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "hybrid-ev-isolation"
+      },
+      "labId": "multivoltage-lab",
+      "status": "active",
+      "basis": "Existing high-voltage isolation scenario",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.hybrid-ev-insulation.to.multivoltage-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "hybrid-ev-insulation"
+      },
+      "labId": "multivoltage-lab",
+      "status": "active",
+      "basis": "Existing high-voltage insulation scenario",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.no-start.to.engine-performance-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "no-start"
+      },
+      "labId": "engine-performance-lab",
+      "status": "planned",
+      "basis": "Engine cranks but does not start; fuel/ignition diagnostic area",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.misfire-acceleration.to.engine-performance-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "misfire-acceleration"
+      },
+      "labId": "engine-performance-lab",
+      "status": "planned",
+      "basis": "Ignition/fuel performance diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.stalling.to.engine-performance-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "stalling"
+      },
+      "labId": "engine-performance-lab",
+      "status": "planned",
+      "basis": "Idle control and airflow diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.misfire-p0300.to.engine-performance-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "misfire-p0300"
+      },
+      "labId": "engine-performance-lab",
+      "status": "planned",
+      "basis": "DTC/misfire root-cause diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.overheating.to.engine-mechanical-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "overheating"
+      },
+      "labId": "engine-mechanical-lab",
+      "status": "planned",
+      "basis": "Engine cooling-system leak/circulation diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.steering-alignment.to.steering-suspension-alignment-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "steering-alignment"
+      },
+      "labId": "steering-suspension-alignment-lab",
+      "status": "planned",
+      "basis": "Alignment/suspension diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.hvac-cooling.to.hvac-thermal-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "hvac-cooling"
+      },
+      "labId": "hvac-thermal-lab",
+      "status": "planned",
+      "basis": "Refrigerant charge/leak diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.diesel-aftertreatment.to.emissions-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "diesel-aftertreatment"
+      },
+      "labId": "emissions-lab",
+      "status": "planned",
+      "basis": "Aftertreatment/emissions diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.automatic-transmission-delayed-drive.to.automatic-transmission-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "automatic-transmission-delayed-drive"
+      },
+      "labId": "automatic-transmission-lab",
+      "status": "planned",
+      "basis": "Automatic-transmission engagement diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.manual-transmission-no-drive.to.drivetrain-manual-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "manual-transmission-no-drive"
+      },
+      "labId": "drivetrain-manual-lab",
+      "status": "planned",
+      "basis": "Manual transmission/clutch/driveline diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.differential-speed-whine.to.drivetrain-manual-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "differential-speed-whine"
+      },
+      "labId": "drivetrain-manual-lab",
+      "status": "planned",
+      "basis": "Differential/driveline diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    },
+    {
+      "mappingId": "scenario-key.transaxle-fluid-leak-shift-hesitation.to.drivetrain-manual-lab",
+      "selector": {
+        "kind": "scenario-key",
+        "value": "transaxle-fluid-leak-shift-hesitation"
+      },
+      "labId": "drivetrain-manual-lab",
+      "status": "planned",
+      "basis": "Transaxle/driveline diagnosis",
+      "engineeringContextSelection": "lab-resolved-governed-model"
+    }
+  ]
+}

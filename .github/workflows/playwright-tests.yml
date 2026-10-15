@@ -47,6 +47,9 @@ jobs:
       - name: Validate approved-question animation mapping
         run: npm run validate:question-animation-mapping --silent
 
+      - name: Validate lab management framework foundation
+        run: npm run validate:lmf-foundation --silent
+
       - name: Run animation review harness
         run: npm run test:animation-review-harness --silent
 
