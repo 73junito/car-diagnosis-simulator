@@ -83,10 +83,16 @@ describe('ANIM-2B canonical presentation contract', () => {
     expect(validateAnimationPresentationContract(manifest, { rootDir: root })).toEqual([])
   })
 
-  test('accepts an explicit static 3D presentation with no meaningless animation clips', () => {
-    const manifest = buildContract({ mode: 'static-3d', withAsset: true })
+  test('accepts an explicit static 3D draft with no meaningless animation clips', () => {
+    const manifest = buildContract({ mode: 'static-3d', withAsset: false })
     expect(validateSchema(manifest)).toBe(true)
     expect(validateAnimationPresentationContract(manifest, { rootDir: root })).toEqual([])
+  })
+
+  test('rejects a static presentation that points at a GLB containing undeclared motion clips', () => {
+    const manifest = buildContract({ mode: 'static-3d', withAsset: true })
+    const errors = validateAnimationPresentationContract(manifest, { rootDir: root })
+    expect(errors.join('\n')).toMatch(/GLB contains undeclared clip/)
   })
 
   test('rejects presentation modes that are incompatible with the declared renderer', () => {
@@ -127,11 +133,11 @@ describe('ANIM-2B canonical presentation contract', () => {
     expect(errors.join('\n')).toMatch(/clip timing must have endSeconds > startSeconds/)
   })
 
-  test('rejects the current review GLB when declared as animated because it contains zero clips', () => {
+  test('rejects an animated contract when the attached GLB does not contain the declared clip', () => {
     const manifest = buildContract({ withAsset: true })
     const errors = validateAnimationPresentationContract(manifest, { rootDir: root })
-    expect(errors.join('\n')).toMatch(/animated GLB contains no animation clips/)
     expect(errors.join('\n')).toMatch(/GLB missing required clip InstructionalSequence/)
+    expect(errors.join('\n')).toMatch(/GLB contains undeclared clip identify-current-path/)
   })
 
   test('automated validation can reject but cannot grant release authority', () => {

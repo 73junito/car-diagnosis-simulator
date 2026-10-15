@@ -53,7 +53,7 @@
       "id": "identify-current-path",
       "label": "Identify the crank-current path",
       "description": "Trace the generic battery-to-solenoid-contact-to-starter-motor path and its return through the ground path before selecting a measurement.",
-      "durationMs": null,
+      "durationMs": 1000,
       "componentIds": [
         "battery",
         "starter-solenoid-contact",
@@ -62,9 +62,10 @@
         "ground-path"
       ],
       "timeline": {
-        "kind": "static-interval",
+        "kind": "clip",
+        "clipId": "identify-current-path",
         "startSeconds": 0,
-        "endSeconds": 0
+        "endSeconds": 1
       },
       "highlightComponentIds": [
         "battery",
@@ -81,16 +82,17 @@
       "id": "identify-control-path",
       "label": "Identify the start-control path",
       "description": "Locate the generic control protection, start-command switch, and solenoid coil that establish a crank request without treating the diagram as vehicle-specific wiring.",
-      "durationMs": null,
+      "durationMs": 1000,
       "componentIds": [
         "control-protection",
         "start-command-switch",
         "starter-solenoid-coil"
       ],
       "timeline": {
-        "kind": "static-interval",
+        "kind": "clip",
+        "clipId": "identify-control-path",
         "startSeconds": 0,
-        "endSeconds": 0
+        "endSeconds": 1
       },
       "highlightComponentIds": [
         "control-protection",
@@ -105,7 +107,7 @@
       "id": "select-measurement-path",
       "label": "Select a voltage-drop measurement path",
       "description": "Use the instructional meter overlay and governed test-point markers to choose the portion of the circuit being investigated; actual limits require separately applicable evidence.",
-      "durationMs": null,
+      "durationMs": 1000,
       "componentIds": [
         "digital-multimeter",
         "positive-path",
@@ -113,9 +115,10 @@
         "starter-motor"
       ],
       "timeline": {
-        "kind": "static-interval",
+        "kind": "clip",
+        "clipId": "select-measurement-path",
         "startSeconds": 0,
-        "endSeconds": 0
+        "endSeconds": 1
       },
       "highlightComponentIds": [
         "digital-multimeter",
@@ -131,15 +134,16 @@
       "id": "interpret-with-evidence",
       "label": "Interpret with applicable evidence",
       "description": "Compare any measured or modeled value only through approved engineering artifacts or applicable evidence, never by inventing a vehicle-specific specification.",
-      "durationMs": null,
+      "durationMs": 1000,
       "componentIds": [
         "digital-multimeter",
         "starter-motor"
       ],
       "timeline": {
-        "kind": "static-interval",
+        "kind": "clip",
+        "clipId": "interpret-with-evidence",
         "startSeconds": 0,
-        "endSeconds": 0
+        "endSeconds": 1
       },
       "highlightComponentIds": [
         "digital-multimeter",
@@ -192,7 +196,7 @@
   },
   "presentation": {
     "contractVersion": "1.0.0",
-    "mode": "static-3d",
+    "mode": "animated",
     "simulationSource": {
       "engineeringArtifactRef": "data/circuit-templates/12v-starting-system.json"
     },
@@ -238,7 +242,28 @@
         "sourceType": "instructional-overlay"
       }
     },
-    "clips": [],
+    "clips": [
+      {
+        "id": "identify-current-path",
+        "assetClipName": "identify-current-path",
+        "durationSeconds": 1
+      },
+      {
+        "id": "identify-control-path",
+        "assetClipName": "identify-control-path",
+        "durationSeconds": 1
+      },
+      {
+        "id": "select-measurement-path",
+        "assetClipName": "select-measurement-path",
+        "durationSeconds": 1
+      },
+      {
+        "id": "interpret-with-evidence",
+        "assetClipName": "interpret-with-evidence",
+        "durationSeconds": 1
+      }
+    ],
     "stateMappings": [
       {
         "stateId": "key-off",

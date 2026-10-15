@@ -61,6 +61,40 @@ def positions(template):
     cx=(min(xs)+max(xs))/2; cy=(min(ys)+max(ys))/2
     return {k:((v["x"]-cx)*0.012,0,(cy-v["y"])*0.012) for k,v in p.items()}
 
+def add_step_animations(manifest):
+    scene=bpy.context.scene
+    scene.render.fps=24
+    scene.frame_start=1
+    scene.frame_end=25
+    clip_names=[]
+    animated_objects=[o for o in scene.objects if o.get("animationComponentId")]
+    for step in manifest["steps"]:
+        timeline=step.get("timeline") or {}
+        if timeline.get("kind")!="clip": raise SystemExit("Animated review step must use clip timeline: "+step["id"])
+        clip=next((c for c in manifest["presentation"]["clips"] if c["id"]==timeline.get("clipId")),None)
+        if not clip: raise SystemExit("Missing declared clip for step: "+step["id"])
+        clip_name=clip["assetClipName"]
+        clip_names.append(clip_name)
+        highlighted=set(step.get("highlightComponentIds") or [])
+        targets=[o for o in animated_objects if o.get("animationComponentId") in highlighted]
+        if not targets: raise SystemExit("No Blender objects mapped to highlighted components for step: "+step["id"])
+        for obj in targets:
+            base=tuple(obj.scale)
+            action=bpy.data.actions.new(clip_name+"__"+obj.name)
+            obj.animation_data_create()
+            obj.animation_data.action=action
+            obj.scale=base
+            obj.keyframe_insert(data_path="scale",frame=1)
+            obj.scale=tuple(v*1.06 for v in base)
+            obj.keyframe_insert(data_path="scale",frame=13)
+            obj.scale=base
+            obj.keyframe_insert(data_path="scale",frame=25)
+            obj.animation_data.action=None
+            track=obj.animation_data.nla_tracks.new()
+            track.name=clip_name
+            track.strips.new(action.name,1,action)
+    return clip_names
+
 def svg(template,path):
     pos=template["layout"]["positions"]; comps={c["id"]:c for c in template["components"]}
     owner={t["id"]:c["id"] for c in template["components"] for t in c["terminals"]}
@@ -103,10 +137,11 @@ def main():
         cyl("test-point-"+tpnt["id"].lower(),(x+0.55,y,z+0.55),0.10,0.08,mats["test"],{"testPointId":tpnt["id"],"engineeringTerminalId":tpnt["terminalId"],"measurementTypes":",".join(tpnt["measurementTypes"]),"vehicleSpecificValueRequired":bool(tpnt["vehicleSpecificValueRequired"]),"assetStatus":STATUS},(math.radians(90),0,0))
     mx=max(v[0] for v in pos.values())+1.5; mz=sum(v[2] for v in pos.values())/len(pos)
     box("digital-multimeter",(mx,0,mz),(0.48,0.20,0.68),mats["meter"],{"animationComponentId":"digital-multimeter","instructionalOverlay":True,"engineeringComponent":False,"assetStatus":STATUS})
+    clip_names=add_step_animations(manifest)
     out.parent.mkdir(parents=True,exist_ok=True)
-    bpy.ops.export_scene.gltf(filepath=str(out),export_format="GLB",use_selection=False,export_apply=True,export_animations=True,export_cameras=False,export_lights=False,export_extras=True)
+    bpy.ops.export_scene.gltf(filepath=str(out),export_format="GLB",use_selection=False,export_apply=True,export_animations=True,export_animation_mode="NLA_TRACKS",export_merge_animation="NLA_TRACK",export_cameras=False,export_lights=False,export_extras=True)
     svg(template,fb)
-    md={"schemaVersion":"1.0.0","animationId":manifest["animationId"],"assetStatus":STATUS,"classification":"engineering-derived","vehicleSpecificClaims":False,"publicationAllowed":False,"assessmentEligible":False,"scoredAssessmentApproved":False,"humanApprovalRequired":True,"agentMayApprove":False,"agentMayRelease":False,"engineeringTemplateId":template["templateId"],"engineeringTemplateSha256":sha(tp),"manifestSha256":sha_text_canonical(mp),"generatorScriptSha256":sha(Path(__file__).resolve()),"blenderVersion":".".join(str(v) for v in bpy.app.version),"outputSha256":sha(out),"outputBytes":out.stat().st_size,"fallbackSha256":sha_text_canonical(fb),"componentMappings":{"battery":"BAT1","control-protection":"FUSE1","start-command-switch":"SW1","starter-solenoid-coil":"SOL_COIL","starter-solenoid-contact":"SOL_CONTACT","starter-motor":"MTR1","ground-path":"GND1"},"connectionDerivedComponents":["positive-path","ground-path"],"instructionalOverlays":["digital-multimeter"],"testPointIds":[x["id"] for x in template["testPoints"]],"operatingStateIds":[x["id"] for x in template["operatingStates"]],"faultIds":[x["id"] for x in template["faultCatalog"]],"numericPolicy":"No vehicle-specific acceptable measurement or limit is embedded in the 3D review asset.","textHashPolicy":"sha256-utf8-lf-normalized"}
+    md={"schemaVersion":"1.0.0","animationId":manifest["animationId"],"assetStatus":STATUS,"classification":"engineering-derived","vehicleSpecificClaims":False,"publicationAllowed":False,"assessmentEligible":False,"scoredAssessmentApproved":False,"humanApprovalRequired":True,"agentMayApprove":False,"agentMayRelease":False,"engineeringTemplateId":template["templateId"],"engineeringTemplateSha256":sha(tp),"manifestSha256":sha_text_canonical(mp),"generatorScriptSha256":sha(Path(__file__).resolve()),"blenderVersion":".".join(str(v) for v in bpy.app.version),"outputSha256":sha(out),"outputBytes":out.stat().st_size,"fallbackSha256":sha_text_canonical(fb),"presentationMode":manifest["presentation"]["mode"],"animationClipNames":clip_names,"animationClipCount":len(clip_names),"componentMappings":{"battery":"BAT1","control-protection":"FUSE1","start-command-switch":"SW1","starter-solenoid-coil":"SOL_COIL","starter-solenoid-contact":"SOL_CONTACT","starter-motor":"MTR1","ground-path":"GND1"},"connectionDerivedComponents":["positive-path","ground-path"],"instructionalOverlays":["digital-multimeter"],"testPointIds":[x["id"] for x in template["testPoints"]],"operatingStateIds":[x["id"] for x in template["operatingStates"]],"faultIds":[x["id"] for x in template["faultCatalog"]],"numericPolicy":"No vehicle-specific acceptable measurement or limit is embedded in the 3D review asset.","textHashPolicy":"sha256-utf8-lf-normalized"}
     meta.write_text(json.dumps(md,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print("ANIM1D_SHA256="+md["outputSha256"])
 

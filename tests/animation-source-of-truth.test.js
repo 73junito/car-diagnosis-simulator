@@ -37,7 +37,9 @@ describe('ANIM-2A student-lab animation source-of-truth contract', () => {
   test('makes Starting System the first governed integration without publishing it', () => {
     const integration = registry.lab_integrations.find((item) => item.lab_id === 'starting-system-lab')
     expect(integration).toBeDefined()
-    expect(integration.status).toBe('contract-migrated-awaiting-motion-generation-and-human-publication-approval')
+    expect(integration.status).toBe('motion-generated-review-only-awaiting-technical-instructional-review')
+    expect(integration.review_motion_clip_count).toBe(4)
+    expect(integration.review_motion_publication_allowed).toBe(false)
     expect(integration.manifest_schema_version).toBe('1.1.0')
     expect(integration.presentation_contract_version).toBe('1.0.0')
     expect(exists(integration.surface)).toBe(true)

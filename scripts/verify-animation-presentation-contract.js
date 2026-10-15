@@ -19,6 +19,25 @@ function readGlbJson(file) {
   return JSON.parse(buffer.toString('utf8', 20, 20 + jsonLength).trim())
 }
 
+function summarizeGlbAnimations(gltf) {
+  return (gltf.animations || []).map((animation) => {
+    const durations = (animation.samplers || [])
+      .map((sampler) => gltf.accessors?.[sampler.input])
+      .filter(Boolean)
+      .map((accessor) => {
+        const min = Array.isArray(accessor.min) ? accessor.min[0] : null
+        const max = Array.isArray(accessor.max) ? accessor.max[0] : null
+        return min != null && max != null ? max - min : null
+      })
+      .filter((value) => value != null)
+    return {
+      name: animation.name || '',
+      durationSeconds: durations.length ? Math.max(...durations) : null,
+      channels: (animation.channels || []).length,
+    }
+  })
+}
+
 function validateAnimationPresentationContract(manifest, { rootDir, requireDeployableAsset = false } = {}) {
   const errors = []
   if (manifest?.schemaVersion !== '1.1.0') return errors
@@ -179,10 +198,23 @@ function validateAnimationPresentationContract(manifest, { rootDir, requireDeplo
     } else if (/\.glb$/i.test(assetRef)) {
       try {
         const gltf = readGlbJson(assetPath)
-        const exportedClips = new Set((gltf.animations || []).map((item) => item.name).filter(Boolean))
+        const summaries = summarizeGlbAnimations(gltf)
+        const exportedClips = new Map(summaries.filter((item) => item.name).map((item) => [item.name, item]))
         if (presentation.mode === 'animated' && exportedClips.size === 0) errors.push('animated GLB contains no animation clips')
         for (const clip of clips) {
-          if (!exportedClips.has(clip.assetClipName)) errors.push('GLB missing required clip ' + clip.assetClipName)
+          const exported = exportedClips.get(clip.assetClipName)
+          if (!exported) {
+            errors.push('GLB missing required clip ' + clip.assetClipName)
+            continue
+          }
+          if (exported.channels < 1) errors.push('GLB clip has no animation channels: ' + clip.assetClipName)
+          if (exported.durationSeconds == null || Math.abs(exported.durationSeconds - clip.durationSeconds) > 0.001) {
+            errors.push('GLB clip duration mismatch for ' + clip.assetClipName)
+          }
+        }
+        const declaredNames = new Set(clips.map((clip) => clip.assetClipName))
+        for (const name of exportedClips.keys()) {
+          if (!declaredNames.has(name)) errors.push('GLB contains undeclared clip ' + name)
         }
       } catch (error) {
         errors.push('model asset could not be validated: ' + error.message)
@@ -219,6 +251,7 @@ function validateAnimationReleaseCandidate(manifest, options = {}) {
 
 module.exports = {
   readGlbJson,
+  summarizeGlbAnimations,
   validateAnimationPresentationContract,
   validateAnimationReleaseCandidate,
 }
