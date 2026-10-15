@@ -1,3 +1,5 @@
+import { resolveQuestionAnimationMapping } from '../animation/question-mapping/starting-system-question-animation-map.js'
+
 /**
  * API endpoint: GET /api/scenario-questions-approved
  *
@@ -191,6 +193,7 @@ export default async function handler(req, res) {
         topic: question.topic,
         competency_code: competencyCodeMap[question.competency_area_id] ?? null,
         question_id: question.question_id,
+        animation_mapping: resolveQuestionAnimationMapping(question),
         question_provenance: {
           id: provenance.id,
           question_id: provenance.question_id,
