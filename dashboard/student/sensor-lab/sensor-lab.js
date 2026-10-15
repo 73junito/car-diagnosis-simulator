@@ -2,9 +2,15 @@
 
 (async function initSensorLab() {
   const NS = "http://www.w3.org/2000/svg";
+  const runtimeResponse = await fetch("/data/architecture/sensor-lab-lmf-runtime.json");
+  if (!runtimeResponse.ok) throw new Error("Unable to load Sensor Lab LMF runtime contract.");
+  const runtime = await runtimeResponse.json();
+  if (runtime.labId !== "sensor-lab" || runtime.engineeringAdapterId !== "electrical-circuit") {
+    throw new Error("Sensor Lab LMF runtime contract is invalid.");
+  }
   const [templateResponse, engineeringResponse, symbolLibrary, connectionLibrary] = await Promise.all([
-    fetch("/data/circuit-templates/12v-three-wire-sensor.json"),
-    fetch("/data/engineering/labs/sensor-training.json"),
+    fetch(runtime.modelRef),
+    fetch(runtime.engineeringProfileRef),
     window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),
     window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections")
   ]);
@@ -12,6 +18,9 @@
   if (!engineeringResponse.ok) throw new Error("Unable to load sensor engineering profile.");
   const circuit = await templateResponse.json();
   const engineeringProfile = await engineeringResponse.json();
+  document.documentElement.dataset.lmfLabId = runtime.labId;
+  document.documentElement.dataset.lmfEngineeringAdapter = runtime.engineeringAdapterId;
+  document.documentElement.dataset.lmfRuntimeRole = runtime.runtimeRole;
   const engine = window.TorqueMindCircuitEngine;
   const validation = window.TorqueMindCircuitTemplateContracts.validateCircuitTemplate(
     circuit, engine, symbolLibrary.registry, connectionLibrary.registry

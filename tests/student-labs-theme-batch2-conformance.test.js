@@ -32,7 +32,7 @@ const pages = [
       'sensorEngineeringStatus','engSensorReference','engSignalRange','engIdealSignal',
       'engObservedSignal','sensorEngineeringFormula','stateBadge','circuitSvg','flowNote','inspectorContent',
     ],
-    jsMarkers: ['three-wire-sensor','SENSOR5','TP_SENSOR_SUPPLY','TP_SENSOR_SIGNAL'],
+    jsMarkers: ['sensor-lab-lmf-runtime.json','SENSOR5','TP_SENSOR_SUPPLY','TP_SENSOR_SIGNAL'],
   },
 ]
 
