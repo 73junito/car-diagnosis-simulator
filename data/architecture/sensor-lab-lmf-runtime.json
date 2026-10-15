@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "runtimeRole": "lmf-derived-sensor-lab-runtime",
+  "sourceContracts": [
+    "/data/lmf/lab-registry.json",
+    "/data/lmf/engineering-model-adapters.json",
+    "/data/lmf/diagnostic-tools.json",
+    "/data/lmf/measurement-contract.json",
+    "/data/lmf/fault-taxonomy.json"
+  ],
+  "labId": "sensor-lab",
+  "route": "/dashboard/student/sensor-lab/",
+  "engineeringAdapterId": "electrical-circuit",
+  "modelRef": "/data/circuit-templates/12v-three-wire-sensor.json",
+  "engineeringProfileRef": "/data/engineering/labs/sensor-training.json",
+  "toolIds": ["tool.dmm", "tool.oscilloscope", "tool.scan-tool"],
+  "measurementTypes": ["voltage", "voltage_drop", "resistance", "continuity", "frequency", "duty_cycle", "waveform", "diagnostic_data", "rpm", "temperature", "pressure", "speed", "position", "command_state"],
+  "faultClassIds": ["electrical.open", "electrical.high-resistance", "electrical.short-to-ground", "electrical.short-to-power"],
+  "directPracticeAllowed": true,
+  "assessmentEligibilityAuthority": "external-governance-only",
+  "publicationAuthority": "external-human-governance-only"
+}
