@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autolearnpro.com/schemas/database-observability-policy.schema.json",
+  "title": "AutoLearnPro Database Observability Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "provider", "status", "probe", "syntheticMonitoring"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "provider": { "const": "supabase" },
+    "status": { "const": "active" },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "route",
+        "method",
+        "table",
+        "operation",
+        "timeoutMs",
+        "warningLatencyMs",
+        "failureLatencyMs",
+        "exposesCredentials",
+        "exposesProjectIdentity",
+        "exposesDatabaseRows"
+      ],
+      "properties": {
+        "route": { "const": "/api/health/database" },
+        "method": { "const": "GET" },
+        "table": { "const": "curriculum_lesson_plans" },
+        "operation": { "const": "select-id-limit-1" },
+        "timeoutMs": { "type": "integer", "minimum": 500, "maximum": 5000 },
+        "warningLatencyMs": { "type": "integer", "minimum": 1 },
+        "failureLatencyMs": { "type": "integer", "minimum": 1 },
+        "exposesCredentials": { "const": false },
+        "exposesProjectIdentity": { "const": false },
+        "exposesDatabaseRows": { "const": false }
+      }
+    },
+    "syntheticMonitoring": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "twoStrikePolicy"],
+      "properties": {
+        "enabled": { "const": true },
+        "twoStrikePolicy": { "const": true }
+      }
+    }
+  }
+}

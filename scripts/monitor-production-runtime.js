@@ -8,6 +8,15 @@ const ROOT = path.resolve(__dirname, '..')
 const REPORT_PATH = path.join(ROOT, 'reports', 'production-runtime-synthetic.json')
 const REQUEST_TIMEOUT_MS = 15000
 
+function databaseMonitoringPolicy() {
+  return JSON.parse(
+    fs.readFileSync(
+      path.join(ROOT, 'data', 'architecture', 'database-observability-policy.json'),
+      'utf8'
+    )
+  )
+}
+
 function existingLabChecks() {
   const registry = JSON.parse(
     fs.readFileSync(path.join(ROOT, 'data', 'lmf', 'lab-registry.json'), 'utf8')
@@ -69,6 +78,46 @@ async function runSyntheticMonitor(fetcher = timedFetch, now = () => new Date())
   const core = await auditProductionSurfaces(wrappedFetcher)
   const checks = []
   const failures = [...core.failures]
+  const databasePolicy = databaseMonitoringPolicy()
+  const databaseUrl = SURFACES.app + databasePolicy.probe.route
+  let databaseCheck = {
+    url: databaseUrl,
+    ok: false,
+    status: 0,
+    latency_ms: null,
+    warning: false
+  }
+
+  try {
+    const { response, text } = await wrappedFetcher(databaseUrl, { accept: 'application/json' })
+    const payload = JSON.parse(text)
+    const probeLatency = Number(payload?.database?.latencyMs)
+    const validLatency = Number.isFinite(probeLatency) && probeLatency >= 0
+    const ok = response.ok && payload?.database?.ok === true && validLatency
+    const warning = ok && probeLatency >= databasePolicy.probe.warningLatencyMs
+    const tooSlow = ok && probeLatency >= databasePolicy.probe.failureLatencyMs
+
+    databaseCheck = {
+      url: databaseUrl,
+      ok: ok && !tooSlow,
+      status: response.status,
+      latency_ms: validLatency ? probeLatency : null,
+      warning
+    }
+
+    if (!response.ok || payload?.database?.ok !== true) {
+      failures.push(`database health probe returned HTTP ${response.status} or degraded state`)
+    } else if (!validLatency) {
+      failures.push('database health probe did not report a valid latency')
+    } else if (tooSlow) {
+      failures.push(
+        `database health latency ${probeLatency}ms exceeded failure threshold ${databasePolicy.probe.failureLatencyMs}ms`
+      )
+    }
+  } catch (error) {
+    databaseCheck.error = error.message
+    failures.push(`database health probe failed: ${error.message}`)
+  }
 
   for (const lab of existingLabChecks()) {
     try {
@@ -105,6 +154,7 @@ async function runSyntheticMonitor(fetcher = timedFetch, now = () => new Date())
     completed_at: now().toISOString(),
     github_sha: process.env.GITHUB_SHA || null,
     core_ok: core.ok,
+    database_check: databaseCheck,
     lab_checks_total: checks.length,
     lab_checks_passed: checks.filter((item) => item.ok).length,
     request_timings: requestTimings,
@@ -138,4 +188,10 @@ if (require.main === module) {
   })
 }
 
-module.exports = { REPORT_PATH, REQUEST_TIMEOUT_MS, existingLabChecks, runSyntheticMonitor }
+module.exports = {
+  REPORT_PATH,
+  REQUEST_TIMEOUT_MS,
+  databaseMonitoringPolicy,
+  existingLabChecks,
+  runSyntheticMonitor
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "provider": "supabase",
+  "status": "active",
+  "probe": {
+    "route": "/api/health/database",
+    "method": "GET",
+    "table": "curriculum_lesson_plans",
+    "operation": "select-id-limit-1",
+    "timeoutMs": 3000,
+    "warningLatencyMs": 750,
+    "failureLatencyMs": 2500,
+    "exposesCredentials": false,
+    "exposesProjectIdentity": false,
+    "exposesDatabaseRows": false
+  },
+  "syntheticMonitoring": {
+    "enabled": true,
+    "twoStrikePolicy": true
+  }
+}

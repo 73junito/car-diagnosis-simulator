@@ -110,6 +110,7 @@ import {
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
+import { probeDatabaseHealth } from './runtime/database-health.js'
 
 const app = new Hono();
 
@@ -123,6 +124,14 @@ app.get("/api/health", (c) => {
     orchestrationPersistence
   }, orchestrationPersistence.ok ? 200 : 503)
 });
+
+app.get('/api/health/database', async (c) => {
+  const database = await probeDatabaseHealth(c.env)
+  return c.json({
+    status: database.ok ? 'ok' : 'degraded',
+    database
+  }, database.ok ? 200 : 503)
+})
 
 // Lightweight ping for diagnostics
 app.get('/__ping', (c) => c.json({ ok: true }));
