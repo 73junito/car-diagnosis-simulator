@@ -18,7 +18,7 @@ const pages = [
       'engVoltageDrop','engLoadVoltage','engLoadPower','engConductorLoss',
       'engineeringFormula','stateBadge','circuitSvg','flowNote','inspectorContent','guidedSteps',
     ],
-    jsMarkers: ['12v-relay-controlled-load.json','relay-load-training.json','RELAY_COIL','RELAY_CONTACT'],
+    jsMarkers: ['relay-load-lab-lmf-runtime.json','RELAY_COIL','RELAY_CONTACT'],
   },
   {
     html: 'dashboard/student/sensor-lab/index.html',
