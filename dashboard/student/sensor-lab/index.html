@@ -60,6 +60,53 @@
       </article>
     </section>
 
+    <section class="lab-equipment-bay" aria-labelledby="sensor3dHeading">
+      <div class="lab-region-heading">
+        <div>
+          <p class="tm-eyebrow">3D Diagnostic Classroom</p>
+          <h2 id="sensor3dHeading">Sensor test equipment and runtime bindings</h2>
+        </div>
+        <div class="lab-3d-authority">
+          <span class="lab-contract-badge">Presentation only</span>
+          <p>The 3D layer mirrors Sensor Lab tools, test points, values, and fault state. It does not calculate, score, or control engineering state.</p>
+        </div>
+      </div>
+      <div class="lab-3d-layout">
+        <div class="lab-3d-viewer">
+          <div class="lab-3d-viewer__heading">
+            <div>
+              <strong id="sensor3dModelTitle">3D sensor equipment</strong>
+              <span id="sensor3dModelRole">Loading governed Sensor Lab equipment metadata…</span>
+            </div>
+            <span class="lab-3d-hint">Drag to rotate · wheel or +/- to zoom · arrow keys rotate</span>
+          </div>
+          <canvas id="sensor3dCanvas" class="lab-3d-canvas" tabindex="0" role="img" aria-label="Interactive 3D Sensor Lab equipment viewer"></canvas>
+          <p id="sensor3dStatus" class="lab-3d-status" aria-live="polite">Loading 3D equipment…</p>
+        </div>
+        <aside class="lab-3d-library" aria-labelledby="sensor3dLibraryHeading">
+          <h3 id="sensor3dLibraryHeading">Equipment &amp; scene assets</h3>
+          <ul id="sensor3dAssetList" class="lab-3d-asset-list"></ul>
+          <p class="lab-capability-note">DMM and oscilloscope meshes are enabled only because the Sensor Lab runtime declares those tools. The current-clamp mesh remains unavailable here.</p>
+        </aside>
+      </div>
+      <div class="sensor-3d-binding-grid">
+        <article class="sensor-3d-binding-card">
+          <label for="sensor3dTestPoint">3D probe target</label>
+          <select id="sensor3dTestPoint"></select>
+          <div id="sensor3dProbeState" class="sensor-3d-probe-state" aria-live="polite"></div>
+        </article>
+        <article class="sensor-3d-binding-card">
+          <span class="sensor-3d-binding-kicker">Runtime-backed display</span>
+          <strong id="sensor3dBindingValue">Runtime value unavailable</strong>
+          <small id="sensor3dBindingLabel"></small>
+        </article>
+        <article class="sensor-3d-binding-card">
+          <span class="sensor-3d-binding-kicker">Visual fault state</span>
+          <div id="sensor3dFaultState" class="sensor-3d-fault-state" aria-live="polite"></div>
+        </article>
+      </div>
+    </section>
+
     <section class="lab-region" aria-labelledby="scenarioWorkAreaHeading">
       <div class="lab-region-heading">
         <div>
@@ -218,6 +265,8 @@
   import { mountShell } from "/theme/shell.js";
   mountShell();
 </script>
+  <script src="/src/presentation/glb-viewer.js"></script>
   <script src="./sensor-lab.js"></script>
+  <script src="./sensor-lab-3d.js"></script>
 </body>
 </html>
