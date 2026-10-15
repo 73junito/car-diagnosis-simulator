@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0.0",
+  "presentationRole": "circuit-lab-3d-presentation-only",
+  "authoritativeRuntime": "/data/architecture/circuit-lab-lmf-runtime.json",
+  "assetRoot": "/dashboard/student/circuit-lab/assets/3d/",
+  "sourcePackage": {
+    "name": "AutoLearnPro Virtual Automotive Circuit Lab 3D",
+    "license": "MIT",
+    "sourceAssetCount": 7,
+    "integrationRule": "Reusable GLB meshes only. Prototype electrical values, faults, evidence export, and scene-mesh simulation are not production engineering authority."
+  },
+  "authority": {
+    "engineeringAuthority": false,
+    "measurementAuthority": false,
+    "assessmentAuthority": false,
+    "publicationAuthority": false,
+    "controlsEngineeringState": false
+  },
+  "assets": [
+    {
+      "assetId": "equipment.dmm",
+      "title": "Digital Multimeter",
+      "file": "multimeter.glb",
+      "kind": "diagnostic-tool",
+      "toolId": "tool.dmm",
+      "origin": "uploaded-prototype",
+      "activeWhenDeclaredByRuntime": true
+    },
+    {
+      "assetId": "equipment.current-clamp",
+      "title": "Current Clamp",
+      "file": "current-clamp.glb",
+      "kind": "diagnostic-tool",
+      "toolId": "tool.current-clamp",
+      "origin": "autolearnpro-original-generated",
+      "activeWhenDeclaredByRuntime": true
+    },
+    {
+      "assetId": "equipment.oscilloscope",
+      "title": "Oscilloscope",
+      "file": "oscilloscope.glb",
+      "kind": "diagnostic-tool",
+      "toolId": "tool.oscilloscope",
+      "origin": "uploaded-prototype",
+      "activeWhenDeclaredByRuntime": true
+    },
+    {
+      "assetId": "scene.battery",
+      "title": "12 V Battery",
+      "file": "battery.glb",
+      "kind": "visual-scene",
+      "origin": "uploaded-prototype"
+    },
+    {
+      "assetId": "scene.harness",
+      "title": "Wiring Harness",
+      "file": "harness.glb",
+      "kind": "visual-scene",
+      "origin": "uploaded-prototype"
+    },
+    {
+      "assetId": "scene.trainer",
+      "title": "Electrical Trainer Board",
+      "file": "trainer.glb",
+      "kind": "visual-scene",
+      "origin": "uploaded-prototype"
+    },
+    {
+      "assetId": "scene.vehicle",
+      "title": "Vehicle Front-End",
+      "file": "vehicle.glb",
+      "kind": "visual-scene",
+      "origin": "uploaded-prototype"
+    },
+    {
+      "assetId": "scene.probe",
+      "title": "Diagnostic Test Probe",
+      "file": "probe.glb",
+      "kind": "visual-scene",
+      "origin": "uploaded-prototype"
+    }
+  ]
+}
