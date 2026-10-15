@@ -37,6 +37,12 @@ describe('production runtime synthetic monitor', () => {
       if (url === 'https://app.autolearnpro.com/') return response(200, 'AutoLearnPro')
       if (url === 'https://exam.autolearnpro.com/') return response(200, 'Exam launch pending')
       if (url.endsWith('/api/health')) return response(200, '{"status":"ok"}')
+      if (url.endsWith('/api/health/database')) {
+        return response(200, JSON.stringify({
+          status: 'ok',
+          database: { provider: 'supabase', ok: true, status: 'ok', latencyMs: 45 }
+        }))
+      }
       if (url.endsWith('/api/curriculum')) return response(200, JSON.stringify({ lessonPlans: committed }))
       if (url.includes('/reference-library/')) return response(200, 'Reference Library')
       if (url.includes('/dashboard/student/coach/')) return response(200, 'Diagnostic Coach')
@@ -68,6 +74,12 @@ describe('production runtime synthetic monitor', () => {
       if (url === 'https://app.autolearnpro.com/') return response(200, 'AutoLearnPro')
       if (url === 'https://exam.autolearnpro.com/') return response(200, 'Prelaunch')
       if (url.endsWith('/api/health')) return response(200, '{"status":"healthy"}')
+      if (url.endsWith('/api/health/database')) {
+        return response(200, JSON.stringify({
+          status: 'ok',
+          database: { provider: 'supabase', ok: true, status: 'ok', latencyMs: 45 }
+        }))
+      }
       if (url.endsWith('/api/curriculum')) return response(200, JSON.stringify({ lessonPlans: committed }))
       if (url.includes('/reference-library/')) return response(200, 'Reference Library')
       if (url.includes('/dashboard/student/coach/')) return response(200, 'Diagnostic Coach')

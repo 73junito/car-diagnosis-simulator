@@ -21,6 +21,11 @@
       "id": "dependency-automation-policy",
       "schema": "schemas/dependency-automation-policy.schema.json",
       "files": ["data/architecture/dependency-automation-policy.json"]
+    },
+    {
+      "id": "database-observability-policy",
+      "schema": "schemas/database-observability-policy.schema.json",
+      "files": ["data/architecture/database-observability-policy.json"]
     }
   ]
 }

@@ -6,8 +6,8 @@ describe('central architecture schema validation', () => {
   test('validates authoritative runtime, observability, and all LMF runtime contracts', () => {
     const result = verifyArchitectureSchemas()
 
-    expect(result.contractCount).toBe(4)
-    expect(result.validatedFileCount).toBe(10)
+    expect(result.contractCount).toBe(5)
+    expect(result.validatedFileCount).toBe(11)
     expect(result.lmfRuntimeCount).toBe(7)
 
     expect(result.results.map((item) => item.file)).toEqual(
