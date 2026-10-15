@@ -57,6 +57,12 @@ updates:
           - "minor"
           - "patch"
     ignore:
+      # Compatibility shim for @zenuml/core's exact optional peer. Keep this
+      # pinned until ZenUML changes its required playwright-core version.
+      - dependency-name: "playwright-core"
+        update-types:
+          - "version-update:semver-minor"
+          - "version-update:semver-patch"
       # Major upgrades are dedicated runtime/toolchain migrations, never routine
       # Dependabot version updates. Security alerts remain visible separately.
       - dependency-name: "*"

@@ -61,6 +61,13 @@ function verifyDependencyAutomation() {
     fail('Both ecosystems must keep routine major updates disabled.')
   }
 
+  const playwrightCoreIgnore = config.match(
+    /dependency-name:\s*"playwright-core"[\s\S]{0,220}?version-update:semver-minor[\s\S]{0,120}?version-update:semver-patch/
+  )
+  if (!playwrightCoreIgnore) {
+    fail('Dependabot must not independently update the ZenUML playwright-core compatibility shim.')
+  }
+
   if (!config.includes('dependency-type: "production"')) {
     fail('Production runtime dependency grouping is missing.')
   }

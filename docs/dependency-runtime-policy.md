@@ -17,6 +17,12 @@ The compatibility guard treats the currently reviewed versions as **minimum floo
 
 Build/test/deployment tooling remains under `devDependencies`.
 
+### Mermaid / Playwright compatibility shim
+
+`@mermaid-js/mermaid-zenuml` currently resolves `@zenuml/core@3.50.1`, which declares an optional **exact** peer on `playwright-core@1.57.0`. npm 10 requires that peer to be represented in the lockfile, while automated lockfile regeneration can otherwise omit the nested optional-peer record and make `npm ci` fail.
+
+The root therefore declares `playwright-core: 1.57.0` as an exact development-only compatibility shim. The application's primary `@playwright/test` / `playwright` toolchain remains independently upgradeable and receives its matching `playwright-core` nested under `playwright` when its version differs from the ZenUML shim. Do not update or remove the shim independently; change it only when the resolved ZenUML peer requirement changes and Mermaid rendering plus Playwright validation pass.
+
 ## Legacy TorqueMind API
 
 `torquemind-api` is retained for legacy/test coverage and is not the canonical production Worker runtime. Its Node floor is aligned with the root project. Its Supabase client is pinned to the currently reviewed lockfile version (`2.105.1`) to prevent an unconstrained `^2.0.0` range from silently crossing future Node-support boundaries.
