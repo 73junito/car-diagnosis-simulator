@@ -41,6 +41,36 @@
       <ol data-review-clip-list aria-label="Declared instructional clips"></ol>
     </section>
 
+    <section class="tm-review-harness__human-review" aria-labelledby="human-review-heading">
+      <h2 id="human-review-heading">Human technical / instructional review record</h2>
+      <p>A review PASS records only the selected human review role. It does not grant final approval, publication, assessment eligibility, or scored-assessment approval.</p>
+
+      <div class="tm-review-harness__review-fields">
+        <label>
+          Review role
+          <select data-human-review-role>
+            <option value="technical-reviewer">Technical reviewer</option>
+            <option value="instructional-reviewer">Instructional reviewer</option>
+          </select>
+        </label>
+        <label>
+          Reviewer name
+          <input type="text" data-human-review-name autocomplete="name">
+        </label>
+      </div>
+
+      <div class="tm-review-harness__criteria" data-human-review-criteria></div>
+
+      <label>
+        Review notes
+        <textarea data-human-review-notes rows="4"></textarea>
+      </label>
+
+      <button type="button" data-human-review-generate>Generate local review record</button>
+      <p role="status" aria-live="polite" data-human-review-status>Complete the human review criteria to generate a local record.</p>
+      <pre data-human-review-output hidden aria-label="Generated human review record"></pre>
+    </section>
+
     <p class="tm-review-harness__note">Electrical behavior remains authoritative in the engineering artifact. Motion on this page is presentation-only.</p>
   </main>
   <script type="module" src="./review-harness.js"></script>
