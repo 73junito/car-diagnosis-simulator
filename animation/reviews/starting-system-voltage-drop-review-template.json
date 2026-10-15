@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactType": "animation-human-review-template",
+  "animationId": "starting-system-voltage-drop-review",
+  "status": "pending-human-review",
+  "allowedRoles": [
+    "technical-reviewer",
+    "instructional-reviewer"
+  ],
+  "criteria": {
+    "technical-reviewer": [
+      {
+        "id": "component-mapping",
+        "label": "Component mapping matches the canonical engineering artifact",
+        "decision": "not-reviewed"
+      },
+      {
+        "id": "current-path-accuracy",
+        "label": "Crank-current and control-path visual emphasis is technically accurate",
+        "decision": "not-reviewed"
+      },
+      {
+        "id": "measurement-path-accuracy",
+        "label": "Voltage-drop measurement locations are technically appropriate and generic",
+        "decision": "not-reviewed"
+      },
+      {
+        "id": "no-vehicle-specific-claims",
+        "label": "The animation makes no unsupported vehicle-specific wiring, pinout, procedure, or limit claims",
+        "decision": "not-reviewed"
+      }
+    ],
+    "instructional-reviewer": [
+      {
+        "id": "sequence-clarity",
+        "label": "The four-step instructional sequence is clear and logically ordered",
+        "decision": "not-reviewed"
+      },
+      {
+        "id": "visual-focus",
+        "label": "Clip highlights support the stated instructional objective without distracting motion",
+        "decision": "not-reviewed"
+      },
+      {
+        "id": "language-clarity",
+        "label": "Labels and descriptions are understandable for the intended learner",
+        "decision": "not-reviewed"
+      },
+      {
+        "id": "accessibility-fallback",
+        "label": "Keyboard, reduced-motion, static fallback, and text alternatives remain instructionally usable",
+        "decision": "not-reviewed"
+      }
+    ]
+  },
+  "record": {
+    "reviewRole": null,
+    "reviewerName": null,
+    "recordedAt": null,
+    "overallDecision": "not-reviewed",
+    "notes": ""
+  },
+  "governance": {
+    "humanReviewRequired": true,
+    "publicationEffect": "none",
+    "assessmentEffect": "none",
+    "finalApprovalEffect": "none",
+    "agentMayCompleteReview": false,
+    "agentMayApprove": false,
+    "agentMayRelease": false
+  }
+}

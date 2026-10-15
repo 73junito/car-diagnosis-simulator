@@ -38,6 +38,9 @@ jobs:
       - name: Run Playwright tests
         run: npm run test:playwright --silent
 
+      - name: Validate animation human-review contract
+        run: npm run validate:animation-human-review --silent
+
       - name: Run animation review harness
         run: npm run test:animation-review-harness --silent
 

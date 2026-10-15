@@ -11,6 +11,7 @@ const reviewEntries = [
   "animation/review-harness/starting-system.html",
   "animation/review-harness/review-harness.css",
   "animation/review-harness/review-harness.js",
+  "animation/reviews/starting-system-voltage-drop-review-template.json",
   "animation/manifests/starting-system-voltage-drop-review.json",
   "animation/review-assets/starting-system-voltage-drop-review.glb",
   "animation/review-assets/starting-system-voltage-drop-review.svg",
