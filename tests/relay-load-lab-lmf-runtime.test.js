@@ -18,6 +18,54 @@ describe('Relay & Load Lab LMF runtime integration', () => {
     expect(source).not.toMatch(/fetch\(["']\/data\/engineering\/labs\/relay-load-training\.json["']\)/);
   });
 
+  test('reference shell renders capabilities from the governed runtime projection', () => {
+    const html = fs.readFileSync(path.join(ROOT, 'dashboard/student/relay-load-lab/index.html'), 'utf8');
+    const source = fs.readFileSync(path.join(ROOT, 'dashboard/student/relay-load-lab/relay-load-lab.js'), 'utf8');
+
+    for (const text of [
+      'Safety &amp; limitations',
+      'Scenario / work area',
+      'Diagnostic tools',
+      'Evidence &amp; observations',
+      'Diagnostic reasoning',
+      'Model status · explicit limitations'
+    ]) {
+      expect(html).toContain(text);
+    }
+
+    for (const id of ['labToolList', 'labMeasurementList', 'labFaultList', 'labModelStatus']) {
+      expect(html).toContain(`id="${id}"`);
+    }
+
+    expect(source).toContain('runtime.toolIds');
+    expect(source).toContain('runtime.measurementTypes');
+    expect(source).toContain('runtime.faultClassIds');
+    expect(source).toContain('runtime.directPracticeAllowed');
+    expect(source).toContain('runtime.assessmentEligibilityAuthority');
+    expect(source).toContain('runtime.publicationAuthority');
+  });
+
+  test('reference shell preserves existing Relay and Load controls and engineering inputs', () => {
+    const html = fs.readFileSync(path.join(ROOT, 'dashboard/student/relay-load-lab/index.html'), 'utf8');
+    for (const id of [
+      'stateSelect',
+      'faultSelect',
+      'showSystemFlow',
+      'traceControl',
+      'tracePower',
+      'traceGround',
+      'resetView',
+      'circuitSvg',
+      'inspectorContent',
+      'guidedSteps',
+      'measuredRelayCurrent',
+      'relayMeasurementResult',
+      'relayComparisonSummary'
+    ]) {
+      expect(html).toContain(`id="${id}"`);
+    }
+  });
+
   test('runtime projection preserves governance boundaries', () => {
     const runtime = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/architecture/relay-load-lab-lmf-runtime.json'), 'utf8'));
     expect(runtime.engineeringAdapterId).toBe('electrical-circuit');

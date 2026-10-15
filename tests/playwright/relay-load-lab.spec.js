@@ -3,6 +3,22 @@ const { test, expect } = require("@playwright/test");
 test.use({ baseURL: "http://127.0.0.1:3003" });
 
 test.describe("12 V relay-controlled load lab", () => {
+  test("renders contract-driven reference-shell capabilities without changing authority", async ({ page }) => {
+    await page.goto("/dashboard/student/relay-load-lab/");
+
+    await expect(page.getByRole("heading", { name: "Available in this lab" })).toBeVisible();
+    await expect(page.locator("#labToolList")).toContainText("Dmm");
+    await expect(page.locator("#labToolList")).toContainText("Current Clamp");
+    await expect(page.locator("#labMeasurementList")).toContainText("Voltage Drop");
+    await expect(page.locator("#labMeasurementList")).toContainText("Current");
+    await expect(page.locator("#labFaultList")).toContainText("Open");
+    await expect(page.locator("#labFaultList")).toContainText("High Resistance");
+    await expect(page.locator("#labModelStatus")).toContainText("Electrical Circuit");
+    await expect(page.locator("#labModelStatus")).toContainText("Direct practice available");
+    await expect(page.locator("#labModelStatus")).toContainText("External Governance Only");
+    await expect(page.locator("#labModelStatus")).toContainText("External Human Governance Only");
+  });
+
   test("renders the reusable template and declared 12 V domain", async ({ page }) => {
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
