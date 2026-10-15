@@ -1,5 +1,10 @@
 'use strict'
 
+const fs = require('fs')
+const path = require('path')
+
+const ROOT = path.resolve(__dirname, '..')
+
 const SURFACES = {
   public: 'https://autolearnpro.com',
   app: 'https://app.autolearnpro.com',
@@ -17,6 +22,17 @@ async function fetchText(url, options = {}) {
 
 function containsAny(text, needles) {
   return needles.some((needle) => text.toLowerCase().includes(needle.toLowerCase()))
+}
+
+function committedLessonPlanIds() {
+  const payload = JSON.parse(
+    fs.readFileSync(path.join(ROOT, 'data', 'curriculum', 'lesson-plans.json'), 'utf8')
+  )
+  const lessonPlans = Array.isArray(payload) ? payload : (payload.lessonPlans || [])
+  const ids = lessonPlans.map((lesson) => lesson.id)
+  if (ids.some((id) => !id)) throw new Error('Committed curriculum contains a lesson plan without an id')
+  if (new Set(ids).size !== ids.length) throw new Error('Committed curriculum contains duplicate lesson-plan ids')
+  return ids.sort()
 }
 
 async function auditProductionSurfaces(fetcher = fetchText) {
@@ -89,8 +105,21 @@ async function auditProductionSurfaces(fetcher = fetchText) {
     else {
       const payload = JSON.parse(text)
       const lessonPlans = Array.isArray(payload.lessonPlans) ? payload.lessonPlans : []
-      if (lessonPlans.length !== 64) {
-        failures.push(`curriculum API expected 64 lesson plans, found ${lessonPlans.length}`)
+      const expectedIds = committedLessonPlanIds()
+      const liveIds = lessonPlans.map((lesson) => lesson.id).filter(Boolean).sort()
+      if (liveIds.length !== lessonPlans.length) {
+        failures.push('curriculum API contains a lesson plan without an id')
+      }
+      if (liveIds.length !== expectedIds.length) {
+        failures.push(`curriculum API expected ${expectedIds.length} committed lesson plans, found ${liveIds.length}`)
+      } else {
+        const missing = expectedIds.filter((id) => !liveIds.includes(id))
+        const extra = liveIds.filter((id) => !expectedIds.includes(id))
+        if (missing.length || extra.length) {
+          failures.push(
+            `curriculum API lesson-plan identity drift: missing [${missing.join(', ')}], extra [${extra.join(', ')}]`
+          )
+        }
       }
     }
   } catch (error) {
@@ -129,5 +158,6 @@ if (require.main === module) {
 module.exports = {
   SURFACES,
   auditProductionSurfaces,
-  containsAny
+  containsAny,
+  committedLessonPlanIds
 }

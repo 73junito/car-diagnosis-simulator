@@ -20,7 +20,7 @@ function verify() {
   const legacyLock = readJson('torquemind-api/package-lock.json')
   const nvmrc = fs.readFileSync(path.join(root, '.nvmrc'), 'utf8').trim()
 
-  if (pkg.engines?.node !== '>=22.19.0') fail('Root Node engine must remain >=22.19.0')
+  if (pkg.engines?.node !== '>=22.19.0 <25') fail('Root Node engine must remain >=22.19.0 <25')
   if (nvmrc !== '22.19.0') fail('.nvmrc must pin the reviewed Node 22.19.0 baseline')
   if (pkg.scripts?.minimist) fail('minimist must not appear as an npm script')
 

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "runtime-stabilization-contract",
+  "canonicalBuildRuntime": {
+    "runtime": "node",
+    "major": 22,
+    "minimumVersion": "22.19.0",
+    "developerPin": "22.19.0",
+    "packageEngineRange": ">=22.19.0 <25"
+  },
+  "compatibilityValidation": {
+    "nodeMajors": [22, 24],
+    "releaseAuthorityMajor": 22,
+    "releaseAuthorityVersion": "22.19.0"
+  },
+  "productionExecutionRuntime": {
+    "provider": "cloudflare-workers",
+    "nodeServer": false
+  },
+  "surfaces": [
+    {
+      "id": "public",
+      "hostname": "autolearnpro.com",
+      "wranglerConfig": "wrangler.jsonc",
+      "workerName": "autolearnpro-public",
+      "workerEntry": "worker/public-index.js",
+      "assetDirectory": "./public-site",
+      "compatibilityDate": "2026-07-30",
+      "routingAuthority": "cloudflare-external"
+    },
+    {
+      "id": "app",
+      "hostname": "app.autolearnpro.com",
+      "wranglerConfig": "wrangler.app.jsonc",
+      "workerName": "autolearnpro-app",
+      "workerEntry": "worker/index.js",
+      "assetDirectory": "./dist",
+      "compatibilityDate": "2026-08-08",
+      "routingAuthority": "wrangler-config"
+    },
+    {
+      "id": "exam",
+      "hostname": "exam.autolearnpro.com",
+      "wranglerConfig": "wrangler.exam.jsonc",
+      "workerName": "autolearnpro-exam",
+      "workerEntry": null,
+      "assetDirectory": "./exam-site",
+      "compatibilityDate": "2026-09-25",
+      "routingAuthority": "wrangler-config"
+    }
+  ],
+  "persistence": {
+    "durableBusinessDataAuthority": "supabase",
+    "edgeCoordination": "cloudflare-durable-objects",
+    "durableObjectStorage": "sqlite",
+    "previewOrchestrationPersistence": "disabled",
+    "stagingOrchestrationPersistence": "supabase",
+    "productionOrchestrationPersistence": "supabase"
+  },
+  "lmf": {
+    "existingProductionLabCount": 7,
+    "plannedUnprojectedLabCount": 10,
+    "runtimeCoverageValidator": "scripts/verify-lmf-runtime-coverage.js"
+  }
+}

@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=22.19.0 <25"
   },
   "scripts": {
     "prepare": "husky install",
@@ -62,11 +62,11 @@
     "exam:catalog:verify": "npm run exam:prepare && npx playwright test tests/playwright/course-catalog.spec.js --project=chromium",
     "exam:navigation:verify": "npm run exam:prepare && npx playwright test tests/playwright/exam-sidebar-navigation.spec.js --project=chromium",
     "audit:scenario-questions": "node scripts/scenario-question-readiness-report.js",
-    "cloudflare:exam:deploy": "npm run exam:prepare && wrangler deploy --config wrangler.exam.jsonc",
-    "cloudflare:exam:preview": "npm run exam:prepare && wrangler preview --config wrangler.exam.jsonc",
+    "cloudflare:exam:deploy": "npm run exam:prepare && wrangler deploy --config wrangler.exam.jsonc --env=\"\"",
+    "cloudflare:exam:preview": "npm run exam:prepare && wrangler preview --config wrangler.exam.jsonc --env=\"\"",
     "cloudflare:app:build": "npm run build",
-    "cloudflare:app:deploy": "npm run cloudflare:app:build && wrangler deploy --config wrangler.app.jsonc",
-    "cloudflare:app:preview": "npm run cloudflare:app:build && wrangler preview --config wrangler.app.jsonc",
+    "cloudflare:app:deploy": "npm run cloudflare:app:build && wrangler deploy --config wrangler.app.jsonc --env=\"\"",
+    "cloudflare:app:preview": "npm run cloudflare:app:build && wrangler preview --config wrangler.app.jsonc --env=\"\"",
     "validate:symbol-library": "node scripts/verify-symbol-library.js",
     "validate:connection-library": "node scripts/verify-connection-library.js",
     "validate:engineering-parameters": "node scripts/verify-engineering-parameters.js",
@@ -133,7 +133,8 @@
     "validate:animation-agentic-prep": "node scripts/verify-animation-agentic-preparation.js",
     "validate:animation-contract": "node scripts/verify-animation-contract.js",
     "validate:lmf-foundation": "node scripts/verify-lmf-foundation.js",
-    "validate:lmf-runtime-coverage": "node scripts/verify-lmf-runtime-coverage.js"
+    "validate:lmf-runtime-coverage": "node scripts/verify-lmf-runtime-coverage.js",
+    "validate:runtime-matrix": "node scripts/verify-runtime-matrix.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

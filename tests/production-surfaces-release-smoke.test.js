@@ -1,10 +1,14 @@
-const { auditProductionSurfaces, containsAny } = require('../scripts/verify-production-surfaces.js')
+const { auditProductionSurfaces, containsAny, committedLessonPlanIds } = require('../scripts/verify-production-surfaces.js')
 
 function response(status, body) {
   return {
     response: { ok: status >= 200 && status < 300, status },
     text: typeof body === 'string' ? body : JSON.stringify(body)
   }
+}
+
+function curriculumPayload() {
+  return { lessonPlans: committedLessonPlanIds().map((id) => ({ id })) }
 }
 
 function hardenedRouteResponse(url) {
@@ -29,7 +33,7 @@ describe('production surface release smoke', () => {
       if (hardened) return hardened
       if (url.endsWith('/api/health')) return response(200, { status: 'ok' })
       if (url.endsWith('/api/curriculum')) {
-        return response(200, { lessonPlans: Array.from({ length: 64 }, (_, i) => ({ id: String(i + 1) })) })
+        return response(200, curriculumPayload())
       }
       throw new Error('unexpected URL ' + url)
     }
@@ -48,7 +52,7 @@ describe('production surface release smoke', () => {
       if (hardened) return hardened
       if (url.endsWith('/api/health')) return response(200, { status: 'ok' })
       if (url.endsWith('/api/curriculum')) {
-        return response(200, { lessonPlans: Array.from({ length: 64 }, (_, i) => ({ id: String(i + 1) })) })
+        return response(200, curriculumPayload())
       }
       throw new Error('unexpected URL ' + url)
     }
@@ -72,7 +76,7 @@ describe('production surface release smoke', () => {
 
     const result = await auditProductionSurfaces(fetcher)
     expect(result.ok).toBe(false)
-    expect(result.failures.join('\n')).toContain('expected 64 lesson plans')
+    expect(result.failures.join('\n')).toContain('committed lesson plans')
   })
 
   test('content matching is case insensitive', () => {
