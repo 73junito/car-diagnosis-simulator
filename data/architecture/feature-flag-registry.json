@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "active",
+  "operationalFlags": [
+    {
+      "id": "diagnostic-copilot",
+      "envVar": "TORQUEMIND_COPILOT_ENABLED",
+      "killSwitchEnvVar": "TORQUEMIND_COPILOT_KILL_SWITCH",
+      "defaultEnabled": false,
+      "environments": {
+        "production": false,
+        "staging": true,
+        "preview": false
+      }
+    },
+    {
+      "id": "semantic-scholar-research",
+      "envVar": "SEMANTIC_SCHOLAR_ENABLED",
+      "killSwitchEnvVar": null,
+      "defaultEnabled": false,
+      "environments": {
+        "production": true,
+        "staging": false,
+        "preview": false
+      }
+    }
+  ],
+  "protectedFlags": [
+    {
+      "id": "assessment-question-display",
+      "enabled": false,
+      "environmentActivationAllowed": false,
+      "authority": "external-human-governance-only"
+    },
+    {
+      "id": "assessment-scoring",
+      "enabled": false,
+      "environmentActivationAllowed": false,
+      "authority": "external-human-governance-only"
+    },
+    {
+      "id": "institutional-assessment",
+      "enabled": false,
+      "environmentActivationAllowed": false,
+      "authority": "external-human-governance-only"
+    },
+    {
+      "id": "high-stakes-assessment",
+      "enabled": false,
+      "environmentActivationAllowed": false,
+      "authority": "external-human-governance-only"
+    },
+    {
+      "id": "production-assessment-release",
+      "enabled": false,
+      "environmentActivationAllowed": false,
+      "authority": "external-human-governance-only"
+    }
+  ]
+}

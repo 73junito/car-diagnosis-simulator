@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autolearnpro.com/schemas/feature-flag-registry.schema.json",
+  "title": "AutoLearnPro Feature Flag Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "operationalFlags", "protectedFlags"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "status": { "const": "active" },
+    "operationalFlags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "envVar",
+          "killSwitchEnvVar",
+          "defaultEnabled",
+          "environments"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "envVar": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
+          "killSwitchEnvVar": {
+            "type": ["string", "null"],
+            "pattern": "^[A-Z0-9_]+$"
+          },
+          "defaultEnabled": { "const": false },
+          "environments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["production", "staging", "preview"],
+            "properties": {
+              "production": { "type": "boolean" },
+              "staging": { "type": "boolean" },
+              "preview": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "protectedFlags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "enabled",
+          "environmentActivationAllowed",
+          "authority"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "enabled": { "const": false },
+          "environmentActivationAllowed": { "const": false },
+          "authority": { "const": "external-human-governance-only" }
+        }
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@ const path = require('path');
 const { verifyLmfRuntimeCoverage } = require('./verify-lmf-runtime-coverage');
 const { verifyObservabilityContract } = require('./verify-observability-contract');
 const { verifyArchitectureSchemas } = require('./verify-architecture-schemas');
+const { verifyFeatureFlagRegistry } = require('./verify-feature-flag-registry');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -201,6 +202,8 @@ function verifyRuntimeMatrix() {
     fail('Runtime contract must not classify production as a Node server.');
   }
 
+  const featureFlags = verifyFeatureFlagRegistry();
+
   const observability = verifyObservabilityContract();
   if (matrix.observability?.primaryBackend !== observability.primaryBackend) {
     fail('Primary observability backend drift from runtime matrix.');
@@ -233,6 +236,8 @@ function verifyRuntimeMatrix() {
     })),
     observabilityBackend: observability.primaryBackend,
     externalOtlpStatus: observability.externalOtlpStatus,
+    operationalFeatureFlags: featureFlags.operationalCount,
+    protectedFeatureFlags: featureFlags.protectedCount,
     lmfExistingLabs: lmf.existingLabCount,
     lmfPlannedLabs: lmf.plannedLabCount
   };
