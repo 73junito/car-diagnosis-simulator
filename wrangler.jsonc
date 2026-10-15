@@ -7,7 +7,16 @@
     "nodejs_compat"
   ],
   "observability": {
-    "enabled": true
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.1,
+      "persist": true
+    }
   },
   "assets": {
     "directory": "./public-site",
@@ -37,6 +46,18 @@
   "env": {
     "staging": {
       "name": "car-diagnosis-simulator-staging",
+      "observability": {
+        "logs": {
+          "enabled": true,
+          "head_sampling_rate": 1,
+          "persist": true
+        },
+        "traces": {
+          "enabled": true,
+          "head_sampling_rate": 1,
+          "persist": true
+        }
+      },
       "durable_objects": {
         "bindings": [
           {

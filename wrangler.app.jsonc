@@ -6,6 +6,18 @@
     "command": "npm run build"
   },
   "compatibility_date": "2026-08-08",
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.1,
+      "persist": true
+    }
+  },
   "workers_dev": true,
   "routes": [
     {
@@ -95,6 +107,18 @@
     "staging": {
       "name": "autolearnpro-app-staging",
       "workers_dev": true,
+      "observability": {
+        "logs": {
+          "enabled": true,
+          "head_sampling_rate": 1,
+          "persist": true
+        },
+        "traces": {
+          "enabled": true,
+          "head_sampling_rate": 1,
+          "persist": true
+        }
+      },
       "routes": [],
       "durable_objects": {
         "bindings": [

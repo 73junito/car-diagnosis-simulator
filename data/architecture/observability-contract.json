@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "active-native-observability",
+  "primaryBackend": {
+    "provider": "cloudflare-observability",
+    "logs": true,
+    "traces": true,
+    "workerMetrics": true
+  },
+  "externalOtlp": {
+    "provider": "grafana-cloud",
+    "status": "pending-account-destination",
+    "tracesDestinationName": "autolearnpro-grafana-traces",
+    "logsDestinationName": "autolearnpro-grafana-logs",
+    "credentialsLocation": "cloudflare-observability-destination-only",
+    "repositorySecretsAllowed": false,
+    "activationRule": "Do not add Wrangler destinations until both account-level Cloudflare OTLP destinations exist and delivery status is verified."
+  },
+  "surfaces": [
+    {
+      "id": "public",
+      "wranglerConfig": "wrangler.jsonc",
+      "executionType": "worker-plus-assets",
+      "production": {
+        "logsEnabled": true,
+        "logsSamplingRate": 1,
+        "logsPersist": true,
+        "tracesEnabled": true,
+        "tracesSamplingRate": 0.1,
+        "tracesPersist": true
+      },
+      "staging": {
+        "logsEnabled": true,
+        "logsSamplingRate": 1,
+        "logsPersist": true,
+        "tracesEnabled": true,
+        "tracesSamplingRate": 1,
+        "tracesPersist": true
+      }
+    },
+    {
+      "id": "app",
+      "wranglerConfig": "wrangler.app.jsonc",
+      "executionType": "worker-plus-assets",
+      "production": {
+        "logsEnabled": true,
+        "logsSamplingRate": 1,
+        "logsPersist": true,
+        "tracesEnabled": true,
+        "tracesSamplingRate": 0.1,
+        "tracesPersist": true
+      },
+      "staging": {
+        "logsEnabled": true,
+        "logsSamplingRate": 1,
+        "logsPersist": true,
+        "tracesEnabled": true,
+        "tracesSamplingRate": 1,
+        "tracesPersist": true
+      }
+    },
+    {
+      "id": "exam",
+      "wranglerConfig": "wrangler.exam.jsonc",
+      "executionType": "static-assets-only",
+      "observability": "not-applicable-until-worker-entry-exists"
+    }
+  ]
+}

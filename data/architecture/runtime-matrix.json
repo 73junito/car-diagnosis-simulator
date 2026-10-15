@@ -49,6 +49,13 @@
       "routingAuthority": "wrangler-config"
     }
   ],
+  "observability": {
+    "contract": "data/architecture/observability-contract.json",
+    "validator": "scripts/verify-observability-contract.js",
+    "primaryBackend": "cloudflare-observability",
+    "plannedExternalOtlpBackend": "grafana-cloud",
+    "externalOtlpStatus": "pending-account-destination"
+  },
   "persistence": {
     "durableBusinessDataAuthority": "supabase",
     "edgeCoordination": "cloudflare-durable-objects",

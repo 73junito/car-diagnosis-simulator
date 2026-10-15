@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { verifyLmfRuntimeCoverage } = require('./verify-lmf-runtime-coverage');
+const { verifyObservabilityContract } = require('./verify-observability-contract');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -198,6 +199,17 @@ function verifyRuntimeMatrix() {
     fail('Runtime contract must not classify production as a Node server.');
   }
 
+  const observability = verifyObservabilityContract();
+  if (matrix.observability?.primaryBackend !== observability.primaryBackend) {
+    fail('Primary observability backend drift from runtime matrix.');
+  }
+  if (matrix.observability?.plannedExternalOtlpBackend !== observability.externalOtlpProvider) {
+    fail('Planned external OTLP backend drift from runtime matrix.');
+  }
+  if (matrix.observability?.externalOtlpStatus !== observability.externalOtlpStatus) {
+    fail('External OTLP status drift from runtime matrix.');
+  }
+
   const lmf = verifyLmfRuntimeCoverage();
   if (
     lmf.existingLabCount !== matrix.lmf.existingProductionLabCount ||
@@ -216,6 +228,8 @@ function verifyRuntimeMatrix() {
       id: surface.id,
       compatibilityDate: surface.compatibilityDate
     })),
+    observabilityBackend: observability.primaryBackend,
+    externalOtlpStatus: observability.externalOtlpStatus,
     lmfExistingLabs: lmf.existingLabCount,
     lmfPlannedLabs: lmf.plannedLabCount
   };
@@ -224,7 +238,7 @@ function verifyRuntimeMatrix() {
 if (require.main === module) {
   const result = verifyRuntimeMatrix();
   console.log(
-    `Runtime matrix: PASS (Node ${result.canonicalNodeMajor} canonical; Node ${result.compatibilityNodeMajors.join('/')} supported; ${result.surfaces.length} Cloudflare surfaces; LMF ${result.lmfExistingLabs} existing / ${result.lmfPlannedLabs} planned)`
+    `Runtime matrix: PASS (Node ${result.canonicalNodeMajor} canonical; Node ${result.compatibilityNodeMajors.join('/')} supported; ${result.surfaces.length} Cloudflare surfaces; observability=${result.observabilityBackend}; LMF ${result.lmfExistingLabs} existing / ${result.lmfPlannedLabs} planned)`
   );
 }
 
