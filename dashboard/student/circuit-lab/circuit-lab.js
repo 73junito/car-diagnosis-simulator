@@ -3,13 +3,22 @@
 (async function initCircuitLab() {
   const NS = "http://www.w3.org/2000/svg";
   const engine = window.TorqueMindCircuitEngine;
+  const runtimeResponse = await fetch("/data/architecture/circuit-lab-lmf-runtime.json");
+  if (!runtimeResponse.ok) throw new Error("Unable to load Circuit Lab LMF runtime contract.");
+  const runtime = await runtimeResponse.json();
+  if (runtime.labId !== "circuit-lab" || runtime.engineeringAdapterId !== "electrical-circuit") {
+    throw new Error("Circuit Lab LMF runtime contract is invalid.");
+  }
   const [response, delcoResponse] = await Promise.all([
-    fetch("/data/circuits/generic-charging-system.json"),
+    fetch(runtime.modelRef),
     fetch("/data/engineering/authoritative-specifications/delco-remy-starting-charging.json")
   ]);
   if (!response.ok) throw new Error("Unable to load training circuit.");
   if (!delcoResponse.ok) throw new Error("Unable to load charging engineering references.");
   const circuit = await response.json();
+  document.documentElement.dataset.lmfLabId = runtime.labId;
+  document.documentElement.dataset.lmfEngineeringAdapter = runtime.engineeringAdapterId;
+  document.documentElement.dataset.lmfRuntimeRole = runtime.runtimeRole;
   const delcoCatalog = await delcoResponse.json();
   const validation = engine.validateCircuit(circuit);
   if (!validation.valid) throw new Error(validation.errors.join("; "));

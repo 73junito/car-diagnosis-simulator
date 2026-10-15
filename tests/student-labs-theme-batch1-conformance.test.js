@@ -99,7 +99,9 @@ describe('Student labs shared-theme conformance (Batch 1: circuit + starting-sys
   })
   test('circuit JS entry points and behavior remain intact', () => {
     const js = read('dashboard/student/circuit-lab/circuit-lab.js')
-    expect(js).toContain('generic-charging-system.json')
+    const runtime = JSON.parse(read('data/architecture/circuit-lab-lmf-runtime.json'))
+    expect(js).toContain('circuit-lab-lmf-runtime.json')
+    expect(runtime.modelRef).toBe('/data/circuits/generic-charging-system.json')
   })
 
   test('starting-system JS keeps the canonical engineering model ids', () => {

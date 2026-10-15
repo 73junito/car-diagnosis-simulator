@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "runtimeRole": "lmf-derived-circuit-lab-runtime",
+  "sourceContracts": [
+    "/data/lmf/lab-registry.json",
+    "/data/lmf/engineering-model-adapters.json",
+    "/data/lmf/diagnostic-tools.json",
+    "/data/lmf/measurement-contract.json",
+    "/data/lmf/fault-taxonomy.json"
+  ],
+  "labId": "circuit-lab",
+  "route": "/dashboard/student/circuit-lab/",
+  "engineeringAdapterId": "electrical-circuit",
+  "modelRef": "/data/circuits/generic-charging-system.json",
+  "toolIds": ["tool.dmm", "tool.current-clamp"],
+  "measurementTypes": ["voltage", "voltage_drop", "resistance", "continuity", "frequency", "duty_cycle", "current", "waveform"],
+  "faultClassIds": ["electrical.open", "electrical.high-resistance", "electrical.short-to-ground", "electrical.short-to-power", "electrical.short-between-lines"],
+  "directPracticeAllowed": true,
+  "assessmentEligibilityAuthority": "external-governance-only",
+  "publicationAuthority": "external-human-governance-only"
+}
