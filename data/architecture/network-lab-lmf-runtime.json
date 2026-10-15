@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "runtimeRole": "lmf-derived-network-lab-runtime",
+  "sourceContracts": [
+    "/data/lmf/lab-registry.json",
+    "/data/lmf/engineering-model-adapters.json",
+    "/data/lmf/diagnostic-tools.json",
+    "/data/lmf/measurement-contract.json",
+    "/data/lmf/fault-taxonomy.json"
+  ],
+  "labId": "network-lab",
+  "route": "/dashboard/student/network-lab/",
+  "engineeringAdapterId": "network-communications",
+  "modelRef": "/data/circuit-templates/12v-can-lin-network.json",
+  "toolIds": ["tool.dmm", "tool.oscilloscope", "tool.scan-tool", "tool.network-analyzer"],
+  "measurementTypes": ["voltage", "voltage_drop", "resistance", "continuity", "frequency", "duty_cycle", "waveform", "diagnostic_data", "rpm", "temperature", "pressure", "speed", "position", "command_state", "network_voltage", "bus_resistance", "network_activity"],
+  "faultClassIds": ["communications.open-bus", "communications.short-bus", "communications.node-offline", "communications.data-integrity"],
+  "directPracticeAllowed": true,
+  "assessmentEligibilityAuthority": "external-governance-only",
+  "publicationAuthority": "external-human-governance-only"
+}
