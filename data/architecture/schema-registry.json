@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "active",
+  "contracts": [
+    {
+      "id": "runtime-matrix",
+      "schema": "schemas/runtime-matrix.schema.json",
+      "files": ["data/architecture/runtime-matrix.json"]
+    },
+    {
+      "id": "observability-contract",
+      "schema": "schemas/observability-contract.schema.json",
+      "files": ["data/architecture/observability-contract.json"]
+    },
+    {
+      "id": "lmf-runtime-projections",
+      "schema": "schemas/lmf-runtime.schema.json",
+      "glob": "data/architecture/*-lmf-runtime.json"
+    }
+  ]
+}
