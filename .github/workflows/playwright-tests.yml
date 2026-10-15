@@ -44,6 +44,9 @@ jobs:
       - name: Validate animation promotion readiness
         run: npm run validate:animation-promotion-readiness --silent
 
+      - name: Validate approved-question animation mapping
+        run: npm run validate:question-animation-mapping --silent
+
       - name: Run animation review harness
         run: npm run test:animation-review-harness --silent
 

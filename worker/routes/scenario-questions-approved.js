@@ -9,6 +9,7 @@
  * This enforces database-level approval, not client-side heuristics.
  */
 import { createClient } from '@supabase/supabase-js'
+import { resolveQuestionAnimationMapping } from '../../animation/question-mapping/starting-system-question-animation-map.js'
 
 export async function handleScenarioQuestionsApproved(c) {
   if (c.req.method !== 'GET') {
@@ -197,6 +198,7 @@ export async function handleScenarioQuestionsApproved(c) {
           topic: question.topic,
           competency_code: competencyCodeMap[question.competency_area_id] ?? null,
         question_id: question.question_id,
+        animation_mapping: resolveQuestionAnimationMapping(question),
         question_provenance: {
           id: provenance.id,
           question_id: provenance.question_id,

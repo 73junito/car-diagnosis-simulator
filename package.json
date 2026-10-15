@@ -128,6 +128,7 @@
     "test:animation-review-harness": "npm run build:animation-review-harness && npx playwright test --config=playwright.animation-review.config.js",
     "validate:animation-human-review": "node scripts/verify-animation-human-review.js",
     "validate:animation-promotion-readiness": "node scripts/verify-animation-promotion-readiness.js",
+    "validate:question-animation-mapping": "node scripts/verify-question-animation-mapping.js",
     "prepare:animation-agent-review": "node scripts/prepare-animation-agent-review.js --write",
     "validate:animation-agentic-prep": "node scripts/verify-animation-agentic-preparation.js",
     "validate:animation-contract": "node scripts/verify-animation-contract.js"
