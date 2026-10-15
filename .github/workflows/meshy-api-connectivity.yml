@@ -7,6 +7,9 @@ on:
       - chore/meshy-api-connectivity-check
     paths:
       - ".github/workflows/meshy-api-connectivity.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/meshy-api-connectivity.yml"
 
 permissions:
   contents: read
