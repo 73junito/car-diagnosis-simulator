@@ -26,6 +26,11 @@
       "id": "database-observability-policy",
       "schema": "schemas/database-observability-policy.schema.json",
       "files": ["data/architecture/database-observability-policy.json"]
+    },
+    {
+      "id": "feature-flag-registry",
+      "schema": "schemas/feature-flag-registry.schema.json",
+      "files": ["data/architecture/feature-flag-registry.json"]
     }
   ]
 }

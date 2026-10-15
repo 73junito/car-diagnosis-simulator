@@ -3,6 +3,7 @@ const path = require('path')
 
 const root = path.resolve('.')
 const activation = fs.readFileSync(path.join(root,'worker/runtime/diagnostic-copilot-activation.js'),'utf8')
+const featureFlags = fs.readFileSync(path.join(root,'worker/runtime/feature-flags.js'),'utf8')
 const model = fs.readFileSync(path.join(root,'worker/services/diagnostic-copilot-model.js'),'utf8')
 const route = fs.readFileSync(path.join(root,'worker/routes/diagnostic-copilot.js'),'utf8')
 const worker = fs.readFileSync(path.join(root,'worker/index.js'),'utf8')
@@ -23,9 +24,10 @@ describe('Hybrid agentic roadmap Stage 3', () => {
     expect(config.env.staging.vars.TORQUEMIND_COPILOT_KILL_SWITCH).toBe('false')
   })
 
-  test('activation requires feature flag, healthy persistence config, and no kill switch', () => {
-    expect(activation).toContain("TORQUEMIND_COPILOT_ENABLED")
-    expect(activation).toContain("TORQUEMIND_COPILOT_KILL_SWITCH")
+  test('activation requires governed feature flag, healthy persistence config, and no kill switch', () => {
+    expect(activation).toContain("resolveFeatureFlag('diagnosticCopilot', env)")
+    expect(featureFlags).toContain("envVar: 'TORQUEMIND_COPILOT_ENABLED'")
+    expect(featureFlags).toContain("killSwitchEnvVar: 'TORQUEMIND_COPILOT_KILL_SWITCH'")
     expect(activation).toContain("persistenceMode === 'supabase'")
     expect(activation).toContain("reason: !enabled")
     expect(activation).toContain("'kill-switch'")
