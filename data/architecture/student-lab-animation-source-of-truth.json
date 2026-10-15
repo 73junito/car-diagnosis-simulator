@@ -32,9 +32,11 @@
     {
       "lab_id": "starting-system-lab",
       "surface": "dashboard/student/starting-system-lab/index.html",
-      "status": "motion-generated-review-only-awaiting-technical-instructional-review",
+      "status": "motion-generated-review-harness-ready-awaiting-technical-instructional-review",
       "production_manifest": "animation/manifests/starting-system-voltage-drop-foundation.json",
       "review_manifest": "animation/manifests/starting-system-voltage-drop-review.json",
+      "review_harness": "animation/review-harness/starting-system.html",
+      "review_harness_deployable": false,
       "engineering_source": "data/circuit-templates/12v-starting-system.json",
       "legacy_visualization": {
         "selector": "#circuitSvg",
