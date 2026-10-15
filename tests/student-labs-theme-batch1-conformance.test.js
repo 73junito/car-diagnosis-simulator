@@ -104,10 +104,12 @@ describe('Student labs shared-theme conformance (Batch 1: circuit + starting-sys
 
   test('starting-system JS keeps the canonical engineering model ids', () => {
     const js = read('dashboard/student/starting-system-lab/starting-system-lab.js')
+    const runtime = JSON.parse(read('data/architecture/starting-system-lmf-runtime.json'))
     for (const id of ['BAT1', 'FUSE1', 'SW1', 'SOL_COIL', 'SOL_CONTACT', 'MTR1', 'GND1']) {
       expect(js).toContain(id)
     }
-    expect(js).toContain('12v-starting-system.json')
+    expect(js).toContain('starting-system-lmf-runtime.json')
+    expect(runtime.modelRef).toBe('/data/circuit-templates/12v-starting-system.json')
   })
 
   test.each(pages)('$css restyles onto shared tokens rather than a legacy palette', (page) => {
