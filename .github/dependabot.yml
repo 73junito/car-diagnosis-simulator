@@ -1,29 +1,80 @@
 version: 2
+
 updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: weekly
+    open-pull-requests-limit: 6
+    rebase-strategy: "auto"
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
     groups:
+      runtime-core:
+        dependency-type: "production"
+        patterns:
+          - "hono"
+          - "@supabase/supabase-js"
+        update-types:
+          - "minor"
+          - "patch"
+      cloudflare-toolchain:
+        dependency-type: "development"
+        patterns:
+          - "wrangler"
+          - "@cloudflare/workers-types"
+        update-types:
+          - "minor"
+          - "patch"
+      playwright-toolchain:
+        dependency-type: "development"
+        patterns:
+          - "@playwright/test"
+        update-types:
+          - "minor"
+          - "patch"
       jest-toolchain:
+        dependency-type: "development"
         patterns:
           - "jest"
           - "jest-*"
           - "@jest/*"
+          - "babel-jest"
+        update-types:
+          - "minor"
+          - "patch"
+      lint-toolchain:
+        dependency-type: "development"
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@eslint/*"
+        update-types:
+          - "minor"
+          - "patch"
     ignore:
-      # Babel 8 currently requires an @babel/core 8 migration while Jest's
-      # babel-preset-current-node-syntax dependency still declares Babel 7 peers.
-      # Keep Dependabot on Babel 7 until that toolchain is compatible.
-      - dependency-name: "@babel/preset-env"
+      # Major upgrades are dedicated runtime/toolchain migrations, never routine
+      # Dependabot version updates. Security alerts remain visible separately.
+      - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
-      - dependency-name: "@babel/core"
-        update-types:
-          - "version-update:semver-major"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: weekly
+    open-pull-requests-limit: 4
+    rebase-strategy: "auto"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "deps(actions)"
     groups:
       pages-actions:
         patterns:
@@ -37,8 +88,8 @@ updates:
         patterns:
           - "peter-evans/create-pull-request"
     ignore:
-      # Checkout is pinned in security-sensitive workflows. A broad major
-      # migration should be reviewed as a dedicated supply-chain change.
-      - dependency-name: "actions/checkout"
+      # GitHub Action major upgrades are reviewed as dedicated supply-chain
+      # changes instead of being bundled into routine automated maintenance.
+      - dependency-name: "*"
         update-types:
           - "version-update:semver-major"

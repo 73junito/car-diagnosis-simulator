@@ -4,7 +4,7 @@ describe('runtime stabilization contract', () => {
   test('repository runtime surfaces and compatibility lanes match the authoritative matrix', () => {
     const result = verifyRuntimeMatrix();
 
-    expect(result.architectureSchemaFiles).toBe(9);
+    expect(result.architectureSchemaFiles).toBe(10);
     expect(result.canonicalNodeMajor).toBe(22);
     expect(result.compatibilityNodeMajors).toEqual([22, 24]);
     expect(result.releaseAuthorityMajor).toBe(22);
