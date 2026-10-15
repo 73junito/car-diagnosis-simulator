@@ -33,6 +33,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate architecture schemas
+        run: npm run validate:architecture-schemas
+
       - name: Validate scenarios
         id: validate
         run: npm run validate:scenarios

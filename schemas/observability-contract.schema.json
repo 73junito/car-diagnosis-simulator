@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autolearnpro.com/schemas/observability-contract.schema.json",
+  "title": "AutoLearnPro Observability Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "primaryBackend", "externalOtlp", "surfaces"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "status": { "const": "active-native-observability" },
+    "primaryBackend": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "logs", "traces", "workerMetrics"],
+      "properties": {
+        "provider": { "const": "cloudflare-observability" },
+        "logs": { "type": "boolean" },
+        "traces": { "type": "boolean" },
+        "workerMetrics": { "type": "boolean" }
+      }
+    },
+    "externalOtlp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "status",
+        "tracesDestinationName",
+        "logsDestinationName",
+        "credentialsLocation",
+        "repositorySecretsAllowed",
+        "activationRule"
+      ],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["pending-account-destination", "active-verified"] },
+        "tracesDestinationName": { "type": "string", "minLength": 1 },
+        "logsDestinationName": { "type": "string", "minLength": 1 },
+        "credentialsLocation": { "type": "string", "minLength": 1 },
+        "repositorySecretsAllowed": { "const": false },
+        "activationRule": { "type": "string", "minLength": 1 }
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "wranglerConfig", "executionType"],
+        "properties": {
+          "id": { "enum": ["public", "app", "exam"] },
+          "wranglerConfig": { "type": "string", "pattern": "^wrangler.*\\.jsonc$" },
+          "executionType": { "enum": ["worker-plus-assets", "static-assets-only"] },
+          "observability": { "type": "string" },
+          "production": { "$ref": "#/$defs/signalSet" },
+          "staging": { "$ref": "#/$defs/signalSet" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "signalSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logsEnabled",
+        "logsSamplingRate",
+        "logsPersist",
+        "tracesEnabled",
+        "tracesSamplingRate",
+        "tracesPersist"
+      ],
+      "properties": {
+        "logsEnabled": { "type": "boolean" },
+        "logsSamplingRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "logsPersist": { "type": "boolean" },
+        "tracesEnabled": { "type": "boolean" },
+        "tracesSamplingRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "tracesPersist": { "type": "boolean" }
+      }
+    }
+  }
+}

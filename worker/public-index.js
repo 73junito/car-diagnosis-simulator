@@ -10,6 +10,15 @@
  * tests/public-worker-least-privilege.spec.js enforces this boundary.
  */
 import { Hono } from "hono";
+import {
+  resolveRequestCorrelation,
+  applyCorrelationResponseHeaders
+} from './utils/request-correlation.js'
+import {
+  logHttpRequestStarted,
+  logHttpRequestCompleted,
+  logHttpRequestFailed
+} from './utils/request-lifecycle-logger.js'
 
 const app = new Hono();
 
@@ -24,8 +33,41 @@ app.get("/api/health", (c) =>
 app.get("/__ping", (c) => c.json({ ok: true }));
 
 export default {
-  fetch(request, env, ctx) {
-    return app.fetch(request, env, ctx);
+  async fetch(request, env, ctx) {
+    const correlation = resolveRequestCorrelation(request)
+    const url = new URL(request.url)
+    const start = Date.now()
+
+    logHttpRequestStarted({
+      surface: 'public',
+      correlation,
+      method: request.method,
+      path: url.pathname
+    })
+
+    try {
+      const response = await app.fetch(request, env, ctx)
+      const correlatedResponse = applyCorrelationResponseHeaders(response, correlation)
+      logHttpRequestCompleted({
+        surface: 'public',
+        correlation,
+        method: request.method,
+        path: url.pathname,
+        status: correlatedResponse.status,
+        durationMs: Date.now() - start
+      })
+      return correlatedResponse
+    } catch (error) {
+      logHttpRequestFailed({
+        surface: 'public',
+        correlation,
+        method: request.method,
+        path: url.pathname,
+        errorType: error?.name || 'unhandled_error',
+        durationMs: Date.now() - start
+      })
+      throw error
+    }
   }
 };
 

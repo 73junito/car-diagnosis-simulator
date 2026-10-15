@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "provider": "dependabot",
+  "status": "controlled",
+  "versionUpdates": {
+    "npm": {
+      "schedule": "weekly",
+      "openPullRequestLimit": 6,
+      "majorUpdates": "manual-dedicated-pr",
+      "groups": [
+        "runtime-core",
+        "cloudflare-toolchain",
+        "playwright-toolchain",
+        "jest-toolchain",
+        "lint-toolchain"
+      ]
+    },
+    "githubActions": {
+      "schedule": "weekly",
+      "openPullRequestLimit": 4,
+      "majorUpdates": "manual-dedicated-pr",
+      "groups": [
+        "pages-actions",
+        "codeql-actions",
+        "pull-request-actions"
+      ]
+    }
+  },
+  "requiredGates": [
+    "validate:dependency-runtime-compatibility",
+    "validate:dependency-security-exceptions",
+    "production-npm-audit"
+  ],
+  "autoMergeAllowed": false
+}

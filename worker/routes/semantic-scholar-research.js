@@ -8,6 +8,7 @@ import {
   getSemanticScholarPaper
 } from '../services/semantic-scholar.js'
 import { isAdminRole, isInstructorOrAdminRole, resolveTrustedRole } from '../auth/role-policy.js'
+import { isFeatureEnabled } from '../runtime/feature-flags.js'
 
 function errorResponse(c, error) {
   if (error?.code === 'INVALID_QUERY' || error?.code === 'INVALID_PAPER_ID') {
@@ -37,7 +38,7 @@ function errorResponse(c, error) {
 export async function authorizeResearch(c, { requireSemanticScholarEnabled = true } = {}) {
   if (
     requireSemanticScholarEnabled &&
-    String(c.env?.SEMANTIC_SCHOLAR_ENABLED || '').toLowerCase() !== 'true'
+    !isFeatureEnabled('semanticScholarResearch', c.env)
   ) {
     return { response: c.json({ error: 'Not found' }, 404) }
   }

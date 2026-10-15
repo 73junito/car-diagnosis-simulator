@@ -110,8 +110,11 @@ import {
 import { createRequestContext } from './middleware/request-context.js'
 import { createRateLimitMiddleware } from './middleware/rate-limit.js'
 import { orchestrationPersistenceHealth } from './runtime/orchestration-persistence.js'
+import { probeDatabaseHealth } from './runtime/database-health.js'
 
 const app = new Hono();
+
+app.use('*', createRequestContext({ surface: 'app' }))
 
 app.get("/api/health", (c) => {
   const orchestrationPersistence = orchestrationPersistenceHealth(c.env)
@@ -122,6 +125,14 @@ app.get("/api/health", (c) => {
   }, orchestrationPersistence.ok ? 200 : 503)
 });
 
+app.get('/api/health/database', async (c) => {
+  const database = await probeDatabaseHealth(c.env)
+  return c.json({
+    status: database.ok ? 'ok' : 'degraded',
+    database
+  }, database.ok ? 200 : 503)
+})
+
 // Lightweight ping for diagnostics
 app.get('/__ping', (c) => c.json({ ok: true }));
 
@@ -131,8 +142,6 @@ app.use('/api/torquemind-feedback/*', cors({
   allowHeaders: ['Content-Type'],
   maxAge: 86400
 }))
-// attach request context middleware for observability
-app.use('/api/torquemind-feedback', createRequestContext())
 // attach rate limiting (in-memory store for dev/tests)
 app.use('/api/torquemind-feedback', createRateLimitMiddleware())
 

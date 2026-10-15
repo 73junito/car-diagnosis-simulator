@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { verifyLmfRuntimeCoverage } = require('./verify-lmf-runtime-coverage');
 const { verifyObservabilityContract } = require('./verify-observability-contract');
+const { verifyFeatureFlagRegistry } = require('./verify-feature-flag-registry');
+const { verifyVectorRetrievalPolicy } = require('./verify-vector-retrieval-policy');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -199,6 +201,19 @@ function verifyRuntimeMatrix() {
     fail('Runtime contract must not classify production as a Node server.');
   }
 
+  const featureFlags = verifyFeatureFlagRegistry();
+  const vectorRetrieval = verifyVectorRetrievalPolicy();
+
+  if (matrix.vectorRetrieval?.provider !== 'supabase-pgvector') {
+    fail('Vector retrieval provider drift from runtime matrix.');
+  }
+  if (matrix.vectorRetrieval?.status !== vectorRetrieval.status) {
+    fail('Vector retrieval status drift from runtime matrix.');
+  }
+  if (matrix.vectorRetrieval?.productionActivationAllowed !== vectorRetrieval.productionActivationAllowed) {
+    fail('Vector retrieval activation boundary drift from runtime matrix.');
+  }
+
   const observability = verifyObservabilityContract();
   if (matrix.observability?.primaryBackend !== observability.primaryBackend) {
     fail('Primary observability backend drift from runtime matrix.');
@@ -230,6 +245,10 @@ function verifyRuntimeMatrix() {
     })),
     observabilityBackend: observability.primaryBackend,
     externalOtlpStatus: observability.externalOtlpStatus,
+    operationalFeatureFlags: featureFlags.operationalCount,
+    protectedFeatureFlags: featureFlags.protectedCount,
+    vectorRetrievalStatus: vectorRetrieval.status,
+    vectorRetrievalProductionActivation: vectorRetrieval.productionActivationAllowed,
     lmfExistingLabs: lmf.existingLabCount,
     lmfPlannedLabs: lmf.plannedLabCount
   };

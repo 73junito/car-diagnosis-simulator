@@ -79,6 +79,8 @@
     "validate:multivoltage-domain-isolation": "npx jest tests/multivoltage-domain-isolation.test.js --runInBand",
     "validate:browser-engineering-artifacts": "npx jest tests/browser-engineering-artifact-adapter.test.js --runInBand",
     "validate:dependency-security-exceptions": "node scripts/verify-dependency-security-exceptions.js",
+    "validate:dependency-automation": "node scripts/verify-dependency-automation.js",
+    "audit:production-dependencies": "npm audit --omit=dev --audit-level=moderate",
     "validate:assessment-governance-boundary": "node scripts/verify-assessment-governance-boundary.js",
     "validate:google-crawler-access": "node scripts/verify-google-crawler-access.js",
     "validate:public-indexability": "node scripts/verify-public-indexability.js",
@@ -86,6 +88,7 @@
     "validate:state-privacy-ai-overlays": "node scripts/verify-state-privacy-ai-overlays.js",
     "validate:curriculum-reference-coverage-baseline": "node scripts/verify-curriculum-reference-coverage-baseline.js",
     "validate:production-surfaces": "node scripts/verify-production-surfaces.js",
+    "monitor:production-runtime": "node scripts/monitor-production-runtime.js",
     "validate:production-release-baseline": "node scripts/verify-production-release-baseline.js",
     "monitor:production-baseline": "node scripts/monitor-production-baseline.js",
     "validate:institutional-readiness-package": "node scripts/verify-institutional-readiness-package.js",
@@ -135,6 +138,9 @@
     "validate:lmf-foundation": "node scripts/verify-lmf-foundation.js",
     "validate:lmf-runtime-coverage": "node scripts/verify-lmf-runtime-coverage.js",
     "validate:observability-contract": "node scripts/verify-observability-contract.js",
+    "validate:architecture-schemas": "node scripts/verify-architecture-schemas.js",
+    "validate:feature-flags": "node scripts/verify-feature-flag-registry.js",
+    "validate:vector-retrieval-policy": "node scripts/verify-vector-retrieval-policy.js",
     "validate:runtime-matrix": "node scripts/verify-runtime-matrix.js"
   },
   "devDependencies": {
