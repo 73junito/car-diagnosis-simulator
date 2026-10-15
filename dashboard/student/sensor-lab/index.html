@@ -30,6 +30,45 @@
       <span>Differentiate sensor supply, analog signal, and sensor ground/reference paths and observe how different faults affect each path.</span>
     </section>
 
+    <section class="lab-safety" aria-labelledby="labSafetyHeading">
+      <div>
+        <p class="tm-eyebrow">Safety &amp; limitations</p>
+        <h2 id="labSafetyHeading">Training model, not a physical sensor-service procedure</h2>
+      </div>
+      <p>This lab presents a governed training model. Sensor states, injected faults, student-entered measurements, calculated transfer values, and signal traces describe the modeled system only. Vehicle-specific service information and approved shop procedures remain authoritative for physical diagnosis and repair.</p>
+    </section>
+
+    <section class="lab-capability-grid" aria-label="Sensor Lab capabilities">
+      <article class="lab-capability-card" aria-labelledby="diagnosticToolsHeading">
+        <div class="lab-section-kicker">
+          <span>Diagnostic tools</span>
+          <span class="lab-contract-badge">Contract driven</span>
+        </div>
+        <h2 id="diagnosticToolsHeading">Available in this lab</h2>
+        <ul id="labToolList" class="lab-chip-list" aria-label="Available diagnostic tools"></ul>
+        <p class="lab-capability-note">Tools request or display measurements and diagnostic data; they do not determine engineering truth, pass/fail status, assessment eligibility, or publication status.</p>
+      </article>
+      <article class="lab-capability-card" aria-labelledby="measurementsHeading">
+        <div class="lab-section-kicker"><span>Measurement support</span></div>
+        <h2 id="measurementsHeading">Declared measurement types</h2>
+        <ul id="labMeasurementList" class="lab-chip-list" aria-label="Supported measurement types"></ul>
+      </article>
+      <article class="lab-capability-card" aria-labelledby="modelStatusHeading">
+        <div class="lab-section-kicker"><span>Model status</span></div>
+        <h2 id="modelStatusHeading">Authoritative runtime boundary</h2>
+        <div id="labModelStatus" class="lab-model-status" aria-live="polite">Loading runtime capabilities.</div>
+      </article>
+    </section>
+
+    <section class="lab-region" aria-labelledby="scenarioWorkAreaHeading">
+      <div class="lab-region-heading">
+        <div>
+          <p class="tm-eyebrow">Scenario / work area</p>
+          <h2 id="scenarioWorkAreaHeading">Operate the modeled sensor circuit</h2>
+        </div>
+        <p>Select an operating state or training fault, then trace sensor supply, signal, and reference-ground paths. Existing engineering and fault behavior remain owned by the Sensor Lab runtime and circuit model.</p>
+      </div>
+
     <section class="toolbar" aria-label="Sensor circuit controls">
       <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
       <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
@@ -50,6 +89,15 @@
       <span><i class="legend-dot test"></i> Test point</span>
       <span class="legend-note">The 5 V reference is a generic training example. Actual sensor supply and signal specifications must come from vehicle-specific service information.</span>
     </section>
+
+    <section class="lab-region lab-evidence-region" aria-labelledby="evidenceObservationsHeading">
+      <div class="lab-region-heading">
+        <div>
+          <p class="tm-eyebrow">Evidence &amp; observations</p>
+          <h2 id="evidenceObservationsHeading">Keep source roles visible</h2>
+        </div>
+        <p>Declared reference voltages, generic training transfer values, student-entered measurements, calculated signals, and validated artifacts remain distinct. Fault states do not receive invented sensor outputs when the model declares them unavailable.</p>
+      </div>
 
     <section class="engineering-panel" aria-labelledby="sensorEngineeringHeading">
       <div class="engineering-heading">
@@ -101,6 +149,7 @@
 
       <p class="engineering-formula" id="sensorEngineeringFormula"></p>
     </section>
+    </section>
 
     <section class="workspace">
       <div class="diagram-card">
@@ -117,8 +166,9 @@
         <p class="flow-note" id="flowNote"></p>
       </div>
 
-      <aside class="inspector" aria-live="polite">
-        <h2>Component inspector</h2>
+      <aside class="inspector lab-reasoning-panel" aria-labelledby="diagnosticReasoningHeading" aria-live="polite">
+        <p class="tm-eyebrow">Diagnostic reasoning</p>
+        <h2 id="diagnosticReasoningHeading">Inspect, observe, explain</h2>
         <div id="inspectorContent"><p>Select a symbol or test point to inspect its role.</p></div>
         <div class="guided-card">
           <p class="tm-eyebrow">Guided practice</p>
@@ -132,10 +182,18 @@
         </div>
       </aside>
     </section>
+    </section>
 
-    <section class="boundary">
-      <h2>Evidence boundary</h2>
+    <section class="boundary lab-boundary" aria-labelledby="evidenceBoundaryHeading">
+      <div>
+        <p class="tm-eyebrow">Model status · explicit limitations</p>
+        <h2 id="evidenceBoundaryHeading">Evidence boundary</h2>
+      </div>
       <p>The 5 V reference shown here is a common training example, not a universal sensor specification. Actual sensor type, supply voltage, signal range, pinout, ground strategy, diagnostic limits, and procedures require authoritative vehicle-specific service information.</p>
+      <div class="lab-fault-contract">
+        <strong>Supported fault classes</strong>
+        <ul id="labFaultList" class="lab-chip-list" aria-label="Supported fault classes"></ul>
+      </div>
     </section>
   </main>
 

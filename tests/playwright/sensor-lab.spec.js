@@ -1,6 +1,22 @@
 const {test,expect}=require("@playwright/test");
 test.use({baseURL:"http://127.0.0.1:3003"});
 test.describe("12 V three-wire sensor lab",()=>{
+ test("renders contract-driven reference-shell capabilities without changing authority",async({page})=>{
+  await page.goto("/dashboard/student/sensor-lab/");
+  await expect(page.getByRole("heading",{name:"Available in this lab"})).toBeVisible();
+  await expect(page.locator("#labToolList")).toContainText("Dmm");
+  await expect(page.locator("#labToolList")).toContainText("Oscilloscope");
+  await expect(page.locator("#labToolList")).toContainText("Scan Tool");
+  await expect(page.locator("#labMeasurementList")).toContainText("Waveform");
+  await expect(page.locator("#labMeasurementList")).toContainText("Diagnostic Data");
+  await expect(page.locator("#labFaultList")).toContainText("Short To Ground");
+  await expect(page.locator("#labFaultList")).toContainText("Short To Power");
+  await expect(page.locator("#labModelStatus")).toContainText("Electrical Circuit");
+  await expect(page.locator("#labModelStatus")).toContainText("Direct practice available");
+  await expect(page.locator("#labModelStatus")).toContainText("External Governance Only");
+  await expect(page.locator("#labModelStatus")).toContainText("External Human Governance Only");
+ });
+
  test("renders explicit 12 V and 5 V domains",async({page})=>{
   const errors=[]; page.on("pageerror",e=>errors.push(e.message));
   await page.goto("/dashboard/student/sensor-lab/");
