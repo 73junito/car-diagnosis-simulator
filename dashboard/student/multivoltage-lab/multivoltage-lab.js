@@ -2,14 +2,23 @@
 
 (async function initMultiVoltageLab(){
   const NS="http://www.w3.org/2000/svg";
+  const runtimeResponse=await fetch("/data/architecture/multivoltage-lab-lmf-runtime.json");
+  if(!runtimeResponse.ok) throw new Error("Unable to load Multi-Voltage Lab LMF runtime contract.");
+  const runtime=await runtimeResponse.json();
+  if(runtime.labId!=="multivoltage-lab"||runtime.engineeringAdapterId!=="electrified-multivoltage"){
+    throw new Error("Multi-Voltage Lab LMF runtime contract is invalid.");
+  }
   const [templateResponse,symbolLibrary,connectionLibrary]=await Promise.all([
-    fetch("/data/circuit-templates/electrified-multivoltage.json"),
+    fetch(runtime.modelRef),
     window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),
     window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections")
   ]);
   if(!templateResponse.ok) throw new Error("Unable to load multi-voltage template.");
 
   const circuit=await templateResponse.json();
+  document.documentElement.dataset.lmfLabId=runtime.labId;
+  document.documentElement.dataset.lmfEngineeringAdapter=runtime.engineeringAdapterId;
+  document.documentElement.dataset.lmfRuntimeRole=runtime.runtimeRole;
   const engine=window.TorqueMindCircuitEngine;
   const validation=window.TorqueMindCircuitTemplateContracts.validateCircuitTemplate(
     circuit,engine,symbolLibrary.registry,connectionLibrary.registry
