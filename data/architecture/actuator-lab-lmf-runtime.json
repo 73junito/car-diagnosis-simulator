@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "runtimeRole": "lmf-derived-actuator-lab-runtime",
+  "sourceContracts": [
+    "/data/lmf/lab-registry.json",
+    "/data/lmf/engineering-model-adapters.json",
+    "/data/lmf/diagnostic-tools.json",
+    "/data/lmf/measurement-contract.json",
+    "/data/lmf/fault-taxonomy.json"
+  ],
+  "labId": "actuator-lab",
+  "route": "/dashboard/student/actuator-lab/",
+  "engineeringAdapterId": "electrical-circuit",
+  "modelRef": "/data/circuit-templates/12v-pwm-actuator.json",
+  "engineeringProfileRef": "/data/engineering/labs/actuator-training.json",
+  "toolIds": ["tool.dmm", "tool.oscilloscope", "tool.scan-tool", "tool.current-clamp"],
+  "measurementTypes": ["voltage", "voltage_drop", "resistance", "continuity", "frequency", "duty_cycle", "waveform", "diagnostic_data", "rpm", "temperature", "pressure", "speed", "position", "command_state", "current"],
+  "faultClassIds": ["electrical.open", "electrical.high-resistance", "electrical.short-to-ground", "electrical.short-to-power"],
+  "directPracticeAllowed": true,
+  "assessmentEligibilityAuthority": "external-governance-only",
+  "publicationAuthority": "external-human-governance-only"
+}

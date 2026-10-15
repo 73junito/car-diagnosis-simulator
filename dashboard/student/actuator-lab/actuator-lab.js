@@ -1,9 +1,15 @@
 "use strict";
 (async function initActuatorLab(){
  const NS="http://www.w3.org/2000/svg";
+ const runtimeResponse=await fetch("/data/architecture/actuator-lab-lmf-runtime.json");
+ if(!runtimeResponse.ok) throw new Error("Unable to load Actuator Lab LMF runtime contract.");
+ const runtime=await runtimeResponse.json();
+ if(runtime.labId!=="actuator-lab"||runtime.engineeringAdapterId!=="electrical-circuit"){
+  throw new Error("Actuator Lab LMF runtime contract is invalid.");
+ }
  const [templateResponse,engineeringResponse,symbolLibrary,connectionLibrary]=await Promise.all([
-  fetch("/data/circuit-templates/12v-pwm-actuator.json"),
-  fetch("/data/engineering/labs/actuator-training.json"),
+  fetch(runtime.modelRef),
+  fetch(runtime.engineeringProfileRef),
   window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),
   window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections")
  ]);
@@ -11,6 +17,9 @@
  if(!engineeringResponse.ok) throw new Error("Unable to load actuator engineering profile.");
  const circuit=await templateResponse.json();
  const engineeringProfile=await engineeringResponse.json();
+ document.documentElement.dataset.lmfLabId=runtime.labId;
+ document.documentElement.dataset.lmfEngineeringAdapter=runtime.engineeringAdapterId;
+ document.documentElement.dataset.lmfRuntimeRole=runtime.runtimeRole;
  const engine=window.TorqueMindCircuitEngine;
  const validation=window.TorqueMindCircuitTemplateContracts.validateCircuitTemplate(circuit,engine,symbolLibrary.registry,connectionLibrary.registry);
  if(!validation.valid) throw new Error(validation.errors.join("; "));
