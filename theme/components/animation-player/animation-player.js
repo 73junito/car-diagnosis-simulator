@@ -59,6 +59,17 @@ export function validateAnimationRuntimeManifest(manifest, { allowDraft = false 
     }
   }
 
+  if (manifest.schemaVersion === '1.1.0' && manifest.presentation?.mode === 'animated') {
+    const declaredClipIds = new Set((manifest.presentation.clips || []).map((clip) => clip.id))
+    if (declaredClipIds.size === 0) errors.push('Animated presentation requires declared clips.')
+    for (const step of manifest.steps || []) {
+      if (step.timeline?.kind !== 'clip' || !declaredClipIds.has(step.timeline.clipId)) {
+        errors.push('Animated instructional steps must reference declared presentation clips.')
+        break
+      }
+    }
+  }
+
   return { ok: errors.length === 0, errors, published, canRender3d: errors.length === 0 && interactive3d && Boolean(assetUrl), assetUrl, fallbackUrl }
 }
 
@@ -259,18 +270,70 @@ export async function mountAnimationPlayer({
     return { manifest: resolvedManifest, validation, runtime: null, error, dispose() {} }
   }
 
-  function seekCurrentStep() {
-    if (!steps.length) return
-    const denominator = Math.max(steps.length - 1, 1)
-    runtime.seekNormalized(currentStep / denominator)
-    renderStep()
-    status.textContent = 'Step ' + (currentStep + 1) + ' of ' + steps.length
+  const declaredClips = new Map((resolvedManifest.presentation?.clips || []).map((clip) => [clip.id, clip]))
+
+  function showRuntimeFallback(reason) {
+    runtime?.setPlaying?.(false)
+    canvas.hidden = true
+    if (fallback) fallback.hidden = false
+    status.textContent = 'Fallback displayed'
+    const existing = stage.querySelector('[data-animation-runtime-failure]')
+    if (!existing) {
+      const message = renderTextFallback(stage, resolvedManifest, reason || 'The requested animation clip is unavailable. The instructional fallback remains available.')
+      message.dataset.animationRuntimeFailure = ''
+    }
   }
 
-  playButton.addEventListener('click', () => { runtime.setPlaying(true); status.textContent = 'Playing' })
+  function activateCurrentStep({ play = false } = {}) {
+    if (!steps.length) return true
+    const step = steps[currentStep]
+    renderStep()
+
+    try {
+      if (step.timeline?.kind === 'clip') {
+        const clip = declaredClips.get(step.timeline.clipId)
+        if (!clip) throw new Error('Instructional step references an undeclared animation clip: ' + step.timeline.clipId)
+        if (typeof runtime.playClip !== 'function') throw new Error('Animation runtime does not support named clip playback.')
+        runtime.playClip(clip.assetClipName, {
+          startSeconds: step.timeline.startSeconds,
+          endSeconds: step.timeline.endSeconds,
+          play: Boolean(play) && !prefersReducedMotion,
+        })
+      } else {
+        const denominator = Math.max(steps.length - 1, 1)
+        runtime.setPlaying(false)
+        runtime.seekNormalized(currentStep / denominator)
+      }
+    } catch (error) {
+      showRuntimeFallback(error.message)
+      return false
+    }
+
+    status.textContent = play && !prefersReducedMotion
+      ? 'Playing step ' + (currentStep + 1) + ' of ' + steps.length
+      : 'Step ' + (currentStep + 1) + ' of ' + steps.length
+    return true
+  }
+
+  if (!activateCurrentStep({ play: false })) {
+    return { manifest: resolvedManifest, validation, runtime, dispose() { runtime?.dispose?.() } }
+  }
+
+  playButton.addEventListener('click', () => {
+    if (resolvedManifest.presentation?.mode === 'animated') activateCurrentStep({ play: true })
+    else { runtime.setPlaying(true); status.textContent = 'Playing' }
+  })
   pauseButton.addEventListener('click', () => { runtime.setPlaying(false); status.textContent = 'Paused' })
-  previousButton.addEventListener('click', () => { currentStep = Math.max(0, currentStep - 1); runtime.setPlaying(false); seekCurrentStep() })
-  nextButton.addEventListener('click', () => { currentStep = Math.min(Math.max(steps.length - 1, 0), currentStep + 1); runtime.setPlaying(false); seekCurrentStep() })
+  previousButton.addEventListener('click', () => {
+    currentStep = Math.max(0, currentStep - 1)
+    runtime.setPlaying(false)
+    activateCurrentStep({ play: false })
+  })
+  nextButton.addEventListener('click', () => {
+    currentStep = Math.min(Math.max(steps.length - 1, 0), currentStep + 1)
+    runtime.setPlaying(false)
+    activateCurrentStep({ play: false })
+  })
   resetButton.addEventListener('click', () => { runtime.resetCamera(); status.textContent = 'Camera reset' })
   fallbackButton?.addEventListener('click', () => {
     const showingFallback = fallback.hidden

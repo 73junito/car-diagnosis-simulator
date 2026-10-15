@@ -87,11 +87,14 @@ export async function createThreeAnimationRuntime({
   const pointer = new THREE.Vector2()
   const componentIds = new Set(components.map((item) => normalizeComponentKey(item.id)))
   const componentObjects = new Map()
-  const clipActions = []
+  const clipActions = new Map()
   let model = null
   let mixer = null
   let maxDuration = 0
-  let playing = !reducedMotion
+  let activeClipName = null
+  let activeAction = null
+  let activeRangeEnd = null
+  let playing = false
   let disposed = false
   let frameId = null
   let selectionHelper = null
@@ -151,7 +154,14 @@ export async function createThreeAnimationRuntime({
 
   function animationFrame() {
     if (disposed) return
-    if (playing && mixer) mixer.update(1 / 60)
+    if (playing && mixer && activeAction) {
+      mixer.update(1 / 60)
+      if (activeRangeEnd != null && activeAction.time >= activeRangeEnd) {
+        activeAction.time = activeRangeEnd
+        activeAction.paused = true
+        playing = false
+      }
+    }
     if (controls.enableDamping) controls.update()
     render()
     if (playing || controls.enableDamping) frameId = requestAnimationFrame(animationFrame)
@@ -194,11 +204,15 @@ export async function createThreeAnimationRuntime({
     if (Array.isArray(gltf.animations) && gltf.animations.length > 0) {
       mixer = new THREE.AnimationMixer(model)
       for (const clip of gltf.animations) {
+        const clipName = String(clip.name || '').trim()
+        if (!clipName) continue
         maxDuration = Math.max(maxDuration, Number(clip.duration) || 0)
         const action = mixer.clipAction(clip)
-        action.play()
-        action.paused = reducedMotion
-        clipActions.push(action)
+        action.enabled = true
+        action.clampWhenFinished = true
+        action.setLoop(THREE.LoopOnce, 1)
+        action.paused = true
+        clipActions.set(clipName, { action, duration: Number(clip.duration) || 0 })
       }
     }
     fitCamera(THREE, camera, controls, model)
@@ -212,10 +226,70 @@ export async function createThreeAnimationRuntime({
   }
 
   function setPlaying(nextPlaying) {
-    playing = Boolean(nextPlaying) && !reducedMotion
-    for (const action of clipActions) action.paused = !playing
+    const requested = Boolean(nextPlaying) && !reducedMotion
+    if (activeAction) {
+      playing = requested
+      activeAction.paused = !playing
+    } else {
+      playing = requested && clipActions.size > 0
+      for (const entry of clipActions.values()) {
+        if (playing) entry.action.play()
+        entry.action.paused = !playing
+      }
+    }
     if (playing) ensureLoop()
     else render()
+  }
+
+  function requireClip(clipName) {
+    const normalized = String(clipName || '').trim()
+    const clip = clipActions.get(normalized)
+    if (!clip) throw new Error('Animation clip is unavailable: ' + normalized)
+    return { name: normalized, ...clip }
+  }
+
+  function playClip(clipName, { startSeconds = 0, endSeconds = null, play = true } = {}) {
+    const clip = requireClip(clipName)
+    const start = Math.min(Math.max(Number(startSeconds) || 0, 0), clip.duration)
+    const requestedEnd = endSeconds == null ? clip.duration : Number(endSeconds)
+    const end = Math.min(Math.max(Number.isFinite(requestedEnd) ? requestedEnd : clip.duration, start), clip.duration)
+    if (!(end > start)) throw new Error('Animation clip range must have endSeconds greater than startSeconds: ' + clip.name)
+
+    for (const entry of clipActions.values()) {
+      entry.action.stop()
+      entry.action.paused = true
+    }
+
+    activeClipName = clip.name
+    activeAction = clip.action
+    activeRangeEnd = end
+    activeAction.reset()
+    activeAction.enabled = true
+    activeAction.setLoop(THREE.LoopOnce, 1)
+    activeAction.clampWhenFinished = true
+    activeAction.time = start
+    activeAction.play()
+    activeAction.paused = true
+    playing = Boolean(play) && !reducedMotion
+    activeAction.paused = !playing
+    mixer?.update(0)
+    if (playing) ensureLoop()
+    else render()
+    return { clipName: activeClipName, startSeconds: start, endSeconds: end, playing }
+  }
+
+  function seekClip(clipName, seconds = 0) {
+    const clip = requireClip(clipName)
+    const time = Math.min(Math.max(Number(seconds) || 0, 0), clip.duration)
+    if (activeClipName !== clip.name) {
+      playClip(clip.name, { startSeconds: 0, endSeconds: clip.duration, play: false })
+    }
+    activeAction.time = time
+    activeAction.paused = true
+    playing = false
+    mixer?.update(0)
+    render()
+    return time
   }
 
   function seekNormalized(value) {
@@ -234,11 +308,14 @@ export async function createThreeAnimationRuntime({
 
   return {
     setPlaying,
+    playClip,
+    seekClip,
     seekNormalized,
     resetCamera,
     selectComponent,
     dispose,
-    hasAnimations: maxDuration > 0,
+    hasAnimations: clipActions.size > 0,
+    availableClips: Array.from(clipActions.keys()),
     availableComponents: Array.from(componentObjects.keys()),
   }
 }

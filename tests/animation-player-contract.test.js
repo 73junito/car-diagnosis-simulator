@@ -4,7 +4,26 @@ import { mountAnimationPlayer, validateAnimationRuntimeManifest } from '../theme
 
 const root = path.resolve(__dirname, '..')
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'animation', 'manifests', 'starting-system-voltage-drop-foundation.json'), 'utf8'))
+const reviewManifest = JSON.parse(fs.readFileSync(path.join(root, 'animation', 'manifests', 'starting-system-voltage-drop-review.json'), 'utf8'))
 const clone = (value) => JSON.parse(JSON.stringify(value))
+
+function createRuntimeStub({ onPlayClip } = {}) {
+  return {
+    setPlaying: jest.fn(),
+    playClip: jest.fn((name, options) => {
+      if (onPlayClip) return onPlayClip(name, options)
+      return { clipName: name, ...options }
+    }),
+    seekClip: jest.fn(),
+    seekNormalized: jest.fn(),
+    resetCamera: jest.fn(),
+    selectComponent: jest.fn(),
+    dispose: jest.fn(),
+    hasAnimations: true,
+    availableClips: reviewManifest.presentation.clips.map((clip) => clip.assetClipName),
+    availableComponents: reviewManifest.components.map((component) => component.id),
+  }
+}
 
 describe('ANIM-1B Three.js player contract', () => {
   beforeEach(() => {
@@ -83,6 +102,108 @@ describe('ANIM-1B Three.js player contract', () => {
     expect(container.querySelector('.tm-animation-player__purpose').textContent).toBe(manifest.instructionalPurpose)
   })
 
+  test('maps instructional steps to manifest-declared named clips', async () => {
+    const runtime = createRuntimeStub()
+    const container = document.getElementById('player')
+    await mountAnimationPlayer({
+      container,
+      manifest: reviewManifest,
+      allowDraft: true,
+      runtimeFactory: jest.fn().mockResolvedValue(runtime),
+    })
+
+    expect(runtime.playClip).toHaveBeenNthCalledWith(1, 'identify-current-path', {
+      startSeconds: 0,
+      endSeconds: 1,
+      play: false,
+    })
+
+    container.querySelector('[data-animation-action="next-step"]').click()
+    expect(runtime.playClip).toHaveBeenLastCalledWith('identify-control-path', {
+      startSeconds: 0,
+      endSeconds: 1,
+      play: false,
+    })
+
+    container.querySelector('[data-animation-action="play"]').click()
+    expect(runtime.playClip).toHaveBeenLastCalledWith('identify-control-path', {
+      startSeconds: 0,
+      endSeconds: 1,
+      play: true,
+    })
+  })
+
+  test('preserves legacy global playback for 1.0 manifests without named presentation clips', async () => {
+    const legacy = clone(reviewManifest)
+    legacy.schemaVersion = '1.0.0'
+    delete legacy.presentation
+    for (const step of legacy.steps) {
+      delete step.timeline
+      delete step.highlightComponentIds
+      delete step.camera
+    }
+    const runtime = createRuntimeStub()
+    const container = document.getElementById('player')
+    await mountAnimationPlayer({
+      container,
+      manifest: legacy,
+      allowDraft: true,
+      runtimeFactory: jest.fn().mockResolvedValue(runtime),
+    })
+
+    expect(runtime.playClip).not.toHaveBeenCalled()
+    container.querySelector('[data-animation-action="play"]').click()
+    expect(runtime.setPlaying).toHaveBeenLastCalledWith(true)
+  })
+
+  test('reduced motion permits step navigation without starting clip motion', async () => {
+    window.matchMedia = jest.fn().mockReturnValue({ matches: true, addEventListener: jest.fn(), removeEventListener: jest.fn() })
+    const runtime = createRuntimeStub()
+    const container = document.getElementById('player')
+    await mountAnimationPlayer({
+      container,
+      manifest: reviewManifest,
+      allowDraft: true,
+      runtimeFactory: jest.fn().mockResolvedValue(runtime),
+    })
+
+    expect(container.querySelector('[data-animation-action="play"]').disabled).toBe(true)
+    container.querySelector('[data-animation-action="next-step"]').click()
+    expect(runtime.playClip).toHaveBeenLastCalledWith('identify-control-path', {
+      startSeconds: 0,
+      endSeconds: 1,
+      play: false,
+    })
+    expect(runtime.playClip.mock.calls.some(([, options]) => options.play === true)).toBe(false)
+  })
+
+  test('fails closed to the static fallback when a named GLB clip is unavailable', async () => {
+    const runtime = createRuntimeStub({
+      onPlayClip(name) { throw new Error('Animation clip is unavailable: ' + name) },
+    })
+    const container = document.getElementById('player')
+    const controller = await mountAnimationPlayer({
+      container,
+      manifest: reviewManifest,
+      allowDraft: true,
+      runtimeFactory: jest.fn().mockResolvedValue(runtime),
+    })
+
+    expect(controller.runtime).toBe(runtime)
+    expect(container.querySelector('.tm-animation-player__canvas').hidden).toBe(true)
+    expect(container.querySelector('figure.tm-animation-player__fallback').hidden).toBe(false)
+    expect(container.querySelector('[data-animation-runtime-failure]')).not.toBeNull()
+    expect(container.querySelector('[role="status"]').textContent).toBe('Fallback displayed')
+  })
+
+  test('rejects animated runtime manifests whose steps do not reference declared clips', () => {
+    const candidate = clone(reviewManifest)
+    candidate.presentation.clips = []
+    const result = validateAnimationRuntimeManifest(candidate, { allowDraft: true })
+    expect(result.ok).toBe(false)
+    expect(result.errors.join('\n')).toMatch(/declared clips/)
+  })
+
   test('pins Three.js without adding React and packages only same-origin runtime modules', () => {
     const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
     expect(pkg.dependencies.three).toBe('^0.186.1')
@@ -104,6 +225,9 @@ describe('ANIM-1B Three.js player contract', () => {
     expect(runtime).toContain('OrbitControls')
     expect(runtime).toContain('loadAsync(assetUrl)')
     expect(runtime).toContain('selectComponent')
+    expect(runtime).toContain('playClip')
+    expect(runtime).toContain('seekClip')
+    expect(runtime).toContain('availableClips')
     expect(runtime).toContain('resetCamera')
     expect(player).toContain("matchMedia('(prefers-reduced-motion: reduce)')")
     expect(player).toContain('Previous step')
