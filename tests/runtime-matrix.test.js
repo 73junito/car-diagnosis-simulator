@@ -4,7 +4,7 @@ describe('runtime stabilization contract', () => {
   test('repository runtime surfaces and compatibility lanes match the authoritative matrix', () => {
     const result = verifyRuntimeMatrix();
 
-    expect(result.architectureSchemaFiles).toBe(12);
+    expect(result.architectureSchemaFiles).toBe(13);
     expect(result.canonicalNodeMajor).toBe(22);
     expect(result.compatibilityNodeMajors).toEqual([22, 24]);
     expect(result.releaseAuthorityMajor).toBe(22);
@@ -12,7 +12,9 @@ describe('runtime stabilization contract', () => {
     expect(result.observabilityBackend).toBe('cloudflare-observability');
     expect(result.externalOtlpStatus).toBe('pending-account-destination');
     expect(result.operationalFeatureFlags).toBe(2);
-    expect(result.protectedFeatureFlags).toBe(5);
+    expect(result.protectedFeatureFlags).toBe(6);
+    expect(result.vectorRetrievalStatus).toBe('disabled-no-approved-vector-corpus');
+    expect(result.vectorRetrievalProductionActivation).toBe(false);
     expect(result.surfaces).toEqual([
       { id: 'public', compatibilityDate: '2026-07-30' },
       { id: 'app', compatibilityDate: '2026-08-08' },

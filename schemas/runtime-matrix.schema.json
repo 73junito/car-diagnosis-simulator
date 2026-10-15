@@ -12,6 +12,7 @@
     "productionExecutionRuntime",
     "surfaces",
     "observability",
+    "vectorRetrieval",
     "persistence",
     "lmf"
   ],
@@ -92,6 +93,24 @@
         "primaryBackend": { "type": "string", "minLength": 1 },
         "plannedExternalOtlpBackend": { "type": "string", "minLength": 1 },
         "externalOtlpStatus": { "type": "string", "minLength": 1 }
+      }
+    },
+    "vectorRetrieval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract",
+        "validator",
+        "provider",
+        "status",
+        "productionActivationAllowed"
+      ],
+      "properties": {
+        "contract": { "const": "data/architecture/vector-retrieval-policy.json" },
+        "validator": { "const": "scripts/verify-vector-retrieval-policy.js" },
+        "provider": { "const": "supabase-pgvector" },
+        "status": { "const": "disabled-no-approved-vector-corpus" },
+        "productionActivationAllowed": { "const": false }
       }
     },
     "persistence": {

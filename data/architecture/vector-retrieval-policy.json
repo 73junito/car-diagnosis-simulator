@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "provider": "supabase-pgvector",
+  "status": "disabled-no-approved-vector-corpus",
+  "productionActivationAllowed": false,
+  "extension": {
+    "name": "vector",
+    "availableVersion": "0.8.0",
+    "installed": false,
+    "installationRequiresSeparateMigration": true
+  },
+  "storage": {
+    "embeddingsTableExists": false,
+    "vectorIndexExists": false,
+    "approvedCorpusManifestRequired": true,
+    "serviceRoleOnly": true
+  },
+  "sourceEligibility": {
+    "approvedSourceStatusRequired": "approved",
+    "approvedChunkStatusRequired": "approved",
+    "databaseStorageAllowedRequired": true,
+    "aiRagIngestionAllowedRequired": true,
+    "currentHumanRightsReviewRequired": true,
+    "expiredRightsRejected": true,
+    "referenceOnlySourcesRejected": true,
+    "unverifiedLocalReferenceRejected": true
+  },
+  "explicitRestrictions": [
+    {
+      "pattern": "openstax",
+      "rule": "link-reference-only",
+      "vectorIngestionAllowed": false
+    },
+    {
+      "pattern": "unverified-local-reference",
+      "rule": "rights-unverified",
+      "vectorIngestionAllowed": false
+    }
+  ],
+  "currentEligibleSourceEvidence": {
+    "sourceId": "frontiers-automotive-alternator-2023",
+    "approvedChunkCountObserved": 2,
+    "rightsClearedForDatabaseStorage": true,
+    "rightsClearedForAiRag": true,
+    "createsApprovedVectorCorpus": false
+  },
+  "authority": {
+    "retrievalActivation": "external-human-governance-only",
+    "assessmentEligibility": "external-human-governance-only",
+    "publication": "external-human-governance-only"
+  }
+}

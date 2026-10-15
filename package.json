@@ -140,6 +140,7 @@
     "validate:observability-contract": "node scripts/verify-observability-contract.js",
     "validate:architecture-schemas": "node scripts/verify-architecture-schemas.js",
     "validate:feature-flags": "node scripts/verify-feature-flag-registry.js",
+    "validate:vector-retrieval-policy": "node scripts/verify-vector-retrieval-policy.js",
     "validate:runtime-matrix": "node scripts/verify-runtime-matrix.js"
   },
   "devDependencies": {

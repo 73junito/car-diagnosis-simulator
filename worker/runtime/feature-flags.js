@@ -57,6 +57,13 @@ export const FEATURE_FLAGS = Object.freeze({
     killSwitchEnvVar: null,
     governanceLocked: true,
     defaultEnabled: false
+  }),
+  semanticVectorRetrieval: Object.freeze({
+    id: 'semantic-vector-retrieval',
+    envVar: null,
+    killSwitchEnvVar: null,
+    governanceLocked: true,
+    defaultEnabled: false
   })
 })
 

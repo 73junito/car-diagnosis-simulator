@@ -55,6 +55,12 @@
       "enabled": false,
       "environmentActivationAllowed": false,
       "authority": "external-human-governance-only"
+    },
+    {
+      "id": "semantic-vector-retrieval",
+      "enabled": false,
+      "environmentActivationAllowed": false,
+      "authority": "external-human-governance-only"
     }
   ]
 }

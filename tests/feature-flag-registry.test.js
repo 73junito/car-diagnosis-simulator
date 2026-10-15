@@ -26,7 +26,8 @@ describe('governed feature flag registry', () => {
     'assessmentScoring',
     'institutionalAssessment',
     'highStakesAssessment',
-    'productionAssessmentRelease'
+    'productionAssessmentRelease',
+    'semanticVectorRetrieval'
   ])('%s cannot be enabled by environment injection', (flagName) => {
     const resolved = resolveFeatureFlag(flagName, {
       ASSESSMENT_ENABLED: 'true',
@@ -45,6 +46,6 @@ describe('governed feature flag registry', () => {
   test('checked-in environment states and governance baseline match the registry', () => {
     const result = verifyFeatureFlagRegistry()
     expect(result.operationalCount).toBe(2)
-    expect(result.protectedCount).toBe(5)
+    expect(result.protectedCount).toBe(6)
   })
 })
