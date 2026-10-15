@@ -1,36 +1,63 @@
-import { randomUUID } from 'crypto'
+import { resolveRequestCorrelation } from '../utils/request-correlation.js'
+import {
+  logHttpRequestStarted,
+  logHttpRequestCompleted,
+  logHttpRequestFailed
+} from '../utils/request-lifecycle-logger.js'
 
-const SAFE_ID_RE = /^[A-Za-z0-9\-_:]{8,64}$/
-
-export function createRequestContext() {
+export function createRequestContext({ surface = 'app', logRequests = true } = {}) {
   return async (c, next) => {
-    let reqId = ''
-    try {
-      if (c && c.req && c.req.headers && typeof c.req.headers.get === 'function') {
-        reqId = c.req.headers.get('x-request-id') || ''
-      }
-    } catch (e) {
-      reqId = ''
-    }
-    if (!SAFE_ID_RE.test(reqId)) {
-      try {
-        reqId = randomUUID()
-      } catch (e) {
-        // fallback simple id
-        reqId = `rid-${Date.now()}-${Math.floor(Math.random() * 10000)}`
-      }
-    }
-    // attach to context
-    c.reqId = reqId
-    // ensure header present on response if available
-    if (typeof c.header === 'function') c.header('x-request-id', reqId)
+    const correlation = resolveRequestCorrelation(c?.req?.raw || c?.req)
+    const method = c?.req?.method || null
+    const path = c?.req?.path || null
     const start = Date.now()
-    if (typeof c.set === 'function') c.set('req_start', start)
+
+    c.reqId = correlation.requestId
+    c.traceId = correlation.traceId
+    c.cfRay = correlation.cfRay
+
+    if (typeof c.set === 'function') {
+      c.set('request_correlation', correlation)
+      c.set('req_start', start)
+    }
+
+    if (typeof c.header === 'function') {
+      c.header('x-request-id', correlation.requestId)
+      if (correlation.traceId) c.header('x-trace-id', correlation.traceId)
+    }
+
+    if (logRequests) {
+      logHttpRequestStarted({ surface, correlation, method, path })
+    }
+
     try {
       await next()
-    } finally {
-      const end = Date.now()
-      if (typeof c.set === 'function') c.set('req_duration_ms', end - start)
+      const durationMs = Date.now() - start
+      if (typeof c.set === 'function') c.set('req_duration_ms', durationMs)
+      if (logRequests) {
+        logHttpRequestCompleted({
+          surface,
+          correlation,
+          method,
+          path,
+          status: c?.res?.status || 200,
+          durationMs
+        })
+      }
+    } catch (error) {
+      const durationMs = Date.now() - start
+      if (typeof c.set === 'function') c.set('req_duration_ms', durationMs)
+      if (logRequests) {
+        logHttpRequestFailed({
+          surface,
+          correlation,
+          method,
+          path,
+          errorType: error?.name || 'unhandled_error',
+          durationMs
+        })
+      }
+      throw error
     }
   }
 }

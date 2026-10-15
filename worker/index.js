@@ -113,6 +113,8 @@ import { orchestrationPersistenceHealth } from './runtime/orchestration-persiste
 
 const app = new Hono();
 
+app.use('*', createRequestContext({ surface: 'app' }))
+
 app.get("/api/health", (c) => {
   const orchestrationPersistence = orchestrationPersistenceHealth(c.env)
   return c.json({
@@ -131,8 +133,6 @@ app.use('/api/torquemind-feedback/*', cors({
   allowHeaders: ['Content-Type'],
   maxAge: 86400
 }))
-// attach request context middleware for observability
-app.use('/api/torquemind-feedback', createRequestContext())
 // attach rate limiting (in-memory store for dev/tests)
 app.use('/api/torquemind-feedback', createRateLimitMiddleware())
 
