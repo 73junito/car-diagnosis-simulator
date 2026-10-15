@@ -38,6 +38,11 @@ jobs:
         continue-on-error: true
         run: npm run monitor:production-baseline
 
+      - name: Verify Google crawler access across public inventory
+        id: crawler_monitor
+        continue-on-error: true
+        run: npm run validate:google-crawler-access
+
       - name: Upload monitor report
         if: always()
         uses: actions/upload-artifact@v4
@@ -50,6 +55,8 @@ jobs:
       - name: Write monitor summary
         if: always()
         shell: bash
+        env:
+          CRAWLER_OUTCOME: ${{ steps.crawler_monitor.outcome }}
         run: |
           node <<'NODE' >> "$GITHUB_STEP_SUMMARY"
           const fs = require('fs')
@@ -63,6 +70,8 @@ jobs:
           console.log('')
           console.log(`**Result:** ${report.ok ? 'PASS' : 'FAIL'} — ${report.gates_passed}/${report.gates_total} gates passed`)
           console.log('')
+          console.log(`**Google crawler inventory:** ${process.env.CRAWLER_OUTCOME || 'unknown'}`)
+          console.log('')
           console.log('| Gate | Status |')
           console.log('| --- | --- |')
           for (const item of report.results) {
@@ -70,8 +79,8 @@ jobs:
           }
           NODE
 
-      - name: Fail on production regression
-        if: steps.production_monitor.outcome == 'failure'
+      - name: Fail on production or crawler regression
+        if: steps.production_monitor.outcome == 'failure' || steps.crawler_monitor.outcome == 'failure'
         run: |
-          echo "Production baseline regression detected. See the uploaded monitor report."
+          echo "Production baseline or Google crawler regression detected. See the workflow output and uploaded monitor report."
           exit 1
