@@ -10,6 +10,7 @@ module.exports = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/tests/playwright/',
+    '/tests/animation-review/',
     // Anchored to a path-segment boundary: Jest matches absolute, forward-slash
     // normalized paths, so an unanchored 'supabase/tests/' would also ignore any
     // checkout directory ending in '-supabase' plus its own tests/ folder.
