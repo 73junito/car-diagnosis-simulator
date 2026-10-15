@@ -1,0 +1,59 @@
+name: Meshy API Connectivity
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - chore/meshy-api-connectivity-check
+    paths:
+      - ".github/workflows/meshy-api-connectivity.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/meshy-api-connectivity.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  meshy-connectivity:
+    name: Meshy API connectivity
+    runs-on: ubuntu-latest
+    environment: meshy
+    timeout-minutes: 5
+    env:
+      MESHY_API: ${{ secrets.MESHY_API }}
+    steps:
+      - name: Verify secret is configured
+        shell: bash
+        run: |
+          if [ -z "${MESHY_API:-}" ]; then
+            echo "::error::GitHub Environment 'meshy' does not expose secret MESHY_API to this job."
+            exit 1
+          fi
+
+      - name: Authenticate with Meshy
+        shell: bash
+        run: |
+          set -euo pipefail
+          response_file="${RUNNER_TEMP}/meshy-balance.json"
+          http_code="$(curl --silent --show-error             --output "${response_file}"             --write-out "%{http_code}"             --connect-timeout 10             --max-time 30             --header "Authorization: Bearer ${MESHY_API}"             "https://api.meshy.ai/openapi/v1/balance")"
+
+          echo "Meshy API HTTP status: ${http_code}"
+
+          if [ "${http_code}" != "200" ]; then
+            echo "::error::Meshy API authentication/connectivity check failed with HTTP ${http_code}."
+            exit 1
+          fi
+
+          node -e '
+            const fs = require("fs");
+            const body = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+            if (!Number.isFinite(body.balance)) {
+              console.error("::error::Meshy returned HTTP 200 but the balance response schema was not recognized.");
+              process.exit(1);
+            }
+            console.log("Meshy API authentication succeeded; balance response schema is valid.");
+          ' "${response_file}"
+
+      - name: Confirm no generation request was made
+        run: echo "Connectivity test used GET /openapi/v1/balance only; no 3D generation task was created."
