@@ -1,6 +1,13 @@
 {
   "agentMayApprove": false,
   "agentMayRelease": false,
+  "animationClipCount": 4,
+  "animationClipNames": [
+    "identify-current-path",
+    "identify-control-path",
+    "select-measurement-path",
+    "interpret-with-evidence"
+  ],
   "animationId": "starting-system-voltage-drop-review",
   "assessmentEligible": false,
   "assetStatus": "engineering-derived-review-only",
@@ -28,20 +35,21 @@
     "FAULT_HIGH_RES_GROUND",
     "FAULT_HIGH_RES_POWER"
   ],
-  "generatorScriptSha256": "4e7143908bd1c666021d58aab690c9722e71f6974e9026b941b966722a7e777a",
+  "generatorScriptSha256": "4fa03556036e09d7d681c771048c8ce4d3374a45770f0e171be91cf21f33fe2d",
   "humanApprovalRequired": true,
   "instructionalOverlays": [
     "digital-multimeter"
   ],
-  "manifestSha256": "ff32ae5101d67d546ce06304f385bb25f47d2e56ffc7538aa5b2a25fbea5495c",
+  "manifestSha256": "0c0f8354cc2ee16463ffa44db462db25f04049d912ba3d1e31feab0cf89260ab",
   "numericPolicy": "No vehicle-specific acceptable measurement or limit is embedded in the 3D review asset.",
   "operatingStateIds": [
     "key-off",
     "key-on",
     "crank"
   ],
-  "outputBytes": 72716,
-  "outputSha256": "c159ab3a2e779898467840018fef3c85062d19e04eef77796e7f234a97ac1303",
+  "outputBytes": 77576,
+  "outputSha256": "d9cbc5f592493d308c4a488335555f511d59ebe022bdf413d3f1df3b1cd31121",
+  "presentationMode": "animated",
   "publicationAllowed": false,
   "schemaVersion": "1.0.0",
   "scoredAssessmentApproved": false,

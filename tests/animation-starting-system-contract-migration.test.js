@@ -55,7 +55,7 @@ describe('ANIM-2B Starting System schema 1.1 migration', () => {
     expect(faultIds(review)).toEqual(authoritativeFaults)
   })
 
-  test('keeps the current representations explicitly static until real Blender clips exist', () => {
+  test('keeps production static while the review model declares real Blender clips', () => {
     expect(foundation.presentation.mode).toBe('static-2d')
     expect(foundation.type).toBe('static-diagram')
     expect(foundation.rendering.renderer).toBe('static')
@@ -63,18 +63,28 @@ describe('ANIM-2B Starting System schema 1.1 migration', () => {
     expect(foundation.rendering.assetPath).toBeNull()
     expect(foundation.rendering.fallbackImagePath).toBe('animation/fallbacks/starting-system-voltage-drop.svg')
 
-    expect(review.presentation.mode).toBe('static-3d')
-    expect(review.presentation.clips).toEqual([])
+    expect(review.presentation.mode).toBe('animated')
+    expect(review.presentation.clips.map((clip) => clip.assetClipName)).toEqual([
+      'identify-current-path',
+      'identify-control-path',
+      'select-measurement-path',
+      'interpret-with-evidence',
+    ])
+    expect(review.presentation.clips.every((clip) => clip.durationSeconds === 1)).toBe(true)
     expect(review.rendering.assetPath).toBe('animation/review-assets/starting-system-voltage-drop-review.glb')
   })
 
-  test('maps every instructional step to a validated static interval with highlights and camera behavior', () => {
-    for (const manifest of [foundation, review]) {
-      for (const step of manifest.steps) {
-        expect(step.timeline).toEqual({ kind: 'static-interval', startSeconds: 0, endSeconds: 0 })
-        expect(step.highlightComponentIds).toEqual(step.componentIds)
-        expect(step.camera).toEqual({ behavior: 'frame-highlighted-components' })
-      }
+  test('maps production steps to static intervals and review steps to named clips', () => {
+    for (const step of foundation.steps) {
+      expect(step.timeline).toEqual({ kind: 'static-interval', startSeconds: 0, endSeconds: 0 })
+      expect(step.highlightComponentIds).toEqual(step.componentIds)
+      expect(step.camera).toEqual({ behavior: 'frame-highlighted-components' })
+    }
+    for (const step of review.steps) {
+      expect(step.timeline).toEqual({ kind: 'clip', clipId: step.id, startSeconds: 0, endSeconds: 1 })
+      expect(step.durationMs).toBe(1000)
+      expect(step.highlightComponentIds).toEqual(step.componentIds)
+      expect(step.camera).toEqual({ behavior: 'frame-highlighted-components' })
     }
   })
 
