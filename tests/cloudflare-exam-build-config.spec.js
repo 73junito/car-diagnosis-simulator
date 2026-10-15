@@ -19,10 +19,10 @@ describe('Cloudflare exam build configuration contract', () => {
 
   test('uses explicit exam config for production and Worker Previews', () => {
     expect(pkg.scripts['cloudflare:exam:deploy']).toBe(
-      'npm run exam:prepare && wrangler deploy --config wrangler.exam.jsonc'
+      'npm run exam:prepare && wrangler deploy --config wrangler.exam.jsonc --env=""'
     );
     expect(pkg.scripts['cloudflare:exam:preview']).toBe(
-      'npm run exam:prepare && wrangler preview --config wrangler.exam.jsonc'
+      'npm run exam:prepare && wrangler preview --config wrangler.exam.jsonc --env=""'
     );
   });
 });
