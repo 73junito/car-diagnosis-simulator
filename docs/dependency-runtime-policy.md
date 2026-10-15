@@ -13,6 +13,8 @@ Current Worker runtime dependencies include:
 - `hono`
 - `@supabase/supabase-js`
 
+The compatibility guard treats the currently reviewed versions as **minimum floors**, not permanent point-version pins. Routine Dependabot minor/patch updates may move these dependencies forward within their reviewed major version when the declared range remains a caret range, the lockfile satisfies that range, and all runtime/CI gates pass. Major-version changes require a dedicated runtime review.
+
 Build/test/deployment tooling remains under `devDependencies`.
 
 ## Legacy TorqueMind API

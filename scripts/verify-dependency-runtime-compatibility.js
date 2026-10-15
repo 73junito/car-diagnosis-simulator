@@ -13,6 +13,48 @@ function fail(message) {
   throw new Error(message)
 }
 
+function parseVersion(value) {
+  const match = String(value || '').trim().match(/^(\d+)\.(\d+)\.(\d+)$/)
+  if (!match) return null
+  return match.slice(1).map(Number)
+}
+
+function compareVersions(left, right) {
+  const a = parseVersion(left)
+  const b = parseVersion(right)
+  if (!a || !b) fail(`Invalid semantic version comparison: ${left} vs ${right}`)
+  for (let i = 0; i < 3; i += 1) {
+    if (a[i] > b[i]) return 1
+    if (a[i] < b[i]) return -1
+  }
+  return 0
+}
+
+function verifyCaretRuntimeDependency({ name, declaredRange, lockedVersion, reviewedFloor, major }) {
+  const match = String(declaredRange || '').trim().match(/^\^(\d+\.\d+\.\d+)$/)
+  if (!match) fail(`${name} must remain a caret-ranged production dependency`)
+
+  const declaredFloor = match[1]
+  const parsedDeclared = parseVersion(declaredFloor)
+  const parsedLocked = parseVersion(lockedVersion)
+
+  if (!parsedDeclared || parsedDeclared[0] !== major) {
+    fail(`${name} declared range must remain on major ${major}`)
+  }
+  if (!parsedLocked || parsedLocked[0] !== major) {
+    fail(`${name} lock version must remain on major ${major}`)
+  }
+  if (compareVersions(declaredFloor, reviewedFloor) < 0) {
+    fail(`${name} declared floor must not regress below reviewed ${reviewedFloor}`)
+  }
+  if (compareVersions(lockedVersion, reviewedFloor) < 0) {
+    fail(`${name} lock version must not regress below reviewed ${reviewedFloor}`)
+  }
+  if (compareVersions(lockedVersion, declaredFloor) < 0) {
+    fail(`${name} lock version must satisfy its declared floor ${declaredFloor}`)
+  }
+}
+
 function verify() {
   const pkg = readJson('package.json')
   const lock = readJson('package-lock.json')
@@ -25,14 +67,30 @@ function verify() {
   if (pkg.scripts?.minimist) fail('minimist must not appear as an npm script')
 
   const supabaseRange = pkg.dependencies?.['@supabase/supabase-js']
-  if (supabaseRange !== '^2.117.2') fail('Supabase JS must be a root production dependency at ^2.117.2')
   if (pkg.devDependencies?.['@supabase/supabase-js']) fail('Supabase JS must not remain dev-only')
 
   const rootSupabase = lock.packages?.['node_modules/@supabase/supabase-js']
-  if (!rootSupabase || rootSupabase.version !== '2.117.2') fail('Root Supabase lock version must be 2.117.2')
+  if (!rootSupabase) fail('Root Supabase lock record is required')
   if (rootSupabase.dev === true) fail('Root Supabase lock record must be production-reachable')
+  verifyCaretRuntimeDependency({
+    name: 'Supabase JS',
+    declaredRange: supabaseRange,
+    lockedVersion: rootSupabase.version,
+    reviewedFloor: '2.117.2',
+    major: 2
+  })
 
-  if (pkg.dependencies?.hono !== '^4.13.13') fail('Hono runtime dependency drifted unexpectedly')
+  const honoRange = pkg.dependencies?.hono
+  const rootHono = lock.packages?.['node_modules/hono']
+  if (!rootHono) fail('Root Hono lock record is required')
+  if (rootHono.dev === true) fail('Root Hono lock record must be production-reachable')
+  verifyCaretRuntimeDependency({
+    name: 'Hono',
+    declaredRange: honoRange,
+    lockedVersion: rootHono.version,
+    reviewedFloor: '4.13.13',
+    major: 4
+  })
 
   if (legacy.engines?.node !== '>=22.19.0') fail('Legacy API Node engine must align to >=22.19.0')
   if (legacy.dependencies?.['@supabase/supabase-js'] !== '2.105.1') {
@@ -70,4 +128,9 @@ if (require.main === module) {
   }
 }
 
-module.exports = { verify }
+module.exports = {
+  compareVersions,
+  parseVersion,
+  verify,
+  verifyCaretRuntimeDependency
+}
