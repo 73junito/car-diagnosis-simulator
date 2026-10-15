@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactType": "animation-controlled-promotion-readiness",
+  "animationId": "starting-system-voltage-drop-review",
+  "status": "blocked-awaiting-human-review-and-final-approval",
+  "sourceManifest": "animation/manifests/starting-system-voltage-drop-review.json",
+  "productionManifest": "animation/manifests/starting-system-voltage-drop-foundation.json",
+  "reviewAsset": "animation/review-assets/starting-system-voltage-drop-review.glb",
+  "reviewFallback": "animation/review-assets/starting-system-voltage-drop-review.svg",
+  "requiredHumanReviews": [
+    {
+      "role": "technical-reviewer",
+      "recordPath": null,
+      "requiredDecision": "pass"
+    },
+    {
+      "role": "instructional-reviewer",
+      "recordPath": null,
+      "requiredDecision": "pass"
+    }
+  ],
+  "finalApproval": {
+    "recordPath": null,
+    "requiredDecision": "approve-for-governed-instructional-publication",
+    "reviewerIdentityRequired": true,
+    "reviewedAtRequired": true
+  },
+  "promotionTarget": {
+    "assetDeploymentPath": "animation/assets/starting-system-voltage-drop.glb",
+    "fallbackDeploymentPath": "animation/fallbacks/starting-system-voltage-drop.svg",
+    "manifestPath": "animation/manifests/starting-system-voltage-drop-production.json"
+  },
+  "gates": {
+    "technicalReviewPassed": false,
+    "instructionalReviewPassed": false,
+    "finalHumanApprovalRecorded": false,
+    "assetHashVerified": true,
+    "manifestContractVerified": true,
+    "productionAllowlistUpdateAuthorized": false
+  },
+  "governance": {
+    "promotionMayProceed": false,
+    "publicationAllowed": false,
+    "assessmentEligible": false,
+    "scoredAssessmentApproved": false,
+    "agentMayApprove": false,
+    "agentMayRelease": false,
+    "automationMayReject": true,
+    "automationMayPromote": false
+  },
+  "invariants": [
+    "Technical and instructional review records must be independently supplied by humans and must each record a pass decision.",
+    "A separate named human final-approval record is required after both role reviews pass.",
+    "Automation may validate or reject evidence but may not create reviewer identities, review decisions, final approval, publication authorization, or release authorization.",
+    "Promotion authorization applies only to governed instructional publication of this animation asset and does not imply assessment eligibility or scored-assessment approval.",
+    "The existing review manifest and review asset remain non-production until every promotion gate is satisfied and a separate promotion action is explicitly authorized."
+  ]
+}
