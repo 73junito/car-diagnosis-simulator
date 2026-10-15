@@ -176,7 +176,7 @@
     "wrangler": "^4.143.1"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.117.2",
+    "@supabase/supabase-js": "^2.117.3",
     "hono": "^4.13.13",
     "three": "^0.186.1"
   },
