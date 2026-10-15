@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "runtimeRole": "lmf-derived-relay-load-lab-runtime",
+  "sourceContracts": [
+    "/data/lmf/lab-registry.json",
+    "/data/lmf/engineering-model-adapters.json",
+    "/data/lmf/diagnostic-tools.json",
+    "/data/lmf/measurement-contract.json",
+    "/data/lmf/fault-taxonomy.json"
+  ],
+  "labId": "relay-load-lab",
+  "route": "/dashboard/student/relay-load-lab/",
+  "engineeringAdapterId": "electrical-circuit",
+  "modelRef": "/data/circuit-templates/12v-relay-controlled-load.json",
+  "engineeringProfileRef": "/data/engineering/labs/relay-load-training.json",
+  "toolIds": ["tool.dmm", "tool.current-clamp"],
+  "measurementTypes": ["voltage", "voltage_drop", "resistance", "continuity", "frequency", "duty_cycle", "current", "waveform"],
+  "faultClassIds": ["electrical.open", "electrical.high-resistance"],
+  "directPracticeAllowed": true,
+  "assessmentEligibilityAuthority": "external-governance-only",
+  "publicationAuthority": "external-human-governance-only"
+}
