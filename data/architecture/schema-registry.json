@@ -16,6 +16,11 @@
       "id": "lmf-runtime-projections",
       "schema": "schemas/lmf-runtime.schema.json",
       "glob": "data/architecture/*-lmf-runtime.json"
+    },
+    {
+      "id": "dependency-automation-policy",
+      "schema": "schemas/dependency-automation-policy.schema.json",
+      "files": ["data/architecture/dependency-automation-policy.json"]
     }
   ]
 }
