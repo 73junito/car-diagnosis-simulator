@@ -36,6 +36,7 @@ describe('ANIM-2E Starting System human review workflow', () => {
   test('runs the human-review validator and harness in the existing Playwright CI workflow', () => {
     const workflow = read('.github/workflows/playwright-tests.yml')
     expect(workflow).toContain('npm run validate:animation-human-review --silent')
+    expect(workflow).toContain('npm run validate:animation-promotion-readiness --silent')
     expect(workflow).toContain('npm run test:animation-review-harness --silent')
   })
 
