@@ -122,6 +122,27 @@ test.describe("12 V three-wire sensor lab",()=>{
   await expect(page.locator("#sensor3dProbeState")).toContainText("TP_SENSOR_GROUND");
  });
 
+ test("standalone multi-object classroom preserves Sensor and ECM signal authority",async({page})=>{
+  await page.goto("/dashboard/student/sensor-lab/sensor-lab-3d.html");
+  await expect(page.getByRole("heading",{name:"3D Sensor Lab Classroom"})).toBeVisible();
+  await expect(page.locator('[data-tool-id="tool.dmm"]')).toHaveAttribute("data-enabled","true");
+  await expect(page.locator('[data-tool-id="tool.oscilloscope"]')).toHaveAttribute("data-enabled","true");
+  await expect(page.locator('[data-tool-id="tool.current-clamp"]')).toHaveAttribute("data-enabled","false");
+  await expect(page.locator("#testpointList .testpoint-item")).toHaveCount(4);
+  await expect(page.locator('#testpointList [data-test-point-id="TP_SENSOR_SIGNAL"] .tp-value')).toHaveText("2.5 V");
+  await expect(page.locator('#testpointList [data-test-point-id="TP_ECM_SIGNAL"] .tp-value')).toHaveText("2.5 V");
+
+  await page.locator("#faultSelect").selectOption("FAULT_SIGNAL_SHORT_GROUND");
+  await expect(page.locator('#testpointList [data-test-point-id="TP_SENSOR_SIGNAL"] .tp-value')).toHaveText("2.5 V");
+  await expect(page.locator('#testpointList [data-test-point-id="TP_ECM_SIGNAL"] .tp-value')).toHaveText("0 V");
+
+  await expect(page.locator('#testpointList [data-test-point-id="TP_SENSOR_GROUND"] .tp-value')).toContainText("No numeric value inferred");
+  await page.locator("#probeRedTarget").selectOption("TP_ECM_SIGNAL");
+  await page.locator("#dockRed").click();
+  await expect(page.locator("#probeStatus")).toContainText("Controller-observed signal");
+  await expect(page.locator("#dmmReading")).toHaveText("0 V");
+ });
+
  test("dashboard links to sensor lab",async({page})=>{
   await page.goto("/dashboard/student/");
   await page.locator('.student-more-tools > summary').click();

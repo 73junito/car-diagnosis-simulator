@@ -238,6 +238,7 @@ const requiredOutputFiles = [
   "dashboard/student/starting-system-lab/starting-system-animation.js",
   "dashboard/student/relay-load-lab/index.html",
   "dashboard/student/sensor-lab/index.html",
+  "dashboard/student/sensor-lab/sensor-lab-3d.html",
   "dashboard/student/actuator-lab/index.html",
   "dashboard/student/network-lab/index.html",
   "dashboard/student/multivoltage-lab/index.html",
