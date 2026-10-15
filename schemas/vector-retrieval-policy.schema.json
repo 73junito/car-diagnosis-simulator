@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autolearnpro.com/schemas/vector-retrieval-policy.schema.json",
+  "title": "AutoLearnPro Vector Retrieval Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "provider",
+    "status",
+    "productionActivationAllowed",
+    "extension",
+    "storage",
+    "sourceEligibility",
+    "explicitRestrictions",
+    "currentEligibleSourceEvidence",
+    "authority"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "provider": { "const": "supabase-pgvector" },
+    "status": { "const": "disabled-no-approved-vector-corpus" },
+    "productionActivationAllowed": { "const": false },
+    "extension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "availableVersion", "installed", "installationRequiresSeparateMigration"],
+      "properties": {
+        "name": { "const": "vector" },
+        "availableVersion": { "type": "string", "minLength": 1 },
+        "installed": { "const": false },
+        "installationRequiresSeparateMigration": { "const": true }
+      }
+    },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "embeddingsTableExists",
+        "vectorIndexExists",
+        "approvedCorpusManifestRequired",
+        "serviceRoleOnly"
+      ],
+      "properties": {
+        "embeddingsTableExists": { "const": false },
+        "vectorIndexExists": { "const": false },
+        "approvedCorpusManifestRequired": { "const": true },
+        "serviceRoleOnly": { "const": true }
+      }
+    },
+    "sourceEligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approvedSourceStatusRequired",
+        "approvedChunkStatusRequired",
+        "databaseStorageAllowedRequired",
+        "aiRagIngestionAllowedRequired",
+        "currentHumanRightsReviewRequired",
+        "expiredRightsRejected",
+        "referenceOnlySourcesRejected",
+        "unverifiedLocalReferenceRejected"
+      ],
+      "properties": {
+        "approvedSourceStatusRequired": { "const": "approved" },
+        "approvedChunkStatusRequired": { "const": "approved" },
+        "databaseStorageAllowedRequired": { "const": true },
+        "aiRagIngestionAllowedRequired": { "const": true },
+        "currentHumanRightsReviewRequired": { "const": true },
+        "expiredRightsRejected": { "const": true },
+        "referenceOnlySourcesRejected": { "const": true },
+        "unverifiedLocalReferenceRejected": { "const": true }
+      }
+    },
+    "explicitRestrictions": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["pattern", "rule", "vectorIngestionAllowed"],
+        "properties": {
+          "pattern": { "type": "string", "minLength": 1 },
+          "rule": { "type": "string", "minLength": 1 },
+          "vectorIngestionAllowed": { "const": false }
+        }
+      }
+    },
+    "currentEligibleSourceEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "approvedChunkCountObserved",
+        "rightsClearedForDatabaseStorage",
+        "rightsClearedForAiRag",
+        "createsApprovedVectorCorpus"
+      ],
+      "properties": {
+        "sourceId": { "type": "string", "minLength": 1 },
+        "approvedChunkCountObserved": { "type": "integer", "minimum": 0 },
+        "rightsClearedForDatabaseStorage": { "const": true },
+        "rightsClearedForAiRag": { "const": true },
+        "createsApprovedVectorCorpus": { "const": false }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["retrievalActivation", "assessmentEligibility", "publication"],
+      "properties": {
+        "retrievalActivation": { "const": "external-human-governance-only" },
+        "assessmentEligibility": { "const": "external-human-governance-only" },
+        "publication": { "const": "external-human-governance-only" }
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+name: Production Runtime Synthetic Monitor
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-runtime-synthetic-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    name: Verify live runtime surfaces and labs
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22.19.0'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Verify production twice before failing
+        shell: bash
+        run: |
+          set +e
+          npm run monitor:production-runtime
+          first_status=$?
+
+          if [ "$first_status" -eq 0 ]; then
+            exit 0
+          fi
+
+          echo "::warning::First synthetic-runtime strike detected; retrying in 2 minutes."
+          cp reports/production-runtime-synthetic.json reports/production-runtime-synthetic-attempt1.json 2>/dev/null || true
+          sleep 120
+
+          npm run monitor:production-runtime
+          second_status=$?
+
+          if [ "$second_status" -eq 0 ]; then
+            echo "Second attempt passed; treating the first failure as transient."
+            exit 0
+          fi
+
+          echo "::error::Production runtime synthetic monitor failed twice consecutively."
+          exit "$second_status"
+
+      - name: Upload synthetic monitor evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: production-runtime-synthetic-${{ github.run_id }}
+          path: reports/production-runtime-synthetic*.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Write synthetic monitor summary
+        if: always()
+        shell: bash
+        run: |
+          node <<'NODE' >> "$GITHUB_STEP_SUMMARY"
+          const fs = require('fs')
+          const reportPath = 'reports/production-runtime-synthetic.json'
+
+          console.log('## Production runtime synthetic monitor')
+          console.log('')
+
+          if (!fs.existsSync(reportPath)) {
+            console.log('Final monitor report was not generated.')
+            process.exit(0)
+          }
+
+          const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'))
+          console.log(`**Result:** ${report.ok ? 'PASS' : 'FAIL'}`)
+          console.log('')
+          console.log(`**Production labs:** ${report.lab_checks_passed}/${report.lab_checks_total} healthy`)
+          console.log('')
+          console.log('| Check | HTTP | Latency | Status |')
+          console.log('| --- | ---: | ---: | --- |')
+
+          for (const check of report.lab_checks || []) {
+            console.log(`| ${check.id} | ${check.status} | ${check.duration_ms} ms | ${check.ok ? 'PASS' : 'FAIL'} |`)
+          }
+
+          if (report.failures?.length) {
+            console.log('')
+            console.log('### Failures')
+            for (const failure of report.failures) console.log(`- ${failure}`)
+          }
+          NODE

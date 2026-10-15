@@ -56,6 +56,13 @@
     "plannedExternalOtlpBackend": "grafana-cloud",
     "externalOtlpStatus": "pending-account-destination"
   },
+  "vectorRetrieval": {
+    "contract": "data/architecture/vector-retrieval-policy.json",
+    "validator": "scripts/verify-vector-retrieval-policy.js",
+    "provider": "supabase-pgvector",
+    "status": "disabled-no-approved-vector-corpus",
+    "productionActivationAllowed": false
+  },
   "persistence": {
     "durableBusinessDataAuthority": "supabase",
     "edgeCoordination": "cloudflare-durable-objects",

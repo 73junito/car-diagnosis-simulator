@@ -1,18 +1,14 @@
 import { validateProviderConfig, sanitizeDiagnostics } from '../config/ai-config.js'
-
-const TRUE_VALUES = new Set(['1','true','yes','on'])
+import { resolveFeatureFlag } from './feature-flags.js'
 
 function text(value) {
   return typeof value === 'string' ? value.trim() : ''
 }
 
-function bool(value) {
-  return TRUE_VALUES.has(text(value).toLowerCase())
-}
-
 export function resolveDiagnosticCopilotActivation(env = {}) {
-  const enabled = bool(env.TORQUEMIND_COPILOT_ENABLED)
-  const killSwitch = bool(env.TORQUEMIND_COPILOT_KILL_SWITCH)
+  const feature = resolveFeatureFlag('diagnosticCopilot', env)
+  const enabled = feature.configuredEnabled
+  const killSwitch = feature.killSwitch
   const environment = text(env.TORQUEMIND_ENVIRONMENT) || 'unknown'
   const persistenceMode = text(env.TORQUEMIND_ORCHESTRATION_PERSISTENCE) || 'disabled'
   const persistenceExpectedRef = text(env.TORQUEMIND_ORCHESTRATION_SUPABASE_PROJECT_REF)

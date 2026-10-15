@@ -10,6 +10,10 @@ describe('runtime stabilization contract', () => {
     expect(result.releaseAuthorityVersion).toBe('22.19.0');
     expect(result.observabilityBackend).toBe('cloudflare-observability');
     expect(result.externalOtlpStatus).toBe('pending-account-destination');
+    expect(result.operationalFeatureFlags).toBe(2);
+    expect(result.protectedFeatureFlags).toBe(6);
+    expect(result.vectorRetrievalStatus).toBe('disabled-no-approved-vector-corpus');
+    expect(result.vectorRetrievalProductionActivation).toBe(false);
     expect(result.surfaces).toEqual([
       { id: 'public', compatibilityDate: '2026-07-30' },
       { id: 'app', compatibilityDate: '2026-08-08' },

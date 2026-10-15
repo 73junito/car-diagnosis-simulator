@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autolearnpro.com/schemas/dependency-automation-policy.schema.json",
+  "title": "AutoLearnPro Dependency Automation Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "provider",
+    "status",
+    "versionUpdates",
+    "requiredGates",
+    "autoMergeAllowed"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "provider": { "const": "dependabot" },
+    "status": { "const": "controlled" },
+    "versionUpdates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["npm", "githubActions"],
+      "properties": {
+        "npm": { "$ref": "#/$defs/updatePolicy" },
+        "githubActions": { "$ref": "#/$defs/updatePolicy" }
+      }
+    },
+    "requiredGates": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "autoMergeAllowed": { "const": false }
+  },
+  "$defs": {
+    "updatePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schedule", "openPullRequestLimit", "majorUpdates", "groups"],
+      "properties": {
+        "schedule": { "const": "weekly" },
+        "openPullRequestLimit": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "majorUpdates": { "const": "manual-dedicated-pr" },
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}
