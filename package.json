@@ -80,6 +80,7 @@
     "validate:browser-engineering-artifacts": "npx jest tests/browser-engineering-artifact-adapter.test.js --runInBand",
     "validate:dependency-security-exceptions": "node scripts/verify-dependency-security-exceptions.js",
     "validate:dependency-automation": "node scripts/verify-dependency-automation.js",
+    "validate:ci-postgres-service-image": "node scripts/verify-ci-postgres-service-image.js",
     "audit:production-dependencies": "npm audit --omit=dev --audit-level=moderate",
     "validate:assessment-governance-boundary": "node scripts/verify-assessment-governance-boundary.js",
     "validate:google-crawler-access": "node scripts/verify-google-crawler-access.js",
