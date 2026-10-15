@@ -1,0 +1,1142 @@
+{
+  "schemaVersion": "1.0.0",
+  "inventoryType": "local-candidate-source-inventory",
+  "collection": {
+    "collectionId": "catalog-local-snapshot-2026-10-14",
+    "observedArtifactCount": 29,
+    "sourceFilesCommitted": false,
+    "sourceFolderPortable": false,
+    "description": "Metadata-only snapshot of locally held automotive catalogs/manuals used for governed discovery and domain triage. PDF bytes are not committed."
+  },
+  "authority": {
+    "candidateUsesArePermissions": false,
+    "metadataDoesNotApproveEvidence": true,
+    "metadataDoesNotApproveRights": true,
+    "metadataDoesNotAuthorizeAssetCopying": true,
+    "metadataDoesNotAuthorizeEngineeringValues": true,
+    "engineeringAuthority": "none",
+    "publicationAuthority": "none",
+    "assessmentAuthority": "none"
+  },
+  "defaultGates": {
+    "rightsStatus": "unverified-local-reference",
+    "citationAllowed": false,
+    "ragIngestionAllowed": false,
+    "modelContextAllowed": false,
+    "reusableChunksAllowed": false,
+    "transcriptIngestionAllowed": false,
+    "figuresReuseAllowed": false,
+    "engineeringValueImportAllowed": false,
+    "assetGeometryCopyingAllowed": false,
+    "publicationAllowed": false
+  },
+  "allowedAutomatedActions": [
+    "filename-and-hash-inventory",
+    "metadata-indexing",
+    "domain-triage",
+    "component-family-triage",
+    "duplicate-detection",
+    "review-queue-preparation"
+  ],
+  "prohibitedAutomatedActions": [
+    "source-text-ingestion",
+    "rag-chunking",
+    "model-context-injection",
+    "figure-extraction-for-reuse",
+    "branded-geometry-copying",
+    "engineering-value-import",
+    "rights-approval",
+    "evidence-approval",
+    "publication",
+    "assessment-eligibility"
+  ],
+  "sources": [
+    {
+      "sourceId": "local-power-transmission-products",
+      "filename": "095119402ce10246_pdf_preview_medium.pdf",
+      "sizeBytes": 7549412,
+      "artifactSha256": "9aac301c748f34458f357f43b92d071e849dbecb464746ae2af4c0ecb1568887",
+      "publisher": "unresolved",
+      "title": "Power Transmission Products",
+      "documentType": "catalog",
+      "domainCandidates": [
+        "drivetrain"
+      ],
+      "componentFamilies": [
+        "belts",
+        "chains",
+        "couplings",
+        "bushings-and-hubs",
+        "sprockets",
+        "pulleys"
+      ],
+      "specificity": "generic-industrial-catalog",
+      "relevance": "secondary",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "out-of-scope-review"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Automotive applicability is not established from the local artifact metadata; retain as secondary candidate only."
+    },
+    {
+      "sourceId": "precision-international-parts-catalog-2024",
+      "filename": "November-Parts-Catalog-2024.pdf",
+      "sizeBytes": 5860992,
+      "artifactSha256": "9a8c391479c7649ec4bb0e5f438b8151c164afe727bb38a85ebc54e2eb7d2fc6",
+      "publisher": "Precision International Automotive Products",
+      "title": "Parts Catalog — November 2024",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "automatic-transmission"
+      ],
+      "componentFamilies": [
+        "transmission-rebuild-components",
+        "seals",
+        "friction-elements",
+        "valve-body-components",
+        "bearings"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness",
+        "generic-asset-planning"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "First pages identify Precision International and automatic-transmission application content. Copyright/reuse rights remain unreviewed."
+    },
+    {
+      "sourceId": "garrett-performance-catalog-2026",
+      "filename": "UTF-8''Garrett_Performance_Catalog_8182026-global---.pdf",
+      "sizeBytes": 171297900,
+      "artifactSha256": "0a7f35690fe962816494d8568811428088188dbf83cc2c24ae2fa00cf2ee8827",
+      "publisher": "Garrett",
+      "title": "Garrett Performance Catalog",
+      "documentType": "performance-catalog",
+      "domainCandidates": [
+        "engine-performance"
+      ],
+      "componentFamilies": [
+        "turbocharger",
+        "compressor",
+        "turbine",
+        "wastegate",
+        "boost-system"
+      ],
+      "specificity": "performance-product-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "technical-corroboration-candidate"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Supplier catalog candidate for generic forced-induction component taxonomy; do not copy branded geometry or specifications."
+    },
+    {
+      "sourceId": "walker-calcat-carb-converters-2018",
+      "filename": "calcat-converters.pdf",
+      "sizeBytes": 20873183,
+      "artifactSha256": "1da86f8fd0a2298131d5346dde2d3033420e73828423fa4ade9708a975dda35a",
+      "publisher": "Walker",
+      "title": "CalCat CARB-Compliant Catalytic Converters",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "emissions"
+      ],
+      "componentFamilies": [
+        "catalytic-converter",
+        "exhaust",
+        "emissions-labeling"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness",
+        "technical-corroboration-candidate"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Local artifact contains vendor and regulatory application guidance; rights are unreviewed and no text/figure reuse is authorized."
+    },
+    {
+      "sourceId": "champion-spark-plug-catalog",
+      "filename": "champion-spark-plug.pdf",
+      "sizeBytes": 19502630,
+      "artifactSha256": "a27043e3a988e6e3da2bbbccae5efaf21cc99d0103d2efb1d0294acbb67a3202",
+      "publisher": "Champion",
+      "title": "Champion Spark Plug Catalog",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "engine-performance"
+      ],
+      "componentFamilies": [
+        "spark-plug",
+        "ignition"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Use only as a candidate source for generic ignition component taxonomy until rights review."
+    },
+    {
+      "sourceId": "fel-pro-1909-1990",
+      "filename": "fel-pro-1909-to-1990.pdf",
+      "sizeBytes": 15268613,
+      "artifactSha256": "b5812871aacfe201b48be9813d424311f35bfdb047e8b79c5637633ecc24dcea",
+      "publisher": "Fel-Pro",
+      "title": "Fel-Pro 1909–1990 Applications",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "engine-mechanical"
+      ],
+      "componentFamilies": [
+        "gaskets",
+        "seals",
+        "engine-service-components"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness",
+        "generic-asset-planning"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate source for generic gasket/sealing component taxonomy; no vendor figure or specification reuse."
+    },
+    {
+      "sourceId": "fel-pro-master-gasket-900-16",
+      "filename": "fel-pro-master-gasket-900-16.pdf",
+      "sizeBytes": 14481238,
+      "artifactSha256": "44b84daa9b26ad9867b818577b4cb35dc337fc9aa7ed06c7067ab4a688fcfc7c",
+      "publisher": "Fel-Pro",
+      "title": "Fel-Pro Master Gasket Catalog 900-16",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "engine-mechanical"
+      ],
+      "componentFamilies": [
+        "gaskets",
+        "seals",
+        "engine-service-components"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness",
+        "generic-asset-planning"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate source for generic gasket/sealing component taxonomy; rights remain unreviewed."
+    },
+    {
+      "sourceId": "fel-pro-vintage",
+      "filename": "fel-pro-vintage.pdf",
+      "sizeBytes": 6593748,
+      "artifactSha256": "f7184d57eb2bb28b627e0505c3070329796c631c0955ecfaa0be00006869998e",
+      "publisher": "Fel-Pro",
+      "title": "Fel-Pro Vintage Applications",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "engine-mechanical"
+      ],
+      "componentFamilies": [
+        "gaskets",
+        "seals",
+        "engine-service-components"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "medium",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Vintage application catalog; lower priority for current generic lab asset planning."
+    },
+    {
+      "sourceId": "whipple-hellcat-g5-installation-2024",
+      "filename": "hellcat-gen5-r20-low.pdf",
+      "sizeBytes": 4597284,
+      "artifactSha256": "a0d7b7bdb08c628bd625b534f14bded7eaa303e7368bab3653bd23c8faffce7b",
+      "publisher": "Whipple Superchargers",
+      "title": "Hellcat G5 Upgrade Installation Manual",
+      "documentType": "installation-manual",
+      "domainCandidates": [
+        "engine-performance"
+      ],
+      "componentFamilies": [
+        "supercharger",
+        "air-induction",
+        "belt-drive",
+        "intercooling"
+      ],
+      "specificity": "vehicle-specific-installation-manual",
+      "relevance": "medium",
+      "candidateUses": [
+        "terminology",
+        "application-awareness",
+        "technical-corroboration-candidate"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Vehicle-specific branded installation manual. Do not use as geometry-copy input or vehicle-specific lab authority."
+    },
+    {
+      "sourceId": "moog-driveline",
+      "filename": "moog-driveline.pdf",
+      "sizeBytes": 6921896,
+      "artifactSha256": "92bcea046be8e0abb7924b71d47aad4f80b9b5a99c31f894c04a0f414358dbdf",
+      "publisher": "MOOG",
+      "title": "MOOG Driveline Catalog",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "drivetrain"
+      ],
+      "componentFamilies": [
+        "driveshaft",
+        "universal-joint",
+        "driveline"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate source for generic driveline component families only; no branded geometry or vendor data ingestion."
+    },
+    {
+      "sourceId": "moog-master-f3834-1",
+      "filename": "moog-f3834-1.pdf",
+      "sizeBytes": 21383704,
+      "artifactSha256": "361553433b2ebdf394c7be731c2957a502462020b9d8cc4e54787a70783ddbff",
+      "publisher": "MOOG / Federal-Mogul Motorparts",
+      "title": "MOOG Master Catalog F3834-1",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "steering-suspension-alignment",
+        "drivetrain"
+      ],
+      "componentFamilies": [
+        "control-arm",
+        "ball-joint",
+        "tie-rod",
+        "sway-bar",
+        "strut",
+        "hub-assembly",
+        "driveline"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "First pages identify undercar/chassis component families. Rights remain external/unreviewed."
+    },
+    {
+      "sourceId": "moog-master-f3834-2",
+      "filename": "moog-f3834-2.pdf",
+      "sizeBytes": 32522104,
+      "artifactSha256": "df2835e022496dc99e60cfdfe22fcc8a85671ccd57796bc10804fd3cec4e1c8b",
+      "publisher": "MOOG / Federal-Mogul Motorparts",
+      "title": "MOOG Master Catalog F3834-2",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "steering-suspension-alignment",
+        "drivetrain"
+      ],
+      "componentFamilies": [
+        "control-arm",
+        "ball-joint",
+        "tie-rod",
+        "sway-bar",
+        "strut",
+        "hub-assembly",
+        "driveline"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Companion master-catalog volume; no content ingestion or figure reuse authorized."
+    },
+    {
+      "sourceId": "moog-master-f3834-3",
+      "filename": "moog-f3834-3.pdf",
+      "sizeBytes": 20378650,
+      "artifactSha256": "078492bc8d40d71dcdb1a61818ca0a8bd11a3e80cf9bcfbb7df7c13bb5dfdb51",
+      "publisher": "MOOG / Federal-Mogul Motorparts",
+      "title": "MOOG Master Catalog F3834-3",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "steering-suspension-alignment",
+        "drivetrain"
+      ],
+      "componentFamilies": [
+        "control-arm",
+        "ball-joint",
+        "tie-rod",
+        "sway-bar",
+        "strut",
+        "hub-assembly",
+        "driveline"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Companion master-catalog volume; rights remain unreviewed."
+    },
+    {
+      "sourceId": "moog-coil-springs-f2925",
+      "filename": "moog-master-catalog-coil-springs-f2925.pdf",
+      "sizeBytes": 1786722,
+      "artifactSha256": "cdf9d74912536b11fd63e302c5ff8c908ba9674f06f38501e871e815ba856c6f",
+      "publisher": "MOOG",
+      "title": "MOOG Master Catalog — Coil Springs F2925",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "steering-suspension-alignment"
+      ],
+      "componentFamilies": [
+        "coil-spring",
+        "suspension"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate source for generic suspension component taxonomy only."
+    },
+    {
+      "sourceId": "whipple-mustang-r46-g6-installation-2026",
+      "filename": "my18my23-ford-mustang-r46-g6-low.pdf",
+      "sizeBytes": 6056173,
+      "artifactSha256": "579de670eb1c36b391aa6ef38f03cdfdfc818e968cd5b37bdb1fc42774c7ab93",
+      "publisher": "Whipple Superchargers",
+      "title": "2018–2023 Mustang R46 G6 Installation Manual",
+      "documentType": "installation-manual",
+      "domainCandidates": [
+        "engine-performance"
+      ],
+      "componentFamilies": [
+        "supercharger",
+        "air-induction",
+        "belt-drive",
+        "intercooling"
+      ],
+      "specificity": "vehicle-specific-installation-manual",
+      "relevance": "medium",
+      "candidateUses": [
+        "terminology",
+        "application-awareness",
+        "technical-corroboration-candidate"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Vehicle-specific branded installation manual. Keep outside generic geometry generation and engineering authority."
+    },
+    {
+      "sourceId": "national-master-application-listings",
+      "filename": "national-master-application-listings.pdf",
+      "sizeBytes": 12306721,
+      "artifactSha256": "68a951edb4699afd38a2363e0c2dea99f345930a4ea2645044ad4039d11c8abd",
+      "publisher": "National",
+      "title": "National Master Application Listings",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "drivetrain",
+        "steering-suspension-alignment",
+        "hvac-thermal"
+      ],
+      "componentFamilies": [
+        "bearing",
+        "oil-seal",
+        "wheel-hub",
+        "differential-seal",
+        "transmission-seal",
+        "transfer-case-seal"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Catalog table of contents identifies wheel-end, axle, transaxle, transmission, A/C, engine and electrical application sections."
+    },
+    {
+      "sourceId": "sealed-power-engine-kit-gaskets",
+      "filename": "sealed-power-engine-kit-gasket-sets.pdf",
+      "sizeBytes": 4749918,
+      "artifactSha256": "22cb91126287e8f02bb314925403e467ade9d1636839c1aee1ef321467c879b3",
+      "publisher": "Sealed Power",
+      "title": "Engine Kit / Gasket Sets",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "engine-mechanical"
+      ],
+      "componentFamilies": [
+        "engine-internals",
+        "gaskets",
+        "seals"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate for generic engine service-component taxonomy; no product geometry copying."
+    },
+    {
+      "sourceId": "sealed-power-sp1502",
+      "filename": "sealed-power-sp1502.pdf",
+      "sizeBytes": 4066598,
+      "artifactSha256": "dc24e67d52ebecfe8960028430af656afbdbfdd25b7c279edf60addedc33aea4",
+      "publisher": "Sealed Power",
+      "title": "Sealed Power SP1502 Catalog",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "engine-mechanical"
+      ],
+      "componentFamilies": [
+        "engine-internals"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate source for generic engine-internal component taxonomy."
+    },
+    {
+      "sourceId": "sealed-power-vintage",
+      "filename": "sealed-power-vintage.pdf",
+      "sizeBytes": 9794358,
+      "artifactSha256": "bdc6f37cdb1a493f2103fb9c0a58f84496222302c3ab181e277ba8178322e44a",
+      "publisher": "Sealed Power",
+      "title": "Sealed Power Vintage Catalog",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "engine-mechanical"
+      ],
+      "componentFamilies": [
+        "engine-internals"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "medium",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Vintage application material; lower priority for current lab foundation."
+    },
+    {
+      "sourceId": "sealed-power-volume-1",
+      "filename": "sealed-power-volume-1.pdf",
+      "sizeBytes": 4470035,
+      "artifactSha256": "d12d65d1b685c701afd8b7f632c4d4eed4d7cc63ec01b05f9a86a804204efcba",
+      "publisher": "Sealed Power",
+      "title": "Sealed Power Volume 1",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "engine-mechanical"
+      ],
+      "componentFamilies": [
+        "engine-internals"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate source for generic engine-internal component families only."
+    },
+    {
+      "sourceId": "wagner-brake-wc101",
+      "filename": "wagner-brake-wc101.pdf",
+      "sizeBytes": 5960136,
+      "artifactSha256": "76afee4fb9eeeab60d234b51630922db4da1c65834d0a72eed1903fec9bdd795",
+      "publisher": "Wagner Brake",
+      "title": "Wagner Brake WC101",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "brake-systems"
+      ],
+      "componentFamilies": [
+        "brake-hydraulic",
+        "friction",
+        "wheel-end-brake"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "High-value candidate for Brake Systems workspace component inventory; no rights grant implied."
+    },
+    {
+      "sourceId": "wagner-brake-wc5700",
+      "filename": "wagner-brake-wc5700.pdf",
+      "sizeBytes": 6340007,
+      "artifactSha256": "e5d4e6f8d82b3f1b24b199db06160332ec80e1299c7a1842a57bd01be9533872",
+      "publisher": "Wagner Brake",
+      "title": "Wagner Brake WC5700",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "brake-systems"
+      ],
+      "componentFamilies": [
+        "brake-hydraulic",
+        "friction",
+        "wheel-end-brake"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "High-value candidate for Brake Systems workspace taxonomy; figure/spec reuse remains prohibited."
+    },
+    {
+      "sourceId": "wagner-brake-wc800",
+      "filename": "wagner-brake-wc800.pdf",
+      "sizeBytes": 6497994,
+      "artifactSha256": "721d65871a2f107e0adcd2ecdd7f9dc6b7f66ce123d3fc7f45b44ac673e0b0aa",
+      "publisher": "Wagner Brake",
+      "title": "Wagner Brake WC800",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "brake-systems"
+      ],
+      "componentFamilies": [
+        "brake-hydraulic",
+        "friction",
+        "wheel-end-brake"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "High-value candidate for Brake Systems workspace taxonomy; no content ingestion authorized."
+    },
+    {
+      "sourceId": "wagner-brake-wc900",
+      "filename": "wagner-brake-wc900.pdf",
+      "sizeBytes": 8744514,
+      "artifactSha256": "180a39252dd91cf42fcbcbf7d5947005117e46f42c2eb600bdf977e13ae3c5ff",
+      "publisher": "Wagner Brake",
+      "title": "Wagner Brake WC900",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "brake-systems"
+      ],
+      "componentFamilies": [
+        "brake-hydraulic",
+        "friction",
+        "wheel-end-brake"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "High-value candidate for Brake Systems workspace taxonomy; rights review required before any reuse."
+    },
+    {
+      "sourceId": "wagner-lighting-products",
+      "filename": "wagner-lighting-products.pdf",
+      "sizeBytes": 16073547,
+      "artifactSha256": "e81d8f060ed1b6c0b926a579e97407be40d475a9586f3866befe2291fda0a368",
+      "publisher": "Wagner Lighting",
+      "title": "Wagner Lighting Products",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "electrical-electronics"
+      ],
+      "componentFamilies": [
+        "lighting",
+        "lamp",
+        "connector"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "medium",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Useful for electrical component recognition and terminology; not an engineering-value source."
+    },
+    {
+      "sourceId": "wagner-lighting-spec-guide",
+      "filename": "wagner-lighting-spec-guide.pdf",
+      "sizeBytes": 2036423,
+      "artifactSha256": "d035db3e0644986292c5c6cf30954c2af7966d32c7ebfbef034e729df726318a",
+      "publisher": "Wagner Lighting",
+      "title": "Wagner Lighting Specification Guide",
+      "documentType": "specification-guide",
+      "domainCandidates": [
+        "electrical-electronics"
+      ],
+      "componentFamilies": [
+        "lighting",
+        "lamp"
+      ],
+      "specificity": "vendor-specification-guide",
+      "relevance": "medium",
+      "candidateUses": [
+        "terminology",
+        "technical-corroboration-candidate"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Specifications remain source-specific and must not be imported into engineering models without independent governed review."
+    },
+    {
+      "sourceId": "walker-epa-converter",
+      "filename": "walker-epa-converter.pdf",
+      "sizeBytes": 10071506,
+      "artifactSha256": "57765af25edbeeefc0c6c12bd8da9ffee6f6890a0ea790bd79ff5410d5f86bd3",
+      "publisher": "Walker",
+      "title": "Walker EPA Converter Catalog",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "emissions"
+      ],
+      "componentFamilies": [
+        "catalytic-converter",
+        "exhaust"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness",
+        "technical-corroboration-candidate"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate source for emissions/exhaust taxonomy and regulatory application awareness; not approved evidence."
+    },
+    {
+      "sourceId": "walker-master",
+      "filename": "walker-master.pdf",
+      "sizeBytes": 22931545,
+      "artifactSha256": "869819fbb0a4cb1049dd76337089dda1e929811295764a7343268efa2a3429fa",
+      "publisher": "Walker",
+      "title": "Walker Master Catalog",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "emissions"
+      ],
+      "componentFamilies": [
+        "exhaust",
+        "muffler",
+        "pipe",
+        "catalytic-converter",
+        "hanger"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "high",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "generic-asset-planning",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Candidate source for generic exhaust-system component taxonomy; no vendor figure reuse."
+    },
+    {
+      "sourceId": "walker-vintage-master",
+      "filename": "walker-vintage-master.pdf",
+      "sizeBytes": 22898236,
+      "artifactSha256": "1eea635209cff063e6955ffa157f902ac4f1b3b8c8f21969f2929bf01b090dc8",
+      "publisher": "Walker",
+      "title": "Walker Vintage Master Catalog",
+      "documentType": "application-catalog",
+      "domainCandidates": [
+        "emissions"
+      ],
+      "componentFamilies": [
+        "exhaust",
+        "muffler",
+        "pipe",
+        "catalytic-converter",
+        "hanger"
+      ],
+      "specificity": "application-catalog",
+      "relevance": "medium",
+      "candidateUses": [
+        "component-taxonomy",
+        "terminology",
+        "application-awareness"
+      ],
+      "rightsStatus": "unverified-local-reference",
+      "reviewState": "metadata-triaged-rights-unreviewed",
+      "citationAllowed": false,
+      "ragIngestionAllowed": false,
+      "modelContextAllowed": false,
+      "reusableChunksAllowed": false,
+      "transcriptIngestionAllowed": false,
+      "figuresReuseAllowed": false,
+      "engineeringValueImportAllowed": false,
+      "assetGeometryCopyingAllowed": false,
+      "publicationAllowed": false,
+      "notes": "Vintage exhaust application catalog; lower priority for current generic workspace planning."
+    }
+  ]
+}
