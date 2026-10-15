@@ -92,6 +92,35 @@ function verify() {
     major: 4
   })
 
+  const zenumlCore = lock.packages?.['node_modules/@mermaid-js/mermaid-zenuml/node_modules/@zenuml/core']
+  const zenumlPlaywrightPeer = zenumlCore?.peerDependencies?.['playwright-core']
+  if (!zenumlPlaywrightPeer) fail('ZenUML Playwright peer requirement is missing from lockfile metadata')
+
+  const playwrightCoreShim = pkg.devDependencies?.['playwright-core']
+  if (playwrightCoreShim !== zenumlPlaywrightPeer) {
+    fail(`playwright-core compatibility shim must exactly match ZenUML peer ${zenumlPlaywrightPeer}`)
+  }
+
+  const rootPlaywrightCore = lock.packages?.['node_modules/playwright-core']
+  if (!rootPlaywrightCore || rootPlaywrightCore.version !== zenumlPlaywrightPeer) {
+    fail(`Root playwright-core lock record must satisfy ZenUML peer ${zenumlPlaywrightPeer}`)
+  }
+
+  const primaryPlaywright = lock.packages?.['node_modules/playwright']
+  const primaryPlaywrightCoreVersion = primaryPlaywright?.dependencies?.['playwright-core']
+  if (!primaryPlaywright || !primaryPlaywrightCoreVersion) {
+    fail('Primary Playwright lock record and playwright-core dependency are required')
+  }
+
+  if (primaryPlaywrightCoreVersion !== zenumlPlaywrightPeer) {
+    const nestedPrimaryCore = lock.packages?.['node_modules/playwright/node_modules/playwright-core']
+    if (!nestedPrimaryCore || nestedPrimaryCore.version !== primaryPlaywrightCoreVersion) {
+      fail(
+        `Primary Playwright ${primaryPlaywright.version} must retain nested playwright-core ${primaryPlaywrightCoreVersion} while ZenUML uses ${zenumlPlaywrightPeer}`
+      )
+    }
+  }
+
   if (legacy.engines?.node !== '>=22.19.0') fail('Legacy API Node engine must align to >=22.19.0')
   if (legacy.dependencies?.['@supabase/supabase-js'] !== '2.105.1') {
     fail('Legacy API Supabase version must remain explicitly pinned to 2.105.1')
@@ -115,6 +144,10 @@ function verify() {
     nodeBaseline: nvmrc,
     rootSupabase: rootSupabase.version,
     legacySupabase: legacySupabase.version,
+    zenumlPlaywrightPeer,
+    playwrightCoreShim,
+    primaryPlaywright: primaryPlaywright.version,
+    primaryPlaywrightCore: primaryPlaywrightCoreVersion,
     overrides: expectedOverrides
   }
 }

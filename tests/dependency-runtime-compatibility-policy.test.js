@@ -6,8 +6,12 @@ const {
 } = require('../scripts/verify-dependency-runtime-compatibility')
 
 describe('dependency runtime compatibility policy', () => {
-  test('current repository dependency runtime policy passes', () => {
-    expect(() => verify()).not.toThrow()
+  test('current repository dependency runtime policy passes with isolated ZenUML shim', () => {
+    const result = verify()
+    expect(result.zenumlPlaywrightPeer).toBe('1.57.0')
+    expect(result.playwrightCoreShim).toBe('1.57.0')
+    expect(result.primaryPlaywright).toBe('1.63.0')
+    expect(result.primaryPlaywrightCore).toBe('1.63.0')
   })
 
   test('allows reviewed same-major Supabase patch/minor movement', () => {
