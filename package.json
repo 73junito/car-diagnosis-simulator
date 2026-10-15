@@ -136,6 +136,7 @@
     "validate:lmf-foundation": "node scripts/verify-lmf-foundation.js",
     "validate:lmf-runtime-coverage": "node scripts/verify-lmf-runtime-coverage.js",
     "validate:observability-contract": "node scripts/verify-observability-contract.js",
+    "validate:architecture-schemas": "node scripts/verify-architecture-schemas.js",
     "validate:runtime-matrix": "node scripts/verify-runtime-matrix.js"
   },
   "devDependencies": {

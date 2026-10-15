@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { verifyLmfRuntimeCoverage } = require('./verify-lmf-runtime-coverage');
 const { verifyObservabilityContract } = require('./verify-observability-contract');
+const { verifyArchitectureSchemas } = require('./verify-architecture-schemas');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -74,6 +75,7 @@ function assertSurface(surface) {
 }
 
 function verifyRuntimeMatrix() {
+  const schemaValidation = verifyArchitectureSchemas();
   const matrix = readJson('data/architecture/runtime-matrix.json');
   const pkg = readJson('package.json');
   const lock = readJson('package-lock.json');
@@ -219,6 +221,7 @@ function verifyRuntimeMatrix() {
   }
 
   return {
+    architectureSchemaFiles: schemaValidation.validatedFileCount,
     currentNode: current,
     canonicalNodeMajor: canonicalMajor,
     compatibilityNodeMajors: allowedMajors,
