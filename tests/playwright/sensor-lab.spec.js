@@ -95,6 +95,33 @@ test.describe("12 V three-wire sensor lab",()=>{
   await expect(page.locator("#engObservedSignal")).toHaveText("—");
  });
 
+ test("3D classroom mirrors runtime-enabled tools, test points, values, and faults",async({page})=>{
+  await page.goto("/dashboard/student/sensor-lab/");
+
+  await expect(page.getByRole("heading",{name:"Sensor test equipment and runtime bindings"})).toBeVisible();
+  await expect(page.locator('[data-asset-id="equipment.dmm"]')).toHaveAttribute("data-enabled","true");
+  await expect(page.locator('[data-asset-id="equipment.oscilloscope"]')).toHaveAttribute("data-enabled","true");
+  await expect(page.locator('[data-asset-id="equipment.current-clamp"]')).toHaveAttribute("data-enabled","false");
+
+  await expect(page.locator("#sensor3dTestPoint option")).toHaveCount(4);
+  await expect(page.locator("#sensor3dBindingValue")).toHaveText("5 V");
+  await page.locator("#sensor3dTestPoint").selectOption("TP_ECM_SIGNAL");
+  await expect(page.locator("#sensor3dBindingValue")).toHaveText("2.5 V");
+
+  await page.locator("#sensorInput").fill("25");
+  await expect(page.locator("#engObservedSignal")).toHaveText("1.5 V");
+  await expect(page.locator("#sensor3dBindingValue")).toHaveText("1.5 V");
+
+  await page.locator("#faultSelect").selectOption("FAULT_SIGNAL_SHORT_GROUND");
+  await expect(page.locator("#engObservedSignal")).toHaveText("0 V");
+  await expect(page.locator("#sensor3dBindingValue")).toHaveText("0 V");
+  await expect(page.locator("#sensor3dFaultState")).toContainText("Sensor signal short to ground");
+
+  await page.locator("#sensor3dTestPoint").selectOption("TP_SENSOR_GROUND");
+  await expect(page.locator("#sensor3dBindingValue")).toContainText("No numeric value inferred");
+  await expect(page.locator("#sensor3dProbeState")).toContainText("TP_SENSOR_GROUND");
+ });
+
  test("dashboard links to sensor lab",async({page})=>{
   await page.goto("/dashboard/student/");
   await page.locator('.student-more-tools > summary').click();

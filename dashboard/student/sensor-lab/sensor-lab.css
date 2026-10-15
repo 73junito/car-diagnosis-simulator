@@ -28,3 +28,16 @@
   .button-row .tm-btn{flex:1 1 100%}
   .diagram-heading h2{overflow-wrap:anywhere}
 }
+
+.sensor-3d-binding-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.sensor-3d-binding-card{display:grid;gap:8px;padding:14px;border:1px solid var(--tm-border);border-radius:var(--tm-radius);background:var(--tm-surface)}
+.sensor-3d-binding-card label,.sensor-3d-binding-kicker{font-size:.76rem;font-weight:900;color:var(--tm-muted);text-transform:uppercase;letter-spacing:.03em}
+.sensor-3d-binding-card select{min-height:42px;padding:8px 10px;border:1px solid var(--tm-border);border-radius:var(--tm-radius-sm);background:var(--tm-surface);color:var(--tm-text);font:inherit}
+.sensor-3d-binding-card strong{font-size:1.45rem;line-height:1.15}
+.sensor-3d-binding-card small,.sensor-3d-probe-state,.sensor-3d-fault-state{color:var(--tm-muted);line-height:1.45}
+.sensor-3d-probe-state{position:relative;padding-left:16px}
+.sensor-3d-probe-state::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:8px;border-radius:50%;background:var(--tm-focus,#6a4bc3);box-shadow:0 0 0 0 rgba(106,75,195,.35);animation:sensor-probe-pulse 1.4s ease-out infinite}
+.sensor-3d-fault-state[data-state="fault"]{color:#8a4b08;font-weight:800}
+@keyframes sensor-probe-pulse{70%{box-shadow:0 0 0 8px rgba(106,75,195,0)}100%{box-shadow:0 0 0 0 rgba(106,75,195,0)}}
+@media(prefers-reduced-motion:reduce){.sensor-3d-probe-state::before{animation:none}}
+@media(max-width:900px){.sensor-3d-binding-grid{grid-template-columns:1fr}}

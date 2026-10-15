@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "presentationRole": "sensor-lab-3d-presentation-only",
+  "authoritativeRuntime": "/data/architecture/sensor-lab-lmf-runtime.json",
+  "authoritativeTemplate": "/data/circuit-templates/12v-three-wire-sensor.json",
+  "assetRoot": "/dashboard/student/circuit-lab/assets/3d/",
+  "authority": {
+    "engineeringAuthority": false,
+    "measurementAuthority": false,
+    "assessmentAuthority": false,
+    "publicationAuthority": false,
+    "controlsEngineeringState": false
+  },
+  "assets": [
+    {"assetId":"equipment.dmm","title":"Digital Multimeter","file":"multimeter.glb","kind":"diagnostic-tool","toolId":"tool.dmm"},
+    {"assetId":"equipment.oscilloscope","title":"Oscilloscope","file":"oscilloscope.glb","kind":"diagnostic-tool","toolId":"tool.oscilloscope"},
+    {"assetId":"equipment.current-clamp","title":"Current Clamp","file":"current-clamp.glb","kind":"diagnostic-tool","toolId":"tool.current-clamp"},
+    {"assetId":"scene.probe","title":"Diagnostic Test Probe","file":"probe.glb","kind":"visual-scene"},
+    {"assetId":"scene.harness","title":"Wiring Harness","file":"harness.glb","kind":"visual-scene"},
+    {"assetId":"scene.trainer","title":"Electrical Trainer Board","file":"trainer.glb","kind":"visual-scene"},
+    {"assetId":"scene.vehicle","title":"Vehicle Front-End","file":"vehicle.glb","kind":"visual-scene"},
+    {"assetId":"scene.battery","title":"12 V Battery","file":"battery.glb","kind":"visual-scene"}
+  ],
+  "testPointBindings": [
+    {"testPointId":"TP_SENSOR_SUPPLY","displaySource":"#engSensorReference","label":"Sensor reference supply","measurementTypes":["voltage"]},
+    {"testPointId":"TP_SENSOR_SIGNAL","displaySource":"#engIdealSignal","label":"Sensor-side modeled signal","measurementTypes":["voltage","signal"]},
+    {"testPointId":"TP_SENSOR_GROUND","displaySource":null,"label":"Sensor ground/reference","measurementTypes":["voltage_drop","continuity"]},
+    {"testPointId":"TP_ECM_SIGNAL","displaySource":"#engObservedSignal","label":"Controller-observed signal","measurementTypes":["voltage","signal"]}
+  ]
+}
