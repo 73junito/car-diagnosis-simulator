@@ -132,7 +132,8 @@
     "prepare:animation-agent-review": "node scripts/prepare-animation-agent-review.js --write",
     "validate:animation-agentic-prep": "node scripts/verify-animation-agentic-preparation.js",
     "validate:animation-contract": "node scripts/verify-animation-contract.js",
-    "validate:lmf-foundation": "node scripts/verify-lmf-foundation.js"
+    "validate:lmf-foundation": "node scripts/verify-lmf-foundation.js",
+    "validate:lmf-runtime-coverage": "node scripts/verify-lmf-runtime-coverage.js"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
