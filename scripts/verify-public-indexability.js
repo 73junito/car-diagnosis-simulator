@@ -11,6 +11,7 @@ const EXPECTED_URLS = [
   'https://autolearnpro.com/',
   'https://autolearnpro.com/about/',
   'https://autolearnpro.com/how-it-works/',
+  'https://autolearnpro.com/demo/',
   'https://autolearnpro.com/students/',
   'https://autolearnpro.com/instructors/',
   'https://autolearnpro.com/help/',
@@ -98,7 +99,31 @@ function audit() {
       if (canonical !== url) {
         errors.push(`canonical mismatch: ${path.relative(ROOT, file)} expected ${url}, found ${canonical || 'none'}`)
       }
+      if (/<meta\b[^>]*\bname=["']robots["'][^>]*\bcontent=["'][^"']*noindex/i.test(html) ||
+          /<meta\b[^>]*\bcontent=["'][^"']*noindex[^"']*["'][^>]*\bname=["']robots["']/i.test(html)) {
+        errors.push(`sitemap URL is locally marked noindex: ${url}`)
+      }
     }
+  }
+
+  const canonicalPublicPages = []
+  for (const file of walkHtml(PUBLIC)) {
+    const html = fs.readFileSync(file, 'utf8')
+    const canonical = canonicalFromHtml(html)
+    if (!canonical) {
+      errors.push(`public HTML page has no canonical: ${path.relative(ROOT, file)}`)
+    } else {
+      canonicalPublicPages.push(canonical)
+    }
+  }
+
+  const canonicalInventory = [...new Set(canonicalPublicPages)].sort()
+  const sitemapInventory = [...new Set(locs)].sort()
+  if (JSON.stringify(canonicalInventory) !== JSON.stringify(sitemapInventory)) {
+    const missing = canonicalInventory.filter((url) => !sitemapInventory.includes(url))
+    const extra = sitemapInventory.filter((url) => !canonicalInventory.includes(url))
+    if (missing.length) errors.push(`canonical public pages missing from sitemap: ${missing.join(', ')}`)
+    if (extra.length) errors.push(`sitemap URLs without canonical public HTML: ${extra.join(', ')}`)
   }
 
   for (const file of walkHtml(PUBLIC)) {
