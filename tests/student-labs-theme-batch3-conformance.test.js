@@ -31,7 +31,7 @@ const pages = [
       'traceCan','traceLin','traceGround','resetView','stateBadge','circuitSvg',
       'flowNote','inspectorContent',
     ],
-    jsMarkers: ['12v-can-lin-network.json','can-lin-active','TP_CAN_H','TP_LIN'],
+    jsMarkers: ['network-lab-lmf-runtime.json','can-lin-active','TP_CAN_H','TP_LIN'],
   },
 ]
 

@@ -1,9 +1,16 @@
 "use strict";
 (async function initNetworkLab(){
  const NS="http://www.w3.org/2000/svg";
- const [tr,symbolLibrary,connectionLibrary]=await Promise.all([fetch("/data/circuit-templates/12v-can-lin-network.json"),window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections")]);
+ const runtimeResponse=await fetch("/data/architecture/network-lab-lmf-runtime.json");
+ if(!runtimeResponse.ok)throw new Error("Unable to load Network Lab LMF runtime contract.");
+ const runtime=await runtimeResponse.json();
+ if(runtime.labId!=="network-lab"||runtime.engineeringAdapterId!=="network-communications")throw new Error("Network Lab LMF runtime contract is invalid.");
+ const [tr,symbolLibrary,connectionLibrary]=await Promise.all([fetch(runtime.modelRef),window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),window.TorqueMindConnectionLibrary.loadConnectionStyles("/data/connections")]);
  if(!tr.ok)throw new Error("Unable to load network template.");
  const circuit=await tr.json(),engine=window.TorqueMindCircuitEngine;
+ document.documentElement.dataset.lmfLabId=runtime.labId;
+ document.documentElement.dataset.lmfEngineeringAdapter=runtime.engineeringAdapterId;
+ document.documentElement.dataset.lmfRuntimeRole=runtime.runtimeRole;
  const validation=window.TorqueMindCircuitTemplateContracts.validateCircuitTemplate(circuit,engine,symbolLibrary.registry,connectionLibrary.registry);
  if(!validation.valid)throw new Error(validation.errors.join("; "));
  const svg=document.getElementById("circuitSvg"),inspector=document.getElementById("inspectorContent"),stateSelect=document.getElementById("stateSelect"),faultSelect=document.getElementById("faultSelect"),stateBadge=document.getElementById("stateBadge"),flowNote=document.getElementById("flowNote"),voltageProfile=document.getElementById("voltageProfile");
