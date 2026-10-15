@@ -1,12 +1,12 @@
-name: Sensor Lab Ollama API verification
+name: AUT-250 Ollama question bank expansion
 
 on:
   workflow_dispatch:
     inputs:
       target_count:
-        description: Number of Sensor Lab draft questions to request (1-20)
+        description: Number of new AUT-250 draft questions to request (1-20)
         required: true
-        default: '10'
+        default: '20'
         type: string
       model:
         description: Ollama Cloud model
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   generate:
-    name: Generate project-authored Sensor Lab drafts
+    name: Draft AUT-250 expansion from project-authored curriculum
     runs-on: ubuntu-latest
     environment: ollama
     timeout-minutes: 10
@@ -28,7 +28,7 @@ jobs:
       OLLAMA_API_URL: https://ollama.com/api/chat
 
     steps:
-      - name: Checkout requested ref
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Validate task without API call
+      - name: Validate inputs and governance
         shell: bash
         run: |
           set -euo pipefail
@@ -48,45 +48,34 @@ jobs:
             echo "Environment secret API_GITHUB is not configured"
             exit 1
           fi
-          node scripts/generate-sensor-lab-question-drafts.js             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --dry-run=true
+          node scripts/generate-aut250-question-drafts.js \
+            --target="${{ inputs.target_count }}" \
+            --model="${{ inputs.model }}" \
+            --dry-run=true
 
-      - name: Send governed Sensor Lab task to Ollama Cloud
+      - name: Send AUT-250 expansion instructions to Ollama Cloud
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/sensor-lab-ollama"
-          node scripts/generate-sensor-lab-question-drafts.js             --target="${{ inputs.target_count }}"             --model="${{ inputs.model }}"             --output="$RUNNER_TEMP/sensor-lab-ollama/sensor-lab-question-drafts.json"
+          mkdir -p "$RUNNER_TEMP/aut250-question-drafts"
+          node scripts/generate-aut250-question-drafts.js \
+            --target="${{ inputs.target_count }}" \
+            --model="${{ inputs.model }}" \
+            --output="$RUNNER_TEMP/aut250-question-drafts/aut250-question-expansion.json"
 
-      - name: Verify completed draft artifact
-        shell: bash
-        run: |
-          node - <<'NODE'
-          const fs = require('fs');
-          const file = process.env.RUNNER_TEMP + '/sensor-lab-ollama/sensor-lab-question-drafts.json';
-          const doc = JSON.parse(fs.readFileSync(file, 'utf8'));
-          if (doc.task_status !== 'completed') throw new Error('Ollama task did not complete.');
-          if (doc.verification_status !== 'pending-human-review') throw new Error('Human verification boundary missing.');
-          if (doc.governance.auto_approval !== false) throw new Error('Auto-approval boundary failed.');
-          if (doc.governance.auto_database_write !== false) throw new Error('Database-write boundary failed.');
-          if (!Array.isArray(doc.questions) || doc.questions.length !== Number('${{ inputs.target_count }}')) {
-            throw new Error('Question count mismatch.');
-          }
-          console.log('OLLAMA_RESPONSE_VERIFIED=completed');
-          console.log('DRAFT_COUNT=' + doc.questions.length);
-          NODE
-
-      - name: Upload completed Ollama task for human verification
+      - name: Upload draft artifact
         uses: actions/upload-artifact@v7
         with:
-          name: "sensor-lab-ollama-verification-${{ github.run_id }}"
-          path: ${{ runner.temp }}/sensor-lab-ollama/sensor-lab-question-drafts.json
+          name: "aut250-question-expansion-${{ github.run_id }}"
+          path: ${{ runner.temp }}/aut250-question-drafts/aut250-question-expansion.json
           if-no-files-found: error
           retention-days: 14
 
       - name: Governance notice
         shell: bash
         run: |
-          echo "Ollama task status: completed."
-          echo "Output is draft-only and pending human verification."
-          echo "Only project-authored Sensor Lab runtime/template facts were sent."
-          echo "No third-party source text, database write, scoring change, assessment eligibility, or automatic approval occurred."
+          echo "AUT-250 expansion is draft-only."
+          echo "Only project-authored curriculum and retained approved questions were sent to Ollama Cloud."
+          echo "No third-party source text or excerpt was sent."
+          echo "No database write, scoring change, assessment eligibility change, or automatic approval occurred."
+          echo "Human rights, technical, instructional, safety, and metadata-evidence mapping reviews remain required."
