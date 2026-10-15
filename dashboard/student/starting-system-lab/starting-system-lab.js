@@ -2,8 +2,14 @@
 
 (async function initStartingSystemLab() {
   const NS = "http://www.w3.org/2000/svg";
+  const runtimeResponse = await fetch("/data/architecture/starting-system-lmf-runtime.json");
+  if (!runtimeResponse.ok) throw new Error("Unable to load Starting System LMF runtime contract.");
+  const runtime = await runtimeResponse.json();
+  if (runtime.labId !== "starting-system-lab" || runtime.engineeringAdapterId !== "electrical-circuit") {
+    throw new Error("Starting System LMF runtime contract is invalid.");
+  }
   const [templateResponse, interstateResponse, delcoResponse, symbolLibrary, connectionLibrary] = await Promise.all([
-    fetch("/data/circuit-templates/12v-starting-system.json"),
+    fetch(runtime.modelRef),
     fetch("/data/engineering/authoritative-specifications/interstate-batteries-2021.json"),
     fetch("/data/engineering/authoritative-specifications/delco-remy-starting-charging.json"),
     window.TorqueMindSymbolLibrary.loadCatalogs("/data/symbols"),
@@ -12,6 +18,9 @@
   if (!templateResponse.ok) throw new Error("Unable to load starting-system template.");
   if (!interstateResponse.ok || !delcoResponse.ok) throw new Error("Unable to load starting-system engineering references.");
   const circuit = await templateResponse.json();
+  document.documentElement.dataset.lmfLabId = runtime.labId;
+  document.documentElement.dataset.lmfEngineeringAdapter = runtime.engineeringAdapterId;
+  document.documentElement.dataset.lmfRuntimeRole = runtime.runtimeRole;
   const interstateCatalog = await interstateResponse.json();
   const delcoCatalog = await delcoResponse.json();
   const engine = window.TorqueMindCircuitEngine;
