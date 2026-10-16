@@ -117,8 +117,30 @@ jobs:
             cat verification.json
             exit 1
           fi
-          echo "Verified applied environment protection (HTTP $HTTP_CODE):"
-          cat verification.json
+          REVIEWER_ID="${{ steps.validate-reviewer.outputs.reviewer_id }}" node - <<'NODE'
+          const fs = require('node:fs');
+          const p = JSON.parse(fs.readFileSync('verification.json', 'utf8'));
+          const reviewerId = Number(process.env.REVIEWER_ID);
+          const rule = (p.protection_rules || []).find(x => x.type === 'required_reviewers');
+          if (p.name !== 'asset-promotion-review' ||
+              p.deployment_branch_policy?.custom_branch_policies !== true ||
+              p.deployment_branch_policy?.protected_branches !== false ||
+              rule?.prevent_self_review !== true ||
+              !(rule.reviewers || []).some(x => x.type === 'User' && x.reviewer?.id === reviewerId))
+            throw Error('Environment settings mismatch');
+          console.log('Environment settings verified');
+          NODE
+          HTTP_CODE=$(curl -sS -o branch-policy-verification.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/environments/asset-promotion-review/deployment-branch-policies)
+          if [ "$HTTP_CODE" -ne 200 ]; then exit 1; fi
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const rules = JSON.parse(fs.readFileSync('branch-policy-verification.json', 'utf8')).branch_policies || [];
+          if (rules.length !== 1 || rules[0].name !== 'main') throw Error('Not restricted exclusively to main');
+          console.log('Exclusive main deployment policy verified');
+          NODE
 
       - name: Confirm
         run: |
