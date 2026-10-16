@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>3D Sensor Lab Classroom</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="./sensor-lab-3d.css">
+</head>
+<body>
+  <main class="lab-shell">
+    <a class="back" href="/dashboard/student/sensor-lab/">← Back to 2D Sensor Lab</a>
+    <header>
+      <p class="eyebrow">Presentation layer — AutoLearnPro Sensor Lab</p>
+      <h1>3D Sensor Lab Classroom</h1>
+      <p>A presentation and interaction layer over the existing Sensor Lab runtime. It displays existing engineering state only and never creates engineering truth.</p>
+      <div id="governanceBanner" class="governance-banner" aria-live="polite"></div>
+      <div id="webglStatus" class="webgl-status" aria-live="polite"></div>
+    </header>
+
+    <div class="classroom-grid" role="region" aria-label="3D classroom">
+      <section class="scene-card" aria-label="3D training scene">
+        <div class="scene-heading">
+          <div>
+            <p class="eyebrow">Training workstation</p>
+            <h2>3D classroom view</h2>
+          </div>
+          <div id="sceneControls" class="scene-toolbar" aria-label="Scene controls"></div>
+        </div>
+        <div class="scene-viewport" id="sceneViewport">
+          <div class="webgl-fallback" id="webglFallback" role="alert" aria-hidden="true">
+            <p><strong>WebGL unavailable.</strong> Showing a 2D schematic fallback. The 3D scene requires WebGL.</p>
+          </div>
+          <div class="scene-3d" id="scene3d" aria-label="Three-dimensional training workstation" role="img"></div>
+        </div>
+        <p class="flow-note" id="sceneFlowNote"></p>
+      </section>
+
+      <section class="control-panel" aria-label="Classroom controls">
+        <div class="control-group">
+          <label for="stateSelect">Operating state</label>
+          <select id="stateSelect"></select>
+        </div>
+        <div class="control-group">
+          <label for="faultSelect">Training fault</label>
+          <select id="faultSelect"><option value="">No injected fault</option></select>
+        </div>
+        <div class="control-group">
+          <label for="sensorInput">
+            Training physical input <strong id="sensorInputValue">50%</strong>
+          </label>
+          <input id="sensorInput" type="range" min="0" max="100" step="1" value="50">
+          <div class="sensor-input-scale"><span>0%</span><span>50%</span><span>100%</span></div>
+        </div>
+
+        <div class="card tool-panel" aria-label="Instrument availability">
+          <p class="eyebrow">Instruments (from Sensor Lab runtime)</p>
+          <div id="toolList" class="tool-list" aria-label="Declared tools"></div>
+        </div>
+
+        <div class="card probe-panel" aria-label="Probe interaction">
+          <p class="eyebrow">Diagnostic probes</p>
+          <p class="hint">Docking a probe is interaction only. It never generates a measurement.</p>
+          <div class="probe-row">
+            <div class="probe-control">
+              <label for="probeRedTarget">Red probe</label>
+              <select id="probeRedTarget"><option value="">Undocked</option></select>
+              <button id="dockRed" type="button">Dock</button>
+            </div>
+            <div class="probe-control">
+              <label for="probeBlackTarget">Black probe</label>
+              <select id="probeBlackTarget"><option value="">Undocked</option></select>
+              <button id="dockBlack" type="button">Dock</button>
+            </div>
+          </div>
+          <div id="probeStatus" class="probe-status" aria-live="polite"></div>
+        </div>
+
+        <div class="card measurement-panel" aria-label="Measurements">
+          <p class="eyebrow">Digital multimeter reading</p>
+          <div id="dmmReading" class="dmm-reading" role="status" aria-live="polite">— V</div>
+          <p id="dmmSource" class="dmm-source">Dock a probe at a test point to read its value.</p>
+        </div>
+
+        <div class="card testpoint-panel" aria-label="Test point values">
+          <p class="eyebrow">Test point values (existing Sensor Lab state)</p>
+          <div id="testpointList" class="testpoint-list" aria-label="Test points"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="boundary">
+      <h2>Evidence boundary</h2>
+      <p>Values shown are generic training examples from the Sensor Lab model, not vehicle specifications. Probe placement and instrument readings are presentation only and do not constitute a measurement or assessment.</p>
+    </section>
+  </main>
+
+  <script src="/src/engineering/calculator.js"></script>
+  <script src="/src/presentation/sensor-lab-scene.js"></script>
+  <script src="./sensor-lab-classroom.js"></script>
+</body>
+</html>
