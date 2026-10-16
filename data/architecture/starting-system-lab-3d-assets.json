@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "1.0.0",
+  "presentationRole": "starting-system-lab-3d-presentation-only",
+  "authoritativeRuntime": "/data/architecture/starting-system-lmf-runtime.json",
+  "authoritativeTemplate": "/data/circuit-templates/12v-starting-system.json",
+  "authority": {
+    "engineeringAuthority": false,
+    "measurementAuthority": false,
+    "assessmentAuthority": false,
+    "publicationAuthority": false,
+    "controlsEngineeringState": false
+  },
+  "assets": [
+    {
+      "assetId": "component.starter-motor",
+      "componentId": "MTR1",
+      "title": "Generic Starter Motor",
+      "url": "/dashboard/student/starting-system-lab/assets/3d/starter-motor-generic.glb",
+      "kind": "component",
+      "sourceRole": "project-authored-cadquery-generic-training-geometry",
+      "vehicleSpecific": false,
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": 0.0014
+      }
+    },
+    {
+      "assetId": "component.starter-solenoid",
+      "componentId": "SOL_CONTACT",
+      "title": "Generic Starter Solenoid",
+      "url": "/dashboard/student/starting-system-lab/assets/3d/starter-solenoid-generic.glb",
+      "kind": "component",
+      "sourceRole": "project-authored-cadquery-generic-training-geometry",
+      "vehicleSpecific": false,
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": -0.0012
+      }
+    },
+    {
+      "assetId": "component.start-switch",
+      "componentId": "SW1",
+      "title": "Generic Start Command Switch",
+      "url": "/dashboard/student/starting-system-lab/assets/3d/start-switch-generic.glb",
+      "kind": "component",
+      "sourceRole": "project-authored-cadquery-generic-training-geometry",
+      "vehicleSpecific": false,
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": 0.0011
+      }
+    },
+    {
+      "assetId": "component.control-protection",
+      "componentId": "FUSE1",
+      "title": "Generic Start-Control Protection",
+      "url": "/dashboard/student/starting-system-lab/assets/3d/start-control-protection-generic.glb",
+      "kind": "component",
+      "sourceRole": "project-authored-cadquery-generic-training-geometry",
+      "vehicleSpecific": false,
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": -0.001
+      }
+    },
+    {
+      "assetId": "equipment.dmm",
+      "title": "Digital Multimeter",
+      "url": "/dashboard/student/circuit-lab/assets/3d/multimeter.glb",
+      "kind": "diagnostic-tool",
+      "toolId": "tool.dmm",
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": 0.0013
+      }
+    },
+    {
+      "assetId": "equipment.current-clamp",
+      "title": "Current Clamp",
+      "url": "/dashboard/student/circuit-lab/assets/3d/current-clamp.glb",
+      "kind": "diagnostic-tool",
+      "toolId": "tool.current-clamp",
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": -0.0015
+      }
+    },
+    {
+      "assetId": "scene.battery",
+      "componentId": "BAT1",
+      "title": "12 V Battery",
+      "url": "/dashboard/student/circuit-lab/assets/3d/battery.glb",
+      "kind": "visual-scene",
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": 0.0009
+      }
+    },
+    {
+      "assetId": "scene.harness",
+      "title": "Wiring Harness",
+      "url": "/dashboard/student/circuit-lab/assets/3d/harness.glb",
+      "kind": "visual-scene",
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": -0.0008
+      }
+    },
+    {
+      "assetId": "scene.vehicle",
+      "title": "Vehicle Front-End",
+      "url": "/dashboard/student/circuit-lab/assets/3d/vehicle.glb",
+      "kind": "visual-scene",
+      "animation": {
+        "mode": "presentation-auto-rotate",
+        "speed": 0.0007
+      }
+    }
+  ],
+  "testPointBindings": [
+    {
+      "testPointId": "TP_BAT_POS",
+      "label": "Battery positive",
+      "componentId": "BAT1",
+      "numericRole": "vehicle-specific-value-required"
+    },
+    {
+      "testPointId": "TP_START_CMD",
+      "label": "Start command output",
+      "componentId": "SW1",
+      "numericRole": "vehicle-specific-value-required"
+    },
+    {
+      "testPointId": "TP_SOLENOID_OUT",
+      "label": "Solenoid motor output",
+      "componentId": "SOL_CONTACT",
+      "numericRole": "vehicle-specific-value-required"
+    },
+    {
+      "testPointId": "TP_MOTOR_GND",
+      "label": "Starter motor ground",
+      "componentId": "MTR1",
+      "numericRole": "vehicle-specific-value-required"
+    }
+  ]
+}
