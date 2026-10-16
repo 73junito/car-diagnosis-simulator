@@ -1,0 +1,9 @@
+const {correlate}=require('../scripts/audit-live-cloudflare-previews');
+const builds={branch:'fix/example',preview_id:'abc123456789'};
+const live={live_status:'present_by_name_lookup',result:{id:'abc123456789'}};
+const pr={number:42,state:'closed',merged_at:'2026-10-16T00:00:00Z',head:{ref:'fix/example',repo:{full_name:'73junito/car-diagnosis-simulator'}}};
+test('matched immutable identity and merged PR is reviewable',()=>expect(correlate(builds,live,[pr]).review).toBe('reviewable_merged_live'));
+test('unverified ID is not reviewable',()=>expect(correlate(builds,{...live,result:{id:'other'}},[pr]).review).toBe('needs_identity_confirmation'));
+test('active PR remains protected',()=>expect(correlate(builds,live,[{...pr,state:'open'}]).review).toBe('protected_pr_lifecycle'));
+test('ambiguous PR history remains protected',()=>expect(correlate(builds,live,[pr,{...pr,number:43}]).review).toBe('protected_ambiguous_pr'));
+test('absent preview never reviewable',()=>expect(correlate(builds,{live_status:'absent'},[pr]).review).toBe('not_live_or_uncertain'));
