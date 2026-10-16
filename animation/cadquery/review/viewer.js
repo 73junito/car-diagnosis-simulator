@@ -16,6 +16,25 @@ try{
  const gltf=await new GLTFLoader().loadAsync('../output/alternator-prototype/alternator-governed-prototype.glb');scene.add(gltf.scene);
  motion=window.createAlternatorMotion(gltf.scene,{reducedMotion:reduced});
  const sphere=new THREE.Box3().setFromObject(gltf.scene).getBoundingSphere(new THREE.Sphere());orbit.target.copy(sphere.center);camera.position.copy(sphere.center).add(new THREE.Vector3(sphere.radius*2,sphere.radius*1.3,sphere.radius*2.5));camera.far=Math.max(100,sphere.radius*40);camera.updateProjectionMatrix();orbit.update();resize();
+ const homePosition=camera.position.clone();
+ canvas.addEventListener('keydown',event=>{
+  if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home'].includes(event.key))return;
+  event.preventDefault();
+  if(event.key==='Home'){camera.position.copy(homePosition)}
+  else{
+   const offset=camera.position.clone().sub(orbit.target);
+   const polar=new THREE.Spherical().setFromVector3(offset);
+   const step=Math.PI/18;
+   if(event.key==='ArrowLeft')polar.theta-=step;
+   if(event.key==='ArrowRight')polar.theta+=step;
+   if(event.key==='ArrowUp')polar.phi-=step;
+   if(event.key==='ArrowDown')polar.phi+=step;
+   polar.makeSafe();
+   camera.position.copy(orbit.target).add(new THREE.Vector3().setFromSpherical(polar));
+  }
+  camera.lookAt(orbit.target);orbit.update();draw();
+ });
+
  window.addEventListener('resize',resize);play.disabled=reduced;pause.disabled=false;reset.disabled=false;
  report(reduced?'Model loaded. Reduced motion enabled: rotation unavailable.':'Model loaded. Animation paused.');
  play.onclick=()=>{if(motion.start()){stop();report('Illustrative rotation playing.');frame=requestAnimationFrame(animate)}};
