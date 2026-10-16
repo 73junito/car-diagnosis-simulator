@@ -26,3 +26,12 @@ jobs:
           node-version: '22.19.0'
       - name: Inspect live preview control plane (read-only)
         run: node scripts/audit-live-cloudflare-previews.js
+
+      - name: Upload read-only eligibility manifest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-preview-eligibility-manifest
+          path: cloudflare-preview-eligibility-manifest.json
+          if-no-files-found: ignore
+          retention-days: 14
