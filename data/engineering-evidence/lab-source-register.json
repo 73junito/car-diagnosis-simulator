@@ -1,0 +1,216 @@
+{
+  "schemaVersion": "1.0.0",
+  "policy": "reference-only; no asset publication or model authority",
+  "sources": [
+    {
+      "id": "denso-starter-alternator-local",
+      "kind": "local-pdf",
+      "path": "F:\\catalog\\Starter-Alternator-Manual-English.pdf",
+      "publisher": "DENSO Europe B.V.",
+      "title": "Starters & Alternators Technical Manual",
+      "pages": 64,
+      "license": "All rights reserved; internal reference only; no reproduction",
+      "provenance": "local catalog verified 2026-10-16",
+      "claims": [
+        {
+          "pages": "9,11,14,17",
+          "component": "starter",
+          "field": "component arrangement and operating principle",
+          "status": "verified-qualitative"
+        },
+        {
+          "pages": "42-47,53",
+          "component": "alternator",
+          "field": "components and alternator operating principles",
+          "status": "verified-qualitative"
+        },
+        {
+          "pages": "54-57",
+          "component": "alternator",
+          "field": "inspection safety and generic diagnostic process",
+          "status": "verified-qualitative"
+        }
+      ],
+      "missing": [
+        "part-number-specific mounting hole dimensions",
+        "terminal coordinates and connector pinout for target alternator",
+        "true-scale rotor stator dimensions",
+        "specific vehicle's testing limits"
+      ]
+    },
+    {
+      "id": "denso-alternators-web",
+      "kind": "manufacturer-page",
+      "url": "https://www.densoautoparts.com/alternators/",
+      "publisher": "DENSO",
+      "claims": [
+        {
+          "component": "alternator",
+          "field": "rotor/stator/regulator/rectifier/bearings component identification",
+          "status": "verified-qualitative"
+        }
+      ],
+      "missing": [
+        "part number-specific CAD dimensions"
+      ],
+      "license": "link-only pending reuse rights"
+    },
+    {
+      "id": "bosch-b3-motorsport-web",
+      "kind": "manufacturer-catalog",
+      "url": "https://www.bosch-motorsport.com/media/downloads/catalogs/printkatalog_2021.pdf",
+      "publisher": "Bosch Motorsport",
+      "claims": [
+        {
+          "component": "alternator",
+          "model": "B3 LIN",
+          "field": "outer diameter without screw",
+          "value": 136,
+          "unit": "mm",
+          "status": "verified-model-specific"
+        },
+        {
+          "component": "alternator",
+          "model": "B3 LIN",
+          "field": "length without pulley",
+          "value": 117,
+          "unit": "mm",
+          "status": "verified-model-specific"
+        },
+        {
+          "component": "alternator",
+          "model": "B3 LIN",
+          "field": "battery B+ thread",
+          "value": "M8x1.25",
+          "status": "verified-model-specific"
+        },
+        {
+          "component": "alternator",
+          "model": "B3 LIN",
+          "field": "regulating voltage default",
+          "value": 14.4,
+          "unit": "V",
+          "status": "verified-model-specific"
+        }
+      ],
+      "missing": [
+        "mounting-hole geometry for B3 LIN",
+        "proof that generic AutoLearnPro model is Bosch B3 LIN"
+      ],
+      "license": "link-only pending reuse rights"
+    },
+    {
+      "id": "bosch-cr760-web",
+      "kind": "manufacturer-page",
+      "url": "https://www.bosch-semiconductors.com/products/automotive-ics/ice-powertrain/cr760/",
+      "publisher": "Bosch Semiconductors",
+      "claims": [
+        {
+          "component": "regulator",
+          "model": "CR760",
+          "field": "PWM-adjustable voltage range",
+          "value": "11.7–15.3",
+          "unit": "V",
+          "status": "verified-model-specific"
+        }
+      ],
+      "missing": [
+        "applicability to alternator asset"
+      ],
+      "license": "link-only pending reuse rights"
+    }
+  ],
+  "labs": [
+    {
+      "id": "circuit-lab",
+      "families": [
+        "battery",
+        "alternator",
+        "wiring",
+        "multimeter"
+      ],
+      "status": "needs-specific-asset-review"
+    },
+    {
+      "id": "starting-system-lab",
+      "families": [
+        "starter",
+        "solenoid",
+        "battery",
+        "cables"
+      ],
+      "status": "needs-specific-asset-review"
+    },
+    {
+      "id": "multivoltage-lab",
+      "families": [
+        "traction battery",
+        "dcdc converter",
+        "inverter",
+        "motor"
+      ],
+      "status": "unverified-physical-specs"
+    },
+    {
+      "id": "sensor-lab",
+      "families": [
+        "sensors",
+        "oscilloscope",
+        "wiring"
+      ],
+      "status": "unverified-physical-specs"
+    },
+    {
+      "id": "actuator-lab",
+      "families": [
+        "actuators",
+        "driver circuits"
+      ],
+      "status": "unverified-physical-specs"
+    },
+    {
+      "id": "network-lab",
+      "families": [
+        "modules",
+        "network connectors",
+        "harness"
+      ],
+      "status": "unverified-physical-specs"
+    },
+    {
+      "id": "relay-load-lab",
+      "families": [
+        "relays",
+        "loads",
+        "connectors"
+      ],
+      "status": "unverified-physical-specs"
+    }
+  ],
+  "assetReviews": [
+    {
+      "id": "generic-12v-alternator-seven-part",
+      "sourceIds": [
+        "denso-starter-alternator-local",
+        "denso-alternators-web"
+      ],
+      "status": "review-only",
+      "known": "Seven independently named nodes and motion pivots validated",
+      "geometryGaps": [
+        "no part-number-specific external dimensions",
+        "terminal and mounting locations unverified",
+        "missing interior stator, rectifier, regulator, fans and bearings"
+      ],
+      "extensionPlan": [
+        "add stator, rotor, rectifier, IC regulator, fans and bearings as separately named instructional meshes",
+        "preserve original seven-part GLB and runtime behavior",
+        "require expert review before any model-dependent measurement"
+      ]
+    }
+  ],
+  "safety": {
+    "publication": "blocked pending source-backed technical review",
+    "automatedGeometryInference": false,
+    "modelSpecificValuesMustNotBecomeUniversal": true
+  }
+}
