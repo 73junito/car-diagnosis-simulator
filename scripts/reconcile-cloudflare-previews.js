@@ -12,7 +12,7 @@ function request(url, token) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, {headers:{'Authorization':'Bearer '+token,'User-Agent':'autolearnpro-preview-reconciler','Accept':'application/json'}},res=>{
       let raw='';res.on('data',b=>raw+=b);res.on('end',()=>{
-        if(res.statusCode<200||res.statusCode>=300)return reject(new Error('HTTP '+res.statusCode+' for '+new URL(url).pathname));
+        if(res.statusCode<200||res.statusCode>=300){let code='unknown';try{const data=JSON.parse(raw);code=(data.errors||[]).map(e=>String(e.code)+':'+String(e.message).slice(0,120)).join(';')}catch{}return reject(new Error('HTTP '+res.statusCode+' for '+new URL(url).pathname+' Cloudflare='+code));}
         try{resolve(JSON.parse(raw))}catch(e){reject(e)}
       });
     });req.on('error',reject);
@@ -41,7 +41,11 @@ async function allPages(url,token,extract,maxPages=30){
 async function main(){
  if(!apiToken||!account||!githubToken)throw Error('Cloudflare/GitHub credentials missing');
  const prs=await allPages('https://api.github.com/repos/'+repo+'/pulls?state=all',githubToken,x=>x,50);
- const previews=await allPages('https://api.cloudflare.com/client/v4/accounts/'+account+'/workers/workers/'+worker+'/previews',apiToken,x=>{
+ const scripts=await request('https://api.cloudflare.com/client/v4/accounts/'+account+'/workers/scripts',apiToken);
+ if(scripts.success!==true||!Array.isArray(scripts.result))throw Error('Worker inventory unavailable');
+ const targets=scripts.result.filter(x=>x.id===worker);
+ if(targets.length!==1||!/^[a-f0-9]{32}$/i.test(targets[0].tag||''))throw Error('Worker tag missing or ambiguous');
+ const previews=await allPages('https://api.cloudflare.com/client/v4/accounts/'+account+'/builds/workers/'+targets[0].tag+'/previews',apiToken,x=>{
    if(x.success!==true)throw Error('Cloudflare listing not successful');
    return x.result;
  });
