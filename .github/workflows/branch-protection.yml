@@ -82,8 +82,21 @@ jobs:
             cat verification.json
             exit 1
           fi
-          echo "Verified applied branch protection (HTTP $HTTP_CODE):"
-          cat verification.json
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const p = JSON.parse(fs.readFileSync('verification.json', 'utf8'));
+          const expected = ['unit-tests','build-and-test (22)','build-and-test (24)','Run ESLint','api-smoke'];
+          const contexts = p.required_status_checks?.contexts || p.required_status_checks?.checks?.map(x => x.context) || [];
+          if (!expected.every(x => contexts.includes(x))) throw Error('Required checks missing');
+          if (p.required_status_checks?.strict !== true || p.enforce_admins?.enabled !== true ||
+              p.required_pull_request_reviews?.required_approving_review_count !== 1 ||
+              p.required_pull_request_reviews?.dismiss_stale_reviews !== true ||
+              p.required_pull_request_reviews?.require_last_push_approval !== true ||
+              p.required_conversation_resolution?.enabled !== true ||
+              p.allow_force_pushes?.enabled !== false || p.allow_deletions?.enabled !== false)
+            throw Error('Branch protection does not match requested fail-closed settings');
+          console.log('Required branch protection settings verified');
+          NODE
 
       - name: Confirm
         run: |
