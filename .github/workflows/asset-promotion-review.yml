@@ -63,15 +63,23 @@ jobs:
           REQUEST: ${{ inputs.request_path }}
           AUTH: ${{ inputs.authorization_path }}
         run: |
-          set +e
-          node scripts/preflight-3d-asset-publication.js \
-            data/engineering-evidence/lab-source-register.json \
-            "$MANIFEST" "$REQUEST" "$AUTH" "$ASSET"
-          result=$?
-          set -e
-          if [ "$result" -eq 0 ]; then
-            echo "::error::Unsafe positive authorization from untrusted CLI"
-            exit 1
-          fi
-          echo "Offline preflight remained fail-closed; NO asset published."
-          echo "Review completed without publication authority." >> "$GITHUB_STEP_SUMMARY"
+          node - <<'NODE'
+          const {spawnSync} = require('node:child_process');
+          const fs = require('node:fs');
+          const args = [
+            'scripts/preflight-3d-asset-publication.js',
+            'data/engineering-evidence/lab-source-register.json',
+            process.env.MANIFEST, process.env.REQUEST, process.env.AUTH, process.env.ASSET
+          ];
+          const run = spawnSync(process.execPath, args, {encoding:'utf8'});
+          if (run.error || run.status !== 1) throw Error('Unexpected preflight execution result');
+          let result;
+          try { result = JSON.parse(run.stdout); } catch { throw Error('Preflight did not emit a decision'); }
+          if (result.decision !== 'blocked' || result.publishAuthorized !== false ||
+              !result.reasons.includes('trusted approval authentication required'))
+            throw Error('Preflight failed to enforce its trust boundary');
+          const summary = 'Offline preflight: BLOCKED (no trusted reviewer authentication).\\n' +
+            'Reasons: ' + result.reasons.join('; ') + '\\nNo asset published.\\n';
+          console.log(summary);
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
+          NODE
