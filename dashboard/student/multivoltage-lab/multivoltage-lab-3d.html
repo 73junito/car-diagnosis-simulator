@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>3D Electrified Multi-Voltage Lab Classroom</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="./multivoltage-lab-3d.css">
+</head>
+<body>
+<main class="lab-shell">
+  <a class="back" href="/dashboard/student/multivoltage-lab/">← Back to 2D Multivoltage Lab</a>
+
+  <header>
+    <p class="eyebrow">Presentation layer — AutoLearnPro Multivoltage Lab</p>
+    <h1>3D Electrified Multi-Voltage Lab Classroom</h1>
+    <p>Real reusable GLB assets visualize the governed low-voltage and traction-domain training model. The 3D layer does not create engineering truth, measurements, service procedures, or vehicle-specific specifications.</p>
+    <div id="governanceBanner" class="governance-banner" aria-live="polite"></div>
+  </header>
+
+  <section class="safety-banner" aria-label="High-voltage training safety boundary">
+    <strong>Conceptual training only.</strong>
+    <span>The 400 V traction domain is a project-authored training example. This classroom does not provide probing, PPE, interlock, isolation, discharge, depowering, or vehicle-specific high-voltage service procedures.</span>
+  </section>
+
+  <section class="controls" aria-label="Multivoltage classroom controls">
+    <div class="control-group">
+      <label for="stateSelect">Operating state</label>
+      <select id="stateSelect"></select>
+    </div>
+    <div class="control-group">
+      <label for="faultSelect">Training fault</label>
+      <select id="faultSelect"><option value="">No injected fault</option></select>
+    </div>
+    <div class="control-group">
+      <label for="engineeringDomainSelect">Declared voltage domain</label>
+      <select id="engineeringDomainSelect">
+        <option value="LV12">12 V low-voltage domain</option>
+        <option value="TR400">400 V traction training example</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="domainCurrentInput">Entered current for P = V × I (A)</label>
+      <input id="domainCurrentInput" type="number" min="0.1" step="0.1" inputmode="decimal" placeholder="No current inferred">
+    </div>
+  </section>
+
+  <section class="engineering-strip" aria-label="Existing multivoltage engineering state">
+    <article><span>Declared domain</span><strong id="domainVoltage">12 V</strong><small id="domainBoundary">Declared 12 V training domain.</small></article>
+    <article><span>Entered current</span><strong id="enteredCurrent">—</strong><small>User-entered calculation input; never inferred from state or fault.</small></article>
+    <article><span>Calculated power</span><strong id="calculatedPower">—</strong><small id="powerNote">P = V × I only when a positive current is entered.</small></article>
+    <article><span>Domain state</span><strong id="domainStatus">Current not entered</strong><small id="domainComparison">No fault-derived numeric comparison is active.</small></article>
+  </section>
+
+  <section class="classroom-grid">
+    <div>
+      <div class="section-heading">
+        <div><p class="eyebrow">Real GLB assets</p><h2>Independent multi-voltage component and tool models</h2></div>
+        <p>CadQuery-authored traction components and diagnostic tools feed the governed Blender→GLB pipeline. Rotation and inspection are presentation-only.</p>
+      </div>
+      <div id="assetGallery" class="asset-gallery" aria-label="3D multivoltage asset gallery"></div>
+    </div>
+
+    <aside class="side-panel">
+      <section class="card">
+        <p class="eyebrow">Runtime diagnostic tools</p>
+        <div id="toolList" class="tool-list"></div>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Tool presentation</p>
+        <label for="activeTool">Diagnostic tool</label>
+        <select id="activeTool"></select>
+        <label for="activeTestPoint">Declared test point</label>
+        <select id="activeTestPoint"></select>
+        <div id="toolReading" class="tool-reading" role="status" aria-live="polite">Select a declared test point.</div>
+        <p id="toolReadingNote" class="hint"></p>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Declared test points</p>
+        <div id="testpointList" class="testpoint-list"></div>
+      </section>
+    </aside>
+  </section>
+
+  <section class="boundary">
+    <h2>Engineering and evidence boundary</h2>
+    <p id="engineeringBoundaryText">The 400 V value is a generic training-domain declaration only. No current, converter efficiency, inverter switching, motor torque, motor speed, phase current, frequency, temperature, diagnostic PID, test-point voltage, or vehicle-specific safety limit is inferred by this 3D classroom.</p>
+  </section>
+</main>
+
+<script src="/src/engineering/calculator.js"></script>
+<script src="/src/engineering/multivoltage-state.js"></script>
+<script src="/src/presentation/glb-viewer.js"></script>
+<script src="/src/presentation/multivoltage-lab-scene.js"></script>
+<script src="./multivoltage-lab-classroom.js"></script>
+</body>
+</html>

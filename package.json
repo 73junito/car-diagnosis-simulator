@@ -43,6 +43,7 @@
     "validate:animation-blender": "node scripts/verify-blender-animation-pipeline.js",
     "validate:animation-cadquery": "node scripts/verify-cadquery-animation-pipeline.js",
     "doctor:animation-cadquery": "node scripts/resolve-cadquery-environment.js",
+    "build:multivoltage-3d-assets": "node scripts/build-multivoltage-3d-assets.js",
     "build:animation-proxy": "node scripts/run-blender-animation-pipeline.js",
     "validate:compliance-authority": "node scripts/verify-compliance-authority.js",
     "validate:student-data-inventory": "node scripts/verify-student-data-inventory.js",

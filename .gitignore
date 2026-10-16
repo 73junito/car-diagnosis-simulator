@@ -77,3 +77,6 @@ animation/blender/output/*.metadata.json
 
 # ANIM-1E generated human-review packets
 animation/agentic-prep/output/
+
+# Local CadQuery intermediate geometry
+animation/cadquery/output/
