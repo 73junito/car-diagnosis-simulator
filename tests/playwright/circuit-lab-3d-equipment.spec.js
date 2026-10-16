@@ -40,6 +40,24 @@ test.describe('Circuit Lab 3D Equipment Bay', () => {
     await expect(page.locator('#lab3dModelRole')).toContainText('does not create measurements, faults, or engineering state')
   })
 
+  test('charging components and exact test-point bindings are exposed without numeric inference', async ({ page }) => {
+    await page.goto('/dashboard/student/circuit-lab/')
+
+    for (const id of ['component.alternator','component.regulator','component.protection','component.load']) {
+      await expect(page.locator('[data-asset-id="' + id + '"]')).toHaveAttribute('data-enabled','true')
+      await expect(page.locator('[data-asset-id="' + id + '"]')).toContainText('Generic charging-system component')
+    }
+
+    await page.locator('[data-asset-id="component.alternator"] button').click()
+    await expect(page.locator('#lab3dModelTitle')).toHaveText('Generic Alternator')
+    await expect(page.locator('#lab3dModelRole')).toContainText('does not simulate electrical output')
+
+    await expect(page.locator('#lab3dTestPointList > li')).toHaveCount(4)
+    await page.locator('[data-test-point-id="TP_ALT_BPLUS"] button').click()
+    await expect(page.locator('#lab3dTestPointStatus')).toContainText('ALT1_BPLUS')
+    await expect(page.locator('#lab3dTestPointStatus')).toContainText('does not infer a numeric value')
+  })
+
   test('viewer is keyboard operable and contained on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/dashboard/student/circuit-lab/')

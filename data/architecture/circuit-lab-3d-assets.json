@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "presentationRole": "circuit-lab-3d-presentation-only",
   "authoritativeRuntime": "/data/architecture/circuit-lab-lmf-runtime.json",
   "assetRoot": "/dashboard/student/circuit-lab/assets/3d/",
@@ -78,6 +78,75 @@
       "file": "probe.glb",
       "kind": "visual-scene",
       "origin": "uploaded-prototype"
+    },
+    {
+      "assetId": "component.alternator",
+      "title": "Generic Alternator",
+      "file": "alternator-generic.glb",
+      "kind": "component",
+      "componentId": "ALT1",
+      "origin": "autolearnpro-cadquery-generated",
+      "sourceRole": "project-authored-cadquery-generic-training-geometry",
+      "vehicleSpecific": false
+    },
+    {
+      "assetId": "component.regulator",
+      "title": "Generic Voltage Regulator",
+      "file": "voltage-regulator-generic.glb",
+      "kind": "component",
+      "componentId": "REG1",
+      "origin": "autolearnpro-cadquery-generated",
+      "sourceRole": "project-authored-cadquery-generic-training-geometry",
+      "vehicleSpecific": false
+    },
+    {
+      "assetId": "component.protection",
+      "title": "Generic Charging Protection",
+      "file": "charging-protection-generic.glb",
+      "kind": "component",
+      "componentId": "FUSE1",
+      "origin": "autolearnpro-cadquery-generated",
+      "sourceRole": "project-authored-cadquery-generic-training-geometry",
+      "vehicleSpecific": false
+    },
+    {
+      "assetId": "component.load",
+      "title": "Generic Electrical Load",
+      "file": "electrical-load-generic.glb",
+      "kind": "component",
+      "componentId": "LOAD1",
+      "origin": "autolearnpro-cadquery-generated",
+      "sourceRole": "project-authored-cadquery-generic-training-geometry",
+      "vehicleSpecific": false
     }
-  ]
+  ],
+  "authoritativeTemplate": "/data/circuits/generic-charging-system.json",
+  "testPointBindings": [
+    {
+      "testPointId": "TP_BAT_POS",
+      "label": "Battery positive",
+      "componentId": "BAT1",
+      "numericRole": "vehicle-specific-value-required"
+    },
+    {
+      "testPointId": "TP_ALT_BPLUS",
+      "label": "Alternator B+",
+      "componentId": "ALT1",
+      "numericRole": "vehicle-specific-value-required"
+    },
+    {
+      "testPointId": "TP_MAIN_GND",
+      "label": "Main ground reference",
+      "componentId": "GND1",
+      "numericRole": "vehicle-specific-value-required"
+    },
+    {
+      "testPointId": "TP_LOAD_PWR",
+      "label": "Electrical load power",
+      "componentId": "LOAD1",
+      "numericRole": "vehicle-specific-value-required"
+    }
+  ],
+  "registeredAssetCount": 12,
+  "generatedAssetCount": 5
 }

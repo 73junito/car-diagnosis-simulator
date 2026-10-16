@@ -28,6 +28,9 @@ function buildExpectedProjection() {
     if (!knownMeasurements.has(type)) throw new Error('Unknown measurement type: ' + type);
   }
 
+  const modeledMeasurementTypes = [...new Set(model.testPoints.flatMap((point) => point.measurementTypes || []))].sort();
+  const studentEnteredMeasurementTypes = ["current"];
+
   const legacyMap = new Map(faults.legacyMappings.map((entry) => [entry.legacyType, entry.faultClassId]));
   const faultClassIds = [...new Set(model.faultCatalog.map((fault) => {
     const mapped = legacyMap.get(fault.type);
@@ -35,7 +38,7 @@ function buildExpectedProjection() {
     return mapped;
   }))].sort();
 
-  return { lab, adapter, measurementTypes, faultClassIds };
+  return { lab, adapter, measurementTypes, modeledMeasurementTypes, studentEnteredMeasurementTypes, faultClassIds };
 }
 
 function validateCircuitLabRuntime() {
@@ -49,7 +52,11 @@ function validateCircuitLabRuntime() {
   if (runtime.directPracticeAllowed !== expected.lab.directPracticeAllowed) throw new Error('Runtime practice flag drift.');
   if (runtime.modelRef !== '/data/circuits/generic-charging-system.json') throw new Error('Circuit Lab modelRef drift.');
   if (expected.adapter.status !== 'existing-model-family') throw new Error('Circuit Lab adapter is not production-existing.');
-  if (JSON.stringify([...runtime.measurementTypes].sort()) !== JSON.stringify(expected.measurementTypes)) throw new Error('Runtime measurement types drift.');
+  if (JSON.stringify([...runtime.measurementTypes].sort()) !== JSON.stringify(expected.measurementTypes)) throw new Error('Runtime legacy measurementTypes drift.');
+  if (JSON.stringify([...(runtime.toolCapabilityMeasurementTypes || [])].sort()) !== JSON.stringify(expected.measurementTypes)) throw new Error('Runtime tool capability measurement types drift.');
+  if (JSON.stringify([...(runtime.modeledMeasurementTypes || [])].sort()) !== JSON.stringify(expected.modeledMeasurementTypes)) throw new Error('Runtime modeled measurement types drift.');
+  if (JSON.stringify([...(runtime.studentEnteredMeasurementTypes || [])].sort()) !== JSON.stringify(expected.studentEnteredMeasurementTypes)) throw new Error('Runtime student-entered measurement types drift.');
+  if (!String(runtime.measurementSemantics || '').includes('legacy tool-capability union')) throw new Error('Runtime measurement semantics must explain the legacy measurementTypes field.');
   if (JSON.stringify([...runtime.faultClassIds].sort()) !== JSON.stringify(expected.faultClassIds)) throw new Error('Runtime modeled fault classes drift.');
   if (runtime.assessmentEligibilityAuthority !== 'external-governance-only') throw new Error('Runtime may not own assessment eligibility.');
   if (runtime.publicationAuthority !== 'external-human-governance-only') throw new Error('Runtime may not own publication approval.');
