@@ -36,7 +36,8 @@
   const engineering=window.TorqueMindEngineering;
   const calculator=engineering.calculator;
   const measurements=engineering.measurements;
-  const comparisons=engineering.comparisons;
+  const multiVoltageState=window.TorqueMindMultiVoltageEngineeringState;
+  if(!multiVoltageState) throw new Error("Shared Multivoltage engineering-state resolver is unavailable.");
 
   const voltageArchitecture=window.TorqueMindVoltageDomains.describeVoltageArchitecture(circuit);
   const voltageDomainById=new Map(voltageArchitecture.map((domain)=>[domain.id,domain]));
@@ -135,60 +136,31 @@
   function renderEngineering(){
     const domain=selectedDomain();
     const current=enteredCurrent();
-    const power=current ? calculator.calculatePower({voltage:domain.nominalVoltage,current:current.value}) : null;
     const domainFault=selectedDomainFault();
-    const active=domainIsActive(domain.id);
+    const state=multiVoltageState.calculateMultiVoltageEngineeringState({
+      calculator,
+      domain,
+      enteredCurrentValue:current?.value??null,
+      currentInputRole:"measured",
+      domainActive:domainIsActive(domain.id),
+      faultType:domainFault?.type||null
+    });
 
     engineeringUi.voltage.textContent=`${domain.nominalVoltage} V`;
     engineeringUi.voltageLabel.textContent=domain.id==="TR400" ? "Traction training example" : "Low-voltage domain";
     engineeringUi.current.textContent=current ? `${Number(current.value.toFixed(2))} A` : "—";
-    engineeringUi.power.textContent=power
-      ? (power.value>=1000 ? `${(power.value/1000).toFixed(3)} kW` : `${Number(power.value.toFixed(2))} W`)
+    engineeringUi.power.textContent=state.power
+      ? (state.power.value>=1000 ? `${(state.power.value/1000).toFixed(3)} kW` : `${Number(state.power.value.toFixed(2))} W`)
       : "—";
     engineeringUi.role.textContent=domain.id;
-    engineeringUi.boundary.textContent=domain.id==="TR400"
-      ? "400 V is a declared training example, not a universal traction voltage"
-      : "Declared 12 V training domain";
-
+    engineeringUi.boundary.textContent=state.boundary;
+    engineeringUi.comparison.textContent=state.comparison;
     engineeringUi.comparison.className="engineering-comparison";
-    if(domainFault?.type==="open_circuit"){
-      const comparison=comparisons.unavailable({basisRole:"declared_system_value",reason:"Selected-domain path is open; no fault current or power is inferred, so numeric healthy-vs-fault comparison is unavailable."});
-      engineeringUi.comparison.textContent=comparison.reason;
-      engineeringUi.comparison.classList.add("unavailable");
-      engineeringUi.status.textContent="Selected-domain path open — entered current is not inferred from the fault";
-      engineeringUi.status.className="engineering-status fault";
-    } else if(domainFault?.type==="high_resistance"){
-      engineeringUi.comparison.textContent="Selected-domain path is degraded; no fault current or power is inferred, so numeric comparison is unavailable.";
-      engineeringUi.comparison.classList.add("unavailable");
-      engineeringUi.status.textContent="Selected-domain path degraded — no fault current or power inferred";
-      engineeringUi.status.className="engineering-status fault";
-    } else if(!active){
-      engineeringUi.comparison.textContent="Selected domain is inactive in this operating state; entered current remains calculation input only and is not treated as a fault measurement.";
-      engineeringUi.comparison.classList.add("not-comparable");
-      engineeringUi.status.textContent=current
-        ? "Domain inactive in this state — entered current is calculation input only"
-        : "Domain inactive; current not entered";
-      engineeringUi.status.className="engineering-status inactive";
-    } else if(!current){
-      engineeringUi.comparison.textContent="Declared-domain baseline active; no fault-derived numeric comparison is active.";
-      engineeringUi.status.textContent="Current not entered";
-      engineeringUi.status.className="engineering-status";
-    } else {
-      engineeringUi.comparison.textContent="Declared-domain calculation uses measured current input only; no fault-derived numeric comparison is active.";
-      engineeringUi.status.textContent="Calculated from declared voltage and entered current";
-      engineeringUi.status.className="engineering-status";
-    }
-
-    const voltageBoundary=domain.id==="TR400"
-      ? "The 400 V value belongs only to this project-authored training example."
-      : "The 12 V value is the declared low-voltage architecture for this training template.";
-    const calculation=current
-      ? `P = ${domain.nominalVoltage} V × measured ${Number(current.value.toFixed(2))} A = ${power.value.toFixed(2)} W.`
-      : "Enter a positive current to calculate power.";
-    const faultText=domainFault
-      ? " The injected fault does not create a measured current, voltage, power, converter-efficiency, or motor-output value."
-      : "";
-    engineeringUi.formula.textContent=`${voltageBoundary} ${calculation} This calculation does not imply DC/DC conversion ratio, efficiency, inverter switching behavior, traction-motor torque, or vehicle-specific operating limits.${faultText}`;
+    if(state.statusClass==="fault") engineeringUi.comparison.classList.add("unavailable");
+    if(state.statusClass==="inactive") engineeringUi.comparison.classList.add("not-comparable");
+    engineeringUi.status.textContent=state.status;
+    engineeringUi.status.className="engineering-status"+(state.statusClass?" "+state.statusClass:"");
+    engineeringUi.formula.textContent=state.formula;
   }
 
   function el(name,attrs={},text=""){

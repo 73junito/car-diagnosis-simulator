@@ -76,9 +76,52 @@ test.describe("electrified multi-voltage lab",()=>{
     await expect(page.locator("#inspectorContent")).toContainText("No probing or service procedure is provided");
   });
 
+  test("standalone 3D classroom loads governed CadQuery and reusable GLB assets",async({page})=>{
+    const errors=[];
+    page.on("pageerror",(error)=>errors.push(error.message));
+    await page.goto("/dashboard/student/multivoltage-lab/multivoltage-lab-3d.html");
+    await expect(page.getByRole("heading",{name:"3D Electrified Multi-Voltage Lab Classroom"})).toBeVisible();
+    await expect(page.locator(".asset-card")).toHaveCount(11);
+    await expect(page.locator(".asset-status")).toHaveCount(11);
+    for(const status of await page.locator(".asset-status").allTextContents()){
+      expect(status).toContain("loaded from reusable GLB asset");
+    }
+    await expect(page.locator("#toolList .tool-item")).toHaveCount(4);
+    await expect(page.locator("#testpointList .testpoint-item")).toHaveCount(5);
+    await expect(page.locator('[data-test-point-id="TP_TRACTION_POS"]')).toHaveAttribute("data-safety","conceptual-only");
+    await expect(page.locator('[data-test-point-id="TP_TRACTION_RETURN"]')).toHaveAttribute("data-safety","conceptual-only");
+
+    await page.locator("#engineeringDomainSelect").selectOption("TR400");
+    await page.locator("#domainCurrentInput").fill("10");
+    await expect(page.locator("#domainVoltage")).toHaveText("400 V");
+    await expect(page.locator("#enteredCurrent")).toHaveText("10 A");
+    await expect(page.locator("#calculatedPower")).toHaveText("4.000 kW");
+
+    await page.locator("#faultSelect").selectOption("FAULT_OPEN_TRACTION_FEED");
+    await expect(page.locator("#domainStatus")).toContainText("entered current is not inferred from the fault");
+    await expect(page.locator("#calculatedPower")).toHaveText("4.000 kW");
+
+    await page.locator("#activeTool").selectOption("tool.current-clamp");
+    await expect(page.locator("#toolReading")).toHaveText("Current not inferred");
+    await expect(page.locator("#toolReadingNote")).toContainText("calculation input only");
+
+    await page.locator("#activeTool").selectOption("tool.temperature-probe");
+    await expect(page.locator("#toolReading")).toHaveText("Temperature not inferred");
+
+    await page.locator("#activeTool").selectOption("tool.scan-tool");
+    await expect(page.locator("#toolReading")).toHaveText("Diagnostic PID not inferred");
+    expect(errors).toEqual([]);
+  });
+
+  test("2D Multivoltage Lab links to the governed 3D classroom",async({page})=>{
+    await page.goto("/dashboard/student/multivoltage-lab/");
+    await expect(page.getByRole("link",{name:/Open multi-object 3D classroom/i}))
+      .toHaveAttribute("href","./multivoltage-lab-3d.html");
+  });
+
   test("student dashboard links to the multi-voltage lab",async({page})=>{
     await page.goto("/dashboard/student/");
-  await page.locator('.student-more-tools > summary').click();
+    await page.locator('.student-more-tools > summary').click();
     await expect(page.getByRole("link",{name:"Electrified Multi-Voltage Lab"})).toHaveAttribute("href","/dashboard/student/multivoltage-lab/");
   });
 });
