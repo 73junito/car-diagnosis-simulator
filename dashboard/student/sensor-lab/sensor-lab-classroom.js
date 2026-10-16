@@ -21,8 +21,9 @@
   const sceneFlowNote=document.getElementById("sceneFlowNote");
 
   const calculator=window.TorqueMindEngineeringCalculator;
+  const sensorState=window.TorqueMindSensorEngineeringState;
   const SensorLabScene=window.AutoLearnProPresentation?.SensorLabScene;
-  if(!scene3d||!calculator||!SensorLabScene)return;
+  if(!scene3d||!calculator||!sensorState||!SensorLabScene)return;
 
   let scene=null;
   let circuit=null;
@@ -54,30 +55,14 @@
   }
 
   function calculateSignalState(){
-    const transfer=calculator.calculateLinearTransfer({
+    return sensorState.calculateSensorSignalState({
+      calculator,
       inputPercent:sensorInputPercent,
-      outputMin:signalRange.min,
-      outputMax:signalRange.max,
-      quantityType:"voltage",
-      unit:"V"
+      signalRange,
+      referenceVoltage,
+      operatingState,
+      faultBehavior:currentFaultBehavior()
     });
-    const behavior=currentFaultBehavior();
-    if(operatingState!=="active-signal"){
-      return {transfer,observed:null,status:"inactive",note:"Signal state inactive; controller-observed signal is not evaluated."};
-    }
-    if(!behavior){
-      return {transfer,observed:transfer.value,status:"healthy",note:"Healthy training example."};
-    }
-    if(behavior.mode==="controller_signal_forced_ground"){
-      return {transfer,observed:0,status:"fault",note:behavior.reason};
-    }
-    if(behavior.mode==="controller_signal_forced_reference"){
-      return {transfer,observed:referenceVoltage,status:"fault",note:behavior.reason};
-    }
-    if(behavior.mode==="controller_signal_unavailable"){
-      return {transfer,observed:null,status:"unavailable",note:behavior.reason};
-    }
-    return {transfer:null,observed:null,status:"unavailable",note:behavior.reason||"Sensor output not inferred."};
   }
 
   function testPointDisplay(testPointId,state){

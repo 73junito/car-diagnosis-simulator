@@ -153,11 +153,30 @@ function verifyLmfRuntimeCoverage() {
     }
 
     if (adapter.family === 'communications') {
-      const communicationFaultClasses = faultTaxonomy.categories
-        .filter((entry) => entry.domain === 'communications')
-        .map((entry) => entry.faultClassId);
-      if (!exactSet(runtimeFaultClasses, communicationFaultClasses)) {
-        throw new Error(`${file}: communications fault taxonomy projection drift.`);
+      const knownCommunicationClasses = new Set(
+        faultTaxonomy.categories
+          .filter((entry) => entry.domain === 'communications')
+          .map((entry) => entry.faultClassId)
+      );
+      const nodeOfflineFaultIds = new Set(['FAULT_OPEN_MODULE_POWER', 'FAULT_OPEN_MODULE_GROUND']);
+      const expectedFaultClasses = [
+        ...new Set((model.faultCatalog || []).map((fault) => {
+          let faultClassId;
+          if (nodeOfflineFaultIds.has(fault.id)) faultClassId = 'communications.node-offline';
+          else if (fault.type === 'open_circuit') faultClassId = 'communications.open-bus';
+          else if (['short_to_ground', 'short_to_power', 'short_between_lines'].includes(fault.type)) {
+            faultClassId = 'communications.short-bus';
+          } else {
+            throw new Error(`${file}: unmapped communications model fault ${fault.id} (${fault.type}).`);
+          }
+          if (!knownCommunicationClasses.has(faultClassId)) {
+            throw new Error(`${file}: unknown communications fault class ${faultClassId}.`);
+          }
+          return faultClassId;
+        }))
+      ];
+      if (!exactSet(runtimeFaultClasses, expectedFaultClasses)) {
+        throw new Error(`${file}: modeled communications fault projection drift.`);
       }
     } else {
       const expectedFaultClasses = [
@@ -174,10 +193,8 @@ function verifyLmfRuntimeCoverage() {
           throw new Error(`${file}: non-electrical fault class ${faultClassId} is not valid for this adapter family.`);
         }
       }
-      for (const faultClassId of expectedFaultClasses) {
-        if (!runtimeFaultClasses.has(faultClassId)) {
-          throw new Error(`${file}: concrete model fault class ${faultClassId} is not covered by the runtime projection.`);
-        }
+      if (!exactSet(runtimeFaultClasses, expectedFaultClasses)) {
+        throw new Error(`${file}: modeled electrical fault projection drift.`);
       }
     }
 

@@ -12,9 +12,24 @@
   "route": "/dashboard/student/circuit-lab/",
   "engineeringAdapterId": "electrical-circuit",
   "modelRef": "/data/circuits/generic-charging-system.json",
-  "toolIds": ["tool.dmm", "tool.current-clamp"],
-  "measurementTypes": ["voltage", "voltage_drop", "resistance", "continuity", "frequency", "duty_cycle", "current", "waveform"],
-  "faultClassIds": ["electrical.open", "electrical.high-resistance", "electrical.short-to-ground", "electrical.short-to-power", "electrical.short-between-lines"],
+  "toolIds": [
+    "tool.dmm",
+    "tool.current-clamp"
+  ],
+  "measurementTypes": [
+    "voltage",
+    "voltage_drop",
+    "resistance",
+    "continuity",
+    "frequency",
+    "duty_cycle",
+    "current",
+    "waveform"
+  ],
+  "faultClassIds": [
+    "electrical.open",
+    "electrical.high-resistance"
+  ],
   "directPracticeAllowed": true,
   "assessmentEligibilityAuthority": "external-governance-only",
   "publicationAuthority": "external-human-governance-only"

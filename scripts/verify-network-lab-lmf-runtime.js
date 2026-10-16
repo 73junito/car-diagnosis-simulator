@@ -10,6 +10,7 @@ function expectedProjection() {
   const tools = read('data/lmf/diagnostic-tools.json');
   const measurements = read('data/lmf/measurement-contract.json');
   const faults = read('data/lmf/fault-taxonomy.json');
+  const model = read('data/circuit-templates/12v-can-lin-network.json');
 
   const lab = labs.labs.find((entry) => entry.labId === 'network-lab');
   if (!lab) throw new Error('LMF network-lab registration is missing.');
@@ -28,12 +29,21 @@ function expectedProjection() {
     if (!knownMeasurements.has(type)) throw new Error('Unknown measurement type: ' + type);
   }
 
-  const communicationFaults = faults.categories
-    .filter((entry) => entry.domain === 'communications')
-    .map((entry) => entry.faultClassId)
-    .sort();
+  const knownCommunicationClasses = new Set(
+    faults.categories.filter((entry) => entry.domain === 'communications').map((entry) => entry.faultClassId)
+  );
+  const nodeOfflineFaultIds = new Set(['FAULT_OPEN_MODULE_POWER', 'FAULT_OPEN_MODULE_GROUND']);
+  const faultClassIds = [...new Set(model.faultCatalog.map((fault) => {
+    let faultClassId;
+    if (nodeOfflineFaultIds.has(fault.id)) faultClassId = 'communications.node-offline';
+    else if (fault.type === 'open_circuit') faultClassId = 'communications.open-bus';
+    else if (['short_to_ground','short_to_power','short_between_lines'].includes(fault.type)) faultClassId = 'communications.short-bus';
+    else throw new Error('Unmapped Network Lab fault: ' + fault.id + ' (' + fault.type + ')');
+    if (!knownCommunicationClasses.has(faultClassId)) throw new Error('Unknown communications fault class: ' + faultClassId);
+    return faultClassId;
+  }))].sort();
 
-  return { lab, adapter, measurementTypes, communicationFaults };
+  return { lab, adapter, measurementTypes, faultClassIds };
 }
 
 function validateNetworkLabRuntime() {
@@ -49,7 +59,7 @@ function validateNetworkLabRuntime() {
   if (expected.adapter.status !== 'existing-model-family') throw new Error('Network Lab adapter is not production-existing.');
   if (expected.adapter.family !== 'communications') throw new Error('Network Lab adapter family drift.');
   if (JSON.stringify([...runtime.measurementTypes].sort()) !== JSON.stringify(expected.measurementTypes)) throw new Error('Runtime measurement types drift.');
-  if (JSON.stringify([...runtime.faultClassIds].sort()) !== JSON.stringify(expected.communicationFaults)) throw new Error('Runtime communications fault taxonomy drift.');
+  if (JSON.stringify([...runtime.faultClassIds].sort()) !== JSON.stringify(expected.faultClassIds)) throw new Error('Runtime modeled communications fault classes drift.');
   if (runtime.assessmentEligibilityAuthority !== 'external-governance-only') throw new Error('Runtime may not own assessment eligibility.');
   if (runtime.publicationAuthority !== 'external-human-governance-only') throw new Error('Runtime may not own publication approval.');
   return runtime;
