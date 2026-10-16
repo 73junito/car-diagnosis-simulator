@@ -45,6 +45,20 @@ function correlate(p,live,prs){
  const identity=typeof returnedId==='string'&&returnedId===p.preview_id?'verified':'unverified';
  return {review:identity==='verified'?'reviewable_merged_live':'needs_identity_confirmation',identity,pr:pr.number};
 }
+const retentionDays=30;
+function eligibility(row, prs, now = new Date()) {
+ if(row.review!=='reviewable_merged_live'||row.identity!=='verified'||row.live_status!=='present_by_name_lookup')
+  return {eligibility:'protected',reason:row.review};
+ const matches=prs.filter(pr=>pr.number===row.pr);
+ if(matches.length!==1||matches[0].state!=='closed'||!matches[0].merged_at)
+  return {eligibility:'protected',reason:'pr_not_uniquely_merged'};
+ const mergedAt=new Date(matches[0].merged_at);
+ if(!Number.isFinite(mergedAt.getTime())||!Number.isFinite(now.getTime())||mergedAt.getTime()>now.getTime())
+  return {eligibility:'protected',reason:'invalid_merge_timestamp'};
+ const ageDays=(now.getTime()-mergedAt.getTime())/86400000;
+ if(ageDays<retentionDays)return {eligibility:'retained',reason:'within_30_day_retention',merged_at:mergedAt.toISOString(),age_days:Math.floor(ageDays)};
+ return {eligibility:'review_required',reason:'past_30_days_not_approved',merged_at:mergedAt.toISOString(),age_days:Math.floor(ageDays)};
+}
 async function allPulls(){
  const prs=[];
  for(let page=1;page<=50;page++){
@@ -83,11 +97,15 @@ async function run(){
   }));
   rows.push(...result);
  }
+ const assessedAt=new Date();
+ const manifest=rows.map(row=>({...row,...eligibility(row,prs,assessedAt)}));
+ const eligibleCounts={};for(const row of manifest)eligibleCounts[row.eligibility]=(eligibleCounts[row.eligibility]||0)+1;
  const counts={present_by_name_lookup:0,absent:0,unknown:0};for(const row of rows)counts[row.live_status]++;
  const reviews={};for(const row of rows)reviews[row.review]=(reviews[row.review]||0)+1;
- console.log(JSON.stringify({worker,readOnly:true,buildsTotal:builds.length,scanned:rows.length,complete:rows.length===builds.length,counts,reviews,rows},null,2));
+ console.log(JSON.stringify({worker,readOnly:true,buildsTotal:builds.length,scanned:rows.length,complete:rows.length===builds.length,counts,reviews,retentionDays,eligibleCounts,rows:manifest},null,2));
+ if(process.env.GITHUB_WORKSPACE){const fs=require('node:fs');const path=require('node:path');const out=path.join(process.env.GITHUB_WORKSPACE,'cloudflare-preview-eligibility-manifest.json');fs.writeFileSync(out,JSON.stringify({created_at:assessedAt.toISOString(),worker,readOnly:true,retentionDays,buildsTotal:builds.length,scanned:manifest.length,complete:manifest.length===builds.length,eligibleCounts,rows:manifest},null,2)+'\n');}
  if(process.env.GITHUB_STEP_SUMMARY)require('node:fs').appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## Live Worker Preview Audit\n\nBuilds records: '+builds.length+'; scanned: '+rows.length+'; complete: '+(rows.length===builds.length)+'; name-lookup present: '+counts.present_by_name_lookup+'; absent: '+counts.absent+'; unknown: '+counts.unknown+'. No deletions.\n');
  if(counts.unknown)process.exitCode=2;
 }
 if(require.main===module)run().catch(e=>{console.error('Read-only preview audit failed:',e.message);process.exitCode=1});
-module.exports={interpret,correlate};
+module.exports={interpret,correlate,eligibility};
