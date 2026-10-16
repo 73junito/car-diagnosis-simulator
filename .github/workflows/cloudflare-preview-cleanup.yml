@@ -1,29 +1,55 @@
-name: Cloudflare Preview Closure Notice
+name: Cloudflare Preview Cleanup (Manual)
 
 on:
-  pull_request:
-    types: [closed]
+  workflow_dispatch:
+    inputs:
+      worker:
+        description: Worker that owns the obsolete Preview
+        required: true
+        type: choice
+        options:
+          - autolearnpro-app
+          - autolearnpro-exam
+      preview_name:
+        description: Exact Preview name confirmed in Cloudflare
+        required: true
+        type: string
+      confirm:
+        description: Type DELETE-OBSOLETE-PREVIEW to acknowledge irreversible Preview storage deletion
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 jobs:
-  report-closed-pr-preview:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+  delete-confirmed-preview:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: cloudflare-preview-cleanup
     steps:
-      - name: Report preview retention (no deletion)
+      - name: Validate explicit target
         env:
-          PREVIEW_BRANCH: ${{ github.event.pull_request.head.ref }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          PR_MERGED: ${{ github.event.pull_request.merged }}
+          WORKER: ${{ inputs.worker }}
+          PREVIEW: ${{ inputs.preview_name }}
+          CONFIRM: ${{ inputs.confirm }}
         run: |
-          {
-            echo '## Cloudflare Preview Retained'
-            echo
-            echo "PR #${PR_NUMBER} closed (merged: ${PR_MERGED})."
-            echo "Branch: \`${PREVIEW_BRANCH}\`"
-            echo
-            echo 'This workflow does not delete or modify Cloudflare previews.'
-            echo 'Use the read-only Cloudflare preview audit for lifecycle verification.'
-          } >> "$GITHUB_STEP_SUMMARY"
+          node - <<'NODE'
+          const {WORKER, PREVIEW, CONFIRM} = process.env;
+          if (!['autolearnpro-app','autolearnpro-exam'].includes(WORKER)) throw Error('Unapproved Worker');
+          if (!/^[a-z0-9][a-z0-9-]{0,99}$/.test(PREVIEW) || ['main','production','prod'].includes(PREVIEW)) throw Error('Unsafe Preview name');
+          if (CONFIRM !== 'DELETE-OBSOLETE-PREVIEW') throw Error('Explicit confirmation required');
+          NODE
+      - name: Delete one exact Preview
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PREVIEW: ${{ inputs.preview_name }}
+          WORKER: ${{ inputs.worker }}
+        run: |
+          set -euo pipefail
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          npx --yes wrangler@4.149.0 preview delete --worker-name "$WORKER" --name "$PREVIEW" --skip-confirmation
+          echo "Deleted explicit Preview \`$PREVIEW\` for \`$WORKER\`." >> "$GITHUB_STEP_SUMMARY"
