@@ -1,0 +1,28 @@
+name: Cloudflare Live Preview Audit
+on:
+  workflow_dispatch:
+    inputs:
+      sample_size:
+        description: 'Read-only sample size (1-25)'
+        required: true
+        default: '20'
+        type: string
+permissions:
+  contents: read
+  pull-requests: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    environment: autolearnpro_cloudflare
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PREVIEW_READ_TOKEN_API }}
+      CLOUDFLARE_ACCOUNT_ID: '0257b4518015b64bd28bca05b803de27'
+      GITHUB_TOKEN: ${{ github.token }}
+      LIVE_PREVIEW_SAMPLE_SIZE: ${{ inputs.sample_size }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0'
+      - name: Inspect live preview control plane (read-only)
+        run: node scripts/audit-live-cloudflare-previews.js

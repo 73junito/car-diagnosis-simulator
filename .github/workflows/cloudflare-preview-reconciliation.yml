@@ -37,3 +37,7 @@ jobs:
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Reconcile previews (scheduled dry-run)
         run: node scripts/reconcile-cloudflare-previews.js
+
+      - name: Audit live Worker previews (read-only sample)
+        if: github.event_name == 'workflow_dispatch' && inputs.apply == false
+        run: node scripts/audit-live-cloudflare-previews.js
