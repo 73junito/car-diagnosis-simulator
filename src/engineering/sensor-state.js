@@ -67,7 +67,7 @@
         observed,
         status: "Signal short-to-ground training fault",
         statusClass: "fault",
-        note: faultBehavior.reason + (artifactBacked ? " Validated engineering artifact applied for the nominal training state." : ""),
+        note: faultBehavior.reason + (artifactBacked ? " Validated engineering artifact applied for the 50% nominal training state." : ""),
         artifactBacked
       };
     }
