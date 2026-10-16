@@ -49,6 +49,10 @@ async function main(){
    if(x.success!==true)throw Error('Cloudflare listing not successful');
    return x.result;
  });
+ if(previews.some(p=>typeof p.name!=='string'||!p.name)){
+  const fields=Object.keys(previews[0]||{}).sort().join(',');
+  throw Error('Cloudflare preview response missing expected name field. Available keys: '+fields);
+ }
  const rows=previews.map(p=>({name:p.name,...classify(p,prs)}));
  const candidates=rows.filter(r=>r.action==='candidate');
  console.log(JSON.stringify({worker,dryRun:!apply,total:rows.length,candidates:candidates.length,rows},null,2));
