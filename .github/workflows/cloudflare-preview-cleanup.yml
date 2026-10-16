@@ -1,4 +1,4 @@
-name: Cloudflare Preview Cleanup
+name: Cloudflare Preview Closure Notice
 
 on:
   pull_request:
@@ -8,28 +8,22 @@ permissions:
   contents: read
 
 jobs:
-  delete-autolearnpro-app-preview:
+  report-closed-pr-preview:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.WRANGLER }}
-      CLOUDFLARE_ACCOUNT_ID: 0257b4518015b64bd28bca05b803de27
-      PREVIEW_NAME: ${{ github.event.pull_request.head.ref }}
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22.19.0"
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --ignore-scripts --no-audit --no-fund
-
-      - name: Delete closed PR Preview
-        run: >
-          npx wrangler preview delete
-          --name "$PREVIEW_NAME"
-          --worker-name autolearnpro-app
-          --skip-confirmation
-          --config wrangler.app.jsonc
+      - name: Report preview retention (no deletion)
+        env:
+          PREVIEW_BRANCH: ${{ github.event.pull_request.head.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+        run: |
+          {
+            echo '## Cloudflare Preview Retained'
+            echo
+            echo "PR #${PR_NUMBER} closed (merged: ${PR_MERGED})."
+            echo "Branch: \`${PREVIEW_BRANCH}\`"
+            echo
+            echo 'This workflow does not delete or modify Cloudflare previews.'
+            echo 'Use the read-only Cloudflare preview audit for lifecycle verification.'
+          } >> "$GITHUB_STEP_SUMMARY"
