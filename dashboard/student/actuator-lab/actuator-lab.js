@@ -75,6 +75,8 @@
  const stateBadge=document.getElementById("stateBadge"), flowNote=document.getElementById("flowNote"), voltageProfile=document.getElementById("voltageProfile");
  const symbolRenderer=window.TorqueMindSymbolRenderer, voltageDomains=window.TorqueMindVoltageDomains;
  const engineering=window.TorqueMindEngineering, calculator=engineering.calculator, measurements=engineering.measurements, comparisons=engineering.comparisons, artifacts=engineering.artifacts;
+ const actuatorState=window.TorqueMindActuatorEngineeringState;
+ if(!actuatorState) throw new Error("Shared Actuator engineering-state resolver is unavailable.");
  const artifactRegistry=await artifacts.loadRegistry();
  const nominalShortGroundArtifact=await artifacts.resolveArtifact(
   artifactRegistry,
@@ -131,35 +133,20 @@
  function faultBehavior(){return engineeringProfile.faultBehavior.find(item=>item.faultId===activeFault)||null;}
  function actuatorCommandActive(){return operatingState==="pwm-low-example"||operatingState==="pwm-high-example";}
  function engineeringState(){
-  const ideal=calculator.calculatePwmAverage({highVoltage:supplyVoltage,dutyCyclePercent:dutyCycle});
-  const behavior=faultBehavior();
-  let observed=actuatorCommandActive()?ideal.value:null;
-  let status=actuatorCommandActive()?"Healthy training example":"PWM command inactive";
-  let statusClass=actuatorCommandActive()?"":"inactive";
-  let power="Available",ground="Available",note="The actuator-side command follows the generic PWM command representation.";
-  if(operatingState==="key-off"){power="Inactive";ground="Inactive";}
-  if(!actuatorCommandActive()) note="No active PWM command is shown in this operating state.";
-  if(behavior){
-   statusClass="fault";
-   if(behavior.mode==="actuator_command_unavailable"){observed=null;status="Actuator-side PWM unavailable";}
-   if(behavior.mode==="actuator_command_forced_ground"){
-    observed=0;status="PWM short-to-ground training fault";
-    if(dutyCycle===30&&nominalShortGroundArtifact.status==="ready"){
-     const baseline=artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact,"baseline");
-     const faulted=artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact,"observed");
-     if(Math.abs(baseline.value-ideal.value)>1e-9) throw new Error("PWM artifact baseline does not match the current nominal average.");
-     observed=faulted.value;
-     note=behavior.reason+" Validated engineering artifact applied for the 30% nominal training state.";
-    }
-   }
-   if(behavior.mode==="actuator_command_forced_power"){observed=supplyVoltage;status="PWM short-to-power training fault";}
-   if(behavior.mode==="actuator_power_unavailable"){power="Unavailable";status="Actuator power unavailable";}
-   if(behavior.mode==="actuator_ground_unavailable"){ground="Unavailable";status="Actuator ground unavailable";}
-   if(behavior.mode==="actuator_power_degraded"){power="Degraded";status="Actuator power path degraded";}
-   if(behavior.mode==="actuator_ground_degraded"){ground="Degraded";status="Actuator ground path degraded";}
-   if(!note.includes("Validated engineering artifact applied")) note=behavior.reason;
+  let shortGroundArtifact=null;
+  if(activeFault==="FAULT_PWM_SHORT_GROUND"&&dutyCycle===30&&nominalShortGroundArtifact.status==="ready"){
+   const baseline=artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact,"baseline");
+   const faulted=artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact,"observed");
+   shortGroundArtifact={baseline:baseline.value,observed:faulted.value};
   }
-  return{ideal,observed,status,statusClass,power,ground,note};
+  return actuatorState.calculateActuatorEngineeringState({
+   calculator,
+   supplyVoltage,
+   dutyCyclePercent:dutyCycle,
+   operatingState,
+   faultBehavior:faultBehavior(),
+   shortGroundArtifact
+  });
  }
  function renderEngineering(){
   const result=engineeringState();

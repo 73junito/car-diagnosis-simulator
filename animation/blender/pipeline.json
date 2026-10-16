@@ -36,5 +36,17 @@
     "componentIds",
     "generatedAtPolicy"
   ],
-  "generatedAtPolicy": "not-recorded-in-deterministic-sidecar"
+  "generatedAtPolicy": "not-recorded-in-deterministic-sidecar",
+  "upstreamGeometryAuthoring": [
+    {
+      "id": "cadquery",
+      "pipeline": "animation/cadquery/pipeline.json",
+      "role": "deterministic-parametric-cad-authoring",
+      "acceptedIntermediates": [
+        "STEP",
+        "STL"
+      ],
+      "directPublicationAuthority": false
+    }
+  ]
 }

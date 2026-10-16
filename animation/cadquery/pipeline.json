@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "ANIM-1C-CAD",
+  "purpose": "deterministic-cad-geometry-authoring",
+  "stageRole": "upstream-geometry-authoring-for-governed-3d-assets",
+  "environment": {
+    "name": "cadquery",
+    "pythonOverrideEnv": "CADQUERY_PYTHON",
+    "environmentRootOverrideEnv": "CADQUERY_ENV",
+    "windowsUserProfileRelativePath": "miniforge3\\envs\\cadquery",
+    "pythonExecutable": "python.exe",
+    "portableRule": "Resolve through environment overrides or USERPROFILE-relative Miniforge path; never hardcode a personal user name."
+  },
+  "outputs": {
+    "preferredIntermediateFormats": ["STEP", "STL"],
+    "directGlbPublicationAllowed": false,
+    "downstreamPipeline": "animation/blender/pipeline.json"
+  },
+  "governance": {
+    "geometryAuthoringOnly": true,
+    "engineeringAuthority": false,
+    "measurementAuthority": false,
+    "assessmentAuthority": false,
+    "publicationAuthority": false,
+    "controlsEngineeringState": false,
+    "humanApprovalRequired": true,
+    "agentMayApprove": false,
+    "agentMayRelease": false
+  },
+  "requirements": {
+    "vehicleSpecificClaimsRequireApprovedEvidence": true,
+    "engineeringDerivedGeometryRequiresExistingEngineeringArtifact": true,
+    "componentIdentityMetadataRequired": true,
+    "deterministicInputsRequired": true
+  }
+}
