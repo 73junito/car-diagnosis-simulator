@@ -65,21 +65,8 @@ async function main(){
  const candidates=rows.filter(r=>r.action==='candidate');
  console.log(JSON.stringify({worker,dryRun:!apply,total:rows.length,candidates:candidates.length,rows},null,2));
  if(process.env.GITHUB_STEP_SUMMARY)fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,
-  '## Cloudflare Preview Reconciliation\n\n'+rows.length+' previews checked, '+candidates.length+' verified closed-PR candidates. Mode: '+(apply?'apply':'dry run')+'.\n');
- if(apply){
-  if(!approvedIds.size)throw Error('Apply requires explicit PREVIEW_APPROVED_IDS from reviewed dry-run');
-  if(candidates.some(r=>approvedIds.has(r.preview_id) && r.action!=='candidate'))throw Error('Approved id is not a candidate');
-  for(const row of candidates){
-   if(!approvedIds.has(row.preview_id))continue;
-   // A second API check immediately before mutation prevents deletion if the PR reopened.
-   const pr=await request('https://api.github.com/repos/'+repo+'/pulls/'+row.pr,githubToken);
-   if(pr.state!=='closed'||!pr.merged_at||pr.head.repo?.full_name!==repo||safeName(pr.head.ref)!==row.name)continue;
-   const current=await allPages('https://api.cloudflare.com/client/v4/accounts/'+account+'/builds/workers/'+targets[0].tag+'/previews',apiToken,x=>{if(x.success!==true)throw Error('Cloudflare listing failed');return x.result;});
-   const found=current.filter(p=>p.preview_id===row.preview_id && safeName(p.branch||'')===row.name);
-   if(found.length!==1)continue;
-   execFileSync('npx',['wrangler','preview','delete','--name',row.name,'--worker-name',worker,'--skip-confirmation','--config','wrangler.app.jsonc'],{stdio:'inherit',shell:process.platform==='win32'});
-  }
- }
+  '## Cloudflare Preview Reconciliation\n\n'+rows.length+' previews checked, '+candidates.length+' merged-PR Builds records (not verified live previews). Mode: '+(apply?'apply':'dry run')+'.\n');
+ if(apply)throw Error('Deletion disabled: Builds inventory does not verify live Worker previews');
 }
 if(require.main===module)main().catch(e=>{console.error('Preview reconciliation stopped:',e.message);process.exitCode=1});
 module.exports={safeName,classify};
