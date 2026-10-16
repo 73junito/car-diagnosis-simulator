@@ -1,0 +1,6 @@
+"use strict";const {record,compare,partId}=require("../scripts/distributor-source-discovery");const sample={manufacturer:"Texas Instruments",partNumber:"TCAN1042H-Q1",provider:"digikey",listingUrl:"https://www.digikey.com/en/products/detail/example"};
+test("exact part number and distributor identity retained",()=>{const x=record(sample);expect(x.manufacturerPartNumber).toBe("TCAN1042H-Q1");expect(x.geometryApproved).toBe(false);expect(x.authority).toBe("discovery-only")});
+test("Mouser source supported without granting authority",()=>expect(record({...sample,provider:"mouser",listingUrl:"https://www.mouser.com/ProductDetail/example"}).electricalApproved).toBe(false));
+test("wrong distributor and insecure links rejected",()=>{expect(()=>record({...sample,listingUrl:"https://example.com"})).toThrow();expect(()=>record({...sample,listingUrl:"http://www.digikey.com"})).toThrow()});
+test("suffix mismatches are not silently accepted",()=>{const a=record(sample),b=record({...sample,partNumber:"TCAN1042G-Q1"});expect(compare(a,b).matched).toBe(false);expect(compare(a,a).matched).toBe(true)});
+test("missing part and malformed input rejected",()=>{expect(()=>partId("")).toThrow();expect(()=>record({...sample,partNumber:"A B"})).toThrow()});
