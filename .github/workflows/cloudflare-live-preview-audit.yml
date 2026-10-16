@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       sample_size:
-        description: 'Read-only sample size (1-25)'
+        description: 'Read-only count (all or 1-3000)'
         required: true
-        default: '20'
+        default: 'all'
         type: string
 permissions:
   contents: read
