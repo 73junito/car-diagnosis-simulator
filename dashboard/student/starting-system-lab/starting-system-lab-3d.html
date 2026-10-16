@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>3D Starting System Lab Classroom</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="./starting-system-lab-3d.css">
+</head>
+<body>
+<main class="lab-shell">
+  <a class="back" href="/dashboard/student/starting-system-lab/">← Back to 2D Starting System Lab</a>
+  <header>
+    <p class="eyebrow">Presentation layer — AutoLearnPro Starting System Lab</p>
+    <h1>3D Starting System Lab Classroom</h1>
+    <p>Generic project-authored component geometry and reusable diagnostic-tool GLBs present the existing governed 12 V starting-system model. This classroom does not create measurements, faults, service specifications, or starter-performance claims.</p>
+    <div id="governanceBanner" class="governance-banner" aria-live="polite"></div>
+  </header>
+
+  <section class="boundary">
+    <strong>Engineering boundary.</strong>
+    <span>No starter current, motor speed, torque, solenoid force, cranking RPM, voltage drop, acceptable limit, or vehicle-specific test-point value is inferred by the 3D presentation. Use the governed 2D engineering panel and authoritative service information for actual diagnosis.</span>
+  </section>
+
+  <section class="classroom-grid">
+    <div>
+      <div class="section-heading">
+        <div><p class="eyebrow">Real GLB assets</p><h2>Starting-system components and tools</h2></div>
+        <p>Each model is independently inspectable. Rotation is presentation-only and does not imply physical operation.</p>
+      </div>
+      <div id="assetGallery" class="asset-gallery" aria-label="Starting System 3D asset gallery"></div>
+    </div>
+
+    <aside class="side-panel">
+      <section class="card">
+        <p class="eyebrow">Runtime diagnostic tools</p>
+        <div id="toolList" class="tool-list"></div>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Governed test points</p>
+        <div id="testPointList" class="testpoint-list"></div>
+        <p class="hint">All numeric values remain vehicle-specific. The 3D layer only exposes the authoritative terminal mapping.</p>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Operating-state contract</p>
+        <div id="stateList" class="contract-list"></div>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Supported training faults</p>
+        <div id="faultList" class="contract-list"></div>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Existing animation governance</p>
+        <p class="hint">The separate engineering-derived instructional animation remains under its own human-review and publication gates. This classroom does not publish, approve, or replace that asset.</p>
+      </section>
+    </aside>
+  </section>
+</main>
+
+<script src="/src/presentation/glb-viewer.js"></script>
+<script src="/src/presentation/starting-system-lab-scene.js"></script>
+<script src="./starting-system-lab-classroom.js"></script>
+</body>
+</html>
