@@ -1,9 +1,14 @@
-# Alternator accessible review viewer
+# Alternator accessible review viewer — local dependency milestone
 
-Run `node scripts/build-alternator-prototype.js`, then serve the **repository root** over HTTP and navigate to `/animation/cadquery/review/`. The generated GLB remains ignored under `animation/cadquery/output/alternator-prototype/`; the page is intentionally **not** linked or packaged in student production routes.
+Run `npm ci`, then `node scripts/prepare-alternator-review-assets.js` to generate ignored, same-origin Three.js assets from the lockfile. Build the seven-part GLB with `node scripts/build-alternator-prototype.js`, serve the repository root over HTTP, and open `/animation/cadquery/review/`. The ignored GLB is never committed or published.
 
-This browser-based Three.js review page offers keyboard-operable Play/Pause/Reset buttons, three illustrative visual speeds, a status live region, a descriptive text alternative, and operating-system reduced-motion handling. It reuses the governed seven-part alternator controller. The Three.js import map references a pinned jsDelivr version and requires network availability; review that dependency before deployment.
+## Reviewed dependency packaging
+This review-only page imports **same-origin** Three.js 0.186.1, copied from the npm package `three@0.186.1`, matching the version resolved by the repository's lockfile. A minimized dependency subset is generated locally (not committed) under `vendor/three/` (core/module, GLTFLoader, OrbitControls, required utilities). Its MIT license is provided at `vendor/three/LICENSE`. No CDN or remote script imports remain in this viewer. Do not use the files as the authoritative upstream source; review future dependency updates against the lockfile and license.
 
-Local Chromium/Playwright smoke: generated GLB loaded; Play advanced pulley and shaft to equal nonzero angles; output stud stayed at zero; Pause/Reset worked; zero page errors.
+## Accessibility and failure behavior
+Play/Pause/Reset are native keyboard buttons, speed uses a native select, status uses a live region, and reduced-motion preferences prevent animation. If rendering or loading fails the canvas is hidden, a text description appears, and playback controls remain disabled. This is a *fallback*, not a substitute for a full assistive-technology audit. The scene itself does not currently expose keyboard-operable camera manipulation or component navigation.
 
-**Not approved:** mechanical fit/specifications, production accessibility audit, circuit/electrical test points, scoring or publication.
+Browser validation with regenerated GLB (Chromium/Playwright): keyboard Play/Pause/Reset, synchronized pulley/shaft rotation, stationary stud, and OS reduced-motion settings passed with no page errors. A focused Jest test verifies same-origin assets, license, and fallback markup.
+
+## Release gates still blocked
+This viewer remains review-only. No qualified mechanical dimensional validation, independent screen-reader audit, governed electrical test-point mappings, assessment eligibility, or publication authority is claimed. Do not link this page into the student dashboard or ship to production lessons without those reviews.

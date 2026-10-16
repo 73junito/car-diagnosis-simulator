@@ -80,3 +80,6 @@ animation/agentic-prep/output/
 
 # Local CadQuery intermediate geometry
 animation/cadquery/output/
+
+# Generated from the locked Three.js package for review only
+animation/cadquery/review/vendor/three/
