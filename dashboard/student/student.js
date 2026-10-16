@@ -139,6 +139,14 @@ function fetchStudentProgress() {
   return studentProgressPromise;
 }
 
+// Escape untrusted API values before interpolating into dashboard HTML.
+function escapeDashboardHtml(value) {
+  const text = value == null ? "" : String(value);
+  return text.replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[char]);
+}
+
 async function loadPerformanceSummary() {
   const root = document.getElementById("performanceSummary");
   if (!root) return;
@@ -170,10 +178,10 @@ async function loadPerformanceSummary() {
         <tbody>
           ${rows.map(r => `
             <tr>
-              <td>${r.scenario_id}</td>
-              <td>${r.responses}</td>
-              <td>${r.correct_responses}</td>
-              <td>${r.accuracy_pct}%</td>
+              <td>${escapeDashboardHtml(r.scenario_id)}</td>
+              <td>${escapeDashboardHtml(r.responses)}</td>
+              <td>${escapeDashboardHtml(r.correct_responses)}</td>
+              <td>${escapeDashboardHtml(r.accuracy_pct)}%</td>
             </tr>
           `).join("")}
         </tbody>
@@ -213,10 +221,10 @@ async function loadStudentTranscriptSummary() {
 
     root.innerHTML = `
       <div class="transcript-grid">
-        <div><strong>Scenarios</strong><br>${transcript.scenario_count}</div>
-        <div><strong>Responses</strong><br>${transcript.response_count}</div>
-        <div><strong>Correct</strong><br>${transcript.correct_response_count}</div>
-        <div><strong>Accuracy</strong><br>${transcript.accuracy_pct}%</div>
+        <div><strong>Scenarios</strong><br>${escapeDashboardHtml(transcript.scenario_count)}</div>
+        <div><strong>Responses</strong><br>${escapeDashboardHtml(transcript.response_count)}</div>
+        <div><strong>Correct</strong><br>${escapeDashboardHtml(transcript.correct_response_count)}</div>
+        <div><strong>Accuracy</strong><br>${escapeDashboardHtml(transcript.accuracy_pct)}%</div>
       </div>
     `;
   } catch (err) {
@@ -257,8 +265,8 @@ async function loadAdaptiveRecommendations() {
       ? `<div class="recommendation-list">${rows.map(row => `
           <article class="recommendation-item">
             <div>
-              <strong>${row.scenario_id}</strong>
-              <p>${row.reason}</p>
+              <strong>${escapeDashboardHtml(row.scenario_id)}</strong>
+              <p>${escapeDashboardHtml(row.reason)}</p>
             </div>
             <a class="recommendation-link" href="./scenario/?id=${encodeURIComponent(row.scenario_id)}">Start Practice</a>
           </article>
