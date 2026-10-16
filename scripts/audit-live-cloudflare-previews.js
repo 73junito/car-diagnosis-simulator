@@ -16,14 +16,10 @@ function api(url, auth) {
   }).on('error',reject);
  });
 }
-function interpret(status, response, expectedName){
- if(status===404)return 'absent';
- if(status!==200 || response?.success!==true)return 'unknown';
- const actual=response.result;
- if(!actual||typeof actual!=='object')return 'unknown';
- const name=actual.name||actual.slug;
- if(typeof name==='string'&&name!==expectedName)return 'mismatch';
- return 'present';
+function interpret(status, response) {
+ if(status===404 && Array.isArray(response?.errors) && response.errors.some(e=>e.code===10025))return 'absent';
+ if(status!==200 || response?.success!==true || !response.result || typeof response.result!=='object')return 'unknown';
+ return 'present_by_name_lookup';
 }
 async function run(){
  if(!account||!token||!gh)throw Error('Credentials missing');
@@ -46,7 +42,7 @@ async function run(){
  }
  const tally={};for(const r of rows)tally[r.live_status]=(tally[r.live_status]||0)+1;
  console.log(JSON.stringify({worker,readOnly:true,sampled:rows.length,counts:tally,rows},null,2));
- if(rows.some(r=>r.live_status==='unknown'||r.live_status==='mismatch'))process.exitCode=2;
+ if(rows.some(r=>r.live_status==='unknown'))process.exitCode=2;
 }
 if(require.main===module)run().catch(e=>{console.error('Read-only preview audit failed:',e.message);process.exitCode=1});
 module.exports={interpret};
