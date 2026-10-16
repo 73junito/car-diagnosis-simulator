@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "1.0.0",
+  "sequence": [
+    "sensor-lab",
+    "actuator-lab",
+    "relay-load-lab",
+    "network-lab",
+    "multivoltage-lab"
+  ],
+  "discoveryDate": "2026-10-16",
+  "governance": {
+    "sourceRights": "link-only; no manufacturer datasheets or drawings republished",
+    "simulationValuesChanged": false,
+    "publicationAuthorized": false,
+    "modelSpecificSpecsAreNotUniversal": true
+  },
+  "entries": [
+    {
+      "lab": "sensor-lab",
+      "model": "Texas Instruments TMP235-Q1",
+      "manufacturer": "Texas Instruments",
+      "url": "https://www.ti.com/product/TMP235-Q1",
+      "doc": "TMP23x-Q1 Rev D",
+      "verifiedSpecs": [
+        {
+          "parameter": "supply operating range",
+          "min": 2.3,
+          "max": 5.5,
+          "unit": "V"
+        },
+        {
+          "parameter": "typical analog slope",
+          "value": 10,
+          "unit": "mV/°C"
+        },
+        {
+          "parameter": "typical output at 0°C",
+          "value": 500,
+          "unit": "mV"
+        },
+        {
+          "parameter": "operating temperature range",
+          "min": -40,
+          "max": 150,
+          "unit": "°C"
+        }
+      ],
+      "openGaps": [
+        "Specific package pin assignment and PCB footprints need revision-matched drawing verification",
+        "Does not establish an automotive coolant/air sensor housing or connector",
+        "Actual precision and transfer-function limits depend on temperature and grade"
+      ],
+      "validation": "manufacturer product page",
+      "approval": "pending"
+    },
+    {
+      "lab": "actuator-lab",
+      "model": "Texas Instruments DRV8873-Q1",
+      "manufacturer": "Texas Instruments",
+      "url": "https://www.ti.com/product/DRV8873-Q1",
+      "doc": "DRV8873-Q1 Rev B",
+      "verifiedSpecs": [
+        {
+          "parameter": "operating supply",
+          "min": 4.5,
+          "max": 38,
+          "unit": "V"
+        },
+        {
+          "parameter": "peak output current (not continuous)",
+          "value": 10,
+          "unit": "A"
+        }
+      ],
+      "openGaps": [
+        "No actuator mechanical load torque/travel specification",
+        "Peak 10A is not permissible continuous design current",
+        "Device pinout/package and thermal derating need matching datasheet validation"
+      ],
+      "validation": "manufacturer product page",
+      "approval": "pending"
+    },
+    {
+      "lab": "relay-load-lab",
+      "model": "Texas Instruments TPS274C65 (solid-state switch reference, NOT mechanical relay)",
+      "manufacturer": "Texas Instruments",
+      "url": "https://www.ti.com/product/TPS274C65",
+      "doc": "TPS274C65xS Rev C",
+      "verifiedSpecs": [
+        {
+          "parameter": "number of high-side channels",
+          "value": 4,
+          "unit": "count"
+        },
+        {
+          "parameter": "maximum per-channel current (device rating)",
+          "value": 2.6,
+          "unit": "A"
+        },
+        {
+          "parameter": "typical on-resistance",
+          "value": 65,
+          "unit": "mΩ"
+        }
+      ],
+      "openGaps": [
+        "Still need exact automotive electromechanical relay part, coil voltage/resistance, contact arrangement, ratings and socket diagram",
+        "Solid-state switch does not prove ISO relay footprint or 30/85/86/87 terminals",
+        "Load power/thermal protection depends on concrete load and application"
+      ],
+      "validation": "manufacturer product page",
+      "approval": "pending"
+    },
+    {
+      "lab": "network-lab",
+      "model": "Texas Instruments TCAN1042H-Q1",
+      "manufacturer": "Texas Instruments",
+      "url": "https://www.ti.com/product/TCAN1042H-Q1",
+      "doc": "TCAN1042-Q1 Rev D",
+      "verifiedSpecs": [
+        {
+          "parameter": "VCC operating range",
+          "min": 4.5,
+          "max": 5.5,
+          "unit": "V"
+        },
+        {
+          "parameter": "max signaling rate of this non-G option",
+          "value": 2,
+          "unit": "Mbps"
+        },
+        {
+          "parameter": "bus fault tolerance",
+          "min": -70,
+          "max": 70,
+          "unit": "V"
+        }
+      ],
+      "openGaps": [
+        "Not a vehicle harness or OBD-II connector pin assignment",
+        "CAN wiring/termination and waveform require full system topology and chosen transceiver variant",
+        "Do not generalize 2 Mbps limit to all CAN FD devices"
+      ],
+      "validation": "manufacturer product page",
+      "approval": "pending"
+    },
+    {
+      "lab": "multivoltage-lab",
+      "model": "Texas Instruments UCC5880-Q1",
+      "manufacturer": "Texas Instruments",
+      "url": "https://www.ti.com/product/UCC5880-Q1",
+      "doc": "UCC5880-Q1 Rev A",
+      "verifiedSpecs": [
+        {
+          "parameter": "peak gate-drive output (not traction phase output)",
+          "value": 20,
+          "unit": "A"
+        },
+        {
+          "parameter": "input-side supply",
+          "min": 3,
+          "max": 5.5,
+          "unit": "V"
+        },
+        {
+          "parameter": "output-side supply",
+          "min": 12,
+          "max": 30,
+          "unit": "V"
+        }
+      ],
+      "openGaps": [
+        "Not a traction battery voltage/current rating",
+        "Battery packs, DC/DC stages, traction inverter power module and motor need separate part-number-specific designs",
+        "HV safety and isolation must not derive from gate-driver output rating"
+      ],
+      "validation": "manufacturer product page",
+      "approval": "pending"
+    }
+  ]
+}
