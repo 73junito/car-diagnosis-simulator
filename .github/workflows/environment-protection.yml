@@ -1,0 +1,128 @@
+name: Configure environment protection
+
+on:
+  workflow_dispatch:
+    inputs:
+      reviewer_id:
+        description: 'GitHub numeric user/team ID of the independent authorized engineering reviewer (must differ from the person initiating the review)'
+        required: true
+        type: number
+
+jobs:
+  protect-asset-promotion-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check inputs and credentials
+        run: |
+          echo 'Configuring GitHub Environment "asset-promotion-review" deployment protection rules.'
+          echo 'This is a review-only environment, not a production deployment destination.'
+          echo ''
+          echo 'Reviewer ID provided: ${{ github.event.inputs.reviewer_id }}'
+          echo ''
+          echo 'Intended protection settings:'
+          echo '  Environment name: asset-promotion-review'
+          echo '  Required reviewers: independent authorized engineering reviewer (ID ${{ github.event.inputs.reviewer_id }})'
+          echo '  Prevent self-review: true'
+          echo '  Wait timer: 0 minutes'
+          echo '  Deployment branches: custom policy permitting only "main"'
+          echo '  Environment secrets: none'
+          echo ''
+          echo 'CREDENTIAL REQUIREMENT: The GITHUB_TOKEN must belong to a token/account with'
+          echo 'Repository Administration: write permission. contents: write alone is NOT sufficient'
+          echo 'to update environment protection rules. Confirm authorization before running this workflow.'
+          echo ''
+          echo 'DO NOT APPLY until reviewer identity and administrative authorization are confirmed.'
+          echo 'The reviewer must be a GitHub account other than the person initiating the protected review.'
+
+      - name: Validate reviewer ID is numeric
+        id: validate-reviewer
+        run: |
+          REVIEWER_ID="${{ github.event.inputs.reviewer_id }}"
+          if ! echo "$REVIEWER_ID" | grep -qE '^[0-9]+$'; then
+            echo "ERROR: reviewer_id must be a numeric GitHub user/team ID, got: $REVIEWER_ID"
+            exit 1
+          fi
+          echo "reviewer_id=$REVIEWER_ID" >> $GITHUB_OUTPUT
+
+      # NOTE: No placeholder reviewer is baked into this payload. A verified numeric GitHub
+      # reviewer ID must be supplied via the workflow_dispatch input. The reviewer must have
+      # at least read access to the repository.
+      - name: Create payload
+        run: |
+          cat > payload.json <<'JSON'
+          {
+            "reviewers": [
+              {
+                "type": "User",
+                "id": REVIEWER_ID_PLACEHOLDER
+              }
+            ],
+            "wait_timer": 0,
+            "prevent_self_review": true,
+            "deployment_branch_policy": {
+              "protected_branches": false,
+              "custom_branch_policies": true
+            }
+          }
+          JSON
+          sed -i "s/REVIEWER_ID_PLACEHOLDER/${{ steps.validate-reviewer.outputs.reviewer_id }}/" payload.json
+          echo '--- payload (reviewer ID substituted) ---'
+          cat payload.json
+
+      - name: Apply environment protection rules
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # --fail-equivalent: capture HTTP status and abort on 4xx/5xx.
+          HTTP_CODE=$(curl -sS -o response.json -w "%{http_code}" -X PUT \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/environments/asset-promotion-review \
+            -d @payload.json)
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "ERROR: Environment protection PUT returned HTTP $HTTP_CODE"
+            cat response.json
+            exit 1
+          fi
+          echo "Environment protection PUT succeeded (HTTP $HTTP_CODE)."
+          cat response.json
+
+      - name: Add exact main deployment branch policy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HTTP_CODE=$(curl -sS -o branch-policy-response.json -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/environments/asset-promotion-review/deployment-branch-policies \
+            -d '{"name":"main","type":"branch"}')
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 400 ]; then
+            echo "ERROR: main branch policy returned HTTP $HTTP_CODE"
+            cat branch-policy-response.json
+            exit 1
+          fi
+
+      - name: Verify applied environment protection
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HTTP_CODE=$(curl -sS -o verification.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/environments/asset-promotion-review)
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "ERROR: Environment protection GET verification returned HTTP $HTTP_CODE"
+            cat verification.json
+            exit 1
+          fi
+          echo "Verified applied environment protection (HTTP $HTTP_CODE):"
+          cat verification.json
+
+      - name: Confirm
+        run: |
+          echo 'Environment protection applied and verified.'
+          echo 'Confirm in repository Settings > Environments > asset-promotion-review.'
+          echo 'Do NOT activate production asset publishing or bypass reviewer requirements.'
+          echo 'Future production promotion should use a separate asset-promotion-production environment.'
