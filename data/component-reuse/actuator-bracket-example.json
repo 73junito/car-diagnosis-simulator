@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "assetId": "actuator_bracket_001",
+  "reuseClass": "dimensionally-controlled",
+  "revision": "1",
+  "provenance": {
+    "source": "project-authored CadQuery parametric example; illustrative, not a manufacturer drawing"
+  },
+  "scope": [
+    "review-lab"
+  ],
+  "permittedUses": [
+    "visual",
+    "geometry"
+  ],
+  "units": "mm",
+  "dimensions": {
+    "holeDiameter": 8
+  },
+  "tolerances": {
+    "holeDiameter": {
+      "plus": 0.1,
+      "minus": 0.1,
+      "unit": "mm",
+      "type": "bilateral"
+    }
+  },
+  "toleranceEvidence": {
+    "status": "not-verified",
+    "source": "illustrative internal example"
+  },
+  "fitEvidence": {
+    "status": "not-verified"
+  },
+  "statisticalModel": {
+    "status": "not-established"
+  },
+  "review": {
+    "status": "pending",
+    "reviewer": null,
+    "evidence": null
+  }
+}
