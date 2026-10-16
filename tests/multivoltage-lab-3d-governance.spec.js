@@ -54,11 +54,21 @@ describe("Multivoltage Lab governed 3D classroom",()=>{
   expect(authored.every((item)=>item.vehicleSpecific===false)).toBe(true);
  });
 
- test("shared engineering state calculates power only from explicit entered current",()=>{
+ test("shared engineering state calculates power only from explicit entered current and preserves input provenance",()=>{
   const lv={id:"LV12",nominalVoltage:12};
   const hv={id:"TR400",nominalVoltage:400};
   expect(calculateMultiVoltageEngineeringState({calculator,domain:lv,domainActive:true}).power).toBeNull();
-  expect(calculateMultiVoltageEngineeringState({calculator,domain:lv,enteredCurrentValue:10,domainActive:true}).power.value).toBe(120);
+
+  const entered=calculateMultiVoltageEngineeringState({calculator,domain:lv,enteredCurrentValue:10,domainActive:true});
+  expect(entered.power.value).toBe(120);
+  expect(entered.formula).toContain("entered 10 A");
+
+  const measured=calculateMultiVoltageEngineeringState({
+   calculator,domain:lv,enteredCurrentValue:10,currentInputRole:"measured",domainActive:true
+  });
+  expect(measured.power.value).toBe(120);
+  expect(measured.formula).toContain("measured 10 A");
+
   expect(calculateMultiVoltageEngineeringState({calculator,domain:hv,enteredCurrentValue:10,domainActive:true}).power.value).toBe(4000);
  });
 

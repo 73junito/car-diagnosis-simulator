@@ -141,6 +141,7 @@
       calculator,
       domain,
       enteredCurrentValue:current?.value??null,
+      currentInputRole:"measured",
       domainActive:domainIsActive(domain.id),
       faultType:domainFault?.type||null
     });

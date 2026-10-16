@@ -6,6 +6,7 @@
       calculator,
       domain,
       enteredCurrentValue = null,
+      currentInputRole = "entered",
       domainActive = false,
       faultType = null
     } = options || {};
@@ -48,8 +49,9 @@
     const voltageBoundary = domain.id === "TR400"
       ? "The 400 V value belongs only to this project-authored training example."
       : "The 12 V value is the declared low-voltage architecture for this training template.";
+    const inputLabel = currentInputRole === "measured" ? "measured" : "entered";
     const calculation = hasCurrent
-      ? "P = " + domain.nominalVoltage + " V × entered " + Number(enteredCurrentValue.toFixed(2)) + " A = " + power.value.toFixed(2) + " W."
+      ? "P = " + domain.nominalVoltage + " V × " + inputLabel + " " + Number(enteredCurrentValue.toFixed(2)) + " A = " + power.value.toFixed(2) + " W."
       : "Enter a positive current to calculate power.";
     const faultText = faultType
       ? " The injected fault does not create a measured current, voltage, power, converter-efficiency, or motor-output value."
