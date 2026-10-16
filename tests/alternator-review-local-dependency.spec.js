@@ -15,6 +15,14 @@ describe("alternator review viewer local assets and fallback",()=>{
   }
   expect(fs.readFileSync(path.join(root,"vendor/three/LICENSE"),"utf8")).toContain("MIT");
  });
+ test("keyboard camera inspection is accessible without enabling motion",()=>{
+  expect(html).toContain('tabindex="0"');
+  expect(html).toMatch(/arrow keys to orbit/i);
+  expect(js).toContain("canvas.addEventListener('keydown'");
+  expect(js).toContain("event.preventDefault()");
+  expect(js).toContain("event.key==='Home'");
+  expect(js).toContain("polar.makeSafe()");
+ });
  test("unavailable WebGL remains understandable and disables unsafe interactions",()=>{
   expect(html).toMatch(/id="fallback" role="alert" hidden/);
   expect(html).toMatch(/id="status" role="status" aria-live="polite"/);
