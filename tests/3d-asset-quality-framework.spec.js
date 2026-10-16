@@ -1,0 +1,10 @@
+"use strict";
+const {validate,PRIORITIES}=require("../scripts/validate-3d-asset-review");
+const sample=require("../animation/asset-reviews/alternator-review.json");
+const clone=()=>JSON.parse(JSON.stringify(sample));
+test("five realism priorities remain ordered",()=>expect(PRIORITIES).toEqual(["silhouette_proportions","connectors_terminals_mounting","materials_lighting","cutaways_separation","surface_detail_textures"]));
+test("alternator is valid review-only and not publishable",()=>{const r=validate(sample);expect(r.valid).toBe(true);expect(r.publishable).toBe(false);expect(r.mandatoryPassed).toBe(false)});
+test("visual polish never overrides missing technical gates",()=>{const x=clone();for(const key of PRIORITIES.slice(2))x.criteria[key].status="pass";x.publicationApproved=true;x.purpose="publication-candidate";expect(validate(x).publishable).toBe(false)});
+test("separate publication approval and every criterion required",()=>{const x=clone();for(const key of PRIORITIES)x.criteria[key].status="pass";x.purpose="publication-candidate";expect(validate(x).publishable).toBe(false);x.publicationApproved=true;x.reviewers.silhouette_proportions="Qualified technical reviewer";x.reviewers.connectors_terminals_mounting="Qualified technical reviewer";expect(validate(x).publishable).toBe(true)});
+test("missing evidence or reviewer fails closed",()=>{const x=clone();x.criteria.silhouette_proportions.evidence="";x.reviewers.connectors_terminals_mounting="";expect(validate(x).valid).toBe(false)});
+test("invalid/unrecognized criterion result fails closed",()=>{const x=clone();x.criteria.surface_detail_textures.status="approved";expect(validate(x).valid).toBe(false)});
