@@ -58,7 +58,23 @@ Generated GLB and sidecar metadata under animation/blender/output are intentiona
 
 Local validation commands:
 - npm run validate:animation-blender
+- npm run validate:animation-cadquery
+- npm run doctor:animation-cadquery
 - npm run build:animation-proxy
+
+### CadQuery geometry-authoring stage
+
+CadQuery is an upstream parametric-CAD authoring stage for the governed 3D asset pipeline. It may create deterministic project-authored geometry and STEP/STL intermediates, but it does not gain engineering, measurement, assessment, publication, or release authority. Governed GLB export/review remains downstream in the Blender pipeline.
+
+Environment discovery is portable and ordered:
+1. `CADQUERY_PYTHON` may point directly to a Python interpreter.
+2. `CADQUERY_ENV` may point to the CadQuery environment root.
+3. On Windows, the resolver checks `%USERPROFILE%\miniforge3\envs\cadquery\python.exe`.
+4. An active Conda environment named `cadquery` may be used.
+
+On the current Windows workstation, the USERPROFILE-relative path resolves to `C:\Users\rod63\miniforge3\envs\cadquery`. The personal user name is intentionally not hardcoded in executable pipeline logic.
+
+Use `npm run doctor:animation-cadquery` for a local import/version check. CI validates the pipeline contract but does not require the workstation-specific environment to exist.
 
 ANIM-1D will replace proxy geometry with the first governed starting-system instructional model. ANIM-1C itself does not make vehicle-specific claims and does not alter lesson delivery, scoring, grading, assessment eligibility, exam release, authentication, authorization, RLS, or curriculum.
 
