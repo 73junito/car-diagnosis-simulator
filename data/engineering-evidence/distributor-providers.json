@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "role": "discovery-only",
+  "providers": [
+    {
+      "id": "digikey",
+      "name": "DigiKey",
+      "documentation": "https://developer.digikey.com/",
+      "credentialState": "not-configured",
+      "use": "manual links / optional API in future"
+    },
+    {
+      "id": "mouser",
+      "name": "Mouser",
+      "documentation": "https://www.mouser.com/api-search/",
+      "credentialState": "not-configured",
+      "use": "manual links / optional API in future"
+    }
+  ],
+  "approval": {
+    "manufacturerPartNumberExactMatch": true,
+    "manufacturerDatasheetRequired": true,
+    "reviewRequired": true,
+    "technicalAuthority": false,
+    "publicationAuthority": false
+  }
+}

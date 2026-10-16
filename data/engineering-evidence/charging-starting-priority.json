@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "charging-then-starting",
+  "authority": "reference-only",
+  "reviewStatus": "pending",
+  "components": [
+    {
+      "family": "charging",
+      "component": "alternator",
+      "referenceModel": "GT22580669 / LEA0669",
+      "source": {
+        "publisher": "GT Automotive / Lucas catalogue",
+        "url": "https://gtautomotiveparts.co.uk/wp-content/uploads/2016/06/Lucas-Alternator-Catalogue.pdf",
+        "document": "Lucas Alternator Catalogue",
+        "lookup": "Product GT22580669 / LEA0669 data sheet"
+      },
+      "specifications": [
+        {
+          "field": "ratedVoltage",
+          "value": 14,
+          "unit": "V"
+        },
+        {
+          "field": "ratedCurrent",
+          "value": 90,
+          "unit": "A"
+        },
+        {
+          "field": "pulleyOutsideDiameter",
+          "value": 56,
+          "unit": "mm"
+        },
+        {
+          "field": "pulleyGrooves",
+          "value": 6,
+          "unit": "count"
+        },
+        {
+          "field": "BPlusTerminal",
+          "value": "M8",
+          "unit": "thread designation"
+        },
+        {
+          "field": "rotation",
+          "value": "CW",
+          "unit": "catalog designation"
+        }
+      ],
+      "qualifications": [
+        "Manufacturer catalogue data is for GT22580669 / LEA0669 only.",
+        "Catalogue drawing parameters A=39.5, B=14.0, C=61.0 require dimensional-label inspection before assignment.",
+        "Does not establish mounting geometry for generic AutoLearnPro GLB.",
+        "Catalog use for evidence reference only, not redistributable imagery."
+      ],
+      "geometryApproval": "pending",
+      "electricalAuthority": false
+    },
+    {
+      "family": "charging",
+      "component": "alternator-internals",
+      "referenceModel": "DENSO technical designs (not one part)",
+      "source": {
+        "publisher": "DENSO Europe",
+        "url": "https://assets.denso-am.eu/production/attachments/Starter-Alternator-Manual-English.pdf",
+        "localPath": "F:\\catalog\\Starter-Alternator-Manual-English.pdf",
+        "pages": [
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          53
+        ]
+      },
+      "specifications": [],
+      "qualifications": [
+        "Component arrangement and principles only, not dimensioned engineering model.",
+        "SC dual-winding and conventional rectifier topologies differ; do not combine into a universal six-diode claim.",
+        "No exact terminal location or rotor/stator clearances supplied."
+      ],
+      "geometryApproval": "pending",
+      "electricalAuthority": false
+    },
+    {
+      "family": "starting",
+      "component": "starter",
+      "referenceModel": "DENSO heavy-duty starter family (application-dependent)",
+      "source": {
+        "publisher": "DENSO",
+        "url": "https://api.densoimages.com/files/download/05f6babc-9a3f-427c-bf8e-d9732af6a1a7",
+        "document": "Heavy Duty Starter Installation Instructions"
+      },
+      "specifications": [
+        {
+          "field": "batteryTerminal30FastenerTorque",
+          "min": 24.5,
+          "max": 27.5,
+          "unit": "N·m"
+        },
+        {
+          "field": "keySwitchTerminal50FastenerTorque",
+          "min": 2,
+          "max": 2.5,
+          "unit": "N·m"
+        }
+      ],
+      "qualifications": [
+        "Installation instructions give terminal identification and fastener values for shown applicable configurations only.",
+        "Do not apply to all starters or treat fastener torque as a simulated electrical parameter.",
+        "No universal mounting-bolt circle, pinion engagement depth or exact motor dimension confirmed.",
+        "User's local DENSO manual pp. 9, 11, 14, 17 supports structural distinctions between pinion-shift, reduction and planetary starter types."
+      ],
+      "geometryApproval": "pending",
+      "electricalAuthority": false
+    }
+  ],
+  "nextGates": [
+    "Match each educational model to one exact part number and applicable vehicle/system revision.",
+    "Obtain dimensional drawings for mounting ear or flange, axial offsets, pinion/pulley, and keyed connector geometry.",
+    "Map only verified terminal identifiers and tested wiring variants to simulation.",
+    "Complete technical review and accessibility/performance gates before publication."
+  ]
+}
