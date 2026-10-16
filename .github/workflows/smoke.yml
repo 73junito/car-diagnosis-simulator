@@ -20,6 +20,8 @@ jobs:
     # Other non-secret CI still validates dependency PRs.
     if: github.actor != 'dependabot[bot]'
     environment: jchfruprqpeypdttvlam_staging
+    # New pending requests supersede older pending requests in this ref group.
+    # Use check-latest-staging-smoke.js to verify the newest PR run before merge.
     concurrency:
       group: staging-smoke-${{ github.ref }}
       cancel-in-progress: false
