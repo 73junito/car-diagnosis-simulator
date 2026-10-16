@@ -9,6 +9,38 @@ const RATE_WINDOW_MS = process.env.RATE_WINDOW_MS ? Number(process.env.RATE_WIND
 
 function sanitize(s){ if(s===undefined || s===null) return ''; return String(s).trim(); }
 
+const MAX_BODY_BYTES = 10 * 1024;
+function parseBody(req) {
+  if (req.body !== undefined && req.body !== null) {
+    const serialized = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+    if (Buffer.byteLength(serialized, 'utf8') > MAX_BODY_BYTES) {
+      const error = new Error('body_too_large'); error.status = 413; throw error;
+    }
+    return Promise.resolve(JSON.parse(serialized || '{}'));
+  }
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let total = 0;
+    req.on('data', chunk => {
+      const bytes = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+      total += bytes.length;
+      if (total > MAX_BODY_BYTES) {
+        const error = new Error('body_too_large'); error.status = 413;
+        reject(error);
+        req.destroy();
+        return;
+      }
+      chunks.push(bytes);
+    });
+    req.on('end', () => {
+      try { resolve(JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}')); }
+      catch (error) { error.status = 400; reject(error); }
+    });
+    req.on('error', reject);
+  });
+}
+
+
 function makeId(){ if(crypto && crypto.randomUUID) return crypto.randomUUID(); // node 14+
  // fallback simple uuid
  return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8);
@@ -92,10 +124,7 @@ module.exports = async (req, res) => {
     const authHeader = req.headers['authorization'] || req.headers['Authorization'] || '';
     const expected = process.env.ADMIN_TOKEN ? `Bearer ${process.env.ADMIN_TOKEN}` : null;
     if(!expected){
-      // Report current feature availability in a non-failing way.
-      const storage = (process.env.SUPABASE_URL && process.env.SUPABASE_KEY) ? 'supabase' : (process.env.REQUESTS_FILE ? 'file' : 'disabled');
-      const notifications = (process.env.RESEND_API_KEY || process.env.SENDGRID_API_KEY) ? 'enabled' : 'disabled';
-      return res.status(200).json({ warning: 'missing_env', mode: 'degraded', storage, notifications });
+      return res.status(503).json({ error: 'admin_not_configured' });
     }
     if(authHeader !== expected) return res.status(401).json({ error: 'unauthorized' });
 
@@ -201,20 +230,9 @@ module.exports = async (req, res) => {
     if(!expected) return res.status(501).json({ error: 'admin_not_configured' });
     if(authHeader !== expected) return res.status(401).json({ error: 'unauthorized' });
 
-    // parse small body
-    const MAX_BODY = 10 * 1024; // 10KB
-    let rawBody = '';
-    if(req.body && Object.keys(req.body).length){ rawBody = JSON.stringify(req.body); }
-    else {
-      rawBody = await new Promise((resolve, reject) => {
-        let s = '';
-        req.on('data', chunk => { s += chunk; if(s.length > MAX_BODY){ reject(new Error('body_too_large')); req.destroy(); } });
-        req.on('end', () => resolve(s || '{}'));
-        req.on('error', reject);
-      });
-    }
-    let body = {};
-    try{ body = rawBody ? JSON.parse(rawBody) : {}; }catch(e){ return res.status(400).json({ error: 'invalid_json' }); }
+    let body;
+    try { body = await parseBody(req); }
+    catch (error) { return res.status(error.status || 400).json({error: error.status === 413 ? 'body_too_large' : 'invalid_json'}); }
     const id = sanitize(body.id || '');
     const status = sanitize(body.status || '').toLowerCase();
     const allowed = new Set(['new','contacted','qualified','closed']);
@@ -264,26 +282,7 @@ module.exports = async (req, res) => {
   if(Array.isArray(ip)) ip = ip[0];
 
   try{
-    // parse body with a size limit to avoid abuse (10kb)
-    const MAX_BODY = 10 * 1024; // 10KB
-    let rawBody = '';
-    if(req.body && Object.keys(req.body).length){
-      rawBody = JSON.stringify(req.body);
-    } else {
-      rawBody = await new Promise((resolve, reject) => {
-        let s = '';
-        req.on('data', chunk => {
-          s += chunk;
-          if(s.length > MAX_BODY) {
-            reject(new Error('body_too_large'));
-            req.destroy();
-          }
-        });
-        req.on('end', () => resolve(s || '{}'));
-        req.on('error', reject);
-      });
-    }
-    const body = rawBody ? JSON.parse(rawBody) : {};
+    const body = await parseBody(req);
 
     // Honeypot: field 'hp' should be empty
     if(body.hp) return res.status(400).json({error:'spam_detected'});
