@@ -23,4 +23,4 @@ try{
  reset.onclick=()=>{motion.reset();stop();draw();report('Animation reset.')};
  window.addEventListener('pagehide',()=>{stop();motion.dispose();orbit.dispose();renderer.dispose()},{once:true});
  window.__alternatorViewer={scene:gltf.scene,motion};
-}catch(error){stop();report('Unable to load review model: '+error.message);console.error(error)}
+}catch(error){stop();el('fallback').hidden=false;canvas.hidden=true;play.disabled=true;pause.disabled=true;reset.disabled=true;report('3D model unavailable. Text description provided.');console.error(error)}
