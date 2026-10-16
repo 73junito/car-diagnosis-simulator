@@ -101,12 +101,45 @@ async function sendNotification(record){
   return { provider: 'none', success: false, errorMessage: 'no_provider_configured' };
 }
 
+function requestOrigin(req) {
+  const host = req.headers.host;
+  if (!host || !/^[a-z0-9.:-]+$/i.test(host)) return null;
+  const protocol = req.socket?.encrypted ? 'https:' : 'http:';
+  try { return new URL(protocol + '//' + host).origin; } catch { return null; }
+}
+
+function allowedCorsOrigin(req) {
+  const origin = req.headers.origin;
+  if (!origin || origin === 'null') return null;
+  let parsed;
+  try { parsed = new URL(origin); } catch { return null; }
+  if (!['https:', 'http:'].includes(parsed.protocol) || parsed.origin !== origin) return null;
+  const allowed = (process.env.PILOT_ALLOWED_ORIGINS || '').split(',').map(x => x.trim()).filter(Boolean);
+  const sameOrigin = requestOrigin(req);
+  return (origin === sameOrigin || allowed.includes(origin)) ? origin : null;
+}
+
+function rateLimitClientKey(req) {
+  // Only trust forwarding information when a deployment operator explicitly enables it
+  // behind a reverse proxy that overwrites client-supplied forwarding headers.
+  if (process.env.PILOT_TRUST_PROXY === 'true') {
+    const supplied = req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'];
+    const candidate = Array.isArray(supplied) ? supplied[0] : String(supplied || '').split(',')[0].trim();
+    if (candidate && require('net').isIP(candidate)) return candidate;
+  }
+  return req.socket?.remoteAddress || 'unknown';
+}
+
 module.exports = async (req, res) => {
   // CORS preflight
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if(req.method === 'OPTIONS') return res.status(204).end();
+  const corsOrigin = allowedCorsOrigin(req);
+  res.setHeader('Vary', 'Origin');
+  if (corsOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', corsOrigin);
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  }
+  if(req.method === 'OPTIONS') return res.status(corsOrigin ? 204 : 403).end();
 
   if(req.method === 'GET'){
     // Support secure server-side fetches from Supabase when configured.
@@ -278,8 +311,7 @@ module.exports = async (req, res) => {
 
   if(req.method !== 'POST') return res.status(405).json({error:'method_not_allowed'});
 
-  let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
-  if(Array.isArray(ip)) ip = ip[0];
+  const ip = rateLimitClientKey(req);
 
   try{
     const body = await parseBody(req);
