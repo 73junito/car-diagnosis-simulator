@@ -32,5 +32,24 @@
   ],
   "directPracticeAllowed": true,
   "assessmentEligibilityAuthority": "external-governance-only",
-  "publicationAuthority": "external-human-governance-only"
+  "publicationAuthority": "external-human-governance-only",
+  "toolCapabilityMeasurementTypes": [
+    "voltage",
+    "voltage_drop",
+    "resistance",
+    "continuity",
+    "frequency",
+    "duty_cycle",
+    "current",
+    "waveform"
+  ],
+  "modeledMeasurementTypes": [
+    "voltage",
+    "voltage_drop",
+    "continuity"
+  ],
+  "studentEnteredMeasurementTypes": [
+    "current"
+  ],
+  "measurementSemantics": "measurementTypes is the legacy tool-capability union; modeledMeasurementTypes identifies model/test-point quantities; studentEnteredMeasurementTypes identifies values accepted only as explicit user/test input."
 }

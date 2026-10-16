@@ -92,9 +92,12 @@
           <p id="lab3dStatus" class="lab-3d-status" aria-live="polite">Loading 3D equipment…</p>
         </div>
         <aside class="lab-3d-library" aria-labelledby="lab3dLibraryHeading">
-          <h3 id="lab3dLibraryHeading">Equipment &amp; scene assets</h3>
+          <h3 id="lab3dLibraryHeading">Equipment, components &amp; scene assets</h3>
           <ul id="lab3dAssetList" class="lab-3d-asset-list"></ul>
-          <p class="lab-capability-note">Only diagnostic tools declared in the authoritative Circuit Lab runtime are enabled as tools. Other models are visual training assets only.</p>
+          <p class="lab-capability-note">Only diagnostic tools declared in the authoritative Circuit Lab runtime are enabled as tools. Component and scene models are presentation-only generic training geometry.</p>
+          <h3 id="lab3dTestPointsHeading">Governed test points</h3>
+          <ul id="lab3dTestPointList" class="lab-3d-asset-list" aria-labelledby="lab3dTestPointsHeading"></ul>
+          <p id="lab3dTestPointStatus" class="lab-capability-note" aria-live="polite">Loading test-point bindings…</p>
         </aside>
       </div>
     </section>
@@ -251,6 +254,7 @@
   <script src="/src/engineering/comparisons.js"></script>
   <script src="/src/engineering/index.js"></script>
   <script src="/src/presentation/glb-viewer.js"></script>
+  <script src="/src/presentation/circuit-lab-scene.js"></script>
   <script src="./circuit-lab-3d.js"></script>
   <script type="module">
     import { mountShell } from "/theme/shell.js";
