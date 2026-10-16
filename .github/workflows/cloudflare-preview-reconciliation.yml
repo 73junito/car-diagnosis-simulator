@@ -21,9 +21,10 @@ concurrency:
 
 jobs:
   reconcile:
+    environment: autolearnpro_cloudflare
     runs-on: ubuntu-latest
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PREVIEW_READ_TOKEN }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PREVIEW_READ_TOKEN_API }}
       CLOUDFLARE_ACCOUNT_ID: '0257b4518015b64bd28bca05b803de27'
       GITHUB_TOKEN: ${{ github.token }}
       PREVIEW_CLEANUP_APPLY: ${{ github.event_name == 'workflow_dispatch' && inputs.apply == true }}
