@@ -12,8 +12,9 @@ const request = {use:"visual",application:"review-lab",sourceRevision:"1"};
 const authorization = {assetId:"demo-asset",assetRevision:"1",application:"review-lab",use:"visual",
  status:"approved",reviewer:"publisher",evidence:"approval-1",reviewedAt:"2026-10-16",
  rightsStatus:"cleared",accessibilityStatus:"passed",performanceStatus:"passed",assetSha256:hash};
-const input = () => ({register:structuredClone(register),manifest:structuredClone(manifest),
- request:structuredClone(request),authorization:structuredClone(authorization),
+const clone = value => JSON.parse(JSON.stringify(value));
+const input = () => ({register:clone(register),manifest:clone(manifest),
+ request:clone(request),authorization:clone(authorization),
  assetBytes:Buffer.from(bytes),expectedAssetDigest:hash,trustedApproval:true});
 test("digest matches expected bytes",()=>expect(digest(bytes)).toBe(hash));
 test("positive decision requires all governance, digest and trusted caller",()=>{
