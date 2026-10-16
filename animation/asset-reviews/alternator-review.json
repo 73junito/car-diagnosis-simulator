@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0.0",
+  "assetId": "generic-12v-alternator-seven-part",
+  "purpose": "review-only",
+  "publicationApproved": false,
+  "reviewers": {
+    "silhouette_proportions": "pending technical reviewer",
+    "connectors_terminals_mounting": "pending technical reviewer"
+  },
+  "criteria": {
+    "silhouette_proportions": {
+      "status": "pending",
+      "evidence": "Approximate illustrative dimensions; no validated real alternator reference comparison."
+    },
+    "connectors_terminals_mounting": {
+      "status": "pending",
+      "evidence": "Output stud, plug and mounting ear present, but actual fit and terminal locations not validated."
+    },
+    "materials_lighting": {
+      "status": "pending",
+      "evidence": "Requires browser lighting/material inspection."
+    },
+    "cutaways_separation": {
+      "status": "pending",
+      "evidence": "Seven named components and shaft pivot contract verified; educational cutaway not yet assessed."
+    },
+    "surface_detail_textures": {
+      "status": "pending",
+      "evidence": "GLB generated locally; device performance and texture quality not yet reviewed."
+    }
+  }
+}
