@@ -32,7 +32,7 @@
     };
 
     populate(toolList, runtime.toolIds);
-    populate(measurementList, runtime.measurementTypes);
+    populate(measurementList, runtime.toolCapabilityMeasurementTypes || runtime.measurementTypes);
     populate(faultList, runtime.faultClassIds);
 
     if (modelStatus) {
