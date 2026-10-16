@@ -102,6 +102,35 @@ test.describe("12 V PWM actuator lab",()=>{
   await expect(page.getByText("Duty cycle does not establish actuator position, speed, force, flow, current, or frequency.")).toBeVisible();
  });
 
+ test("standalone multi-object 3D classroom uses real GLBs without creating engineering truth",async({page})=>{
+  const errors=[];page.on("pageerror",e=>errors.push(e.message));
+  await page.goto("/dashboard/student/actuator-lab/actuator-lab-3d.html");
+  await expect(page.getByRole("heading",{name:"3D Actuator Lab Classroom"})).toBeVisible();
+  await expect(page.locator(".asset-card")).toHaveCount(9);
+  await expect(page.locator('[data-asset-id="component.generic-actuator"] .asset-status')).toContainText("loaded from reusable GLB asset");
+  await expect(page.locator("#toolList .tool-item")).toHaveCount(4);
+  await expect(page.locator("#toolList")).toContainText("Scan Tool");
+  await expect(page.locator("#toolList")).toContainText("no dedicated 3D asset");
+  await expect(page.locator("#testpointList .testpoint-item")).toHaveCount(4);
+  await expect(page.locator("#ecmCommandValue")).toHaveText("3.6 V avg");
+  await expect(page.locator("#actuatorCommandValue")).toHaveText("3.6 V avg");
+
+  await page.locator("#faultSelect").selectOption("FAULT_PWM_SHORT_GROUND");
+  await expect(page.locator("#ecmCommandValue")).toHaveText("3.6 V avg");
+  await expect(page.locator("#actuatorCommandValue")).toHaveText("0 V avg");
+
+  await page.locator("#activeTool").selectOption("tool.current-clamp");
+  await expect(page.locator("#toolReading")).toHaveText("Current not inferred");
+  await expect(page.locator("#toolReadingNote")).toContainText("no authoritative load/current model");
+  expect(errors).toEqual([]);
+ });
+
+ test("2D Actuator Lab links to the governed 3D classroom",async({page})=>{
+  await page.goto("/dashboard/student/actuator-lab/");
+  await expect(page.getByRole("link",{name:/Open multi-object 3D classroom/i}))
+   .toHaveAttribute("href","./actuator-lab-3d.html");
+ });
+
  test("dashboard links to actuator lab",async({page})=>{
   await page.goto("/dashboard/student/");
   await page.locator('.student-more-tools > summary').click();

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>3D Actuator Lab Classroom</title>
+  <link rel="stylesheet" href="../student.css">
+  <link rel="stylesheet" href="./actuator-lab-3d.css">
+</head>
+<body>
+<main class="lab-shell">
+  <a class="back" href="/dashboard/student/actuator-lab/">← Back to 2D Actuator Lab</a>
+
+  <header>
+    <p class="eyebrow">Presentation layer — AutoLearnPro Actuator Lab</p>
+    <h1>3D Actuator Lab Classroom</h1>
+    <p>Real reusable GLB assets display and react to the existing Actuator Lab contracts. The 3D layer never creates engineering truth, measurements, assessment decisions, or vehicle-specific specifications.</p>
+    <div id="governanceBanner" class="governance-banner" aria-live="polite"></div>
+  </header>
+
+  <section class="controls" aria-label="Actuator classroom controls">
+    <div class="control-group">
+      <label for="stateSelect">Operating state</label>
+      <select id="stateSelect"></select>
+    </div>
+    <div class="control-group">
+      <label for="faultSelect">Training fault</label>
+      <select id="faultSelect"><option value="">No injected fault</option></select>
+    </div>
+    <div class="control-group duty-control">
+      <label for="dutyInput">Generic training duty command <strong id="dutyInputValue">30%</strong></label>
+      <input id="dutyInput" type="range" min="0" max="100" step="1" value="30">
+      <div class="duty-scale"><span>0%</span><span>50%</span><span>100%</span></div>
+    </div>
+  </section>
+
+  <section class="engineering-strip" aria-label="Existing engineering state">
+    <article><span>Declared supply</span><strong id="supplyValue">12 V</strong><small>Template nominal value; not a test-point measurement.</small></article>
+    <article><span>ECM command math</span><strong id="ecmCommandValue">3.6 V avg</strong><small id="ecmCommandNote">Generic PWM-average training calculation.</small></article>
+    <article><span>Actuator-side command</span><strong id="actuatorCommandValue">3.6 V avg</strong><small id="actuatorCommandNote">Existing modeled state; not a measurement.</small></article>
+    <article><span>Power / ground</span><strong id="pathAvailability">Available / Available</strong><small>No actuator response inferred.</small></article>
+  </section>
+
+  <section class="classroom-grid">
+    <div>
+      <div class="section-heading">
+        <div><p class="eyebrow">Real GLB assets</p><h2>Independent 3D equipment and scene models</h2></div>
+        <p>Each enabled model uses its own WebGL viewer and presentation-only rotation. Drag or use arrow keys to inspect it independently.</p>
+      </div>
+      <div id="assetGallery" class="asset-gallery" aria-label="3D asset gallery"></div>
+    </div>
+
+    <aside class="side-panel">
+      <section class="card">
+        <p class="eyebrow">Runtime tools</p>
+        <div id="toolList" class="tool-list" aria-label="Runtime-declared diagnostic tools"></div>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Diagnostic probes</p>
+        <p class="hint">Docking is visual interaction only. It does not create a measurement.</p>
+        <div class="probe-grid">
+          <label>Red probe<select id="probeRedTarget"><option value="">Undocked</option></select></label>
+          <button id="dockRed" type="button">Dock red probe</button>
+          <label>Black probe<select id="probeBlackTarget"><option value="">Undocked</option></select></label>
+          <button id="dockBlack" type="button">Dock black probe</button>
+        </div>
+        <div id="probeStatus" class="probe-status" aria-live="polite">No probes docked.</div>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Selected tool presentation</p>
+        <label for="activeTool">Diagnostic tool</label>
+        <select id="activeTool"></select>
+        <div id="toolReading" class="tool-reading" role="status" aria-live="polite">Select a tool and dock the red probe.</div>
+        <p id="toolReadingNote" class="hint"></p>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Declared test points</p>
+        <div id="testpointList" class="testpoint-list"></div>
+      </section>
+    </aside>
+  </section>
+
+  <section class="boundary">
+    <h2>Evidence boundary</h2>
+    <p>The 30% and 70% duty-cycle states and any displayed PWM average are project-authored generic training mathematics. Actual PWM frequency, waveform, test-point voltage, current, actuator position, speed, force, flow, response, and diagnostic limits require authoritative vehicle-specific service information or a separately validated component model.</p>
+  </section>
+</main>
+
+<script src="/src/engineering/calculator.js"></script>
+<script src="/src/engineering/contracts.js"></script>
+<script src="/src/engineering/artifacts.js"></script>
+<script src="/src/engineering/actuator-state.js"></script>
+<script src="/src/presentation/glb-viewer.js"></script>
+<script src="/src/presentation/actuator-lab-scene.js"></script>
+<script src="./actuator-lab-classroom.js"></script>
+</body>
+</html>
