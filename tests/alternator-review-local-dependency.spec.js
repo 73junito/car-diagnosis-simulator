@@ -1,6 +1,7 @@
 "use strict";
 const fs=require("node:fs"),path=require("node:path");
 const root=path.resolve(__dirname,"../animation/cadquery/review");
+const prepare=require("node:child_process").execFileSync;
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 const js=fs.readFileSync(path.join(root,"viewer.js"),"utf8");
 describe("alternator review viewer local assets and fallback",()=>{
@@ -8,6 +9,7 @@ describe("alternator review viewer local assets and fallback",()=>{
   expect(html).toContain('"three":"./vendor/three/build/three.module.js"');
   expect(html).toContain('"three/addons/":"./vendor/three/addons/"');
   expect(html).not.toMatch(/cdn\.jsdelivr|https:\/\/.*three/);
+  prepare(process.execPath,[path.resolve(__dirname,"../scripts/prepare-alternator-review-assets.js")],{cwd:path.resolve(__dirname,"..")});
   for(const f of ["build/three.module.js","build/three.core.js","addons/loaders/GLTFLoader.js","addons/controls/OrbitControls.js","addons/utils/BufferGeometryUtils.js","addons/utils/SkeletonUtils.js","LICENSE"]){
    expect(fs.existsSync(path.join(root,"vendor/three",f))).toBe(true);
   }
