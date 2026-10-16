@@ -85,6 +85,23 @@ test.describe("12 V PWM actuator lab",()=>{
   await expect(page.locator("#actuatorEngineeringStatus")).toHaveText("PWM command inactive");
  });
 
+ test("reference shell mirrors runtime capabilities without creating authority",async({page})=>{
+  await page.goto("/dashboard/student/actuator-lab/");
+  await expect(page.locator("#labToolList li")).toHaveCount(4);
+  await expect(page.locator("#labToolList")).toContainText("Dmm");
+  await expect(page.locator("#labToolList")).toContainText("Oscilloscope");
+  await expect(page.locator("#labToolList")).toContainText("Scan Tool");
+  await expect(page.locator("#labToolList")).toContainText("Current Clamp");
+  await expect(page.locator("#labMeasurementList")).toContainText("Duty Cycle");
+  await expect(page.locator("#labMeasurementList")).toContainText("Frequency");
+  await expect(page.locator("#labMeasurementList")).toContainText("Current");
+  await expect(page.locator("#labFaultList li")).toHaveCount(4);
+  await expect(page.locator("#labModelStatus")).toContainText("Direct practice available");
+  await expect(page.locator("#labModelStatus")).toContainText("External Governance Only");
+  await expect(page.locator("#labModelStatus")).toContainText("External Human Governance Only");
+  await expect(page.getByText("Duty cycle does not establish actuator position, speed, force, flow, current, or frequency.")).toBeVisible();
+ });
+
  test("dashboard links to actuator lab",async({page})=>{
   await page.goto("/dashboard/student/");
   await page.locator('.student-more-tools > summary').click();

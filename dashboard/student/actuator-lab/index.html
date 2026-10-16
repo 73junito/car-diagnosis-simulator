@@ -18,84 +18,105 @@
   <header class="tm-page-header">
     <p class="tm-eyebrow">Reusable circuit-template preview</p>
     <h1 class="tm-page-title">Interactive 12 V PWM-Controlled Actuator Lab</h1>
-    <p class="tm-page-subtitle">Separate actuator power, PWM command, and ground/return while avoiding vehicle-specific duty-cycle or frequency assumptions.</p>
+    <p class="tm-page-subtitle">Separate actuator power, PWM command, and ground/return while avoiding vehicle-specific duty-cycle, frequency, current, or actuator-response assumptions.</p>
     <div id="voltageProfile" class="voltage-profile" aria-label="Electrical system voltage"></div>
   </header>
+
   <section class="learning-strip" aria-label="Learning objective"><strong>Learning goal</strong><span>Explain why actuator power and PWM command are different circuit functions and diagnose faults on each path independently.</span></section>
-  <section class="toolbar" aria-label="Actuator circuit controls">
-    <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
-    <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
-    <div class="button-row">
-      <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system flow</button>
-      <button id="tracePower" type="button" class="tm-btn tm-btn-secondary">Trace actuator power</button>
-      <button id="tracePwm" type="button" class="tm-btn tm-btn-secondary">Trace PWM command</button>
-      <button id="traceGround" type="button" class="tm-btn tm-btn-secondary">Trace ground return</button>
-      <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset</button>
+
+  <section class="lab-safety" aria-labelledby="labSafetyHeading">
+    <div>
+      <p class="tm-eyebrow">Safety &amp; limitations</p>
+      <h2 id="labSafetyHeading">Training model, not a physical actuator-service procedure</h2>
     </div>
+    <p>This lab presents a governed training model. PWM duty examples, calculated averages, injected faults, student-entered measurements, and circuit availability describe the modeled system only. Vehicle-specific service information and approved shop procedures remain authoritative for physical diagnosis and repair.</p>
   </section>
-  <section class="legend" aria-label="Schematic legend">
-    <span><i class="legend-line power"></i> 12 V power</span>
-    <span><i class="legend-line control"></i> PWM command</span>
-    <span><i class="legend-line ground"></i> Ground return</span>
-    <span><i class="legend-line fault"></i> Faulted / degraded</span>
-    <span><i class="legend-dot test"></i> Test point</span>
-    <span class="legend-note">Low-duty and high-duty states are qualitative training examples only; no universal percentage or frequency is implied.</span>
+
+  <section class="lab-capability-grid" aria-label="Actuator Lab capabilities">
+    <article class="lab-capability-card" aria-labelledby="diagnosticToolsHeading">
+      <div class="lab-section-kicker"><span>Diagnostic tools</span><span class="lab-contract-badge">Contract driven</span></div>
+      <h2 id="diagnosticToolsHeading">Available in this lab</h2>
+      <ul id="labToolList" class="lab-chip-list" aria-label="Available diagnostic tools"></ul>
+      <p class="lab-capability-note">Tools request or display measurements and diagnostic data; they do not determine engineering truth, actuator response, pass/fail status, assessment eligibility, or publication status.</p>
+    </article>
+    <article class="lab-capability-card" aria-labelledby="measurementsHeading">
+      <div class="lab-section-kicker"><span>Measurement support</span></div>
+      <h2 id="measurementsHeading">Declared measurement types</h2>
+      <ul id="labMeasurementList" class="lab-chip-list" aria-label="Supported measurement types"></ul>
+    </article>
+    <article class="lab-capability-card" aria-labelledby="modelStatusHeading">
+      <div class="lab-section-kicker"><span>Model status</span></div>
+      <h2 id="modelStatusHeading">Authoritative runtime boundary</h2>
+      <div id="labModelStatus" class="lab-model-status" aria-live="polite">Loading runtime capabilities.</div>
+    </article>
   </section>
-  <section class="engineering-panel" aria-labelledby="actuatorEngineeringHeading">
-    <div class="engineering-heading">
-      <div>
-        <p class="tm-eyebrow">PWM engineering example</p>
-        <h2 id="actuatorEngineeringHeading">Commanded and observed PWM behavior</h2>
-        <p>Duty-cycle values are generic training examples. They do not define actuator position, speed, force, flow, current, or frequency.</p>
+
+  <section class="lab-region" aria-labelledby="scenarioWorkAreaHeading">
+    <div class="lab-region-heading">
+      <div><p class="tm-eyebrow">Scenario / work area</p><h2 id="scenarioWorkAreaHeading">Operate the modeled PWM actuator circuit</h2></div>
+      <p>Select an operating state or training fault, then trace actuator power, PWM command, and ground-return paths. Existing engineering and fault behavior remain owned by the Actuator Lab runtime, circuit template, and engineering profile.</p>
+    </div>
+
+    <section class="toolbar" aria-label="Actuator circuit controls">
+      <div class="control-group"><label for="stateSelect">Operating state</label><select id="stateSelect"></select></div>
+      <div class="control-group"><label for="faultSelect">Training fault</label><select id="faultSelect"><option value="">No injected fault</option></select></div>
+      <div class="button-row">
+        <button id="showSystemFlow" type="button" class="tm-btn tm-btn-secondary">Show system flow</button>
+        <button id="tracePower" type="button" class="tm-btn tm-btn-secondary">Trace actuator power</button>
+        <button id="tracePwm" type="button" class="tm-btn tm-btn-secondary">Trace PWM command</button>
+        <button id="traceGround" type="button" class="tm-btn tm-btn-secondary">Trace ground return</button>
+        <button id="resetView" type="button" class="tm-btn tm-btn-secondary">Reset</button>
       </div>
-      <span class="engineering-status" id="actuatorEngineeringStatus">Healthy training example</span>
+    </section>
+
+    <section class="legend" aria-label="Schematic legend">
+      <span><i class="legend-line power"></i> 12 V power</span>
+      <span><i class="legend-line control"></i> PWM command</span>
+      <span><i class="legend-line ground"></i> Ground return</span>
+      <span><i class="legend-line fault"></i> Faulted / degraded</span>
+      <span><i class="legend-dot test"></i> Test point</span>
+      <span class="legend-note">The 30% and 70% duty-cycle values are project-authored training examples. No universal duty cycle or frequency is implied.</span>
+    </section>
+  </section>
+
+  <section class="lab-region lab-evidence-region" aria-labelledby="evidenceObservationsHeading">
+    <div class="lab-region-heading">
+      <div><p class="tm-eyebrow">Evidence &amp; observations</p><h2 id="evidenceObservationsHeading">Keep command, measurement, and response roles distinct</h2></div>
+      <p>The declared 12 V supply, generic duty examples, calculated PWM average, student-entered measurements, validated artifacts, and actuator-side availability remain distinct. Duty cycle does not establish actuator position, speed, force, flow, current, or frequency.</p>
     </div>
 
-    <div class="pwm-input-control">
-      <label for="dutyInput">Training duty-cycle command <strong id="dutyInputValue">30%</strong></label>
-      <input id="dutyInput" type="range" min="0" max="100" step="1" value="30">
-      <div class="pwm-input-scale"><span>0%</span><span>50%</span><span>100%</span></div>
-    </div>
+    <section class="engineering-panel" aria-labelledby="actuatorEngineeringHeading">
+      <div class="engineering-heading">
+        <div>
+          <p class="tm-eyebrow">PWM engineering example</p>
+          <h2 id="actuatorEngineeringHeading">Commanded and observed PWM behavior</h2>
+          <p>Duty-cycle values are generic training examples. They do not define actuator position, speed, force, flow, current, or frequency.</p>
+        </div>
+        <span class="engineering-status" id="actuatorEngineeringStatus">Healthy training example</span>
+      </div>
 
-    <div class="measurement-entry">
-      <label for="measuredActuatorAverage"><span class="measurement-role">Measured value</span>Student-entered PWM average (V)</label>
-      <input id="measuredActuatorAverage" type="number" step="0.001" inputmode="decimal" placeholder="Enter measured average">
-      <div id="actuatorMeasurementResult" class="measurement-result">No measurement entered</div>
-    </div>
-    <div id="actuatorComparisonSummary" class="engineering-comparison">Healthy baseline selected; no fault comparison active.</div>
-    <div class="engineering-grid">
-      <article class="engineering-card">
-        <span class="value-role declared">Declared system value</span>
-        <strong id="engActuatorSupply">12 V</strong>
-        <small>Actuator/PWM high-level source</small>
-      </article>
-      <article class="engineering-card">
-        <span class="value-role example">Generic training example</span>
-        <strong id="engDutyCycle">30%</strong>
-        <small>Commanded duty cycle</small>
-      </article>
-      <article class="engineering-card result">
-        <span class="value-role calculated">Calculated value</span>
-        <strong id="engIdealAverage">3.6 V</strong>
-        <small>Ideal mathematical PWM average</small>
-      </article>
-      <article class="engineering-card result">
-        <span class="value-role calculated">Actuator-side observed</span>
-        <strong id="engObservedCommand">3.6 V avg</strong>
-        <small id="engObservedCommandLabel">PWM command representation</small>
-      </article>
-      <article class="engineering-card">
-        <span class="value-role example">Circuit availability</span>
-        <strong id="engPowerAvailability">Available</strong>
-        <small>Actuator power path</small>
-      </article>
-      <article class="engineering-card">
-        <span class="value-role example">Circuit availability</span>
-        <strong id="engGroundAvailability">Available</strong>
-        <small>Actuator ground path</small>
-      </article>
-    </div>
-    <p class="engineering-formula" id="actuatorEngineeringFormula"></p>
+      <div class="pwm-input-control">
+        <label for="dutyInput">Training duty-cycle command <strong id="dutyInputValue">30%</strong></label>
+        <input id="dutyInput" type="range" min="0" max="100" step="1" value="30">
+        <div class="pwm-input-scale"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
+
+      <div class="measurement-entry">
+        <label for="measuredActuatorAverage"><span class="measurement-role">Measured value</span>Student-entered PWM average (V)</label>
+        <input id="measuredActuatorAverage" type="number" step="0.001" inputmode="decimal" placeholder="Enter measured average">
+        <div id="actuatorMeasurementResult" class="measurement-result">No measurement entered</div>
+      </div>
+      <div id="actuatorComparisonSummary" class="engineering-comparison">Healthy baseline selected; no fault comparison active.</div>
+      <div class="engineering-grid">
+        <article class="engineering-card"><span class="value-role declared">Declared system value</span><strong id="engActuatorSupply">12 V</strong><small>Actuator/PWM high-level source</small></article>
+        <article class="engineering-card"><span class="value-role example">Generic training example</span><strong id="engDutyCycle">30%</strong><small>Commanded duty cycle</small></article>
+        <article class="engineering-card result"><span class="value-role calculated">Calculated value</span><strong id="engIdealAverage">3.6 V</strong><small>Ideal mathematical PWM average</small></article>
+        <article class="engineering-card result"><span class="value-role calculated">Actuator-side observed</span><strong id="engObservedCommand">3.6 V avg</strong><small id="engObservedCommandLabel">PWM command representation</small></article>
+        <article class="engineering-card"><span class="value-role example">Circuit availability</span><strong id="engPowerAvailability">Available</strong><small>Actuator power path</small></article>
+        <article class="engineering-card"><span class="value-role example">Circuit availability</span><strong id="engGroundAvailability">Available</strong><small>Actuator ground path</small></article>
+      </div>
+      <p class="engineering-formula" id="actuatorEngineeringFormula"></p>
+    </section>
   </section>
 
   <section class="workspace">
@@ -104,9 +125,31 @@
       <div class="diagram-scroll" aria-label="Scrollable PWM actuator schematic"><svg id="circuitSvg" viewBox="0 0 820 650" role="img" aria-labelledby="diagramTitle diagramDesc"><title id="diagramTitle">Generic 12 V PWM actuator training schematic</title><desc id="diagramDesc">Interactive actuator circuit with separate power, PWM command, ground, test points, and faults.</desc></svg></div>
       <p class="flow-note" id="flowNote"></p>
     </div>
-    <aside class="inspector" aria-live="polite"><h2>Component inspector</h2><div id="inspectorContent"><p>Select a symbol or test point to inspect its role.</p></div></aside>
+    <aside class="inspector lab-reasoning-panel" aria-labelledby="diagnosticReasoningHeading" aria-live="polite">
+      <p class="tm-eyebrow">Diagnostic reasoning</p>
+      <h2 id="diagnosticReasoningHeading">Inspect, observe, explain</h2>
+      <div id="inspectorContent"><p>Select a symbol or test point to inspect its role.</p></div>
+      <div class="guided-card">
+        <p class="tm-eyebrow">Guided practice</p>
+        <ol id="guidedSteps">
+          <li class="active">Identify the actuator power, PWM command, and ground paths.</li>
+          <li>Trace the 12 V actuator power feed separately from the controller command.</li>
+          <li>Compare the ECM PWM source with the actuator-side PWM test point.</li>
+          <li>Inject an open or short fault and identify the affected path.</li>
+          <li>Explain why duty-cycle or PWM-average data alone does not prove actuator response.</li>
+        </ol>
+      </div>
+    </aside>
   </section>
-  <section class="boundary"><h2>Evidence boundary</h2><p>This is a generic project-authored training circuit. Actual actuator architecture, duty cycle, frequency, current, pinout, wiring, diagnostic limits, and procedures require authoritative vehicle-specific service information.</p></section>
+
+  <section class="boundary lab-boundary" aria-labelledby="evidenceBoundaryHeading">
+    <div><p class="tm-eyebrow">Model status · explicit limitations</p><h2 id="evidenceBoundaryHeading">Evidence boundary</h2></div>
+    <p>This project-authored template teaches generic PWM actuator relationships only. Actual actuator architecture, duty cycle, frequency, current, position, speed, force, flow, pinout, wiring, diagnostic limits, and procedures require authoritative vehicle-specific service information.</p>
+    <div class="lab-fault-contract">
+      <strong>Supported fault classes</strong>
+      <ul id="labFaultList" class="lab-chip-list" aria-label="Supported fault classes"></ul>
+    </div>
+  </section>
 </main>
 <script src="/src/circuits/contracts.js"></script>
 <script src="/src/circuits/engine.js"></script>
