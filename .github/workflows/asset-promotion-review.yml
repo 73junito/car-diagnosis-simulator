@@ -1,0 +1,77 @@
+name: 3D Asset Promotion Review (No Publish)
+# Manual evidence review only. This workflow has no write permission and no deploy step.
+on:
+  workflow_dispatch:
+    inputs:
+      asset_path:
+        description: "Repository-relative GLB candidate path (review only)"
+        required: true
+        type: string
+      manifest_path:
+        description: "Repository-relative reuse manifest"
+        required: true
+        type: string
+      request_path:
+        description: "Repository-relative reuse request"
+        required: true
+        type: string
+      authorization_path:
+        description: "Repository-relative publication authorization record"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    name: Offline publication preflight (always untrusted)
+    runs-on: ubuntu-latest
+    environment: asset-promotion-review
+    timeout-minutes: 10
+    steps:
+      - name: Checkout protected default branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Verify only in-repository candidate paths are used
+        env:
+          ASSET: ${{ inputs.asset_path }}
+          MANIFEST: ${{ inputs.manifest_path }}
+          REQUEST: ${{ inputs.request_path }}
+          AUTH: ${{ inputs.authorization_path }}
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          for (const key of ['ASSET','MANIFEST','REQUEST','AUTH']) {
+            const p = process.env[key];
+            if (!p || path.isAbsolute(p) || p.split(/[\\/]/).includes('..')) throw Error('Unsafe path: '+key);
+            const resolved = fs.realpathSync(p);
+            const root = fs.realpathSync(process.cwd());
+            if (!resolved.startsWith(root + path.sep) || !fs.statSync(resolved).isFile()) throw Error('Path outside repository: '+key);
+          }
+          NODE
+      - name: Evaluate offline gate (untrusted CLI must deny)
+        env:
+          ASSET: ${{ inputs.asset_path }}
+          MANIFEST: ${{ inputs.manifest_path }}
+          REQUEST: ${{ inputs.request_path }}
+          AUTH: ${{ inputs.authorization_path }}
+        run: |
+          set +e
+          node scripts/preflight-3d-asset-publication.js \
+            data/engineering-evidence/lab-source-register.json \
+            "$MANIFEST" "$REQUEST" "$AUTH" "$ASSET"
+          result=$?
+          set -e
+          if [ "$result" -eq 0 ]; then
+            echo "::error::Unsafe positive authorization from untrusted CLI"
+            exit 1
+          fi
+          echo "Offline preflight remained fail-closed; NO asset published."
+          echo "Review completed without publication authority." >> "$GITHUB_STEP_SUMMARY"
