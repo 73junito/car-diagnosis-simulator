@@ -1,0 +1,76 @@
+.lab-shell header{margin:0 0 16px}
+.governance-banner{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:#fff3cd;color:#6a4b00;font-size:.86rem;border:1px solid #e2d193;margin:0 0 10px;line-height:1.4}
+.governance-banner code{background:#f6f2d8;padding:0 4px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.webgl-status{font-size:.82rem;color:#64748b;margin:0 0 12px}
+.webgl-status.ok{color:#1b5e20}.webgl-status.fallback{color:#8a4b08}
+
+.classroom-grid{display:grid;grid-template-columns:1.15fr 0.85fr;gap:16px}
+@media(max-width:1050px){.classroom-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.classroom-grid{grid-template-columns:1fr}}
+
+.scene-card{border:1px solid #cbd5e1;border-radius:14px;background:#fff;display:flex;flex-direction:column;height:100%;min-height:560px}
+.scene-heading{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:16px 16px 8px;border-bottom:1px solid #e2e8f0}
+.scene-heading h2{margin:0;font-size:1.1rem}
+.scene-toolbar{display:flex;gap:8px;flex-wrap:wrap}
+.scene-viewport{position:relative;flex:1;min-height:340px;border:1px dashed #cbd5e1;border-radius:10px;margin:10px 16px 16px;overflow:hidden;background:#f1f5f9}
+.scene-3d{position:relative;width:100%;height:100%;perspective:1200px;transform-style:preserve-3d}
+.webgl-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#e2e8f0;color:#475569;padding:16px;text-align:center;z-index:2}
+.flow-note{padding:0 16px 16px;font-size:.86rem;color:#64748b}
+
+.asset{position:absolute;transform-style:preserve-3d;transform-origin:center;cursor:default;user-select:none;-webkit-user-select:none;outline:none}
+.asset:focus{outline:3px solid #2563eb;outline-offset:2px;border-radius:6px}
+.asset[role="button"]{cursor:pointer}
+.asset-label{position:absolute;left:50%;top:-24px;transform:translateX(-50%);font-size:.72rem;color:#475569;white-space:nowrap;pointer-events:none;background:rgba(255,255,255,0.85);padding:2px 6px;border-radius:4px;border:1px solid #cbd5e1}
+.asset-body{position:relative;width:110px;height:110px;border:2px solid #94a3b8;border-radius:12px;background:#eef2f7;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d}
+.asset-body.instrument{background:#e8f5e9;border-color:#1b5e20}
+.asset-body.power-source{background:#fce7f3;border-color:#881337}
+.asset-body.environment{background:#e0f2fe;border-color:#0369a1}
+.asset-body.probe{background:#fff7ed;border-color:#c2410c}
+.asset-body.workspace{background:#f8fafc;border-color:#64748b}
+.asset-body.test-target{background:#fef3c7;border-color:#b45309}
+.asset-icon{font-size:32px;line-height:1}
+.asset[visible="false"] .asset-body{opacity:0.45}
+.fault-highlight{position:absolute;inset:-4px;border-radius:16px;border:3px solid #b42318;box-shadow:0 0 14px rgba(180,35,24,0.45);pointer-events:none;animation:pulseRed 2s ease-in-out infinite}
+.fault-degraded{position:absolute;inset:-4px;border-radius:16px;border:2px dashed #b45309;pointer-events:none;opacity:0.85}
+@keyframes pulseRed{0%,100%{opacity:0.6}50%{opacity:1}}
+
+.control-panel{border:1px solid #cbd5e1;border-radius:14px;background:#f8fafc;padding:16px;display:flex;flex-direction:column;gap:14px;max-height:100%;overflow-y:auto}
+.control-group{display:flex;flex-direction:column;gap:6px}
+.control-group label{font-weight:800;font-size:.9rem}
+.control-group select{padding:8px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;font-size:.9rem}
+.sensor-input-scale{display:flex;justify-content:space-between;color:#64748b;font-size:.72rem;margin-top:4px}
+.card{border:1px solid #cbd5e1;border-radius:12px;background:#fff;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.card .eyebrow{margin:0 0 6px;font-size:.8rem;color:#64748b}
+.tool-list{display:flex;flex-direction:column;gap:6px}
+.tool-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#fff}
+.tool-item.disabled{opacity:0.55}
+.tool-badge{display:inline-flex;align-items:center;gap:6px;font-size:.8rem}
+.tool-dot{width:10px;height:10px;border-radius:50%;background:#cbd5e1}
+.tool-item.enabled .tool-dot{background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,0.25)}
+.tool-item.disabled .tool-dot{background:#94a3b8}
+.probe-row{display:flex;gap:12px;flex-wrap:wrap}
+.probe-control{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px}
+.probe-control select{padding:7px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;font-size:.9rem}
+.probe-control button{padding:6px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;font-size:.86rem;cursor:pointer}
+.probe-control button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+.probe-control button:active{background:#f1f5f9}
+.probe-status{font-size:.86rem;color:#475569}
+.measurement-panel .dmm-reading{font-size:2rem;font-weight:800;color:#16a34a;background:#f1f8f2;border:1px solid #bbf7d0;border-radius:10px;padding:14px;text-align:center;min-height:64px;display:flex;align-items:center;justify-content:center}
+.measurement-panel .dmm-source{font-size:.82rem;color:#64748b;margin:0}
+.testpoint-list{display:flex;flex-direction:column;gap:8px}
+.testpoint-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid #e2e8f0;border-radius:8px;background:#fff}
+.testpoint-item.unavailable{background:#f1f5f9;color:#64748b;border-color:#cbd5e1}
+.testpoint-item.available{background:#f1f8f2;color:#16a34a;border-color:#bbf7d0}
+.testpoint-item .tp-id{font-weight:800;font-size:.85rem}
+.testpoint-item .tp-value{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700}
+.hint{font-size:.78rem;color:#64748b;margin:4px 0 0}
+
+button:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+select:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+input[type="range"]:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+
+@media(prefers-reduced-motion:reduce){
+  .asset{transition:none}
+  .fault-highlight{animation:none}
+  .webgl-fallback{animation:none}
+}
