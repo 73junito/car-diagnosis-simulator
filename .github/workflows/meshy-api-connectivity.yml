@@ -52,7 +52,8 @@ jobs:
               console.error("::error::Meshy returned HTTP 200 but the balance response schema was not recognized.");
               process.exit(1);
             }
-            console.log("Meshy API authentication succeeded; available API balance: " + body.balance);`n            if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, "## Meshy API balance (read-only)\\n\\nAvailable API credits: **" + body.balance + "**\\n\\nNo generation request was made.\\n");
+            console.log("Meshy API authentication succeeded; available API balance: " + body.balance);
+            if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, "## Meshy API balance (read-only)\\n\\nAvailable API credits: **" + body.balance + "**\\n\\nNo generation request was made.\\n");
           ' "${response_file}"
 
       - name: Confirm no generation request was made
