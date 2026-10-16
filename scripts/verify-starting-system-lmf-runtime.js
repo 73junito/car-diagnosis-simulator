@@ -10,6 +10,7 @@ function buildExpectedProjection() {
   const tools = read('data/lmf/diagnostic-tools.json');
   const measurements = read('data/lmf/measurement-contract.json');
   const faults = read('data/lmf/fault-taxonomy.json');
+  const model = read('data/circuit-templates/12v-starting-system.json');
 
   const lab = labs.labs.find((entry) => entry.labId === 'starting-system-lab');
   if (!lab) throw new Error('LMF starting-system-lab registration is missing.');
@@ -27,12 +28,14 @@ function buildExpectedProjection() {
     if (!knownMeasurements.has(type)) throw new Error('Unknown measurement type: ' + type);
   }
 
-  const electricalFaults = faults.categories
-    .filter((entry) => entry.domain === 'electrical')
-    .map((entry) => entry.faultClassId)
-    .sort();
+  const legacyMap = new Map(faults.legacyMappings.map((entry) => [entry.legacyType, entry.faultClassId]));
+  const faultClassIds = [...new Set(model.faultCatalog.map((fault) => {
+    const mapped = legacyMap.get(fault.type);
+    if (!mapped) throw new Error('Unmapped Starting System fault type: ' + fault.type);
+    return mapped;
+  }))].sort();
 
-  return { lab, adapter, measurementTypes, electricalFaults };
+  return { lab, adapter, measurementTypes, faultClassIds };
 }
 
 function validateStartingSystemRuntime() {
@@ -47,7 +50,7 @@ function validateStartingSystemRuntime() {
   if (runtime.modelRef !== '/data/circuit-templates/12v-starting-system.json') throw new Error('Starting System modelRef drift.');
   if (expected.adapter.status !== 'existing-model-family') throw new Error('Starting System adapter is not production-existing.');
   if (JSON.stringify([...runtime.measurementTypes].sort()) !== JSON.stringify(expected.measurementTypes)) throw new Error('Runtime measurement types drift.');
-  if (JSON.stringify([...runtime.faultClassIds].sort()) !== JSON.stringify(expected.electricalFaults)) throw new Error('Runtime fault taxonomy drift.');
+  if (JSON.stringify([...runtime.faultClassIds].sort()) !== JSON.stringify(expected.faultClassIds)) throw new Error('Runtime modeled fault classes drift.');
   if (runtime.assessmentEligibilityAuthority !== 'external-governance-only') throw new Error('Runtime may not own assessment eligibility.');
   if (runtime.publicationAuthority !== 'external-human-governance-only') throw new Error('Runtime may not own publication approval.');
   return runtime;

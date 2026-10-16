@@ -118,11 +118,11 @@
     for (const terminal of component.terminals) terminalOwner.set(terminal.id, component.id);
   }
 
-  const stateLabels = {
-    "key-off": "Key off",
-    "key-on": "Key on",
-    "engine-running": "Engine running / charging"
-  };
+  if (!Array.isArray(circuit.operatingStates) || !circuit.operatingStates.length) {
+    throw new Error("Charging circuit operating states are missing from the authoritative model.");
+  }
+  const stateById = new Map(circuit.operatingStates.map((state) => [state.id, state]));
+  const stateLabels = Object.fromEntries(circuit.operatingStates.map((state) => [state.id, state.label]));
 
   const roleText = {
     battery: "Electrical energy source and storage device for this generic training circuit.",
@@ -223,46 +223,15 @@
       : "No source-backed charging reference is available.";
   }
 
-  const systemFlows = {
-    "key-off": {
-      power: [],
-      ground: [],
-      control: [],
-      note: "Key off: no continuous operating current is animated. The battery remains the source, but flow is not implied without an active load."
-    },
-    "key-on": {
-      power: [
-        ["W_BAT_FUSE", "forward"],
-        ["W_FUSE_LOAD", "forward"]
-      ],
-      ground: [
-        ["W_LOAD_GND", "forward"],
-        ["W_BAT_GND", "reverse"]
-      ],
-      control: [
-        ["W_REG_CTRL", "forward"],
-        ["W_ALT_REG", "reverse"]
-      ],
-      note: "Key on: conventional current is shown from battery positive through protection to the electrical load, then through the ground return toward battery negative. The dashed blue path represents control, not load current."
-    },
-    "engine-running": {
-      power: [
-        ["W_FUSE_ALT", "reverse"],
-        ["W_BAT_FUSE", "reverse"],
-        ["W_FUSE_LOAD", "forward"]
-      ],
-      ground: [
-        ["W_LOAD_GND", "forward"],
-        ["W_BAT_GND", "reverse"],
-        ["W_ALT_GND", "reverse"]
-      ],
-      control: [
-        ["W_REG_CTRL", "forward"],
-        ["W_ALT_REG", "reverse"]
-      ],
-      note: "Engine running: the alternator is represented as a charging source. Conventional current is animated from alternator B+ toward the protected battery/load branches, with return paths shown toward ground."
-    }
-  };
+  const systemFlows = Object.fromEntries(
+    circuit.operatingStates.map((state) => [
+      state.id,
+      {
+        ...(state.activeFlows || {}),
+        note: state.note
+      }
+    ])
+  );
 
   for (const fault of circuit.faultCatalog || []) {
     const option = document.createElement("option");
@@ -612,6 +581,7 @@
 
   function applySystemFlow() {
     activeFlow = systemFlows[operatingState];
+    if (!activeFlow || !stateById.has(operatingState)) throw new Error("Unknown charging operating state: " + operatingState);
     inspector.textContent = activeFlow.note;
     document.getElementById("flowNote").textContent = activeFlow.note;
     render();

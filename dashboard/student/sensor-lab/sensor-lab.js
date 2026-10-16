@@ -88,6 +88,8 @@
   const symbolRenderer = window.TorqueMindSymbolRenderer;
   const engineering = window.TorqueMindEngineering;
   const calculator = engineering.calculator;
+  const sensorState = window.TorqueMindSensorEngineeringState;
+  if (!sensorState) throw new Error("Shared Sensor engineering-state resolver is unavailable.");
   const measurements = engineering.measurements;
   const comparisons = engineering.comparisons;
   const artifacts = engineering.artifacts;
@@ -182,85 +184,24 @@
   }
 
   function calculateSignalState() {
-    const transfer = calculator.calculateLinearTransfer({
-      inputPercent: sensorInputPercent,
-      outputMin: signalRange.min,
-      outputMax: signalRange.max,
-      quantityType: "voltage",
-      unit: "V"
-    });
-
     const behavior = currentFaultBehavior();
-    const activeSignalState = operatingState === "active-signal";
-
-    if (!activeSignalState) {
-      return {
-        transfer,
-        observed:null,
-        status:"Signal state inactive",
-        statusClass:"inactive",
-        note:"The transfer relationship remains visible, but controller-observed signal is not evaluated until the active-signal state is selected."
-      };
+    let shortGroundArtifact = null;
+    if (behavior?.mode === "controller_signal_forced_ground" &&
+        sensorInputPercent === 50 &&
+        nominalShortGroundArtifact.status === "ready") {
+      const baseline = artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact, "baseline");
+      const faulted = artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact, "observed");
+      shortGroundArtifact = { baseline: baseline.value, observed: faulted.value };
     }
-
-    if (!behavior) {
-      return {
-        transfer,
-        observed:transfer.value,
-        status:"Healthy training example",
-        statusClass:"",
-        note:"The controller-observed signal follows the generic linear transfer example."
-      };
-    }
-
-    if (behavior.mode === "controller_signal_forced_ground") {
-      let observed = 0;
-      let artifactBacked = false;
-      if (sensorInputPercent === 50 && nominalShortGroundArtifact.status === "ready") {
-        const baseline = artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact, "baseline");
-        const faulted = artifacts.quantityFromArtifact(nominalShortGroundArtifact.artifact, "observed");
-        if (Math.abs(baseline.value - transfer.value) > 1e-9) {
-          throw new Error("Sensor artifact baseline does not match the current nominal transfer.");
-        }
-        observed = faulted.value;
-        artifactBacked = true;
-      }
-      return {
-        transfer,
-        observed,
-        status:"Signal short-to-ground training fault",
-        statusClass:"fault",
-        note:behavior.reason + (artifactBacked ? " Validated engineering artifact applied for the 50% nominal training state." : "")
-      };
-    }
-
-    if (behavior.mode === "controller_signal_forced_reference") {
-      return {
-        transfer,
-        observed:sensorReferenceVoltage,
-        status:"Signal short-to-reference training fault",
-        statusClass:"fault",
-        note:behavior.reason
-      };
-    }
-
-    if (behavior.mode === "controller_signal_unavailable") {
-      return {
-        transfer,
-        observed:null,
-        status:"Signal path open",
-        statusClass:"fault",
-        note:behavior.reason
-      };
-    }
-
-    return {
-      transfer:null,
-      observed:null,
-      status:"Sensor output not inferred",
-      statusClass:"fault",
-      note:behavior.reason
-    };
+    return sensorState.calculateSensorSignalState({
+      calculator,
+      inputPercent: sensorInputPercent,
+      signalRange,
+      referenceVoltage: sensorReferenceVoltage,
+      operatingState,
+      faultBehavior: behavior,
+      shortGroundArtifact
+    });
   }
 
   function renderEngineering() {
