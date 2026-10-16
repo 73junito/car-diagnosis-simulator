@@ -12,7 +12,7 @@ function request(url, token) {
   return new Promise((resolve, reject) => {
     const req = https.get(url, {headers:{'Authorization':'Bearer '+token,'User-Agent':'autolearnpro-preview-reconciler','Accept':'application/json'}},res=>{
       let raw='';res.on('data',b=>raw+=b);res.on('end',()=>{
-        if(res.statusCode<200||res.statusCode>=300)return reject(new Error('HTTP '+res.statusCode+' for '+new URL(url).pathname));
+        if(res.statusCode<200||res.statusCode>=300){let code='unknown';try{const data=JSON.parse(raw);code=(data.errors||[]).map(e=>String(e.code)+':'+String(e.message).slice(0,120)).join(';')}catch{}return reject(new Error('HTTP '+res.statusCode+' for '+new URL(url).pathname+' Cloudflare='+code));}
         try{resolve(JSON.parse(raw))}catch(e){reject(e)}
       });
     });req.on('error',reject);
