@@ -1,11 +1,11 @@
-const {safeName,classify}=require('../scripts/reconcile-cloudflare-previews');
-const own='73junito/car-diagnosis-simulator';
-const pr=(n,ref,state='closed',full_name=own)=>({number:n,state,head:{ref,repo:{full_name}}});
-describe('Cloudflare preview reconciliation guardrails',()=>{
- test('normalizes Wrangler preview name',()=>expect(safeName('feat/test-example')).toBe('feat-test-example'));
- test('never deletes unknown preview',()=>expect(classify({name:'mystery'},[]).action).toBe('retain'));
- test('never deletes active PR preview',()=>expect(classify({name:'feat-one'},[pr(1,'feat/one','open')]).reason).toBe('active_pr'));
- test('never deletes fork-owned preview',()=>expect(classify({name:'feat-one'},[pr(1,'feat/one','closed','some/fork')]).action).toBe('retain'));
- test('never deletes name collision',()=>expect(classify({name:'feat-one'},[pr(1,'feat/one'),pr(2,'feat-one')]).reason).toBe('ambiguous_reused_branch'));
- test('closed owned PR can be reviewed as candidate',()=>expect(classify({name:'feat-one'},[pr(1,'feat/one')])).toEqual({action:'candidate',reason:'verified_closed_pr',pr:1}));
-});
+const {classify}=require('../scripts/reconcile-cloudflare-previews');
+const owner='73junito/car-diagnosis-simulator';
+const preview=(branch='fix/closed',preview_id='123456789abc')=>({branch,preview_id});
+const pr=(state='closed',merged_at='2026-10-15T01:00:00Z',ref='fix/closed',repo=owner)=>({number:50,state,merged_at,head:{ref,repo:{full_name:repo}}});
+test('merged matching PR becomes candidate',()=>expect(classify(preview(),[pr()]).action).toBe('candidate'));
+test('open PR is always retained',()=>expect(classify(preview(),[pr('open')]).reason).toBe('active_pr'));
+test('closed but unmerged PR is retained',()=>expect(classify(preview(),[pr('closed',null)]).reason).toBe('closed_unmerged_pr'));
+test('fork owner is retained',()=>expect(classify(preview(),[pr('closed','2026-10-15','fix/closed','other/repo')]).reason).toBe('fork_or_unknown_owner'));
+test('duplicate branch matches retained',()=>expect(classify(preview(),[pr(),{...pr(),number:51}]).reason).toBe('ambiguous_reused_branch'));
+test('invalid immutable preview ID retained',()=>expect(classify(preview('fix/closed',''),[pr()]).reason).toBe('invalid_preview_identity'));
+test('unknown PR retained',()=>expect(classify(preview(),[]).reason).toBe('no_matching_pr'));

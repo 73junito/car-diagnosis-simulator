@@ -5,6 +5,7 @@ const { execFileSync } = require('node:child_process');
 const repo = process.env.GITHUB_REPOSITORY || '73junito/car-diagnosis-simulator';
 const worker = 'autolearnpro-app';
 const apply = process.env.PREVIEW_CLEANUP_APPLY === 'true';
+const approvedIds = new Set((process.env.PREVIEW_APPROVED_IDS || '').split(',').map(x=>x.trim()).filter(Boolean));
 const apiToken = process.env.CLOUDFLARE_API_TOKEN;
 const account = process.env.CLOUDFLARE_ACCOUNT_ID;
 const githubToken = process.env.GITHUB_TOKEN;
@@ -20,13 +21,20 @@ function request(url, token) {
 }
 function safeName(branch) { return branch.replace(/[^a-zA-Z0-9_-]/g,'-').slice(0,128); }
 function classify(preview, prs) {
- const matches=prs.filter(pr=>safeName(pr.head.ref)===preview.name);
- if(!matches.length)return {action:'retain',reason:'no_matching_pr'};
- if(matches.some(pr=>pr.state==='open'))return {action:'retain',reason:'active_pr'};
- if(matches.some(pr=>pr.head.repo?.full_name!==repo))return {action:'retain',reason:'fork_or_unknown_owner'};
- if(matches.length!==1)return {action:'retain',reason:'ambiguous_reused_branch'};
- return {action:'candidate',reason:'verified_closed_pr',pr:matches[0].number};
+ if (!preview || typeof preview.branch !== 'string' || !preview.branch ||
+     typeof preview.preview_id !== 'string' || !/^[a-z0-9-]{8,}$/i.test(preview.preview_id)) {
+   return {action:'retain',reason:'invalid_preview_identity'};
+ }
+ const matches = prs.filter(pr=>safeName(pr.head.ref)===safeName(preview.branch));
+ if (!matches.length) return {action:'retain',reason:'no_matching_pr'};
+ if (matches.some(pr=>pr.state==='open')) return {action:'retain',reason:'active_pr'};
+ if (matches.some(pr=>pr.head.repo?.full_name!==repo)) return {action:'retain',reason:'fork_or_unknown_owner'};
+ if (matches.length!==1) return {action:'retain',reason:'ambiguous_reused_branch'};
+ const pr=matches[0];
+ if (!pr.merged_at) return {action:'retain',reason:'closed_unmerged_pr'};
+ return {action:'candidate',reason:'merged_pr',pr:pr.number};
 }
+
 async function allPages(url,token,extract,maxPages=30){
  const items=[];
  for(let page=1;page<=maxPages;page++){
@@ -53,19 +61,12 @@ async function main(){
   const fields=Object.keys(previews[0]||{}).sort().join(',');
   throw Error('Cloudflare preview response missing branch or preview_id. Available keys: '+fields);
  }
- const rows=previews.map(p=>({name:safeName(p.branch),...classify({name:safeName(p.branch)},prs)}));
+ const rows=previews.map(p=>({name:safeName(p.branch),preview_id:p.preview_id,...classify(p,prs)}));
  const candidates=rows.filter(r=>r.action==='candidate');
  console.log(JSON.stringify({worker,dryRun:!apply,total:rows.length,candidates:candidates.length,rows},null,2));
  if(process.env.GITHUB_STEP_SUMMARY)fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,
-  '## Cloudflare Preview Reconciliation\n\n'+rows.length+' previews checked, '+candidates.length+' verified closed-PR candidates. Mode: '+(apply?'apply':'dry run')+'.\n');
- if(apply){
-  for(const row of candidates){
-   // A second API check immediately before mutation prevents deletion if the PR reopened.
-   const pr=await request('https://api.github.com/repos/'+repo+'/pulls/'+row.pr,githubToken);
-   if(pr.state!=='closed'||safeName(pr.head.ref)!==row.name)continue;
-   execFileSync('npx',['wrangler','preview','delete','--name',row.name,'--worker-name',worker,'--skip-confirmation','--config','wrangler.app.jsonc'],{stdio:'inherit',shell:process.platform==='win32'});
-  }
- }
+  '## Cloudflare Preview Reconciliation\n\n'+rows.length+' previews checked, '+candidates.length+' merged-PR Builds records (not verified live previews). Mode: '+(apply?'apply':'dry run')+'.\n');
+ if(apply)throw Error('Deletion disabled: Builds inventory does not verify live Worker previews');
 }
 if(require.main===module)main().catch(e=>{console.error('Preview reconciliation stopped:',e.message);process.exitCode=1});
 module.exports={safeName,classify};
