@@ -306,19 +306,22 @@ async function loadTorqueMindFeedback(payload){
 
         const data = await res.json();
 
-        body.innerHTML = `
-            <h3>Why your answer was incorrect</h3>
-            <p>${data.reasonIncorrect}</p>
+        const sections = [
+            ["Why your answer was incorrect", data.reasonIncorrect],
+            ["Correct reasoning", data.reasonCorrect],
+            ["Technical Concept", data.technicalConcept],
+            ["Next Diagnostic Step", data.nextStep]
+        ];
 
-            <h3>Correct reasoning</h3>
-            <p>${data.reasonCorrect}</p>
-
-            <h3>Technical Concept</h3>
-            <p>${data.technicalConcept}</p>
-
-            <h3>Next Diagnostic Step</h3>
-            <p>${data.nextStep}</p>
-        `;
+        const content = document.createDocumentFragment();
+        for (const [heading, value] of sections) {
+            const title = document.createElement("h3");
+            title.textContent = heading;
+            const paragraph = document.createElement("p");
+            paragraph.textContent = typeof value === "string" ? value : "";
+            content.append(title, paragraph);
+        }
+        body.replaceChildren(content);
 
     }
     catch(err){
