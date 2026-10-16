@@ -8,7 +8,7 @@ This document outlines the high-level repository layout, migration status, and c
 
 ## High-level system
 - `worker/` — Cloudflare Worker runtime and routes (target for production).
-- `api/` — Vercel Functions (legacy; kept during migration).
+- `api/` — Legacy Node API handlers retained as archival/inactive code; not deployed by Cloudflare.
 - `app/` or `src/` — frontend application code and static assets.
 - `database/` and `db/` — schema and persistence related artifacts.
 
@@ -17,7 +17,7 @@ This document outlines the high-level repository layout, migration status, and c
 - Agents and AI: `agents/`, `skills/`, `prompts/` (review before deleting).
 - Experimental or legacy: move into `archive/` for long-term history.
 
-## Cloudflare Worker vs Vercel Functions
+## Cloudflare Worker and legacy Node API
 - Worker is primary runtime for production routes.
 - During migration keep `api/` until parity is confirmed.
 - Define a route-ownership map in `docs/route-map.md`.
@@ -34,7 +34,7 @@ This document outlines the high-level repository layout, migration status, and c
 ## Migration checklist
 1. Verify Worker handles all routes.
 2. Move `api/` contents to `worker/` or archive.
-3. Remove Vercel-specific files (.vercel) after successful cutover.
+3. Cloudflare Workers are the sole active hosting platform; legacy deployment configuration is retired.
 
 ## Next steps
 - Finalize route map and update README.
