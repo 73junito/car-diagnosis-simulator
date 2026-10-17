@@ -1,0 +1,8 @@
+const {run}=require('../scripts/collect-do-evidence-batches');
+const id=n=>String(n).padStart(32,'0');const namespaces=Array.from({length:3},(_,i)=>({id:id(i+1),name:'autolearnpro-app_feat-'+i+'_TorqueMindRateLimitCounter',script:'autolearnpro-app'}));
+const inventory={inventory:{pagination:{complete:true,verification:'declared_total_count_exact'},total_namespaces:3,namespaces}};
+const dependencies={read_only:true,deletion_authorized:false,rows:namespaces.map((n,i)=>({namespace_id:n.id,name:n.name,script:n.script,preview_match:'no_preview_identity_join',object_evidence_status:'not_collected'}))};
+const bindings={read_only:true,deletion_authorized:false,summary:{workers:6},rows:[{namespace_id:id(1)}]};
+const previous=[{evidence:{read_only:true,deletion_authorized:false,namespaces:[{name:namespaces[1].name,object_enumeration_complete:true}],failures:[]}}];
+test('skips active and previously examined namespaces',async()=>{let urls=[];const r=await run({inventory,dependencies,bindings,previous,account:'a'.repeat(32),token:'x',fetchImpl:async(url,opt)=>{expect(opt.method).toBe('GET');urls.push(url);return {ok:true,json:async()=>({success:true,result:[],result_info:{cursor:null}})}}});expect(r).toMatchObject({attempted:1,completed:1,prior_complete:1,deletion_authorized:false});expect(urls[0]).toContain(id(3))});
+test('rejects untrusted previous reports and oversized collection',async()=>{await expect(run({inventory,dependencies,bindings,previous:[{evidence:{read_only:false}}],account:'a'.repeat(32),token:'x'})).rejects.toThrow();await expect(run({inventory,dependencies,bindings,max:101,account:'a'.repeat(32),token:'x'})).rejects.toThrow()});
