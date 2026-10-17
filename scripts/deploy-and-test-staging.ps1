@@ -1,6 +1,19 @@
+param([switch]$Deploy)
+
 # Build, deploy, and end-to-end test script for staging
 # Run from repository root as Administrator (if needed)
 
+# Confirm the deployment contract before building or deploying.
+$ConfigPath = Join-Path (Split-Path -Parent $PSScriptRoot) 'wrangler.app.jsonc'
+if (-not (Test-Path $ConfigPath)) { throw 'Missing wrangler.app.jsonc' }
+$Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
+if ($Config.name -ne 'autolearnpro-app' -or $Config.env.staging.name -ne 'autolearnpro-app-staging') {
+    throw 'Unexpected staging target; deployment aborted.'
+}
+if (-not $Deploy) {
+    Write-Host 'DRY RUN: staging configuration verified. Pass -Deploy to build, deploy and execute the live smoke request.'
+    return
+}
 # 1. Build
 npm run build
 if ($LASTEXITCODE -ne 0) {
@@ -9,20 +22,20 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # 2. Deploy to staging
-npx wrangler deploy --env staging
+npx wrangler deploy --config wrangler.app.jsonc --env staging
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Staging deployment failed. Aborting."
     exit 1
 }
 
 # 3. Restore version.json (avoid committing build artifacts)
-try { git restore -- public/version.json } catch { }
+# Generated build artifacts must be reviewed separately; do not modify tracked files automatically.
 
 # 4. Start tailing logs in a separate window manually (recommended):
-Write-Host "Run in a separate terminal: npx wrangler tail car-diagnosis-simulator-staging --format pretty" -ForegroundColor Yellow
+Write-Host "Run in a separate terminal: npx wrangler tail autolearnpro-app-staging --config wrangler.app.jsonc --env staging --format pretty" -ForegroundColor Yellow
 
 # 5. Run the Worker end-to-end test
-$StagingUrl = Read-Host "Enter staging base URL (e.g. https://car-diagnosis-simulator-staging.73junito.workers.dev)"
+$StagingUrl = Read-Host "Enter staging base URL (e.g. https://autolearnpro-app-staging.73junito.workers.dev)"
 
 $Body = @{
     scenario      = "Engine cranks but will not start."

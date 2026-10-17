@@ -1,4 +1,4 @@
-$StagingUrl = "https://car-diagnosis-simulator-staging.73junito.workers.dev"
+$StagingUrl = "https://autolearnpro-app-staging.73junito.workers.dev"
 
 $Body = @{
     scenario      = "Engine cranks but will not start."
