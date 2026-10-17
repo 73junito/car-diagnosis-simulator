@@ -1,0 +1,7 @@
+const {reconcile,collect,WORKERS}=require('../scripts/verify-live-do-binding-identity');
+const makeInv=()=>({inventory:{pagination:{complete:true},total_namespaces:1,namespaces:[{id:'a'.repeat(32),name:'autolearnpro-app_TorqueMindRateLimitCounter',class:'TorqueMindRateLimitCounter'}]}});
+const observed=()=>WORKERS.map(worker=>({worker,status:'complete',bindings:worker==='autolearnpro-app'?[{name:'TORQUEMIND_RATE_LIMITER',namespace_id:'a'.repeat(32),class_name:'TorqueMindRateLimitCounter'}]:[]}));
+test('matches actual namespace ID and does not authorize deletion',()=>{const r=reconcile(makeInv(),observed());expect(r).toMatchObject({deletion_authorized:false,summary:{workers:6,confirmed:1,no_binding:5,unmatched:0}})});
+test('unknown namespace ID remains unmatched',()=>{const o=observed();o[0].bindings[0].namespace_id='b'.repeat(32);expect(reconcile(makeInv(),o).summary.unmatched).toBe(1)});
+test('missing Worker evidence fails closed',()=>expect(()=>reconcile(makeInv(),observed().slice(1))).toThrow());
+test('only GET requests and DO binding fields retained',async()=>{let n=0;const fetchImpl=async(_url,opts)=>{expect(opts.method).toBe('GET');n++;return {ok:true,json:async()=>({success:true,result:{bindings:[{type:'durable_object_namespace',name:'TORQUEMIND_RATE_LIMITER',namespace_id:'a'.repeat(32),class_name:'TorqueMindRateLimitCounter',secret_value:'DO_NOT_SAVE'}]}})}};const r=await collect({account:'1'.repeat(32),token:'test',fetchImpl});expect(n).toBe(6);expect(JSON.stringify(r)).not.toContain('DO_NOT_SAVE')});
