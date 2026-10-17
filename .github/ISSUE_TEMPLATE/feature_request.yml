@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest an AutoLearnPro feature or educational improvement
+title: "feat: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Learning or operational problem
+      description: Explain the learner, instructor, or maintainer need.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and acceptance criteria
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Area
+      options:
+        - Automotive simulation and labs
+        - Curriculum and learning paths
+        - Instructor workflows
+        - Assessments and governance
+        - Infrastructure and operations
+        - Accessibility and user experience
+        - Other
+  - type: textarea
+    id: governance
+    attributes:
+      label: Evidence, rights, privacy, and assessment considerations
+      description: Identify third-party materials, technical citations, student data, or assessment changes; write none if not applicable.
