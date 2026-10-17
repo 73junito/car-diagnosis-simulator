@@ -18,8 +18,8 @@
 // A short or empty page is never treated as proof of the end of the inventory.
 // Fail-closed codes: metadata_missing, pagination_inconsistent,
 // parameter_mismatch, pagination_incomplete, duplicate_namespace_id,
-// schema_mismatch, api_failure, request_failed, http_error, auth_failed,
-// permission_denied, rate_limited, config_missing, config_invalid.
+// schema_mismatch, manifest_invalid, api_failure, request_failed, http_error,
+// auth_failed, permission_denied, rate_limited, config_missing, config_invalid.
 //
 // Probe mode (DO_NAMESPACE_AUDIT_PROBE=true with optional
 // DO_NAMESPACE_AUDIT_PROBE_PAGES, default 3) retrieves a bounded number of
@@ -480,15 +480,171 @@ async function collectNamespaces(options) {
   };
 }
 
+// Preview eligibility manifest validation (Phase 3D).
+// The manifest is produced by scripts/audit-live-cloudflare-previews.js and
+// published as the `cloudflare-preview-eligibility-manifest` artifact of the
+// Cloudflare Live Preview Audit workflow. This audit consumes it read-only via
+// PREVIEW_MANIFEST_PATH. Validation is fail-closed: a present-but-malformed
+// manifest throws NamespaceAuditError with code 'manifest_invalid' (sanitized
+// aggregates only) instead of silently yielding zero matches. A missing file
+// is NOT an error: it yields manifest_available=false with an explicit
+// manifest_status so "no manifest" can never be misread as "zero matches".
+function validatePreviewManifest(manifest, sourceRunId) {
+  const source_run_id =
+    typeof sourceRunId === 'string' && sourceRunId ? sourceRunId : null;
+  if (manifest === null || manifest === undefined) {
+    return {
+      available: false,
+      rows: null,
+      invalid_rows_skipped: 0,
+      status: {
+        state: 'missing',
+        reason:
+          'Preview eligibility manifest was not supplied to this run, so no ' +
+          'preview-to-namespace correlation was performed. This is not zero matches.',
+        source_run_id
+      }
+    };
+  }
+  if (typeof manifest !== 'object' || Array.isArray(manifest)) {
+    throw new NamespaceAuditError(
+      'Preview manifest must be a JSON object with a rows array.',
+      'manifest_invalid',
+      { source_run_id }
+    );
+  }
+  if (!Array.isArray(manifest.rows)) {
+    throw new NamespaceAuditError(
+      'Preview manifest schema mismatch: manifest.rows array is required.',
+      'manifest_invalid',
+      { source_run_id }
+    );
+  }
+  if (manifest.rows.length === 0) {
+    throw new NamespaceAuditError(
+      'Preview manifest contains no rows; correlation cannot proceed.',
+      'manifest_invalid',
+      { source_run_id, rows: 0 }
+    );
+  }
+  if (typeof manifest.created_at !== 'string' || Number.isNaN(Date.parse(manifest.created_at))) {
+    throw new NamespaceAuditError(
+      'Preview manifest provenance mismatch: created_at must be an ISO timestamp string.',
+      'manifest_invalid',
+      { source_run_id }
+    );
+  }
+  if (typeof manifest.worker !== 'string' || !manifest.worker) {
+    throw new NamespaceAuditError(
+      'Preview manifest provenance mismatch: worker must be a non-empty string.',
+      'manifest_invalid',
+      { source_run_id }
+    );
+  }
+  if ('readOnly' in manifest && manifest.readOnly !== true) {
+    throw new NamespaceAuditError(
+      'Preview manifest provenance mismatch: readOnly must be true.',
+      'manifest_invalid',
+      { source_run_id }
+    );
+  }
+  if (manifest.complete !== true) {
+    throw new NamespaceAuditError(
+      'Preview manifest reports an incomplete scan; correlation cannot proceed.',
+      'manifest_invalid',
+      { source_run_id, complete: manifest.complete ?? null }
+    );
+  }
+  if (typeof manifest.scanned !== 'number' || !Number.isSafeInteger(manifest.scanned)) {
+    throw new NamespaceAuditError(
+      'Preview manifest provenance mismatch: scanned must be an integer count.',
+      'manifest_invalid',
+      { source_run_id }
+    );
+  }
+  if (manifest.scanned !== manifest.rows.length) {
+    throw new NamespaceAuditError(
+      'Preview manifest scanned count does not match its row count; correlation cannot proceed.',
+      'manifest_invalid',
+      { source_run_id, scanned: manifest.scanned, rows: manifest.rows.length }
+    );
+  }
+  let invalidRowsSkipped = 0;
+  for (const row of manifest.rows) {
+    if (!row || typeof row.builds_preview_id !== 'string' || !row.builds_preview_id) {
+      invalidRowsSkipped += 1;
+    }
+  }
+  if (invalidRowsSkipped >= manifest.rows.length) {
+    throw new NamespaceAuditError(
+      'Preview manifest contains no usable preview identifier rows.',
+      'manifest_invalid',
+      { source_run_id, rows: manifest.rows.length, invalid_rows_skipped: invalidRowsSkipped }
+    );
+  }
+  return {
+    available: true,
+    rows: manifest.rows,
+    invalid_rows_skipped: invalidRowsSkipped,
+    status: {
+      state: 'available',
+      reason: null,
+      source_run_id,
+      created_at: manifest.created_at,
+      worker: manifest.worker,
+      scanned: manifest.scanned,
+      complete: manifest.complete,
+      invalid_rows_skipped: invalidRowsSkipped
+    }
+  };
+}
+
+// Verify that a workflow-run record (GitHub REST shape) is a usable
+// manifest source: it must belong to this repository, be produced by the
+// live-preview-audit workflow, and have concluded successfully. Fail-closed:
+// any unknown shape is rejected with reason, never coerced.
+const MANIFEST_SOURCE_WORKFLOW_PATH = '.github/workflows/cloudflare-live-preview-audit.yml';
+
+function verifyManifestSourceRun(run, expectedRepository) {
+  const normalized = run && typeof run === 'object' && !Array.isArray(run) ? run : null;
+  if (!normalized) {
+    return { ok: false, reason: 'run_not_an_object' };
+  }
+  const repo = normalized.head_repository && typeof normalized.head_repository.full_name === 'string'
+    ? normalized.head_repository.full_name
+    : null;
+  const workflowPath = typeof normalized.path === 'string' ? normalized.path : null;
+  const conclusion = typeof normalized.conclusion === 'string' ? normalized.conclusion : null;
+  if (repo !== expectedRepository) {
+    return { ok: false, reason: 'wrong_repository', repo, workflowPath, conclusion };
+  }
+  if (workflowPath !== MANIFEST_SOURCE_WORKFLOW_PATH) {
+    return { ok: false, reason: 'wrong_workflow', repo, workflowPath, conclusion };
+  }
+  if (conclusion !== 'success') {
+    return { ok: false, reason: 'run_not_successful', repo, workflowPath, conclusion };
+  }
+  return { ok: true, reason: null, repo, workflowPath, conclusion };
+}
+
 // Correlate the namespace inventory with the historical preview manifest.
 // Correlation uses exact identifier equality only; similar names are never
 // treated as evidence of ownership. All unmatched records stay unknown.
-function reconcileNamespaces(inventory, manifest) {
+// Identifier equality is supporting evidence, NOT proof of ownership: the
+// Builds preview_id and the Durable Object namespace id come from different
+// systems and may use different identifier types, so even a byte-identical
+// match cannot confirm ownership on its own.
+function reconcileNamespaces(inventory, manifest, options) {
   if (!inventory || !Array.isArray(inventory.namespaces)) {
     throw new NamespaceAuditError('Inventory namespaces array is required.', 'schema_mismatch');
   }
-  const rows = manifest && Array.isArray(manifest.rows) ? manifest.rows : null;
-  const manifestAvailable = Boolean(rows);
+  const manifestSourceRunId =
+    (options && typeof options.sourceRunId === 'string' && options.sourceRunId) ||
+    process.env.PREVIEW_MANIFEST_RUN_ID ||
+    null;
+  const validated = validatePreviewManifest(manifest, manifestSourceRunId);
+  const rows = validated.rows;
+  const manifestAvailable = validated.available;
   const livePreviewIds = new Set();
   const absentPreviewIds = new Set();
   if (rows) {
@@ -518,12 +674,27 @@ function reconcileNamespaces(inventory, manifest) {
 
   return {
     manifest_available: manifestAvailable,
+    manifest_status: validated.status,
+    manifest_invalid_rows_skipped: validated.invalid_rows_skipped,
     exact_identifier_matches: {
       live_previews: exactMatchesLive.length,
       absent_previews: exactMatchesAbsent.length,
       note:
         'A match means the Builds preview_id string is byte-identical to the namespace id. ' +
-        'Identifier equality is supporting evidence, not proof of namespace ownership.'
+        'Identifier equality is supporting evidence, not proof of namespace ownership: the two ' +
+        'systems may use different identifier types.'
+    },
+    // Explicit three-tier classification: confirmed identifier matches are
+    // evidence (never proof), Worker-associated namespaces are supporting
+    // context only, and everything else stays unresolved.
+    correlation_tiers: {
+      confirmed_identifier_matches: exactMatchesLive.length + exactMatchesAbsent.length,
+      supporting_context: workerOwnedNotPreviewAttributable.length,
+      unresolved: unknown.length + (manifestAvailable ? liveUnmatched + absentUnmatched : 0),
+      note:
+        'confirmed = byte-identical identifier matches (evidence, not proof); ' +
+        'supporting = Worker-associated but not attributable to a specific preview record; ' +
+        'unresolved = unknown namespaces plus preview records without a namespace match.'
     },
     worker_owned_not_preview_attributable: {
       count: workerOwnedNotPreviewAttributable.length,
@@ -555,7 +726,9 @@ function metricRow(metric, result) {
 
 function buildReconciliationReport(inventory, reconciliation) {
   const capNote = 'unknown (no verified quota endpoint queried in this read-only run)';
-  const manifestNote = 'unknown (preview manifest unavailable)';
+  const manifestNote = reconciliation.manifest_status
+    ? `unknown (${reconciliation.manifest_status.reason})`
+    : 'unknown (preview manifest unavailable)';
   const lines = [
     '# Cloudflare Durable Object Namespace Reconciliation',
     '',
@@ -571,7 +744,7 @@ function buildReconciliationReport(inventory, reconciliation) {
     metricRow(
       'Confirmed preview-owned namespaces',
       reconciliation.manifest_available
-        ? `${reconciliation.exact_identifier_matches.live_previews + reconciliation.exact_identifier_matches.absent_previews} by exact identifier match (evidence, not proof)`
+        ? `${reconciliation.exact_identifier_matches.live_previews + reconciliation.exact_identifier_matches.absent_previews} by exact identifier match (evidence, not proof of ownership)`
         : manifestNote
     ),
     metricRow(
@@ -589,6 +762,14 @@ function buildReconciliationReport(inventory, reconciliation) {
     metricRow(
       'Unknown or unrelated namespaces',
       String(reconciliation.unknown_or_unrelated_namespaces.count)
+    ),
+    metricRow(
+      'Correlation tiers (confirmed / supporting / unresolved)',
+      reconciliation.manifest_available
+        ? `${reconciliation.correlation_tiers.confirmed_identifier_matches} / ` +
+          `${reconciliation.correlation_tiers.supporting_context} / ` +
+          `${reconciliation.correlation_tiers.unresolved}`
+        : manifestNote
     ),
     metricRow('Current capacity limit', capNote),
     metricRow(
@@ -609,10 +790,23 @@ function buildReconciliationReport(inventory, reconciliation) {
     ''
   ];
   if (!reconciliation.manifest_available) {
+    const reason = reconciliation.manifest_status
+      ? reconciliation.manifest_status.reason
+      : 'The preview manifest was not provided to this run.';
+    const sourceRun = reconciliation.manifest_status && reconciliation.manifest_status.source_run_id
+      ? ` Manifest source run: ${reconciliation.manifest_status.source_run_id}.`
+      : '';
     lines.push(
-      '- The preview manifest was not provided to this run, so no preview-to-namespace',
-      '  correlation was performed. Re-run with PREVIEW_MANIFEST_PATH pointing to the',
-      '  eligibility manifest to correlate.',
+      `- ${reason}${sourceRun} Re-run with PREVIEW_MANIFEST_PATH pointing to the`,
+      '  eligibility manifest, or dispatch with the manifest_run_id input, to correlate.',
+      ''
+    );
+  } else if (reconciliation.manifest_status && reconciliation.manifest_status.source_run_id) {
+    lines.push(
+      `- Preview manifest provenance: produced ${reconciliation.manifest_status.created_at} ` +
+        `for worker ${reconciliation.manifest_status.worker} ` +
+        `(source run ${reconciliation.manifest_status.source_run_id}; ` +
+        `scanned ${reconciliation.manifest_status.scanned}).`,
       ''
     );
   }
@@ -683,11 +877,28 @@ async function run() {
   }
 
   let manifest = null;
+  let manifestLoadError = null;
   const manifestPath = process.env.PREVIEW_MANIFEST_PATH || 'cloudflare-preview-eligibility-manifest.json';
   if (manifestPath && fs.existsSync(manifestPath)) {
-    manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    try {
+      manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    } catch (err) {
+      manifestLoadError = err instanceof Error ? err.message : String(err);
+    }
   }
-  const reconciliation = reconcileNamespaces(inventory, manifest);
+  if (manifestLoadError !== null) {
+    throw new NamespaceAuditError(
+      'Preview manifest could not be parsed; correlation cannot proceed.',
+      'manifest_invalid',
+      {
+        source_run_id: process.env.PREVIEW_MANIFEST_RUN_ID || null,
+        parse_error: manifestLoadError.slice(0, 200)
+      }
+    );
+  }
+  const reconciliation = reconcileNamespaces(inventory, manifest, {
+    sourceRunId: process.env.PREVIEW_MANIFEST_RUN_ID || null
+  });
   const report = buildReconciliationReport(inventory, reconciliation);
 
   const outDir = process.env.GITHUB_WORKSPACE || process.cwd();
@@ -707,8 +918,15 @@ async function run() {
         pagination_verification: inventory.pagination.verification,
         total_namespaces: inventory.total_namespaces,
         manifest_available: reconciliation.manifest_available,
-        exact_matches_live: reconciliation.exact_identifier_matches.live_previews,
-        exact_matches_absent: reconciliation.exact_identifier_matches.absent_previews,
+        // Explicitly null (not 0) when no usable manifest was supplied, so a
+        // missing manifest can never be misread as "zero matches".
+        exact_matches_live: reconciliation.manifest_available
+          ? reconciliation.exact_identifier_matches.live_previews
+          : null,
+        exact_matches_absent: reconciliation.manifest_available
+          ? reconciliation.exact_identifier_matches.absent_previews
+          : null,
+        manifest_status: reconciliation.manifest_status,
         unknown_namespaces: reconciliation.unknown_or_unrelated_namespaces.count
       },
       null,
@@ -739,6 +957,9 @@ if (require.main === module) {
 module.exports.collectNamespaces = collectNamespaces;
 module.exports.reconcileNamespaces = reconcileNamespaces;
 module.exports.buildReconciliationReport = buildReconciliationReport;
+module.exports.verifyManifestSourceRun = verifyManifestSourceRun;
+module.exports.MANIFEST_SOURCE_WORKFLOW_PATH = MANIFEST_SOURCE_WORKFLOW_PATH;
+module.exports.validatePreviewManifest = validatePreviewManifest;
 module.exports.NamespaceAuditError = NamespaceAuditError;
 module.exports.classifyHttpFailure = classifyHttpFailure;
 module.exports.validateNamespaceRecord = validateNamespaceRecord;

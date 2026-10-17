@@ -1,8 +1,15 @@
 name: Cloudflare Durable Object Namespace Audit
 on:
   workflow_dispatch:
+    inputs:
+      manifest_run_id:
+        description: 'Run ID of a successful Cloudflare Live Preview Audit whose eligibility manifest artifact should be used for read-only correlation (optional)'
+        required: false
+        default: ''
+        type: string
 permissions:
   contents: read
+  actions: read
 jobs:
   inspect:
     runs-on: ubuntu-latest
@@ -15,6 +22,45 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22.19.0'
+      # Optional manifest fetch (read-only): downloads the eligibility manifest
+      # artifact from a verified successful live-preview-audit run so the audit
+      # can correlate the inventory against the historical preview records.
+      # Skipped entirely when no run ID is supplied. Verification is fail-closed:
+      # the source run must belong to this repository, be the
+      # cloudflare-live-preview-audit.yml workflow, and have conclusion success.
+      # Source-run identity comes from the REST API (gh api), because
+      # `gh run view --json` does not expose the head repository field, and all
+      # checks are structural jq comparisons, never grep against formatted JSON.
+      - name: Fetch preview eligibility manifest (read-only, verified)
+        if: inputs.manifest_run_id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MANIFEST_RUN_ID: ${{ inputs.manifest_run_id }}
+        run: |
+          set -euo pipefail
+          # Source-run identity comes from the REST API (GET a single workflow
+          # run), because `gh run view --json` does not expose head_repository
+          # or the workflow file path. All checks are structural comparisons;
+          # the audited `verifyManifestSourceRun` helper applies the same
+          # policy in unit tests, never grep against formatted JSON.
+          RUN_JSON=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$MANIFEST_RUN_ID")
+          echo "$RUN_JSON" | node -e "
+            const { verifyManifestSourceRun } = require('./scripts/audit-cloudflare-do-namespaces.js');
+            let run = null;
+            try { run = JSON.parse(require('node:fs').readFileSync(0, 'utf8')); }
+            catch { console.error('Refusing: source-run response is not valid JSON.'); process.exit(1); }
+            const verdict = verifyManifestSourceRun(run, process.env.GITHUB_REPOSITORY);
+            if (!verdict.ok) {
+              console.error('Refusing manifest run ' + process.env.MANIFEST_RUN_ID + ': ' + verdict.reason + '.');
+              process.exit(1);
+            }
+            console.log('Verified manifest source run.');
+          "
+          mkdir -p .manifest
+          gh run download "$MANIFEST_RUN_ID" --repo "$GITHUB_REPOSITORY" --name cloudflare-preview-eligibility-manifest --dir .manifest
+          test -f .manifest/cloudflare-preview-eligibility-manifest.json
+          echo "PREVIEW_MANIFEST_PATH=$GITHUB_WORKSPACE/.manifest/cloudflare-preview-eligibility-manifest.json" >> "$GITHUB_ENV"
+          echo "PREVIEW_MANIFEST_RUN_ID=$MANIFEST_RUN_ID" >> "$GITHUB_ENV"
       - name: Collect Durable Object namespace inventory (read-only GET)
         run: node scripts/audit-cloudflare-do-namespaces.js
 
