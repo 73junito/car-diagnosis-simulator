@@ -5,14 +5,47 @@
 // https.get exclusively and never passes a `method` option, so POST, PUT,
 // PATCH, and DELETE cannot be issued. Unit tests must not import https;
 // inject a fake `request` function instead (see tests/cloudflare-do-namespace-audit.spec.js).
+//
+// Pagination follows the documented contract of
+// GET /accounts/{account_id}/workers/durable_objects/namespaces
+// (page: minimum 1; per_page: 1..1000; result_info optional, and each of its
+// fields individually optional). Completeness is claimed only when declared
+// metadata proves it:
+//   - declared_total_pages: every declared page is retrieved, then the unique
+//     namespace count is reconciled against declared total_count when present.
+//   - declared_total_count: pages are retrieved until exactly the declared
+//     number of unique namespaces has been collected.
+// A short or empty page is never treated as proof of the end of the inventory.
+// Fail-closed codes: metadata_missing, pagination_inconsistent,
+// parameter_mismatch, pagination_incomplete, duplicate_namespace_id,
+// schema_mismatch, api_failure, request_failed, http_error, auth_failed,
+// permission_denied, rate_limited, config_missing, config_invalid.
+//
+// Probe mode (DO_NAMESPACE_AUDIT_PROBE=true with optional
+// DO_NAMESPACE_AUDIT_PROBE_PAGES, default 3) retrieves a bounded number of
+// pages, prints aggregate-only diagnostics, writes no artifacts, and never
+// claims completeness.
 const https = require('node:https');
 const fs = require('node:fs');
 const path = require('node:path');
 
 const API_BASE = 'https://api.cloudflare.com/client/v4';
 const NAMESPACE_PATH = account => `/accounts/${account}/workers/durable_objects/namespaces`;
-const DEFAULT_PER_PAGE = 100;
+// Documented limits for GET /accounts/{account_id}/workers/durable_objects/namespaces
+// (Cloudflare API reference, retrieved 2026-10-16):
+//   page    : optional number, minimum 1
+//   per_page: optional number, minimum 1, maximum 1000
+// 1000 is the documented maximum page size, so it is the default: with the
+// unchanged maxPages safety ceiling of 100 the collector can verify inventories
+// of up to 100,000 namespaces in at most 100 GET requests. The 5 MB response
+// cap still bounds every page; 1000 namespace records are far below it.
+const DEFAULT_PER_PAGE = 1000;
+const MAX_SUPPORTED_PER_PAGE = 1000;
 const DEFAULT_MAX_PAGES = 100;
+// Hard safety boundary for any page walk, including probes. Kept at the
+// historical value on purpose: raising it is a reviewed change, never a
+// reflexive response to pagination failure.
+const MAX_SUPPORTED_PAGES = 100;
 const MAX_RESPONSE_BYTES = 5000000;
 const TIMEOUT_MS = 15000;
 
@@ -119,6 +152,8 @@ async function collectNamespaces(options) {
     request = defaultRequest,
     perPage = DEFAULT_PER_PAGE,
     maxPages = DEFAULT_MAX_PAGES,
+    probePages = null,
+    onDiagnostic = null,
     now = () => new Date()
   } = options || {};
 
@@ -128,23 +163,51 @@ async function collectNamespaces(options) {
   if (!token || typeof token !== 'string') {
     throw new NamespaceAuditError('CLOUDFLARE_API_TOKEN is required.', 'config_missing');
   }
-  if (!Number.isSafeInteger(perPage) || perPage < 1 || perPage > 5000) {
-    throw new NamespaceAuditError('perPage must be an integer between 1 and 5000.', 'config_invalid');
+  if (!Number.isSafeInteger(perPage) || perPage < 1 || perPage > MAX_SUPPORTED_PER_PAGE) {
+    throw new NamespaceAuditError(
+      `perPage must be an integer between 1 and ${MAX_SUPPORTED_PER_PAGE} (the documented API maximum).`,
+      'config_invalid'
+    );
   }
-  if (!Number.isSafeInteger(maxPages) || maxPages < 1) {
-    throw new NamespaceAuditError('maxPages must be a positive integer.', 'config_invalid');
+  if (!Number.isSafeInteger(maxPages) || maxPages < 1 || maxPages > MAX_SUPPORTED_PAGES) {
+    throw new NamespaceAuditError(
+      `maxPages must be an integer between 1 and ${MAX_SUPPORTED_PAGES} (safety boundary).`,
+      'config_invalid'
+    );
   }
+  if (
+    probePages !== null &&
+    (!Number.isSafeInteger(probePages) || probePages < 1 || probePages > MAX_SUPPORTED_PAGES)
+  ) {
+    throw new NamespaceAuditError(
+      `probePages must be an integer between 1 and ${MAX_SUPPORTED_PAGES}.`,
+      'config_invalid'
+    );
+  }
+
+  // A probe bounds the number of pages directly; a full audit uses maxPages.
+  const pageLimit = probePages !== null ? probePages : maxPages;
 
   const collectedAt = now().toISOString();
   const base = `${API_BASE}${NAMESPACE_PATH(account)}`;
   const namespaces = [];
   const seenIds = new Set();
   const pagesReceived = [];
+  const diagnostics = [];
   let declaredTotalCount = null;
   let declaredTotalPages = null;
+  // Termination mode: 'none' (no usable metadata yet), 'total_pages', or
+  // 'total_count'. Mode is established from declared result_info only.
+  let metadataMode = 'none';
   let complete = false;
+  let verification = null;
 
-  for (let page = 1; page <= maxPages && !complete; page += 1) {
+  const emit = entry => {
+    diagnostics.push(entry);
+    if (typeof onDiagnostic === 'function') onDiagnostic(entry);
+  };
+
+  for (let page = 1; page <= pageLimit && !complete; page += 1) {
     const url = `${base}?page=${page}&per_page=${perPage}`;
     let response;
     try {
@@ -172,11 +235,13 @@ async function collectNamespaces(options) {
     for (const item of json.result) {
       const record = validateNamespaceRecord(item, namespaces.length);
       if (seenIds.has(record.id)) {
+        // Identifier deliberately redacted from message and details: error
+        // output is diagnostics, and diagnostics carry aggregates only.
         throw new NamespaceAuditError(
-          `Duplicate namespace id "${record.id}" encountered while paginating. ` +
-            'Pagination responses are inconsistent; inventory is not trustworthy.',
+          `Duplicate namespace id encountered on page ${page} while paginating ` +
+            '(identifier redacted). Pagination responses are inconsistent; inventory is not trustworthy.',
           'duplicate_namespace_id',
-          { page, id: record.id }
+          { page }
         );
       }
       seenIds.add(record.id);
@@ -186,41 +251,207 @@ async function collectNamespaces(options) {
     const info = json.result_info || null;
     pagesReceived.push(page);
     if (info) {
-      if (Number.isInteger(info.total_count)) declaredTotalCount = info.total_count;
-      if (Number.isInteger(info.total_pages)) declaredTotalPages = info.total_pages;
       if (Number.isInteger(info.page) && info.page !== page) {
         throw new NamespaceAuditError(
           `Namespace page ${page} echoed page ${info.page}; pagination responses are inconsistent.`,
-          'pagination_incomplete',
-          { requestedPage: page, echoedPage: info.page }
+          'pagination_inconsistent',
+          { requested_page: page, returned_page: info.page }
         );
       }
       if (Number.isInteger(info.count) && info.count !== json.result.length) {
         throw new NamespaceAuditError(
           `Namespace page ${page} reported count ${info.count} but returned ${json.result.length} records.`,
-          'pagination_incomplete',
-          { page, reportedCount: info.count, receivedCount: json.result.length }
+          'pagination_inconsistent',
+          { page, reported_count: info.count, returned_count: json.result.length }
         );
       }
-      if (Number.isInteger(declaredTotalPages) && page >= declaredTotalPages) complete = true;
-    } else if (json.result.length < perPage) {
-      complete = true;
+      if (Number.isInteger(info.per_page) && info.per_page !== perPage) {
+        throw new NamespaceAuditError(
+          `Namespace page ${page} was served per_page ${info.per_page} but ${perPage} was requested; ` +
+            'the API did not honor the requested pagination parameter.',
+          'parameter_mismatch',
+          { page, requested_per_page: perPage, returned_per_page: info.per_page }
+        );
+      }
+      if (Number.isInteger(info.total_count)) {
+        if (declaredTotalCount === null) declaredTotalCount = info.total_count;
+        else if (declaredTotalCount !== info.total_count) {
+          throw new NamespaceAuditError(
+            `Namespace page ${page} declared total_count ${info.total_count}, changing from ${declaredTotalCount}.`,
+            'pagination_inconsistent',
+            { page, previous_total_count: declaredTotalCount, new_total_count: info.total_count }
+          );
+        }
+      }
+      if (Number.isInteger(info.total_pages)) {
+        if (declaredTotalPages === null) declaredTotalPages = info.total_pages;
+        else if (declaredTotalPages !== info.total_pages) {
+          throw new NamespaceAuditError(
+            `Namespace page ${page} declared total_pages ${info.total_pages}, changing from ${declaredTotalPages}.`,
+            'pagination_inconsistent',
+            { page, previous_total_pages: declaredTotalPages, new_total_pages: info.total_pages }
+          );
+        }
+      }
+      if (metadataMode === 'none') {
+        if (Number.isInteger(declaredTotalPages)) metadataMode = 'total_pages';
+        else if (Number.isInteger(declaredTotalCount)) metadataMode = 'total_count';
+      }
+
+      emit({
+        requested_page: page,
+        returned_page: Number.isInteger(info.page) ? info.page : null,
+        requested_per_page: perPage,
+        returned_per_page: Number.isInteger(info.per_page) ? info.per_page : null,
+        returned_count: json.result.length,
+        declared_total_count: declaredTotalCount,
+        declared_total_pages: declaredTotalPages,
+        pagination_mode: metadataMode,
+        result_info_present: true,
+        // Type names only (never values of identifiers): reveal schema drift
+        // such as stringified integers without echoing record contents.
+        total_pages_type: info.total_pages === undefined ? 'undefined' : typeof info.total_pages,
+        total_count_type: info.total_count === undefined ? 'undefined' : typeof info.total_count
+      });
+
+      if (metadataMode === 'total_pages' && Number.isInteger(declaredTotalPages)) {
+        if (declaredTotalPages === 0 && json.result.length > 0) {
+          throw new NamespaceAuditError(
+            `Namespace page ${page} returned records but the API declared total_pages 0.`,
+            'pagination_inconsistent',
+            { page, returned_count: json.result.length, declared_total_pages: declaredTotalPages }
+          );
+        }
+        if (page < declaredTotalPages && json.result.length < perPage) {
+          throw new NamespaceAuditError(
+            `Namespace page ${page} of ${declaredTotalPages} returned ${json.result.length} records, fewer than per_page ${perPage}; ` +
+              'pagination ended early or the API clamped the requested page size.',
+            'pagination_inconsistent',
+            {
+              page,
+              returned_count: json.result.length,
+              declared_total_pages: declaredTotalPages,
+              per_page: perPage
+            }
+          );
+        }
+        if (page >= declaredTotalPages) complete = true;
+      }
+      if (metadataMode === 'total_count' && !complete) {
+        if (namespaces.length === declaredTotalCount) {
+          complete = true;
+        } else if (namespaces.length > declaredTotalCount) {
+          throw new NamespaceAuditError(
+            `Collected ${namespaces.length} namespaces by page ${page} but the API declared total_count ${declaredTotalCount}.`,
+            'pagination_inconsistent',
+            { page, collected: namespaces.length, declared_total_count: declaredTotalCount }
+          );
+        } else if (json.result.length === 0) {
+          throw new NamespaceAuditError(
+            `Namespace page ${page} returned no records but the API declared total_count ${declaredTotalCount} ` +
+              `(${namespaces.length} collected so far); pagination ended early.`,
+            'pagination_inconsistent',
+            { page, collected: namespaces.length, declared_total_count: declaredTotalCount }
+          );
+        } else if (json.result.length < perPage) {
+          // Pages are full until the one that lands exactly on the declared
+          // total. A short page while the total is still unreached means the
+          // API clamped the page size or the data changed mid-walk; either
+          // way the sequence cannot be trusted as complete.
+          throw new NamespaceAuditError(
+            `Namespace page ${page} returned ${json.result.length} records, fewer than per_page ${perPage}, ` +
+              `before the declared total_count ${declaredTotalCount} was reached ` +
+              `(${namespaces.length} collected so far); pagination ended early.`,
+            'pagination_inconsistent',
+            {
+              page,
+              returned_count: json.result.length,
+              per_page: perPage,
+              collected: namespaces.length,
+              declared_total_count: declaredTotalCount
+            }
+          );
+        }
+      }
+    } else {
+      emit({
+        requested_page: page,
+        returned_page: null,
+        requested_per_page: perPage,
+        returned_per_page: null,
+        returned_count: json.result.length,
+        declared_total_count: null,
+        declared_total_pages: null,
+        pagination_mode: 'none',
+        result_info_present: false,
+        total_pages_type: 'absent',
+        total_count_type: 'absent'
+      });
     }
+
+    if (metadataMode === 'none' && probePages === null) {
+      // Full audits require documented pagination metadata. result_info is
+      // optional in the Cloudflare schema, and its total_pages/total_count
+      // fields are individually optional; when none arrive as usable integers
+      // there is no verifiable termination condition, and a short page is not
+      // a documented one for this endpoint. Bounded probes tolerate the gap so
+      // the actual response shape can be observed, but they never claim
+      // completeness either.
+      throw new NamespaceAuditError(
+        `Namespace page ${page} did not provide usable pagination metadata ` +
+          '(result_info with integer total_pages or total_count is required). ' +
+          'Completeness cannot be verified from record counts alone.',
+        'metadata_missing',
+        { page, pages_received: pagesReceived.length, diagnostics }
+      );
+    }
+  }
+
+  if (!complete && probePages !== null) {
+    // Bounded diagnostic probe: report exactly what was observed and stop.
+    // complete stays false by construction; this result is not an inventory.
+    return {
+      collected_at_utc: collectedAt,
+      endpoint: base,
+      method: 'GET',
+      read_only: true,
+      probe_bounded: true,
+      pagination: {
+        complete: false,
+        per_page: perPage,
+        pages_received: pagesReceived.length,
+        total_pages_declared: declaredTotalPages,
+        total_count_declared: declaredTotalCount,
+        pagination_mode: metadataMode,
+        verification: null,
+        diagnostics
+      },
+      total_namespaces: namespaces.length,
+      namespaces
+    };
   }
 
   if (!complete) {
     throw new NamespaceAuditError(
-      `Pagination did not reach a verified end within ${maxPages} pages. ` +
-        'Refusing to claim inventory completeness.',
+      `Pagination did not reach a verified end within ${pageLimit} pages ` +
+        `(declared_total_pages: ${declaredTotalPages}, declared_total_count: ${declaredTotalCount}, ` +
+        `collected: ${namespaces.length}). Refusing to claim inventory completeness.`,
       'pagination_incomplete',
-      { pagesReceived: pagesReceived.length, declaredTotalPages, collected: namespaces.length }
+      {
+        pages_received: pagesReceived.length,
+        declared_total_pages: declaredTotalPages,
+        declared_total_count: declaredTotalCount,
+        pagination_mode: metadataMode,
+        collected: namespaces.length,
+        diagnostics
+      }
     );
   }
   if (declaredTotalCount !== null && namespaces.length !== declaredTotalCount) {
     throw new NamespaceAuditError(
       `Collected ${namespaces.length} namespaces but the API declared total_count ${declaredTotalCount}.`,
       'pagination_incomplete',
-      { collected: namespaces.length, declaredTotalCount }
+      { collected: namespaces.length, declared_total_count: declaredTotalCount, diagnostics }
     );
   }
 
@@ -234,7 +465,15 @@ async function collectNamespaces(options) {
       per_page: perPage,
       pages_received: pagesReceived.length,
       total_pages_declared: declaredTotalPages,
-      total_count_declared: declaredTotalCount
+      total_count_declared: declaredTotalCount,
+      pagination_mode: metadataMode,
+      verification:
+        metadataMode === 'total_count'
+          ? 'declared_total_count_exact'
+          : declaredTotalCount !== null
+            ? 'declared_total_pages_and_total_count_reconciled'
+            : 'declared_total_pages',
+      diagnostics
     },
     total_namespaces: namespaces.length,
     namespaces
@@ -380,12 +619,68 @@ function buildReconciliationReport(inventory, reconciliation) {
   return lines.join('\n');
 }
 
+function parseProbePages() {
+  if (process.env.DO_NAMESPACE_AUDIT_PROBE !== 'true') return null;
+  const raw = process.env.DO_NAMESPACE_AUDIT_PROBE_PAGES;
+  if (raw === undefined || raw === '') return 3;
+  const parsed = Number(raw);
+  if (!Number.isSafeInteger(parsed) || parsed < 1 || parsed > MAX_SUPPORTED_PAGES) {
+    throw new NamespaceAuditError(
+      `DO_NAMESPACE_AUDIT_PROBE_PAGES must be an integer between 1 and ${MAX_SUPPORTED_PAGES}.`,
+      'config_invalid'
+    );
+  }
+  return parsed;
+}
+
+// Aggregate-only pagination logger. Entries are built exclusively by
+// collectNamespaces' emit() whitelist and never contain identifiers,
+// credentials, or record contents.
+function logPaginationDiagnostic(entry) {
+  console.error('[do-namespace-audit] pagination ' + JSON.stringify(entry));
+}
+
 async function run() {
   const account = process.env.CLOUDFLARE_ACCOUNT_ID;
   const token = process.env.CLOUDFLARE_API_TOKEN;
   if (!account || !token) throw new NamespaceAuditError('Cloudflare credentials missing', 'config_missing');
 
-  const inventory = await collectNamespaces({ account, token });
+  const probePages = parseProbePages();
+  const inventory = await collectNamespaces({
+    account,
+    token,
+    probePages,
+    onDiagnostic: logPaginationDiagnostic
+  });
+
+  if (probePages !== null) {
+    // Probe runs report observed pagination shape only. No artifacts are
+    // written and no reconciliation is performed. complete is always false:
+    // a probe is a diagnostic run, never an audit, even when its bounded
+    // walk happened to observe a verifiable end within the bound.
+    console.log(
+      JSON.stringify(
+        {
+          probe: true,
+          complete: false,
+          observed_termination: inventory.pagination.verification,
+          note:
+            'Bounded read-only pagination probe. This is not an inventory; no artifacts were ' +
+            'written and no completeness claim is made.',
+          pages_requested: probePages,
+          pages_received: inventory.pagination.pages_received,
+          pagination_mode: inventory.pagination.pagination_mode,
+          declared_total_count: inventory.pagination.total_count_declared,
+          declared_total_pages: inventory.pagination.total_pages_declared,
+          collected_records: inventory.total_namespaces,
+          diagnostics: inventory.pagination.diagnostics
+        },
+        null,
+        2
+      )
+    );
+    return;
+  }
 
   let manifest = null;
   const manifestPath = process.env.PREVIEW_MANIFEST_PATH || 'cloudflare-preview-eligibility-manifest.json';
@@ -408,6 +703,8 @@ async function run() {
         readOnly: true,
         collected_at_utc: inventory.collected_at_utc,
         pagination_complete: inventory.pagination.complete,
+        pagination_mode: inventory.pagination.pagination_mode,
+        pagination_verification: inventory.pagination.verification,
         total_namespaces: inventory.total_namespaces,
         manifest_available: reconciliation.manifest_available,
         exact_matches_live: reconciliation.exact_identifier_matches.live_previews,
@@ -427,7 +724,14 @@ async function run() {
 if (require.main === module) {
   run().catch(err => {
     console.error('Read-only Durable Object namespace audit failed:', err.message);
-    if (err instanceof NamespaceAuditError) console.error('code:', err.code);
+    if (err instanceof NamespaceAuditError) {
+      console.error('code:', err.code);
+      // Sanitized aggregates only: NamespaceAuditError details are constructed
+      // from whitelisted fields (pages, counts, declared totals, diagnostics).
+      if (err.details && Object.keys(err.details).length > 0) {
+        console.error('details:', JSON.stringify(err.details));
+      }
+    }
     process.exitCode = 1;
   });
 }
