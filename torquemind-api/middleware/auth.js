@@ -24,7 +24,28 @@ module.exports = function createAuthMiddleware(supabase){
       }
     } catch (e) { void e; }
     try {
-      const { data, error } = await supabase.auth.getUser(token);
+      let { data, error } = await supabase.auth.getUser(token);
+      // The SDK can return AuthSessionMissingError in stateless API processes.
+      // In that specific case, verify the supplied bearer token with GoTrue's
+      // /user endpoint. Never trust decoded JWT claims or bypass verification.
+      if (error && (error.name === 'AuthSessionMissingError' || error.message === 'Auth session missing!')) {
+        const url = process.env.SUPABASE_URL;
+        const anon = process.env.SUPABASE_ANON_KEY;
+        if (url && anon) {
+          const response = await fetch(`${url.replace(/\/$/, '')}/auth/v1/user`, {
+            headers: { apikey: anon, Authorization: `Bearer ${token}`, Accept: 'application/json' },
+            signal: AbortSignal.timeout(10000),
+          });
+          if (response.ok) {
+            const verified = await response.json();
+            const verifiedUser = verified && (verified.user || verified);
+            if (verifiedUser && typeof verifiedUser.id === 'string' && verifiedUser.id) {
+              data = { user: verifiedUser };
+              error = null;
+            }
+          }
+        }
+      }
       if (debugAuth) console.log('getUser result', { userId: data && data.user && data.user.id, error: error && error.message });
       if (error || !data || !data.user) {
         console.warn('Auth failed: invalid/expired token', error && error.message);
