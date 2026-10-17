@@ -34,7 +34,7 @@ test('successful single-page inventory is complete and read-only', async () => {
     { id: 'ns-1', name: 'alpha', script: 'autolearnpro-app', class: 'Session' },
     { id: 'ns-2', name: 'beta', script: null, class: 'Counter' }
   ];
-  const { request, calls } = recorder({ 1: pageResponse(records, { page: 1, count: 2, total_count: 2, total_pages: 1, per_page: 100 }) });
+  const { request, calls } = recorder({ 1: pageResponse(records, { page: 1, count: 2, total_count: 2, total_pages: 1, per_page: 1000 }) });
   const inventory = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, now: fixedNow });
   expect(inventory.pagination.complete).toBe(true);
   expect(inventory.pagination.pages_received).toBe(1);
@@ -209,4 +209,290 @@ test('the audit script issues no destructive HTTP methods', () => {
   expect(source).not.toMatch(/durable_objects\/namespaces\/[^`]*`.*(DELETE|PUT|PATCH)/);
 });
 
+// ---------------------------------------------------------------------------
+// Phase 3A: pagination correctness and fail-closed regression coverage.
+// All network behavior remains mocked through the injected request function.
+// ---------------------------------------------------------------------------
+
+const DIAGNOSTIC_KEYS = [
+  'requested_page',
+  'returned_page',
+  'requested_per_page',
+  'returned_per_page',
+  'returned_count',
+  'declared_total_count',
+  'declared_total_pages',
+  'pagination_mode',
+  'result_info_present',
+  'total_pages_type',
+  'total_count_type'
+];
+
+function rec(id) {
+  return { id, name: `n-${id}`, script: 's', class: 'C' };
+}
+
+test('missing result_info fails closed immediately in audit mode', async () => {
+  const { request, calls } = recorder({ 1: pageResponse([rec('ns-1')]) });
+  const error = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, now: fixedNow }).catch(e => e);
+  expect(error).toMatchObject({ code: 'metadata_missing' });
+  // Fail fast: no further pages are requested once completeness is impossible.
+  expect(calls).toHaveLength(1);
+});
+
+test('result_info without total_pages or total_count fails closed', async () => {
+  const { request } = recorder({ 1: pageResponse([rec('ns-1')], { page: 1, count: 1, per_page: 1000 }) });
+  await expect(collectNamespaces({ account: ACCOUNT, token: TOKEN, request, now: fixedNow })).rejects.toMatchObject({
+    code: 'metadata_missing'
+  });
+});
+
+test('declared total_count without total_pages completes only at the exact declared count', async () => {
+  const { request, calls } = recorder({
+    1: pageResponse([rec('ns-1'), rec('ns-2')], { page: 1, count: 2, total_count: 3, per_page: 2 }),
+    2: pageResponse([rec('ns-3')], { page: 2, count: 1, total_count: 3, per_page: 2 })
+  });
+  const inventory = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 2, now: fixedNow });
+  expect(inventory.pagination.complete).toBe(true);
+  expect(inventory.pagination.pagination_mode).toBe('total_count');
+  expect(inventory.pagination.verification).toBe('declared_total_count_exact');
+  expect(inventory.total_namespaces).toBe(3);
+  expect(calls).toHaveLength(2);
+});
+
+test('total_count mode refuses an early end even on a short page', async () => {
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 5, per_page: 2 })
+  });
+  const error = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 2, now: fixedNow }).catch(e => e);
+  expect(error).toMatchObject({ code: 'pagination_inconsistent' });
+  expect(error.message).toContain('fewer than per_page');
+});
+
+test('a changing total_count across pages fails closed', async () => {
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 3, total_pages: 3, per_page: 1 }),
+    2: pageResponse([rec('ns-2')], { page: 2, count: 1, total_count: 4, total_pages: 3, per_page: 1 })
+  });
+  const error = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, now: fixedNow }).catch(e => e);
+  expect(error).toMatchObject({ code: 'pagination_inconsistent' });
+  expect(error.message).toContain('changing from 3');
+});
+
+test('a changing total_pages across pages fails closed', async () => {
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 3, total_pages: 3, per_page: 1 }),
+    2: pageResponse([rec('ns-2')], { page: 2, count: 1, total_count: 3, total_pages: 4, per_page: 1 })
+  });
+  const error = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, now: fixedNow }).catch(e => e);
+  expect(error).toMatchObject({ code: 'pagination_inconsistent' });
+  expect(error.message).toContain('changing from 3');
+});
+
+test('a repeated page echo fails closed', async () => {
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 3, total_pages: 3, per_page: 1 }),
+    // The API repeats page 1's metadata when page 2 is requested.
+    2: pageResponse([rec('ns-2')], { page: 1, count: 1, total_count: 3, total_pages: 3, per_page: 1 })
+  });
+  await expect(collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, now: fixedNow })).rejects.toMatchObject({
+    code: 'pagination_inconsistent'
+  });
+});
+
+test('an API that ignores the requested per_page fails closed as parameter_mismatch', async () => {
+  // Cloudflare's documented default page size is 20; an echo of 20 while 1000
+  // was requested means the parameter was ignored or clamped.
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 40, total_pages: 2, per_page: 20 })
+  });
+  const error = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, now: fixedNow }).catch(e => e);
+  expect(error).toMatchObject({ code: 'parameter_mismatch' });
+  expect(error.message).toContain('per_page');
+});
+
+
+
+
+test('an empty page before the declared end fails closed in total_pages mode', async () => {
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 3, total_pages: 3, per_page: 1 }),
+    2: pageResponse([], { page: 2, count: 0, total_count: 3, total_pages: 3, per_page: 1 })
+  });
+  await expect(collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, now: fixedNow })).rejects.toMatchObject({
+    code: 'pagination_inconsistent'
+  });
+});
+
+test('an empty terminal page is accepted only when declared totals reconcile', async () => {
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1'), rec('ns-2')], { page: 1, count: 2, total_count: 2, total_pages: 2, per_page: 2 }),
+    2: pageResponse([], { page: 2, count: 0, total_count: 2, total_pages: 2, per_page: 2 })
+  });
+  const inventory = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 2, now: fixedNow });
+  expect(inventory.pagination.complete).toBe(true);
+  expect(inventory.total_namespaces).toBe(2);
+});
+
+test('an empty result with declared zero totals completes as an empty inventory', async () => {
+  const { request } = recorder({
+    1: pageResponse([], { page: 1, count: 0, total_count: 0, total_pages: 1, per_page: 1000 })
+  });
+  const inventory = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, now: fixedNow });
+  expect(inventory.pagination.complete).toBe(true);
+  expect(inventory.total_namespaces).toBe(0);
+  expect(inventory.namespaces).toEqual([]);
+});
+
+test('reaching the page ceiling fails closed and reports declared totals', async () => {
+  const pages = {};
+  for (let i = 1; i <= 100; i += 1) {
+    pages[i] = pageResponse([rec(`ns-${i}`)], { page: i, count: 1, total_count: 150, total_pages: 150, per_page: 1 });
+  }
+  const { request } = recorder(pages);
+  const error = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, now: fixedNow }).catch(e => e);
+  expect(error).toMatchObject({ code: 'pagination_incomplete' });
+  expect(error.details.declared_total_pages).toBe(150);
+  expect(error.details.pages_received).toBe(100);
+  expect(error.details.collected).toBe(100);
+});
+
+test('page sizes and page ceilings outside documented bounds fail closed', async () => {
+  const never = async () => {
+    throw new Error('no request expected');
+  };
+  for (const perPage of [0, -1, 1001, 1.5, '10']) {
+    await expect(
+      collectNamespaces({ account: ACCOUNT, token: TOKEN, request: never, perPage, now: fixedNow })
+    ).rejects.toMatchObject({ code: 'config_invalid' });
+  }
+  for (const maxPages of [0, 101, 2.5]) {
+    await expect(
+      collectNamespaces({ account: ACCOUNT, token: TOKEN, request: never, maxPages, now: fixedNow })
+    ).rejects.toMatchObject({ code: 'config_invalid' });
+  }
+  for (const probePages of [0, 101, 2.5]) {
+    await expect(
+      collectNamespaces({ account: ACCOUNT, token: TOKEN, request: never, probePages, now: fixedNow })
+    ).rejects.toMatchObject({ code: 'config_invalid' });
+  }
+});
+
+test('a genuine multi-page inventory reconciles declared totals end to end', async () => {
+  const { request, calls } = recorder({
+    1: pageResponse([rec('ns-1'), rec('ns-2')], { page: 1, count: 2, total_count: 5, total_pages: 3, per_page: 2 }),
+    2: pageResponse([rec('ns-3'), rec('ns-4')], { page: 2, count: 2, total_count: 5, total_pages: 3, per_page: 2 }),
+    3: pageResponse([rec('ns-5')], { page: 3, count: 1, total_count: 5, total_pages: 3, per_page: 2 })
+  });
+  const inventory = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 2, now: fixedNow });
+  expect(inventory.pagination.complete).toBe(true);
+  expect(inventory.pagination.verification).toBe('declared_total_pages_and_total_count_reconciled');
+  expect(inventory.pagination.pages_received).toBe(3);
+  expect(inventory.total_namespaces).toBe(5);
+  expect(inventory.namespaces.map(n => n.id)).toEqual(['ns-1', 'ns-2', 'ns-3', 'ns-4', 'ns-5']);
+  expect(calls).toHaveLength(3);
+});
+
+test('every collector request is a read-only GET against the namespace endpoint only', async () => {
+  const { request, calls } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 1, total_pages: 1, per_page: 1 })
+  });
+  await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, now: fixedNow });
+  const endpointPattern = /^https:\/\/api\.cloudflare\.com\/client\/v4\/accounts\/test-account\/workers\/durable_objects\/namespaces\?page=\d+&per_page=\d+$/;
+  expect(calls.length).toBeGreaterThan(0);
+  for (const url of calls) {
+    expect(url).toMatch(endpointPattern);
+  }
+});
+
+
+test('diagnostics carry only whitelisted aggregate keys and never identifiers', async () => {
+  const seen = [];
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 3, total_pages: 3, per_page: 1 }),
+    2: pageResponse([rec('ns-2')], { page: 2, count: 1, total_count: 4, total_pages: 3, per_page: 1 })
+  });
+  const error = await collectNamespaces({
+    account: ACCOUNT,
+    token: TOKEN,
+    request,
+    perPage: 1,
+    onDiagnostic: entry => seen.push(entry),
+    now: fixedNow
+  }).catch(e => e);
+  expect(error).toMatchObject({ code: 'pagination_inconsistent' });
+  expect(seen.length).toBeGreaterThan(0);
+  for (const entry of seen) {
+    expect(Object.keys(entry).every(key => DIAGNOSTIC_KEYS.includes(key))).toBe(true);
+  }
+  const serialized = JSON.stringify(seen) + JSON.stringify(error.details) + error.message;
+  expect(serialized).not.toContain('ns-1');
+  expect(serialized).not.toContain('ns-2');
+  expect(serialized).not.toContain(TOKEN);
+});
+
+test('duplicate-namespace errors redact the identifier from message and details', async () => {
+  const { request } = recorder({
+    1: pageResponse([rec('ns-unique-42')], { page: 1, count: 1, total_count: 3, total_pages: 3, per_page: 1 }),
+    2: pageResponse([rec('ns-unique-42')], { page: 2, count: 1, total_count: 3, total_pages: 3, per_page: 1 })
+  });
+  const error = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, now: fixedNow }).catch(e => e);
+  expect(error).toMatchObject({ code: 'duplicate_namespace_id' });
+  expect(error.message).not.toContain('ns-unique-42');
+  expect(JSON.stringify(error.details)).not.toContain('ns-unique-42');
+});
+
+test('probe mode stops at the bound without claiming completeness', async () => {
+  const pages = {
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 500, total_pages: 500, per_page: 1 }),
+    2: pageResponse([rec('ns-2')], { page: 2, count: 1, total_count: 500, total_pages: 500, per_page: 1 })
+  };
+  const { request, calls } = recorder(pages);
+  const inventory = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, probePages: 2, now: fixedNow });
+  expect(inventory.probe_bounded).toBe(true);
+  expect(inventory.pagination.complete).toBe(false);
+  expect(inventory.pagination.verification).toBe(null);
+  expect(inventory.pagination.pages_received).toBe(2);
+  expect(calls).toHaveLength(2);
+});
+
+test('probe mode tolerates missing metadata so the response shape can be observed', async () => {
+  const pages = {
+    1: pageResponse([rec('ns-1')]),
+    2: pageResponse([rec('ns-2')])
+  };
+  const { request, calls } = recorder(pages);
+  const inventory = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, probePages: 2, now: fixedNow });
+  expect(inventory.probe_bounded).toBe(true);
+  expect(inventory.pagination.complete).toBe(false);
+  expect(inventory.pagination.pagination_mode).toBe('none');
+  expect(inventory.pagination.diagnostics).toHaveLength(2);
+  expect(inventory.pagination.diagnostics[0].result_info_present).toBe(false);
+  expect(calls).toHaveLength(2);
+});
+
+test('a probe that observes a verifiable end reports it without marking an inventory complete by probe', async () => {
+  const { request } = recorder({
+    1: pageResponse([rec('ns-1')], { page: 1, count: 1, total_count: 1, total_pages: 1, per_page: 1 })
+  });
+  const inventory = await collectNamespaces({ account: ACCOUNT, token: TOKEN, request, perPage: 1, probePages: 3, now: fixedNow });
+  // The library reports the observed state truthfully...
+  expect(inventory.pagination.complete).toBe(true);
+  expect(inventory.pagination.verification).toBe('declared_total_pages_and_total_count_reconciled');
+  // ...but run() gates artifact writing on probe mode, never on this flag.
+  const source = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'audit-cloudflare-do-namespaces.js'), 'utf8');
+  const probeGateIndex = source.indexOf('if (probePages !== null)');
+  const artifactWriteIndex = source.indexOf('cloudflare-do-namespace-inventory.json');
+  expect(probeGateIndex).toBeGreaterThan(-1);
+  expect(artifactWriteIndex).toBeGreaterThan(probeGateIndex);
+});
+
+test('the default page size honors the documented maximum of 1000', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'audit-cloudflare-do-namespaces.js'), 'utf8');
+  expect(source).toContain('const DEFAULT_PER_PAGE = 1000;');
+  expect(source).toContain('const MAX_SUPPORTED_PER_PAGE = 1000;');
+  // The page ceiling is NOT silently raised: 100 remains the safety boundary.
+  expect(source).toContain('const DEFAULT_MAX_PAGES = 100;');
+  expect(source).toContain('const MAX_SUPPORTED_PAGES = 100;');
+});
 
