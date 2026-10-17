@@ -1,0 +1,37 @@
+name: Cloudflare Durable Object Namespace Audit
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    environment: autolearnpro_cloudflare
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PREVIEW_READ_TOKEN_API }}
+      CLOUDFLARE_ACCOUNT_ID: '0257b4518015b64bd28bca05b803de27'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0'
+      - name: Collect Durable Object namespace inventory (read-only GET)
+        run: node scripts/audit-cloudflare-do-namespaces.js
+
+      - name: Upload namespace inventory
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-do-namespace-inventory
+          path: cloudflare-do-namespace-inventory.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload reconciliation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-do-namespace-reconciliation
+          path: cloudflare-do-namespace-reconciliation.md
+          if-no-files-found: ignore
+          retention-days: 14
