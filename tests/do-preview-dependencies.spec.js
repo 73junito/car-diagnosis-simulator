@@ -1,0 +1,11 @@
+const {verify}=require('../scripts/verify-do-preview-dependencies');
+const namespace={id:'a'.repeat(32),name:'autolearnpro-app_feat-a_TorqueMindRateLimitCounter',script:'autolearnpro-app'};
+const inv={inventory:{pagination:{complete:true},total_namespaces:1,namespaces:[namespace]}};
+const req=[{namespace_id:namespace.id,status:'unknown_no_group'}];
+const obj={namespaces:[],failures:[]};
+const own={read_only:true,deletion_authorized:false,rows:[{branch:'feat-a',builds_preview_id:'b'.repeat(32),decision:'cleanup_review_only'}]};
+const ret={read_only:true,deletion_authorized:false,rows:[{preview_id:'b'.repeat(32),decision:'retain_30_day_window'}]};
+test('name match remains heuristic and never approves deletion',()=>{const r=verify(inv,req,obj,own,ret);expect(r).toMatchObject({deletion_authorized:false,summary:{heuristic_preview_matches:1,authorized_deletions:0}});expect(r.rows[0]).toMatchObject({binding_dependency:'not_independently_verified',storage_dependency:'not_fully_verified',preview_match:'heuristic_branch_name_match',deletion_authorized:false})});
+test('observed stored data is protected',()=>{const r=verify(inv,req,{namespaces:[{name:namespace.name,object_enumeration_complete:true,object_count:1,has_stored_data:true}],failures:[]},own,ret);expect(r.rows[0].assessment).toBe('protected_stored_data')});
+test('invalid ownership or missing retention fails closed',()=>expect(()=>verify(inv,req,obj,own,{})).toThrow());
+test('missing preview evidence is not inferred as absence of dependency',()=>{const r=verify(inv,req,obj,{...own,rows:[]},ret);expect(r.rows[0]).toMatchObject({preview_match:'no_preview_identity_join',deletion_authorized:false})});
