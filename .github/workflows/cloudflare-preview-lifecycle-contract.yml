@@ -1,0 +1,33 @@
+name: Cloudflare Preview Lifecycle Contract
+
+on:
+  pull_request:
+    paths:
+      - 'wrangler.app.jsonc'
+      - 'scripts/reconcile-cloudflare-previews.js'
+      - 'scripts/verify-preview-lifecycle-contract.js'
+      - '.github/workflows/cloudflare-preview-*.yml'
+      - 'tests/preview-lifecycle-contract.spec.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0'
+      - name: Validate preview isolation and cleanup guardrails (offline)
+        run: node scripts/verify-preview-lifecycle-contract.js . preview-lifecycle-contract-report.json
+      - name: Upload contract evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-lifecycle-contract
+          path: preview-lifecycle-contract-report.json
+          retention-days: 14
+          if-no-files-found: ignore
