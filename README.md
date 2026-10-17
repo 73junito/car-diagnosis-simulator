@@ -90,6 +90,15 @@ flowchart LR
 | `docs/` | Architecture, governance, deployment, and operational documentation |
 | `api/` | Legacy API implementations retained during migration; not the canonical production security boundary |
 
+## Contributing, support, and security
+
+- [Contributor guidelines](.github/CONTRIBUTING.md) and the [default pull request checklist](.github/PULL_REQUEST_TEMPLATE.md)
+- [Report a bug or request a feature](https://github.com/73junito/car-diagnosis-simulator/issues/new/choose)
+- [Security policy](SECURITY.md): report vulnerabilities privately; do not disclose them in public issues
+- [Support information](SUPPORT.md) and [Code of Conduct](CODE_OF_CONDUCT.md)
+
+**Licensing:** No repository-wide open-source license has been declared. Do not assume the code, curriculum, models, media, or third-party evidence is authorized for redistribution or commercial reuse; verify applicable rights before using any material.
+
 ## Local development
 
 ### Prerequisites
