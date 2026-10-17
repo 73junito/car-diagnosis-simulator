@@ -32,6 +32,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cloudflare-preview-eligibility-manifest
-          path: cloudflare-preview-eligibility-manifest.json
+          path: |
+            cloudflare-preview-eligibility-manifest.json
+            cloudflare-preview-pr-ownership.json
           if-no-files-found: ignore
           retention-days: 14
