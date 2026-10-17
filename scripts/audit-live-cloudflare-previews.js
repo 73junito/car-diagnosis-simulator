@@ -1,5 +1,6 @@
 'use strict';
 const https = require('node:https');
+const {reconcile: reconcileOwnership} = require('./preview-pr-ownership');
 const worker = 'autolearnpro-app';
 const account = process.env.CLOUDFLARE_ACCOUNT_ID;
 const token = process.env.CLOUDFLARE_API_TOKEN;
@@ -99,11 +100,13 @@ async function run(){
  }
  const assessedAt=new Date();
  const manifest=rows.map(row=>({...row,...eligibility(row,prs,assessedAt)}));
+ const ownershipReport=manifest.length===builds.length?reconcileOwnership({worker,readOnly:true,complete:manifest.length===builds.length,scanned:manifest.length,buildsTotal:builds.length,created_at:assessedAt.toISOString(),rows:manifest},prs):null;
  const eligibleCounts={};for(const row of manifest)eligibleCounts[row.eligibility]=(eligibleCounts[row.eligibility]||0)+1;
  const counts={present_by_name_lookup:0,absent:0,unknown:0};for(const row of rows)counts[row.live_status]++;
  const reviews={};for(const row of rows)reviews[row.review]=(reviews[row.review]||0)+1;
  console.log(JSON.stringify({worker,readOnly:true,buildsTotal:builds.length,scanned:rows.length,complete:rows.length===builds.length,counts,reviews,retentionDays,eligibleCounts,rows:manifest},null,2));
  if(process.env.GITHUB_WORKSPACE){const fs=require('node:fs');const path=require('node:path');const out=path.join(process.env.GITHUB_WORKSPACE,'cloudflare-preview-eligibility-manifest.json');fs.writeFileSync(out,JSON.stringify({created_at:assessedAt.toISOString(),worker,readOnly:true,retentionDays,buildsTotal:builds.length,scanned:manifest.length,complete:manifest.length===builds.length,eligibleCounts,rows:manifest},null,2)+'\n');}
+ if(process.env.GITHUB_WORKSPACE && ownershipReport){const fs=require('node:fs');const path=require('node:path');fs.writeFileSync(path.join(process.env.GITHUB_WORKSPACE,'cloudflare-preview-pr-ownership.json'),JSON.stringify(ownershipReport,null,2)+'\n');}
  if(process.env.GITHUB_STEP_SUMMARY)require('node:fs').appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## Live Worker Preview Audit\n\nBuilds records: '+builds.length+'; scanned: '+rows.length+'; complete: '+(rows.length===builds.length)+'; name-lookup present: '+counts.present_by_name_lookup+'; absent: '+counts.absent+'; unknown: '+counts.unknown+'. No deletions.\n');
  if(counts.unknown)process.exitCode=2;
 }
