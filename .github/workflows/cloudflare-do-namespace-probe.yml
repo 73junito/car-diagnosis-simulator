@@ -1,0 +1,30 @@
+name: Cloudflare DO Namespace Pagination Probe
+# Bounded, read-only diagnostic probe. Fetches a small number of pages,
+# prints aggregate pagination metadata only, and never writes inventory
+# artifacts or claims completeness. workflow_dispatch only: never runs on a
+# schedule, push, or pull_request.
+on:
+  workflow_dispatch:
+    inputs:
+      probe_pages:
+        description: 'Number of pages to probe (1-100)'
+        required: false
+        default: '3'
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    environment: autolearnpro_cloudflare
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_PREVIEW_READ_TOKEN_API }}
+      CLOUDFLARE_ACCOUNT_ID: '0257b4518015b64bd28bca05b803de27'
+      DO_NAMESPACE_AUDIT_PROBE: 'true'
+      DO_NAMESPACE_AUDIT_PROBE_PAGES: ${{ inputs.probe_pages }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0'
+      - name: Probe pagination metadata (read-only GET, bounded)
+        run: node scripts/audit-cloudflare-do-namespaces.js
