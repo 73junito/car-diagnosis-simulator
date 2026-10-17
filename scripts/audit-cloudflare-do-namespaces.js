@@ -548,11 +548,25 @@ function validatePreviewManifest(manifest, sourceRunId) {
       { source_run_id }
     );
   }
-  if ('complete' in manifest && manifest.complete !== true) {
+  if (manifest.complete !== true) {
     throw new NamespaceAuditError(
       'Preview manifest reports an incomplete scan; correlation cannot proceed.',
       'manifest_invalid',
-      { source_run_id, complete: manifest.complete }
+      { source_run_id, complete: manifest.complete ?? null }
+    );
+  }
+  if (typeof manifest.scanned !== 'number' || !Number.isSafeInteger(manifest.scanned)) {
+    throw new NamespaceAuditError(
+      'Preview manifest provenance mismatch: scanned must be an integer count.',
+      'manifest_invalid',
+      { source_run_id }
+    );
+  }
+  if (manifest.scanned !== manifest.rows.length) {
+    throw new NamespaceAuditError(
+      'Preview manifest scanned count does not match its row count; correlation cannot proceed.',
+      'manifest_invalid',
+      { source_run_id, scanned: manifest.scanned, rows: manifest.rows.length }
     );
   }
   let invalidRowsSkipped = 0;
@@ -578,11 +592,39 @@ function validatePreviewManifest(manifest, sourceRunId) {
       source_run_id,
       created_at: manifest.created_at,
       worker: manifest.worker,
-      scanned: typeof manifest.scanned === 'number' ? manifest.scanned : manifest.rows.length,
-      complete: 'complete' in manifest ? manifest.complete : null,
+      scanned: manifest.scanned,
+      complete: manifest.complete,
       invalid_rows_skipped: invalidRowsSkipped
     }
   };
+}
+
+// Verify that a workflow-run record (GitHub REST shape) is a usable
+// manifest source: it must belong to this repository, be produced by the
+// live-preview-audit workflow, and have concluded successfully. Fail-closed:
+// any unknown shape is rejected with reason, never coerced.
+const MANIFEST_SOURCE_WORKFLOW_PATH = '.github/workflows/cloudflare-live-preview-audit.yml';
+
+function verifyManifestSourceRun(run, expectedRepository) {
+  const normalized = run && typeof run === 'object' && !Array.isArray(run) ? run : null;
+  if (!normalized) {
+    return { ok: false, reason: 'run_not_an_object' };
+  }
+  const repo = normalized.head_repository && typeof normalized.head_repository.full_name === 'string'
+    ? normalized.head_repository.full_name
+    : null;
+  const workflowPath = typeof normalized.path === 'string' ? normalized.path : null;
+  const conclusion = typeof normalized.conclusion === 'string' ? normalized.conclusion : null;
+  if (repo !== expectedRepository) {
+    return { ok: false, reason: 'wrong_repository', repo, workflowPath, conclusion };
+  }
+  if (workflowPath !== MANIFEST_SOURCE_WORKFLOW_PATH) {
+    return { ok: false, reason: 'wrong_workflow', repo, workflowPath, conclusion };
+  }
+  if (conclusion !== 'success') {
+    return { ok: false, reason: 'run_not_successful', repo, workflowPath, conclusion };
+  }
+  return { ok: true, reason: null, repo, workflowPath, conclusion };
 }
 
 // Correlate the namespace inventory with the historical preview manifest.
@@ -915,6 +957,8 @@ if (require.main === module) {
 module.exports.collectNamespaces = collectNamespaces;
 module.exports.reconcileNamespaces = reconcileNamespaces;
 module.exports.buildReconciliationReport = buildReconciliationReport;
+module.exports.verifyManifestSourceRun = verifyManifestSourceRun;
+module.exports.MANIFEST_SOURCE_WORKFLOW_PATH = MANIFEST_SOURCE_WORKFLOW_PATH;
 module.exports.validatePreviewManifest = validatePreviewManifest;
 module.exports.NamespaceAuditError = NamespaceAuditError;
 module.exports.classifyHttpFailure = classifyHttpFailure;

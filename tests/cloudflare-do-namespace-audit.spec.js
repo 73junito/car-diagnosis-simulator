@@ -4,7 +4,9 @@ const path = require('node:path');
 const {
   collectNamespaces,
   reconcileNamespaces,
-  buildReconciliationReport
+  buildReconciliationReport,
+  verifyManifestSourceRun,
+  MANIFEST_SOURCE_WORKFLOW_PATH
 } = require('../scripts/audit-cloudflare-do-namespaces');
 
 const ACCOUNT = 'test-account';
@@ -162,6 +164,8 @@ test('malformed manifests never yield silent zero-matches', () => {
   const inventory = inventoryOf([{ id: 'ns-1', name: 'a', script: 's', class: 'C' }]);
   const missingCreatedAt = {
     worker: 'autolearnpro-app',
+    complete: true,
+    scanned: 1,
     rows: [{ builds_preview_id: 'pv-x', live_status: 'absent' }]
   };
   expect(() => reconcileNamespaces(inventory, missingCreatedAt)).toThrow(
@@ -171,9 +175,43 @@ test('malformed manifests never yield silent zero-matches', () => {
     created_at: '2026-10-20T12:00:00.000Z',
     worker: 'autolearnpro-app',
     complete: false,
+    scanned: 1,
     rows: [{ builds_preview_id: 'pv-x', live_status: 'absent' }]
   };
   expect(() => reconcileNamespaces(inventory, incompleteScan)).toThrow(
+    expect.objectContaining({ code: 'manifest_invalid' })
+  );
+});
+
+test('manifests with missing or mismatched scanned counts are rejected', () => {
+  const inventory = inventoryOf([{ id: 'ns-1', name: 'a', script: 's', class: 'C' }]);
+  const rows = [{ builds_preview_id: 'pv-x', live_status: 'absent' }];
+  const missingScanned = {
+    created_at: '2026-10-20T12:00:00.000Z',
+    worker: 'autolearnpro-app',
+    complete: true,
+    rows
+  };
+  expect(() => reconcileNamespaces(inventory, missingScanned)).toThrow(
+    expect.objectContaining({ code: 'manifest_invalid' })
+  );
+  const mismatchedScanned = {
+    created_at: '2026-10-20T12:00:00.000Z',
+    worker: 'autolearnpro-app',
+    complete: true,
+    scanned: 2,
+    rows
+  };
+  expect(() => reconcileNamespaces(inventory, mismatchedScanned)).toThrow(
+    expect.objectContaining({ code: 'manifest_invalid' })
+  );
+  const missingComplete = {
+    created_at: '2026-10-20T12:00:00.000Z',
+    worker: 'autolearnpro-app',
+    scanned: 1,
+    rows
+  };
+  expect(() => reconcileNamespaces(inventory, missingComplete)).toThrow(
     expect.objectContaining({ code: 'manifest_invalid' })
   );
 });
@@ -267,6 +305,53 @@ test('manifest status carries provenance when a manifest run id is supplied', ()
   expect(found.correlation_tiers.confirmed_identifier_matches).toBe(1);
   const report = buildReconciliationReport(inventory, found);
   expect(report).toMatch(/source run 12345/);
+});
+
+function sourceRun(overrides) {
+  return {
+    head_repository: { full_name: '73junito/car-diagnosis-simulator' },
+    path: MANIFEST_SOURCE_WORKFLOW_PATH,
+    conclusion: 'success',
+    ...(overrides || {})
+  };
+}
+
+test('manifest source runs are verified structurally, never by formatted output', () => {
+  const good = verifyManifestSourceRun(sourceRun(), '73junito/car-diagnosis-simulator');
+  expect(good).toMatchObject({ ok: true, reason: null });
+
+  expect(verifyManifestSourceRun(null, '73junito/car-diagnosis-simulator')).toMatchObject({ ok: false });
+  expect(verifyManifestSourceRun([], '73junito/car-diagnosis-simulator')).toMatchObject({ ok: false });
+
+  const wrongRepo = verifyManifestSourceRun(
+    sourceRun({ head_repository: { full_name: 'someone-else/fork' } }),
+    '73junito/car-diagnosis-simulator'
+  );
+  expect(wrongRepo).toMatchObject({ ok: false, reason: 'wrong_repository' });
+
+  const missingRepo = verifyManifestSourceRun(
+    sourceRun({ head_repository: null }),
+    '73junito/car-diagnosis-simulator'
+  );
+  expect(missingRepo).toMatchObject({ ok: false, reason: 'wrong_repository' });
+
+  const wrongWorkflow = verifyManifestSourceRun(
+    sourceRun({ path: '.github/workflows/cloudflare-do-namespace-audit.yml' }),
+    '73junito/car-diagnosis-simulator'
+  );
+  expect(wrongWorkflow).toMatchObject({ ok: false, reason: 'wrong_workflow' });
+
+  const failedRun = verifyManifestSourceRun(
+    sourceRun({ conclusion: 'failure' }),
+    '73junito/car-diagnosis-simulator'
+  );
+  expect(failedRun).toMatchObject({ ok: false, reason: 'run_not_successful' });
+
+  const inProgressRun = verifyManifestSourceRun(
+    sourceRun({ conclusion: null }),
+    '73junito/car-diagnosis-simulator'
+  );
+  expect(inProgressRun).toMatchObject({ ok: false, reason: 'run_not_successful' });
 });
 
 test('report labels capacity as unknown and never fabricates remaining capacity', () => {

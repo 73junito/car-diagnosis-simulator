@@ -28,6 +28,9 @@ jobs:
       # Skipped entirely when no run ID is supplied. Verification is fail-closed:
       # the source run must belong to this repository, be the
       # cloudflare-live-preview-audit.yml workflow, and have conclusion success.
+      # Source-run identity comes from the REST API (gh api), because
+      # `gh run view --json` does not expose the head repository field, and all
+      # checks are structural jq comparisons, never grep against formatted JSON.
       - name: Fetch preview eligibility manifest (read-only, verified)
         if: inputs.manifest_run_id != ''
         env:
@@ -35,10 +38,24 @@ jobs:
           MANIFEST_RUN_ID: ${{ inputs.manifest_run_id }}
         run: |
           set -euo pipefail
-          RUN_JSON=$(gh run view "$MANIFEST_RUN_ID" --repo "$GITHUB_REPOSITORY" --json workflowName,conclusion,headRepository --jq '{workflow: .workflowName, conclusion: .conclusion, repo: .headRepository.nameWithOwner}')
-          echo "Source run: $RUN_JSON"
-          echo "$RUN_JSON" | grep -q '"workflow": "Cloudflare Live Preview Audit"' || { echo "Refusing: source run is not a Cloudflare Live Preview Audit run."; exit 1; }
-          echo "$RUN_JSON" | grep -q '"conclusion": "success"' || { echo "Refusing: source run did not succeed."; exit 1; }
+          # Source-run identity comes from the REST API (GET a single workflow
+          # run), because `gh run view --json` does not expose head_repository
+          # or the workflow file path. All checks are structural comparisons;
+          # the audited `verifyManifestSourceRun` helper applies the same
+          # policy in unit tests, never grep against formatted JSON.
+          RUN_JSON=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$MANIFEST_RUN_ID")
+          echo "$RUN_JSON" | node -e "
+            const { verifyManifestSourceRun } = require('./scripts/audit-cloudflare-do-namespaces.js');
+            let run = null;
+            try { run = JSON.parse(require('node:fs').readFileSync(0, 'utf8')); }
+            catch { console.error('Refusing: source-run response is not valid JSON.'); process.exit(1); }
+            const verdict = verifyManifestSourceRun(run, process.env.GITHUB_REPOSITORY);
+            if (!verdict.ok) {
+              console.error('Refusing manifest run ' + process.env.MANIFEST_RUN_ID + ': ' + verdict.reason + '.');
+              process.exit(1);
+            }
+            console.log('Verified manifest source run.');
+          "
           mkdir -p .manifest
           gh run download "$MANIFEST_RUN_ID" --repo "$GITHUB_REPOSITORY" --name cloudflare-preview-eligibility-manifest --dir .manifest
           test -f .manifest/cloudflare-preview-eligibility-manifest.json
