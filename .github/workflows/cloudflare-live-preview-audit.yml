@@ -27,6 +27,14 @@ jobs:
       - name: Inspect live preview control plane (read-only)
         run: node scripts/audit-live-cloudflare-previews.js
 
+      - name: Cross-check ownership and retention (read-only)
+        run: |
+          if test -f cloudflare-preview-pr-ownership.json && test -f cloudflare-preview-eligibility-manifest.json; then
+            node scripts/assess-preview-retention-evidence.js cloudflare-preview-pr-ownership.json cloudflare-preview-eligibility-manifest.json cloudflare-preview-retention-evidence.json
+          else
+            echo 'Partial scan: retention cross-check not available'
+          fi
+
       - name: Upload read-only eligibility manifest
         if: always()
         uses: actions/upload-artifact@v4
@@ -35,5 +43,6 @@ jobs:
           path: |
             cloudflare-preview-eligibility-manifest.json
             cloudflare-preview-pr-ownership.json
+            cloudflare-preview-retention-evidence.json
           if-no-files-found: ignore
           retention-days: 14
