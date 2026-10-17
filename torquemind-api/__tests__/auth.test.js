@@ -131,6 +131,42 @@ describe('auth middleware', () => {
     });
   });
 
+  describe('stateless session-missing verification', () => {
+    const priorUrl = process.env.SUPABASE_URL;
+    const priorAnon = process.env.SUPABASE_ANON_KEY;
+    const priorFetch = global.fetch;
+    beforeEach(() => {
+      process.env.SUPABASE_URL = 'https://staging.example.test';
+      process.env.SUPABASE_ANON_KEY = 'test-anon-key';
+    });
+    afterEach(() => {
+      global.fetch = priorFetch;
+      if (priorUrl === undefined) delete process.env.SUPABASE_URL;
+      else process.env.SUPABASE_URL = priorUrl;
+      if (priorAnon === undefined) delete process.env.SUPABASE_ANON_KEY;
+      else process.env.SUPABASE_ANON_KEY = priorAnon;
+    });
+    it('accepts only a user independently verified by Supabase Auth', async () => {
+      const supabase = makeSupabase({ data: { user: null }, error: { name: 'AuthSessionMissingError', message: 'Auth session missing!' } });
+      global.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => ({ id: 'uid-1', email: 'teacher@example.test' }) });
+      const req = makeReq('Bearer signed-token');
+      const res = makeRes();
+      await createAuth(supabase)(req, res, next);
+      expect(global.fetch).toHaveBeenCalledWith('https://staging.example.test/auth/v1/user', expect.objectContaining({ headers: expect.objectContaining({ Authorization: 'Bearer signed-token' }) }));
+      expect(req.user.id).toBe('uid-1');
+      expect(next).toHaveBeenCalledTimes(1);
+    });
+    it('rejects a token when Supabase Auth rejects it', async () => {
+      const supabase = makeSupabase({ data: null, error: { name: 'AuthSessionMissingError', message: 'Auth session missing!' } });
+      global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 401 });
+      const req = makeReq('Bearer invalid-token');
+      const res = makeRes();
+      await createAuth(supabase)(req, res, next);
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(next).not.toHaveBeenCalled();
+    });
+  });
+
   describe('when Bearer token is valid', () => {
     const mockUser = { id: 'uid-1', email: 'teacher@school.com' };
 
