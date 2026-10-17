@@ -134,15 +134,69 @@ function inventoryOf(records) {
   };
 }
 
-test('unknown namespace ownership is preserved, never guessed', () => {
+function validManifest(rows) {
+  return {
+    created_at: '2026-10-20T12:00:00.000Z',
+    worker: 'autolearnpro-app',
+    readOnly: true,
+    complete: true,
+    scanned: rows.length,
+    rows
+  };
+}
+
+test('reconciliation validates the manifest schema fail-closed', () => {
+  const inventory = inventoryOf([{ id: 'ns-1', name: 'a', script: 's', class: 'C' }]);
+  expect(() => reconcileNamespaces(inventory, { rows: [] })).toThrow(
+    expect.objectContaining({ code: 'manifest_invalid' })
+  );
+  expect(() => reconcileNamespaces(inventory, { rows: 'nope' })).toThrow(
+    expect.objectContaining({ code: 'manifest_invalid' })
+  );
+  expect(() =>
+    reconcileNamespaces(inventory, { rows: [{ builds_preview_id: 'pv-x', live_status: 'absent' }] })
+  ).toThrow(expect.objectContaining({ code: 'manifest_invalid' }));
+});
+
+test('malformed manifests never yield silent zero-matches', () => {
+  const inventory = inventoryOf([{ id: 'ns-1', name: 'a', script: 's', class: 'C' }]);
+  const missingCreatedAt = {
+    worker: 'autolearnpro-app',
+    rows: [{ builds_preview_id: 'pv-x', live_status: 'absent' }]
+  };
+  expect(() => reconcileNamespaces(inventory, missingCreatedAt)).toThrow(
+    expect.objectContaining({ code: 'manifest_invalid' })
+  );
+  const incompleteScan = {
+    created_at: '2026-10-20T12:00:00.000Z',
+    worker: 'autolearnpro-app',
+    complete: false,
+    rows: [{ builds_preview_id: 'pv-x', live_status: 'absent' }]
+  };
+  expect(() => reconcileNamespaces(inventory, incompleteScan)).toThrow(
+    expect.objectContaining({ code: 'manifest_invalid' })
+  );
+});
+
+test('correlation tiers separate confirmed, supporting, and unresolved evidence', () => {
   const inventory = inventoryOf([
-    { id: 'ns-1', name: 'preview-something-similar', script: 'someone-else', class: 'C' },
-    { id: 'ns-2', name: 'unrelated', script: 'another-worker', class: 'C' }
+    { id: 'pv-live-1', name: 'x', script: 'autolearnpro-app', class: 'C' },
+    { id: 'pv-abs-1', name: 'y', script: 'autolearnpro-app', class: 'C' },
+    { id: 'ns-other', name: 'z', script: 'unrelated', class: 'C' }
   ]);
-  const result = reconcileNamespaces(inventory, { rows: [{ builds_preview_id: 'preview-abc', live_status: 'absent' }] });
-  expect(result.exact_identifier_matches.absent_previews).toBe(0);
-  expect(result.unknown_or_unrelated_namespaces.count).toBe(2);
-  expect(result.unknown_or_unrelated_namespaces.records.map(r => r.id)).toEqual(['ns-1', 'ns-2']);
+  const manifest = validManifest([
+    { builds_preview_id: 'pv-live-1', live_status: 'present_by_name_lookup' },
+    { builds_preview_id: 'pv-live-2', live_status: 'present_by_name_lookup' },
+    { builds_preview_id: 'pv-abs-1', live_status: 'absent' },
+    { builds_preview_id: 'pv-abs-2', live_status: 'absent' }
+  ]);
+  const result = reconcileNamespaces(inventory, manifest);
+  expect(result.correlation_tiers.confirmed_identifier_matches).toBe(2);
+  expect(result.correlation_tiers.supporting_context).toBe(0);
+  expect(result.correlation_tiers.unresolved).toBe(3);
+  const report = buildReconciliationReport(inventory, result);
+  expect(report).toContain('Correlation tiers (confirmed / supporting / unresolved)');
+  expect(report).toMatch(/evidence, not proof of ownership/);
 });
 
 test('mismatched preview and namespace counts stay separate and unmatched', () => {
@@ -151,14 +205,12 @@ test('mismatched preview and namespace counts stay separate and unmatched', () =
     { id: 'pv-abs-1', name: 'y', script: 'autolearnpro-app', class: 'C' },
     { id: 'ns-other', name: 'z', script: 'unrelated', class: 'C' }
   ]);
-  const manifest = {
-    rows: [
-      { builds_preview_id: 'pv-live-1', live_status: 'present_by_name_lookup' },
-      { builds_preview_id: 'pv-live-2', live_status: 'present_by_name_lookup' },
-      { builds_preview_id: 'pv-abs-1', live_status: 'absent' },
-      { builds_preview_id: 'pv-abs-2', live_status: 'absent' }
-    ]
-  };
+  const manifest = validManifest([
+    { builds_preview_id: 'pv-live-1', live_status: 'present_by_name_lookup' },
+    { builds_preview_id: 'pv-live-2', live_status: 'present_by_name_lookup' },
+    { builds_preview_id: 'pv-abs-1', live_status: 'absent' },
+    { builds_preview_id: 'pv-abs-2', live_status: 'absent' }
+  ]);
   const result = reconcileNamespaces(inventory, manifest);
   expect(result.exact_identifier_matches.live_previews).toBe(1);
   expect(result.exact_identifier_matches.absent_previews).toBe(1);
@@ -169,9 +221,21 @@ test('mismatched preview and namespace counts stay separate and unmatched', () =
 
 test('worker-owned namespaces are reported but not attributed to previews', () => {
   const inventory = inventoryOf([{ id: 'ns-1', name: 'sessions', script: 'autolearnpro-app', class: 'Session' }]);
-  const result = reconcileNamespaces(inventory, { rows: [{ builds_preview_id: 'pv-x', live_status: 'absent' }] });
+  const result = reconcileNamespaces(inventory, validManifest([{ builds_preview_id: 'pv-x', live_status: 'absent' }]));
   expect(result.worker_owned_not_preview_attributable.count).toBe(1);
   expect(result.exact_identifier_matches.absent_previews).toBe(0);
+});
+
+test('unknown namespace ownership is preserved, never guessed', () => {
+  const inventory = inventoryOf([
+    { id: 'ns-1', name: 'preview-something-similar', script: 'someone-else', class: 'C' },
+    { id: 'ns-2', name: 'unrelated', script: 'another-worker', class: 'C' }
+  ]);
+  const manifest = validManifest([{ builds_preview_id: 'preview-abc', live_status: 'absent' }]);
+  const result = reconcileNamespaces(inventory, manifest);
+  expect(result.exact_identifier_matches.absent_previews).toBe(0);
+  expect(result.unknown_or_unrelated_namespaces.count).toBe(2);
+  expect(result.unknown_or_unrelated_namespaces.records.map(r => r.id)).toEqual(['ns-1', 'ns-2']);
 });
 
 test('without a manifest no preview-to-namespace correlation is claimed', () => {
@@ -179,10 +243,30 @@ test('without a manifest no preview-to-namespace correlation is claimed', () => 
   const result = reconcileNamespaces(inventory, null);
   expect(result.manifest_available).toBe(false);
   expect(result.unknown_or_unrelated_namespaces.count).toBe(1);
+  // A missing manifest is explicit, never silent zero-matches.
+  expect(result.manifest_status.state).toBe('missing');
+  expect(result.manifest_status.reason).toMatch(/not zero matches/);
+  expect(result.unmatched_preview_records.live_previews_without_namespace_match).toBeNull();
   const report = buildReconciliationReport(inventory, result);
-  expect(report).toContain('unknown (preview manifest unavailable)');
+  expect(report).toMatch(/not zero matches/);
+  expect(report).toMatch(/manifest_run_id/);
   expect(report).toContain('Deletion candidates');
   expect(report).toContain('none authorized');
+});
+
+test('manifest status carries provenance when a manifest run id is supplied', () => {
+  const inventory = inventoryOf([{ id: 'ns-1', name: 'a', script: 's', class: 'C' }]);
+  const missing = reconcileNamespaces(inventory, null, { sourceRunId: '12345' });
+  expect(missing.manifest_status.source_run_id).toBe('12345');
+  const found = reconcileNamespaces(
+    inventory,
+    validManifest([{ builds_preview_id: 'ns-1', live_status: 'absent' }]),
+    { sourceRunId: '12345' }
+  );
+  expect(found.manifest_status).toMatchObject({ state: 'available', source_run_id: '12345', worker: 'autolearnpro-app' });
+  expect(found.correlation_tiers.confirmed_identifier_matches).toBe(1);
+  const report = buildReconciliationReport(inventory, found);
+  expect(report).toMatch(/source run 12345/);
 });
 
 test('report labels capacity as unknown and never fabricates remaining capacity', () => {

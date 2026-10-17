@@ -1,8 +1,15 @@
 name: Cloudflare Durable Object Namespace Audit
 on:
   workflow_dispatch:
+    inputs:
+      manifest_run_id:
+        description: 'Run ID of a successful Cloudflare Live Preview Audit whose eligibility manifest artifact should be used for read-only correlation (optional)'
+        required: false
+        default: ''
+        type: string
 permissions:
   contents: read
+  actions: read
 jobs:
   inspect:
     runs-on: ubuntu-latest
@@ -15,6 +22,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22.19.0'
+      # Optional manifest fetch (read-only): downloads the eligibility manifest
+      # artifact from a verified successful live-preview-audit run so the audit
+      # can correlate the inventory against the historical preview records.
+      # Skipped entirely when no run ID is supplied. Verification is fail-closed:
+      # the source run must belong to this repository, be the
+      # cloudflare-live-preview-audit.yml workflow, and have conclusion success.
+      - name: Fetch preview eligibility manifest (read-only, verified)
+        if: inputs.manifest_run_id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MANIFEST_RUN_ID: ${{ inputs.manifest_run_id }}
+        run: |
+          set -euo pipefail
+          RUN_JSON=$(gh run view "$MANIFEST_RUN_ID" --repo "$GITHUB_REPOSITORY" --json workflowName,conclusion,headRepository --jq '{workflow: .workflowName, conclusion: .conclusion, repo: .headRepository.nameWithOwner}')
+          echo "Source run: $RUN_JSON"
+          echo "$RUN_JSON" | grep -q '"workflow": "Cloudflare Live Preview Audit"' || { echo "Refusing: source run is not a Cloudflare Live Preview Audit run."; exit 1; }
+          echo "$RUN_JSON" | grep -q '"conclusion": "success"' || { echo "Refusing: source run did not succeed."; exit 1; }
+          mkdir -p .manifest
+          gh run download "$MANIFEST_RUN_ID" --repo "$GITHUB_REPOSITORY" --name cloudflare-preview-eligibility-manifest --dir .manifest
+          test -f .manifest/cloudflare-preview-eligibility-manifest.json
+          echo "PREVIEW_MANIFEST_PATH=$GITHUB_WORKSPACE/.manifest/cloudflare-preview-eligibility-manifest.json" >> "$GITHUB_ENV"
+          echo "PREVIEW_MANIFEST_RUN_ID=$MANIFEST_RUN_ID" >> "$GITHUB_ENV"
       - name: Collect Durable Object namespace inventory (read-only GET)
         run: node scripts/audit-cloudflare-do-namespaces.js
 
