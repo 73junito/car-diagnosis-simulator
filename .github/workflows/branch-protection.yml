@@ -11,7 +11,11 @@ jobs:
     steps:
       - name: Check inputs
         run: |
-          echo 'Applying branch protection to "main" with required checks: unit-tests, build-and-test (22), build-and-test (24), Run ESLint, api-smoke'
+          echo 'Applying branch protection to "main" with required checks: unit-tests, build-and-test (22), build-and-test (24), Run ESLint, api-smoke; required PR review (1 approval, dismiss stale, approve latest push), conversation resolution, enforce admins; no deletions/force pushes'
+          echo ''
+          echo 'CREDENTIAL REQUIREMENT: The GITHUB_TOKEN must belong to a token/account with'
+          echo 'Repository Administration: write permission. contents: write alone is NOT sufficient'
+          echo 'to update branch protection. Confirm authorization before running this workflow.'
 
       # Required contexts must match the exact check-run names GitHub publishes.
       # Matrix jobs append their matrix values to the job id, so the
@@ -37,8 +41,10 @@ jobs:
             "required_pull_request_reviews": {
               "dismiss_stale_reviews": true,
               "require_code_owner_reviews": false,
-              "required_approving_review_count": 1
+              "required_approving_review_count": 1,
+              "require_last_push_approval": true
             },
+            "required_conversation_resolution": true,
             "restrictions": null,
             "allow_deletions": false,
             "allow_force_pushes": false
@@ -49,11 +55,51 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          curl -sS -X PUT \
+          # --fail makes curl return a non-zero exit code on HTTP errors (4xx/5xx).
+          HTTP_CODE=$(curl -sS -o response.json -w "%{http_code}" -X PUT \
             -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/branches/main/protection \
-            -d @payload.json
+            -d @payload.json)
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "ERROR: Branch protection PUT returned HTTP $HTTP_CODE"
+            cat response.json
+            exit 1
+          fi
+          echo "Branch protection PUT succeeded (HTTP $HTTP_CODE)."
+          cat response.json
+
+      - name: Verify applied branch protection
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HTTP_CODE=$(curl -sS -o verification.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/branches/main/protection)
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "ERROR: Branch protection GET verification returned HTTP $HTTP_CODE"
+            cat verification.json
+            exit 1
+          fi
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const p = JSON.parse(fs.readFileSync('verification.json', 'utf8'));
+          const expected = ['unit-tests','build-and-test (22)','build-and-test (24)','Run ESLint','api-smoke'];
+          const contexts = p.required_status_checks?.contexts || p.required_status_checks?.checks?.map(x => x.context) || [];
+          if (!expected.every(x => contexts.includes(x))) throw Error('Required checks missing');
+          if (p.required_status_checks?.strict !== true || p.enforce_admins?.enabled !== true ||
+              p.required_pull_request_reviews?.required_approving_review_count !== 1 ||
+              p.required_pull_request_reviews?.dismiss_stale_reviews !== true ||
+              p.required_pull_request_reviews?.require_last_push_approval !== true ||
+              p.required_conversation_resolution?.enabled !== true ||
+              p.allow_force_pushes?.enabled !== false || p.allow_deletions?.enabled !== false)
+            throw Error('Branch protection does not match requested fail-closed settings');
+          console.log('Required branch protection settings verified');
+          NODE
 
       - name: Confirm
-        run: echo "Branch protection request sent. Verify in repository settings or via GitHub API."
+        run: |
+          echo 'Branch protection applied and verified.'
+          echo 'Confirm in repository Settings > Branches > main branch protection rules.'
+          echo 'Do NOT activate production asset publishing or bypass reviewer requirements.'
