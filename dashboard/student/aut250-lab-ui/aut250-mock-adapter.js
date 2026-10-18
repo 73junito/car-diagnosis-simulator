@@ -1,6 +1,14 @@
 (function (root) {
   'use strict';
-  var crypto = require('crypto');
+  function newSessionId() {
+    var webCrypto = root.crypto;
+    if (!webCrypto || typeof webCrypto.getRandomValues !== 'function') {
+      throw new Error('Secure random generation unavailable for simulated session.');
+    }
+    var bytes = new Uint8Array(8);
+    webCrypto.getRandomValues(bytes);
+    return 'SIM-' + Array.from(bytes, function (byte) { return byte.toString(16).padStart(2, '0'); }).join('').toUpperCase();
+  }
   var CORRECT_REPAIR_ID = 'replace-ignition-coil-cylinder-3';
   var TEST_CATALOG = [
     { id: 'scan-tool-dtc', label: 'Scan tool: read DTCs', category: 'scan-tool' },
@@ -37,7 +45,7 @@
   }
   function createAut250MockAdapter(opts) {
     var now = (opts && opts.now) || function () { return new Date().toISOString(); };
-    var state = { id: 'SIM-' + crypto.randomBytes(3).toString('hex').slice(0, 5).toUpperCase(), repaired: false, events: [], repairs: [] };
+    var state = { id: (opts && opts.makeId ? opts.makeId() : newSessionId()), repaired: false, closed: false, events: [], repairs: [] };
     function ev(kind, payload) {
       var e = { seq: state.events.length + 1, at: now(), kind: kind, payload: payload || {} };
       state.events.push(e); return e;
