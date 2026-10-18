@@ -24,32 +24,47 @@ jobs:
     steps:
       - name: Export staging database with PostgreSQL 17
         env:
-          STAGING_DB: ${{ secrets.STAGING_DB }}
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB }}
           BACKUP_PASSPHRASE: ${{ secrets.STAGING_BACKUP_PASSPHRASE }}
+          DB_HOST: ${{ vars.STAGING_DB_HOST }}
+          DB_USER: ${{ vars.STAGING_DB_USER }}
+          DB_PORT: ${{ vars.STAGING_DB_PORT }}
+          DB_NAME: ${{ vars.STAGING_DB_NAME }}
         shell: bash
         run: |
           set -euo pipefail
           set +x
-          test -n "$STAGING_DB" || { echo 'Missing STAGING_DB'; exit 1; }
+          test -n "$STAGING_DB_PASSWORD" || { echo 'Missing STAGING_DB password'; exit 1; }
           test -n "$BACKUP_PASSPHRASE" || { echo 'Missing STAGING_BACKUP_PASSPHRASE'; exit 1; }
-          case "$STAGING_DB" in
-            *jchfruprqpeypdttvlam*) ;;
-            *) echo 'Connection does not identify the expected staging project'; exit 1 ;;
-          esac
-          echo "::add-mask::$STAGING_DB"
+          test -n "$DB_HOST" && test -n "$DB_USER" && test -n "$DB_PORT" && test -n "$DB_NAME" || {
+            echo 'Missing required staging pooler environment variables'; exit 1;
+          }
+          # Session pooler uses port 5432. Validate project tenancy before any connection.
+          [[ "$DB_HOST" =~ ^[a-z0-9.-]+\.pooler\.supabase\.com$ ]] || { echo 'Unexpected pooler hostname'; exit 1; }
+          [[ "$DB_USER" == 'postgres.jchfruprqpeypdttvlam' ]] || { echo 'Unexpected staging pooler username'; exit 1; }
+          [[ "$DB_PORT" == '5432' && "$DB_NAME" == 'postgres' ]] || { echo 'Unexpected database name or pooler port'; exit 1; }
+          echo "::add-mask::$STAGING_DB_PASSWORD"
           echo "::add-mask::$BACKUP_PASSPHRASE"
           mkdir -m 700 "$RUNNER_TEMP/staging-backup"
           cd "$RUNNER_TEMP/staging-backup"
-          trap 'rm -f staging.dump passphrase.txt' EXIT
-          # No credential and no plaintext dump are written to GitHub Actions logs.
-          docker run --rm -e STAGING_DB postgres:17             sh -c 'pg_isready -d "$STAGING_DB" >/dev/null && pg_dump -d "$STAGING_DB" -Fc --no-owner --no-acl' > staging.dump
+          trap 'rm -f staging.dump verification.dump passphrase.txt' EXIT
+          # Credentials stay in environment variables; never place password in a CLI argument or log.
+          docker run --rm \
+            -e PGPASSWORD="$STAGING_DB_PASSWORD" \
+            -e PGSSLMODE=require -e PGCONNECT_TIMEOUT=20 \
+            -e PGHOST="$DB_HOST" -e PGPORT="$DB_PORT" \
+            -e PGUSER="$DB_USER" -e PGDATABASE="$DB_NAME" \
+            postgres:17 pg_dump -Fc --no-owner --no-acl > staging.dump
           test -s staging.dump
           docker run --rm -i postgres:17 pg_restore -l < staging.dump > /dev/null
           printf '%s' "$BACKUP_PASSPHRASE" > passphrase.txt
           chmod 600 passphrase.txt
-          gpg --batch --yes --pinentry-mode loopback --symmetric             --cipher-algo AES256 --passphrase-file passphrase.txt             --output staging.dump.gpg staging.dump
+          gpg --batch --yes --pinentry-mode loopback --symmetric \
+            --cipher-algo AES256 --passphrase-file passphrase.txt \
+            --output staging.dump.gpg staging.dump
           test -s staging.dump.gpg
-          gpg --batch --yes --pinentry-mode loopback --passphrase-file passphrase.txt             --output verification.dump --decrypt staging.dump.gpg 2>/dev/null
+          gpg --batch --yes --pinentry-mode loopback --passphrase-file passphrase.txt \
+            --output verification.dump --decrypt staging.dump.gpg 2>/dev/null
           cmp -s staging.dump verification.dump
           rm -f verification.dump staging.dump passphrase.txt
           sha256sum staging.dump.gpg > staging.dump.gpg.sha256
