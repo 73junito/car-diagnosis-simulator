@@ -1,5 +1,6 @@
 (function (root) {
   'use strict';
+  var crypto = require('crypto');
   var CORRECT_REPAIR_ID = 'replace-ignition-coil-cylinder-3';
   var TEST_CATALOG = [
     { id: 'scan-tool-dtc', label: 'Scan tool: read DTCs', category: 'scan-tool' },
@@ -36,7 +37,7 @@
   }
   function createAut250MockAdapter(opts) {
     var now = (opts && opts.now) || function () { return new Date().toISOString(); };
-    var state = { id: 'SIM-' + Math.random().toString(36).slice(2, 7).toUpperCase(), repaired: false, events: [], repairs: [] };
+    var state = { id: 'SIM-' + crypto.randomBytes(3).toString('hex').slice(0, 5).toUpperCase(), repaired: false, events: [], repairs: [] };
     function ev(kind, payload) {
       var e = { seq: state.events.length + 1, at: now(), kind: kind, payload: payload || {} };
       state.events.push(e); return e;
