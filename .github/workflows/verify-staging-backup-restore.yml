@@ -58,17 +58,22 @@ jobs:
             sleep 2
           done
           docker exec staging-restore-test pg_isready -U postgres
+          # Supabase's postgres role is intentionally not SUPERUSER. Realtime's
+          # function-level log_min_messages setting requires supabase_admin.
+          # Assert the role is privileged in this disposable container only.
+          test "$(docker exec staging-restore-test psql -U supabase_admin -d postgres \
+            -v ON_ERROR_STOP=1 -Atc "SELECT rolsuper FROM pg_roles WHERE rolname = 'supabase_admin'")" = t
           # Supabase initializes auth/storage/etc in its default postgres DB.
-          # A separate database created from template0 avoids duplicate system schemas.
+          # Restore into a clean database made from template0 instead.
           docker exec staging-restore-test createdb \
-            -U postgres -T template0 staging_restore_check
+            -U supabase_admin -T template0 staging_restore_check
           docker cp staging.dump staging-restore-test:/tmp/staging.dump
           # Fail closed on any restore error; do not mark a partial restore as verified.
           docker exec staging-restore-test pg_restore \
             --exit-on-error --no-owner --no-acl \
-            -U postgres -d staging_restore_check /tmp/staging.dump
-          docker exec staging-restore-test psql -U postgres -d staging_restore_check \
+            -U supabase_admin -d staging_restore_check /tmp/staging.dump
+          docker exec staging-restore-test psql -U supabase_admin -d staging_restore_check \
             -v ON_ERROR_STOP=1 -Atc "SELECT 'migration_history=' || count(*) FROM supabase_migrations.schema_migrations;"
-          docker exec staging-restore-test psql -U postgres -d staging_restore_check \
+          docker exec staging-restore-test psql -U supabase_admin -d staging_restore_check \
             -v ON_ERROR_STOP=1 -Atc "SELECT 'scenario_catalog=' || count(*) FROM public.scenario_catalog UNION ALL SELECT 'scenario_questions=' || count(*) FROM public.scenario_questions;"
           echo 'Disposable PostgreSQL restore verified.'
