@@ -49,9 +49,10 @@ jobs:
           gpg --batch --quiet --yes --pinentry-mode loopback \
               --passphrase-file .passphrase --output staging.dump --decrypt staging.dump.gpg
           rm -f .passphrase
+          # Pinned official Supabase image from GHCR avoids public ECR transfer limits.
           docker run -d --name staging-restore-test --network none \
             -e POSTGRES_PASSWORD=disposable-restore-only \
-            public.ecr.aws/supabase/postgres:17.6.1.167 >/dev/null
+            ghcr.io/supabase/postgres:17.6.1.167@sha256:6942962433a569e87f228b4d4ab7e11db5deca64e43babb3a038443ad6c4f1bb >/dev/null
           for n in {1..120}; do
             if docker exec staging-restore-test pg_isready -U postgres >/dev/null 2>&1; then break; fi
             sleep 2
