@@ -1,4 +1,4 @@
-'use strict';const test=require('node:test');const assert=require('node:assert/strict');
+'use strict';const test=globalThis.test || require('node:test');const assert=require('node:assert/strict');
 const program=require('../docs/institutional-readiness/dcaf-program-gates.json');const {verify}=require('../scripts/verify-dcaf-program-gates');
 const copy=()=>JSON.parse(JSON.stringify(program));
 test('baseline is formative and has six guarded stages',()=>assert.equal(verify(copy()).stage_count,6));
