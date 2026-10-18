@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "1.0.0",
+  "courseId": "aut-250",
+  "courseTitle": "Automotive Diagnostics I",
+  "status": "proposed_not_approved",
+  "competencyId": "ug-aut250-systematic-diagnostics",
+  "outcome": {
+    "id": "aut250-lo-theoretical-measurements",
+    "statement": "Calculate and evaluate theoretical automotive system values by comparing predicted results with applicable manufacturer specifications and measured data, identifying discrepancies, explaining their causes, and assessing the validity of the underlying assumptions.",
+    "bloomLevels": [
+      "apply",
+      "analyze",
+      "evaluate"
+    ],
+    "physicalMeasurementRequired": false,
+    "manufacturerSpecificationsRequiredWhenClaimed": true
+  },
+  "activities": [
+    {
+      "id": "ideal-resistive-dc",
+      "model": "steady_state_ohms_law",
+      "assumptions": [
+        "ideal dc source",
+        "constant resistive load",
+        "steady state"
+      ],
+      "inputs": {
+        "voltage_v": 12,
+        "resistance_ohm": 6
+      },
+      "predicted": {
+        "current_a": 2,
+        "power_w": 24
+      },
+      "measurementStatus": "not_supplied",
+      "oemStatus": "not_supplied",
+      "inference": "no discrepancy verdict can be drawn without independently supplied measurement"
+    },
+    {
+      "id": "ignition-primary-rl",
+      "model": "inductive_transient",
+      "status": "calculation_pending_review",
+      "assumptions": [
+        "time-varying current",
+        "requires resistance, inductance, switching topology and initial conditions"
+      ],
+      "numericOutput": null,
+      "measurementStatus": "not_supplied",
+      "oemStatus": "not_supplied",
+      "inference": "steady-state ohms law cannot substitute for primary-current ramp"
+    }
+  ],
+  "evidenceCriteria": [
+    {
+      "id": "model_selection",
+      "artifact": "model choice and assumptions",
+      "criterion": "justify why selected equations apply"
+    },
+    {
+      "id": "calculate",
+      "artifact": "worked derivation with units",
+      "criterion": "show calculations and dimensional consistency"
+    },
+    {
+      "id": "source_applicability",
+      "artifact": "documentation and model-specific applicability statement",
+      "criterion": "label unavailable OEM specifications explicitly"
+    },
+    {
+      "id": "compare",
+      "artifact": "predicted-versus-measured comparison with operating conditions",
+      "criterion": "compute discrepancy only when independent measured values exist"
+    },
+    {
+      "id": "interpret",
+      "artifact": "alternative-explanation and limitations report",
+      "criterion": "explain deviations or mark unresolved"
+    },
+    {
+      "id": "justify",
+      "artifact": "evidence-based conclusion",
+      "criterion": "allow inconclusive result when evidence is insufficient"
+    }
+  ],
+  "safeguards": {
+    "technicalReviewApproved": false,
+    "standardsCrosswalkApproved": false,
+    "proficiencyThresholdDefined": false,
+    "instructorRubricValidated": false,
+    "automaticGrading": false,
+    "assessmentEligible": false,
+    "productionConnected": false
+  },
+  "dependencies": {
+    "alignment": "data/curriculum/aut250-outcome-alignment-matrix.json",
+    "truthTable": "data/curriculum/aut250-ignition-truth-table.json",
+    "integrationDesignPr": 1058
+  }
+}
