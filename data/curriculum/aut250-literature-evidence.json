@@ -5,10 +5,10 @@
   "course": "AUT-250",
   "sources": [
     {
-      "source_id": "ase-a8-2026",
-      "publisher": "National Institute for Automotive Service Excellence",
-      "title": "ASE Automobile Study Guide 2026 — A8 Engine Performance",
-      "canonical_url": "https://www.ase.com/uploads/ASE_Automobile_Study_Guide_2026.pdf",
+      "source_id": "engine-performance-industry-guide-2026",
+      "publisher": "Industry certification organization (identity withheld under repository policy)",
+      "title": "Automobile engine-performance study guide (2026), restricted bibliographic placeholder",
+      "canonical_url": null,
       "source_type": "industry-task-guide",
       "units": [
         "general-diagnosis",
@@ -28,7 +28,7 @@
       "rag_allowed": false,
       "figure_reuse_allowed": false,
       "assessment_authority": false,
-      "source_verification": "official-page-located",
+      "source_verification": "identified-link-withheld-under-repository-policy",
       "notes": null
     },
     {

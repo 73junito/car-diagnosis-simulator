@@ -5,7 +5,7 @@ Status: initial bibliography, not comprehensive review, technical approval, OEM 
 Data file: data/curriculum/aut250-literature-evidence.json. This is a course-specific supplement to the existing broader source registries, not their replacement.
 
 ## Coverage
-- ASE A8 2026: engine-performance task alignment; exact course mapping pending.
+- Industry engine-performance certification guide (2026): source identity and direct link are withheld from active project files under repository mark policy; task alignment remains pending.
 - HELLA ignition coil: component construction, supply, switching, alternative failure modes.
 - Pico ignition guided tests and primary current: waveform interpretation and precautions; link only.
 - NGK/NTK TekniWiki: ignition, sensors, fuel-air topical discovery pending detailed verification.
