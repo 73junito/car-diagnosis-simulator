@@ -1,0 +1,70 @@
+{
+  "version": "0.1.0-design",
+  "status": "review_pending",
+  "sourceTruthTable": "data/curriculum/aut250-ignition-truth-table.json",
+  "sourceOutcome": "data/curriculum/aut250-outcome-alignment-matrix.json",
+  "engine": "engine/aut250MisfireLab.js",
+  "engineContract": "contracts/aut250-engine-integration/contract.js",
+  "assets": "dashboard/student/aut250-lab-assets",
+  "state": "design_only",
+  "integrationGates": {
+    "technicalSMEApproval": false,
+    "architectureValidated": false,
+    "observationProvenanceValidated": false,
+    "accessibleStudentWalkthroughValidated": false,
+    "assessmentAuthorized": false
+  },
+  "gaps": [
+    {
+      "id": "scenario_identity",
+      "current": "R1 cylinder-2 primary open; UI mock cylinder-3 secondary open",
+      "required": "Versioned R2 adapter with canonical cylinder-2 fault; retain mock separate"
+    },
+    {
+      "id": "runtime_boundary",
+      "current": "Node CommonJS crypto-based engine versus browser UMD assets",
+      "required": "Server or browser-safe engine proxy with explicit signed/versioned payload; do not bundle node crypto directly"
+    },
+    {
+      "id": "instrument_semantics",
+      "current": "R1 classifies visual connector inspection as dvom",
+      "required": "Represent visual inspection separately and bind only supplied measurements"
+    },
+    {
+      "id": "primary_current",
+      "current": "Engine labels current ramp, assets require numeric sample array",
+      "required": "Show explicitly qualitative status until reviewed authored finite samples exist; do not synthesize plots"
+    },
+    {
+      "id": "coil_fault_discrimination",
+      "current": "Static continuity and driver command not conclusive",
+      "required": "Reproduce isolated internal winding open and external integrity evidence under matching fault conditions, subject to SME approval"
+    },
+    {
+      "id": "evidence",
+      "current": "DCAF checks R1 event/checksum contract; assets do not grade",
+      "required": "Versioned event mapper with observation provenance; reject mock UI evidence from R2"
+    },
+    {
+      "id": "pedagogy",
+      "current": "AUT-250 mapped to Automotive Diagnostics I planned competency",
+      "required": "Capture assumption, source applicability, alternative hypotheses and inconclusive judgment as instructor-reviewed evidence"
+    }
+  ],
+  "sequence": [
+    "Review fictional coil topology and safe measurement boundaries",
+    "Validate R2 truth table with qualified independent automotive SME",
+    "Define canonical provider payload and observation provenance including unavailable readings",
+    "Build read-only, browser-safe adapter mapping engine observations to instrument fields",
+    "Add scenario-specific instrument and evidence integration tests including negative cases",
+    "Perform keyboard, screen-reader and performance checks",
+    "Request instructor and institution pilot permissions separately"
+  ],
+  "forbidden": [
+    "no fabricated numeric waveforms or OEM thresholds",
+    "no automatic grading",
+    "no silent conversion from cylinder-3 mock to cylinder-2 engine",
+    "no direct ingestion of restricted reference material",
+    "no production activation without approval"
+  ]
+}
