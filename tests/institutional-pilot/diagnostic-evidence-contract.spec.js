@@ -1,0 +1,11 @@
+'use strict';
+const {validate,digest}=require('../../contracts/diagnostic-evidence/validate');
+const {session}=require('../../engine/aut250MisfireLab');
+const create=()=>{const s=session({sessionId:'student-001',studentAlias:'pilot-1',clock:()=> '2026-10-17T00:00:00.000Z'});s.record('scenario_started');s.record('hypothesis_recorded',{hypothesis:'ignition'});s.test('read_dtc','scan_tool');s.test('scope_coil_primary_2','oscilloscope');s.repair('cylinder_2_ignition_coil');s.test('verify_after_coil_replacement','scan_tool');s.record('session_ended');return s.exportEvidence()};
+const clone=v=>JSON.parse(JSON.stringify(v));
+test('validates engine-native formative evidence',()=>{expect(validate(create())).toEqual({valid:true,errors:[]})});
+test('rejects high-stakes claims even with recalculated checksum',()=>{const e=create();e.assessment_eligible=true;expect(validate(e).errors).toContain('prohibited_assessment_claim')});
+test('rejects altered measurements and reordered events',()=>{const e=create();e.events.find(x=>x.kind==='measurement_observed').payload.result.codes=['P9999'];expect(validate(e).errors).toContain('checksum_mismatch');const f=create();f.events[1].sequence=99;f.integrity_sha256=digest(f.events);expect(validate(f).errors).toContain('event_invalid_2')});
+test('rejects fake simulator provenance even after checksum recompute',()=>{const e=create();e.events.find(x=>x.kind==='measurement_observed').payload.simulated=false;e.integrity_sha256=digest(e.events);expect(validate(e).errors.some(s=>s.startsWith('measurement_provenance_invalid'))).toBe(true)});
+test('rejects cross-session records and unsupported event kinds',()=>{const e=create();e.events[0].session_id='student-other';e.events[1].kind='score_approved';e.integrity_sha256=digest(e.events);expect(validate(e).errors).toEqual(expect.arrayContaining(['event_invalid_1','event_invalid_2']))});
+test('rejects incomplete test-measurement pairs and post-session mutations',()=>{const e=create();e.events.splice(3,1);e.events.forEach((x,i)=>x.sequence=i+1);e.integrity_sha256=digest(e.events);expect(validate(e).errors.some(s=>s.startsWith('unpaired_test_request'))).toBe(true);const f=create();f.events.push({...clone(f.events[0]),sequence:f.events.length+1});f.integrity_sha256=digest(f.events);expect(validate(f).errors).toContain('event_after_session_end')});
