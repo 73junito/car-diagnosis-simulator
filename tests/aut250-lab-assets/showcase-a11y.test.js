@@ -19,8 +19,8 @@ const SCRIPTS = [
 
 function loadShowcase() {
   const html = fs.readFileSync(path.join(UI, 'index.html'), 'utf8');
-  const body = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-  document.body.innerHTML = body ? body[1] : html;
+  const parsed = new DOMParser().parseFromString(html, 'text/html');
+  document.body.innerHTML = parsed.body.innerHTML;
   const source = SCRIPTS.map((file) => fs.readFileSync(path.join(UI, file), 'utf8')).join('\n;\n');
   const run = new Function('window', 'document', source);
   run(window, document);

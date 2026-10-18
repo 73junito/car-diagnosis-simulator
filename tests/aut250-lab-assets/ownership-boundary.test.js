@@ -84,16 +84,18 @@ describe('AUT-250 lab assets — ownership and boundary', () => {
   });
 
   test('the showcase page loads only local asset scripts and has no inline logic', () => {
-    const html = read('index.html');
-    const scriptTags = html.match(/<script[^>]*>[\s\S]*?<\/script>/g) || [];
-    expect(scriptTags.length).toBeGreaterThan(0);
-    scriptTags.forEach((tag) => {
-      expect(tag).toMatch(/<script src="\.\/(src|data)\/[a-z-]+\.js"><\/script>/);
-      expect(tag.replace(/<script[^>]*><\/script>/, '').trim()).toBe('');
+    const doc = new DOMParser().parseFromString(read('index.html'), 'text/html');
+    const scripts = Array.from(doc.querySelectorAll('script'));
+    expect(scripts.length).toBeGreaterThan(0);
+    scripts.forEach((script) => {
+      expect(script.getAttribute('src')).toMatch(/^\.\/(src|data)\/[a-z-]+\.js$/);
+      expect(script.textContent.trim()).toBe('');
     });
-    expect(html).toMatch(/href="\.\/lab-assets\.css"/);
-    expect(html).toMatch(/SIMULATED, DEVELOPMENTAL ASSETS/);
-    expect(html).toMatch(/invented illustrative demonstration input/);
+    const stylesheets = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'))
+      .map((link) => link.getAttribute('href'));
+    expect(stylesheets).toEqual(['./lab-assets.css']);
+    expect(doc.body.textContent).toMatch(/SIMULATED, DEVELOPMENTAL ASSETS/);
+    expect(doc.body.textContent).toMatch(/invented illustrative demonstration input/);
   });
 
   test('the demo payload is explicitly labelled as illustrative and not a measurement', () => {
