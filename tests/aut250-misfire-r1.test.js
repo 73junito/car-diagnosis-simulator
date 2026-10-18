@@ -1,5 +1,5 @@
 'use strict';
-const test=require('node:test'),assert=require('node:assert/strict');
+const test=globalThis.test || require('node:test'),assert=require('node:assert/strict');
 const {SCENARIO,session}=require('../engine/aut250MisfireLab');
 const make=()=>session({sessionId:'student-001',studentAlias:'learner-1',clock:()=> '2026-10-17T00:00:00.000Z'});
 test('same actions produce deterministic simulated results and event sequence',()=>{
