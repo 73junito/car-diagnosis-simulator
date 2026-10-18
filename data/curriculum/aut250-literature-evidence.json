@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryType": "aut250-literature-evidence",
+  "policy": "link-only; no copying, model ingestion, grade authority, or OEM specification invention",
+  "course": "AUT-250",
+  "sources": [
+    {
+      "source_id": "ase-a8-2026",
+      "publisher": "National Institute for Automotive Service Excellence",
+      "title": "ASE Automobile Study Guide 2026 — A8 Engine Performance",
+      "canonical_url": "https://www.ase.com/uploads/ASE_Automobile_Study_Guide_2026.pdf",
+      "source_type": "industry-task-guide",
+      "units": [
+        "general-diagnosis",
+        "ignition",
+        "fuel-air",
+        "emissions-controls"
+      ],
+      "topics": [
+        "A8-task-alignment"
+      ],
+      "course": "AUT-250",
+      "rights_status": "unverified-or-restricted",
+      "reuse_mode": "external-link-only",
+      "technical_review": "pending",
+      "license_review": "pending",
+      "content_ingestion_allowed": false,
+      "rag_allowed": false,
+      "figure_reuse_allowed": false,
+      "assessment_authority": false,
+      "source_verification": "official-page-located",
+      "notes": null
+    },
+    {
+      "source_id": "hella-ignition-coil",
+      "publisher": "HELLA Tech World",
+      "title": "Ignition coil — checking, measuring, faults",
+      "canonical_url": "https://www.hella.com/techworld/uk/technical/car-electronics-and-electrics/check-ignition-coil/",
+      "source_type": "vendor-technical",
+      "units": [
+        "ignition",
+        "electrical-diagnostics"
+      ],
+      "topics": [
+        "coil-winding",
+        "visual-inspection",
+        "supply",
+        "trigger",
+        "resistance"
+      ],
+      "course": "AUT-250",
+      "rights_status": "unverified-or-restricted",
+      "reuse_mode": "external-link-only",
+      "technical_review": "pending",
+      "license_review": "pending",
+      "content_ingestion_allowed": false,
+      "rag_allowed": false,
+      "figure_reuse_allowed": false,
+      "assessment_authority": false,
+      "source_verification": "official-page-located",
+      "notes": null
+    },
+    {
+      "source_id": "pico-ignition-library",
+      "publisher": "Pico Technology",
+      "title": "Automotive Guided Tests — Ignition",
+      "canonical_url": "https://www.picoauto.com/library/automotive-guided-tests/ignition/",
+      "source_type": "vendor-technical",
+      "units": [
+        "ignition",
+        "oscilloscope"
+      ],
+      "topics": [
+        "primary-voltage",
+        "primary-current",
+        "secondary-waveform"
+      ],
+      "course": "AUT-250",
+      "rights_status": "unverified-or-restricted",
+      "reuse_mode": "external-link-only",
+      "technical_review": "pending",
+      "license_review": "pending",
+      "content_ingestion_allowed": false,
+      "rag_allowed": false,
+      "figure_reuse_allowed": false,
+      "assessment_authority": false,
+      "source_verification": "official-page-located",
+      "notes": null
+    },
+    {
+      "source_id": "pico-primary-current",
+      "publisher": "Pico Technology",
+      "title": "Primary current — automotive oscilloscope test",
+      "canonical_url": "https://www.picoauto.com/library/automotive-guided-tests/ignition/distributorless-wasted-spark/AGT-168-primary-current/",
+      "source_type": "vendor-technical",
+      "units": [
+        "ignition",
+        "oscilloscope"
+      ],
+      "topics": [
+        "primary-current-interpretation"
+      ],
+      "course": "AUT-250",
+      "rights_status": "unverified-or-restricted",
+      "reuse_mode": "external-link-only",
+      "technical_review": "pending",
+      "license_review": "pending",
+      "content_ingestion_allowed": false,
+      "rag_allowed": false,
+      "figure_reuse_allowed": false,
+      "assessment_authority": false,
+      "source_verification": "official-page-located",
+      "notes": null
+    },
+    {
+      "source_id": "ngk-tekniwiki",
+      "publisher": "NGK/NTK",
+      "title": "TekniWiki Technical Training",
+      "canonical_url": "https://www.ngkntk.com/service/tekniwiki/",
+      "source_type": "vendor-technical",
+      "units": [
+        "ignition",
+        "sensors",
+        "fuel-air"
+      ],
+      "topics": [
+        "component-context"
+      ],
+      "course": "AUT-250",
+      "rights_status": "unverified-or-restricted",
+      "reuse_mode": "external-link-only",
+      "technical_review": "pending",
+      "license_review": "pending",
+      "content_ingestion_allowed": false,
+      "rag_allowed": false,
+      "figure_reuse_allowed": false,
+      "assessment_authority": false,
+      "source_verification": "link-identified-needs-review",
+      "notes": null
+    },
+    {
+      "source_id": "epa-obd",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Vehicle emissions inspection and maintenance technical guidance",
+      "canonical_url": "https://www.epa.gov/state-and-local-transportation/vehicle-emissions-inspection-and-maintenance-im-policy-and-technical",
+      "source_type": "government-guidance",
+      "units": [
+        "obd-emissions"
+      ],
+      "topics": [
+        "obd-readiness-context"
+      ],
+      "course": "AUT-250",
+      "rights_status": "unverified-or-restricted",
+      "reuse_mode": "external-link-only",
+      "technical_review": "pending",
+      "license_review": "pending",
+      "content_ingestion_allowed": false,
+      "rag_allowed": false,
+      "figure_reuse_allowed": false,
+      "assessment_authority": false,
+      "source_verification": "link-identified-needs-review",
+      "notes": null
+    },
+    {
+      "source_id": "openstax-physics-inductance",
+      "publisher": "OpenStax",
+      "title": "University Physics Volume 2 — Inductance",
+      "canonical_url": "https://openstax.org/books/university-physics-volume-2/pages/14-introduction",
+      "source_type": "oer-foundations",
+      "units": [
+        "electrical-diagnostics",
+        "ignition"
+      ],
+      "topics": [
+        "inductance-principles"
+      ],
+      "course": "AUT-250",
+      "rights_status": "unverified-or-restricted",
+      "reuse_mode": "external-link-only",
+      "technical_review": "pending",
+      "license_review": "pending",
+      "content_ingestion_allowed": false,
+      "rag_allowed": false,
+      "figure_reuse_allowed": false,
+      "assessment_authority": false,
+      "source_verification": "link-identified-needs-review",
+      "notes": null
+    },
+    {
+      "source_id": "lime-book",
+      "publisher": "Edward W. J. McComas / AME Publishing",
+      "title": "The Complete Chevrolet V-8 Engine Code Pocket Guide — Lime Book",
+      "canonical_url": null,
+      "source_type": "user-supplied-book",
+      "units": [
+        "historical-engine-identification"
+      ],
+      "topics": [
+        "historical-reference-only"
+      ],
+      "course": "AUT-250",
+      "rights_status": "unverified-or-restricted",
+      "reuse_mode": "external-link-only",
+      "technical_review": "pending",
+      "license_review": "pending",
+      "content_ingestion_allowed": false,
+      "rag_allowed": false,
+      "figure_reuse_allowed": false,
+      "assessment_authority": false,
+      "source_verification": "uploaded-document-inspected",
+      "notes": "All rights reserved; historical engine ID only, not an ignition diagnostic source."
+    }
+  ]
+}
