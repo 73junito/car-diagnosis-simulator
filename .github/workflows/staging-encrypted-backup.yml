@@ -1,0 +1,65 @@
+name: Manual encrypted staging database backup
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type BACKUP-STAGING to confirm read-only staging export'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manual-staging-database-backup
+  cancel-in-progress: false
+
+jobs:
+  export:
+    if: inputs.confirm == 'BACKUP-STAGING'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: jchfruprqpeypdttvlam_staging
+    steps:
+      - name: Export staging database with PostgreSQL 17
+        env:
+          STAGING_DB: ${{ secrets.STAGING_DB }}
+          BACKUP_PASSPHRASE: ${{ secrets.STAGING_BACKUP_PASSPHRASE }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +x
+          test -n "$STAGING_DB" || { echo 'Missing STAGING_DB'; exit 1; }
+          test -n "$BACKUP_PASSPHRASE" || { echo 'Missing STAGING_BACKUP_PASSPHRASE'; exit 1; }
+          case "$STAGING_DB" in
+            *jchfruprqpeypdttvlam*) ;;
+            *) echo 'Connection does not identify the expected staging project'; exit 1 ;;
+          esac
+          echo "::add-mask::$STAGING_DB"
+          echo "::add-mask::$BACKUP_PASSPHRASE"
+          mkdir -m 700 "$RUNNER_TEMP/staging-backup"
+          cd "$RUNNER_TEMP/staging-backup"
+          trap 'rm -f staging.dump passphrase.txt' EXIT
+          # No credential and no plaintext dump are written to GitHub Actions logs.
+          docker run --rm -e STAGING_DB postgres:17             sh -c 'pg_isready -d "$STAGING_DB" >/dev/null && pg_dump -d "$STAGING_DB" -Fc --no-owner --no-acl' > staging.dump
+          test -s staging.dump
+          docker run --rm -i postgres:17 pg_restore -l < staging.dump > /dev/null
+          printf '%s' "$BACKUP_PASSPHRASE" > passphrase.txt
+          chmod 600 passphrase.txt
+          gpg --batch --yes --pinentry-mode loopback --symmetric             --cipher-algo AES256 --passphrase-file passphrase.txt             --output staging.dump.gpg staging.dump
+          test -s staging.dump.gpg
+          gpg --batch --yes --pinentry-mode loopback --passphrase-file passphrase.txt             --output verification.dump --decrypt staging.dump.gpg 2>/dev/null
+          cmp -s staging.dump verification.dump
+          rm -f verification.dump staging.dump passphrase.txt
+          sha256sum staging.dump.gpg > staging.dump.gpg.sha256
+          echo 'Encrypted staging backup created and cryptographically verified.'
+      - name: Upload encrypted backup only
+        uses: actions/upload-artifact@v4
+        with:
+          name: encrypted-staging-database-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/staging-backup/staging.dump.gpg
+            ${{ runner.temp }}/staging-backup/staging.dump.gpg.sha256
+          retention-days: 1
+          if-no-files-found: error
