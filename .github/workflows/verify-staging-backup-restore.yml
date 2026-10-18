@@ -50,9 +50,9 @@ jobs:
               --passphrase-file .passphrase --output staging.dump --decrypt staging.dump.gpg
           rm -f .passphrase
           docker run -d --name staging-restore-test --network none \
-            -e POSTGRES_HOST_AUTH_METHOD=trust \
-            postgres:17 >/dev/null
-          for n in {1..45}; do
+            -e POSTGRES_PASSWORD=disposable-restore-only \
+            public.ecr.aws/supabase/postgres:17.6.1.167 >/dev/null
+          for n in {1..120}; do
             if docker exec staging-restore-test pg_isready -U postgres >/dev/null 2>&1; then break; fi
             sleep 2
           done
