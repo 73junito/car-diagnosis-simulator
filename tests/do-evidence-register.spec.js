@@ -1,0 +1,11 @@
+const {build}=require('../scripts/build-do-evidence-register');
+const name='autolearnpro-app_feat-test_TorqueMindRateLimitCounter';
+const inv={inventory:{pagination:{complete:true,verification:'declared_total_count_exact'},total_namespaces:1,namespaces:[{id:'a'.repeat(32),name,script:'autolearnpro-app',class:'TorqueMindRateLimitCounter'}]}};
+const dep={read_only:true,deletion_authorized:false,rows:[{namespace_id:'a'.repeat(32),preview_match:'heuristic_branch_name_match',requests_status:'unknown_no_group',object_evidence_status:'not_collected'}]};
+const bind={read_only:true,deletion_authorized:false,summary:{workers:6},rows:[]};
+const entry={name,object_enumeration_complete:true,object_count:0,has_stored_data:false};
+const batch={read_only:true,deletion_authorized:false,entries:[entry],failures:[]};
+test('deduplicates repeated complete batch records',()=>{const r=build(inv,dep,bind,[batch,batch]);expect(r.summary.completed_current_batches).toBe(1);expect(r.rows[0].deletion_authorized).toBe(false)});
+test('conflicting observations are preserved for investigation',()=>{const second={...batch,entries:[{...entry,object_count:1,has_stored_data:true}]};const r=build(inv,dep,bind,[batch,second]);expect(r.rows[0].object_evidence).toBe('conflicting_snapshots');expect(r.rows[0].deletion_authorized).toBe(false)});
+test('current Worker binding is protected',()=>{const r=build(inv,dep,{...bind,rows:[{namespace_id:'a'.repeat(32),worker:'autolearnpro-app'}]},[batch]);expect(r.rows[0].investigation_priority).toBe('protect_live_binding')});
+test('incomplete inventory and untrusted batch fail closed',()=>{expect(()=>build({...inv,inventory:{...inv.inventory,total_namespaces:2}},dep,bind,[batch])).toThrow();expect(()=>build(inv,dep,bind,[{...batch,deletion_authorized:true}])).toThrow()});
