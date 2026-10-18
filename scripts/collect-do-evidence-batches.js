@@ -7,7 +7,7 @@ async function run({inventory,dependencies,bindings,previous=[],account,token,fe
  const inv=assertInventory(inventory);
  const known=new Set();
  if(!Array.isArray(previous)) previous=[previous];
- for(const p of previous){if(p?.evidence?.read_only!==true||p?.evidence?.deletion_authorized!==false)throw Error('Untrusted prior evidence');for(const v of p.evidence.namespaces||[]){if(!v.object_enumeration_complete)continue;const id=inv.namespaces.find(n=>n.name===v.name)?.id;if(id)known.add(id)}}
+ for(const p of previous){const ev=p?.evidence||p;if(ev?.read_only!==true||ev?.deletion_authorized!==false)throw Error('Untrusted prior evidence');for(const v of ev.namespaces||ev.entries||[]){if(!v.object_enumeration_complete)continue;const id=inv.namespaces.find(n=>n.name===v.name)?.id;if(id)known.add(id)}}
  const baseline=select(inventory,dependencies,bindings,25);
  const pinned=new Set(bindings.rows.map(r=>r.namespace_id).filter(Boolean));
  const rows=dependencies.rows.filter(r=>!pinned.has(r.namespace_id)&&!known.has(r.namespace_id)&&r.object_evidence_status!=='complete');
