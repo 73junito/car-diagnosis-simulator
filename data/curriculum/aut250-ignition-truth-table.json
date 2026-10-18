@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.0.0",
+  "scenarioId": "AUT250-MISFIRE-CYL2-R2-PROPOSED",
+  "status": "technical_review_pending",
+  "validated": false,
+  "assessmentEligible": false,
+  "architecture": {
+    "engine": "fictional four-cylinder",
+    "coil": "two-terminal individual primary winding, externally switched",
+    "approval": "proposed-not-authoritative"
+  },
+  "states": [
+    "normal",
+    "fault_active",
+    "post_repair"
+  ],
+  "checks": [
+    {
+      "id": "dtc",
+      "instrument": "scan_tool",
+      "normal": "no cylinder-2 misfire presently observed",
+      "fault_active": "P0302 may be stored, not component-specific",
+      "post_repair": "no recurrent misfire after comparable drive cycle",
+      "discriminates": false
+    },
+    {
+      "id": "connector_visual",
+      "instrument": "visual_inspection",
+      "normal": "no visible damage",
+      "fault_active": "no visible damage may persist",
+      "post_repair": "unchanged",
+      "discriminates": false
+    },
+    {
+      "id": "supply_loaded",
+      "instrument": "dvom_or_scope",
+      "normal": "supply available under comparable demand",
+      "fault_active": "supply present at designated measurement boundary",
+      "post_repair": "supply present",
+      "discriminates": false
+    },
+    {
+      "id": "control_command",
+      "instrument": "oscilloscope",
+      "normal": "appropriate control signal under defined operating state",
+      "fault_active": "command observed when misfire occurs; no proof of driver current capability",
+      "post_repair": "command observed",
+      "discriminates": false
+    },
+    {
+      "id": "primary_current",
+      "instrument": "current_probe_scope",
+      "normal": "current buildup present",
+      "fault_active": "cylinder-2 current buildup intermittently absent",
+      "post_repair": "current buildup restored",
+      "discriminates": false
+    },
+    {
+      "id": "harness_fault_reproduction",
+      "instrument": "circuit_specific_test",
+      "normal": "no external interruption during controlled simulation",
+      "fault_active": "external connections electrically maintained at tested boundaries while fault occurs; method requires SME definition",
+      "post_repair": "same",
+      "discriminates": true
+    },
+    {
+      "id": "isolated_primary_continuity",
+      "instrument": "isolated_ohmmeter",
+      "normal": "primary circuit continuous with appropriate coil disconnected",
+      "fault_active": "intermittent open measured directly across isolated primary terminals under reproduced fault condition",
+      "post_repair": "replacement primary continuous",
+      "discriminates": true
+    },
+    {
+      "id": "repair_verification",
+      "instrument": "scan_tool_and_scope",
+      "normal": "not applicable",
+      "fault_active": "no repair attempted",
+      "post_repair": "primary ramp restored, no recurrent misfire under equivalent load/temperature",
+      "discriminates": false
+    }
+  ],
+  "releaseGates": {
+    "sme_signoff": false,
+    "safe_test_procedures_approved": false,
+    "scenario_versioned_in_engine": false,
+    "student_ui_integrated": false,
+    "assessment_authorized": false
+  },
+  "constraints": [
+    "No numeric specification is asserted beyond existing illustrative engine fixture",
+    "No high-voltage secondary probing instructions",
+    "Visual inspection is not a DVOM reading",
+    "Static continuity alone does not exclude intermittent harness defects",
+    "A driver command waveform alone does not guarantee driver circuit can carry load",
+    "Reproduce fault under same conditions for isolation and verification"
+  ]
+}
