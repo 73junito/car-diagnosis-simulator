@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Theoretical DC Circuit Calculator | AutoLearnPro</title>
+<style>
+body{font:1rem/1.6 system-ui,sans-serif;background:#0d1726;color:#f1f5fb;margin:0}
+main{max-width:780px;margin:auto;padding:2rem 1rem}
+a{color:#9de0ff} .panel{padding:1.4rem;margin:1rem 0;background:#1d2a3c;border:1px solid #60748c;border-radius:12px}
+label{display:block;font-weight:650;margin:.8rem 0 .2rem}
+input{background:white;color:#152236;padding:.7rem;font:inherit;border-radius:6px;border:2px solid #697b8c;max-width:14rem;width:95%}
+button{font:inherit;border:0;border-radius:6px;background:#c8ecff;color:#0d1726;padding:.7rem 1.1rem;margin-top:1rem;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #ffe08b;outline-offset:3px}
+.notice{border-left:5px solid #ffdb8f;padding-left:1rem} .error{color:#ffc4b7}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.5rem 1rem}dd{margin:0}
+</style></head>
+<body><main>
+<nav><a href="./index.html">Back to laboratory asset showcase</a></nav>
+<h1>Theoretical DC circuit calculator</h1>
+<p class="notice"><strong>Illustrative ideal-resistive model only.</strong> Not an OEM specification, an actual workshop measurement, or a switched ignition-coil transient. No grading or diagnostic conclusion.</p>
+<form id="calculator" class="panel" novalidate>
+<h2>Ideal steady-state DC inputs</h2>
+<label for="voltage">Supply voltage (V)</label><input id="voltage" type="number" step="any" value="12" required>
+<label for="resistance">Constant resistance (Ω)</label><input id="resistance" type="number" step="any" min="0" value="6" required>
+<label for="measured">Optional measured current (A)</label><input id="measured" type="number" step="any" placeholder="Not supplied">
+<button type="submit">Calculate and compare</button>
+<p id="error" class="error" role="alert" hidden></p>
+</form>
+<section class="panel" aria-labelledby="results-heading"><h2 id="results-heading">Theoretical results</h2>
+<div id="results" role="status" aria-live="polite">Enter values, then select Calculate and compare.</div></section>
+<section><h2>Assumptions and limitations</h2><p>Ideal DC source, constant resistance, steady state. Current: I = V / R. Power: P = V × I. Discrepancy = measured − predicted; a discrepancy alone does not establish acceptability.</p>
+<p>Manufacturer specification: <strong>Not supplied</strong>. Independent laboratory reading: <strong>Not supplied unless entered above</strong>. Measurement uncertainty and operating conditions: <strong>Not supplied</strong>.</p></section>
+</main><script src="./calculator.bundle.js" defer></script></body></html>
