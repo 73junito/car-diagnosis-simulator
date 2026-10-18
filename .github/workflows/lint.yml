@@ -29,8 +29,8 @@ jobs:
           node --version
           npm --version
           echo "::endgroup::"
-          # Capture installer lifecycle output and fail deterministically rather than hanging for an hour.
-          timeout --signal=TERM --kill-after=20s 12m npm ci --foreground-scripts --loglevel=info
+          # ESLint requires JavaScript packages, not dependency lifecycle hooks. Prevent lingering postinstall processes; full-build workflows still run normal npm ci.
+          timeout --signal=TERM --kill-after=20s 12m npm ci --ignore-scripts --loglevel=info
           status=$?
           if [ "$status" -ne 0 ]; then
             echo "::error::npm ci failed or exceeded 12 minutes (exit $status); lint was not executed"
