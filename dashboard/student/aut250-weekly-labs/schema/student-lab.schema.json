@@ -123,7 +123,11 @@
             "notes": { "type": ["string", "null"] }
           }
         },
-        "uncertainty": { "type": "string", "minLength": 10 }
+        "uncertainty": { "type": "string", "minLength": 10 },
+        "scanData": {
+          "type": ["object", "null"],
+          "description": "Optional provider-shaped scan-tool payload passed to the reused scan-tool asset. When absent the asset shows its explicit not-supplied state. This schema does not model the payload internals; the asset normalizes and rejects malformed entries itself."
+        }
       }
     },
     "competingHypotheses": {

@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-01",
+  "week": 1,
+  "instructorOnly": true,
+  "expectedEvidence": [
+    {
+      "id": "E1",
+      "statement": "Student states the meter function and the isolation step before describing any connection, and gives a safety reason for that order.",
+      "required": true,
+      "notes": "Accept any wording that puts function selection and isolation before connection."
+    },
+    {
+      "id": "E2",
+      "statement": "Student states that each instrument shows an explicit not-supplied state, and that this state does not prove the vehicle or the instrument is fault-free.",
+      "required": true,
+      "notes": "The key idea is that absence of data is not evidence about the vehicle."
+    },
+    {
+      "id": "E3",
+      "statement": "Student identifies the supplied 12.62 V reading as an illustrative training value rather than a measurement or specification.",
+      "required": true,
+      "notes": null
+    },
+    {
+      "id": "E4",
+      "statement": "Student records a written waveform observation approach instead of requesting a plotted trace.",
+      "required": false,
+      "notes": "Optional but expected if the student selects T3."
+    }
+  ],
+  "acceptableAlternatives": [
+    {
+      "id": "A1",
+      "statement": "Any instrument order is acceptable if the student states a safety-based reason first.",
+      "notes": "Sequence is not the assessed element; justification is."
+    },
+    {
+      "id": "A2",
+      "statement": "A student may describe the empty state as 'no data', 'not supplied' or 'nothing connected' provided they separate it from a fault conclusion.",
+      "notes": null
+    }
+  ],
+  "misconceptionFeedback": [
+    {
+      "id": "M1",
+      "misconception": "An empty scan-tool panel proves the vehicle has no faults.",
+      "feedback": "The panel reports that no data was supplied to it. That is a statement about the panel's input, not about the vehicle. Ask what evidence would be needed to make a claim about the vehicle."
+    },
+    {
+      "id": "M2",
+      "misconception": "The 12.62 V figure is the vehicle's specified value.",
+      "feedback": "It is an illustrative training value authored for practice. Ask the student where a real specification would have to come from and why this project cannot supply it."
+    },
+    {
+      "id": "M3",
+      "misconception": "Repeating the same reading verifies a repair.",
+      "feedback": "Repeating a reading under the same conditions shows repeatability, not repair verification. Ask what would have to change in the evidence."
+    }
+  ],
+  "debriefPrompts": [
+    "Which step would change if a real vehicle were involved, and why?",
+    "Where did you have to state an uncertainty instead of a conclusion?"
+  ],
+  "sources": [
+    {
+      "id": "src-project-w1-instructor",
+      "kind": "project_authored",
+      "title": "Project-authored Week 1 instructor evidence guide",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Authored for this repository."
+    }
+  ],
+  "technicalReviewChecklist": [
+    { "id": "C1", "statement": "Guide implies no physical procedure and no live measurement.", "status": "pending" },
+    { "id": "C2", "statement": "Expected evidence is reachable from the student materials without guessing a hidden key.", "status": "pending" },
+    { "id": "C3", "statement": "Feedback corrects misconceptions without asserting a vehicle condition.", "status": "pending" },
+    { "id": "C4", "statement": "No answer content appears in the student bundle.", "status": "pending" }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}
