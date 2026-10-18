@@ -14,12 +14,18 @@ const TESTS=Object.freeze({
  measure_coil_supply:{instrument:'dvom',result:{voltage_v:13.8},units:'V'},
  scope_coil_primary_2:{instrument:'oscilloscope',result:{pattern:'intermittent_missing_primary_current_ramp',comparison:'cylinder_1_normal'},units:null},
  scope_coil_primary_1:{instrument:'oscilloscope',result:{pattern:'normal_primary_current_ramp'},units:null},
+ // Provisional qualitative observations only; no OEM values or confirmed fault localization.
+ inspect_coil_connector:{instrument:'dvom',result:{status:'no_obvious_connector_damage_observed',limitations:'visual_check_does_not_exclude_intermittent_harness_fault'},units:null},
+ inspect_harness_continuity:{instrument:'dvom',result:{status:'continuity_observed_during_static_test',limitations:'static_check_cannot_exclude_intermittent_wiring_fault'},units:null},
+ scope_coil_driver_command:{instrument:'oscilloscope',result:{status:'command_pulses_observed',limitations:'command_observation_alone_does_not_prove_coil_defect'},units:null},
  verify_after_coil_replacement:{instrument:'scan_tool',result:{misfire_counter_cyl2:0,mil:'off',drive_cycle:'simulated_pass'},units:null}
 });
 const ALLOWED=new Set(['scenario_started','hypothesis_recorded','test_requested','measurement_observed','diagnosis_submitted','repair_selected','repair_verification_requested','session_ended']);
 function session({sessionId,studentAlias,clock=()=>new Date().toISOString()}){
  if(!/^[A-Za-z0-9_-]{8,64}$/.test(sessionId)||typeof studentAlias!=='string'||studentAlias.length<1||studentAlias.length>64)throw Error('Invalid pseudonymous session identifiers');
  const events=[];let sequence=0,closed=false,repaired=false;
+ const requiredBeforeRepair=['read_dtc','measure_coil_supply','scope_coil_primary_2','scope_coil_driver_command','inspect_coil_connector','inspect_harness_continuity'];
+ const observed=new Set();
  function record(kind,payload={}){
   if(closed||!ALLOWED.has(kind)||!payload||typeof payload!=='object'||Array.isArray(payload))throw Error('Invalid event');
   if(kind==='measurement_observed')throw Error('Measurements must originate from simulation');
@@ -32,9 +38,17 @@ function session({sessionId,studentAlias,clock=()=>new Date().toISOString()}){
   record('test_requested',{test_id:testId,instrument});
   const result=JSON.parse(JSON.stringify(TESTS[testId].result));
   const event={schema_version:'1.0',scenario_id:SCENARIO.id,scenario_version:SCENARIO.version,session_id:sessionId,sequence:++sequence,timestamp:clock(),kind:'measurement_observed',payload:{test_id:testId,instrument,simulated:true,result}};
-  events.push(Object.freeze(event));return JSON.parse(JSON.stringify(event));
+  events.push(Object.freeze(event));observed.add(testId);return JSON.parse(JSON.stringify(event));
  }
- function repair(component){if(component!=='cylinder_2_ignition_coil')throw Error('Unsupported simulation repair');record('repair_selected',{component});repaired=true}
+ function repair(component){
+  if(component!=='cylinder_2_ignition_coil')throw Error('Unsupported simulation repair');
+  if(closed)throw Error('Simulated session is closed');
+  const missing=requiredBeforeRepair.filter(id=>!observed.has(id));
+  if(missing.length)throw Error('Diagnostic evidence incomplete before repair: '+missing.join(','));
+  const diagnosis=events.find(e=>e.kind==='diagnosis_submitted'&&typeof e.payload.reasoning==='string'&&e.payload.reasoning.trim().length>0);
+  if(!diagnosis)throw Error('Reasoned diagnosis required before repair');
+  record('repair_selected',{component});repaired=true;
+ }
  function exportEvidence(){const data={status:'formative_prototype_unvalidated',assessment_eligible:false,scenario:{...SCENARIO},session_id:sessionId,student_alias:studentAlias,events:events.map(e=>JSON.parse(JSON.stringify(e)))};data.integrity_sha256=crypto.createHash('sha256').update(JSON.stringify(data.events)).digest('hex');return data}
  return Object.freeze({record,test,repair,exportEvidence});
 }
