@@ -1,0 +1,26 @@
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, Segoe UI, Arial, sans-serif; background: #f4f6fb; color: #17202b; }
+.skip-link { position: absolute; left: -999px; top: 0; background: #0b5fff; color: #fff; padding: 10px; }
+.skip-link:focus { left: 8px; top: 8px; }
+.lab-shell { max-width: 1180px; margin: 0 auto; padding: 24px 16px 56px; }
+.back { text-decoration: none; font-weight: 700; }
+.eyebrow { font-size: .8rem; font-weight: 800; letter-spacing: .04em; color: #44546a; }
+.sim-banner { background: #fff4d6; border: 1px solid #d9a400; padding: 10px 12px; border-radius: 10px; }
+.status { background: #10233f; color: #fff; padding: 10px 12px; border-radius: 10px; min-height: 44px; }
+.workstation { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+.card { background: #fff; border: 1px solid #d6dde8; border-radius: 14px; padding: 16px; }
+.vehicle-viz { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
+.cyl { border: 2px solid #9fb3c8; border-radius: 10px; padding: 12px 6px; text-align: center; }
+.cyl.fault { border-color: #c62828; background: #fdecea; }
+.tool-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+button { min-height: 42px; padding: 8px 12px; border-radius: 8px; border: 1px solid #33475f; background: #fff; cursor: pointer; }
+button:focus-visible, a:focus-visible, textarea:focus-visible, pre:focus-visible { outline: 3px solid #0b5fff; outline-offset: 2px; }
+.readout, .meter { margin-top: 10px; background: #0f1f33; color: #d8ffde; padding: 10px; border-radius: 8px; min-height: 48px; white-space: pre-wrap; }
+.scope { width: 100%; border: 1px solid #33475f; border-radius: 8px; background: #071426; }
+label { display: block; font-weight: 700; margin: 10px 0 4px; }
+textarea { width: 100%; font: inherit; padding: 8px; border-radius: 8px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.evidence { background: #101828; color: #dce6f5; padding: 10px; border-radius: 8px; max-height: 220px; overflow: auto; }
+.session-line { font-weight: 700; }
+@media (max-width: 860px) { .workstation { grid-template-columns: 1fr; } }
