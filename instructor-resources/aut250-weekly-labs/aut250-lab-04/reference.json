@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-04",
+  "week": 4,
+  "instructorOnly": true,
+  "expectedEvidence": [
+    {
+      "id": "E1",
+      "statement": "Student records each entry with its status and keeps status separate from any conclusion about a component.",
+      "required": true,
+      "notes": "Stored and pending must not be collapsed into a single 'fault' statement."
+    },
+    {
+      "id": "E2",
+      "statement": "Student states that a stored entry is evidence of a monitored condition and does not by itself prove a component failed.",
+      "required": true,
+      "notes": "This is the core objective of the week."
+    },
+    {
+      "id": "E3",
+      "statement": "Student distinguishes which interpretation depends on a generic code definition and which would require a manufacturer-specific definition that is unavailable here.",
+      "required": true,
+      "notes": "Accept 'cannot be determined from the supplied information' as correct."
+    },
+    {
+      "id": "E4",
+      "statement": "Student states the operating window indicated by the freeze-frame conditions and states what it does not establish.",
+      "required": true,
+      "notes": "Freeze frame constrains when the condition occurred, not which component caused it."
+    },
+    {
+      "id": "E5",
+      "statement": "Student states that clearing codes is not acceptable as repair verification on its own.",
+      "required": true,
+      "notes": null
+    }
+  ],
+  "acceptableAlternatives": [
+    {
+      "id": "A1",
+      "statement": "Any independently justified measurement plan is acceptable if it names a decision point.",
+      "notes": "Do not require a specific measurement or a specific component."
+    },
+    {
+      "id": "A2",
+      "statement": "Students may conclude that neither hypothesis can be separated with the supplied evidence, provided they state what evidence would separate them.",
+      "notes": "This is a strong answer, not an evasion."
+    }
+  ],
+  "misconceptionFeedback": [
+    {
+      "id": "M1",
+      "misconception": "A stored code proves the component has failed.",
+      "feedback": "A stored code records that a monitored condition was detected. Ask the student to separate the detection from a component conclusion and to name the missing evidence."
+    },
+    {
+      "id": "M2",
+      "misconception": "Freeze frame identifies the faulty part.",
+      "feedback": "Freeze frame describes the conditions at capture. Ask what it does and does not narrow."
+    },
+    {
+      "id": "M3",
+      "misconception": "Clearing the code and seeing it stay off verifies the repair.",
+      "feedback": "Clearing removes the record, not the cause, and some monitors require a full drive cycle. Ask what independent evidence would be needed."
+    }
+  ],
+  "debriefPrompts": [
+    "Which part of your interpretation depended on a definition you could not verify?",
+    "What evidence would separate your two hypotheses?"
+  ],
+  "sources": [
+    {
+      "id": "src-project-w4-instructor",
+      "kind": "project_authored",
+      "title": "Project-authored Week 4 instructor evidence guide",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Authored for this repository. Contains no real diagnostic trouble code definition."
+    },
+    {
+      "id": "src-obd-reference-catalog-1063-instructor",
+      "kind": "external_reference",
+      "title": "Source-governed OBD-I/OBD-II reference catalog (PR #1063, unmerged)",
+      "page": null,
+      "url": null,
+      "citationStatus": "pending",
+      "rightsStatus": "pending",
+      "notes": "Instructors must not substitute unverified generic or manufacturer-specific definitions."
+    }
+  ],
+  "technicalReviewChecklist": [
+    { "id": "C1", "statement": "Guide asserts no real code definition, OEM threshold or monitor result.", "status": "pending" },
+    { "id": "C2", "statement": "Expected evidence is reachable without a verified code definition.", "status": "pending" },
+    { "id": "C3", "statement": "Feedback keeps status, capture conditions and component conclusions separate.", "status": "pending" },
+    { "id": "C4", "statement": "No answer content appears in the student bundle.", "status": "pending" }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}
