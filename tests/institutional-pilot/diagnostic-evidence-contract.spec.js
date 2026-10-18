@@ -1,7 +1,7 @@
 'use strict';
 const {validate,digest}=require('../../contracts/diagnostic-evidence/validate');
 const {session}=require('../../engine/aut250MisfireLab');
-const create=()=>{const s=session({sessionId:'student-001',studentAlias:'pilot-1',clock:()=> '2026-10-17T00:00:00.000Z'});s.record('scenario_started');s.record('hypothesis_recorded',{hypothesis:'ignition'});s.test('read_dtc','scan_tool');s.test('scope_coil_primary_2','oscilloscope');s.repair('cylinder_2_ignition_coil');s.test('verify_after_coil_replacement','scan_tool');s.record('session_ended');return s.exportEvidence()};
+const create=()=>{const s=session({sessionId:'student-001',studentAlias:'pilot-1',clock:()=> '2026-10-17T00:00:00.000Z'});s.record('scenario_started');s.record('hypothesis_recorded',{hypothesis:'ignition'});for(const [id,instrument] of [['read_dtc','scan_tool'],['scope_coil_primary_2','oscilloscope'],['measure_coil_supply','dvom'],['scope_coil_driver_command','oscilloscope'],['inspect_coil_connector','dvom'],['inspect_harness_continuity','dvom']])s.test(id,instrument);s.record('diagnosis_submitted',{reasoning:'Provisional coil diagnosis with differential considered; pending SME review'});s.repair('cylinder_2_ignition_coil');s.test('verify_after_coil_replacement','scan_tool');s.record('session_ended');return s.exportEvidence()};
 const clone=v=>JSON.parse(JSON.stringify(v));
 test('validates engine-native formative evidence',()=>{expect(validate(create())).toEqual({valid:true,errors:[]})});
 test('rejects high-stakes claims even with recalculated checksum',()=>{const e=create();e.assessment_eligible=true;expect(validate(e).errors).toContain('prohibited_assessment_claim')});

@@ -9,7 +9,7 @@ test('contract fixes R1 cylinder-2 primary fault identity and instrument mapping
  expect(SCENARIO.dtc).toBe('P0302');
 });
 test('native engine evidence passes integrity validation but never authorizes grading',()=>{
- const s=make();s.record('scenario_started');s.record('hypothesis_recorded',{cause:'coil'});s.test('read_dtc','scan_tool');s.test('scope_coil_primary_2','oscilloscope');s.repair(ENGINE_REPAIR);s.test('verify_after_coil_replacement','scan_tool');s.record('session_ended');
+ const s=make();s.record('scenario_started');s.record('hypothesis_recorded',{cause:'coil'});for(const [id,instrument] of Object.entries({...REQUIRED_TESTS,scope_coil_driver_command:'oscilloscope',inspect_coil_connector:'dvom',inspect_harness_continuity:'dvom'})){if(id!=='verify_after_coil_replacement')s.test(id,instrument)}s.record('diagnosis_submitted',{reasoning:'Provisional differential diagnosis; requires SME review'});s.repair(ENGINE_REPAIR);s.test('verify_after_coil_replacement','scan_tool');s.record('session_ended');
  const check=evaluateEvidence(s.exportEvidence());
  expect(check.ready_for_formative_review).toBe(true);
  expect(check.ready_for_grading).toBe(false);
