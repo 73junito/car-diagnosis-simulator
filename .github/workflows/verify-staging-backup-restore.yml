@@ -1,0 +1,68 @@
+name: Verify encrypted staging backup restoration
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_run_id:
+        description: 'GitHub Actions run ID of encrypted staging backup'
+        required: true
+        type: string
+      confirm:
+        description: 'Type VERIFY-RESTORE'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  restore-test:
+    if: inputs.confirm == 'VERIFY-RESTORE'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: jchfruprqpeypdttvlam_staging
+    steps:
+      - name: Retrieve encrypted backup artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: encrypted-staging-database-${{ inputs.backup_run_id }}
+          run-id: ${{ inputs.backup_run_id }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/restore
+
+      - name: Verify ciphertext and restore on disposable PostgreSQL
+        shell: bash
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.STAGING_BACKUP_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          set +x
+          [[ -n "$BACKUP_PASSPHRASE" ]] || { echo "Missing encryption passphrase"; exit 1; }
+          echo "::add-mask::$BACKUP_PASSPHRASE"
+          cd "$RUNNER_TEMP/restore"
+          chmod 700 .
+          sha256sum -c staging.dump.gpg.sha256
+          printf %s "$BACKUP_PASSPHRASE" > .passphrase
+          chmod 600 .passphrase
+          trap 'docker rm -f staging-restore-test >/dev/null 2>&1 || true; rm -f .passphrase staging.dump' EXIT
+          gpg --batch --quiet --yes --pinentry-mode loopback \
+              --passphrase-file .passphrase --output staging.dump --decrypt staging.dump.gpg
+          rm -f .passphrase
+          docker run -d --name staging-restore-test --network none \
+            -e POSTGRES_PASSWORD=disposable-restore-only \
+            public.ecr.aws/supabase/postgres:17.6.1.167 >/dev/null
+          for n in {1..120}; do
+            if docker exec staging-restore-test pg_isready -U postgres >/dev/null 2>&1; then break; fi
+            sleep 2
+          done
+          docker exec staging-restore-test pg_isready -U postgres
+          docker cp staging.dump staging-restore-test:/tmp/staging.dump
+          # Fail closed on any restore error; do not mark a partial restore as verified.
+          docker exec staging-restore-test pg_restore \
+            --exit-on-error --no-owner --no-acl -U postgres -d postgres /tmp/staging.dump
+          docker exec staging-restore-test psql -U postgres -d postgres \
+            -v ON_ERROR_STOP=1 -Atc "SELECT 'migration_history=' || count(*) FROM supabase_migrations.schema_migrations;"
+          docker exec staging-restore-test psql -U postgres -d postgres \
+            -v ON_ERROR_STOP=1 -Atc "SELECT 'scenario_catalog=' || count(*) FROM public.scenario_catalog UNION ALL SELECT 'scenario_questions=' || count(*) FROM public.scenario_questions;"
+          echo 'Disposable PostgreSQL restore verified.'
