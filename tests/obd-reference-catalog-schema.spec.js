@@ -4,7 +4,8 @@ const migration=fs.readFileSync(path.join(__dirname,'../supabase/migrations/2026
 const inventory=fs.readFileSync(path.join(__dirname,'../data/obd2/OBD-REFERENCE-SOURCE-INVENTORY.md'),'utf8');
 test('OBD-I and OBD-II identities are separate and context-scoped',()=>{
  expect(migration).toContain("protocol_generation in ('OBD_I','OBD_II')");
- expect(migration).toMatch(/unique \(protocol_generation,code,manufacturer,vehicle_model,model_year_from,model_year_to\)/);
+ expect(migration).toContain('model_year_to,interpretation_key)');
+ expect(migration).toContain('source_page integer');
  expect(migration).toContain('obd_year_range');
 });
 test('sources, license review and unverified-by-default code records',()=>{

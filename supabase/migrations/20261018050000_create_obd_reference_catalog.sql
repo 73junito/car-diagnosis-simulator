@@ -19,6 +19,8 @@ create table if not exists public.obd_reference_codes (
  model_year_from integer check (model_year_from between 1950 and 2100),
  model_year_to integer check (model_year_to between 1950 and 2100),
  system_category text,
+ interpretation_key text not null default 'default' check (length(trim(interpretation_key)) > 0),
+ source_page integer check (source_page > 0),
  source_id uuid references public.obd_reference_sources(id) on delete restrict,
  verification_status text not null default 'unverified'
    check (verification_status in ('unverified','source_review_pending','verified','rejected')),
@@ -27,7 +29,7 @@ create table if not exists public.obd_reference_codes (
  updated_at timestamptz not null default now(),
  constraint obd_year_range check (model_year_from is null or model_year_to is null or model_year_from <= model_year_to),
  constraint obd_source_required_for_verified check (verification_status <> 'verified' or source_id is not null),
- constraint obd_code_context_unique unique (protocol_generation,code,manufacturer,vehicle_model,model_year_from,model_year_to)
+ constraint obd_code_context_unique unique (protocol_generation,code,manufacturer,vehicle_model,model_year_from,model_year_to,interpretation_key)
 );
 create index if not exists obd_reference_codes_lookup_idx on public.obd_reference_codes(protocol_generation,code);
 create index if not exists obd_reference_codes_source_idx on public.obd_reference_codes(source_id);
