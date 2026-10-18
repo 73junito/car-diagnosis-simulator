@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0.0",
+  "courseId": "aut-250",
+  "courseTitle": "Automotive Diagnostics I",
+  "catalogStatus": "planned",
+  "alignmentStatus": "proposed_not_approved",
+  "outcome": {
+    "id": "aut250-lo-evaluate-engineering-assumptions",
+    "bloomLevel": "evaluate",
+    "statement": "Evaluate engineering assumptions by comparing simulated diagnostic measurements with applicable manufacturer specifications and technical evidence to determine their validity, limitations, and suitability for a specific automotive diagnostic application.",
+    "fictionalScenarioAdaptation": "Evaluate simulated diagnostic measurements against documented circuit assumptions, reference operating conditions, and technical evidence to determine whether a proposed component failure is adequately supported.",
+    "manufacturerSpecsRequiredWhenClaimed": true
+  },
+  "competencyMapping": {
+    "id": "ug-aut250-systematic-diagnostics",
+    "status": "planned",
+    "relationship": "proposed-supporting-alignment"
+  },
+  "externalStandards": [
+    {
+      "id": "industry-engine-performance-task-guide",
+      "status": "mapping_pending",
+      "claim": "reference-only; task-level crosswalk not verified"
+    },
+    {
+      "id": "kansas-automotive-course-competencies",
+      "status": "mapping_pending",
+      "claim": "formal state course outcome alignment not verified"
+    },
+    {
+      "id": "engineering-technology-criteria",
+      "status": "conceptual_only",
+      "claim": "not an accreditation claim"
+    }
+  ],
+  "scenario": {
+    "id": "AUT250-MISFIRE-CYL2-R2-PROPOSED",
+    "sourcePr": 1056,
+    "status": "provisional",
+    "operatingCondition": "warm engine under load; values are hypothetical",
+    "evidenceAuthority": "not_manufacturer_verified",
+    "assessmentEligible": false
+  },
+  "rows": [
+    {
+      "criterion": "assumptions",
+      "studentAction": "Identify simulated engineering assumptions and test conditions",
+      "activity": "Identify assumptions about cylinder-2 supply, switching and primary-current observations",
+      "evidence": "assumption register listing source and uncertainty",
+      "evaluation": "Distinguish explicit assumptions from observed measurements"
+    },
+    {
+      "criterion": "source_selection",
+      "studentAction": "Identify relevant manufacturer documentation when a vehicle is specified",
+      "activity": "Mark fictional system as lacking applicable manufacturer specifications",
+      "evidence": "source applicability statement and reference citations",
+      "evaluation": "Do not invent manufacturer limits; correctly record unavailable specifications"
+    },
+    {
+      "criterion": "measurement_comparison",
+      "studentAction": "Compare fault-active and reference observations under matching conditions",
+      "activity": "Compare primary-current, supply and switching evidence across normal, fault-active and post-repair states",
+      "evidence": "measurement comparison matrix",
+      "evaluation": "Accurately separate consistent observations from unsupported causal conclusions"
+    },
+    {
+      "criterion": "limitations",
+      "studentAction": "Evaluate competing wiring, connector, supply and driver explanations",
+      "activity": "Assess whether fault-active isolated winding and external harness evidence distinguish causes",
+      "evidence": "alternative-hypothesis reasoning",
+      "evaluation": "Identify inconclusive findings and limitations of static tests"
+    },
+    {
+      "criterion": "diagnostic_justification",
+      "studentAction": "Justify appropriate next test or provisional repair recommendation",
+      "activity": "Document decision and verification plan",
+      "evidence": "signed-off instructor-reviewable diagnostic report",
+      "evaluation": "Reasoning follows observations; allows inconclusive verdict"
+    }
+  ],
+  "rubric": {
+    "type": "proposed_analytic",
+    "ratingScale": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "ratingDescriptions": {
+      "0": "No relevant evidence",
+      "1": "Limited or incorrect support",
+      "2": "Mostly supported, material gap remains",
+      "3": "Supported, limitations and source applicability addressed"
+    },
+    "proficiencyThreshold": null,
+    "formalScoreWeight": null,
+    "instructorReviewRequired": true,
+    "automaticGrading": false
+  },
+  "releaseGates": {
+    "technicalSmeApproved": false,
+    "standardsCrosswalkVerified": false,
+    "manufacturerApplicabilityVerified": false,
+    "rubricReliabilityEstablished": false,
+    "institutionalApproval": false,
+    "highStakesAssessmentAllowed": false
+  }
+}
