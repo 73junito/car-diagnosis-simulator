@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>AUT-250 Interactive Laboratory Assets (Simulated) | AutoLearnPro</title>
+  <link rel="stylesheet" href="./lab-assets.css">
+</head>
+<body>
+  <a class="tm-skip-link" href="#assetShowcase">Skip to asset showcase</a>
+  <main id="assetShowcase" class="tm-assets-shell" aria-labelledby="assetsTitle">
+    <nav aria-label="Asset navigation"><a class="tm-assets-back" href="/dashboard/student/">Back to Dashboard</a></nav>
+
+    <header class="tm-assets-hero">
+      <p class="tm-assets-eyebrow">AUT-250 · Reusable laboratory assets</p>
+      <h1 id="assetsTitle">Interactive laboratory equipment and vehicle components</h1>
+      <p class="tm-assets-notice" role="note">
+        <strong>SIMULATED, DEVELOPMENTAL ASSETS.</strong> Every value on this page is
+        <strong>invented illustrative demonstration input</strong>. It is not a vehicle measurement,
+        an OEM specification, a real diagnostic trouble code, a tolerance, or a diagnostic conclusion.
+        These assets draw no pass/fail verdict, perform no grading, and are not connected to the
+        student laboratory, the diagnostic engine, or any database.
+      </p>
+    </header>
+
+    <section class="tm-assets-controls" aria-labelledby="dataControlsHeading">
+      <h2 id="dataControlsHeading">External data input</h2>
+      <p class="tm-assets-hint">
+        Each instrument renders only what a provider supplies. Use these controls to supply,
+        clear, or deliberately break the input and observe the explicit fallback states.
+      </p>
+      <div class="tm-assets-control-row" role="group" aria-label="Demo data controls">
+        <button type="button" id="loadDemo">Load illustrative demo data</button>
+        <button type="button" id="clearAll">Clear all supplied data</button>
+        <button type="button" id="loadUnsupported">Supply unsupported input example</button>
+      </div>
+      <p id="showcaseStatus" class="tm-assets-status" role="status" aria-live="polite">Assets ready. No data supplied yet.</p>
+    </section>
+
+    <section class="tm-assets-region" aria-labelledby="multimeterHeading">
+      <h2 id="multimeterHeading">Digital multimeter</h2>
+      <div class="tm-assets-control-row" role="group" aria-label="Multimeter measurement input">
+        <button type="button" id="supplyVoltage">Supply illustrative voltage</button>
+        <button type="button" id="supplyResistance">Supply illustrative resistance</button>
+        <button type="button" id="supplyContinuity">Supply illustrative continuity</button>
+        <button type="button" id="clearMeasurement">Clear measurement</button>
+      </div>
+      <div id="multimeterHost"></div>
+    </section>
+
+    <section class="tm-assets-region" aria-labelledby="scopeHeading">
+      <h2 id="scopeHeading">Automotive oscilloscope</h2>
+      <div class="tm-assets-control-row" role="group" aria-label="Oscilloscope data input">
+        <button type="button" id="supplyWaveforms">Supply illustrative waveforms</button>
+        <button type="button" id="clearWaveforms">Clear waveform data</button>
+      </div>
+      <div id="scopeHost"></div>
+    </section>
+
+    <section class="tm-assets-region" aria-labelledby="scanHeading">
+      <h2 id="scanHeading">OBD-II scan tool</h2>
+      <div class="tm-assets-control-row" role="group" aria-label="Scan tool data input">
+        <button type="button" id="supplyScan">Supply illustrative scan data</button>
+        <button type="button" id="clearScan">Clear scan data</button>
+      </div>
+      <div id="scanHost"></div>
+    </section>
+
+    <section class="tm-assets-region" aria-labelledby="partsHeading">
+      <h2 id="partsHeading">Vehicle electrical components</h2>
+      <div class="tm-assets-control-row" role="group" aria-label="Component library input">
+        <button type="button" id="supplyComponents">Supply illustrative components</button>
+        <button type="button" id="clearComponents">Clear components</button>
+        <button type="button" id="highlightAll">Highlight all supplied components</button>
+      </div>
+      <div id="partsHost"></div>
+    </section>
+
+    <section class="tm-assets-region" aria-labelledby="docsHeading">
+      <h2 id="docsHeading">Documentation</h2>
+      <ul class="tm-assets-docs">
+        <li><a href="./README.md">README — scope, ownership, and usage</a></li>
+        <li><a href="./INTEGRATION.md">INTEGRATION — provider contract and integration sequence</a></li>
+        <li><a href="./ACCESSIBILITY.md">ACCESSIBILITY — keyboard, screen-reader, and fallback notes</a></li>
+        <li><a href="./PERFORMANCE.md">PERFORMANCE — rendering and resource considerations</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="./src/data-contract.js"></script>
+  <script src="./src/scenario-data.js"></script>
+  <script src="./src/multimeter.js"></script>
+  <script src="./src/oscilloscope.js"></script>
+  <script src="./src/scan-tool.js"></script>
+  <script src="./src/vehicle-components.js"></script>
+  <script src="./data/demo-scenario.js"></script>
+  <script src="./src/showcase.js"></script>
+</body>
+</html>
