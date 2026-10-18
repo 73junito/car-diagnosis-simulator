@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autolearnpro.com/contracts/diagnostic-evidence/v1",
+  "title": "DCAF diagnostic evidence export v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "assessment_eligible",
+    "scenario",
+    "session_id",
+    "student_alias",
+    "events",
+    "integrity_sha256"
+  ],
+  "properties": {
+    "status": {
+      "const": "formative_prototype_unvalidated"
+    },
+    "assessment_eligible": {
+      "const": false
+    },
+    "scenario": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "validated",
+        "assessment_eligible"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validated": {
+          "const": false
+        },
+        "assessment_eligible": {
+          "const": false
+        }
+      }
+    },
+    "session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{8,64}$"
+    },
+    "student_alias": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "events": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "schema_version",
+          "scenario_id",
+          "scenario_version",
+          "session_id",
+          "sequence",
+          "timestamp",
+          "kind",
+          "payload"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "1.0"
+          },
+          "scenario_id": {
+            "type": "string"
+          },
+          "scenario_version": {
+            "type": "string"
+          },
+          "session_id": {
+            "type": "string"
+          },
+          "sequence": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "kind": {
+            "enum": [
+              "scenario_started",
+              "hypothesis_recorded",
+              "test_requested",
+              "measurement_observed",
+              "diagnosis_submitted",
+              "repair_selected",
+              "repair_verification_requested",
+              "session_ended"
+            ]
+          },
+          "payload": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "integrity_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}
