@@ -102,14 +102,32 @@ function formatAjvErrors(errors) {
   return (errors || []).map((error) => (error.instancePath || '/') + ' ' + error.message);
 }
 
-function validateWithSchema(ajv, schemaFile, document) {
+/**
+ * Compiled-schema cache.
+ *
+ * Ajv rejects a schema whose `$id` has already been added, so a schema must be
+ * compiled once per validation run rather than once per document. Without this
+ * cache, validating a second lab package against the same schema throws
+ * "schema with key or id ... already exists".
+ */
+function makeSchemaCache() {
+  return new Map();
+}
+
+function validateWithSchema(ajv, schemaFile, document, cache) {
   if (!ajv) return { ok: true, problems: [], skipped: true };
   if (!exists(schemaFile)) {
     return { ok: false, problems: ['Schema not found: ' + relative(schemaFile)] };
   }
-  const validate = ajv.compile(readJson(schemaFile));
-  const ok = validate(document);
-  return { ok, problems: ok ? [] : formatAjvErrors(validate.errors), skipped: false };
+  var compiled = null;
+  if (cache && cache.has(schemaFile)) {
+    compiled = cache.get(schemaFile);
+  } else {
+    compiled = ajv.compile(readJson(schemaFile));
+    if (cache) cache.set(schemaFile, compiled);
+  }
+  const ok = compiled(document);
+  return { ok, problems: ok ? [] : formatAjvErrors(compiled.errors), skipped: false };
 }
 
 /**
@@ -325,6 +343,7 @@ function validateBlueprintCoverage(blueprint, labs) {
 
 function buildReport() {
   const engine = makeAjv();
+  const schemaCache = makeSchemaCache();
   const blueprint = loadBlueprint();
   const corpus = loadCorpus();
 
@@ -338,7 +357,7 @@ function buildReport() {
 
   const seenIds = new Set();
   corpus.labs.forEach((entry) => {
-    const schemaResult = validateWithSchema(engine.ajv, PATHS.studentSchema, entry.document);
+    const schemaResult = validateWithSchema(engine.ajv, PATHS.studentSchema, entry.document, schemaCache);
     if (!schemaResult.ok) {
       schemaResult.problems.forEach((problem) => errors.push({
         code: 'student-schema', labId: entry.document.labId || entry.dirName, message: problem
@@ -358,7 +377,7 @@ function buildReport() {
 
   const referenceIds = new Set();
   corpus.instructorReferences.forEach((entry) => {
-    const schemaResult = validateWithSchema(engine.ajv, PATHS.instructorSchema, entry.document);
+    const schemaResult = validateWithSchema(engine.ajv, PATHS.instructorSchema, entry.document, schemaCache);
     if (!schemaResult.ok) {
       schemaResult.problems.forEach((problem) => errors.push({
         code: 'instructor-schema', labId: entry.document.labId || entry.dirName, message: problem
@@ -441,6 +460,9 @@ module.exports = {
   FORBIDDEN_STUDENT_FIELDS,
   PATHS,
   expectedLabIds,
+  makeAjv,
+  makeSchemaCache,
+  validateWithSchema,
   validateLabSemantics,
   validateSeparation,
   loadBlueprint,

@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const validator = require('../../scripts/verify-aut250-weekly-labs');
-
 const FIXTURES = path.join(__dirname, 'fixtures');
 
 function readJson(file) {
@@ -119,5 +118,63 @@ describe('AUT 250 weekly lab validator — fail-closed semantics', () => {
     const second = validator.buildReport();
     expect(JSON.stringify(first)).toBe(JSON.stringify(second));
     expect(JSON.stringify(first)).not.toMatch(/generatedAt|timestamp|\d{4}-\d{2}-\d{2}T/);
+  });
+});
+
+describe('AUT 250 weekly lab validator — schema compilation is cached', () => {
+  const STUDENT_SCHEMA = validator.PATHS.studentSchema;
+
+  test('the same schema validates several documents in one run without throwing', () => {
+    const engine = validator.makeAjv();
+    expect(engine.error).toBeNull();
+    const cache = validator.makeSchemaCache();
+    const document = { not: 'a lab package' };
+    const first = validator.validateWithSchema(engine.ajv, STUDENT_SCHEMA, document, cache);
+    const second = validator.validateWithSchema(engine.ajv, STUDENT_SCHEMA, document, cache);
+    expect(first.skipped).toBe(false);
+    expect(second.skipped).toBe(false);
+    expect(first.ok).toBe(false);
+    expect(second.ok).toBe(false);
+  });
+
+  test('each schema is compiled exactly once per run', () => {
+    const engine = validator.makeAjv();
+    const cache = validator.makeSchemaCache();
+    validator.validateWithSchema(engine.ajv, STUDENT_SCHEMA, {}, cache);
+    validator.validateWithSchema(engine.ajv, STUDENT_SCHEMA, {}, cache);
+    validator.validateWithSchema(engine.ajv, STUDENT_SCHEMA, {}, cache);
+    expect(cache.size).toBe(1);
+    expect(typeof cache.get(STUDENT_SCHEMA)).toBe('function');
+  });
+
+  test('compiling a freshly read copy of the same schema twice is what the cache prevents', () => {
+    // Reproduces the original defect faithfully: validateWithSchema read the
+    // schema file on every call, producing a new object with the same $id each
+    // time. Ajv caches by object identity, so only a fresh read throws.
+    const engine = validator.makeAjv();
+    const readFresh = () => JSON.parse(fs.readFileSync(STUDENT_SCHEMA, 'utf8').replace(/^\uFEFF/, ''));
+    engine.ajv.compile(readFresh());
+    expect(() => engine.ajv.compile(readFresh())).toThrow(/already exists/);
+  });
+
+  test('the cached path does not throw when the schema file is re-read', () => {
+    const engine = validator.makeAjv();
+    const cache = validator.makeSchemaCache();
+    expect(() => {
+      validator.validateWithSchema(engine.ajv, STUDENT_SCHEMA, {}, cache);
+      validator.validateWithSchema(engine.ajv, STUDENT_SCHEMA, {}, cache);
+    }).not.toThrow();
+  });
+
+  test('a run without a cache still validates a single document', () => {
+    const engine = validator.makeAjv();
+    const result = validator.validateWithSchema(engine.ajv, STUDENT_SCHEMA, {}, null);
+    expect(result.skipped).toBe(false);
+    expect(result.ok).toBe(false);
+  });
+
+  test('an unavailable schema engine is reported rather than crashing the run', () => {
+    const result = validator.validateWithSchema(null, STUDENT_SCHEMA, {});
+    expect(result).toEqual({ ok: true, problems: [], skipped: true });
   });
 });
