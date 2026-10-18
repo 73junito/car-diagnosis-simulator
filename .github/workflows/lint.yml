@@ -20,8 +20,25 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies with bounded diagnostics
+        timeout-minutes: 15
+        shell: bash
+        run: |
+          set +e
+          echo "::group::Runner and npm environment"
+          node --version
+          npm --version
+          echo "::endgroup::"
+          # Capture installer lifecycle output and fail deterministically rather than hanging for an hour.
+          timeout --signal=TERM --kill-after=20s 12m npm ci --foreground-scripts --loglevel=info
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            echo "::error::npm ci failed or exceeded 12 minutes (exit $status); lint was not executed"
+            echo "::group::Remaining process snapshot"
+            ps -eo pid,ppid,stat,etime,args --sort=ppid | head -100
+            echo "::endgroup::"
+          fi
+          exit "$status"
 
       - name: Run ESLint
         run: npm run lint -- --max-warnings=0
