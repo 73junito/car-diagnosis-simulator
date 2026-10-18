@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://autolearnpro.com/schemas/aut250-weekly-lab-instructor.schema.json",
+  "title": "AUT 250 weekly laboratory — instructor reference",
+  "description": "Instructor-only reference material. This artifact must never be reachable from the student tree or the built student site.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "labId", "week", "instructorOnly", "expectedEvidence",
+    "acceptableAlternatives", "misconceptionFeedback", "debriefPrompts",
+    "sources", "technicalReviewChecklist", "flags"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "labId": { "type": "string", "pattern": "^aut250-lab-(0[1-9]|1[0-5])$" },
+    "week": { "type": "integer", "minimum": 1, "maximum": 15 },
+    "instructorOnly": { "const": true },
+    "expectedEvidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "statement"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "statement": { "type": "string", "minLength": 10 },
+          "required": { "type": "boolean" },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "acceptableAlternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "statement"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "statement": { "type": "string", "minLength": 10 },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "misconceptionFeedback": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "misconception", "feedback"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "misconception": { "type": "string", "minLength": 10 },
+          "feedback": { "type": "string", "minLength": 10 }
+        }
+      }
+    },
+    "debriefPrompts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 10 }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "citationStatus", "rightsStatus"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["project_authored", "external_reference", "internal_contract"] },
+          "title": { "type": ["string", "null"] },
+          "page": { "type": ["string", "integer", "null"] },
+          "url": { "type": ["string", "null"] },
+          "citationStatus": { "enum": ["verified", "metadata_only", "pending"] },
+          "rightsStatus": { "enum": ["approved", "pending", "not_required"] },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "technicalReviewChecklist": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "statement", "status"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "statement": { "type": "string", "minLength": 10 },
+          "status": { "enum": ["pending", "confirmed", "not_applicable"] }
+        }
+      }
+    },
+    "flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessmentEligible", "autoGradingEnabled", "published", "smeApproved", "rightsApproved"],
+      "properties": {
+        "assessmentEligible": { "const": false },
+        "autoGradingEnabled": { "const": false },
+        "published": { "const": false },
+        "smeApproved": { "const": false },
+        "rightsApproved": { "const": false }
+      }
+    }
+  }
+}
