@@ -50,7 +50,7 @@
           <button type="button" data-test="scope-ignition-secondary">Ignition secondary</button>
         </div>
         <canvas id="scopeCanvas" class="scope" width="420" height="170" role="img" aria-label="Simulated ignition waveform canvas"></canvas>
-        <p id="scopeCaption" class="readout" aria-live="polite">No waveform captured.</p>
+        <p id="scopeCaption" class="readout" aria-live="polite">No waveform captured. Text diagnosis is provided with every capture; the canvas is supplementary.</p>
       </section>
       <section class="card" aria-labelledby="dxHeading">
         <h2 id="dxHeading">Diagnosis &amp; repair</h2>
@@ -61,6 +61,7 @@
         <div class="row">
           <button type="button" id="saveReasoning">Save reasoning</button>
           <button type="button" id="exportBtn">Export simulated evidence</button>
+          <button type="button" id="endSessionBtn">End simulated session</button>
         </div>
         <h3>Repair selection</h3>
         <div id="repairList" class="tool-grid" role="group" aria-label="Simulated repairs"></div>

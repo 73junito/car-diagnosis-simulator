@@ -38,6 +38,37 @@ describe('AUT-250 student lab UI components (simulated)', () => {
     expect(document.getElementById('statusMessage').textContent).toMatch(/recorded/);
   });
 
+  test('incorrect repair keeps fault present and reports understandable feedback', () => {
+    loadLab();
+    document.querySelector('[data-test=\"scan-tool-dtc\"]').click();
+    expect(document.getElementById('scanOutput').textContent).toContain('P0303');
+    const plug = Array.from(document.querySelectorAll('[data-repair]')).find((b) => b.getAttribute('data-repair') === 'replace-spark-plug-cylinder-3');
+    plug.click();
+    expect(document.getElementById('repairOutput').textContent).toMatch(/fault remains/);
+    expect(document.getElementById('statusMessage').textContent).toMatch(/did not resolve/);
+    document.querySelector('[data-test=\"scan-tool-dtc\"]').click();
+    expect(document.getElementById('scanOutput').textContent).toContain('P0303');
+  });
+
+  test('ending a simulated session disables later actions with clear feedback', () => {
+    loadLab();
+    document.getElementById('endSessionBtn').click();
+    expect(document.getElementById('statusMessage').textContent).toMatch(/ended/);
+    document.querySelector('[data-test=\"scan-tool-dtc\"]').click();
+    expect(document.getElementById('statusMessage').textContent).toMatch(/unavailable/);
+    expect(document.getElementById('statusMessage').textContent).toMatch(/No success was recorded/);
+  });
+
+  test('oscilloscope result has a non-visual text alternative and keyboard access', () => {
+    loadLab();
+    const scopeButton = document.querySelector('[data-test=\"scope-ignition-secondary\"]');
+    scopeButton.focus();
+    expect(document.activeElement).toBe(scopeButton);
+    scopeButton.click();
+    expect(document.getElementById('scopeCaption').textContent).toMatch(/Text result/);
+    expect(document.getElementById('scopeCanvas').getAttribute('role')).toBe('img');
+  });
+
   test('exporting evidence stays local and is labeled simulated', () => {
     loadLab();
     document.getElementById('exportBtn').click();

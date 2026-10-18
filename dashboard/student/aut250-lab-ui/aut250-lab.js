@@ -9,10 +9,17 @@
     document.getElementById('sessionLine').textContent = 'Simulated session ' + session.sessionId + ' · AUT-250';
     status.textContent = 'Simulated session ready. Start with Read DTCs.';
     function say(m) { status.textContent = m; }
+    function friendly(error) {
+      var message = error && error.message ? error.message : String(error);
+      return 'Simulated action unavailable: ' + message + ' No success was recorded.';
+    }
     function out(id, v) { document.getElementById(id).textContent = typeof v === 'string' ? v : JSON.stringify(v, null, 2); }
     function draw(pattern) {
-      var c = document.getElementById('scopeCanvas');
-      var x = c.getContext('2d');
+      try {
+        var c = document.getElementById('scopeCanvas');
+        if (!c || typeof c.getContext !== 'function') return;
+        var x = c.getContext('2d');
+        if (!x) return;
       x.clearRect(0, 0, c.width, c.height);
       x.strokeStyle = '#59ff9c'; x.lineWidth = 3; x.beginPath();
       if (pattern === 'normal-burn-line') {
@@ -21,14 +28,19 @@
         x.moveTo(10, 130); x.lineTo(410, 130);
       }
       x.stroke();
+      } catch (ignore) { /* Canvas is supplementary; text caption remains authoritative. */ }
     }
     document.querySelectorAll('[data-test]').forEach(function (b) {
       b.addEventListener('click', function () {
-        var r = adapter.test(b.getAttribute('data-test'));
+        var id = b.getAttribute('data-test');
+        var r;
+        try { r = adapter.test(id); }
+        catch (error) { say(friendly(error)); return; }
         var m = r.measurement || {};
-        if (b.getAttribute('data-test').indexOf('scan') === 0) out('scanOutput', m);
-        else if (b.getAttribute('data-test') === 'scope-ignition-secondary') {
-          draw(m.pattern); out('scopeCaption', m.note + ' Pattern: ' + m.pattern);
+        if (id.indexOf('scan') === 0) out('scanOutput', m);
+        else if (id === 'scope-ignition-secondary') {
+          draw(m.pattern);
+          out('scopeCaption', m.note + ' Pattern: ' + m.pattern + '. Text result: ' + (m.verdict || m.display || m.pattern));
         } else out('dmmDisplay', 'DMM: ' + (m.display || JSON.stringify(m)));
         say('Simulated test recorded: ' + r.testId);
       });
@@ -38,23 +50,35 @@
       var b = document.createElement('button');
       b.type = 'button'; b.textContent = r.label; b.setAttribute('data-repair', r.id);
       b.addEventListener('click', function () {
-        var res = adapter.repair(r.id);
+        var res;
+        try { res = adapter.repair(r.id); }
+        catch (error) { out('repairOutput', friendly(error)); say(friendly(error)); return; }
         out('repairOutput', res.verification);
         say(res.success ? 'Simulated repair verified.' : 'Simulated repair did not resolve fault.');
       });
       repairs.append(b);
     });
     document.getElementById('saveReasoning').addEventListener('click', function () {
-      adapter.record('reasoning', {
-        hypothesis: document.getElementById('hypothesis').value,
-        explanation: document.getElementById('explanation').value
-      });
-      say('Simulated reasoning saved locally.');
+      try {
+        adapter.record('reasoning', {
+          hypothesis: document.getElementById('hypothesis').value,
+          explanation: document.getElementById('explanation').value
+        });
+        say('Simulated reasoning saved locally.');
+      } catch (error) { say(friendly(error)); }
     });
     document.getElementById('exportBtn').addEventListener('click', function () {
-      var bundle = adapter.exportEvidence();
-      out('evidencePreview', bundle);
-      say('Simulated evidence exported locally. Not for assessment.');
+      try {
+        var bundle = adapter.exportEvidence();
+        out('evidencePreview', bundle);
+        say('Simulated evidence exported locally. Not for assessment.');
+      } catch (error) { say(friendly(error)); }
+    });
+    document.getElementById('endSessionBtn').addEventListener('click', function () {
+      try {
+        adapter.record('session-ended', { reason: 'student-ended-simulation' });
+        say('Simulated session ended locally. Further actions are unavailable.');
+      } catch (error) { say(friendly(error)); }
     });
     return { adapter: adapter, session: session };
   }

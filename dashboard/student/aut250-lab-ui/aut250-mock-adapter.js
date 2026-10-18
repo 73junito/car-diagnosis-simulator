@@ -50,6 +50,14 @@
       var e = { seq: state.events.length + 1, at: now(), kind: kind, payload: payload || {} };
       state.events.push(e); return e;
     }
+    function knownTest(id) {
+      for (var i = 0; i < TEST_CATALOG.length; i += 1) if (TEST_CATALOG[i].id === id) return true;
+      return false;
+    }
+    function knownRepair(id) {
+      for (var j = 0; j < REPAIR_CATALOG.length; j += 1) if (REPAIR_CATALOG[j].id === id) return true;
+      return false;
+    }
     var api = {
       ADAPTER_ID: 'aut250-mock', ADAPTER_VERSION: '0.1.0-mock',
       SIMULATED: true, DEVELOPMENTAL: true,
@@ -60,14 +68,22 @@
           complaint: 'SIMULATED: rough idle, MIL on.', testCatalog: TEST_CATALOG.slice(), repairCatalog: REPAIR_CATALOG.slice() };
         ev('session', { sessionId: state.id }); return s;
       },
-      record: function (t, p) { if (!t) throw new Error('record needs type'); return ev(t, p || {}); },
+      record: function (t, p) {
+        if (!t) throw new Error('record needs type');
+        if (state.closed) throw new Error('Simulated session is closed.');
+        if (t === 'session-ended' || t === 'session_ended') state.closed = true;
+        return ev(t, p || {});
+      },
       test: function (id) {
+        if (state.closed) throw new Error('Simulated session is closed.');
+        if (!knownTest(id)) throw new Error('Unsupported simulated test: ' + String(id));
         var m = measurement(id, state.repaired);
-        if (!m && id !== 'visual-inspection') throw new Error('Unknown test: ' + id);
         ev('test', { testId: id, measurement: m });
         return { testId: id, simulated: true, measurement: m };
       },
       repair: function (id) {
+        if (state.closed) throw new Error('Simulated session is closed.');
+        if (!knownRepair(id)) throw new Error('Unsupported simulated repair: ' + String(id));
         var ok = id === CORRECT_REPAIR_ID;
         if (ok) state.repaired = true;
         state.repairs.push({ repairId: id, at: now(), success: ok });
