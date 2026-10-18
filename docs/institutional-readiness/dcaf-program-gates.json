@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "program": "AutoLearnPro Research Validation and Institutional Adoption",
+  "assessment_use": "formative_only",
+  "scientific_validation_claim": false,
+  "institutional_approval_claim": false,
+  "high_stakes_eligible": false,
+  "stages": [
+    {
+      "id": "R0",
+      "name": "Governance and measurement design",
+      "status": "planned",
+      "required_evidence": [
+        "competency_rubric_sme_review",
+        "scenario_fault_truth_review",
+        "research_ethics_plan",
+        "privacy_retention_spec"
+      ],
+      "approval_roles": [
+        "academic_sponsor",
+        "automotive_sme_lead",
+        "research_methods_lead",
+        "privacy_lead"
+      ]
+    },
+    {
+      "id": "R1",
+      "name": "Technical diagnostic fidelity",
+      "status": "blocked",
+      "depends_on": [
+        "R0"
+      ],
+      "required_evidence": [
+        "AUT250_reproducible_scenario",
+        "instrument_accuracy_review",
+        "accessibility_safety_review"
+      ],
+      "approval_roles": [
+        "automotive_sme_lead",
+        "engineering_lead"
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "Scoring reliability",
+      "status": "blocked",
+      "depends_on": [
+        "R1"
+      ],
+      "required_evidence": [
+        "independent_dual_ratings",
+        "agreement_confidence_intervals",
+        "rubric_adjudication_log"
+      ],
+      "approval_roles": [
+        "research_methods_lead",
+        "instructor_lead"
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "Educational validation",
+      "status": "blocked",
+      "depends_on": [
+        "R2"
+      ],
+      "required_evidence": [
+        "research_approval_or_IRB_determination",
+        "preregistered_analysis",
+        "real_lab_transfer_results"
+      ],
+      "approval_roles": [
+        "research_methods_lead",
+        "academic_sponsor"
+      ]
+    },
+    {
+      "id": "R4",
+      "name": "Institutional pilot",
+      "status": "blocked",
+      "depends_on": [
+        "R2"
+      ],
+      "required_evidence": [
+        "partner_written_agreement",
+        "data_governance_signoff",
+        "instructor_UAT",
+        "accessibility_review"
+      ],
+      "approval_roles": [
+        "academic_sponsor",
+        "privacy_lead",
+        "instructor_lead"
+      ]
+    },
+    {
+      "id": "R5",
+      "name": "Replication and adoption",
+      "status": "blocked",
+      "depends_on": [
+        "R3",
+        "R4"
+      ],
+      "required_evidence": [
+        "independent_replication",
+        "institutional_acceptance",
+        "transparent_limitations_report"
+      ],
+      "approval_roles": [
+        "academic_sponsor",
+        "research_methods_lead"
+      ]
+    }
+  ],
+  "rubric": {
+    "total_weight": 100,
+    "dimensions": [
+      {
+        "id": "process",
+        "weight": 25
+      },
+      {
+        "id": "tests",
+        "weight": 25
+      },
+      {
+        "id": "reasoning",
+        "weight": 20
+      },
+      {
+        "id": "safety",
+        "weight": 10
+      },
+      {
+        "id": "verification",
+        "weight": 10
+      },
+      {
+        "id": "documentation",
+        "weight": 10
+      }
+    ],
+    "status": "illustrative_not_validated"
+  },
+  "controls": {
+    "requires_instructor_review": true,
+    "automatic_progression": false,
+    "student_grading_enabled": false,
+    "raw_event_mutation_allowed": false,
+    "score_gate_enabled": false,
+    "privacy_review_required_before_pilot": true
+  }
+}
