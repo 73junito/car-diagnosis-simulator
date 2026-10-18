@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>AUT-250 Diagnostic Laboratory (Simulated) | AutoLearnPro</title>
+  <link rel="stylesheet" href="./aut250-lab.css">
+</head>
+<body>
+  <a class="skip-link" href="#labMain">Skip to lab workstation</a>
+  <main id="labMain" class="lab-shell" aria-labelledby="labTitle">
+    <nav aria-label="Lab navigation"><a class="back" href="/dashboard/student/">Back to Dashboard</a></nav>
+    <header>
+      <p class="eyebrow">AUT-250 · Simulated developmental lab</p>
+      <h1 id="labTitle">Cylinder Misfire Diagnostic Laboratory</h1>
+      <p class="sim-banner" role="note"><strong>SIMULATED TRAINING MODEL.</strong> No real vehicle, scoring, or assessment. Developmental preview only.</p>
+      <p id="sessionLine" class="session-line" aria-live="polite">Starting simulated session…</p>
+    </header>
+    <p id="statusMessage" class="status" role="status" aria-live="polite">Loading…</p>
+    <div class="workstation">
+      <section class="card" aria-labelledby="vehicleHeading">
+        <h2 id="vehicleHeading">Training vehicle</h2>
+        <div id="vehicleViz" class="vehicle-viz" role="img" aria-label="Simulated 4-cylinder engine. Cylinder 3 highlighted as misfiring.">
+          <div class="cyl" data-cyl="1"><span>Cyl 1</span><i>OK</i></div>
+          <div class="cyl" data-cyl="2"><span>Cyl 2</span><i>OK</i></div>
+          <div class="cyl fault" data-cyl="3"><span>Cyl 3</span><i>MISFIRE (sim)</i></div>
+          <div class="cyl" data-cyl="4"><span>Cyl 4</span><i>OK</i></div>
+        </div>
+        <h3>Scan tool</h3>
+        <div class="tool-grid">
+          <button type="button" data-test="scan-tool-dtc">Read DTCs</button>
+          <button type="button" data-test="scan-tool-live-data">Live data</button>
+          <button type="button" data-test="visual-inspection">Visual inspection</button>
+        </div>
+        <div id="scanOutput" class="readout" aria-live="polite">No scan data yet.</div>
+      </section>
+      <section class="card" aria-labelledby="dmmHeading">
+        <h2 id="dmmHeading">Virtual multimeter</h2>
+        <div class="tool-grid">
+          <button type="button" data-test="coil-primary-resistance">Coil primary</button>
+          <button type="button" data-test="coil-secondary-resistance">Coil secondary</button>
+          <button type="button" data-test="compression-test">Compression</button>
+        </div>
+        <div id="dmmDisplay" class="meter" aria-live="polite">DMM: — — —</div>
+      </section>
+      <section class="card" aria-labelledby="scopeHeading">
+        <h2 id="scopeHeading">Virtual oscilloscope</h2>
+        <div class="tool-grid">
+          <button type="button" data-test="scope-ignition-secondary">Ignition secondary</button>
+        </div>
+        <canvas id="scopeCanvas" class="scope" width="420" height="170" role="img" aria-label="Simulated ignition waveform canvas"></canvas>
+        <p id="scopeCaption" class="readout" aria-live="polite">No waveform captured.</p>
+      </section>
+      <section class="card" aria-labelledby="dxHeading">
+        <h2 id="dxHeading">Diagnosis &amp; repair</h2>
+        <label for="hypothesis">Hypothesis (simulated)</label>
+        <textarea id="hypothesis" rows="3" placeholder="Example: cylinder-3 secondary open because…"></textarea>
+        <label for="explanation">Diagnostic explanation (simulated)</label>
+        <textarea id="explanation" rows="3" placeholder="Evidence supporting the hypothesis…"></textarea>
+        <div class="row">
+          <button type="button" id="saveReasoning">Save reasoning</button>
+          <button type="button" id="exportBtn">Export simulated evidence</button>
+        </div>
+        <h3>Repair selection</h3>
+        <div id="repairList" class="tool-grid" role="group" aria-label="Simulated repairs"></div>
+        <div id="repairOutput" class="readout" aria-live="polite">No repair attempted.</div>
+        <h3>Evidence preview</h3>
+        <pre id="evidencePreview" class="evidence" tabindex="0" aria-label="Simulated evidence preview">No evidence exported yet.</pre>
+      </section>
+    </div>
+  </main>
+  <script src="./aut250-mock-adapter.js"></script>
+  <script src="./aut250-lab.js"></script>
+</body>
+</html>
