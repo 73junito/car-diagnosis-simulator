@@ -1,5 +1,5 @@
 'use strict';
-const {renderCalculation,mount}=require('../dashboard/student/aut250-lab-assets/src/calculator-entry');
+const {renderCalculation,mount}=require('../dashboard/student/circuit-lab-calculator/src/calculator-entry');
 const fs=require('fs'),path=require('path');
 test('illustrative example displays correct calculation with missing measurement',()=>{
  const r=Object.fromEntries(renderCalculation({voltageText:'12',resistanceText:'6',measuredText:''}));
@@ -19,7 +19,7 @@ test('invalid input rejected without silent coercion',()=>{
  expect(()=>renderCalculation({voltageText:vals[0],resistanceText:vals[1],measuredText:vals[2]})).toThrow();
 });
 test('page is separate from the instrument showcase and has accessible controls',()=>{
- const html=fs.readFileSync(path.join(__dirname,'../dashboard/student/aut250-lab-assets/calculator.html'),'utf8');
+ const html=fs.readFileSync(path.join(__dirname,'../dashboard/student/circuit-lab-calculator/index.html'),'utf8');
  expect(html).toContain('id="calculator"');
  expect(html).toContain('aria-live="polite"');
  expect(html).toContain('role="alert"');

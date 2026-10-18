@@ -56,9 +56,9 @@
     }
   });
 
-  // dashboard/student/aut250-lab-assets/src/calculator-entry.js
+  // dashboard/student/circuit-lab-calculator/src/calculator-entry.js
   var require_calculator_entry = __commonJS({
-    "dashboard/student/aut250-lab-assets/src/calculator-entry.js"(exports, module) {
+    "dashboard/student/circuit-lab-calculator/src/calculator-entry.js"(exports, module) {
       var { calculate, compare } = require_circuitLabCalculations();
       function parseRequired(raw, name) {
         if (raw.trim() === "") throw new Error(name + " is required");
