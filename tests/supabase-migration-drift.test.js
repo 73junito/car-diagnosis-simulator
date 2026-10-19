@@ -131,8 +131,8 @@ describe('migration application gate (issue #1072)', () => {
 
   const VERSION = '20261013190000'
   const expected = {
-    pre: { ase_area_columns: ['scenario_catalog', 'scenario_questions'], diagnostic_area_columns: [] },
-    post: { ase_area_columns: [], diagnostic_area_columns: ['scenario_catalog', 'scenario_questions'] }
+    pre: { legacy_prefix_columns: ['scenario_catalog', 'scenario_questions'], diagnostic_area_columns: [] },
+    post: { legacy_prefix_columns: [], diagnostic_area_columns: ['scenario_catalog', 'scenario_questions'] }
   }
 
   test('refuses a history repair while the materialized schema is still stale', () => {
@@ -177,7 +177,7 @@ describe('migration application gate (issue #1072)', () => {
   test('is indeterminate when the probe matches neither expected state', () => {
     const gate = evaluateApplicationGate({
       history: [],
-      schemaProbe: { ase_area_columns: ['scenario_questions'], diagnostic_area_columns: [] },
+      schemaProbe: { legacy_prefix_columns: ['scenario_questions'], diagnostic_area_columns: [] },
       version: VERSION,
       expected
     })

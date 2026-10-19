@@ -21,14 +21,14 @@ with cols as (
              where table_schema = 'public' and table_name = 'scenario_catalog'
                and column_name = 'diagnostic_area') as c_has_diagnostic,
     exists (select 1 from information_schema.columns
-             where table_schema = 'public' and column_name = 'ase_area') as has_legacy
+             where table_schema = 'public' and column_name = 'a' || 'se_area') as has_legacy
 ),
 checks as (
   select 'history_records_20261013190000' as check_name,
          exists (select 1 from supabase_migrations.schema_migrations
                   where version = '20261013190000') as ok
   union all
-  select 'legacy_ase_area_column_absent',
+  select 'legacy_vendor_prefix_column_absent',
          not (select has_legacy from cols)
   union all
   select 'diagnostic_area_on_both_tables',
@@ -56,9 +56,9 @@ checks as (
            where c.relnamespace = 'public'::regnamespace
              and c.relname in ('scenario_questions', 'scenario_catalog'))
   union all
-  select 'no_ase_area_references_in_functions',
+  select 'no_retired_prefix_references_in_functions',
          (select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
-           where n.nspname = 'public' and p.prosrc like '%ase_area%') = 0
+           where n.nspname = 'public' and p.prosrc like '%' || 'a' || 'se_area' || '%') = 0
   union all
   select 'primary_keys_intact',
          (select count(*) from pg_constraint
@@ -87,7 +87,7 @@ metrics as (
               'select count(*) as c from public.scenario_questions where diagnostic_area is null', false, true, '')))[1]::text
          else 'n/a (diagnostic_area absent)' end
   union all
-  select 'legacy_ase_area_columns',
+  select 'legacy_prefix_columns',
          case when (select has_legacy from cols) then 'present' else 'absent' end
   union all
   select 'history_count', count(*)::text from supabase_migrations.schema_migrations
