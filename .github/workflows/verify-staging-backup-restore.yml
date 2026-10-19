@@ -11,6 +11,11 @@ on:
         description: 'Type VERIFY-RESTORE'
         required: true
         type: string
+      baseline_manifest:
+        description: 'Recorded backup baseline manifest to compare against'
+        required: false
+        default: 'docs/database/staging-restore-baseline-39172287178.json'
+        type: string
 
 permissions:
   contents: read
@@ -20,9 +25,17 @@ jobs:
   restore-test:
     if: inputs.confirm == 'VERIFY-RESTORE'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     environment: jchfruprqpeypdttvlam_staging
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+
       - name: Retrieve encrypted backup artifact
         uses: actions/download-artifact@v4
         with:
@@ -31,7 +44,7 @@ jobs:
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/restore
 
-      - name: Verify ciphertext and restore on disposable PostgreSQL
+      - name: Verify ciphertext, restore, and emit verification matrix
         shell: bash
         env:
           BACKUP_PASSPHRASE: ${{ secrets.STAGING_BACKUP_PASSPHRASE }}
@@ -72,8 +85,31 @@ jobs:
           docker exec staging-restore-test pg_restore \
             --exit-on-error --no-owner --no-acl \
             -U supabase_admin -d staging_restore_check /tmp/staging.dump
+          # Emit the machine-readable verification matrix from the restored copy.
+          docker cp "$GITHUB_WORKSPACE/scripts/sql/restore-verification-matrix.sql" \
+            staging-restore-test:/tmp/restore-verification-matrix.sql
           docker exec staging-restore-test psql -U supabase_admin -d staging_restore_check \
-            -v ON_ERROR_STOP=1 -Atc "SELECT 'migration_history=' || count(*) FROM supabase_migrations.schema_migrations;"
-          docker exec staging-restore-test psql -U supabase_admin -d staging_restore_check \
-            -v ON_ERROR_STOP=1 -Atc "SELECT 'scenario_catalog=' || count(*) FROM public.scenario_catalog UNION ALL SELECT 'scenario_questions=' || count(*) FROM public.scenario_questions;"
-          echo 'Disposable PostgreSQL restore verified.'
+            -At -f /tmp/restore-verification-matrix.sql > "$RUNNER_TEMP/restore/restore-verification-matrix.json"
+          test -s "$RUNNER_TEMP/restore/restore-verification-matrix.json"
+          echo "Disposable PostgreSQL restore complete; verification matrix emitted."
+
+      - name: Compare restored database against the recorded baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/verify-restore-baseline.js \
+            --matrix "$RUNNER_TEMP/restore/restore-verification-matrix.json" \
+            --baseline "${{ inputs.baseline_manifest }}" \
+            --report "$RUNNER_TEMP/restore/restore-verification-report.json"
+          echo "RESTORE VERIFICATION: PASS"
+
+      - name: Upload restore verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: restore-verification-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/restore/restore-verification-matrix.json
+            ${{ runner.temp }}/restore/restore-verification-report.json
+          retention-days: 30
+          if-no-files-found: warn
