@@ -234,7 +234,7 @@
       "ev_specifications"
     ],
     "taxonomy_pre_migration": {
-      "ase_area_columns": [
+      "legacy_prefix_columns": [
         "scenario_catalog",
         "scenario_questions"
       ],

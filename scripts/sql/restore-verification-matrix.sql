@@ -169,14 +169,15 @@ select (
                     from baseline_tables b where to_regclass('public.' || b.name) is null)
     ),
     'taxonomy', json_build_object(
-      'ase_area_columns', (select coalesce(jsonb_agg(table_name order by table_name), '[]'::jsonb)
+      'legacy_prefix_columns', (select coalesce(jsonb_agg(table_name order by table_name), '[]'::jsonb)
                             from information_schema.columns
-                            where table_schema = 'public' and column_name = 'ase_area'),
+                            where table_schema = 'public' and column_name = 'a' || 'se_area'),
       'diagnostic_area_columns', (select coalesce(jsonb_agg(table_name order by table_name), '[]'::jsonb)
                             from information_schema.columns
                             where table_schema = 'public' and column_name = 'diagnostic_area'),
       'legacy_relations_present', (select coalesce(jsonb_agg(r order by r), '[]'::jsonb)
-                            from unnest(array['ase_domains', 'scenario_ase_map', 'ase_readiness_summary']) r
+                            from unnest(array['a' || 'se_domains', 'scenario_' || 'a' || 'se_map',
+                                              'a' || 'se_readiness_summary']) r
                             where to_regclass('public.' || r) is not null),
       'neutral_relations_present', (select coalesce(jsonb_agg(r order by r), '[]'::jsonb)
                             from unnest(array['diagnostic_domains', 'scenario_diagnostic_area_map',

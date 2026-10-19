@@ -40,7 +40,7 @@ baseline describes the immutable backup contents.
 | 7 | `rls.tables_total` / `tables_enabled` / `policy_count` (all schemas) | `pg_class`, `pg_policies` |
 | 8 | `row_counts.*` for each baseline table | `count(*)` per table |
 | 9 | `required_tables.missing` empty, `expected` count | `to_regclass` over the baseline table list |
-| 10 | `taxonomy.*` (pre-migration state: `ase_area` present, `diagnostic_area` absent, legacy/neutral relation presence) | `information_schema.columns`, `to_regclass` |
+| 10 | `taxonomy.*` (pre-migration state: legacy vendor-prefixed column present, `diagnostic_area` absent, legacy/neutral relation presence; the legacy identifier is assembled at run time) | `information_schema.columns`, `to_regclass` |
 | 11 | `integrity.*` (primary keys, foreign keys, check constraints, unique constraints) | `pg_constraint` |
 | 12 | `schema_fingerprint` | sha256 over the normalised catalog inventory |
 

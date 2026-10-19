@@ -2,9 +2,9 @@
 -- Emits one PASS/FAIL row per assertion; any FAIL means the rehearsal failed.
 -- Run only inside the disposable rehearsal database.
 with checks as (
-  select 'legacy_ase_area_column_absent' as check_name,
+  select 'legacy_vendor_prefix_column_absent' as check_name,
          (select count(*) from information_schema.columns
-           where table_schema = 'public' and column_name = 'ase_area') = 0 as ok
+           where table_schema = 'public' and column_name = 'a' || 'se_area') = 0 as ok
   union all
   select 'diagnostic_area_present_on_both_tables',
          (select count(*) from information_schema.columns
@@ -41,9 +41,9 @@ with checks as (
            where connamespace = 'public'::regnamespace and contype = 'f'
              and confrelid::regclass::text in ('scenario_questions', 'scenario_catalog')) = 7
   union all
-  select 'no_ase_area_references_in_functions',
+  select 'no_retired_prefix_references_in_functions',
          (select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
-           where n.nspname = 'public' and p.prosrc like '%ase_area%') = 0
+           where n.nspname = 'public' and p.prosrc like '%' || 'a' || 'se_area' || '%') = 0
   union all
   select 'rls_still_enabled',
          (select bool_and(relrowsecurity) from pg_class

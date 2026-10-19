@@ -95,7 +95,7 @@ describe('restore baseline manifest contract', () => {
     expect(e.row_counts.scenario_questions).toBe(25);
     expect(e.row_counts.battery_temperature_telemetry).toBe(425862);
     expect(e.row_counts.auth_users).toBe(3);
-    expect([...e.taxonomy_pre_migration.ase_area_columns].sort())
+    expect([...e.taxonomy_pre_migration.legacy_prefix_columns].sort())
       .toEqual(['scenario_catalog', 'scenario_questions']);
     expect(e.taxonomy_pre_migration.diagnostic_area_columns).toEqual([]);
     expect(e.schema_fingerprint).toMatch(/^[0-9a-f]{64}$/);

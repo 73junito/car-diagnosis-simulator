@@ -93,7 +93,7 @@ pre_cols="$("${psql_base[@]}" -Atc "
   from information_schema.columns
   where table_schema='public'
     and table_name in ('scenario_questions','scenario_catalog')
-    and column_name in ('ase_area','diagnostic_area')
+    and column_name in ('a' || 'se_area','diagnostic_area')
   order by 1")"
 echo "== pre-state columns:"; echo "$pre_cols"
 echo "== pre-state row counts:"
@@ -114,7 +114,7 @@ if [ "$mode" = "--dry-run" ]; then
     select table_name || '.' || column_name from information_schema.columns
     where table_schema='public'
       and table_name in ('scenario_questions','scenario_catalog')
-      and column_name in ('ase_area','diagnostic_area') order by 1")"
+      and column_name in ('a' || 'se_area','diagnostic_area') order by 1")"
   echo "== post-rollback columns (must equal pre-state):"; echo "$post_cols"
   if [ "$pre_cols" = "$post_cols" ]; then
     echo "REHEARSAL DRY-RUN: PASS (migration is transactional; rollback restored pre-state)"

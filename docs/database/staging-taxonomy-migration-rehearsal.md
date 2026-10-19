@@ -11,7 +11,7 @@ byte-identical to the file on `main`).
 ## 1. Why a rehearsal is required
 
 `origin/main` has 106 canonical migrations; staging history has 105. The missing
-migration renames legacy `ase_*` columns/relations to vendor-neutral `diagnostic_*`
+migration renames the retired vendor-prefixed columns/relations to vendor-neutral `diagnostic_*`
 names and normalises labels. It mutates schema and, in some environments, data. It
 must be rehearsed against a canonical database before it is applied to staging, and
 the `staging migration parity` gate must not be disabled to clear the failure.
@@ -65,32 +65,32 @@ is transactional by executing it inside `BEGIN … ROLLBACK`.
 | Step | Result |
 | --- | --- |
 | Canonical chain (versions < pending) | **105/105 applied** with `psql -v ON_ERROR_STOP=1`; any failure aborts the run |
-| Pre-state columns | `scenario_catalog.ase_area`, `scenario_questions.ase_area` |
+| Pre-state columns | legacy vendor-prefixed column present on `scenario_catalog` and `scenario_questions` |
 | Pre-state rows | `scenario_questions=0`, `scenario_catalog=19` (the chain seeds catalog only) |
-| Dry-run (transaction + rollback) | **PASS** — `post_rename_inside_tx=2`; after `ROLLBACK` both tables showed `ase_area` again |
+| Dry-run (transaction + rollback) | **PASS** — `post_rename_inside_tx=2`; after `ROLLBACK` both tables showed the legacy column again |
 | Apply unchanged migration | `DO` / `DO`, no errors |
 | Verification (1st) | **11/11 PASS** |
 | Post-state distribution | identical to pre-state (3 NULL, 7 CI, 4 DI, 4 Electrical…, 1 Mechanical…, 6 Starter System) |
 | Idempotency (re-apply + verify) | no error, **11/11 PASS** again |
 
-Verification checks executed: `legacy_ase_area_column_absent`,
+Verification checks executed: `legacy_vendor_prefix_column_absent`,
 `diagnostic_area_present_on_both_tables`, `scenario_questions_row_count_preserved`,
 `scenario_catalog_row_count_preserved`, `question_label_values_preserved`,
 `catalog_labels_still_null`, `readiness_view_still_queryable`,
 `primary_keys_intact`, `inbound_foreign_keys_intact`,
-`no_ase_area_references_in_functions`, `rls_still_enabled`.
+`no_retired_prefix_references_in_functions`, `rls_still_enabled`.
 
 ### 3.1 Original vs canonical schema comparison
 
 Column sets for the affected objects — live staging (read-only probe) versus the
 canonical rehearsal database — are **byte-identical**:
 
-* `scenario_catalog`: `scenario_id:text,title:text,description:text,ase_area:text,active:boolean,created_at:timestamptz,competency_area_id:uuid`
-* `scenario_questions`: `id:uuid,scenario_id:text,question_text:text,option_a..d:text,correct_answer:text,explanation:text,difficulty:text,topic:text,ase_area:text,created_at:timestamptz,question_id:text,competency_area_id:uuid`
+* `scenario_catalog`: `scenario_id:text,title:text,description:text,<legacy label column>:text,active:boolean,created_at:timestamptz,competency_area_id:uuid`
+* `scenario_questions`: `id:uuid,scenario_id:text,question_text:text,option_a..d:text,correct_answer:text,explanation:text,difficulty:text,topic:text,<legacy label column>:text,created_at:timestamptz,question_id:text,competency_area_id:uuid`
 
 Dependencies checked: the dependent view `public.scenario_question_readiness` does
-not reference `ase_area` and stayed queryable; no function body references
-`ase_area`; 7 inbound foreign keys and both primary keys were preserved.
+not reference the legacy label column and stayed queryable; no function body
+references it; 7 inbound foreign keys and both primary keys were preserved.
 
 ## 4. Findings and investigations
 
@@ -111,7 +111,7 @@ not reference `ase_area` and stayed queryable; no function body references
    `competency_areas` and `competency_to_program_map` instead. The pending migration
    only renames those relations when they already exist, and every branch is
    existence-guarded, so on staging they are skipped. This is not a restoration gap.
-5. **No label rewriting is expected on staging.** Staging's `ase_area` values
+5. **No label rewriting is expected on staging.** Staging's legacy label values
    (`CI`, `DI`, `Electrical and Electrical Components`, `Mechanical Components`,
    `Starter System`, NULL) match none of the `A1…A8` / `L1` / `L3` mapping keys, so
    the `case` expressions fall through to `else`. Only the two column renames take effect.
