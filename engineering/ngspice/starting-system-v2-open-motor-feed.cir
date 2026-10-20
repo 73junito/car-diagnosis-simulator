@@ -1,0 +1,40 @@
+* AutoLearnPro Starting-System template v2.0.0 - open starter-motor feed
+* INDEPENDENT reference fixture. Hand-authored from
+* data/circuit-templates/12v-starting-system-v2.json.
+*
+* Variant of starting-system-v2-healthy.cir with RMOTORFEED (template element
+* W_CONTACT_MOTOR, fixture element E9) REMOVED. This is the power-side-open
+* case: the solenoid main contact stays closed because the coil is still
+* energised, so the motor side must remain electrically determinate.
+*
+* Expected operating point (hand-calculated):
+*   v(20)=12.564013 v(30)=12.559829 v(40)=12.555644 v(50)=0.002092
+*   v(60)=12.564013 v(70)=12.564013 v(80)=0 v(85)=0  v(90)=-0.002511
+*   i(vsrc)=-4.184517  (delivered +4.184517 A)
+*   All main-path element currents are exactly zero.
+*
+* Note: every remaining node stays connected, so ngspice has no floating-node
+* error. That is itself independent evidence that the removed edge was a
+* non-bridge and that no node became isolated.
+
+VSRC 10 90 DC 12.600
+RINT 20 10 8m
+RNEGCABLE 90 0 0.6m
+RFUSE 20 30 1m
+RSWITCH 30 40 1m
+RCOIL 40 50 3
+RCOILRETURN 50 0 0.5m
+RPOSCABLE 20 60 0.6m
+RCONTACT 60 70 0.5m
+RARMATURE 80 85 50m
+RMOTORRETURN 85 0 0.4m
+
+.control
+op
+print v(20) v(30) v(40) v(50) v(60) v(70) v(80) v(85) v(90)
+print i(vsrc)
+print @rint[i] @rnegcable[i] @rfuse[i] @rswitch[i] @rcoil[i] @rcoilreturn[i]
+print @rposcable[i] @rcontact[i] @rarmature[i] @rmotorreturn[i]
+.endc
+
+.end

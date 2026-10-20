@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.0.0",
+  "fixtureRole": "hand-calculated-expected-values",
+  "templateId": "automotive-12v-starting-system",
+  "templateVersion": "2.0.0",
+  "notice": "Hand-calculated expectations for the Gate 2C electrical engine. Every value was derived in closed form from the declared training parameters, then cross-checked against Kirchhoff current and power balance. No value was produced by the implementation under test. These are project-authored training values and are not vehicle specifications.",
+  "tolerance": {
+    "nodeVoltageV": 1e-05,
+    "branchCurrentA": 1e-03,
+    "powerW": 1e-02,
+    "kclResidualA": 1e-04,
+    "powerBalanceW": 1e-02
+  },
+  "currentConvention": "Positive current flows from the element's fromNode through the element to its toNode. For the ideal voltage source E1 this yields a NEGATIVE value, because the source delivers current from its negative terminal through itself to its positive terminal. The delivered source current is the negation of that value.",
+  "scenarioNodeSplits": {
+    "FAULT_OPEN_CONTROL": [
+      {
+        "splitNode": "N_CTRL",
+        "intoNodes": ["N_SW_OUT", "N_COIL_PWR"],
+        "brokenConnectionId": "W_SWITCH_SOL",
+        "elementRemap": [
+          { "elementId": "E4", "endpoint": "toNode", "newNode": "N_SW_OUT" },
+          { "elementId": "E5", "endpoint": "fromNode", "newNode": "N_COIL_PWR" }
+        ],
+        "reason": "Opening an ideal conductor splits the merged node into two independent nodes. E4 now ends at N_SW_OUT and E5 now starts at N_COIL_PWR."
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "scenarioId": "healthy-crank",
+      "faultIds": [],
+      "operatingStateId": "crank",
+      "relayContactState": "closed",
+      "relayResolutionBasis": "coil-voltage-above-pickup",
+      "sourceCurrentDeliveredA": 211.345139,
+      "nodeVoltagesV": {
+        "N_REF": 0, "N_BATNEG": -0.126807, "N_BATINT": 12.473193, "N_BATPOS": 10.782432,
+        "N_FUSE_OUT": 10.778841, "N_CTRL": 10.77525, "N_COIL_GND": 0.001796,
+        "N_CONTACT_BAT": 10.65778, "N_CONTACT_OUT": 10.553903, "N_MTR_PWR": 10.470801, "N_MTR_GND": 0.083102
+      },
+      "elementCurrentsA": {
+        "E1": -211.345139, "E2": -211.345139, "E3": 3.591152, "E4": 3.591152,
+        "E5": 3.591152, "E6": 3.591152, "E7": 207.754, "E8": 207.754,
+        "E9": 207.754, "E10": 207.754, "E11": 207.754, "E12": -211.345139
+      },
+      "testPointVoltagesV": {
+        "TP_BAT_POS": 10.782432, "TP_START_CMD": 10.77525,
+        "TP_SOLENOID_OUT": 10.553903, "TP_MOTOR_GND": 0.083102
+      },
+      "starterCableTotalDropV": 0.417663,
+      "powerBalance": { "sourceDeliveredW": 2662.9488, "resistiveAbsorbedW": 2662.9488 },
+      "expectedUnavailableQuantities": []
+    },
+    {
+      "scenarioId": "open-motor-feed",
+      "faultIds": ["FAULT_OPEN_POWER"],
+      "operatingStateId": "crank",
+      "relayContactState": "closed",
+      "relayResolutionBasis": "coil-voltage-above-pickup",
+      "removedElements": ["E9"],
+      "sourceCurrentDeliveredA": 4.184517,
+      "nodeVoltagesV": {
+        "N_REF": 0, "N_BATNEG": -0.002511, "N_BATINT": 12.597489, "N_BATPOS": 12.564013,
+        "N_FUSE_OUT": 12.559829, "N_CTRL": 12.555644, "N_COIL_GND": 0.002092,
+        "N_CONTACT_BAT": 12.564013, "N_CONTACT_OUT": 12.564013, "N_MTR_PWR": 0, "N_MTR_GND": 0
+      },
+      "elementCurrentsA": {
+        "E1": -4.184517, "E2": -4.184517, "E3": 4.184517, "E4": 4.184517,
+        "E5": 4.184517, "E6": 4.184517, "E7": 0, "E8": 0, "E9": 0, "E10": 0, "E11": 0, "E12": -4.184517
+      },
+      "testPointVoltagesV": {
+        "TP_BAT_POS": 12.564013, "TP_START_CMD": 12.555644,
+        "TP_SOLENOID_OUT": 12.564013, "TP_MOTOR_GND": 0
+      },
+      "powerBalance": { "sourceDeliveredW": 52.7249, "resistiveAbsorbedW": 52.7249 },
+      "notes": "Both sides remain determinate. The solenoid output reads battery voltage because the contact is closed and carries no current; the motor side is a proved zero through the armature and return conductor. This is the power-side-open signature.",
+      "expectedUnavailableQuantities": []
+    },
+    {
+      "scenarioId": "open-motor-ground",
+      "faultIds": [],
+      "syntheticVariant": "open-ground-return",
+      "faultVariantNote": "The v2.0.0 fault catalogue contains a high-resistance ground fault but no open-ground fault, so this ground-side-open case is a declared synthetic variant with E11 removed rather than a catalogued fault.",
+      "operatingStateId": "crank",
+      "relayContactState": "closed",
+      "relayResolutionBasis": "coil-voltage-above-pickup",
+      "removedElements": ["E11"],
+      "sourceCurrentDeliveredA": 4.184517,
+      "nodeVoltagesV": {
+        "N_REF": 0, "N_BATNEG": -0.002511, "N_BATINT": 12.597489, "N_BATPOS": 12.564013,
+        "N_FUSE_OUT": 12.559829, "N_CTRL": 12.555644, "N_COIL_GND": 0.002092,
+        "N_CONTACT_BAT": 12.564013, "N_CONTACT_OUT": 12.564013, "N_MTR_PWR": 12.564013, "N_MTR_GND": 12.564013
+      },
+      "elementCurrentsA": {
+        "E1": -4.184517, "E2": -4.184517, "E3": 4.184517, "E4": 4.184517,
+        "E5": 4.184517, "E6": 4.184517, "E7": 0, "E8": 0, "E9": 0, "E10": 0, "E11": 0, "E12": -4.184517
+      },
+      "testPointVoltagesV": {
+        "TP_BAT_POS": 12.564013, "TP_START_CMD": 12.555644,
+        "TP_SOLENOID_OUT": 12.564013, "TP_MOTOR_GND": 12.564013
+      },
+      "powerBalance": { "sourceDeliveredW": 52.7249, "resistiveAbsorbedW": 52.725 },
+      "notes": "Ground-side-open signature: the load-side ground point reads battery voltage because no current flows and the whole motor branch floats up to the positive rail. Determinate, not unavailable.",
+      "expectedUnavailableQuantities": []
+    },
+    {
+      "scenarioId": "open-control-circuit",
+      "faultIds": ["FAULT_OPEN_CONTROL"],
+      "operatingStateId": "crank",
+      "relayContactState": "open",
+      "relayResolutionBasis": "coil-voltage-below-hold",
+      "removedElements": ["E8"],
+      "appliedNodeSplits": ["N_CTRL -> N_SW_OUT, N_COIL_PWR"],
+      "sourceCurrentDeliveredA": 0,
+      "nodeVoltagesV": {
+        "N_REF": 0, "N_BATNEG": 0, "N_BATINT": 12.6, "N_BATPOS": 12.6,
+        "N_FUSE_OUT": 12.6, "N_SW_OUT": 12.6, "N_COIL_PWR": 0, "N_COIL_GND": 0,
+        "N_CONTACT_BAT": 12.6, "N_CONTACT_OUT": 0, "N_MTR_PWR": 0, "N_MTR_GND": 0
+      },
+      "elementCurrentsA": {
+        "E1": 0, "E2": 0, "E3": 0, "E4": 0, "E5": 0, "E6": 0,
+        "E7": 0, "E8": 0, "E9": 0, "E10": 0, "E11": 0, "E12": 0
+      },
+      "testPointVoltagesV": {
+        "TP_BAT_POS": 12.6, "TP_START_CMD": 12.6, "TP_SOLENOID_OUT": 0, "TP_MOTOR_GND": 0
+      },
+      "powerBalance": { "sourceDeliveredW": 0, "resistiveAbsorbedW": 0 },
+      "notes": "An open control circuit de-energizes the coil, so the relay coupling contract opens the main contact. Every branch current is a proved zero by the leaf-KCL lemma. The solenoid output reads 0 V and the control point reads battery voltage with no load. This corrects an earlier state-flag model in which the contact would have stayed closed.",
+      "expectedUnavailableQuantities": []
+    },
+    {
+      "scenarioId": "open-solenoid-coil",
+      "faultIds": ["FAULT_OPEN_COIL"],
+      "operatingStateId": "crank",
+      "relayContactState": "open",
+      "relayResolutionBasis": "coil-element-absent",
+      "removedElements": ["E5", "E8"],
+      "sourceCurrentDeliveredA": 0,
+      "nodeVoltagesV": {
+        "N_REF": 0, "N_BATNEG": 0, "N_BATINT": 12.6, "N_BATPOS": 12.6,
+        "N_FUSE_OUT": 12.6, "N_CTRL": 12.6, "N_COIL_GND": 0,
+        "N_CONTACT_BAT": 12.6, "N_CONTACT_OUT": 0, "N_MTR_PWR": 0, "N_MTR_GND": 0
+      },
+      "elementCurrentsA": {
+        "E1": 0, "E2": 0, "E3": 0, "E4": 0, "E5": 0, "E6": 0,
+        "E7": 0, "E8": 0, "E9": 0, "E10": 0, "E11": 0, "E12": 0
+      },
+      "testPointVoltagesV": {
+        "TP_BAT_POS": 12.6, "TP_START_CMD": 12.6, "TP_SOLENOID_OUT": 0, "TP_MOTOR_GND": 0
+      },
+      "powerBalance": { "sourceDeliveredW": 0, "resistiveAbsorbedW": 0 },
+      "notes": "With the coil element absent the contact cannot be energised, so the coupling contract leaves the normally-open main contact electrically OPEN and records the basis as coil-element-absent. The coil voltage itself is unavailable and must never be reported as 0 V.",
+      "expectedUnavailableQuantities": ["coil-voltage (SOL_COIL_PWR to SOL_COIL_GND)"]
+    },
+    {
+      "scenarioId": "high-resistance-ground",
+      "faultIds": ["FAULT_HIGH_RES_GROUND"],
+      "operatingStateId": "crank",
+      "relayContactState": "closed",
+      "expectedValues": null,
+      "reason": "The v2.0.0 fault catalogue does not declare a resistance magnitude for this fault, and the fault taxonomy class alone does not determine one. No numeric expectation is asserted in Gate 2B. A magnitude must be declared and independently validated before this scenario can carry expected values."
+    },
+    {
+      "scenarioId": "high-resistance-power",
+      "faultIds": ["FAULT_HIGH_RES_POWER"],
+      "operatingStateId": "crank",
+      "relayContactState": "closed",
+      "expectedValues": null,
+      "reason": "Same as high-resistance-ground: no declared magnitude, therefore no numeric expectation is asserted."
+    }
+  ]
+}
