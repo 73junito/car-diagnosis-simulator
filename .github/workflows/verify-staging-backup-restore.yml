@@ -89,7 +89,7 @@ jobs:
           docker cp "$GITHUB_WORKSPACE/scripts/sql/restore-verification-matrix.sql" \
             staging-restore-test:/tmp/restore-verification-matrix.sql
           docker exec staging-restore-test psql -U supabase_admin -d staging_restore_check \
-            -At -f /tmp/restore-verification-matrix.sql > "$RUNNER_TEMP/restore/restore-verification-matrix.json"
+            -qAt -f /tmp/restore-verification-matrix.sql > "$RUNNER_TEMP/restore/restore-verification-matrix.json"
           test -s "$RUNNER_TEMP/restore/restore-verification-matrix.json"
           echo "Disposable PostgreSQL restore complete; verification matrix emitted."
 
