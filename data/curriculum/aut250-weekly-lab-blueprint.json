@@ -1,0 +1,649 @@
+{
+  "schemaVersion": "1.0.0",
+  "courseId": "aut-250",
+  "courseTitle": "Automotive Diagnostics I",
+  "planningStatus": "approved_course_structure_labs_proposed_pending_review",
+  "weeks": 15,
+  "credits": 3,
+  "labMinutesPerWeek": 120,
+  "totalLabHours": 30,
+  "weeklyLabs": [
+    {
+      "week": 1,
+      "id": "aut250-lab-01",
+      "title": "Diagnostic safety and equipment familiarization",
+      "durationMinutes": 120,
+      "equipment": [
+        "dvom",
+        "scan_tool",
+        "oscilloscope"
+      ],
+      "learningObjective": "Demonstrate tool selection, isolation and safe measurement setup",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 2,
+      "id": "aut250-lab-02",
+      "title": "Concern verification and diagnostic strategy",
+      "durationMinutes": 120,
+      "equipment": [
+        "work_order",
+        "service_information"
+      ],
+      "learningObjective": "Translate customer concern into testable symptoms and initial plan",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 3,
+      "id": "aut250-lab-03",
+      "title": "Ford and GM OBD-I interpretation",
+      "durationMinutes": 120,
+      "equipment": [
+        "legacy_code_reference",
+        "vehicle_profile"
+      ],
+      "learningObjective": "Resolve manufacturer-dependent numeric code meanings and retrieval context",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 4,
+      "id": "aut250-lab-04",
+      "title": "OBD-II DTC and freeze-frame interpretation",
+      "durationMinutes": 120,
+      "equipment": [
+        "scan_tool",
+        "freeze_frame"
+      ],
+      "learningObjective": "Distinguish stored condition from confirmed component failure",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 5,
+      "id": "aut250-lab-05",
+      "title": "Voltage, current, resistance and continuity",
+      "durationMinutes": 120,
+      "equipment": [
+        "dvom",
+        "circuit_board"
+      ],
+      "learningObjective": "Select appropriate measurement and identify meter placement risks",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 6,
+      "id": "aut250-lab-06",
+      "title": "Ohm's law and voltage-drop diagnosis",
+      "durationMinutes": 120,
+      "equipment": [
+        "dvom",
+        "ideal_dc_calculator"
+      ],
+      "learningObjective": "Compare predicted versus supplied observed values; document assumptions",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 7,
+      "id": "aut250-lab-07",
+      "title": "Sensor input circuit diagnosis",
+      "durationMinutes": 120,
+      "equipment": [
+        "scan_tool",
+        "dvom",
+        "sensor_models"
+      ],
+      "learningObjective": "Evaluate sensor signal, reference and ground evidence",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 8,
+      "id": "aut250-lab-08",
+      "title": "Actuator, relay and command-response diagnosis",
+      "durationMinutes": 120,
+      "equipment": [
+        "dvom",
+        "oscilloscope",
+        "relay_models"
+      ],
+      "learningObjective": "Distinguish commanded state from proven load behavior",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 9,
+      "id": "aut250-lab-09",
+      "title": "Oscilloscope setup and waveform analysis",
+      "durationMinutes": 120,
+      "equipment": [
+        "oscilloscope",
+        "signal_generator"
+      ],
+      "learningObjective": "Interpret timebase, amplitude and duty cycle only from supplied samples",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 10,
+      "id": "aut250-lab-10",
+      "title": "Ignition and cylinder misfire investigation",
+      "durationMinutes": 120,
+      "equipment": [
+        "scan_tool",
+        "oscilloscope",
+        "ignition_models"
+      ],
+      "learningObjective": "Compare competing misfire hypotheses and identify safe next tests",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 11,
+      "id": "aut250-lab-11",
+      "title": "Fuel-system performance and fuel trim",
+      "durationMinutes": 120,
+      "equipment": [
+        "scan_tool",
+        "pressure_sensor_model"
+      ],
+      "learningObjective": "Analyze trim trends and separate observations from unverified pressure limits",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 12,
+      "id": "aut250-lab-12",
+      "title": "Intermittent wiring and connector faults",
+      "durationMinutes": 120,
+      "equipment": [
+        "wiring_harness",
+        "dvom",
+        "oscilloscope"
+      ],
+      "learningObjective": "Design repeated fault-capture tests and log uncertainty",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 13,
+      "id": "aut250-lab-13",
+      "title": "Multiple DTC prioritization",
+      "durationMinutes": 120,
+      "equipment": [
+        "scan_tool",
+        "vehicle_wiring_diagram"
+      ],
+      "learningObjective": "Evaluate shared cause versus cascading symptoms",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 14,
+      "id": "aut250-lab-14",
+      "title": "Integrated vehicle diagnostic investigation",
+      "durationMinutes": 120,
+      "equipment": [
+        "full_virtual_vehicle",
+        "service_information"
+      ],
+      "learningObjective": "Build complete diagnosis, limitations and repair-verification plan",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    },
+    {
+      "week": 15,
+      "id": "aut250-lab-15",
+      "title": "Instructor-reviewed practical capstone",
+      "durationMinutes": 120,
+      "equipment": [
+        "full_virtual_vehicle",
+        "all_approved_tools"
+      ],
+      "learningObjective": "Independently document evidence, test strategy and verification without auto grading",
+      "delivery": "virtual_formative_development",
+      "requiredSections": [
+        "safety_briefing",
+        "instructor_demonstration",
+        "interactive_diagnostic_scenario",
+        "student_evidence_worksheet",
+        "instructor_reference_and_feedback",
+        "accessibility_notes",
+        "source_and_measurement_provenance",
+        "technical_review_checklist"
+      ],
+      "sessionMinutes": {
+        "safetyBriefing": 10,
+        "instructorDemonstration": 15,
+        "studentDiagnosis": 60,
+        "evidenceReport": 25,
+        "debrief": 10
+      },
+      "evidenceRequirements": [
+        "observations",
+        "competing_hypotheses",
+        "test_selection_justification",
+        "measurement_source_and_limitations",
+        "repair_verification_plan"
+      ],
+      "smeApproved": false,
+      "rightsApproved": false,
+      "assessmentEligible": false,
+      "autoGradingEnabled": false,
+      "published": false
+    }
+  ],
+  "writtenFinal": {
+    "questionCount": 50,
+    "examDeliveryEnabled": false,
+    "automaticScoringEnabled": false
+  },
+  "practicalCapstone": {
+    "week": 15,
+    "instructorReviewed": true,
+    "automaticScoringEnabled": false
+  },
+  "restrictions": {
+    "noProductionWrites": true,
+    "noLivePublication": true,
+    "noManufacturedOemLimits": true,
+    "noInventedMeasuredWaveforms": true,
+    "originalSourceRightsReviewRequired": true
+  }
+}
