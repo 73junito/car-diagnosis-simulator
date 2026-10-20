@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Diagnostic Question Authoring — Developmental</title>
+<style>body{margin:0;font:1rem/1.5 system-ui;background:#101b2b;color:#f4f7fc}main{max-width:880px;margin:auto;padding:2rem 1rem}fieldset,section{border:1px solid #71839a;border-radius:10px;padding:1rem;margin:1rem 0}label{display:block;font-weight:650;margin:.7rem 0 .2rem}input,select,textarea{box-sizing:border-box;width:100%;padding:.65rem;font:inherit;background:white;color:#102033;border-radius:5px}button{font:inherit;padding:.65rem 1rem;border:0;border-radius:5px;background:#c5edff;color:#112137;cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #ffde83;outline-offset:2px}.notice{border-left:5px solid #ffc771;padding:1rem;background:#26364b}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#26364b;padding:1rem}</style></head>
+<body><main><h1>Diagnostic question authoring workspace</h1><p class="notice"><strong>Developmental, offline draft only.</strong> No authentication, storage, publishing, assessment, grades or production integration. Do not enter student information.</p>
+<form id="author" novalidate><fieldset><legend>Question metadata</legend>
+<label for="itemId">Draft identifier</label><input id="itemId" required value="draft-obd-001">
+<label for="protocol">Diagnostic generation</label><select id="protocol"><option value="OBD_I">OBD-I</option><option value="OBD_II">OBD-II</option></select>
+<label for="level">Bloom level</label><select id="level"><option value="analyze">Analyze</option><option value="evaluate">Evaluate</option><option value="apply">Apply</option></select>
+<label for="stem">Original question prompt</label><textarea id="stem" rows="3" required></textarea>
+<label for="answer">Expected answer or reasoning evidence</label><textarea id="answer" rows="3" required></textarea>
+<label for="rationale">Technical rationale and limitations</label><textarea id="rationale" rows="3" required></textarea>
+<label for="source">Source identifier (reference only)</label><input id="source" placeholder="e.g., reviewed-source-id">
+<label for="page">Source page (optional)</label><input id="page" type="number" min="1" step="1">
+<label for="applicability">Vehicle/year/system applicability</label><textarea id="applicability" rows="2" placeholder="Not verified"></textarea>
+</fieldset><button type="submit">Validate draft for review</button></form>
+<section aria-labelledby="reviewTitle"><h2 id="reviewTitle">Review package</h2><p id="status" role="status" aria-live="polite">No draft validated.</p><pre id="output">No package.</pre><button type="button" id="copy" disabled>Copy draft JSON</button></section>
+</main><script src="./workspace.js" defer></script></body></html>
