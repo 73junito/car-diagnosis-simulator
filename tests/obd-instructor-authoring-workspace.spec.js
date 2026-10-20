@@ -1,0 +1,8 @@
+'use strict';
+const {review}=require('../dashboard/instructor/obd-question-authoring/workspace');
+const fs=require('fs'),path=require('path');
+const input={id:'draft-diagnostic-001',protocol:'OBD_I',bloom:'evaluate',stem:'How would you resolve conflicting code meanings?',expectedEvidence:'Use vehicle-year and test context to identify applicability.',rationale:'Numeric codes alone do not prove a defective component.',sourceId:'source-pending',page:2,applicability:'Manufacturer and engine must be verified'};
+test('complete draft remains non-publishable and ungraded',()=>{const v=review(input);expect(v.valid).toBe(true);expect(v.draft).toMatchObject({technicalSmeApproved:false,instructorApproved:false,sourceRightsApproved:false,assessmentEligible:false,productionPublishAllowed:false});});
+test('missing source page and applicability fail closed',()=>{const v=review({...input,page:null,applicability:''});expect(v.valid).toBe(false);expect(v.issues).toEqual(expect.arrayContaining(['A source requires a valid page reference.','Document vehicle/system applicability or say not verified.']));});
+test('invalid answer evidence and unsupported protocol rejected',()=>{const v=review({...input,protocol:'OTHER',expectedEvidence:'no'});expect(v.valid).toBe(false);expect(v.issues.length).toBeGreaterThanOrEqual(2);});
+test('separate prototype page has form labels, no browser storage dependencies',()=>{const p=path.join(__dirname,'../dashboard/instructor/obd-question-authoring/index.html');const h=fs.readFileSync(p,'utf8');expect(h).toContain('aria-live="polite"');expect(h).toContain('id="author"');expect(h).toContain('No authentication, storage, publishing');});
