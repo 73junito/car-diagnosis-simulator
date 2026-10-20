@@ -91,6 +91,13 @@ jobs:
           docker exec staging-restore-test psql -U supabase_admin -d staging_restore_check \
             -At -f /tmp/restore-verification-matrix.sql > "$RUNNER_TEMP/restore/restore-verification-matrix.json"
           test -s "$RUNNER_TEMP/restore/restore-verification-matrix.json"
+          # Preserve hashed object-level evidence for diagnostic comparison.
+          docker cp "$GITHUB_WORKSPACE/scripts/sql/restore-object-fingerprints.sql" \
+            staging-restore-test:/tmp/restore-object-fingerprints.sql
+          docker exec staging-restore-test psql -X -v ON_ERROR_STOP=1 -U supabase_admin \
+            -d staging_restore_check -F ',' -At -f /tmp/restore-object-fingerprints.sql \
+            > "$RUNNER_TEMP/restore/restore-object-fingerprints.csv"
+          test -s "$RUNNER_TEMP/restore/restore-object-fingerprints.csv"
           # Copy the restored staging snapshot into a second isolated database.
           # No live database connection; migration history is never manipulated.
           docker exec staging-restore-test createdb -U supabase_admin \
@@ -134,5 +141,6 @@ jobs:
             ${{ runner.temp }}/restore/restore-verification-matrix.json
             ${{ runner.temp }}/restore/restore-verification-report.json
             ${{ runner.temp }}/restore/taxonomy-rehearsal-checks.txt
+            ${{ runner.temp }}/restore/restore-object-fingerprints.csv
           retention-days: 30
           if-no-files-found: warn
