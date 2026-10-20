@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cooling Fan — Isolated Simulation Demo | AutoLearnPro</title>
+<style>body{font:16px system-ui,sans-serif;max-width:850px;margin:2rem auto;padding:0 1rem;line-height:1.5;background:#f8fafc;color:#172033}header,section{margin-bottom:1.5rem}fieldset{border:1px solid #9ba9bd;border-radius:.5rem;padding:1rem}label{display:block;margin:.7rem 0}button,select,input{font:inherit;padding:.3rem}button{margin:.4rem .4rem .4rem 0}output{font-weight:700}svg{max-width:100%;background:#e8f4fa;border-radius:.5rem}a:focus,button:focus,input:focus,select:focus{outline:3px solid #155dc1;outline-offset:2px}.notice{border-left:4px solid #a45d05;padding:.5rem 1rem;background:#fff4dd}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}</style>
+<script src="/engine/sharedCoolingFanSimulation.js" defer></script><script src="/dashboard/student/cooling-fan-demo/demo.js" defer></script></head>
+<body><header><h1>Cooling Fan — Electrical / Thermal Demonstrator</h1><p class="notice"><strong>Developmental training example only.</strong> Values are illustrative, not vehicle measurements, manufacturer specifications, diagnostic limits, or assessment results.</p></header>
+<main><section aria-labelledby="settings"><h2 id="settings">Scenario</h2><fieldset><legend>Model settings</legend>
+<label>Ambient temperature (°C) <input id="ambient" type="number" min="-20" max="60" value="25"></label>
+<label>Engine heat load (%) <input id="heat" type="number" min="0" max="100" value="65"></label>
+<label><input id="command" type="checkbox" checked> Command fan on</label>
+<label>Injected fault <select id="fault"><option value="none">None</option><option value="fan-open">Fan motor open</option><option value="low-supply">Low supply voltage</option></select></label>
+<button type="button" id="apply">Apply settings / Reset</button><button type="button" id="step">Advance 5 seconds</button>
+</fieldset></section>
+<section aria-labelledby="measurements"><h2 id="measurements">Shared simulation state</h2>
+<p role="status" aria-live="polite" id="status">Model loading</p>
+<dl><dt>Simulation time</dt><dd><output id="time">0 s</output></dd><dt>Coolant temperature</dt><dd><output id="coolant">—</output></dd><dt>Supply voltage</dt><dd><output id="voltage">—</output></dd><dt>Fan current</dt><dd><output id="current">—</output></dd><dt>Fan state</dt><dd><output id="fan">—</output></dd></dl>
+<svg viewBox="0 0 320 180" role="img" aria-labelledby="visual-title visual-desc"><title id="visual-title">Illustrative cooling fan visualization</title><desc id="visual-desc">The fan rotates according to the same simulation state driving the numeric readouts.</desc><circle cx="110" cy="90" r="72" fill="none" stroke="#48617c" stroke-width="6"/><g id="blades" fill="#417b9e"><ellipse cx="110" cy="54" rx="14" ry="35"/><ellipse cx="110" cy="126" rx="14" ry="35"/><ellipse cx="74" cy="90" rx="35" ry="14"/><ellipse cx="146" cy="90" rx="35" ry="14"/></g><circle cx="110" cy="90" r="14" fill="#24394d"/><text x="202" y="84" fill="#172033">Fan</text><text x="202" y="108" id="fanLabel" fill="#172033">—</text></svg>
+<p id="fallback">Simulation values are also available as text above. Animation is optional, never authoritative.</p></section></main></body></html>

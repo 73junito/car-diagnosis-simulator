@@ -1,0 +1,63 @@
+* AutoLearnPro Starting-System template v2.0.0 - healthy crank
+* INDEPENDENT reference fixture. Hand-authored from
+* data/circuit-templates/12v-starting-system-v2.json.
+* NOT generated from the browser netlist translator, and deliberately using a
+* different node-numbering scheme so that a shared translation error cannot be
+* reproduced in both implementations.
+*
+* Node map:
+*   0  = chassis / engine ground (reference)
+*   10 = battery internal node
+*   20 = battery positive / fuse input
+*   30 = fuse output / switch input
+*   40 = switch output / solenoid coil control input
+*   50 = solenoid coil ground terminal
+*   60 = solenoid main contact, battery side
+*   70 = solenoid main contact, motor side
+*   80 = starter motor power terminal
+*   85 = starter motor ground terminal
+*   90 = battery negative terminal
+*
+* Element map (each template element appears exactly once):
+*   VSRC, RINT      <- BAT1          RNEGCABLE    <- W_BAT_GND
+*   RFUSE           <- FUSE1         RSWITCH      <- SW1
+*   RCOIL           <- SOL_COIL      RCOILRETURN  <- W_SOL_COIL_GND
+*   RPOSCABLE       <- W_BAT_CONTACT RCONTACT     <- SOL_CONTACT
+*   RMOTORFEED      <- W_CONTACT_MOTOR  RARMATURE <- MTR1
+*   RMOTORRETURN    <- W_MOTOR_GND
+*
+* Conventions:
+*   Resistor branch currents @r[i] are positive from the first-declared node to
+*   the second, matching the fixture fromNode->toNode convention.
+*   i(vsrc) uses SPICE's passive convention (into the positive terminal), so a
+*   delivering source reports a NEGATIVE current. The delivered current is the
+*   negation of i(vsrc).
+*
+* Expected operating point (hand-calculated, see
+* tests/simulators/starting-system-v2-expected-values.json):
+*   v(20)=10.782432 v(30)=10.778841 v(40)=10.775250 v(50)=0.001796
+*   v(60)=10.657780 v(70)=10.553903 v(80)=10.470801 v(85)=0.083102
+*   v(90)=-0.126807  i(vsrc)=-211.345139  (delivered +211.345139 A)
+
+VSRC 10 90 DC 12.600
+RINT 20 10 8m
+RNEGCABLE 90 0 0.6m
+RFUSE 20 30 1m
+RSWITCH 30 40 1m
+RCOIL 40 50 3
+RCOILRETURN 50 0 0.5m
+RPOSCABLE 20 60 0.6m
+RCONTACT 60 70 0.5m
+RMOTORFEED 70 80 0.4m
+RARMATURE 80 85 50m
+RMOTORRETURN 85 0 0.4m
+
+.control
+op
+print v(10) v(20) v(30) v(40) v(50) v(60) v(70) v(80) v(85) v(90)
+print i(vsrc)
+print @rint[i] @rnegcable[i] @rfuse[i] @rswitch[i] @rcoil[i] @rcoilreturn[i]
+print @rposcable[i] @rcontact[i] @rmotorfeed[i] @rarmature[i] @rmotorreturn[i]
+.endc
+
+.end
