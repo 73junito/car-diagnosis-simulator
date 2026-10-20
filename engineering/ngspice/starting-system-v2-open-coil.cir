@@ -1,0 +1,37 @@
+* AutoLearnPro Starting-System template v2.0.0 - open starter-solenoid coil
+* INDEPENDENT reference fixture. Hand-authored from
+* data/circuit-templates/12v-starting-system-v2.json.
+*
+* Variant of starting-system-v2-healthy.cir with RCOIL (template element
+* SOL_COIL, fixture element E5) REMOVED. The control conductor is intact, so
+* node 40 remains the merged switch-output / coil-input node.
+*
+* With the coil absent the coupling contract fails closed to contact-open and
+* records the basis as coil-element-absent. The coil voltage itself is
+* UNAVAILABLE and must never be reported as 0 V.
+*
+* Expected operating point (hand-calculated, all currents exactly zero):
+*   v(20)=12.6 v(30)=12.6 v(40)=12.6 v(50)=0
+*   v(60)=12.6 v(70)=0 v(80)=0 v(85)=0 v(90)=0
+*   i(vsrc)=0
+
+VSRC 10 90 DC 12.600
+RINT 20 10 8m
+RNEGCABLE 90 0 0.6m
+RFUSE 20 30 1m
+RSWITCH 30 40 1m
+RCOILRETURN 50 0 0.5m
+RPOSCABLE 20 60 0.6m
+RMOTORFEED 70 80 0.4m
+RARMATURE 80 85 50m
+RMOTORRETURN 85 0 0.4m
+
+.control
+op
+print v(20) v(30) v(40) v(50) v(60) v(70) v(80) v(85) v(90)
+print i(vsrc)
+print @rint[i] @rnegcable[i] @rfuse[i] @rswitch[i] @rcoilreturn[i]
+print @rposcable[i] @rmotorfeed[i] @rarmature[i] @rmotorreturn[i]
+.endc
+
+.end

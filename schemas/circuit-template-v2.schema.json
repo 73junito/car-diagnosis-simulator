@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autolearnpro.com/schemas/circuit-template-v2.schema.json",
+  "title": "Circuit Template v2 Engineering Additions",
+  "description": "Validates the engineering additions that distinguish a v2.0.0 circuit template from v1.0.0: declared element parameters, per-branch conductor resistance, independently actuated element states, and relay coil/contact couplings. The v1 component, connection, symbol and connection-style contracts remain owned by src/circuits/* and are not duplicated here.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "templateId",
+    "templateVersion",
+    "extendsTemplateVersion",
+    "elementParameters",
+    "conductorResistances",
+    "elementStates",
+    "relayCouplings",
+    "engineeringBoundary"
+  ],
+  "properties": {
+    "templateId": { "type": "string", "minLength": 1 },
+    "templateVersion": { "const": "2.0.0" },
+    "extendsTemplateVersion": { "const": "1.0.0" },
+    "elementParameters": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/elementParameter" }
+    },
+    "conductorResistances": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/conductorResistance" }
+    },
+    "elementStates": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/stateDeclaration" }
+    },
+    "relayCouplings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/relayCoupling" }
+    },
+    "engineeringBoundary": { "$ref": "#/$defs/engineeringBoundary" }
+  },
+  "$defs": {
+    "valueRole": { "enum": ["generic_training_example", "declared_system_value"] },
+    "elementParameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["elementId", "parameterId", "quantityType", "unit", "value", "valueRole"],
+      "properties": {
+        "elementId": { "type": "string", "minLength": 1 },
+        "parameterId": { "type": "string", "minLength": 1 },
+        "quantityType": { "type": "string", "minLength": 1 },
+        "unit": { "type": "string", "minLength": 1 },
+        "value": { "type": "number" },
+        "valueRole": { "$ref": "#/$defs/valueRole" },
+        "bounds": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["min", "max"],
+          "properties": {
+            "min": { "type": "number" },
+            "max": { "type": "number" }
+          }
+        }
+      }
+    },
+    "conductorResistance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["connectionId", "resistanceOhm", "valueRole"],
+      "properties": {
+        "connectionId": { "type": "string", "minLength": 1 },
+        "resistanceOhm": { "type": "number", "exclusiveMinimum": 0 },
+        "valueRole": { "$ref": "#/$defs/valueRole" },
+        "note": { "type": "string" }
+      }
+    },
+    "stateDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stateId", "independentlyActuatedElements"],
+      "properties": {
+        "stateId": { "type": "string", "minLength": 1 },
+        "independentlyActuatedElements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["elementId", "actuation", "basis"],
+            "properties": {
+              "elementId": { "type": "string", "minLength": 1 },
+              "actuation": { "enum": ["closed", "open"] },
+              "basis": { "enum": ["operator-actuation", "operating-state"] }
+            }
+          }
+        }
+      }
+    },
+    "relayCoupling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "couplingId",
+        "coilElementId",
+        "contactElementId",
+        "coilControlNode",
+        "coilReturnNode",
+        "pickupVoltageV",
+        "holdVoltageV",
+        "model",
+        "dynamics",
+        "dynamicsNotice",
+        "parameterProvenance"
+      ],
+      "properties": {
+        "couplingId": { "type": "string", "minLength": 1 },
+        "coilElementId": { "type": "string", "minLength": 1 },
+        "contactElementId": { "type": "string", "minLength": 1 },
+        "coilControlNode": { "type": "string", "minLength": 1 },
+        "coilReturnNode": { "type": "string", "minLength": 1 },
+        "pickupVoltageV": { "type": "number", "exclusiveMinimum": 0 },
+        "holdVoltageV": { "type": "number", "exclusiveMinimum": 0 },
+        "model": { "const": "threshold-on-solved-coil-voltage" },
+        "dynamics": { "const": "quasi-static-declared" },
+        "dynamicsNotice": { "type": "string", "minLength": 1 },
+        "parameterProvenance": { "const": "project-authored-training-value" },
+        "failureBehaviour": { "const": "de-energized-contact-open" }
+      }
+    },
+    "engineeringBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "numericalEngineImplemented",
+        "fixedCurrentReferenceIds",
+        "disclosedSimplifications",
+        "unsupportedElementClasses"
+      ],
+      "properties": {
+        "numericalEngineImplemented": { "const": false },
+        "fixedCurrentReferenceIds": { "type": "array", "items": { "type": "string" } },
+        "disclosedSimplifications": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "unsupportedElementClasses": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Simulation worker harness</title>
+</head>
+<body>
+  <main>
+    <h1>Simulation worker harness</h1>
+    <p id="status">loading</p>
+  </main>
+  <script src="/dist-simulation/mna-worker.js"></script>
+  <script>
+    'use strict';
+    (function () {
+      var MODEL_REF = '/data/circuit-templates/12v-starting-system-v2.json';
+      var state = { client: null, template: null, metrics: {}, errors: [] };
+
+      window.addEventListener('error', function (event) { state.errors.push(String(event.message)); });
+      window.addEventListener('unhandledrejection', function (event) { state.errors.push(String(event.reason)); });
+
+      function heap() {
+        var memory = performance.memory;
+        return memory ? { used: memory.usedJSHeapSize, total: memory.totalJSHeapSize } : null;
+      }
+
+      function registration(template) {
+        return {
+          modelRef: MODEL_REF,
+          templateId: template.templateId,
+          templateVersion: template.templateVersion,
+          manifest: {
+            manifestId: 'manifest.starting-system.v2',
+            modelId: 'automotive-12v-starting-system',
+            modelVersion: '2.0.0',
+            schemaVersion: '1.0.0',
+            status: 'in-development',
+            primaryDomainId: 'electrical',
+            coupledDomainIds: ['mechanical'],
+            applicability: { mode: 'generic-training-only', vehicleSpecific: false, notice: 'training only' },
+            capabilities: [],
+            unsupportedMeasurementTypes: [],
+            simplifications: ['starter motor is a pure resistance'],
+            dependencies: [],
+            provenance: { evidenceRole: 'project_authored_training_model', authoritativeSpecification: false }
+          },
+          capability: {
+            domainId: 'electrical',
+            status: 'in-development',
+            supportedMeasurementTypes: ['voltage', 'voltage_drop', 'current', 'power', 'continuity', 'command_state'],
+            unsupportedMeasurementTypes: ['waveform', 'diagnostic_data'],
+            reportsResiduals: true,
+            distinguishesUnavailableFromZero: true,
+            limitations: []
+          },
+          template: template,
+          operatingStates: [{ stateId: 'crank', label: 'Crank request', elementStates: [{ elementId: 'SW1', actuation: 'closed', basis: 'operator-actuation' }] }],
+          faultScenarios: template.faultCatalog.map(function (fault) {
+            return { scenarioId: fault.id, label: fault.label, faultClassId: fault.faultClassId, targetElementId: fault.targetConnectionId || fault.targetComponentId || '' };
+          }),
+          relayCouplings: template.relayCouplings,
+          declaredToolIds: ['tool.dmm', 'tool.current-clamp'],
+          toolMeasurementTypes: {
+            'tool.dmm': ['voltage', 'voltage_drop', 'resistance', 'continuity', 'frequency', 'duty_cycle'],
+            'tool.current-clamp': ['current', 'waveform']
+          }
+        };
+      }
+
+      function voltageRequests() {
+        return ['TP_BAT_POS', 'TP_START_CMD', 'TP_SOLENOID_OUT', 'TP_MOTOR_GND'].map(function (id) {
+          return { measurementId: 'm-' + id, measurementType: 'voltage', kind: 'node-voltage', fromTerminalId: id, toolId: 'tool.dmm' };
+        });
+      }
+
+      function request(id, faultIds, measurements) {
+        return {
+          requestId: id,
+          labId: 'starting-system-lab',
+          manifestId: 'manifest.starting-system.v2',
+          modelId: 'automotive-12v-starting-system',
+          modelVersion: '2.0.0',
+          modelRef: MODEL_REF,
+          operatingStateId: 'crank',
+          faultScenarioIds: faultIds,
+          measurementRequests: measurements || voltageRequests()
+        };
+      }
+
+      function clientWith(options) {
+        var api = window.TorqueMindSimulation;
+        return api.createEngineClient(Object.assign({
+          fallbackSolve: function () { throw new Error('fallback must not run in this path'); },
+          nodeCount: function () { return 11; },
+          models: [registration(state.template)]
+        }, options));
+      }
+
+      async function boot() {
+        var api = window.TorqueMindSimulation;
+        if (!api) throw new Error('simulation bundle did not expose an API');
+        var response = await fetch(MODEL_REF);
+        if (!response.ok) throw new Error('template fetch failed: ' + response.status);
+        state.template = await response.json();
+        var heapBefore = heap();
+        var started = performance.now();
+        state.client = clientWith({ workerFactory: function () { return new Worker('/dist-simulation/mna-worker.js'); } });
+        var first = await state.client.solve(request('warmup', []));
+        state.metrics.initMs = performance.now() - started;
+        state.metrics.firstEngine = first.ok ? first.provenance.engine : 'error:' + first.failure.code;
+        state.metrics.heapBefore = heapBefore;
+        state.metrics.heapAfter = heap();
+        state.metrics.executionPath = state.client.executionPath();
+      }
+
+      window.harness = {
+        ready: null,
+        errors: state.errors,
+        metrics: state.metrics,
+        solveHealthy: function () { return state.client.solve(request('healthy', [])); },
+        solveFaults: function (faultIds) { return state.client.solve(request('fault', faultIds)); },
+        measureLatency: async function (iterations) {
+          var samples = [];
+          for (var i = 0; i < iterations; i += 1) {
+            var t0 = performance.now();
+            var result = await state.client.solve(request('lat-' + i, []));
+            samples.push(performance.now() - t0);
+            if (!result.ok) throw new Error('solve failed: ' + result.failure.code);
+          }
+          samples.sort(function (a, b) { return a - b; });
+          return {
+            count: samples.length,
+            p50: samples[Math.floor(samples.length * 0.5)],
+            p95: samples[Math.floor(samples.length * 0.95)],
+            max: samples[samples.length - 1],
+            heapAfter: heap()
+          };
+        },
+        timeoutPath: async function () {
+          var client = clientWith({ workerFactory: function () { return new Worker('/dist-simulation/mna-worker.js'); }, timeoutMs: 1 });
+          var result = await client.solve(request('timeout', []));
+          client.dispose();
+          return result;
+        },
+        cancelPath: async function () {
+          var promise = state.client.solve(request('cancel-me', []));
+          state.client.cancel('cancel-me');
+          return await promise;
+        },
+        fallbackPath: async function () {
+          var client = clientWith({
+            workerFactory: function () { return null; },
+            fallbackSolve: function (req) {
+              return { ok: true, requestId: req.requestId, quantities: [], residuals: { infinityNorm: 0, iterations: 0, tolerance: 1e-9 }, excludedElements: [], warnings: [], provenance: { manifestId: 'x', modelId: 'x', modelVersion: 'x', solverVersion: 'fallback', engine: 'main-thread-fallback', deterministic: true } };
+            }
+          });
+          var result = await client.solve(request('fallback', []));
+          client.dispose();
+          return result;
+        },
+        largeNetworkPath: async function () {
+          var client = clientWith({ workerFactory: function () { return null; }, maxNodesForFallback: 40, nodeCount: function () { return 500; } });
+          var result = await client.solve(request('large', []));
+          client.dispose();
+          return result;
+        },
+        disposePath: async function () {
+          var client = clientWith({ workerFactory: function () { return new Worker('/dist-simulation/mna-worker.js'); } });
+          client.dispose();
+          return await client.solve(request('after-dispose', []));
+        }
+      };
+
+      window.harness.ready = boot()
+        .then(function () { document.getElementById('status').textContent = 'ready'; return true; })
+        .catch(function (error) {
+          document.getElementById('status').textContent = 'failed: ' + error.message;
+          state.errors.push(String(error && error.message));
+          throw error;
+        });
+    })();
+  </script>
+</body>
+</html>

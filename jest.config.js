@@ -2,7 +2,7 @@
 try { console.log('[JEST CONFIG LOADED]') } catch (e) {}
 module.exports = {
   testEnvironment:       'jsdom',
-  transform:             { '^.+\\.js$': ['babel-jest', { presets: ['@babel/preset-env'] }] },
+  transform:             { '^.+\\.js$': ['babel-jest', { presets: ['@babel/preset-env'] }], '^.+\\.ts$': '<rootDir>/scripts/jest-transform-ts.js' },
   testMatch: [
     '**/tests/**/*.spec.js',
     '**/tests/**/*.test.js'
@@ -14,7 +14,14 @@ module.exports = {
     // Anchored to a path-segment boundary: Jest matches absolute, forward-slash
     // normalized paths, so an unanchored 'supabase/tests/' would also ignore any
     // checkout directory ending in '-supabase' plus its own tests/ folder.
-    '^(.*)/supabase/tests/'
+    '^(.*)/supabase/tests/',
+    // Git worktrees checked out inside a repository directory (for example
+    // 'wt-<name>/') contain their own copy of 'tests/', so the '**/tests/**'
+    // testMatch glob above collects duplicate, stale suites that belong to a
+    // different checkout. Anchored and directory-scoped for the same reason as
+    // the supabase pattern. This narrows discovery only; it does not skip,
+    // relax, or alter any assertion, reporter, timeout, or CI requirement.
+    '^(.*)/wt-[^/]+/tests/'
   ],
   // Ensure undici register runs before any test imports that may require Request/fetch.
   setupFiles:            ['<rootDir>/tests/jest-undici-register.js', '<rootDir>/tests/jest-setup.js'],
