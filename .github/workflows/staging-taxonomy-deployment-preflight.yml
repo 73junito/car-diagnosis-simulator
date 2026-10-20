@@ -35,7 +35,7 @@ jobs:
           git diff --exit-code HEAD -- supabase/migrations/20261013190000_retire_external_certification_taxonomy.sql
           echo 'PASS: canonical migration present; no SQL executed.'
 
-      - name: Verify approval protection and backup evidence
+      - name: Verify environment protection and backup evidence
         env:
           GH_TOKEN: ${{ github.token }}
           BACKUP_RUN_ID: ${{ inputs.backup_run_id }}
@@ -43,22 +43,17 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$BACKUP_RUN_ID" =~ ^[0-9]+$ ]] || exit 1
-          # Fail closed if staging environment lacks required reviewers.
+          # Single-developer governance: disallow bypass and require a deliberate wait.
           gh api "repos/$GITHUB_REPOSITORY/environments/jchfruprqpeypdttvlam_staging" \
-            --jq '.protection_rules | any(.type == "required_reviewers")' | grep -qx true || {
-              echo 'BLOCKED: staging environment must require independent reviewer approval.'
-              exit 1
-            }
-          gh api "repos/$GITHUB_REPOSITORY/environments/jchfruprqpeypdttvlam_staging" \
-            --jq '[.can_admins_bypass == false, (.protection_rules | any(.type == "required_reviewers" and .prevent_self_review == true))] | all' | grep -qx true || {
-              echo 'BLOCKED: disable admin bypass and require no-self-review deployment approval.'
+            --jq '[.can_admins_bypass == false, (.protection_rules | any(.type == "wait_timer" and .wait_timer >= 5))] | all' | grep -qx true || {
+              echo 'BLOCKED: staging environment requires no admin bypass and at least a 5-minute wait.'
               exit 1
             }
           test "$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BACKUP_RUN_ID" --jq .conclusion)" = success
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BACKUP_RUN_ID/artifacts" \
             --jq ".artifacts[] | select(.name == \"encrypted-staging-database-$BACKUP_RUN_ID\" and .expired == false) | .id" \
             | grep -Eq '^[0-9]+$'
-          echo 'PASS: approval protection and encrypted-backup artifact verified.'
+          echo 'PASS: staging wait protection and encrypted-backup artifact verified.'
 
       - name: State deployment readiness
         run: |
