@@ -149,6 +149,15 @@ select (
       'policies',     (select count(*) from pols where schema_name = 'public')
     ),
     'schema_fingerprint', (select value from fingerprint),
+    'schema_component_fingerprints', (
+      select coalesce(jsonb_object_agg(category, checksum order by category), '{}'::jsonb)
+      from (
+        select split_part(part, '|', 1) as category,
+               encode(digest(string_agg(part, E'\n' order by part), 'sha256'), 'hex') as checksum
+        from fingerprint_parts
+        group by split_part(part, '|', 1)
+      ) components
+    ),
     'integrity', json_build_object(
       'primary_keys',       (select count(*) from cons where contype = 'p'),
       'foreign_keys',       (select count(*) from cons where contype = 'f'),

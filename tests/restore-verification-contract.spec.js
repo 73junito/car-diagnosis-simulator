@@ -62,7 +62,7 @@ describe('restore verification matrix SQL contract', () => {
     for (const key of [
       'migration_history', 'schemas', 'object_counts', 'extensions', 'roles',
       'rls', 'public_objects', 'row_counts', 'required_tables', 'taxonomy',
-      'integrity', 'schema_fingerprint'
+      'integrity', 'schema_fingerprint', 'schema_component_fingerprints'
     ]) {
       expect(sql).toContain(`'${key}'`);
     }
