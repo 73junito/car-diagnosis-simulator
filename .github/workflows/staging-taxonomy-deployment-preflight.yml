@@ -1,4 +1,4 @@
-﻿name: Staging taxonomy migration deployment preflight
+name: Staging taxonomy migration deployment preflight
 
 on:
   workflow_dispatch:
@@ -47,6 +47,11 @@ jobs:
           gh api "repos/$GITHUB_REPOSITORY/environments/jchfruprqpeypdttvlam_staging" \
             --jq '.protection_rules | any(.type == "required_reviewers")' | grep -qx true || {
               echo 'BLOCKED: staging environment must require independent reviewer approval.'
+              exit 1
+            }
+          gh api "repos/$GITHUB_REPOSITORY/environments/jchfruprqpeypdttvlam_staging" \
+            --jq '[.can_admins_bypass == false, (.protection_rules | any(.type == "required_reviewers" and .prevent_self_review == true))] | all' | grep -qx true || {
+              echo 'BLOCKED: disable admin bypass and require no-self-review deployment approval.'
               exit 1
             }
           test "$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BACKUP_RUN_ID" --jq .conclusion)" = success
