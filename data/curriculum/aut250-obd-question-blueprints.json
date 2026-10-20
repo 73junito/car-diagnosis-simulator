@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "developmental_formative_only",
+  "courseId": "aut-250",
+  "competencyId": "ug-aut250-systematic-diagnostics",
+  "learningOutcomeIds": [
+    "aut250-lo-evaluate-engineering-assumptions",
+    "aut250-lo-theoretical-measurements"
+  ],
+  "questions": [
+    {
+      "id": "obd-dx-reference-scope-001",
+      "bloom": "evaluate",
+      "type": "single_choice",
+      "protocol": "OBD_I",
+      "stem": "Two reference entries assign different interpretations to the same legacy numeric trouble code. What evidence is needed before choosing its meaning?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "The code number alone"
+        },
+        {
+          "id": "b",
+          "text": "Manufacturer, applicable vehicle system, model year and diagnostic test context"
+        },
+        {
+          "id": "c",
+          "text": "The most common meaning from an online list"
+        }
+      ],
+      "correctChoiceId": "b",
+      "rationale": "Legacy code formats and descriptions depend on vehicle and test applicability; a code number alone cannot establish a component failure.",
+      "sourceContext": [
+        {
+          "documentId": "obdcodex-ford-obd1",
+          "page": 2,
+          "purpose": "source example; not manufacturer-verified"
+        }
+      ],
+      "technicalStatus": "pending_sme",
+      "copyrightStatus": "original_question_requires_source_rights_review",
+      "assessmentEligible": false
+    },
+    {
+      "id": "obd-dx-dtc-evidence-002",
+      "bloom": "analyze",
+      "type": "single_choice",
+      "protocol": "OBD_II",
+      "stem": "A training vehicle reports an airflow-circuit DTC and hesitates under load. Which next action best tests competing hypotheses?",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Immediately replace the airflow sensor"
+        },
+        {
+          "id": "b",
+          "text": "Clear the DTC and declare a repair"
+        },
+        {
+          "id": "c",
+          "text": "Confirm applicability, inspect relevant wiring and intake conditions, and compare scan observations against reviewed service information"
+        }
+      ],
+      "correctChoiceId": "c",
+      "rationale": "A DTC indicates a monitored condition; additional tests and applicable technical evidence are needed before attributing the fault to one component.",
+      "sourceContext": [
+        {
+          "documentId": "oemy-obd2",
+          "page": 4,
+          "purpose": "general airflow DTC context; not proof of specific vehicle behavior"
+        }
+      ],
+      "technicalStatus": "pending_sme",
+      "copyrightStatus": "original_question_requires_source_rights_review",
+      "assessmentEligible": false
+    },
+    {
+      "id": "obd-dx-comparison-003",
+      "bloom": "evaluate",
+      "type": "written_reasoning",
+      "protocol": "OBD_II",
+      "stem": "For a fictional 12 V ideal resistive load of 6 ohms, compute predicted current and power. No independent workshop measurement is supplied. Explain whether a measured discrepancy or manufacturer compliance can be concluded.",
+      "expectedEvidence": [
+        "2 A predicted current",
+        "24 W predicted power",
+        "steady-state constant-resistance assumptions",
+        "no measurement supplied; discrepancy not determined",
+        "no manufacturer specification supplied"
+      ],
+      "rationale": "Theoretical predictions do not establish observed values or OEM compliance without applicable independent evidence.",
+      "sourceContext": [],
+      "technicalStatus": "pending_sme",
+      "copyrightStatus": "original_question",
+      "assessmentEligible": false
+    }
+  ],
+  "review": {
+    "technicalSmeApproved": false,
+    "sourceRightsApproved": false,
+    "manufacturerApplicabilityVerified": false,
+    "rubricValidated": false,
+    "productionAssessmentAllowed": false
+  }
+}
