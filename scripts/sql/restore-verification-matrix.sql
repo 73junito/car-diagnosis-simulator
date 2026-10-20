@@ -14,6 +14,12 @@
 --     extensions.
 --   * excluded: ownership and ACLs (pg_restore runs with --no-owner --no-acl),
 --     OIDs, tablespaces, statistics, sequence last_value, comments.
+-- Canonicalize object names from PostgreSQL deparsers. Schema qualification
+-- is a presentation detail; these fixed search_path entries keep the text
+-- stable across staging and isolated restores. Excluded schemas remain
+-- represented through explicit object names in fingerprint parts.
+set search_path = auth, public, extensions, pg_catalog;
+
 with
 rel as (
   select n.nspname as schema_name, c.relname, c.relkind::text as kind, c.relrowsecurity as rls
@@ -21,7 +27,9 @@ rel as (
   where n.nspname not like 'pg\_%' and n.nspname <> 'information_schema'
 ),
 cols as (
-  select table_schema as schema_name, table_name, column_name, data_type, is_nullable, ordinal_position
+  select table_schema as schema_name, table_name, column_name, data_type, is_nullable,
+         row_number() over (partition by table_schema, table_name
+                            order by ordinal_position) as ordinal_position
   from information_schema.columns
   where table_schema not like 'pg\_%' and table_schema <> 'information_schema'
 ),
