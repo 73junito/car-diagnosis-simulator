@@ -91,6 +91,28 @@ jobs:
           docker exec staging-restore-test psql -U supabase_admin -d staging_restore_check \
             -At -f /tmp/restore-verification-matrix.sql > "$RUNNER_TEMP/restore/restore-verification-matrix.json"
           test -s "$RUNNER_TEMP/restore/restore-verification-matrix.json"
+          # Copy the restored staging snapshot into a second isolated database.
+          # No live database connection; migration history is never manipulated.
+          docker exec staging-restore-test createdb -U supabase_admin \
+            -T staging_restore_check staging_taxonomy_rehearsal
+          docker cp "$GITHUB_WORKSPACE/supabase/migrations/20261013190000_retire_external_certification_taxonomy.sql" \
+            staging-restore-test:/tmp/pending-taxonomy.sql
+          docker exec staging-restore-test psql -X -v ON_ERROR_STOP=1 -U supabase_admin \
+            -d staging_taxonomy_rehearsal -f /tmp/pending-taxonomy.sql
+          # Idempotency: applying the canonical file twice must not fail.
+          docker exec staging-restore-test psql -X -v ON_ERROR_STOP=1 -U supabase_admin \
+            -d staging_taxonomy_rehearsal -f /tmp/pending-taxonomy.sql
+          docker cp "$GITHUB_WORKSPACE/scripts/sql/taxonomy-rehearsal-verify.sql" \
+            staging-restore-test:/tmp/taxonomy-verify.sql
+          docker exec staging-restore-test psql -X -v ON_ERROR_STOP=1 -U supabase_admin \
+            -d staging_taxonomy_rehearsal -At -f /tmp/taxonomy-verify.sql \
+            > "$RUNNER_TEMP/restore/taxonomy-rehearsal-checks.txt"
+          test -s "$RUNNER_TEMP/restore/taxonomy-rehearsal-checks.txt"
+          ! grep -q '|FAIL' "$RUNNER_TEMP/restore/taxonomy-rehearsal-checks.txt"
+          test "$(docker exec staging-restore-test psql -X -v ON_ERROR_STOP=1 \
+            -U supabase_admin -d staging_taxonomy_rehearsal -Atc \
+            'select count(*) from supabase_migrations.schema_migrations')" = 105
+          echo "Restored-data taxonomy rehearsal PASS (history unchanged)."
           echo "Disposable PostgreSQL restore complete; verification matrix emitted."
 
       - name: Compare restored database against the recorded baseline
@@ -111,5 +133,6 @@ jobs:
           path: |
             ${{ runner.temp }}/restore/restore-verification-matrix.json
             ${{ runner.temp }}/restore/restore-verification-report.json
+            ${{ runner.temp }}/restore/taxonomy-rehearsal-checks.txt
           retention-days: 30
           if-no-files-found: warn
