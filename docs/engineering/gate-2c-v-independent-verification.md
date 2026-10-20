@@ -4,6 +4,11 @@ Status: Gate 2C-V accepted, Gate 3 authorized
 Scope: independent ngspice and real-Chromium verification of the Gate 2C electrical solver
 Recorded from the owner engineering review supplied on 2026-10-20
 
+Placement: this record lives on `docs/gate-2c-v-engineering-record`, branched
+from `origin/main` at `29d2bc8b`, the PR #1090 squash-merge of the Gate 2A–2C
+solver work. It is documentation only and carries no solver, laboratory,
+schema, feature-flag, or assessment change.
+
 Independent verification passed.
 
 Cline's latest report provides the independent validation that was missing from
@@ -75,15 +80,24 @@ real Chromium worker execution, regression results, and fault-state validation.
 | Item | Value |
 | --- | --- |
 | Repository | `73junito/car-diagnosis-simulator` |
-| Authorized worktree | `F:\TorqueMind-gate2` |
-| Branch | `feature/lab-platform-gate2` |
+| Authorization worktree | `F:\TorqueMind-gate2` (historical) |
+| Authorization branch | `feature/lab-platform-gate2` (historical) |
+| Current integration state | solver work squash-merged into `main` as PR #1090 (`29d2bc8b`); branch retired |
 
 ### 4.1 Preserve existing engineering work
 
 Verify the worktree branch, HEAD, existing modifications and all untracked
 Gate 2A–2C-V files before editing. Preserve the original `F:\TorqueMind`
-checkout, all 25 existing entries, the canonical LMF registry and the separate
-GPU Laboratory. Do not discard, reset, stash or overwrite previous work.
+checkout, the canonical LMF registry and the separate GPU Laboratory. Do not
+discard, reset, stash or overwrite previous work.
+
+Baseline correction (2026-10-20): the 25-entry count quoted in the original
+review was the Gate 2A worktree baseline. The original `F:\TorqueMind` checkout
+now holds 259 pending entries: 240 agent-skill documents across `.agents`,
+`.claude`, `.continue`, `.qwen`, `.vibe` and `skills`, the sensor-lab 3D page,
+stylesheet, script and governance test, two submodule pointers, and temporary
+inventory scripts. Those entries remain staged and uncommitted and are out of
+scope for this record.
 
 ### 4.2 Feature-flagged Starting-System integration
 
@@ -191,6 +205,10 @@ real-vehicle communication, ECU commands, grading changes or
 publication-governance changes. Do not edit the original checkout or frozen GPU
 Laboratory.
 
+Recording this review required one documentation commit, explicitly authorized
+by the owner. That commit changes documentation only and grants no authority
+for laboratory, schema, feature-flag, assessment, or deployment changes.
+
 ### 4.12 Completion evidence
 
 Return:
@@ -219,7 +237,7 @@ without explicit owner authorization.
 | Gate 2B — Unified multi-domain contracts | complete |
 | Gate 2C — Electrical MNA solver | complete |
 | Gate 2C-V — Independent ngspice and browser verification | complete, accepted |
-| Gate 3 — Starting-System student integration | authorized, next |
+| Gate 3 — Starting-System student integration | authorized, next; solver work already merged via PR #1090 |
 | Gate 4 — Additional laboratory integration | later |
 | Later gates — Other domain engines and real-vehicle diagnostics | later |
 
@@ -232,3 +250,17 @@ that will ultimately serve all 17 laboratories.
 This review relies on the supplied Cline evidence; the reviewer did not
 independently run the tests on the owner's Windows computer or change the
 repository.
+
+## 6. Record history
+
+| Date | Event |
+| --- | --- |
+| 2026-10-20 | Review recorded as `204b0f33` on `feature/lab-platform-gate2` |
+| 2026-10-20 | Gate 2A–2C solver work squash-merged into `main` as PR #1090 (`29d2bc8b`) |
+| 2026-10-20 | Record cherry-picked onto `docs/gate-2c-v-engineering-record`, cut from `origin/main` |
+| 2026-10-20 | Worktree, branch, status and baseline references corrected to current project state |
+
+The superseded copy remains on `feature/lab-platform-gate2` for provenance. That
+branch is retired: do not reopen it or merge it again now that PR #1090 has
+landed. Publication of this record, and any push of
+`docs/gate-2c-v-engineering-record`, requires explicit owner authorization.
