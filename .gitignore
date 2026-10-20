@@ -40,6 +40,9 @@ screenshots/
 .vercel
 .env*
 
+# Reproducible solver build output (regenerate with npm run build:simulation)
+dist-simulation/
+
 # Generated or experimental artifacts to ignore
 .wrangler/
 runs/*
