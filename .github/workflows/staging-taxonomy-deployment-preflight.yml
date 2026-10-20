@@ -1,0 +1,61 @@
+name: Staging taxonomy migration deployment preflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_run_id:
+        description: 'Successful encrypted staging backup workflow run ID'
+        required: true
+        type: string
+      confirm:
+        description: 'Type PREFLIGHT-STAGING; this workflow never writes to databases'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  staging-preflight:
+    if: inputs.confirm == 'PREFLIGHT-STAGING'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: jchfruprqpeypdttvlam_staging
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Confirm staging destination and migration file
+        env:
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+        run: |
+          set -euo pipefail
+          node scripts/assert-staging-supabase.js
+          test -s supabase/migrations/20261013190000_retire_external_certification_taxonomy.sql
+          git diff --exit-code HEAD -- supabase/migrations/20261013190000_retire_external_certification_taxonomy.sql
+          echo 'PASS: canonical migration present; no SQL executed.'
+
+      - name: Verify environment protection and backup evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BACKUP_RUN_ID: ${{ inputs.backup_run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$BACKUP_RUN_ID" =~ ^[0-9]+$ ]] || exit 1
+          # Single-developer governance: disallow bypass and require a deliberate wait.
+          gh api "repos/$GITHUB_REPOSITORY/environments/jchfruprqpeypdttvlam_staging" \
+            --jq '[.can_admins_bypass == false, (.protection_rules | any(.type == "wait_timer" and .wait_timer >= 5))] | all' | grep -qx true || {
+              echo 'BLOCKED: staging environment requires no admin bypass and at least a 5-minute wait.'
+              exit 1
+            }
+          test "$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BACKUP_RUN_ID" --jq .conclusion)" = success
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$BACKUP_RUN_ID/artifacts" \
+            --jq ".artifacts[] | select(.name == \"encrypted-staging-database-$BACKUP_RUN_ID\" and .expired == false) | .id" \
+            | grep -Eq '^[0-9]+$'
+          echo 'PASS: staging wait protection and encrypted-backup artifact verified.'
+
+      - name: State deployment readiness
+        run: |
+          echo 'Preflight only: no staging or production writes.'
+          echo 'Do not deploy until the historical schema fingerprint mismatch has been independently reconciled.'
