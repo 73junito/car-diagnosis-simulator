@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0.0",
+  "fixtureRole": "hand-authored-expected-netlist",
+  "templateId": "automotive-12v-starting-system",
+  "templateVersion": "2.0.0",
+  "stateId": "crank",
+  "relayStateAssumed": "closed",
+  "notice": "This netlist was written by hand from data/circuit-templates/12v-starting-system-v2.json to serve as the translation reference for the Gate 2C netlist translator. It is deliberately independent of any translator output. Every declared resistance appears exactly once. Ideal conductors merge their endpoints into a single node and contribute no resistance.",
+  "referenceNodeId": "N_REF",
+  "nodes": [
+    { "nodeId": "N_REF", "label": "Chassis / engine ground reference", "templateTerminals": ["GND1_MAIN"] },
+    { "nodeId": "N_BATNEG", "label": "Battery negative terminal", "templateTerminals": ["BAT1_NEG"] },
+    { "nodeId": "N_BATINT", "label": "Battery internal node", "templateTerminals": [] },
+    { "nodeId": "N_BATPOS", "label": "Battery positive / fuse input", "templateTerminals": ["BAT1_POS", "FUSE1_IN"] },
+    { "nodeId": "N_FUSE_OUT", "label": "Fuse output / switch input", "templateTerminals": ["FUSE1_OUT", "SW1_IN"] },
+    { "nodeId": "N_CTRL", "label": "Switch output / solenoid coil control input", "templateTerminals": ["SW1_OUT", "SOL_COIL_PWR"] },
+    { "nodeId": "N_COIL_GND", "label": "Solenoid coil ground terminal", "templateTerminals": ["SOL_COIL_GND"] },
+    { "nodeId": "N_CONTACT_BAT", "label": "Solenoid main contact, battery side", "templateTerminals": ["SOL_CONTACT_BAT"] },
+    { "nodeId": "N_CONTACT_OUT", "label": "Solenoid main contact, motor side", "templateTerminals": ["SOL_CONTACT_MOTOR"] },
+    { "nodeId": "N_MTR_PWR", "label": "Starter motor power terminal", "templateTerminals": ["MTR1_PWR"] },
+    { "nodeId": "N_MTR_GND", "label": "Starter motor ground terminal", "templateTerminals": ["MTR1_GND"] },
+    { "nodeId": "N_SW_OUT", "label": "Start switch output (exists only when the control conductor is open)", "templateTerminals": ["SW1_OUT"], "variantOnly": true },
+    { "nodeId": "N_COIL_PWR", "label": "Solenoid coil control input (exists only when the control conductor is open)", "templateTerminals": ["SOL_COIL_PWR"], "variantOnly": true }
+  ],
+  "idealConductorsMerged": [
+    { "connectionId": "W_BAT_FUSE", "mergedTerminals": ["BAT1_POS", "FUSE1_IN"] },
+    { "connectionId": "W_FUSE_SWITCH", "mergedTerminals": ["FUSE1_OUT", "SW1_IN"] },
+    { "connectionId": "W_SWITCH_SOL", "mergedTerminals": ["SW1_OUT", "SOL_COIL_PWR"] }
+  ],
+  "elements": [
+    { "elementId": "E1", "kind": "ideal-voltage-source", "fromNode": "N_BATINT", "toNode": "N_BATNEG", "templateOrigin": "BAT1", "parameterId": "sourceVoltage", "value": 12.6, "unit": "V", "positiveNode": "N_BATINT" },
+    { "elementId": "E2", "kind": "resistor", "fromNode": "N_BATPOS", "toNode": "N_BATINT", "templateOrigin": "BAT1", "parameterId": "internalResistance", "resistanceOhm": 0.008 },
+    { "elementId": "E3", "kind": "fuse", "fromNode": "N_BATPOS", "toNode": "N_FUSE_OUT", "templateOrigin": "FUSE1", "parameterId": "closedResistance", "resistanceOhm": 0.001 },
+    { "elementId": "E4", "kind": "switch", "fromNode": "N_FUSE_OUT", "toNode": "N_CTRL", "templateOrigin": "SW1", "parameterId": "closedResistance", "resistanceOhm": 0.001, "actuation": "closed" },
+    { "elementId": "E5", "kind": "solenoid-coil", "fromNode": "N_CTRL", "toNode": "N_COIL_GND", "templateOrigin": "SOL_COIL", "parameterId": "coilResistance", "resistanceOhm": 3.0 },
+    { "elementId": "E6", "kind": "conductor", "fromNode": "N_COIL_GND", "toNode": "N_REF", "templateOrigin": "W_SOL_COIL_GND", "resistanceOhm": 0.0005 },
+    { "elementId": "E7", "kind": "conductor", "fromNode": "N_BATPOS", "toNode": "N_CONTACT_BAT", "templateOrigin": "W_BAT_CONTACT", "resistanceOhm": 0.0006 },
+    { "elementId": "E8", "kind": "relay-contact", "fromNode": "N_CONTACT_BAT", "toNode": "N_CONTACT_OUT", "templateOrigin": "SOL_CONTACT", "parameterId": "closedResistance", "resistanceOhm": 0.0005, "actuation": "derived-from-coil" },
+    { "elementId": "E9", "kind": "conductor", "fromNode": "N_CONTACT_OUT", "toNode": "N_MTR_PWR", "templateOrigin": "W_CONTACT_MOTOR", "resistanceOhm": 0.0004 },
+    { "elementId": "E10", "kind": "motor-armature", "fromNode": "N_MTR_PWR", "toNode": "N_MTR_GND", "templateOrigin": "MTR1", "parameterId": "armatureResistance", "resistanceOhm": 0.05 },
+    { "elementId": "E11", "kind": "conductor", "fromNode": "N_MTR_GND", "toNode": "N_REF", "templateOrigin": "W_MOTOR_GND", "resistanceOhm": 0.0004 },
+    { "elementId": "E12", "kind": "conductor", "fromNode": "N_BATNEG", "toNode": "N_REF", "templateOrigin": "W_BAT_GND", "resistanceOhm": 0.0006 }
+  ],
+  "scenarioElementRemovals": {
+    "FAULT_OPEN_CONTROL": ["E_EXT_W_SWITCH_SOL"],
+    "FAULT_OPEN_POWER": ["E9"],
+    "FAULT_OPEN_COIL": ["E5"],
+    "FAULT_HIGH_RES_GROUND": [],
+    "FAULT_HIGH_RES_POWER": []
+  },
+  "conductorsExcludedFromDcSolve": [],
+  "spiceComparison": {
+    "runner": "ngspice-console-batch",
+    "notice": "Node numbers and element names used by the hand-authored SPICE decks, mapped to the fixture's node and element identifiers. The decks deliberately use a different numbering scheme so that a shared translation error cannot be reproduced in both implementations.",
+    "nodeMap": {
+      "0": "N_REF",
+      "10": "N_BATINT",
+      "20": "N_BATPOS",
+      "30": "N_FUSE_OUT",
+      "40": "N_CTRL",
+      "45": "N_COIL_PWR",
+      "50": "N_COIL_GND",
+      "60": "N_CONTACT_BAT",
+      "70": "N_CONTACT_OUT",
+      "80": "N_MTR_PWR",
+      "85": "N_MTR_GND",
+      "90": "N_BATNEG"
+    },
+    "elementMap": {
+      "VSRC": "E1",
+      "RINT": "E2",
+      "RNEGCABLE": "E12",
+      "RFUSE": "E3",
+      "RSWITCH": "E4",
+      "RCOIL": "E5",
+      "RCOILRETURN": "E6",
+      "RPOSCABLE": "E7",
+      "RCONTACT": "E8",
+      "RMOTORFEED": "E9",
+      "RARMATURE": "E10",
+      "RMOTORRETURN": "E11"
+    },
+    "decks": [
+      { "file": "engineering/ngspice/starting-system-v2-healthy.cir", "scenarioId": "healthy-crank" },
+      { "file": "engineering/ngspice/starting-system-v2-open-motor-feed.cir", "scenarioId": "open-motor-feed" },
+      { "file": "engineering/ngspice/starting-system-v2-open-motor-ground.cir", "scenarioId": "open-motor-ground" },
+      { "file": "engineering/ngspice/starting-system-v2-open-control.cir", "scenarioId": "open-control-circuit" },
+      { "file": "engineering/ngspice/starting-system-v2-open-coil.cir", "scenarioId": "open-solenoid-coil" }
+    ]
+  }
+}
