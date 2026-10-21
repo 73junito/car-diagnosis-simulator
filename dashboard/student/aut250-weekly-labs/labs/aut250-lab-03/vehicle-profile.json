@@ -1,0 +1,19 @@
+{
+  "standInId": "aut250-w3-vehicle-profile",
+  "status": "developmental_stand_in",
+  "notice": "Minimal original context input authored for AUT 250 Week 3. The values below are ILLUSTRATIVE TRAINING LABELS. They are not a real vehicle identity, not verified vehicle data, and not a source of code meaning.",
+  "profile": {
+    "manufacturerContext": "Illustrative legacy manufacturer A (training label)",
+    "modelYear": 1988,
+    "engine": "Illustrative inline four-cylinder (training label)",
+    "retrievalMethod": "Illustrative flash-code output via a self-test connector",
+    "testMode": "Illustrative key-on-engine-off self-test",
+    "additionalSystems": "not supplied"
+  },
+  "contextRequirementNotice": "OBD-I code meaning depends on manufacturer, model year, engine, retrieval method and test mode. This profile supplies the context fields, but it does not supply any code definition.",
+  "whyThisMatters": [
+    "The same numeric output can carry different meanings across manufacturers and test modes.",
+    "A retrieval performed in the wrong test mode can produce an output that is misinterpreted.",
+    "Without a verified manufacturer source, no code meaning may be asserted."
+  ]
+}
