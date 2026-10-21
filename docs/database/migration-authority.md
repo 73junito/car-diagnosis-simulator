@@ -1,0 +1,86 @@
+# Migration authority and integrity baseline
+
+Status: Phase 2A (local, uncommitted). No database was contacted for this record.
+
+## 1. Authoritative migration sequence
+
+| Path | Role | Evidence |
+| --- | --- | --- |
+| `supabase/migrations/` | **Canonical** sequence for Supabase-managed application schema (106 files, `20260710204828` to `20261013190000`) | `db/migrations/MIGRATION-FLOW.md` documents committing to `supabase/migrations/`; `docs/phase-4-functional-gap-roadmap.md` states the legacy surface is superseded by canonical Supabase migrations; `.github/workflows/supabase-migration-drift.yml` compares this history with staging and production; `.github/workflows/staging-taxonomy-deployment-preflight.yml` asserts the specific canonical file before any staging action |
+| `db/migrations/` | **Legacy / historical** (6 SQL files plus `MIGRATION-FLOW.md`) | Applied only by `.github/workflows/apply-migrations.yml` into a disposable `postgres:14` service; no staging or production target is configured for it; `docs/phase-4-functional-gap-roadmap.md` marks the surface historical |
+
+Ownership statements:
+
+- New application schema changes belong in `supabase/migrations/` only.
+- `db/migrations/` is retained for history. It is **not** deleted, consolidated or reordered here, and its workflow is unchanged by Phase 2A.
+- The trademark policy guard already exempts `db/migrations/` as a historical prefix (`scripts/verify-prohibited-trademark-policy.js`).
+
+## 2. Target databases
+
+| Environment | Project ref | Evidence | Verified by this phase |
+| --- | --- | --- | --- |
+| Staging | `jchfruprqpeypdttvlam` | `scripts/assert-staging-supabase.js`, `supabase-migration-drift.yml`, `staging-taxonomy-deployment-preflight.yml` | No — no credentials were used |
+| Production | `pffdgqpynpbffbcnxmum` | `supabase-migration-drift.yml` (hard-coded URL), `_headers` CSP `connect-src` | No — no credentials were used |
+
+Migration history is exposed only through `public.app_migration_history()` (migration `20261011220034_expose_migration_history_for_drift_check.sql`), a `security definer` function returning `version` and `name`, revoked from `public`, `anon` and `authenticated` and granted to `service_role` only.
+
+## 3. PostgreSQL version requirement
+
+`supabase/config.toml` declares `major_version = 17`. The canonical sequence does create at least one extension itself — `supabase/migrations/20261005031812_create_orchestration_persistence_rpc.sql` opens with `create extension if not exists pgcrypto;` — while the `anon`/`authenticated`/`service_role` roles and the `supabase_migrations` schema are provisioned by the Supabase platform rather than by the SQL files.
+
+Consequences:
+
+- Any disposable runtime must supply the platform roles, the preinstalled extension catalogue **and** permission for migrations to create extensions. A pinned `supabase/postgres:17.*` image (or a pinned Supabase CLI local stack) is required; a vanilla image must not be assumed sufficient.
+- Extension state is part of schema parity: Phase 2B must compare `pg_extension` alongside relations, policies, constraints, indexes, triggers and functions.
+- `.github/workflows/apply-migrations.yml` still uses `postgres:14` for the legacy `db/migrations/` set. That mismatch is recorded here as a known hazard and is **not** changed in this phase; any future work on that workflow must move it to the Supabase-compatible runtime or retire it deliberately.
+
+## 4. Integrity baseline
+
+`docs/database/migration-integrity-baseline.json` records, for every canonical migration, its version, repository path, SHA-256 hash and byte length.
+
+One historical filename contains the retired vendor token, so that path is serialised with a JSON unicode escape (`pathEncoding` records the rule). Decoding yields the exact repository path, so comparisons stay literal while the trademark guard remains satisfied without modification.
+
+Adoption semantics, recorded in the manifest itself (`hashHistory`):
+
+> SHA-256 hashes are authoritative from the adoption date forward. No trustworthy pre-adoption hash history exists, so earlier modification can be neither proven nor disproven.
+
+The manifest therefore establishes immutability from adoption; it does not make a claim about earlier history. Where historical evidence exists it lives elsewhere (`docs/database/staging-restore-baseline-39172287178.json`, `docs/database/staging-taxonomy-migration-rehearsal.md`) and describes database state, not file content.
+
+## 5. Validator
+
+`scripts/verify-migration-integrity.js` is deterministic, dependency-free and side-effect free unless `--write` is passed.
+
+| Command | Behaviour |
+| --- | --- |
+| `node scripts/verify-migration-integrity.js` | Verify the repository against the baseline |
+| `node scripts/verify-migration-integrity.js --allow-pending` | Report pending additions without failing (local convenience) |
+| `node scripts/verify-migration-integrity.js --json` | Machine-readable result |
+| `node scripts/verify-migration-integrity.js --write` | Regenerate the reviewed baseline (preserves adoption metadata and approved no-op pairs) |
+
+Violation codes: `INVALID_FILENAME`, `DUPLICATE_VERSION`, `EMPTY_MIGRATION`, `MISSING_MIGRATION`, `MIGRATION_CONTENT_CHANGED`, `BACKDATED_ADDITION`, `DUPLICATE_CONTENT`, `BASELINE_MISSING_ENTRY`.
+
+Exit codes: `0` satisfied, `1` integrity violation, `2` baseline or configuration error.
+
+Duplicate-content migrations are **not** silently dropped from the comparison: they fail unless the exact pair is listed in `approvedDuplicateContent` as an intentional, reviewed no-op.
+
+## 6. Adding a migration (from Phase 2A onward)
+
+1. Create `supabase/migrations/YYYYMMDDHHMMSS_lower_snake_case.sql` with a new version greater than the newest baselined version.
+2. Run `node scripts/verify-migration-integrity.js` — a new version is reported as `BASELINE_MISSING_ENTRY`.
+3. Run `node scripts/verify-migration-integrity.js --write` and commit the regenerated manifest in the same change.
+4. Never edit, rename or delete an already-baselined migration; corrections go in a new migration.
+
+## 7. Not covered yet
+
+- Actual schema parity against staging or production (Phase 2B), including columns, types, extensions, indexes, triggers, functions and RLS policies beyond the ad-hoc checks in `supabase/verification/04_security_audit.sql`.
+- Disposable PostgreSQL 17/Supabase-compatible apply tests (Phase 2C).
+- The staging taxonomy mismatch itself (Phase 2D), which needs its own approved database recovery action; `scripts/sql/staging-taxonomy-recovery-preflight.sql` and `docs/database/staging-taxonomy-recovery-gate.md` (PR #1076) own that path.
+- Scheduled read-only drift detection (Phase 2E) and recovery/rollback documentation (Phase 2F).
+
+## 8. Interaction with open work
+
+| PR | Relationship |
+| --- | --- |
+| #1084 | Adds `scripts/sql/verify-taxonomy-migration-applied.sql` and the schema-probe gate. Phase 2A does not duplicate them and does not touch the trademark guard |
+| #1063 | Adds `supabase/migrations/20261018050000_create_obd_reference_catalog.sql`; it must regenerate the baseline in the same PR |
+| #1076 | Owns the staging recovery gate and preflight SQL; Phase 2A adds no recovery SQL |

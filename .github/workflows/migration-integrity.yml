@@ -1,0 +1,48 @@
+name: Migration Integrity
+
+# Repository-only integrity gate for the canonical Supabase migration sequence.
+# It performs no database access, carries no credentials, applies no migration
+# and does not deploy. See docs/database/migration-authority.md.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - "docs/database/migration-integrity-baseline.json"
+      - "scripts/verify-migration-integrity.js"
+      - "tests/migration-integrity.spec.js"
+      - ".github/workflows/migration-integrity.yml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - "docs/database/migration-integrity-baseline.json"
+      - "scripts/verify-migration-integrity.js"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: migration-integrity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  migration-integrity:
+    name: repository migration integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+
+      - name: Verify migration integrity against the reviewed baseline
+        run: node scripts/verify-migration-integrity.js
