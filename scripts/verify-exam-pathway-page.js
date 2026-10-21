@@ -6,10 +6,26 @@ const path = require("path");
 const { chromium } = require("@playwright/test");
 
 const root = path.resolve(__dirname, "..", "exam-site");
+const curriculumDir = path.resolve(__dirname, "..", "data", "curriculum");
 const port = 3011;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+/**
+ * Expected pathway counts come from the canonical curriculum files rather than
+ * hard-coded numbers: /learning-path/ renders the pathway course sets
+ * (undergraduate-courses.json / graduate-courses.json), which are a different
+ * collection from the 68-record course catalog in course-catalog.json.
+ * Deriving the expectation keeps this validator honest when the canonical
+ * curriculum grows.
+ */
+function canonicalCount(file) {
+  const full = path.join(curriculumDir, file);
+  const parsed = JSON.parse(fs.readFileSync(full, "utf8"));
+  assert(Array.isArray(parsed.courses), `${file} must expose a courses array`);
+  return parsed.courses.length;
 }
 
 function mime(file) {
@@ -61,8 +77,17 @@ async function verify() {
   const undergradCount = await page.locator("#undergraduate-content .course-grid article").count();
   const graduateCount = await page.locator("#graduate-content .graduate-grid article").count();
 
-  assert(undergradCount === 43, `Expected 43 undergraduate courses, found ${undergradCount}`);
-  assert(graduateCount === 21, `Expected 21 graduate courses, found ${graduateCount}`);
+  const expectedUndergraduate = canonicalCount("undergraduate-courses.json");
+  const expectedGraduate = canonicalCount("graduate-courses.json");
+
+  assert(
+    undergradCount === expectedUndergraduate,
+    `Expected ${expectedUndergraduate} undergraduate courses from data/curriculum/undergraduate-courses.json, found ${undergradCount}`
+  );
+  assert(
+    graduateCount === expectedGraduate,
+    `Expected ${expectedGraduate} graduate courses from data/curriculum/graduate-courses.json, found ${graduateCount}`
+  );
 
   const body = await page.locator("body").innerText();
   assert(body.includes("CIP 47.0604"), "Undergraduate CIP missing");
