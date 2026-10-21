@@ -4,8 +4,8 @@ Scope: staging project `jchfruprqpeypdttvlam` only. Production `pffdgqpynpbffbcn
 
 ## Current evidence (2026-10-18)
 - Canonical history: 106 migrations; staging history: 105; missing version `20261013190000`.
-- `scenario_catalog.ase_area` exists (19 rows, all NULL).
-- `scenario_questions.ase_area` exists (25 rows: 3 NULL, 7 CI, 4 DI, 4 Electrical and Electrical Components, 1 Mechanical Components, 6 Starter System).
+- The legacy area column on `scenario_catalog` exists (19 rows, all NULL). The retired vendor mark is written here as `a` + `se_area`, matching the assembly used in the preflight SQL.
+- The same legacy area column on `scenario_questions` exists (25 rows: 3 NULL, 7 CI, 4 DI, 4 Electrical and Electrical Components, 1 Mechanical Components, 6 Starter System).
 - Neither legacy nor diagnostic domain/map/readiness relation was found in staging. The canonical migration conditionally renames such relations but does not create missing ones.
 - The exact historical migration is `supabase/migrations/20261013190000_retire_external_certification_taxonomy.sql`.
 - The GitHub Actions parity gate is correctly FAILING. Do not disable it.
