@@ -1,0 +1,166 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-01",
+  "week": 1,
+  "title": "Diagnostic safety and equipment familiarization",
+  "durationMinutes": 120,
+  "delivery": "virtual_formative_development",
+  "competencyId": "ug-aut250-systematic-diagnostics",
+  "learningObjective": "Demonstrate tool selection, isolation and safe measurement setup in a simulated bay.",
+  "learningOutcomeIds": ["aut250-lo-evaluate-engineering-assumptions"],
+  "sessionMinutes": {
+    "safetyBriefing": 10,
+    "instructorDemonstration": 15,
+    "studentDiagnosis": 60,
+    "evidenceReport": 25,
+    "debrief": 10
+  },
+  "equipment": [
+    {
+      "id": "dvom",
+      "label": "Digital multimeter (simulated)",
+      "assetRef": "dashboard/student/aut250-lab-assets/src/multimeter.js",
+      "availability": "available",
+      "notes": "Data-driven asset; displays only supplied measurements."
+    },
+    {
+      "id": "scan_tool",
+      "label": "Scan tool panel (simulated)",
+      "assetRef": "dashboard/student/aut250-lab-assets/src/scan-tool.js",
+      "availability": "available",
+      "notes": "Renders provider-supplied codes and data only."
+    },
+    {
+      "id": "oscilloscope",
+      "label": "Oscilloscope (simulated)",
+      "assetRef": "dashboard/student/aut250-lab-assets/src/oscilloscope.js",
+      "availability": "available",
+      "notes": "Text description is authoritative; canvas is supplementary."
+    }
+  ],
+  "safetyBriefing": {
+    "points": [
+      "Confirm the simulated vehicle is in a safe state before any measurement.",
+      "Treat every supplied voltage as live and select the correct meter function first.",
+      "Report an unsafe or ambiguous step instead of proceeding with the exercise."
+    ],
+    "boundaries": "This is a simulated training bay. No physical vehicle, tool, or high-voltage procedure is performed, and no reading implies a real vehicle condition."
+  },
+  "instructorDemonstration": {
+    "summary": "Demonstrate meter function selection, lead placement, and a scan-tool session before students begin.",
+    "steps": [
+      "Select the DC voltage function and show the display before connection.",
+      "Connect the negative lead to the simulated ground point, then the positive lead.",
+      "Show the scan-tool panel with no data supplied and explain the empty state."
+    ]
+  },
+  "scenario": {
+    "symptom": "Simulated training bay: the instruments are connected but no measurements have been supplied yet.",
+    "systemContext": "Familiarization only. Students practice selecting the correct instrument and function before any fault is introduced.",
+    "vehicleContext": { "contextStatus": "not_applicable", "make": null, "year": null, "engine": null, "testMode": null },
+    "measurements": [
+      {
+        "id": "m-supply-voltage",
+        "label": "Illustrative supply voltage (training value)",
+        "instrumentId": "dvom",
+        "testPoint": "simulated battery positive",
+        "value": 12.62,
+        "unit": "V",
+        "conditions": "simulated key on, engine off",
+        "provenance": "illustrative",
+        "limitations": "Illustrative training value. Not a measurement of any vehicle and not an OEM specification."
+      }
+    ],
+    "waveformEvidence": {
+      "mode": "qualitative",
+      "descriptors": [
+        "No sampled trace is supplied for this lab.",
+        "Students describe what a steady DC level would look like in text."
+      ],
+      "samples": null,
+      "illustrative": true,
+      "notes": "Qualitative descriptors only; no fictional waveform is plotted."
+    },
+    "uncertainty": "Students must state which values are illustrative training inputs rather than verified measurements."
+  },
+  "competingHypotheses": [
+    {
+      "id": "h-1",
+      "statement": "The instruments are working and simply have no supplied data yet.",
+      "evidenceFor": ["The scan tool reports an explicit empty state."],
+      "evidenceAgainst": []
+    },
+    {
+      "id": "h-2",
+      "statement": "A connection fault prevents any measurement from being supplied.",
+      "evidenceFor": ["No reading appears after the meter is connected."],
+      "evidenceAgainst": ["The supplied illustrative voltage does display once requested."]
+    }
+  ],
+  "testSelectionOptions": [
+    {
+      "id": "t-1",
+      "label": "Check the meter function before connecting the leads",
+      "justificationPrompt": "Explain why function selection precedes connection.",
+      "expectedObservation": "The display shows the selected function with no value until data is supplied."
+    },
+    {
+      "id": "t-2",
+      "label": "Request a scan-tool session and read the empty state",
+      "justificationPrompt": "Explain what the empty state does and does not prove.",
+      "expectedObservation": "The panel states that nothing has been supplied."
+    }
+  ],
+  "evidenceWorksheet": {
+    "prompts": [
+      "Which instrument and function did you select first, and why?",
+      "What did the instruments show before any data was supplied?",
+      "Which values in this lab are illustrative training inputs?",
+      "What would you report to an instructor before continuing?"
+    ],
+    "requiredFields": ["instrumentSelection", "safetyCheck", "provenanceStatement", "nextStepJustification"]
+  },
+  "repairVerification": {
+    "steps": ["Re-select the instrument function and re-request the supplied reading."],
+    "expectedEvidence": ["A repeated reading with the same conditions and provenance label."]
+  },
+  "accessibility": {
+    "keyboardPath": "Tab through the instrument controls, then use Enter or Space to request a reading.",
+    "textAlternatives": ["Every reading is shown as text with its unit and provenance."],
+    "notes": ["Motion is decorative and disabled under prefers-reduced-motion."]
+  },
+  "sources": [
+    {
+      "id": "src-project",
+      "kind": "project_authored",
+      "title": "Project-authored training scenario",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Authored for this repository; no external reproduction."
+    },
+    {
+      "id": "src-obd-reference",
+      "kind": "external_reference",
+      "title": "Uploaded OBD reference (rights unverified)",
+      "page": null,
+      "url": null,
+      "citationStatus": "pending",
+      "rightsStatus": "pending",
+      "notes": "Metadata pointer only. No content reproduced."
+    }
+  ],
+  "technicalReviewChecklist": [
+    { "id": "c-safety", "statement": "Simulated-only scope is stated and no physical procedure is implied.", "status": "pending" },
+    { "id": "c-provenance", "statement": "Every reading carries units, conditions and provenance.", "status": "pending" },
+    { "id": "c-accessibility", "statement": "Keyboard path and text alternatives are described.", "status": "pending" }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}

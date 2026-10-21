@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-03",
+  "week": 3,
+  "instructorOnly": true,
+  "expectedEvidence": [
+    {
+      "id": "E1",
+      "statement": "Student records make, model year, engine, retrieval method and test mode before attempting any interpretation, marking any unknown item explicitly.",
+      "required": true,
+      "notes": "Context first is the central requirement of this week."
+    },
+    {
+      "id": "E2",
+      "statement": "Student records the raw flash-code observation without adding a meaning.",
+      "required": true,
+      "notes": "Adding an asserted meaning is the primary failure mode to look for."
+    },
+    {
+      "id": "E3",
+      "statement": "Student states that code meaning cannot be established from the supplied information and requires a verified manufacturer source.",
+      "required": true,
+      "notes": "This is the correct response given the unavailable reference catalog. Do not supply the meaning yourself."
+    },
+    {
+      "id": "E4",
+      "statement": "Student proposes an independent electrical test and states what it would establish.",
+      "required": true,
+      "notes": "The test should gather evidence about the circuit rather than restate the code."
+    },
+    {
+      "id": "E5",
+      "statement": "Student distinguishes a currently present condition from a stored condition that may no longer be active.",
+      "required": true,
+      "notes": null
+    }
+  ],
+  "acceptableAlternatives": [
+    {
+      "id": "A1",
+      "statement": "Any independently justified test is acceptable if it gathers circuit evidence and states a decision point.",
+      "notes": "Do not require a specific test sequence."
+    },
+    {
+      "id": "A2",
+      "statement": "Students may state that no interpretation is possible until the source is verified.",
+      "notes": "This is a correct and expected answer, not an incomplete one."
+    }
+  ],
+  "misconceptionFeedback": [
+    {
+      "id": "M1",
+      "misconception": "A numeric flash code has one universal meaning.",
+      "feedback": "Meaning depends on manufacturer, model year, engine, retrieval method and test mode. Ask which of these the student established before interpreting."
+    },
+    {
+      "id": "M2",
+      "misconception": "A stored code identifies the failed part.",
+      "feedback": "A code records that a monitored condition was detected. Ask what independent evidence would be needed to identify a component."
+    },
+    {
+      "id": "M3",
+      "misconception": "Any available online table can be used to look up the meaning.",
+      "feedback": "Only a verified source with cleared rights may establish meaning. Ask the student to mark the meaning unresolved instead."
+    }
+  ],
+  "debriefPrompts": [
+    "What would have to change before you could state the code's meaning?",
+    "Which of your statements were observations, and which were interpretations?"
+  ],
+  "sources": [
+    {
+      "id": "src-project-w3-instructor",
+      "kind": "project_authored",
+      "title": "Project-authored Week 3 instructor evidence guide",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Authored for this repository. Contains no manufacturer code definition."
+    },
+    {
+      "id": "src-obd-reference-catalog-1063-instructor",
+      "kind": "external_reference",
+      "title": "Source-governed OBD-I/OBD-II reference catalog (PR #1063, unmerged)",
+      "page": null,
+      "url": null,
+      "citationStatus": "pending",
+      "rightsStatus": "pending",
+      "notes": "Instructors must not substitute an unverified definition while this remains unmerged."
+    }
+  ],
+  "technicalReviewChecklist": [
+    { "id": "C1", "statement": "Guide asserts no manufacturer code definition, OEM threshold or service procedure.", "status": "pending" },
+    { "id": "C2", "statement": "Expected evidence is reachable without the student guessing an unavailable definition.", "status": "pending" },
+    { "id": "C3", "statement": "Feedback reinforces observation versus interpretation without asserting a vehicle condition.", "status": "pending" },
+    { "id": "C4", "statement": "No answer content appears in the student bundle.", "status": "pending" }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}

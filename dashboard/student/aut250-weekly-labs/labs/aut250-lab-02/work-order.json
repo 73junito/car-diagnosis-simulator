@@ -1,0 +1,23 @@
+{
+  "standInId": "aut250-w2-work-order-input",
+  "status": "developmental_stand_in",
+  "notice": "Minimal original input authored for AUT 250 Week 2. It presents a written customer concern only. It is not a completed service-write-up tool, has no persistence, produces no repair order, and contains no manufacturer procedure or specification.",
+  "customerConcern": {
+    "verbatim": "It runs rough sometimes and the light comes on, mostly when I am getting on the highway.",
+    "reportedBy": "illustrative customer statement (fictional)",
+    "reportedConditions": "customer-reported only; not observed, not verified, not reproduced",
+    "frequency": "reported as intermittent",
+    "warningLampReported": true
+  },
+  "missingInformation": [
+    "Vehicle make, model year and engine are not supplied.",
+    "When the concern occurs and when it does not occur is not established.",
+    "Whether the warning lamp remains illuminated is not established.",
+    "No measurement, scan data or stored record has been supplied."
+  ],
+  "studentTaskPrompts": [
+    "Rewrite the concern as a testable symptom statement with conditions and an observable effect.",
+    "List every unknown item and state why each one matters before a plan is made.",
+    "State which information source would be required, and why an unverified source cannot be used as authority."
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-01",
+  "week": 1,
+  "instructorOnly": true,
+  "expectedEvidence": [
+    {
+      "id": "e-1",
+      "statement": "Student states that no data was supplied and identifies the empty-state message.",
+      "required": true,
+      "notes": "Accept a paraphrase that distinguishes 'no data supplied' from 'no fault found'."
+    },
+    {
+      "id": "e-2",
+      "statement": "Student identifies which supplied values are illustrative training inputs.",
+      "required": true,
+      "notes": null
+    }
+  ],
+  "acceptableAlternatives": [
+    {
+      "id": "a-1",
+      "statement": "Any ordering of instrument checks that states a safety reason first is acceptable.",
+      "notes": "Sequence order is not graded; justification is what matters."
+    }
+  ],
+  "misconceptionFeedback": [
+    {
+      "id": "mis-1",
+      "misconception": "An empty scan-tool panel proves the vehicle has no faults.",
+      "feedback": "An empty panel means no data was supplied to the panel. It is not evidence about a real vehicle."
+    },
+    {
+      "id": "mis-2",
+      "misconception": "Illustrative training values are manufacturer specifications.",
+      "feedback": "Illustrative values are authored for practice. They are not specifications and must not be quoted as such."
+    }
+  ],
+  "debriefPrompts": [
+    "Which step would you change if a real vehicle were involved, and why?",
+    "Where did you have to state an uncertainty rather than a conclusion?"
+  ],
+  "sources": [
+    {
+      "id": "src-project",
+      "kind": "project_authored",
+      "title": "Project-authored instructor guide",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Authored for this repository."
+    }
+  ],
+  "technicalReviewChecklist": [
+    { "id": "c-safety", "statement": "Instructor guide does not imply any physical procedure.", "status": "pending" },
+    { "id": "c-scope", "statement": "Expected evidence is achievable without guessing a hidden key.", "status": "pending" },
+    { "id": "c-feedback", "statement": "Misconception feedback corrects without asserting a vehicle condition.", "status": "pending" }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}

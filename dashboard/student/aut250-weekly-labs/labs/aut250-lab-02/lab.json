@@ -1,0 +1,236 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-02",
+  "week": 2,
+  "title": "Concern verification and diagnostic strategy",
+  "durationMinutes": 120,
+  "delivery": "virtual_formative_development",
+  "competencyId": "ug-aut250-systematic-diagnostics",
+  "learningObjective": "Translate customer concern into testable symptoms and initial plan",
+  "learningOutcomeIds": [
+    "aut250-lo-evaluate-engineering-assumptions"
+  ],
+  "sessionMinutes": {
+    "safetyBriefing": 10,
+    "instructorDemonstration": 15,
+    "studentDiagnosis": 60,
+    "evidenceReport": 25,
+    "debrief": 10
+  },
+  "equipment": [
+    {
+      "id": "work_order",
+      "label": "Work-order input (developmental stand-in)",
+      "assetRef": "dashboard/student/aut250-weekly-labs/labs/aut250-lab-02/work-order.json",
+      "availability": "prototype",
+      "notes": "Minimal original stand-in authored for this lab. It provides a written customer concern only. It is not a completed service-write-up tool, has no persistence, and does not produce a repair order."
+    },
+    {
+      "id": "service_information",
+      "label": "Service information lookup",
+      "assetRef": null,
+      "availability": "missing",
+      "notes": "Not available. No approved service-information source exists in this repository and the source-rights status of the uploaded references is unverified. This lab therefore requires students to state which information they would need and where it must come from, instead of presenting a lookup interface."
+    }
+  ],
+  "safetyBriefing": {
+    "points": [
+      "Verify the concern before planning work; an unverified concern cannot be diagnosed.",
+      "Record the exact conditions under which the concern occurs, including when it does not occur.",
+      "State any assumption you make, and state what evidence would confirm or refute it.",
+      "Do not begin a repair plan from a customer description alone."
+    ],
+    "boundaries": "Simulated and paper-based only. No vehicle is inspected, no test is performed, and no manufacturer procedure or specification is provided or implied."
+  },
+  "instructorDemonstration": {
+    "summary": "Demonstrate converting an ambiguous customer statement into a verifiable symptom statement, then into an ordered test plan with stated assumptions.",
+    "steps": [
+      "Read the supplied customer concern and identify the vague terms in it.",
+      "Rewrite the concern as a symptom statement that states conditions and a measurable observation.",
+      "List two competing causes that the symptom alone cannot separate.",
+      "State the first test and what result would change the plan.",
+      "Show what happens when service information is unavailable: state the need rather than guessing a specification."
+    ]
+  },
+  "scenario": {
+    "symptom": "Supplied customer concern: 'It runs rough sometimes and the light comes on, mostly when I am getting on the highway.' No measurement has been supplied yet.",
+    "systemContext": "Concern verification and strategy only. Students must turn an ambiguous statement into a testable symptom, name the missing information, and justify an ordered plan without performing a diagnosis.",
+    "vehicleContext": {
+      "contextStatus": "unknown",
+      "make": null,
+      "year": null,
+      "engine": null,
+      "testMode": null
+    },
+    "measurements": [
+      {
+        "id": "m-w2-concern",
+        "label": "Supplied customer concern (written statement, not a measurement)",
+        "instrumentId": "work_order",
+        "testPoint": null,
+        "value": "rough running sometimes; warning lamp illuminated; reported mainly under highway acceleration",
+        "unit": null,
+        "conditions": "customer-reported conditions only; not observed or verified",
+        "provenance": "illustrative",
+        "limitations": "A customer statement is not a measurement. It is unverified, subjective and incomplete, and it must not be treated as a confirmed symptom."
+      }
+    ],
+    "waveformEvidence": {
+      "mode": "qualitative",
+      "descriptors": [
+        "No waveform is supplied in Week 2. No scope work is expected.",
+        "Students state whether a scope observation would even be an appropriate first step, and why or why not."
+      ],
+      "samples": null,
+      "illustrative": true,
+      "notes": "No sampled trace is supplied and none is implied."
+    },
+    "uncertainty": "The concern is unverified and the vehicle is unidentified. Students must state what is unknown and what must be established before any measurement plan is meaningful.",
+    "scanData": null
+  },
+  "competingHypotheses": [
+    {
+      "id": "H1",
+      "statement": "The reported concern reflects a real intermittent condition that only occurs under the stated highway-acceleration conditions.",
+      "evidenceFor": [
+        "The customer states a repeatable condition and a consistent operating context."
+      ],
+      "evidenceAgainst": [
+        "The report is subjective, unverified, and no measurement or stored data has been supplied to support it."
+      ]
+    },
+    {
+      "id": "H2",
+      "statement": "The reported concern is a misdescription of normal behaviour, or a condition unrelated to the system the customer suspects.",
+      "evidenceFor": [
+        "Vague terms such as 'runs rough' and 'sometimes' can describe several unrelated conditions."
+      ],
+      "evidenceAgainst": [
+        "A warning lamp was reported, which suggests a monitored condition was detected by the control system."
+      ]
+    }
+  ],
+  "testSelectionOptions": [
+    {
+      "id": "T1",
+      "label": "Verify the concern by stating conditions and a measurable observation before any test",
+      "justificationPrompt": "Explain why concern verification must precede test selection, and what makes a symptom statement testable.",
+      "expectedObservation": "A rewritten symptom statement that names conditions, frequency and an observable effect."
+    },
+    {
+      "id": "T2",
+      "label": "Identify the missing vehicle and system information before planning",
+      "justificationPrompt": "Explain which vehicle and system details are required before any plan is meaningful, and why guessing them is unacceptable.",
+      "expectedObservation": "A stated list of unknown items that must be established, with the reason each matters."
+    },
+    {
+      "id": "T3",
+      "label": "Draft an ordered plan with explicit assumptions and decision points",
+      "justificationPrompt": "Explain how each planned step would change your thinking if the result differed from expectation.",
+      "expectedObservation": "An ordered plan in which every step states what result would confirm or refute a competing hypothesis."
+    }
+  ],
+  "evidenceWorksheet": {
+    "prompts": [
+      "Rewrite the supplied customer concern as a testable symptom statement.",
+      "List everything about the vehicle and system that remains unknown, and why each item matters.",
+      "State which information source you would need, and why an unverified source cannot be used as authority.",
+      "Describe your first planned test and the result that would change your plan."
+    ],
+    "requiredFields": [
+      "symptomStatement",
+      "unknownsList",
+      "informationSourceRequirement",
+      "orderedPlanWithDecisionPoints",
+      "assumptionDisclosure"
+    ]
+  },
+  "repairVerification": {
+    "steps": [
+      "Restate the original concern and confirm the symptom statement still describes it.",
+      "Confirm each plan step names the observation that would confirm or refute it."
+    ],
+    "expectedEvidence": [
+      "A symptom statement an instructor could verify or refute from the same information.",
+      "A plan in which no step depends on an unstated assumption."
+    ]
+  },
+  "accessibility": {
+    "keyboardPath": "Tab from the skip link to the work-order panel, then through the hypothesis cards, test-selection buttons and worksheet fields using standard form navigation.",
+    "textAlternatives": [
+      "The customer concern is presented as text and is also read by the work-order stand-in panel.",
+      "All hypothesis and test information is text; no information is conveyed by colour or position alone."
+    ],
+    "notes": [
+      "No instrument is mounted in this lab, so no canvas or animated element is present.",
+      "Status and selection feedback is announced through a polite live region.",
+      "Worksheet fields are labelled and reachable in document order."
+    ]
+  },
+  "sources": [
+    {
+      "id": "src-project-w2",
+      "kind": "project_authored",
+      "title": "Project-authored Week 2 concern-verification scenario and work-order stand-in",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Authored for this repository. The customer concern is fictional and written for practice."
+    },
+    {
+      "id": "src-blueprint-1067",
+      "kind": "internal_contract",
+      "title": "AUT 250 15-week weekly lab blueprint (PR #1067, frozen c652ff69)",
+      "page": null,
+      "url": null,
+      "citationStatus": "metadata_only",
+      "rightsStatus": "not_required",
+      "notes": "Planning input. Read only; not copied into this package."
+    },
+    {
+      "id": "src-service-info",
+      "kind": "external_reference",
+      "title": "Service information source (not available, rights unverified)",
+      "page": null,
+      "url": null,
+      "citationStatus": "pending",
+      "rightsStatus": "pending",
+      "notes": "No approved source exists in this repository. The lab requires students to state the need rather than consult an unverified source."
+    }
+  ],
+  "technicalReviewChecklist": [
+    {
+      "id": "C1",
+      "statement": "Customer concern is clearly labelled unverified and is not presented as a measurement.",
+      "status": "pending"
+    },
+    {
+      "id": "C2",
+      "statement": "No manufacturer procedure, specification or service-information content is presented.",
+      "status": "pending"
+    },
+    {
+      "id": "C3",
+      "statement": "The missing service-information asset is disclosed in the lab, not simulated.",
+      "status": "pending"
+    },
+    {
+      "id": "C4",
+      "statement": "Work-order stand-in is described as a limited developmental input, not a completed tool.",
+      "status": "pending"
+    },
+    {
+      "id": "C5",
+      "statement": "Instructor material is stored outside the student tree and is not reachable from this page.",
+      "status": "pending"
+    }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}
