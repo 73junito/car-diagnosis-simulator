@@ -12,6 +12,45 @@ const workflow = fs.readFileSync(workflowPath, "utf8");
 const sql = fs.readFileSync(sqlPath, "utf8");
 const classifier = fs.readFileSync(classifierPath, "utf8");
 
+/*
+ * Returns one entry per xpath() call in the SQL, describing whether its result
+ * is wrapped in parentheses before the array subscript. A bare `xpath(...)[1]`
+ * is rejected by PostgreSQL; `(xpath(...))[1]` is the valid form. The scan is
+ * deliberately scoped to xpath() calls so unrelated `)[1]` subscripts, which
+ * can be valid elsewhere, are never flagged.
+ */
+function inspectXpathSubscripts(source) {
+  const findings = [];
+  const marker = /xpath\(/g;
+  let match;
+
+  while ((match = marker.exec(source)) !== null) {
+    let index = match.index + "xpath(".length;
+    let depth = 1;
+
+    while (index < source.length && depth > 0) {
+      if (source[index] === "(") depth += 1;
+      else if (source[index] === ")") depth -= 1;
+      index += 1;
+    }
+
+    const beforeCall = source.slice(0, match.index).replace(/\s+$/, "");
+    const afterCall = source.slice(index);
+    const bareSubscript = /^\s*\[\s*1\s*\]/.test(afterCall);
+    const wrappedSubscript = /^\s*\)\s*\[\s*1\s*\]/.test(afterCall);
+
+    findings.push({
+      line: source.slice(0, match.index).split(/\r?\n/).length,
+      subscripted: bareSubscript || wrappedSubscript,
+      bareSubscript,
+      wrappedBefore: beforeCall.endsWith("("),
+      wrappedAfter: wrappedSubscript
+    });
+  }
+
+  return findings;
+}
+
 describe("staging schema probe workflow and SQL safety (Gate A)", () => {
   test("is manual-only and scoped to the staging environment", () => {
     expect(workflow).toMatch(/^on:\r?\n  workflow_dispatch:/m);
@@ -67,6 +106,19 @@ describe("staging schema probe workflow and SQL safety (Gate A)", () => {
     expect(uploadBlock).toContain("probe-report.json");
     expect(uploadBlock).not.toContain(".env");
     expect(uploadBlock).not.toContain("STAGING_DB");
+  });
+
+  test("parenthesises every xpath() result before its array subscript", () => {
+    const findings = inspectXpathSubscripts(sql);
+
+    expect(findings).toHaveLength(4);
+
+    for (const finding of findings) {
+      expect(finding.subscripted).toBe(true);
+      expect(finding.bareSubscript).toBe(false);
+      expect(finding.wrappedBefore).toBe(true);
+      expect(finding.wrappedAfter).toBe(true);
+    }
   });
 
   test("the classifier refuses to treat a determinative exit code as permission", () => {
