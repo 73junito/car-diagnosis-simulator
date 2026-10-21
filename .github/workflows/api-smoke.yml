@@ -17,8 +17,11 @@ jobs:
     # Other non-secret CI still validates dependency PRs.
     if: github.actor != 'dependabot[bot]'
     environment: jchfruprqpeypdttvlam_staging
+    # Workflow-scoped concurrency group: distinct from smoke.yml (…-auth-…) so
+    # the two staging smoke workflows serialize independently and cannot
+    # supersede each other's pending runs for the same ref.
     concurrency:
-      group: staging-smoke-${{ github.ref }}
+      group: staging-smoke-api-${{ github.ref }}
       cancel-in-progress: false
     runs-on: ubuntu-latest
     env:
