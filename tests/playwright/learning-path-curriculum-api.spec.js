@@ -153,7 +153,9 @@ function assertNoUnexpectedFields(payload) {
 
 
 async function blockCdn(page) {
-  // The page lazily imports mermaid from a CDN; keep the suite offline-safe.
+  // The learning-path diagram is pre-rendered and static, so no CDN request is
+  // expected any more. The route stays installed as a runtime guard against
+  // reintroducing a third-party script that the exam CSP would block anyway.
   await page.route('**cdn.jsdelivr.net/**', (route) => route.abort('failed'));
 }
 
