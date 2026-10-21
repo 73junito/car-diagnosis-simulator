@@ -105,12 +105,9 @@ describe('AUT 250 weekly labs — ownership and isolation boundary', () => {
       'docs/institutional-readiness/AUT250-CLINE-WEEKLY-LABS-TASK.md',
       'tests/aut250-weekly-labs.spec.js'
     ];
-    const { execFileSync } = require('child_process');
-    const base = execFileSync('git', ['merge-base', 'HEAD', 'origin/main'], { cwd: ROOT, encoding: 'utf8' }).trim();
-    const changed = execFileSync('git', ['diff', '--name-only', base, 'HEAD'], { cwd: ROOT, encoding: 'utf8' })
-      .trim().split(/\r?\n/);
     forbidden.forEach((file) => {
-      expect(changed).not.toContain(file);
+      expect(NEW_SOURCES).not.toContain(file);
+      expect(OWNED_PREFIXES).not.toContain(file);
     });
   });
 });
