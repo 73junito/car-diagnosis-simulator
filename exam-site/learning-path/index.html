@@ -38,35 +38,26 @@
     <section class="section architecture-section" aria-labelledby="architecture-title">
       <div class="shell">
         <p class="eyebrow">PATHWAY ARCHITECTURE</p><h2 id="architecture-title">One model, two academic levels.</h2><p><a class="text-link" href="/program-architecture/">View full 68-credit undergraduate and 30-credit graduate program architecture <span aria-hidden="true">→</span></a></p>
-        <div class="mermaid-wrap"><pre class="mermaid">flowchart TD
-  A[Academic Pathways] --> U[Undergraduate - 43 courses]
-  A --> G[Graduate - 25 courses]
-
-  U --> U47[CIP 47.0604]
-  U47 --> U100[AUT 100-199<br/>Foundations - 13]
-  U47 --> U200[AUT 200-299<br/>Core Systems - 12]
-  U47 --> U300[AUT 300-499<br/>Advanced Technology - 18]
-
-  G --> G15[CIP 15.0803]
-  G15 --> G500[AUT 500-599<br/>Graduate Core and Specializations - 18]
-  G15 --> G600[AUT 600-699<br/>Research and Professional Practice - 7<br/>Applied Research included]
-
-  U100 --> C[Unique Course Catalog Record]
-  U200 --> C
-  U300 --> C
-  G500 --> C
-  G600 --> C
-  C --> URL[Stable Course Detail URL]
-  C --> D{Developed curriculum content?}
-  D -->|Yes| L[Competency and Lesson Plan]
-  D -->|Not yet| P[Catalog-only planned course]
-  L --> E[Evidence-governed Learning]</pre></div>
+        <figure class="mermaid-wrap">
+          <img src="/learning-path/pathway-architecture.svg" width="1967" height="1334" loading="lazy" decoding="async" alt="Flowchart of the academic pathway structure: undergraduate 48 courses under CIP 47.0604 (AUT 100-199 Foundations 13, AUT 200-299 Core Systems 12, AUT 300-499 Advanced Technology 18, plus 5 named subject courses) and graduate 30 courses under CIP 15.0803 (AUT 500-599 Graduate Core and Specializations 18, AUT 600-699 Research and Professional Practice 7, plus 5 named graduate courses). AUT-numbered courses lead to a unique course catalog record with a stable course detail URL; developed curriculum adds a competency and lesson plan and then evidence-governed learning, while undeveloped curriculum remains a catalog-only planned course.">
+          <figcaption>Academic pathway structure: how pathway courses, CIP classifications, course bands, catalog records and curriculum status relate.</figcaption>
+        </figure>
+        <details class="diagram-text">
+          <summary>Diagram text description</summary>
+          <ul>
+            <li>The academic pathway structure splits into two academic levels.</li>
+            <li>Undergraduate — 48 courses, CIP 47.0604: AUT 100-199 Foundations (13), AUT 200-299 Core Systems (12), AUT 300-499 Advanced Technology (18), plus 5 named subject courses (Brakes, Electrical, Engine Performance, Hybrid and Electric Vehicle Technology, Suspension and Steering).</li>
+            <li>Graduate — 30 courses, CIP 15.0803: AUT 500-599 Graduate Core and Specializations (18), AUT 600-699 Research and Professional Practice (7), plus 5 named graduate courses (Advanced Diagnostic Analysis, Applied Research, Curriculum and Assessment Design, Technical Instructional Leadership, Vehicle Systems and Testing).</li>
+            <li>Each AUT-numbered course band leads to a unique course catalog record, and every catalog record has a stable course detail URL. The catalog holds 68 records in total (43 undergraduate, 25 graduate).</li>
+            <li>Curriculum content developed: competency and lesson plan, then evidence-governed learning.</li>
+            <li>Curriculum content not yet developed: catalog-only planned course.</li>
+          </ul>
+        </details>
       </div>
     </section>
   </main>
   <footer><div class="shell footer-inner"><div><a class="footer-brand" href="/">AutoLearnPro</a><p>Automotive learning, built with evidence.</p></div><div class="footer-links"><a href="/">Exam home</a><a href="/catalog/">Course catalog</a><a href="/program-architecture/">Program architecture</a><a href="/curriculum-standards/">Curriculum standards</a><a href="https://autolearnpro.com/">Public site</a><a href="https://app.autolearnpro.com/">Training app</a></div><p class="fine-print">Pathway labels describe AutoLearnPro's academic organization. Verified authority references, AutoLearnPro-authored curriculum, and evidence provenance remain explicitly separated.</p></div></footer>
   <script type="module" src="/learning-path/pathways.js"></script>
-  <script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';mermaid.initialize({startOnLoad:true,securityLevel:'strict',theme:'neutral'});</script>
   <script type="module" src="/navigation.js"></script>
 </body>
 </html>
