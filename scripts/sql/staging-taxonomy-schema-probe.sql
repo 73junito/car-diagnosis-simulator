@@ -128,18 +128,18 @@ select json_build_object(
       where table_schema = 'public' and table_name = 'scenario_catalog'
         and column_name = 'diagnostic_area'
     ) then (
-      xpath('/row/c/text()', query_to_xml(
+      (xpath('/row/c/text()', query_to_xml(
         'select count(*) as c from public.scenario_catalog where diagnostic_area is null',
-        false, true, ''))[1]::text::int
+        false, true, '')))[1]::text::int
     ) else null end,
     'labelled', case when exists (
       select 1 from information_schema.columns
       where table_schema = 'public' and table_name = 'scenario_catalog'
         and column_name = 'diagnostic_area'
     ) then (
-      xpath('/row/c/text()', query_to_xml(
+      (xpath('/row/c/text()', query_to_xml(
         'select count(*) as c from public.scenario_catalog where diagnostic_area is not null',
-        false, true, ''))[1]::text::int
+        false, true, '')))[1]::text::int
     ) else null end
   ),
   'legacy', json_build_object(
@@ -153,18 +153,18 @@ select json_build_object(
       where table_schema = 'public' and table_name = 'scenario_catalog'
         and column_name = 'a' || 'se_area'
     ) then (
-      xpath('/row/c/text()', query_to_xml(
+      (xpath('/row/c/text()', query_to_xml(
         'select count(*) as c from public.scenario_catalog where ' || 'a' || 'se_area' || ' is null',
-        false, true, ''))[1]::text::int
+        false, true, '')))[1]::text::int
     ) else null end,
     'labelled', case when exists (
       select 1 from information_schema.columns
       where table_schema = 'public' and table_name = 'scenario_catalog'
         and column_name = 'a' || 'se_area'
     ) then (
-      xpath('/row/c/text()', query_to_xml(
+      (xpath('/row/c/text()', query_to_xml(
         'select count(*) as c from public.scenario_catalog where ' || 'a' || 'se_area' || ' is not null',
-        false, true, ''))[1]::text::int
+        false, true, '')))[1]::text::int
     ) else null end
   )
 );
