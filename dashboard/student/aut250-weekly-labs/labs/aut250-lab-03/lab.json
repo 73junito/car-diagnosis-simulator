@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-03",
+  "week": 3,
+  "title": "Ford and GM OBD-I interpretation",
+  "durationMinutes": 120,
+  "delivery": "virtual_formative_development",
+  "competencyId": "ug-aut250-systematic-diagnostics",
+  "learningObjective": "Resolve manufacturer-dependent numeric code meanings and retrieval context",
+  "learningOutcomeIds": [
+    "aut250-lo-evaluate-engineering-assumptions"
+  ],
+  "sessionMinutes": {
+    "safetyBriefing": 10,
+    "instructorDemonstration": 15,
+    "studentDiagnosis": 60,
+    "evidenceReport": 25,
+    "debrief": 10
+  },
+  "equipment": [
+    {
+      "id": "legacy_code_reference",
+      "label": "Legacy code evidence input (developmental stand-in)",
+      "assetRef": "dashboard/student/aut250-weekly-labs/labs/aut250-lab-03/legacy-code-evidence.json",
+      "availability": "prototype",
+      "notes": "Minimal original stand-in authored for this lab. It supplies illustrative flash-code observations and a written retrieval procedure. It contains no manufacturer code table, no reproduced glossary and no OEM definition, and it is not a completed reference tool."
+    },
+    {
+      "id": "vehicle_profile",
+      "label": "Vehicle profile input (developmental stand-in)",
+      "assetRef": "dashboard/student/aut250-weekly-labs/labs/aut250-lab-03/vehicle-profile.json",
+      "availability": "prototype",
+      "notes": "Minimal original stand-in that supplies the make/year/engine/test-mode context OBD-I interpretation requires. The profile is explicitly illustrative training context, not a real vehicle identity and not a source of code meaning. It is not a completed tool and provides no lookup capability."
+    }
+  ],
+  "safetyBriefing": {
+    "points": [
+      "Do not connect or disconnect anything on a simulated live circuit; describe the step instead.",
+      "Confirm the retrieval method and test mode before interpreting any code, because meaning depends on them.",
+      "Treat every code as an observation from a monitored condition until supporting evidence exists.",
+      "State clearly when a code meaning cannot be established from the information available."
+    ],
+    "boundaries": "Simulated and paper-based only. No physical retrieval is performed. No manufacturer code definition, numeric threshold or service procedure is provided, asserted or implied, because no verified source is available to this project."
+  },
+  "instructorDemonstration": {
+    "summary": "Demonstrate why the same numeric code can mean different things across manufacturers and test modes, and how to record an interpretation that is honest about what cannot be established.",
+    "steps": [
+      "Read the illustrative vehicle profile and state which context items constrain interpretation.",
+      "Show two illustrative retrieval procedures and explain how the test mode changes what a code means.",
+      "Demonstrate recording an observation without asserting a definition that no verified source supports.",
+      "Show how to mark an unresolved code meaning as requiring a verified source rather than guessing."
+    ]
+  },
+  "scenario": {
+    "symptom": "Illustrative legacy vehicle with a stored condition reported during a self-test. Flash-code observations are supplied; the code meanings are not, because no verified source is available to this project.",
+    "systemContext": "OBD-I interpretation depends on manufacturer, model year, engine, retrieval method and test mode. Students must establish that context before interpreting anything, then record what remains unresolved.",
+    "vehicleContext": {
+      "contextStatus": "specified",
+      "make": "Illustrative legacy manufacturer A (training label, not a real vehicle identity)",
+      "year": 1988,
+      "engine": "Illustrative inline four-cylinder (training label)",
+      "testMode": "Illustrative key-on-engine-off self-test with flash-code output"
+    },
+    "measurements": [
+      {
+        "id": "m-w3-flash",
+        "label": "Illustrative flash-code observation (training value)",
+        "instrumentId": "legacy_code_reference",
+        "testPoint": "illustrative self-test output connector",
+        "value": "3 flashes, pause, 2 flashes",
+        "unit": null,
+        "conditions": "illustrative key-on-engine-off self-test, warm ambient, no load applied",
+        "provenance": "illustrative",
+        "limitations": "Authored for practice. This is not a real retrieval result, and the numeric value has no asserted meaning here. Meaning requires a verified manufacturer source and the full context above."
+      },
+      {
+        "id": "m-w3-context",
+        "label": "Retrieval context recorded alongside the observation",
+        "instrumentId": "vehicle_profile",
+        "testPoint": null,
+        "value": "make, model year, engine and test mode recorded as supplied",
+        "unit": null,
+        "conditions": "recorded before interpretation, per the supplied procedure",
+        "provenance": "illustrative",
+        "limitations": "Context values are illustrative training labels. They are not verified vehicle data."
+      }
+    ],
+    "waveformEvidence": {
+      "mode": "qualitative",
+      "descriptors": [
+        "No waveform is supplied in Week 3 and no scope work is expected.",
+        "Students state whether an electrical measurement would add useful evidence to a code interpretation, and why."
+      ],
+      "samples": null,
+      "illustrative": true,
+      "notes": "No sampled trace is supplied and none is implied."
+    },
+    "uncertainty": "Code meaning is unresolved in this lab by design. Students must record the code as an observation, state the context that would be required to interpret it, and state that a verified source is needed. No manufacturer definition may be asserted.",
+    "scanData": null
+  },
+  "competingHypotheses": [
+    {
+      "id": "H1",
+      "statement": "The stored condition reflects a genuine circuit or component fault that further electrical testing would isolate.",
+      "evidenceFor": [
+        "The self-test reported a stored condition during the stated test mode."
+      ],
+      "evidenceAgainst": [
+        "A stored condition indicates a monitored condition was detected; it does not identify which component caused it, and the code meaning is unresolved here."
+      ]
+    },
+    {
+      "id": "H2",
+      "statement": "The stored condition was set by a condition that is no longer present, or by a retrieval performed in the wrong test mode.",
+      "evidenceFor": [
+        "Test mode and retrieval method change what a code means, and the procedure must be confirmed before interpretation."
+      ],
+      "evidenceAgainst": [
+        "No re-test or clearing-and-retest evidence has been supplied, so persistence has not been established."
+      ]
+    }
+  ],
+  "testSelectionOptions": [
+    {
+      "id": "T1",
+      "label": "Confirm make, year, engine and test mode before attempting any interpretation",
+      "justificationPrompt": "Explain why the same numeric code cannot be interpreted without this context, and what could go wrong if it were assumed.",
+      "expectedObservation": "A recorded context statement, with any unavailable item explicitly marked unknown."
+    },
+    {
+      "id": "T2",
+      "label": "Record the code as an observation and mark the meaning as requiring a verified source",
+      "justificationPrompt": "Explain the difference between recording an observation and asserting a definition, and why the distinction matters.",
+      "expectedObservation": "An observation record that contains no asserted manufacturer meaning."
+    },
+    {
+      "id": "T3",
+      "label": "Propose an electrical test that would add evidence without needing the code definition",
+      "justificationPrompt": "Explain what the test would establish and what result would change your thinking, without relying on an unresolved code meaning.",
+      "expectedObservation": "A test that gathers independent evidence about the circuit rather than restating the code."
+    }
+  ],
+  "evidenceWorksheet": {
+    "prompts": [
+      "Record the retrieval context: make, model year, engine, retrieval method and test mode, marking anything unknown.",
+      "Record the flash-code observation exactly as supplied, without adding a meaning.",
+      "State which information would be required to interpret the code, and why the project cannot assert it now.",
+      "Propose one independent electrical test and state what it would establish.",
+      "State how you would distinguish a currently present condition from a stored one that is no longer active."
+    ],
+    "requiredFields": [
+      "retrievalContext",
+      "rawObservation",
+      "unresolvedMeaningStatement",
+      "independentTestProposal",
+      "presentVsStoredReasoning",
+      "verifiedSourceRequirement"
+    ]
+  },
+  "repairVerification": {
+    "steps": [
+      "Re-state the retrieval context and confirm the observation was taken under the same conditions.",
+      "Confirm the interpretation section contains no asserted manufacturer meaning.",
+      "State what evidence would be required before any repair is claimed as verified."
+    ],
+    "expectedEvidence": [
+      "A record that separates the raw observation from any interpretation.",
+      "An explicit statement that a verified source and a re-test are both required before a repair is claimed as verified."
+    ]
+  },
+  "accessibility": {
+    "keyboardPath": "Tab from the skip link to the vehicle-profile panel and the legacy-code evidence panel, then through hypothesis cards, test buttons and worksheet fields.",
+    "textAlternatives": [
+      "Flash-code observations are presented as text, not as an animated lamp sequence, so no information depends on timing or motion.",
+      "All context, hypothesis and evidence content is text and is reachable in document order."
+    ],
+    "notes": [
+      "No canvas or animated element is used in this lab.",
+      "Selection and status feedback is announced through a polite live region.",
+      "Long context values wrap rather than requiring horizontal scrolling."
+    ]
+  },
+  "sources": [
+    {
+      "id": "src-project-w3",
+      "kind": "project_authored",
+      "title": "Project-authored Week 3 illustrative retrieval scenario, profile and evidence stand-ins",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Independently authored for practice. Contains no manufacturer code table, glossary or procedure."
+    },
+    {
+      "id": "src-blueprint-1067",
+      "kind": "internal_contract",
+      "title": "AUT 250 15-week weekly lab blueprint (PR #1067, frozen c652ff69)",
+      "page": null,
+      "url": null,
+      "citationStatus": "metadata_only",
+      "rightsStatus": "not_required",
+      "notes": "Planning input. Read only; not copied into this package."
+    },
+    {
+      "id": "src-obd-reference-catalog-1063",
+      "kind": "external_reference",
+      "title": "Source-governed OBD-I/OBD-II reference catalog (PR #1063, unmerged)",
+      "page": null,
+      "url": null,
+      "citationStatus": "pending",
+      "rightsStatus": "pending",
+      "notes": "Not available. Until it is reviewed and merged, no manufacturer code meaning may be asserted. Code meaning in this lab remains source_review_pending."
+    }
+  ],
+  "technicalReviewChecklist": [
+    {
+      "id": "C1",
+      "statement": "No manufacturer code definition, OEM threshold or service procedure is asserted anywhere in this lab.",
+      "status": "pending"
+    },
+    {
+      "id": "C2",
+      "statement": "Retrieval context (make, year, engine, test mode) is required before interpretation.",
+      "status": "pending"
+    },
+    {
+      "id": "C3",
+      "statement": "The code is treated as an observation of a monitored condition, not proof of a failed component.",
+      "status": "pending"
+    },
+    {
+      "id": "C4",
+      "statement": "Stand-ins are described as limited developmental inputs, not completed reference tools.",
+      "status": "pending"
+    },
+    {
+      "id": "C5",
+      "statement": "Instructor material is stored outside the student tree and is not reachable from this page.",
+      "status": "pending"
+    }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}

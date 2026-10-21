@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-02",
+  "week": 2,
+  "instructorOnly": true,
+  "expectedEvidence": [
+    {
+      "id": "E1",
+      "statement": "Student rewrites the concern as a symptom statement naming conditions, frequency and an observable effect.",
+      "required": true,
+      "notes": "A statement such as 'rough running reported under highway acceleration, intermittent, warning lamp reported' is sufficient."
+    },
+    {
+      "id": "E2",
+      "statement": "Student lists the unknown vehicle and system information and states why each item matters.",
+      "required": true,
+      "notes": "Make, model year, engine and system are the expected core items."
+    },
+    {
+      "id": "E3",
+      "statement": "Student states that a verified service-information source is required and refuses to guess a specification.",
+      "required": true,
+      "notes": "This is the central lesson of the week given the unavailable service-information asset."
+    },
+    {
+      "id": "E4",
+      "statement": "Student provides an ordered plan in which each step names the observation that would confirm or refute a hypothesis.",
+      "required": true,
+      "notes": null
+    },
+    {
+      "id": "E5",
+      "statement": "Student discloses at least one assumption and what would confirm or refute it.",
+      "required": false,
+      "notes": "Expected for full marks but not required to pass the exercise formatively."
+    }
+  ],
+  "acceptableAlternatives": [
+    {
+      "id": "A1",
+      "statement": "Any plan order is acceptable if each step is justified and its decision point is stated.",
+      "notes": "Do not treat a particular sequence as the correct answer."
+    },
+    {
+      "id": "A2",
+      "statement": "Students may propose asking the customer, inspecting the vehicle, or consulting a verified source first, provided they justify the choice.",
+      "notes": null
+    }
+  ],
+  "misconceptionFeedback": [
+    {
+      "id": "M1",
+      "misconception": "The customer's description can be treated as a verified symptom.",
+      "feedback": "A customer report is subjective and unverified. Ask what observation would confirm the concern and how it would be recorded."
+    },
+    {
+      "id": "M2",
+      "misconception": "A plan can proceed without knowing the vehicle.",
+      "feedback": "Without make, model year and engine, no manufacturer information applies and no test can be justified against it. Ask which unknowns must be closed first."
+    },
+    {
+      "id": "M3",
+      "misconception": "An unverified online reference can be used as authority.",
+      "feedback": "Unverified sources cannot establish a specification. Ask what would make a source acceptable and who would have to approve it."
+    }
+  ],
+  "debriefPrompts": [
+    "Which unknown, if resolved, would most change your plan?",
+    "Where did you state a need for information instead of inventing it?"
+  ],
+  "sources": [
+    {
+      "id": "src-project-w2-instructor",
+      "kind": "project_authored",
+      "title": "Project-authored Week 2 instructor evidence guide",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Authored for this repository."
+    },
+    {
+      "id": "src-service-info-instructor",
+      "kind": "external_reference",
+      "title": "Service information source (not available, rights unverified)",
+      "page": null,
+      "url": null,
+      "citationStatus": "pending",
+      "rightsStatus": "pending",
+      "notes": "Instructors must not supply unverified service information to complete this lab."
+    }
+  ],
+  "technicalReviewChecklist": [
+    { "id": "C1", "statement": "Guide supplies no manufacturer procedure or specification.", "status": "pending" },
+    { "id": "C2", "statement": "Expected evidence is reachable from the student materials.", "status": "pending" },
+    { "id": "C3", "statement": "Feedback does not assert a vehicle condition.", "status": "pending" },
+    { "id": "C4", "statement": "No answer content appears in the student bundle.", "status": "pending" }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}
