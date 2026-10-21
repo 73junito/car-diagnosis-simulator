@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-01",
+  "week": 1,
+  "title": "Diagnostic safety and equipment familiarization",
+  "durationMinutes": 120,
+  "delivery": "virtual_formative_development",
+  "competencyId": "ug-aut250-systematic-diagnostics",
+  "learningObjective": "Demonstrate tool selection, isolation and safe measurement setup",
+  "learningOutcomeIds": [
+    "aut250-lo-evaluate-engineering-assumptions"
+  ],
+  "sessionMinutes": {
+    "safetyBriefing": 10,
+    "instructorDemonstration": 15,
+    "studentDiagnosis": 60,
+    "evidenceReport": 25,
+    "debrief": 10
+  },
+  "equipment": [
+    {
+      "id": "dvom",
+      "label": "Digital multimeter (simulated)",
+      "assetRef": "dashboard/student/aut250-lab-assets/src/multimeter.js",
+      "availability": "available",
+      "notes": "Reused approved asset. Displays only the measurement supplied by this lab package and never generates its own reading."
+    },
+    {
+      "id": "scan_tool",
+      "label": "OBD-II scan tool panel (simulated)",
+      "assetRef": "dashboard/student/aut250-lab-assets/src/scan-tool.js",
+      "availability": "available",
+      "notes": "Reused approved asset. No scan payload is supplied in Week 1, so the panel shows its explicit not-supplied state; that empty state is the teaching point."
+    },
+    {
+      "id": "oscilloscope",
+      "label": "Automotive oscilloscope (simulated)",
+      "assetRef": "dashboard/student/aut250-lab-assets/src/oscilloscope.js",
+      "availability": "available",
+      "notes": "Reused approved asset. Week 1 supplies qualitative descriptors only; no sampled trace is plotted and no numeric waveform is implied."
+    }
+  ],
+  "safetyBriefing": {
+    "points": [
+      "Treat every supplied voltage as live. Select the meter function before connecting any lead.",
+      "Never place the meter in a current or resistance function across a simulated live supply; state the correct function first.",
+      "Confirm the simulated bay state before each step and report an unsafe or ambiguous step instead of continuing.",
+      "Isolate the circuit under test in the simulated model before describing any resistance or continuity check."
+    ],
+    "boundaries": "This is a simulated training bay. No physical vehicle, tool, or high-voltage procedure is performed. No reading in this lab describes a real vehicle condition, and no manufacturer specification is stated."
+  },
+  "instructorDemonstration": {
+    "summary": "Demonstrate function selection, lead placement order, isolation of the circuit under test, and how an unsupplied instrument reports its empty state.",
+    "steps": [
+      "Show the meter with no measurement supplied and read the empty state aloud.",
+      "Select the DC voltage function and explain why function selection precedes connection.",
+      "Connect the negative lead to the simulated ground point first, then the positive lead, narrating the isolation check.",
+      "Open the scan-tool panel with no payload and explain that 'no data supplied' is not the same as 'no fault found'.",
+      "Describe how a qualitative oscilloscope observation would be written in words rather than drawn as a trace."
+    ]
+  },
+  "scenario": {
+    "symptom": "Simulated bay familiarization: instruments are powered and connected, but no vehicle measurement has been supplied to any instrument yet.",
+    "systemContext": "Familiarization and safety only. Students practise selecting the correct instrument and function, isolating the circuit under test, and reading explicit empty states before any diagnostic scenario is introduced.",
+    "vehicleContext": {
+      "contextStatus": "not_applicable",
+      "make": null,
+      "year": null,
+      "engine": null,
+      "testMode": null
+    },
+    "measurements": [
+      {
+        "id": "m-w1-supply",
+        "label": "Illustrative supply voltage at the simulated battery terminals",
+        "instrumentId": "dvom",
+        "testPoint": "simulated battery positive to simulated battery negative",
+        "value": 12.62,
+        "unit": "V",
+        "conditions": "simulated key on, engine off, no load applied",
+        "provenance": "illustrative",
+        "limitations": "Illustrative training value authored for this exercise. Not a measurement of any vehicle and not a manufacturer specification."
+      }
+    ],
+    "waveformEvidence": {
+      "mode": "qualitative",
+      "descriptors": [
+        "No sampled trace is supplied in Week 1.",
+        "Students describe in words what a steady DC level would look like and what would have to change before a scope trace would be useful."
+      ],
+      "samples": null,
+      "illustrative": true,
+      "notes": "Qualitative descriptors only. The runtime renders these as text and plots nothing."
+    },
+    "uncertainty": "Students must state which values are illustrative training inputs, and must state what the empty instrument states do and do not prove.",
+    "scanData": null
+  },
+  "competingHypotheses": [
+    {
+      "id": "H1",
+      "statement": "The instruments are functioning and simply have no data supplied yet, so nothing can be concluded about the vehicle.",
+      "evidenceFor": [
+        "Each instrument reports an explicit not-supplied state rather than a value."
+      ],
+      "evidenceAgainst": [
+        "A not-supplied state would look identical if an instrument were faulty, so the state alone is not proof of correct operation."
+      ]
+    },
+    {
+      "id": "H2",
+      "statement": "A connection or setup fault is preventing a measurement from reaching the instrument.",
+      "evidenceFor": [
+        "No reading appears on the meter until a measurement is explicitly supplied to it."
+      ],
+      "evidenceAgainst": [
+        "The supplied illustrative voltage does appear once requested, which shows the display path works."
+      ]
+    }
+  ],
+  "testSelectionOptions": [
+    {
+      "id": "T1",
+      "label": "Confirm the meter function and isolation before connecting leads",
+      "justificationPrompt": "Explain why function selection and isolation precede connection, and what could go wrong if the order were reversed.",
+      "expectedObservation": "The display shows the selected function with no value until a measurement is supplied."
+    },
+    {
+      "id": "T2",
+      "label": "Open the scan tool and read the not-supplied state",
+      "justificationPrompt": "Explain what the empty scan-tool state does and does not prove about the vehicle.",
+      "expectedObservation": "The panel states that no data has been supplied."
+    },
+    {
+      "id": "T3",
+      "label": "State how a scope observation would be recorded without a trace",
+      "justificationPrompt": "Explain how to record a waveform observation in words when no sampled trace is available.",
+      "expectedObservation": "A written description of the expected shape and what evidence would be needed to confirm it."
+    }
+  ],
+  "evidenceWorksheet": {
+    "prompts": [
+      "Which instrument and function did you select first, and why did that order matter?",
+      "What did each instrument display before any data was supplied, and what does that state not prove?",
+      "Which values in this lab are illustrative training inputs rather than verified measurements?",
+      "What would you report to an instructor before continuing to a live diagnostic scenario?"
+    ],
+    "requiredFields": [
+      "instrumentSelection",
+      "safetyAndIsolationCheck",
+      "emptyStateInterpretation",
+      "provenanceStatement",
+      "nextStepJustification"
+    ]
+  },
+  "repairVerification": {
+    "steps": [
+      "Re-select the instrument function and re-request the supplied reading under the same stated conditions.",
+      "Confirm the empty-state message returns when the supplied measurement is removed."
+    ],
+    "expectedEvidence": [
+      "A repeated reading with identical conditions and an unchanged provenance label.",
+      "A stated explanation that repeating a reading does not by itself verify a repair."
+    ]
+  },
+  "accessibility": {
+    "keyboardPath": "Tab from the skip link through the session plan, then use Enter or Space to activate instrument controls and test-selection buttons.",
+    "textAlternatives": [
+      "Every supplied reading is rendered as text with its unit, conditions, provenance and limitations.",
+      "Qualitative waveform descriptors are text; no meaning depends on a plotted trace."
+    ],
+    "notes": [
+      "Status changes are announced through a polite live region.",
+      "Motion in the reused assets is decorative and is disabled under prefers-reduced-motion.",
+      "Layout is responsive; the measurement table scrolls rather than clipping."
+    ]
+  },
+  "sources": [
+    {
+      "id": "src-project-w1",
+      "kind": "project_authored",
+      "title": "Project-authored Week 1 familiarization scenario and safety brief",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Authored for this repository. No external content reproduced."
+    },
+    {
+      "id": "src-blueprint-1067",
+      "kind": "internal_contract",
+      "title": "AUT 250 15-week weekly lab blueprint (PR #1067, frozen c652ff69)",
+      "page": null,
+      "url": null,
+      "citationStatus": "metadata_only",
+      "rightsStatus": "not_required",
+      "notes": "Planning input. Read only; not copied into this package."
+    },
+    {
+      "id": "src-obd-reference-uploads",
+      "kind": "external_reference",
+      "title": "Uploaded OBD reference material (reproduction rights unverified)",
+      "page": null,
+      "url": null,
+      "citationStatus": "pending",
+      "rightsStatus": "pending",
+      "notes": "Not used in Week 1. Metadata pointer only; no content reproduced or relied upon."
+    }
+  ],
+  "technicalReviewChecklist": [
+    {
+      "id": "C1",
+      "statement": "Safety brief states simulated-only scope and requires no physical procedure.",
+      "status": "pending"
+    },
+    {
+      "id": "C2",
+      "statement": "Every supplied reading carries units, conditions, provenance and limitations.",
+      "status": "pending"
+    },
+    {
+      "id": "C3",
+      "statement": "No manufacturer specification, service limit or verified waveform claim appears.",
+      "status": "pending"
+    },
+    {
+      "id": "C4",
+      "statement": "Keyboard path and text alternatives are accurate for the built page.",
+      "status": "pending"
+    },
+    {
+      "id": "C5",
+      "statement": "Instructor material is stored outside the student tree and is not reachable from this page.",
+      "status": "pending"
+    }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}

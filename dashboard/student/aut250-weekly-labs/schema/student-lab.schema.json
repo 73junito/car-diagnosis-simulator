@@ -1,0 +1,238 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://autolearnpro.com/schemas/aut250-weekly-lab-student.schema.json",
+  "title": "AUT 250 weekly laboratory — student bundle",
+  "description": "Developmental student-facing lab bundle. Must contain no answer key, expected answer, or instructor feedback. All approval and publication flags are fail-closed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "labId", "week", "title", "durationMinutes", "delivery",
+    "competencyId", "learningObjective", "sessionMinutes", "equipment",
+    "safetyBriefing", "instructorDemonstration", "scenario",
+    "competingHypotheses", "testSelectionOptions", "evidenceWorksheet",
+    "repairVerification", "accessibility", "sources",
+    "technicalReviewChecklist", "flags"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "labId": { "type": "string", "pattern": "^aut250-lab-(0[1-9]|1[0-5])$" },
+    "week": { "type": "integer", "minimum": 1, "maximum": 15 },
+    "title": { "type": "string", "minLength": 3 },
+    "durationMinutes": { "const": 120 },
+    "delivery": { "const": "virtual_formative_development" },
+    "competencyId": { "const": "ug-aut250-systematic-diagnostics" },
+    "learningObjective": { "type": "string", "minLength": 10 },
+    "learningOutcomeIds": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 3 },
+      "uniqueItems": true
+    },
+    "sessionMinutes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["safetyBriefing", "instructorDemonstration", "studentDiagnosis", "evidenceReport", "debrief"],
+      "properties": {
+        "safetyBriefing": { "type": "integer", "minimum": 0 },
+        "instructorDemonstration": { "type": "integer", "minimum": 0 },
+        "studentDiagnosis": { "type": "integer", "minimum": 0 },
+        "evidenceReport": { "type": "integer", "minimum": 0 },
+        "debrief": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "equipment": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "availability"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "assetRef": { "type": ["string", "null"] },
+          "availability": { "enum": ["available", "prototype", "missing"] },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "safetyBriefing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["points", "boundaries"],
+      "properties": {
+        "points": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 5 } },
+        "boundaries": { "type": "string", "minLength": 10 }
+      }
+    },
+    "instructorDemonstration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "steps"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 10 },
+        "steps": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 5 } }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["symptom", "systemContext", "vehicleContext", "measurements", "uncertainty"],
+      "properties": {
+        "symptom": { "type": "string", "minLength": 10 },
+        "systemContext": { "type": "string", "minLength": 10 },
+        "vehicleContext": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["contextStatus"],
+          "properties": {
+            "contextStatus": { "enum": ["specified", "not_applicable", "unknown"] },
+            "make": { "type": ["string", "null"] },
+            "year": { "type": ["integer", "null"] },
+            "engine": { "type": ["string", "null"] },
+            "testMode": { "type": ["string", "null"] }
+          }
+        },
+        "measurements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "label", "instrumentId", "provenance", "conditions"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "label": { "type": "string", "minLength": 3 },
+              "instrumentId": { "type": "string", "minLength": 1 },
+              "testPoint": { "type": ["string", "null"] },
+              "value": { "type": ["number", "string", "null"] },
+              "unit": { "type": ["string", "null"] },
+              "conditions": { "type": "string", "minLength": 3 },
+              "provenance": { "enum": ["supplied_simulation", "illustrative", "sme_review_pending"] },
+              "limitations": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "waveformEvidence": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "enum": ["qualitative", "illustrative_samples"] },
+            "descriptors": { "type": "array", "items": { "type": "string" } },
+            "samples": { "type": ["array", "null"] },
+            "illustrative": { "type": "boolean" },
+            "notes": { "type": ["string", "null"] }
+          }
+        },
+        "uncertainty": { "type": "string", "minLength": 10 },
+        "scanData": {
+          "type": ["object", "null"],
+          "description": "Optional provider-shaped scan-tool payload passed to the reused scan-tool asset. When absent the asset shows its explicit not-supplied state. This schema does not model the payload internals; the asset normalizes and rejects malformed entries itself."
+        }
+      }
+    },
+    "competingHypotheses": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "statement"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "statement": { "type": "string", "minLength": 10 },
+          "evidenceFor": { "type": "array", "items": { "type": "string" } },
+          "evidenceAgainst": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "testSelectionOptions": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "justificationPrompt"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 3 },
+          "justificationPrompt": { "type": "string", "minLength": 10 },
+          "expectedObservation": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "evidenceWorksheet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompts", "requiredFields"],
+      "properties": {
+        "prompts": { "type": "array", "minItems": 3, "items": { "type": "string", "minLength": 5 } },
+        "requiredFields": { "type": "array", "minItems": 3, "items": { "type": "string", "minLength": 3 } }
+      }
+    },
+    "repairVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["steps", "expectedEvidence"],
+      "properties": {
+        "steps": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } },
+        "expectedEvidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["keyboardPath", "textAlternatives", "notes"],
+      "properties": {
+        "keyboardPath": { "type": "string", "minLength": 10 },
+        "textAlternatives": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } },
+        "notes": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 5 } }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "citationStatus", "rightsStatus"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["project_authored", "external_reference", "internal_contract"] },
+          "title": { "type": ["string", "null"] },
+          "page": { "type": ["string", "integer", "null"] },
+          "url": { "type": ["string", "null"] },
+          "citationStatus": { "enum": ["verified", "metadata_only", "pending"] },
+          "rightsStatus": { "enum": ["approved", "pending", "not_required"] },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "technicalReviewChecklist": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "statement", "status"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "statement": { "type": "string", "minLength": 10 },
+          "status": { "enum": ["pending", "confirmed", "not_applicable"] }
+        }
+      }
+    },
+    "flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assessmentEligible", "autoGradingEnabled", "published", "smeApproved", "rightsApproved"],
+      "properties": {
+        "assessmentEligible": { "const": false },
+        "autoGradingEnabled": { "const": false },
+        "published": { "const": false },
+        "smeApproved": { "const": false },
+        "rightsApproved": { "const": false }
+      }
+    }
+  }
+}
+
+

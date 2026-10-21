@@ -1,0 +1,26 @@
+{
+  "standInId": "aut250-w3-legacy-code-evidence",
+  "status": "developmental_stand_in",
+  "notice": "Minimal original evidence input authored for AUT 250 Week 3. It supplies an illustrative flash-code observation and a written retrieval procedure. It contains NO manufacturer code table, NO reproduced glossary, NO OEM definition and NO service specification. Code meaning is intentionally unresolved.",
+  "codeMeaningStatus": "source_review_pending",
+  "codeMeaningNotice": "This lab does not assert what the observation means. Establishing meaning requires a verified manufacturer source together with the full retrieval context. That source is not available to this project.",
+  "observation": {
+    "rawOutput": "3 flashes, pause, 2 flashes",
+    "interpretation": "not asserted",
+    "capturedUnder": "illustrative key-on-engine-off self-test",
+    "capturedConditions": "warm ambient, no load applied, self-test connector engaged"
+  },
+  "retrievalProcedure": [
+    "Confirm the vehicle profile and record make, model year, engine and retrieval method before starting.",
+    "Confirm the test mode and record it alongside the observation.",
+    "Record the raw output exactly as presented, without adding a meaning.",
+    "Mark the meaning as requiring a verified source if none is available.",
+    "Re-test under the same conditions before drawing any conclusion about persistence."
+  ],
+  "whatThisEvidenceDoesNotEstablish": [
+    "It does not identify which component caused the stored condition.",
+    "It does not establish that any component has failed.",
+    "It does not establish the numeric code's meaning for this manufacturer or test mode.",
+    "It does not establish whether the condition is currently present."
+  ]
+}
