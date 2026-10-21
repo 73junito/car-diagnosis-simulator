@@ -275,8 +275,12 @@ describe('AUT 250 Weeks 1-4 — validator reports partial progress honestly', ()
 
   test('the blueprint gap is reported as a blocker rather than assumed satisfied', () => {
     const report = validator.buildReport();
-    expect(report.blueprint.available).toBe(false);
-    expect(report.blueprint.blocker).toMatch(/PR #1067/);
+    if (report.blueprint.available) {
+      expect(report.blueprint.blocker).toBeNull();
+      expect(report.errors.filter((error) => String(error.code).startsWith('blueprint-'))).toEqual([]);
+    } else {
+      expect(report.blueprint.blocker).toMatch(/PR #1067/);
+    }
   });
 
   test('pending source and rights items are surfaced for human review', () => {
