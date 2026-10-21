@@ -1,0 +1,353 @@
+{
+  "schemaVersion": "1.0.0",
+  "labId": "aut250-lab-04",
+  "week": 4,
+  "title": "OBD-II DTC and freeze-frame interpretation",
+  "durationMinutes": 120,
+  "delivery": "virtual_formative_development",
+  "competencyId": "ug-aut250-systematic-diagnostics",
+  "learningObjective": "Distinguish stored condition from confirmed component failure",
+  "learningOutcomeIds": [
+    "aut250-lo-evaluate-engineering-assumptions"
+  ],
+  "sessionMinutes": {
+    "safetyBriefing": 10,
+    "instructorDemonstration": 15,
+    "studentDiagnosis": 60,
+    "evidenceReport": 25,
+    "debrief": 10
+  },
+  "equipment": [
+    {
+      "id": "scan_tool",
+      "label": "OBD-II scan tool panel (simulated)",
+      "assetRef": "dashboard/student/aut250-lab-assets/src/scan-tool.js",
+      "availability": "available",
+      "notes": "Reused approved asset. It renders only the payload this lab package supplies and rejects malformed entries rather than substituting values."
+    },
+    {
+      "id": "freeze_frame",
+      "label": "Freeze-frame panel (rendered by the scan-tool asset)",
+      "assetRef": "dashboard/student/aut250-lab-assets/src/scan-tool.js",
+      "availability": "available",
+      "notes": "Freeze-frame conditions are rendered by the same reused scan-tool asset from the supplied payload. There is no separate freeze-frame asset, so this is a reuse mapping rather than a distinct tool."
+    }
+  ],
+  "safetyBriefing": {
+    "points": [
+      "Do not clear any code in the simulated model until the evidence has been recorded.",
+      "Treat a stored code as evidence of a monitored condition, not as proof that a component has failed.",
+      "Record the freeze-frame conditions before drawing any conclusion about when the condition occurred.",
+      "State explicitly which parts of the interpretation depend on a code definition this project cannot yet verify."
+    ],
+    "boundaries": "Simulated and paper-based only. No vehicle is connected and no code is cleared on real hardware. The code identifiers used here are illustrative placeholders, not real diagnostic trouble code definitions, and no manufacturer-specific definition is asserted."
+  },
+  "instructorDemonstration": {
+    "summary": "Demonstrate separating what the scan data states from what it does not establish, using stored versus pending status and freeze-frame conditions.",
+    "steps": [
+      "Open the scan tool with no payload and read the not-supplied state aloud.",
+      "Load the supplied payload and read the stored and pending entries as observations.",
+      "Show how freeze-frame conditions constrain when the condition occurred.",
+      "Show how to record a placeholder code without inventing a definition for it.",
+      "Demonstrate distinguishing 'monitored condition detected' from 'component confirmed failed'."
+    ]
+  },
+  "scenario": {
+    "symptom": "Illustrative OBD-II vehicle reports stored and pending entries with freeze-frame conditions recorded. The vehicle identity is not supplied, so manufacturer-specific meanings are unavailable.",
+    "systemContext": "OBD-II interpretation. Students must distinguish generic from manufacturer-specific codes, separate stored from pending status, use freeze-frame conditions as evidence about when the condition occurred, and state that a code does not prove a component failed.",
+    "vehicleContext": {
+      "contextStatus": "unknown",
+      "make": null,
+      "year": null,
+      "engine": null,
+      "testMode": "simulated key-on-engine-running scan session"
+    },
+    "measurements": [
+      {
+        "id": "m-w4-stored",
+        "label": "Illustrative stored entry (placeholder identifier)",
+        "instrumentId": "scan_tool",
+        "testPoint": null,
+        "value": "DEMO-DTC-A (placeholder, stored)",
+        "unit": null,
+        "conditions": "simulated scan session with engine running",
+        "provenance": "illustrative",
+        "limitations": "Placeholder identifier authored for practice. It is not a real diagnostic trouble code and carries no asserted definition. A real generic definition requires a verified source."
+      },
+      {
+        "id": "m-w4-pending",
+        "label": "Illustrative pending entry (placeholder identifier)",
+        "instrumentId": "scan_tool",
+        "testPoint": null,
+        "value": "DEMO-DTC-B (placeholder, pending)",
+        "unit": null,
+        "conditions": "same simulated scan session",
+        "provenance": "illustrative",
+        "limitations": "Placeholder identifier authored for practice. Pending status indicates a monitored condition observed once and not yet confirmed by the control system; it is not a repair recommendation."
+      },
+      {
+        "id": "m-w4-freeze",
+        "label": "Freeze-frame conditions recorded with the stored entry",
+        "instrumentId": "freeze_frame",
+        "testPoint": null,
+        "value": "illustrative engine speed and calculated load at the time the condition was recorded",
+        "unit": null,
+        "conditions": "captured at the moment the stored condition was set",
+        "provenance": "illustrative",
+        "limitations": "Illustrative training conditions. They describe when the condition was recorded, not which component caused it."
+      }
+    ],
+    "waveformEvidence": {
+      "mode": "qualitative",
+      "descriptors": [
+        "No waveform is supplied in Week 4 and no scope work is expected.",
+        "Students state what additional evidence a scope or meter measurement would add, and what it would not establish on its own."
+      ],
+      "samples": null,
+      "illustrative": true,
+      "notes": "No sampled trace is supplied and none is implied."
+    },
+    "uncertainty": "Vehicle identity is unknown, so manufacturer-specific meanings cannot be determined and generic meanings are not asserted here. Students must record which interpretation depends on a definition the project cannot yet verify.",
+    "scanData": {
+      "vehicle": {
+        "demoLabel": "Illustrative OBD-II training vehicle (identity not supplied)"
+      },
+      "dtcs": [
+        {
+          "code": "DEMO-DTC-A",
+          "description": "Illustrative placeholder — not a real diagnostic trouble code definition",
+          "status": "stored",
+          "type": "generic-placeholder"
+        },
+        {
+          "code": "DEMO-DTC-B",
+          "description": "Illustrative placeholder — not a real diagnostic trouble code definition",
+          "status": "pending",
+          "type": "generic-placeholder"
+        }
+      ],
+      "freezeFrame": {
+        "dtcCode": "DEMO-DTC-A",
+        "conditions": [
+          {
+            "label": "Illustrative engine speed at capture",
+            "value": 2180,
+            "unit": "rpm"
+          },
+          {
+            "label": "Illustrative calculated load at capture",
+            "value": 54,
+            "unit": "%"
+          },
+          {
+            "label": "Illustrative coolant temperature at capture",
+            "value": 88,
+            "unit": "C"
+          }
+        ]
+      },
+      "liveData": [
+        {
+          "pid": "DEMO-PID-01",
+          "label": "Illustrative short-term fuel trim (training value)",
+          "value": 3.1,
+          "unit": "%"
+        },
+        {
+          "pid": "DEMO-PID-02",
+          "label": "Illustrative supply voltage (training value)",
+          "value": 13.9,
+          "unit": "V"
+        }
+      ],
+      "misfireCounters": [
+        {
+          "cylinder": "Illustrative cylinder 1 (training label)",
+          "count": 0,
+          "window": "illustrative current trip"
+        },
+        {
+          "cylinder": "Illustrative cylinder 2 (training label)",
+          "count": 4,
+          "window": "illustrative current trip"
+        },
+        {
+          "cylinder": "Illustrative cylinder 3 (training label)",
+          "count": 0,
+          "window": "illustrative current trip"
+        },
+        {
+          "cylinder": "Illustrative cylinder 4 (training label)",
+          "count": 0,
+          "window": "illustrative current trip"
+        }
+      ],
+      "operatingConditions": [
+        {
+          "label": "Illustrative readiness status (training value)",
+          "value": "illustrative — not a real monitor result"
+        },
+        {
+          "label": "Illustrative ambient temperature (training value)",
+          "value": 20,
+          "unit": "C"
+        }
+      ],
+      "repairVerification": {
+        "dtcCleared": false,
+        "monitorStatus": "illustrative — no monitor result is asserted",
+        "notes": "No repair has been performed in this lab. Clearing codes is not an acceptable verification step on its own.",
+        "evidenceRef": "illustrative-reference"
+      }
+    }
+  },
+  "competingHypotheses": [
+    {
+      "id": "H1",
+      "statement": "A monitored condition was detected and a component in the monitored system has failed.",
+      "evidenceFor": [
+        "A stored entry is present, and a freeze-frame record exists showing the conditions at capture."
+      ],
+      "evidenceAgainst": [
+        "A stored entry records that a monitored condition was detected. It does not identify a failed component, and the code definition cannot be verified from the supplied information."
+      ]
+    },
+    {
+      "id": "H2",
+      "statement": "A monitored condition was detected because of an influence outside the monitored component, such as a supply, ground or mechanical condition.",
+      "evidenceFor": [
+        "The pending entry indicates a condition observed once and not yet confirmed by the control system."
+      ],
+      "evidenceAgainst": [
+        "No electrical or mechanical measurement has been supplied that would support or exclude an external influence."
+      ]
+    }
+  ],
+  "testSelectionOptions": [
+    {
+      "id": "T1",
+      "label": "Record stored and pending status separately before interpreting anything",
+      "justificationPrompt": "Explain what each status does and does not establish, and why the distinction changes the plan.",
+      "expectedObservation": "A record that keeps status separate from any conclusion about a component."
+    },
+    {
+      "id": "T2",
+      "label": "Use the freeze-frame conditions to constrain when the condition occurred",
+      "justificationPrompt": "Explain how the captured conditions narrow the search, and what they cannot tell you.",
+      "expectedObservation": "A statement of the operating window in which the condition occurred, with its limits."
+    },
+    {
+      "id": "T3",
+      "label": "Propose an independent measurement that would test the monitored circuit",
+      "justificationPrompt": "Explain what the measurement would establish and what result would change your thinking.",
+      "expectedObservation": "A measurement plan that does not depend on an unverified code definition."
+    }
+  ],
+  "evidenceWorksheet": {
+    "prompts": [
+      "Record each entry with its status, without adding a definition the supplied information does not support.",
+      "State which interpretation depends on a generic code definition, and which depends on a manufacturer-specific definition you cannot obtain.",
+      "Describe the operating window indicated by the freeze-frame conditions, and state what it does not tell you.",
+      "State why a stored entry does not by itself prove a component has failed.",
+      "Describe the independent measurement you would take next and what it would establish.",
+      "State why clearing codes is not acceptable as repair verification on its own."
+    ],
+    "requiredFields": [
+      "entriesWithStatus",
+      "genericVsManufacturerSpecific",
+      "freezeFrameOperatingWindow",
+      "storedVsFailedReasoning",
+      "independentMeasurementPlan",
+      "repairVerificationLimits"
+    ]
+  },
+  "repairVerification": {
+    "steps": [
+      "Re-read the stored and pending entries after the proposed test and compare them with the original record.",
+      "Confirm the original freeze-frame record is retained rather than cleared before comparison.",
+      "State what evidence would be required before a repair is claimed as verified."
+    ],
+    "expectedEvidence": [
+      "A before-and-after record that preserves the original capture conditions.",
+      "An explicit statement that clearing codes alone does not verify a repair."
+    ]
+  },
+  "accessibility": {
+    "keyboardPath": "Tab from the skip link into the scan-tool panel, use its controls with Enter or Space, then continue through the hypothesis cards, test buttons and worksheet fields.",
+    "textAlternatives": [
+      "All scan data is rendered as semantic tables with column headers, so no value depends on colour or icon.",
+      "The scan-tool asset announces its empty and rejected-input states through a polite live region."
+    ],
+    "notes": [
+      "No waveform is plotted in this lab.",
+      "Tables scroll rather than clip at narrow widths.",
+      "Worksheet fields are labelled and reachable in document order."
+    ]
+  },
+  "sources": [
+    {
+      "id": "src-project-w4",
+      "kind": "project_authored",
+      "title": "Project-authored Week 4 OBD-II interpretation scenario and placeholder payload",
+      "page": null,
+      "url": null,
+      "citationStatus": "verified",
+      "rightsStatus": "not_required",
+      "notes": "Independently authored for practice. Contains no real diagnostic trouble code definition and no manufacturer-specific content."
+    },
+    {
+      "id": "src-blueprint-1067",
+      "kind": "internal_contract",
+      "title": "AUT 250 15-week weekly lab blueprint (PR #1067, frozen c652ff69)",
+      "page": null,
+      "url": null,
+      "citationStatus": "metadata_only",
+      "rightsStatus": "not_required",
+      "notes": "Planning input. Read only; not copied into this package."
+    },
+    {
+      "id": "src-obd-reference-catalog-1063",
+      "kind": "external_reference",
+      "title": "Source-governed OBD-I/OBD-II reference catalog (PR #1063, unmerged)",
+      "page": null,
+      "url": null,
+      "citationStatus": "pending",
+      "rightsStatus": "pending",
+      "notes": "Not available. Real generic and manufacturer-specific definitions require this reviewed source. Code meaning remains source_review_pending."
+    }
+  ],
+  "technicalReviewChecklist": [
+    {
+      "id": "C1",
+      "statement": "No real diagnostic trouble code definition or OEM threshold is asserted or implied.",
+      "status": "pending"
+    },
+    {
+      "id": "C2",
+      "statement": "Generic versus manufacturer-specific codes are distinguished, and the missing definition is disclosed.",
+      "status": "pending"
+    },
+    {
+      "id": "C3",
+      "statement": "Stored and pending status are kept separate from any component-failure conclusion.",
+      "status": "pending"
+    },
+    {
+      "id": "C4",
+      "statement": "Freeze-frame values are labelled illustrative and are not presented as vehicle measurements.",
+      "status": "pending"
+    },
+    {
+      "id": "C5",
+      "statement": "Instructor material is stored outside the student tree and is not reachable from this page.",
+      "status": "pending"
+    }
+  ],
+  "flags": {
+    "assessmentEligible": false,
+    "autoGradingEnabled": false,
+    "published": false,
+    "smeApproved": false,
+    "rightsApproved": false
+  }
+}
