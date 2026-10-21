@@ -22,6 +22,14 @@ describe('Cloudflare Web Analytics CSP contract', () => {
     }
   });
 
+  test('denies plugin embedding, base-tag rewrites and cross-origin form submission', () => {
+    for (const cspLine of cspLines) {
+      expect(cspLine).toContain("object-src 'none';");
+      expect(cspLine).toContain("base-uri 'self';");
+      expect(cspLine).toContain("form-action 'self';");
+    }
+  });
+
   test('limits Supabase browser connectivity to the application asset root', () => {
     expect(cspLines[0]).toContain("connect-src 'self' https://pffdgqpynpbffbcnxmum.supabase.co;");
     expect(cspLines[1]).toContain("connect-src 'self';");
