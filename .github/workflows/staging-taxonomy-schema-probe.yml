@@ -1,0 +1,127 @@
+name: Staging taxonomy schema probe (read-only)
+
+# Manual, read-only schema probe for staging project jchfruprqpeypdttvlam.
+# It executes a single read-only transaction, writes nothing, applies no
+# migration and never edits migration history. Credentials come only from the
+# protected staging environment. See docs/database/staging-schema-probe.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type PROBE-STAGING to run the read-only schema probe"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staging-taxonomy-schema-probe
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    name: read-only staging schema probe
+    if: inputs.confirm == 'PROBE-STAGING'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: jchfruprqpeypdttvlam_staging
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+
+      - name: Confirm staging project identity
+        env:
+          SUPABASE_URL: ${{ secrets.STAGING_URL }}
+        run: node scripts/assert-staging-supabase.js
+
+      - name: Confirm database destination shape
+        env:
+          STAGING_DB_USER: ${{ vars.STAGING_DB_USER }}
+          STAGING_DB_HOST: ${{ vars.STAGING_DB_HOST }}
+          STAGING_DB_PORT: ${{ vars.STAGING_DB_PORT }}
+          STAGING_DB_NAME: ${{ vars.STAGING_DB_NAME }}
+          STAGING_DB_PASSWORD: ${{ secrets.STAGING_DB }}
+        run: |
+          set -euo pipefail
+          [ -n "${STAGING_DB_PASSWORD}" ] || { echo 'BLOCKED: staging database secret is not configured.'; exit 1; }
+          [ "${STAGING_DB_USER}" = "postgres.jchfruprqpeypdttvlam" ] || { echo 'BLOCKED: unexpected database user.'; exit 1; }
+          [ "${STAGING_DB_NAME}" = "postgres" ] || { echo 'BLOCKED: unexpected database name.'; exit 1; }
+          [ "${STAGING_DB_PORT}" = "5432" ] || { echo 'BLOCKED: unexpected port.'; exit 1; }
+          case "${STAGING_DB_HOST}" in
+            *.pooler.supabase.com) ;;
+            *) echo 'BLOCKED: unexpected database host.'; exit 1 ;;
+          esac
+          echo 'PASS: staging database destination shape verified.'
+
+      - name: Configure TLS trust for the staging database
+        env:
+          STAGING_DB_CA_CERT: ${{ secrets.STAGING_DB_CA_CERT }}
+        run: |
+          set -euo pipefail
+          if [ -z "${STAGING_DB_CA_CERT}" ]; then
+            echo 'BLOCKED: STAGING_DB_CA_CERT is not configured; verify-full TLS cannot be established.'
+            exit 1
+          fi
+          umask 077
+          printf '%s\n' "${STAGING_DB_CA_CERT}" > "${RUNNER_TEMP}/staging-ca.pem"
+          test "$(grep -c 'BEGIN CERTIFICATE' "${RUNNER_TEMP}/staging-ca.pem")" -ge 1 || {
+            echo 'BLOCKED: the configured CA bundle holds no certificate.'
+            exit 1
+          }
+          echo 'PASS: TLS trust bundle staged for verify-full.'
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client
+
+      - name: Run read-only schema probe
+        env:
+          PGPASSWORD: ${{ secrets.STAGING_DB }}
+          PGHOST: ${{ vars.STAGING_DB_HOST }}
+          PGUSER: ${{ vars.STAGING_DB_USER }}
+          PGPORT: ${{ vars.STAGING_DB_PORT }}
+          PGDATABASE: ${{ vars.STAGING_DB_NAME }}
+          PGSSLMODE: verify-full
+          PGSSLROOTCERT: ${{ runner.temp }}/staging-ca.pem
+          PGAPPNAME: torquemind-readonly-schema-probe
+          PGOPTIONS: -c default_transaction_read_only=on -c statement_timeout=20000
+        run: |
+          set -euo pipefail
+          psql --no-psqlrc -q -v ON_ERROR_STOP=1 -A -t \
+            -f scripts/sql/staging-taxonomy-schema-probe.sql > probe.jsonl
+          test -s probe.jsonl || { echo 'BLOCKED: probe produced no output.'; exit 1; }
+          echo "probeLines=$(wc -l < probe.jsonl)"
+
+      - name: Classify staging migration state
+        run: |
+          set -o pipefail
+          status=0
+          node scripts/classify-staging-migration-state.js --input=probe.jsonl --json > probe-report.json || status=$?
+          node scripts/classify-staging-migration-state.js --input=probe.jsonl || true
+          echo "classifierExit=${status}"
+          if [ "${status}" -eq 2 ] || [ "${status}" -eq 3 ]; then
+            echo 'BLOCKED: probe output is invalid or the session was not read-only.'
+            exit "${status}"
+          fi
+          if [ "${status}" -eq 1 ]; then
+            echo 'ATTENTION: classification is indeterminate; retain the artifact and escalate.'
+            exit 1
+          fi
+          echo 'NOTE: a determinate classification is diagnostic only; it grants no permission to migrate.'
+
+      - name: Upload read-only probe report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: staging-taxonomy-probe-${{ github.run_id }}
+          path: |
+            probe.jsonl
+            probe-report.json
+          retention-days: 3
+          if-no-files-found: warn

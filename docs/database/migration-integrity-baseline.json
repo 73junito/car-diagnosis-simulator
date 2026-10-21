@@ -1,0 +1,651 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-21",
+  "canonicalDirectory": "supabase/migrations",
+  "legacyDirectory": "db/migrations",
+  "postgresMajorVersion": 17,
+  "hashHistory": {
+    "adopted": "2026-10-21",
+    "statement": "SHA-256 hashes are authoritative from the adoption date forward. No trustworthy pre-adoption hash history exists, so earlier modification can be neither proven nor disproven."
+  },
+  "approvedDuplicateContent": [],
+  "migrations": [
+    {
+      "version": "20260710204828",
+      "path": "supabase/migrations/20260710204828_external_data_resource_registry.sql",
+      "sha256": "2523693c69ffe5bb6da6d6405e8682ef53ee31cd3ebb4a2d2d28c5d602f176b4",
+      "bytes": 19550
+    },
+    {
+      "version": "20260817011638",
+      "path": "supabase/migrations/20260817011638_bootstrap_foundation_schema.sql",
+      "sha256": "6b7b88c7851b3411776dc9ff8d16b146f1b17c8002773d0eb28fe654407eea1c",
+      "bytes": 7792
+    },
+    {
+      "version": "20260817012628",
+      "path": "supabase/migrations/20260817012628_create_attempts.sql",
+      "sha256": "68681524f6886a48df0d01d8efb157ecd8aac99141424fa74c5a2bfd0983207d",
+      "bytes": 1861
+    },
+    {
+      "version": "20260817012707",
+      "path": "supabase/migrations/20260817012707_create_citation_validations.sql",
+      "sha256": "aa20db75fc93f52deee4d2cdfedcdee614fc21d3858ee310ea9a87792f6c5064",
+      "bytes": 2224
+    },
+    {
+      "version": "20260817012716",
+      "path": "supabase/migrations/20260817012716_create_attempt_answers.sql",
+      "sha256": "f9b6720accc79ddfa8e54bee185e06be8c55442ea7a59420e9d6928321d00982",
+      "bytes": 1736
+    },
+    {
+      "version": "20260817012750",
+      "path": "supabase/migrations/20260817012750_harden_tted805_table_privileges.sql",
+      "sha256": "db6e2a03b048122e219802076a2f86ddf80bab0223554d7557d154c9bdeff9c1",
+      "bytes": 2061
+    },
+    {
+      "version": "20260821040000",
+      "path": "supabase/migrations/20260821040000_create_syllabus_and_scenario_catalog.sql",
+      "sha256": "3713a710e4767d7021da1357156151e15f2dda464d6352d30fd7dffec4117dba",
+      "bytes": 4495
+    },
+    {
+      "version": "20260823041129",
+      "path": "supabase/migrations/20260823041129_harden_syllabus_table_privileges.sql",
+      "sha256": "372f0d49fcca739c9b033f4eb77905774e55c5e0a6aa5b2851439ea253aa9cae",
+      "bytes": 646
+    },
+    {
+      "version": "20260823042639",
+      "path": "supabase/migrations/20260823042639_seed_automotive_scenario_catalog.sql",
+      "sha256": "1eeb07393970d5d70cdd86f1fffdde3c652feb82ac30bf0264a22498761101be",
+      "bytes": 3006
+    },
+    {
+      "version": "20260823233137",
+      "path": "supabase/migrations/20260823233137_create_staging_vehicle_reference_datasets.sql",
+      "sha256": "faa349ea1d5a70c2f60091fa19d5aebcb745cb6ff21deb3126b40ce21120a81d",
+      "bytes": 3885
+    },
+    {
+      "version": "20260823234900",
+      "path": "supabase/migrations/20260823234900_create_scenario_dataset_mappings.sql",
+      "sha256": "e04410d3f621c019ba02344968b208217cf91f558f729cf2dd0ffcc9a03f80b6",
+      "bytes": 4048
+    },
+    {
+      "version": "20260824004244",
+      "path": "supabase/migrations/20260824004244_create_restricted_dataset_archive_registry.sql",
+      "sha256": "2be395074e5c4c20ccde6bc68d862777f36403cd865ffd7036fd3cade58801a8",
+      "bytes": 3821
+    },
+    {
+      "version": "20260826000045",
+      "path": "supabase/migrations/20260826000045_align_scenario_question_semantic_ids.sql",
+      "sha256": "f3c2578adf0ca4e8ca8af2ccfa233a8f3fefa5b288f7ca903d2d6007d38c2e76",
+      "bytes": 5715
+    },
+    {
+      "version": "20260826001607",
+      "path": "supabase/migrations/20260826001607_harden_citation_validation_public_privileges.sql",
+      "sha256": "1353792298c184e9c987a9277b852110a90dcf2cb8a22568454675da2bd944ef",
+      "bytes": 416
+    },
+    {
+      "version": "20260903100000",
+      "path": "supabase/migrations/20260903100000_remove_legacy_citation_role_supports_\u0061se_concept.sql",
+      "sha256": "5c1ea11c9f7ff5d320a2dd773484a554827a6f98eace16031d59775ea2306db2",
+      "bytes": 4237
+    },
+    {
+      "version": "20260911200000",
+      "path": "supabase/migrations/20260911200000_add_vendor_neutral_competency_foundation.sql",
+      "sha256": "180bdf589d470dc07355d60901193b64bf3c2fd53d7729fd36b0e42ec7f70b8c",
+      "bytes": 9071
+    },
+    {
+      "version": "20260915153000",
+      "path": "supabase/migrations/20260915153000_harden_citation_role_migration_audit_privileges.sql",
+      "sha256": "c56ae338bc7c73a5041080f08a02588a46bcd4c5230272cccbc740da9f4cf10e",
+      "bytes": 772
+    },
+    {
+      "version": "20260918203224",
+      "path": "supabase/migrations/20260918203224_profiles.sql",
+      "sha256": "f5bfd3ecf06c9ecd13337243cf6f80f3136527f0c23e96d4c82dd100024722d5",
+      "bytes": 1262
+    },
+    {
+      "version": "20260924052734",
+      "path": "supabase/migrations/20260924052734_restore_classroom_api_schema.sql",
+      "sha256": "85d4e8f296d8dd50b5364adeec107981999494761a62dad03cd7d33d5e639608",
+      "bytes": 4925
+    },
+    {
+      "version": "20260924052757",
+      "path": "supabase/migrations/20260924052757_optimize_classroom_api_rls.sql",
+      "sha256": "6b4279fa4ea349d2cfe9a62d250c164e2c50b69707a6cc22eef69e65024cb1e8",
+      "bytes": 3330
+    },
+    {
+      "version": "20260924180000",
+      "path": "supabase/migrations/20260924180000_repair_question_provenance_semantic_ids.sql",
+      "sha256": "4dc07c1c7b204c3bd9e576362374d77c02dde00234ff050b1068ac672dd9c54d",
+      "bytes": 1455
+    },
+    {
+      "version": "20260924190000",
+      "path": "supabase/migrations/20260924190000_add_scenario_question_readiness_view.sql",
+      "sha256": "6fe246f98430438a2d9ad32b785bd7296e2688951c7d69941b587cc14878fd98",
+      "bytes": 2296
+    },
+    {
+      "version": "20260924200000",
+      "path": "supabase/migrations/20260924200000_retire_noncompliant_evidence_sources.sql",
+      "sha256": "269680a433a6ff28b2bbc6362643a253ff613c7beee1d0b81eeb684e485ea507",
+      "bytes": 1639
+    },
+    {
+      "version": "20260925013000",
+      "path": "supabase/migrations/20260925013000_triage_charging_system_evidence.sql",
+      "sha256": "d94a976dd207b925176673fcf55f5f1732f006fa082a471217b61e791cb59b2c",
+      "bytes": 4675
+    },
+    {
+      "version": "20260925014500",
+      "path": "supabase/migrations/20260925014500_review_charging_system_source_linked.sql",
+      "sha256": "044834517d28382630757adcc55aa850308355e4eb72ba3f9d11149450e4acc7",
+      "bytes": 2934
+    },
+    {
+      "version": "20260925021000",
+      "path": "supabase/migrations/20260925021000_prepare_charging_system_citation_validation.sql",
+      "sha256": "4b7911b87c5fd82bc6993c188b86897fbdfa2ecc8b82f8e9469c1eda586945d4",
+      "bytes": 2164
+    },
+    {
+      "version": "20260925040000",
+      "path": "supabase/migrations/20260925040000_revise_charging_system_distractors.sql",
+      "sha256": "34607d1ada1a278845e3542138b42678b65eaa44b5d12f1f41728877750c6ee9",
+      "bytes": 1504
+    },
+    {
+      "version": "20260925235437",
+      "path": "supabase/migrations/20260925235437_add_curriculum_schema.sql",
+      "sha256": "965edd2b04bde37712fa11d09d81dd2b4cee189d647a0780bdf260a98f071303",
+      "bytes": 25786
+    },
+    {
+      "version": "20260926000000",
+      "path": "supabase/migrations/20260926000000_enforce_evidence_approval_gates.sql",
+      "sha256": "c644c21b4e8784a7a2cc73703fd5a9faec9a61837babd298a42b76d4e3c66221",
+      "bytes": 9817
+    },
+    {
+      "version": "20260928072000",
+      "path": "supabase/migrations/20260928072000_add_assessment_attempt_question_binding.sql",
+      "sha256": "04fb8305b69c0a7398b47d11ad0b2cd7b94e8333d3975df19d3173a112a527a8",
+      "bytes": 7290
+    },
+    {
+      "version": "20260928093000",
+      "path": "supabase/migrations/20260928093000_add_curriculum_catalog_courses.sql",
+      "sha256": "6bc3528d7cdd800df8db666fcc76b78e75eaab91c6fe63d618b6047290badcd5",
+      "bytes": 38386
+    },
+    {
+      "version": "20260928094000",
+      "path": "supabase/migrations/20260928094000_sync_hybrid_ev_developed_curriculum.sql",
+      "sha256": "71726aeb6d53d3517eab7602f76698a15e267de2257e06da40535967a2529500",
+      "bytes": 2457
+    },
+    {
+      "version": "20260928152000",
+      "path": "supabase/migrations/20260928152000_add_aut101_developed_curriculum.sql",
+      "sha256": "987d125c60359eb4a8c5c58a3619f507ef54ad0cafbd48e7b370b7ff33c87aa5",
+      "bytes": 2407
+    },
+    {
+      "version": "20260928163000",
+      "path": "supabase/migrations/20260928163000_add_aut105_developed_curriculum.sql",
+      "sha256": "665561e498e38a4873b22fc66113226c75d17da749bf7076f6c8963bfd922583",
+      "bytes": 2664
+    },
+    {
+      "version": "20260928180000",
+      "path": "supabase/migrations/20260928180000_add_foundations_core_batch_110_180.sql",
+      "sha256": "302232200eb8c62915006444f9e4cb633970c48fc99de886c0076084e2513453",
+      "bytes": 10357
+    },
+    {
+      "version": "20260928213000",
+      "path": "supabase/migrations/20260928213000_add_core_systems_batch_200_280.sql",
+      "sha256": "021393b4c7c624396611f60fa2734f194c17cdcaae47c3671a624d3639e09246",
+      "bytes": 14032
+    },
+    {
+      "version": "20260928231500",
+      "path": "supabase/migrations/20260928231500_add_advanced_technology_batch_300_390.sql",
+      "sha256": "fa2be68ff0401915493ebbdf05272b17e74e870743662c1ac826c782cb85f3d8",
+      "bytes": 14821
+    },
+    {
+      "version": "20260929003000",
+      "path": "supabase/migrations/20260929003000_add_undergrad_completion_batch_400_451.sql",
+      "sha256": "7e2f9a1c5c12d33c14e68cc1995f186c38e9f9ca6ec8de45b5ac257d94521d7b",
+      "bytes": 6892
+    },
+    {
+      "version": "20260929020000",
+      "path": "supabase/migrations/20260929020000_add_graduate_core_batch_501_590.sql",
+      "sha256": "15aa00d3a78f0710e1ac2ce40d03f3c1b9fc43e56cf6856c3b104ba24551e926",
+      "bytes": 19814
+    },
+    {
+      "version": "20260929030656",
+      "path": "supabase/migrations/20260929030656_curriculum_evidence_gap_persistence.sql",
+      "sha256": "3fbe8bb576d73977841623f51320f9ff11c04026f2012fe6fecac46fc49a8816",
+      "bytes": 4864
+    },
+    {
+      "version": "20260929041951",
+      "path": "supabase/migrations/20260929041951_require_approved_source_for_curriculum_evidence_approval.sql",
+      "sha256": "1af7d66f2e34c1167cf2aed8f5cc8798471f59cc8ac7195a26a957fc946973bf",
+      "bytes": 1122
+    },
+    {
+      "version": "20260929222509",
+      "path": "supabase/migrations/20260929222509_add_approved_source_rights_scopes.sql",
+      "sha256": "13f78dc142a27f82d7a064878928fbc7ecc3dc83977942b59aa89923c00d2989",
+      "bytes": 4653
+    },
+    {
+      "version": "20260929230536",
+      "path": "supabase/migrations/20260929230536_add_curriculum_enhancement_drafts.sql",
+      "sha256": "ef1d4929a2ef4bdd3943601fb80e76d4b82755cbf73f0e026cf14d1d496ce1b2",
+      "bytes": 5577
+    },
+    {
+      "version": "20260929232410",
+      "path": "supabase/migrations/20260929232410_add_curriculum_enhancement_evidence_index.sql",
+      "sha256": "31c3cb505a9334def1e2b59196199fe25d335c5d23b488149420bf8dc5483173",
+      "bytes": 142
+    },
+    {
+      "version": "20260930000435",
+      "path": "supabase/migrations/20260930000435_authorize_frontiers_ai_rag.sql",
+      "sha256": "f9b2eee298d14b924b64c94cb6886648657704157ad15bf86799a4394c4594b0",
+      "bytes": 1584
+    },
+    {
+      "version": "20260930005918",
+      "path": "supabase/migrations/20260930005918_add_curriculum_reference_library.sql",
+      "sha256": "2d9e27a1a495def1526051a75aead468b48bea1fde5bd82aea5f6156f73140d7",
+      "bytes": 11290
+    },
+    {
+      "version": "20260930011726",
+      "path": "supabase/migrations/20260930011726_map_chemistry_additive_manufacturing_references.sql",
+      "sha256": "c1fbfe08821d1da0055d6e4c02055defe204b8a6c9cc4f7f06695def775144b3",
+      "bytes": 1687
+    },
+    {
+      "version": "20260930015304",
+      "path": "supabase/migrations/20260930015304_expand_reference_coverage_batch_1.sql",
+      "sha256": "be2a436b170e93abdf8d7a88e329b66b85f642df8104cbbef87bb4d3bc7d8cff",
+      "bytes": 5515
+    },
+    {
+      "version": "20260930022400",
+      "path": "supabase/migrations/20260930022400_expand_reference_coverage_batch_2.sql",
+      "sha256": "ab952b3c00896c2bab0375ea8cb6947839d0694ccd8ff8c945ca18391b4062f0",
+      "bytes": 4733
+    },
+    {
+      "version": "20260930024127",
+      "path": "supabase/migrations/20260930024127_expand_reference_coverage_batch_3.sql",
+      "sha256": "1b086d576e2b32f55305f8d08c328d66b8079de7f0c290c49bc2eda767cd2c2c",
+      "bytes": 4880
+    },
+    {
+      "version": "20260930153300",
+      "path": "supabase/migrations/20260930153300_retire_legacy_student_progress.sql",
+      "sha256": "98650556c6f2a7d329521d6ae1870a248f5c880c30196ba0d511b4f1a4d316c4",
+      "bytes": 4522
+    },
+    {
+      "version": "20260930162904",
+      "path": "supabase/migrations/20260930162904_enforce_telemetry_payload_contract_and_ttl.sql",
+      "sha256": "ef3afea8aaca58943d26d96dc9773bbecf9159f5772f90a0ab38ee50088b9e48",
+      "bytes": 3383
+    },
+    {
+      "version": "20260930162957",
+      "path": "supabase/migrations/20260930162957_restrict_legacy_student_recommendations_access.sql",
+      "sha256": "8feae73cf3d2dec0a047ff872d609b9cc2c2391d8bc0268565c7a5daa92d4165",
+      "bytes": 754
+    },
+    {
+      "version": "20260930163022",
+      "path": "supabase/migrations/20260930163022_restrict_legacy_student_summary_views.sql",
+      "sha256": "c3a26659c0cebd18cb8a51e92d94ed6cbf9a5f5ab7916cb56606310e6ac503ce",
+      "bytes": 827
+    },
+    {
+      "version": "20260930175711",
+      "path": "supabase/migrations/20260930175711_retire_legacy_student_recommendations.sql",
+      "sha256": "2f951677dd40036fb6fa77c723952fe6e5160ee22063839f2252a68ce1543087",
+      "bytes": 1904
+    },
+    {
+      "version": "20260930191704",
+      "path": "supabase/migrations/20260930191704_retire_legacy_student_recommendations.sql",
+      "sha256": "3ab8812c8395ff507feefbb774c2dba7c9cd7c2694fcbfe21fadc7887e5c62d6",
+      "bytes": 507
+    },
+    {
+      "version": "20260930203051",
+      "path": "supabase/migrations/20260930203051_retire_legacy_roster_shells.sql",
+      "sha256": "1336161cd89671320cd28b88d5b65b8e906874a60291d1969af94376e3ca5c32",
+      "bytes": 3067
+    },
+    {
+      "version": "20260930210756",
+      "path": "supabase/migrations/20260930210756_cleanup_historical_smoke_classes.sql",
+      "sha256": "a48bcf3e098b121a7e0e63a4ca386c92d3dec1e20dfffcfa32998c419fb14344",
+      "bytes": 3080
+    },
+    {
+      "version": "20261001025048",
+      "path": "supabase/migrations/20261001025048_expand_reference_coverage_batch_4.sql",
+      "sha256": "86a009f364c542de265bef3a66ba478f683c4c0a32e91a130a56fb471fa999b8",
+      "bytes": 4815
+    },
+    {
+      "version": "20261001033126",
+      "path": "supabase/migrations/20261001033126_add_instructor_school_verification.sql",
+      "sha256": "f4067cd0a1efca833888c1ff7fe11b9a76d4a8dd9635bcdddc70b9542a45fd20",
+      "bytes": 2833
+    },
+    {
+      "version": "20261001041910",
+      "path": "supabase/migrations/20261001041910_seed_federal_school_codes_2026_27_q4.sql",
+      "sha256": "69ca2cdf3e4b6d147534abb7c659b83d7e9faff57f4d790c074c0e0cf9930dd6",
+      "bytes": 1157968
+    },
+    {
+      "version": "20261001235500",
+      "path": "supabase/migrations/20261001235500_create_profile_on_auth_signup.sql",
+      "sha256": "ff8f9d685da2286e4b8cc32ceb7aa7ba9e11b391a3f912ea3a1039e13999a5d5",
+      "bytes": 722
+    },
+    {
+      "version": "20261002001500",
+      "path": "supabase/migrations/20261002001500_add_institution_email_domains.sql",
+      "sha256": "4e851c874ded52e1fabedf89ad5ab2fd2e9cd0d5727b1fe80923e442c57393f0",
+      "bytes": 1628
+    },
+    {
+      "version": "20261002004500",
+      "path": "supabase/migrations/20261002004500_add_student_institution_claims.sql",
+      "sha256": "2b95d1be591e3a4f8dc0cfd2ab11e8dae79f9d5eba4ebf7b2683660a6ee9e984",
+      "bytes": 2420
+    },
+    {
+      "version": "20261003023000",
+      "path": "supabase/migrations/20261003023000_add_scenario_challenge_review_artifacts.sql",
+      "sha256": "4c976a17a692e1a1c384aee07239a7fd5f345a4336b2312d5bf4240d8a8fe76c",
+      "bytes": 2121
+    },
+    {
+      "version": "20261003024437",
+      "path": "supabase/migrations/20261003024437_add_scenario_challenge_review_artifacts.sql",
+      "sha256": "6471d9c07ea97e242075dd44ea0f2bb5b2767d345e00497ca3a6c48ba3e725c4",
+      "bytes": 310
+    },
+    {
+      "version": "20261005031812",
+      "path": "supabase/migrations/20261005031812_create_orchestration_persistence_rpc.sql",
+      "sha256": "16781af589557a5b3a5979a683fb25b521607361e54a023dd08deaa39d894f58",
+      "bytes": 12025
+    },
+    {
+      "version": "20261005035043",
+      "path": "supabase/migrations/20261005035043_create_orchestration_persistence_rpc.sql",
+      "sha256": "b7ea064615dfa041f46e625c6e011568724c4ff97723923d41aa2f5eaa5f8b3a",
+      "bytes": 315
+    },
+    {
+      "version": "20261006033456",
+      "path": "supabase/migrations/20261006033456_add_native_governed_question_drafts.sql",
+      "sha256": "5128abbc6073ec61f63662dcb428da83a5257a51b40f7c6e14e5c5c8dc30f761",
+      "bytes": 2370
+    },
+    {
+      "version": "20261006035521",
+      "path": "supabase/migrations/20261006035521_add_native_governed_question_drafts.sql",
+      "sha256": "878da664529ed8db2b6af1457d23277a55adac26d5a8a2dd7f696bcebe178a97",
+      "bytes": 306
+    },
+    {
+      "version": "20261009042000",
+      "path": "supabase/migrations/20261009042000_expand_reference_coverage_batch_5.sql",
+      "sha256": "f09db709f9b22ebe43661db5d80ad0c7ce39c5f6bd6a49c8014f050b0f822759",
+      "bytes": 5072
+    },
+    {
+      "version": "20261009043500",
+      "path": "supabase/migrations/20261009043500_expand_reference_coverage_batch_6.sql",
+      "sha256": "cc21fe0d36263a37722fc223eeaaa8152902691e976ba9b74d12c537e50af793",
+      "bytes": 5853
+    },
+    {
+      "version": "20261009045500",
+      "path": "supabase/migrations/20261009045500_add_supplemental_automotive_authority_batch_1.sql",
+      "sha256": "b00ad02927c6ba69c8f5a8af55e0873618a7bb4e7faf71d19ef696194ab196cb",
+      "bytes": 8712
+    },
+    {
+      "version": "20261009051500",
+      "path": "supabase/migrations/20261009051500_add_supplemental_automotive_authority_batch_2.sql",
+      "sha256": "d204c9663bf0a925e71e9e3b7effb65e7cdc5f2892af9c2016a13acb20316707",
+      "bytes": 8712
+    },
+    {
+      "version": "20261009054500",
+      "path": "supabase/migrations/20261009054500_add_supplemental_automotive_authority_batch_3.sql",
+      "sha256": "968f362ebaccdc801f3c60b468a6bbc7bca21ad7390f2c62840db5ae2d54d7e7",
+      "bytes": 5309
+    },
+    {
+      "version": "20261009061000",
+      "path": "supabase/migrations/20261009061000_add_supplemental_automotive_authority_batch_4.sql",
+      "sha256": "ce07a752db0e9b06b1f702ffe041c6704e9d19146ea9db6c480bee056b310caa",
+      "bytes": 9967
+    },
+    {
+      "version": "20261009064000",
+      "path": "supabase/migrations/20261009064000_add_supplemental_automotive_authority_batch_5.sql",
+      "sha256": "c4cfb9a14c6c367ec4e8c568125819439ba838407c69549d67f7439ef7d5bd99",
+      "bytes": 8363
+    },
+    {
+      "version": "20261009071000",
+      "path": "supabase/migrations/20261009071000_add_supplemental_automotive_authority_batch_6.sql",
+      "sha256": "3cfe17facd276afad4719149f40c739421716c209300f645ecc05c4d5cdc6423",
+      "bytes": 7727
+    },
+    {
+      "version": "20261009074500",
+      "path": "supabase/migrations/20261009074500_add_reference_quality_review_batch_1.sql",
+      "sha256": "da7b5f112fef85a5bb544f3df65871c4b17ecb792301b4a41a92a63ff08f898f",
+      "bytes": 3156
+    },
+    {
+      "version": "20261009082000",
+      "path": "supabase/migrations/20261009082000_refine_reference_quality_authority_independence.sql",
+      "sha256": "200e536ca8fc28be8744b0e5b0527686be5852822cccfaaa9e9283562abf0439",
+      "bytes": 1133
+    },
+    {
+      "version": "20261009205000",
+      "path": "supabase/migrations/20261009205000_resolve_ies_source_rights.sql",
+      "sha256": "697348f1a4d9db191983ad3e0f427e6ecd43672ac586fb039e81b05cef66198d",
+      "bytes": 2030
+    },
+    {
+      "version": "20261009214000",
+      "path": "supabase/migrations/20261009214000_resolve_mdpi_battery_source_rights.sql",
+      "sha256": "87df1d975ee8e2c4884d28343d61f64bbf06990212c764251ba2c27df16f01f6",
+      "bytes": 1682
+    },
+    {
+      "version": "20261009221500",
+      "path": "supabase/migrations/20261009221500_resolve_icar_source_rights.sql",
+      "sha256": "6e1539539213b14b0e678207def2f450b36f2d3586d08d9076782d55c515ca8a",
+      "bytes": 1838
+    },
+    {
+      "version": "20261009223500",
+      "path": "supabase/migrations/20261009223500_resolve_bosch_source_rights.sql",
+      "sha256": "2f8f24402518d2f9115ccd0676fa738c676af93d83397c339c1590cb6e46284c",
+      "bytes": 2346
+    },
+    {
+      "version": "20261009224500",
+      "path": "supabase/migrations/20261009224500_resolve_gm_source_rights.sql",
+      "sha256": "ea8f9875739dd64885b8bbb195e9957698cff8c6a935d5b47e5e939842ce9728",
+      "bytes": 1908
+    },
+    {
+      "version": "20261009230000",
+      "path": "supabase/migrations/20261009230000_resolve_sae_source_rights.sql",
+      "sha256": "ab00d189aef0b4994b85ea59d7b7082d78a21f881eef2e10907b30099aa3e12d",
+      "bytes": 2412
+    },
+    {
+      "version": "20261009231500",
+      "path": "supabase/migrations/20261009231500_resolve_sage_diagnostic_survey_rights.sql",
+      "sha256": "4a8e7b7a4e45dae3732a64292d0637afe09507618e335b0bbb451fd0bb1f6b5b",
+      "bytes": 3283
+    },
+    {
+      "version": "20261010033513",
+      "path": "supabase/migrations/20261010033513_correct_aut420_industry_employment_proof.sql",
+      "sha256": "e22220628d6efca79b59cdc104687be6fb97cda0a9ac50c799f248e576192bab",
+      "bytes": 506
+    },
+    {
+      "version": "20261010174000",
+      "path": "supabase/migrations/20261010174000_add_aut120_canonical_curriculum.sql",
+      "sha256": "a80d0697af850a8424caf3ccf628abea6bf54646d9a292410b1f971cd1fcdd8b",
+      "bytes": 3459
+    },
+    {
+      "version": "20261010191000",
+      "path": "supabase/migrations/20261010191000_resolve_four_canonical_curriculum_blockers.sql",
+      "sha256": "896b53538f38720ba996e06f9eb6a3b2293582957d77e8c37812e64032a5ce0c",
+      "bytes": 9867
+    },
+    {
+      "version": "20261010232020",
+      "path": "supabase/migrations/20261010232020_phase7fx_resolve_nine_canonical_curriculum_blockers.sql",
+      "sha256": "9da954d042f1a96fd53ce754f523634c0cc85b606d1ff8f55d90b46feb078855",
+      "bytes": 19215
+    },
+    {
+      "version": "20261011212851",
+      "path": "supabase/migrations/20261011212851_admin_instructor_verification_review.sql",
+      "sha256": "54ed0d7f1013685757b17fed23863ddf8be512c63d8478fb50e45343fb1575c5",
+      "bytes": 3707
+    },
+    {
+      "version": "20261011220034",
+      "path": "supabase/migrations/20261011220034_expose_migration_history_for_drift_check.sql",
+      "sha256": "450b8b0e0ac284ef43e836514b54e3411291d8e3e2105cee8828355d80232164",
+      "bytes": 745
+    },
+    {
+      "version": "20261012031851",
+      "path": "supabase/migrations/20261012031851_harden_trigger_function_execution.sql",
+      "sha256": "91816be95d166a08fa6ff85db1666d17bdddc65a8cd3b44051e2a313e5ab4a35",
+      "bytes": 705
+    },
+    {
+      "version": "20261012083703",
+      "path": "supabase/migrations/20261012083703_retire_provenance_rls_helpers.sql",
+      "sha256": "bbffe1a48cfc6c21d2a7dbb919053301adfe8f969c1f8a327fb5abbcb592e41e",
+      "bytes": 2710
+    },
+    {
+      "version": "20261012090441",
+      "path": "supabase/migrations/20261012090441_add_scenario_authoring_drafts.sql",
+      "sha256": "2d4a60412d702f2b930ea18566a53f1c935c5a3d9cfbd603b0819b03a46cc7c9",
+      "bytes": 1791
+    },
+    {
+      "version": "20261012092021",
+      "path": "supabase/migrations/20261012092021_add_authoring_review_lifecycle.sql",
+      "sha256": "98844d19e414f377d585ac3b3c618493d8a70cac81100d89f5762b6dc0668aca",
+      "bytes": 3784
+    },
+    {
+      "version": "20261012094800",
+      "path": "supabase/migrations/20261012094800_add_authoring_evidence_linkage.sql",
+      "sha256": "631e7a14084a120c39b9fca20cc916c4f3840de042a8ba5c2918654bcf58a749",
+      "bytes": 3821
+    },
+    {
+      "version": "20261012195501",
+      "path": "supabase/migrations/20261012195501_add_authoring_publication_approval.sql",
+      "sha256": "6412f85428768e83bc524fc565e5631bf5a96bb65f3815304765277f20c27376",
+      "bytes": 6601
+    },
+    {
+      "version": "20261012205000",
+      "path": "supabase/migrations/20261012205000_add_institution_tenant_foundation.sql",
+      "sha256": "59cff5554cd930d1e771e1c08bacd6b99087912b0e48e0c3a3b4cf9caa92bd5a",
+      "bytes": 9523
+    },
+    {
+      "version": "20261012210213",
+      "path": "supabase/migrations/20261012210213_add_institution_membership_administration.sql",
+      "sha256": "6a2b3909329a80ead7853c7f2d8296cfe70b7ce3d7d30712e71d3b99cb876729",
+      "bytes": 11811
+    },
+    {
+      "version": "20261012212214",
+      "path": "supabase/migrations/20261012212214_add_institution_settings_domains.sql",
+      "sha256": "ec6d2aaf87fe1cd165f184e56ac371cb1478dd805f15a02337220ddbedf0f31d",
+      "bytes": 7220
+    },
+    {
+      "version": "20261012223500",
+      "path": "supabase/migrations/20261012223500_add_student_institution_claim_review.sql",
+      "sha256": "6238f48071b8bc3f44883befa65b02f4cad7ba80bc7f5e726f94ef45db5df870",
+      "bytes": 4908
+    },
+    {
+      "version": "20261012224500",
+      "path": "supabase/migrations/20261012224500_add_platform_admin_operational_settings.sql",
+      "sha256": "88b3b6742d7a141fceca8fb3a5905eddfe695dc117022748b4bf420a68276d49",
+      "bytes": 3140
+    },
+    {
+      "version": "20261013005905",
+      "path": "supabase/migrations/20261013005905_add_diagnostic_copilot_stage2.sql",
+      "sha256": "c9ad0570c33dd6d3e5e8f3659853953441db9bb45145b749f6ea564dae1742e8",
+      "bytes": 6406
+    },
+    {
+      "version": "20261013190000",
+      "path": "supabase/migrations/20261013190000_retire_external_certification_taxonomy.sql",
+      "sha256": "9d68ed1ba6753e91657a2411784f86c10a10d1eb78dd1fe7dbc126edd5ce68d4",
+      "bytes": 8666
+    }
+  ],
+  "pathEncoding": "Retired vendor tokens inside historical filenames are written with JSON unicode escapes; decoded values are the exact repository paths."
+}
