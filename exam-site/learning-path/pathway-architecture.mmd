@@ -1,0 +1,25 @@
+flowchart TD
+  A[Academic Pathway Structure] --> U[Undergraduate - 48 courses]
+  A --> G[Graduate - 30 courses]
+
+  U --> U47[CIP 47.0604]
+  U47 --> U100[AUT 100-199<br/>Foundations - 13]
+  U47 --> U200[AUT 200-299<br/>Core Systems - 12]
+  U47 --> U300[AUT 300-499<br/>Advanced Technology - 18]
+  U47 --> UNAM[Named Subject Courses - 5<br/>Brakes, Electrical, Engine Performance,<br/>Hybrid and Electric Vehicle Technology,<br/>Suspension and Steering]
+
+  G --> G15[CIP 15.0803]
+  G15 --> G500[AUT 500-599<br/>Graduate Core and Specializations - 18]
+  G15 --> G600[AUT 600-699<br/>Research and Professional Practice - 7]
+  G15 --> GNAM[Named Graduate Courses - 5<br/>Advanced Diagnostic Analysis, Applied Research,<br/>Curriculum and Assessment Design,<br/>Technical Instructional Leadership,<br/>Vehicle Systems and Testing]
+
+  U100 --> C[Unique Course Catalog Record]
+  U200 --> C
+  U300 --> C
+  G500 --> C
+  G600 --> C
+  C --> URL[Stable Course Detail URL]
+  C --> D{Developed curriculum content?}
+  D -->|Yes| L[Competency and Lesson Plan]
+  D -->|Not yet| P[Catalog-only planned course]
+  L --> E[Evidence-governed Learning]
