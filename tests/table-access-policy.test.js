@@ -15,6 +15,8 @@ const {
 
 const MANIFEST_PATH = path.join(__dirname, "..", "docs", "database", "table-access-policy.json");
 
+const { verifyManifestConsistency } = require("../scripts/verify-table-access-policy-manifest");
+
 function manifest(tables) {
   return { schemaVersion: 1, tables };
 }
@@ -234,5 +236,75 @@ describe("table access policy audit: manifest integrity", () => {
     expect(args).not.toContain("-f");
     expect(statementsOnly).not.toMatch(/\b(insert|update|delete|drop|alter|create|grant|revoke)\b/);
     expect(sql).toContain("information_schema");
+  });
+});
+
+describe("table access policy manifest: deterministic consistency verification", () => {
+  test("the committed manifest is consistent with its declared migration sources", () => {
+    const result = verifyManifestConsistency();
+
+    expect(result.problems).toEqual([]);
+    expect(result.ok).toBe(true);
+    expect(result.tableCount).toBeGreaterThan(50);
+  });
+
+  test("detects a canonical table missing from the manifest", () => {
+    const manifest = loadManifest(MANIFEST_PATH);
+    delete manifest.tables.attempts;
+
+    const result = verifyManifestConsistency({ manifest });
+
+    expect(result.ok).toBe(false);
+    expect(result.problems.join(" ")).toContain("missing table: public.attempts");
+  });
+
+  test("detects an unknown policy entry", () => {
+    const manifest = loadManifest(MANIFEST_PATH);
+    manifest.tables.invented_table = {
+      classification: "service-role-only",
+      anon: [],
+      authenticated: [],
+      authority: ["invented"]
+    };
+
+    const result = verifyManifestConsistency({ manifest });
+
+    expect(result.ok).toBe(false);
+    expect(result.problems.join(" ")).toContain("unknown policy entry: public.invented_table");
+  });
+
+  test("detects an unsupported privilege and an invalid classification", () => {
+    const manifest = loadManifest(MANIFEST_PATH);
+    manifest.tables.attempts.authenticated = ["OWNERSHIP"];
+    manifest.tables.attempts.classification = "not-a-classification";
+
+    const result = verifyManifestConsistency({ manifest });
+
+    expect(result.ok).toBe(false);
+    expect(result.problems.join(" ")).toContain("unsupported privilege");
+    expect(result.problems.join(" ")).toContain("unknown classification");
+  });
+
+  test("detects a policy that contradicts its source without an owner decision", () => {
+    const manifest = loadManifest(MANIFEST_PATH);
+    // classes is granted SELECT/INSERT/UPDATE/DELETE by the canonical chain.
+    manifest.tables.classes.authenticated = ["SELECT"];
+    manifest.tables.classes.authority = ["test fixture"];
+
+    const result = verifyManifestConsistency({ manifest });
+
+    expect(result.ok).toBe(false);
+    expect(result.problems.join(" ")).toContain("source mismatch: public.classes.authenticated");
+    expect(result.problems.join(" ")).toContain("no owner decision is recorded");
+  });
+
+  test("accepts a narrowed policy when an owner decision is recorded", () => {
+    const manifest = loadManifest(MANIFEST_PATH);
+    manifest.tables.classes.authenticated = ["SELECT"];
+    manifest.tables.classes.authority = ["owner decision: reduced for this review"];
+
+    const result = verifyManifestConsistency({ manifest });
+
+    expect(result.problems.join(" ")).not.toContain("source mismatch");
   });
 });

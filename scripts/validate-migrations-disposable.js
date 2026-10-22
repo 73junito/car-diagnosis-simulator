@@ -52,7 +52,11 @@ const CONTAINER_MIGRATIONS_DIR = "/work/migrations";
 const CONTAINER_AUDIT_SQL = "/work/grants_audit.sql";
 const DEFAULT_MIGRATIONS_DIRECTORY = "supabase/migrations";
 const DEFAULT_AUDIT_SQL_PATH = "db/scripts/grants_audit.sql";
-const DEFAULT_INIT_TIMEOUT_MS = 600000;
+// Measured: the image's entrypoint takes ~243 s to expose a TCP listener on a
+// quiet host (server up -> shutdown/checkpoint -> "init process complete" ->
+// restart -> listening). The budget covers a loaded host without weakening the
+// readiness conditions, which stay "TCP reachable AND postmaster stable".
+const DEFAULT_INIT_TIMEOUT_MS = 900000;
 const DEFAULT_INIT_POLL_MS = 5000;
 // The entrypoint cycles the server, so require repeated identical postmaster
 // start times before trusting the instance.
@@ -119,6 +123,19 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
   };
 
   try {
+    // Refuse to race. Two concurrent runs sharing a fixed container name would
+    // let one run's teardown destroy the other's container mid-initialisation,
+    // which is indistinguishable from a slow start (psql reports "connection
+    // refused" for the whole timeout). Fail closed instead, and never remove a
+    // container this run did not create.
+    const existing = docker(["ps", "-a", "--filter", `name=^/${container}$`, "--format", "{{.Names}}"]);
+
+    if (existing.exitCode === 0 && existing.stdout.trim() === container) {
+      record("start", false, `container "${container}" already exists; refusing to race`);
+
+      return { ok: false, reason: "container-name-in-use", steps, evidence };
+    }
+
     const run = docker(["run", "-d", "--name", container, "--network", "none", "-e", "POSTGRES_PASSWORD=validation-only", image]);
 
     if (run.exitCode !== 0) {
