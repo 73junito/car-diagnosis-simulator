@@ -1,5 +1,8 @@
 "use strict";
 
+const fs = require("fs");
+const path = require("path");
+
 const {
   APPROVED_SUPABASE_IMAGE,
   APPROVED_SUPABASE_IMAGE_DIGEST,
@@ -71,9 +74,14 @@ function happyDocker({ roles = ["anon", "authenticated"], probe = READY_PROBE } 
     if (command === "exec") {
       const inline = args[args.indexOf("-c") + 1] || "";
 
-      // The probe SQL also mentions pg_roles, so discriminate on the probe's
-      // own marker first, otherwise the gate would never report ready.
-      if (inline.includes("union all")) {
+      // Three different probes reach this fake; discriminate on their own SQL
+      // markers. The policy probe must be checked first because the init probe
+      // also uses `union all`.
+      if (inline.includes("role_table_grants")) {
+        return { exitCode: 0, stdout: policyProbeFromManifest(), stderr: "" };
+      }
+
+      if (inline.includes("pg_postmaster_start_time")) {
         return { exitCode: 0, stdout: probe, stderr: "" };
       }
 
@@ -89,6 +97,29 @@ function happyDocker({ roles = ["anon", "authenticated"], probe = READY_PROBE } 
 }
 
 const silent = { log: () => {}, logError: () => {} };
+
+/**
+ * Build the policy-probe payload from the committed manifest, so the happy path
+ * is a real comparison rather than a stubbed string.
+ */
+function policyProbeFromManifest() {
+  const manifest = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "..", "docs", "database", "table-access-policy.json"), "utf8")
+  );
+  const lines = ["role:anon", "role:authenticated"];
+
+  for (const [name, entry] of Object.entries(manifest.tables)) {
+    lines.push(`table:${name}`);
+
+    for (const role of ["anon", "authenticated"]) {
+      for (const privilege of entry[role]) {
+        lines.push(`grant:${role}|${name}|${privilege}`);
+      }
+    }
+  }
+
+  return lines.join("\n");
+}
 
 function runValidate(docker, overrides = {}) {
   return validate({
@@ -305,7 +336,8 @@ describe("disposable migration container: end-to-end orchestration", () => {
     expect(result.steps.every((step) => step.ok)).toBe(true);
     expect(result.evidence.isolation.networkMode).toBe("none");
     expect(result.evidence.roles).toEqual(["anon", "authenticated"]);
-    expect(result.evidence.audit).toEqual({ outcome: "clean", rows: 0 });
+    expect(result.evidence.policy.tablesInDatabase).toBeGreaterThan(50);
+    expect(result.evidence.policy.violations).toBe(0);
     expect(docker.calls.some((args) => args[0] === "rm")).toBe(true);
   });
 
