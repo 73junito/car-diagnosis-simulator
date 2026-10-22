@@ -28,7 +28,19 @@ const {
   isolationViolations
 } = require("./lib/disposable-migration-container");
 
-const { runApply, runAudit } = require("./lib/disposable-migration-validation");
+const {
+  buildRolePreconditionArgs,
+  classifyRolePrecondition,
+  runApply
+} = require("./lib/disposable-migration-validation");
+
+const {
+  DEFAULT_MANIFEST_PATH,
+  buildPolicyProbeArgs,
+  evaluatePolicy,
+  loadManifest,
+  parsePolicyProbe
+} = require("./verify-table-access-policy");
 
 const DEFAULT_CONTAINER = `${DISPOSABLE_NAME_PREFIX}-ci`;
 const CONTAINER_DB_USER = "supabase_admin";
@@ -87,7 +99,7 @@ function createContainerPsqlExecutor({ docker, container, mapPath }) {
  * Every docker interaction goes through the injected CLI, so this is testable
  * without Docker and deterministic under a fake clock.
  */
-async function validate({ docker, container, image, migrationsDirectory, auditSqlPath, log, logError, sleep, now, initTimeoutMs, initPollMs, stabilityChecks = DEFAULT_STABILITY_CHECKS, keepContainer }) {
+async function validate({ docker, container, image, migrationsDirectory, auditSqlPath, manifestPath = DEFAULT_MANIFEST_PATH, log, logError, sleep, now, initTimeoutMs, initPollMs, stabilityChecks = DEFAULT_STABILITY_CHECKS, keepContainer }) {
   const steps = [];
   const evidence = {};
   let started = false;
@@ -236,17 +248,49 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
 
     record("apply", true, `${apply.applied.length} canonical migration(s) applied with ON_ERROR_STOP=1`);
 
-    const audit = runAudit({ databaseUrl: CONTAINER_DSN, auditSqlPath, exec, log, logError });
+    const preconditionResult = exec(buildRolePreconditionArgs({ databaseUrl: CONTAINER_DSN }), {
+      phase: "role-precondition"
+    });
+    const precondition = classifyRolePrecondition({
+      exitCode: preconditionResult.exitCode,
+      stdout: preconditionResult.stdout
+    });
 
-    evidence.roles = audit.precondition ? audit.precondition.present : [];
-    evidence.audit = audit.audit ? { outcome: audit.audit.outcome, rows: audit.audit.rows.length } : null;
+    evidence.roles = precondition.present;
 
-    if (!audit.ok) {
-      record("audit", false, audit.message);
-      return { ok: false, reason: audit.reason, steps, evidence };
+    if (!precondition.ok) {
+      record("audit", false, precondition.message);
+      return { ok: false, reason: precondition.reason, steps, evidence };
     }
 
-    record("audit", true, audit.message);
+    // Policy-aligned privilege audit: the live database is compared against the
+    // reviewed manifest in both directions, so a missing privilege and an
+    // unexpected privilege both fail.
+    const probeResult = exec(buildPolicyProbeArgs({ databaseUrl: CONTAINER_DSN }), {
+      phase: "policy-probe"
+    });
+    const policy = evaluatePolicy({
+      manifest: loadManifest(manifestPath),
+      probe: parsePolicyProbe({ exitCode: probeResult.exitCode, stdout: probeResult.stdout })
+    });
+
+    evidence.policy = policy.summary;
+
+    if (!policy.ok) {
+      record("audit", false, `${policy.summary.violations} table access policy violation(s)`);
+
+      for (const violation of policy.violations.slice(0, 12)) {
+        logError(`  ${violation.code}: ${violation.detail}`);
+      }
+
+      return { ok: false, reason: "policy-violation", steps, evidence };
+    }
+
+    record(
+      "audit",
+      true,
+      `table access policy satisfied (${policy.summary.tablesInDatabase} tables, ${policy.summary.roleComparisons} role comparisons)`
+    );
 
     return { ok: true, reason: null, steps, evidence };
   } finally {
@@ -277,6 +321,7 @@ async function main(argv = process.argv.slice(2), deps = {}) {
     image: process.env.MIGRATION_VALIDATION_IMAGE || APPROVED_SUPABASE_IMAGE,
     migrationsDirectory: process.env.MIGRATIONS_DIR || DEFAULT_MIGRATIONS_DIRECTORY,
     auditSqlPath: process.env.GRANTS_AUDIT_SQL || DEFAULT_AUDIT_SQL_PATH,
+    manifestPath: process.env.TABLE_ACCESS_POLICY || DEFAULT_MANIFEST_PATH,
     log,
     logError,
     sleep: deps.sleep || ((ms) => new Promise((resolve) => setTimeout(resolve, ms))),

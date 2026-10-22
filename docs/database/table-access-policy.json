@@ -116,19 +116,21 @@
       ]
     },
     "competency_areas": {
-      "classification": "unclassified",
+      "classification": "service-role-only",
       "anon": [],
       "authenticated": [],
       "authority": [
-        "20260911200000_add_vendor_neutral_competency_foundation.sql"
+        "consumers: worker/routes/scenario-questions-approved.js only (service role); no client-side reference",
+        "owner decision: service-role-only least-privilege baseline"
       ]
     },
     "competency_to_program_map": {
-      "classification": "unclassified",
+      "classification": "service-role-only",
       "anon": [],
       "authenticated": [],
       "authority": [
-        "20260911200000_add_vendor_neutral_competency_foundation.sql"
+        "no consumer in worker/, src/, supabase/functions/ or exam-site/",
+        "owner decision: service-role-only least-privilege baseline"
       ]
     },
     "completions": {
@@ -269,11 +271,12 @@
       ]
     },
     "diagnostic_data_domains": {
-      "classification": "unclassified",
+      "classification": "service-role-only",
       "anon": [],
       "authenticated": [],
       "authority": [
-        "20260710204828_external_data_resource_registry.sql"
+        "no consumer in worker/, src/, supabase/functions/ or exam-site/",
+        "owner decision: service-role-only least-privilege baseline"
       ]
     },
     "diagnostic_execution_events": {
@@ -360,19 +363,21 @@
       ]
     },
     "external_data_resources": {
-      "classification": "unclassified",
+      "classification": "service-role-only",
       "anon": [],
       "authenticated": [],
       "authority": [
-        "20260710204828_external_data_resource_registry.sql"
+        "no consumer in worker/, src/, supabase/functions/ or exam-site/",
+        "owner decision: service-role-only least-privilege baseline"
       ]
     },
     "external_resource_domain_links": {
-      "classification": "unclassified",
+      "classification": "service-role-only",
       "anon": [],
       "authenticated": [],
       "authority": [
-        "20260710204828_external_data_resource_registry.sql"
+        "no consumer in worker/, src/, supabase/functions/ or exam-site/",
+        "owner decision: service-role-only least-privilege baseline"
       ]
     },
     "institution_cohorts": {
@@ -702,12 +707,18 @@
       ]
     },
     "telemetry_events": {
-      "classification": "unclassified",
+      "classification": "service-role-only",
       "anon": [],
       "authenticated": [],
       "authority": [
-        "20260930162904_enforce_telemetry_payload_contract_and_ttl.sql"
+        "20260930162904_enforce_telemetry_payload_contract_and_ttl.sql: four deny-all RLS policies for anon, authenticated (using false / with check false)",
+        "consumers: supabase/functions/insert_telemetry_batch, get_daily_analytics and worker/routes/{instructor-telemetry,student-activity}.js (service role only)"
       ]
     }
-  }
+  },
+  "reviewNotes": [
+    "Classification is derived from the canonical migration chain (grants, revokes and documenting comments).",
+    "The six tables recorded as service-role-only were approved by owner decision (Phase 4, Decision A) after consumer tracing; see their authority entries.",
+    "anon holds no table privilege anywhere in public. Supabase default privileges grant anon/authenticated the full arwdDxtm set on new tables; 20261022000000_enforce_least_privilege_public_schema.sql removes those grants and the defaults."
+  ]
 }
