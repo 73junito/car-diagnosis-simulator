@@ -183,7 +183,7 @@ describe("disposable migration container: isolation assertions", () => {
         { ...CLEAN_INSPECT, HostConfig: { ...CLEAN_INSPECT.HostConfig, PortBindings: { "5432/tcp": [{}] } } },
         "Published database ports"
       ],
-      [{ ...CLEAN_INSPECT, Image: "sha256:deadbeef" }, "Image digest"]
+      [{ ...CLEAN_INSPECT, Image: "sha256:deadbeef" }, "approved digest"]
     ];
 
     for (const [inspect, expected] of cases) {
@@ -199,9 +199,58 @@ describe("disposable migration container: isolation assertions", () => {
       binds: [],
       portBindings: {},
       mounts: [],
-      imageId: APPROVED_SUPABASE_IMAGE_DIGEST
+      imageId: APPROVED_SUPABASE_IMAGE_DIGEST,
+      repoDigests: []
     });
     expect(parseIsolation(undefined).networkMode).toBeNull();
+  });
+
+  test("accepts a manifest-list pull whose local config id differs from the pinned digest", () => {
+    // On a hosted runner the pinned digest is a manifest-list digest, so the
+    // local image id is the platform configuration id. RepoDigests still records
+    // the digest the image was pulled by.
+    const manifestListPull = {
+      ...CLEAN_INSPECT,
+      Image: "sha256:66089200353d90686fe9b252a47d17d078364bf47c50190852c33dc850a0191f",
+      RepoDigests: [
+        `ghcr.io/supabase/postgres@${APPROVED_SUPABASE_IMAGE_DIGEST}`,
+        `public.ecr.aws/supabase/postgres@${APPROVED_SUPABASE_IMAGE_DIGEST}`
+      ]
+    };
+
+    expect(isolationViolations({ name: "tm-migval-ci", inspect: manifestListPull })).toEqual([]);
+  });
+
+  test("rejects an unapproved image even when digest metadata is present", () => {
+    const unapproved = {
+      ...CLEAN_INSPECT,
+      Image: "sha256:deadbeef",
+      RepoDigests: ["ghcr.io/supabase/postgres@sha256:1111111111111111111111111111111111111111111111111111111111111111"]
+    };
+
+    expect(isolationViolations({ name: "tm-migval-ci", inspect: unapproved }).join(" ")).toContain(
+      "must originate from the approved digest"
+    );
+  });
+
+  test("rejects a tag-only pull with missing digest metadata", () => {
+    const tagOnly = { ...CLEAN_INSPECT, Image: "sha256:deadbeef", RepoDigests: [] };
+
+    expect(isolationViolations({ name: "tm-migval-ci", inspect: tagOnly }).join(" ")).toContain(
+      "must originate from the approved digest"
+    );
+  });
+
+  test("rejects malformed digest metadata", () => {
+    const malformed = {
+      ...CLEAN_INSPECT,
+      Image: "sha256:deadbeef",
+      RepoDigests: ["not-a-digest", "ghcr.io/supabase/postgres:17.6.1.167"]
+    };
+
+    expect(isolationViolations({ name: "tm-migval-ci", inspect: malformed }).join(" ")).toContain(
+      "must originate from the approved digest"
+    );
   });
 });
 

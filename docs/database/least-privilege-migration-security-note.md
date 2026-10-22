@@ -31,18 +31,52 @@ revoke all on all tables in schema public from authenticated;
 
 Every grant reproduces a canonical statement; none is invented. Course enrolment, instruction, assignment, assessment and completion operations keep the operations the chain granted them. **Review point:** the five classroom tables lost `UPDATE`/`DELETE` (four of them) and every table lost `TRUNCATE`/`REFERENCES`/`TRIGGER`. Those came from Supabase default privileges, not from any migration. If a governed feature needs `UPDATE` or `DELETE` on `enrollments`, `replays`, `completions` or `assignments`, that must be added as a new canonical grant.
 
-## 3. Default-privilege changes (lines 68–71)
+## 3. Default-privilege change (single statement, current role only)
 
 ```sql
-alter default privileges for role supabase_admin in schema public revoke all on tables from anon;
-alter default privileges for role supabase_admin in schema public revoke all on tables from authenticated;
-alter default privileges for role postgres in schema public revoke all on tables from anon;
-alter default privileges for role postgres in schema public revoke all on tables from authenticated;
+alter default privileges in schema public revoke all on tables from anon, authenticated;
 ```
 
-- Verified before: `pg_default_acl` granted `anon` and `authenticated` the full `arwdDxtm` set on new `public` tables for **both** definer roles.
-- Verified after: neither role appears for either definer. Only `postgres` and `service_role` remain.
-- **Review point:** this is a repository-wide policy change, not a per-table fix. Any future migration that expects a new table to be client-readable must now grant explicitly. That is the intent, but it should be an explicit accepted consequence.
+**Why it is not `FOR ROLE supabase_admin`.** PostgreSQL permits changing your own
+default privileges and those of roles you are a member of. Measured in a
+disposable Supabase PostgreSQL 17 instance:
+
+| Role | superuser | member of `supabase_admin` |
+| --- | --- | --- |
+| `supabase_admin` | **yes** | — |
+| `postgres` | **no** | **no** — it is a member of `anon`, `authenticated`, `service_role`, `supabase_privileged_role`, … |
+
+`postgres` therefore cannot alter `supabase_admin`'s defaults, and the earlier
+`FOR ROLE supabase_admin` statement failed on the platform with
+`SQLSTATE 42501 permission denied to change default privileges`. The implicit
+current-role form needs no cross-role membership and applies to whichever role
+actually runs migrations.
+
+**Verified scope of the broad grants** (`pg_default_acl`):
+
+```
+postgres       schema=public  type=r  {postgres=arwdDxtm, anon=arwdDxtm, authenticated=arwdDxtm, …}
+supabase_admin schema=public  type=r  {postgres=arwdDxtm, anon=arwdDxtm, authenticated=arwdDxtm, …}
+```
+
+Both are **per-schema** entries; there are no global entries, so a per-schema
+`REVOKE` is effective here. (PostgreSQL documentation: per-schema default
+privileges can only *add* to the global setting, so a per-schema `REVOKE` would
+be a no-op against a *global* grant. That is not the case for these roles.)
+
+**Platform-managed residual — cannot be closed by this migration.**
+`supabase_admin` also holds per-schema `public` defaults granting
+`anon`/`authenticated` the full set. A project migration is neither a member of
+that role nor a superuser, so it cannot change them, and it must not try. They
+take effect only for objects created **by `supabase_admin`**; the platform uses
+that role for administration and extensions, not for application tables, so the
+practical exposure is limited. **This is a boundary, not a fix** — it is recorded
+here rather than claimed as resolved.
+
+**What this migration therefore enforces:** the defaults of the role that runs
+migrations no longer grant client privileges, and every existing `public` table
+carries only the reviewed client privileges. **What it does not enforce:**
+`supabase_admin`'s own default ACL.
 
 ## 4. Impact on future migrations
 

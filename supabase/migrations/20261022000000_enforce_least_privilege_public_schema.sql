@@ -62,12 +62,31 @@ revoke all on table public.external_data_resources from anon, authenticated;
 revoke all on table public.external_resource_domain_links from anon, authenticated;
 revoke all on table public.telemetry_events from anon, authenticated;
 
--- 4. Stop future tables from inheriting broad client grants. Both definer roles
---    that own objects in `public` are covered, so a table created by either
---    arrives with no `anon`/`authenticated` privilege at all.
-alter default privileges for role supabase_admin in schema public revoke all on tables from anon;
-alter default privileges for role supabase_admin in schema public revoke all on tables from authenticated;
-alter default privileges for role postgres in schema public revoke all on tables from anon;
-alter default privileges for role postgres in schema public revoke all on tables from authenticated;
+-- 4. Stop future tables from inheriting broad client grants.
+--
+-- Only the *current* migration role's defaults can be changed here, and only
+-- for roles the migration role is a member of. Verified in a disposable
+-- Supabase PostgreSQL 17 instance:
+--
+--   supabase_admin: superuser, and `postgres` is NOT a member of it
+--   postgres:       non-superuser, CREATEROLE, member of anon/authenticated/service_role
+--
+-- so `ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin` is refused with
+-- SQLSTATE 42501, which is exactly how the Supabase preview deployment failed.
+-- Supabase manages supabase_admin; a project migration must not assume
+-- authority over it.
+--
+-- The broad defaults that affect application tables are per-schema entries on
+-- `public` held by the migration role, so the implicit current-role form is both
+-- sufficient and the least privileged option available. It targets whichever
+-- role actually runs migrations, so it does not depend on naming that role.
+--
+-- Platform-managed residual, recorded rather than papered over: supabase_admin
+-- also holds per-schema `public` defaults granting anon/authenticated the full
+-- set. A project migration cannot change them. They only take effect for objects
+-- created *by supabase_admin*, and the platform does not use that role to create
+-- application tables, so this is a documented boundary rather than a gap this
+-- migration can close. See docs/database/least-privilege-migration-security-note.md.
+alter default privileges in schema public revoke all on tables from anon, authenticated;
 
 commit;

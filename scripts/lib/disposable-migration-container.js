@@ -147,7 +147,8 @@ function parseIsolation(inspect) {
     binds: Array.isArray(host.Binds) ? host.Binds : [],
     portBindings: host.PortBindings || {},
     mounts: Array.isArray(inspect && inspect.Mounts) ? inspect.Mounts : [],
-    imageId: (inspect && inspect.Image) || null
+    imageId: (inspect && inspect.Image) || null,
+    repoDigests: Array.isArray(inspect && inspect.RepoDigests) ? inspect.RepoDigests : []
   };
 }
 
@@ -181,8 +182,22 @@ function isolationViolations({ name, inspect, expectedDigest = APPROVED_SUPABASE
     violations.push("Published database ports are forbidden; a port binding was found.");
   }
 
-  if (isolation.imageId !== expectedDigest) {
-    violations.push(`Image digest must be ${expectedDigest}; found "${isolation.imageId}".`);
+  // Image identity. `inspect.Image` is the local image *configuration* id, which
+  // is not stable when a reference digest resolves to a platform-specific image:
+  // a manifest-list digest and the local config id differ. `RepoDigests` records
+  // the digest the image was actually pulled by, so identity is proven by
+  // requiring the approved digest in either field. A tag-only pull, an
+  // unapproved digest, or missing digest metadata all still fail.
+  const approvedById = isolation.imageId === expectedDigest;
+  const approvedByRepoDigest = isolation.repoDigests.some((entry) =>
+    String(entry).endsWith(`@${expectedDigest}`)
+  );
+
+  if (!approvedById && !approvedByRepoDigest) {
+    violations.push(
+      `Image must originate from the approved digest ${expectedDigest}; ` +
+        `found id "${isolation.imageId}" with RepoDigests ${JSON.stringify(isolation.repoDigests)}.`
+    );
   }
 
   return violations;

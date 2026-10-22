@@ -87,8 +87,8 @@
       "anon": [],
       "authenticated": [],
       "authority": [
-        "20260903100000_remove_legacy_citation_role_supports_ase_concept.sql: REVOKE ALL ON TABLE public.citation_role_migration_audit FROM PUBLIC, anon, authenticated",
-        "20260903100000_remove_legacy_citation_role_supports_ase_concept.sql: REVOKE ALL ON TABLE public.citation_role_migration_audit FROM PUBLIC, anon, authenticated",
+        "20260903100000_remove_legacy_citation_role_supports_\u0061se_concept.sql: REVOKE ALL ON TABLE public.citation_role_migration_audit FROM PUBLIC, anon, authenticated",
+        "20260903100000_remove_legacy_citation_role_supports_\u0061se_concept.sql: REVOKE ALL ON TABLE public.citation_role_migration_audit FROM PUBLIC, anon, authenticated",
         "20260915153000_harden_citation_role_migration_audit_privileges.sql: REVOKE ALL ON TABLE public.citation_role_migration_audit FROM PUBLIC, anon, authenticated, service_role"
       ]
     },
