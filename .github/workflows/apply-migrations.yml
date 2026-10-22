@@ -40,6 +40,45 @@ jobs:
       # audited roles exist, then runs the grants audit. Migration history is
       # never written, no staging or production credential is present, and the
       # container is removed at the end.
+      # ghcr.io rate-limits anonymous pulls with a burst limiter, which surfaces
+      # as `toomanyrequests: retry-after: ...` and fails this job in ~6 s before
+      # a single migration is applied (observed twice on run 39841045927, while
+      # the identical job passed on another PR at the same time).
+      #
+      # The image is resolved from the harness's own exported constant, so the
+      # digest has exactly one source of truth and cannot drift between this
+      # step and the validator. The pull is bounded and lives entirely outside
+      # the validator: the validator keeps its digest pin, its ON_ERROR_STOP and
+      # its fail-closed behaviour unchanged.
+      - name: Resolve the pinned migration image
+        id: migration-image
+        run: |
+          set -euo pipefail
+          image=$(node -e "process.stdout.write(require('./scripts/lib/disposable-migration-container').APPROVED_SUPABASE_IMAGE)")
+          test -n "$image" || { echo 'BLOCKED: could not resolve the approved migration image.'; exit 1; }
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+
+      - name: Pre-pull the pinned migration image (bounded retry)
+        timeout-minutes: 8
+        env:
+          IMAGE: ${{ steps.migration-image.outputs.image }}
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5; do
+            if docker pull "$IMAGE"; then
+              echo "Pulled $IMAGE on attempt $attempt."
+              exit 0
+            fi
+            if [ "$attempt" -eq 5 ]; then
+              break
+            fi
+            delay=$(( 5 * (2 ** (attempt - 1)) ))
+            echo "::warning::pull attempt $attempt failed; retrying in ${delay}s"
+            sleep "$delay"
+          done
+          echo "::error::could not pull $IMAGE after 5 bounded attempts."
+          exit 1
+
       - name: Validate canonical migrations against disposable Supabase Postgres
         run: node scripts/validate-migrations-disposable.js
 
