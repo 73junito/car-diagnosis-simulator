@@ -7,12 +7,16 @@ const path = require("path");
 const {
   AUDITED_ROLES,
   AUDIT_OUTCOMES,
+  DEFAULT_MIGRATIONS_DIRECTORY,
   FAILURE_REASONS,
+  LEGACY_MIGRATIONS_DIRECTORY,
   buildPsqlArgs,
   buildRolePreconditionArgs,
   classifyAuditOutcome,
+  classifyMigrationsDirectory,
   classifyRolePrecondition,
   discoverMigrationFiles,
+  normalizeMigrationDirectory,
   parseDatabaseTarget,
   redactDatabaseUrl,
   rolePreconditionSql,
@@ -625,3 +629,104 @@ describe("apply-migrations workflow: fail-closed contract", () => {
     expect(psqlFileInvocations(metadataOnly)).toEqual([]);
   });
 });
+
+describe("canonical migration directory guard", () => {
+  test("defaults to the canonical chain and never to the legacy directory", () => {
+    expect(DEFAULT_MIGRATIONS_DIRECTORY).toBe("supabase/migrations");
+    expect(LEGACY_MIGRATIONS_DIRECTORY).toBe("db/migrations");
+    expect(DEFAULT_MIGRATIONS_DIRECTORY).not.toBe(LEGACY_MIGRATIONS_DIRECTORY);
+  });
+
+  test("accepts the canonical chain and rejects the legacy directory", () => {
+    expect(classifyMigrationsDirectory("supabase/migrations").ok).toBe(true);
+    expect(classifyMigrationsDirectory("./supabase/migrations/").ok).toBe(true);
+
+    const legacy = classifyMigrationsDirectory("db/migrations");
+
+    expect(legacy.ok).toBe(false);
+    expect(legacy.reason).toBe(FAILURE_REASONS.LEGACY_MIGRATIONS_DIRECTORY);
+    expect(legacy.legacy).toBe(true);
+  });
+
+  test("rejects the legacy directory however it is written", () => {
+    const candidates = [
+      "db/migrations",
+      "db/migrations/",
+      "./db/migrations",
+      "db\\migrations",
+      "/checkout/db/migrations",
+      "C:\\checkout\\db\\migrations"
+    ];
+
+    for (const candidate of candidates) {
+      const result = classifyMigrationsDirectory(candidate);
+
+      expect(result.ok).toBe(false);
+      expect(result.reason).toBe(FAILURE_REASONS.LEGACY_MIGRATIONS_DIRECTORY);
+    }
+  });
+
+  test("a merely wrong directory is not mistaken for the legacy directory", () => {
+    expect(classifyMigrationsDirectory("supabase/migrations-typo").ok).toBe(true);
+    expect(classifyMigrationsDirectory(undefined).reason).toBe(FAILURE_REASONS.NO_MIGRATIONS);
+    expect(normalizeMigrationDirectory("db\\migrations\\")).toBe("db/migrations");
+  });
+
+  test("the legacy opt-in is explicit and cannot be reached by default", () => {
+    expect(classifyMigrationsDirectory("db/migrations", { allowLegacy: true }).ok).toBe(true);
+    expect(classifyMigrationsDirectory("db/migrations").ok).toBe(false);
+  });
+
+  test("runApply refuses the legacy directory and applies nothing", () => {
+    const invocations = [];
+    const exec = (args) => {
+      invocations.push(args);
+
+      return { exitCode: 0, stdout: "", stderr: "" };
+    };
+
+    const result = runApply({ databaseUrl: LOCAL_DSN, migrationsDirectory: "db/migrations", exec });
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe(FAILURE_REASONS.LEGACY_MIGRATIONS_DIRECTORY);
+    expect(result.applied).toEqual([]);
+    expect(invocations).toEqual([]);
+  });
+
+  test("runApply with no directory targets the canonical chain, not the legacy one", () => {
+    const expected = discoverMigrationFiles("supabase/migrations");
+    const applied = [];
+    const exec = (args, context) => {
+      applied.push(context.file);
+
+      return { exitCode: 0, stdout: "", stderr: "" };
+    };
+
+    const result = runApply({ databaseUrl: LOCAL_DSN, exec });
+
+    expect(result.ok).toBe(true);
+    expect(expected.length).toBeGreaterThan(0);
+    expect(applied.length).toBe(expected.length);
+    expect(applied).not.toContain("20260805_approved_sources_large_chunks.sql");
+  });
+
+  test("the legacy set applies only under the explicit in-code opt-in", () => {
+    const applied = [];
+    const exec = (args, context) => {
+      applied.push(context.file);
+
+      return { exitCode: 0, stdout: "", stderr: "" };
+    };
+
+    const result = runApply({
+      databaseUrl: LOCAL_DSN,
+      migrationsDirectory: "db/migrations",
+      allowLegacyDirectory: true,
+      exec
+    });
+
+    expect(result.ok).toBe(true);
+    expect(applied).toContain("20260805_approved_sources_large_chunks.sql");
+  });
+});
+

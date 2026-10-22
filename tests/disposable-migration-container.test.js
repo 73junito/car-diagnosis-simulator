@@ -410,6 +410,7 @@ describe("disposable migration container: end-to-end orchestration", () => {
 
     expect(result.ok).toBe(true);
     expect(result.steps.map((step) => step.name)).toEqual([
+      "migrations-directory",
       "start",
       "isolation",
       "initialisation",
@@ -731,5 +732,43 @@ describe("disposable migration container: platform-equivalent role", () => {
     expect(result.reason).toBe("not-platform-equivalent");
     expect(docker.calls.some((call) => call[0] === "cp")).toBe(false);
     expect(docker.calls.some((call) => call[0] === "exec" && call.includes("-f"))).toBe(false);
+  });
+});
+
+describe("disposable migration container: canonical directory guard", () => {
+  test("refuses the legacy migration directory before touching Docker", async () => {
+    const docker = createFakeDocker(() => ({ exitCode: 0, stdout: "", stderr: "" }));
+
+    const result = await validate({
+      docker,
+      container: CONTAINER_ID,
+      image: APPROVED_SUPABASE_IMAGE,
+      migrationsDirectory: "db/migrations",
+      log: () => {},
+      logError: () => {}
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe("legacy-migrations-directory");
+    expect(docker.calls).toEqual([]);
+    expect(result.steps.map((step) => step.name)).toEqual(["migrations-directory"]);
+    expect(result.steps[0].ok).toBe(false);
+  });
+
+  test("refuses an absolute path into the legacy directory too", async () => {
+    const docker = createFakeDocker(() => ({ exitCode: 0, stdout: "", stderr: "" }));
+
+    const result = await validate({
+      docker,
+      container: CONTAINER_ID,
+      image: APPROVED_SUPABASE_IMAGE,
+      migrationsDirectory: "/checkout/db/migrations",
+      log: () => {},
+      logError: () => {}
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe("legacy-migrations-directory");
+    expect(docker.calls).toEqual([]);
   });
 });

@@ -33,6 +33,7 @@ const {
 
 const {
   buildRolePreconditionArgs,
+  classifyMigrationsDirectory,
   classifyRolePrecondition,
   runApply
 } = require("./lib/disposable-migration-validation");
@@ -144,6 +145,22 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
   };
 
   try {
+    // The canonical migration chain is the only valid target of this validator.
+    // `MIGRATIONS_DIR` could otherwise repoint it at the legacy `db/migrations`
+    // set, which applies a different (6-file) history and then fails in a way
+    // that reads like a migration regression rather than a mis-targeted
+    // validator. Refuse before any container work.
+    const directory = classifyMigrationsDirectory(migrationsDirectory);
+
+    if (!directory.ok) {
+      record("migrations-directory", false, directory.message);
+
+      return { ok: false, reason: directory.reason, steps, evidence };
+    }
+
+    record("migrations-directory", true, `canonical chain: ${directory.normalized}`);
+    evidence.migrationsDirectory = directory.normalized;
+
     // Refuse to race. Two concurrent runs sharing a fixed container name would
     // let one run's teardown destroy the other's container mid-initialisation,
     // which is indistinguishable from a slow start (psql reports "connection

@@ -26,7 +26,11 @@
 const fs = require("fs");
 const path = require("path");
 
-const DEFAULT_MIGRATIONS_DIRECTORY = "db/migrations";
+// The canonical migration chain for the Supabase-managed application schema.
+// `db/migrations` is legacy/historical (docs/database/migration-authority.md)
+// and must never be the silent default target of a canonical validation.
+const DEFAULT_MIGRATIONS_DIRECTORY = "supabase/migrations";
+const LEGACY_MIGRATIONS_DIRECTORY = "db/migrations";
 const DEFAULT_AUDIT_SQL_PATH = "db/scripts/grants_audit.sql";
 
 /**
@@ -72,7 +76,8 @@ const FAILURE_REASONS = Object.freeze({
   AUDIT_FAILED: "audit-failed",
   MISSING_GRANTS: "missing-grants",
   ROLES_MISSING: "roles-missing",
-  ROLE_CHECK_FAILED: "role-check-failed"
+  ROLE_CHECK_FAILED: "role-check-failed",
+  LEGACY_MIGRATIONS_DIRECTORY: "legacy-migrations-directory"
 });
 
 /** Replace any `user:password@` credentials with a fixed marker for logging. */
@@ -297,6 +302,56 @@ function classifyAuditOutcome({ exitCode, stdout = "" }) {
 }
 
 /**
+ * Normalise a migration directory for comparison: unify separators, strip a
+ * leading "./" and any trailing slashes, so the same directory written two ways
+ * compares equal.
+ */
+function normalizeMigrationDirectory(directory) {
+  if (typeof directory !== "string") {
+    return "";
+  }
+
+  return path
+    .normalize(directory)
+    .replace(/\\/g, "/")
+    .replace(/^\.\//, "")
+    .replace(/\/+$/, "");
+}
+
+/**
+ * Decide whether a migration directory may be validated.
+ *
+ * A non-empty but wrong directory used to validate silently: the legacy
+ * `db/migrations` set (6 files) applied, failed, and reported a failure that
+ * read like a migration regression rather than a mis-targeted validator. The
+ * legacy directory is therefore refused outright.
+ *
+ * `allowLegacy` is an in-code opt-in rather than an environment switch, so no
+ * environment change can silently repoint the canonical validation path.
+ */
+function classifyMigrationsDirectory(directory, { allowLegacy = false } = {}) {
+  const normalized = normalizeMigrationDirectory(directory);
+
+  if (normalized === "" || normalized === ".") {
+    const message = `No migration directory was resolved (received ${JSON.stringify(directory)}).`;
+    return { ok: false, reason: FAILURE_REASONS.NO_MIGRATIONS, legacy: false, normalized, message };
+  }
+
+  const legacy =
+    normalized === LEGACY_MIGRATIONS_DIRECTORY || normalized.endsWith(`/${LEGACY_MIGRATIONS_DIRECTORY}`);
+
+  if (legacy && !allowLegacy) {
+    const message =
+      `Refusing to validate the legacy migration directory "${directory}". ` +
+      `"${LEGACY_MIGRATIONS_DIRECTORY}" is retained for history only; the canonical chain is ` +
+      `"${DEFAULT_MIGRATIONS_DIRECTORY}". Pass allowLegacy only from a test that targets the legacy set.`;
+    return { ok: false, reason: FAILURE_REASONS.LEGACY_MIGRATIONS_DIRECTORY, legacy, normalized, message };
+  }
+
+  return { ok: true, reason: null, legacy, normalized, message: null };
+}
+
+/**
  * Apply every migration in order, stopping at the first failure.
  *
  * `exec(args, context)` must return `{ exitCode, stdout, stderr }`. It is
@@ -305,12 +360,23 @@ function classifyAuditOutcome({ exitCode, stdout = "" }) {
 function runApply({
   databaseUrl,
   migrationsDirectory = DEFAULT_MIGRATIONS_DIRECTORY,
+  allowLegacyDirectory = false,
   resolveFilePath = (name) => path.join(migrationsDirectory, name),
   exec,
   log = () => {},
   logError = () => {}
 }) {
   requireExecutor(exec);
+
+  // Refuse a migration set that is not the canonical chain before applying
+  // anything. An undefined `migrationsDirectory` now resolves to the canonical
+  // chain rather than silently falling back to the legacy directory.
+  const directory = classifyMigrationsDirectory(migrationsDirectory, { allowLegacy: allowLegacyDirectory });
+
+  if (!directory.ok) {
+    logError(directory.message);
+    return { ok: false, reason: directory.reason, applied: [], failedFile: null, message: directory.message };
+  }
 
   const target = parseDatabaseTarget(databaseUrl);
 
@@ -502,6 +568,7 @@ function runValidation(options) {
 
 module.exports = {
   DEFAULT_MIGRATIONS_DIRECTORY,
+  LEGACY_MIGRATIONS_DIRECTORY,
   DEFAULT_AUDIT_SQL_PATH,
   DISPOSABLE_HOSTS,
   ACCEPTED_SCHEMES,
@@ -512,6 +579,8 @@ module.exports = {
   redactDatabaseUrl,
   parseDatabaseTarget,
   discoverMigrationFiles,
+  normalizeMigrationDirectory,
+  classifyMigrationsDirectory,
   buildPsqlArgs,
   rolePreconditionSql,
   buildRolePreconditionArgs,
