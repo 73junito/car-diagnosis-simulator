@@ -53,9 +53,28 @@ jobs:
         run: |
           set -euo pipefail
           consumer='.github/workflows/verify-staging-backup-restore.yml'
-          image=$(grep -Eo 'ghcr\.io/supabase/postgres:[0-9a-z.]+@sha256:[0-9a-f]{64}' "$consumer" | head -1)
-          test -n "$image" || { echo "BLOCKED: no pinned image reference found in $consumer."; exit 1; }
-          echo "source reference: $consumer"
+
+          # Exactly one distinct approved reference is required. Taking the first
+          # grep match would silently accept a file that carries several, so a
+          # second, conflicting reference makes this diagnostic fail closed rather
+          # than test an arbitrary one.
+          refs=$(grep -Eo 'ghcr\.io/supabase/postgres:[0-9a-z.]+@sha256:[0-9a-f]{64}' "$consumer" | sort -u || true)
+          count=$(printf '%s' "$refs" | grep -c '^ghcr\.io/' || true)
+
+          if [ "$count" -eq 0 ]; then
+            echo "BLOCKED: no approved image reference found in $consumer."
+            exit 1
+          fi
+
+          if [ "$count" -gt 1 ]; then
+            echo "BLOCKED: $consumer carries $count distinct image references; exactly one is required."
+            printf '%s\n' "$refs" | sed 's/^/  /'
+            exit 1
+          fi
+
+          image="$refs"
+          echo "source reference: $consumer (1 distinct reference)"
+
           if [ -f scripts/lib/disposable-migration-container.js ]; then
             harness=$(node -e "process.stdout.write(require('./scripts/lib/disposable-migration-container').APPROVED_SUPABASE_IMAGE)")
             if [ "$harness" != "$image" ]; then
@@ -68,11 +87,17 @@ jobs:
           else
             echo "cross-check: harness export not present on this ref (expected until #1103 merges)"
           fi
+
           echo "image=$image" >> "$GITHUB_OUTPUT"
           echo "Resolved image: $image"
 
       # The token is piped through stdin, never placed on an argv list and never
       # echoed, so it cannot appear in the log, the step summary or `ps`.
+      #
+      # A failed login reports only the exit code and a fixed vocabulary of
+      # recognised signals. Raw docker output is deliberately not printed:
+      # pattern-based redaction is defence in depth, not a guarantee, and this
+      # step is the one place a credential could plausibly surface.
       - name: Authenticate to ghcr.io with GITHUB_TOKEN
         id: login
         env:
@@ -84,7 +109,9 @@ jobs:
           printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_ACTOR" --password-stdin > /tmp/ghcr-login.out 2>&1 || rc=$?
           if [ "$rc" -ne 0 ]; then
             echo "LOGIN_FAILED rc=$rc"
-            sed -E 's/[A-Za-z0-9_.-]{24,}/<redacted>/g' /tmp/ghcr-login.out | tail -10
+            echo "matched_signals:"
+            grep -Eio 'unauthorized|denied|forbidden|authentication required|no basic auth credentials|not found|error|failed|cannot|timeout|connection refused|rate limit' /tmp/ghcr-login.out | tr '[:upper:]' '[:lower:]' | sort -u || echo "(none)"
+            echo "(raw docker login output withheld: redaction cannot be guaranteed)"
             exit "$rc"
           fi
           echo "LOGIN_OK actor=$GHCR_ACTOR"
