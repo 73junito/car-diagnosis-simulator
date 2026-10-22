@@ -21,9 +21,12 @@ jobs:
     if: github.actor != 'dependabot[bot]'
     environment: jchfruprqpeypdttvlam_staging
     # New pending requests supersede older pending requests in this ref group.
+    # The group is workflow-scoped (…-auth-…) so api-smoke.yml cannot supersede
+    # this workflow's pending run for the same ref: a cancelled run here would
+    # otherwise hold PR verification per docs/staging-smoke-concurrency.md.
     # Use check-latest-staging-smoke.js to verify the newest PR run before merge.
     concurrency:
-      group: staging-smoke-${{ github.ref }}
+      group: staging-smoke-auth-${{ github.ref }}
       cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
