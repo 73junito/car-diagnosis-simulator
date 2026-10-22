@@ -12,6 +12,10 @@ const {
   REQUIRED_SCHEMAS,
   assertDisposableContainerName,
   buildInitialisationProbeArgs,
+  buildRoleEquivalenceArgs,
+  classifyRoleEquivalence,
+  PLATFORM_MIGRATION_ROLE,
+  roleEquivalenceProbeSql,
   classifyInitialisation,
   initialisationProbeSql,
   isolationViolations,
@@ -85,6 +89,12 @@ function happyDocker({ roles = ["anon", "authenticated"], probe = READY_PROBE } 
         return { exitCode: 0, stdout: probe, stderr: "" };
       }
 
+      // The role-equivalence probe also references pg_roles, so it must be
+      // matched before the role-precondition probe.
+      if (inline.includes("platform_member")) {
+        return { exitCode: 0, stdout: ROLE_EQUIVALENCE_OK, stderr: "" };
+      }
+
       if (inline.includes("pg_roles")) {
         return { exitCode: 0, stdout: roles.length ? `${roles.join("\n")}\n` : "", stderr: "" };
       }
@@ -97,6 +107,17 @@ function happyDocker({ roles = ["anon", "authenticated"], probe = READY_PROBE } 
 }
 
 const silent = { log: () => {}, logError: () => {} };
+
+/** Platform-equivalent execution context: non-superuser, not a platform member. */
+const ROLE_EQUIVALENCE_OK = [
+  "role:postgres",
+  "session:postgres",
+  "superuser:false",
+  "platform_member:0",
+  "db_owner:postgres",
+  "create_on_public:true",
+  "expected_role:postgres"
+].join("\n");
 
 /** Container ID returned by the fake `docker run` and echoed by `inspect --format`. */
 const CONTAINER_ID = "abcdef123456";
@@ -392,6 +413,7 @@ describe("disposable migration container: end-to-end orchestration", () => {
       "start",
       "isolation",
       "initialisation",
+      "role-equivalence",
       "bootstrap",
       "transfer",
       "apply",
@@ -492,6 +514,10 @@ describe("disposable migration container: end-to-end orchestration", () => {
 
       if (args[0] === "exec") {
         const inline = args[args.indexOf("-c") + 1] || "";
+
+        if (inline.includes("platform_member")) {
+          return { exitCode: 0, stdout: ROLE_EQUIVALENCE_OK, stderr: "" };
+        }
 
         if (inline.includes("union all")) {
           return { exitCode: 0, stdout: READY_PROBE, stderr: "" };
@@ -605,5 +631,105 @@ describe("disposable migration container: end-to-end orchestration", () => {
     expect(removal).toBeDefined();
     expect(removal[removal.length - 1]).toBe(CONTAINER_ID);
     expect(removal).not.toContain("tm-migval-test");
+  });
+});
+
+describe("disposable migration container: platform-equivalent role", () => {
+  test("accepts the platform migration role: non-superuser, no platform membership", () => {
+    const result = classifyRoleEquivalence({ exitCode: 0, stdout: ROLE_EQUIVALENCE_OK });
+
+    expect(result.ok).toBe(true);
+    expect(result.role).toBe(PLATFORM_MIGRATION_ROLE);
+    expect(result.superuser).toBe(false);
+    expect(result.platformMember).toBe(false);
+    expect(result.message).toContain("Platform-equivalent");
+  });
+
+  test("rejects a rehearsal running as a superuser", () => {
+    const stdout = ROLE_EQUIVALENCE_OK.replace("role:postgres", "role:supabase_admin").replace("superuser:false", "superuser:true");
+    const result = classifyRoleEquivalence({ exitCode: 0, stdout });
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe("not-platform-equivalent");
+    expect(result.message).toContain("is a superuser");
+  });
+
+  test("rejects a role that is a member of a platform-managed role", () => {
+    const result = classifyRoleEquivalence({
+      exitCode: 0,
+      stdout: ROLE_EQUIVALENCE_OK.replace("platform_member:0", "platform_member:1")
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.message).toContain("platform-managed role");
+  });
+
+  test("rejects a role that cannot create in public, and a mismatched expected role", () => {
+    expect(
+      classifyRoleEquivalence({
+        exitCode: 0,
+        stdout: ROLE_EQUIVALENCE_OK.replace("create_on_public:true", "create_on_public:false")
+      }).ok
+    ).toBe(false);
+    expect(classifyRoleEquivalence({ exitCode: 0, stdout: ROLE_EQUIVALENCE_OK, expectedRole: "supabase_admin" }).ok).toBe(false);
+  });
+
+  test("fails closed when the role probe itself errors", () => {
+    const result = classifyRoleEquivalence({ exitCode: 2, stdout: "" });
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe("probe-failed");
+  });
+
+  test("the probe is read-only, runs over TCP, and asks for the platform facts", () => {
+    const sql = roleEquivalenceProbeSql();
+    const args = buildRoleEquivalenceArgs({ user: PLATFORM_MIGRATION_ROLE, database: "postgres" });
+
+    expect(sql).toContain("current_user");
+    expect(sql).toContain("rolsuper");
+    expect(sql).toContain("pg_auth_members");
+    expect(sql).toContain("has_schema_privilege");
+    expect(sql.replace(/'[^']*'/g, "''")).not.toMatch(/\b(insert|update|delete|drop|alter|create|grant|revoke)\b/);
+    expect(args[args.indexOf("-h") + 1]).toBe("127.0.0.1");
+    expect(args).toContain("ON_ERROR_STOP=1");
+  });
+
+  test("the orchestrator refuses a superuser context before applying anything", async () => {
+    const docker = createFakeDocker((args) => {
+      if (args[0] === "run") {
+        return { exitCode: 0, stdout: `${CONTAINER_ID}\n`, stderr: "" };
+      }
+
+      if (args[0] === "inspect") {
+        return inspectResponse(args);
+      }
+
+      if (args[0] === "exec") {
+        const inline = args[args.indexOf("-c") + 1] || "";
+
+        if (inline.includes("platform_member")) {
+          return {
+            exitCode: 0,
+            stdout: ROLE_EQUIVALENCE_OK.replace("role:postgres", "role:supabase_admin").replace("superuser:false", "superuser:true"),
+            stderr: ""
+          };
+        }
+
+        if (inline.includes("union all")) {
+          return { exitCode: 0, stdout: READY_PROBE, stderr: "" };
+        }
+
+        return { exitCode: 0, stdout: "", stderr: "" };
+      }
+
+      return { exitCode: 0, stdout: "", stderr: "" };
+    });
+
+    const result = await runValidate(docker);
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe("not-platform-equivalent");
+    expect(docker.calls.some((call) => call[0] === "cp")).toBe(false);
+    expect(docker.calls.some((call) => call[0] === "exec" && call.includes("-f"))).toBe(false);
   });
 });

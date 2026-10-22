@@ -22,9 +22,12 @@ const {
   APPROVED_SUPABASE_IMAGE,
   BOOTSTRAP_SQL,
   DISPOSABLE_NAME_PREFIX,
+  PLATFORM_MIGRATION_ROLE,
   assertDisposableContainerName,
   buildInitialisationProbeArgs,
+  buildRoleEquivalenceArgs,
   classifyInitialisation,
+  classifyRoleEquivalence,
   isolationViolations
 } = require("./lib/disposable-migration-container");
 
@@ -43,7 +46,7 @@ const {
 } = require("./verify-table-access-policy");
 
 const DEFAULT_CONTAINER = `${DISPOSABLE_NAME_PREFIX}-ci`;
-const CONTAINER_DB_USER = "supabase_admin";
+const CONTAINER_DB_USER = "postgres";
 const CONTAINER_DB_NAME = "postgres";
 // 127.0.0.1 rather than `localhost`, so no IPv6 resolution can pick a
 // different listener than the one the probe verified.
@@ -244,6 +247,39 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
     }
 
     record("initialisation", true, initialisation.message);
+
+    // Platform equivalence must be proven before any SQL is applied. The hosted
+    // preview ran migrations as a role that could not change `supabase_admin`
+    // defaults, and a rehearsal under a superuser cannot reproduce that
+    // boundary - it would pass where the platform fails. Refuse to continue
+    // unless the execution role is the platform's migration role.
+    const roleResult = docker([
+      "exec",
+      container,
+      "psql",
+      ...buildRoleEquivalenceArgs({ user: CONTAINER_DB_USER, database: CONTAINER_DB_NAME })
+    ]);
+    const equivalence = classifyRoleEquivalence({
+      exitCode: roleResult.exitCode,
+      stdout: roleResult.stdout,
+      expectedRole: PLATFORM_MIGRATION_ROLE
+    });
+
+    evidence.roleEquivalence = {
+      role: equivalence.role,
+      sessionRole: equivalence.sessionRole,
+      superuser: equivalence.superuser,
+      platformMember: equivalence.platformMember,
+      dbOwner: equivalence.dbOwner,
+      createOnPublic: equivalence.createOnPublic
+    };
+
+    if (!equivalence.ok) {
+      record("role-equivalence", false, equivalence.message);
+      return { ok: false, reason: equivalence.reason, steps, evidence };
+    }
+
+    record("role-equivalence", true, equivalence.message);
 
     // Documented empty bookkeeping shim. No history row is ever inserted.
     const bootstrap = docker(["exec", container, "psql", "-U", CONTAINER_DB_USER, "-d", CONTAINER_DB_NAME, "-v", "ON_ERROR_STOP=1", "--no-psqlrc", "-c", BOOTSTRAP_SQL]);

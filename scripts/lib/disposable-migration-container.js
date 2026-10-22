@@ -278,6 +278,129 @@ function classifyInitialisation({ exitCode, stdout = "" }) {
   };
 }
 
+/**
+ * The role the platform uses to apply migrations.
+ *
+ * Supabase's `postgres` role is a non-superuser and is NOT a member of
+ * `supabase_admin`, so it cannot alter that role's default privileges. That
+ * boundary is exactly what the hosted preview hit with SQLSTATE 42501, and a
+ * rehearsal that runs as a superuser cannot reproduce it.
+ */
+const PLATFORM_MIGRATION_ROLE = "postgres";
+
+/** Roles a platform-equivalent migration runner must never be a member of. */
+const PLATFORM_MANAGED_ROLES = Object.freeze(["supabase_admin"]);
+
+/**
+ * Read-only probe of the execution context: who is running, whether they are a
+ * superuser, whether they hold a platform-managed role, and whether they can
+ * create objects in `public`.
+ */
+function roleEquivalenceProbeSql(expectedRole = PLATFORM_MIGRATION_ROLE) {
+  const platformRoles = PLATFORM_MANAGED_ROLES.map((role) => `'${role}'`).join(",");
+
+  return [
+    "select 'role:' || current_user",
+    "select 'session:' || session_user",
+    "select 'superuser:' || (select rolsuper::text from pg_roles where rolname = current_user)",
+    "select 'platform_member:' || (select count(*)::text from pg_auth_members am " +
+      `join pg_roles r on r.oid = am.roleid where r.rolname in (${platformRoles}) ` +
+      "and am.member = (select oid from pg_roles where rolname = current_user))",
+    "select 'db_owner:' || (select pg_get_userbyid(datdba) from pg_database where datname = current_database())",
+    "select 'create_on_public:' || has_schema_privilege(current_user, 'public', 'CREATE')::text",
+    `select 'expected_role:' || '${expectedRole}'`
+  ].join(" union all ");
+}
+
+/** psql arguments for the role-equivalence probe (TCP, matching migrations). */
+function buildRoleEquivalenceArgs({ user, database }) {
+  return [
+    "-h",
+    "127.0.0.1",
+    "-U",
+    user,
+    "-d",
+    database,
+    "-A",
+    "-t",
+    "-v",
+    "ON_ERROR_STOP=1",
+    "--no-psqlrc",
+    "-c",
+    roleEquivalenceProbeSql()
+  ];
+}
+
+/**
+ * Fail closed unless the rehearsal runs as the platform's migration role. A
+ * superuser, or a role that can change `supabase_admin` defaults, would produce
+ * false confidence: the harness would pass where the platform fails.
+ */
+function classifyRoleEquivalence({ exitCode, stdout = "", expectedRole = PLATFORM_MIGRATION_ROLE }) {
+  if (exitCode !== 0) {
+    return {
+      ok: false,
+      reason: "probe-failed",
+      role: null,
+      message: `Role equivalence probe exited with status ${exitCode}.`
+    };
+  }
+
+  const lines = String(stdout)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const value = (prefix) => {
+    const match = lines.find((line) => line.startsWith(prefix));
+
+    return match ? match.slice(prefix.length) : "";
+  };
+
+  const role = value("role:");
+  const sessionRole = value("session:");
+  const superuser = value("superuser:") === "true";
+  const platformMember = Number(value("platform_member:") || "0") > 0;
+  const dbOwner = value("db_owner:");
+  const createOnPublic = value("create_on_public:") === "true";
+  const problems = [];
+
+  if (superuser) {
+    problems.push(
+      `execution role "${role}" is a superuser, so the rehearsal would not reproduce the hosted permission boundary`
+    );
+  }
+
+  if (platformMember) {
+    problems.push(
+      `execution role "${role}" is a member of a platform-managed role (${PLATFORM_MANAGED_ROLES.join(", ")}), ` +
+        "so it could change defaults the platform protects"
+    );
+  }
+
+  if (role !== expectedRole) {
+    problems.push(`expected the platform migration role "${expectedRole}"; found "${role}"`);
+  }
+
+  if (!createOnPublic) {
+    problems.push(`role "${role}" cannot CREATE in schema public, so it cannot apply migrations`);
+  }
+
+  return {
+    ok: problems.length === 0,
+    reason: problems.length === 0 ? null : "not-platform-equivalent",
+    role,
+    sessionRole,
+    superuser,
+    platformMember,
+    dbOwner,
+    createOnPublic,
+    message:
+      problems.length === 0
+        ? `Platform-equivalent migration role confirmed: ${role} (non-superuser, not a member of ${PLATFORM_MANAGED_ROLES.join("/")})`
+        : `Rehearsal is not platform-equivalent: ${problems.join("; ")}.`
+  };
+}
+
 module.exports = {
   APPROVED_SUPABASE_IMAGE,
   APPROVED_SUPABASE_IMAGE_DIGEST,
@@ -290,8 +413,13 @@ module.exports = {
   BOOTSTRAP_SQL,
   DISPOSABLE_NAME_PREFIX,
   PROTECTED_NAME_PATTERNS,
+  PLATFORM_MIGRATION_ROLE,
+  PLATFORM_MANAGED_ROLES,
   initialisationProbeSql,
   buildInitialisationProbeArgs,
+  roleEquivalenceProbeSql,
+  buildRoleEquivalenceArgs,
+  classifyRoleEquivalence,
   assertDisposableContainerName,
   parseIsolation,
   isolationViolations,
