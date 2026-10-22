@@ -4,11 +4,13 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+# Only the scopes the executable steps need. `pages: write` and `id-token: write`
+# were removed: this workflow triggers only on pull_request, so the Pages
+# publishing steps are unreachable, while the test job checks out and runs
+# pull-request code. tests/disposable-migration-validation.test.js guards this.
 permissions:
   contents: read
   pull-requests: write
-  pages: write
-  id-token: write
 
 jobs:
   apply-migrations:

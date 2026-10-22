@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
 
 const {
@@ -16,6 +17,7 @@ const {
 const MANIFEST_PATH = path.join(__dirname, "..", "docs", "database", "table-access-policy.json");
 
 const { verifyManifestConsistency } = require("../scripts/verify-table-access-policy-manifest");
+const { dynamicPrivilegeMutations } = require("../scripts/verify-table-access-policy-manifest");
 
 function manifest(tables) {
   return { schemaVersion: 1, tables };
@@ -306,5 +308,121 @@ describe("table access policy manifest: deterministic consistency verification",
     const result = verifyManifestConsistency({ manifest });
 
     expect(result.problems.join(" ")).not.toContain("source mismatch");
+  });
+});
+
+describe("table access policy manifest: dynamic SQL guard", () => {
+  function fixtureRoot(migrations) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "policy-dynamic-"));
+    const directory = path.join(root, "supabase", "migrations");
+
+    fs.mkdirSync(directory, { recursive: true });
+
+    for (const [name, sql] of Object.entries(migrations)) {
+      fs.writeFileSync(path.join(directory, name), sql, "utf8");
+    }
+
+    return root;
+  }
+
+  test("detects a dynamic GRANT that names a client role", () => {
+    const root = fixtureRoot({
+      "20260101000000_dynamic.sql": [
+        "do $$",
+        "begin",
+        "  execute 'grant select on table public.attempts to authenticated';",
+        "end $$;"
+      ].join("\n")
+    });
+
+    const findings = dynamicPrivilegeMutations(root);
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0].mentionsClientRole).toBe(true);
+    expect(findings[0].sql).toContain("authenticated");
+  });
+
+  test("records but does not flag a dynamic grant that names only service_role", () => {
+    const root = fixtureRoot({
+      "20260101000000_service.sql": [
+        "do $$",
+        "begin",
+        "  execute 'grant all privileges on table public.widgets to service_role';",
+        "end $$;"
+      ].join("\n")
+    });
+
+    const findings = dynamicPrivilegeMutations(root);
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0].mentionsClientRole).toBe(false);
+  });
+
+  test("fails closed when a migration mutates client privileges dynamically", () => {
+    const root = fixtureRoot({
+      "20260101000000_dynamic.sql": [
+        "create table if not exists public.widgets (id int primary key);",
+        "do $$",
+        "begin",
+        "  execute 'grant select on table public.widgets to anon';",
+        "end $$;"
+      ].join("\n")
+    });
+    const manifest = {
+      schemaVersion: 1,
+      tables: {
+        widgets: {
+          classification: "service-role-only",
+          anon: [],
+          authenticated: [],
+          authority: ["test fixture"]
+        }
+      }
+    };
+
+    const result = verifyManifestConsistency({ rootDirectory: root, manifest });
+
+    expect(result.ok).toBe(false);
+    expect(result.problems.join(" ")).toContain("dynamic privilege escalation");
+  });
+
+  test("does not fail on a dynamic REVOKE, which can only reduce access", () => {
+    const root = fixtureRoot({
+      "20260101000000_revoke.sql": [
+        "create table if not exists public.widgets (id int primary key);",
+        "do $$",
+        "begin",
+        "  execute 'revoke all privileges on table public.widgets from anon, authenticated';",
+        "end $$;"
+      ].join("\n")
+    });
+    const manifest = {
+      schemaVersion: 1,
+      tables: {
+        widgets: {
+          classification: "service-role-only",
+          anon: [],
+          authenticated: [],
+          authority: ["test fixture"]
+        }
+      }
+    };
+
+    const result = verifyManifestConsistency({ rootDirectory: root, manifest });
+
+    expect(result.ok).toBe(true);
+    expect(result.problems).toEqual([]);
+  });
+
+  test("the canonical chain contains no dynamic client privilege escalation", () => {
+    const findings = dynamicPrivilegeMutations(path.join(__dirname, ".."));
+
+    expect(findings.filter((finding) => finding.escalates)).toEqual([]);
+
+    // The three informational revokes found in the canonical chain: they reduce
+    // client access on legacy objects, so they are recorded, not fatal.
+    const informational = findings.filter((finding) => finding.mentionsClientRole);
+
+    expect(informational.every((finding) => finding.kind === "revoke")).toBe(true);
   });
 });

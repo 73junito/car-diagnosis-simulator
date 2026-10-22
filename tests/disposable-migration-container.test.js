@@ -60,11 +60,11 @@ function happyDocker({ roles = ["anon", "authenticated"], probe = READY_PROBE } 
     const [command] = args;
 
     if (command === "run") {
-      return { exitCode: 0, stdout: "abcdef123456\n", stderr: "" };
+      return { exitCode: 0, stdout: `${CONTAINER_ID}\n`, stderr: "" };
     }
 
     if (command === "inspect") {
-      return { exitCode: 0, stdout: JSON.stringify([CLEAN_INSPECT]), stderr: "" };
+      return inspectResponse(args);
     }
 
     if (command === "cp" || command === "rm") {
@@ -97,6 +97,22 @@ function happyDocker({ roles = ["anon", "authenticated"], probe = READY_PROBE } 
 }
 
 const silent = { log: () => {}, logError: () => {} };
+
+/** Container ID returned by the fake `docker run` and echoed by `inspect --format`. */
+const CONTAINER_ID = "abcdef123456";
+
+/**
+ * `docker inspect` is called twice with different shapes: once without
+ * `--format` for the isolation assertions, and once with `--format {{.Id}}` to
+ * prove ownership before teardown.
+ */
+function inspectResponse(args, inspect = CLEAN_INSPECT, id = CONTAINER_ID) {
+  if (args.includes("--format")) {
+    return { exitCode: 0, stdout: `${id}\n`, stderr: "" };
+  }
+
+  return { exitCode: 0, stdout: JSON.stringify([inspect]), stderr: "" };
+}
 
 /**
  * Build the policy-probe payload from the committed manifest, so the happy path
@@ -344,17 +360,14 @@ describe("disposable migration container: end-to-end orchestration", () => {
   test("aborts before running anything when the container is not isolated", async () => {
     const docker = createFakeDocker((args) => {
       if (args[0] === "run") {
-        return { exitCode: 0, stdout: "abc\n", stderr: "" };
+        return { exitCode: 0, stdout: `${CONTAINER_ID}\n`, stderr: "" };
       }
 
       if (args[0] === "inspect") {
-        return {
-          exitCode: 0,
-          stdout: JSON.stringify([
-            { ...CLEAN_INSPECT, HostConfig: { ...CLEAN_INSPECT.HostConfig, NetworkMode: "bridge" } }
-          ]),
-          stderr: ""
-        };
+        return inspectResponse(args, {
+          ...CLEAN_INSPECT,
+          HostConfig: { ...CLEAN_INSPECT.HostConfig, NetworkMode: "bridge" }
+        });
       }
 
       return { exitCode: 0, stdout: "", stderr: "" };
@@ -388,11 +401,11 @@ describe("disposable migration container: end-to-end orchestration", () => {
     let start = 1792633943;
     const docker = createFakeDocker((args) => {
       if (args[0] === "run") {
-        return { exitCode: 0, stdout: "abc\n", stderr: "" };
+        return { exitCode: 0, stdout: `${CONTAINER_ID}\n`, stderr: "" };
       }
 
       if (args[0] === "inspect") {
-        return { exitCode: 0, stdout: JSON.stringify([CLEAN_INSPECT]), stderr: "" };
+        return inspectResponse(args);
       }
 
       if (args[0] === "exec") {
@@ -421,11 +434,11 @@ describe("disposable migration container: end-to-end orchestration", () => {
   test("aborts on a migration failure and never reaches the audit", async () => {
     const docker = createFakeDocker((args) => {
       if (args[0] === "run") {
-        return { exitCode: 0, stdout: "abc\n", stderr: "" };
+        return { exitCode: 0, stdout: `${CONTAINER_ID}\n`, stderr: "" };
       }
 
       if (args[0] === "inspect") {
-        return { exitCode: 0, stdout: JSON.stringify([CLEAN_INSPECT]), stderr: "" };
+        return inspectResponse(args);
       }
 
       if (args[0] === "exec") {
@@ -484,5 +497,64 @@ describe("disposable migration container: end-to-end orchestration", () => {
 
     expect(code).toBe(1);
     expect(docker.calls).toHaveLength(0);
+  });
+
+  test("refuses teardown when the container ID no longer matches", async () => {
+    // A name can be reused by another run; the ID proves which object this run
+    // created, so a mismatch must stop the removal.
+    const docker = createFakeDocker((args) => {
+      if (args[0] === "run") {
+        return { exitCode: 0, stdout: `${CONTAINER_ID}\n`, stderr: "" };
+      }
+
+      if (args[0] === "inspect") {
+        return inspectResponse(args, CLEAN_INSPECT, "replaced99999");
+      }
+
+      return { exitCode: 0, stdout: "", stderr: "" };
+    });
+
+    const result = await runValidate(docker, { initTimeoutMs: 0 });
+    const teardown = result.steps.find((step) => step.name === "teardown");
+
+    expect(teardown.ok).toBe(false);
+    expect(teardown.detail).toContain("ownership not established");
+    expect(docker.calls.some((args) => args[0] === "rm")).toBe(false);
+  });
+
+  test("refuses teardown when ownership cannot be determined", async () => {
+    const docker = createFakeDocker((args) => {
+      if (args[0] === "run") {
+        return { exitCode: 0, stdout: `${CONTAINER_ID}\n`, stderr: "" };
+      }
+
+      if (args[0] === "inspect" && args.includes("--format")) {
+        return { exitCode: 1, stdout: "", stderr: "Error: No such container" };
+      }
+
+      if (args[0] === "inspect") {
+        return inspectResponse(args);
+      }
+
+      return { exitCode: 0, stdout: "", stderr: "" };
+    });
+
+    const result = await runValidate(docker, { initTimeoutMs: 0 });
+    const teardown = result.steps.find((step) => step.name === "teardown");
+
+    expect(teardown.ok).toBe(false);
+    expect(docker.calls.some((args) => args[0] === "rm")).toBe(false);
+  });
+
+  test("removes by container ID, never by name", async () => {
+    const docker = happyDocker();
+
+    await runValidate(docker);
+
+    const removal = docker.calls.find((args) => args[0] === "rm");
+
+    expect(removal).toBeDefined();
+    expect(removal[removal.length - 1]).toBe(CONTAINER_ID);
+    expect(removal).not.toContain("tm-migval-test");
   });
 });

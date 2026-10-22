@@ -99,6 +99,47 @@ function declaredFromMigrations(rootDirectory) {
   return tables;
 }
 
+/**
+ * Find privilege mutations built as dynamic SQL, which the static extraction
+ * above cannot attribute to a table. Executing arbitrary SQL in JavaScript to
+ * infer policy is explicitly not done; instead every dynamic GRANT/REVOKE that
+ * names a client role is reported.
+ *
+ * Only a dynamic GRANT is fatal: it can create access the manifest does not
+ * represent. A dynamic REVOKE can only reduce access, and any resulting
+ * shortfall is caught by the live audit against the manifest, so it is recorded
+ * as informational rather than failing the check.
+ */
+function dynamicPrivilegeMutations(rootDirectory) {
+  const directory = path.join(rootDirectory, MIGRATIONS_DIRECTORY);
+  const findings = [];
+
+  for (const file of fs.readdirSync(directory).filter((name) => name.endsWith(".sql")).sort()) {
+    const clean = stripComments(fs.readFileSync(path.join(directory, file), "utf8"));
+
+    for (const match of clean.matchAll(/execute\s+(?:immediate\s+)?'([^']*)'/gi)) {
+      const sql = match[1].replace(/\s+/g, " ").trim();
+      const kind = /\bgrant\b/i.test(sql) ? "grant" : /\brevoke\b/i.test(sql) ? "revoke" : null;
+
+      if (kind === null) continue;
+
+      const mentionsClientRole = APPLICATION_ROLES.some((role) =>
+        new RegExp(`\\b${role}\\b`, "i").test(sql)
+      );
+
+      findings.push({
+        file,
+        sql,
+        kind,
+        mentionsClientRole,
+        escalates: kind === "grant" && mentionsClientRole
+      });
+    }
+  }
+
+  return findings;
+}
+
 function verifyManifestConsistency({ rootDirectory = path.join(__dirname, ".."), manifest } = {}) {
   const problems = [];
   const policy = manifest || loadManifest(path.join(rootDirectory, DEFAULT_MANIFEST_PATH));
@@ -109,6 +150,16 @@ function verifyManifestConsistency({ rootDirectory = path.join(__dirname, ".."),
   }
 
   const declared = declaredFromMigrations(rootDirectory);
+
+  // Fail closed on privilege escalation the static extraction cannot attribute.
+  for (const finding of dynamicPrivilegeMutations(rootDirectory)) {
+    if (finding.escalates) {
+      problems.push(
+        `dynamic privilege escalation: ${finding.file} executes "${finding.sql}" which grants to ` +
+          "anon/authenticated and cannot be represented in the manifest"
+      );
+    }
+  }
 
   for (const table of declared.keys()) {
     if (!(table in entries)) {
@@ -169,4 +220,4 @@ if (require.main === module) {
   process.exitCode = result.ok ? 0 : 1;
 }
 
-module.exports = { SUPPORTED_PRIVILEGES, declaredFromMigrations, verifyManifestConsistency };
+module.exports = { SUPPORTED_PRIVILEGES, declaredFromMigrations, dynamicPrivilegeMutations, verifyManifestConsistency };

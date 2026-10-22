@@ -62,6 +62,36 @@ function hasSuppressedFailure(content) {
   return executableLines(content).some((line) => /\|\|\s*true/.test(line));
 }
 
+/**
+ * Top-level `permissions:` scopes as `scope:level` strings. Stops at the next
+ * unindented key, so job-level permissions are not confused with workflow-level
+ * ones.
+ */
+function topLevelPermissions(content) {
+  const lines = content.split(/\r?\n/);
+  const start = lines.findIndex((line) => /^permissions:\s*$/.test(line));
+
+  if (start === -1) {
+    return [];
+  }
+
+  const scopes = [];
+
+  for (let index = start + 1; index < lines.length; index += 1) {
+    if (/^\S/.test(lines[index])) {
+      break;
+    }
+
+    const match = lines[index].match(/^\s+([a-z-]+):\s*(\S+)/);
+
+    if (match) {
+      scopes.push(`${match[1]}:${match[2]}`);
+    }
+  }
+
+  return scopes;
+}
+
 function createExec(handler) {
   const calls = [];
   const exec = (args, context) => {
@@ -490,6 +520,39 @@ describe("apply-migrations workflow: fail-closed contract", () => {
 
   test("contains no unconditional suppression of a command failure", () => {
     expect(hasSuppressedFailure(readWorkflow())).toBe(false);
+  });
+
+  test("holds no token scope its executable steps cannot reach", () => {
+    const workflow = readWorkflow();
+    const scopes = topLevelPermissions(workflow);
+
+    // The reporting steps need these two.
+    expect(scopes).toEqual(expect.arrayContaining(["contents:read", "pull-requests:write"]));
+
+    // `pages: write` and `id-token: write` were removed: the workflow triggers
+    // only on pull_request, so its Pages publishing steps never run, while the
+    // test job executes pull-request code.
+    expect(scopes.filter((scope) => scope.startsWith("pages:"))).toEqual([]);
+    expect(scopes.filter((scope) => scope.startsWith("id-token:"))).toEqual([]);
+  });
+
+  test("control: the permission scanner reads a synthetic block and stops at the next key", () => {
+    const synthetic = [
+      "permissions:",
+      "  contents: read",
+      "  pages: write",
+      "  id-token: write",
+      "jobs:",
+      "  build:",
+      "    permissions:",
+      "      security-events: write"
+    ].join("\n");
+
+    expect(topLevelPermissions(synthetic)).toEqual([
+      "contents:read",
+      "pages:write",
+      "id-token:write"
+    ]);
   });
 
   test("runs no SQL through psql in the workflow at all", () => {

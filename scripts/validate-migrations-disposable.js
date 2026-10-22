@@ -113,12 +113,30 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
     log(`[${ok ? "ok" : "FAIL"}] ${name}${detail ? `: ${detail}` : ""}`);
   };
 
+  let ownedContainerId = null;
+
   const teardown = () => {
     if (!started || keepContainer) {
       return;
     }
 
-    const removal = docker(["rm", "-f", container]);
+    // Ownership must be established before removal. A container that is not the
+    // one this run created must never be deleted, and a name that has been
+    // replaced by another run must not be mistaken for ours.
+    const current = docker(["inspect", container, "--format", "{{.Id}}"]);
+    const currentId = current.exitCode === 0 ? current.stdout.trim() : "";
+
+    if (!ownedContainerId || currentId !== ownedContainerId) {
+      record(
+        "teardown",
+        false,
+        `refusing to remove "${container}": ownership not established (owned=${ownedContainerId || "unknown"})`
+      );
+
+      return;
+    }
+
+    const removal = docker(["rm", "-f", ownedContainerId]);
     record("teardown", removal.exitCode === 0, "disposable container removed");
   };
 
@@ -144,7 +162,8 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
     }
 
     started = true;
-    record("start", true, run.stdout.trim().slice(0, 12));
+    ownedContainerId = run.stdout.trim();
+    record("start", true, ownedContainerId.slice(0, 12));
 
     // Isolation must be proven before anything is executed inside the container.
     const inspectResult = docker(["inspect", container]);
