@@ -42,11 +42,25 @@ const ACCEPTED_SCHEMES = Object.freeze(["postgres:", "postgresql:"]);
 /** The single flag that makes psql fail closed on script errors. */
 const ON_ERROR_STOP = "ON_ERROR_STOP=1";
 
-/** The three audit outcomes that must remain distinguishable. */
+/**
+ * The roles the grants audit reasons about.
+ *
+ * `db/scripts/grants_audit.sql` guards every query with
+ * `EXISTS (... rolname = '<role>')`, so when these roles are absent the audit
+ * returns zero rows — indistinguishable from "all grants present". The
+ * precondition check below exists to make that state impossible to report as a
+ * passing audit. `tests/disposable-migration-validation.test.js` asserts this
+ * set matches the roles named in the audit SQL, so the two cannot drift.
+ */
+const AUDITED_ROLES = Object.freeze(["authenticated", "anon"]);
+
+/** The five audit outcomes that must remain distinguishable. */
 const AUDIT_OUTCOMES = Object.freeze({
   CLEAN: "clean",
   MISSING_GRANTS: "missing-grants",
-  AUDIT_FAILED: "audit-failed"
+  AUDIT_FAILED: "audit-failed",
+  ROLES_MISSING: "roles-missing",
+  ROLE_CHECK_FAILED: "role-check-failed"
 });
 
 const FAILURE_REASONS = Object.freeze({
@@ -56,7 +70,9 @@ const FAILURE_REASONS = Object.freeze({
   NO_MIGRATIONS: "no-migrations",
   MIGRATION_FAILED: "migration-failed",
   AUDIT_FAILED: "audit-failed",
-  MISSING_GRANTS: "missing-grants"
+  MISSING_GRANTS: "missing-grants",
+  ROLES_MISSING: "roles-missing",
+  ROLE_CHECK_FAILED: "role-check-failed"
 });
 
 /** Replace any `user:password@` credentials with a fixed marker for logging. */
@@ -172,6 +188,73 @@ function buildPsqlArgs({ databaseUrl, file, tuplesOnly = false, fieldSeparator =
 }
 
 /**
+ * The precondition query: which audited roles exist in this database.
+ * Derived from AUDITED_ROLES so the gate cannot drift from the constant.
+ */
+function rolePreconditionSql(roles = AUDITED_ROLES) {
+  const list = roles.map((role) => `'${role}'`).join(",");
+
+  return `select rolname from pg_roles where rolname in (${list}) order by rolname`;
+}
+
+/** Read-only psql arguments for the role precondition query. */
+function buildRolePreconditionArgs({ databaseUrl, roles = AUDITED_ROLES }) {
+  return ["-v", ON_ERROR_STOP, "--no-psqlrc", "-d", databaseUrl, "-A", "-t", "-c", rolePreconditionSql(roles)];
+}
+
+/**
+ * Decide whether the grants audit is even applicable.
+ *
+ * A missing audited role is not an error in the audit query, and it must not be
+ * confused with either a clean audit or a failed one: the audit cannot reach a
+ * conclusion at all, so it fails closed with its own distinct reason.
+ */
+function classifyRolePrecondition({ exitCode, stdout = "", roles = AUDITED_ROLES }) {
+  if (exitCode !== 0) {
+    return {
+      ok: false,
+      reason: FAILURE_REASONS.ROLE_CHECK_FAILED,
+      outcome: AUDIT_OUTCOMES.ROLE_CHECK_FAILED,
+      present: [],
+      missing: [...roles],
+      message:
+        `Role precondition FAILED: the role query exited with status ${exitCode}. ` +
+        "The environment is unverified, so no grant conclusion can be drawn."
+    };
+  }
+
+  const present = String(stdout)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+
+  const missing = roles.filter((role) => !present.includes(role));
+
+  if (missing.length > 0) {
+    return {
+      ok: false,
+      reason: FAILURE_REASONS.ROLES_MISSING,
+      outcome: AUDIT_OUTCOMES.ROLES_MISSING,
+      present,
+      missing,
+      message:
+        `Grants audit NOT APPLICABLE: required role(s) absent (${missing.join(", ")}). ` +
+        "The audit SQL skips every query when a role is absent, so an empty result would be " +
+        "vacuous rather than clean. Refusing to report success."
+    };
+  }
+
+  return {
+    ok: true,
+    reason: null,
+    outcome: null,
+    present,
+    missing: [],
+    message: `Role precondition satisfied: ${present.join(", ")} present.`
+  };
+}
+
+/**
  * Classify the grants audit into exactly one of three outcomes:
  *   - `clean`          query succeeded, no rows  -> pass
  *   - `missing-grants` query succeeded, rows     -> fail
@@ -222,6 +305,7 @@ function classifyAuditOutcome({ exitCode, stdout = "" }) {
 function runApply({
   databaseUrl,
   migrationsDirectory = DEFAULT_MIGRATIONS_DIRECTORY,
+  resolveFilePath = (name) => path.join(migrationsDirectory, name),
   exec,
   log = () => {},
   logError = () => {}
@@ -254,7 +338,7 @@ function runApply({
   for (const file of files) {
     log(`--- applying ${file} ---`);
 
-    const result = exec(buildPsqlArgs({ databaseUrl, file }), { phase: "apply", file });
+    const result = exec(buildPsqlArgs({ databaseUrl, file: resolveFilePath(file) }), { phase: "apply", file });
     const exitCode = exitCodeOf(result);
 
     if (exitCode !== 0) {
@@ -295,10 +379,16 @@ function exitCodeOf(result) {
 /**
  * Run the grants audit and classify the result. Validates the target first, so
  * the audit step cannot be pointed at a non-disposable database either.
+ *
+ * Order matters: the audited roles are verified *before* the audit runs, because
+ * the audit SQL skips every query when a role is absent. Without that
+ * precondition a database with no `authenticated` role reports a "clean" audit
+ * that proves nothing.
  */
 function runAudit({
   databaseUrl,
   auditSqlPath = DEFAULT_AUDIT_SQL_PATH,
+  roles = AUDITED_ROLES,
   exec,
   log = () => {},
   logError = () => {}
@@ -309,20 +399,57 @@ function runAudit({
 
   if (!target.ok) {
     logError(target.message);
-    return { ok: false, reason: target.reason, audit: null, message: target.message };
+    return { ok: false, reason: target.reason, audit: null, precondition: null, message: target.message };
   }
 
   log(`Grants audit target: ${target.redacted}`);
+
+  const preconditionResult = exec(buildRolePreconditionArgs({ databaseUrl, roles }), {
+    phase: "role-precondition"
+  });
+  const precondition = classifyRolePrecondition({
+    exitCode: exitCodeOf(preconditionResult),
+    stdout: preconditionResult ? preconditionResult.stdout : "",
+    roles
+  });
+
+  if (!precondition.ok) {
+    logError(precondition.message);
+
+    if (preconditionResult && preconditionResult.stderr) {
+      logError(String(preconditionResult.stderr).trim());
+    }
+
+    return {
+      ok: false,
+      reason: precondition.reason,
+      precondition,
+      audit: {
+        outcome: precondition.outcome,
+        failed: true,
+        rows: [],
+        presentRoles: precondition.present,
+        missingRoles: precondition.missing
+      },
+      message: precondition.message
+    };
+  }
+
+  log(precondition.message);
 
   const result = exec(
     buildPsqlArgs({ databaseUrl, file: auditSqlPath, tuplesOnly: true, fieldSeparator: "," }),
     { phase: "audit", file: auditSqlPath }
   );
 
-  const audit = classifyAuditOutcome({
-    exitCode: exitCodeOf(result),
-    stdout: result ? result.stdout : ""
-  });
+  const audit = {
+    ...classifyAuditOutcome({
+      exitCode: exitCodeOf(result),
+      stdout: result ? result.stdout : ""
+    }),
+    presentRoles: precondition.present,
+    missingRoles: []
+  };
 
   if (audit.failed) {
     logError(audit.message);
@@ -341,6 +468,7 @@ function runAudit({
         audit.outcome === AUDIT_OUTCOMES.AUDIT_FAILED
           ? FAILURE_REASONS.AUDIT_FAILED
           : FAILURE_REASONS.MISSING_GRANTS,
+      precondition,
       audit,
       message: audit.message
     };
@@ -348,7 +476,7 @@ function runAudit({
 
   log(audit.message);
 
-  return { ok: true, reason: null, audit, message: audit.message };
+  return { ok: true, reason: null, precondition, audit, message: audit.message };
 }
 
 /** Apply then audit, for a single-step invocation. */
@@ -366,6 +494,7 @@ function runValidation(options) {
     reason: audit.reason,
     applied: apply.applied,
     failedFile: null,
+    precondition: audit.precondition,
     audit: audit.audit,
     message: audit.message
   };
@@ -377,12 +506,16 @@ module.exports = {
   DISPOSABLE_HOSTS,
   ACCEPTED_SCHEMES,
   ON_ERROR_STOP,
+  AUDITED_ROLES,
   AUDIT_OUTCOMES,
   FAILURE_REASONS,
   redactDatabaseUrl,
   parseDatabaseTarget,
   discoverMigrationFiles,
   buildPsqlArgs,
+  rolePreconditionSql,
+  buildRolePreconditionArgs,
+  classifyRolePrecondition,
   classifyAuditOutcome,
   runApply,
   runAudit,

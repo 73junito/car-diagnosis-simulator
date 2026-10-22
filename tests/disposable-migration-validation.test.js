@@ -5,13 +5,17 @@ const os = require("os");
 const path = require("path");
 
 const {
+  AUDITED_ROLES,
   AUDIT_OUTCOMES,
   FAILURE_REASONS,
   buildPsqlArgs,
+  buildRolePreconditionArgs,
   classifyAuditOutcome,
+  classifyRolePrecondition,
   discoverMigrationFiles,
   parseDatabaseTarget,
   redactDatabaseUrl,
+  rolePreconditionSql,
   runApply,
   runAudit,
   runValidation
@@ -74,6 +78,29 @@ function succeedingExec() {
   return createExec(() => ({ exitCode: 0, stdout: "", stderr: "" }));
 }
 
+/**
+ * Executor that answers per phase, so the role precondition and the grants audit
+ * can be scripted independently. Defaults to a healthy environment where both
+ * audited roles exist.
+ */
+function phaseAwareExec({
+  roles = ["anon", "authenticated"],
+  audit = { exitCode: 0, stdout: "", stderr: "" },
+  apply = { exitCode: 0, stdout: "", stderr: "" }
+} = {}) {
+  return createExec(({ context }) => {
+    if (context.phase === "role-precondition") {
+      return { exitCode: 0, stdout: roles.length ? `${roles.join("\n")}\n` : "", stderr: "" };
+    }
+
+    if (context.phase === "audit") {
+      return audit;
+    }
+
+    return apply;
+  });
+}
+
 function captureLogs() {
   const out = [];
   const err = [];
@@ -113,8 +140,12 @@ describe("disposable migration validation: fail-closed application", () => {
       expect(call.args).toContain(LOCAL_DSN);
     }
 
-    expect(calls[0].args[calls[0].args.indexOf("-f") + 1]).toBe("20260101_first.sql");
-    expect(calls[1].args[calls[1].args.indexOf("-f") + 1]).toBe("20260102_second.sql");
+    expect(calls[0].args[calls[0].args.indexOf("-f") + 1]).toBe(
+      path.join(directory, "20260101_first.sql")
+    );
+    expect(calls[1].args[calls[1].args.indexOf("-f") + 1]).toBe(
+      path.join(directory, "20260102_second.sql")
+    );
   });
 
   test("fails when a migration contains invalid SQL and applies no later migration", () => {
@@ -187,11 +218,13 @@ describe("disposable migration validation: grants audit outcomes stay distinct",
   test("treats a failed audit query as a failure, not as a clean audit", () => {
     // This is the regression the previous `|| true` introduced: psql failed,
     // wrote nothing to the output file, and the shell reported success.
-    const { exec } = createExec(() => ({
-      exitCode: 1,
-      stdout: "",
-      stderr: 'psql:db/scripts/grants_audit.sql:5: ERROR:  permission denied for schema public\n'
-    }));
+    const { exec } = phaseAwareExec({
+      audit: {
+        exitCode: 1,
+        stdout: "",
+        stderr: 'psql:db/scripts/grants_audit.sql:5: ERROR:  permission denied for schema public\n'
+      }
+    });
     const logs = captureLogs();
 
     const result = runAudit({ databaseUrl: LOCAL_DSN, exec, log: logs.log, logError: logs.logError });
@@ -209,7 +242,9 @@ describe("disposable migration validation: grants audit outcomes stay distinct",
       "table,public,attempts,authenticated",
       "sequence,public,attempts_id_seq,authenticated"
     ].join("\n");
-    const { exec, calls } = createExec(() => ({ exitCode: 0, stdout: `${rows}\n`, stderr: "" }));
+    const { exec, calls } = phaseAwareExec({
+      audit: { exitCode: 0, stdout: `${rows}\n`, stderr: "" }
+    });
     const logs = captureLogs();
 
     const result = runAudit({ databaseUrl: LOCAL_DSN, exec, log: logs.log, logError: logs.logError });
@@ -219,13 +254,16 @@ describe("disposable migration validation: grants audit outcomes stay distinct",
     expect(result.audit.outcome).toBe(AUDIT_OUTCOMES.MISSING_GRANTS);
     expect(result.audit.rows).toHaveLength(2);
     expect(logs.err.join("\n")).toContain("2 missing required Data API grant row(s)");
-    expect(calls[0].args).toEqual(expect.arrayContaining(["-A", "-t", "-F", ","]));
-    expect(calls[0].args).toContain("ON_ERROR_STOP=1");
+
+    const auditCall = calls.find((call) => call.context.phase === "audit");
+
+    expect(auditCall.args).toEqual(expect.arrayContaining(["-A", "-t", "-F", ","]));
+    expect(auditCall.args).toContain("ON_ERROR_STOP=1");
   });
 
   test("passes only when the audit query succeeds and returns no rows", () => {
     for (const stdout of ["", "\n", "   \n"]) {
-      const { exec } = createExec(() => ({ exitCode: 0, stdout, stderr: "" }));
+      const { exec } = phaseAwareExec({ audit: { exitCode: 0, stdout, stderr: "" } });
 
       const result = runAudit({ databaseUrl: LOCAL_DSN, exec });
 
@@ -256,6 +294,105 @@ describe("disposable migration validation: grants audit outcomes stay distinct",
     expect(result.reason).toBe(FAILURE_REASONS.MIGRATION_FAILED);
     expect(result.audit).toBeNull();
     expect(calls.every((call) => call.context.phase === "apply")).toBe(true);
+  });
+});
+
+describe("disposable migration validation: role precondition", () => {
+  test("passes and proceeds to the audit when every audited role exists", () => {
+    const { exec, calls } = phaseAwareExec();
+
+    const result = runAudit({ databaseUrl: LOCAL_DSN, exec });
+
+    expect(result.ok).toBe(true);
+    expect(result.precondition.ok).toBe(true);
+    expect(result.precondition.present).toEqual(["anon", "authenticated"]);
+    expect(result.precondition.missing).toEqual([]);
+    expect(result.audit.outcome).toBe(AUDIT_OUTCOMES.CLEAN);
+    expect(result.audit.presentRoles).toEqual(["anon", "authenticated"]);
+    expect(calls.map((call) => call.context.phase)).toEqual(["role-precondition", "audit"]);
+  });
+
+  test("refuses to report a clean audit when the audited roles are absent", () => {
+    // The exact vacuous case: the audit SQL returns zero rows because it skips
+    // every query when a role is absent. That must never be reported as clean.
+    const { exec, calls } = phaseAwareExec({ roles: [], audit: { exitCode: 0, stdout: "", stderr: "" } });
+    const logs = captureLogs();
+
+    const result = runAudit({ databaseUrl: LOCAL_DSN, exec, log: logs.log, logError: logs.logError });
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe(FAILURE_REASONS.ROLES_MISSING);
+    expect(result.audit.outcome).toBe(AUDIT_OUTCOMES.ROLES_MISSING);
+    expect(result.audit.outcome).not.toBe(AUDIT_OUTCOMES.CLEAN);
+    expect([...result.audit.missingRoles].sort()).toEqual(["anon", "authenticated"]);
+    expect(result.audit.rows).toEqual([]);
+    // the audit query must not even run
+    expect(calls.map((call) => call.context.phase)).toEqual(["role-precondition"]);
+    expect(logs.err.join("\n")).toContain("NOT APPLICABLE");
+    expect(logs.err.join("\n")).toContain("vacuous");
+  });
+
+  test("names exactly which audited role is missing", () => {
+    const { exec } = phaseAwareExec({ roles: ["authenticated"] });
+
+    const result = runAudit({ databaseUrl: LOCAL_DSN, exec });
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe(FAILURE_REASONS.ROLES_MISSING);
+    expect(result.audit.missingRoles).toEqual(["anon"]);
+    expect(result.audit.presentRoles).toEqual(["authenticated"]);
+    expect(result.message).toContain("anon");
+  });
+
+  test("keeps a failed role query distinct from missing roles and from missing grants", () => {
+    const { exec } = createExec(() => ({ exitCode: 1, stdout: "", stderr: "connection refused\n" }));
+
+    const result = runAudit({ databaseUrl: LOCAL_DSN, exec });
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe(FAILURE_REASONS.ROLE_CHECK_FAILED);
+    expect(result.audit.outcome).toBe(AUDIT_OUTCOMES.ROLE_CHECK_FAILED);
+    expect(result.reason).not.toBe(FAILURE_REASONS.ROLES_MISSING);
+    expect(result.reason).not.toBe(FAILURE_REASONS.MISSING_GRANTS);
+    expect(result.reason).not.toBe(FAILURE_REASONS.AUDIT_FAILED);
+  });
+
+  test("classifies the precondition states directly", () => {
+    expect(classifyRolePrecondition({ exitCode: 0, stdout: "anon\nauthenticated\n" }).ok).toBe(true);
+    expect(classifyRolePrecondition({ exitCode: 0, stdout: "authenticated\n" }).missing).toEqual(["anon"]);
+    expect([...classifyRolePrecondition({ exitCode: 0, stdout: "" }).missing].sort()).toEqual([
+      "anon",
+      "authenticated"
+    ]);
+    expect(classifyRolePrecondition({ exitCode: 2, stdout: "" }).reason).toBe(
+      FAILURE_REASONS.ROLE_CHECK_FAILED
+    );
+  });
+
+  test("the precondition query is read-only and fails closed", () => {
+    const args = buildRolePreconditionArgs({ databaseUrl: LOCAL_DSN });
+    const sql = rolePreconditionSql();
+
+    expect(args).toContain("ON_ERROR_STOP=1");
+    expect(args).toContain("--no-psqlrc");
+    expect(args).toContain("-c");
+    expect(args).not.toContain("-f");
+    expect(sql.toLowerCase()).toContain("select");
+    expect(sql.toLowerCase()).not.toMatch(/\b(insert|update|delete|drop|alter|create|grant|revoke)\b/);
+    expect(sql).toContain("pg_roles");
+  });
+
+  test("drift guard: AUDITED_ROLES matches the roles named in grants_audit.sql", () => {
+    const auditSql = fs.readFileSync(
+      path.join(__dirname, "..", "db", "scripts", "grants_audit.sql"),
+      "utf8"
+    );
+    const namedRoles = [
+      ...new Set([...auditSql.matchAll(/rolname\s*=\s*'([^']+)'/g)].map((match) => match[1]))
+    ].sort();
+
+    expect(namedRoles.length).toBeGreaterThan(0);
+    expect([...AUDITED_ROLES].sort()).toEqual(namedRoles);
   });
 });
 
@@ -349,7 +486,7 @@ describe("disposable migration validation: target authorisation", () => {
 describe("disposable migration validation: CLI exit status", () => {
   test("exits 0 when migrations apply and the audit is clean", () => {
     const directory = makeMigrations(seeded);
-    const { exec, calls } = succeedingExec();
+    const { exec, calls } = phaseAwareExec();
     const logs = captureLogs();
 
     const code = main(["--all"], {
@@ -361,8 +498,10 @@ describe("disposable migration validation: CLI exit status", () => {
     });
 
     expect(code).toBe(0);
-    expect(calls).toHaveLength(3);
-    expect(calls[2].context.phase).toBe("audit");
+    // two migrations, then the role precondition, then the audit
+    expect(calls).toHaveLength(4);
+    expect(calls[2].context.phase).toBe("role-precondition");
+    expect(calls[3].context.phase).toBe("audit");
   });
 
   test("exits 1 when a migration fails and 1 when the audit query fails", () => {
@@ -377,7 +516,9 @@ describe("disposable migration validation: CLI exit status", () => {
       logError: () => {}
     });
 
-    const auditFailure = createExec(() => ({ exitCode: 1, stdout: "", stderr: "audit exploded\n" }));
+    const auditFailure = phaseAwareExec({
+      audit: { exitCode: 1, stdout: "", stderr: "audit exploded\n" }
+    });
     const auditCode = main(["--audit"], {
       databaseUrl: LOCAL_DSN,
       exec: auditFailure.exec,
@@ -401,7 +542,7 @@ describe("disposable migration validation: CLI exit status", () => {
       logError: () => {}
     });
 
-    const audit = createExec(() => ({ exitCode: 0, stdout: "", stderr: "" }));
+    const audit = phaseAwareExec();
     main(["--audit"], {
       databaseUrl: LOCAL_DSN,
       exec: audit.exec,
@@ -411,8 +552,8 @@ describe("disposable migration validation: CLI exit status", () => {
 
     expect(apply.calls).toHaveLength(2);
     expect(apply.calls.every((call) => call.context.phase === "apply")).toBe(true);
-    expect(audit.calls).toHaveLength(1);
-    expect(audit.calls[0].context.phase).toBe("audit");
+    // the audit mode must verify the roles first, then run the audit
+    expect(audit.calls.map((call) => call.context.phase)).toEqual(["role-precondition", "audit"]);
   });
 
   test("rejects an unknown mode without touching the database", () => {
@@ -433,50 +574,49 @@ describe("disposable migration validation: CLI exit status", () => {
 });
 
 describe("apply-migrations workflow: fail-closed contract", () => {
-  test("delegates migration application and the grants audit to the fail-closed runner", () => {
+  test("delegates the whole validation to the isolated Supabase runner", () => {
     const workflow = readWorkflow();
 
-    expect(workflow).toContain("node scripts/run-disposable-migration-validation.js --apply");
-    expect(workflow).toContain("node scripts/run-disposable-migration-validation.js --audit");
+    expect(workflow).toContain("node scripts/validate-migrations-disposable.js");
   });
 
   test("contains no unconditional suppression of a command failure", () => {
     expect(hasSuppressedFailure(readWorkflow())).toBe(false);
   });
 
-  test("runs no SQL file through psql outside the fail-closed runner", () => {
+  test("runs no SQL through psql in the workflow at all", () => {
+    // Every statement now executes inside the disposable container through the
+    // runner, so the workflow itself must contain no psql invocation.
+    expect(psqlInvocations(readWorkflow())).toEqual([]);
     expect(psqlFileInvocations(readWorkflow())).toEqual([]);
   });
 
-  test("every remaining psql invocation fails closed on SQL errors", () => {
-    const invocations = psqlInvocations(readWorkflow());
-
-    expect(invocations.length).toBeGreaterThan(0);
-
-    for (const line of invocations) {
-      expect(line).toContain("ON_ERROR_STOP=1");
-      expect(line).toContain("--no-psqlrc");
-    }
-  });
-
-  test("keeps every declared target on the disposable loopback service", () => {
+  test("keeps every declared database target on loopback and never a staging or production host", () => {
     const workflow = readWorkflow();
-    const dsnLines = workflow.split(/\r?\n/).filter((line) => /DATABASE_URL:\s*postgres/.test(line));
+    const dsnLines = workflow.split(/\r?\n/).filter((line) => /DATABASE_URL:\s*\S/.test(line));
 
-    expect(dsnLines.length).toBeGreaterThan(0);
-
+    // The dependent test job still declares a loopback DSN for its own service;
+    // the migration-validation step declares none at all, because the runner
+    // addresses the database inside the container.
     for (const line of dsnLines) {
       expect(line).toContain("@localhost:5432");
     }
 
+    const validationStep = workflow
+      .split(/\r?\n/)
+      .find((line) => line.includes("validate-migrations-disposable.js"));
+
+    expect(validationStep).toBeDefined();
     expect(workflow).not.toMatch(/supabase\.co|pooler\.supabase/);
   });
 
-  test("preserves the disposable service image contract and the dependent job", () => {
+  test("keeps only the test job's disposable service and the dependent job", () => {
     const workflow = readWorkflow();
 
-    expect((workflow.match(/image: postgres:14/g) || [])).toHaveLength(2);
+    // The migration-validation job no longer declares a `services:` block.
+    expect((workflow.match(/image: postgres:14/g) || [])).toHaveLength(1);
     expect(workflow).toContain("needs: apply-migrations");
+    expect(workflow).toMatch(/timeout-minutes:/);
   });
 
   test("control: the scanners detect the configuration this change removed", () => {
