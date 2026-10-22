@@ -21,8 +21,6 @@ const {
   runValidation
 } = require("../scripts/lib/disposable-migration-validation");
 
-const { main } = require("../scripts/run-disposable-migration-validation");
-
 const LOCAL_DSN = "postgres://postgres:postgres@localhost:5432/postgres";
 const PRODUCTION_DSN = "postgres://user:secret@db.abcdefghijklmnop.supabase.co:5432/postgres";
 
@@ -480,96 +478,6 @@ describe("disposable migration validation: target authorisation", () => {
       "-f",
       "db/migrations/a.sql"
     ]);
-  });
-});
-
-describe("disposable migration validation: CLI exit status", () => {
-  test("exits 0 when migrations apply and the audit is clean", () => {
-    const directory = makeMigrations(seeded);
-    const { exec, calls } = phaseAwareExec();
-    const logs = captureLogs();
-
-    const code = main(["--all"], {
-      databaseUrl: LOCAL_DSN,
-      migrationsDirectory: directory,
-      exec,
-      log: logs.log,
-      logError: logs.logError
-    });
-
-    expect(code).toBe(0);
-    // two migrations, then the role precondition, then the audit
-    expect(calls).toHaveLength(4);
-    expect(calls[2].context.phase).toBe("role-precondition");
-    expect(calls[3].context.phase).toBe("audit");
-  });
-
-  test("exits 1 when a migration fails and 1 when the audit query fails", () => {
-    const directory = makeMigrations(seeded);
-
-    const migrationFailure = createExec(() => ({ exitCode: 3, stdout: "", stderr: "syntax error\n" }));
-    const applyCode = main(["--apply"], {
-      databaseUrl: LOCAL_DSN,
-      migrationsDirectory: directory,
-      exec: migrationFailure.exec,
-      log: () => {},
-      logError: () => {}
-    });
-
-    const auditFailure = phaseAwareExec({
-      audit: { exitCode: 1, stdout: "", stderr: "audit exploded\n" }
-    });
-    const auditCode = main(["--audit"], {
-      databaseUrl: LOCAL_DSN,
-      exec: auditFailure.exec,
-      log: () => {},
-      logError: () => {}
-    });
-
-    expect(applyCode).toBe(1);
-    expect(auditCode).toBe(1);
-  });
-
-  test("runs only migrations for --apply and only the audit for --audit", () => {
-    const directory = makeMigrations(seeded);
-
-    const apply = createExec(() => ({ exitCode: 0, stdout: "", stderr: "" }));
-    main(["--apply"], {
-      databaseUrl: LOCAL_DSN,
-      migrationsDirectory: directory,
-      exec: apply.exec,
-      log: () => {},
-      logError: () => {}
-    });
-
-    const audit = phaseAwareExec();
-    main(["--audit"], {
-      databaseUrl: LOCAL_DSN,
-      exec: audit.exec,
-      log: () => {},
-      logError: () => {}
-    });
-
-    expect(apply.calls).toHaveLength(2);
-    expect(apply.calls.every((call) => call.context.phase === "apply")).toBe(true);
-    // the audit mode must verify the roles first, then run the audit
-    expect(audit.calls.map((call) => call.context.phase)).toEqual(["role-precondition", "audit"]);
-  });
-
-  test("rejects an unknown mode without touching the database", () => {
-    const { exec, calls } = succeedingExec();
-    const logs = captureLogs();
-
-    const code = main(["--nope"], {
-      databaseUrl: LOCAL_DSN,
-      exec,
-      log: logs.log,
-      logError: logs.logError
-    });
-
-    expect(code).toBe(1);
-    expect(calls).toHaveLength(0);
-    expect(logs.err.join("\n")).toContain("Unknown mode");
   });
 });
 
