@@ -24,8 +24,24 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      # Chromium only. The suite declares no Firefox or WebKit project:
+      # playwright.config.js exposes `setup`, `chromium` and an optional
+      # `public-chromium` (all Desktop Chrome), and
+      # playwright.animation-review.config.js exposes `chromium` only.
+      # Installing every engine makes `--with-deps` pull the WebKit/Firefox
+      # multimedia dependency tree (GStreamer, libav, SDL, PipeWire, JACK),
+      # which is what exhausted the job budget on run 39828013635.
+      #
+      # The two stages are split and separately bounded so that a slow apt
+      # transaction or a slow browser download fails fast and names the stage
+      # instead of consuming the whole job timeout.
+      - name: Install Playwright OS dependencies (chromium)
+        timeout-minutes: 10
+        run: npx playwright install-deps chromium
+
+      - name: Install Playwright browser (chromium)
+        timeout-minutes: 10
+        run: npx playwright install chromium
 
       - name: Start static server
         run: |
