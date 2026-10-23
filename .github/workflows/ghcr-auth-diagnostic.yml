@@ -1,0 +1,160 @@
+name: GHCR authenticated pull diagnostic (manual, read-only)
+
+# Manual, single-purpose diagnostic. It answers exactly one question:
+# can this repository's GitHub Actions GITHUB_TOKEN authenticate to ghcr.io and
+# pull the approved Supabase PostgreSQL image without anonymous rate limiting?
+#
+# It pulls one image, prints no credentials, uploads no artifacts, touches no
+# database, and runs no migration validation. It is not part of any validation
+# path and should be deleted once the question is answered.
+#
+# The image reference is read from verify-staging-backup-restore.yml - the
+# workflow that actually consumes this digest on main - so the experiment tests
+# the real reference and there is no second copy to drift. When the disposable
+# migration harness is also present (it arrives with #1103) its export is
+# cross-checked, and any disagreement aborts.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type PROBE-GHCR to run the authenticated pull diagnostic"
+        required: true
+        type: string
+
+# Least privilege. Read the repository to resolve the reference, read packages to
+# authenticate to GHCR. No write scope of any kind.
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: ghcr-auth-diagnostic
+  cancel-in-progress: false
+
+jobs:
+  diagnostic:
+    name: authenticated ghcr pull
+    if: inputs.confirm == 'PROBE-GHCR'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Resolve the approved image
+        id: image
+        run: |
+          set -euo pipefail
+          consumer='.github/workflows/verify-staging-backup-restore.yml'
+
+          # Exactly one distinct approved reference is required. Taking the first
+          # grep match would silently accept a file that carries several, so a
+          # second, conflicting reference makes this diagnostic fail closed rather
+          # than test an arbitrary one.
+          refs=$(grep -Eo 'ghcr\.io/supabase/postgres:[0-9a-z.]+@sha256:[0-9a-f]{64}' "$consumer" | sort -u || true)
+          count=$(printf '%s' "$refs" | grep -c '^ghcr\.io/' || true)
+
+          if [ "$count" -eq 0 ]; then
+            echo "BLOCKED: no approved image reference found in $consumer."
+            exit 1
+          fi
+
+          if [ "$count" -gt 1 ]; then
+            echo "BLOCKED: $consumer carries $count distinct image references; exactly one is required."
+            printf '%s\n' "$refs" | sed 's/^/  /'
+            exit 1
+          fi
+
+          image="$refs"
+          echo "source reference: $consumer (1 distinct reference)"
+
+          if [ -f scripts/lib/disposable-migration-container.js ]; then
+            harness=$(node -e "process.stdout.write(require('./scripts/lib/disposable-migration-container').APPROVED_SUPABASE_IMAGE)")
+            if [ "$harness" != "$image" ]; then
+              echo "BLOCKED: digest drift between $consumer and the harness export."
+              echo "  consumer: $image"
+              echo "  harness : $harness"
+              exit 1
+            fi
+            echo "cross-check: harness export agrees with the consumer reference"
+          else
+            echo "cross-check: harness export not present on this ref (expected until #1103 merges)"
+          fi
+
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+          echo "Resolved image: $image"
+
+      # The token is piped through stdin, never placed on an argv list and never
+      # echoed, so it cannot appear in the log, the step summary or `ps`.
+      #
+      # A failed login reports only the exit code and a fixed vocabulary of
+      # recognised signals. Raw docker output is deliberately not printed:
+      # pattern-based redaction is defence in depth, not a guarantee, and this
+      # step is the one place a credential could plausibly surface.
+      - name: Authenticate to ghcr.io with GITHUB_TOKEN
+        id: login
+        env:
+          GHCR_ACTOR: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          rc=0
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_ACTOR" --password-stdin > /tmp/ghcr-login.out 2>&1 || rc=$?
+          if [ "$rc" -ne 0 ]; then
+            echo "LOGIN_FAILED rc=$rc"
+            echo "matched_signals:"
+            grep -Eio 'unauthorized|denied|forbidden|authentication required|no basic auth credentials|not found|error|failed|cannot|timeout|connection refused|rate limit' /tmp/ghcr-login.out | tr '[:upper:]' '[:lower:]' | sort -u || echo "(none)"
+            echo "(raw docker login output withheld: redaction cannot be guaranteed)"
+            exit "$rc"
+          fi
+          echo "LOGIN_OK actor=$GHCR_ACTOR"
+          rm -f /tmp/ghcr-login.out
+
+      # Exactly one authenticated attempt, so the comparison against the
+      # anonymous run is like-for-like. Success is reported with RepoDigests -
+      # the manifest digest - not the local config ID, which differs.
+      - name: Pull the approved digest (single authenticated attempt)
+        id: pull
+        env:
+          IMAGE: ${{ steps.image.outputs.image }}
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          rc=0
+          docker pull "$IMAGE" > /tmp/ghcr-pull.out 2>&1 || rc=$?
+          end=$(date +%s)
+          echo "pull_seconds=$((end - start))"
+          if [ "$rc" -ne 0 ]; then
+            echo "PULL_FAILED rc=$rc"
+            echo "matched_signals:"
+            grep -Eio 'toomanyrequests|unauthorized|denied|manifest unknown|not found|no matching manifest|rate limit|pull access denied' /tmp/ghcr-pull.out | sort -u || echo "(none)"
+            sed -E 's/[A-Za-z0-9_.-]{24,}/<redacted>/g' /tmp/ghcr-pull.out | tail -20
+            exit "$rc"
+          fi
+          echo "PULL_OK"
+          docker image inspect "$IMAGE" --format 'repo_digests={{json .RepoDigests}}' || true
+
+      - name: Report summary
+        if: always()
+        run: |
+          {
+            echo "### GHCR authenticated pull diagnostic"
+            echo ""
+            echo "| field | value |"
+            echo "| --- | --- |"
+            echo "| image | \`${{ steps.image.outputs.image }}\` |"
+            echo "| login | \`${{ steps.login.outcome }}\` |"
+            echo "| pull | \`${{ steps.pull.outcome }}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Log out of ghcr.io
+        if: always()
+        run: docker logout ghcr.io || true
+
