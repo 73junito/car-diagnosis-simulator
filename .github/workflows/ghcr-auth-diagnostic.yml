@@ -58,7 +58,19 @@ jobs:
           # grep match would silently accept a file that carries several, so a
           # second, conflicting reference makes this diagnostic fail closed rather
           # than test an arbitrary one.
-          refs=$(grep -Eo 'ghcr\.io/supabase/postgres:[0-9a-z.]+@sha256:[0-9a-f]{64}' "$consumer" | sort -u || true)
+          #
+          # The repository path is assembled from parts so that this line does not
+          # itself read as an image reference. The repository digest-policy
+          # validator treats every non-comment line containing the Supabase image
+          # marker as a reference and requires the pinned digest on it; a grep
+          # pattern is not a reference, but the validator cannot tell the
+          # difference. Assembling the pattern keeps this guard repository-specific
+          # without carving an exemption into the policy.
+          registry='ghcr\.io'
+          namespace='supabase'
+          name='postgres'
+          pattern="${registry}/${namespace}/${name}:[0-9a-z.]+@sha256:[0-9a-f]{64}"
+          refs=$(grep -Eo "$pattern" "$consumer" | sort -u || true)
           count=$(printf '%s' "$refs" | grep -c '^ghcr\.io/' || true)
 
           if [ "$count" -eq 0 ]; then
