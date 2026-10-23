@@ -182,7 +182,7 @@
     "playwright-core": "1.57.0",
     "supertest": "^7.3.1",
     "typescript": "7.0.2",
-    "undici": "^8.11.2",
+    "undici": "^8.12.3",
     "wait-on": "^9.5.1",
     "wrangler": "^4.149.0"
   },
