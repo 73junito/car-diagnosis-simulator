@@ -156,18 +156,18 @@
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
-    "@cloudflare/workers-types": "^5.20261012.1",
+    "@cloudflare/workers-types": "^5.20261019.1",
     "@mermaid-js/mermaid-cli": "^12.0.0",
-    "@playwright/test": "^1.64.0",
+    "@playwright/test": "^1.64.1",
     "acorn": "^8.19.0",
     "adm-zip": "^0.6.1",
     "ajv": "^8.20.0",
     "babel-jest": "^30.5.1",
     "cors": "^2.8.6",
     "cross-env": "^10.1.0",
-    "dotenv": "^18.0.7",
+    "dotenv": "^18.0.8",
     "esbuild": "^0.28.2",
-    "eslint": "^10.12.0",
+    "eslint": "^10.13.0",
     "express": "^5.3.0",
     "express-rate-limit": "^8.7.1",
     "fast-xml-parser": "^5.11.2",
@@ -182,12 +182,12 @@
     "playwright-core": "1.57.0",
     "supertest": "^7.3.1",
     "typescript": "7.0.2",
-    "undici": "^8.11.2",
+    "undici": "^8.12.3",
     "wait-on": "^9.5.1",
-    "wrangler": "^4.149.0"
+    "wrangler": "^4.151.2"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.117.3",
+    "@supabase/supabase-js": "^2.118.0",
     "hono": "^4.13.13",
     "three": "^0.186.1"
   },
