@@ -29,7 +29,7 @@ there is invisible to every table-privilege control in this package.
 | `scripts/sql/gate-d-security-inventory.sql` | Read-only inventory of tables, columns, sequences, routines, views, default ACLs, `SECURITY DEFINER` | `node scripts/validate-gate-d-inventory.js` |
 | `scripts/sql/gate-d-security-inventory-fixtures.sql` | Positive and negative control per object kind | via the same runner |
 | `scripts/validate-gate-d-against-manifest.js` | Observed privileges equal `docs/database/table-access-policy.json` for 75 tables × 2 roles | `node scripts/validate-gate-d-against-manifest.js` |
-| `scripts/sql/gate-d-authorization-matrix.sql` | 27 authorization cases; every denial asserts SQLSTATE `42501` and its specific message; 10 classifier controls | `node scripts/validate-gate-d-authorization.js` |
+| `scripts/sql/gate-d-authorization-matrix.sql` | 35 authorization and tenancy cases, including 8 two-institution isolation cases against the service-role query path; every denial asserts SQLSTATE `42501` and its specific message; 10 classifier controls | `node scripts/validate-gate-d-authorization.js` |
 | `tests/gate-d-institution-reporting-authorization.test.js` | `handleInstitutionAdminReport` rejects missing, invalid, forged and cross-institution codes and role escalation | `npx jest tests/gate-d-institution-reporting-authorization.test.js` |
 | `supabase/migrations/20261022000000_enforce_least_privilege_public_schema.sql` | The change under review | — |
 | `docs/database/table-access-policy.json` | The intended contract | — |
@@ -75,19 +75,43 @@ returns data before completing its membership check?
 **Established at the database boundary.** A client role cannot read or write any institution
 record at all, so cross-tenant access from a browser is impossible by construction.
 
-**Not established end-to-end.** The route-level guarantee is traced in code, not exercised
-against a real database with two institutions. This is the weakest link in the package and
-the highest-value thing to test next.
+**Established end-to-end against the service-role query path.** The matrix seeds two
+institutions with separate administrators, memberships, programs and classes, then asserts
+eight cases using the same query shape the reporting route uses:
 
-**Open questions.** Given two institutions with real memberships and classes, can a user of
-A reach B's records through the actual service-role query path by manipulating a code, an
-identifier or a request body? Does an omitted `school_code` fail closed or error?
+- `service_role` is confirmed to bypass RLS, so the tenant scope is load-bearing rather than
+  a policy that happens to filter.
+- An unscoped service-role read sees **both** institutions (2 rows) — the exposure the
+  route's scope exists to prevent.
+- A scoped read returns only the caller's institution (1 row), and supplying the other
+  institution's class identifier under that scope returns 0 rows.
+- Membership resolution returns 1 row for the caller's own institution and 0 rows for a
+  forged institution code, so a forged code fails closed.
+- A cross-tenant class creation and a class linked to another institution's program are both
+  **rejected by the database** (SQLSTATE `P0001`) by a trigger on `classes` that requires the
+  class owner to hold an active membership in the claimed institution and requires any
+  linked program or cohort to belong to the same institution.
+
+That last point is a genuine second line of defence: the rejection is enforced by the
+database and is **not** bypassed by `service_role`.
+
+**Limits.** This exercises the real query path against a real database, but it does not call
+the route handler — the route's decision logic is still covered only by the stubbed runtime
+test. The identities and codes are synthetic and fixed, so there is no coverage of
+concurrent requests, policy subqueries, or a live Supabase deployment with connection
+pooling or PostgREST.
+
+**Open questions.** Does every service-role query in every route carry the same tenant
+scope that this test exercises for `classes`? `classes` has an explicit cross-tenant
+trigger; other tenant tables have no equivalent, so their isolation rests on the route
+scope alone. Is an omitted `school_code` guaranteed to fail closed on every path?
 
 ## Where this evidence is weaker than it may appear
 
 - The runtime route test stubs the data layer.
-- Tenant isolation is asserted at the database boundary and traced in code, not exercised
-  end-to-end across two institutions.
+- The two-institution isolation test exercises the service-role query path, not the route
+  handler that calls it, and it covers `classes`; other tenant tables have no equivalent
+  cross-tenant trigger, so their isolation rests on the route scope alone.
 - 66 of 75 tables grant `authenticated` nothing — correct for a service-role-only model, but
   any unexamined student read path using `authenticated` against them will fail.
 - The classifier controls prove the assertions reject misclassification; they do not prove

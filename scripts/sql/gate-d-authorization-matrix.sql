@@ -27,8 +27,8 @@ create temp table gd_case (
 -- The recording table is written while acting as a restricted role, so it and the
 -- sequence behind its serial column both need grants. Without these, a case fails
 -- while recording its result rather than while performing the operation under test.
-grant insert, select on gd_case to authenticated, anon;
-grant usage, select on sequence gd_case_n_seq to authenticated, anon;
+grant insert, select on gd_case to authenticated, anon, service_role;
+grant usage, select on sequence gd_case_n_seq to authenticated, anon, service_role;
 
 -- Classification of a denial, extracted into a function so it can be tested
 -- directly rather than only through the cases that use it. RLS violations and
@@ -378,6 +378,155 @@ begin
       values ('anon', 'select classes', 'privilege-denied (anon holds no grant)', 'privilege-denied',
               sqlstate, sqlerrm,
               sqlstate = '42501' and sqlerrm like '%permission denied%');
+  end;
+end $$;
+
+-- Two-institution end-to-end isolation through the real service-role path.
+--
+-- The reporting route reads with the service role, which bypasses RLS, so the
+-- tenant scope is load-bearing: nothing else stops one institution's data from
+-- reaching another. This seeds two institutions and asserts both directions -
+-- the scope returns only the caller's institution, and the database rejects a
+-- cross-tenant write outright.
+do $$
+declare
+  a_admin uuid := '11111111-1111-1111-1111-111111111111';
+  b_admin uuid := '22222222-2222-2222-2222-222222222222';
+  a_class uuid := 'cccccccc-cccc-cccc-cccc-cccccccccccc';
+  b_class uuid := 'dddddddd-dddd-dddd-dddd-dddddddddddd';
+  a_program uuid := 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee';
+  b_program uuid := 'ffffffff-ffff-ffff-ffff-ffffffffffff';
+  n integer;
+  bypass boolean;
+begin
+  -- SET LOCAL is transaction-scoped, so the role set by an earlier case is still in
+  -- effect here. The seed must restore the session role explicitly, or it writes as
+  -- whichever restricted role the previous case left behind.
+  reset role;
+
+  insert into public.institutions (school_code, school_name)
+    values ('AAAAAA', 'Institution A'), ('BBBBBB', 'Institution B')
+    on conflict (school_code) do nothing;
+
+  insert into public.institution_memberships (school_code, user_id, role, status) values
+    ('AAAAAA', a_admin, 'institution_admin', 'active'),
+    ('BBBBBB', b_admin, 'institution_admin', 'active')
+    on conflict do nothing;
+
+  insert into public.institution_programs (id, school_code, name) values
+    (a_program, 'AAAAAA', 'Program A'), (b_program, 'BBBBBB', 'Program B')
+    on conflict (id) do nothing;
+
+  -- Distinct class codes: classes.class_code is unique and the matrix's earlier seed
+  -- already uses GD-A and GD-B, so the isolation classes need their own.
+  insert into public.classes (id, name, owner_id, class_code, institution_school_code, institution_program_id) values
+    (a_class, 'Class A', a_admin, 'GD-ISO-A', 'AAAAAA', a_program),
+    (b_class, 'Class B', b_admin, 'GD-ISO-B', 'BBBBBB', b_program)
+    on conflict (id) do nothing;
+
+  -- Control: the service role really does bypass RLS, so the scope below is what
+  -- protects the data rather than a policy that happens to filter.
+  select rolbypassrls into bypass from pg_roles where rolname = 'service_role';
+
+  insert into gd_case (actor, operation, expected, observed, ok)
+    values ('control', 'service_role bypasses RLS', 'true', coalesce(bypass::text, 'missing'),
+            bypass is true);
+
+  -- Unscoped: the service role sees both institutions. This is the exposure the
+  -- route's scope exists to prevent.
+  begin
+    set local role service_role;
+    select count(*) into n from public.classes
+      where institution_school_code in ('AAAAAA', 'BBBBBB');
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('service_role', 'unscoped read sees both institutions', '2 rows', n || ' rows', n = 2);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('service_role', 'unscoped read sees both institutions', '2 rows', 'denied',
+              sqlstate, sqlerrm, false);
+  end;
+
+  -- Scoped, exactly as the route queries it.
+  begin
+    set local role service_role;
+    select count(*) into n from public.classes where institution_school_code = 'AAAAAA';
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('service_role', 'scoped read returns only institution A', '1 row', n || ' rows', n = 1);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('service_role', 'scoped read returns only institution A', '1 row', 'denied',
+              sqlstate, sqlerrm, false);
+  end;
+
+  -- The other institution's class is never returned under A's scope, even when its
+  -- identifier is supplied directly.
+  begin
+    set local role service_role;
+    select count(*) into n from public.classes
+      where institution_school_code = 'AAAAAA' and id = b_class;
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('service_role', 'manipulated identifier returns nothing', '0 rows', n || ' rows', n = 0);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('service_role', 'manipulated identifier returns nothing', '0 rows', 'denied',
+              sqlstate, sqlerrm, false);
+  end;
+
+  -- The route's membership resolution: the caller's own institution resolves, the
+  -- other does not, so a forged code fails closed.
+  begin
+    set local role service_role;
+    select count(*) into n from public.institution_memberships
+      where school_code = 'AAAAAA' and user_id = a_admin and status = 'active';
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('service_role', 'membership resolves for the caller institution', '1 row', n || ' rows', n = 1);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('service_role', 'membership resolves for the caller institution', '1 row', 'denied',
+              sqlstate, sqlerrm, false);
+  end;
+
+  begin
+    set local role service_role;
+    select count(*) into n from public.institution_memberships
+      where school_code = 'BBBBBB' and user_id = a_admin and status = 'active';
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('service_role', 'forged institution code resolves to no membership', '0 rows', n || ' rows', n = 0);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('service_role', 'forged institution code resolves to no membership', '0 rows', 'denied',
+              sqlstate, sqlerrm, false);
+  end;
+
+  -- Cross-tenant write: the database rejects a class whose owner is not a member of
+  -- the institution it claims, so this cannot be created even by the service role.
+  begin
+    set local role service_role;
+    insert into public.classes (name, owner_id, class_code, institution_school_code)
+      values ('Cross-tenant class', a_admin, 'GD-X', 'BBBBBB');
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('service_role', 'cross-tenant class creation', 'rejected', 'allowed', false);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('service_role', 'cross-tenant class creation', 'rejected',
+              case when sqlerrm like '%institution_scope_rejected%' then 'rejected' else 'other: ' || sqlerrm end,
+              sqlstate, sqlerrm,
+              sqlerrm like '%institution_scope_rejected%');
+  end;
+
+  -- Cross-tenant program linkage is rejected for the same reason.
+  begin
+    set local role service_role;
+    insert into public.classes (name, owner_id, class_code, institution_school_code, institution_program_id)
+      values ('Cross-program class', a_admin, 'GD-Y', 'AAAAAA', b_program);
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('service_role', 'class linked to another institution program', 'rejected', 'allowed', false);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('service_role', 'class linked to another institution program', 'rejected',
+              case when sqlerrm like '%institution_scope_rejected%' then 'rejected' else 'other: ' || sqlerrm end,
+              sqlstate, sqlerrm,
+              sqlerrm like '%institution_scope_rejected%');
   end;
 end $$;
 
