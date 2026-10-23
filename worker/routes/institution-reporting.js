@@ -119,7 +119,7 @@ function buildRoleCounts(memberships) {
   return counts
 }
 
-function buildClassSummaries(classes, enrollments, attempts) {
+function buildClassSummaries(classes, enrollments) {
   const userIdsByClass = new Map()
   for (const enrollment of enrollments || []) {
     if (!userIdsByClass.has(enrollment.class_id)) userIdsByClass.set(enrollment.class_id, new Set())
@@ -237,7 +237,7 @@ export async function handleInstitutionAdminReport(c) {
     uniqueStudents: uniqueStudents.size,
     // Unattributed assessment activity must not appear in a tenant-scoped report.
     activity: null,
-    classSummaries: buildClassSummaries(classes, enrollments, attempts)
+    classSummaries: buildClassSummaries(classes, enrollments)
   }, 200)
 }
 
