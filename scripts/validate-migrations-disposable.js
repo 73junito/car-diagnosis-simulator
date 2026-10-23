@@ -202,16 +202,44 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
       return { ok: false, reason: "isolation-unknown", steps, evidence };
     }
 
-    const violations = isolationViolations({ name: container, inspect });
+    // Image provenance is read from a second, explicit `docker image inspect`
+    // keyed by the container's own immutable image id. The container's
+    // `inspect.Image` is the local configuration id, which is a different object
+    // from the pinned manifest digest whenever the reference resolves to a
+    // platform-specific image, so the two must never be compared directly.
+    // Keying the lookup by the container's image id is also what stops an
+    // unrelated image already present on the runner from satisfying the check.
+    const containerImageId = typeof inspect.Image === "string" ? inspect.Image : "";
+    let imageInspect = null;
 
-    evidence.isolation = { networkMode: inspect.HostConfig && inspect.HostConfig.NetworkMode, image: inspect.Image };
+    if (/^sha256:[0-9a-f]{64}$/.test(containerImageId)) {
+      const imageResult = docker(["image", "inspect", containerImageId]);
+
+      if (imageResult.exitCode === 0) {
+        try {
+          imageInspect = JSON.parse(imageResult.stdout)[0] || null;
+        } catch {
+          imageInspect = null;
+        }
+      }
+    }
+
+    const violations = isolationViolations({ name: container, inspect, imageInspect });
+
+    evidence.isolation = {
+      networkMode: inspect.HostConfig && inspect.HostConfig.NetworkMode,
+      image: inspect.Image,
+      provenance: imageInspect
+        ? { id: imageInspect.Id, repoDigests: imageInspect.RepoDigests }
+        : null
+    };
 
     if (violations.length > 0) {
       record("isolation", false, violations.join(" "));
       return { ok: false, reason: "isolation-violated", steps, evidence };
     }
 
-    record("isolation", true, "network none, no mounts, no published ports, approved digest");
+    record("isolation", true, "network none, no mounts, no published ports, approved repository and digest provenance");
 
     // Wait for complete initialisation. `pg_isready` is explicitly not enough:
     // the entrypoint starts the server, shuts it down and starts it again, so

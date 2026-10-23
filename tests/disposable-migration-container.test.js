@@ -31,11 +31,24 @@ const {
   validate
 } = require("../scripts/validate-migrations-disposable");
 
+/** Container inspect: network none, no mounts, no published ports. */
 const CLEAN_INSPECT = {
   HostConfig: { NetworkMode: "none", Binds: null, PortBindings: {} },
   Mounts: [],
   Image: APPROVED_SUPABASE_IMAGE_DIGEST
 };
+
+/**
+ * Image inspect for the container's own image id. Provenance lives here and never
+ * on the container: a container inspect has no `RepoDigests` key at all.
+ */
+const CLEAN_IMAGE_INSPECT = {
+  Id: APPROVED_SUPABASE_IMAGE_DIGEST,
+  RepoDigests: [`ghcr.io/supabase/postgres@${APPROVED_SUPABASE_IMAGE_DIGEST}`]
+};
+
+/** A local configuration id that legitimately differs from the pinned digest. */
+const PLATFORM_CONFIG_ID = "sha256:66089200353d90686fe9b252a47d17d078364bf47c50190852c33dc850a0191f";
 
 const READY_PROBE = [
   ...REQUIRED_SCHEMAS.map((name) => `schema:${name}`),
@@ -69,6 +82,10 @@ function happyDocker({ roles = ["anon", "authenticated"], probe = READY_PROBE } 
 
     if (command === "inspect") {
       return inspectResponse(args);
+    }
+
+    if (command === "image") {
+      return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
     }
 
     if (command === "cp" || command === "rm") {
@@ -191,8 +208,10 @@ describe("disposable migration container: name safety", () => {
 });
 
 describe("disposable migration container: isolation assertions", () => {
-  test("accepts a container with no network, no mounts, no ports and the approved digest", () => {
-    expect(isolationViolations({ name: "tm-migval-ci", inspect: CLEAN_INSPECT })).toEqual([]);
+  test("accepts a container with no network, no mounts, no ports and proven provenance", () => {
+    expect(
+      isolationViolations({ name: "tm-migval-ci", inspect: CLEAN_INSPECT, imageInspect: CLEAN_IMAGE_INSPECT })
+    ).toEqual([]);
   });
 
   test("rejects each isolation violation individually", () => {
@@ -204,74 +223,111 @@ describe("disposable migration container: isolation assertions", () => {
         { ...CLEAN_INSPECT, HostConfig: { ...CLEAN_INSPECT.HostConfig, PortBindings: { "5432/tcp": [{}] } } },
         "Published database ports"
       ],
-      [{ ...CLEAN_INSPECT, Image: "sha256:deadbeef" }, "approved digest"]
+      [{ ...CLEAN_INSPECT, Image: "sha256:deadbeef" }, "image id"]
     ];
 
     for (const [inspect, expected] of cases) {
-      const violations = isolationViolations({ name: "tm-migval-ci", inspect });
+      const violations = isolationViolations({ name: "tm-migval-ci", inspect, imageInspect: CLEAN_IMAGE_INSPECT });
 
       expect(violations.join(" ")).toContain(expected);
     }
   });
 
-  test("parses only the isolation-relevant fields", () => {
+  test("parses only the isolation-relevant fields, and never provenance", () => {
     expect(parseIsolation(CLEAN_INSPECT)).toEqual({
       networkMode: "none",
       binds: [],
       portBindings: {},
       mounts: [],
-      imageId: APPROVED_SUPABASE_IMAGE_DIGEST,
-      repoDigests: []
+      imageId: APPROVED_SUPABASE_IMAGE_DIGEST
     });
+    // A container inspect carries no RepoDigests key at all, so provenance must
+    // never be read from here. Reading it here is exactly the defect that made the
+    // hosted run fail closed, and this asserts it cannot come back.
+    expect(parseIsolation(CLEAN_INSPECT).repoDigests).toBeUndefined();
+    expect(parseIsolation({ ...CLEAN_INSPECT, RepoDigests: ["ghcr.io/x@sha256:00"] }).repoDigests).toBeUndefined();
     expect(parseIsolation(undefined).networkMode).toBeNull();
   });
 
   test("accepts a manifest-list pull whose local config id differs from the pinned digest", () => {
-    // On a hosted runner the pinned digest is a manifest-list digest, so the
-    // local image id is the platform configuration id. RepoDigests still records
-    // the digest the image was pulled by.
-    const manifestListPull = {
-      ...CLEAN_INSPECT,
-      Image: "sha256:66089200353d90686fe9b252a47d17d078364bf47c50190852c33dc850a0191f",
+    // On a hosted runner the pinned digest is a manifest-list digest, so the local
+    // image id is the platform configuration id. The image metadata still records
+    // the digest the image was pulled by, and the lookup is linked by that id.
+    const container = { ...CLEAN_INSPECT, Image: PLATFORM_CONFIG_ID };
+    const image = {
+      Id: PLATFORM_CONFIG_ID,
       RepoDigests: [
         `ghcr.io/supabase/postgres@${APPROVED_SUPABASE_IMAGE_DIGEST}`,
         `public.ecr.aws/supabase/postgres@${APPROVED_SUPABASE_IMAGE_DIGEST}`
       ]
     };
 
-    expect(isolationViolations({ name: "tm-migval-ci", inspect: manifestListPull })).toEqual([]);
+    expect(isolationViolations({ name: "tm-migval-ci", inspect: container, imageInspect: image })).toEqual([]);
   });
 
-  test("rejects an unapproved image even when digest metadata is present", () => {
-    const unapproved = {
-      ...CLEAN_INSPECT,
-      Image: "sha256:deadbeef",
+  test("fails closed when image provenance is unavailable", () => {
+    expect(
+      isolationViolations({ name: "tm-migval-ci", inspect: CLEAN_INSPECT, imageInspect: null }).join(" ")
+    ).toContain("provenance is unavailable");
+  });
+
+  test("fails closed when the inspected image is not the container's image", () => {
+    // The correct manifest and digest, but for an unrelated image that merely
+    // happens to be present on the host. The lookup must be linked to the
+    // container's own image id, so this cannot pass.
+    const unrelated = {
+      Id: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      RepoDigests: [`ghcr.io/supabase/postgres@${APPROVED_SUPABASE_IMAGE_DIGEST}`]
+    };
+
+    expect(
+      isolationViolations({ name: "tm-migval-ci", inspect: CLEAN_INSPECT, imageInspect: unrelated }).join(" ")
+    ).toContain("not linked to this container");
+  });
+
+  test("fails closed when RepoDigests is missing, empty or not a list", () => {
+    for (const repoDigests of [undefined, [], "ghcr.io/supabase/postgres@sha256:x"]) {
+      const image = { Id: APPROVED_SUPABASE_IMAGE_DIGEST, RepoDigests: repoDigests };
+
+      expect(
+        isolationViolations({ name: "tm-migval-ci", inspect: CLEAN_INSPECT, imageInspect: image }).join(" ")
+      ).toContain("no RepoDigests");
+    }
+  });
+
+  test("fails closed on a digest that is not the approved one", () => {
+    const image = {
+      Id: APPROVED_SUPABASE_IMAGE_DIGEST,
       RepoDigests: ["ghcr.io/supabase/postgres@sha256:1111111111111111111111111111111111111111111111111111111111111111"]
     };
 
-    expect(isolationViolations({ name: "tm-migval-ci", inspect: unapproved }).join(" ")).toContain(
-      "must originate from the approved digest"
-    );
+    expect(
+      isolationViolations({ name: "tm-migval-ci", inspect: CLEAN_INSPECT, imageInspect: image }).join(" ")
+    ).toContain("digest mismatch");
   });
 
-  test("rejects a tag-only pull with missing digest metadata", () => {
-    const tagOnly = { ...CLEAN_INSPECT, Image: "sha256:deadbeef", RepoDigests: [] };
+  test("fails closed on the right digest published under the wrong repository", () => {
+    // The digest alone is not sufficient: matching only on `@sha256:` would accept
+    // a mirror. The repository name is part of the identity.
+    const image = {
+      Id: APPROVED_SUPABASE_IMAGE_DIGEST,
+      RepoDigests: [`public.ecr.aws/supabase/postgres@${APPROVED_SUPABASE_IMAGE_DIGEST}`]
+    };
 
-    expect(isolationViolations({ name: "tm-migval-ci", inspect: tagOnly }).join(" ")).toContain(
-      "must originate from the approved digest"
-    );
+    expect(
+      isolationViolations({ name: "tm-migval-ci", inspect: CLEAN_INSPECT, imageInspect: image }).join(" ")
+    ).toContain("repository mismatch");
   });
 
-  test("rejects malformed digest metadata", () => {
-    const malformed = {
-      ...CLEAN_INSPECT,
-      Image: "sha256:deadbeef",
+  test("fails closed on malformed provenance metadata", () => {
+    const image = {
+      Id: APPROVED_SUPABASE_IMAGE_DIGEST,
       RepoDigests: ["not-a-digest", "ghcr.io/supabase/postgres:17.6.1.167"]
     };
 
-    expect(isolationViolations({ name: "tm-migval-ci", inspect: malformed }).join(" ")).toContain(
-      "must originate from the approved digest"
-    );
+    expect(
+      isolationViolations({ name: "tm-migval-ci", inspect: CLEAN_INSPECT, imageInspect: image }).join(" ")
+    ).toContain("malformed RepoDigests");
   });
 });
 
@@ -442,6 +498,10 @@ describe("disposable migration container: end-to-end orchestration", () => {
         });
       }
 
+      if (args[0] === "image") {
+        return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
+      }
+
       return { exitCode: 0, stdout: "", stderr: "" };
     });
 
@@ -480,6 +540,10 @@ describe("disposable migration container: end-to-end orchestration", () => {
         return inspectResponse(args);
       }
 
+      if (args[0] === "image") {
+        return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
+      }
+
       if (args[0] === "exec") {
         const inline = args[args.indexOf("-c") + 1] || "";
 
@@ -511,6 +575,10 @@ describe("disposable migration container: end-to-end orchestration", () => {
 
       if (args[0] === "inspect") {
         return inspectResponse(args);
+      }
+
+      if (args[0] === "image") {
+        return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
       }
 
       if (args[0] === "exec") {
@@ -703,6 +771,10 @@ describe("disposable migration container: platform-equivalent role", () => {
 
       if (args[0] === "inspect") {
         return inspectResponse(args);
+      }
+
+      if (args[0] === "image") {
+        return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
       }
 
       if (args[0] === "exec") {
