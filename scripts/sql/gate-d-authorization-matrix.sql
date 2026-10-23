@@ -19,6 +19,8 @@ create temp table gd_case (
   operation text,
   expected text,
   observed text,
+  sqlstate_code text,
+  error_detail text,
   ok boolean
 ) on commit drop;
 
@@ -147,8 +149,10 @@ begin
     insert into gd_case (actor, operation, expected, observed, ok)
       values ('owner_a', 'insert assignment in another class', 'denied', 'allowed', false);
   exception when others then
-    insert into gd_case (actor, operation, expected, observed, ok)
-      values ('owner_a', 'insert assignment in another class', 'denied', 'denied', true);
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('owner_a', 'insert assignment in another class', 'rls-denied', 'rls-denied',
+              sqlstate, sqlerrm,
+              sqlstate = '42501' and sqlerrm like '%row-level security policy%');
   end;
 end $$;
 
@@ -219,8 +223,10 @@ begin
     insert into gd_case (actor, operation, expected, observed, ok)
       values ('student_a', 'insert replay for another user', 'denied', 'allowed', false);
   exception when others then
-    insert into gd_case (actor, operation, expected, observed, ok)
-      values ('student_a', 'insert replay for another user', 'denied', 'denied', true);
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('student_a', 'insert replay for another user', 'rls-denied', 'rls-denied',
+              sqlstate, sqlerrm,
+              sqlstate = '42501' and sqlerrm like '%row-level security policy%');
   end;
 
   begin
@@ -231,8 +237,10 @@ begin
     insert into gd_case (actor, operation, expected, observed, ok)
       values ('student_a', 'update enrollments', 'denied (no UPDATE grant)', 'allowed', false);
   exception when others then
-    insert into gd_case (actor, operation, expected, observed, ok)
-      values ('student_a', 'update enrollments', 'denied (no UPDATE grant)', 'denied', true);
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('student_a', 'update enrollments', 'privilege-denied (no UPDATE grant)', 'privilege-denied',
+              sqlstate, sqlerrm,
+              sqlstate = '42501' and sqlerrm like '%permission denied%');
   end;
 
   begin
@@ -243,8 +251,10 @@ begin
     insert into gd_case (actor, operation, expected, observed, ok)
       values ('student_a', 'delete replays', 'denied (no DELETE grant)', 'allowed', false);
   exception when others then
-    insert into gd_case (actor, operation, expected, observed, ok)
-      values ('student_a', 'delete replays', 'denied (no DELETE grant)', 'denied', true);
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('student_a', 'delete replays', 'privilege-denied (no DELETE grant)', 'privilege-denied',
+              sqlstate, sqlerrm,
+              sqlstate = '42501' and sqlerrm like '%permission denied%');
   end;
 
   begin
@@ -279,8 +289,10 @@ begin
     insert into gd_case (actor, operation, expected, observed, ok)
       values ('student_a', 'select a table outside the manifest', 'denied (least privilege)', 'allowed', false);
   exception when others then
-    insert into gd_case (actor, operation, expected, observed, ok)
-      values ('student_a', 'select a table outside the manifest', 'denied (least privilege)', 'denied', true);
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('student_a', 'select a table outside the manifest', 'privilege-denied (least privilege)', 'privilege-denied',
+              sqlstate, sqlerrm,
+              sqlstate = '42501' and sqlerrm like '%permission denied%');
   end;
 end $$;
 
@@ -348,12 +360,14 @@ begin
     insert into gd_case (actor, operation, expected, observed, ok)
       values ('anon', 'select classes', 'denied (anon holds no grant)', 'allowed', false);
   exception when others then
-    insert into gd_case (actor, operation, expected, observed, ok)
-      values ('anon', 'select classes', 'denied (anon holds no grant)', 'denied', true);
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('anon', 'select classes', 'privilege-denied (anon holds no grant)', 'privilege-denied',
+              sqlstate, sqlerrm,
+              sqlstate = '42501' and sqlerrm like '%permission denied%');
   end;
 end $$;
 
-select n, actor, operation, expected, observed, ok from gd_case order by n;
+select n, actor, operation, expected, observed, sqlstate_code, ok from gd_case order by n;
 
 do $$
 declare bad integer;
