@@ -64,4 +64,12 @@ Use a data-equivalent *disposable clone only after the approved restore/clone ga
 - [ ] Hosted migration validator executes completely without bypasses
 - [ ] PR review and merge permissions separately authorized
 
-**Current result: HOLD — evidence and independent approval incomplete.**
+## Synthetic PostgreSQL 17 validation (2026-10-23)
+
+A brand-new container `gate-d-synthetic-20261023` ran with `--network none`, using only synthetic objects. Fixture: `scripts/sql/gate-d-synthetic-fixture.sql`. SQL inventory executed with `psql -X -v ON_ERROR_STOP=1`, exit 0. Evidence categories returned: target, table ACL, column ACL, default ACL, sequence ACL, routine ACL, view security. The target reported `transaction_read_only=on`; execution concluded with `ROLLBACK`.
+
+Negative/positive controls: authenticated table SELECT=true; anon table SELECT=false; anon column SELECT=true; authenticated sequence USAGE=true. SECURITY DEFINER and security_invoker were correctly reported. These fixture controls intentionally exhibit a risky column-level anonymous grant so that an inventory can detect it. The container was explicitly removed after verification; pre-existing Docker containers were untouched.
+
+**Limit:** these are metadata and privilege-observation fixtures, not end-to-end application/JWT/RLS compatibility tests. No staging/prod comparison or independent approval has occurred.
+
+**Current result: PostgreSQL inventory execution verified; Gate D remains HOLD pending application compatibility and independent approval.**
