@@ -30,6 +30,20 @@ create temp table gd_case (
 grant insert, select on gd_case to authenticated, anon;
 grant usage, select on sequence gd_case_n_seq to authenticated, anon;
 
+-- Classification of a denial, extracted into a function so it can be tested
+-- directly rather than only through the cases that use it. RLS violations and
+-- privilege denials share SQLSTATE 42501, so the message is what distinguishes
+-- them; a constraint failure, a missing column, a missing table or an unexpected
+-- success must never be accepted as an authorization denial.
+create or replace function pg_temp.classify_denial(p_sqlstate text, p_message text, p_expected text)
+returns boolean language sql immutable as $$
+  select case p_expected
+    when 'privilege-denied' then p_sqlstate = '42501' and p_message like '%permission denied%'
+    when 'rls-denied' then p_sqlstate = '42501' and p_message like '%row-level security policy%'
+    else false
+  end
+$$;
+
 -- Synthetic identities and rows. `auth.users` needs a row for each subject
 -- because the classroom tables reference it. The image creates a profile row per
 -- user, so the profile seed is an upsert rather than a plain insert.
@@ -317,10 +331,10 @@ begin
       insert into gd_case (actor, operation, expected, observed, ok)
         values ('owner_a', 'cross-tenant read: ' || t, 'denied (no grant)', 'allowed', false);
     exception when others then
-      insert into gd_case (actor, operation, expected, observed, ok)
-        values ('owner_a', 'cross-tenant read: ' || t, 'denied (no grant)',
-                case when sqlerrm like '%permission denied%' then 'denied' else 'other: ' || sqlerrm end,
-                sqlerrm like '%permission denied%');
+      insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+        values ('owner_a', 'cross-tenant read: ' || t, 'privilege-denied', 'privilege-denied',
+                sqlstate, sqlerrm,
+                pg_temp.classify_denial(sqlstate, sqlerrm, 'privilege-denied'));
     end;
   end loop;
 
@@ -332,10 +346,10 @@ begin
     insert into gd_case (actor, operation, expected, observed, ok)
       values ('owner_a', 'cross-tenant write: institution_memberships', 'denied (no grant)', 'allowed', false);
   exception when others then
-    insert into gd_case (actor, operation, expected, observed, ok)
-      values ('owner_a', 'cross-tenant write: institution_memberships', 'denied (no grant)',
-              case when sqlerrm like '%permission denied%' then 'denied' else 'other: ' || sqlerrm end,
-              sqlerrm like '%permission denied%');
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('owner_a', 'cross-tenant write: institution_memberships', 'privilege-denied', 'privilege-denied',
+              sqlstate, sqlerrm,
+              pg_temp.classify_denial(sqlstate, sqlerrm, 'privilege-denied'));
   end;
 
   begin
@@ -344,10 +358,10 @@ begin
     insert into gd_case (actor, operation, expected, observed, ok)
       values ('anon', 'read institutions', 'denied (anon holds no grant)', 'allowed', false);
   exception when others then
-    insert into gd_case (actor, operation, expected, observed, ok)
-      values ('anon', 'read institutions', 'denied (anon holds no grant)',
-              case when sqlerrm like '%permission denied%' then 'denied' else 'other: ' || sqlerrm end,
-              sqlerrm like '%permission denied%');
+    insert into gd_case (actor, operation, expected, observed, sqlstate_code, error_detail, ok)
+      values ('anon', 'read institutions', 'privilege-denied', 'privilege-denied',
+              sqlstate, sqlerrm,
+              pg_temp.classify_denial(sqlstate, sqlerrm, 'privilege-denied'));
   end;
 end $$;
 
@@ -365,6 +379,44 @@ begin
               sqlstate, sqlerrm,
               sqlstate = '42501' and sqlerrm like '%permission denied%');
   end;
+end $$;
+
+-- Negative controls for the classifier itself. These prove the assertions reject
+-- incorrect classifications rather than accepting any exception as a denial. They
+-- are pure function calls: no database object is touched.
+do $$
+begin
+  insert into gd_case (actor, operation, expected, observed, ok) values
+    ('control', 'classifier accepts a real privilege denial',
+     'accepted', 'accepted',
+     pg_temp.classify_denial('42501', 'permission denied for table classes', 'privilege-denied')),
+    ('control', 'classifier accepts a real RLS denial',
+     'accepted', 'accepted',
+     pg_temp.classify_denial('42501', 'new row violates row-level security policy for table "replays"', 'rls-denied')),
+    ('control', 'classifier rejects an RLS message classified as a privilege denial',
+     'rejected', 'rejected',
+     not pg_temp.classify_denial('42501', 'new row violates row-level security policy for table "replays"', 'privilege-denied')),
+    ('control', 'classifier rejects a privilege message classified as an RLS denial',
+     'rejected', 'rejected',
+     not pg_temp.classify_denial('42501', 'permission denied for table classes', 'rls-denied')),
+    ('control', 'classifier rejects an incorrect SQLSTATE',
+     'rejected', 'rejected',
+     not pg_temp.classify_denial('23505', 'permission denied for table classes', 'privilege-denied')),
+    ('control', 'classifier rejects a constraint violation',
+     'rejected', 'rejected',
+     not pg_temp.classify_denial('23502', 'null value in column "user_id" violates not-null constraint', 'privilege-denied')),
+    ('control', 'classifier rejects a missing column',
+     'rejected', 'rejected',
+     not pg_temp.classify_denial('42703', 'column "user_id" does not exist', 'privilege-denied')),
+    ('control', 'classifier rejects a missing table',
+     'rejected', 'rejected',
+     not pg_temp.classify_denial('42P01', 'relation "public.missing" does not exist', 'privilege-denied')),
+    ('control', 'classifier rejects an unexpected success',
+     'rejected', 'rejected',
+     not pg_temp.classify_denial('00000', '', 'privilege-denied')),
+    ('control', 'classifier rejects an unknown expected category',
+     'rejected', 'rejected',
+     not pg_temp.classify_denial('42501', 'permission denied for table classes', 'not-a-category'));
 end $$;
 
 select n, actor, operation, expected, observed, sqlstate_code, ok from gd_case order by n;
