@@ -284,6 +284,61 @@ begin
   end;
 end $$;
 
+-- Institution tenancy. The manifest grants the client roles nothing on any
+-- institution table, so a browser session cannot read or write any institution
+-- record at all - its own or another's. Each case asserts the error is actually
+-- a privilege denial, so a failure for an unrelated reason (a constraint, a
+-- missing column) cannot be recorded as a pass.
+do $$
+declare t text;
+begin
+  foreach t in array array[
+    'institutions', 'institution_memberships', 'institution_settings',
+    'institution_cohorts', 'institution_programs', 'institution_email_domains',
+    'institution_membership_invitations', 'student_institution_claims'
+  ] loop
+    begin
+      set local role authenticated;
+      perform set_config('request.jwt.claims',
+        '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}', true);
+      execute format('select count(*) from public.%I', t);
+      insert into gd_case (actor, operation, expected, observed, ok)
+        values ('owner_a', 'cross-tenant read: ' || t, 'denied (no grant)', 'allowed', false);
+    exception when others then
+      insert into gd_case (actor, operation, expected, observed, ok)
+        values ('owner_a', 'cross-tenant read: ' || t, 'denied (no grant)',
+                case when sqlerrm like '%permission denied%' then 'denied' else 'other: ' || sqlerrm end,
+                sqlerrm like '%permission denied%');
+    end;
+  end loop;
+
+  begin
+    set local role authenticated;
+    perform set_config('request.jwt.claims',
+      '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}', true);
+    execute 'insert into public.institution_memberships default values';
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('owner_a', 'cross-tenant write: institution_memberships', 'denied (no grant)', 'allowed', false);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('owner_a', 'cross-tenant write: institution_memberships', 'denied (no grant)',
+              case when sqlerrm like '%permission denied%' then 'denied' else 'other: ' || sqlerrm end,
+              sqlerrm like '%permission denied%');
+  end;
+
+  begin
+    set local role anon;
+    perform count(*) from public.institutions;
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('anon', 'read institutions', 'denied (anon holds no grant)', 'allowed', false);
+  exception when others then
+    insert into gd_case (actor, operation, expected, observed, ok)
+      values ('anon', 'read institutions', 'denied (anon holds no grant)',
+              case when sqlerrm like '%permission denied%' then 'denied' else 'other: ' || sqlerrm end,
+              sqlerrm like '%permission denied%');
+  end;
+end $$;
+
 -- Anonymous: the manifest grants anon nothing anywhere.
 do $$
 begin
