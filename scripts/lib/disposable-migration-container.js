@@ -138,7 +138,21 @@ function assertDisposableContainerName(name, { prefix = DISPOSABLE_NAME_PREFIX }
   return null;
 }
 
-/** Extract the isolation-relevant fields from `docker inspect` output. */
+/** A sha256 image id, as Docker reports it. */
+const IMAGE_ID_PATTERN = /^sha256:[0-9a-f]{64}$/;
+
+/** The only accepted `RepoDigests` shape: an explicit repository and digest. */
+const REPO_DIGEST_PATTERN = /^([A-Za-z0-9][A-Za-z0-9._:/-]*)@(sha256:[0-9a-f]{64})$/;
+
+/**
+ * Extract the isolation-relevant fields from a **container** `docker inspect`.
+ *
+ * A container inspect carries no `RepoDigests` key at all - only images do - so
+ * provenance is deliberately absent here. Reading it from a container silently
+ * produced an empty list and disabled the manifest-list fallback it was meant to
+ * provide, which is what made the hosted run fail with `isolation-violated`.
+ * `parseImageProvenance` reads the real metadata instead.
+ */
 function parseIsolation(inspect) {
   const host = (inspect && inspect.HostConfig) || {};
 
@@ -147,16 +161,44 @@ function parseIsolation(inspect) {
     binds: Array.isArray(host.Binds) ? host.Binds : [],
     portBindings: host.PortBindings || {},
     mounts: Array.isArray(inspect && inspect.Mounts) ? inspect.Mounts : [],
-    imageId: (inspect && inspect.Image) || null,
-    repoDigests: Array.isArray(inspect && inspect.RepoDigests) ? inspect.RepoDigests : []
+    imageId: (inspect && inspect.Image) || null
   };
 }
 
 /**
- * Assert the container is genuinely disposable and isolated. Returns a list of
- * violations; an empty list means the container is safe to use.
+ * Extract provenance from **image** `docker inspect` output.
+ *
+ * `id` is the image's immutable configuration id. `repoDigests` is `null` when
+ * the field is absent or not an array, which is how "metadata missing" is told
+ * apart from "metadata present but carrying nothing usable".
  */
-function isolationViolations({ name, inspect, expectedDigest = APPROVED_SUPABASE_IMAGE_DIGEST }) {
+function parseImageProvenance(imageInspect) {
+  const entry = Array.isArray(imageInspect) ? imageInspect[0] : imageInspect;
+
+  return {
+    id: (entry && entry.Id) || null,
+    repoDigests: entry && Array.isArray(entry.RepoDigests) ? entry.RepoDigests : null
+  };
+}
+
+/**
+ * Assert the container is genuinely disposable and isolated, and that its image
+ * provably originates from the approved repository and digest. Returns a list of
+ * violations; an empty list means the container is safe to use.
+ *
+ * Provenance is proven from `docker image inspect` of the container's own
+ * immutable image id, never from the container inspect. `inspect.Image` is the
+ * local *configuration* id, which differs from the pinned digest whenever the
+ * reference resolves to a platform-specific image, so the two must never be
+ * compared directly.
+ */
+function isolationViolations({
+  name,
+  inspect,
+  imageInspect = null,
+  expectedDigest = APPROVED_SUPABASE_IMAGE_DIGEST,
+  expectedRepository = APPROVED_SUPABASE_IMAGE_REPOSITORY
+}) {
   const violations = [];
   const nameError = assertDisposableContainerName(name);
 
@@ -182,22 +224,70 @@ function isolationViolations({ name, inspect, expectedDigest = APPROVED_SUPABASE
     violations.push("Published database ports are forbidden; a port binding was found.");
   }
 
-  // Image identity. `inspect.Image` is the local image *configuration* id, which
-  // is not stable when a reference digest resolves to a platform-specific image:
-  // a manifest-list digest and the local config id differ. `RepoDigests` records
-  // the digest the image was actually pulled by, so identity is proven by
-  // requiring the approved digest in either field. A tag-only pull, an
-  // unapproved digest, or missing digest metadata all still fail.
-  const approvedById = isolation.imageId === expectedDigest;
-  const approvedByRepoDigest = isolation.repoDigests.some((entry) =>
-    String(entry).endsWith(`@${expectedDigest}`)
-  );
+  const containerImageId = isolation.imageId;
 
-  if (!approvedById && !approvedByRepoDigest) {
+  if (!IMAGE_ID_PATTERN.test(String(containerImageId || ""))) {
+    violations.push(`Container image id must be a sha256 id; found ${JSON.stringify(containerImageId)}.`);
+  }
+
+  const provenance = parseImageProvenance(imageInspect);
+
+  if (!provenance.id && !provenance.repoDigests) {
     violations.push(
-      `Image must originate from the approved digest ${expectedDigest}; ` +
-        `found id "${isolation.imageId}" with RepoDigests ${JSON.stringify(isolation.repoDigests)}.`
+      "Image provenance is unavailable: `docker image inspect` returned no metadata for the container's image."
     );
+
+    return violations;
+  }
+
+  // The lookup is keyed by the container's own image id, so this also rejects an
+  // unrelated image that merely happens to be present on the host.
+  if (provenance.id !== containerImageId) {
+    violations.push(
+      `Image provenance is not linked to this container: the container's image id is ` +
+        `${JSON.stringify(containerImageId)} but the inspected image id is ${JSON.stringify(provenance.id)}.`
+    );
+  }
+
+  const expected = `${expectedRepository}@${expectedDigest}`;
+  const repoDigests = provenance.repoDigests;
+
+  if (!Array.isArray(repoDigests) || repoDigests.length === 0) {
+    violations.push(
+      `Image metadata carries no RepoDigests, so provenance cannot be proven; expected ${expected}.`
+    );
+
+    return violations;
+  }
+
+  const malformed = repoDigests.filter((entry) => !REPO_DIGEST_PATTERN.test(String(entry)));
+
+  if (malformed.length > 0) {
+    violations.push(`Image metadata contains malformed RepoDigests: ${JSON.stringify(malformed)}.`);
+  }
+
+  if (repoDigests.some((entry) => String(entry) === expected)) {
+    return violations;
+  }
+
+  // Neither the repository nor the digest alone is sufficient, so report which of
+  // the two actually diverged rather than a generic mismatch.
+  const parsed = repoDigests.map((entry) => REPO_DIGEST_PATTERN.exec(String(entry))).filter(Boolean);
+  const otherRepositories = parsed.filter((match) => match[2] === expectedDigest).map((match) => match[1]);
+  const otherDigests = parsed.filter((match) => match[1] === expectedRepository).map((match) => match[2]);
+
+  if (otherRepositories.length > 0) {
+    violations.push(
+      `Image provenance repository mismatch: the approved digest is published as ` +
+        `${JSON.stringify(otherRepositories)} but the approved repository is "${expectedRepository}".`
+    );
+  } else if (otherDigests.length > 0) {
+    violations.push(
+      `Image provenance digest mismatch for "${expectedRepository}": found ` +
+        `${JSON.stringify(otherDigests)}; expected ${expectedDigest}.`
+    );
+  } else {
+    violations.push(`Image must originate from ${expected}; RepoDigests were ${JSON.stringify(repoDigests)}.`);
   }
 
   return violations;
@@ -422,6 +512,7 @@ module.exports = {
   classifyRoleEquivalence,
   assertDisposableContainerName,
   parseIsolation,
+  parseImageProvenance,
   isolationViolations,
   classifyInitialisation
 };
