@@ -269,3 +269,264 @@ describe("GHCR bounded pre-pull workflow contract", () => {
   });
 });
 
+/*
+ * Regression contract for the best-effort GHCR authentication wrapped around the
+ * bounded pre-pull.
+ *
+ * Manual diagnostic run 39892068108 proved that this repository's GITHUB_TOKEN can
+ * authenticate to ghcr.io and pull the approved digest. It did not prove that
+ * authentication caused that pull to succeed, nor that it removes the shared
+ * runner's anonymous rate limiting. The login is therefore deliberately
+ * best-effort while the pull stays fail-closed, and this file locks that asymmetry
+ * in place: an edit that made the login fatal, leaked the token, widened the job's
+ * token scope, or dropped the anonymous fallback is rejected here.
+ *
+ * `inspectGhcrAuth` is pure, which is what makes the negative controls possible.
+ */
+function inspectGhcrAuth(source) {
+  const violations = [];
+  const record = (code, detail) => violations.push({ code, detail });
+
+  let doc;
+
+  try {
+    doc = yaml.load(source);
+  } catch (error) {
+    return { ok: false, violations: [{ code: "unparseable-yaml", detail: String(error && error.message) }] };
+  }
+
+  const job = doc && doc.jobs && doc.jobs["apply-migrations"];
+  const steps = job && job.steps;
+
+  if (!Array.isArray(steps)) {
+    return { ok: false, violations: [{ code: "missing-steps", detail: "apply-migrations has no steps array" }] };
+  }
+
+  // The job must carry its own scope block. Inheriting the workflow-level block
+  // would hand the migration job `pull-requests: write`, which it never uses.
+  const permissions = job.permissions && typeof job.permissions === "object" ? job.permissions : null;
+
+  if (!permissions) {
+    record("missing-job-permissions", "the migration job declares no job-level permissions");
+  } else {
+    if (permissions.contents !== "read") {
+      record("missing-contents-read", "job-level permissions do not grant contents: read");
+    }
+
+    if (permissions.packages !== "read") {
+      record("missing-packages-read", "job-level permissions do not grant packages: read");
+    }
+
+    if (permissions["pull-requests"]) {
+      record("job-writes-to-pull-request", "the migration job does not need a pull-request scope");
+    }
+  }
+
+  const resolveIndex = findStep(steps, (s) => String(s.name || "").includes("Resolve the pinned migration image"));
+  const authIndex = findStep(steps, (s) => String(s.name || "").includes("Authenticate to ghcr.io"));
+  const pullIndex = findStep(steps, (s) => String(s.name || "").includes("Pre-pull"));
+  const logoutIndex = findStep(steps, (s) => String(s.name || "").includes("Log out of ghcr.io"));
+  const validateIndex = findStep(steps, (s) => String(s.run || "").includes("validate-migrations-disposable.js"));
+
+  if (authIndex === -1) record("missing-auth-step", "no ghcr.io authentication step");
+  if (logoutIndex === -1) record("missing-logout-step", "no ghcr.io logout step");
+
+  if (authIndex !== -1) {
+    const step = steps[authIndex];
+    const run = String(step.run || "");
+    const env = step.env || {};
+
+    if (!run.includes("--password-stdin")) {
+      record("no-password-stdin", "the token is not supplied through stdin");
+    }
+
+    if (!/secrets\.GITHUB_TOKEN/.test(String(env.GHCR_TOKEN || ""))) {
+      record("token-not-github-token", "login does not use GITHUB_TOKEN");
+    }
+
+    if (!/github\.actor/.test(String(env.GHCR_ACTOR || ""))) {
+      record("actor-not-github-actor", "login does not use github.actor");
+    }
+
+    const tokenReferences = (run.match(/GHCR_TOKEN/g) || []).length;
+
+    if (tokenReferences !== 1) {
+      record("token-referenced-too-often", `GHCR_TOKEN appears ${tokenReferences} times; only the stdin pipeline may read it`);
+    }
+
+    if (/\becho\b[^\n]*GHCR_TOKEN/.test(run)) {
+      record("token-echoed", "the token is echoed");
+    }
+
+    if (!run.includes("raw docker login output withheld")) {
+      record("raw-login-output-not-withheld", "raw docker login output is not explicitly withheld");
+    }
+
+    if (/cat\s+[^\n]*ghcr-login\.out/.test(run)) {
+      record("raw-login-output-printed", "the login output file is printed");
+    }
+
+    if (!/(^|\r?\n)[ \t]*exit 0\b/.test(run)) {
+      record("no-fallback-exit", "the authentication step has no non-fatal fallback");
+    }
+
+    if (/(^|\r?\n)[ \t]*exit 1\b/.test(run)) {
+      record("auth-step-fails-job", "the authentication step can fail the job");
+    }
+
+    if (!run.includes("status=authenticated")) {
+      record("no-authenticated-status", "the authenticated path is not reported");
+    }
+
+    if (!run.includes("status=anonymous-fallback")) {
+      record("no-fallback-status", "the anonymous fallback path is not reported");
+    }
+
+    if (!run.includes("::warning::")) {
+      record("no-auth-warning", "a failed authentication is not annotated");
+    }
+  }
+
+  if (logoutIndex !== -1) {
+    if (String(steps[logoutIndex].if || "").trim() !== "always()") {
+      record("logout-not-always", "logout does not run with if: always()");
+    }
+
+    if (!String(steps[logoutIndex].run || "").includes("docker logout ghcr.io")) {
+      record("logout-does-not-logout", "the logout step does not log out of ghcr.io");
+    }
+  }
+
+  if (pullIndex !== -1) {
+    const env = steps[pullIndex].env || {};
+
+    if (!String(env.AUTH_STATUS || "").includes("steps.ghcr-auth.outputs.status")) {
+      record("pull-not-reporting-auth-path", "the pull does not report which authentication path was taken");
+    }
+  }
+
+  if (resolveIndex !== -1 && authIndex !== -1 && authIndex < resolveIndex) {
+    record("auth-before-resolve", "authentication runs before the image is resolved");
+  }
+
+  if (authIndex !== -1 && pullIndex !== -1 && authIndex > pullIndex) {
+    record("auth-after-pull", "authentication runs after the pull");
+  }
+
+  if (logoutIndex !== -1 && pullIndex !== -1 && logoutIndex < pullIndex) {
+    record("logout-before-pull", "logout runs before the credential is used");
+  }
+
+  if (logoutIndex !== -1 && validateIndex !== -1 && logoutIndex > validateIndex) {
+    record("logout-after-validate", "logout is not reached before validation");
+  }
+
+  if (DIGEST_PATTERN.test(source)) {
+    record("hardcoded-digest", "the workflow embeds a literal digest instead of the harness export");
+  }
+
+  return { ok: violations.length === 0, violations };
+}
+
+describe("GHCR authenticated pull integration contract", () => {
+  const codesForAuth = (source) => inspectGhcrAuth(source).violations.map((violation) => violation.code);
+
+  test("the committed workflow satisfies every authentication guard", () => {
+    const result = inspectGhcrAuth(workflowSource);
+
+    expect(result.violations).toEqual([]);
+    expect(result.ok).toBe(true);
+  });
+
+  test("the migration job asks only for contents: read and packages: read", () => {
+    const job = yaml.load(workflowSource).jobs["apply-migrations"];
+
+    expect(job.permissions).toEqual({ contents: "read", packages: "read" });
+  });
+
+  test("credentials are supplied only through stdin and are never printed", () => {
+    const auth = loadSteps(workflowSource).find((step) =>
+      String(step.name || "").includes("Authenticate to ghcr.io")
+    );
+
+    expect(auth.env.GHCR_TOKEN).toBe("${{ secrets.GITHUB_TOKEN }}");
+    expect(auth.env.GHCR_ACTOR).toBe("${{ github.actor }}");
+    expect(auth.run).toContain("--password-stdin");
+    expect(auth.run).toContain("raw docker login output withheld");
+    expect((auth.run.match(/GHCR_TOKEN/g) || []).length).toBe(1);
+  });
+
+  test("authentication is best-effort while the pull stays fail-closed", () => {
+    const steps = loadSteps(workflowSource);
+    const auth = steps.find((step) => String(step.name || "").includes("Authenticate to ghcr.io"));
+    const pull = steps.find((step) => String(step.name || "").includes("Pre-pull"));
+
+    expect(auth.run).toContain("exit 0");
+    expect(auth.run).not.toContain("exit 1");
+    expect(auth["continue-on-error"]).toBeFalsy();
+    expect(pull["continue-on-error"]).toBeFalsy();
+    expect(pull.run).toContain("exit 1");
+    expect(pull.run).toContain("for attempt in 1 2 3 4 5;");
+    expect(pull.run).toContain('sleep "$delay"');
+    expect(pull["timeout-minutes"]).toBe(MAX_STEP_MINUTES);
+  });
+
+  test("the pull reports which authentication path was taken", () => {
+    const pull = loadSteps(workflowSource).find((step) => String(step.name || "").includes("Pre-pull"));
+
+    expect(pull.env.AUTH_STATUS).toContain("steps.ghcr-auth.outputs.status");
+    expect(pull.run).toContain("ghcr-auth status:");
+  });
+
+  test("the credential is removed by an always-running logout before validation", () => {
+    const steps = loadSteps(workflowSource);
+    const names = steps.map((step) => String(step.name || "").trim());
+    const pullIndex = names.findIndex((name) => name.startsWith("Pre-pull"));
+    const logoutIndex = names.indexOf("Log out of ghcr.io");
+    const validateIndex = names.indexOf("Validate canonical migrations against disposable Supabase Postgres");
+
+    expect(logoutIndex).toBeGreaterThan(pullIndex);
+    expect(logoutIndex).toBeLessThan(validateIndex);
+    expect(steps[logoutIndex].if).toBe("always()");
+    expect(steps[logoutIndex].run).toContain("docker logout ghcr.io");
+  });
+
+  test("the approved digest still has exactly one source and no literal copy", () => {
+    const resolve = loadSteps(workflowSource).find((step) =>
+      String(step.name || "").includes("Resolve the pinned migration image")
+    );
+
+    expect(resolve.run).toContain("APPROVED_SUPABASE_IMAGE");
+    expect(DIGEST_PATTERN.test(workflowSource)).toBe(false);
+  });
+});
+
+describe("GHCR authenticated pull negative controls", () => {
+  const codesForAuth = (source) => inspectGhcrAuth(source).violations.map((violation) => violation.code);
+
+  const mutations = [
+    ["an inherited workflow-level scope block", (s) => s.replace(/\r?\n    permissions:\r?\n      contents: read\r?\n      packages: read\r?\n/, "\n"), "missing-job-permissions"],
+    ["packages: write instead of packages: read", (s) => s.replace(/      packages: read\r?\n/, "      packages: write\n"), "missing-packages-read"],
+    ["a pull-request scope on the migration job", (s) => s.replace(/      packages: read\r?\n/, "      packages: read\n      pull-requests: write\n"), "job-writes-to-pull-request"],
+    ["no authentication step", (s) => s.replace(/- name: Authenticate to ghcr\.io \(best effort\)/, "- name: Skipped authentication"), "missing-auth-step"],
+    ["no logout step", (s) => s.replace(/- name: Log out of ghcr\.io/, "- name: Skipped logout"), "missing-logout-step"],
+    ["a logout that only runs on success", (s) => s.replace(/- name: Log out of ghcr\.io\r?\n        if: always\(\)\r?\n/, "- name: Log out of ghcr.io\n"), "logout-not-always"],
+    ["a fatal authentication step", (s) => s.replace(/\r?\n[ \t]*exit 0\r?\n/, "\n            exit 1\n"), "auth-step-fails-job"],
+    ["a token passed on the command line", (s) => s.replace(/--password-stdin/, "--password"), "no-password-stdin"],
+    ["a personal access token instead of GITHUB_TOKEN", (s) => s.replace(/secrets\.GITHUB_TOKEN/, "secrets.GHCR_PAT"), "token-not-github-token"],
+    ["an unredacted login output", (s) => s.replace(/raw docker login output withheld: pattern redaction is not a guarantee/, "login output follows"), "raw-login-output-not-withheld"],
+    ["no anonymous fallback path", (s) => s.replace(/status=anonymous-fallback/g, "status=unknown"), "no-fallback-status"],
+    ["no authenticated path", (s) => s.replace(/status=authenticated/g, "status=unknown"), "no-authenticated-status"],
+    ["an unreported authentication path", (s) => s.replace(/\r?\n[ \t]*AUTH_STATUS: \$\{\{ steps\.ghcr-auth\.outputs\.status \}\}\r?\n/, "\n"), "pull-not-reporting-auth-path"],
+    ["a literal digest", (s) => s.replace(/APPROVED_SUPABASE_IMAGE/, `'ghcr.io/supabase/postgres@sha256:${"b".repeat(64)}'`), "hardcoded-digest"]
+  ];
+
+  test.each(mutations)("rejects %s", (_label, mutate, expectedCode) => {
+    const mutated = mutate(workflowSource);
+
+    expect(mutated).not.toBe(workflowSource);
+    expect(codesForAuth(mutated)).toContain(expectedCode);
+  });
+});
+
+
