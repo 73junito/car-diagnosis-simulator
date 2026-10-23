@@ -58,6 +58,11 @@ async function main() {
       logError: (line) => console.log(`  [harness] ${line}`),
       sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
       now: () => Date.now(),
+      // Bound the readiness wait. Without this the gate cannot exit when the
+      // container dies during initialisation, so the process hangs instead of
+      // reporting the failure it is looking at.
+      initTimeoutMs: 300000,
+      initPollMs: 5000,
       keepContainer: true
     });
 
