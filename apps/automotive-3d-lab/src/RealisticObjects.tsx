@@ -68,18 +68,20 @@ export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal
   </group>
 }
 export function RealisticMeter({ voltage }: {voltage:number}) {
-  return <group position={[2.40,-0.05,0]} rotation={[0,0,0]}>
+  return <group position={[2.40,-0.05,0]}>
     <mesh castShadow><boxGeometry args={[2.25,1.12,0.42]}/><meshStandardMaterial color="#dda925" roughness={0.48}/></mesh>
-    <mesh position={[0,0.3,0.221]}><planeGeometry args={[1.95,0.4]}/><meshBasicMaterial color="#1b3533"/></mesh>
-    <Html center position={[0,0.3,0.23]} transform distanceFactor={5}><span className="meter-face">{voltage.toFixed(2)} V DC</span></Html>
-    <Html center position={[0,-0.89,0.255]}><div className="meter-model-rating" aria-label="Illustrative training meter, DC voltage zero to 20 volts, 0.01 volt display resolution, 10 megaohm nominal input impedance. Not safety certified.">DCV 0–20 V · 0.01 V RES<br/>10 MΩ INPUT · TRAINING ONLY</div></Html>
-    <mesh position={[0,-0.2,0.245]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.23,0.23,0.09,32]}/><meshStandardMaterial color="#2d3439" roughness={0.53}/></mesh>
+    <mesh position={[0,0.30,0.221]}><planeGeometry args={[1.95,0.40]}/><meshBasicMaterial color="#1b3533"/></mesh>
+    <Html center position={[0,0.30,0.24]} transform distanceFactor={5}><span className="meter-face">{voltage.toFixed(2)} V DC</span></Html>
+    <Html center position={[0,0.57,0.26]} transform distanceFactor={5}><span className="meter-brand">AUTOLEARNPRO DMM-01</span></Html>
+    <mesh position={[0,-0.17,0.245]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.235,0.235,0.09,32]}/><meshStandardMaterial color="#26333f" roughness={0.45}/></mesh>
+    <mesh position={[0,-0.17,0.30]} rotation={[0,0,-0.30]}><boxGeometry args={[0.095,0.31,0.04]}/><meshStandardMaterial color="#f3f3f0"/></mesh>
+    <Html center position={[0.42,-0.14,0.27]} transform distanceFactor={5}><span className="dial-marking">V DC</span></Html>
     {([-0.75,0.74] as const).map((x,i)=><group key={x} position={[x,-0.34,0.226]}>
       <mesh rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.125,0.125,0.06,24]}/><meshStandardMaterial color={i?'#c93645':'#242b32'}/></mesh>
+      <Html center position={[0,-0.19,0.05]} transform distanceFactor={4}><span className="jack-marking">{i?'V/Ω':'COM'}</span></Html>
     </group>)}
   </group>
-}
-export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePlacement}) {
+}export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePlacement}) {
   const start=socket[probe]
   const end:[number,number,number]=placement==='disconnected'?
     [probe==='red'?4.3:1.0,-1.05,1.8]:terminals[placement]

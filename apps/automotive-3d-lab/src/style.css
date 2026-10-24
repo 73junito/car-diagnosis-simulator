@@ -16,3 +16,8 @@
 .meter-ratings dt{color:#526e80}
 .meter-ratings dd{margin:0;color:#17334a;font-weight:750;text-align:right}
 .meter-ratings p{margin:9px 0 0;font-size:.75rem;color:#76511a}
+
+.meter-brand{font:800 12px/1 Arial,sans-serif;background:#202c35;color:#fff;padding:2px 4px;white-space:nowrap}
+.dial-marking{font:900 13px Arial,sans-serif;color:#172d3d;white-space:nowrap}
+.jack-marking{font:900 12px Arial,sans-serif;color:#111e29;background:#f5cc49;padding:1px 3px;white-space:nowrap}
+.meter-rating-small{font:800 8px Arial,sans-serif;color:#273139;background:#ffe69d;padding:1px 3px;white-space:nowrap}
