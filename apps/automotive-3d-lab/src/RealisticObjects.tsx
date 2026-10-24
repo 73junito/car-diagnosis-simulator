@@ -1,5 +1,7 @@
 import { Html, CatmullRomLine } from '@react-three/drei'
 import type { ThreeEvent } from '@react-three/fiber'
+import { useMemo, useEffect } from 'react'
+import { CanvasTexture, SRGBColorSpace } from 'three'
 import type { ProbePlacement } from './simulation/circuit'
 
 export type Probe = 'red' | 'black'
@@ -12,13 +14,45 @@ const socket: Record<Probe,[number,number,number]> = {
 function Label({ children, position }: {children: string; position: [number,number,number]}) {
   return <Html center position={position}><span className="model-label">{children}</span></Html>
 }
+function BatterySpecDecal() {
+  const texture = useMemo(() => {
+    const canvas = document.createElement('canvas')
+    canvas.width = 1024
+    canvas.height = 360
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('2D canvas required for battery label')
+    ctx.fillStyle = '#f0f3ee'
+    ctx.fillRect(0, 0, 1024, 360)
+    ctx.fillStyle = '#be2434'
+    ctx.fillRect(0, 0, 1024, 42)
+    ctx.fillStyle = '#162a3b'
+    ctx.font = 'bold 54px Arial'
+    ctx.fillText('AUTOLEARNPRO', 32, 114)
+    ctx.font = 'bold 27px Arial'
+    ctx.fillText('ILLUSTRATIVE 12 V TRAINING BATTERY', 34, 154)
+    ctx.fillStyle = '#142c3d'
+    ctx.font = 'bold 83px Arial'
+    ctx.fillText('650 CCA', 30, 257)
+    ctx.font = 'bold 31px Arial'
+    ctx.fillText('800 CA  |  RC 110 MIN  |  60 Ah', 35, 307)
+    ctx.font = 'bold 19px Arial'
+    ctx.fillText('EXAMPLE RATINGS - NOT A REAL PRODUCT', 35, 339)
+    const output = new CanvasTexture(canvas)
+    output.colorSpace = SRGBColorSpace
+    output.anisotropy = 4
+    return output
+  }, [])
+  useEffect(() => () => texture.dispose(), [texture])
+  return <mesh position={[0,-0.07,0.805]}>
+    <planeGeometry args={[2.72,0.95]}/>
+    <meshBasicMaterial map={texture} toneMapped={false}/>
+  </mesh>
+}
 export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal:'positive'|'negative')=>void; selected:Probe}) {
   return <group position={[-2,0,0]}>
     <mesh position={[0,-0.1,0]} castShadow receiveShadow><boxGeometry args={[3.2,1.45,1.58]}/><meshStandardMaterial color="#171e24" roughness={0.77}/></mesh>
     <mesh position={[0,0.66,0]} castShadow><boxGeometry args={[3.16,0.17,1.54]}/><meshStandardMaterial color="#313c44" roughness={0.55}/></mesh>
-    <mesh position={[0,-0.07,0.797]}><planeGeometry args={[2.72,0.84]}/><meshStandardMaterial color="#e9ecdf" roughness={0.9}/></mesh>
-    <mesh position={[0,0.42,0.804]}><planeGeometry args={[2.72,0.14]}/><meshStandardMaterial color="#bf2939"/></mesh>
-    <Label position={[0,-0.08,0.83]}>AUTOLEARNPRO | 12 V BATTERY</Label>
+    <BatterySpecDecal/>
     <mesh position={[0,0.77,-0.42]}><boxGeometry args={[1.3,0.11,0.27]}/><meshStandardMaterial color="#20292f"/></mesh>
     {(['positive','negative'] as const).map(terminal => {
       const positive=terminal==='positive'
