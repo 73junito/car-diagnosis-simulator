@@ -44,14 +44,16 @@ describe('G8 institution reporting', () => {
     expect(html).toContain('not a transcript, credential, academic-credit record, or institutional grade report')
   })
 
-  test('reports memberships, programs, cohorts, classes, enrollments, and attempt rollups', () => {
+  test('reports tenant-scoped counts and suppresses unattributed assessment activity', () => {
     expect(route).toContain('membershipCounts')
     expect(route).toContain('activeMemberships')
     expect(route).toContain('programs:')
     expect(route).toContain('cohorts:')
     expect(route).toContain('classes: classes.length')
     expect(route).toContain('enrollments: enrollments.length')
-    expect(route).toContain('activity: summarizeAttempts(attempts)')
+    expect(route).toContain('activity: null')
+    expect(route).not.toContain(".from('attempts')")
+    expect(route).not.toContain('activity: summarizeAttempts(attempts)')
   })
 
   test('portal renders only aggregate report metrics and class rollups', () => {
