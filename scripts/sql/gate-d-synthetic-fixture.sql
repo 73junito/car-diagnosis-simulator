@@ -1,0 +1,12 @@
+CREATE ROLE anon NOLOGIN;
+CREATE ROLE authenticated NOLOGIN;
+CREATE TABLE public.gate_d_example(id integer primary key, private_note text);
+GRANT SELECT ON public.gate_d_example TO authenticated;
+GRANT SELECT(private_note) ON public.gate_d_example TO anon;
+CREATE SEQUENCE public.gate_d_counter;
+GRANT USAGE ON SEQUENCE public.gate_d_counter TO authenticated;
+CREATE FUNCTION public.gate_d_test() RETURNS integer LANGUAGE sql SECURITY DEFINER AS 'SELECT 1';
+GRANT EXECUTE ON FUNCTION public.gate_d_test() TO anon;
+CREATE VIEW public.gate_d_view WITH (security_invoker=true) AS SELECT id FROM public.gate_d_example;
+GRANT SELECT ON public.gate_d_view TO authenticated;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO authenticated;
