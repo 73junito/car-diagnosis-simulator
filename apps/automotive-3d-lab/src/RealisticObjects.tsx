@@ -9,7 +9,7 @@ export const terminals: Record<'positive'|'negative', [number,number,number]> = 
   positive: [-3.08,0.81,0.1], negative: [-0.92,0.81,0.1]
 }
 const socket: Record<Probe,[number,number,number]> = {
-  red: [3.15,-0.34,0.30], black: [1.65,-0.34,0.30]
+  red: [3.19,-1.06,0.36], black: [1.70,-1.06,0.36]
 }
 function Label({ children, position }: {children: string; position: [number,number,number]}) {
   return <Html center position={position}><span className="model-label">{children}</span></Html>
@@ -67,21 +67,46 @@ export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal
     <mesh position={[0,-0.94,0]} receiveShadow><boxGeometry args={[4,0.13,2.2]}/><meshStandardMaterial color="#263341" roughness={0.8}/></mesh>
   </group>
 }
+function MeterScreen({voltage}:{voltage:number}) {
+  const texture = useMemo(() => {
+    const canvas=document.createElement('canvas')
+    canvas.width=512; canvas.height=160
+    const ctx=canvas.getContext('2d')
+    if(!ctx) throw new Error('LCD texture canvas unavailable')
+    ctx.fillStyle='#1b3b35'; ctx.fillRect(0,0,512,160)
+    ctx.fillStyle='#a3ffcd'; ctx.font='bold 68px monospace'
+    ctx.textAlign='center'; ctx.textBaseline='middle'
+    ctx.fillText(voltage.toFixed(2)+' V',256,78)
+    const t=new CanvasTexture(canvas);t.colorSpace=SRGBColorSpace;return t
+  },[voltage])
+  useEffect(()=>()=>texture.dispose(),[texture])
+  return <mesh position={[0,1.01,0.356]}><planeGeometry args={[1.32,0.41]}/><meshBasicMaterial map={texture} toneMapped={false}/></mesh>
+}
 export function RealisticMeter({ voltage }: {voltage:number}) {
-  return <group position={[2.40,-0.05,0]}>
-    <mesh castShadow><boxGeometry args={[2.25,1.12,0.42]}/><meshStandardMaterial color="#dda925" roughness={0.48}/></mesh>
-    <mesh position={[0,0.30,0.221]}><planeGeometry args={[1.95,0.40]}/><meshBasicMaterial color="#1b3533"/></mesh>
-    <Html center position={[0,0.30,0.24]} transform distanceFactor={5}><span className="meter-face">{voltage.toFixed(2)} V DC</span></Html>
-    <Html center position={[0,0.57,0.26]} transform distanceFactor={5}><span className="meter-brand">AUTOLEARNPRO DMM-01</span></Html>
-    <mesh position={[0,-0.17,0.245]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.235,0.235,0.09,32]}/><meshStandardMaterial color="#26333f" roughness={0.45}/></mesh>
-    <mesh position={[0,-0.17,0.30]} rotation={[0,0,-0.30]}><boxGeometry args={[0.095,0.31,0.04]}/><meshStandardMaterial color="#f3f3f0"/></mesh>
-    <Html center position={[0.42,-0.14,0.27]} transform distanceFactor={5}><span className="dial-marking">V DC</span></Html>
-    {([-0.75,0.74] as const).map((x,i)=><group key={x} position={[x,-0.34,0.226]}>
-      <mesh rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.125,0.125,0.06,24]}/><meshStandardMaterial color={i?'#c93645':'#242b32'}/></mesh>
-      <Html center position={[0,-0.19,0.05]} transform distanceFactor={4}><span className="jack-marking">{i?'V/Ω':'COM'}</span></Html>
+  return <group position={[2.45,0.1,0]}>
+    {/* Taller handheld case; all markings are illustrative. */}
+    <mesh castShadow><boxGeometry args={[2.08,3.05,0.49]}/><meshStandardMaterial color="#f0b72f" roughness={0.66}/></mesh>
+    <mesh position={[0,0,0.262]}><boxGeometry args={[1.79,2.76,0.065]}/><meshStandardMaterial color="#26343e" roughness={0.71}/></mesh>
+    <mesh position={[0,1.01,0.31]}><boxGeometry args={[1.51,0.64,0.07]}/><meshStandardMaterial color="#141e25"/></mesh>
+    <MeterScreen voltage={voltage}/>
+    <Html center transform distanceFactor={5} position={[0,1.43,0.33]}><span className="meter-brand">AUTOLEARNPRO DMM-01</span></Html>
+    {([-0.54,-0.17,0.2,0.57] as const).map((x,i)=><mesh key={x} position={[x,0.51,0.34]}><boxGeometry args={[0.25,0.16,0.09]}/><meshStandardMaterial color={i===0?'#cd4255':'#515e68'}/></mesh>)}
+    {/* Dial on a face-facing axis; pointer locked to the only simulated DCV mode. */}
+    <mesh position={[0,-0.19,0.35]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.56,0.56,0.08,48]}/><meshStandardMaterial color="#131e25"/></mesh>
+    <mesh position={[0,-0.19,0.41]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.44,0.44,0.12,48]}/><meshStandardMaterial color="#27343d" roughness={0.46}/></mesh>
+    <mesh position={[0.16,-0.02,0.49]} rotation={[0,0,-0.72]}><boxGeometry args={[0.12,0.46,0.055]}/><meshStandardMaterial color="#d6dee3"/></mesh>
+    <Html center position={[0.55,0.12,0.39]}><span className="dial-marking dial-marking--active">V DC</span></Html>
+    <Html center position={[-0.59,-0.41,0.39]}><span className="dial-marking meter-disabled">Ω</span></Html>
+    <Html center position={[-0.55,0.1,0.39]}><span className="dial-marking meter-disabled">A</span></Html>
+    {/* Both modeled sockets are aligned with the lead attachment world coordinates below. */}
+    {([-0.75,0.74] as const).map((x,i)=><group key={x} position={[x,-1.16,0.32]}>
+      <mesh rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.13,0.13,0.09,24]}/><meshStandardMaterial color={i?'#b42f40':'#161e25'}/></mesh>
+      <Html center position={[0,0.23,0.09]}><span className="jack-marking">{i?'V/Ω':'COM'}</span></Html>
     </group>)}
+    <Html center position={[0,-1.48,0.32]}><span className="meter-rating-small">DCV ONLY · TRAINING MODEL</span></Html>
   </group>
-}export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePlacement}) {
+}
+export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePlacement}) {
   const start=socket[probe]
   const end:[number,number,number]=placement==='disconnected'?
     [probe==='red'?4.3:1.0,-1.05,1.8]:terminals[placement]
