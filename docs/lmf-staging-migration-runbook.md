@@ -14,7 +14,7 @@ Scope: staging Supabase project `jchfruprqpeypdttvlam` ONLY. Canonical file: `su
 ## Preconditions — stop if any missing
 
 1. Confirm an actual, restorable staging backup or PITR checkpoint **with timestamp and recovery owner**, plus a rehearsal or documented restore procedure. Do not assume dashboard backup availability.
-2. Review application reads/writes, generated types, API response contracts, views, functions, RLS, triggers, cron jobs, and any downstream reports that reference `ase_area`, `ase_domains`, `scenario_ase_map` or `ase_code`; update incompatible consumers before migration.
+2. Review application reads/writes, generated types, API response contracts, views, functions, RLS, triggers, cron jobs, and any downstream reports that reference legacy taxonomy columns, domain tables, mapping tables or code identifiers; update incompatible consumers before migration.
 3. Check current migration history directly again; reject duplicate or out-of-order application. Review the exact migration SQL and the environment/project reference, and arrange a change window if necessary.
 4. Agree on post-change validation and owners before applying. Use the approved staging migration mechanism; **never insert migration history manually** or change the parity baseline to mask divergence.
 5. Ensure recovery uses verified backup restoration or a separately reviewed forward correction; a simple reverse rename is not a complete rollback because the migration may also rewrite taxonomy code values and remove legacy lookup data.
