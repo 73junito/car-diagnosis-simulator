@@ -31,6 +31,16 @@ if(kind==='meter'){
  lead(blackPath,.045,palette.black);lead(redPath,.045,palette.red);
  box(-.92,-3.44,.65,.13,.43,.13,palette.black);box(.85,-3.54,.65,.13,.43,.13,palette.red);
  cyl(-.92,-3.77,.65,.045,.25,palette.steel);cyl(.85,-3.87,.65,.045,.25,palette.steel);
+ // Flexible strain-relief collars and contrasting socket rings help distinguish the probes.
+ for(const [x,y,c] of [[-.5,-1.35,palette.black],[.5,-1.35,palette.red]]) {
+   cyl(x,y,.49,.125,.18,palette.dark,'y');
+   cyl(x,y-.12,.49,.090,.075,c,'y');
+ }
+ for(const [x,y,c] of [[-.92,-3.35,palette.black],[.85,-3.45,palette.red]]) {
+   cyl(x,y,.65,.105,.16,c);
+   for(let k=0;k<3;k++)cyl(x,y-.11+k*.06,.65,.108,.018,palette.dark);
+ }
+ box(0,1.59,.09,1.38,.095,.60,palette.dark);
 }else if(kind==='starter'){
  cyl(0,0,0,.76,2.6,palette.gray,'x',32);
  for(let x of [-1.15,-.85,.78,1.12])torus(x,0,0,.76,.06,palette.steel,'y');
@@ -50,6 +60,10 @@ if(kind==='meter'){
  // Ribbed cast cover and layered mounting plate (illustrative dimensions).
  for(let x of [-1.03,-.57,-.12,.36,.78])for(let side of [-1,1])box(x,side*.45,-.62,.055,.18,.08,palette.steel);
  box(.88,-.82,-.28,.28,.17,.63,palette.gray);
+ // Alternating satin cast-metal panels and corrosion-resistant fastener heads.
+ for(let x of [-.90,-.44,.02,.48,.94])box(x,-.19,-.755,.26,.22,.028,palette.steel);
+ for(let x of [-1.05,1.06])for(let y of [-.34,.34])cyl(x,y,.60,.055,.12,palette.dark,'z');
+ for(let x of [-.85,.40])cyl(x,1.38,.34,.19,.04,palette.cream,'y');
 }else if(kind==='solenoid'){
  cyl(0,0,0,.59,2.0,palette.gray,'x',32);
  cyl(-1.13,0,0,.43,.30,palette.steel,'x');
@@ -62,6 +76,11 @@ if(kind==='meter'){
  cyl(.12,.71,-.36,.12,.22,palette.black,'y');
  box(.12,.90,-.36,.22,.16,.20,palette.blue);
  for(let x of [-.47,.47]){box(x,-.70,.25,.33,.16,.30,palette.steel);cyl(x,-.83,.25,.085,.17,palette.dark,'y')}
+ // Insulating washers and paired locknuts remain visual only.
+ for(let x of [-.6,.55]){
+   cyl(x,.94,0,.22,.075,palette.black);
+   cyl(x,1.09,0,.17,.055,palette.steel);
+ }
 }
 }
 function save(file){const pad=x=>x.length%4?Buffer.concat([x,Buffer.alloc(4-x.length%4)]):x;
