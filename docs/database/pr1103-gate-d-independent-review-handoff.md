@@ -77,6 +77,17 @@ wrote the manifest: 150 role comparisons, zero mismatches.
 **Limits.** A privilege set matching its manifest proves the migration did what it intended,
 not that the intent is correct. The manifest itself is the claim under review.
 
+**Reconciled — the default-privilege claim.** The #1103 description stated that the
+default-privilege change applied to **both** definer roles (`supabase_admin` and `postgres`),
+and that the verification table showed `anon`/`authenticated` absent from `pg_default_acl`
+for both. Neither was true, and the discrepancy was in the description rather than in the
+migration. The migration uses the current-role form, so it applies to whichever role runs
+it (`postgres` in the disposable validation); `ALTER DEFAULT PRIVILEGES FOR ROLE
+supabase_admin` is refused with SQLSTATE 42501 because Supabase manages that role. The
+`supabase_admin` per-schema `public` defaults are therefore unchanged, and the migration
+itself records them as a platform-managed residual rather than papering over them. The
+description has been corrected to say so. No code, migration or manifest changed.
+
 **Open questions.** Are the nine authenticated grants the complete, approved application
 access contract? Is `DELETE` on `classes` and `syllabi` intended for the `authenticated`
 role, or should deletion be service-role only?
