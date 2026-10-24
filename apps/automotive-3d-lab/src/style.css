@@ -29,3 +29,11 @@
 .dial-face-label{font:900 12px/1 Arial,sans-serif;color:#13334b;white-space:nowrap;pointer-events:none}
 
 .scene-loading{display:grid;place-items:center;width:100%;height:100%;padding:20px;text-align:center;color:#274a65;font-weight:700;background:#e3eff9}
+
+.workshop-column{min-width:0;display:flex;flex-direction:column;gap:10px}
+.inspection-nav{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.inspection-nav button{background:#fff;border:1px solid #abc8dd;border-radius:9px;padding:9px 12px;font:700 .8rem system-ui,sans-serif;color:#23506b;cursor:pointer}
+.inspection-nav button[aria-pressed="true"]{background:#176aa4;border-color:#176aa4;color:#fff}
+.inspection-nav button:hover:not([aria-pressed="true"]){background:#e6f3fc}
+.inspection-nav button:focus-visible{outline:3px solid #ec9c26;outline-offset:3px}
+@media(max-width:520px){.inspection-nav button{flex:1 1 43%;font-size:.76rem}}
