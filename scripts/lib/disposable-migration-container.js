@@ -142,12 +142,6 @@ function assertDisposableContainerName(name, { prefix = DISPOSABLE_NAME_PREFIX }
   return null;
 }
 
-/** A sha256 image id, as Docker reports it. */
-const IMAGE_ID_PATTERN = /^sha256:[0-9a-f]{64}$/;
-
-/** The only accepted `RepoDigests` shape: an explicit repository and digest. */
-const REPO_DIGEST_PATTERN = /^([A-Za-z0-9][A-Za-z0-9._:/-]*)@(sha256:[0-9a-f]{64})$/;
-
 /**
  * Extract the isolation-relevant fields from a **container** `docker inspect`.
  *
@@ -155,7 +149,7 @@ const REPO_DIGEST_PATTERN = /^([A-Za-z0-9][A-Za-z0-9._:/-]*)@(sha256:[0-9a-f]{64
  * provenance is deliberately absent here. Reading it from a container silently
  * produced an empty list and disabled the manifest-list fallback it was meant to
  * provide, which is what made the hosted run fail with `isolation-violated`.
- * `parseImageProvenance` reads the real metadata instead.
+ * `imageProvenanceViolations` reads the real metadata instead.
  */
 function parseIsolation(inspect) {
   const host = (inspect && inspect.HostConfig) || {};
