@@ -126,6 +126,7 @@
        const reviewFile=asset.title==="Generic Starter Motor"?"starter-motor-detailed-review.glb":
          asset.title==="Generic Starter Solenoid"?"starter-solenoid-detailed-review.glb":null;
        const reviewUrl=review&&reviewFile?"/dashboard/student/starting-system-lab/assets/3d/"+reviewFile:asset.url;
+       viewer.detailedLighting=review&&!!reviewFile;
        await viewer.load(reviewUrl,asset.title);
       }catch(error){
         status.textContent="Unable to render "+asset.title+": "+error.message;

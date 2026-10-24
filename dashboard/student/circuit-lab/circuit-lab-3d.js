@@ -88,6 +88,7 @@
       const assetUrl = review && asset.assetId === "equipment.dmm"
         ? "/dashboard/student/circuit-lab/assets/3d/multimeter-detailed-review.glb"
         : asset.url;
+      viewer.detailedLighting = review && asset.assetId === "equipment.dmm";
       await viewer.load(assetUrl, asset.title);
     } catch (error) {
       status.textContent = "Unable to render " + asset.title + ": " + error.message + ". Circuit Lab engineering behavior is unchanged.";
