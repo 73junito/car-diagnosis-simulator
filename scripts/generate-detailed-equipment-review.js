@@ -9,6 +9,8 @@ function box(x,y,z,w,h,d,c){const a=x-w/2,b=x+w/2,e=y-h/2,f=y+h/2,g=z-d/2,j=z+d/
 mesh([[a,e,g],[b,e,g],[b,f,g],[a,f,g],[a,e,j],[b,e,j],[b,f,j],[a,f,j]],[0,1,2,0,2,3,4,6,5,4,7,6,0,4,5,0,5,1,3,2,6,3,6,7,1,5,6,1,6,2,0,3,7,0,7,4],c)}
 function cyl(x,y,z,r,length,c,axis='y',segments=24){const verts=[];const faces=[];for(let k=0;k<2;k++)for(let i=0;i<segments;i++){const theta=2*Math.PI*i/segments;let a=r*Math.cos(theta),b=r*Math.sin(theta),long=(k-.5)*length;verts.push(axis==='y'?[x+a,y+long,z+b]:axis==='z'?[x+a,y+b,z+long]:[x+long,y+a,z+b])}for(let i=0;i<segments;i++){const j=(i+1)%segments;faces.push(i,j,i+segments,j,j+segments,i+segments)}for(let i=1;i<segments-1;i++){faces.push(0,i+1,i,segments,segments+i,segments+i+1)}mesh(verts,faces,c)}
 function torus(x,y,z,r,t,c,axis='z'){const n=24,m=8,v=[],f=[];for(let i=0;i<n;i++)for(let j=0;j<m;j++){const a=2*Math.PI*i/n,b=2*Math.PI*j/m,R=r+t*Math.cos(b);v.push(axis==='z'?[x+R*Math.cos(a),y+R*Math.sin(a),z+t*Math.sin(b)]:[x+R*Math.cos(a),y+t*Math.sin(b),z+R*Math.sin(a)])}for(let i=0;i<n;i++)for(let j=0;j<m;j++){const a=i*m+j,b=((i+1)%n)*m+j,c=((i+1)%n)*m+(j+1)%m,d=i*m+(j+1)%m;f.push(a,b,c,a,c,d)}mesh(v,f,c)}
+// Low-poly insulated probe lead rendered as a continuous round tube.
+function lead(points,r,c){for(let k=0;k<points.length-1;k++){const a=points[k],b=points[k+1],dx=b[0]-a[0],dy=b[1]-a[1],dz=b[2]-a[2],len=Math.hypot(dx,dy,dz);if(!len)continue;const ux=dx/len,uy=dy/len,uz=dz/len,ref=Math.abs(uy)>.9?[1,0,0]:[0,1,0];let vx=uy*ref[2]-uz*ref[1],vy=uz*ref[0]-ux*ref[2],vz=ux*ref[1]-uy*ref[0];const vl=Math.hypot(vx,vy,vz);vx/=vl;vy/=vl;vz/=vl;const wx=uy*vz-uz*vy,wy=uz*vx-ux*vz,wz=ux*vy-uy*vx,n=10,vertices=[],faces=[];for(let j=0;j<2;j++)for(let i=0;i<n;i++){const t=2*Math.PI*i/n,center=j?b:a;vertices.push([center[0]+r*(Math.cos(t)*vx+Math.sin(t)*wx),center[1]+r*(Math.cos(t)*vy+Math.sin(t)*wy),center[2]+r*(Math.cos(t)*vz+Math.sin(t)*wz)])}for(let i=0;i<n;i++){const j=(i+1)%n;faces.push(i,j,n+i,j,n+j,n+i)}mesh(vertices,faces,c)}}
 function build(kind){
 if(kind==='meter'){
  box(0,0,0,1.65,3.2,.54,palette.yellow);box(0,.03,.30,1.46,2.93,.10,palette.dark);
@@ -23,6 +25,12 @@ if(kind==='meter'){
  for(let i=0;i<10;i++){const a=2*Math.PI*i/10;box(.66*Math.cos(a),-.47+.66*Math.sin(a),.35,.09,.09,.045,palette.cream)}
  for(let i=0;i<3;i++){box(-.30+i*.25,.96,.425,.07,.20,.025,palette.dark);box(-.30+i*.25,.86,.425,.07,.20,.025,palette.dark)}
  box(-.44,-1.43,.39,.18,.06,.05,palette.cream);box(.47,-1.43,.39,.18,.06,.05,palette.cream);
+ // Separate insulated leads and probe handles, with exposed metal probe tips.
+ const blackPath=[[-.5,-1.29,.48],[-.58,-1.55,.55],[-1,-2.05,.53],[-1.25,-2.52,.55],[-1.2,-2.95,.60],[-.92,-3.24,.65]];
+ const redPath=[[.5,-1.29,.48],[.67,-1.65,.55],[1.05,-2.0,.53],[1.23,-2.54,.57],[1.04,-2.99,.61],[.85,-3.34,.65]];
+ lead(blackPath,.045,palette.black);lead(redPath,.045,palette.red);
+ box(-.92,-3.44,.65,.13,.43,.13,palette.black);box(.85,-3.54,.65,.13,.43,.13,palette.red);
+ cyl(-.92,-3.77,.65,.045,.25,palette.steel);cyl(.85,-3.87,.65,.045,.25,palette.steel);
 }else if(kind==='starter'){
  cyl(0,0,0,.76,2.6,palette.gray,'x',32);
  for(let x of [-1.15,-.85,.78,1.12])torus(x,0,0,.76,.06,palette.steel,'y');
@@ -39,6 +47,9 @@ if(kind==='meter'){
  for(let i=0;i<4;i++){const a=2*Math.PI*i/4;cyl(.99,.49*Math.cos(a),.49*Math.sin(a),.075,.20,palette.dark,'x')}
  for(let x of [-.75,.72]){box(x,-.89,-.69,.40,.16,.40,palette.steel);cyl(x,-.99,-.70,.11,.24,palette.dark,'y')}
  box(.9,.32,.61,.30,.22,.20,palette.dark);
+ // Ribbed cast cover and layered mounting plate (illustrative dimensions).
+ for(let x of [-1.03,-.57,-.12,.36,.78])for(let side of [-1,1])box(x,side*.45,-.62,.055,.18,.08,palette.steel);
+ box(.88,-.82,-.28,.28,.17,.63,palette.gray);
 }else if(kind==='solenoid'){
  cyl(0,0,0,.59,2.0,palette.gray,'x',32);
  cyl(-1.13,0,0,.43,.30,palette.steel,'x');
