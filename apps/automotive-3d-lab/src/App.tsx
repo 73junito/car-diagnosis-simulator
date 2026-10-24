@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { measure, type Fault, type ProbePlacement } from './simulation/circuit'
 import type { Probe } from './RealisticObjects'
 const WorkshopScene = lazy(() => import('./WorkshopScene'))
@@ -7,15 +7,41 @@ export default function App() {
   const [black,setBlack] = useState<ProbePlacement>('negative')
   const [selected,setSelected] = useState<Probe>('red')
   const [fault,setFault] = useState<Fault>('healthy')
+  const sceneContainer = useRef<HTMLDivElement>(null)
+  const [sceneRequested, setSceneRequested] = useState(false)
+  useEffect(() => {
+    if (sceneRequested) return
+    const node = sceneContainer.current
+    if (!node) return
+    if (typeof IntersectionObserver === 'undefined') {
+      setSceneRequested(true)
+      return
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        setSceneRequested(true)
+        observer.disconnect()
+      }
+    }, { rootMargin: '0px', threshold: 0 })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [sceneRequested])
   const result = measure(red,black,fault)
   const attach = (terminal:'positive'|'negative') => selected === 'red' ? setRed(terminal) : setBlack(terminal)
   return <main>
     <header><small>BRIGHT WORKSHOP THEME ACTIVE · AUTOLEARNPRO · DOCKER PILOT · MILESTONE B</small><h1>Automotive Circuit Lab</h1><p>Explore DC voltage and probe polarity on a 3D battery and multimeter. Training only; no scored assessment or real vehicle diagnosis.</p></header>
     <section className="layout">
-      <div className="scene" aria-label="Interactive 3D battery and multimeter; all controls are also available in the adjacent panel">
-        <Suspense fallback={<div className="scene-loading" role="status">Loading interactive 3D workshop...</div>}>
-          <WorkshopScene voltage={result.voltage} red={red} black={black} selected={selected} onTerminal={attach}/>
-        </Suspense>
+      <div ref={sceneContainer} className="scene" aria-label="Interactive 3D battery and multimeter; all controls are also available in the adjacent panel">
+        {sceneRequested ? (
+          <Suspense fallback={<div className="scene-loading" role="status">Loading interactive 3D workshop...</div>}>
+            <WorkshopScene voltage={result.voltage} red={red} black={black} selected={selected} onTerminal={attach}/>
+          </Suspense>
+        ) : (
+          <div className="scene-loading">
+            <span>3D workshop loads when this section enters view.</span>
+            <button className="reset" onClick={() => setSceneRequested(true)}>Load 3D workshop</button>
+          </div>
+        )}
       </div>
       <div className="panel">
         <h2>Digital multimeter</h2><output aria-live="polite">{result.voltage.toFixed(2)} V DC</output>
