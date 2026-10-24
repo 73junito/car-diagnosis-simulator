@@ -12,10 +12,12 @@ export function runLmfStartingReference(template: any, request: {modelRef:string
  const fault=request.faultId?(template.faultCatalog||[]).find((f:any)=>f.id===request.faultId):null;
  if(request.faultId&&!fault)throw new Error('Unknown fault');
  if(fault && fault.type!=='open_circuit')return {status:'unsupported-fault',measurement:null};
- // Fault translation is explicitly deferred; do not silently solve a healthy circuit.
- if(fault)return {status:'fault-adapter-not-connected',measurement:null};
+ // Only catalogue-declared open-circuit connection targets may enter the DC model.
+ const target=fault?.targetConnectionId;
+ if(fault && (!target || !(template.connections||[]).some((c:any)=>c.id===target)))
+  return {status:'fault-adapter-not-connected',measurement:null};
  const result=solveWithRelayCoupling({template,modelRef:REF,operatingStateId:request.operatingStateId,
-  removedElementIds:[],relayCouplings:(template.relayCouplings||[]) as RelayCoupling[]});
+  removedElementIds:target?[target]:[],relayCouplings:(template.relayCouplings||[]) as RelayCoupling[]});
  if(!result.ok)return {status:'solver-refused',measurement:null,failure:result.failure};
  const node=result.netlist.testPointToNode[request.testPointId];
  if(!node)return {status:'measurement-unavailable',measurement:null};
