@@ -14,7 +14,7 @@ export default function App() {
     <header><small>BRIGHT WORKSHOP THEME ACTIVE · AUTOLEARNPRO · DOCKER PILOT · MILESTONE B</small><h1>Automotive Circuit Lab</h1><p>Explore DC voltage and probe polarity on a 3D battery and multimeter. Training only; no scored assessment or real vehicle diagnosis.</p></header>
     <section className="layout">
       <div className="scene" aria-label="Interactive 3D battery and multimeter; all controls are also available in the adjacent panel">
-        <Canvas shadows dpr={[1,1.75]} camera={{position:[4.1,3.5,6.8],fov:47}}>
+        <Canvas shadows dpr={[1,1.75]} camera={{position:[5.4,3.7,10.6],fov:48}}>
           <color attach="background" args={['#e3eff9']}/>
           <ambientLight intensity={1.3}/><hemisphereLight args={['#f5fbff','#9bafc0',1.0]}/><directionalLight castShadow position={[4,7,5]} intensity={2.2} shadow-mapSize-width={2048} shadow-mapSize-height={2048} shadow-bias={-0.0001}/><directionalLight position={[-5,3,-4]} intensity={0.7} color="#b8d9f3"/><mesh rotation={[-Math.PI/2,0,0]} position={[0,-2.04,0]} receiveShadow><planeGeometry args={[200,200]}/><shadowMaterial transparent opacity={0.25}/></mesh>
           <RealisticBattery onTerminal={attach} selected={selected}/>

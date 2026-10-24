@@ -1,6 +1,5 @@
-import { Html, Line } from '@react-three/drei'
+import { Html, CatmullRomLine } from '@react-three/drei'
 import type { ThreeEvent } from '@react-three/fiber'
-import { Vector3 } from 'three'
 import type { ProbePlacement } from './simulation/circuit'
 
 export type Probe = 'red' | 'black'
@@ -8,7 +7,7 @@ export const terminals: Record<'positive'|'negative', [number,number,number]> = 
   positive: [-1.08,0.81,0.1], negative: [1.08,0.81,0.1]
 }
 const socket: Record<Probe,[number,number,number]> = {
-  red: [0.74,-1.62,0.22], black: [-0.75,-1.62,0.22]
+  red: [4.05,-0.24,1.04], black: [2.55,-0.24,1.04]
 }
 function Label({ children, position }: {children: string; position: [number,number,number]}) {
   return <Html center position={position} transform distanceFactor={5}><span className="model-label">{children}</span></Html>
@@ -35,7 +34,7 @@ export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal
   </group>
 }
 export function RealisticMeter({ voltage }: {voltage:number}) {
-  return <group position={[0,-1.35,0.15]}>
+  return <group position={[3.30,0,0.83]} rotation={[-0.14,-0.18,0]}>
     <mesh castShadow><boxGeometry args={[2.25,1.12,0.42]}/><meshStandardMaterial color="#dda925" roughness={0.48}/></mesh>
     <mesh position={[0,0.3,0.221]}><planeGeometry args={[1.95,0.4]}/><meshBasicMaterial color="#1b3533"/></mesh>
     <Html center position={[0,0.3,0.23]} transform distanceFactor={5}><span className="meter-face">{voltage.toFixed(2)} V DC</span></Html>
@@ -49,12 +48,12 @@ export function RealisticMeter({ voltage }: {voltage:number}) {
 export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePlacement}) {
   const start=socket[probe]
   const end:[number,number,number]=placement==='disconnected'?
-    [probe==='red'?2.2:-2.2,-1.58,0.6]:terminals[placement]
+    [probe==='red'?5.0:2.1,-0.95,1.6]:terminals[placement]
   const color=probe==='red'?'#e7484f':'#12161b'
-  const bend:[number,number,number]=[(start[0]+end[0])/2,-1.85,0.95]
-  const handLength=new Vector3(...start).distanceTo(new Vector3(...end))
+  const outerX = probe === 'red' ? 5.15 : 2.45
+  const points: [number,number,number][] = [start,[outerX,-0.9,1.6],[outerX,-1.35,2.0],[(outerX+end[0])/2,-1.3,2.2],[end[0],end[1]+0.36,1.2],end]
   return <group>
-    <Line points={[start,[start[0],-1.77,0.85],bend,[end[0],end[1]-0.34,0.75],end]} color={color} lineWidth={4}/>
+    <CatmullRomLine points={points} color={color} lineWidth={5} segments={54}/>
     <mesh position={end} rotation={[Math.PI/2,0,0]} castShadow>
       <cylinderGeometry args={[0.065,0.08,0.38,16]}/><meshStandardMaterial color={color} roughness={0.78}/>
     </mesh>
