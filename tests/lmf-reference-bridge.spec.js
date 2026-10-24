@@ -2,6 +2,7 @@
 const bridge=require('../src/simulation/lmf-reference-bridge');
 const template=require('../data/circuit-templates/12v-starting-system-v2.json');
 const expected=require('./simulators/starting-system-v2-expected-values.json');
+const {createHash}=require('node:crypto');
 describe('LMF headless starting reference bridge',()=>{
  test('healthy crank model reports traceable voltage matching independent fixture',()=>{
   const result=bridge.runLmfStartingReference(template,{modelRef:'/data/circuit-templates/12v-starting-system-v2.json',operatingStateId:'crank',testPointId:'TP_BAT_POS'});
@@ -9,6 +10,15 @@ describe('LMF headless starting reference bridge',()=>{
   expect(result.measurement.unit).toBe('V');
   expect(result.measurement.value).toBeCloseTo(expected.scenarios.find(s=>s.scenarioId==='healthy-crank').testPointVoltagesV.TP_BAT_POS,4);
   expect(result.provenance.solverId).toBe('typescript-mna');
+  expect(result.measurement.measurementId).toMatch(/^lmf:/);
+  expect(result.measurement.location).toBe('TP_BAT_POS');
+  expect(result.measurement.operatingStateId).toBe('crank');
+  expect(result.measurement.sourceRole).toBe('engineering-model-derived');
+  expect(result.measurement.provenance.modelSha256).toBe(createHash('sha256').update(JSON.stringify(template)).digest('hex'));
+  expect(result.measurement.provenance.solverVersion).toBeTruthy();
+  const repeated=bridge.runLmfStartingReference(template,{modelRef:'/data/circuit-templates/12v-starting-system-v2.json',operatingStateId:'crank',testPointId:'TP_BAT_POS'});
+  expect(repeated.measurement.measurementId).toBe(result.measurement.measurementId);
+  expect(Object.isFrozen(result.measurement)).toBe(true);
  });
  test.each([
   ['healthy-crank',null],

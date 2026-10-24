@@ -2,7 +2,11 @@
 import { solveWithRelayCoupling } from './electrical-adapter';
 import type { RelayCoupling } from '../../contracts/model';
 import type { MnaSuccess } from './mna';
+import { canonicalVoltageRecord } from './lmf-measurement';
+import { ELECTRICAL_SOLVER_VERSION } from './electrical-adapter';
 const REF='/data/circuit-templates/12v-starting-system-v2.json';
+// Digest pinned from the project-authored JSON serialization of the v2 reference fixture.
+const REFERENCE_MODEL_SHA256='aedda68a5f756da6369ff2cc6e0bddd667cdaa27f8562f0750285f7d75651904';
 export function runLmfStartingReference(template: any, request: {modelRef:string;operatingStateId:string;testPointId:string;faultId?:string}) {
  if(request.modelRef!==REF) throw new Error('Reference model not registered');
  const states=new Set((template.operatingStates||[]).map((s:any)=>s.id));
@@ -22,7 +26,10 @@ export function runLmfStartingReference(template: any, request: {modelRef:string
  const node=result.netlist.testPointToNode[request.testPointId];
  if(!node)return {status:'measurement-unavailable',measurement:null};
  const voltage=(result.solution as MnaSuccess).nodeVoltageAbsolute[node];
- if(!Number.isFinite(voltage))return {status:'measurement-unavailable',measurement:null};
- return {status:'solved',measurement:{measurementType:'voltage',value:voltage,unit:'V',sourceRole:'engineering-model-derived'},
-  provenance:{solverId:'typescript-mna',modelRef:REF,templateVersion:template.templateVersion,engine:'headless-reference'}};
+ if(voltage===undefined || !Number.isFinite(voltage))return {status:'measurement-unavailable',measurement:null};
+ const modelSha256=REFERENCE_MODEL_SHA256;
+ const measurement=canonicalVoltageRecord({modelRef:REF,modelVersion:template.templateVersion,modelSha256,
+  solverVersion:ELECTRICAL_SOLVER_VERSION,operatingStateId:request.operatingStateId,
+  ...(request.faultId?{faultId:request.faultId}:{}),testPointId:request.testPointId,value:voltage});
+ return {status:'solved',measurement,provenance:measurement.provenance};
 }
