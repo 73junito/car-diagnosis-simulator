@@ -229,6 +229,10 @@ listed under Boundary 2 are not yet covered.
   any unexamined student read path using `authenticated` against them will fail.
 - The classifier controls prove the assertions reject misclassification; they do not prove
   the cases exercise every reachable code path.
+- The residual sequence and routine grants (8 sequence `USAGE`, 4 routine `EXECUTE`) are now
+  enumerated and attributed to specific migrations, but they are still **not remediated**:
+  the manifest and the audit cover tables only, so they sit outside the reviewed privilege
+  set. The enumeration is read-only; no revoke is proposed here.
 - Nothing here exercises a real Supabase deployment, connection pooling, or PostgREST.
 
 ## Deployment gates that are not security findings
