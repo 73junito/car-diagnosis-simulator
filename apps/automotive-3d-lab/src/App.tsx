@@ -11,7 +11,7 @@ export default function App() {
   const result = measure(red,black,fault)
   const attach = (terminal:'positive'|'negative') => selected === 'red' ? setRed(terminal) : setBlack(terminal)
   return <main>
-    <header><small>AUTOLEARNPRO · DOCKER PILOT · MILESTONE B</small><h1>Automotive Circuit Lab</h1><p>Explore DC voltage and probe polarity on a 3D battery and multimeter. Training only; no scored assessment or real vehicle diagnosis.</p></header>
+    <header><small>BRIGHT WORKSHOP THEME ACTIVE · AUTOLEARNPRO · DOCKER PILOT · MILESTONE B</small><h1>Automotive Circuit Lab</h1><p>Explore DC voltage and probe polarity on a 3D battery and multimeter. Training only; no scored assessment or real vehicle diagnosis.</p></header>
     <section className="layout">
       <div className="scene" aria-label="Interactive 3D battery and multimeter; all controls are also available in the adjacent panel">
         <Canvas shadows dpr={[1,1.75]} camera={{position:[4.1,3.5,6.8],fov:47}}>
