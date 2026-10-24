@@ -163,6 +163,33 @@ describe("institution reporting route: runtime authorization", () => {
     expect(mockCalls.some((call) => call.table === "classes")).toBe(false);
   });
 
+  test("never reads cross-institution assessment attempts for a shared learner", async () => {
+    mockTables.institution_memberships = {
+      data: [{ id: "m1", role: "institution_admin", status: "active" }],
+      error: null
+    };
+    mockTables.classes = {
+      data: [{ id: "class-a", name: "A", institution_school_code: "ABCDEF" }],
+      error: null
+    };
+    mockTables.enrollments = {
+      data: [{ class_id: "class-a", user_id: "shared-learner" }],
+      error: null
+    };
+    // The learner could have attempts belonging to another institution.
+    // An attempts lookup by user ID alone would mix those into this report.
+    mockTables.attempts = {
+      data: [{ id: "other-tenant-attempt", user_id: "shared-learner", score: 99, status: "completed" }],
+      error: null
+    };
+
+    const res = await handleInstitutionAdminReport(context({ schoolCode: "ABCDEF" }));
+    expect(res.status).toBe(200);
+    expect(res.body.activity).toBeNull();
+    expect(res.body.classSummaries.every((item) => item.activity === null)).toBe(true);
+    expect(mockCalls.some((call) => call.table === "attempts")).toBe(false);
+  });
+
   test("scopes every downstream query to the caller's own institution", async () => {
     // An array, because the route reads this table twice: `maybeSingle()` for the
     // membership check and a list query for the role counts.
