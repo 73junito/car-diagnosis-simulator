@@ -19,6 +19,7 @@ function writeJson(filePath, value) {
 function normalizeMessage(value) {
   return String(value || '')
     .replace(/\x1b\[[0-9;]*m/g, '')
+    .replace(/\s*\|\s*/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -248,3 +249,27 @@ describe('RALA pilot ingestion preview', () => {
     expect(result.normalizedMessage).toMatch(/retrievable citations/i);
   });
 });
+describe('normalizeMessage', () => {
+  test('keeps a message contiguous when the PowerShell error view wraps it', () => {
+    // PowerShell 7 on Windows renders a terminating error with the DetailedView
+    // gutter, and wraps the message body at the console width. The gutter and the
+    // wrap can split a phrase such as "retrievable citations" across two lines,
+    // which is how a correct script message was read as a mismatch.
+    const detailedView = [
+      'Exception: C:\\repo\\scripts\\rala-pilot-ingestion.ps1:254:7',
+      'Line |',
+      ' 254 |       throw "Pilot question $questionId cites non-retrievable chunk ... "',
+      '     |       ~~~~~',
+      '     | Pilot question q1 cites non-retrievable chunk c1 from',
+      '     | source s1. Metadata/link-only chunks must not be ingested as retrievable',
+      '     | citations.',
+    ].join('\n');
+
+    const normalized = normalizeMessage(detailedView);
+
+    expect(normalized).toMatch(/must not be ingested as retrievable citations\./i);
+    expect(normalized).not.toMatch(/\|/);
+  });
+});
+
+module.exports = { normalizeMessage };
