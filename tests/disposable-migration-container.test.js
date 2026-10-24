@@ -32,6 +32,7 @@ const {
   validate
 } = require("../scripts/validate-migrations-disposable");
 
+/** Container inspect: network none, no mounts, no published ports. */
 const CLEAN_INSPECT = {
   HostConfig: { NetworkMode: "none", Binds: null, PortBindings: {} },
   Mounts: [],
@@ -97,6 +98,10 @@ function happyDocker({ roles = ["anon", "authenticated"], probe = READY_PROBE } 
 
     if (command === "inspect") {
       return inspectResponse(args);
+    }
+
+    if (command === "image") {
+      return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
     }
 
     if (command === "cp" || command === "rm") {
@@ -251,7 +256,7 @@ describe("disposable migration container: isolation assertions", () => {
     }
   });
 
-  test("parses only the isolation-relevant fields", () => {
+  test("parses only the isolation-relevant fields, and never provenance", () => {
     expect(parseIsolation(CLEAN_INSPECT)).toEqual({
       networkMode: "none",
       binds: [],
@@ -259,6 +264,11 @@ describe("disposable migration container: isolation assertions", () => {
       mounts: [],
       imageId: APPROVED_SUPABASE_IMAGE_DIGEST
     });
+    // A container inspect carries no RepoDigests key at all, so provenance must
+    // never be read from here. Reading it here is exactly the defect that made the
+    // hosted run fail closed, and this asserts it cannot come back.
+    expect(parseIsolation(CLEAN_INSPECT).repoDigests).toBeUndefined();
+    expect(parseIsolation({ ...CLEAN_INSPECT, RepoDigests: ["ghcr.io/x@sha256:00"] }).repoDigests).toBeUndefined();
     expect(parseIsolation(undefined).networkMode).toBeNull();
   });
 });
@@ -572,6 +582,10 @@ describe("disposable migration container: end-to-end orchestration", () => {
         });
       }
 
+      if (args[0] === "image") {
+        return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
+      }
+
       return { exitCode: 0, stdout: "", stderr: "" };
     });
 
@@ -638,6 +652,10 @@ describe("disposable migration container: end-to-end orchestration", () => {
         return inspectResponse(args);
       }
 
+      if (args[0] === "image") {
+        return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
+      }
+
       if (args[0] === "exec") {
         const inline = args[args.indexOf("-c") + 1] || "";
 
@@ -669,6 +687,10 @@ describe("disposable migration container: end-to-end orchestration", () => {
 
       if (args[0] === "inspect") {
         return inspectResponse(args);
+      }
+
+      if (args[0] === "image") {
+        return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
       }
 
       if (args[0] === "exec") {
@@ -861,6 +883,10 @@ describe("disposable migration container: platform-equivalent role", () => {
 
       if (args[0] === "inspect") {
         return inspectResponse(args);
+      }
+
+      if (args[0] === "image") {
+        return { exitCode: 0, stdout: JSON.stringify([CLEAN_IMAGE_INSPECT]), stderr: "" };
       }
 
       if (args[0] === "exec") {

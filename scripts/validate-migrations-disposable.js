@@ -252,7 +252,7 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
       return { ok: false, reason: "isolation-violated", steps, evidence };
     }
 
-    record("isolation", true, "network none, no mounts, no published ports, approved digest");
+    record("isolation", true, "network none, no mounts, no published ports, approved repository and digest provenance");
 
     // Wait for complete initialisation. `pg_isready` is explicitly not enough:
     // the entrypoint starts the server, shuts it down and starts it again, so
