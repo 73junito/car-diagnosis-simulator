@@ -26,6 +26,11 @@ export default function App() {
       <div className="panel">
         <h2>Digital multimeter</h2><output aria-live="polite">{result.voltage.toFixed(2)} V DC</output>
         <p className="status" role="status">{result.status}</p>
+        <section className="meter-ratings" aria-label="Illustrative multimeter specifications">
+          <h3>DMM-01 · Training instrument ratings</h3>
+          <dl><dt>DC voltage range</dt><dd>0–20 V</dd><dt>Display resolution</dt><dd>0.01 V</dd><dt>Nominal input impedance</dt><dd>10 MΩ</dd><dt>Measurement mode</dt><dd>DC voltage only</dd></dl>
+          <p>Illustrative specifications. No CAT rating or safety certification; not for real electrical testing.</p>
+        </section>
         <fieldset><legend>Probe to place by clicking a terminal</legend>
           <label className="radio"><input type="radio" name="selected" checked={selected==='red'} onChange={()=>setSelected('red')}/> Red probe</label>
           <label className="radio"><input type="radio" name="selected" checked={selected==='black'} onChange={()=>setSelected('black')}/> Black probe</label>

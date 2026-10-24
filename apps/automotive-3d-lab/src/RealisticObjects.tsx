@@ -72,7 +72,7 @@ export function RealisticMeter({ voltage }: {voltage:number}) {
     <mesh castShadow><boxGeometry args={[2.25,1.12,0.42]}/><meshStandardMaterial color="#dda925" roughness={0.48}/></mesh>
     <mesh position={[0,0.3,0.221]}><planeGeometry args={[1.95,0.4]}/><meshBasicMaterial color="#1b3533"/></mesh>
     <Html center position={[0,0.3,0.23]} transform distanceFactor={5}><span className="meter-face">{voltage.toFixed(2)} V DC</span></Html>
-    <Label position={[0,0.57,0.25]}>DIGITAL MULTIMETER</Label>
+    <Html center position={[0,-0.89,0.255]}><div className="meter-model-rating" aria-label="Illustrative training meter, DC voltage zero to 20 volts, 0.01 volt display resolution, 10 megaohm nominal input impedance. Not safety certified.">DCV 0–20 V · 0.01 V RES<br/>10 MΩ INPUT · TRAINING ONLY</div></Html>
     <mesh position={[0,-0.2,0.245]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.23,0.23,0.09,32]}/><meshStandardMaterial color="#2d3439" roughness={0.53}/></mesh>
     {([-0.75,0.74] as const).map((x,i)=><group key={x} position={[x,-0.34,0.226]}>
       <mesh rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.125,0.125,0.06,24]}/><meshStandardMaterial color={i?'#c93645':'#242b32'}/></mesh>

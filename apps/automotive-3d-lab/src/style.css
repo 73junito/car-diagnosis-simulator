@@ -7,3 +7,12 @@
 .battery-spec__main small{font-size:16px}
 .battery-spec__grid{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:3px;font-size:13px;font-weight:900;white-space:nowrap;text-align:center;border-top:2px solid #63788b;padding-top:7px}
 .battery-spec__foot{font-size:8px;text-align:center;font-weight:700;letter-spacing:.02em;margin-top:8px;color:#576a75}
+
+.meter-model-title{background:#182c39;color:#f4fcff;border-radius:3px;padding:3px 7px;font:800 12px/1.2 Arial,sans-serif;letter-spacing:.055em;white-space:nowrap;pointer-events:none}
+.meter-model-rating{background:#fff1c1;color:#152f3c;border:1px solid #775e13;border-radius:3px;padding:3px 6px;text-align:center;font:800 10px/1.3 Arial,sans-serif;white-space:nowrap;pointer-events:none}
+.meter-ratings{background:#f7f9fc;border:1px solid #c8d9e7;border-radius:10px;padding:13px 15px;margin:14px 0 17px}
+.meter-ratings h3{font-size:.88rem;color:#244358;margin:0 0 8px}
+.meter-ratings dl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-size:.83rem}
+.meter-ratings dt{color:#526e80}
+.meter-ratings dd{margin:0;color:#17334a;font-weight:750;text-align:right}
+.meter-ratings p{margin:9px 0 0;font-size:.75rem;color:#76511a}
