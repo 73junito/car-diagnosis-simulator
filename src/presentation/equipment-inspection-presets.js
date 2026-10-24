@@ -39,5 +39,11 @@
       buttons.push(button);
     }
   }
-  global.AutoLearnProEquipmentInspection = Object.freeze({ presets, apply, mount });
+  function reset(container) {
+    if (!container) return;
+    container.querySelectorAll("button[data-inspection-view]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.inspectionView === "overview"));
+    });
+  }
+  global.AutoLearnProEquipmentInspection = Object.freeze({ presets, apply, mount, reset });
 })(typeof window === "undefined" ? globalThis : window);

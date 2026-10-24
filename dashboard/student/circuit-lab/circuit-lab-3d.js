@@ -91,6 +91,7 @@
     role.textContent = describeRole(asset);
     try {
       await viewer.load(asset.url, asset.title);
+      if (inspection && !inspection.hidden) window.AutoLearnProEquipmentInspection?.reset(inspection);
     } catch (error) {
       status.textContent = "Unable to render " + asset.title + ": " + error.message + ". Circuit Lab engineering behavior is unchanged.";
       status.dataset.state = "unavailable";
