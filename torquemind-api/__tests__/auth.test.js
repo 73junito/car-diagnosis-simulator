@@ -52,7 +52,7 @@ describe('auth middleware', () => {
 
   beforeEach(() => {
     next = jest.fn();
-    jest.clearAllMocks();
+    jest.resetAllMocks();
     // Default: createClient returns a no-op authed client
     createClient.mockReturnValue(makeAuthedClient());
   });
