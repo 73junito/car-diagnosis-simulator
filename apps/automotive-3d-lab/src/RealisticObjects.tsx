@@ -10,7 +10,7 @@ const socket: Record<Probe,[number,number,number]> = {
   red: [3.15,-0.34,0.30], black: [1.65,-0.34,0.30]
 }
 function Label({ children, position }: {children: string; position: [number,number,number]}) {
-  return <Html center position={position} transform distanceFactor={5}><span className="model-label">{children}</span></Html>
+  return <Html center position={position}><span className="model-label">{children}</span></Html>
 }
 export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal:'positive'|'negative')=>void; selected:Probe}) {
   return <group position={[-2,0,0]}>
@@ -18,7 +18,7 @@ export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal
     <mesh position={[0,0.66,0]} castShadow><boxGeometry args={[3.16,0.17,1.54]}/><meshStandardMaterial color="#313c44" roughness={0.55}/></mesh>
     <mesh position={[0,-0.07,0.797]}><planeGeometry args={[2.72,0.84]}/><meshStandardMaterial color="#e9ecdf" roughness={0.9}/></mesh>
     <mesh position={[0,0.42,0.804]}><planeGeometry args={[2.72,0.14]}/><meshStandardMaterial color="#bf2939"/></mesh>
-    <Label position={[0,-0.08,0.83]}>AUTOLEARNPRO • 12 V TRAINING BATTERY</Label>
+    <Label position={[0,-0.08,0.83]}>AUTOLEARNPRO | 12 V BATTERY</Label>
     <mesh position={[0,0.77,-0.42]}><boxGeometry args={[1.3,0.11,0.27]}/><meshStandardMaterial color="#20292f"/></mesh>
     {(['positive','negative'] as const).map(terminal => {
       const positive=terminal==='positive'
@@ -49,11 +49,11 @@ export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePla
   const start=socket[probe]
   const end:[number,number,number]=placement==='disconnected'?
     [probe==='red'?4.3:1.0,-1.05,1.8]:terminals[placement]
-  const color=probe==='red'?'#e7484f':'#12161b'
+  const color=probe==='red'?'#d63644':'#222c34'
   const outerX = probe === 'red' ? 3.35 : 1.35
   const points: [number,number,number][] = [start,[outerX,-0.95,0.65],[outerX,-1.28,1.65],[(outerX+end[0])/2,-1.18,2.05],[end[0],end[1]+0.25,1.2],end]
   return <group>
-    <CatmullRomLine points={points} color={color} lineWidth={5} segments={54}/>
+    <CatmullRomLine points={points} color={color} lineWidth={6} segments={64}/><CatmullRomLine points={points} color={probe==='red'?'#ff7881':'#526170'} lineWidth={1.15} segments={64}/>
     <mesh position={end} rotation={[Math.PI/2,0,0]} castShadow>
       <cylinderGeometry args={[0.065,0.08,0.38,16]}/><meshStandardMaterial color={color} roughness={0.78}/>
     </mesh>
