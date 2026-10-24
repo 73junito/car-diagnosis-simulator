@@ -142,7 +142,21 @@ function assertDisposableContainerName(name, { prefix = DISPOSABLE_NAME_PREFIX }
   return null;
 }
 
-/** Extract the isolation-relevant fields from `docker inspect` output. */
+/** A sha256 image id, as Docker reports it. */
+const IMAGE_ID_PATTERN = /^sha256:[0-9a-f]{64}$/;
+
+/** The only accepted `RepoDigests` shape: an explicit repository and digest. */
+const REPO_DIGEST_PATTERN = /^([A-Za-z0-9][A-Za-z0-9._:/-]*)@(sha256:[0-9a-f]{64})$/;
+
+/**
+ * Extract the isolation-relevant fields from a **container** `docker inspect`.
+ *
+ * A container inspect carries no `RepoDigests` key at all - only images do - so
+ * provenance is deliberately absent here. Reading it from a container silently
+ * produced an empty list and disabled the manifest-list fallback it was meant to
+ * provide, which is what made the hosted run fail with `isolation-violated`.
+ * `parseImageProvenance` reads the real metadata instead.
+ */
 function parseIsolation(inspect) {
   const host = (inspect && inspect.HostConfig) || {};
 
@@ -225,6 +239,12 @@ function imageProvenanceViolations({
 /**
  * Assert the container is genuinely disposable and isolated. Returns a list of
  * violations; an empty list means the container is safe to use.
+ *
+ * Provenance is proven from `docker image inspect` of the container's own
+ * immutable image id, never from the container inspect. `inspect.Image` is the
+ * local *configuration* id, which differs from the pinned digest whenever the
+ * reference resolves to a platform-specific image, so the two must never be
+ * compared directly.
  */
 function isolationViolations({
   name,
