@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0.0",
+  "publicationRights": "unverified_no_bulk_reproduction",
+  "documents": [
+    {
+      "id": "oemy-obd2",
+      "filename": "obd ii codes.pdf",
+      "title": "OBD II Diagnostic Trouble Codes",
+      "compiler": "Oemy's UltraPower Performance",
+      "pages": 21,
+      "protocol": "OBD_II",
+      "scope": "general powertrain DTC reference",
+      "license": "not_verified",
+      "authority": "secondary_compilation",
+      "decision": "reference_only"
+    },
+    {
+      "id": "obdcodex-oem-obd2",
+      "filename": "All Manufacturer-specific OBD2 Codes List.pdf",
+      "title": "All Manufacturer-specific OBD2 Codes List",
+      "compiler": "OBDCodeX",
+      "pages": 690,
+      "protocol": "OBD_II",
+      "scope": "manufacturer-specific definitions across makes",
+      "license": "not_verified",
+      "authority": "secondary_compilation",
+      "decision": "reference_only"
+    },
+    {
+      "id": "obdcodex-ford-obd1",
+      "filename": "ford-obd1-codes-list.pdf",
+      "title": "Ford OBD1 Trouble Codes List",
+      "compiler": "OBDCodeX",
+      "pages": 27,
+      "protocol": "OBD_I",
+      "manufacturer": "Ford",
+      "scope": "two- and three-digit code listings; repeated code numbers with different meanings",
+      "license": "not_verified",
+      "authority": "secondary_compilation",
+      "decision": "reference_only"
+    },
+    {
+      "id": "obdcodex-gm-obd1",
+      "filename": "gm-obd1-codes-list.pdf",
+      "title": "GM OBD1 Trouble Codes List",
+      "compiler": "OBDCodeX",
+      "pages": 7,
+      "protocol": "OBD_I",
+      "manufacturer": "GM",
+      "scope": "code, definition and cause columns",
+      "license": "not_verified",
+      "authority": "secondary_compilation",
+      "decision": "reference_only"
+    }
+  ],
+  "importPolicy": {
+    "requiresPermission": true,
+    "requiresIndependentTechnicalVerification": true,
+    "requiresVehicleApplicability": true,
+    "requiresCitedPage": true,
+    "defaultMode": "review_only",
+    "productionWritesAllowed": false
+  }
+}

@@ -29,7 +29,7 @@ jobs:
           node --version
           npm --version
           echo "::endgroup::"
-          # Capture installer lifecycle output and fail deterministically rather than hanging for an hour.
+          # Keep dependency lifecycle scripts enabled; enforce bounded install and diagnostics consistently with PR #1084.
           timeout --signal=TERM --kill-after=20s 12m npm ci --foreground-scripts --loglevel=info
           status=$?
           if [ "$status" -ne 0 ]; then
