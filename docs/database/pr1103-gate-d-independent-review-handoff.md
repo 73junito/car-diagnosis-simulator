@@ -47,6 +47,24 @@ pinned digest is a manifest list. The harness therefore requires the running ima
 the image the approved digest resolves to, corroborated by the digest metadata the image
 store records, and fails closed when neither can be established.
 
+Two independent implementations of that correction reached this branch: one keyed on
+`RepoDigests` alone (approved repository plus digest) and one correlating the inspected
+image id with the image the approved digest resolves to. The retained form is the second,
+deliberately. A `RepoDigests`-only rule requires the image store to record the approved
+repository and digest, which does not hold on a workstation single-platform pull, where the
+recorded digest is the platform configuration id rather than the pinned manifest digest.
+The retained proof does not depend on the image store recording digest metadata at all.
+
+The last failing CI job on this branch, `tests/ci-postgres-service-image.test.js`, was not
+a live defect. The repository digest-policy verifier requires the pinned digest on every
+non-comment workflow line containing the Supabase image marker, and the GHCR auth
+diagnostic needs a grep pattern to find the approved reference in another workflow; written
+as a single literal, that pattern reads as an unpinned reference. `main` already carries the
+correction (`f2bffeee`, #1114), which assembles the pattern from parts so the effective ERE
+is byte-identical, carves no exemption into the policy, and leaves the validator untouched.
+This branch was three commits behind `main` and did not contain it; merging `main` resolved
+the failure. The verifier now exits 0 here.
+
 ## Boundary 1 — direct grants and RLS
 
 **Established.** All 12 institution and tenant tables carry `anon=[]` and `authenticated=[]`.
