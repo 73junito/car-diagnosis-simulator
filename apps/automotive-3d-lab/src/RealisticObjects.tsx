@@ -156,10 +156,30 @@ export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePla
       <torusGeometry args={[0.101,0.012,8,20]}/><meshStandardMaterial color={probe==='red'?'#b52b35':'#4b555d'}/>
     </mesh>)}
     <mesh position={[end[0],end[1]+0.21,end[2]]}><coneGeometry args={[0.045,0.22,12]}/><meshStandardMaterial color="#bfc9d1" metalness={0.85} roughness={0.2}/></mesh>
-    {placement!=='disconnected' && <group position={[end[0],end[1]+0.09,end[2]]}>
-      <mesh position={[0,0.06,0]}><boxGeometry args={[0.26,0.12,0.19]}/><meshStandardMaterial color={color} metalness={0.16} roughness={0.63}/></mesh>
-      <mesh position={[0,0.15,0.02]} rotation={[0,0,0.26]}><boxGeometry args={[0.30,0.075,0.13]}/><meshStandardMaterial color="#b9c6cf" metalness={0.8} roughness={0.24}/></mesh>
-      <mesh position={[0,-0.06,-0.02]} rotation={[0,0,-0.26]}><boxGeometry args={[0.30,0.075,0.13]}/><meshStandardMaterial color="#b9c6cf" metalness={0.8} roughness={0.24}/></mesh>
+    {placement!=='disconnected' && <group position={[end[0],end[1]+0.08,end[2]]}>
+      {/* A sprung training clamp. The clamp is visual only; terminal placement
+          remains controlled by the existing simulation state. */}
+      <mesh position={[0,-0.16,-0.05]} castShadow>
+        <cylinderGeometry args={[0.13,0.09,0.40,24]}/>
+        <meshStandardMaterial color={color} roughness={0.83}/>
+      </mesh>
+      {[-0.24,-0.18,-0.12].map(y=><mesh key={y} position={[0,y,-0.06]}>
+        <torusGeometry args={[0.132,0.014,8,24]}/>
+        <meshStandardMaterial color={probe==='red'?'#a82c3d':'#4c545c'} roughness={0.65}/>
+      </mesh>)}
+      <mesh position={[0,0.03,0.01]} rotation={[0,0,Math.PI/2]} castShadow>
+        <cylinderGeometry args={[0.065,0.065,0.25,16]}/>
+        <meshStandardMaterial color="#788893" metalness={0.67} roughness={0.3}/>
+      </mesh>
+      {([-1,1] as const).map(side=><group key={side} position={[side*0.105,0.13,0.03]} rotation={[0,0,side*0.18]}>
+        <mesh castShadow><boxGeometry args={[0.065,0.32,0.16]}/>
+          <meshStandardMaterial color="#bac5ca" metalness={0.85} roughness={0.26}/>
+        </mesh>
+        {[-0.09,0,0.09].map(y=><mesh key={y} position={[side*-0.037,y,0.012]}>
+          <boxGeometry args={[0.022,0.032,0.125]}/>
+          <meshStandardMaterial color="#697981" metalness={0.72} roughness={0.34}/>
+        </mesh>)}
+      </group>)}
     </group>}
   </group>
 }
