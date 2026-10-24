@@ -23,6 +23,10 @@ const APPROVED_SUPABASE_IMAGE_REPOSITORY = "ghcr.io/supabase/postgres";
 const APPROVED_SUPABASE_IMAGE_TAG = "17.6.1.167";
 const APPROVED_SUPABASE_IMAGE =
   `${APPROVED_SUPABASE_IMAGE_REPOSITORY}:${APPROVED_SUPABASE_IMAGE_TAG}@${APPROVED_SUPABASE_IMAGE_DIGEST}`;
+// The same reference without the tag. It is the form an image store records in
+// `RepoDigests`, so the approved image can be inspected by digest alone.
+const APPROVED_SUPABASE_IMAGE_BY_DIGEST =
+  `${APPROVED_SUPABASE_IMAGE_REPOSITORY}@${APPROVED_SUPABASE_IMAGE_DIGEST}`;
 
 /**
  * The schemas the image's own initialisation must have created. Exactly eight
@@ -142,21 +146,93 @@ function assertDisposableContainerName(name, { prefix = DISPOSABLE_NAME_PREFIX }
 function parseIsolation(inspect) {
   const host = (inspect && inspect.HostConfig) || {};
 
+  // `RepoDigests` is deliberately absent: it is an image-level field, so a
+  // container inspection never carries it. Reading it from a container
+  // inspection is what made the provenance check look like it worked while
+  // always comparing an empty list.
   return {
     networkMode: host.NetworkMode || null,
     binds: Array.isArray(host.Binds) ? host.Binds : [],
     portBindings: host.PortBindings || {},
     mounts: Array.isArray(inspect && inspect.Mounts) ? inspect.Mounts : [],
-    imageId: (inspect && inspect.Image) || null,
-    repoDigests: Array.isArray(inspect && inspect.RepoDigests) ? inspect.RepoDigests : []
+    imageId: (inspect && inspect.Image) || null
   };
+}
+
+/**
+ * Establish image provenance for the image a container is running.
+ *
+ * `docker inspect <container>` reports the image *configuration* id and no
+ * digest metadata at all: `RepoDigests` belongs to the image, not to the
+ * container. The configuration id is also not the pinned digest whenever the
+ * pinned digest is a multi-platform manifest list, because each platform has
+ * its own configuration.
+ *
+ * Provenance is therefore taken from `docker image inspect <image id>`, and
+ * proven to describe the running image by requiring the inspected image id to
+ * equal the container's image id. Missing metadata, an unreadable inspection,
+ * an inspected image that is not the running one, and a digest naming
+ * anything other than the approved one all fail closed.
+ */
+function imageProvenanceViolations({
+  imageInspect,
+  containerImageId,
+  approvedImageId = null,
+  expectedDigest = APPROVED_SUPABASE_IMAGE_DIGEST
+}) {
+  const violations = [];
+
+  if (!imageInspect || typeof imageInspect !== "object") {
+    violations.push(
+      "Image provenance could not be established: docker image inspect returned no metadata " +
+        `for the running image "${containerImageId}".`
+    );
+
+    return violations;
+  }
+
+  const inspectedId = imageInspect.Id || null;
+
+  if (!inspectedId) {
+    violations.push("Image provenance could not be established: the inspected image has no Id.");
+  } else if (inspectedId !== containerImageId) {
+    violations.push(
+      `The inspected image "${inspectedId}" is not the image running in the container "${containerImageId}".`
+    );
+  }
+
+  const repoDigests = Array.isArray(imageInspect.RepoDigests) ? imageInspect.RepoDigests : [];
+  const approvedByRepoDigest = repoDigests.some((entry) => String(entry).endsWith(`@${expectedDigest}`));
+  // A single-platform image whose configuration id *is* the approved digest is
+  // the approved content by construction, so it needs no digest metadata.
+  const approvedById = containerImageId === expectedDigest;
+  // The strongest proof, and the one that does not depend on the image store
+  // recording any digest metadata at all: the running image is the very image
+  // the approved digest resolves to on this platform.
+  const approvedByImageId = Boolean(approvedImageId) && approvedImageId === containerImageId;
+
+  if (!approvedByRepoDigest && !approvedById && !approvedByImageId) {
+    violations.push(
+      `Image must originate from the approved digest ${expectedDigest}; ` +
+        `found id "${containerImageId}" with RepoDigests ${JSON.stringify(repoDigests)} ` +
+        `and approved image id "${approvedImageId}".`
+    );
+  }
+
+  return violations;
 }
 
 /**
  * Assert the container is genuinely disposable and isolated. Returns a list of
  * violations; an empty list means the container is safe to use.
  */
-function isolationViolations({ name, inspect, expectedDigest = APPROVED_SUPABASE_IMAGE_DIGEST }) {
+function isolationViolations({
+  name,
+  inspect,
+  imageInspect,
+  approvedImageId = null,
+  expectedDigest = APPROVED_SUPABASE_IMAGE_DIGEST
+}) {
   const violations = [];
   const nameError = assertDisposableContainerName(name);
 
@@ -182,23 +258,18 @@ function isolationViolations({ name, inspect, expectedDigest = APPROVED_SUPABASE
     violations.push("Published database ports are forbidden; a port binding was found.");
   }
 
-  // Image identity. `inspect.Image` is the local image *configuration* id, which
-  // is not stable when a reference digest resolves to a platform-specific image:
-  // a manifest-list digest and the local config id differ. `RepoDigests` records
-  // the digest the image was actually pulled by, so identity is proven by
-  // requiring the approved digest in either field. A tag-only pull, an
-  // unapproved digest, or missing digest metadata all still fail.
-  const approvedById = isolation.imageId === expectedDigest;
-  const approvedByRepoDigest = isolation.repoDigests.some((entry) =>
-    String(entry).endsWith(`@${expectedDigest}`)
+  // Image identity. A container inspection cannot establish it on its own: it
+  // carries no digest metadata and its image id is the platform configuration
+  // id, not the pinned digest. It is delegated to the image inspection, and
+  // the two are correlated by image id.
+  violations.push(
+    ...imageProvenanceViolations({
+      imageInspect,
+      containerImageId: isolation.imageId,
+      approvedImageId,
+      expectedDigest
+    })
   );
-
-  if (!approvedById && !approvedByRepoDigest) {
-    violations.push(
-      `Image must originate from the approved digest ${expectedDigest}; ` +
-        `found id "${isolation.imageId}" with RepoDigests ${JSON.stringify(isolation.repoDigests)}.`
-    );
-  }
 
   return violations;
 }
@@ -403,6 +474,7 @@ function classifyRoleEquivalence({ exitCode, stdout = "", expectedRole = PLATFOR
 
 module.exports = {
   APPROVED_SUPABASE_IMAGE,
+  APPROVED_SUPABASE_IMAGE_BY_DIGEST,
   APPROVED_SUPABASE_IMAGE_DIGEST,
   APPROVED_SUPABASE_IMAGE_REPOSITORY,
   APPROVED_SUPABASE_IMAGE_TAG,
@@ -422,6 +494,7 @@ module.exports = {
   classifyRoleEquivalence,
   assertDisposableContainerName,
   parseIsolation,
+  imageProvenanceViolations,
   isolationViolations,
   classifyInitialisation
 };
