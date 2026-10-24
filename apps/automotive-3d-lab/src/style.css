@@ -37,3 +37,15 @@
 .inspection-nav button:hover:not([aria-pressed="true"]){background:#e6f3fc}
 .inspection-nav button:focus-visible{outline:3px solid #ec9c26;outline-offset:3px}
 @media(max-width:520px){.inspection-nav button{flex:1 1 43%;font-size:.76rem}}
+
+.production-pathways{margin:24px 0 30px;padding:22px;background:#f7fbff;border:1px solid #bfd7e8;border-radius:14px;color:#18344a}
+.production-pathways h2{margin:0 0 8px}
+.production-pathways>p{max-width:80ch;line-height:1.6}
+.production-pathway-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,255px),1fr));gap:12px;margin-top:14px}
+.production-pathway{background:#fff;border:1px solid #d4e2ec;border-radius:10px;padding:15px;min-width:0}
+.production-pathway h3{font-size:1rem;margin:0 0 8px}
+.production-pathway a{color:#145e91}
+.production-pathway a:focus-visible{outline:3px solid #e6a13a;outline-offset:3px}
+.production-pathway p{font-size:.8rem;line-height:1.5}
+.pathway-phase{font-weight:750;color:#315e7b}
+.pathway-boundary{color:#526778}

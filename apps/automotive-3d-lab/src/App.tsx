@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { measure, type Fault, type ProbePlacement } from './simulation/circuit'
 import type { Probe } from './RealisticObjects'
 import type { InspectionView } from './WorkshopScene'
+import { productionLabs, productionLabUrl } from './productionLabBridge'
 const WorkshopScene = lazy(() => import('./WorkshopScene'))
 export default function App() {
   const [red,setRed] = useState<ProbePlacement>('positive')
@@ -66,6 +67,18 @@ export default function App() {
         <label>Training condition<select value={fault} onChange={e=>setFault(e.target.value as Fault)}><option value="healthy">Healthy reference battery (12.6 V)</option><option value="discharged">Discharged battery (10.5 V)</option><option value="open">Open-circuit training fault (0 V)</option><option value="resistance">Simulated load / voltage drop (11.8 V)</option></select></label>
         <button className="reset" onClick={()=>{setRed('positive');setBlack('negative');setFault('healthy');setSelected('red')}}>Reset lab</button>
         <p className="note">Use the dropdowns as a keyboard-accessible alternative to clicking the 3D terminals. Values are deliberately simplified presets; an open circuit in a real system does not universally imply zero volts.</p>
+      </div>
+    </section>
+    <section className="production-pathways" aria-labelledby="production-pathways-title">
+      <h2 id="production-pathways-title">Continue in the production laboratories</h2>
+      <p>Practice instrument identification and DC polarity here, then explore a governed production lab. These are separate experiences: this pilot does not send measurements, assessment decisions, or learner progress to production.</p>
+      <div className="production-pathway-grid">
+        {productionLabs.map(lab => <article key={lab.id} className="production-pathway">
+          <h3><a href={productionLabUrl(lab.path)} target="_blank" rel="noopener noreferrer">{lab.title} <span aria-hidden="true">↗</span></a></h3>
+          <p className="pathway-phase">{lab.integrationPhase === 'first' ? 'First integration candidate' : lab.integrationPhase === 'next' ? 'Next-stage integration' : 'Advanced / governed integration'}</p>
+          <p><strong>Reusable equipment:</strong> {lab.sharedEquipment.length ? lab.sharedEquipment.join(', ') : 'Conceptual learning bridge'}</p>
+          <p className="pathway-boundary">{lab.boundary}</p>
+        </article>)}
       </div>
     </section>
   </main>
