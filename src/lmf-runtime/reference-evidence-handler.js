@@ -7,7 +7,7 @@ function createReferenceEvidenceHandler({store}){
   res.setHeader("Cache-Control","no-store");
   if(req.method!=="POST")return res.status(405).json({ok:false,error:"method_not_allowed"});
   const header=req.headers?.authorization;
-  const match=typeof header==="string"&&/^Bearer ([^\\s]+)$/i.exec(header);
+  const match=typeof header==="string"&&/^Bearer ([^\s]+)$/i.exec(header);
   if(!match)return res.status(401).json({ok:false,error:"authentication_required"});
   const body=req.body;
   if(!body||typeof body!=="object"||Array.isArray(body)||!body.sessionId||!body.request||

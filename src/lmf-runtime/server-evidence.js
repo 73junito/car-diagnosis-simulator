@@ -20,7 +20,7 @@ function signEnvelope({actor,record,key,previousHash=null}){
  if(previousHash!==null&&!/^[a-f0-9]{64}$/.test(previousHash))throw Error("Invalid prior hash");
  if(!record||record.evidenceRole!=="training-reference-only")throw Error("Unapproved evidence");
  const body={schemaVersion:"1.0.0",actor,previousHash,record};
- const canonical=JSON.stringify(body);
+ const canonical=JSON.stringify(body,(_key,value)=>value&&typeof value==='object'&&!Array.isArray(value)?Object.fromEntries(Object.keys(value).sort().map(k=>[k,value[k]])):value);
  const hash=crypto.createHash("sha256").update(canonical).digest("hex");
  const signature=crypto.createHmac("sha256",key).update(hash).digest("hex");
  return {body,hash,signature};

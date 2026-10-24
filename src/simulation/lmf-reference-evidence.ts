@@ -19,6 +19,7 @@ export function replayReferenceEvidence(template:unknown,evidence:ReferenceEvide
  if(!evidence.request||!evidence.outcome)throw Error('Incomplete evidence');
  const current=runLmfStartingReference(template,snapshot(evidence.request));
  // Compare all recorded outcome fields, including refusal and solver/model provenance.
- const matches=JSON.stringify(current)===JSON.stringify(evidence.outcome);
+ const canonical=(input:unknown)=>JSON.stringify(input,(_key,value)=>value&&typeof value==='object'&&!Array.isArray(value)?Object.fromEntries(Object.keys(value).sort().map(k=>[k,value[k]])):value);
+ const matches=canonical(current)===canonical(evidence.outcome);
  return Object.freeze({status:matches?'matched':'mismatch',matches,expected:snapshot(evidence.outcome),actual:snapshot(current)});
 }
