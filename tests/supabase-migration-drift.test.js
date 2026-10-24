@@ -57,10 +57,24 @@ describe('Supabase migration drift detector', () => {
   test('repository contains no migration bloat after reconciliation', () => {
     const result = canonicalRepositoryMigrations('WORKTREE')
     expect(result.ignoredBloat).toEqual([])
-    expect(result.migrations).toHaveLength(106)
+
+    // Derived from the reviewed integrity baseline rather than a hard-coded
+    // count. Adding a canonical migration must keep the baseline and the
+    // discovered set in agreement instead of breaking a literal; duplicate
+    // detection is preserved by the Set comparison below.
+    const baseline = JSON.parse(fs.readFileSync(path.join(
+      path.resolve('.'),
+      'docs/database/migration-integrity-baseline.json'
+    ), 'utf8'))
+    const baselinedVersions = baseline.migrations.map((entry) => entry.version)
+
+    expect(baseline.canonicalDirectory).toBe('supabase/migrations')
+    expect(baselinedVersions.length).toBeGreaterThan(0)
+    expect(result.migrations).toHaveLength(baselinedVersions.length)
 
     const versions = result.migrations.map((m) => m.version)
-    expect(new Set(versions).size).toBe(106)
+    expect(new Set(versions).size).toBe(baselinedVersions.length)
+    expect([...versions].sort()).toEqual([...baselinedVersions].sort())
     expect(versions).toContain('20260930210756')
     expect(versions).toContain('20261011220034')
     expect(versions).toContain('20261012031851')

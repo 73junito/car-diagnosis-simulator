@@ -7,7 +7,7 @@ Status: Phase 2A (local, uncommitted). No database was contacted for this record
 | Path | Role | Evidence |
 | --- | --- | --- |
 | `supabase/migrations/` | **Canonical** sequence for Supabase-managed application schema (106 files, `20260710204828` to `20261013190000`) | `db/migrations/MIGRATION-FLOW.md` documents committing to `supabase/migrations/`; `docs/phase-4-functional-gap-roadmap.md` states the legacy surface is superseded by canonical Supabase migrations; `.github/workflows/supabase-migration-drift.yml` compares this history with staging and production; `.github/workflows/staging-taxonomy-deployment-preflight.yml` asserts the specific canonical file before any staging action |
-| `db/migrations/` | **Legacy / historical** (6 SQL files plus `MIGRATION-FLOW.md`) | Applied only by `.github/workflows/apply-migrations.yml` into a disposable `postgres:14` service; no staging or production target is configured for it; `docs/phase-4-functional-gap-roadmap.md` marks the surface historical |
+| `db/migrations/` | **Legacy / historical** (6 SQL files plus `MIGRATION-FLOW.md`) | Retained for history. It is **no longer applied by any workflow**: `apply-migrations.yml` was re-targeted at the canonical chain (see section 3). New schema changes belong in `supabase/migrations/` only |
 
 Ownership statements:
 
@@ -32,7 +32,48 @@ Consequences:
 
 - Any disposable runtime must supply the platform roles, the preinstalled extension catalogue **and** permission for migrations to create extensions. A pinned `supabase/postgres:17.*` image (or a pinned Supabase CLI local stack) is required; a vanilla image must not be assumed sufficient.
 - Extension state is part of schema parity: Phase 2B must compare `pg_extension` alongside relations, policies, constraints, indexes, triggers and functions.
-- `.github/workflows/apply-migrations.yml` still uses `postgres:14` for the legacy `db/migrations/` set. That mismatch is recorded here as a known hazard and is **not** changed in this phase; any future work on that workflow must move it to the Supabase-compatible runtime or retire it deliberately.
+- **Resolved.** `.github/workflows/apply-migrations.yml` no longer uses `postgres:14`. The migration-validation job now runs `scripts/validate-migrations-disposable.js`, which starts the digest-pinned `ghcr.io/supabase/postgres:17.6.1.167@sha256:6942962433a569e87f228b4d4ab7e11db5deca64e43babb3a038443ad6c4f1bb` image with `--network none`, no published port and no host mount, waits for complete initialisation (the entrypoint cycles the server, so the probe runs over TCP and the postmaster start time must repeat), creates the documented **empty** `supabase_migrations.schema_migrations` relation, applies `supabase/migrations` with `psql -v ON_ERROR_STOP=1`, then evaluates the table access policy against `docs/database/table-access-policy.json`. Migration history is never written and the container is removed afterwards. The legacy `db/migrations/` set is no longer applied by any workflow.
+
+## 3.1 Table access policy
+
+`docs/database/table-access-policy.json` is the reviewed source of truth for
+`anon`/`authenticated` privileges on public tables. `scripts/verify-table-access-policy.js`
+compares a live database against it and fails closed on a missing privilege, an
+unexpected privilege, an unknown table, a missing object, a missing role, an
+unresolved classification, or a failed query.
+`scripts/verify-table-access-policy-manifest.js` verifies the manifest against its
+declared sources without touching a database: it fails on a canonical table
+missing from the manifest, an unknown policy entry, an invalid classification,
+an unsupported privilege, or a policy that contradicts the migrations without a
+recorded owner decision. It never regenerates policy from database grants.
+
+The previous `db/scripts/grants_audit.sql` rule ("every public base table must
+grant SELECT to `authenticated`") contradicted the deliberate service-role-only
+model: on a Supabase-compatible runtime it reported 124 tables, **all of which
+are intentional restrictions**. `grants_audit.sql` is retained unchanged as a raw
+inventory.
+
+### Status: implemented and validated in a disposable instance, not in live databases
+
+Supabase default privileges grant `anon`, `authenticated` and `service_role` the
+full `arwdDxtm` set on every table created in `public`. The canonical chain
+revoked selectively, so 11 tables retained the full set for `anon` and 15 for
+`authenticated`.
+
+`supabase/migrations/20261022000000_enforce_least_privilege_public_schema.sql`
+corrects that. Status of the evidence:
+
+| Statement | Evidence |
+| --- | --- |
+| Applied in a disposable Supabase PostgreSQL 17 instance | **Verified**: 107/107 canonical migrations applied with `ON_ERROR_STOP=1` |
+| Policy audit passes there | **Verified**: 75 tables, 150 role comparisons, 0 violations |
+| `anon` holds no table privilege | **Verified**: 0 tables |
+| Canonical `authenticated` grants preserved | **Verified**: exactly the 9 tables the chain grants |
+| Default privileges no longer grant clients | **Verified**: `anon`/`authenticated` absent from `pg_default_acl` for both `postgres` and `supabase_admin` |
+| RLS preserved | **Verified**: 75 tables with RLS, 29 policies |
+| Column-level grants | **Verified**: no true column ACLs exist (0) |
+| **Staging and production privilege state** | **NOT VERIFIED.** No live database was contacted. Whether staging or production carry the same default-ACL grants is unknown |
+| Sequence `USAGE` and function `EXECUTE` for `anon`/`authenticated` | **NOT REMEDIATED.** The manifest and audit cover tables only; 8 sequence and 4 routine grants remain |
 
 ## 4. Integrity baseline
 
