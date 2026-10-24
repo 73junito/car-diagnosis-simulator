@@ -8,7 +8,12 @@ const owner="123e4567-e89b-42d3-a456-426614174001";
 const payload=JSON.stringify({evidenceRole:"training-reference-only"});
 async function main(){
  const url=process.env.LMF_TEST_DATABASE_URL;
- if(!url||!url.includes("lmf_concurrency_verify"))throw Error("Disposable LMF database required");
+ if(!url)throw Error("Disposable LMF database required");
+ const parsed=new URL(url);
+ if(!["postgres:","postgresql:"].includes(parsed.protocol)||
+    parsed.pathname!=="/lmf_concurrency_verify"||
+    !["localhost","127.0.0.1","::1","[::1]"].includes(parsed.hostname))
+   throw Error("Local disposable LMF database required");
  const clients=await Promise.all([0,1,2].map(async()=>{const c=new Client({connectionString:url});await c.connect();return c}));
  const append=(c,sequence,previous,hash)=>c.query(
  "select lmf_private.append_reference_event($1,$2,$3,$4,$5::jsonb,$6,$7) as id",
