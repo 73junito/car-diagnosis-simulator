@@ -22,7 +22,7 @@ Scope: staging Supabase project `jchfruprqpeypdttvlam` ONLY. Canonical file: `su
 ## Post-application acceptance
 
 - Verify staging migration history contains the canonical version, and parity passes against `main`.
-- Assert `diagnostic_area` is present and `ase_area` absent in both tables; check renamed tables and mapped values where applicable.
+- Assert the replacement `diagnostic_area` column is present and the retired taxonomy column is absent in both tables; check renamed tables and mapped values where applicable.
 - Re-run authenticated API smoke, catalog/question retrieval, RLS/tenant isolation tests, data integrity tests, and relevant UI regression suites against staging.
 - Document actual migration execution ID, timestamp, operator, backup proof, validation artifacts, and reviewer. If tests fail, halt rollout and follow the rehearsed recovery path.
 - Leave `P0-migration-parity` pending until independent review is recorded. This runbook and previous read-only checks are not passing release evidence.
