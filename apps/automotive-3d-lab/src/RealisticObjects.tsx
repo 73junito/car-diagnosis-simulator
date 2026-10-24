@@ -48,11 +48,28 @@ function BatterySpecDecal() {
     <meshBasicMaterial map={texture} toneMapped={false}/>
   </mesh>
 }
+function PolarityDecal({positive}:{positive:boolean}) {
+  const texture=useMemo(()=>{
+    const canvas=document.createElement('canvas')
+    canvas.width=128;canvas.height=128
+    const ctx=canvas.getContext('2d')
+    if(!ctx) throw new Error('Polarity decal canvas unavailable')
+    ctx.fillStyle=positive?'#c92939':'#24313a'
+    ctx.fillRect(0,0,128,128)
+    ctx.fillStyle='#ffffff';ctx.font='bold 96px Arial';ctx.textAlign='center';ctx.textBaseline='middle'
+    ctx.fillText(positive?'+':'-',64,64)
+    const t=new CanvasTexture(canvas);t.colorSpace=SRGBColorSpace;return t
+  },[positive])
+  useEffect(()=>()=>texture.dispose(),[texture])
+  return <mesh position={[positive?-1.1:1.1,0.42,0.805]}><planeGeometry args={[0.32,0.32]}/><meshBasicMaterial map={texture} toneMapped={false}/></mesh>
+}
 export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal:'positive'|'negative')=>void; selected:Probe}) {
   return <group position={[-2,0,0]}>
     <mesh position={[0,-0.1,0]} castShadow receiveShadow><boxGeometry args={[3.2,1.45,1.58]}/><meshStandardMaterial color="#171e24" roughness={0.77}/></mesh>
     <mesh position={[0,0.66,0]} castShadow><boxGeometry args={[3.16,0.17,1.54]}/><meshStandardMaterial color="#313c44" roughness={0.55}/></mesh>
     <BatterySpecDecal/>
+    <PolarityDecal positive={true}/><PolarityDecal positive={false}/>
+    <Html center position={[-1.08,1.22,0.45]}><button className="terminal" onClick={() => onTerminal('positive')} aria-label="Attach selected probe to positive terminal">+</button></Html>
     <mesh position={[0,0.77,-0.42]}><boxGeometry args={[1.3,0.11,0.27]}/><meshStandardMaterial color="#20292f"/></mesh>
     {(['positive','negative'] as const).map(terminal => {
       const positive=terminal==='positive'
@@ -61,7 +78,7 @@ export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal
       return <group key={terminal} position={at}>
         <mesh position={[0,-0.10,0]}><cylinderGeometry args={[0.29,0.29,0.09,24]}/><meshStandardMaterial color={positive?'#ad2737':'#222a31'}/></mesh>
         <mesh onClick={cap} castShadow><cylinderGeometry args={[0.14,0.17,0.3,24]}/><meshStandardMaterial color="#b0b9bc" metalness={0.82} roughness={0.27}/></mesh>
-        <Html center position={[0,0.38,0]}><button className="terminal" onClick={()=>onTerminal(terminal)} aria-label={`Attach ${selected} lead to ${terminal} battery post`}>{positive?'+':'−'}</button></Html>
+        <Html center position={[0,0.51,0]}><button className="terminal" onClick={()=>onTerminal(terminal)} aria-label={`Attach ${selected} lead to ${terminal} battery post`}>{positive?'+':'-'}</button></Html>
       </group>
     })}
     <mesh position={[0,-0.94,0]} receiveShadow><boxGeometry args={[4,0.13,2.2]}/><meshStandardMaterial color="#263341" roughness={0.8}/></mesh>
@@ -74,7 +91,7 @@ function MeterScreen({voltage}:{voltage:number}) {
     const ctx=canvas.getContext('2d')
     if(!ctx) throw new Error('LCD texture canvas unavailable')
     ctx.fillStyle='#1b3b35'; ctx.fillRect(0,0,512,160)
-    ctx.fillStyle='#a3ffcd'; ctx.font='bold 68px monospace'
+    ctx.fillStyle='#a3ffcd'; ctx.font='bold 94px monospace'
     ctx.textAlign='center'; ctx.textBaseline='middle'
     ctx.fillText(voltage.toFixed(2)+' V',256,78)
     const t=new CanvasTexture(canvas);t.colorSpace=SRGBColorSpace;return t
@@ -84,6 +101,7 @@ function MeterScreen({voltage}:{voltage:number}) {
 }
 export function RealisticMeter({ voltage }: {voltage:number}) {
   return <group position={[2.45,0.1,0]}>
+    <mesh position={[0,0,-0.29]} castShadow><boxGeometry args={[2.18,3.13,0.18]}/><meshStandardMaterial color="#cf971d" roughness={0.8}/></mesh>
     {/* Taller handheld case; all markings are illustrative. */}
     <mesh castShadow><boxGeometry args={[2.08,3.05,0.49]}/><meshStandardMaterial color="#f0b72f" roughness={0.66}/></mesh>
     <mesh position={[0,0,0.262]}><boxGeometry args={[1.79,2.76,0.065]}/><meshStandardMaterial color="#26343e" roughness={0.71}/></mesh>
@@ -95,7 +113,7 @@ export function RealisticMeter({ voltage }: {voltage:number}) {
     <mesh position={[0,-0.19,0.35]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.56,0.56,0.08,48]}/><meshStandardMaterial color="#131e25"/></mesh>
     <mesh position={[0,-0.19,0.41]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.44,0.44,0.12,48]}/><meshStandardMaterial color="#27343d" roughness={0.46}/></mesh>
     <mesh position={[0.16,-0.02,0.49]} rotation={[0,0,-0.72]}><boxGeometry args={[0.12,0.46,0.055]}/><meshStandardMaterial color="#d6dee3"/></mesh>
-    <Html center position={[0.55,0.12,0.39]}><span className="dial-marking dial-marking--active">V DC</span></Html>
+    <Html center position={[0.62,0.19,0.45]}><span className="dial-marking dial-marking--active">V DC</span></Html>
     <Html center position={[-0.59,-0.41,0.39]}><span className="dial-marking meter-disabled">Ω</span></Html>
     <Html center position={[-0.55,0.1,0.39]}><span className="dial-marking meter-disabled">A</span></Html>
     {/* Both modeled sockets are aligned with the lead attachment world coordinates below. */}
