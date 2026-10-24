@@ -25,7 +25,7 @@ function Lead({ probe, placement }: { probe: Probe; placement: ProbePlacement })
   </group>
 }
 function Battery({ onTerminal, selected }: { onTerminal: (terminal: 'positive'|'negative') => void; selected: Probe }) {
-  return <group position={[0,0.65,0]}>
+  return <group position={[0,0,0]}>
     <mesh><boxGeometry args={[3,1.35,1.4]}/><meshStandardMaterial color="#243448" roughness={0.72}/></mesh>
     {(['positive','negative'] as const).map(terminal => {
       const isPositive = terminal === 'positive'
