@@ -16,3 +16,7 @@
 .tool-item strong,.testpoint-item strong,.contract-item strong{font-size:.8rem}.tool-item span,.testpoint-item span,.contract-item span{font-size:.74rem;text-align:right;color:#475569}
 .hint{font-size:.76rem;color:#64748b;margin:0;line-height:1.4}
 button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #2563eb;outline-offset:2px}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+.lab-3d-inspection-presets:not([hidden]){display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.lab-3d-inspection-presets button{padding:7px 10px;border:1px solid #b8c8d6;border-radius:8px;background:#fff;color:#17415f;cursor:pointer}
+.lab-3d-inspection-presets button[aria-pressed="true"]{background:#175b89;color:#fff}
+.lab-3d-inspection-presets button:focus-visible{outline:3px solid #e6a13a;outline-offset:2px}

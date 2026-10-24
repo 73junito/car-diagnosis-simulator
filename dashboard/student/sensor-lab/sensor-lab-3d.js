@@ -46,6 +46,11 @@
     enabled: asset.kind !== "diagnostic-tool" || declaredTools.has(asset.toolId)
   }));
   const viewer = new window.AutoLearnProGlbViewer.GlbViewer(canvas, status);
+  const inspection = document.getElementById("sensor3dInspectionPresets");
+  if (inspection && new URLSearchParams(window.location.search).get("equipmentInspection") === "1") {
+    inspection.hidden = false;
+    window.AutoLearnProEquipmentInspection?.mount({ viewer, container: inspection, status });
+  }
   const assetRoot = manifest.assetRoot || "/dashboard/student/circuit-lab/assets/3d/";
   const testPointById = new Map((template.testPoints || []).map((item) => [item.id, item]));
   const bindingById = new Map((manifest.testPointBindings || []).map((item) => [item.testPointId, item]));
@@ -66,6 +71,7 @@
     role.textContent = describeAsset(asset);
     try {
       await viewer.load(assetRoot + asset.file, asset.title);
+      if (inspection && !inspection.hidden) window.AutoLearnProEquipmentInspection?.reset(inspection);
     } catch (error) {
       status.textContent = `Unable to render ${asset.title}: ${error.message}. Sensor engineering behavior is unchanged.`;
       status.dataset.state = "unavailable";
