@@ -1,12 +1,12 @@
 "use strict";
 // Server-only adapter. verifyAccessToken MUST verify an authenticated JWT, never simply decode it.
 // computeEvidence must build the outcome from an approved, digest-verified server-side model.
-const {signEnvelope}=require("./server-evidence");
+const {createEvidenceKeyring}=require("./evidence-keyring");
 const MODEL_REF="/data/circuit-templates/12v-starting-system-v2.json";
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-function createEvidenceStore({db,verifyAccessToken,computeEvidence,key}){
+function createEvidenceStore({db,verifyAccessToken,computeEvidence,key,signingKeys,activeKeyId}){
  if(typeof db?.query!=="function"||typeof verifyAccessToken!=="function"||typeof computeEvidence!=="function")throw Error("Trusted database, authentication and compute providers required");
- if(!Buffer.isBuffer(key)||key.length<32)throw Error("Invalid server signing key");
+ const keyring=createEvidenceKeyring({activeKeyId:activeKeyId||'legacy-v1',keys:signingKeys||{'legacy-v1':key}});
  return Object.freeze({
   async append({token,sessionId,request}){
    if(typeof token!=="string"||!token)throw Error("Missing access token");
@@ -22,7 +22,7 @@ function createEvidenceStore({db,verifyAccessToken,computeEvidence,key}){
    if(read.rows.length!==1)throw Error("Session unavailable");
    const head=read.rows[0],next=Number(head.sequence_number??0)+1,previous=head.event_hash??null;
    if(!Number.isSafeInteger(next)||next<1)throw Error("Invalid evidence sequence");
-   const envelope=signEnvelope({actor,record,key,previousHash:previous});
+   const envelope=keyring.sign({actor,record,previousHash:previous});
    const response=await db.query("select lmf_private.append_reference_event($1,$2,$3,$4,$5::jsonb,$6,$7) as id",
       [sessionId,actor,next,previous,JSON.stringify(envelope.body),envelope.hash,envelope.signature]);
    return Object.freeze({eventId:response.rows[0].id,sequenceNumber:next,eventHash:envelope.hash});

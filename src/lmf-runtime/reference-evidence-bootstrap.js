@@ -5,7 +5,7 @@ const {createSupabaseTokenVerifier}=require("./supabase-auth");
 const {createEvidenceStore}=require("./evidence-store");
 const {createReferenceEvidenceHandler}=require("./reference-evidence-handler");
 const REF="/data/circuit-templates/12v-starting-system-v2.json";
-function createReferenceEvidenceService({authClient,db,signingKey,model,computeReferenceEvidence}){
+function createReferenceEvidenceService({authClient,db,signingKey,signingKeys,activeKeyId,model,computeReferenceEvidence}){
  if(typeof computeReferenceEvidence!=="function")throw Error("Trusted solver required");
  const digest=verifyModel(model);
  const verifyAccessToken=createSupabaseTokenVerifier(authClient);
@@ -23,7 +23,7 @@ function createReferenceEvidenceService({authClient,db,signingKey,model,computeR
     throw Error("Untrusted solver outcome");
   return record;
  };
- const store=createEvidenceStore({db,verifyAccessToken,computeEvidence,key:signingKey});
+ const store=createEvidenceStore({db,verifyAccessToken,computeEvidence,key:signingKey,signingKeys,activeKeyId});
  return Object.freeze({handler:createReferenceEvidenceHandler({store})});
 }
 module.exports={createReferenceEvidenceService};
