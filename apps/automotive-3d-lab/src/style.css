@@ -21,3 +21,6 @@
 .dial-marking{font:900 13px Arial,sans-serif;color:#172d3d;white-space:nowrap}
 .jack-marking{font:900 12px Arial,sans-serif;color:#111e29;background:#f5cc49;padding:1px 3px;white-space:nowrap}
 .meter-rating-small{font:800 8px Arial,sans-serif;color:#273139;background:#ffe69d;padding:1px 3px;white-space:nowrap}
+
+.dial-marking--active{background:#faffd6!important;border:2px solid #142e3e!important;color:#102f45!important;font-weight:900!important;padding:4px 7px!important;box-shadow:0 1px 5px #172e4455}
+.meter-disabled{color:#8e9ba2!important;opacity:.65}

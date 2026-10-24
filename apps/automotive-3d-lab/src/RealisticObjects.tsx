@@ -1,7 +1,7 @@
 import { Html, CatmullRomLine } from '@react-three/drei'
 import type { ThreeEvent } from '@react-three/fiber'
 import { useMemo, useEffect } from 'react'
-import { CanvasTexture, SRGBColorSpace } from 'three'
+import { CanvasTexture, SRGBColorSpace, Shape, ExtrudeGeometry } from 'three'
 import type { ProbePlacement } from './simulation/circuit'
 
 export type Probe = 'red' | 'black'
@@ -99,12 +99,24 @@ function MeterScreen({voltage}:{voltage:number}) {
   useEffect(()=>()=>texture.dispose(),[texture])
   return <mesh position={[0,1.01,0.356]}><planeGeometry args={[1.32,0.41]}/><meshBasicMaterial map={texture} toneMapped={false}/></mesh>
 }
+function RoundedShell({width,height,depth,radius,color,z}:{width:number;height:number;depth:number;radius:number;color:string;z:number}) {
+  const geometry=useMemo(()=>{
+    const w=width/2,h=height/2,r=radius
+    const s=new Shape()
+    s.moveTo(-w+r,-h);s.lineTo(w-r,-h);s.quadraticCurveTo(w,-h,w,-h+r)
+    s.lineTo(w,h-r);s.quadraticCurveTo(w,h,w-r,h)
+    s.lineTo(-w+r,h);s.quadraticCurveTo(-w,h,-w,h-r)
+    s.lineTo(-w,-h+r);s.quadraticCurveTo(-w,-h,-w+r,-h)
+    const g=new ExtrudeGeometry(s,{depth,bevelEnabled:true,bevelThickness:0.035,bevelSize:0.035,bevelSegments:3,steps:1,curveSegments:8})
+    g.computeVertexNormals();return g
+  },[width,height,depth,radius])
+  useEffect(()=>()=>geometry.dispose(),[geometry])
+  return <mesh geometry={geometry} position={[0,0,z]} castShadow><meshStandardMaterial color={color} roughness={0.67}/></mesh>
+}
 export function RealisticMeter({ voltage }: {voltage:number}) {
   return <group position={[2.45,0.1,0]}>
-    <mesh position={[0,0,-0.29]} castShadow><boxGeometry args={[2.18,3.13,0.18]}/><meshStandardMaterial color="#cf971d" roughness={0.8}/></mesh>
-    {/* Taller handheld case; all markings are illustrative. */}
-    <mesh castShadow><boxGeometry args={[2.08,3.05,0.49]}/><meshStandardMaterial color="#f0b72f" roughness={0.66}/></mesh>
-    <mesh position={[0,0,0.262]}><boxGeometry args={[1.79,2.76,0.065]}/><meshStandardMaterial color="#26343e" roughness={0.71}/></mesh>
+    <RoundedShell width={2.13} height={3.10} depth={0.48} radius={0.28} color="#e8b12c" z={-0.25}/>
+    <RoundedShell width={1.80} height={2.76} depth={0.052} radius={0.20} color="#26343e" z={0.24}/>
     <mesh position={[0,1.01,0.31]}><boxGeometry args={[1.51,0.64,0.07]}/><meshStandardMaterial color="#141e25"/></mesh>
     <MeterScreen voltage={voltage}/>
     <Html center transform distanceFactor={5} position={[0,1.43,0.33]}><span className="meter-brand">AUTOLEARNPRO DMM-01</span></Html>
@@ -113,9 +125,9 @@ export function RealisticMeter({ voltage }: {voltage:number}) {
     <mesh position={[0,-0.19,0.35]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.56,0.56,0.08,48]}/><meshStandardMaterial color="#131e25"/></mesh>
     <mesh position={[0,-0.19,0.41]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.44,0.44,0.12,48]}/><meshStandardMaterial color="#27343d" roughness={0.46}/></mesh>
     <mesh position={[0.16,-0.02,0.49]} rotation={[0,0,-0.72]}><boxGeometry args={[0.12,0.46,0.055]}/><meshStandardMaterial color="#d6dee3"/></mesh>
-    <Html center position={[0.62,0.19,0.45]}><span className="dial-marking dial-marking--active">V DC</span></Html>
-    <Html center position={[-0.59,-0.41,0.39]}><span className="dial-marking meter-disabled">Ω</span></Html>
-    <Html center position={[-0.55,0.1,0.39]}><span className="dial-marking meter-disabled">A</span></Html>
+    <Html center position={[0.60,0.19,0.49]}><span className="dial-marking dial-marking--active">V DC</span></Html>
+    <Html center position={[-0.62,-0.41,0.49]}><span className="dial-marking meter-disabled">Ω</span></Html>
+    <Html center position={[-0.60,0.1,0.49]}><span className="dial-marking meter-disabled">A</span></Html>
     {/* Both modeled sockets are aligned with the lead attachment world coordinates below. */}
     {([-0.75,0.74] as const).map((x,i)=><group key={x} position={[x,-1.16,0.32]}>
       <mesh rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.13,0.13,0.09,24]}/><meshStandardMaterial color={i?'#b42f40':'#161e25'}/></mesh>
@@ -133,9 +145,12 @@ export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePla
   const points: [number,number,number][] = [start,[outerX,-0.95,0.65],[outerX,-1.28,1.65],[(outerX+end[0])/2,-1.18,2.05],[end[0],end[1]+0.25,1.2],end]
   return <group>
     <CatmullRomLine points={points} color={color} lineWidth={6} segments={64}/><CatmullRomLine points={points} color={probe==='red'?'#ff7881':'#526170'} lineWidth={1.15} segments={64}/>
-    <mesh position={end} rotation={[Math.PI/2,0,0]} castShadow>
-      <cylinderGeometry args={[0.065,0.08,0.38,16]}/><meshStandardMaterial color={color} roughness={0.78}/>
+    <mesh position={[end[0],end[1]-0.16,end[2]]} castShadow>
+      <cylinderGeometry args={[0.095,0.12,0.44,20]}/><meshStandardMaterial color={color} roughness={0.76}/>
     </mesh>
+    {[-0.28,-0.2,-0.12].map(offset=><mesh key={offset} position={[end[0],end[1]+offset,end[2]]}>
+      <torusGeometry args={[0.101,0.012,8,20]}/><meshStandardMaterial color={probe==='red'?'#b52b35':'#4b555d'}/>
+    </mesh>)}
     <mesh position={[end[0],end[1]+0.21,end[2]]}><coneGeometry args={[0.045,0.22,12]}/><meshStandardMaterial color="#bfc9d1" metalness={0.85} roughness={0.2}/></mesh>
   </group>
 }
