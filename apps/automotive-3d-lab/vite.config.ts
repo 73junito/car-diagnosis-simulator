@@ -39,7 +39,6 @@ export default defineConfig({
         manualChunks(id) {
           if (!id.includes('node_modules')) return
           if (id.includes('/three/') || id.includes('\\three\\')) return 'three-core'
-          if (id.includes('@react-three')) return 'react-three'
           if (id.includes('/react-dom/') || id.includes('/react/') || id.includes('/scheduler/')) return 'react-runtime'
         }
       }
