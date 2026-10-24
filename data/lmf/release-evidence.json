@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "subject": "PR-1128",
+  "gates": [
+    {
+      "id": "P0-authentication",
+      "priority": "P0",
+      "status": "pending",
+      "commit": null,
+      "evidence": null,
+      "reviewer": null,
+      "reviewedAt": null
+    },
+    {
+      "id": "P0-migration-parity",
+      "priority": "P0",
+      "status": "pending",
+      "commit": null,
+      "evidence": null,
+      "reviewer": null,
+      "reviewedAt": null
+    },
+    {
+      "id": "P1-tenant-isolation",
+      "priority": "P1",
+      "status": "pending",
+      "commit": null,
+      "evidence": null,
+      "reviewer": null,
+      "reviewedAt": null
+    },
+    {
+      "id": "P1-concurrent-append",
+      "priority": "P1",
+      "status": "pending",
+      "commit": null,
+      "evidence": null,
+      "reviewer": null,
+      "reviewedAt": null
+    },
+    {
+      "id": "P1-crypto-replay",
+      "priority": "P1",
+      "status": "pending",
+      "commit": null,
+      "evidence": null,
+      "reviewer": null,
+      "reviewedAt": null
+    },
+    {
+      "id": "P1-independent-review",
+      "priority": "P1",
+      "status": "pending",
+      "commit": null,
+      "evidence": null,
+      "reviewer": null,
+      "reviewedAt": null
+    },
+    {
+      "id": "P2-load-and-recovery",
+      "priority": "P2",
+      "status": "pending",
+      "commit": null,
+      "evidence": null,
+      "reviewer": null,
+      "reviewedAt": null
+    },
+    {
+      "id": "P2-observability-rollback",
+      "priority": "P2",
+      "status": "pending",
+      "commit": null,
+      "evidence": null,
+      "reviewer": null,
+      "reviewedAt": null
+    }
+  ]
+}
