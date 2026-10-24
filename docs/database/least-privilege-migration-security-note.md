@@ -83,13 +83,58 @@ carries only the reviewed client privileges. **What it does not enforce:**
 - New tables arrive with **no** `anon`/`authenticated` privilege, so `docs/database/table-access-policy.json` must be extended in the same change that grants access, or the live audit will report `UNCLASSIFIED_OBJECT`.
 - `scripts/verify-table-access-policy-manifest.js` fails on a dynamic `GRANT` naming a client role, because such a grant cannot be represented in the manifest. Dynamic `REVOKE`s are recorded as informational: they can only reduce access, and any resulting shortfall is caught by the live audit.
 
-## 5. Remaining sequence and function privileges (not remediated)
+## 5. Remaining sequence and function privileges (enumerated, not remediated)
 
-Measured after the migration: **8 sequence `USAGE` grants** (`anon` and `authenticated`) and **4 routine `EXECUTE` grants**. The manifest and the audit cover **tables only**.
+Measured after the migration: **8 sequence `USAGE` grants** (`anon` and `authenticated`) and
+**4 routine `EXECUTE` grants**. The manifest and the audit cover **tables only**.
 
-- The sequences are not created by any canonical migration (no `create sequence`, no `serial`/`bigserial` columns), so they originate from the platform image and could not be named from repository evidence.
-- 17 functions exist in `public` from canonical migrations; only 2 retain client grants, and the objects were not enumerable from repository evidence.
-- **Required next step:** a separate, read-only enumeration and impact analysis. These must **not** be revoked blindly, and must **not** be treated as secure by omission.
+The objects are now **named**, by a read-only enumeration added to the disposable validator
+(`scripts/validate-migrations-disposable.js`, phase `residual-enumeration`). It applies the
+same canonical chain in the digest-pinned container and then selects the client ACLs for
+sequences and routines. It grants nothing, revokes nothing, and does not affect the
+validation verdict.
+
+| Object | Kind | Client grants | Created by |
+| --- | --- | --- | --- |
+| `public.battery_temperature_telemetry_id_seq` | sequence | `anon`, `authenticated` — USAGE | `20260823233137_create_staging_vehicle_reference_datasets.sql:78` — identity column |
+| `public.diagnostic_data_domains_id_seq` | sequence | `anon`, `authenticated` — USAGE | `20260710204828_external_data_resource_registry.sql:507` — identity column |
+| `public.diagnostic_execution_events_id_seq` | sequence | `anon`, `authenticated` — USAGE | `20261013005905_add_diagnostic_copilot_stage2.sql:59` — identity column |
+| `public.external_data_resources_id_seq` | sequence | `anon`, `authenticated` — USAGE | `20260710204828_external_data_resource_registry.sql:6` — identity column |
+| `public.enforce_evidence_source_gate_consistency()` | routine | `anon`, `authenticated` — EXECUTE | `20260926000000_enforce_evidence_approval_gates.sql:200` — trigger function |
+| `public.enforce_source_chunk_evidence_gate()` | routine | `anon`, `authenticated` — EXECUTE | `20260926000000_enforce_evidence_approval_gates.sql:95` — trigger function |
+
+**Correction to an earlier inference in this note.** This note previously said the sequences
+"are not created by any canonical migration (no `create sequence`, no `serial`/`bigserial`
+columns), so they originate from the platform image". That inference was wrong. The literal
+`create sequence` statement is absent because `GENERATED ... AS IDENTITY` creates the
+sequence implicitly, and all four sequences belong to tables created by canonical
+migrations, as the table above shows.
+
+**Where the grants come from.** No canonical migration grants `anon` or `authenticated`
+anything on these six objects. They are the platform's broad per-schema `public` default
+privileges described in section 3, inherited by objects created before this migration
+tightened the *table* defaults; the schema-wide `REVOKE ALL` in section 1 covers tables
+only, so sequences and routines keep the platform defaults. `service_role` holds its own
+explicit grants and is unaffected.
+
+**Why exactly these two routines.** The canonical chain *does* revoke function execution
+from `public`, `anon` and `authenticated` — for example
+`20261012031851_harden_trigger_function_execution.sql` revokes it on
+`handle_new_auth_user()`, `capture_student_institution_claim()` and
+`set_external_data_resource_updated_at()`. The two evidence-gate trigger functions were
+created earlier, in `20260926000000_enforce_evidence_approval_gates.sql`, and were not in
+that revoke list, so they are the residual the enumeration reports. No `revoke` on a
+sequence appears anywhere in the chain, which is why all four sequences retain the
+platform defaults.
+
+**What this does and does not establish.** The residual is enumerable and attributable, so
+it is no longer "not enumerable from repository evidence". It is still **not remediated**:
+the manifest and the audit cover tables only, so these grants sit outside the reviewed
+privilege set. Closing it needs a separate impact analysis — the two routines are trigger
+functions and the four sequences back identity columns — and a follow-up migration that
+extends the revokes to the two missed functions and the four sequences, with the manifest
+extended to match. That is a follow-up change and must not be done by omission or by a
+blind revoke.
 
 ## 6. Explicit non-claims
 

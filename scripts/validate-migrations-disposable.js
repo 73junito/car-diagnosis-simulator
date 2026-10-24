@@ -54,6 +54,30 @@ const CONTAINER_DB_NAME = "postgres";
 const CONTAINER_DSN = `postgres://${CONTAINER_DB_USER}:validation-only@127.0.0.1:5432/${CONTAINER_DB_NAME}`;
 const CONTAINER_MIGRATIONS_DIR = "/work/migrations";
 const CONTAINER_AUDIT_SQL = "/work/grants_audit.sql";
+
+/*
+ * Read-only enumeration of the residual client privileges that the table-level
+ * manifest does not cover: sequence USAGE and routine EXECUTE for `anon` and
+ * `authenticated`. It reports what is present; it grants nothing, revokes
+ * nothing and does not affect the validation verdict.
+ */
+const RESIDUAL_CLIENT_GRANTS_SQL = `
+select 'sequence' as kind, c.relname as object, r.rolname as grantee
+from pg_class c
+join pg_namespace n on n.oid = c.relnamespace
+cross join lateral aclexplode(coalesce(c.relacl, acldefault('S', c.relowner))) a
+join pg_roles r on r.oid = a.grantee
+where n.nspname = 'public' and c.relkind = 'S'
+  and r.rolname in ('anon', 'authenticated') and a.privilege_type = 'USAGE'
+union all
+select 'routine' as kind, p.proname as object, r.rolname as grantee
+from pg_proc p
+join pg_namespace n on n.oid = p.pronamespace
+cross join lateral aclexplode(coalesce(p.proacl, acldefault('f', p.proowner))) a
+join pg_roles r on r.oid = a.grantee
+where n.nspname = 'public'
+  and r.rolname in ('anon', 'authenticated') and a.privilege_type = 'EXECUTE'
+order by 1, 2, 3`;
 const DEFAULT_MIGRATIONS_DIRECTORY = "supabase/migrations";
 const DEFAULT_AUDIT_SQL_PATH = "db/scripts/grants_audit.sql";
 // Measured: the image's entrypoint takes ~243 s to expose a TCP listener on a
@@ -408,6 +432,44 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
       true,
       `table access policy satisfied (${policy.summary.tablesInDatabase} tables, ${policy.summary.roleComparisons} role comparisons)`
     );
+
+    // Read-only enumeration of the residual client privileges the table-level
+    // manifest does not cover. This reports; it grants nothing, revokes nothing,
+    // and a failure to enumerate is reported rather than swallowed.
+    const residual = exec(
+      [
+        "-v",
+        "ON_ERROR_STOP=1",
+        "--no-psqlrc",
+        "-d",
+        CONTAINER_DSN,
+        "-A",
+        "-t",
+        "-c",
+        RESIDUAL_CLIENT_GRANTS_SQL
+      ],
+      { phase: "residual-enumeration" }
+    );
+
+    if (residual.exitCode !== 0) {
+      logError(
+        `  residual client grant enumeration failed: ${String(residual.stderr || residual.stdout || "")
+          .trim()
+          .slice(0, 300)}`
+      );
+    } else {
+      const residualLines = String(residual.stdout || "")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      evidence.residualClientGrants = residualLines;
+
+      log(`  residual client grants (sequence USAGE / routine EXECUTE): ${residualLines.length}`);
+      for (const line of residualLines) {
+        log(`    ${line}`);
+      }
+    }
 
     return { ok: true, reason: null, steps, evidence };
   } finally {
