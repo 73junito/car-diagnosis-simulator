@@ -5,7 +5,7 @@ Scope: staging Supabase project `jchfruprqpeypdttvlam` ONLY. Canonical file: `su
 ## Verified preflight (2026-10-24)
 
 - Staging migration parity failed: 105 records versus 106 in canonical base (main commit `25e32b08c9df3476858b48800f99f576804fa692`).
-- `scenario_questions.ase_area` and `scenario_catalog.ase_area` still exist; `diagnostic_area` does not. This is an unapplied schema change, not merely missing tracking history.
+- The legacy taxonomy-area columns still exist in both `scenario_questions` and `scenario_catalog`; their replacement `diagnostic_area` columns do not. This is an unapplied schema change, not merely missing tracking history.
 - Zero matching A1–A8/L1/L3 code values were found in either legacy column at inspection time; this does not establish future or concurrent write safety.
 - No `public` function or view text references to those columns were found in the limited scan.
 - No triggers were returned for those two tables; their existing SELECT RLS policies are `scenario_catalog_read_active` (authenticated, active records) and `scenario_questions_read_all` (public, true). Their predicates do not reference the renamed column. Application-side consumers are not proven safe.
