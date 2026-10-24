@@ -32,6 +32,7 @@ there is invisible to every table-privilege control in this package.
 | `scripts/sql/gate-d-authorization-matrix.sql` | 35 authorization and tenancy cases, including 8 two-institution isolation cases against the service-role query path; every denial asserts SQLSTATE `42501` and its specific message; 10 classifier controls | `node scripts/validate-gate-d-authorization.js` |
 | `tests/gate-d-institution-reporting-authorization.test.js` | `handleInstitutionAdminReport` rejects missing, invalid, forged and cross-institution codes and role escalation | `npx jest tests/gate-d-institution-reporting-authorization.test.js` |
 | `tests/gate-d-classroom-route-tenant-isolation.test.js` | The classroom routes scope every service-role query to the caller; a caller cannot reach another instructor's or another institution's data | `npx jest tests/gate-d-classroom-route-tenant-isolation.test.js` |
+| `tests/gate-d-institution-route-tenant-isolation.test.js` | The institution routes scope every service-role query to the caller's verified institution; a caller cannot reach another institution's portal, settings, members or claims | `npx jest tests/gate-d-institution-route-tenant-isolation.test.js` |
 | `supabase/migrations/20261022000000_enforce_least_privilege_public_schema.sql` | The change under review | — |
 | `docs/database/table-access-policy.json` | The intended contract | — |
 | `docs/database/least-privilege-migration-security-note.md` | Residual sequence and routine exposure | — |
@@ -112,6 +113,35 @@ cases establish that:
 - the join-by-code path, which crosses institutions on purpose, returns only the class id and
   name.
 
+**Established for the institution routes.** `tests/gate-d-institution-route-tenant-isolation.test.js`
+drives the real handlers of `institution-portal.js`, `institution-settings-domains.js`,
+`institution-membership-admin.js`, `student-institution-claims.js` and
+`institution-search.js` against the same filter-applying stub. Sixteen cases establish
+that:
+
+- the institution portal, the member list and the settings read or write are refused
+  unless the caller holds an **active** membership in the institution being read, and the
+  refusal happens before any tenant table is read;
+- every portal, settings, member-list and claim-queue query carries the **verified** school
+  code, and the membership is always resolved for the caller's own user id, so another
+  administrator of the same institution cannot stand in for them;
+- an instructor sees only the classes they own, while an institution administrator sees
+  their own institution's classes and never another institution's;
+- a student reads only their own claim, and a claim reviewer sees only the claims of the
+  institutions they administer;
+- the institution search route is deliberately unauthenticated — it is the directory a
+  student uses to find the institution to apply to — so it returns active institutions only
+  and no member, class or settings data.
+
+Each of those controls was mutation-tested: removing the membership `user_id` scope, the
+active-status filter, the instructor owner scope, the settings forbidden check, the claim
+queue school-code scope, the claim status user scope, the member-list school-code scope or
+the search active filter each fails at least one case.
+
+The remaining mutating handlers of the institution routes — the email-domain decisions, the
+invitation and member decisions, and the claim decision — are not yet covered and remain
+open.
+
 Each of those controls was mutation-tested. Removing the class owner scope, the membership
 `user_id` scope, the active-status filter, the assignment owner scope, the enrollment class
 scope or the enrollment membership check, and sourcing the school code from the request body
@@ -124,10 +154,8 @@ logic, not its behaviour against a real database. The route trace was static.
 **Open questions.** Does every service-role query in every route carry a tenant or user
 scope, or are there paths that read broadly and filter afterwards? Is there any route that
 returns data before completing its membership check? — Both are now answered for the
-classroom routes and the institution-reporting route. The remaining service-role routes
-(`institution-portal.js`, `institution-membership-admin.js`, `institution-search.js`,
-`institution-settings-domains.js` and `student-institution-claims.js`) are not yet covered
-by this evidence and remain open.
+classroom routes, the institution routes and the institution-reporting route, for the
+handlers listed above. The mutating handlers listed above remain open.
 
 ## Boundary 3 — cross-institution isolation
 
@@ -173,17 +201,19 @@ live Supabase deployment with connection pooling or PostgREST.
 scope that this test exercises for `classes`? `classes` has an explicit cross-tenant
 trigger; other tenant tables have no equivalent, so their isolation rests on the route
 scope alone. Is an omitted `school_code` guaranteed to fail closed on every path? — The
-classroom routes now have route-level coverage; the remaining service-role routes listed
-under Boundary 2 are not yet covered.
+classroom and institution routes now have route-level coverage; the mutating handlers
+listed under Boundary 2 are not yet covered.
 
 ## Where this evidence is weaker than it may appear
 
 - The runtime route test stubs the data layer.
 - The two-institution isolation test exercises the service-role query path, not the route
   handler that calls it, and it covers `classes`; other tenant tables have no equivalent
-  cross-tenant trigger, so their isolation rests on the route scope alone. The classroom
-  routes now carry route-level coverage, but only `classes`, `enrollments`, `assignments` and
-  `institution_memberships` are exercised; the other service-role routes are not.
+  cross-tenant trigger, so their isolation rests on the route scope alone. The classroom and
+  institution routes now carry route-level coverage, but only `classes`, `enrollments`,
+  `assignments`, `institution_memberships`, `institution_settings`, `institution_programs`,
+  `institution_cohorts`, `institutions` and `student_institution_claims` are exercised, and
+  the mutating handlers listed above are not.
 - 66 of 75 tables grant `authenticated` nothing — correct for a service-role-only model, but
   any unexamined student read path using `authenticated` against them will fail.
 - The classifier controls prove the assertions reject misclassification; they do not prove
