@@ -120,12 +120,16 @@ export function RealisticMeter({ voltage }: {voltage:number}) {
     <mesh position={[0,1.01,0.31]}><boxGeometry args={[1.51,0.64,0.07]}/><meshStandardMaterial color="#141e25"/></mesh>
     <MeterScreen voltage={voltage}/>
     <Html center transform distanceFactor={5} position={[0,1.43,0.33]}><span className="meter-brand">AUTOLEARNPRO DMM-01</span></Html>
-    {([-0.54,-0.17,0.2,0.57] as const).map((x,i)=><mesh key={x} position={[x,0.51,0.34]}><boxGeometry args={[0.25,0.16,0.09]}/><meshStandardMaterial color={i===0?'#cd4255':'#515e68'}/></mesh>)}
+    {([-0.54,-0.17,0.2,0.57] as const).map((x,i)=><group key={x}>
+      <mesh position={[x,0.51,0.34]}><boxGeometry args={[0.25,0.16,0.09]}/><meshStandardMaterial color={i===0?'#cd4255':'#515e68'}/></mesh>
+      <Html center position={[x,0.51,0.40]} transform distanceFactor={3}><span className="meter-button-label">{['PWR','HOLD','MODE','SELECT'][i]}</span></Html>
+    </group>)}
     {/* Dial on a face-facing axis; pointer locked to the only simulated DCV mode. */}
     <mesh position={[0,-0.19,0.35]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.56,0.56,0.08,48]}/><meshStandardMaterial color="#131e25"/></mesh>
     <mesh position={[0,-0.19,0.41]} rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.44,0.44,0.12,48]}/><meshStandardMaterial color="#27343d" roughness={0.46}/></mesh>
     <mesh position={[0.16,-0.02,0.49]} rotation={[0,0,-0.72]}><boxGeometry args={[0.12,0.46,0.055]}/><meshStandardMaterial color="#d6dee3"/></mesh>
-    <Html center position={[0.60,0.19,0.49]}><span className="dial-marking dial-marking--active">V DC</span></Html>
+    <mesh position={[0.60,0.19,0.36]}><planeGeometry args={[0.37,0.17]}/><meshBasicMaterial color="#f9efb3"/></mesh>
+    <Html center transform distanceFactor={3} position={[0.60,0.19,0.39]}><span className="dial-face-label">V DC</span></Html>
     <Html center position={[-0.62,-0.41,0.49]}><span className="dial-marking meter-disabled">Ω</span></Html>
     <Html center position={[-0.60,0.1,0.49]}><span className="dial-marking meter-disabled">A</span></Html>
     {/* Both modeled sockets are aligned with the lead attachment world coordinates below. */}
@@ -152,5 +156,10 @@ export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePla
       <torusGeometry args={[0.101,0.012,8,20]}/><meshStandardMaterial color={probe==='red'?'#b52b35':'#4b555d'}/>
     </mesh>)}
     <mesh position={[end[0],end[1]+0.21,end[2]]}><coneGeometry args={[0.045,0.22,12]}/><meshStandardMaterial color="#bfc9d1" metalness={0.85} roughness={0.2}/></mesh>
+    {placement!=='disconnected' && <group position={[end[0],end[1]+0.09,end[2]]}>
+      <mesh position={[0,0.06,0]}><boxGeometry args={[0.26,0.12,0.19]}/><meshStandardMaterial color={color} metalness={0.16} roughness={0.63}/></mesh>
+      <mesh position={[0,0.15,0.02]} rotation={[0,0,0.26]}><boxGeometry args={[0.30,0.075,0.13]}/><meshStandardMaterial color="#b9c6cf" metalness={0.8} roughness={0.24}/></mesh>
+      <mesh position={[0,-0.06,-0.02]} rotation={[0,0,-0.26]}><boxGeometry args={[0.30,0.075,0.13]}/><meshStandardMaterial color="#b9c6cf" metalness={0.8} roughness={0.24}/></mesh>
+    </group>}
   </group>
 }

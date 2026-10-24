@@ -24,3 +24,6 @@
 
 .dial-marking--active{background:#faffd6!important;border:2px solid #142e3e!important;color:#102f45!important;font-weight:900!important;padding:4px 7px!important;box-shadow:0 1px 5px #172e4455}
 .meter-disabled{color:#8e9ba2!important;opacity:.65}
+
+.meter-button-label{font:800 8px/1 Arial,sans-serif;color:#fff;white-space:nowrap;pointer-events:none}
+.dial-face-label{font:900 12px/1 Arial,sans-serif;color:#13334b;white-space:nowrap;pointer-events:none}
