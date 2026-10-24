@@ -18,6 +18,11 @@ if(kind==='meter'){
  box(.12,-.30,.56,.11,.40,.07,palette.cream);
  for(let i=0;i<2;i++){let x=i===0?-.50:.5;cyl(x,-1.27,.40,.16,.12,i===0?palette.black:palette.red,'z');cyl(x,-1.27,.48,.080,.025,palette.black,'z')}
  for(let i=0;i<4;i++)box(-.48+i*.32,1.35,.37,.21,.075,.035,palette.cream);
+ // Protective bumper ribs, segmented display digits, selector tick marks and molded grip.
+ for(let y of [-1.05,-.78,-.52,.18,.52]){box(-.77,y,.28,.075,.11,.07,palette.black);box(.77,y,.28,.075,.11,.07,palette.black)}
+ for(let i=0;i<10;i++){const a=2*Math.PI*i/10;box(.66*Math.cos(a),-.47+.66*Math.sin(a),.35,.09,.09,.045,palette.cream)}
+ for(let i=0;i<3;i++){box(-.30+i*.25,.96,.425,.07,.20,.025,palette.dark);box(-.30+i*.25,.86,.425,.07,.20,.025,palette.dark)}
+ box(-.44,-1.43,.39,.18,.06,.05,palette.cream);box(.47,-1.43,.39,.18,.06,.05,palette.cream);
 }else if(kind==='starter'){
  cyl(0,0,0,.76,2.6,palette.gray,'x',32);
  for(let x of [-1.15,-.85,.78,1.12])torus(x,0,0,.76,.06,palette.steel,'y');
@@ -29,6 +34,11 @@ if(kind==='meter'){
  for(let x of [-.65,.65])cyl(x,-1.02,-.32,.13,.18,palette.dark,'y');
  cyl(-.25,.92,.34,.34,1.75,palette.gray,'x');
  for(let x of [-.85,.4]){cyl(x,1.26,.34,.13,.32,palette.copper,'y');cyl(x,1.43,.34,.16,.055,palette.steel,'y')}
+ // Cast end-cover contours, through-bolts, nose gear teeth and mounting bolt bosses.
+ for(let i=0;i<10;i++){const a=2*Math.PI*i/10;box(-2.09,.28*Math.cos(a),.28*Math.sin(a),.27,.10,.10,palette.steel)}
+ for(let i=0;i<4;i++){const a=2*Math.PI*i/4;cyl(.99,.49*Math.cos(a),.49*Math.sin(a),.075,.20,palette.dark,'x')}
+ for(let x of [-.75,.72]){box(x,-.89,-.69,.40,.16,.40,palette.steel);cyl(x,-.99,-.70,.11,.24,palette.dark,'y')}
+ box(.9,.32,.61,.30,.22,.20,palette.dark);
 }else if(kind==='solenoid'){
  cyl(0,0,0,.59,2.0,palette.gray,'x',32);
  cyl(-1.13,0,0,.43,.30,palette.steel,'x');
@@ -36,6 +46,11 @@ if(kind==='meter'){
  box(0,-.64,0,1.28,.23,.55,palette.dark);
  for(let x of [-.6,.55]){cyl(x,.78,0,.12,.50,palette.copper,'y');cyl(x,1.05,0,.20,.09,palette.steel,'y')}
  cyl(.1,.65,-.37,.075,.25,palette.copper,'y');
+ // External metal seams, insulated small signal terminal and connector collar.
+ for(let x of [-.88,.86])torus(x,0,0,.58,.048,palette.steel,'y');
+ cyl(.12,.71,-.36,.12,.22,palette.black,'y');
+ box(.12,.90,-.36,.22,.16,.20,palette.blue);
+ for(let x of [-.47,.47]){box(x,-.70,.25,.33,.16,.30,palette.steel);cyl(x,-.83,.25,.085,.17,palette.dark,'y')}
 }
 }
 function save(file){const pad=x=>x.length%4?Buffer.concat([x,Buffer.alloc(4-x.length%4)]):x;
