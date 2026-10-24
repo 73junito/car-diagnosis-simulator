@@ -13,6 +13,12 @@ test("starting model also requires solver-ready parameters",()=>{
  assert.equal(r.compatible,false);
  assert.ok(r.reasons.length>0);
 });
+test("existing starting v2 electrical reference template passes structural preflight",()=>{
+ const r=inspectElectricalCompatibility("/data/circuit-templates/12v-starting-system-v2.json");
+ assert.equal(r.compatible,true);
+ assert.equal(r.status,"structural-preflight-only");
+ assert.equal(r.reasons.length,0);
+});
 test("model references cannot escape data directory",()=>{
  assert.throws(()=>inspectElectricalCompatibility("/data/../package.json"),/Unsafe model reference/);
 });
