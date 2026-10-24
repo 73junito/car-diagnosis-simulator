@@ -4,16 +4,16 @@ import type { ProbePlacement } from './simulation/circuit'
 
 export type Probe = 'red' | 'black'
 export const terminals: Record<'positive'|'negative', [number,number,number]> = {
-  positive: [-1.08,0.81,0.1], negative: [1.08,0.81,0.1]
+  positive: [-3.08,0.81,0.1], negative: [-0.92,0.81,0.1]
 }
 const socket: Record<Probe,[number,number,number]> = {
-  red: [4.05,-0.24,1.04], black: [2.55,-0.24,1.04]
+  red: [3.15,-0.34,0.30], black: [1.65,-0.34,0.30]
 }
 function Label({ children, position }: {children: string; position: [number,number,number]}) {
   return <Html center position={position} transform distanceFactor={5}><span className="model-label">{children}</span></Html>
 }
 export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal:'positive'|'negative')=>void; selected:Probe}) {
-  return <group>
+  return <group position={[-2,0,0]}>
     <mesh position={[0,-0.1,0]} castShadow receiveShadow><boxGeometry args={[3.2,1.45,1.58]}/><meshStandardMaterial color="#171e24" roughness={0.77}/></mesh>
     <mesh position={[0,0.66,0]} castShadow><boxGeometry args={[3.16,0.17,1.54]}/><meshStandardMaterial color="#313c44" roughness={0.55}/></mesh>
     <mesh position={[0,-0.07,0.797]}><planeGeometry args={[2.72,0.84]}/><meshStandardMaterial color="#e9ecdf" roughness={0.9}/></mesh>
@@ -22,7 +22,7 @@ export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal
     <mesh position={[0,0.77,-0.42]}><boxGeometry args={[1.3,0.11,0.27]}/><meshStandardMaterial color="#20292f"/></mesh>
     {(['positive','negative'] as const).map(terminal => {
       const positive=terminal==='positive'
-      const at=terminals[terminal]
+      const at:[number,number,number]=[terminals[terminal][0]+2,terminals[terminal][1],terminals[terminal][2]]
       const cap=(e:ThreeEvent<MouseEvent>)=>{e.stopPropagation();onTerminal(terminal)}
       return <group key={terminal} position={at}>
         <mesh position={[0,-0.10,0]}><cylinderGeometry args={[0.29,0.29,0.09,24]}/><meshStandardMaterial color={positive?'#ad2737':'#222a31'}/></mesh>
@@ -34,7 +34,7 @@ export function RealisticBattery({ onTerminal, selected }: {onTerminal:(terminal
   </group>
 }
 export function RealisticMeter({ voltage }: {voltage:number}) {
-  return <group position={[3.30,0,0.83]} rotation={[-0.14,-0.18,0]}>
+  return <group position={[2.40,-0.05,0]} rotation={[0,0,0]}>
     <mesh castShadow><boxGeometry args={[2.25,1.12,0.42]}/><meshStandardMaterial color="#dda925" roughness={0.48}/></mesh>
     <mesh position={[0,0.3,0.221]}><planeGeometry args={[1.95,0.4]}/><meshBasicMaterial color="#1b3533"/></mesh>
     <Html center position={[0,0.3,0.23]} transform distanceFactor={5}><span className="meter-face">{voltage.toFixed(2)} V DC</span></Html>
@@ -48,10 +48,10 @@ export function RealisticMeter({ voltage }: {voltage:number}) {
 export function RealisticLead({probe,placement}: {probe:Probe;placement:ProbePlacement}) {
   const start=socket[probe]
   const end:[number,number,number]=placement==='disconnected'?
-    [probe==='red'?5.0:2.1,-0.95,1.6]:terminals[placement]
+    [probe==='red'?4.3:1.0,-1.05,1.8]:terminals[placement]
   const color=probe==='red'?'#e7484f':'#12161b'
-  const outerX = probe === 'red' ? 5.15 : 2.45
-  const points: [number,number,number][] = [start,[outerX,-0.9,1.6],[outerX,-1.35,2.0],[(outerX+end[0])/2,-1.3,2.2],[end[0],end[1]+0.36,1.2],end]
+  const outerX = probe === 'red' ? 3.35 : 1.35
+  const points: [number,number,number][] = [start,[outerX,-0.95,0.65],[outerX,-1.28,1.65],[(outerX+end[0])/2,-1.18,2.05],[end[0],end[1]+0.25,1.2],end]
   return <group>
     <CatmullRomLine points={points} color={color} lineWidth={5} segments={54}/>
     <mesh position={end} rotation={[Math.PI/2,0,0]} castShadow>
