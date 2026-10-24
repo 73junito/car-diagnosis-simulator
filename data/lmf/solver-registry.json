@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryRole": "unified-lmf-solver-candidates",
+  "disclaimer": "Registration identifies integration candidates, not installed or validated executable solver capabilities. No candidate may produce measurement or assessment authority merely by being listed.",
+  "solvers": [
+    {
+      "solverId": "typescript-mna",
+      "name": "TypeScript Modified Nodal Analysis",
+      "domainIds": [
+        "electrical"
+      ],
+      "role": "primary-electrical-candidate",
+      "integrationStatus": "implementation-present-not-unified",
+      "executionBoundary": "browser-worker",
+      "sourceRefs": [
+        "src/simulation/mna.ts",
+        "src/simulation/electrical-adapter.ts",
+        "scripts/build-simulation.js"
+      ],
+      "modelInterface": "electrical-netlist",
+      "assessmentAuthority": false
+    },
+    {
+      "solverId": "ngspice",
+      "name": "ngspice",
+      "domainIds": [
+        "electrical"
+      ],
+      "role": "independent-electrical-reference",
+      "integrationStatus": "reference-models-only",
+      "executionBoundary": "isolated-native-process",
+      "sourceRefs": [
+        "engineering/ngspice/starting-system-v2-healthy.cir"
+      ],
+      "modelInterface": "spice-netlist",
+      "assessmentAuthority": false
+    },
+    {
+      "solverId": "openmodelica",
+      "name": "OpenModelica",
+      "domainIds": [
+        "mechanical",
+        "electrical",
+        "hydraulic",
+        "thermal",
+        "powertrain"
+      ],
+      "role": "multidomain-engine-candidate",
+      "integrationStatus": "not-integrated",
+      "executionBoundary": "isolated-native-process",
+      "sourceRefs": [],
+      "modelInterface": "modelica-model",
+      "assessmentAuthority": false
+    },
+    {
+      "solverId": "omsimulator",
+      "name": "OMSimulator / FMI",
+      "domainIds": [
+        "mechanical",
+        "electrical",
+        "hydraulic",
+        "thermal",
+        "network-control"
+      ],
+      "role": "fmu-co-simulation-candidate",
+      "integrationStatus": "not-integrated",
+      "executionBoundary": "isolated-native-process",
+      "sourceRefs": [],
+      "modelInterface": "fmi-fmu",
+      "assessmentAuthority": false
+    },
+    {
+      "solverId": "opendss",
+      "name": "OpenDSS",
+      "domainIds": [
+        "electrical"
+      ],
+      "role": "specialized-distribution-reference-candidate",
+      "integrationStatus": "not-integrated",
+      "executionBoundary": "isolated-native-process",
+      "sourceRefs": [],
+      "modelInterface": "distribution-network-model",
+      "applicability": "Electric distribution models; not suitable as the default automotive electrical solver.",
+      "assessmentAuthority": false
+    }
+  ]
+}
