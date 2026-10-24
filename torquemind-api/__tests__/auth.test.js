@@ -156,6 +156,32 @@ describe('auth middleware', () => {
       expect(req.user.id).toBe('uid-1');
       expect(next).toHaveBeenCalledTimes(1);
     });
+    it('emits token-safe verifier diagnostics without granting access when rejected', async () => {
+      const previous = process.env.AUTH_VERIFY_DIAGNOSTICS;
+      const log = jest.spyOn(console, 'log').mockImplementation(() => {});
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      process.env.AUTH_VERIFY_DIAGNOSTICS = 'true';
+      try {
+        const supabase = makeSupabase({ data: null, error: { name: 'AuthSessionMissingError', message: 'Auth session missing!' } });
+        global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 401 });
+        const req = makeReq('Bearer sensitive-smoke-test-token');
+        req.path = '/api/replay';
+        const res = makeRes();
+        await createAuth(supabase)(req, res, next);
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(next).not.toHaveBeenCalled();
+        const diagnostics = log.mock.calls.map((args) => args.join(' ') + JSON.stringify(args.slice(1))).join(' ');
+        expect(diagnostics).toContain('Auth verifier response');
+        expect(diagnostics).toContain('/api/replay');
+        expect(diagnostics).toContain('401');
+        expect(diagnostics).not.toContain('sensitive-smoke-test-token');
+      } finally {
+        log.mockRestore();
+        warn.mockRestore();
+        if (previous === undefined) delete process.env.AUTH_VERIFY_DIAGNOSTICS;
+        else process.env.AUTH_VERIFY_DIAGNOSTICS = previous;
+      }
+    });
     it('rejects a token when Supabase Auth rejects it', async () => {
       const supabase = makeSupabase({ data: null, error: { name: 'AuthSessionMissingError', message: 'Auth session missing!' } });
       global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 401 });
