@@ -40,6 +40,13 @@ with `--network none`, no published ports, no host mounts, `ON_ERROR_STOP=1`, an
 by container id. No staging or production credential is present and no student or
 application data is used.
 
+Image provenance is established from `docker image inspect`, not from the container
+inspection. A container inspection carries no digest metadata at all, and the image id it
+reports is the platform configuration id, which differs from the pinned digest whenever the
+pinned digest is a manifest list. The harness therefore requires the running image to be
+the image the approved digest resolves to, corroborated by the digest metadata the image
+store records, and fails closed when neither can be established.
+
 ## Boundary 1 — direct grants and RLS
 
 **Established.** All 12 institution and tenant tables carry `anon=[]` and `authenticated=[]`.

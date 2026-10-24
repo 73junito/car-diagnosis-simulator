@@ -20,6 +20,7 @@ const { spawnSync } = require("child_process");
 
 const {
   APPROVED_SUPABASE_IMAGE,
+  APPROVED_SUPABASE_IMAGE_BY_DIGEST,
   BOOTSTRAP_SQL,
   DISPOSABLE_NAME_PREFIX,
   PLATFORM_MIGRATION_ROLE,
@@ -202,9 +203,49 @@ async function validate({ docker, container, image, migrationsDirectory, auditSq
       return { ok: false, reason: "isolation-unknown", steps, evidence };
     }
 
-    const violations = isolationViolations({ name: container, inspect });
+    // Image provenance is established from the image, not from the container:
+    // `docker inspect <container>` reports no digest metadata at all, and the
+    // container's image id is the platform configuration id, which differs from
+    // the pinned digest whenever the pinned digest is a manifest list.
+    const imageInspectResult = docker(["image", "inspect", inspect.Image]);
+    let imageInspect = null;
 
-    evidence.isolation = { networkMode: inspect.HostConfig && inspect.HostConfig.NetworkMode, image: inspect.Image };
+    if (imageInspectResult.exitCode === 0) {
+      try {
+        imageInspect = JSON.parse(imageInspectResult.stdout)[0] || null;
+      } catch {
+        imageInspect = null;
+      }
+    }
+
+    // The approved reference resolved in the local image store. Comparing the
+    // running image with it proves provenance without depending on the store
+    // recording any digest metadata at all.
+    const approvedImageResult = docker(["image", "inspect", APPROVED_SUPABASE_IMAGE_BY_DIGEST]);
+    let approvedImageId = null;
+
+    if (approvedImageResult.exitCode === 0) {
+      try {
+        const approvedImage = JSON.parse(approvedImageResult.stdout)[0];
+
+        approvedImageId = (approvedImage && approvedImage.Id) || null;
+      } catch {
+        approvedImageId = null;
+      }
+    }
+
+    const violations = isolationViolations({
+      name: container,
+      inspect,
+      imageInspect,
+      approvedImageId
+    });
+
+    evidence.isolation = {
+      networkMode: inspect.HostConfig && inspect.HostConfig.NetworkMode,
+      image: inspect.Image,
+      imageProvenance: (imageInspect && imageInspect.RepoDigests) || []
+    };
 
     if (violations.length > 0) {
       record("isolation", false, violations.join(" "));
