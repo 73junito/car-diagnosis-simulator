@@ -244,6 +244,18 @@ any test in this package:
 The local PostgreSQL migration divergence is also separate from the hosted staging
 migration-parity failure. Resolving one does not resolve the other.
 
+**Diagnosed — the staging migration-parity failure is not caused by #1103.** The failing
+`staging migration parity` check reports that the staging project
+`jchfruprqpeypdttvlam` is missing one canonical migration,
+`20261013190000_retire_external_certification_taxonomy.sql`, against a baseline of 106
+migrations on `main` (`53ebf0f7`). That migration is present on `main` and on the #1103
+branch, and it is **not** part of the #1103 diff, so the branch cannot be the cause: the
+staging project simply has not applied a migration that `main` already carries. The check
+compares staging against `main` rather than against the pull request, which is why it
+appears on this branch. `production migration parity` passes, so the two environments
+differ. Closing this requires applying the outstanding canonical migration to staging,
+which is a deployment action and is deliberately not taken here.
+
 ## Required output
 
 An explicit approval or rejection, with conditions if any, stating for each of the three
