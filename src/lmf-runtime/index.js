@@ -44,4 +44,4 @@ function createRuntime(labId){
  };
  return Object.freeze({labId,modelIdentity,adapterId:binding.engineeringAdapterId,resolveState,measure});
 }
-module.exports={createRuntime,...require('./solver-registry')};
+module.exports={createRuntime,...require('./solver-registry'),...require('./electrical-compatibility')};
