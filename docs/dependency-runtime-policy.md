@@ -43,7 +43,22 @@ Do not broaden, remove, or bump these overrides as part of unrelated feature wor
 
 Root `npm audit` currently reports a reviewed moderate-severity Jest/Istanbul development-only chain ending in `sprintf-js`. The repository's `validate:dependency-security-exceptions` gate verifies the exact reviewed chain and prohibits it from becoming a production or direct dependency.
 
-The legacy `torquemind-api` lockfile currently reports no npm audit vulnerabilities.
+The legacy `torquemind-api` lockfile currently reports no moderate-or-higher `npm audit` findings in its production tree. Its remaining findings are dev-only.
+
+### Remediated transitive advisories
+
+Four transitive packages previously carried open Dependabot advisories. Their parents already permitted the patched releases, so the fix is a lockfile resolution bump rather than an override, and no direct dependency was added.
+
+| Package | Patched version | Root scope | Legacy API scope | Advisory |
+| --- | --- | --- | --- | --- |
+| `dompurify` | `3.4.17` | dev-only (`mermaid`, `@zenuml/core`) | not present | GHSA-cg2g-xh64-v4q7, GHSA-mrv2-3pqr-j5jr, GHSA-c6gr-qvv4-5v3f |
+| `ip-address` | `10.7.4` | dev-only (`express-rate-limit`) | production (`express-rate-limit`) | GHSA-rxp7-6hxx-x8q5 |
+| `body-parser` | `2.4.0` | dev-only (`express`) | production (`express`) | GHSA-v422-hmwv-36x6 |
+| `fast-uri` | `3.1.9` | dev-only (`ajv`) | production (`ajv`) | GHSA-w74x-v6f9-j3xg and related |
+
+`validate:dependency-runtime-compatibility` enforces these versions as minimum floors across both lockfiles and pins each package's scope. The floor check fails if a package regresses below its patched release, resolves to more than one lockfile record, or changes between dev-only and production-reachable. These floors are the only guard against a future lockfile regeneration silently reintroducing a vulnerable resolution.
+
+The legacy API production tree is now free of moderate-or-higher `npm audit` findings. Its remaining findings are dev-only (`puppeteer`, `puppeteer-core`, `chromium-bidi`, `zod`) and are not covered by Dependabot alerts.
 
 ## Required compatibility checks
 
