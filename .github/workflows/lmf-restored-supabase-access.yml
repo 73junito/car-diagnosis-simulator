@@ -1,11 +1,22 @@
 name: Restored Supabase Access Smoke
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/lmf-restored-supabase-access.yml'
+      - 'scripts/smoke-restored-supabase-access.cjs'
 permissions:
   contents: read
 jobs:
   restored-access:
-    if: github.repository == '73junito/car-diagnosis-simulator' && github.ref == 'refs/heads/feat/lmf-unified-runtime-foundation'
+    if: >-
+      github.repository == '73junito/car-diagnosis-simulator' &&
+      ((github.event_name == 'pull_request' &&
+        github.event.pull_request.head.repo.full_name == '73junito/car-diagnosis-simulator' &&
+        github.event.pull_request.head.ref == 'feat/lmf-unified-runtime-foundation') ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.ref == 'refs/heads/feat/lmf-unified-runtime-foundation'))
     runs-on: ubuntu-latest
     timeout-minutes: 5
     environment: nbgvllelsfhnmuwuqlkw
