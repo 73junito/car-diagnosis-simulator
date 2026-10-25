@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/lmf-restored-supabase-access.yml'
       - 'scripts/smoke-restored-supabase-access.cjs'
+      - 'scripts/smoke-restored-supabase-authenticated.cjs'
 permissions:
   contents: read
 jobs:
@@ -32,3 +33,9 @@ jobs:
           EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
           RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
         run: node scripts/smoke-restored-supabase-access.cjs
+      - name: Verify dedicated authenticated restored-project catalog read when configured
+        env:
+          EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
+          RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
+          RESTORED_TEST_USER_JWT: ${{ secrets.RESTORED_TEST_USER_JWT }}
+        run: node scripts/smoke-restored-supabase-authenticated.cjs
