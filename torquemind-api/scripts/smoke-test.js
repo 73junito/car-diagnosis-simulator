@@ -4,7 +4,15 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TEST_TEACHER_EMAIL = process.env.TEST_TEACHER_EMAIL;
 const TEST_TEACHER_PASSWORD = process.env.TEST_TEACHER_PASSWORD;
+// A dedicated teacher identity belongs to exactly one workflow. When it is
+// present it wins over the shared identity, so repairing it cannot revoke the
+// sessions a sibling workflow is holding.
+const DEDICATED_TEACHER_EMAIL = process.env.DEDICATED_TEACHER_EMAIL;
+const DEDICATED_TEACHER_PASSWORD = process.env.DEDICATED_TEACHER_PASSWORD;
 const SMOKE_SEED_FIXTURE = process.env.SMOKE_SEED_FIXTURE === "true";
+const TEACHER_SCOPE_DEDICATED = "dedicated";
+const TEACHER_SCOPE_SHARED_ISOLATED = "shared-isolated";
+const TEACHER_SCOPE_SHARED = "shared";
 const APPROVED_STAGING_SUPABASE_HOST = "jchfruprqpeypdttvlam.supabase.co";
 const TIMEOUT = 15000;
 
@@ -79,6 +87,7 @@ async function ensureTeacherFixture(options = {}) {
     email = TEST_TEACHER_EMAIL,
     password = TEST_TEACHER_PASSWORD,
     fetchImpl = fetch,
+    allowPasswordReset = true,
   } = options;
 
   if (!enabled) return { action: "disabled" };
@@ -143,6 +152,15 @@ async function ensureTeacherFixture(options = {}) {
   }
   if (typeof teacher.id !== "string" || !teacher.id) {
     throw new Error("Teacher fixture lookup returned an invalid user identity.");
+  }
+  // Resetting the password revokes every session this identity holds. That is
+  // safe for a dedicated identity, whose sessions belong to this workflow
+  // alone, but it breaks a sibling workflow that is signed in with the shared
+  // identity, so the repair is refused there.
+  if (!allowPasswordReset) {
+    throw new Error(
+      "Teacher fixture password reset refused: this run shares the staging teacher identity, and resetting its password revokes every session it holds."
+    );
   }
   await adminRequest(`/${encodeURIComponent(teacher.id)}`, {
     method: "PUT",
@@ -212,6 +230,56 @@ async function requestTeacherSignIn(options = {}) {
 }
 
 /**
+ * Resolve the teacher identity this run is allowed to use.
+ *
+ * Three scopes are possible:
+ *
+ * - `dedicated`: the workflow owns a disposable identity of its own. Repairing
+ *   it cannot revoke a session another workflow is holding, so the repair is
+ *   allowed.
+ * - `shared-isolated`: the workflow fell back to the shared identity but opted
+ *   into isolation. The shared identity is used by several workflows (and by
+ *   the production sign-in workflows), so it must never be repaired from a
+ *   workflow run: GoTrue revokes every session the user holds when the
+ *   password changes. The run fails loudly instead.
+ * - `shared`: legacy behaviour. The shared identity is repaired as before.
+ *
+ * @returns {{email: string, password: string, scope: string}}
+ */
+function resolveTeacherCredentials(env = process.env) {
+  const dedicatedEmail = (env.DEDICATED_TEACHER_EMAIL || "").trim();
+  const dedicatedPassword = env.DEDICATED_TEACHER_PASSWORD || "";
+  const sharedEmail = (env.TEST_TEACHER_EMAIL || "").trim();
+  const sharedPassword = env.TEST_TEACHER_PASSWORD || "";
+  const isolated = env.SMOKE_TEACHER_ISOLATED === "true";
+
+  if (dedicatedEmail && !dedicatedPassword) {
+    throw new Error(
+      "Dedicated teacher credentials are incomplete: DEDICATED_TEACHER_EMAIL was provided without DEDICATED_TEACHER_PASSWORD."
+    );
+  }
+  if (!dedicatedEmail && dedicatedPassword) {
+    throw new Error(
+      "Dedicated teacher credentials are incomplete: DEDICATED_TEACHER_PASSWORD was provided without DEDICATED_TEACHER_EMAIL."
+    );
+  }
+
+  if (dedicatedEmail && dedicatedPassword) {
+    return {
+      email: dedicatedEmail,
+      password: dedicatedPassword,
+      scope: TEACHER_SCOPE_DEDICATED,
+    };
+  }
+
+  return {
+    email: sharedEmail,
+    password: sharedPassword,
+    scope: isolated ? TEACHER_SCOPE_SHARED_ISOLATED : TEACHER_SCOPE_SHARED,
+  };
+}
+
+/**
  * Resolve a signed-in teacher session for this run.
  *
  * The two staging smoke workflows run concurrently against the same staging
@@ -230,6 +298,7 @@ async function resolveTeacherSession(options = {}) {
   const {
     requestSignIn = requestTeacherSignIn,
     ensureFixture = ensureTeacherFixture,
+    mayResetPassword = true,
   } = options;
 
   const result = await requestSignIn();
@@ -249,6 +318,32 @@ async function resolveTeacherSession(options = {}) {
   // revokes every session the shared identity holds, so a transient blip would
   // break a concurrently running sibling smoke workflow that is signed in.
   if (result.status !== 400) return result;
+
+  if (!mayResetPassword) {
+    // The identity is shared with at least one sibling workflow. Creating it is
+    // harmless, but resetting the password would revoke every session it holds
+    // and break the sibling run, so the repair is refused and the rejection is
+    // reported with the remediation instead.
+    let fixture;
+    try {
+      fixture = await ensureFixture({ allowPasswordReset: false });
+    } catch (err) {
+      return {
+        ...result,
+        repairRefused: true,
+        message: `Teacher sign-in was rejected and the shared staging teacher identity was not repaired: ${err.message} Provision dedicated teacher credentials for this workflow.`,
+      };
+    }
+    if (fixture && fixture.action === "created") {
+      return requestSignIn();
+    }
+    return {
+      ...result,
+      repairRefused: true,
+      message:
+        "Teacher sign-in was rejected and the shared staging teacher identity was not repaired: resetting its password revokes every session it holds, including the sessions a sibling smoke workflow is using. Provision dedicated teacher credentials for this workflow.",
+    };
+  }
 
   const fixture = await ensureFixture();
 
@@ -278,7 +373,8 @@ async function getUserFromToken(token) {
   }
 }
 
-async function ensureProfile(userId) {
+async function ensureProfile(userId, options = {}) {
+  const { email = TEST_TEACHER_EMAIL } = options;
   if (!userId) return;
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) return;
   // Prefer using the Supabase admin client with the service role key to bypass RLS
@@ -287,12 +383,12 @@ async function ensureProfile(userId) {
     const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const { error } = await admin
       .from('profiles')
-      .upsert({ id: userId, email: TEST_TEACHER_EMAIL, role: 'teacher' }, { onConflict: 'id', returning: 'minimal' });
+      .upsert({ id: userId, email, role: 'teacher' }, { onConflict: 'id', returning: 'minimal' });
 
     console.log('ensureProfile result', {
       ok: !error,
       userId: userId || null,
-      email: TEST_TEACHER_EMAIL || null,
+      email: email || null,
       role: 'teacher',
       error: error ? (error.message || JSON.stringify(error)) : null,
     });
@@ -309,7 +405,7 @@ async function ensureProfile(userId) {
           'Content-Type': 'application/json',
           Prefer: 'resolution=merge-duplicates, return=representation'
         },
-        body: JSON.stringify({ id: userId, email: TEST_TEACHER_EMAIL, role: 'teacher' })
+        body: JSON.stringify({ id: userId, email, role: 'teacher' })
       });
       let error = null;
       let body = null;
@@ -320,13 +416,13 @@ async function ensureProfile(userId) {
       console.log('ensureProfile result', {
         ok: res.ok,
         userId: userId || null,
-        email: TEST_TEACHER_EMAIL || null,
+        email: email || null,
         role: 'teacher',
         error: error || (e && e.message) || null
       });
       return { ok: res.ok, body };
     } catch (err2) {
-      console.log('ensureProfile result', { ok: false, userId: userId || null, email: TEST_TEACHER_EMAIL || null, role: 'teacher', error: err2 && err2.message });
+      console.log('ensureProfile result', { ok: false, userId: userId || null, email: email || null, role: 'teacher', error: err2 && err2.message });
     }
   }
 }
@@ -380,7 +476,36 @@ async function cleanupActiveSmokeClass() {
 async function main() {
   console.log(`TorqueMind smoke test against ${BASE_URL}`);
 
-  const signIn = await resolveTeacherSession();
+  const credentials = resolveTeacherCredentials();
+  // A shared identity must not be repaired from a workflow run: resetting the
+  // password revokes every session it holds, including the sessions a sibling
+  // workflow and the production sign-in workflows are using.
+  const mayResetPassword = credentials.scope !== TEACHER_SCOPE_SHARED_ISOLATED;
+
+  if (credentials.scope === TEACHER_SCOPE_DEDICATED) {
+    console.log(`Teacher identity: dedicated (${credentials.email}).`);
+  } else if (mayResetPassword) {
+    console.log(`Teacher identity: shared (${credentials.email || "unset"}).`);
+  } else {
+    console.warn(
+      `Teacher identity: shared fallback (${credentials.email || "unset"}). This run may not reset the teacher password, because that would revoke the sessions a sibling smoke workflow is holding. Provision dedicated teacher credentials for full isolation.`
+    );
+  }
+
+  const signIn = await resolveTeacherSession({
+    requestSignIn: () =>
+      requestTeacherSignIn({
+        email: credentials.email,
+        password: credentials.password,
+      }),
+    ensureFixture: (options = {}) =>
+      ensureTeacherFixture({
+        ...options,
+        email: credentials.email,
+        password: credentials.password,
+      }),
+    mayResetPassword,
+  });
 
   if (!signIn.ok) {
     if (signIn.credentialsMissing) {
@@ -402,7 +527,7 @@ async function main() {
   }
 
   // Ensure the test teacher has a profile with teacher role (use service role key)
-  await ensureProfile(userId);
+  await ensureProfile(userId, { email: credentials.email });
 
   const health = await request("/", {}, token);
   if (!health.ok) {
@@ -554,4 +679,8 @@ module.exports = {
   cleanupSmokeClass,
   requestTeacherSignIn,
   resolveTeacherSession,
+  resolveTeacherCredentials,
+  TEACHER_SCOPE_DEDICATED,
+  TEACHER_SCOPE_SHARED_ISOLATED,
+  TEACHER_SCOPE_SHARED,
 };

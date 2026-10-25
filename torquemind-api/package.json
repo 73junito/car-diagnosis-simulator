@@ -9,7 +9,8 @@
     "db:validate": "node scripts/validate-db-ssl.js",
     "db:validate-report": "node scripts/validate-db-ssl-report.js",
     "test": "jest --runInBand --forceExit",
-    "test:smoke": "node scripts/smoke-test.js"
+    "test:smoke": "node scripts/smoke-test.js",
+    "provision:smoke-teacher": "node scripts/provision-smoke-teacher-identity.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.105.1",

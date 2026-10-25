@@ -54,6 +54,8 @@ Under the patch the healthy path performs **no** password reset at all, so no se
 
 Separate teacher identities per workflow, or a dedicated staging project for one of them, would remove the shared state entirely. That requires additional environment secrets and is not yet provisioned.
 
+> Superseded by `docs/staging-smoke-teacher-isolation.md`: the per-workflow disposable teacher identities are now implemented. `smoke.yml` and `api-smoke.yml` each use their own dedicated identity (`SMOKE_TEACHER_EMAIL` / `API_SMOKE_TEACHER_EMAIL`), and both opt into `SMOKE_TEACHER_ISOLATED=true`, so a run that still falls back to the shared identity refuses to reset its password instead of revoking a sibling's session. The release workflow and the production sign-in workflows keep the shared identity and are unchanged.
+
 Concurrent fixture access has now been exercised (see "Validation of the fix under concurrency" above): the two smoke-test *steps* in CI still rarely overlap to the second, so the CI-level runs alone remain weak evidence. The A/B comparison above exercises the same interleaving deterministically and is the stronger signal.
 
 The two workflows were nevertheless run concurrently against staging on PR #1132 and on a `workflow_dispatch` pair; both passed, and the teacher identity accumulated sessions across the runs instead of being reset, which is the expected patched behaviour.
