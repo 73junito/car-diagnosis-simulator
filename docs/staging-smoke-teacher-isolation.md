@@ -35,10 +35,16 @@ Two disposable identities are needed, one per staging smoke workflow. Store
 them as **environment secrets** on the `jchfruprqpeypdttvlam_staging`
 environment:
 
-| Workflow | Secret name |
-| --- | --- |
-| `.github/workflows/smoke.yml` | `SMOKE_TEACHER_EMAIL`, `SMOKE_TEACHER_PASSWORD` |
-| `.github/workflows/api-smoke.yml` | `API_SMOKE_TEACHER_EMAIL`, `API_SMOKE_TEACHER_PASSWORD` |
+| Workflow | Secret name | Identity |
+| --- | --- | --- |
+| `.github/workflows/smoke.yml` | `SMOKE_TEACHER_EMAIL`, `SMOKE_TEACHER_PASSWORD` | `…+smoke-staging-a` plus-alias |
+| `.github/workflows/api-smoke.yml` | `API_SMOKE_TEACHER_EMAIL`, `API_SMOKE_TEACHER_PASSWORD` | `…+smoke-staging-b` plus-alias |
+
+Both identities are provisioned (2026-10-25). They are plus-aliases of the
+same mailbox the other disposable staging accounts use, following the
+convention already established in this project. The literal addresses are not
+committed here — they are recorded in the environment secrets themselves, so
+read them from GitHub rather than from this document.
 
 Each workflow maps its own pair onto `DEDICATED_TEACHER_EMAIL` /
 `DEDICATED_TEACHER_PASSWORD`, so the two workflows never share an identity.
@@ -57,9 +63,10 @@ shared identity itself.
 cd torquemind-api
 $env:SUPABASE_URL = 'https://jchfruprqpeypdttvlam.supabase.co'
 $env:SUPABASE_SERVICE_ROLE_KEY = '<staging service role key>'
-$env:SMOKE_TEACHER_EMAIL = 'smoke-teacher@example.test'
+$env:SMOKE_TEACHER_EMAIL = '<the disposable address for this workflow>'
 $env:SMOKE_TEACHER_PASSWORD = '<generated password>'
 $env:TEST_TEACHER_EMAIL = '<the shared identity email>'
+$env:SECRET_NAME_PREFIX = 'SMOKE_TEACHER'   # or API_SMOKE_TEACHER
 
 node scripts/provision-smoke-teacher-identity.js
 ```
@@ -76,12 +83,16 @@ node scripts/provision-smoke-teacher-identity.js --cleanup
 
 ## Fallback behaviour
 
-Until the dedicated secrets are provisioned, both staging smoke workflows fall
-back to the shared identity with `SMOKE_TEACHER_ISOLATED=true`. In that state
-the run still signs in normally, but if the stored shared credential is
-rejected (HTTP 400) the run **fails** with a remediation message instead of
-resetting the shared password. Resetting it would revoke the sessions that the
-release workflow and the production sign-in workflows are holding.
+The dedicated secrets are provisioned, so both staging smoke workflows run in
+the `dedicated` scope and can repair their own identity without touching
+anyone else's sessions.
+
+If the dedicated secrets are ever removed, both workflows fall back to the
+shared identity with `SMOKE_TEACHER_ISOLATED=true`. In that state the run
+still signs in normally, but if the stored shared credential is rejected
+(HTTP 400) the run **fails** with a remediation message instead of resetting
+the shared password. Resetting it would revoke the sessions that the release
+workflow and the production sign-in workflows are holding.
 
 ## Regression protection
 
