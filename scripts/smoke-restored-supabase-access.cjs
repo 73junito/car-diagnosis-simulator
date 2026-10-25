@@ -18,13 +18,16 @@ const request = async (path, token) => {
   const body = await response.text();
   if (body.length > 100000) throw new Error('Unexpectedly large API response');
   let rows; try { rows = JSON.parse(body); } catch { rows = null; }
-  return { status: response.status, rows };
+  // Report only allowlisted machine error codes; never print API responses or credentials.
+  const knownCodes = new Set(['PGRST301', 'PGRST302', '42501', 'invalid_jwt', 'invalid_api_key', 'bad_jwt', 'JWTExpired']);
+  const errorCode = rows && !Array.isArray(rows) && typeof rows.code === 'string' && knownCodes.has(rows.code) ? rows.code : 'unclassified';
+  return { status: response.status, rows, errorCode };
 };
 (async () => {
   const questions = await request('/rest/v1/scenario_questions?select=diagnostic_area&limit=1', publishable ? null : anonKey);
-  assert.equal(questions.status, 200, 'Anonymous question read failed');
+  assert.equal(questions.status, 200, `Anonymous question read failed (HTTP ${questions.status}; code ${questions.errorCode}; key type ${publishable ? 'publishable' : 'legacy-jwt'})`);
   assert.ok(Array.isArray(questions.rows), 'Question result was not an array');
-  const catalog = await request('/rest/v1/scenario_catalog?select=diagnostic_area&limit=1', anonKey);
+  const catalog = await request('/rest/v1/scenario_catalog?select=diagnostic_area&limit=1', publishable ? null : anonKey);
   // Catalog is protected by authenticated-only SELECT RLS. RLS may return [] or 403.
   if (catalog.status === 200) assert.deepEqual(catalog.rows, [], 'Anonymous user saw protected catalog data');
   else assert.ok([401, 403].includes(catalog.status), 'Unexpected anonymous catalog response');
