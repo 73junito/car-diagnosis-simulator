@@ -25,3 +25,15 @@ test('Ford and GM OBD-I code are separate keys, OBD-II cannot borrow OBD-I sourc
  expect(result.issues[1].reasons).not.toContain('potential_duplicate_or_context_collision');
  expect(result.issues[2].reasons).toContain('source_protocol_mismatch');
 });
+
+test('generic OBD-II context is not a fabricated vehicle-specific mapping',()=>{
+ const result=inspect([{...sample,protocol:'OBD_II',scope:'generic',manufacturer:'generic',model:'unspecified',yearFrom:null,yearTo:null}]);
+ expect(result.issues.flatMap(issue=>issue.reasons)).not.toContain('vehicle_applicability_missing');
+ expect(result.issues.flatMap(issue=>issue.reasons)).not.toContain('year_range_invalid');
+ expect(result.acceptedCount).toBe(0);
+ expect(result.productionWritesAllowed).toBe(false);
+});
+test('generic scope is rejected if vehicle fields are claimed',()=>{
+ const result=inspect([{...sample,protocol:'OBD_II',scope:'generic'}]);
+ expect(result.issues.flatMap(issue=>issue.reasons)).toContain('generic_scope_invalid');
+});
