@@ -52,7 +52,7 @@ GoTrue reports the underlying cause as `Session from session_id claim in JWT doe
 
 Under the patch the healthy path performs **no** password reset at all, so no session is revoked. The teacher identity's session count therefore grows with concurrent runs instead of being reset to a single session.
 
-Separate teacher identities per workflow, or a dedicated staging project for one of them, would remove the shared state entirely. That requires additional environment secrets and is not yet provisioned.
+Separate teacher identities per workflow, or a dedicated staging project for one of them, would remove the shared state entirely. That requires additional environment secrets and was not yet provisioned when this incident was recorded.
 
 > Superseded by `docs/staging-smoke-teacher-isolation.md`: the per-workflow disposable teacher identities are now implemented. `smoke.yml` and `api-smoke.yml` each use their own dedicated identity (`SMOKE_TEACHER_EMAIL` / `API_SMOKE_TEACHER_EMAIL`), and both opt into `SMOKE_TEACHER_ISOLATED=true`, so a run that still falls back to the shared identity refuses to reset its password instead of revoking a sibling's session. The release workflow and the production sign-in workflows keep the shared identity and are unchanged.
 
