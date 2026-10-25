@@ -63,6 +63,23 @@ The `staging migration parity` gate is a genuine, independently confirmed diverg
 | Schema classification (Gate A) | `staging-taxonomy-schema-probe` run `40156753598` | `unapplied` (determinate, `classifierExit=0`) |
 | Deployment preflight | `staging-taxonomy-deployment-preflight` run `40156755853` against the new backup | pass |
 
-The `unapplied` classification confirms the legacy area columns are still present on both staging scenario tables and the replacement `diagnostic_area` columns are absent, so version `20261013190000` was never applied rather than applied without a history row. Deployment readiness is therefore established, and the remaining step is the controlled application of the canonical file to staging under the gates in `docs/database/staging-taxonomy-recovery-gate.md`, which requires an owner decision on the deployment window and on whether the historical schema fingerprint mismatch has been independently reconciled. This work was **not** performed here: the recovery gate requires approval, and the gate explicitly forbids `migration repair`, `db reset`, blind `db push`, history-table edits and disabling the parity CI.
+The `unapplied` classification confirms the legacy area columns are still present on both staging scenario tables and the replacement `diagnostic_area` columns are absent, so version `20261013190000` was never applied rather than applied without a history row. Deployment readiness is therefore established, and the remaining step is the controlled application of the canonical file to staging under the gates in `docs/database/staging-taxonomy-recovery-gate.md`, which requires an owner decision on the deployment window. This work was **not** performed here: the recovery gate requires approval, and the gate explicitly forbids `migration repair`, `db reset`, blind `db push`, history-table edits and disabling the parity CI.
+
+### Historical schema fingerprint mismatch — reconciled
+
+The question "has the historical schema fingerprint mismatch been independently reconciled?" is now answered: **yes, and it is not schema drift.**
+
+The restore-verification fingerprint is a digest over the normalised catalog inventory, so its value depends on the normalisation algorithm, not only on the schema. The algorithm changed on 2026-10-20 (commit `c744fc8d`), which pinned a fixed `search_path` for deparser output and derived a dense column ordinal with `row_number()`. The Oct 18 baseline was recorded under the older normalisation and the Oct 23 baseline under the current one, so their `schema_fingerprint` values differ even though the staging schema they describe is the same.
+
+This was settled against **real restore evidence**, not by inspection. The matrix emitted by the genuine restore of encrypted staging backup `40156128866` (run `40156618194`) was compared against both baselines:
+
+* against the current baseline (`staging-restore-baseline-40034471907.json`): **47/47 checks PASS**;
+* against the superseded baseline (`staging-restore-baseline-39172287178.json`): **46/47**, with `schema_fingerprint` the *only* failure.
+
+Every substantive expectation — schemas, extensions, roles, public objects, RLS, row counts, required tables, taxonomy state, integrity constraints and the migration-history set — is identical between the two baselines. The mismatch is therefore an **algorithm-version artifact**.
+
+The conclusion is reproducible in CI: the restored-copy matrix is committed at `tests/fixtures/restore-verification-matrix-40156618194.json` and `tests/restore-verification-contract.spec.js` asserts both outcomes against it. `docs/database/restore-verification-spec.md` §3.2 records the versioning rule, and the workflow's default `baseline_manifest` now points at the current baseline so a future restore run is not failed by the superseded fingerprint alone.
+
+The remaining owner decision is consequently only the **deployment window and authorization** for the controlled application of the canonical migration to staging.
 
 No staging or production SQL changes were performed by these validation queries. The restored project may incur continuing cost.
