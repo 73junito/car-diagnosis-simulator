@@ -137,6 +137,45 @@ function verify() {
     if (pkg.overrides?.[name] !== version) fail(`Override ${name} must remain documented at ${version}`)
   }
 
+  const remediatedFloors = {
+    'package-lock.json': {
+      dompurify: { floor: '3.4.17', expectation: 'dev-only' },
+      'ip-address': { floor: '10.7.4', expectation: 'dev-only' },
+      'body-parser': { floor: '2.4.0', expectation: 'dev-only' },
+      'fast-uri': { floor: '3.1.9', expectation: 'dev-only' }
+    },
+    'torquemind-api/package-lock.json': {
+      'ip-address': { floor: '10.7.4', expectation: 'production-reachable' },
+      'body-parser': { floor: '2.4.0', expectation: 'production-reachable' },
+      'fast-uri': { floor: '3.1.9', expectation: 'production-reachable' }
+    }
+  }
+
+  const remediated = []
+  for (const [manifest, entries] of Object.entries(remediatedFloors)) {
+    const manifestLock = readJson(manifest)
+    for (const [name, expectation] of Object.entries(entries)) {
+      const records = Object.entries(manifestLock.packages || {}).filter(
+        ([key]) => key === `node_modules/${name}` || key.endsWith(`/node_modules/${name}`)
+      )
+      if (records.length !== 1) {
+        fail(`${name} must resolve to exactly one reviewed lockfile record in ${manifest}, found ${records.length}`)
+      }
+      const record = records[0][1]
+      if (compareVersions(record.version, expectation.floor) < 0) {
+        fail(`${name} in ${manifest} must not regress below patched ${expectation.floor}, got ${record.version}`)
+      }
+      const devOnly = record.dev === true
+      if (expectation.expectation === 'dev-only' && !devOnly) {
+        fail(`${name} in ${manifest} must remain dev-only; it is not runtime-reachable`)
+      }
+      if (expectation.expectation === 'production-reachable' && devOnly) {
+        fail(`${name} in ${manifest} must remain production-reachable`)
+      }
+      remediated.push(`${manifest} ${name}@${record.version} (${expectation.expectation})`)
+    }
+  }
+
   const policyPath = path.join(root, 'docs', 'dependency-runtime-policy.md')
   if (!fs.existsSync(policyPath)) fail('Dependency runtime policy documentation is required')
 
@@ -148,7 +187,8 @@ function verify() {
     playwrightCoreShim,
     primaryPlaywright: primaryPlaywright.version,
     primaryPlaywrightCore: primaryPlaywrightCoreVersion,
-    overrides: expectedOverrides
+    overrides: expectedOverrides,
+    remediatedTransitiveFloors: remediated
   }
 }
 
