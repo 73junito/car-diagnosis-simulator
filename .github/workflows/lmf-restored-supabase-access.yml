@@ -1,0 +1,23 @@
+name: Restored Supabase Access Smoke
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  restored-access:
+    if: github.repository == '73junito/car-diagnosis-simulator' && github.ref == 'refs/heads/feat/lmf-unified-runtime-foundation'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: nbgvllelsfhnmuwuqlkw
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify isolated restored-project credentials and anonymous access
+        env:
+          EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
+          RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
+        run: node scripts/smoke-restored-supabase-access.cjs
