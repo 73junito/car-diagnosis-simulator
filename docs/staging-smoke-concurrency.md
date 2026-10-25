@@ -27,9 +27,36 @@ This was observed as an intermittent `smoke` failure on PR #1128 head `ffc16102`
 
 The smoke test therefore signs in **before** it repairs the fixture, so the destructive reset stays off the healthy path and only runs when the stored credential is genuinely rejected (HTTP 400). A transient failure (rate limit, upstream 5xx, network error) never triggers the reset, because it would revoke the sibling's session without repairing anything.
 
+### Validation of the fix under concurrency
+
+The fix was validated against live staging with an A/B comparison of the smoke script **before** and **after** the change, using a disposable teacher identity and a local `torquemind-api` server pointed at the approved staging project.
+
+Both variants ran the real script twice concurrently, sweeping the relative start offset between the two runs (0–2200 ms) to cover the interleaving space. Each variant used a fresh API server so the 100-request/15-minute IP rate limiter could not confound the result, and every failure was classified so that a `429` could never be misattributed to the race:
+
+| Variant | Concurrent pairs passed | Failures | API-server `Auth failed: invalid/expired token` |
+| --- | --- | --- | --- |
+| Pre-fix (`origin/main`) | 3 / 8 | **5 × `RACE_401`** | **5** |
+| Post-fix (this change) | **8 / 8** | 0 | **0** |
+
+The pre-fix failures land on **different** smoke steps (exit codes 1, 3, 5, 7 — create class, list classes, post replay, post completion), depending on where the sibling's reset falls relative to the victim's request sequence. That is the same mechanism that made the CI failure look non-deterministic (`3/7` in one run, `4/7` in another).
+
+The failure was also reproduced end to end against the real API server, confirming the exact CI error string:
+
+```
+GET /api/classes  (before sibling reset)  -> 200 {"classes":[]}
+< sibling runs ensureTeacherFixture() -> password reset >
+GET /api/classes  (same JWT, after reset)  -> 401 {"error":"Invalid or expired token"}
+```
+
+GoTrue reports the underlying cause as `Session from session_id claim in JWT does not exist` (`session_not_found`); the API's auth middleware turns that into `401 Invalid or expired token`. After the patch, the same flow re-signs-in successfully and the route returns `200` again.
+
+Under the patch the healthy path performs **no** password reset at all, so no session is revoked. The teacher identity's session count therefore grows with concurrent runs instead of being reset to a single session.
+
 Separate teacher identities per workflow, or a dedicated staging project for one of them, would remove the shared state entirely. That requires additional environment secrets and is not yet provisioned.
 
-Treat concurrent fixture safety as low-risk but **not proven**: on PR #1100 the two workflow runs overlapped, but the two smoke-test *steps* did not overlap in time (23:38:51–23:38:55 and 23:39:07–23:39:10), so simultaneous fixture access has not yet been exercised.
+Concurrent fixture access has now been exercised (see "Validation of the fix under concurrency" above): the two smoke-test *steps* in CI still rarely overlap to the second, so the CI-level runs alone remain weak evidence. The A/B comparison above exercises the same interleaving deterministically and is the stronger signal.
+
+The two workflows were nevertheless run concurrently against staging on PR #1132 and on a `workflow_dispatch` pair; both passed, and the teacher identity accumulated sessions across the runs instead of being reset, which is the expected patched behaviour.
 
 Before declaring a PR staging-verified, identify the **most recently created smoke workflow run for that PR** and require a completed `success` conclusion. A newer cancelled/pending/failed run holds verification, even if an older run succeeded.
 
