@@ -25,14 +25,16 @@ const request = async (path, token) => {
 };
 (async () => {
   const questions = await request('/rest/v1/scenario_questions?select=diagnostic_area&limit=1', publishable ? null : anonKey);
-  assert.equal(questions.status, 200, `Anonymous question read failed (HTTP ${questions.status}; code ${questions.errorCode}; key type ${publishable ? 'publishable' : 'legacy-jwt'})`);
-  assert.ok(Array.isArray(questions.rows), 'Question result was not an array');
+  // Match verified staging/restored grants: anon has no SELECT privilege on scenario tables.
+  // RLS read policies do not confer table privileges; never grant access merely to pass smoke.
+  assert.ok([401, 403].includes(questions.status) && questions.errorCode === '42501',
+    `Question access contract changed (HTTP ${questions.status}; code ${questions.errorCode}; key type ${publishable ? 'publishable' : 'legacy-jwt'})`);
   const catalog = await request('/rest/v1/scenario_catalog?select=diagnostic_area&limit=1', publishable ? null : anonKey);
-  // Catalog is protected by authenticated-only SELECT RLS. RLS may return [] or 403.
-  if (catalog.status === 200) assert.deepEqual(catalog.rows, [], 'Anonymous user saw protected catalog data');
-  else assert.ok([401, 403].includes(catalog.status), 'Unexpected anonymous catalog response');
+  // Catalog also denies anon at the table-privilege boundary.
+  assert.ok([401, 403].includes(catalog.status) && catalog.errorCode === '42501',
+    `Catalog access contract changed (HTTP ${catalog.status}; code ${catalog.errorCode})`);
   const bad = await request('/rest/v1/scenario_catalog?select=diagnostic_area&limit=1', 'intentionally.invalid.token');
   assert.ok([401,403].includes(bad.status), 'Malformed token was accepted');
-  console.log('PASS restored project read-only anon access and malformed-token checks');
+  console.log('PASS restored project anonymous access-denial and malformed-token checks');
   console.log('NOTE positive authenticated user access and write-denial tests remain outstanding');
 })().catch(e => {console.error('FAIL restored-project access smoke:',e.message);process.exitCode=1;});
