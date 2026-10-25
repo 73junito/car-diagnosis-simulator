@@ -649,8 +649,8 @@
     {
       "version": "20261018050000",
       "path": "supabase/migrations/20261018050000_create_obd_reference_catalog.sql",
-      "sha256": "41735e2ee00f106159b32885588c6b72d477cdd75d809028e9b3bca27f7576d4",
-      "bytes": 4683
+      "sha256": "e8ece55a5b596f4e508f1e07e01cea8a2d273d1da959258bb74df0a328d06a58",
+      "bytes": 4609
     }
   ],
   "pathEncoding": "Retired vendor tokens inside historical filenames are written with JSON unicode escapes; decoded values are the exact repository paths."
