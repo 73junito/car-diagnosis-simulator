@@ -17,6 +17,11 @@ on:
 permissions:
   contents: read
 
+# Cancel superseded PR evidence checks without treating pending evidence as passed.
+concurrency:
+  group: lmf-release-evidence-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   release-evidence:
     runs-on: ubuntu-latest
