@@ -152,23 +152,42 @@ async function ensureTeacherFixture(options = {}) {
   return { action: "updated" };
 }
 
-async function signInTeacher() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !TEST_TEACHER_EMAIL || !TEST_TEACHER_PASSWORD) {
-    console.warn("Supabase test credentials not provided; auth-required checks may fail.");
-    return null;
+/**
+ * Perform the teacher password grant without mutating any credential.
+ *
+ * Returns a discriminated result instead of terminating the process so that the
+ * caller can decide whether the shared staging identity has to be repaired
+ * first. See {@link resolveTeacherSession} for why that ordering matters.
+ */
+async function requestTeacherSignIn(options = {}) {
+  const {
+    supabaseUrl = SUPABASE_URL,
+    anonKey = SUPABASE_ANON_KEY,
+    email = TEST_TEACHER_EMAIL,
+    password = TEST_TEACHER_PASSWORD,
+    fetchImpl = fetch,
+  } = options;
+
+  if (!supabaseUrl || !anonKey || !email || !password) {
+    return {
+      ok: false,
+      credentialsMissing: true,
+      status: null,
+      message: "Supabase test credentials not provided.",
+    };
   }
 
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+  const res = await fetchImpl(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
     method: "POST",
     headers: {
-      apikey: SUPABASE_ANON_KEY,
-      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      apikey: anonKey,
+      Authorization: `Bearer ${anonKey}`,
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      email: TEST_TEACHER_EMAIL,
-      password: TEST_TEACHER_PASSWORD,
+      email,
+      password,
     }),
   });
 
@@ -179,12 +198,65 @@ async function signInTeacher() {
       body && typeof body === "object"
         ? body.message || body.error_description || body.error || body.msg || "Authentication failed"
         : "Authentication failed";
-    console.error("Teacher sign-in failed", { status: res.status, message });
-    process.exit(2);
+    return { ok: false, credentialsMissing: false, status: res.status, message };
   }
 
-  console.log("0/7 OK: teacher sign-in");
-  return { token: body.access_token, user: body.user || null };
+  return {
+    ok: true,
+    credentialsMissing: false,
+    status: res.status,
+    message: null,
+    token: body.access_token,
+    user: body.user || null,
+  };
+}
+
+/**
+ * Resolve a signed-in teacher session for this run.
+ *
+ * The two staging smoke workflows run concurrently against the same staging
+ * project and share one teacher identity. `ensureTeacherFixture()` resets that
+ * identity's password through the Admin API, and GoTrue revokes *every* session
+ * that user holds when a password changes (`User.UpdatePassword` -> `Logout` ->
+ * `DELETE FROM auth.sessions WHERE user_id = ?`). Resetting the password on
+ * every run therefore invalidated the access token of the concurrently running
+ * sibling workflow, whose next authenticated request then failed with
+ * `401 Invalid or expired token` (GoTrue `session_not_found`).
+ *
+ * Signing in first keeps the destructive reset off the healthy path: the
+ * identity is only repaired when the stored credential is actually unusable.
+ */
+async function resolveTeacherSession(options = {}) {
+  const {
+    requestSignIn = requestTeacherSignIn,
+    ensureFixture = ensureTeacherFixture,
+  } = options;
+
+  const result = await requestSignIn();
+
+  if (result.ok) return result;
+
+  // Missing credentials are a configuration error. Run the fixture step so the
+  // misconfiguration fails loudly, exactly as it did before.
+  if (result.credentialsMissing) {
+    await ensureFixture();
+    return result;
+  }
+
+  // Only a deterministic credential rejection (HTTP 400) means the stored
+  // identity is unusable. A transient failure (rate limit, upstream 5xx,
+  // network error) must not trigger the repair: the Admin password reset
+  // revokes every session the shared identity holds, so a transient blip would
+  // break a concurrently running sibling smoke workflow that is signed in.
+  if (result.status !== 400) return result;
+
+  const fixture = await ensureFixture();
+
+  // A disabled fixture cannot repair anything, so retrying would only repeat
+  // the same rejected request.
+  if (fixture && fixture.action === "disabled") return result;
+
+  return requestSignIn();
 }
 
 async function getUserFromToken(token) {
@@ -308,10 +380,21 @@ async function cleanupActiveSmokeClass() {
 async function main() {
   console.log(`TorqueMind smoke test against ${BASE_URL}`);
 
-  await ensureTeacherFixture();
-  const signIn = await signInTeacher();
-  const token = signIn && signIn.token;
-  let userId = signIn && signIn.user && signIn.user.id;
+  const signIn = await resolveTeacherSession();
+
+  if (!signIn.ok) {
+    if (signIn.credentialsMissing) {
+      console.warn("Supabase test credentials not provided; auth-required checks may fail.");
+    } else {
+      console.error("Teacher sign-in failed", { status: signIn.status, message: signIn.message });
+      process.exit(2);
+    }
+  } else {
+    console.log("0/7 OK: teacher sign-in");
+  }
+
+  const token = signIn.token;
+  let userId = signIn.user && signIn.user.id;
 
   if (!userId && token) {
     const u = await getUserFromToken(token);
@@ -469,4 +552,6 @@ module.exports = {
   assertApprovedStagingDestination,
   ensureTeacherFixture,
   cleanupSmokeClass,
+  requestTeacherSignIn,
+  resolveTeacherSession,
 };
