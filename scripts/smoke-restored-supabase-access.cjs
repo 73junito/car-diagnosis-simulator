@@ -7,11 +7,13 @@ const url = new URL('https://' + PROJECT_REF + '.supabase.co');
 const expected = process.env.EXPECTED_SUPABASE_REF;
 const anonKey = process.env.RESTORED_SUPABASE_ANON_KEY;
 if (expected !== PROJECT_REF) throw new Error('Restored project reference mismatch');
-if (!anonKey) throw new Error('Missing restored-project anon key');
+if (!anonKey) throw new Error('Missing restored-project public API key');
+const publishable = anonKey.startsWith('sb_publishable_');
+if (!publishable && anonKey.split('.').length !== 3) throw new Error('Expected publishable key or legacy anon JWT');
 const request = async (path, token) => {
   const response = await fetch(new URL(path, url), {
     method: 'GET', redirect: 'error', signal: AbortSignal.timeout(15000),
-    headers: { apikey: anonKey, Authorization: 'Bearer ' + token, Accept: 'application/json' },
+    headers: { apikey: anonKey, ...(token ? { Authorization: 'Bearer ' + token } : {}), Accept: 'application/json' },
   });
   const body = await response.text();
   if (body.length > 100000) throw new Error('Unexpectedly large API response');
@@ -19,7 +21,7 @@ const request = async (path, token) => {
   return { status: response.status, rows };
 };
 (async () => {
-  const questions = await request('/rest/v1/scenario_questions?select=diagnostic_area&limit=1', anonKey);
+  const questions = await request('/rest/v1/scenario_questions?select=diagnostic_area&limit=1', publishable ? null : anonKey);
   assert.equal(questions.status, 200, 'Anonymous question read failed');
   assert.ok(Array.isArray(questions.rows), 'Question result was not an array');
   const catalog = await request('/rest/v1/scenario_catalog?select=diagnostic_area&limit=1', anonKey);
