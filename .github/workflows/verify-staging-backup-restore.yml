@@ -11,10 +11,14 @@ on:
         description: 'Type VERIFY-RESTORE'
         required: true
         type: string
+      # The default must track the fingerprint algorithm version of
+      # scripts/sql/restore-verification-matrix.sql. A baseline recorded under an
+      # older normalisation is not comparable with the matrix emitted by the
+      # current SQL, even when the restored schema is identical.
       baseline_manifest:
         description: 'Recorded backup baseline manifest to compare against'
         required: false
-        default: 'docs/database/staging-restore-baseline-39172287178.json'
+        default: 'docs/database/staging-restore-baseline-40034471907.json'
         type: string
 
 permissions:

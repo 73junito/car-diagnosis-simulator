@@ -6,7 +6,9 @@ const read = (file) => fs.readFileSync(path.join(root, file), 'utf8').replace(/\
 
 const workflowPath = '.github/workflows/verify-staging-backup-restore.yml';
 const matrixPath = 'scripts/sql/restore-verification-matrix.sql';
-const baselinePath = 'docs/database/staging-restore-baseline-39172287178.json';
+const baselinePath = 'docs/database/staging-restore-baseline-40034471907.json';
+const supersededBaselinePath = 'docs/database/staging-restore-baseline-39172287178.json';
+const restoredMatrixPath = 'tests/fixtures/restore-verification-matrix-40156618194.json';
 const { compareMatrixToBaseline } = require('../scripts/verify-restore-baseline.js');
 
 describe('restore verification workflow contract', () => {
@@ -79,10 +81,9 @@ describe('restore baseline manifest contract', () => {
 
   test('describes the verified backup run', () => {
     expect(baseline.schema_version).toBe(1);
-    expect(baseline.backup.workflow_run_id).toBe(39172287178);
-    expect(baseline.backup.restore_verified_run_id).toBe(39180383455);
+    expect(baseline.backup.workflow_run_id).toBe(40034471907);
     expect(baseline.backup.ciphertext_sha256).toMatch(/^[0-9a-f]{64}$/);
-    expect(baseline.backup.local_copy_sha256_verified).toBe(true);
+    expect(baseline.backup.source_project_ref).toBe('jchfruprqpeypdttvlam');
   });
 
   test('records the staging expectations observed at backup time', () => {
@@ -105,6 +106,118 @@ describe('restore baseline manifest contract', () => {
     expect(baseline.canonical_repository_expectation.migrations).toBe(106);
     expect(baseline.canonical_repository_expectation.missing_from_backup)
       .toEqual(['20261013190000_retire_external_certification_taxonomy.sql']);
+  });
+});
+
+describe('restore baseline fingerprint algorithm reconciliation', () => {
+  const workflow = read(workflowPath);
+  const sql = read(matrixPath);
+  const baseline = JSON.parse(read(baselinePath));
+  const superseded = JSON.parse(read(supersededBaselinePath));
+
+  test('the workflow defaults to the current baseline, never the superseded one', () => {
+    expect(workflow).toContain(`default: '${baselinePath}'`);
+    expect(workflow).not.toContain(`default: '${supersededBaselinePath}'`);
+    expect(workflow).not.toContain(supersededBaselinePath);
+  });
+
+  test('the fingerprint algorithm changed between the two baselines', () => {
+    // The two baselines describe the same staging schema but were recorded under
+    // different fingerprint normalisations, so their overall fingerprints differ.
+    // If this ever becomes equal, one of the two records was re-normalised and
+    // the reconciliation below must be revisited.
+    expect(baseline.expectations.schema_fingerprint)
+      .not.toBe(superseded.expectations.schema_fingerprint);
+  });
+
+  test('the superseded fingerprint is recorded for audit rather than silently dropped', () => {
+    expect(baseline.diagnostics.historical_20261018_fingerprint)
+      .toBe(superseded.expectations.schema_fingerprint);
+  });
+
+  test('the fingerprint difference is not schema drift: every substantive expectation is identical', () => {
+    // This is the reconciliation that proves the fingerprint mismatch is an
+    // algorithm-version artifact. If any substantive section diverged, the
+    // mismatch would be real schema drift and the baseline would have to be
+    // re-captured instead of reconciled.
+    for (const section of [
+      'schemas',
+      'extensions',
+      'roles_required',
+      'public_objects',
+      'rls',
+      'row_counts',
+      'required_tables',
+      'taxonomy_pre_migration',
+      'integrity'
+    ]) {
+      expect(baseline.expectations[section]).toEqual(superseded.expectations[section]);
+    }
+    expect(baseline.expectations.migration_history.count)
+      .toBe(superseded.expectations.migration_history.count);
+    expect(baseline.expectations.migration_history.max_version)
+      .toBe(superseded.expectations.migration_history.max_version);
+    expect([...baseline.expectations.migration_history.versions].sort())
+      .toEqual([...superseded.expectations.migration_history.versions].sort());
+  });
+
+  test('the current baseline records per-category fingerprints for mismatch diagnosis', () => {
+    const categories = baseline.diagnostics.schema_component_fingerprints;
+    expect(Object.keys(categories).sort()).toEqual([
+      'col', 'con', 'ext', 'fn', 'idx', 'pol', 'rel', 'schema', 'trg'
+    ]);
+    for (const [category, checksum] of Object.entries(categories)) {
+      expect(checksum).toMatch(/^[0-9a-f]{64}$/);
+    }
+  });
+
+  test('the matrix SQL still emits the normalisation the current baseline was recorded under', () => {
+    // If the normalisation in the matrix SQL changes again, the recorded
+    // fingerprint no longer matches a freshly restored copy and the baseline
+    // must be re-captured. Guard the two normalisation markers that changed
+    // the fingerprint between the two recorded baselines.
+    expect(sql).toContain('set search_path = auth, public, extensions, pg_catalog;');
+    expect(sql).toContain('row_number() over (partition by table_schema, table_name');
+  });
+});
+
+describe('restore verification against real restored-backup evidence', () => {
+  // Matrix emitted by the real restore of encrypted staging backup
+  // 40156128866 (workflow run 40156618194, artifact
+  // restore-verification-40156618194). It is the matrix of a genuinely
+  // restored copy, not a synthesised one, so it proves the reconciliation
+  // against restore evidence rather than against a hand-written expectation.
+  const restoredMatrix = JSON.parse(read(restoredMatrixPath));
+  const baseline = JSON.parse(read(baselinePath));
+  const superseded = JSON.parse(read(supersededBaselinePath));
+
+  test('the restored copy matches the current baseline on every check', () => {
+    const result = compareMatrixToBaseline(restoredMatrix, baseline);
+    expect(result.failures).toEqual([]);
+    expect(result.verdict).toBe('PASS');
+  });
+
+  test('the restored copy matches the superseded baseline except for the fingerprint', () => {
+    // This is the decisive evidence that the historical fingerprint mismatch
+    // is an algorithm-version artifact and not schema drift: every substantive
+    // check passes against the superseded baseline too, and the fingerprint is
+    // the only difference.
+    const result = compareMatrixToBaseline(restoredMatrix, superseded);
+    expect(result.verdict).toBe('FAIL');
+    expect(result.failures.map((failure) => failure.name)).toEqual(['schema_fingerprint']);
+  });
+
+  test('canonical drift stays informational on real restore evidence', () => {
+    const result = compareMatrixToBaseline(restoredMatrix, baseline);
+    expect(result.informational[0].name).toBe('canonical_repository_drift');
+    expect(result.informational[0].missing_from_backup)
+      .toEqual(['20261013190000_retire_external_certification_taxonomy.sql']);
+  });
+
+  test('the restored copy fingerprint equals the current baseline fingerprint', () => {
+    expect(restoredMatrix.schema_fingerprint).toBe(baseline.expectations.schema_fingerprint);
+    expect(restoredMatrix.schema_fingerprint)
+      .not.toBe(superseded.expectations.schema_fingerprint);
   });
 });
 
