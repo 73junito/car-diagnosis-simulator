@@ -58,6 +58,8 @@ Concurrent fixture access has now been exercised (see "Validation of the fix und
 
 The two workflows were nevertheless run concurrently against staging on PR #1132 and on a `workflow_dispatch` pair; both passed, and the teacher identity accumulated sessions across the runs instead of being reset, which is the expected patched behaviour.
 
+On the final commit of PR #1132 (`51a9aa47`) the two PR-triggered smoke steps overlapped for real — both started at `12:21:04Z` and completed within a 2000 ms window — and both passed. The teacher identity's session count grew to 7 across the concurrent runs instead of being reset to a single session.
+
 Before declaring a PR staging-verified, identify the **most recently created smoke workflow run for that PR** and require a completed `success` conclusion. A newer cancelled/pending/failed run holds verification, even if an older run succeeded.
 
 Run the read-only check with a token authorized to read Actions metadata:
