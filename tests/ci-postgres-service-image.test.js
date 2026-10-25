@@ -11,7 +11,7 @@ describe('CI disposable Postgres registry policy', () => {
     const result = verifyCiPostgresServiceImage()
 
     expect(result.approvedImage).toBe('postgres:14')
-    expect(result.occurrenceCount).toBe(3)
+    expect(result.occurrenceCount).toBe(4)
     expect(result.occurrences).toEqual([
       {
         workflow: '.github/workflows/apply-migrations.yml',
@@ -20,6 +20,10 @@ describe('CI disposable Postgres registry policy', () => {
       {
         workflow: '.github/workflows/apply-migrations.yml',
         image: 'postgres:14'
+      },
+      {
+        workflow: '.github/workflows/obd-catalog-regression.yml',
+        image: 'postgres:17'
       },
       {
         workflow: '.github/workflows/provenance-db-integration.yml',
@@ -53,4 +57,13 @@ describe('CI disposable Postgres registry policy', () => {
 
     expect(combined).not.toContain('public.ecr.aws/docker/library/postgres')
   })
+})
+
+test('PG17 is restricted to the dedicated OBD catalog review workflow',()=>{
+ const {REVIEW_ONLY_PG17_WORKFLOW}=require('../scripts/verify-ci-postgres-service-image')
+ expect(REVIEW_ONLY_PG17_WORKFLOW).toBe('.github/workflows/obd-catalog-regression.yml')
+ const result=verifyCiPostgresServiceImage()
+ expect(result.occurrences.filter(x=>x.image==='postgres:17')).toEqual([
+   {workflow:REVIEW_ONLY_PG17_WORKFLOW,image:'postgres:17'}
+ ])
 })

@@ -4,6 +4,9 @@ const path = require('path')
 const ROOT = path.resolve(__dirname, '..')
 const WORKFLOWS_DIR = path.join(ROOT, '.github', 'workflows')
 const APPROVED_IMAGE = 'postgres:14'
+// The catalog exercises PostgreSQL 15+ NULLS NOT DISTINCT semantics.
+// Permit only this review-only PG17 workflow; all other services remain PG14.
+const REVIEW_ONLY_PG17_WORKFLOW = '.github/workflows/obd-catalog-regression.yml'
 const FORBIDDEN_ECR_PREFIX = 'public.ecr.aws/docker/library/postgres'
 
 function fail(message) {
@@ -46,7 +49,7 @@ function verifyCiPostgresServiceImage() {
     }
 
     for (const image of postgresServiceImages(text)) {
-      if (image !== APPROVED_IMAGE) {
+      if (image !== APPROVED_IMAGE && !(relative === REVIEW_ONLY_PG17_WORKFLOW && image === 'postgres:17')) {
         fail(`${relative}: disposable Postgres service must use ${APPROVED_IMAGE}; found ${image}`)
       }
       occurrences.push({ workflow: relative, image })
@@ -67,12 +70,13 @@ function verifyCiPostgresServiceImage() {
 if (require.main === module) {
   const result = verifyCiPostgresServiceImage()
   console.log(
-    `CI Postgres service image: PASS (${result.occurrenceCount} services use ${result.approvedImage}; Public ECR forbidden)`
+    `CI Postgres service image: PASS (${result.occurrenceCount} explicitly approved services; default ${result.approvedImage}; Public ECR forbidden)`
   )
 }
 
 module.exports = {
   APPROVED_IMAGE,
+  REVIEW_ONLY_PG17_WORKFLOW,
   FORBIDDEN_ECR_PREFIX,
   postgresServiceImages,
   verifyCiPostgresServiceImage
