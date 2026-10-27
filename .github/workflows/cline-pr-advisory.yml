@@ -28,7 +28,7 @@ jobs:
       - name: Validate advisory Python and data filters
         run: |
           python3 -m py_compile .github/scripts/cline_pr_advisory.py
-          python3 -m unittest discover -s tests -p 'cline-pr-advisory-filter.test.py' -v
+          python3 tests/cline-pr-advisory-filter.test.py -v
       - name: Validate security-review credential
         env:
           CLINE_SECURITY_KEY: ${{ secrets.CLINE_SECURITY_KEY }}
