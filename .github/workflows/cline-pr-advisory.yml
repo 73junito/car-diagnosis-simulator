@@ -25,6 +25,10 @@ jobs:
         with:
           persist-credentials: false
           ref: main
+      - name: Validate advisory Python and data filters
+        run: |
+          python3 -m py_compile .github/scripts/cline_pr_advisory.py
+          python3 -m unittest discover -s tests -p 'cline-pr-advisory-filter.test.py' -v
       - name: Validate development credential
         env:
           CLINE_DEVELOPMENT_KEY: ${{ secrets.CLINE_DEVELOPMENT_KEY }}
