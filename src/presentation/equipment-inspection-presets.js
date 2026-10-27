@@ -20,6 +20,8 @@
   }
   function mount({ viewer, container, status }) {
     if (!container || !viewer || !status) return;
+    // Re-mount replaces old controls and their listeners instead of duplicating them.
+    container.replaceChildren();
     const buttons = [];
     for (const [key, preset] of Object.entries(presets)) {
       const button = document.createElement("button");
