@@ -17,6 +17,17 @@ EXCLUDED_PARTS = {
     "credentials", "private", "fixture", "fixtures", "snapshot", "snapshots",
     "personal", "telemetry", "analytics", "provenance", "grading", "grade",
 }
+# Conservative content-level guard: discard the *entire file patch* on suspicion.
+# This cannot prove that a diff has no confidential text. Only dispatch for trusted PRs.
+SENSITIVE_PATTERNS = (
+    re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----", re.I),
+    re.compile(r"(?i)(?:api[_-]?key|secret|password|passwd|private[_-]?key|access[_-]?token|refresh[_-]?token|authorization)\\s*[:=]\\s*['\\\"]?[^\\s,'\\\"}]{8,}"),
+    re.compile(r"(?i)bearer\\s+[a-z0-9._~+/=-]{12,}"),
+    re.compile(r"(?i)sk-(?:proj-)?[a-zA-Z0-9_-]{16,}"),
+    re.compile(r"(?i)(?:AKIA|ASIA)[A-Z0-9]{16}"),
+    re.compile(r"(?i)gh[pousr]_[a-z0-9]{20,}"),
+    re.compile(r"(?i)(?:student[_-]?id|date[_-]?of[_-]?birth|ssn|social security number)\\s*[:=]"),
+)
 EXCLUDED_SUFFIXES = (".json", ".csv", ".md", ".yaml", ".yml", ".env", ".sql",
                      ".svg", ".html", ".pdf", ".txt", ".lock", ".map", ".snap")
 
@@ -48,6 +59,13 @@ def is_allowed(filename):
     if any(part.startswith(".") for part in parts):
         return False
     return filename.endswith((".js", ".jsx", ".ts", ".tsx", ".py", ".css"))
+
+
+def patch_is_sensitive(patch):
+    """Conservative whole-patch exclusion; never send suspected secrets or student data."""
+    if not isinstance(patch, str):
+        return True
+    return any(pattern.search(patch) for pattern in SENSITIVE_PATTERNS)
 
 
 def main():
@@ -84,7 +102,7 @@ def main():
             name = entry.get("filename", "")
             patch = entry.get("patch")
             if (not is_allowed(name) or entry.get("status") not in ("modified", "added")
-                    or not isinstance(patch, str)):
+                    or not isinstance(patch, str) or patch_is_sensitive(patch)):
                 exclusions += 1
                 continue
             if len(patches) >= MAX_FILES:
@@ -97,6 +115,8 @@ def main():
             patches.append("FILE: " + name + "\n" + patch[:max(0, room - len(name) - 8)])
         if len(files) < 100:
             break
+        if page == 5:
+            fail("PR exceeds 500 changed files; refusing partial inventory")
     if not patches:
         Path("cline-pr-advisory.md").write_text(
             "# Manual ClinePass PR advisory\n\nNo eligible source patches to review. "
