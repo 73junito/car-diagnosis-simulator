@@ -21,12 +21,12 @@ EXCLUDED_PARTS = {
 # This cannot prove that a diff has no confidential text. Only dispatch for trusted PRs.
 SENSITIVE_PATTERNS = (
     re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----", re.I),
-    re.compile(r"(?i)(?:api[_-]?key|secret|password|passwd|private[_-]?key|access[_-]?token|refresh[_-]?token|authorization)\\s*[:=]\\s*['\\\"]?[^\\s,'\\\"}]{8,}"),
-    re.compile(r"(?i)bearer\\s+[a-z0-9._~+/=-]{12,}"),
+    re.compile(r"(?i)(?:api[_-]?key|secret|password|passwd|private[_-]?key|access[_-]?token|refresh[_-]?token|authorization)\s*[:=]\s*['\\\"]?[^\s,'\\\"}]{8,}"),
+    re.compile(r"(?i)bearer\s+[a-z0-9._~+/=-]{12,}"),
     re.compile(r"(?i)sk-(?:proj-)?[a-zA-Z0-9_-]{16,}"),
     re.compile(r"(?i)(?:AKIA|ASIA)[A-Z0-9]{16}"),
     re.compile(r"(?i)gh[pousr]_[a-z0-9]{20,}"),
-    re.compile(r"(?i)(?:student[_-]?id|date[_-]?of[_-]?birth|ssn|social security number)\\s*[:=]"),
+    re.compile(r"(?i)(?:student[_-]?id|date[_-]?of[_-]?birth|ssn|social security number)\s*[:=]"),
 )
 EXCLUDED_SUFFIXES = (".json", ".csv", ".md", ".yaml", ".yml", ".env", ".sql",
                      ".svg", ".html", ".pdf", ".txt", ".lock", ".map", ".snap")
