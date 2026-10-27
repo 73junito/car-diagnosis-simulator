@@ -49,7 +49,7 @@ describe('presentation-only inspection views',()=>{
   expect(secondViewer.voltage).toBe(5);
  });
  test('missing model does not change pressed state',()=>{
-  const buttonAttrs={};const buttons=[];
+  const buttons=[];
   const context={document:{createElement:()=>({
    dataset:{},setAttribute(k,v){this[k]=v},getAttribute(k){return this[k]},
    addEventListener(k,fn){this[k]=fn},click(){this.click()},textContent:''
