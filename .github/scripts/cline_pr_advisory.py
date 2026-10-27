@@ -75,9 +75,9 @@ def main():
     number = os.environ.get("PR_NUMBER", "")
     if not re.fullmatch(r"[1-9][0-9]{0,5}", number):
         fail("Invalid PR number")
-    key = os.environ.get("CLINE_DEVELOPMENT_KEY")
+    key = os.environ.get("CLINE_SECURITY_KEY")
     if not key:
-        fail("Missing CLINE_DEVELOPMENT_KEY secret")
+        fail("Missing CLINE_SECURITY_KEY secret")
     gh_token = os.environ.get("GITHUB_TOKEN")
     if not gh_token:
         fail("Missing read-only GitHub token")
