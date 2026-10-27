@@ -29,17 +29,17 @@ jobs:
         run: |
           python3 -m py_compile .github/scripts/cline_pr_advisory.py
           python3 -m unittest discover -s tests -p 'cline-pr-advisory-filter.test.py' -v
-      - name: Validate development credential
+      - name: Validate security-review credential
         env:
-          CLINE_DEVELOPMENT_KEY: ${{ secrets.CLINE_DEVELOPMENT_KEY }}
+          CLINE_SECURITY_KEY: ${{ secrets.CLINE_SECURITY_KEY }}
         run: |
-          if [ -z "$CLINE_DEVELOPMENT_KEY" ]; then
-            echo "::error::Add CLINE_DEVELOPMENT_KEY to THIS repository Actions secrets; do not use staging or production keys."
+          if [ -z "$CLINE_SECURITY_KEY" ]; then
+            echo "::error::Add CLINE_SECURITY_KEY to THIS repository Actions secrets; do not use staging or production keys."
             exit 1
           fi
       - name: Produce read-only PR advisory
         env:
-          CLINE_DEVELOPMENT_KEY: ${{ secrets.CLINE_DEVELOPMENT_KEY }}
+          CLINE_SECURITY_KEY: ${{ secrets.CLINE_SECURITY_KEY }}
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 .github/scripts/cline_pr_advisory.py
       - name: Upload advisory artifact
