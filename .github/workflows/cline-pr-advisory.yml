@@ -1,0 +1,48 @@
+name: ClinePass PR Advisory (Manual, Read-only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Existing pull request number to review"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  advisory:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      CLINE_MODEL: cline-pass/qwen3.7-plus
+      PR_NUMBER: ${{ inputs.pr_number }}
+      GH_REPOSITORY: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          ref: main
+      - name: Validate development credential
+        env:
+          CLINE_DEVELOPMENT_KEY: ${{ secrets.CLINE_DEVELOPMENT_KEY }}
+        run: |
+          if [ -z "$CLINE_DEVELOPMENT_KEY" ]; then
+            echo "::error::Add CLINE_DEVELOPMENT_KEY to THIS repository Actions secrets; do not use staging or production keys."
+            exit 1
+          fi
+      - name: Produce read-only PR advisory
+        env:
+          CLINE_DEVELOPMENT_KEY: ${{ secrets.CLINE_DEVELOPMENT_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/cline_pr_advisory.py
+      - name: Upload advisory artifact
+        if: success()
+        uses: actions/upload-artifact@v6
+        with:
+          name: cline-pr-advisory
+          path: cline-pr-advisory.md
+          retention-days: 7
+          if-no-files-found: error
