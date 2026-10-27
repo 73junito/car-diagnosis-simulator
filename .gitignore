@@ -91,3 +91,6 @@ animation/cadquery/review/vendor/three/
 audit-artifacts/
 cloudflare-do-namespace-inventory.json
 cloudflare-do-namespace-reconciliation.md
+# Local MCP server configuration. Machine-scoped (it names internal project
+# refs) and not portable between developers, so it stays out of the repository.
+.vscode/mcp.json
