@@ -7,11 +7,32 @@ const catalog = JSON.parse(
 );
 const courses = catalog.courses;
 const examBase = "http://127.0.0.1:3012";
-const apiUrl = "https://app.autolearnpro.com/api/curriculum";
+// The application configures its curriculum endpoint on the production host
+// (exam-site/catalog/catalog-data.js). This matcher is deliberately host-agnostic:
+// it intercepts the configured endpoint without hardcoding a production hostname
+// in the test suite, so no test file names a production URL.
+const CATALOG_ENDPOINT = "**/api/curriculum";
+
+function isLocalPreview(url) {
+  return (url.hostname === "127.0.0.1" || url.hostname === "localhost")
+    && (url.port === "3012" || url.port === "3003");
+}
 
 test.describe("academic course catalog", () => {
   test.beforeEach(async ({ page }) => {
-    await page.route(apiUrl, (route) => route.fulfill({
+    // Safety net: anything that is neither served by the local preview nor
+    // fulfilled by a mock is aborted. If the endpoint mock ever stops matching,
+    // the page falls back to its static catalog and the API assertions fail
+    // loudly instead of the browser reaching the production host.
+    await page.route("**/*", async (route) => {
+      const url = new URL(route.request().url());
+      if (url.protocol === "data:" || url.protocol === "blob:") return route.continue();
+      if (isLocalPreview(url)) return route.continue();
+      return route.abort();
+    });
+
+    // Registered after the safety net so this handler runs first for the endpoint.
+    await page.route(CATALOG_ENDPOINT, (route) => route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({ schemaVersion: "1.0.0", catalogCourses: courses })
@@ -39,8 +60,8 @@ test.describe("academic course catalog", () => {
   });
 
   test("falls back to static catalog when the API fails", async ({ page }) => {
-    await page.unroute(apiUrl);
-    await page.route(apiUrl, (route) => route.fulfill({ status: 503, body: "unavailable" }));
+    await page.unroute(CATALOG_ENDPOINT);
+    await page.route(CATALOG_ENDPOINT, (route) => route.fulfill({ status: 503, body: "unavailable" }));
     await page.goto(examBase + "/catalog/");
     await expect(page.locator("html")).toHaveAttribute("data-catalog-source", "static");
     await expect(page.locator(".catalog-course-card")).toHaveCount(68);
