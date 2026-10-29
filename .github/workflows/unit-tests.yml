@@ -33,6 +33,13 @@ jobs:
       - name: Install dependencies (root)
         run: npm ci
 
+      # PGlite RLS regression coverage (PostgreSQL compiled to WASM).
+      # This enforces the repository's row-level-security policies on a real engine.
+      # It is NOT complete Supabase verification: no PostgREST, no GoTrue, no
+      # production-equivalent database. See docs/security/R22-PGLITE-RLS-EVIDENCE.md.
+      - name: Run R22 PGlite RLS regression
+        run: npm run test:r22
+
       - name: Validate scenarios
         id: validate-scenarios
         run: npm run validate:scenarios

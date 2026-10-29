@@ -188,6 +188,23 @@ Result of re-running under the repository-managed dependency: harness resolves
 pass (exit 0)**, matrix unchanged at **104/106**. The `/tmp/r22-deps` path remains only as
 an offline fallback and is no longer required.
 
+### CI integration
+
+`npm run test:r22` now runs in the existing `unit-tests` job
+(`.github/workflows/unit-tests.yml`), immediately after `Install dependencies (root)` /
+`npm ci` and before scenario validation. The diff is a single added step; no existing step,
+gate, or `continue-on-error` setting was changed.
+
+The step is labelled and commented as **PGlite RLS regression coverage** and explicitly not
+as complete Supabase verification. Consequences accepted with that decision:
+
+- CI gains a new pinned devDependency (`@electric-sql/pglite`, Apache-2.0) and roughly two
+  seconds of runtime.
+- A regression in the RLS policies now fails `unit-tests`, which is a required check on
+  `main`, so the policies cannot silently drift.
+- Green CI must not be read as R22 closure: the limits in §6 still apply, including the two
+  unapplied Supabase-platform migrations.
+
 ## 8. Remaining blockers for R22
 
 1. A production-equivalent database (Supabase project, or Postgres with the full
