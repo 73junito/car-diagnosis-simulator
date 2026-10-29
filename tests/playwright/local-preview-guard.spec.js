@@ -105,6 +105,71 @@ test.describe('local preview network guard', () => {
     expect(logged).not.toContain('?token');
   });
 
+  test('masks identifier-like path segments while preserving route shape', () => {
+    expect(
+      sanitizeUrl(new URL('https://h.test/api/assessment-attempts/11111111-1111-4111-8111-111111111111/questions'))
+    ).toBe('https://h.test/api/assessment-attempts/:id/questions');
+    expect(sanitizeUrl(new URL('https://h.test/users/73junito@gmail.test/profile'))).toBe(
+      'https://h.test/users/:redacted/profile'
+    );
+    expect(sanitizeUrl(new URL('https://h.test/token/abcdefghijklmnopqrstuvwxyz012345/done'))).toBe(
+      'https://h.test/token/:id/done'
+    );
+    // Short literal segments stay readable for diagnostics.
+    expect(sanitizeUrl(new URL('https://h.test/api/curriculum'))).toBe('https://h.test/api/curriculum');
+    expect(sanitizeUrl(new URL('https://h.test/'))).toBe('https://h.test/');
+  });
+
+  test('malformed approved origins do not echo the submitted value', async ({ page }) => {
+    // Genuinely unparseable (empty host) yet carrying both a password-shaped value
+    // and a token-shaped query parameter.
+    const leaky = 'https://user:sup3rsecret@?token=abc123';
+    const message = await installLocalPreviewGuard(page, { approvedOrigins: [leaky] })
+      .then(() => null)
+      .catch((err) => err.message);
+    expect(message).toMatch(/malformed/);
+    expect(message).not.toContain('sup3rsecret');
+    expect(message).not.toContain('abc123');
+    expect(message).not.toContain(leaky);
+  });
+
+  test('blockMutations aborts an unmocked same-origin POST and records it', async ({ page }) => {
+    const guard = await installLocalPreviewGuard(page, { approvedOrigins: [LOCAL], blockMutations: true });
+    await page.goto(LOCAL + '/', { waitUntil: 'domcontentloaded' });
+
+    const outcome = await page.evaluate(async () => {
+      try {
+        const response = await fetch('/api/scenario-submissions/grade', { method: 'POST', body: '{}' });
+        return { escaped: true, status: response.status };
+      } catch (err) {
+        return { escaped: false };
+      }
+    });
+
+    expect(outcome.escaped, 'same-origin POST must be aborted').toBe(false);
+    expect(guard.blockedMutations).toHaveLength(1);
+    expect(guard.blockedMutations[0]).toBe('POST http://127.0.0.1:3012/api/scenario-submissions/grade');
+
+    // GETs on the same approved origin are unaffected.
+    const getResponse = await page.goto(LOCAL + '/');
+    expect(getResponse && getResponse.status()).toBe(200);
+  });
+
+  test('blockMutations is opt-in: mocked writes still work when it is off', async ({ page }) => {
+    const guard = await installLocalPreviewGuard(page);
+    expect(guard.blockedMutations).toEqual([]);
+
+    await guard.mock('**/api/mock-write', (route) => route.fulfill({ status: 202, body: 'accepted' }));
+    await page.goto(LOCAL + '/', { waitUntil: 'domcontentloaded' });
+    const status = await page.evaluate(async () => {
+      const response = await fetch('/api/mock-write', { method: 'POST', body: '{}' });
+      return response.status;
+    });
+
+    expect(status).toBe(202);
+    expect(guard.blockedMutations).toEqual([]);
+  });
+
   test('rejects malformed or non-loopback approved origins', async ({ page }) => {
     await expect(installLocalPreviewGuard(page, { approvedOrigins: ['not a url'] })).rejects.toThrow(/malformed/);
     await expect(installLocalPreviewGuard(page, { approvedOrigins: ['https://app.autolearnpro.com'] })).rejects.toThrow(/loopback/);

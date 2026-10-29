@@ -56,8 +56,13 @@ test.describe('TTED805: Server-Side Grading Integration', () => {
     fixture = { fulfilled: [], unmatched: [] };
     mutationAttempts = [];
 
-    // 1. Local-preview guard: only the approved origin may use the network.
-    guard = await installLocalPreviewGuard(page, { approvedOrigins: APPROVED_ORIGINS });
+    // 1. Local-preview guard: only the approved origin may use the network, and
+    //    (blockMutations) every POST/PUT/PATCH/DELETE is aborted — including
+    //    same-origin writes to the approved preview origin.
+    guard = await installLocalPreviewGuard(page, {
+      approvedOrigins: APPROVED_ORIGINS,
+      blockMutations: true
+    });
 
     // 2. Explicit local fixtures. Never passes through to the network, and never
     //    fulfils a mutation method even if the glob would match one.
@@ -66,7 +71,7 @@ test.describe('TTED805: Server-Side Grading Integration', () => {
       const url = request.url();
 
       if (MUTATION_METHODS.includes(request.method())) {
-        mutationAttempts.push(request.method() + ' ' + url);
+        mutationAttempts.push(request.method() + ' ' + guard.sanitizeUrl(new URL(url)));
         return route.abort('blockedbyclient');
       }
 
@@ -82,7 +87,7 @@ test.describe('TTED805: Server-Side Grading Integration', () => {
 
       if (questions === null) {
         // Deliberate local failure for an unexpected scenario id.
-        fixture.unmatched.push(url);
+        fixture.unmatched.push(guard.sanitizeUrl(new URL(url)));
         return route.fulfill({
           status: 404,
           contentType: 'application/json',
@@ -90,7 +95,12 @@ test.describe('TTED805: Server-Side Grading Integration', () => {
         });
       }
 
-      fixture.fulfilled.push({ url, method: request.method(), status: 200, count: questions.length });
+      fixture.fulfilled.push({
+        url: guard.sanitizeUrl(new URL(url)),
+        method: request.method(),
+        status: 200,
+        count: questions.length
+      });
       return route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -98,19 +108,9 @@ test.describe('TTED805: Server-Side Grading Integration', () => {
       });
     });
 
-    // 3. Mutation blocker: registered last, so it is evaluated first. It aborts every
-    //    mutation to ANY destination — including approved loopback origins, which the
-    //    origin-based guard would otherwise allow. Abort is the blocking mechanism;
-    //    non-mutations are delegated with fallback() to the guard, a catch-all
-    //    registered first, so fallback can never reach the network.
-    await page.route('**/*', (route) => {
-      const request = route.request();
-      if (MUTATION_METHODS.includes(request.method())) {
-        mutationAttempts.push(request.method() + ' ' + request.url());
-        return route.abort('blockedbyclient');
-      }
-      return route.fallback();
-    });
+    // 3. Mutation blocking is provided by the guard itself (blockMutations: true), so
+    //    no per-suite blocker is needed. The mock below still checks the method,
+    //    because mocks evaluate before the guard and could otherwise fulfil a write.
   });
 
   test('documents validated questions (awaiting Gate 4 approval)', async ({ page, request }) => {
@@ -257,6 +257,7 @@ test.describe('TTED805: Server-Side Grading Integration', () => {
     // This flow must never mutate: no POST/PUT/PATCH/DELETE of any kind, and no
     // attempt to reach anything outside the approved local origin.
     expect(mutationAttempts, 'no mutation requests may occur').toEqual([]);
+    expect(guard.blockedMutations, 'the guard must not have aborted any mutation').toEqual([]);
     expect(guard.blockedDestinations, 'no unexpected external destinations').toEqual([]);
     
     console.log('✓ charging-system: Status 200, 3 questions (available)');
