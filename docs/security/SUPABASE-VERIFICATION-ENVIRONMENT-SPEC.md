@@ -120,7 +120,7 @@ is the easiest way to overstate R26.
 
 Established facts about this repository that shape the test:
 
-- **41 policies across 13 tables**, and RLS is enabled on **71 tables**. Most protected
+- **41 policies across 13 tables**, and RLS is enabled on **76 tables**. Most protected
   tables therefore rely on having *no* policy at all, which is deny-all for the API roles.
 - There are **zero institution- or school-named policies**. Institution tables
   (`institutions`, `institution_memberships`, `institution_cohorts`, `institution_settings`,
@@ -228,7 +228,7 @@ which contradicts numbers previously reported.
 | --- | --- | --- |
 | `CREATE POLICY` statements | 9 | **41** |
 | Distinct tables with policies | 3 | **13** |
-| Tables with RLS enabled | 10 | **71** |
+| Tables with RLS enabled | 10 | **76** |
 | Institution-named policies | "not testable / none exist" | **0 exist, but institution tables do have RLS enabled** |
 
 Corrected distribution:
