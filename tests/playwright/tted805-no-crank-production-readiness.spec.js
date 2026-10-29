@@ -16,22 +16,35 @@ const APPROVED_ORIGINS = ['http://127.0.0.1:3012', 'http://127.0.0.1:3003'];
  * request to the network and bypass the guard, which is exactly the failure mode
  * this suite must prevent. An unmatched scenario id therefore receives a local
  * 404 rather than escaping.
+ *
+ * Returns deterministic call statistics so a test can prove its fixture — rather
+ * than an unrelated 404 — produced the assertion it makes.
  */
 async function mockApprovedQuestions(guard, urlFragment, questions) {
+  const observed = { requests: [], fulfilled: [], unmatched: [] };
+
   await guard.mock('**/api/scenario-questions-approved*', async (route) => {
-    if (route.request().url().includes(urlFragment)) {
+    const requestUrl = route.request().url();
+    observed.requests.push(requestUrl);
+
+    if (requestUrl.includes(urlFragment)) {
+      observed.fulfilled.push(requestUrl);
       return route.fulfill({
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({ questions })
       });
     }
+
+    observed.unmatched.push(requestUrl);
     return route.fulfill({
       status: 404,
       contentType: 'application/json',
       body: JSON.stringify({ error: 'scenario_not_mocked' })
     });
   });
+
+  return observed;
 }
 
 async function fetchMockedApi(page, path) {
@@ -113,8 +126,10 @@ test.describe('TTED805: Approved Questions API - Production Contracts', () => {
     
     const BASE_URL = process.env.BASE_URL || 'http://127.0.0.1:3003';
     
-    // Mock API: no-crank returns 200 with 0 questions
-    await mockApprovedQuestions(guard, 'scenario_id=no-crank', []);
+    // Mock API: no-crank returns 200 with 0 questions.
+    // The dashboard requests ?scenarioId=no-crank (camelCase — see scenario.js:209),
+    // so this fragment must match that spelling for the fixture to be served at all.
+    const fixture = await mockApprovedQuestions(guard, 'scenarioId=no-crank', []);
 
     await page.goto(`${BASE_URL}/dashboard/student/scenario/?scenario=no-crank-clicking&mode=training`);
 
@@ -126,6 +141,13 @@ test.describe('TTED805: Approved Questions API - Production Contracts', () => {
     await expect(
       page.getByText('Question bank unavailable for grading.')
     ).toBeVisible();
+
+    // Prove the blocked state above came from THIS fixture and not from an
+    // unrelated HTTP 404: the mock must have matched and fulfilled exactly once,
+    // and nothing may have fallen through to the unmatched branch.
+    expect(fixture.fulfilled, 'the approved-questions fixture must actually be served').toHaveLength(1);
+    expect(fixture.fulfilled[0]).toContain('scenarioId=no-crank');
+    expect(fixture.unmatched, 'no request may fall through to the 404 branch').toEqual([]);
     
     console.log('✓ no-crank: UI correctly shows fail-closed blocking message');
   });
