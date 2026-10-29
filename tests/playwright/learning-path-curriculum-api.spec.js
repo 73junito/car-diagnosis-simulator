@@ -5,9 +5,10 @@
  *        ↓ on API / HTTP / contract / timeout failure
  *   fall back to the static exam-site/data/curriculum JSON
  *
- * Hermetic by design: every /api/curriculum request is intercepted via
- * page.route(), the Mermaid CDN is blocked, and a local exam-site server
- * supplies the fallback JSON. No live backend is contacted in CI.
+ * Hermetic by design: a shared local-preview network guard (local-preview-guard.js)
+ * allows only http://127.0.0.1:3012, every /api/curriculum request is fulfilled by
+ * an explicit local mock, unrelated external requests are aborted, and a local
+ * exam-site server supplies the fallback JSON. No live backend is contacted.
  *
  * NOTE ON CORS: CORS_HEADERS below is only a test affordance so the browser
  * accepts a fulfilled cross-origin response. It is deliberately permissive
@@ -21,6 +22,7 @@
  * `npm run validate:curriculum-api` against a live endpoint.
  */
 const { test, expect } = require('@playwright/test');
+const { installLocalPreviewGuard } = require('./local-preview-guard');
 const fs = require('fs');
 const path = require('path');
 
@@ -160,8 +162,8 @@ async function blockCdn(page) {
 }
 
 /** Serve `payload` with an explicit HTTP status from /api/curriculum. */
-async function mockApi(page, payload, status = 200) {
-  await page.route(API_GLOB, (route) =>
+async function mockApi(guard, payload, status = 200) {
+  await guard.mock(API_GLOB, (route) =>
     route.fulfill({
       status,
       contentType: 'application/json',
@@ -172,13 +174,13 @@ async function mockApi(page, payload, status = 200) {
 }
 
 /** Fail the API request at the transport layer (network/CORS-style error). */
-async function mockApiNetworkFailure(page) {
-  await page.route(API_GLOB, (route) => route.abort('failed'));
+async function mockApiNetworkFailure(guard) {
+  await guard.mock(API_GLOB, (route) => route.abort('failed'));
 }
 
 /** Never settle the API request, so only the abort/timeout path can end it. */
-async function mockApiHang(page) {
-  await page.route(API_GLOB, () => new Promise(() => {}));
+async function mockApiHang(guard) {
+  await guard.mock(API_GLOB, () => new Promise(() => {}));
 }
 
 /** Shorten the page's API abort budget so the timeout branch is testable. */
@@ -243,6 +245,14 @@ function collectPageErrors(page) {
 
 
 test.describe('Learning path curriculum API integration', () => {
+  let guard;
+
+  // Installed before any mock so mocks are evaluated first (Playwright matches
+  // routes last-registered-first) and every unmatched external request is aborted.
+  test.beforeEach(async ({ page }) => {
+    guard = await installLocalPreviewGuard(page);
+  });
+
   test('renders both pathways from a validated API payload without static JSON', async ({ page }) => {
     const payload = buildApiPayload();
 
@@ -258,7 +268,7 @@ test.describe('Learning path curriculum API integration', () => {
     const pageErrors = collectPageErrors(page);
     const staticReads = trackStaticReads(page);
     await blockCdn(page);
-    await mockApi(page, payload);
+    await mockApi(guard, payload);
 
     await page.goto('/learning-path/');
     await expect(page.locator('html')).toHaveAttribute('data-curriculum-source', 'api');
@@ -290,7 +300,7 @@ test.describe('Learning path curriculum API integration', () => {
 
     const pageErrors = collectPageErrors(page);
     await blockCdn(page);
-    await mockApi(page, payload);
+    await mockApi(guard, payload);
 
     await page.goto('/learning-path/');
     await expect(page.locator('html')).toHaveAttribute('data-curriculum-source', 'api');
@@ -306,7 +316,7 @@ test.describe('Learning path curriculum API integration', () => {
     const pageErrors = collectPageErrors(page);
     const staticReads = trackStaticReads(page);
     await blockCdn(page);
-    await mockApiNetworkFailure(page);
+    await mockApiNetworkFailure(guard);
 
     await page.goto('/learning-path/');
     await expect(page.locator('html')).toHaveAttribute('data-curriculum-source', 'static');
@@ -328,7 +338,7 @@ test.describe('Learning path curriculum API integration', () => {
     await blockCdn(page);
     // Body is a VALID contract payload, so the only thing that can trigger the
     // fallback is the !response.ok status check in loadFromApi().
-    await mockApi(page, buildApiPayload(), 500);
+    await mockApi(guard, buildApiPayload(), 500);
 
     await page.goto('/learning-path/');
     await expect(page.locator('html')).toHaveAttribute('data-curriculum-source', 'static');
@@ -343,7 +353,7 @@ test.describe('Learning path curriculum API integration', () => {
     const staticReads = trackStaticReads(page);
     await blockCdn(page);
     await useShortApiTimeout(page);
-    await mockApiHang(page);
+    await mockApiHang(guard);
 
     await page.goto('/learning-path/');
     await expect(page.locator('html')).toHaveAttribute('data-curriculum-source', 'static');
@@ -398,7 +408,7 @@ test.describe('Learning path curriculum API integration', () => {
       const pageErrors = collectPageErrors(page);
       const staticReads = trackStaticReads(page);
       await blockCdn(page);
-      await mockApi(page, failure.build(buildApiPayload()));
+      await mockApi(guard, failure.build(buildApiPayload()));
 
       await page.goto('/learning-path/');
       await expect(page.locator('html')).toHaveAttribute('data-curriculum-source', 'static');

@@ -1,0 +1,37 @@
+name: autolearnpro-r3f-pilot
+services:
+  lab:
+    build:
+      context: .
+      target: development
+    ports:
+      - "127.0.0.1:5173:5173"
+      - "127.0.0.1:5174:5173"
+    volumes:
+      - .:/app
+      - lab_node_modules:/app/node_modules
+    environment:
+      NODE_ENV: development
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    init: true
+  preview:
+    profiles: ["preview"]
+    build:
+      context: .
+      target: production
+    ports:
+      - "127.0.0.1:4173:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+volumes:
+  lab_node_modules:

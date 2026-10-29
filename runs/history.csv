@@ -21,3 +21,6 @@ accepted,denied,acceptRate,completed,avgDuration,p50,p90,p99,notificationAttempt
 50,0,1.00,50,285,185,242,1797,0,0,2026-10-22T06:08:29.581Z,run-scheduled-summary.json
 50,0,1.00,50,351,260,831,1262,0,0,2026-10-23T06:08:10.878Z,run-scheduled-summary.json
 50,0,1.00,50,284,198,612,1138,0,0,2026-10-24T06:08:07.514Z,run-scheduled-summary.json
+50,0,1.00,50,496,358,1132,1554,0,0,2026-10-26T06:10:47.544Z,run-scheduled-summary.json
+50,0,1.00,50,459,358,497,1792,0,0,2026-10-27T06:08:51.834Z,run-scheduled-summary.json
+50,0,1.00,50,371,261,303,1992,0,0,2026-10-28T06:07:03.286Z,run-scheduled-summary.json
