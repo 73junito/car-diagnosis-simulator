@@ -212,7 +212,9 @@ async function ensureTeacherFixture(options = {}) {
   // An existing identity is left untouched unless its configured credential is proven
   // wrong. Resetting the password revokes every live session for this user, so doing it
   // on every run invalidated the tokens of any smoke run already in flight — the cause
-  // of the intermittent 401 "Invalid or expired token" failures.
+  // of the intermittent 401 "Invalid or expired token" failures. The recovery path below
+  // still rotates, so the residual shared-identity risk remains:
+  // see docs/staging-smoke-concurrency.md.
   const probe = await probeTeacherCredentials({ baseUrl, anonKey, email, password, fetchImpl });
 
   if (probe.status === "ok") {
