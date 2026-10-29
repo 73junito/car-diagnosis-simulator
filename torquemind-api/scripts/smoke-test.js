@@ -71,11 +71,75 @@ function assertApprovedStagingDestination(value = SUPABASE_URL) {
   return true;
 }
 
+/**
+ * Checks whether the configured fixture credential still works, without mutating
+ * anything. Returns one of:
+ *   { status: "ok" }                     - sign-in succeeded; leave the account alone
+ *   { status: "mismatch" }               - the provider explicitly rejected the credential
+ *   { status: "unverifiable", reason }   - transient or configuration failure
+ *
+ * Anything that is not an explicit credential rejection is unverifiable: an outage,
+ * a rate limit or a missing key is not evidence that the password is wrong.
+ */
+async function probeTeacherCredentials({ baseUrl, anonKey, email, password, fetchImpl = fetch }) {
+  if (!anonKey) return { status: "unverifiable", reason: "SUPABASE_ANON_KEY is missing" };
+
+  let response;
+  try {
+    response = await fetchImpl(`${baseUrl}/auth/v1/token?grant_type=password`, {
+      method: "POST",
+      headers: {
+        apikey: anonKey,
+        Authorization: `Bearer ${anonKey}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+      redirect: "error",
+      signal: AbortSignal.timeout(TIMEOUT),
+    });
+  } catch (error) {
+    return {
+      status: "unverifiable",
+      reason: `sign-in request failed: ${(error && error.message) || "unknown error"}`,
+    };
+  }
+
+  let body = null;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+
+  if (response.ok && body && typeof body.access_token === "string" && body.access_token) {
+    return { status: "ok" };
+  }
+
+  if (response.status === 429 || response.status >= 500) {
+    return { status: "unverifiable", reason: `identity provider returned ${response.status}` };
+  }
+
+  if (response.status === 400 || response.status === 401) {
+    const code = String((body && (body.error_code || body.error || body.code)) || "");
+    const description = String((body && (body.error_description || body.msg || body.message)) || "");
+    if (/invalid[_ ]?(credentials|grant|login|password)/i.test(`${code} ${description}`)) {
+      return { status: "mismatch" };
+    }
+  }
+
+  const detail =
+    String(response.status) +
+    (body && (body.msg || body.message) ? ` ${body.msg || body.message}` : "");
+  return { status: "unverifiable", reason: `unexpected sign-in response (${detail})` };
+}
+
 async function ensureTeacherFixture(options = {}) {
   const {
     enabled = SMOKE_SEED_FIXTURE,
     supabaseUrl = SUPABASE_URL,
     serviceRoleKey = SUPABASE_SERVICE_ROLE_KEY,
+    anonKey = SUPABASE_ANON_KEY,
     email = TEST_TEACHER_EMAIL,
     password = TEST_TEACHER_PASSWORD,
     fetchImpl = fetch,
@@ -144,12 +208,30 @@ async function ensureTeacherFixture(options = {}) {
   if (typeof teacher.id !== "string" || !teacher.id) {
     throw new Error("Teacher fixture lookup returned an invalid user identity.");
   }
-  await adminRequest(`/${encodeURIComponent(teacher.id)}`, {
-    method: "PUT",
-    body: JSON.stringify({ password, email_confirm: true }),
-  });
-  console.log("Teacher fixture ensured: staging test identity already existed.");
-  return { action: "updated" };
+
+  // An existing identity is left untouched unless its configured credential is proven
+  // wrong. Resetting the password revokes every live session for this user, so doing it
+  // on every run invalidated the tokens of any smoke run already in flight — the cause
+  // of the intermittent 401 "Invalid or expired token" failures.
+  const probe = await probeTeacherCredentials({ baseUrl, anonKey, email, password, fetchImpl });
+
+  if (probe.status === "ok") {
+    console.log("Teacher fixture ensured: existing credentials verified; nothing changed.");
+    return { action: "preserved" };
+  }
+
+  if (probe.status === "mismatch") {
+    await adminRequest(`/${encodeURIComponent(teacher.id)}`, {
+      method: "PUT",
+      body: JSON.stringify({ password, email_confirm: true }),
+    });
+    console.log("Teacher fixture ensured: credentials rejected; password reset for recovery.");
+    return { action: "recovered" };
+  }
+
+  // Unverifiable means an outage, a rate limit or a configuration gap — none of which
+  // is evidence of a wrong password, so fail without rotating anything.
+  throw new Error(`Teacher fixture refused to rotate credentials: ${probe.reason}`);
 }
 
 async function signInTeacher() {
@@ -187,13 +269,18 @@ async function signInTeacher() {
   return { token: body.access_token, user: body.user || null };
 }
 
-async function getUserFromToken(token) {
-  if (!token || !SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+async function getUserFromToken(token, options = {}) {
+  const {
+    supabaseUrl = SUPABASE_URL,
+    anonKey = SUPABASE_ANON_KEY,
+    fetchImpl = fetch,
+  } = options;
+  if (!token || !supabaseUrl || !anonKey) return null;
   try {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+    const res = await fetchImpl(`${supabaseUrl}/auth/v1/user`, {
       method: "GET",
       headers: {
-        apikey: SUPABASE_ANON_KEY,
+        apikey: anonKey,
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
       },
@@ -467,6 +554,8 @@ if (require.main === module) {
 
 module.exports = {
   assertApprovedStagingDestination,
+  probeTeacherCredentials,
   ensureTeacherFixture,
+  getUserFromToken,
   cleanupSmokeClass,
 };
