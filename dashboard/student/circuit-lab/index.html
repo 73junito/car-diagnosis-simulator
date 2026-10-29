@@ -89,6 +89,7 @@
             <span class="lab-3d-hint">Drag to rotate · wheel or +/- to zoom · arrow keys rotate</span>
           </div>
           <canvas id="lab3dCanvas" class="lab-3d-canvas" tabindex="0" role="img" aria-label="Interactive 3D equipment viewer"></canvas>
+          <div id="lab3dInspectionPresets" class="lab-3d-inspection-presets" role="group" aria-label="Equipment inspection camera views" hidden></div>
           <p id="lab3dStatus" class="lab-3d-status" aria-live="polite">Loading 3D equipment…</p>
         </div>
         <aside class="lab-3d-library" aria-labelledby="lab3dLibraryHeading">
@@ -255,6 +256,7 @@
   <script src="/src/engineering/index.js"></script>
   <script src="/src/presentation/glb-viewer.js"></script>
   <script src="/src/presentation/circuit-lab-scene.js"></script>
+  <script src="/src/presentation/equipment-inspection-presets.js"></script>
   <script src="./circuit-lab-3d.js"></script>
   <script type="module">
     import { mountShell } from "/theme/shell.js";
