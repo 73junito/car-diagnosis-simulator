@@ -540,6 +540,10 @@ header p { max-width: 850px; line-height: 1.6; }
 .lab-3d-asset[data-enabled="false"] .lab-3d-asset__state {
   color:var(--fault);
 }
+.lab-3d-inspection-presets:not([hidden]){display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.lab-3d-inspection-presets button{padding:8px 12px;border:1px solid var(--tm-border,#bdcbd7);border-radius:8px;background:var(--tm-surface,#fff);color:var(--tm-text,#20384d);cursor:pointer}
+.lab-3d-inspection-presets button[aria-pressed="true"]{background:#175b89;color:#fff}
+.lab-3d-inspection-presets button:focus-visible{outline:3px solid #e6a13a;outline-offset:2px}
 @media (max-width:900px) {
   .lab-3d-layout { grid-template-columns:1fr; }
   .lab-3d-library { order:-1; }
