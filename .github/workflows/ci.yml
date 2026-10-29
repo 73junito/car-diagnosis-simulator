@@ -44,6 +44,15 @@ jobs:
       - name: Enforce disposable Postgres registry policy
         run: npm run validate:ci-postgres-service-image
 
+      - name: Enforce scheduled harness history integrity
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+            node scripts/verify-harness-history-integrity.js --baseline-ref FETCH_HEAD
+          else
+            node scripts/verify-harness-history-integrity.js
+          fi
+
       - name: Validate public sitemap and canonical inventory
         run: npm run validate:public-indexability
 
