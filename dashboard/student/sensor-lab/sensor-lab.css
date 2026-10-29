@@ -41,3 +41,8 @@
 @keyframes sensor-probe-pulse{70%{box-shadow:0 0 0 8px rgba(106,75,195,0)}100%{box-shadow:0 0 0 0 rgba(106,75,195,0)}}
 @media(prefers-reduced-motion:reduce){.sensor-3d-probe-state::before{animation:none}}
 @media(max-width:900px){.sensor-3d-binding-grid{grid-template-columns:1fr}}
+
+.lab-3d-inspection-presets:not([hidden]){display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.lab-3d-inspection-presets button{padding:7px 10px;border:1px solid #b8c8d6;border-radius:8px;background:#fff;color:#17415f;cursor:pointer}
+.lab-3d-inspection-presets button[aria-pressed="true"]{background:#175b89;color:#fff}
+.lab-3d-inspection-presets button:focus-visible{outline:3px solid #e6a13a;outline-offset:2px}

@@ -115,11 +115,20 @@
         role.textContent="Visual context only; no engineering, measurement, assessment, or publication authority.";
       }
 
-      card.append(head,canvas,status,role);
+      const inspection=document.createElement("div");
+     inspection.className="lab-3d-inspection-presets";
+     inspection.setAttribute("role","group");
+     inspection.setAttribute("aria-label",asset.title+" inspection views");
+     inspection.hidden=true;
+     card.append(head,canvas,inspection,status,role);
       assetGallery.append(card);
 
       if(!asset.enabled)continue;
       const viewer=new Viewer(canvas,status);
+     if(new URLSearchParams(window.location.search).get("equipmentInspection")==="1"){
+       inspection.hidden=false;
+       window.AutoLearnProEquipmentInspection?.mount({viewer,container:inspection,status});
+     }
       viewers.push({viewer,speed:Number(asset.animation?.speed)||0});
       try{
         await viewer.load(asset.url,asset.title);

@@ -83,6 +83,7 @@
             <span class="lab-3d-hint">Drag to rotate · wheel or +/- to zoom · arrow keys rotate</span>
           </div>
           <canvas id="sensor3dCanvas" class="lab-3d-canvas" tabindex="0" role="img" aria-label="Interactive 3D Sensor Lab equipment viewer"></canvas>
+          <div id="sensor3dInspectionPresets" class="lab-3d-inspection-presets" role="group" aria-label="Sensor equipment inspection views" hidden></div>
           <p id="sensor3dStatus" class="lab-3d-status" aria-live="polite">Loading 3D equipment…</p>
         </div>
         <aside class="lab-3d-library" aria-labelledby="sensor3dLibraryHeading">
@@ -270,6 +271,7 @@
 </script>
   <script src="/src/presentation/glb-viewer.js"></script>
   <script src="./sensor-lab.js"></script>
+  <script src="/src/presentation/equipment-inspection-presets.js"></script>
   <script src="./sensor-lab-3d.js"></script>
 </body>
 </html>
