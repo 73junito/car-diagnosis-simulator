@@ -14,6 +14,7 @@
     "test:supabase-contracts": "node --test supabase/tests/security-contracts.test.js supabase/tests/package-integrity.test.js",
     "test:r22": "node tests/r22/pglite-rls-harness.mjs",
     "test:r22:matrix": "node tests/r22/pglite-rls-harness.mjs --matrix",
+    "verify:rls-coverage": "node scripts/verify-rls-policy-coverage.mjs",
     "build": "npm run write-version && node scripts/build-static-site.js",
     "write-version": "node scripts/write-version.js",
     "test:live-session": "node tests/live-session-ui.test.js",

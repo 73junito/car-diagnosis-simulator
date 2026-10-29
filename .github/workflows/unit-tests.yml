@@ -40,6 +40,12 @@ jobs:
       - name: Run R22 PGlite RLS regression
         run: npm run test:r22
 
+      # Coverage guard: derives the policy inventory from the migrations, runs the harness,
+      # and fails if declared coverage is not backed by passing assertions or a policy table
+      # is untracked. PGlite regression coverage only - not Supabase equivalence.
+      - name: Verify R22 policy coverage inventory
+        run: npm run verify:rls-coverage
+
       - name: Validate scenarios
         id: validate-scenarios
         run: npm run validate:scenarios

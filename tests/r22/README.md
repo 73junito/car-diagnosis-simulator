@@ -17,7 +17,15 @@ install reproduces this harness exactly — no out-of-tree setup required:
 npm ci                      # or: npm install
 npm run test:r22            # 32 RLS assertions (incl. privilege audit)
 npm run test:r22:matrix     # migration compatibility sweep (reporting only)
+npm run verify:rls-coverage # inventory vs measured evidence; fails on overstatement
 ```
+
+The coverage guard compares three things: the policy inventory derived from
+`supabase/migrations`, the assertions the harness actually executed and passed (attributed
+per table), and the declared manifest `tests/r22/rls-coverage.json`. Declaring a table as
+tested is never enough — it must be backed by a passing assertion in the same run. Current
+measured coverage is **3 of 13 policy tables (9 of 41 policies)**; the rest are inventoried
+and scheduled in phases (see the evidence document §6a).
 
 Direct invocation with evidence output:
 

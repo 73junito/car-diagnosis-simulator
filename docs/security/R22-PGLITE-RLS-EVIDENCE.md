@@ -13,6 +13,7 @@ Supabase behaviour, and it does not close R22.
 | Engine | PostgreSQL **18.6** via PGlite 0.5.13 (wasm32, single connection, in-memory) |
 | Migrations under test | `20260817012628_create_attempts.sql`, `20260821040000_create_syllabus_and_scenario_catalog.sql` |
 | Assertions | **32/32 passed**, exit 0 |
+| Coverage | **3 of 13 policy-bearing tables · 9 of 41 policies (22%)** — measured, see §6a |
 | Dependency | `@electric-sql/pglite` **`0.5.13`** devDependency (Apache-2.0), lockfile-managed; `npm run test:r22` |
 | Privileged changes required | none (no Docker, no sudo, no credentials) |
 
@@ -160,10 +161,71 @@ Tables observed with RLS enabled in this cluster: `attempts`, `scenario_catalog`
 - Version parity: PGlite is PostgreSQL 18.6; a project may run a different major.
 - Concurrency: one connection, no pooling, no statement timeout, no transaction races.
 - Extension parity: `pgcrypto` and `supabase_migrations` are unavailable.
-- Institution-level scope: the policy surface here is **owner-scoped**
-  (`owner_id = auth.uid()`), not institution-scoped. There is no institution predicate on
-  these tables to test, so this says nothing about institution isolation beyond what R26
-  recorded for route code.
+- Institution scope: this harness tests **3 of the 13 policy-bearing tables**. Statement of
+  what that means precisely is in §6a. In short: `classes` (8 policies) and `enrollments`
+  (4) are institution-adjacent and are **not** covered here, five institution tables carry
+  RLS with no policies, and institution authorization in production is enforced in route
+  code rather than by RLS. Nothing in this document establishes institution isolation.
+
+## 6a. Coverage inventory and measured scope
+
+Derived case-insensitively from all 106 migrations by `scripts/verify-rls-policy-coverage.mjs`,
+which also runs the harness and reads its per-table assertion attribution:
+
+| Metric | Value |
+| --- | --- |
+| Policies declared in migrations | **41** |
+| Tables carrying policies | **13** |
+| Tables with RLS enabled | **76** |
+| Policy tables covered by this harness | **3** — `syllabi` (4), `syllabus_scenarios` (4), `scenario_catalog` (1) |
+| Policies covered | **9 of 41 (22%)** |
+| Assertions attributable to policy tables | 26 of 32; the other 6 exercise `attempts`, which has no policies |
+
+An earlier revision of this document reported 9 policies on 3 tables and 10 RLS-enabled
+tables. Those figures came from case-sensitive greps against lowercase migration SQL and were
+wrong in both directions; they must not be reused.
+
+### Tested, planned, deny-all
+
+| Bucket | Meaning | Tables |
+| --- | --- | --- |
+| **Tested** | passing assertions measured for the table | `syllabi`, `syllabus_scenarios`, `scenario_catalog` |
+| **Planned** | policy-bearing, no regression evidence yet | phase 1 `classes`, `enrollments` · phase 2 `assignments`, `replays`, `completions` · phase 3 `telemetry_events`, `profiles` · phase 4 `external_data_resources`, `diagnostic_data_domains`, `external_resource_domain_links` |
+| **Deny-all by design** | RLS enabled, zero policies | `institutions`, `institution_memberships`, `institution_cohorts`, `institution_settings`, `student_institution_claims`, `institution_email_domains` |
+| **No RLS at all** | border case | `instructor_school_verifications` |
+
+### The guard
+
+`npm run verify:rls-coverage` (`scripts/verify-rls-policy-coverage.mjs`) is the enforcement
+mechanism:
+
+1. derive the inventory from the migrations — case-insensitive and whitespace-tolerant, so a
+   clause wrapped onto the next line is still counted;
+2. run the harness and read **only** the assertions that actually executed and passed;
+3. compare that evidence against the declared manifest `tests/r22/rls-coverage.json`.
+
+It fails when a table is declared tested without measured evidence, when measured evidence
+exists for an undeclared table, when a declared table carries no policies, when a deny-all
+entry is not RLS-enabled, or when a policy-bearing table is neither tested nor scheduled.
+Being listed in the manifest is never sufficient: the manifest records intent, the run records
+evidence, and only the intersection is reported as coverage.
+
+### Phased plan for the remaining ten tables
+
+| Phase | Tables | Evidence required before a table may be declared tested |
+| --- | --- | --- |
+| 1 | `classes`, `enrollments` | positive control (owner/instructor), cross-tenant denial, holder-of-privilege proof — also the R26 tie-in |
+| 2 | `assignments`, `replays`, `completions` | the same three, per applicable verb |
+| 3 | `telemetry_events`, `profiles` | the same three, plus the ownership/TTL contract for telemetry |
+| 4 | `external_data_resources`, `diagnostic_data_domains`, `external_resource_domain_links` | the same three |
+
+Rules for every phase: no assertion counts as RLS evidence unless the role provably holds the
+underlying privilege; no test may be weakened to make a table reachable; a table moves from
+*planned* to *tested* only by adding assertions and updating the manifest in the same change.
+
+R22 remains **UNVERIFIED** no matter how complete this coverage becomes, because PGlite is not
+Supabase.
+
 
 ## 7. Dependency integration (approved)
 
@@ -217,10 +279,11 @@ as complete Supabase verification. Consequences accepted with that decision:
 ## 9. Reproduction
 
 ```bash
-cd /home/rod/r22-pglite
+cd <repo>
 npm ci
-npm run test:r22            # 32/32 assertions, exit 0
-npm run test:r22:matrix     # 104/106 migrations applied
+npm run test:r22             # 32/32 assertions, exit 0
+npm run test:r22:matrix      # 104/106 migrations applied
+npm run verify:rls-coverage  # inventory vs measured evidence; fails on overstatement
 ```
 
 Recorded run artefacts: `/tmp/r22-repo-dep.log` (repository-managed dependency run),
