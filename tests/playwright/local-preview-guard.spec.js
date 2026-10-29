@@ -15,6 +15,30 @@ async function navigationOutcome(page, url) {
   }
 }
 
+/**
+ * Attempt a navigation on its own page with its own guard.
+ *
+ * A blocked navigation leaves the page sitting on Chromium's error document, and on
+ * slower (CI) runners that error-page commit can race a later navigation on the same
+ * page:
+ *
+ *   page.goto: Navigation to "http://127.0.0.1:3012/catalog/" is interrupted by
+ *   another navigation to "chrome-error://chromewebdata/"
+ *
+ * Isolating each blocked attempt keeps the same security assertions while removing
+ * the timing dependency entirely.
+ */
+async function probeBlockedNavigation(context, url, options) {
+  const probePage = await context.newPage();
+  try {
+    const guard = await installLocalPreviewGuard(probePage, options);
+    const outcome = await navigationOutcome(probePage, url);
+    return { outcome, guard };
+  } finally {
+    await probePage.close();
+  }
+}
+
 test.describe('local preview network guard', () => {
   test('allows approved local exam-site requests', async ({ page }) => {
     const guard = await installLocalPreviewGuard(page);
@@ -26,15 +50,17 @@ test.describe('local preview network guard', () => {
     expect(guard.allowedDestinations.length).toBeGreaterThan(0);
   });
 
-  test('blocks unmatched production requests', async ({ page }) => {
-    const guard = await installLocalPreviewGuard(page);
-    const outcome = await navigationOutcome(page, 'https://app.autolearnpro.com/');
-    expect(outcome.navigated, 'production navigation must be blocked').toBe(false);
-    expect(guard.blockedDestinations).toContain('https://app.autolearnpro.com/');
+  test('blocks unmatched production requests', async ({ page, context }) => {
+    // Negative control on a dedicated page, so the aborted navigation's error document
+    // cannot race the successful local navigation below.
+    const blocked = await probeBlockedNavigation(context, 'https://app.autolearnpro.com/');
+    expect(blocked.outcome.navigated, 'production navigation must be blocked').toBe(false);
+    expect(blocked.guard.blockedDestinations).toContain('https://app.autolearnpro.com/');
 
     // Realistic case: the local catalog page itself requests the production
     // curriculum endpoint, so an unmocked run records the blocked attempt while
     // still rendering from its static fallback.
+    const guard = await installLocalPreviewGuard(page);
     const catalog = await page.goto(LOCAL + '/catalog/');
     expect(catalog && catalog.status()).toBe(200);
     expect(guard.blockedDestinations).toContain('https://app.autolearnpro.com/api/curriculum');
@@ -68,26 +94,24 @@ test.describe('local preview network guard', () => {
     await expect(page.locator('.catalog-course-card')).toHaveCount(68);
   });
 
-  test('blocks unauthorized loopback ports, including 3003', async ({ page }) => {
-    const guard = await installLocalPreviewGuard(page);
-    const other = await navigationOutcome(page, 'http://127.0.0.1:3999/');
-    expect(other.navigated, 'unapproved loopback port must be blocked').toBe(false);
-    expect(guard.blockedDestinations).toContain('http://127.0.0.1:3999/');
+  test('blocks unauthorized loopback ports, including 3003', async ({ context }) => {
+    const other = await probeBlockedNavigation(context, 'http://127.0.0.1:3999/');
+    expect(other.outcome.navigated, 'unapproved loopback port must be blocked').toBe(false);
+    expect(other.guard.blockedDestinations).toContain('http://127.0.0.1:3999/');
 
-    const previewRoot = await navigationOutcome(page, 'http://127.0.0.1:3003/');
-    expect(previewRoot.navigated, 'port 3003 is not approved by default').toBe(false);
-    expect(guard.blockedDestinations).toContain('http://127.0.0.1:3003/');
+    const previewRoot = await probeBlockedNavigation(context, 'http://127.0.0.1:3003/');
+    expect(previewRoot.outcome.navigated, 'port 3003 is not approved by default').toBe(false);
+    expect(previewRoot.guard.blockedDestinations).toContain('http://127.0.0.1:3003/');
   });
 
-  test('an unexpected external hostname cannot bypass the guard', async ({ page }) => {
-    const guard = await installLocalPreviewGuard(page);
-    const external = await navigationOutcome(page, 'https://example.com/');
-    expect(external.navigated).toBe(false);
-    expect(guard.blockedDestinations).toContain('https://example.com/');
+  test('an unexpected external hostname cannot bypass the guard', async ({ context }) => {
+    const external = await probeBlockedNavigation(context, 'https://example.com/');
+    expect(external.outcome.navigated).toBe(false);
+    expect(external.guard.blockedDestinations).toContain('https://example.com/');
 
-    const lookalike = await navigationOutcome(page, 'https://app.autolearnpro.com.evil.test/');
-    expect(lookalike.navigated).toBe(false);
-    expect(guard.blockedDestinations).toContain('https://app.autolearnpro.com.evil.test/');
+    const lookalike = await probeBlockedNavigation(context, 'https://app.autolearnpro.com.evil.test/');
+    expect(lookalike.outcome.navigated).toBe(false);
+    expect(lookalike.guard.blockedDestinations).toContain('https://app.autolearnpro.com.evil.test/');
   });
 
   test('does not leak credentials, query strings or fragments in blocked logs', async ({ page }) => {
