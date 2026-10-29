@@ -119,7 +119,9 @@
     clear(classReportList)
     try {
       const report = await window.apiGet('/api/institution/admin/report?schoolCode=' + encodeURIComponent(schoolCode))
-      const activity = report.activity || {}
+      // Attempt-derived activity is withheld by the API until attempts carry trusted
+      // class attribution, so render it unavailable rather than as an implied zero.
+      const activity = report.activity || null
       const roles = report.membershipCounts || {}
 
       reportSummary.appendChild(metric('Active memberships', report.activeMemberships ?? 0))
@@ -132,10 +134,10 @@
       reportSummary.appendChild(metric('Classes', report.classes ?? 0))
       reportSummary.appendChild(metric('Enrollments', report.enrollments ?? 0))
       reportSummary.appendChild(metric('Unique enrolled students', report.uniqueStudents ?? 0))
-      reportSummary.appendChild(metric('Attempt records', activity.attempts ?? 0))
-      reportSummary.appendChild(metric('Completed attempts', activity.completedAttempts ?? 0))
-      reportSummary.appendChild(metric('Completion rate', activity.completionRate == null ? 'Unavailable' : activity.completionRate + '%'))
-      reportSummary.appendChild(metric('Average score', activity.averageScore == null ? 'Unavailable' : activity.averageScore))
+      reportSummary.appendChild(metric('Attempt records', activity && activity.attempts != null ? activity.attempts : 'Unavailable'))
+      reportSummary.appendChild(metric('Completed attempts', activity && activity.completedAttempts != null ? activity.completedAttempts : 'Unavailable'))
+      reportSummary.appendChild(metric('Completion rate', activity && activity.completionRate != null ? activity.completionRate + '%' : 'Unavailable'))
+      reportSummary.appendChild(metric('Average score', activity && activity.averageScore != null ? activity.averageScore : 'Unavailable'))
 
       const interpretation = document.createElement('p')
       interpretation.textContent = report.interpretation || 'Operational learning activity only.'
@@ -151,11 +153,12 @@
           const title = document.createElement('h4')
           title.textContent = summary.name || 'Class'
           card.appendChild(title)
+          const classActivity = summary.activity || null
           card.appendChild(metric('Students', summary.studentCount ?? 0))
-          card.appendChild(metric('Attempts', summary.attempts ?? 0))
-          card.appendChild(metric('Completed', summary.completedAttempts ?? 0))
-          card.appendChild(metric('Completion rate', summary.completionRate == null ? 'Unavailable' : summary.completionRate + '%'))
-          card.appendChild(metric('Average score', summary.averageScore == null ? 'Unavailable' : summary.averageScore))
+          card.appendChild(metric('Attempts', classActivity && classActivity.attempts != null ? classActivity.attempts : 'Unavailable'))
+          card.appendChild(metric('Completed', classActivity && classActivity.completedAttempts != null ? classActivity.completedAttempts : 'Unavailable'))
+          card.appendChild(metric('Completion rate', classActivity && classActivity.completionRate != null ? classActivity.completionRate + '%' : 'Unavailable'))
+          card.appendChild(metric('Average score', classActivity && classActivity.averageScore != null ? classActivity.averageScore : 'Unavailable'))
           classReportList.appendChild(card)
         })
       }
