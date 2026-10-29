@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const { test, expect } = require("@playwright/test");
+const { installLocalPreviewGuard } = require("./local-preview-guard");
 
 const catalog = JSON.parse(
   fs.readFileSync(path.join(__dirname, "..", "..", "data", "curriculum", "course-catalog.json"), "utf8")
@@ -13,26 +14,16 @@ const examBase = "http://127.0.0.1:3012";
 // in the test suite, so no test file names a production URL.
 const CATALOG_ENDPOINT = "**/api/curriculum";
 
-function isLocalPreview(url) {
-  return (url.hostname === "127.0.0.1" || url.hostname === "localhost")
-    && (url.port === "3012" || url.port === "3003");
-}
-
 test.describe("academic course catalog", () => {
-  test.beforeEach(async ({ page }) => {
-    // Safety net: anything that is neither served by the local preview nor
-    // fulfilled by a mock is aborted. If the endpoint mock ever stops matching,
-    // the page falls back to its static catalog and the API assertions fail
-    // loudly instead of the browser reaching the production host.
-    await page.route("**/*", async (route) => {
-      const url = new URL(route.request().url());
-      if (url.protocol === "data:" || url.protocol === "blob:") return route.continue();
-      if (isLocalPreview(url)) return route.continue();
-      return route.abort();
-    });
+  let guard;
 
-    // Registered after the safety net so this handler runs first for the endpoint.
-    await page.route(CATALOG_ENDPOINT, (route) => route.fulfill({
+  test.beforeEach(async ({ page }) => {
+    // Shared local-only network guard. Installed before any mock so the mock is
+    // evaluated first; anything else external is aborted, so a mock that stops
+    // matching fails loudly instead of reaching the production host.
+    guard = await installLocalPreviewGuard(page);
+
+    await guard.mock(CATALOG_ENDPOINT, (route) => route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({ schemaVersion: "1.0.0", catalogCourses: courses })
@@ -61,7 +52,7 @@ test.describe("academic course catalog", () => {
 
   test("falls back to static catalog when the API fails", async ({ page }) => {
     await page.unroute(CATALOG_ENDPOINT);
-    await page.route(CATALOG_ENDPOINT, (route) => route.fulfill({ status: 503, body: "unavailable" }));
+    await guard.mock(CATALOG_ENDPOINT, (route) => route.fulfill({ status: 503, body: "unavailable" }));
     await page.goto(examBase + "/catalog/");
     await expect(page.locator("html")).toHaveAttribute("data-catalog-source", "static");
     await expect(page.locator(".catalog-course-card")).toHaveCount(68);
