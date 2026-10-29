@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   setup-and-validate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     outputs:
       scenarios_passed: ${{ steps.setout.outputs.passed }}
