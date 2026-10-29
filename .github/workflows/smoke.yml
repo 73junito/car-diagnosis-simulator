@@ -28,7 +28,7 @@ jobs:
     concurrency:
       group: staging-smoke-auth-${{ github.ref }}
       cancel-in-progress: false
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
@@ -120,6 +120,14 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.STAGING_SECRET }}
           TEST_TEACHER_EMAIL: ${{ secrets.TEST_TEACHER_EMAIL }}
           TEST_TEACHER_PASSWORD: ${{ secrets.TEST_TEACHER_PASSWORD }}
+          # Dedicated disposable identity for this workflow. It wins over the
+          # shared identity, so a repair performed here cannot revoke the
+          # sessions another workflow is holding.
+          DEDICATED_TEACHER_EMAIL: ${{ secrets.SMOKE_TEACHER_EMAIL }}
+          DEDICATED_TEACHER_PASSWORD: ${{ secrets.SMOKE_TEACHER_PASSWORD }}
+          # While running on the shared fallback identity, refuse to reset its
+          # password instead of revoking a sibling workflow's session.
+          SMOKE_TEACHER_ISOLATED: 'true'
           SMOKE_SEED_FIXTURE: 'true'
           BASE_URL: http://localhost:3000
         run: npm run test:smoke

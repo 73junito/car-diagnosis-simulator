@@ -12,6 +12,8 @@
     "build:simulation": "node scripts/build-simulation.js",
     "verify:simulation-bundle": "node scripts/build-simulation.js --check",
     "test:supabase-contracts": "node --test supabase/tests/security-contracts.test.js supabase/tests/package-integrity.test.js",
+    "test:r22": "node tests/r22/pglite-rls-harness.mjs",
+    "test:r22:matrix": "node tests/r22/pglite-rls-harness.mjs --matrix",
     "build": "npm run write-version && node scripts/build-static-site.js",
     "write-version": "node scripts/write-version.js",
     "test:live-session": "node tests/live-session-ui.test.js",
@@ -41,6 +43,7 @@
     "validate:curriculum-content": "node scripts/verify-curriculum-content-policy.js",
     "validate:evidence-approval": "node scripts/verify-evidence-approval-contract.js",
     "validate:external-technical-references": "node scripts/verify-external-technical-references.js",
+    "validate:harness-history": "node scripts/verify-harness-history-integrity.js",
     "validate:circuits": "node scripts/verify-circuit-models.js",
     "validate:animations": "node scripts/verify-animation-manifests.js",
     "validate:animation-blender": "node scripts/verify-blender-animation-pipeline.js",
@@ -157,6 +160,7 @@
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.24.0",
     "@cloudflare/workers-types": "^5.20261019.1",
+    "@electric-sql/pglite": "0.5.13",
     "@mermaid-js/mermaid-cli": "^12.0.0",
     "@playwright/test": "^1.64.1",
     "acorn": "^8.19.0",
@@ -184,7 +188,7 @@
     "typescript": "7.0.2",
     "undici": "^8.12.3",
     "wait-on": "^9.5.1",
-    "wrangler": "^4.151.2"
+    "wrangler": "^4.153.0"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
