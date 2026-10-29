@@ -83,7 +83,7 @@ do not share it; no production file was altered.
 3. Scope: `classes.owner_id = caller` → class ids. No owned classes ⇒ empty result.
 4. `hasClassAttribution` probes `attempts.class_id`; absent ⇒ `503 attempt_attribution_unavailable`.
 5. When present: `attempts.class_id IN owned` **and** `class_id IS NOT NULL` → answers →
-   `scenario_questions.ase_area` → per-area aggregates.
+   the diagnostic-area column on `scenario_questions` → per-area aggregates.
 6. Enrollments are never consulted; no answer text, `correct_answer`, `student_answer` or
    `is_correct` value is returned — only counts.
 

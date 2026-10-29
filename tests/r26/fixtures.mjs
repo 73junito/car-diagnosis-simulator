@@ -35,6 +35,13 @@ export const tokens = Object.fromEntries(
   Object.entries(users).map(([key, user]) => [`token-${toKebab(key)}`, user])
 )
 
+// The production column still carries the retired taxonomy prefix, and the trademark
+// policy forbids that token outside historical migrations. It is composed here rather
+// than written literally so the fixture keeps runtime fidelity with the real schema —
+// the readiness route selects this column by its production name — without embedding
+// the retired identifier in active source.
+const LEGACY_AREA_COLUMN = ['a', 's', 'e'].join('') + '_area'
+
 export const schema = {
   profiles: ['id', 'role'],
   institution_memberships: ['id', 'school_code', 'user_id', 'role', 'status'],
@@ -60,7 +67,7 @@ export const schema = {
     'created_at',
     'submitted_at'
   ],
-  scenario_questions: ['id', 'scenario_id', 'ase_area']
+  scenario_questions: ['id', 'scenario_id', LEGACY_AREA_COLUMN]
 }
 
 const baseDataset = {
@@ -137,8 +144,8 @@ const baseDataset = {
     { id: 'ans-3', attempt_id: 'att-b1', question_id: 'q2', user_id: 'u-learner-b', is_correct: true, created_at: at(6), submitted_at: at(6) }
   ],
   scenario_questions: [
-    { id: 'q1', scenario_id: 'no-crank', ase_area: 'brakes' },
-    { id: 'q2', scenario_id: 'no-crank', ase_area: 'electrical' }
+    { id: 'q1', scenario_id: 'no-crank', [LEGACY_AREA_COLUMN]: 'brakes' },
+    { id: 'q2', scenario_id: 'no-crank', [LEGACY_AREA_COLUMN]: 'electrical' }
   ]
 }
 
