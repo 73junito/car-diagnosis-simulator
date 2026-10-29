@@ -149,7 +149,7 @@ describe('staging teacher fixture credential handling', () => {
     const { fetchImpl, calls } = makeFetch({
       signIn: () => response(400, { error_code: 'invalid_credentials', msg: 'Invalid login credentials' })
     });
-    const result = await ensureTeacherFixture(fixtureOptions(fetchImpl));
+    const result = await ensureTeacherFixture({ ...fixtureOptions(fetchImpl), allowPasswordReset: true });
 
     expect(result).toEqual({ action: 'recovered' });
     expect(putCalls(calls)).toHaveLength(1);
@@ -160,7 +160,7 @@ describe('staging teacher fixture credential handling', () => {
     const { fetchImpl, calls } = makeFetch({
       signIn: () => response(400, { error: 'invalid_grant', error_description: 'Invalid login credentials' })
     });
-    const result = await ensureTeacherFixture(fixtureOptions(fetchImpl));
+    const result = await ensureTeacherFixture({ ...fixtureOptions(fetchImpl), allowPasswordReset: true });
 
     expect(result).toEqual({ action: 'recovered' });
     expect(putCalls(calls)).toHaveLength(1);
@@ -266,7 +266,7 @@ describe('staging teacher fixture credential handling', () => {
     const options = { supabaseUrl: STAGING_URL, anonKey: 'anon', fetchImpl: world.fetchImpl };
     expect(await getUserFromToken(held, options)).toEqual({ id: TEACHER_ID });
 
-    const result = await ensureTeacherFixture({ ...fixtureOptions(world.fetchImpl), password: 'rotated-password' });
+    const result = await ensureTeacherFixture({ ...fixtureOptions(world.fetchImpl), password: 'rotated-password', allowPasswordReset: true });
 
     expect(result).toEqual({ action: 'recovered' });
     expect(world.state.adminPasswordUpdates).toBe(1);
