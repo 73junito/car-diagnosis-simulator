@@ -185,7 +185,7 @@
     "typescript": "7.0.2",
     "undici": "^8.12.3",
     "wait-on": "^9.5.1",
-    "wrangler": "^4.151.2"
+    "wrangler": "^4.153.0"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
