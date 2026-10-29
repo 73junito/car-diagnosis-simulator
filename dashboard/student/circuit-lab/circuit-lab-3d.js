@@ -29,6 +29,12 @@
   const summary = scene.loadContracts({ runtime, manifest, template });
   const assets = scene.getAssets();
   const viewer = new window.AutoLearnProGlbViewer.GlbViewer(canvas, status);
+  const inspection = document.getElementById("lab3dInspectionPresets");
+  // Explicit opt-in only. No default production behavior changes.
+  if (inspection && new URLSearchParams(window.location.search).get("equipmentInspection") === "1") {
+    inspection.hidden = false;
+    window.AutoLearnProEquipmentInspection?.mount({ viewer, container: inspection, status });
+  }
 
   function describeRole(asset) {
     if (asset.kind === "diagnostic-tool") {
