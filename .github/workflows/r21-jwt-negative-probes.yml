@@ -1,0 +1,84 @@
+name: R21 JWT Negative Probes (staging)
+
+# Draft verification workflow. Manual dispatch only: this never runs on push or
+# pull_request, so no probe can fire as a side effect of ordinary CI.
+#
+# Purpose: evidence that the REAL staging authentication boundary rejects forged,
+# malformed, expired and alg=none tokens. Production verification is delegated to
+# Supabase (api/_utils/auth-utils.js -> supabase.auth.getUser()); this workflow does
+# not add or change any verification logic.
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type probe-staging-readonly to run the read-only probe set against staging (includes one sign-in)'
+        required: true
+        type: string
+      acknowledgement:
+        description: 'I understand this signs in once with the dedicated smoke teacher identity and sends read-only GETs (no application-data writes)'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# Never allow overlapping probe runs against the shared staging project.
+concurrency:
+  group: r21-jwt-negative-probes
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    name: r21-jwt-negative-probes
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    # Staging environment supplies STAGING_URL and STAGING_ANON. The anon key is
+    # publishable; no service-role or administrative credential is used anywhere.
+    environment: jchfruprqpeypdttvlam_staging
+    steps:
+      - name: Refuse to run without explicit confirmation
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+          ACK: ${{ inputs.acknowledgement }}
+        run: |
+          set -euo pipefail
+          if [ "${CONFIRM}" != "probe-staging-readonly" ]; then
+            echo "::error::confirm input must be exactly 'probe-staging-readonly'"
+            exit 1
+          fi
+          if [ "${ACK}" != "true" ]; then
+            echo "::error::acknowledgement must be checked"
+            exit 1
+          fi
+          echo "Confirmation accepted; probes are read-only GETs."
+
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+
+      - name: Self-test guards (no network)
+        run: node tests/r21/jwt-negative-probes.mjs --self-test
+
+      - name: Negative probes against staging (read-only, with positive control)
+        env:
+          STAGING_URL: ${{ secrets.STAGING_URL }}
+          STAGING_ANON: ${{ secrets.STAGING_ANON }}
+          SMOKE_TEACHER_EMAIL: ${{ secrets.SMOKE_TEACHER_EMAIL }}
+          SMOKE_TEACHER_PASSWORD: ${{ secrets.SMOKE_TEACHER_PASSWORD }}
+        run: |
+          set -euo pipefail
+          # The runner enforces the host allowlist, the request cap, the per-request
+          # timeout and fail-closed behaviour; it prints status codes and labels only.
+          # It signs in once with the dedicated smoke identity to obtain a genuine JWT
+          # (positive control) and never prints or logs that token.
+          node tests/r21/jwt-negative-probes.mjs
+
+      - name: Record outcome
+        if: always()
+        run: |
+          echo "Outcome: ${{ job.status }}"
+          echo "All probes are negative (HTTP 4xx expected). Any 2xx above is a finding."
