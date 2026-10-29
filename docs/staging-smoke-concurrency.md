@@ -17,7 +17,7 @@ Regression protection: `npx jest tests/smoke-workflow-concurrency.test.js` reads
 
 ## Residual risk: shared staging fixtures
 
-The two suites now run concurrently against the same staging project. They share the teacher fixture identity (`TEST_TEACHER_EMAIL`, seeded by an idempotent upsert). The class fixture uses a time-derived name (`Smoke Test Class <epoch ms>`) and is deleted by exact id + owner + name, with cleanup failing closed unless exactly one row is deleted. `Date.now()` is not a guaranteed unique run identifier, so two runs starting within the same millisecond could collide; the failure mode is a loud cleanup error rather than silent corruption.
+The two suites now run concurrently against the same staging project. They share the teacher fixture identity (`TEST_TEACHER_EMAIL`). The class fixture uses a time-derived name (`Smoke Test Class <epoch ms>`) and is deleted by exact id + owner + name, with cleanup failing closed unless exactly one row is deleted. `Date.now()` is not a guaranteed unique run identifier, so two runs starting within the same millisecond could collide; the failure mode is a loud cleanup error rather than silent corruption.
 
 ### Session revocation on password reset
 
