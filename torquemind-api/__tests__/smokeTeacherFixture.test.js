@@ -49,6 +49,62 @@ function fixtureOptions(fetchImpl) {
 const putCalls = (calls) => calls.filter((call) => call.method === 'PUT');
 const tokenCalls = (calls) => calls.filter((call) => call.url.includes('/auth/v1/token'));
 
+/**
+ * A stateful stand-in for the identity provider that models the one behaviour that
+ * matters here: an administrative password update revokes every live session for that
+ * user. Session survival can then be asserted directly, and the "no administrative
+ * update was issued" condition is instrumented (counted) instead of being inferred
+ * from a successful request.
+ */
+function makeSessionWorld({ providerPassword = 'configured-password' } = {}) {
+  const state = { password: providerPassword, sessions: new Map(), adminPasswordUpdates: 0, sequence: 0 };
+
+  const fetchImpl = jest.fn(async (url, options = {}) => {
+    const method = options.method || 'GET';
+    const headers = options.headers || {};
+    const bearer = String(headers.Authorization || headers.authorization || '').replace(/^Bearer\s+/i, '');
+
+    if (url.includes('/auth/v1/admin/users?page=')) {
+      return response(200, { users: [{ id: TEACHER_ID, email: TEACHER_EMAIL }] });
+    }
+    if (url.includes('/auth/v1/token')) {
+      const body = JSON.parse(options.body || '{}');
+      if (body.password !== state.password) {
+        return response(400, { error_code: 'invalid_credentials', msg: 'Invalid login credentials' });
+      }
+      const token = `session-${(state.sequence += 1)}`;
+      state.sessions.set(token, TEACHER_ID);
+      return response(200, { access_token: token, user: { id: TEACHER_ID, email: TEACHER_EMAIL } });
+    }
+    if (url.includes('/auth/v1/user')) {
+      const id = state.sessions.get(bearer);
+      if (!id) return response(401, { error: 'Invalid or expired token' });
+      return response(200, { user: { id } });
+    }
+    if (url.includes('/auth/v1/admin/users/') && method === 'PUT') {
+      const body = JSON.parse(options.body || '{}');
+      state.password = body.password;
+      state.adminPasswordUpdates += 1;
+      state.sessions.clear();
+      return response(200, {});
+    }
+    throw new Error(`unexpected request: ${method} ${url}`);
+  });
+
+  return { state, fetchImpl };
+}
+
+async function signInTwice(world, password) {
+  const issue = async () => {
+    const res = await world.fetchImpl(`${STAGING_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      body: JSON.stringify({ email: TEACHER_EMAIL, password }),
+    });
+    return (await res.json()).access_token;
+  };
+  return [await issue(), await issue()];
+}
+
 describe('staging teacher fixture credential handling', () => {
   test('existing teacher with a working password is preserved without an admin update', async () => {
     const { fetchImpl, calls } = makeFetch({ signIn: () => response(200, { access_token: 'live-token' }) });
@@ -177,5 +233,43 @@ describe('staging teacher fixture credential handling', () => {
       fetchImpl: makeFetch({ signIn: () => response(502, {}) }).fetchImpl
     });
     expect(outage.status).toBe('unverifiable');
+  });
+
+  // Session survival, asserted against a provider model that revokes sessions on a
+  // password update. Two tokens held before the fixture runs must both still resolve,
+  // and the invariant is instrumented: zero administrative password updates.
+  test('two live sessions survive fixture setup on the valid-credential path', async () => {
+    const world = makeSessionWorld();
+    const [first, second] = await signInTwice(world, 'configured-password');
+    expect(world.state.sessions.size).toBe(2);
+
+    const result = await ensureTeacherFixture(fixtureOptions(world.fetchImpl));
+
+    expect(result).toEqual({ action: 'preserved' });
+    expect(world.state.adminPasswordUpdates).toBe(0);
+    // The probe signs in to verify the credential, so the fixture adds its own session
+    // rather than removing any. What matters is that neither pre-existing one is gone.
+    expect(world.state.sessions.has(first)).toBe(true);
+    expect(world.state.sessions.has(second)).toBe(true);
+
+    const options = { supabaseUrl: STAGING_URL, anonKey: 'anon', fetchImpl: world.fetchImpl };
+    expect(await getUserFromToken(first, options)).toEqual({ id: TEACHER_ID });
+    expect(await getUserFromToken(second, options)).toEqual({ id: TEACHER_ID });
+  });
+
+  // Documents the residual risk rather than hiding it: the controlled recovery path can
+  // still rotate a shared credential, which is why per-run identities remain the durable
+  // fix. If this ever stops revoking, revisit whether the provider changed its behaviour.
+  test('the recovery path still revokes concurrent sessions (known limitation)', async () => {
+    const world = makeSessionWorld();
+    const [held] = await signInTwice(world, 'configured-password');
+    const options = { supabaseUrl: STAGING_URL, anonKey: 'anon', fetchImpl: world.fetchImpl };
+    expect(await getUserFromToken(held, options)).toEqual({ id: TEACHER_ID });
+
+    const result = await ensureTeacherFixture({ ...fixtureOptions(world.fetchImpl), password: 'rotated-password' });
+
+    expect(result).toEqual({ action: 'recovered' });
+    expect(world.state.adminPasswordUpdates).toBe(1);
+    expect(await getUserFromToken(held, options)).toBeNull();
   });
 });
