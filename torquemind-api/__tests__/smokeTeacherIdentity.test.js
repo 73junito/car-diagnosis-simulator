@@ -34,6 +34,7 @@ function createAdminStub(users = []) {
       body: init.body ? JSON.parse(init.body) : null,
     });
 
+    if (url.includes('/auth/v1/token')) return jsonResponse({ error_code: 'invalid_credentials', msg: 'Invalid login credentials' }, 400);
     if (method === 'GET') return jsonResponse({ users });
     if (method === 'POST') return jsonResponse({ id: 'user-created' });
     if (method === 'PUT') return jsonResponse({ id: 'user-existing' });
@@ -138,7 +139,7 @@ describe('isolated smoke teacher session resolution', () => {
     });
 
     expect(result).toBe(ok);
-    expect(ensureFixture).toHaveBeenCalledWith();
+    expect(ensureFixture).toHaveBeenCalledWith({ allowPasswordReset: true });
   });
 
   test('does not touch the shared identity on the healthy path', async () => {
@@ -167,6 +168,7 @@ describe('teacher fixture password reset guard', () => {
         enabled: true,
         supabaseUrl: STAGING_URL,
         serviceRoleKey: 'service-role',
+        anonKey: 'anon',
         email: 'shared@example.test',
         password: 'shared-secret',
         fetchImpl,
@@ -174,8 +176,9 @@ describe('teacher fixture password reset guard', () => {
       })
     ).rejects.toThrow(/password reset refused/i);
 
-    // Only the lookup ran: no password reset request was sent.
-    expect(calls.every((call) => call.method === 'GET')).toBe(true);
+    // Lookup and credential probe are permitted; no administrative password update.
+    expect(calls.map((call) => call.method)).toEqual(['GET', 'POST']);
+    expect(calls.some((call) => call.method === 'PUT')).toBe(false);
   });
 
   test('resets a dedicated identity password when the repair is allowed', async () => {
@@ -187,14 +190,15 @@ describe('teacher fixture password reset guard', () => {
       enabled: true,
       supabaseUrl: STAGING_URL,
       serviceRoleKey: 'service-role',
+      anonKey: 'anon',
       email: 'dedicated@example.test',
       password: 'dedicated-secret',
       fetchImpl,
       allowPasswordReset: true,
     });
 
-    expect(result).toEqual({ action: 'updated' });
-    expect(calls.map((call) => call.method)).toEqual(['GET', 'PUT']);
+    expect(result).toEqual({ action: 'recovered' });
+    expect(calls.map((call) => call.method)).toEqual(['GET', 'POST', 'PUT']);
   });
 
   test('refuses to seed outside the approved staging project', async () => {
@@ -348,6 +352,7 @@ describe('smoke teacher identity provisioning guards', () => {
     const result = await provisionTeacherIdentity({
       supabaseUrl: STAGING_URL,
       serviceRoleKey: 'service-role',
+      anonKey: 'anon',
       email: 'dedicated@example.test',
       password: 'dedicated-secret',
       fetchImpl,
@@ -377,6 +382,7 @@ describe('smoke teacher identity provisioning guards', () => {
     const result = await cleanupTeacherIdentity({
       supabaseUrl: STAGING_URL,
       serviceRoleKey: 'service-role',
+      anonKey: 'anon',
       email: 'dedicated@example.test',
       password: 'dedicated-secret',
       fetchImpl,
@@ -399,6 +405,7 @@ describe('smoke teacher identity provisioning guards', () => {
     const result = await cleanupTeacherIdentity({
       supabaseUrl: STAGING_URL,
       serviceRoleKey: 'service-role',
+      anonKey: 'anon',
       email: 'dedicated@example.test',
       password: 'dedicated-secret',
       fetchImpl,

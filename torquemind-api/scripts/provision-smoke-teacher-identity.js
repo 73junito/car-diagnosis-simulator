@@ -298,24 +298,16 @@ async function cleanupTeacherIdentity(options = {}) {
 }
 
 /**
- * Print the GitHub secret commands the owner must run. The password is never
- * printed: the command reads it from the environment instead.
- *
- * @param {object} context
+ * Print static setup instructions without logging environment-derived values.
  */
-function printSecretCommands(context) {
-  const { email, secretNamePrefix } = context;
+function printSecretCommands() {
   console.log('');
-  console.log('Store the identity in GitHub Actions (environment secrets):');
-  console.log(
-    `  gh secret set ${secretNamePrefix}_EMAIL --env ${STAGING_ENVIRONMENT} --body "${email}"`
-  );
-  console.log(
-    `  gh secret set ${secretNamePrefix}_PASSWORD --env ${STAGING_ENVIRONMENT} --body "$SMOKE_TEACHER_PASSWORD"`
-  );
+  console.log('Required GitHub Actions environment secrets (values are never printed):');
+  console.log('  SMOKE_TEACHER_EMAIL     - dedicated smoke teacher address');
+  console.log('  SMOKE_TEACHER_PASSWORD  - dedicated smoke teacher password');
   console.log('');
-  console.log('Then wire the workflow to those secrets as DEDICATED_TEACHER_EMAIL /');
-  console.log('DEDICATED_TEACHER_PASSWORD.');
+  console.log('Set these under Settings > Environments, then wire them to');
+  console.log('DEDICATED_TEACHER_EMAIL / DEDICATED_TEACHER_PASSWORD in the workflow.');
 }
 
 /**
@@ -335,15 +327,13 @@ async function main() {
 
   if (options.cleanup) {
     const result = await cleanupTeacherIdentity(context);
-    console.log(
-      `Cleanup complete: ${result.action} (${result.email}).`
-    );
+    console.log('Cleanup complete.');
     return;
   }
 
   const result = await provisionTeacherIdentity(context);
-  console.log(`Provisioning complete: ${result.action} (${result.email}).`);
-  printSecretCommands(context);
+  console.log("Provisioning complete.");
+  printSecretCommands();
 }
 
 if (require.main === module) {

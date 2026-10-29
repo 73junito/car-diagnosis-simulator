@@ -151,7 +151,7 @@ async function ensureTeacherFixture(options = {}) {
     email = TEST_TEACHER_EMAIL,
     password = TEST_TEACHER_PASSWORD,
     fetchImpl = fetch,
-    allowPasswordReset = true,
+    allowPasswordReset = false,
   } = options;
 
   if (!enabled) return { action: "disabled" };
@@ -217,10 +217,15 @@ async function ensureTeacherFixture(options = {}) {
   if (typeof teacher.id !== "string" || !teacher.id) {
     throw new Error("Teacher fixture lookup returned an invalid user identity.");
   }
-  // Resetting the password revokes every session this identity holds. That is
-  // safe for a dedicated identity, whose sessions belong to this workflow
-  // alone, but it breaks a sibling workflow that is signed in with the shared
-  // identity, so the repair is refused there.
+  // Preserve valid credentials and every existing session without a write.
+  const probe = await probeTeacherCredentials({ baseUrl, anonKey, email, password, fetchImpl });
+  if (probe.status === "ok") {
+    console.log("Teacher fixture ensured: existing credentials verified; nothing changed.");
+    return { action: "preserved" };
+  }
+  if (probe.status !== "mismatch") {
+    throw new Error(`Teacher fixture refused to rotate credentials: ${probe.reason}`);
+  }
   if (!allowPasswordReset) {
     throw new Error(
       "Teacher fixture password reset refused: this run shares the staging teacher identity, and resetting its password revokes every session it holds."
@@ -230,8 +235,8 @@ async function ensureTeacherFixture(options = {}) {
     method: "PUT",
     body: JSON.stringify({ password, email_confirm: true }),
   });
-  console.log("Teacher fixture ensured: staging test identity already existed.");
-  return { action: "updated" };
+  console.log("Teacher fixture ensured: credentials rejected; password reset for recovery.");
+  return { action: "recovered" };
 }
 
 /**
@@ -372,7 +377,7 @@ async function resolveTeacherSession(options = {}) {
   // Missing credentials are a configuration error. Run the fixture step so the
   // misconfiguration fails loudly, exactly as it did before.
   if (result.credentialsMissing) {
-    await ensureFixture();
+    await ensureFixture({ allowPasswordReset: mayResetPassword });
     return result;
   }
 
@@ -409,7 +414,7 @@ async function resolveTeacherSession(options = {}) {
     };
   }
 
-  const fixture = await ensureFixture();
+  const fixture = await ensureFixture({ allowPasswordReset: mayResetPassword });
 
   // A disabled fixture cannot repair anything, so retrying would only repeat
   // the same rejected request.
