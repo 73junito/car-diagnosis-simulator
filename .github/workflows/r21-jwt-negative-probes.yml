@@ -16,7 +16,7 @@ on:
         required: true
         type: string
       acknowledgement:
-        description: 'I understand this signs in once with the dedicated smoke teacher identity and sends read-only GETs (no application-data writes)'
+        description: 'I understand this signs in once with the dedicated R21 teacher identity and sends read-only GETs (no application-data writes)'
         required: true
         type: boolean
         default: false
@@ -67,14 +67,16 @@ jobs:
         env:
           STAGING_URL: ${{ secrets.STAGING_URL }}
           STAGING_ANON: ${{ secrets.STAGING_ANON }}
-          SMOKE_TEACHER_EMAIL: ${{ secrets.SMOKE_TEACHER_EMAIL }}
-          SMOKE_TEACHER_PASSWORD: ${{ secrets.SMOKE_TEACHER_PASSWORD }}
+          R21_TEACHER_EMAIL: ${{ secrets.R21_TEACHER_EMAIL }}
+          R21_TEACHER_PASSWORD: ${{ secrets.R21_TEACHER_PASSWORD }}
         run: |
           set -euo pipefail
           # The runner enforces the host allowlist, the request cap, the per-request
           # timeout and fail-closed behaviour; it prints status codes and labels only.
-          # It signs in once with the dedicated smoke identity to obtain a genuine JWT
-          # (positive control) and never prints or logs that token.
+          # It signs in once with the dedicated R21 identity to obtain a genuine JWT
+          # (positive control) and never prints or logs that token. That identity is
+          # separate from SMOKE_TEACHER_* and API_SMOKE_TEACHER_* so this probe cannot
+          # disturb the sessions held by the staging smoke workflows.
           node tests/r21/jwt-negative-probes.mjs
 
       - name: Record outcome

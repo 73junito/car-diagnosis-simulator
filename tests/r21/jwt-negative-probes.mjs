@@ -16,6 +16,7 @@
  *
  * Usage:
  *   STAGING_URL=https://<ref>.supabase.co STAGING_ANON=<anon key> \
+ *   R21_TEACHER_EMAIL=<dedicated r21 identity> R21_TEACHER_PASSWORD=<...> \
  *     node tests/r21/jwt-negative-probes.mjs
  *   node tests/r21/jwt-negative-probes.mjs --self-test   # no network at all
  *
@@ -217,9 +218,14 @@ async function main() {
   }
 
   const anonKey = process.env.STAGING_ANON
+  // R21 has its own dedicated identity so a security probe can never disturb the
+  // sessions held by the staging smoke workflows (#1132 isolation model):
+  //   SMOKE_TEACHER_*     -> smoke.yml
+  //   API_SMOKE_TEACHER_* -> api-smoke.yml
+  //   R21_TEACHER_*       -> this workflow
   const credentials = {
-    email: process.env.SMOKE_TEACHER_EMAIL,
-    password: process.env.SMOKE_TEACHER_PASSWORD,
+    email: process.env.R21_TEACHER_EMAIL,
+    password: process.env.R21_TEACHER_PASSWORD,
   }
   let url
   try {
@@ -228,7 +234,7 @@ async function main() {
     // Fail closed without a positive control: otherwise a boundary that rejects
     // everything would satisfy every negative probe below.
     if (!credentials.email || !credentials.password) {
-      throw new Error('SMOKE_TEACHER_EMAIL / SMOKE_TEACHER_PASSWORD are required for the positive control')
+      throw new Error('R21_TEACHER_EMAIL / R21_TEACHER_PASSWORD are required for the positive control')
     }
   } catch (error) {
     console.error(`REFUSING TO PROBE: ${error.message}`)

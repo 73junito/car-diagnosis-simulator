@@ -45,12 +45,12 @@ check('no service-role / admin credential referenced', !/SERVICE_ROLE|STAGING_SE
 const ALLOWED_SECRETS = [
   'secrets.STAGING_URL',
   'secrets.STAGING_ANON',
-  'secrets.SMOKE_TEACHER_EMAIL',
-  'secrets.SMOKE_TEACHER_PASSWORD',
+  'secrets.R21_TEACHER_EMAIL',
+  'secrets.R21_TEACHER_PASSWORD',
 ]
 check('only allowlisted secrets referenced',
-  (raw.match(/secrets\.([A-Z_]+)/g) ?? []).every((m) => ALLOWED_SECRETS.includes(m)),
-  (raw.match(/secrets\.([A-Z_]+)/g) ?? []).join(','))
+  (raw.match(/secrets\.([A-Z0-9_]+)/g) ?? []).every((m) => ALLOWED_SECRETS.includes(m)),
+  (raw.match(/secrets\.([A-Z0-9_]+)/g) ?? []).join(','))
 
 // --- runtime guards -------------------------------------------------------
 const job = Object.values(doc.jobs ?? {})[0] ?? {}
@@ -84,7 +84,21 @@ check(
 )
 check(
   'positive control fails closed without credentials',
-  /SMOKE_TEACHER_EMAIL \/ SMOKE_TEACHER_PASSWORD are required/.test(runner)
+  /R21_TEACHER_EMAIL \/ R21_TEACHER_PASSWORD are required/.test(runner)
+)
+// R21 must not borrow the shared account or another workflow's identity: the password
+// grant creates a session, so a shared identity could disturb a sibling smoke run.
+const runnerCode = runner
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/^[ \t]*\/\/.*$/gm, '')
+  .replace(/[ \t]\/\/.*$/gm, '')
+check(
+  'runner uses only the dedicated R21 identity in code',
+  !/SMOKE_TEACHER_|API_SMOKE_TEACHER_|TEST_TEACHER_/.test(runnerCode) && /R21_TEACHER_EMAIL/.test(runnerCode)
+)
+check(
+  'workflow references no shared or sibling-identity secrets',
+  !/secrets\.(SMOKE_TEACHER|API_SMOKE_TEACHER|TEST_TEACHER)/.test(raw)
 )
 check(
   'expiry/audience probes carry explicit limitation caveats',

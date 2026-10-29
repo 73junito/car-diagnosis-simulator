@@ -11,7 +11,7 @@ submitted for review before any execution.
 | Workflow | `.github/workflows/r21-jwt-negative-probes.yml` (draft) |
 | Runner | `tests/r21/jwt-negative-probes.mjs` |
 | Validator | `tests/r21/validate-workflow.mjs` |
-| Local validation | runner self-test **10/10**, validator **26/26**, fail-closed **6/6** |
+| Local validation | runner self-test **10/10**, validator **28/28**, fail-closed **6/6** |
 | Staging contact so far | **none** |
 
 ## 1. Objective, and what this is not
@@ -39,7 +39,7 @@ requests total**, sequential, 500 ms apart, in three phases.
 | Phase | Request | Authorization | Expected | Proves |
 | --- | --- | --- | --- | --- |
 | 1 | anonymous reachability control | none (apikey only) | **200** | host and path are correct; PostgREST answers; RLS filters rows |
-| 2a | password grant with the dedicated smoke identity | apikey only | **200** | a legitimate staging session can be obtained |
+| 2a | password grant with the dedicated R21 identity | apikey only | **200** | a legitimate staging session can be obtained |
 | 2b | authenticated positive control | real staging JWT | **200** | the same endpoint **accepts** a valid token |
 | 3.1 | malformed: two segments | `Bearer not.a-jwt` | 400/401 | structurally invalid token rejected |
 | 3.2 | malformed: not a token | `Bearer definitely-not-a-token` | 400/401 | non-JWT bearer rejected |
@@ -106,7 +106,7 @@ R22 harness initially granted default privileges to the wrong role set.
 
 | Boundary | Decision |
 | --- | --- |
-| Principal | The **dedicated** `SMOKE_TEACHER_*` identity, never the shared `TEST_TEACHER_*` account. Verified at name level: `SMOKE_TEACHER_EMAIL/PASSWORD` are referenced **only** by `smoke.yml`; `API_SMOKE_TEACHER_*` only by `api-smoke.yml`; the shared `TEST_TEACHER_EMAIL` is used by **five** workflows. This draft adds a second reference to the dedicated identity (the same account the smoke workflow already uses), not a new use of the shared account. |
+| Principal | The **dedicated** `R21_TEACHER_*` identity — a third credential pair created for this workflow alone. Each workflow now owns one identity: `SMOKE_TEACHER_*` → `smoke.yml`, `API_SMOKE_TEACHER_*` → `api-smoke.yml`, `R21_TEACHER_*` → this workflow. The shared `TEST_TEACHER_*` account (used by five workflows) is never used. Because the password grant creates a session, this separation also guarantees a security probe cannot disturb a sibling smoke run. |
 | Side effect | Exactly **one** GoTrue password grant. It creates an authentication **session**; the workflow is **application-data read-only, not strictly read-only**. |
 | Administrative repair | **Never attempted.** The runner has no admin or service-role credential and no password-update path; `POST /auth/v1/token` is the only non-GET call it can make. |
 | Endpoint | `GET /rest/v1/syllabi?select=id&limit=1` retained for the first run. |
@@ -118,7 +118,7 @@ R22 harness initially granted default privileges to the wrong role set.
 | --- | --- |
 | Destination allowlist | hard-coded `ALLOWED_HOSTS` = `jchfruprqpeypdttvlam.supabase.co`; `https:` only; non-default ports refused; redirects refused (`redirect: 'error'`) |
 | Read-only application data | one `GET` path; **one** non-GET call exists and it is only the auth password grant (`POST /auth/v1/token?grant_type=password`). No PUT/PATCH/DELETE anywhere |
-| No administrative credential | only `STAGING_URL`, `STAGING_ANON` (publishable) and the dedicated `SMOKE_TEACHER_EMAIL`/`SMOKE_TEACHER_PASSWORD`. No service-role key, no JWT secret, no CLI token |
+| No administrative credential | only `STAGING_URL`, `STAGING_ANON` (publishable) and the dedicated `R21_TEACHER_EMAIL`/`R21_TEACHER_PASSWORD`. No service-role key, no JWT secret, no CLI token |
 | Rate limit | `MAX_REQUESTS = 10` (1 anon GET + 1 grant + 1 authenticated GET + 7 negatives), sequential, 500 ms spacing — far below the documented 100 req/15 min per-IP limit |
 | Timeouts | `REQUEST_TIMEOUT_MS = 10_000` per request; job `timeout-minutes: 10` |
 | No sensitive output | GET bodies are cancelled unread; the grant response body is read only to extract `access_token` and is never printed; only labels and status codes are output; secrets passed via `env:` and never interpolated into shell text; no `set -x` |
@@ -127,18 +127,24 @@ R22 harness initially granted default privileges to the wrong role set.
 | No overlapping runs | `concurrency: r21-jwt-negative-probes` |
 | Least privilege | `permissions: contents: read`; actions pinned to full commit SHAs |
 
-`STAGING_URL`, `STAGING_ANON`, `SMOKE_TEACHER_EMAIL` and `SMOKE_TEACHER_PASSWORD` were
-confirmed to exist as secret **names** in the `jchfruprqpeypdttvlam_staging` environment;
-their values were never read.
+`STAGING_URL` and `STAGING_ANON` were confirmed to exist as secret **names** in the
+`jchfruprqpeypdttvlam_staging` environment; their values were never read.
+
+`R21_TEACHER_EMAIL` and `R21_TEACHER_PASSWORD` **do not exist yet** and must be provisioned
+in that environment before the first run. Until they exist, the runner exits 2 with
+`REFUSING TO PROBE: R21_TEACHER_EMAIL / R21_TEACHER_PASSWORD are required for the positive
+control` and contacts nothing. Credential values must be created directly in the
+environment; they are never copied, printed, or committed by this package.
 
 ## 6. Preconditions before the first run
 
 1. Maintainer review of this document and the workflow diff.
 2. Confirm `GET /rest/v1/syllabi?select=id&limit=1` is the intended read-only surface — if
    a narrower path is preferred, change `READONLY_PATH` in the runner (one constant).
-3. Confirm the **dedicated** smoke identity is the right principal for the positive
-   control. Using `SMOKE_TEACHER_*` (not `TEST_TEACHER_*`) keeps this aligned with the
-   per-workflow identities shipped in #1132.
+3. **Provision `R21_TEACHER_EMAIL` / `R21_TEACHER_PASSWORD`** as environment secrets on
+   `jchfruprqpeypdttvlam_staging`, with an identity that belongs to no other workflow. This
+   is a hard prerequisite: the workflow cannot produce evidence without a positive control,
+   and it fails closed rather than running negatives alone.
 4. Accept that the staging environment applies a ~5-minute wait timer to jobs using it, so
    a manual run will appear to queue before starting.
 5. Accept the session side effect: the password grant creates a GoTrue session row.
@@ -168,7 +174,7 @@ their values were never read.
 ```bash
 cd /home/rod/r21-jwt-probe
 node tests/r21/jwt-negative-probes.mjs --self-test   # 10/10 PASS, exit 0
-node tests/r21/validate-workflow.mjs                 # 26/26 checks, exit 0
+node tests/r21/validate-workflow.mjs                 # 28/28 checks, exit 0
 ```
 
 Fail-closed behaviour verified with deliberately invalid configuration — all six cases exit
@@ -180,7 +186,7 @@ Fail-closed behaviour verified with deliberately invalid configuration — all s
 | `http://` target | `REFUSING TO PROBE: refusing non-TLS target (http:)` |
 | non-allowlisted host | `REFUSING TO PROBE: refusing non-allowlisted host (evil.example.com)` |
 | allowlisted host, no anon key | `REFUSING TO PROBE: STAGING_ANON is not set` |
-| allowlisted host + anon key, no teacher credentials | `REFUSING TO PROBE: SMOKE_TEACHER_EMAIL / SMOKE_TEACHER_PASSWORD are required for the positive control` |
+| allowlisted host + anon key, no teacher credentials | `REFUSING TO PROBE: R21_TEACHER_EMAIL / R21_TEACHER_PASSWORD are required for the positive control` |
 | `http://` target with all credentials present | `REFUSING TO PROBE: refusing non-TLS target (http:)` |
 
 The self-test also asserts the structural guarantees with no network: single-host allowlist,
