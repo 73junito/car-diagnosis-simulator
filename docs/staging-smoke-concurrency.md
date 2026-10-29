@@ -17,9 +17,27 @@ Regression protection: `npx jest tests/smoke-workflow-concurrency.test.js` reads
 
 ## Residual risk: shared staging fixtures
 
-The two suites now run concurrently against the same staging project. They share the teacher fixture identity (`TEST_TEACHER_EMAIL`, seeded by an idempotent upsert). The class fixture uses a time-derived name (`Smoke Test Class <epoch ms>`) and is deleted by exact id + owner + name, with cleanup failing closed unless exactly one row is deleted. `Date.now()` is not a guaranteed unique run identifier, so two runs starting within the same millisecond could collide; the failure mode is a loud cleanup error rather than silent corruption.
+The two suites now run concurrently against the same staging project. They share the teacher fixture identity (`TEST_TEACHER_EMAIL`). The class fixture uses a time-derived name (`Smoke Test Class <epoch ms>`) and is deleted by exact id + owner + name, with cleanup failing closed unless exactly one row is deleted. `Date.now()` is not a guaranteed unique run identifier, so two runs starting within the same millisecond could collide; the failure mode is a loud cleanup error rather than silent corruption.
 
-Treat concurrent fixture safety as low-risk but **not proven**: on PR #1100 the two workflow runs overlapped, but the two smoke-test *steps* did not overlap in time (23:38:51–23:38:55 and 23:39:07–23:39:10), so simultaneous fixture access has not yet been exercised.
+Until the fixture credential fix, the teacher fixture was **not** an idempotent upsert: it issued an administrative password update on every run, even when the stored password already matched. A password update revokes that user's live sessions, so a run that seeded the fixture could invalidate the token of a run already in flight. That is the mechanism behind the intermittent `401 Invalid or expired token` failures seen on `main` and on several PRs: the workflow with a retry loop re-seeded and healed itself, while the auth-aware workflow, which runs the suite once, surfaced the failure.
+
+### Known limitation — shared staging identity
+
+This change prevents unnecessary administrative password updates when the existing staging teacher credentials are valid.
+
+The credential-recovery path still performs an administrative password update after a confirmed mismatch. That operation may invalidate sessions belonging to concurrent CI runs using the same teacher identity.
+
+The remaining risk is documented by an automated regression test — `torquemind-api/__tests__/smokeTeacherFixture.test.js`, case "the recovery path still revokes concurrent sessions" — which asserts the revocation rather than describing it in prose.
+
+A future isolated-identity implementation should eliminate this shared-account dependency.
+
+Successful overlapping CI runs support the correction but do not constitute definitive proof of session preservation against the real staging identity provider.
+
+### Evidence status
+
+Observed overlaps between the two workflows' smoke steps include a pair running on fixed code: `api-smoke` 06:05:35–06:05:39 and `smoke.yml` 06:05:38–06:05:44 (UTC), both `success`. Overlapping runs also succeeded before the fix, so the race is timing-dependent and green overlaps do not prove the window is closed. A deterministic two-token check against staging — sign in twice, run the fixture, confirm both tokens still resolve and no administrative update was issued — remains outstanding because it requires staging credentials.
+
+Treat concurrent fixture safety as **improved but not proven**.
 
 Before declaring a PR staging-verified, identify the **most recently created smoke workflow run for that PR** and require a completed `success` conclusion. A newer cancelled/pending/failed run holds verification, even if an older run succeeded.
 
