@@ -104,6 +104,13 @@ export function selectRows({ schema, table, rows, params, variant, select }) {
   return filtered
 }
 
+// Diagnostics for the harness operator only. This is stderr in a test process, never
+// an HTTP response body.
+function logRejection(table, error) {
+  const detail = error && error.message ? error.message : String(error)
+  console.error(`[r26-stub] rejected query on ${table}: ${detail}`)
+}
+
 function sendJson(response, status, body) {
   const payload = JSON.stringify(body)
   response.writeHead(status, {
@@ -157,7 +164,13 @@ export async function startStub({ dataset, schema, tokens, variant = 'current', 
     try {
       rows = selectRows({ schema, table, rows: dataset[table], params: url.searchParams, variant, select })
     } catch (error) {
-      sendJson(response, 400, error.code ? error : { code: 'XX000', message: error.message })
+      // The response carries a stable envelope only. Exception text (and any stack a
+      // thrown Error may carry) never reaches the client; diagnostics go to the
+      // harness log, which is test-only output.
+      logRejection(table, error)
+      const code =
+        error && typeof error.code === 'string' && /^[0-9A-Z]{5}$/.test(error.code) ? error.code : 'XX000'
+      sendJson(response, 400, { code, message: 'query rejected' })
       return
     }
 

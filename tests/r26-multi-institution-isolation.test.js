@@ -27,4 +27,15 @@ describe('R26 multi-institution isolation (runtime)', () => {
     expect(result.status).toBe(2)
     expect(result.stderr).toContain('BLOCKED')
   })
+
+  // CodeQL flagged taint from a caught exception into the stub's HTTP response.
+  // This probe keeps the sanitization asserted rather than merely fixed once.
+  test('stub error responses carry no exception detail', () => {
+    const result = spawnSync(process.execPath, [path.join(root, 'tests/r26/stub-error-envelope.mjs')], {
+      encoding: 'utf8',
+      timeout: 120000
+    })
+    expect(result.status).toBe(0)
+    expect(result.stdout).toContain('PASS:')
+  })
 })
