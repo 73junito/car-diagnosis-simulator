@@ -42,6 +42,12 @@ const MIGRATIONS_DIR = join(REPO_ROOT, 'supabase', 'migrations')
 const REQUIRED_MIGRATIONS = [
   '20260817012628_create_attempts.sql',
   '20260821040000_create_syllabus_and_scenario_catalog.sql',
+  // R22 Phase 1: classroom ownership policies for classes and enrollments.
+  // Both are required: the second migration drops and recreates the policies of the
+  // first with `(select auth.uid())`, so applying only the first would test a policy
+  // shape that is not effective in production.
+  '20260924052734_restore_classroom_api_schema.sql',
+  '20260924052757_optimize_classroom_api_rls.sql',
 ]
 
 const PGLITE_CANDIDATES = [
@@ -285,6 +291,161 @@ async function runSuite(db) {
 }
 
 
+// R22 Phase 1 classroom fixtures: two owners plus an enrolled student and an outsider.
+const STUDENT = '33333333-3333-4333-8333-333333333333'
+const OUTSIDER = '44444444-4444-4444-8444-444444444444'
+const CLASS_A = 'aaaaaaaa-2222-4222-8222-aaaaaaaaaaaa'
+const CLASS_B = 'bbbbbbbb-3333-4333-8333-bbbbbbbbbbbb'
+const CLASS_TMP = 'dddddddd-5555-4555-8555-dddddddddddd'
+const ENROLLMENT_1 = 'cccccccc-4444-4444-8444-cccccccccccc'
+
+const CLASSROOM_SEED_SQL = `
+insert into auth.users (id) values ('${STUDENT}'), ('${OUTSIDER}');
+insert into public.classes (id, owner_id, name, class_code) values
+  ('${CLASS_A}', '${USER_A}', 'Class owned by A', 'ZZA-001'),
+  ('${CLASS_B}', '${USER_B}', 'Class owned by B', 'ZZB-001'),
+  ('${CLASS_TMP}', '${USER_A}', 'Class A deletes', 'ZZA-TMP');
+insert into public.enrollments (id, class_id, user_id) values
+  ('${ENROLLMENT_1}', '${CLASS_A}', '${STUDENT}');
+`
+
+// ---------------------------------------------------------------------------
+// Suite: classroom ownership policies (classes, enrollments) - R22 Phase 1
+// ---------------------------------------------------------------------------
+/**
+ * Effective policies under test (6; created by 20260924052734 and recreated by
+ * 20260924052757 with `(select auth.uid())`):
+ *   classes     : select / insert / update / delete scoped to owner_id = auth.uid()
+ *   enrollments : select member-or-owner, insert self-or-owner
+ *
+ * `enrollments` grants SELECT and INSERT only, so UPDATE/DELETE denials there are
+ * privilege denials and are asserted as such - never counted as RLS evidence.
+ */
+async function runClassroomSuite(db) {
+  console.log('\n=== R22 Phase 1: classes and enrollments (owner/member policies) ===')
+
+  const auditPrivilege = async (table, verb, expected) => {
+    const value = (await db.query(`select has_table_privilege('authenticated', 'public.${table}', '${verb}') as v`)).rows[0].v
+    record(
+      `${table}: authenticated ${expected ? 'HOLDS' : 'LACKS'} ${verb}${expected ? '' : ' (denial is privilege, not RLS)'}`,
+      String(expected),
+      String(value),
+      value === expected,
+      table
+    )
+  }
+
+  // --- classes: positive controls ---
+  await expectRows(db, 'authenticated', USER_A, 'class owner SELECTs own classes', 'select id from public.classes', 2)
+  await expectAffected(
+    db, 'authenticated', USER_A, 'class owner INSERTs own class',
+    `insert into public.classes (id, owner_id, name, class_code)
+       values (gen_random_uuid(), '${USER_A}', 'A new class', 'ZZA-NEW') returning id`, 1
+  )
+  await expectAffected(
+    db, 'authenticated', USER_A, 'class owner UPDATEs own class',
+    `update public.classes set name = 'Renamed by A' where id = '${CLASS_A}' returning id`, 1
+  )
+
+  // --- classes: cross-owner denials ---
+  await expectRows(
+    db, 'authenticated', OUTSIDER, 'unrelated user sees no classes',
+    'select id from public.classes', 0
+  )
+  await expectRejected(
+    db, 'authenticated', USER_A, 'INSERT class owned by another user',
+    `insert into public.classes (id, owner_id, name, class_code)
+       values (gen_random_uuid(), '${USER_B}', 'spoofed owner', 'ZZA-SPOOF')`,
+    /row-level security/i
+  )
+  await expectAffected(
+    db, 'authenticated', USER_A, 'UPDATE another owner class',
+    `update public.classes set name = 'hijacked' where id = '${CLASS_B}' returning id`, 0
+  )
+  await expectAffected(
+    db, 'authenticated', USER_A, 'DELETE own class',
+    `delete from public.classes where id = '${CLASS_TMP}' returning id`, 1
+  )
+  await expectAffected(
+    db, 'authenticated', USER_A, 'DELETE another owner class',
+    `delete from public.classes where id = '${CLASS_B}' returning id`, 0
+  )
+
+  // --- classes: privilege audit (all four verbs are granted) ---
+  await auditPrivilege('classes', 'SELECT', true)
+  await auditPrivilege('classes', 'INSERT', true)
+  await auditPrivilege('classes', 'UPDATE', true)
+  await auditPrivilege('classes', 'DELETE', true)
+
+  // --- enrollments: both branches of member-or-owner ---
+  await expectRows(
+    db, 'authenticated', STUDENT, 'enrolled student SELECTs own enrollment',
+    'select id from public.enrollments', 1
+  )
+  await expectRows(
+    db, 'authenticated', USER_A, 'class owner SELECTs enrollments of own class',
+    `select id from public.enrollments where class_id = '${CLASS_A}'`, 1
+  )
+  await expectRows(
+    db, 'authenticated', OUTSIDER, 'unrelated user sees no enrollments',
+    'select id from public.enrollments', 0
+  )
+  await expectAffected(
+    db, 'authenticated', STUDENT, 'student INSERTs self-enrollment (self branch)',
+    `insert into public.enrollments (id, class_id, user_id)
+       values (gen_random_uuid(), '${CLASS_B}', '${STUDENT}') returning id`, 1
+  )
+  await expectRejected(
+    db, 'authenticated', STUDENT, 'student INSERTs enrollment for another user',
+    `insert into public.enrollments (id, class_id, user_id)
+       values (gen_random_uuid(), '${CLASS_A}', '${OUTSIDER}')`,
+    /row-level security/i
+  )
+  await expectAffected(
+    db, 'authenticated', USER_A, 'class owner INSERTs enrollment (owner branch)',
+    `insert into public.enrollments (id, class_id, user_id)
+       values (gen_random_uuid(), '${CLASS_A}', '${OUTSIDER}') returning id`, 1
+  )
+
+  // --- enrollments: UPDATE/DELETE ---
+  // The migration grants only SELECT/INSERT, but Supabase's default privileges grant ALL on
+  // new public tables to anon/authenticated, so that grant is additive rather than
+  // restrictive: the role still holds UPDATE/DELETE. Because there is no UPDATE/DELETE
+  // policy on enrollments, those operations are RLS-denied (0 rows) rather than
+  // privilege-denied. This is asserted explicitly so the classification cannot drift.
+  await auditPrivilege('enrollments', 'SELECT', true)
+  await auditPrivilege('enrollments', 'INSERT', true)
+  await auditPrivilege('enrollments', 'UPDATE', true)
+  await auditPrivilege('enrollments', 'DELETE', true)
+  await expectAffected(
+    db, 'authenticated', STUDENT, 'UPDATE enrollment is denied by RLS (no UPDATE policy)',
+    `update public.enrollments set created_at = now() where id = '${ENROLLMENT_1}' returning id`, 0
+  )
+  await expectAffected(
+    db, 'authenticated', STUDENT, 'DELETE enrollment is denied by RLS (no DELETE policy)',
+    `delete from public.enrollments where id = '${ENROLLMENT_1}' returning id`, 0
+  )
+
+  // --- integrity: denied writes must not have changed row counts ---
+  await db.exec('reset role')
+  const classCount = await db.query('select count(*)::int as n from public.classes')
+  record(
+    'denied class writes left classes intact (3: A, B, new)',
+    '3 rows',
+    `${classCount.rows[0].n} rows`,
+    classCount.rows[0].n === 3,
+    'classes'
+  )
+  const enrollmentCount = await db.query('select count(*)::int as n from public.enrollments')
+  record(
+    'denied enrollment writes left enrollments intact (3: seed, self, owner)',
+    '3 rows',
+    `${enrollmentCount.rows[0].n} rows`,
+    enrollmentCount.rows[0].n === 3,
+    'enrollments'
+  )
+}
+
 // ---------------------------------------------------------------------------
 // Suite: role boundary, data integrity, and the service-role posture
 // ---------------------------------------------------------------------------
@@ -452,9 +613,11 @@ async function main() {
   console.log(`migrations applied: ${applied.map((a) => a.file).join(', ')}`)
 
   await db.exec(SEED_SQL)
-  console.log('fixtures seeded: 2 owners, 2 syllabi, 2 mappings, 2 catalog rows (1 inactive)')
+  await db.exec(CLASSROOM_SEED_SQL)
+  console.log('fixtures seeded: 4 owners/users, syllabi, catalog, classes (3), enrollments (1)')
 
   await runSuite(db)
+  await runClassroomSuite(db)
   await runRoleBoundarySuite(db)
   await runPrivilegeAudit(db)
 
