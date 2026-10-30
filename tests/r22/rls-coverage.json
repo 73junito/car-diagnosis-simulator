@@ -1,0 +1,38 @@
+{
+  "$comment": "Declared coverage intent for the R22 PGlite harness. scripts/verify-rls-policy-coverage.js compares this against BOTH the case-insensitive policy inventory derived from supabase/migrations AND the assertions a real harness run actually executed and passed. Being listed in policyTablesTested is a claim that must be backed by passing assertions; it is never taken on trust.",
+  "policyTablesTested": ["scenario_catalog", "syllabi", "syllabus_scenarios"],
+  "phases": [
+    {
+      "phase": 1,
+      "tables": ["classes", "enrollments"],
+      "why": "classroom ownership; closest thing to institution-adjacent enforcement at the RLS layer"
+    },
+    {
+      "phase": 2,
+      "tables": ["assignments", "replays", "completions"],
+      "why": "student artifacts; owner-scoped policies"
+    },
+    {
+      "phase": 3,
+      "tables": ["telemetry_events", "profiles"],
+      "why": "telemetry ownership contract and identity table"
+    },
+    {
+      "phase": 4,
+      "tables": ["external_data_resources", "diagnostic_data_domains", "external_resource_domain_links"],
+      "why": "reference/catalog gates; low traffic but policy-bearing"
+    }
+  ],
+  "denyAllExpected": [
+    "institutions",
+    "institution_memberships",
+    "institution_cohorts",
+    "institution_settings",
+    "student_institution_claims",
+    "institution_email_domains"
+  ],
+  "knownGaps": {
+    "noRls": ["instructor_school_verifications"],
+    "$comment": "instructor_school_verifications has no RLS enabled at all. It is a border case to test explicitly, not an RLS policy table."
+  }
+}
