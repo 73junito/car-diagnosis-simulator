@@ -4,6 +4,11 @@ import {
   verifySupabaseToken
 } from '../../api/_utils/auth-utils.js'
 import { isInstructorRole, resolveTrustedRole } from '../auth/role-policy.js'
+import {
+  resolveInstitutionScopeAccess,
+  INSTITUTION_ACCESS_REFUSED,
+  INSTITUTION_ACCESS_UNAVAILABLE
+} from '../auth/institution-membership.js'
 
 const CLASS_CODE_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 const CLASS_CODE_LENGTH = 6
@@ -116,6 +121,33 @@ async function resolveInstructorInstitution(auth, requestedSchoolCode = null) {
   if (memberships.length === 1) return { schoolCode: memberships[0].school_code }
   if (memberships.length === 0) return { schoolCode: null }
   return { selectionRequired: true }
+}
+
+async function resolveEnrollmentEligibility(auth, cls) {
+  // R26 Phase 2 / R2: a class code identifies a class, it never establishes eligibility.
+  // Institution-scoped classes require an ACTIVE membership in the class's own institution,
+  // resolved from the server-verified identity only (never a client-supplied user id or
+  // school code). This is a minimum eligibility requirement, not evidence that the student
+  // was individually invited or approved for this class.
+  if (!cls?.institution_school_code) {
+    // Unscoped classes have no eligibility mechanism yet; refuse rather than inherit the
+    // open class-code model. Pending the F4 product decision.
+    return { allowed: false, reason: 'unscoped_enrollment_not_permitted' }
+  }
+
+  const { data, error } = await auth.supabase
+    .from('institution_memberships')
+    .select('school_code,role,status')
+    .eq('user_id', auth.user.id)
+    .eq('school_code', cls.institution_school_code)
+    .eq('status', 'active')
+    .maybeSingle()
+
+  // Fail closed: an unverifiable membership is never treated as membership.
+  if (error) return { allowed: false, status: 503, reason: 'eligibility_lookup_failed' }
+  if (!data) return { allowed: false, reason: 'no_active_institution_membership' }
+
+  return { allowed: true, schoolCode: data.school_code }
 }
 
 function joinableClass(row) {
@@ -258,7 +290,7 @@ export async function handleEnrollInClass(c) {
 
   const { data: cls, error: classError } = await auth.supabase
     .from('classes')
-    .select('id,class_code')
+    .select('id,class_code,institution_school_code')
     .eq('id', classId)
     .maybeSingle()
 
@@ -268,6 +300,23 @@ export async function handleEnrollInClass(c) {
   }
   if (!cls) return c.json({ error: 'Class not found' }, 404)
   if (code !== cls.class_code) return c.json({ error: 'Invalid class code' }, 403)
+
+  // Eligibility is resolved from the class's own institution and the verified token identity,
+  // and only after the caller has proven knowledge of the class code. It runs strictly before
+  // the service-role insert below, which bypasses RLS and therefore performs no checks itself.
+  const eligibility = await resolveEnrollmentEligibility(auth, cls)
+  if (!eligibility.allowed) {
+    if (eligibility.status === 503) {
+      console.error('Class enrollment eligibility lookup failed:', eligibility.reason)
+      return c.json({ error: 'Unable to verify enrollment eligibility' }, 503)
+    }
+    console.warn('Class enrollment refused:', eligibility.reason, {
+      classId: cls.id,
+      userId: auth.user.id,
+      institutionSchoolCode: cls.institution_school_code || null
+    })
+    return c.json({ error: 'Enrollment not permitted' }, 403)
+  }
 
   const payload = {
     class_id: cls.id,
@@ -310,7 +359,7 @@ export async function handleClassRoster(c) {
   const classId = c.req.param('classId')
   const { data: cls, error: classError } = await auth.supabase
     .from('classes')
-    .select('id')
+    .select('id,institution_school_code')
     .eq('id', classId)
     .eq('owner_id', auth.user.id)
     .maybeSingle()
@@ -320,6 +369,25 @@ export async function handleClassRoster(c) {
     return c.json({ error: 'Unable to load class roster' }, 500)
   }
   if (!cls) return c.json({ error: 'Class not found' }, 404)
+
+  // R26 Phase 2 / R1: revalidate current institution membership before any protected read, so a
+  // suspended or revoked owner never reaches enrollment records or student email addresses.
+  const scope = await resolveInstitutionScopeAccess(auth, cls.institution_school_code)
+  if (!scope.allowed) {
+    if (scope.status === 503) {
+      console.error('Class roster membership revalidation failed:', scope.reason)
+      return c.json({ error: INSTITUTION_ACCESS_UNAVAILABLE }, 503)
+    }
+    console.warn('Class roster access refused:', scope.reason, {
+      classId: cls.id,
+      userId: auth.user.id,
+      institutionSchoolCode: cls.institution_school_code || null
+    })
+    return c.json({ error: INSTITUTION_ACCESS_REFUSED }, 403)
+  }
+  if (scope.unscoped) {
+    console.warn('Class roster authorized by ownership alone:', scope.reason, { classId: cls.id })
+  }
 
   const { data: enrollments, error: enrollmentError } = await auth.supabase
     .from('enrollments')
