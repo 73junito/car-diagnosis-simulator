@@ -1,0 +1,135 @@
+name: LMF Database Verification
+
+# Isolated verification of the LMF reference-evidence database guarantees.
+#
+# Every step runs against an ephemeral PostgreSQL service container created for this job and
+# discarded with the runner. No Supabase project, environment, secret, migration history or
+# release gate is read or written here.
+#
+# The connection values are literals, not secrets and not vars, so a hosted database cannot be
+# selected by changing repository or environment configuration. lmf-db-concurrency.cjs also
+# rejects any host outside localhost/127.0.0.1/::1 on its own.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tests/lmf-db-concurrency.cjs'
+      - 'tests/lmf-db-key-rotation.cjs'
+      - 'src/lmf-runtime/**'
+      - 'scripts/sql/lmf-db-verification-shim.sql'
+      - 'scripts/sql/lmf-db-verification-fixtures.sql'
+      - 'supabase/migrations/20261024212822_lmf_reference_evidence_access.sql'
+      - 'supabase/migrations/20261024213613_lmf_atomic_reference_append.sql'
+      - '.github/workflows/lmf-db-verification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lmf-db-verification:
+    name: concurrency and key rotation on disposable Postgres
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: lmf_ci_disposable_only
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      # Throwaway credential for the disposable container only. It unlocks nothing outside this
+      # job, which is why it is a literal here rather than a repository or environment secret.
+      PGPASSWORD: lmf_ci_disposable_only
+      LMF_CONCURRENCY_DATABASE_URL: postgresql://postgres:lmf_ci_disposable_only@localhost:5432/lmf_concurrency_verify
+      LMF_ROTATION_DATABASE_URL: postgresql://postgres:lmf_ci_disposable_only@localhost:5432/lmf_rotation_verify
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Refuse non-local database targets
+        run: |
+          set -euo pipefail
+          for name in LMF_CONCURRENCY_DATABASE_URL LMF_ROTATION_DATABASE_URL; do
+            url="${!name}"
+            case "$url" in
+              postgresql://*@localhost:5432/*) ;;
+              *)
+                echo "::error::$name does not target localhost:5432"
+                exit 1
+                ;;
+            esac
+          done
+          echo 'Both harness targets are the disposable localhost service container.'
+
+      - name: Create databases and apply shim plus LMF migrations
+        run: |
+          set -euo pipefail
+          PSQL=(psql -h localhost -p 5432 -U postgres -v ON_ERROR_STOP=1 -q -X)
+
+          for db in lmf_concurrency_verify lmf_rotation_verify; do
+            "${PSQL[@]}" -d postgres -c "drop database if exists ${db} with (force)"
+            "${PSQL[@]}" -d postgres -c "create database ${db}"
+            "${PSQL[@]}" -d "$db" -f scripts/sql/lmf-db-verification-shim.sql
+
+            for migration in \
+              supabase/migrations/20261024212822_lmf_reference_evidence_access.sql \
+              supabase/migrations/20261024213613_lmf_atomic_reference_append.sql; do
+              echo "Applying ${migration} to ${db}"
+              "${PSQL[@]}" -d "$db" -f "$migration"
+            done
+          done
+
+          # Concurrency fixture only; the rotation harness creates its own user and session.
+          "${PSQL[@]}" -d lmf_concurrency_verify -f scripts/sql/lmf-db-verification-fixtures.sql
+          echo 'Disposable schemas ready.'
+
+      - name: Run concurrency harness (parallel first append, one winner)
+        timeout-minutes: 4
+        env:
+          LMF_TEST_DATABASE_URL: ${{ env.LMF_CONCURRENCY_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          output="$(node tests/lmf-db-concurrency.cjs)"
+          printf '%s\n' "$output"
+          grep -q '^PASS: two parallel first appends' <<<"$output"
+
+      - name: Run key rotation harness (v1 to v2 rotation, chain, retired-key denial)
+        timeout-minutes: 4
+        env:
+          LMF_TEST_DATABASE_URL: ${{ env.LMF_ROTATION_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          output="$(node tests/lmf-db-key-rotation.cjs)"
+          printf '%s\n' "$output"
+          grep -q '^PASS: PostgreSQL persisted v1 and v2 signatures' <<<"$output"
+
+      - name: Tear down disposable databases
+        if: always()
+        run: |
+          set -uo pipefail
+          for db in lmf_concurrency_verify lmf_rotation_verify; do
+            psql -h localhost -p 5432 -U postgres -q -X \
+              -c "drop database if exists ${db} with (force)" || true
+          done
+          echo 'Disposable databases dropped; the service container is discarded with the job.'
