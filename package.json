@@ -14,6 +14,8 @@
     "test:supabase-contracts": "node --test supabase/tests/security-contracts.test.js supabase/tests/package-integrity.test.js",
     "test:r22": "node tests/r22/pglite-rls-harness.mjs",
     "test:r22:matrix": "node tests/r22/pglite-rls-harness.mjs --matrix",
+    "verify:rls-coverage": "node scripts/verify-rls-policy-coverage.mjs",
+    "verify:rls-coverage:self-test": "node scripts/verify-rls-policy-coverage.mjs --self-test",
     "build": "npm run write-version && node scripts/build-static-site.js",
     "write-version": "node scripts/write-version.js",
     "test:live-session": "node tests/live-session-ui.test.js",
@@ -169,7 +171,7 @@
     "babel-jest": "^30.5.1",
     "cors": "^2.8.6",
     "cross-env": "^10.1.0",
-    "dotenv": "^18.0.8",
+    "dotenv": "^18.0.9",
     "esbuild": "^0.28.2",
     "eslint": "^10.13.0",
     "express": "^5.3.0",
@@ -192,7 +194,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
-    "hono": "^4.13.13",
+    "hono": "^4.13.14",
     "three": "^0.186.1"
   },
   "description": "Evidence-aware automotive technology learning, diagnostic scenario, and lab platform",
