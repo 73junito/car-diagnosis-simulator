@@ -79,8 +79,9 @@ The deadline is deliberately short. It is long enough to finish the authenticate
 verification, and short enough that the decision is revisited while someone still remembers why the
 project exists.
 
-**The owner field is not filled in by this document.** Naming an accountable owner is the approval
-act this record exists to obtain; recording it here in advance would defeat the purpose.
+**§7 is deliberately left blank.** A candidate owner is proposed above for discussion, but recording
+that name is the approval act this document exists to obtain; entering it as settled here would
+defeat the purpose of asking.
 
 ## 4. What this designation does and does not authorise
 
