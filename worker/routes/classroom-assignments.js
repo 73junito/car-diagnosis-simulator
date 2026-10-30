@@ -4,6 +4,11 @@ import {
   verifySupabaseToken
 } from '../../api/_utils/auth-utils.js'
 import { isInstructorRole, resolveTrustedRole } from '../auth/role-policy.js'
+import {
+  resolveInstitutionScopeAccess,
+  INSTITUTION_ACCESS_REFUSED,
+  INSTITUTION_ACCESS_UNAVAILABLE
+} from '../auth/institution-membership.js'
 
 const MAX_SYSTEM_LENGTH = 120
 const MAX_SCENARIOS_PER_ASSIGNMENT = 100
@@ -118,7 +123,7 @@ export async function handleCreateAssignment(c) {
 
   const { data: cls, error: classError } = await auth.supabase
     .from('classes')
-    .select('id')
+    .select('id,institution_school_code')
     .eq('id', classId)
     .eq('owner_id', auth.user.id)
     .maybeSingle()
@@ -128,6 +133,25 @@ export async function handleCreateAssignment(c) {
     return c.json({ error: 'Unable to create assignment' }, 500)
   }
   if (!cls) return c.json({ error: 'Class not found' }, 404)
+
+  // R26 Phase 2 / R1: revalidate current institution membership before validating enrollment
+  // records or creating the assignment, so a suspended or revoked owner cannot reach students.
+  const scope = await resolveInstitutionScopeAccess(auth, cls.institution_school_code)
+  if (!scope.allowed) {
+    if (scope.status === 503) {
+      console.error('Assignment membership revalidation failed:', scope.reason)
+      return c.json({ error: INSTITUTION_ACCESS_UNAVAILABLE }, 503)
+    }
+    console.warn('Assignment creation refused:', scope.reason, {
+      classId: cls.id,
+      userId: auth.user.id,
+      institutionSchoolCode: cls.institution_school_code || null
+    })
+    return c.json({ error: INSTITUTION_ACCESS_REFUSED }, 403)
+  }
+  if (scope.unscoped) {
+    console.warn('Assignment authorized by ownership alone:', scope.reason, { classId: cls.id })
+  }
 
   if (studentIds) {
     const { data: enrollments, error: enrollmentError } = await auth.supabase

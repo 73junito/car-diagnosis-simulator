@@ -4,6 +4,11 @@ import {
   verifySupabaseToken
 } from '../../api/_utils/auth-utils.js'
 import { isInstructorRole, resolveTrustedRole } from '../auth/role-policy.js'
+import {
+  resolveInstitutionScopeAccess,
+  INSTITUTION_ACCESS_REFUSED,
+  INSTITUTION_ACCESS_UNAVAILABLE
+} from '../auth/institution-membership.js'
 
 const CLASS_CODE_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 const CLASS_CODE_LENGTH = 6
@@ -354,7 +359,7 @@ export async function handleClassRoster(c) {
   const classId = c.req.param('classId')
   const { data: cls, error: classError } = await auth.supabase
     .from('classes')
-    .select('id')
+    .select('id,institution_school_code')
     .eq('id', classId)
     .eq('owner_id', auth.user.id)
     .maybeSingle()
@@ -364,6 +369,25 @@ export async function handleClassRoster(c) {
     return c.json({ error: 'Unable to load class roster' }, 500)
   }
   if (!cls) return c.json({ error: 'Class not found' }, 404)
+
+  // R26 Phase 2 / R1: revalidate current institution membership before any protected read, so a
+  // suspended or revoked owner never reaches enrollment records or student email addresses.
+  const scope = await resolveInstitutionScopeAccess(auth, cls.institution_school_code)
+  if (!scope.allowed) {
+    if (scope.status === 503) {
+      console.error('Class roster membership revalidation failed:', scope.reason)
+      return c.json({ error: INSTITUTION_ACCESS_UNAVAILABLE }, 503)
+    }
+    console.warn('Class roster access refused:', scope.reason, {
+      classId: cls.id,
+      userId: auth.user.id,
+      institutionSchoolCode: cls.institution_school_code || null
+    })
+    return c.json({ error: INSTITUTION_ACCESS_REFUSED }, 403)
+  }
+  if (scope.unscoped) {
+    console.warn('Class roster authorized by ownership alone:', scope.reason, { classId: cls.id })
+  }
 
   const { data: enrollments, error: enrollmentError } = await auth.supabase
     .from('enrollments')
