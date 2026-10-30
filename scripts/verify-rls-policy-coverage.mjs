@@ -74,21 +74,14 @@ function runHarness() {
   return report
 }
 
-function main() {
-  const jsonIndex = process.argv.indexOf('--json')
-  const jsonOut = jsonIndex >= 0 ? process.argv[jsonIndex + 1] : null
-
-  const inventory = deriveInventory()
-  const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'))
-  const report = runHarness()
-
+/**
+ * Pure classification of inventory + measured evidence + declared manifest.
+ * Extracted so the negative cases can be asserted offline in CI (see --self-test):
+ * declaring a table tested never substitutes for a passing assertion.
+ */
+function classify(inventory, measured, manifest) {
   const policyTables = [...inventory.policyCounts.keys()].sort()
   const totalPolicies = [...inventory.policyCounts.values()].reduce((a, b) => a + b, 0)
-
-  const measured = new Map()
-  for (const row of report.tableCoverage || []) {
-    measured.set(row.table, { assertions: row.assertions, passed: row.passed })
-  }
 
   const declaredTested = new Set(manifest.policyTablesTested || [])
   const planned = new Map()
@@ -144,6 +137,61 @@ function main() {
   const testedPolicies = tested.reduce((sum, t) => sum + t.policies, 0)
   const plannedPolicies = plannedOnly.reduce((sum, t) => sum + t.policies, 0)
   const coveredPct = totalPolicies ? Math.round((testedPolicies / totalPolicies) * 100) : 0
+
+  return { policyTables, totalPolicies, tested, plannedOnly, untracked, failures, testedPolicies, plannedPolicies, coveredPct }
+}
+
+/**
+ * Offline self-test: proves the classifier rejects false coverage claims, so CI records
+ * the negative behaviour rather than a local anecdote. No database, no harness run.
+ */
+function runSelfTest() {
+  const inventory = {
+    files: 1,
+    policyCounts: new Map([['alpha', 3], ['beta', 2], ['gamma', 1]]),
+    rlsTables: new Set(['alpha', 'beta', 'gamma', 'deny_only']),
+  }
+  const measured = new Map([['alpha', { assertions: 5, passed: 5 }]])
+  const cases = [
+    ['truthful manifest is accepted', { policyTablesTested: ['alpha'], phases: [{ phase: 1, tables: ['beta', 'gamma'] }] }, []],
+    ['declared without evidence is rejected', { policyTablesTested: ['alpha', 'beta'], phases: [{ phase: 1, tables: ['gamma'] }] }, ['overstatement']],
+    ['omitted policy table is rejected', { policyTablesTested: ['alpha'], phases: [] }, ['untracked']],
+    ['phantom declaration is rejected', { policyTablesTested: ['alpha', 'delta'], phases: [{ phase: 1, tables: ['beta', 'gamma'] }] }, ['phantom declaration']],
+  ]
+
+  let ok = true
+  console.log('guard self-test (offline, synthetic manifest mutations)')
+  for (const [label, manifest, expected] of cases) {
+    const result = classify(inventory, measured, manifest)
+    const pass =
+      expected.length === 0
+        ? result.failures.length === 0
+        : expected.every((needle) => result.failures.some((failure) => failure.includes(needle)))
+    ok = ok && pass
+    console.log(`  ${pass ? 'PASS' : 'FAIL'}  ${label}`)
+    if (!pass) console.log(`        failures: ${result.failures.join(' | ') || '(none)'}`)
+  }
+  console.log(`\n${ok ? 'PASS' : 'FAIL'} — guard rejects false coverage claims in all ${cases.length} mutation cases`)
+  process.exitCode = ok ? 0 : 1
+}
+
+function main() {
+  if (process.argv.includes('--self-test')) return runSelfTest()
+
+  const jsonIndex = process.argv.indexOf('--json')
+  const jsonOut = jsonIndex >= 0 ? process.argv[jsonIndex + 1] : null
+
+  const inventory = deriveInventory()
+  const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'))
+  const report = runHarness()
+
+  const measured = new Map()
+  for (const row of report.tableCoverage || []) {
+    measured.set(row.table, { assertions: row.assertions, passed: row.passed })
+  }
+
+  const { policyTables, totalPolicies, tested, plannedOnly, untracked, failures, testedPolicies, plannedPolicies, coveredPct } =
+    classify(inventory, measured, manifest)
 
   console.log(`\npolicy inventory (case-insensitive, ${inventory.files} migrations)`)
   console.log(`  ${totalPolicies} policies across ${policyTables.length} tables`)

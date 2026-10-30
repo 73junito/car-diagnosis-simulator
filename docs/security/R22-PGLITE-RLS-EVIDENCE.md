@@ -210,6 +210,22 @@ entry is not RLS-enabled, or when a policy-bearing table is neither tested nor s
 Being listed in the manifest is never sufficient: the manifest records intent, the run records
 evidence, and only the intersection is reported as coverage.
 
+`npm run verify:rls-coverage:self-test` runs the classifier against synthetic manifest
+mutations offline (no database, no harness run) and fails if the guard stops rejecting a
+declared-but-unmeasured table, an omitted policy table, or a phantom declaration. CI runs both
+the real check and this self-test, so the negative behaviour is recorded in CI rather than
+asserted in a report.
+
+### Table coverage is not policy-behaviour coverage
+
+The 41 policies include 9 that belong to the three tested tables, but this harness asserts
+**behaviour classes** — owner access succeeding, cross-tenant access denied, verb-level
+enforcement, catalog activity filtering — not one assertion per named policy. The guard
+therefore reports **table-level regression coverage**. It does not claim that each of the 9
+policies has been individually exercised, and it cannot: the harness emits table attribution,
+not policy identifiers. Closing that gap would require the harness to tag assertions with the
+policy name they target, which is a future change, not a current claim.
+
 ### Phased plan for the remaining ten tables
 
 | Phase | Tables | Evidence required before a table may be declared tested |
