@@ -1,12 +1,8 @@
 {
-  "$comment": "Declared coverage intent for the R22 PGlite harness. scripts/verify-rls-policy-coverage.js compares this against BOTH the case-insensitive policy inventory derived from supabase/migrations AND the assertions a real harness run actually executed and passed. Being listed in policyTablesTested is a claim that must be backed by passing assertions; it is never taken on trust.",
-  "policyTablesTested": ["scenario_catalog", "syllabi", "syllabus_scenarios"],
+  "$comment": "Declared coverage intent for the R22 PGlite harness. scripts/verify-rls-policy-coverage.mjs compares this against BOTH the case-insensitive policy inventory derived from supabase/migrations AND the assertions a real harness run actually executed and passed. Being listed in policyTablesTested is a claim that must be backed by passing assertions; it is never taken on trust.",
+  "$phaseNote": "Phase 1 (classes, enrollments) completed: both moved into policyTablesTested with measured evidence. Those two tables carry 12 historical policy statements but only 6 effective policies, because the optimize migration drops and recreates each one.",
+  "policyTablesTested": ["classes", "enrollments", "scenario_catalog", "syllabi", "syllabus_scenarios"],
   "phases": [
-    {
-      "phase": 1,
-      "tables": ["classes", "enrollments"],
-      "why": "classroom ownership; closest thing to institution-adjacent enforcement at the RLS layer"
-    },
     {
       "phase": 2,
       "tables": ["assignments", "replays", "completions"],
