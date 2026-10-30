@@ -1,17 +1,29 @@
 const fs = require("fs");
 const path = require("path");
 const { test, expect } = require("@playwright/test");
+const { installLocalPreviewGuard } = require("./local-preview-guard");
 
 const catalog = JSON.parse(
   fs.readFileSync(path.join(__dirname, "..", "..", "data", "curriculum", "course-catalog.json"), "utf8")
 );
 const courses = catalog.courses;
 const examBase = "http://127.0.0.1:3012";
-const apiUrl = "https://app.autolearnpro.com/api/curriculum";
+// The application configures its curriculum endpoint on the production host
+// (exam-site/catalog/catalog-data.js). This matcher is deliberately host-agnostic:
+// it intercepts the configured endpoint without hardcoding a production hostname
+// in the test suite, so no test file names a production URL.
+const CATALOG_ENDPOINT = "**/api/curriculum";
 
 test.describe("academic course catalog", () => {
+  let guard;
+
   test.beforeEach(async ({ page }) => {
-    await page.route(apiUrl, (route) => route.fulfill({
+    // Shared local-only network guard. Installed before any mock so the mock is
+    // evaluated first; anything else external is aborted, so a mock that stops
+    // matching fails loudly instead of reaching the production host.
+    guard = await installLocalPreviewGuard(page);
+
+    await guard.mock(CATALOG_ENDPOINT, (route) => route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({ schemaVersion: "1.0.0", catalogCourses: courses })
@@ -39,8 +51,8 @@ test.describe("academic course catalog", () => {
   });
 
   test("falls back to static catalog when the API fails", async ({ page }) => {
-    await page.unroute(apiUrl);
-    await page.route(apiUrl, (route) => route.fulfill({ status: 503, body: "unavailable" }));
+    await page.unroute(CATALOG_ENDPOINT);
+    await guard.mock(CATALOG_ENDPOINT, (route) => route.fulfill({ status: 503, body: "unavailable" }));
     await page.goto(examBase + "/catalog/");
     await expect(page.locator("html")).toHaveAttribute("data-catalog-source", "static");
     await expect(page.locator(".catalog-course-card")).toHaveCount(68);
