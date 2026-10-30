@@ -4,79 +4,143 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+# Only the scopes the executable steps need. `pages: write` and `id-token: write`
+# were removed: this workflow triggers only on pull_request, so the Pages
+# publishing steps are unreachable, while the test job checks out and runs
+# pull-request code. tests/disposable-migration-validation.test.js guards this.
 permissions:
   contents: read
   pull-requests: write
-  pages: write
-  id-token: write
 
 jobs:
   apply-migrations:
     name: Apply migrations against disposable Postgres
-    runs-on: ubuntu-24.04
-    services:
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    # Least privilege, scoped to this job. The workflow-level block above still
+    # governs the reporting job; this job never writes to the pull request, so it
+    # deliberately does not inherit `pull-requests: write`. `packages: read` is the
+    # only addition, and it exists solely to authenticate the image pull below.
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Wait for Postgres
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # Validates the canonical chain (supabase/migrations) against the reviewed
+      # digest-pinned Supabase PostgreSQL 17 image, which is the only runtime
+      # that supplies the platform roles and `auth` schema the chain depends on.
+      # See docs/database/migration-authority.md section 3.
+      #
+      # The container runs with no network, no published port and no host mount.
+      # The script proves that isolation, waits for complete initialisation
+      # (`pg_isready` alone is not sufficient), creates the documented *empty*
+      # migration-bookkeeping relation, applies every migration with
+      # `psql -v ON_ERROR_STOP=1` stopping at the first failure, verifies the
+      # audited roles exist, then runs the grants audit. Migration history is
+      # never written, no staging or production credential is present, and the
+      # container is removed at the end.
+      # ghcr.io rate-limits anonymous pulls with a burst limiter, which surfaces
+      # as `toomanyrequests: retry-after: ...` and fails this job in ~6 s before
+      # a single migration is applied (observed twice on run 39841045927, while
+      # the identical job passed on another PR at the same time).
+      #
+      # The image is resolved from the harness's own exported constant, so the
+      # digest has exactly one source of truth and cannot drift between this
+      # step and the validator. The pull is bounded and lives entirely outside
+      # the validator: the validator keeps its digest pin, its ON_ERROR_STOP and
+      # its fail-closed behaviour unchanged.
+      - name: Resolve the pinned migration image
+        id: migration-image
         run: |
-          until pg_isready -h localhost -p 5432; do
-            sleep 1
-          done
+          set -euo pipefail
+          image=$(node -e "process.stdout.write(require('./scripts/lib/disposable-migration-container').APPROVED_SUPABASE_IMAGE)")
+          test -n "$image" || { echo 'BLOCKED: could not resolve the approved migration image.'; exit 1; }
+          echo "image=$image" >> "$GITHUB_OUTPUT"
 
-      - name: Install psql client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
-
-      - name: Apply SQL migrations
+      # Best-effort authentication, added after manual diagnostic run 39892068108
+      # showed that this repository's GITHUB_TOKEN can authenticate to ghcr.io and
+      # pull this exact digest.
+      #
+      # A successful login only proves that credentials were configured for the
+      # pull that follows. It does not prove that authentication caused that pull to
+      # succeed, nor that it removes the shared runner's anonymous rate limiting.
+      # The step is therefore deliberately *not* fail-closed: it reports which path
+      # was taken and leaves the anonymous attempt available. Only the pull itself
+      # fails closed.
+      #
+      # Fork-origin pull requests do not receive `packages: read`, so login is
+      # expected to fail there. That must not fail the job, or a fork pull request
+      # would lose the anonymous attempt that currently works.
+      - name: Authenticate to ghcr.io (best effort)
+        id: ghcr-auth
         env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+          GHCR_ACTOR: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Applying migrations to $DATABASE_URL"
-          ls -1 db/migrations || true
-          for f in db/migrations/*.sql; do
-            if [ -f "$f" ]; then
-              echo "--- applying $f ---"
-              psql "$DATABASE_URL" -f "$f"
-            fi
-          done
-
-      - name: Verify sample table access
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-        run: |
-          # Show tables and privileges for quick debugging
-          psql "$DATABASE_URL" -c "\\dt public.*"
-          psql "$DATABASE_URL" -c "SELECT table_schema, table_name, privilege_type, grantee FROM information_schema.role_table_grants WHERE table_schema='public' LIMIT 50;"
-
-      - name: Run grants audit
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-        run: |
-          echo "Running grants audit"
-          psql "$DATABASE_URL" -At -F"," -f db/scripts/grants_audit.sql > /tmp/grants_audit.out || true
-          if [ -s /tmp/grants_audit.out ]; then
-            echo "Missing grants detected:" >&2
-            cat /tmp/grants_audit.out >&2
-            echo "Failing job: missing required Data API grants" >&2
-            exit 1
-          else
-            echo "All required grants appear present (audit returned no rows)."
+          set -uo pipefail
+          rc=0
+          printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_ACTOR" --password-stdin > /tmp/ghcr-login.out 2>&1 || rc=$?
+          if [ "$rc" -ne 0 ]; then
+            echo "ghcr-auth status: anonymous-fallback"
+            echo "::warning::ghcr.io authentication failed (rc=$rc); continuing with an anonymous pull."
+            echo "matched_signals:"
+            grep -Eio 'unauthorized|denied|forbidden|authentication required|no basic auth credentials|not found|error|failed|cannot|timeout|connection refused|rate limit' /tmp/ghcr-login.out | tr '[:upper:]' '[:lower:]' | sort -u || echo "(none)"
+            echo "(raw docker login output withheld: pattern redaction is not a guarantee)"
+            rm -f /tmp/ghcr-login.out
+            echo "status=anonymous-fallback" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          rm -f /tmp/ghcr-login.out
+          echo "ghcr-auth status: authenticated"
+          echo "status=authenticated" >> "$GITHUB_OUTPUT"
+
+      - name: Pre-pull the pinned migration image (bounded retry)
+        timeout-minutes: 8
+        env:
+          IMAGE: ${{ steps.migration-image.outputs.image }}
+          AUTH_STATUS: ${{ steps.ghcr-auth.outputs.status }}
+        run: |
+          set -euo pipefail
+          echo "ghcr-auth status: ${AUTH_STATUS:-unknown}"
+          for attempt in 1 2 3 4 5; do
+            if docker pull "$IMAGE"; then
+              echo "Pulled $IMAGE on attempt $attempt."
+              exit 0
+            fi
+            if [ "$attempt" -eq 5 ]; then
+              break
+            fi
+            delay=$(( 5 * (2 ** (attempt - 1)) ))
+            echo "::warning::pull attempt $attempt failed; retrying in ${delay}s"
+            sleep "$delay"
+          done
+          echo "::error::could not pull $IMAGE after 5 bounded attempts."
+          exit 1
+
+      # Removes the credential stored by the login step. `always()` so it still runs
+      # when the pull failed and the job is about to stop. `docker logout` only
+      # deletes the stored credential and prints no secret. A non-zero logout is
+      # annotated but does not fail the job: the runner is discarded either way, and
+      # failing here would mask the real validation result.
+      - name: Log out of ghcr.io
+        if: always()
+        run: |
+          set -uo pipefail
+          if ! docker logout ghcr.io; then
+            echo "::warning::docker logout ghcr.io reported a non-zero status."
+          fi
+
+      - name: Validate canonical migrations against disposable Supabase Postgres
+        run: node scripts/validate-migrations-disposable.js
 
   run-tests:
     name: Run full test suite

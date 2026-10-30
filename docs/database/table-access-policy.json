@@ -1,0 +1,724 @@
+{
+  "schemaVersion": 1,
+  "description": "Expected public-schema privileges for anon/authenticated, derived from the canonical migration chain. Reviewed source of truth for scripts/verify-table-access-policy.js.",
+  "applicationRoles": [
+    "anon",
+    "authenticated"
+  ],
+  "tables": {
+    "approved_source_rights_scopes": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260929222509_add_approved_source_rights_scopes.sql: revoke all on public.approved_source_rights_scopes from public, anon, authenticated",
+        "20260929222509_add_approved_source_rights_scopes.sql: revoke all on public.approved_source_rights_scopes from public, anon, authenticated"
+      ]
+    },
+    "approved_sources": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.approved_sources FROM anon, authenticated",
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.approved_sources FROM anon, authenticated"
+      ]
+    },
+    "assessment_question_eligibility": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260928072000_add_assessment_attempt_question_binding.sql: revoke all on public.assessment_question_eligibility from anon, authenticated",
+        "20260928072000_add_assessment_attempt_question_binding.sql: revoke all on public.assessment_question_eligibility from anon, authenticated"
+      ]
+    },
+    "assignments": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "INSERT",
+        "SELECT"
+      ],
+      "authority": [
+        "20260924052734_restore_classroom_api_schema.sql: grant select, insert on public.assignments to authenticated"
+      ]
+    },
+    "attempt_answers": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260817012716_create_attempt_answers.sql: revoke all on public.attempt_answers from anon, authenticated",
+        "20260817012716_create_attempt_answers.sql: revoke all on public.attempt_answers from anon, authenticated",
+        "20260817012750_harden_tted805_table_privileges.sql: REVOKE ALL ON public.attempt_answers FROM anon, authenticated"
+      ]
+    },
+    "attempt_questions": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260928072000_add_assessment_attempt_question_binding.sql: revoke all on public.attempt_questions from anon, authenticated",
+        "20260928072000_add_assessment_attempt_question_binding.sql: revoke all on public.attempt_questions from anon, authenticated"
+      ]
+    },
+    "attempts": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260817012628_create_attempts.sql: REVOKE ALL ON public.attempts FROM anon, authenticated",
+        "20260817012628_create_attempts.sql: REVOKE ALL ON public.attempts FROM anon, authenticated",
+        "20260817012750_harden_tted805_table_privileges.sql: REVOKE ALL ON public.attempts FROM anon, authenticated"
+      ]
+    },
+    "battery_temperature_telemetry": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260823233137_create_staging_vehicle_reference_datasets.sql: REVOKE ALL ON TABLE public.battery_temperature_telemetry FROM PUBLIC, anon, authenticated",
+        "20260823233137_create_staging_vehicle_reference_datasets.sql: REVOKE ALL ON TABLE public.battery_temperature_telemetry FROM PUBLIC, anon, authenticated"
+      ]
+    },
+    "citation_role_migration_audit": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260903100000_remove_legacy_citation_role_supports_\u0061se_concept.sql: REVOKE ALL ON TABLE public.citation_role_migration_audit FROM PUBLIC, anon, authenticated",
+        "20260903100000_remove_legacy_citation_role_supports_\u0061se_concept.sql: REVOKE ALL ON TABLE public.citation_role_migration_audit FROM PUBLIC, anon, authenticated",
+        "20260915153000_harden_citation_role_migration_audit_privileges.sql: REVOKE ALL ON TABLE public.citation_role_migration_audit FROM PUBLIC, anon, authenticated, service_role"
+      ]
+    },
+    "citation_validations": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260817012750_harden_tted805_table_privileges.sql: REVOKE ALL ON public.citation_validations FROM anon, authenticated",
+        "20260817012750_harden_tted805_table_privileges.sql: REVOKE ALL ON public.citation_validations FROM anon, authenticated",
+        "20260826001607_harden_citation_validation_public_privileges.sql: revoke all on table public.citation_validations from public, anon, authenticated"
+      ]
+    },
+    "classes": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "DELETE",
+        "INSERT",
+        "SELECT",
+        "UPDATE"
+      ],
+      "authority": [
+        "20260924052734_restore_classroom_api_schema.sql: grant select, insert, update, delete on public.classes to authenticated"
+      ]
+    },
+    "competency_areas": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "consumers: worker/routes/scenario-questions-approved.js only (service role); no client-side reference",
+        "owner decision: service-role-only least-privilege baseline"
+      ]
+    },
+    "competency_to_program_map": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "no consumer in worker/, src/, supabase/functions/ or exam-site/",
+        "owner decision: service-role-only least-privilege baseline"
+      ]
+    },
+    "completions": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "INSERT",
+        "SELECT"
+      ],
+      "authority": [
+        "20260924052734_restore_classroom_api_schema.sql: grant select, insert on public.completions to authenticated"
+      ]
+    },
+    "curriculum_catalog_courses": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260928093000_add_curriculum_catalog_courses.sql: revoke all on table public.curriculum_catalog_courses from public, anon, authenticated",
+        "20260928093000_add_curriculum_catalog_courses.sql: revoke all on table public.curriculum_catalog_courses from public, anon, authenticated"
+      ]
+    },
+    "curriculum_competencies": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_competencies from public, anon, authenticated",
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_competencies from public, anon, authenticated"
+      ]
+    },
+    "curriculum_courses": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_courses from public, anon, authenticated",
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_courses from public, anon, authenticated"
+      ]
+    },
+    "curriculum_enhancement_draft_evidence": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260929230536_add_curriculum_enhancement_drafts.sql: revoke all on public.curriculum_enhancement_draft_evidence from public, anon, authenticated",
+        "20260929230536_add_curriculum_enhancement_drafts.sql: revoke all on public.curriculum_enhancement_draft_evidence from public, anon, authenticated"
+      ]
+    },
+    "curriculum_enhancement_drafts": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260929230536_add_curriculum_enhancement_drafts.sql: revoke all on public.curriculum_enhancement_drafts from public, anon, authenticated",
+        "20260929230536_add_curriculum_enhancement_drafts.sql: revoke all on public.curriculum_enhancement_drafts from public, anon, authenticated"
+      ]
+    },
+    "curriculum_evidence_records": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260929030656_curriculum_evidence_gap_persistence.sql: revoke all on table public.curriculum_evidence_records from public, anon, authenticated",
+        "20260929030656_curriculum_evidence_gap_persistence.sql: revoke all on table public.curriculum_evidence_records from public, anon, authenticated"
+      ]
+    },
+    "curriculum_lesson_evidence": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_lesson_evidence from public, anon, authenticated",
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_lesson_evidence from public, anon, authenticated"
+      ]
+    },
+    "curriculum_lesson_plans": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_lesson_plans from public, anon, authenticated",
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_lesson_plans from public, anon, authenticated"
+      ]
+    },
+    "curriculum_lesson_steps": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_lesson_steps from public, anon, authenticated",
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_lesson_steps from public, anon, authenticated"
+      ]
+    },
+    "curriculum_module_gaps": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260929030656_curriculum_evidence_gap_persistence.sql: revoke all on table public.curriculum_module_gaps from public, anon, authenticated",
+        "20260929030656_curriculum_evidence_gap_persistence.sql: revoke all on table public.curriculum_module_gaps from public, anon, authenticated"
+      ]
+    },
+    "curriculum_pathways": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_pathways from public, anon, authenticated",
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_pathways from public, anon, authenticated"
+      ]
+    },
+    "curriculum_programs": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_programs from public, anon, authenticated",
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.curriculum_programs from public, anon, authenticated"
+      ]
+    },
+    "curriculum_reference_mappings": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260930005918_add_curriculum_reference_library.sql: revoke all on public.curriculum_reference_mappings from public, anon, authenticated",
+        "20260930005918_add_curriculum_reference_library.sql: revoke all on public.curriculum_reference_mappings from public, anon, authenticated"
+      ]
+    },
+    "curriculum_reference_sources": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260930005918_add_curriculum_reference_library.sql: revoke all on public.curriculum_reference_sources from public, anon, authenticated",
+        "20260930005918_add_curriculum_reference_library.sql: revoke all on public.curriculum_reference_sources from public, anon, authenticated"
+      ]
+    },
+    "diagnostic_data_domains": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "no consumer in worker/, src/, supabase/functions/ or exam-site/",
+        "owner decision: service-role-only least-privilege baseline"
+      ]
+    },
+    "diagnostic_execution_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia",
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia"
+      ]
+    },
+    "diagnostic_executions": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia",
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia"
+      ]
+    },
+    "diagnostic_reports": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia",
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia"
+      ]
+    },
+    "diagnostic_session_evidence": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia",
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia"
+      ]
+    },
+    "diagnostic_sessions": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia",
+        "20261013005905_add_diagnostic_copilot_stage2.sql: revoke all on table public.diagnostic_sessions, public.diagnostic_session_evidence, public.diagnostic_executions, public.diagnostic_execution_events, public.dia"
+      ]
+    },
+    "enrollments": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "INSERT",
+        "SELECT"
+      ],
+      "authority": [
+        "20260924052734_restore_classroom_api_schema.sql: grant select, insert on public.enrollments to authenticated"
+      ]
+    },
+    "ev_specifications": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260823233137_create_staging_vehicle_reference_datasets.sql: REVOKE ALL ON TABLE public.ev_specifications FROM PUBLIC, anon, authenticated",
+        "20260823233137_create_staging_vehicle_reference_datasets.sql: REVOKE ALL ON TABLE public.ev_specifications FROM PUBLIC, anon, authenticated"
+      ]
+    },
+    "evidence_chunk_decisions": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260926000000_enforce_evidence_approval_gates.sql: revoke all on table public.evidence_chunk_decisions from anon, authenticated",
+        "20260926000000_enforce_evidence_approval_gates.sql: revoke all on table public.evidence_chunk_decisions from anon, authenticated"
+      ]
+    },
+    "evidence_source_gates": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260926000000_enforce_evidence_approval_gates.sql: revoke all on table public.evidence_source_gates from anon, authenticated",
+        "20260926000000_enforce_evidence_approval_gates.sql: revoke all on table public.evidence_source_gates from anon, authenticated"
+      ]
+    },
+    "external_data_resources": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "no consumer in worker/, src/, supabase/functions/ or exam-site/",
+        "owner decision: service-role-only least-privilege baseline"
+      ]
+    },
+    "external_resource_domain_links": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "no consumer in worker/, src/, supabase/functions/ or exam-site/",
+        "owner decision: service-role-only least-privilege baseline"
+      ]
+    },
+    "institution_cohorts": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012205000_add_institution_tenant_foundation.sql: revoke all on table public.institution_cohorts from public, anon, authenticated, service_role",
+        "20261012205000_add_institution_tenant_foundation.sql: revoke all on table public.institution_cohorts from public, anon, authenticated, service_role"
+      ]
+    },
+    "institution_domain_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012212214_add_institution_settings_domains.sql: revoke all on table public.institution_domain_events from public, anon, authenticated, service_role",
+        "20261012212214_add_institution_settings_domains.sql: revoke all on table public.institution_domain_events from public, anon, authenticated, service_role"
+      ]
+    },
+    "institution_email_domains": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261002001500_add_institution_email_domains.sql: revoke all on table public.institution_email_domains from public, anon, authenticated",
+        "20261002001500_add_institution_email_domains.sql: revoke all on table public.institution_email_domains from public, anon, authenticated"
+      ]
+    },
+    "institution_membership_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012210213_add_institution_membership_administration.sql: revoke all on table public.institution_membership_events from public, anon, authenticated, service_role",
+        "20261012210213_add_institution_membership_administration.sql: revoke all on table public.institution_membership_events from public, anon, authenticated, service_role"
+      ]
+    },
+    "institution_membership_invitations": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012210213_add_institution_membership_administration.sql: revoke all on table public.institution_membership_invitations from public, anon, authenticated, service_role",
+        "20261012210213_add_institution_membership_administration.sql: revoke all on table public.institution_membership_invitations from public, anon, authenticated, service_role"
+      ]
+    },
+    "institution_memberships": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012205000_add_institution_tenant_foundation.sql: revoke all on table public.institution_memberships from public, anon, authenticated, service_role",
+        "20261012205000_add_institution_tenant_foundation.sql: revoke all on table public.institution_memberships from public, anon, authenticated, service_role"
+      ]
+    },
+    "institution_programs": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012205000_add_institution_tenant_foundation.sql: revoke all on table public.institution_programs from public, anon, authenticated, service_role",
+        "20261012205000_add_institution_tenant_foundation.sql: revoke all on table public.institution_programs from public, anon, authenticated, service_role"
+      ]
+    },
+    "institution_settings": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012212214_add_institution_settings_domains.sql: revoke all on table public.institution_settings from public, anon, authenticated, service_role",
+        "20261012212214_add_institution_settings_domains.sql: revoke all on table public.institution_settings from public, anon, authenticated, service_role"
+      ]
+    },
+    "institution_settings_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012212214_add_institution_settings_domains.sql: revoke all on table public.institution_settings_events from public, anon, authenticated, service_role",
+        "20261012212214_add_institution_settings_domains.sql: revoke all on table public.institution_settings_events from public, anon, authenticated, service_role"
+      ]
+    },
+    "institutions": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261001033126_add_instructor_school_verification.sql: revoke all on table public.institutions from public, anon, authenticated",
+        "20261001033126_add_instructor_school_verification.sql: revoke all on table public.institutions from public, anon, authenticated"
+      ]
+    },
+    "instructor_verification_decisions": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261011212851_admin_instructor_verification_review.sql: revoke all on table public.instructor_verification_decisions from public, anon, authenticated",
+        "20261011212851_admin_instructor_verification_review.sql: revoke all on table public.instructor_verification_decisions from public, anon, authenticated"
+      ]
+    },
+    "instructor_verification_requests": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261001033126_add_instructor_school_verification.sql: revoke all on table public.instructor_verification_requests from public, anon, authenticated",
+        "20261001033126_add_instructor_school_verification.sql: revoke all on table public.instructor_verification_requests from public, anon, authenticated"
+      ]
+    },
+    "native_governed_question_drafts": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261006033456_add_native_governed_question_drafts.sql: revoke all on table public.native_governed_question_drafts from public, anon, authenticated, service_role",
+        "20261006033456_add_native_governed_question_drafts.sql: revoke all on table public.native_governed_question_drafts from public, anon, authenticated, service_role"
+      ]
+    },
+    "platform_operational_setting_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012224500_add_platform_admin_operational_settings.sql: revoke all on table public.platform_operational_setting_events from public, anon, authenticated, service_role",
+        "20261012224500_add_platform_admin_operational_settings.sql: revoke all on table public.platform_operational_setting_events from public, anon, authenticated, service_role"
+      ]
+    },
+    "platform_operational_settings": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012224500_add_platform_admin_operational_settings.sql: revoke all on table public.platform_operational_settings from public, anon, authenticated, service_role",
+        "20261012224500_add_platform_admin_operational_settings.sql: revoke all on table public.platform_operational_settings from public, anon, authenticated, service_role"
+      ]
+    },
+    "profiles": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "SELECT"
+      ],
+      "authority": [
+        "20260918203224_profiles.sql: revoke all on table public.profiles from anon",
+        "20260918203224_profiles.sql: revoke all on table public.profiles from authenticated",
+        "20260918203224_profiles.sql: grant select on table public.profiles to authenticated"
+      ]
+    },
+    "question_citations": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.question_citations FROM anon, authenticated",
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.question_citations FROM anon, authenticated"
+      ]
+    },
+    "question_provenance": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.question_provenance FROM anon, authenticated",
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.question_provenance FROM anon, authenticated"
+      ]
+    },
+    "replays": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "INSERT",
+        "SELECT"
+      ],
+      "authority": [
+        "20260924052734_restore_classroom_api_schema.sql: grant select, insert on public.replays to authenticated"
+      ]
+    },
+    "restricted_dataset_archives": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260824004244_create_restricted_dataset_archive_registry.sql: REVOKE ALL ON TABLE public.restricted_dataset_archives FROM PUBLIC, anon, authenticated",
+        "20260824004244_create_restricted_dataset_archive_registry.sql: REVOKE ALL ON TABLE public.restricted_dataset_archives FROM PUBLIC, anon, authenticated"
+      ]
+    },
+    "scenario_authoring_draft_evidence": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012094800_add_authoring_evidence_linkage.sql: revoke all on table public.scenario_authoring_draft_evidence from public, anon, authenticated, service_role",
+        "20261012094800_add_authoring_evidence_linkage.sql: revoke all on table public.scenario_authoring_draft_evidence from public, anon, authenticated, service_role"
+      ]
+    },
+    "scenario_authoring_draft_review_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012092021_add_authoring_review_lifecycle.sql: revoke all on table public.scenario_authoring_draft_review_events from public, anon, authenticated, service_role",
+        "20261012092021_add_authoring_review_lifecycle.sql: revoke all on table public.scenario_authoring_draft_review_events from public, anon, authenticated, service_role"
+      ]
+    },
+    "scenario_authoring_drafts": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012090441_add_scenario_authoring_drafts.sql: revoke all on table public.scenario_authoring_drafts from public, anon, authenticated, service_role",
+        "20261012090441_add_scenario_authoring_drafts.sql: revoke all on table public.scenario_authoring_drafts from public, anon, authenticated, service_role"
+      ]
+    },
+    "scenario_authoring_publication_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012195501_add_authoring_publication_approval.sql: revoke all on table public.scenario_authoring_publication_events from public, anon, authenticated, service_role",
+        "20261012195501_add_authoring_publication_approval.sql: revoke all on table public.scenario_authoring_publication_events from public, anon, authenticated, service_role"
+      ]
+    },
+    "scenario_catalog": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "SELECT"
+      ],
+      "authority": [
+        "20260823041129_harden_syllabus_table_privileges.sql: REVOKE ALL PRIVILEGES ON TABLE public.syllabi, public.scenario_catalog, public.syllabus_scenarios FROM anon, authenticated",
+        "20260823041129_harden_syllabus_table_privileges.sql: REVOKE ALL PRIVILEGES ON TABLE public.syllabi, public.scenario_catalog, public.syllabus_scenarios FROM anon, authenticated",
+        "20260823041129_harden_syllabus_table_privileges.sql: GRANT SELECT ON TABLE public.scenario_catalog TO authenticated"
+      ]
+    },
+    "scenario_challenge_review_artifacts": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261003023000_add_scenario_challenge_review_artifacts.sql: revoke all on table public.scenario_challenge_review_artifacts from public, anon, authenticated, service_role",
+        "20261003023000_add_scenario_challenge_review_artifacts.sql: revoke all on table public.scenario_challenge_review_artifacts from public, anon, authenticated, service_role"
+      ]
+    },
+    "scenario_curriculum_mappings": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.scenario_curriculum_mappings from public, anon, authenticated",
+        "20260925235437_add_curriculum_schema.sql: revoke all on table public.scenario_curriculum_mappings from public, anon, authenticated"
+      ]
+    },
+    "scenario_dataset_mappings": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260823234900_create_scenario_dataset_mappings.sql: REVOKE ALL ON TABLE public.scenario_dataset_mappings FROM PUBLIC, anon, authenticated",
+        "20260823234900_create_scenario_dataset_mappings.sql: REVOKE ALL ON TABLE public.scenario_dataset_mappings FROM PUBLIC, anon, authenticated"
+      ]
+    },
+    "scenario_questions": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.scenario_questions FROM anon, authenticated",
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.scenario_questions FROM anon, authenticated"
+      ]
+    },
+    "source_chunks": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.source_chunks FROM anon, authenticated",
+        "20260817011638_bootstrap_foundation_schema.sql: REVOKE ALL ON public.source_chunks FROM anon, authenticated"
+      ]
+    },
+    "student_institution_claim_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261012223500_add_student_institution_claim_review.sql: revoke all on table public.student_institution_claim_events from public, anon, authenticated, service_role",
+        "20261012223500_add_student_institution_claim_review.sql: revoke all on table public.student_institution_claim_events from public, anon, authenticated, service_role"
+      ]
+    },
+    "student_institution_claims": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20261002004500_add_student_institution_claims.sql: revoke all on table public.student_institution_claims from public, anon, authenticated",
+        "20261002004500_add_student_institution_claims.sql: revoke all on table public.student_institution_claims from public, anon, authenticated"
+      ]
+    },
+    "syllabi": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "DELETE",
+        "INSERT",
+        "SELECT",
+        "UPDATE"
+      ],
+      "authority": [
+        "20260823041129_harden_syllabus_table_privileges.sql: REVOKE ALL PRIVILEGES ON TABLE public.syllabi, public.scenario_catalog, public.syllabus_scenarios FROM anon, authenticated",
+        "20260823041129_harden_syllabus_table_privileges.sql: REVOKE ALL PRIVILEGES ON TABLE public.syllabi, public.scenario_catalog, public.syllabus_scenarios FROM anon, authenticated",
+        "20260823041129_harden_syllabus_table_privileges.sql: GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.syllabi, public.syllabus_scenarios TO authenticated"
+      ]
+    },
+    "syllabus_scenarios": {
+      "classification": "authenticated-granted",
+      "anon": [],
+      "authenticated": [
+        "DELETE",
+        "INSERT",
+        "SELECT",
+        "UPDATE"
+      ],
+      "authority": [
+        "20260823041129_harden_syllabus_table_privileges.sql: REVOKE ALL PRIVILEGES ON TABLE public.syllabi, public.scenario_catalog, public.syllabus_scenarios FROM anon, authenticated",
+        "20260823041129_harden_syllabus_table_privileges.sql: REVOKE ALL PRIVILEGES ON TABLE public.syllabi, public.scenario_catalog, public.syllabus_scenarios FROM anon, authenticated",
+        "20260823041129_harden_syllabus_table_privileges.sql: GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.syllabi, public.syllabus_scenarios TO authenticated"
+      ]
+    },
+    "telemetry_events": {
+      "classification": "service-role-only",
+      "anon": [],
+      "authenticated": [],
+      "authority": [
+        "20260930162904_enforce_telemetry_payload_contract_and_ttl.sql: four deny-all RLS policies for anon, authenticated (using false / with check false)",
+        "consumers: supabase/functions/insert_telemetry_batch, get_daily_analytics and worker/routes/{instructor-telemetry,student-activity}.js (service role only)"
+      ]
+    }
+  },
+  "reviewNotes": [
+    "Classification is derived from the canonical migration chain (grants, revokes and documenting comments).",
+    "The six tables recorded as service-role-only were approved by owner decision (Phase 4, Decision A) after consumer tracing; see their authority entries.",
+    "anon holds no table privilege anywhere in public. Supabase default privileges grant anon/authenticated the full arwdDxtm set on new tables; 20261022000000_enforce_least_privilege_public_schema.sql removes those grants and the defaults."
+  ]
+}
