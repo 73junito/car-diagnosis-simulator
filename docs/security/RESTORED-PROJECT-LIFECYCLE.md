@@ -2,7 +2,7 @@
 
 **Status: proposed. Not approved, not applied.** This document is the record that must be approved
 before any change is made to environment `nbgvllelsfhnmuwuqlkw`. Nothing in it is in force until
-the approval record in §8 is signed. Until then, no environment protection rule is added, no branch
+the approval record in §7 is signed. Until then, no environment protection rule is added, no branch
 restriction is applied, no credential is provisioned, and no Supabase user is created.
 
 Base: `main` `505b86ba`. Related work: PR #1128 (draft, head `fd9011fe`), the LMF release HOLD, and
