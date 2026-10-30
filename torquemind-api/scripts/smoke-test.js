@@ -4,7 +4,15 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TEST_TEACHER_EMAIL = process.env.TEST_TEACHER_EMAIL;
 const TEST_TEACHER_PASSWORD = process.env.TEST_TEACHER_PASSWORD;
+// A dedicated teacher identity belongs to exactly one workflow. When it is
+// present it wins over the shared identity, so repairing it cannot revoke the
+// sessions a sibling workflow is holding.
+const DEDICATED_TEACHER_EMAIL = process.env.DEDICATED_TEACHER_EMAIL;
+const DEDICATED_TEACHER_PASSWORD = process.env.DEDICATED_TEACHER_PASSWORD;
 const SMOKE_SEED_FIXTURE = process.env.SMOKE_SEED_FIXTURE === "true";
+const TEACHER_SCOPE_DEDICATED = "dedicated";
+const TEACHER_SCOPE_SHARED_ISOLATED = "shared-isolated";
+const TEACHER_SCOPE_SHARED = "shared";
 const APPROVED_STAGING_SUPABASE_HOST = "jchfruprqpeypdttvlam.supabase.co";
 const TIMEOUT = 15000;
 
@@ -71,14 +79,79 @@ function assertApprovedStagingDestination(value = SUPABASE_URL) {
   return true;
 }
 
+/**
+ * Checks whether the configured fixture credential still works, without mutating
+ * anything. Returns one of:
+ *   { status: "ok" }                     - sign-in succeeded; leave the account alone
+ *   { status: "mismatch" }               - the provider explicitly rejected the credential
+ *   { status: "unverifiable", reason }   - transient or configuration failure
+ *
+ * Anything that is not an explicit credential rejection is unverifiable: an outage,
+ * a rate limit or a missing key is not evidence that the password is wrong.
+ */
+async function probeTeacherCredentials({ baseUrl, anonKey, email, password, fetchImpl = fetch }) {
+  if (!anonKey) return { status: "unverifiable", reason: "SUPABASE_ANON_KEY is missing" };
+
+  let response;
+  try {
+    response = await fetchImpl(`${baseUrl}/auth/v1/token?grant_type=password`, {
+      method: "POST",
+      headers: {
+        apikey: anonKey,
+        Authorization: `Bearer ${anonKey}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+      redirect: "error",
+      signal: AbortSignal.timeout(TIMEOUT),
+    });
+  } catch (error) {
+    return {
+      status: "unverifiable",
+      reason: `sign-in request failed: ${(error && error.message) || "unknown error"}`,
+    };
+  }
+
+  let body = null;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+
+  if (response.ok && body && typeof body.access_token === "string" && body.access_token) {
+    return { status: "ok" };
+  }
+
+  if (response.status === 429 || response.status >= 500) {
+    return { status: "unverifiable", reason: `identity provider returned ${response.status}` };
+  }
+
+  if (response.status === 400 || response.status === 401) {
+    const code = String((body && (body.error_code || body.error || body.code)) || "");
+    const description = String((body && (body.error_description || body.msg || body.message)) || "");
+    if (/invalid[_ ]?(credentials|grant|login|password)/i.test(`${code} ${description}`)) {
+      return { status: "mismatch" };
+    }
+  }
+
+  const detail =
+    String(response.status) +
+    (body && (body.msg || body.message) ? ` ${body.msg || body.message}` : "");
+  return { status: "unverifiable", reason: `unexpected sign-in response (${detail})` };
+}
+
 async function ensureTeacherFixture(options = {}) {
   const {
     enabled = SMOKE_SEED_FIXTURE,
     supabaseUrl = SUPABASE_URL,
     serviceRoleKey = SUPABASE_SERVICE_ROLE_KEY,
+    anonKey = SUPABASE_ANON_KEY,
     email = TEST_TEACHER_EMAIL,
     password = TEST_TEACHER_PASSWORD,
     fetchImpl = fetch,
+    allowPasswordReset = false,
   } = options;
 
   if (!enabled) return { action: "disabled" };
@@ -144,31 +217,64 @@ async function ensureTeacherFixture(options = {}) {
   if (typeof teacher.id !== "string" || !teacher.id) {
     throw new Error("Teacher fixture lookup returned an invalid user identity.");
   }
+  // Preserve valid credentials and every existing session without a write.
+  const probe = await probeTeacherCredentials({ baseUrl, anonKey, email, password, fetchImpl });
+  if (probe.status === "ok") {
+    console.log("Teacher fixture ensured: existing credentials verified; nothing changed.");
+    return { action: "preserved" };
+  }
+  if (probe.status !== "mismatch") {
+    throw new Error(`Teacher fixture refused to rotate credentials: ${probe.reason}`);
+  }
+  if (!allowPasswordReset) {
+    throw new Error(
+      "Teacher fixture password reset refused: this run shares the staging teacher identity, and resetting its password revokes every session it holds."
+    );
+  }
   await adminRequest(`/${encodeURIComponent(teacher.id)}`, {
     method: "PUT",
     body: JSON.stringify({ password, email_confirm: true }),
   });
-  console.log("Teacher fixture ensured: staging test identity already existed.");
-  return { action: "updated" };
+  console.log("Teacher fixture ensured: credentials rejected; password reset for recovery.");
+  return { action: "recovered" };
 }
 
-async function signInTeacher() {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !TEST_TEACHER_EMAIL || !TEST_TEACHER_PASSWORD) {
-    console.warn("Supabase test credentials not provided; auth-required checks may fail.");
-    return null;
+/**
+ * Perform the teacher password grant without mutating any credential.
+ *
+ * Returns a discriminated result instead of terminating the process so that the
+ * caller can decide whether the shared staging identity has to be repaired
+ * first. See {@link resolveTeacherSession} for why that ordering matters.
+ */
+async function requestTeacherSignIn(options = {}) {
+  const {
+    supabaseUrl = SUPABASE_URL,
+    anonKey = SUPABASE_ANON_KEY,
+    email = TEST_TEACHER_EMAIL,
+    password = TEST_TEACHER_PASSWORD,
+    fetchImpl = fetch,
+  } = options;
+
+  if (!supabaseUrl || !anonKey || !email || !password) {
+    return {
+      ok: false,
+      credentialsMissing: true,
+      status: null,
+      message: "Supabase test credentials not provided.",
+    };
   }
 
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+  const res = await fetchImpl(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
     method: "POST",
     headers: {
-      apikey: SUPABASE_ANON_KEY,
-      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      apikey: anonKey,
+      Authorization: `Bearer ${anonKey}`,
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      email: TEST_TEACHER_EMAIL,
-      password: TEST_TEACHER_PASSWORD,
+      email,
+      password,
     }),
   });
 
@@ -179,21 +285,156 @@ async function signInTeacher() {
       body && typeof body === "object"
         ? body.message || body.error_description || body.error || body.msg || "Authentication failed"
         : "Authentication failed";
-    console.error("Teacher sign-in failed", { status: res.status, message });
-    process.exit(2);
+    return { ok: false, credentialsMissing: false, status: res.status, message };
   }
 
-  console.log("0/7 OK: teacher sign-in");
-  return { token: body.access_token, user: body.user || null };
+  return {
+    ok: true,
+    credentialsMissing: false,
+    status: res.status,
+    message: null,
+    token: body.access_token,
+    user: body.user || null,
+  };
 }
 
-async function getUserFromToken(token) {
-  if (!token || !SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+/**
+ * Resolve the teacher identity this run is allowed to use.
+ *
+ * Three scopes are possible:
+ *
+ * - `dedicated`: the workflow owns a disposable identity of its own. Repairing
+ *   it cannot revoke a session another workflow is holding, so the repair is
+ *   allowed.
+ * - `shared-isolated`: the workflow fell back to the shared identity but opted
+ *   into isolation. The shared identity is used by several workflows (and by
+ *   the production sign-in workflows), so it must never be repaired from a
+ *   workflow run: GoTrue revokes every session the user holds when the
+ *   password changes. The run fails loudly instead.
+ * - `shared`: legacy behaviour. The shared identity is repaired as before.
+ *
+ * @returns {{email: string, password: string, scope: string}}
+ */
+function resolveTeacherCredentials(env = process.env) {
+  const dedicatedEmail = (env.DEDICATED_TEACHER_EMAIL || "").trim();
+  const dedicatedPassword = env.DEDICATED_TEACHER_PASSWORD || "";
+  const sharedEmail = (env.TEST_TEACHER_EMAIL || "").trim();
+  const sharedPassword = env.TEST_TEACHER_PASSWORD || "";
+  const isolated = env.SMOKE_TEACHER_ISOLATED === "true";
+
+  if (dedicatedEmail && !dedicatedPassword) {
+    throw new Error(
+      "Dedicated teacher credentials are incomplete: DEDICATED_TEACHER_EMAIL was provided without DEDICATED_TEACHER_PASSWORD."
+    );
+  }
+  if (!dedicatedEmail && dedicatedPassword) {
+    throw new Error(
+      "Dedicated teacher credentials are incomplete: DEDICATED_TEACHER_PASSWORD was provided without DEDICATED_TEACHER_EMAIL."
+    );
+  }
+
+  if (dedicatedEmail && dedicatedPassword) {
+    return {
+      email: dedicatedEmail,
+      password: dedicatedPassword,
+      scope: TEACHER_SCOPE_DEDICATED,
+    };
+  }
+
+  return {
+    email: sharedEmail,
+    password: sharedPassword,
+    scope: isolated ? TEACHER_SCOPE_SHARED_ISOLATED : TEACHER_SCOPE_SHARED,
+  };
+}
+
+/**
+ * Resolve a signed-in teacher session for this run.
+ *
+ * The two staging smoke workflows run concurrently against the same staging
+ * project and share one teacher identity. `ensureTeacherFixture()` resets that
+ * identity's password through the Admin API, and GoTrue revokes *every* session
+ * that user holds when a password changes (`User.UpdatePassword` -> `Logout` ->
+ * `DELETE FROM auth.sessions WHERE user_id = ?`). Resetting the password on
+ * every run therefore invalidated the access token of the concurrently running
+ * sibling workflow, whose next authenticated request then failed with
+ * `401 Invalid or expired token` (GoTrue `session_not_found`).
+ *
+ * Signing in first keeps the destructive reset off the healthy path: the
+ * identity is only repaired when the stored credential is actually unusable.
+ */
+async function resolveTeacherSession(options = {}) {
+  const {
+    requestSignIn = requestTeacherSignIn,
+    ensureFixture = ensureTeacherFixture,
+    mayResetPassword = true,
+  } = options;
+
+  const result = await requestSignIn();
+
+  if (result.ok) return result;
+
+  // Missing credentials are a configuration error. Run the fixture step so the
+  // misconfiguration fails loudly, exactly as it did before.
+  if (result.credentialsMissing) {
+    await ensureFixture({ allowPasswordReset: mayResetPassword });
+    return result;
+  }
+
+  // Only a deterministic credential rejection (HTTP 400) means the stored
+  // identity is unusable. A transient failure (rate limit, upstream 5xx,
+  // network error) must not trigger the repair: the Admin password reset
+  // revokes every session the shared identity holds, so a transient blip would
+  // break a concurrently running sibling smoke workflow that is signed in.
+  if (result.status !== 400) return result;
+
+  if (!mayResetPassword) {
+    // The identity is shared with at least one sibling workflow. Creating it is
+    // harmless, but resetting the password would revoke every session it holds
+    // and break the sibling run, so the repair is refused and the rejection is
+    // reported with the remediation instead.
+    let fixture;
+    try {
+      fixture = await ensureFixture({ allowPasswordReset: false });
+    } catch (err) {
+      return {
+        ...result,
+        repairRefused: true,
+        message: `Teacher sign-in was rejected and the shared staging teacher identity was not repaired: ${err.message} Provision dedicated teacher credentials for this workflow.`,
+      };
+    }
+    if (fixture && fixture.action === "created") {
+      return requestSignIn();
+    }
+    return {
+      ...result,
+      repairRefused: true,
+      message:
+        "Teacher sign-in was rejected and the shared staging teacher identity was not repaired: resetting its password revokes every session it holds, including the sessions a sibling smoke workflow is using. Provision dedicated teacher credentials for this workflow.",
+    };
+  }
+
+  const fixture = await ensureFixture({ allowPasswordReset: mayResetPassword });
+
+  // A disabled fixture cannot repair anything, so retrying would only repeat
+  // the same rejected request.
+  if (fixture && fixture.action === "disabled") return result;
+
+  return requestSignIn();
+}
+
+async function getUserFromToken(token, options = {}) {
+  const {
+    supabaseUrl = SUPABASE_URL,
+    anonKey = SUPABASE_ANON_KEY,
+    fetchImpl = fetch,
+  } = options;
+  if (!token || !supabaseUrl || !anonKey) return null;
   try {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+    const res = await fetchImpl(`${supabaseUrl}/auth/v1/user`, {
       method: "GET",
       headers: {
-        apikey: SUPABASE_ANON_KEY,
+        apikey: anonKey,
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
       },
@@ -206,7 +447,8 @@ async function getUserFromToken(token) {
   }
 }
 
-async function ensureProfile(userId) {
+async function ensureProfile(userId, options = {}) {
+  const { email = TEST_TEACHER_EMAIL } = options;
   if (!userId) return;
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) return;
   // Prefer using the Supabase admin client with the service role key to bypass RLS
@@ -215,12 +457,12 @@ async function ensureProfile(userId) {
     const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
     const { error } = await admin
       .from('profiles')
-      .upsert({ id: userId, email: TEST_TEACHER_EMAIL, role: 'teacher' }, { onConflict: 'id', returning: 'minimal' });
+      .upsert({ id: userId, email, role: 'teacher' }, { onConflict: 'id', returning: 'minimal' });
 
     console.log('ensureProfile result', {
       ok: !error,
       userId: userId || null,
-      email: TEST_TEACHER_EMAIL || null,
+      email: email || null,
       role: 'teacher',
       error: error ? (error.message || JSON.stringify(error)) : null,
     });
@@ -237,7 +479,7 @@ async function ensureProfile(userId) {
           'Content-Type': 'application/json',
           Prefer: 'resolution=merge-duplicates, return=representation'
         },
-        body: JSON.stringify({ id: userId, email: TEST_TEACHER_EMAIL, role: 'teacher' })
+        body: JSON.stringify({ id: userId, email, role: 'teacher' })
       });
       let error = null;
       let body = null;
@@ -248,13 +490,13 @@ async function ensureProfile(userId) {
       console.log('ensureProfile result', {
         ok: res.ok,
         userId: userId || null,
-        email: TEST_TEACHER_EMAIL || null,
+        email: email || null,
         role: 'teacher',
         error: error || (e && e.message) || null
       });
       return { ok: res.ok, body };
     } catch (err2) {
-      console.log('ensureProfile result', { ok: false, userId: userId || null, email: TEST_TEACHER_EMAIL || null, role: 'teacher', error: err2 && err2.message });
+      console.log('ensureProfile result', { ok: false, userId: userId || null, email: email || null, role: 'teacher', error: err2 && err2.message });
     }
   }
 }
@@ -308,10 +550,50 @@ async function cleanupActiveSmokeClass() {
 async function main() {
   console.log(`TorqueMind smoke test against ${BASE_URL}`);
 
-  await ensureTeacherFixture();
-  const signIn = await signInTeacher();
-  const token = signIn && signIn.token;
-  let userId = signIn && signIn.user && signIn.user.id;
+  const credentials = resolveTeacherCredentials();
+  // A shared identity must not be repaired from a workflow run: resetting the
+  // password revokes every session it holds, including the sessions a sibling
+  // workflow and the production sign-in workflows are using.
+  const mayResetPassword = credentials.scope !== TEACHER_SCOPE_SHARED_ISOLATED;
+
+  if (credentials.scope === TEACHER_SCOPE_DEDICATED) {
+    console.log(`Teacher identity: dedicated (${credentials.email}).`);
+  } else if (mayResetPassword) {
+    console.log(`Teacher identity: shared (${credentials.email || "unset"}).`);
+  } else {
+    console.warn(
+      `Teacher identity: shared fallback (${credentials.email || "unset"}). This run may not reset the teacher password, because that would revoke the sessions a sibling smoke workflow is holding. Provision dedicated teacher credentials for full isolation.`
+    );
+  }
+
+  const signIn = await resolveTeacherSession({
+    requestSignIn: () =>
+      requestTeacherSignIn({
+        email: credentials.email,
+        password: credentials.password,
+      }),
+    ensureFixture: (options = {}) =>
+      ensureTeacherFixture({
+        ...options,
+        email: credentials.email,
+        password: credentials.password,
+      }),
+    mayResetPassword,
+  });
+
+  if (!signIn.ok) {
+    if (signIn.credentialsMissing) {
+      console.warn("Supabase test credentials not provided; auth-required checks may fail.");
+    } else {
+      console.error("Teacher sign-in failed", { status: signIn.status, message: signIn.message });
+      process.exit(2);
+    }
+  } else {
+    console.log("0/7 OK: teacher sign-in");
+  }
+
+  const token = signIn.token;
+  let userId = signIn.user && signIn.user.id;
 
   if (!userId && token) {
     const u = await getUserFromToken(token);
@@ -319,7 +601,7 @@ async function main() {
   }
 
   // Ensure the test teacher has a profile with teacher role (use service role key)
-  await ensureProfile(userId);
+  await ensureProfile(userId, { email: credentials.email });
 
   const health = await request("/", {}, token);
   if (!health.ok) {
@@ -467,6 +749,14 @@ if (require.main === module) {
 
 module.exports = {
   assertApprovedStagingDestination,
+  probeTeacherCredentials,
   ensureTeacherFixture,
+  getUserFromToken,
   cleanupSmokeClass,
+  requestTeacherSignIn,
+  resolveTeacherSession,
+  resolveTeacherCredentials,
+  TEACHER_SCOPE_DEDICATED,
+  TEACHER_SCOPE_SHARED_ISOLATED,
+  TEACHER_SCOPE_SHARED,
 };
