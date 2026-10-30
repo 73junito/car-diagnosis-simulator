@@ -15,6 +15,8 @@ const isRemoteBaseUrl = /^https?:\/\//i.test(baseURL)
 const skipWebServer = process.env.PLAYWRIGHT_SKIP_WEBSERVER === 'true';
 const enablePublicProject = Boolean(process.env.PUBLIC_SITE_BASE_URL);
 const isCi = process.env.CI === 'true';
+// Remote authentication is opt-in only; it is not authorized by CI=true.
+const remoteAuthOptIn = process.env.PLAYWRIGHT_REMOTE_AUTH === 'true';
 const authStoragePath = 'playwright/.auth/user.json';
 const authStorageState = fs.existsSync(authStoragePath) ? authStoragePath : undefined;
 
@@ -53,16 +55,25 @@ module.exports = {
       ],
 
   projects: [
-    {
-      name: 'setup',
-      testMatch: /auth\.setup\.js/,
-      retries: 0,
-      use: {
-        // Headed browsers fail in Linux CI without X server.
-        headless: isCi,
-        baseURL,
-      },
-    },
+    // The interactive auth setup project is registered ONLY when remote
+    // authentication is explicitly opted in. Without PLAYWRIGHT_REMOTE_AUTH=true
+    // an unrestricted `npx playwright test` cannot select it because the project
+    // does not exist. auth.setup.js enforces the same gate itself, so an explicit
+    // `--project=setup` cannot bypass it either.
+    ...(remoteAuthOptIn
+      ? [
+          {
+            name: 'setup',
+            testMatch: /auth\.setup\.js/,
+            retries: 0,
+            use: {
+              // Headed browsers fail in Linux CI without X server.
+              headless: isCi,
+              baseURL,
+            },
+          },
+        ]
+      : []),
     {
       name: 'chromium',
       testIgnore: [
