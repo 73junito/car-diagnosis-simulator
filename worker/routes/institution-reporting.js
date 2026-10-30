@@ -85,20 +85,8 @@ async function loadEnrollmentsByClassIds(supabase, classIds) {
   return { data: rows }
 }
 
-async function loadAttemptsByUserIds(supabase, userIds) {
-  const rows = []
-  for (const batch of chunks(userIds)) {
-    const { data, error } = await supabase
-      .from('attempts')
-      .select('id,user_id,status,score,created_at,updated_at')
-      .in('user_id', batch)
-
-    if (error) return { error }
-    rows.push(...(data || []))
-  }
-  return { data: rows }
-}
-
+// Retained for reuse by callers that can supply class-attributed attempts. This
+// route deliberately does not call it: see the attribution note in the report payload.
 function summarizeAttempts(attempts) {
   const rows = Array.isArray(attempts) ? attempts : []
   const completed = rows.filter((attempt) => attempt.status === 'completed')
@@ -133,7 +121,7 @@ function buildRoleCounts(memberships) {
   return counts
 }
 
-function buildClassSummaries(classes, enrollments, attempts) {
+function buildClassSummaries(classes, enrollments) {
   const userIdsByClass = new Map()
   for (const enrollment of enrollments || []) {
     if (!userIdsByClass.has(enrollment.class_id)) userIdsByClass.set(enrollment.class_id, new Set())
@@ -142,7 +130,6 @@ function buildClassSummaries(classes, enrollments, attempts) {
 
   return (classes || []).map((cls) => {
     const classUsers = userIdsByClass.get(cls.id) || new Set()
-    const classAttempts = (attempts || []).filter((attempt) => classUsers.has(attempt.user_id))
 
     return {
       classId: cls.id,
@@ -150,7 +137,9 @@ function buildClassSummaries(classes, enrollments, attempts) {
       programId: cls.institution_program_id || null,
       cohortId: cls.institution_cohort_id || null,
       studentCount: classUsers.size,
-      ...summarizeAttempts(classAttempts)
+      // Attempts currently have no trusted class/institution attribution.
+      // Fail closed rather than treating a cross-institution learner's attempts as this class's.
+      activity: null
     }
   })
 }
@@ -212,7 +201,6 @@ export async function handleInstitutionAdminReport(c) {
   const classes = classResult.data || []
   const classIds = classes.map((row) => row.id)
   let enrollments = []
-  let attempts = []
 
   if (classIds.length) {
     const enrollmentResult = await loadEnrollmentsByClassIds(auth.supabase, classIds)
@@ -222,15 +210,7 @@ export async function handleInstitutionAdminReport(c) {
     }
     enrollments = enrollmentResult.data || []
 
-    const uniqueStudentIds = [...new Set(enrollments.map((row) => row.user_id).filter(Boolean))]
-    if (uniqueStudentIds.length) {
-      const attemptResult = await loadAttemptsByUserIds(auth.supabase, uniqueStudentIds)
-      if (attemptResult.error) {
-        console.error('Institution report attempt lookup failed:', attemptResult.error.message || attemptResult.error)
-        return c.json({ error: 'Unable to load institution report' }, 500)
-      }
-      attempts = attemptResult.data || []
-    }
+
   }
 
   const uniqueStudents = new Set(enrollments.map((row) => row.user_id).filter(Boolean))
@@ -257,8 +237,9 @@ export async function handleInstitutionAdminReport(c) {
     classes: classes.length,
     enrollments: enrollments.length,
     uniqueStudents: uniqueStudents.size,
-    activity: summarizeAttempts(attempts),
-    classSummaries: buildClassSummaries(classes, enrollments, attempts)
+    // Unattributed assessment activity must not appear in a tenant-scoped report.
+    activity: null,
+    classSummaries: buildClassSummaries(classes, enrollments)
   }, 200)
 }
 
