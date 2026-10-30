@@ -171,7 +171,7 @@
     "babel-jest": "^30.5.1",
     "cors": "^2.8.6",
     "cross-env": "^10.1.0",
-    "dotenv": "^18.0.8",
+    "dotenv": "^18.0.9",
     "esbuild": "^0.28.2",
     "eslint": "^10.13.0",
     "express": "^5.3.0",
@@ -194,7 +194,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
-    "hono": "^4.13.13",
+    "hono": "^4.13.14",
     "three": "^0.186.1"
   },
   "description": "Evidence-aware automotive technology learning, diagnostic scenario, and lab platform",
