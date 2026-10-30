@@ -189,6 +189,38 @@ async function requestAccessToken({
   if (provider !== 'unclassified') return { code: 'auth-provider-' + provider };
   return { accessToken: payload.access_token };
 }
+/**
+ * Machine-readable outcome. A green job is not evidence of authenticated access, so every run
+ * records which of PASS / NOT_RUN / FAIL it reached. The line carries a stable prefix and one JSON
+ * object: no credentials, no token, no JWT claims, no response body. `releaseEvidence` is always
+ * false — this smoke is diagnostic, and tenant-isolation, write-denial and policy-equivalence
+ * evidence remain outstanding even on PASS.
+ */
+const OUTCOME_PREFIX = 'AUTH_SMOKE_OUTCOME ';
+
+function outcomeRecord({ outcome, reason, authenticated = false, tokenValidated = false, catalogRead = false }) {
+  return {
+    outcome,
+    reason,
+    authenticated,
+    tokenValidated,
+    catalogRead,
+    releaseEvidence: false,
+  };
+}
+
+function emitOutcome(log, record) {
+  log(OUTCOME_PREFIX + JSON.stringify(record));
+  return record;
+}
+
+/** Failure carrying a machine-readable code, so the FAIL record never has to echo a message. */
+function smokeFailure(code, message) {
+  const error = new Error(message);
+  error.code = code;
+  return error;
+}
+
 /** Read-only catalog GET. Reports status and allowlisted codes only, never the body. */
 async function fetchCatalog({ fetchImpl = fetch, anonKey, accessToken, keyType, timeoutMs = REQUEST_TIMEOUT_MS } = {}) {
   let response;
@@ -236,14 +268,17 @@ async function runSmoke({
   nowSeconds = Math.floor(Date.now() / 1000),
   log = console.log,
 } = {}) {
-  if (env.EXPECTED_SUPABASE_REF !== PROJECT_REF) throw new Error('Restored project reference mismatch');
+  if (env.EXPECTED_SUPABASE_REF !== PROJECT_REF) {
+    throw smokeFailure('project-mismatch', 'Restored project reference mismatch');
+  }
 
   const anonKey = env.RESTORED_SUPABASE_ANON_KEY;
   let keyType;
   try {
     keyType = classifyCredential(anonKey);
   } catch {
-    throw new Error('Restored-project API key rejected: ' + (anonKey ? 'invalid-api-key' : 'missing-api-key'));
+    const code = anonKey ? 'invalid-api-key' : 'missing-api-key';
+    throw smokeFailure(code, 'Restored-project API key rejected: ' + code);
   }
 
   const email = env.RESTORED_TEST_USER_EMAIL;
@@ -255,34 +290,65 @@ async function runSmoke({
       'NOT RUN: authenticated access was not verified. Provide RESTORED_TEST_USER_EMAIL and ' +
         'RESTORED_TEST_USER_PASSWORD for a dedicated disposable user in the restored project.'
     );
-    return { status: 'not-run' };
+    const record = emitOutcome(log, outcomeRecord({ outcome: 'NOT_RUN', reason: 'credentials-not-configured' }));
+    return { status: 'not-run', ...record };
   }
 
   const signIn = await requestAccessToken({ fetchImpl, email, password, anonKey });
-  if (signIn.code) throw new Error('Restored-project sign-in failed: ' + signIn.code);
+  if (signIn.code) throw smokeFailure(signIn.code, 'Restored-project sign-in failed: ' + signIn.code);
 
   const verdict = classifyTestToken(signIn.accessToken, { nowSeconds });
-  if (verdict.code) throw new Error('Access token rejected: ' + verdict.code + ' (' + verdict.detail + ')');
+  if (verdict.code) {
+    throw smokeFailure(verdict.code, 'Access token rejected: ' + verdict.code + ' (' + verdict.detail + ')');
+  }
 
   const consistency = checkTokenConsistency(verdict.claims, { nowSeconds });
   if (consistency.code) {
-    throw new Error('Access token rejected: ' + consistency.code + ' (' + consistency.detail + ')');
+    throw smokeFailure(
+      consistency.code,
+      'Access token rejected: ' + consistency.code + ' (' + consistency.detail + ')'
+    );
   }
 
   const catalog = await fetchCatalog({ fetchImpl, anonKey, accessToken: signIn.accessToken, keyType });
   if (catalog.code) {
-    throw new Error(
+    throw smokeFailure(
+      catalog.code,
       'Authenticated catalog read failed: ' + catalog.code + (catalog.detail ? ' (' + catalog.detail + ')' : '')
     );
   }
 
   log('PASS restored-project authenticated catalog read (no writes performed)');
   log('NOTE tenant-isolation and unauthorized-write behavioral evidence remain outstanding');
-  return { status: 'pass' };
+  const record = emitOutcome(
+    log,
+    outcomeRecord({
+      outcome: 'PASS',
+      reason: 'catalog-read-ok',
+      authenticated: true,
+      tokenValidated: true,
+      catalogRead: true,
+    })
+  );
+  return { status: 'pass', ...record };
+}
+
+/**
+ * Adds the FAIL outcome record without changing exit behaviour: the error is re-thrown, so the
+ * caller still exits non-zero. Only the reason code is recorded, never the message.
+ */
+async function runSmokeWithOutcome(options = {}) {
+  const log = options.log || console.log;
+  try {
+    return await runSmoke(options);
+  } catch (error) {
+    emitOutcome(log, outcomeRecord({ outcome: 'FAIL', reason: (error && error.code) || 'unclassified' }));
+    throw error;
+  }
 }
 
 async function main() {
-  await runSmoke();
+  await runSmokeWithOutcome();
 }
 
 if (require.main === module) main().catch((e) => {
@@ -296,9 +362,13 @@ module.exports = {
   requestAccessToken,
   fetchCatalog,
   runSmoke,
+  runSmokeWithOutcome,
+  outcomeRecord,
+  emitOutcome,
   classifyAuthError,
   TOKEN_ISSUE,
   NOT_RUN_WARNING,
+  OUTCOME_PREFIX,
   AUTH_TOKEN_URL,
   CATALOG_URL,
 };

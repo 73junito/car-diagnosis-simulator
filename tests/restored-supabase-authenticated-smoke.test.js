@@ -9,6 +9,7 @@ const {
   requestAccessToken,
   fetchCatalog,
   runSmoke,
+  runSmokeWithOutcome,
   TOKEN_ISSUE,
   NOT_RUN_WARNING,
   AUTH_TOKEN_URL,
@@ -248,7 +249,8 @@ describe('P1 runtime authentication — happy path', () => {
       catalog: httpResponse({ json: [{ diagnostic_area: 'electrical' }] }),
     });
     assert.equal(error, null);
-    assert.deepEqual(result, { status: 'pass' });
+    assert.equal(result.status, 'pass');
+    assert.equal(result.outcome, 'PASS');
     assert.equal(transport.authCalls(), 1);
     assert.equal(transport.catalogCalls(), 1);
     const get = transport.calls.find((call) => call.url === CATALOG_URL);
@@ -330,7 +332,8 @@ describe('P1 runtime authentication — returned token validation', () => {
       catalog: httpResponse({ json: [] }),
     });
     assert.equal(error, null);
-    assert.deepEqual(result, { status: 'pass' });
+    assert.equal(result.status, 'pass');
+    assert.equal(result.outcome, 'PASS');
   });
 
   test('iat/exp consistency is evaluated against the supplied clock, not wall time', () => {
@@ -389,7 +392,8 @@ describe('P1 runtime authentication — read stage and output discipline', () =>
       catalog: httpResponse({ json: [] }),
       env: baseEnv({ RESTORED_TEST_USER_EMAIL: undefined, RESTORED_TEST_USER_PASSWORD: undefined }),
     });
-    assert.deepEqual(result, { status: 'not-run' });
+    assert.equal(result.status, 'not-run');
+    assert.equal(result.outcome, 'NOT_RUN');
     assert.match(output, /^::warning::NOT RUN:/m);
     assert.match(output, /NOT RUN: authenticated access was not verified/);
     assert.equal(transport.calls.length, 0, 'no network call may be attempted without credentials');
@@ -406,7 +410,8 @@ describe('P1 runtime authentication — read stage and output discipline', () =>
         RESTORED_TEST_USER_JWT: freshToken(),
       }),
     });
-    assert.deepEqual(result, { status: 'not-run' });
+    assert.equal(result.status, 'not-run');
+    assert.equal(result.outcome, 'NOT_RUN');
     assert.match(output, /^::warning::NOT RUN:/m);
     assert.equal(transport.calls.length, 0);
   });
@@ -451,6 +456,158 @@ describe('P1 runtime authentication — read stage and output discipline', () =>
     assert.match(workflow, /RESTORED_TEST_USER_PASSWORD: \$\{\{ secrets\.RESTORED_TEST_USER_PASSWORD \}\}/);
     assert.match(workflow, /EXPECTED_SUPABASE_REF: \$\{\{ vars\.EXPECTED_SUPABASE_REF \}\}/);
     assert.match(workflow, /RESTORED_SUPABASE_ANON_KEY: \$\{\{ secrets\.ANON_KEY \}\}/);
+  });
+});
+
+
+// ---------------------------------------------------------------------------
+// Machine-readable outcome record (PASS / NOT_RUN / FAIL)
+// ---------------------------------------------------------------------------
+const OUTCOME_LINE = /^AUTH_SMOKE_OUTCOME (\{.*\})$/;
+
+function parseOutcome(output) {
+  const line = output.split('\n').find((entry) => entry.startsWith('AUTH_SMOKE_OUTCOME '));
+  if (!line) return null;
+  return JSON.parse(line.slice('AUTH_SMOKE_OUTCOME '.length));
+}
+
+async function runWithOutcome({ signIn, catalog, env = baseEnv() } = {}) {
+  const transport = stubTransport({ signIn, catalog });
+  const lines = [];
+  let error = null;
+  try {
+    await runSmokeWithOutcome({
+      env,
+      fetchImpl: transport.fetchImpl,
+      nowSeconds: NOW_S,
+      log: (line) => lines.push(line),
+    });
+  } catch (thrown) {
+    error = thrown;
+  }
+  const output = lines.join('\n');
+  return { transport, output, error, outcome: parseOutcome(output) };
+}
+
+describe('Outcome record — machine-readable and never credential-bearing', () => {
+  test('PASS records a real authenticated catalog read', async () => {
+    const { outcome, error } = await runWithOutcome({
+      signIn: httpResponse({ json: { access_token: freshToken() } }),
+      catalog: httpResponse({ json: [{ diagnostic_area: 'electrical' }] }),
+    });
+    assert.equal(error, null);
+    assert.deepEqual(outcome, {
+      outcome: 'PASS',
+      reason: 'catalog-read-ok',
+      authenticated: true,
+      tokenValidated: true,
+      catalogRead: true,
+      releaseEvidence: false,
+    });
+  });
+
+  test('NOT_RUN records that authentication was NOT verified', async () => {
+    const { outcome, output } = await runWithOutcome({
+      signIn: httpResponse({ json: {} }),
+      catalog: httpResponse({ json: [] }),
+      env: baseEnv({ RESTORED_TEST_USER_EMAIL: undefined, RESTORED_TEST_USER_PASSWORD: undefined }),
+    });
+    assert.deepEqual(outcome, {
+      outcome: 'NOT_RUN',
+      reason: 'credentials-not-configured',
+      authenticated: false,
+      tokenValidated: false,
+      catalogRead: false,
+      releaseEvidence: false,
+    });
+    assert.match(output, /^::warning::NOT RUN:/m);
+  });
+
+  test('NOT_RUN can never be read as successful authenticated verification', async () => {
+    const { outcome } = await runWithOutcome({
+      signIn: httpResponse({ json: {} }),
+      catalog: httpResponse({ json: [] }),
+      env: baseEnv({ RESTORED_TEST_USER_EMAIL: undefined }),
+    });
+    assert.equal(outcome.outcome, 'NOT_RUN');
+    assert.equal(outcome.authenticated, false);
+    assert.equal(outcome.tokenValidated, false);
+    assert.equal(outcome.catalogRead, false);
+    assert.equal(outcome.releaseEvidence, false);
+  });
+
+  test('PASS is still not release evidence', async () => {
+    const { outcome } = await runWithOutcome({
+      signIn: httpResponse({ json: { access_token: freshToken() } }),
+      catalog: httpResponse({ json: [] }),
+    });
+    assert.equal(outcome.outcome, 'PASS');
+    assert.equal(outcome.releaseEvidence, false, 'an auth smoke is diagnostic, never release evidence');
+  });
+
+  test('FAIL records the reason code and the error still propagates', async () => {
+    const { outcome, error } = await runWithOutcome({
+      signIn: httpResponse({ status: 401, json: { error: 'invalid_api_key' } }),
+      catalog: httpResponse({ json: [] }),
+    });
+    assert.ok(error, 'failure must still throw so the job exits non-zero');
+    assert.deepEqual(outcome, {
+      outcome: 'FAIL',
+      reason: 'auth-http-401',
+      authenticated: false,
+      tokenValidated: false,
+      catalogRead: false,
+      releaseEvidence: false,
+    });
+  });
+
+  test('FAIL after a rejected token records the token code, not the message', async () => {
+    const { outcome, error } = await runWithOutcome({
+      signIn: httpResponse({ json: { access_token: freshToken({ role: 'anon' }) } }),
+      catalog: httpResponse({ json: [] }),
+    });
+    assert.ok(error);
+    assert.equal(outcome.outcome, 'FAIL');
+    assert.equal(outcome.reason, 'invalid-claims');
+  });
+
+  test('FAIL on a catalog refusal records the read-stage code', async () => {
+    const { outcome } = await runWithOutcome({
+      signIn: httpResponse({ json: { access_token: freshToken() } }),
+      catalog: httpResponse({ status: 403, json: { code: '42501' } }),
+    });
+    assert.equal(outcome.outcome, 'FAIL');
+    assert.equal(outcome.reason, 'catalog-http-403');
+  });
+
+  test('exactly one outcome line is emitted per run', async () => {
+    const { output } = await runWithOutcome({
+      signIn: httpResponse({ json: { access_token: freshToken() } }),
+      catalog: httpResponse({ json: [] }),
+    });
+    assert.equal(output.split('\n').filter((line) => OUTCOME_LINE.test(line)).length, 1);
+  });
+
+  test('the outcome record carries no credentials, token or claims', async () => {
+    const token = freshToken({ marker: 'OUTCOME-CANARY' });
+    const { output } = await runWithOutcome({
+      signIn: httpResponse({ json: { access_token: token, refresh_token: 'REFRESH-CANARY' } }),
+      catalog: httpResponse({ json: [] }),
+    });
+    const record = parseOutcome(output);
+    const serialized = JSON.stringify(record);
+    for (const forbidden of [token, 'OUTCOME-CANARY', 'REFRESH-CANARY', EMAIL, PASSWORD, 'eyJ']) {
+      assert.equal(serialized.includes(forbidden), false, 'outcome record must not contain ' + forbidden);
+      assert.equal(output.includes(forbidden), false, 'output must not contain ' + forbidden);
+    }
+    assert.deepEqual(Object.keys(record).sort(), [
+      'authenticated',
+      'catalogRead',
+      'outcome',
+      'reason',
+      'releaseEvidence',
+      'tokenValidated',
+    ]);
   });
 });
 

@@ -213,3 +213,32 @@ or any part of LMF release readiness. The script's trailing `NOTE` line must kee
 4. Decide whether `NOT RUN` should annotate the job (`::warning::`) so green is less misleading. The
    design keeps exit 0 either way and never converts a failure into a skip.
 
+
+## 13. Machine-readable outcome (added after review)
+
+Every run emits exactly one line, with a stable prefix and a single JSON object:
+
+```
+AUTH_SMOKE_OUTCOME {"outcome":"NOT_RUN","reason":"credentials-not-configured","authenticated":false,"tokenValidated":false,"catalogRead":false,"releaseEvidence":false}
+```
+
+| Outcome | Meaning | Exit |
+| --- | --- | --- |
+| `PASS` | real GoTrue sign-in succeeded, the token validated, and the authenticated catalog GET returned an array | 0 |
+| `NOT_RUN` | credentials are not configured, so authentication was **not** verified | 0 |
+| `FAIL` | sign-in, token validation or the catalog read failed; `reason` carries the code only | 1 |
+
+`releaseEvidence` is **always false**, including on `PASS`. This smoke is diagnostic: a green run
+does not establish tenant isolation, write denial or policy equivalence, so nothing here should ever
+be consumed as release evidence. `NOT_RUN` additionally carries `authenticated:false`,
+`tokenValidated:false`, `catalogRead:false`, so a parser keying off the record cannot read it as a
+successful authenticated verification — it must check `outcome`, not merely the job status.
+
+The record contains no credentials, no token, no JWT claims and no response body. `FAIL` records the
+reason **code** (for example `auth-http-401`, `invalid-claims`, `catalog-http-403`) and never the
+error message, so a message change cannot leak material into the record.
+
+Exit behaviour is unchanged: `NOT_RUN` stays 0 (a configuration gap, not a test failure) and `FAIL`
+stays 1. The record and the `::warning::` annotation are what make a green run unambiguous; the check
+status alone is not evidence.
+
