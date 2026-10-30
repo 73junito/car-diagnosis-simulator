@@ -40,17 +40,28 @@ function deriveInventory() {
   const files = readdirSync(MIGRATIONS_DIR).filter((f) => f.endsWith('.sql')).sort()
   const sql = files.map((f) => readFileSync(join(MIGRATIONS_DIR, f), 'utf8')).join('\n').toLowerCase()
 
+  // Count statements AND distinct names. A `create policy` statement is not an effective
+  // policy: migrations that drop and recreate a policy (the classroom optimize migration does
+  // this for twelve of them) inflate the statement count without adding a policy. The
+  // statement count stays the coverage denominator for compatibility; the distinct count is
+  // reported alongside it so the number cannot be overstated in prose. Neither changes the
+  // pass/fail rule, which is per-table.
   const policyCounts = new Map()
-  const policyRe = /create policy\s+(?:"[^"]+"|[a-z0-9_]+)\s*(?:\r?\n\s*)?on\s+(?:public\.)?([a-z0-9_]+)/g
+  const policyNames = new Map()
+  const policyRe = /create policy\s+(?:"([^"]+)"|([a-z0-9_]+))\s*(?:\r?\n\s*)?on\s+(?:public\.)?([a-z0-9_]+)/g
   for (const match of sql.matchAll(policyRe)) {
-    policyCounts.set(match[1], (policyCounts.get(match[1]) || 0) + 1)
+    const name = match[1] || match[2]
+    const table = match[3]
+    policyCounts.set(table, (policyCounts.get(table) || 0) + 1)
+    if (!policyNames.has(table)) policyNames.set(table, new Set())
+    policyNames.get(table).add(name)
   }
 
   const rlsTables = new Set()
   const rlsRe = /alter table (?:if exists )?(?:only )?public\.([a-z0-9_]+)\s+enable row level security/g
   for (const match of sql.matchAll(rlsRe)) rlsTables.add(match[1])
 
-  return { files: files.length, policyCounts, rlsTables }
+  return { files: files.length, policyCounts, policyNames, rlsTables }
 }
 
 function runHarness() {
@@ -82,6 +93,11 @@ function runHarness() {
 function classify(inventory, measured, manifest) {
   const policyTables = [...inventory.policyCounts.keys()].sort()
   const totalPolicies = [...inventory.policyCounts.values()].reduce((a, b) => a + b, 0)
+  // Distinct policies per table. Synthetic inventories (the self-test) may omit policyNames,
+  // in which case statements are the only available count and the two figures coincide.
+  const distinctFor = (table) =>
+    inventory.policyNames?.get(table)?.size ?? inventory.policyCounts.get(table) ?? 0
+  const totalDistinct = policyTables.reduce((sum, table) => sum + distinctFor(table), 0)
 
   const declaredTested = new Set(manifest.policyTablesTested || [])
   const planned = new Map()
@@ -138,7 +154,25 @@ function classify(inventory, measured, manifest) {
   const plannedPolicies = plannedOnly.reduce((sum, t) => sum + t.policies, 0)
   const coveredPct = totalPolicies ? Math.round((testedPolicies / totalPolicies) * 100) : 0
 
-  return { policyTables, totalPolicies, tested, plannedOnly, untracked, failures, testedPolicies, plannedPolicies, coveredPct }
+  const testedDistinct = tested.reduce((sum, t) => sum + distinctFor(t.table), 0)
+  const plannedDistinct = plannedOnly.reduce((sum, t) => sum + distinctFor(t.table), 0)
+  const distinctCoveredPct = totalDistinct ? Math.round((testedDistinct / totalDistinct) * 100) : 0
+
+  return {
+    policyTables,
+    totalPolicies,
+    totalDistinct,
+    tested,
+    plannedOnly,
+    untracked,
+    failures,
+    testedPolicies,
+    plannedPolicies,
+    testedDistinct,
+    plannedDistinct,
+    coveredPct,
+    distinctCoveredPct
+  }
 }
 
 /**
@@ -190,14 +224,14 @@ function main() {
     measured.set(row.table, { assertions: row.assertions, passed: row.passed })
   }
 
-  const { policyTables, totalPolicies, tested, plannedOnly, untracked, failures, testedPolicies, plannedPolicies, coveredPct } =
+  const { policyTables, totalPolicies, totalDistinct, tested, plannedOnly, untracked, failures, testedPolicies, plannedPolicies, testedDistinct, coveredPct, distinctCoveredPct } =
     classify(inventory, measured, manifest)
 
   console.log(`\npolicy inventory (case-insensitive, ${inventory.files} migrations)`)
-  console.log(`  ${totalPolicies} policies across ${policyTables.length} tables`)
+  console.log(`  ${totalPolicies} policies across ${policyTables.length} tables (${totalDistinct} distinct (table,policy) pairs; ${totalPolicies - totalDistinct} statements re-create an existing policy)`)
   console.log(`  ${inventory.rlsTables.size} tables have RLS enabled`)
 
-  console.log(`\nTESTED — passing assertions measured in this run (${tested.length}/${policyTables.length} tables, ${testedPolicies}/${totalPolicies} policies, ${coveredPct}%)`)
+  console.log(`\nTESTED — passing assertions measured in this run (${tested.length}/${policyTables.length} tables, ${testedPolicies}/${totalPolicies} policy statements, ${testedDistinct}/${totalDistinct} distinct policies, ${coveredPct}% of statements / ${distinctCoveredPct}% of distinct)`)
   for (const t of tested) {
     console.log(`  ${t.table.padEnd(26)} ${String(t.policies).padStart(2)} policies  ${t.passed}/${t.assertions} assertions`)
   }
@@ -241,6 +275,7 @@ function main() {
           generatedAt: new Date().toISOString(),
           migrations: inventory.files,
           totalPolicies,
+          totalDistinctPolicies: totalDistinct,
           policyTables: policyTables.length,
           rlsEnabledTables: inventory.rlsTables.size,
           tested,
@@ -250,6 +285,9 @@ function main() {
           assertionTotal: report.assertionTotal,
           assertionPassed: report.assertionPassed,
           coveragePercent: coveredPct,
+          testedPolicies,
+          testedDistinctPolicies: testedDistinct,
+          distinctCoveragePercent: distinctCoveredPct,
         },
         null,
         2
