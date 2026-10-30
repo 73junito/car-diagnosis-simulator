@@ -176,7 +176,7 @@ introduces this file, this document is a proposal and the environment remains un
 | Decision (retain / delete) | _pending_ |
 | Accountable owner | _pending_ |
 | Reviewer identity for the environment (see §5) | _pending — deferred_ |
-| Retention deadline confirmed as 2026-11-30 | _pending_ |
+| Retention deadline confirmed as November 30, 2026 | _pending_ |
 | Confirmed that the project holds no unique production data | _pending — currently unknown_ |
 | Approval date | _pending_ |
 | Approving reference (PR / issue / comment link) | _pending_ |
