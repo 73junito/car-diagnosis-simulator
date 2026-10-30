@@ -44,14 +44,39 @@ describe('G8 institution reporting', () => {
     expect(html).toContain('not a transcript, credential, academic-credit record, or institutional grade report')
   })
 
-  test('reports memberships, programs, cohorts, classes, enrollments, and attempt rollups', () => {
+  test('reports memberships, programs, cohorts, classes, and enrollments', () => {
     expect(route).toContain('membershipCounts')
     expect(route).toContain('activeMemberships')
     expect(route).toContain('programs:')
     expect(route).toContain('cohorts:')
     expect(route).toContain('classes: classes.length')
     expect(route).toContain('enrollments: enrollments.length')
-    expect(route).toContain('activity: summarizeAttempts(attempts)')
+  })
+
+  test('withholds attempt-derived activity until attempts carry class attribution', () => {
+    // Enrollment is a roster relationship, not attribution of assessment work: a
+    // learner enrolled with another institution must not inflate this tenant's figures.
+    expect(route).not.toContain('loadAttemptsByUserIds')
+    expect(route).not.toContain(".from('attempts')")
+    expect(route).not.toContain('activity: summarizeAttempts(attempts)')
+    expect(route).toMatch(/Unattributed assessment activity must not appear in a tenant-scoped report/)
+    expect(route).toContain('activity: null')
+    expect(route).toContain('buildClassSummaries(classes, enrollments)')
+  })
+
+  test('preserves independently verifiable class and enrollment information', () => {
+    expect(route).toContain('studentCount: classUsers.size')
+    expect(route).toContain('uniqueStudents: uniqueStudents.size')
+    expect(route).toContain('classes: classes.length')
+    expect(route).toContain('enrollments: enrollments.length')
+  })
+
+  test('portal renders withheld activity metrics as unavailable, never as zero', () => {
+    expect(ui).toContain('const activity = report.activity || null')
+    expect(ui).not.toContain('activity.attempts ?? 0')
+    expect(ui).not.toContain('activity.completedAttempts ?? 0')
+    expect(ui).toContain('const classActivity = summary.activity || null')
+    expect(ui).not.toContain('summary.attempts ?? 0')
   })
 
   test('portal renders only aggregate report metrics and class rollups', () => {
