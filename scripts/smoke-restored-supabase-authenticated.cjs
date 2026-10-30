@@ -1,5 +1,4 @@
 'use strict';
-const assert = require('node:assert/strict');
 const { PROJECT_REF, classifyCredential, buildRequestHeaders, classifyBodyCode, classifyGatewayCode, describeFailure } = require('./smoke-restored-supabase-access.cjs');
 
 /**
@@ -16,6 +15,7 @@ const TOKEN_ISSUE = Object.freeze({
   EXPIRED: 'expired-token',
   PROJECT: 'project-mismatch',
   ISSUER: 'issuer-mismatch',
+  CLOCK: 'clock-inconsistent',
 });
 
 const REQUIRED_CLAIMS_MESSAGE = 'Test-user JWT must have authenticated role, subject, and unexpired timestamp';
@@ -80,7 +80,7 @@ function classifyTestToken(token, { nowSeconds = Math.floor(Date.now() / 1000), 
     return { code: TOKEN_ISSUE.ISSUER, detail: 'claim: iss' };
   }
 
-  return { code: null, detail: 'ok' };
+  return { code: null, detail: 'ok', claims };
 }
 
 const ISSUE_MESSAGES = {
@@ -92,6 +92,7 @@ const ISSUE_MESSAGES = {
   [TOKEN_ISSUE.EXPIRED]: (detail) => `${REQUIRED_CLAIMS_MESSAGE} (${TOKEN_ISSUE.EXPIRED}: ${detail})`,
   [TOKEN_ISSUE.PROJECT]: (detail) => `Test-user token references another Supabase project (${TOKEN_ISSUE.PROJECT}: ${detail})`,
   [TOKEN_ISSUE.ISSUER]: (detail) => `Test-user token issuer does not match the restored project (${TOKEN_ISSUE.ISSUER}: ${detail})`,
+  [TOKEN_ISSUE.CLOCK]: (detail) => `Test-user token timestamps are inconsistent (${TOKEN_ISSUE.CLOCK}: ${detail})`,
 };
 
 function inspectTestToken(token, options) {
@@ -100,35 +101,204 @@ function inspectTestToken(token, options) {
   return true;
 }
 
-async function main() {
-  if (process.env.EXPECTED_SUPABASE_REF !== PROJECT_REF) throw new Error('Restored project reference mismatch');
-  const key = process.env.RESTORED_SUPABASE_ANON_KEY;
-  classifyCredential(key);
-  const token = process.env.RESTORED_TEST_USER_JWT;
-  if (!token) {
-    console.log('NOT RUN: restored-project authenticated-user smoke needs RESTORED_TEST_USER_JWT from a dedicated disposable test user');
-    return;
-  }
-  inspectTestToken(token);
-  const response = await fetch('https://' + PROJECT_REF + '.supabase.co/rest/v1/scenario_catalog?select=diagnostic_area&limit=1', {
-    method: 'GET', redirect: 'error', signal: AbortSignal.timeout(15000),
-    headers: buildRequestHeaders(key, token),
-  });
-  const body = await response.text();
-  if (body.length > 100000) throw new Error('Unexpectedly large REST response');
-  let parsed; try { parsed = JSON.parse(body); } catch { parsed = null; }
-  const result = {
-    status: response.status,
-    errorCode: classifyBodyCode(parsed),
-    gatewayCode: classifyGatewayCode(response.headers.get('sb-error-code')),
-  };
-  assert.equal(result.status, 200, 'Authenticated catalog SELECT failed (' + describeFailure(result, classifyCredential(key)) + ')');
-  assert.ok(Array.isArray(parsed), 'Authenticated catalog response must be an array');
-  console.log('PASS restored-project authenticated catalog read (no writes performed)');
-  console.log('NOTE tenant-isolation and unauthorized-write behavioral evidence remain outstanding');
+// ---------------------------------------------------------------------------
+// P1: runtime authentication (no stored token)
+// ---------------------------------------------------------------------------
+const AUTH_TOKEN_URL = 'https://' + PROJECT_REF + '.supabase.co/auth/v1/token?grant_type=password';
+const CATALOG_URL = 'https://' + PROJECT_REF + '.supabase.co/rest/v1/scenario_catalog?select=diagnostic_area&limit=1';
+const REQUEST_TIMEOUT_MS = 15000;
+const CLOCK_SKEW_SECONDS = 60;
+const MAX_RESPONSE_BYTES = 100000;
+
+/** Emitted as a GitHub annotation so a green job cannot be mistaken for authenticated evidence. */
+const NOT_RUN_WARNING =
+  '::warning::NOT RUN: authenticated restored-project access was NOT verified ' +
+  '(RESTORED_TEST_USER_EMAIL / RESTORED_TEST_USER_PASSWORD are not configured)';
+
+/** GoTrue error codes safe to print. Anything else stays 'unclassified'. */
+const KNOWN_AUTH_ERROR_CODES = new Set([
+  'invalid_credentials',
+  'email_not_confirmed',
+  'user_not_found',
+  'invalid_grant',
+  'over_request_rate_limit',
+  'invalid_api_key',
+]);
+
+function classifyAuthError(payload) {
+  const raw = payload && typeof payload === 'object' ? payload.error_code || payload.error : null;
+  return typeof raw === 'string' && KNOWN_AUTH_ERROR_CODES.has(raw) ? raw : 'unclassified';
 }
-if (require.main === module) main().catch(e => {
+
+/**
+ * iat/exp consistency, checked after the classifier has already required exp to be in the future.
+ * No fixed lifetime cap: a project may configure a longer lifetime, so only internal consistency is
+ * enforced. A zero or negative lifetime is a defect.
+ */
+function checkTokenConsistency(
+  claims,
+  { nowSeconds = Math.floor(Date.now() / 1000), skewSeconds = CLOCK_SKEW_SECONDS } = {}
+) {
+  const exp = claims && claims.exp;
+  const iat = claims && claims.iat;
+  if (iat === undefined) return { code: null, detail: 'ok' };
+  if (!Number.isFinite(iat)) return { code: TOKEN_ISSUE.CLAIMS, detail: 'claim: iat' };
+  if (iat >= exp) return { code: TOKEN_ISSUE.CLOCK, detail: 'iat is not before exp' };
+  if (iat > nowSeconds + skewSeconds) return { code: TOKEN_ISSUE.CLOCK, detail: 'iat is in the future' };
+  return { code: null, detail: 'ok' };
+}
+
+/**
+ * Password grant against the restored project's own GoTrue. Only the access token leaves this
+ * function: the response body, refresh token and user object are dropped in memory, never logged,
+ * never returned.
+ */
+async function requestAccessToken({
+  fetchImpl = fetch,
+  email,
+  password,
+  anonKey,
+  timeoutMs = REQUEST_TIMEOUT_MS,
+} = {}) {
+  let response;
+  try {
+    response = await fetchImpl(AUTH_TOKEN_URL, {
+      method: 'POST',
+      redirect: 'error',
+      signal: AbortSignal.timeout(timeoutMs),
+      headers: { apikey: anonKey, 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+  } catch (error) {
+    const name = error && error.name;
+    return { code: name === 'TimeoutError' || name === 'AbortError' ? 'auth-http-timeout' : 'auth-network-error' };
+  }
+  if (!response || typeof response.status !== 'number') return { code: 'auth-unusable-response' };
+  if (!response.ok) return { code: 'auth-http-' + response.status };
+
+  let payload;
+  try {
+    payload = await response.json();
+  } catch {
+    return { code: 'auth-body-not-json' };
+  }
+  if (!payload || typeof payload.access_token !== 'string' || payload.access_token.length === 0) {
+    return { code: 'auth-missing-access-token' };
+  }
+  const provider = classifyAuthError(payload);
+  if (provider !== 'unclassified') return { code: 'auth-provider-' + provider };
+  return { accessToken: payload.access_token };
+}
+/** Read-only catalog GET. Reports status and allowlisted codes only, never the body. */
+async function fetchCatalog({ fetchImpl = fetch, anonKey, accessToken, keyType, timeoutMs = REQUEST_TIMEOUT_MS } = {}) {
+  let response;
+  try {
+    response = await fetchImpl(CATALOG_URL, {
+      method: 'GET',
+      redirect: 'error',
+      signal: AbortSignal.timeout(timeoutMs),
+      headers: buildRequestHeaders(anonKey, accessToken),
+    });
+  } catch (error) {
+    const name = error && error.name;
+    return { code: name === 'TimeoutError' || name === 'AbortError' ? 'catalog-timeout' : 'catalog-network-error' };
+  }
+  const text = await response.text();
+  if (text.length > MAX_RESPONSE_BYTES) return { code: 'catalog-response-too-large' };
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    parsed = null;
+  }
+  if (response.status !== 200) {
+    const detail = describeFailure(
+      {
+        status: response.status,
+        errorCode: classifyBodyCode(parsed),
+        gatewayCode: classifyGatewayCode(response.headers.get('sb-error-code')),
+      },
+      keyType
+    );
+    return { code: 'catalog-http-' + response.status, detail };
+  }
+  if (!Array.isArray(parsed)) return { code: 'catalog-not-array' };
+  return { rows: parsed.length };
+}
+
+/**
+ * Full run. Injectable env/fetch/clock/logger so the whole matrix is asserted offline with no
+ * secret, no network and no project access.
+ */
+async function runSmoke({
+  env = process.env,
+  fetchImpl = fetch,
+  nowSeconds = Math.floor(Date.now() / 1000),
+  log = console.log,
+} = {}) {
+  if (env.EXPECTED_SUPABASE_REF !== PROJECT_REF) throw new Error('Restored project reference mismatch');
+
+  const anonKey = env.RESTORED_SUPABASE_ANON_KEY;
+  let keyType;
+  try {
+    keyType = classifyCredential(anonKey);
+  } catch {
+    throw new Error('Restored-project API key rejected: ' + (anonKey ? 'invalid-api-key' : 'missing-api-key'));
+  }
+
+  const email = env.RESTORED_TEST_USER_EMAIL;
+  const password = env.RESTORED_TEST_USER_PASSWORD;
+  if (!email || !password) {
+    // No fallback: a stored static token is never consulted, even when one is configured.
+    log(NOT_RUN_WARNING);
+    log(
+      'NOT RUN: authenticated access was not verified. Provide RESTORED_TEST_USER_EMAIL and ' +
+        'RESTORED_TEST_USER_PASSWORD for a dedicated disposable user in the restored project.'
+    );
+    return { status: 'not-run' };
+  }
+
+  const signIn = await requestAccessToken({ fetchImpl, email, password, anonKey });
+  if (signIn.code) throw new Error('Restored-project sign-in failed: ' + signIn.code);
+
+  const verdict = classifyTestToken(signIn.accessToken, { nowSeconds });
+  if (verdict.code) throw new Error('Access token rejected: ' + verdict.code + ' (' + verdict.detail + ')');
+
+  const consistency = checkTokenConsistency(verdict.claims, { nowSeconds });
+  if (consistency.code) {
+    throw new Error('Access token rejected: ' + consistency.code + ' (' + consistency.detail + ')');
+  }
+
+  const catalog = await fetchCatalog({ fetchImpl, anonKey, accessToken: signIn.accessToken, keyType });
+  if (catalog.code) {
+    throw new Error(
+      'Authenticated catalog read failed: ' + catalog.code + (catalog.detail ? ' (' + catalog.detail + ')' : '')
+    );
+  }
+
+  log('PASS restored-project authenticated catalog read (no writes performed)');
+  log('NOTE tenant-isolation and unauthorized-write behavioral evidence remain outstanding');
+  return { status: 'pass' };
+}
+
+async function main() {
+  await runSmoke();
+}
+
+if (require.main === module) main().catch((e) => {
   console.error('FAIL restored-project authenticated smoke:', e.message);
   process.exitCode = 1;
 });
-module.exports = { inspectTestToken, classifyTestToken, TOKEN_ISSUE };
+module.exports = {
+  inspectTestToken,
+  classifyTestToken,
+  checkTokenConsistency,
+  requestAccessToken,
+  fetchCatalog,
+  runSmoke,
+  classifyAuthError,
+  TOKEN_ISSUE,
+  NOT_RUN_WARNING,
+  AUTH_TOKEN_URL,
+  CATALOG_URL,
+};

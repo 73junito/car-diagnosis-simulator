@@ -37,5 +37,6 @@ jobs:
         env:
           EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
           RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
-          RESTORED_TEST_USER_JWT: ${{ secrets.RESTORED_TEST_USER_JWT }}
+          RESTORED_TEST_USER_EMAIL: ${{ secrets.RESTORED_TEST_USER_EMAIL }}
+          RESTORED_TEST_USER_PASSWORD: ${{ secrets.RESTORED_TEST_USER_PASSWORD }}
         run: node scripts/smoke-restored-supabase-authenticated.cjs

@@ -1,9 +1,12 @@
-# Restored-auth smoke — P1 runtime authentication design (NOT implemented)
+# Restored-auth smoke — P1 runtime authentication (implemented, not yet provisioned)
 
-**Status: design for review.** No workflow, script, secret or environment is changed by this
-document. P0 (`f1df7ef0`) is implemented separately and is a prerequisite for part of this design.
+**Status: implemented in code; not verified end to end.** The workflow now wires
+`RESTORED_TEST_USER_EMAIL` / `RESTORED_TEST_USER_PASSWORD` instead of the retired static JWT, and the
+script authenticates at runtime. The dedicated restored-project test user does **not** exist yet and
+those secrets are **not** provisioned, so the real run currently reports `NOT RUN` with a warning
+annotation. P0 (`f1df7ef0`) is the separate diagnostic commit this builds on.
 
-Base: PR #1128 head `3aecc3a4`. PR #1128 stays draft; the release-evidence HOLD and the October 13
+Base: PR #1128 head `50fa0991`. PR #1128 stays draft; the release-evidence HOLD and the October 13
 staging migration discrepancy remain separate blockers.
 
 ---
