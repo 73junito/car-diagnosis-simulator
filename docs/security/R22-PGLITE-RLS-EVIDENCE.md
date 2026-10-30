@@ -379,6 +379,82 @@ as complete Supabase verification. Consequences accepted with that decision:
 - Green CI must not be read as R22 closure: the limits in §6 still apply, including the two
   unapplied Supabase-platform migrations.
 
+## 6c. Phase 5 results — `lmf_reference_sessions` and `lmf_reference_events` (PR #1128)
+
+The three LMF migrations from PR #1128 are applied **unmodified** by the harness
+(`20261024212822_lmf_reference_evidence_access.sql`, `…213613_lmf_atomic_reference_append.sql`,
+`…221008_lmf_reference_retention_guard.sql`). Twenty-three assertions were added; the suite is now
+**81/81**.
+
+### Coverage
+
+| Measure | Before | After |
+| --- | --- | --- |
+| Policy-bearing tables | 15 | 15 |
+| Policy statements | 43 | 43 |
+| Distinct `(table, policy)` pairs | 31 | 31 |
+| Tables with RLS enabled | 78 | 78 |
+| **Tested policy-bearing tables** | 5 | **7** |
+| Tested statements | 21/43 (49%) | **23/43 (53%)** |
+| Tested distinct policies | 15/31 (48%) | **17/31 (55%)** |
+| Assertions | 58 | **81** |
+
+Table attribution comes from the SQL, not from this document: `lmf_reference_sessions` 11/11 and
+`lmf_reference_events` 8/8. The remaining 4 of the 23 exercise the service-only functions and carry
+no table attribution.
+
+### What each assertion establishes
+
+| Area | Assertions |
+| --- | --- |
+| Owner visibility | owner sees own unexpired session (1 row) and own event (1 row) |
+| Expiry | owner does **not** see their own expired session (0 rows) |
+| Cross-user isolation | another user sees neither A's session nor any event (0 rows) |
+| Expired parent hides events | a second event, same owner, under an expired session is invisible |
+| Privilege denial | `anon` SELECT and `authenticated` INSERT/UPDATE/DELETE raise `permission denied for table` |
+| Service-only write path | `authenticated` cannot EXECUTE the append function (`permission denied for schema lmf_private`) |
+| Positive controls | `service_role` inserts a session and an event; a correctly chained append succeeds; the purge removes exactly the expired session |
+| Chain integrity | append with a wrong expected sequence is rejected (`Stale or broken reference evidence chain`) |
+| Expired-session append | rejected (`Session missing, expired, or owner mismatch`) |
+
+### Privilege denial and RLS denial are separated, not conflated
+
+These migrations `revoke all` from `anon, authenticated` and re-grant `SELECT` only, so client writes
+fail at the **privilege** layer. A suite made only of those assertions would stay green if someone
+later re-granted `INSERT`, because the write would still be tested for and still fail — for the
+wrong reason — or, worse, would succeed unobserved.
+
+The suite therefore creates a transient `rls_probe` role that **holds** insert/update/delete and is
+granted membership of `authenticated` (so the `to authenticated` policies apply to it), then asserts:
+
+- INSERT on both tables is rejected with `new row violates row-level security policy` — pure RLS
+  evidence, since the privilege is held;
+- SELECT still returns only the caller's unexpired row — the policy predicate, not the grant, does
+  the scoping.
+
+Two behaviours discovered while building this, both worth remembering:
+
+1. **A policy scoped `to authenticated` does not apply to a role that is not a member.** Such a role
+   gets default-deny — 0 rows, no error, and no hint that the policy never ran. The probe is
+   therefore made a member of `authenticated`; a non-member version of this test proves nothing
+   about the policy.
+2. **An RLS predicate that raises (here: `auth.uid()` without `USAGE` on schema `auth`) fails closed
+   as 0 rows rather than surfacing an error** in PGlite. Zero rows is therefore ambiguous on its
+   own; the positive controls are what distinguish "policy filtered it" from "the predicate could
+   not be evaluated".
+
+### Limitations specific to these two tables
+
+- No concurrency: `for update`/`skip locked` serialization in the append function and the retention
+  worker is **not** exercised. Two real connections are required, so atomicity under contention
+  remains unverified.
+- Real clock: expiry is tested with ±1 hour/day intervals only.
+- `service_role` BYPASSRLS comes from the harness shim, not from the project.
+- No PostgREST: `SET ROLE` approximates an API request; JWT issuance and verification are untested.
+- The retention assertion is attributed to `lmf_reference_sessions` because that is the table it
+  must have emptied; the scalar return value is reported in the assertion label.
+
+
 ## 8. Remaining blockers for R22
 
 1. A production-equivalent database (Supabase project, or Postgres with the full
@@ -393,10 +469,17 @@ as complete Supabase verification. Consequences accepted with that decision:
 ```bash
 cd <repo>
 npm ci
-npm run test:r22             # 58/58 assertions, exit 0
-npm run test:r22:matrix      # 104/106 migrations applied
+npm run test:r22             # 81/81 assertions, exit 0
+npm run test:r22:matrix      # 104/106 migrations applied (LMF tables are in the curated set)
 npm run verify:rls-coverage  # inventory vs measured evidence; fails on overstatement
+node scripts/run-lmf-node-contracts.mjs   # 39 LMF contracts, plus the classification check
 ```
+
+The last line is also the required-CI step added in `.github/workflows/unit-tests.yml`. It fails
+with exit 2 — independently of the test result — when an `tests/lmf-*.test.js` file is neither
+executed there nor visible to Jest, so a new contract cannot land unrun. It does not touch the LMF
+release-evidence HOLD: `lmf-release-gates.test.js` and `lmf-robustness-catalog.test.js` run in it to
+keep proving that incomplete evidence is refused.
 
 Recorded run artefacts: `/tmp/r22-repo-dep.log` (repository-managed dependency run),
 `/tmp/r22-run2.log`, `/tmp/r22-evidence.json`, `/tmp/r22-matrix.log`.

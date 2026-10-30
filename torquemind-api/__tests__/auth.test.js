@@ -19,7 +19,11 @@ function makeReq(authHeader) {
 
 // Build a minimal Supabase-like client for the outer `supabase` argument
 function makeSupabase(getUserResult) {
-  return { auth: { getUser: jest.fn().mockResolvedValue(getUserResult) } };
+  const client = { auth: { getUser: jest.fn().mockResolvedValue(getUserResult) } };
+  // The first createClient call creates the stateless bearer verifier;
+  // subsequent calls resolve profile/role data with the request's token.
+  createClient.mockImplementationOnce(() => client);
+  return client;
 }
 
 // Build a chainable mock Supabase client for profile/user table lookups
@@ -48,7 +52,7 @@ describe('auth middleware', () => {
 
   beforeEach(() => {
     next = jest.fn();
-    jest.clearAllMocks();
+    jest.resetAllMocks();
     // Default: createClient returns a no-op authed client
     createClient.mockReturnValue(makeAuthedClient());
   });
@@ -222,6 +226,7 @@ describe('auth middleware', () => {
 
     it('returns 500 when getUser throws an exception', async () => {
       const supabase = { auth: { getUser: jest.fn().mockRejectedValue(new Error('network error')) } };
+      createClient.mockImplementationOnce(() => supabase);
       const middleware = createAuth(supabase);
       const req = makeReq('Bearer boom');
       const res = makeRes();

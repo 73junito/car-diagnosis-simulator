@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "registryRole": "lmf-electrical-reference-models",
+  "models": [
+    {
+      "modelRef": "/data/circuit-templates/12v-starting-system-v2.json",
+      "modelFamily": "electrical-circuit",
+      "solverId": "typescript-mna",
+      "readiness": "engineering-validation-fixture",
+      "evidenceRefs": [
+        "tests/simulators/starting-system-v2-expected-values.json",
+        "tests/simulators/starting-system-v2-expected-netlist.json",
+        "tests/simulation-electrical-solver.spec.js",
+        "tests/simulation-ngspice-comparison.spec.js"
+      ],
+      "limits": "Project-authored generic training model only. This registry is not an automatic solver execution or assessment authorization."
+    }
+  ]
+}

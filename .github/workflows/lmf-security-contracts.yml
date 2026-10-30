@@ -1,0 +1,48 @@
+name: LMF Security Contracts
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/lmf-runtime/**'
+      - 'src/simulation/lmf-*'
+      - 'data/lmf/**'
+      - 'data/circuit-templates/12v-starting-system-v2.json'
+      - 'supabase/migrations/*lmf*'
+      - 'tests/lmf-*'
+      - '.github/workflows/lmf-security-contracts.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lmf-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Run Node-native LMF security contracts
+        run: |
+          node --test \
+            tests/lmf-evidence-migration.test.js \
+            tests/lmf-evidence-store.test.js \
+            tests/lmf-server-evidence.test.js \
+            tests/lmf-supabase-auth.test.js \
+            tests/lmf-reference-evidence-handler.test.js \
+            tests/lmf-reference-evidence-bootstrap.test.js \
+            tests/lmf-keyring.test.js \
+            tests/lmf-writer-rotation.test.js \
+            tests/lmf-retention-job.test.js \
+            tests/lmf-solver-registry.test.js \
+            tests/lmf-reference-models.test.js \
+            tests/lmf-electrical-compatibility.test.js
+      - name: Run Jest-based LMF contracts
+        run: node ./node_modules/jest/bin/jest.js tests/lmf-foundation.test.js tests/lmf-runtime-coverage.test.js tests/lmf-reference-bridge.spec.js --config=jest.config.js --runInBand
+      - name: Verify TypeScript
+        run: npm run typecheck

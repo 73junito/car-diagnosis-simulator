@@ -1,0 +1,7 @@
+# Local authenticated LMF evidence end-to-end test
+
+`tests/lmf-local-e2e.cjs` runs exclusively against local Supabase Auth at `http://127.0.0.1:54321` and a separately created disposable PostgreSQL database named `lmf_e2e_verify`; it refuses other database names. Before running, initialize the disposable database with a minimal `auth.users` table and the draft LMF migrations. Supply `LMF_TEST_DATABASE_URL`, `LMF_LOCAL_SUPABASE_URL`, `LMF_LOCAL_SUPABASE_ANON_KEY`, and `LMF_LOCAL_SUPABASE_SERVICE_KEY` as environment variables; do not commit or display their values. Node dependencies `pg`, `esbuild`, and `@supabase/supabase-js` must be available.
+
+The test creates an ephemeral local Supabase Auth user, signs in using a real access token, exercises the guarded handler, runs the actual TypeScript MNA solver via server-side transpilation, writes a signed event into PostgreSQL, checks the persisted signature, and replays the recorded result. It rejects missing/invalid tokens and deletes the temporary Auth user in `finally`. Drop the disposable database after the test.
+
+**Important:** This validates a local harness, not a deployed API endpoint, production Auth tenancy, or key rotation, retention and operational policies. A canonical JSON serialization is necessary because PostgreSQL `jsonb` reorders object fields; the signature and replay checks both normalize object-key order. Do not enable assessment authority or merge without remaining security and CI review.

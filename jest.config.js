@@ -11,6 +11,8 @@ module.exports = {
     '/node_modules/',
     '/tests/playwright/',
     '/tests/animation-review/',
+    // Node's built-in test runner owns these contracts; Jest cannot discover node:test cases.
+    '/tests/lmf-(?!foundation\\.test\\.js|runtime-coverage\\.test\\.js)[^/]+\\.test\\.js$',
     // Anchored to a path-segment boundary: Jest matches absolute, forward-slash
     // normalized paths, so an unanchored 'supabase/tests/' would also ignore any
     // checkout directory ending in '-supabase' plus its own tests/ folder.

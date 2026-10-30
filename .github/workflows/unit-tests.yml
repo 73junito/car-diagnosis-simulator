@@ -51,6 +51,13 @@ jobs:
       - name: Verify R22 coverage guard self-test
         run: npm run verify:rls-coverage:self-test
 
+      # LMF contracts that Jest cannot run (they use node:test), including the release-gate
+      # contracts, which must keep proving that incomplete evidence is REFUSED. The runner also
+      # fails when an LMF test file is neither executed here nor visible to Jest, so a new
+      # contract cannot land unexecuted. It does not approve release evidence or touch the HOLD.
+      - name: Run LMF node-native contracts
+        run: node scripts/run-lmf-node-contracts.mjs
+
       - name: Validate scenarios
         id: validate-scenarios
         run: npm run validate:scenarios
