@@ -12,8 +12,8 @@ Supabase behaviour, and it does not close R22.
 | Harness | `tests/r22/pglite-rls-harness.mjs`, `tests/r22/README.md` |
 | Engine | PostgreSQL **18.6** via PGlite 0.5.13 (wasm32, single connection, in-memory) |
 | Migrations under test | `20260817012628_create_attempts.sql`, `20260821040000_create_syllabus_and_scenario_catalog.sql` |
-| Assertions | **32/32 passed**, exit 0 |
-| Coverage | **3 of 13 policy-bearing tables · 9 of 41 policies (22%)** — measured, see §6a |
+| Assertions | **58/58 passed**, exit 0 |
+| Coverage | **5 of 13 policy-bearing tables · 21 of 41 policy statements (51%)** — measured, see §6a and §6b |
 | Dependency | `@electric-sql/pglite` **`0.5.13`** devDependency (Apache-2.0), lockfile-managed; `npm run test:r22` |
 | Privileged changes required | none (no Docker, no sudo, no credentials) |
 
@@ -178,7 +178,7 @@ which also runs the harness and reads its per-table assertion attribution:
 | Tables carrying policies | **13** |
 | Tables with RLS enabled | **76** |
 | Policy tables covered by this harness | **3** — `syllabi` (4), `syllabus_scenarios` (4), `scenario_catalog` (1) |
-| Policies covered | **9 of 41 (22%)** |
+| Policies covered (statements) | **21 of 41 (51%)** across 5 tables; 21 statements = **15 effective policies** (classes 8→4, enrollments 4→2 are recreated by the optimize migration) |
 | Assertions attributable to policy tables | 26 of 32; the other 6 exercise `attempts`, which has no policies |
 
 An earlier revision of this document reported 9 policies on 3 tables and 10 RLS-enabled
@@ -189,8 +189,8 @@ wrong in both directions; they must not be reused.
 
 | Bucket | Meaning | Tables |
 | --- | --- | --- |
-| **Tested** | passing assertions measured for the table | `syllabi`, `syllabus_scenarios`, `scenario_catalog` |
-| **Planned** | policy-bearing, no regression evidence yet | phase 1 `classes`, `enrollments` · phase 2 `assignments`, `replays`, `completions` · phase 3 `telemetry_events`, `profiles` · phase 4 `external_data_resources`, `diagnostic_data_domains`, `external_resource_domain_links` |
+| **Tested** | passing assertions measured for the table | `classes`, `enrollments`, `syllabi`, `syllabus_scenarios`, `scenario_catalog` |
+| **Planned** | policy-bearing, no regression evidence yet | phase 2 `assignments`, `replays`, `completions` · phase 3 `telemetry_events`, `profiles` · phase 4 `external_data_resources`, `diagnostic_data_domains`, `external_resource_domain_links` |
 | **Deny-all by design** | RLS enabled, zero policies | `institutions`, `institution_memberships`, `institution_cohorts`, `institution_settings`, `student_institution_claims`, `institution_email_domains` |
 | **No RLS at all** | border case | `instructor_school_verifications` |
 
@@ -226,11 +226,11 @@ policies has been individually exercised, and it cannot: the harness emits table
 not policy identifiers. Closing that gap would require the harness to tag assertions with the
 policy name they target, which is a future change, not a current claim.
 
-### Phased plan for the remaining ten tables
+### Phased plan for the remaining eight tables
 
 | Phase | Tables | Evidence required before a table may be declared tested |
 | --- | --- | --- |
-| 1 | `classes`, `enrollments` | positive control (owner/instructor), cross-tenant denial, holder-of-privilege proof — also the R26 tie-in |
+| ~~1~~ | ~~`classes`, `enrollments`~~ | **completed in §6b** — 26 assertions |
 | 2 | `assignments`, `replays`, `completions` | the same three, per applicable verb |
 | 3 | `telemetry_events`, `profiles` | the same three, plus the ownership/TTL contract for telemetry |
 | 4 | `external_data_resources`, `diagnostic_data_domains`, `external_resource_domain_links` | the same three |
@@ -272,6 +272,102 @@ an offline fallback and is no longer required.
 (`.github/workflows/unit-tests.yml`), immediately after `Install dependencies (root)` /
 `npm ci` and before scenario validation. The diff is a single added step; no existing step,
 gate, or `continue-on-error` setting was changed.
+## 6b. Phase 1 results — `classes` and `enrollments`
+
+| Field | Value |
+| --- | --- |
+| Migrations applied (unmodified) | `20260924052734_restore_classroom_api_schema.sql`, `20260924052757_optimize_classroom_api_rls.sql` |
+| Assertions added | **26** (13 per table) |
+| Assertions total | **58/58 passing**, exit 0 |
+| Policy statements | 12 for the two tables; **6 effective**, because the optimize migration drops and recreates each one |
+| Privilege source | Supabase-style default privileges (`grant all` to `anon`/`authenticated`) plus the migrations' explicit grants |
+
+### Coverage
+
+```
+TESTED — 5/13 tables, 21/41 policy statements (51%)
+  classes                8 policies  13/13 assertions
+  enrollments            4 policies  13/13 assertions
+  syllabi                4 policies  18/18 assertions
+  syllabus_scenarios     4 policies   6/6 assertions
+  scenario_catalog       1 policy     2/2 assertions
+```
+
+21 statements equal **15 effective policies** for these five tables. The 21/41 and 5/13 figures
+are table-level regression coverage; they are not individual policy-behaviour coverage.
+
+### Privilege finding — the `grant select, insert` on `enrollments` is not restrictive
+
+`20260924052734` grants only `select, insert` on `enrollments` to `authenticated`, which reads
+like UPDATE/DELETE should be refused. They are not: Supabase's default privileges already
+grant ALL on new `public` tables to `anon`/`authenticated`, so the explicit grant is
+**additive**. Measured in PGlite, `authenticated` holds SELECT, INSERT, UPDATE **and** DELETE on
+`enrollments`.
+
+The consequence is a reclassification: because `enrollments` has no UPDATE or DELETE policy,
+those operations are **RLS-denied (0 rows affected)**, not privilege-denied. Both are asserted:
+the privilege hold (all four true) and the 0-row outcomes. Had this not been measured, the
+matrix would have mislabelled two RLS results as privilege results — the exact error the
+privilege audit exists to prevent.
+
+In an environment *without* Supabase's default grants, the same migration would produce a
+privilege denial instead, so this classification is platform-dependent and is recorded as such.
+
+### Other observed behaviour
+
+- **Self-enrolment into any class succeeds.** The `user_id = auth.uid()` branch of
+  `enrollments_insert_self_or_owner` lets any authenticated user enrol themselves in any class
+  by id, including one they are not invited to. Asserted as observed behaviour, not as a
+  defect judgement — whether that is intended is a product question.
+- **Owner branch confirmed**: a class owner can enrol a third user into their own class.
+- Denied writes left row counts unchanged (3 classes, 3 enrolments).
+
+### Institution-scope trigger — PGlite observation, not production evidence
+
+`private.enforce_class_institution_scope()` (in `20261012205000_add_institution_tenant_foundation.sql`)
+is a `BEFORE INSERT OR UPDATE` trigger, `security invoker`, that rejects an institution-scoped
+class unless the owner holds an **active** membership with role
+`instructor`/`institution_admin`/`institution_owner`.
+
+The chain applies under PGlite once its real prerequisites are present
+(`restore_classroom_api_schema`, `add_instructor_school_verification`,
+`add_scenario_authoring_drafts`, `add_authoring_review_lifecycle`, then the foundation
+migration). Observed as `authenticated`:
+
+| Case | Observed |
+| --- | --- |
+| active member, institution-scoped class | `permission denied for table institution_memberships` |
+| invited (non-active) member, institution-scoped class | `permission denied for table institution_memberships` |
+| active member, class **without** institution fields | succeeds (trigger returns early) |
+| program set while institution is null | `institution_scope_rejected: program/cohort requires institution` |
+| grants for `authenticated` on `institution_memberships` | SELECT/INSERT/UPDATE/DELETE all **false** |
+
+So the trigger's own membership logic is **unreachable for the API role**: the function runs as
+the invoker, and `authenticated` holds no privileges on the table it must read. Even a
+*legitimate* active member cannot create an institution-scoped class through a user-scoped
+client.
+
+**Mitigation, verified in code:** every route that writes `classes`
+(`worker/routes/classroom-classes.js`, `instructor-telemetry.js`, `institution-reporting.js`,
+`institution-portal.js`, `classroom-assignments.js`) constructs a **service-role** client
+(`SUPABASE_SERVICE_ROLE_KEY`). `service_role` does hold privileges on `institution_memberships`,
+so the trigger path works there and the application never depends on the API role for this
+write. That is consistent with the R26 finding that institution authorization lives in route
+code, not in RLS.
+
+Classification: **PGlite-only observation, not confirmed production behaviour.** It requires a
+real Supabase project to determine whether `authenticated` genuinely lacks those grants there,
+and whether any direct PostgREST write path to `classes` exists that would hit the defect.
+
+### Limitations
+
+- No institution dimension on `enrollments`, so cross-institution scenarios for that table
+  reduce to cross-owner scenarios.
+- The trigger observation used a PGlite chain assembled for the probe; it is not part of the
+  default harness and adds no assertions to CI.
+- PGlite is still not Supabase: no PostgREST, no GoTrue, single connection, PostgreSQL 18.6.
+
+
 
 The step is labelled and commented as **PGlite RLS regression coverage** and explicitly not
 as complete Supabase verification. Consequences accepted with that decision:
@@ -297,7 +393,7 @@ as complete Supabase verification. Consequences accepted with that decision:
 ```bash
 cd <repo>
 npm ci
-npm run test:r22             # 32/32 assertions, exit 0
+npm run test:r22             # 58/58 assertions, exit 0
 npm run test:r22:matrix      # 104/106 migrations applied
 npm run verify:rls-coverage  # inventory vs measured evidence; fails on overstatement
 ```
