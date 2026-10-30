@@ -113,6 +113,90 @@ async function remoteMigrations(url, serviceRoleKey) {
   return rows.map((row) => ({ version: String(row.version || ''), name: String(row.name || '') }));
 }
 
+/**
+ * Decides whether the recorded migration history and the materialized schema agree.
+ *
+ * Pure function: no I/O, no network. It guards the failure mode described in
+ * issue #1072: recording a migration version in history must never be used as a
+ * substitute for actually applying the SQL, and history must not be "repaired"
+ * while the materialized schema is still stale.
+ *
+ * @param {object} input
+ * @param {Array<{version:string,name:string}>} input.history recorded migration history
+ * @param {object|null} input.schemaProbe observed materialized state for the target migration
+ * @param {string} input.version target migration version
+ * @param {{pre:object, post:object}} input.expected expected probe states
+ */
+function evaluateApplicationGate({ history, schemaProbe, version, expected }) {
+  const target = String(version || '');
+  const recordedInHistory = (history || []).some((row) => String(row.version) === target);
+  const probe = schemaProbe || null;
+
+  const matches = (state) => {
+    if (!probe) return false;
+    return Object.keys(state || {}).every((key) => {
+      return JSON.stringify(probe[key]) === JSON.stringify(state[key]);
+    });
+  };
+
+  const schemaMatchesPre = matches((expected || {}).pre);
+  const schemaMatchesPost = matches((expected || {}).post);
+
+  if (recordedInHistory && schemaMatchesPost) {
+    return {
+      decision: 'already_applied',
+      ok: true,
+      recordedInHistory,
+      schemaMatchesPre,
+      schemaMatchesPost,
+      requiresTrackedApplication: false,
+      reason: `version ${target} is recorded and the materialized schema matches the expected post-state`
+    };
+  }
+  if (recordedInHistory && schemaMatchesPre) {
+    return {
+      decision: 'history_recorded_but_schema_stale',
+      ok: false,
+      recordedInHistory,
+      schemaMatchesPre,
+      schemaMatchesPost,
+      requiresTrackedApplication: true,
+      reason: `version ${target} is recorded in history but the materialized schema is still the pre-state; apply the canonical SQL through the tracked migration process instead of repairing history`
+    };
+  }
+  if (!recordedInHistory && schemaMatchesPost) {
+    return {
+      decision: 'schema_applied_but_history_missing',
+      ok: false,
+      recordedInHistory,
+      schemaMatchesPre,
+      schemaMatchesPost,
+      requiresTrackedApplication: true,
+      reason: `the materialized schema already shows the post-state but version ${target} is not recorded; reconcile history only with evidence of the original tracked application`
+    };
+  }
+  if (!recordedInHistory && schemaMatchesPre) {
+    return {
+      decision: 'apply_required',
+      ok: true,
+      recordedInHistory,
+      schemaMatchesPre,
+      schemaMatchesPost,
+      requiresTrackedApplication: true,
+      reason: `version ${target} is unapplied and the materialized schema is the pre-state; the canonical migration still has to be applied`
+    };
+  }
+  return {
+    decision: 'indeterminate',
+    ok: false,
+    recordedInHistory,
+    schemaMatchesPre,
+    schemaMatchesPost,
+    requiresTrackedApplication: true,
+    reason: `could not classify version ${target}: the schema probe matched neither the expected pre-state nor the expected post-state`
+  };
+}
+
 function arg(name, fallback) {
   const index = process.argv.indexOf(name);
   return index >= 0 && process.argv[index + 1] ? process.argv[index + 1] : fallback;
@@ -140,6 +224,23 @@ async function main() {
     for (const item of ignoredBloat) console.log(`  ~ ${item.version}_${item.name}.sql (${item.reason})`);
   }
   console.log(`Remote ${actualRef}: ${remote.length} migrations.`);
+
+  // Optional read-only guard: refuse a "history repair" while the materialized
+  // schema is still stale (or already migrated but unrecorded). See issue #1072.
+  const probePath = arg('--schema-probe');
+  if (probePath) {
+    const probeDoc = JSON.parse(fs.readFileSync(probePath, 'utf8'));
+    const gate = evaluateApplicationGate({
+      history: remote,
+      schemaProbe: probeDoc.schema_probe,
+      version: probeDoc.version,
+      expected: probeDoc.expected
+    });
+    console.log(`Application gate (${probeDoc.version}): ${gate.decision}`);
+    console.log(`  ${gate.reason}`);
+    console.log(`  recorded_in_history=${gate.recordedInHistory} schema_pre=${gate.schemaMatchesPre} schema_post=${gate.schemaMatchesPost}`);
+    if (!gate.ok) process.exitCode = 1;
+  }
 
   if (result.timestampAliases.length) {
     console.error(`FAIL: timestamp-renamed migrations detected: ${result.timestampAliases.length}.`);
@@ -175,5 +276,6 @@ module.exports = {
   compareMigrationHistories,
   canonicalRepositoryMigrations,
   repositoryMigrations,
-  projectRefFromUrl
+  projectRefFromUrl,
+  evaluateApplicationGate
 };
