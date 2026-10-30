@@ -122,7 +122,12 @@
       const viewer=new Viewer(canvas,status);
       viewers.push({viewer,speed:Number(asset.animation?.speed)||0});
       try{
-        await viewer.load(asset.url,asset.title);
+        const review=new URLSearchParams(window.location.search).get("visualReview")==="1";
+       const reviewFile=asset.title==="Generic Starter Motor"?"starter-motor-detailed-review.glb":
+         asset.title==="Generic Starter Solenoid"?"starter-solenoid-detailed-review.glb":null;
+       const reviewUrl=review&&reviewFile?"/dashboard/student/starting-system-lab/assets/3d/"+reviewFile:asset.url;
+       viewer.detailedLighting=review&&!!reviewFile;
+       await viewer.load(reviewUrl,asset.title);
       }catch(error){
         status.textContent="Unable to render "+asset.title+": "+error.message;
         status.dataset.state="unavailable";
