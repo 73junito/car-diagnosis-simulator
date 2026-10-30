@@ -33,6 +33,15 @@ jobs:
           EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
           RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
         run: node scripts/smoke-restored-supabase-access.cjs
+      # Read-only GoTrue configuration report: answers whether email/password sign-in is available,
+      # so the authenticated smoke's prerequisites can be assessed without creating a user or
+      # attempting a sign-in. Uses the existing environment anon key, prints only allowlisted fields,
+      # and never emits the key, headers or a raw response body. Restored project only.
+      - name: Report restored-project Auth configuration (read-only)
+        env:
+          EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
+          RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
+        run: node scripts/report-restored-auth-config.cjs
       - name: Verify dedicated authenticated restored-project catalog read when configured
         env:
           EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
