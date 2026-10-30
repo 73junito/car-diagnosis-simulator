@@ -36,8 +36,9 @@ rather than trusted.
 | Project ref | `nbgvllelsfhnmuwuqlkw` | workflow environment binding |
 | Environment protection rules | **0** | GitHub API, 2026-10-29 |
 | `can_admins_bypass` | `true` | GitHub API, 2026-10-29 |
-| `deployment_branch_policy` | `null` — **no branch restriction** | GitHub API, 2026-10-29 |
-| Remote branches able to run the workflow | **731** | `git ls-remote`, 2026-10-29 |
+| `deployment_branch_policy` | `null` — **no platform-level branch restriction** | GitHub API, 2026-10-29 |
+| Workflow-level restriction | job `if:` permits only head ref `feat/lmf-unified-runtime-foundation` (on `pull_request`) or a dispatch on that branch, in this repository | workflow file, 2026-10-29 |
+| Remote branches in the repository | 731 — none of which are stopped by the environment itself | `git ls-remote`, 2026-10-29 |
 | Environment secrets (names only) | 7 — `ANON_KEY`, `AUTHORIZATION_ENDPOINT`, `DB_PASSWORD`, `JWKS_ENDPOINT`, `OIDC_DISCOVERY`, `RESTORED_TEST_USER_JWT`, `TOKEN_ENDPOINT` | GitHub API metadata, 2026-10-29 |
 | Auth settings probe | HTTP 200, `probe: ok` | CI run on `fd9011fe`, 2026-10-29 |
 | Email/password provider | enabled (`external.email: true`) | same run |
@@ -52,10 +53,15 @@ Two of these carry more weight than the rest and are stated plainly:
   on it. That is a normal setting for a live product and is not a vulnerability in itself. It does,
   however, mean the project accumulates identities over time, and an unowned project that accepts
   signups indefinitely is a liability whose size nobody is measuring.
-- **`deployment_branch_policy: null` with 0 protection rules.** Every one of the 731 remote branches
-  can run `lmf-restored-supabase-access.yml`, and the run receives all seven environment secrets
-  with no approval step and no branch constraint. This is the concrete exposure today, and it is
-  larger than the missing reviewer rule that prompted this record.
+- **`deployment_branch_policy: null` with 0 protection rules.** There is no platform-level restriction
+  on which branch may reach this environment. The only effective restriction today is a code-level
+  guard — the job's `if:` expression in `lmf-restored-supabase-access.yml` — which is honest but
+  weaker than it looks: the guard and the secret consumer live in the *same file*, so anyone able to
+  write to that branch can rewrite the guard and still receive the secrets. Repository protection
+  does not back it up either, since `main` requires **0** approving reviews. The exposure is
+  therefore not "731 branches can reach the secrets" — it is "the environment enforces nothing, and
+  the only thing standing between a run and the secrets is a line of code that the same branch can
+  change".
 
 For context, the same pattern holds repo-wide: of 13 environments, one carries a single protection
 rule (a `wait_timer` on `jchfruprqpeypdttvlam_staging`, with `can_admins_bypass: false`), and no
@@ -67,17 +73,25 @@ credentials.
 
 | Field | Proposal | Status |
 |---|---|---|
+| Recommended decision | **Retain temporarily**, for isolated verification | **proposed** |
 | Designation | Temporary, isolated **verification** environment — not a production or staging destination, and not a source of truth | proposed |
-| Accountable owner | `73junito` (repository owner, sole collaborator) | **proposed — requires confirmation** |
-| Retention deadline | **2026-11-30** | proposed |
+| Accountable owner | `73junito` (repository owner, sole collaborator) — **candidate only, pending explicit acceptance** | **proposed — not accepted** |
+| Retention deadline | **November 30, 2026** — mandatory review, and deletion if not renewed | proposed |
 | Days remaining from 2026-10-29 | 32 | arithmetic |
 | Decision due at deadline | retain with a renewed written justification, or delete | proposed |
-| New credential provisioning | frozen until this record is approved | proposed |
-| Production data present | unverified — must be established before deletion is treated as cost-free | **unknown** |
+| New credential provisioning | **not authorised** | proposed |
+| Environment protection changes | **not authorised** by this record — see §4, §5 | proposed |
+| Project deletion | **not authorised** — the deadline triggers a review, not an automatic deletion | proposed |
+| Unique production data present | **UNKNOWN** — verification required before any deletion is authorised | **unknown** |
 
 The deadline is deliberately short. It is long enough to finish the authenticated-access
 verification, and short enough that the decision is revisited while someone still remembers why the
 project exists.
+
+**The unique-data question does not block documenting retention, and it does block deletion.** Those
+are separate gates and must stay separate: without a verified answer, the record can say "retain to
+November 30" but it cannot say "deleting this is safe". Nothing in this document converts silence on
+that question into permission to delete.
 
 **§7 is deliberately left blank.** A candidate owner is proposed above for discussion, but recording
 that name is the approval act this document exists to obtain; entering it as settled here would
@@ -142,7 +156,7 @@ after the lifecycle record is approved.
 |---|---|---|
 | Authenticated access verification | dedicated pre-confirmed user + two environment secrets | `NOT_RUN`, `credentials-not-configured` |
 | Environment reviewer rule | this record, then a second eligible reviewer | 0 protection rules |
-| Deployment branch restriction | this record | unrestricted, 731 branches |
+| Deployment branch restriction | this record, then a branch-restriction analysis (prepared separately) | no platform policy; one workflow-level `if:` guard |
 | P2 cleanup of the obsolete JWT secret | separate authorisation after verification | `RESTORED_TEST_USER_JWT` still stored |
 | Teardown procedure | this record, and the deadline review | not yet written |
 
@@ -188,8 +202,8 @@ Before deletion is treated as safe, three things must be established, none of wh
    source, which says nothing about whether the source has since moved on);
 2. that no evidence referenced by an open gate depends on it remaining reachable — the eight LMF
    release requirements remain pending, not satisfied;
-3. that deleting it does not strand a branch or workflow still pointing at the ref. At present
-   `lmf-restored-supabase-access.yml` and 731 branches do.
+3. that deleting it does not strand a branch or workflow still pointing at the ref —
+   `lmf-restored-supabase-access.yml` references it directly.
 
 Deleting the project disposes of `DB_PASSWORD` and the stored `RESTORED_TEST_USER_JWT` along with
 it; the environment and its secret records would survive and must be removed separately.
@@ -198,7 +212,7 @@ it; the environment and its secret records would survive and must be removed sep
 
 | Risk | Assessment |
 |---|---|
-| Credentials on an unowned project | The quantified exposure: 7 secrets, released to any of 731 branches, no approval step, no branch restriction |
+| Credentials on an unowned project | 7 secrets behind no platform control: no protection rule, no branch policy, no approval step. The only restriction is a workflow `if:` guard in the same file that consumes them |
 | Signups accepted indefinitely | `disable_signup: false`; identities accumulate on a project nobody has agreed to operate |
 | Deletion destroys the only copy of something | **Unknown.** Not established either way; §8 requires it before deletion |
 | Approving retention is read as approving provisioning | Mitigated by §4, which enumerates what approval does *not* cover |
