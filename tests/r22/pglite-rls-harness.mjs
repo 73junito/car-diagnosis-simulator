@@ -154,8 +154,18 @@ async function asRole(db, role, sub, fn) {
 // ---------------------------------------------------------------------------
 const results = []
 
-function record(label, expected, actual, pass) {
-  results.push({ label, expected, actual, pass })
+/**
+ * Attribute each assertion to the table its SQL touches, so coverage is measured rather
+ * than declared. Every assertion in this harness queries an explicit `public.<table>`;
+ * anything without one stays unattributed and is never counted as table coverage.
+ */
+function tableOf(sql) {
+  const match = /public\.([a-z_0-9]+)/i.exec(String(sql || ''))
+  return match ? match[1] : null
+}
+
+function record(label, expected, actual, pass, table = null) {
+  results.push({ label, expected, actual, pass, table })
   console.log(`${pass ? 'PASS' : 'FAIL'}  ${label}`)
   if (!pass) console.log(`        expected: ${expected}\n        actual:   ${actual}`)
 }
@@ -164,9 +174,9 @@ async function expectRows(db, role, sub, label, sql, expectedCount) {
   const tag = `${label} [${role}${sub ? ':' + sub.slice(0, 4) : ''}]`
   try {
     const out = await asRole(db, role, sub, () => db.query(sql))
-    record(tag, `${expectedCount} row(s)`, `${out.rows.length} row(s)`, out.rows.length === expectedCount)
+    record(tag, `${expectedCount} row(s)`, `${out.rows.length} row(s)`, out.rows.length === expectedCount, tableOf(sql))
   } catch (error) {
-    record(tag, `${expectedCount} row(s)`, `error: ${firstLine(error.message)}`, false)
+    record(tag, `${expectedCount} row(s)`, `error: ${firstLine(error.message)}`, false, tableOf(sql))
   }
 }
 
@@ -174,10 +184,16 @@ async function expectRejected(db, role, sub, label, sql, pattern) {
   const tag = `${label} [${role}]`
   try {
     await asRole(db, role, sub, () => db.query(sql))
-    record(tag, 'rejected', 'succeeded', false)
+    record(tag, 'rejected', 'succeeded', false, tableOf(sql))
   } catch (error) {
     const message = String(error.message || error)
-    record(tag, `rejected${pattern ? ' ' + pattern : ''}`, firstLine(message), pattern ? pattern.test(message) : true)
+    record(
+      tag,
+      `rejected${pattern ? ' ' + pattern : ''}`,
+      firstLine(message),
+      pattern ? pattern.test(message) : true,
+      tableOf(sql)
+    )
   }
 }
 
@@ -185,9 +201,9 @@ async function expectAffected(db, role, sub, label, sql, expectedCount) {
   const tag = `${label} [${role}]`
   try {
     const out = await asRole(db, role, sub, () => db.query(sql))
-    record(tag, `${expectedCount} row(s) affected`, `${out.rows.length} row(s) affected`, out.rows.length === expectedCount)
+    record(tag, `${expectedCount} row(s) affected`, `${out.rows.length} row(s) affected`, out.rows.length === expectedCount, tableOf(sql))
   } catch (error) {
-    record(tag, `${expectedCount} row(s) affected`, `error: ${firstLine(error.message)}`, false)
+    record(tag, `${expectedCount} row(s) affected`, `error: ${firstLine(error.message)}`, false, tableOf(sql))
   }
 }
 
@@ -286,9 +302,15 @@ async function runRoleBoundarySuite(db) {
   // Denied writes must not have mutated data.
   await db.exec('reset role')
   const syllabiCount = await db.query('select count(*)::int as n from public.syllabi')
-  record('denied writes left syllabi intact', '3 rows', `${syllabiCount.rows[0].n} rows`, syllabiCount.rows[0].n === 3)
+  record('denied writes left syllabi intact', '3 rows', `${syllabiCount.rows[0].n} rows`, syllabiCount.rows[0].n === 3, 'syllabi')
   const mapCount = await db.query('select count(*)::int as n from public.syllabus_scenarios')
-  record('denied mapping writes left data intact', '3 rows', `${mapCount.rows[0].n} rows`, mapCount.rows[0].n === 3)
+  record(
+    'denied mapping writes left data intact',
+    '3 rows',
+    `${mapCount.rows[0].n} rows`,
+    mapCount.rows[0].n === 3,
+    'syllabus_scenarios'
+  )
 
   // service_role bypasses RLS. This records the production posture R26 already
   // described: tenant scoping is enforced by route code, not by RLS, whenever the
@@ -329,7 +351,7 @@ async function runPrivilegeAudit(db) {
   const audit = async (label, sql, expected) => {
     const out = await db.query(sql)
     const value = out.rows[0].v
-    record(label, String(expected), String(value), value === expected)
+    record(label, String(expected), String(value), value === expected, tableOf(sql))
   }
 
   await audit(
@@ -453,6 +475,19 @@ async function main() {
   console.log(`\n${results.length - failed.length}/${results.length} assertions passed`)
   if (failed.length) console.log(`FAILED: ${failed.map((f) => f.label).join('; ')}`)
 
+  // Measured coverage: tables this run actually asserted against, with passing counts.
+  // Declared coverage lives in tests/r22/rls-coverage.json and is checked by
+  // scripts/verify-rls-policy-coverage.js, which never trusts the declaration alone.
+  const tableCoverage = [...new Set(results.filter((r) => r.table).map((r) => r.table))]
+    .sort()
+    .map((table) => ({
+      table,
+      assertions: results.filter((r) => r.table === table).length,
+      passed: results.filter((r) => r.table === table && r.pass).length,
+    }))
+  console.log('\n=== measured table coverage (this run) ===')
+  for (const row of tableCoverage) console.log(`  ${row.table.padEnd(24)} ${row.passed}/${row.assertions} assertions passing`)
+
   if (jsonOut) {
     writeFileSync(
       jsonOut,
@@ -465,6 +500,7 @@ async function main() {
           migrations: applied,
           rlsEnabledTables: rlsEnabled.rows,
           results,
+          tableCoverage,
           assertionTotal: results.length,
           assertionPassed: results.length - failed.length,
           passed: failed.length === 0,
