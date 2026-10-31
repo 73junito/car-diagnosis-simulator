@@ -11,7 +11,16 @@ const request={modelRef,operatingStateId:"crank",testPointId:"TP_BAT_POS"};
 const keys={v1:crypto.randomBytes(32),v2:crypto.randomBytes(32)};
 async function main(){
  const url=process.env.LMF_TEST_DATABASE_URL;
- if(!url||!url.endsWith("/lmf_rotation_verify"))throw Error("Disposable rotation database required");
+ // Same disposable-target guard as tests/lmf-db-concurrency.cjs: a database name alone does not
+ // prove the target is throwaway, so the host is constrained to loopback as well. Rejected URLs
+ // throw before any Client is constructed, so no connection is attempted.
+ if(!url)throw Error("Local disposable LMF database required");
+ let parsed;
+ try{parsed=new URL(url)}catch{throw Error("Local disposable LMF database required")}
+ if(!["postgres:","postgresql:"].includes(parsed.protocol)||
+    parsed.pathname!=="/lmf_rotation_verify"||
+    !["localhost","127.0.0.1","::1","[::1]"].includes(parsed.hostname))
+   throw Error("Local disposable LMF database required");
  const db=new Client({connectionString:url});
  await db.connect();
  try{
