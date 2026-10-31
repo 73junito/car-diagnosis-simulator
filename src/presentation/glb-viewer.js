@@ -69,6 +69,7 @@
       uniform float uYaw;
       uniform float uPitch;
       out vec4 vColor;
+      out vec3 vSurface;
       void main() {
         vec3 p = (aPosition - uCenter) * uScale;
         float cy = cos(uYaw), sy = sin(uYaw);
@@ -77,14 +78,26 @@
         p = vec3(p.x, cp*p.y - sp*p.z, sp*p.y + cp*p.z);
         gl_Position = vec4(p.x / max(uAspect, 0.01), p.y, p.z * 0.35, 1.0);
         vColor = aColor;
+        vSurface = p;
       }`);
     const fragment = shader(gl, gl.FRAGMENT_SHADER, `#version 300 es
       precision mediump float;
       in vec4 vColor;
+      in vec3 vSurface;
+      uniform bool uDetailedLighting;
       out vec4 outColor;
       void main() {
         vec3 lit = vColor.rgb * 0.82 + vec3(0.12);
-        outColor = vec4(lit, vColor.a);
+        if (uDetailedLighting) {
+          vec3 normal = normalize(cross(dFdx(vSurface), dFdy(vSurface)));
+          normal = gl_FrontFacing ? normal : -normal;
+          vec3 keyLight = normalize(vec3(-0.42, 0.73, 0.55));
+          float diffuse = max(dot(normal, keyLight), 0.0);
+          float fill = max(dot(normal, normalize(vec3(0.65, 0.22, -0.6))), 0.0);
+          float specular = pow(max(dot(reflect(-keyLight, normal), vec3(0.0, 0.0, 1.0)), 0.0), 20.0);
+          lit = vColor.rgb * (0.48 + 0.42 * diffuse + 0.15 * fill) + vec3(0.09) * specular;
+        }
+        outColor = vec4(clamp(lit, 0.0, 1.0), vColor.a);
       }`);
     const handle = gl.createProgram();
     gl.attachShader(handle, vertex);
@@ -107,6 +120,7 @@
       this.yaw = -0.55;
       this.pitch = 0.28;
       this.zoom = 0.78;
+      this.detailedLighting = false;
       this.drag = null;
       if (!this.gl) {
         this.setStatus("3D preview unavailable in this browser. Equipment capability remains unchanged.", "unavailable");
@@ -120,7 +134,8 @@
         scale: this.gl.getUniformLocation(this.program, "uScale"),
         aspect: this.gl.getUniformLocation(this.program, "uAspect"),
         yaw: this.gl.getUniformLocation(this.program, "uYaw"),
-        pitch: this.gl.getUniformLocation(this.program, "uPitch")
+        pitch: this.gl.getUniformLocation(this.program, "uPitch"),
+        detailedLighting: this.gl.getUniformLocation(this.program, "uDetailedLighting")
       };
       this.bindInteraction();
       this.resizeObserver = new ResizeObserver(() => this.render());
@@ -265,6 +280,7 @@
       gl.uniform1f(this.locations.aspect, width / height);
       gl.uniform1f(this.locations.yaw, this.yaw);
       gl.uniform1f(this.locations.pitch, this.pitch);
+      gl.uniform1i(this.locations.detailedLighting, this.detailedLighting ? 1 : 0);
 
       for (const item of this.drawables) {
         gl.bindBuffer(gl.ARRAY_BUFFER, item.positionBuffer);
