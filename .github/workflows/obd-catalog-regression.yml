@@ -1,0 +1,56 @@
+name: OBD Catalog PG17 Regression
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "supabase/migrations/20261018050000_create_obd_reference_catalog.sql"
+      - "tests/sql/obd-reference-catalog-regression.sql"
+      - ".github/workflows/obd-catalog-regression.yml"
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: obd-catalog-pg17-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  pg17:
+    name: OBD catalog invariants on PostgreSQL 17
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 3s
+          --health-timeout 2s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: "5432"
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      - name: Wait for database
+        run: timeout 60s bash -c 'until pg_isready -q; do sleep 2; done'
+      - name: Create test roles
+        run: |
+          psql -X -v ON_ERROR_STOP=1 -c "CREATE ROLE anon NOLOGIN"
+          psql -X -v ON_ERROR_STOP=1 -c "CREATE ROLE authenticated NOLOGIN"
+      - name: Apply catalog migration
+        run: psql -X -v ON_ERROR_STOP=1 -f supabase/migrations/20261018050000_create_obd_reference_catalog.sql
+      - name: Test security and catalog invariants
+        run: psql -X -v ON_ERROR_STOP=1 -f tests/sql/obd-reference-catalog-regression.sql
+      - name: Ensure no test catalog data persisted
+        run: |
+          count=$(psql -X -v ON_ERROR_STOP=1 -At -c "SELECT (SELECT count(*) FROM public.obd_reference_sources)+(SELECT count(*) FROM public.obd_reference_codes)")
+          test "$count" = "0"

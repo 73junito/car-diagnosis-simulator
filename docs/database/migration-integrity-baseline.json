@@ -645,6 +645,12 @@
       "path": "supabase/migrations/20261013190000_retire_external_certification_taxonomy.sql",
       "sha256": "9d68ed1ba6753e91657a2411784f86c10a10d1eb78dd1fe7dbc126edd5ce68d4",
       "bytes": 8666
+    },
+    {
+      "version": "20261018050000",
+      "path": "supabase/migrations/20261018050000_create_obd_reference_catalog.sql",
+      "sha256": "e8ece55a5b596f4e508f1e07e01cea8a2d273d1da959258bb74df0a328d06a58",
+      "bytes": 4609
     }
   ],
   "pathEncoding": "Retired vendor tokens inside historical filenames are written with JSON unicode escapes; decoded values are the exact repository paths."
