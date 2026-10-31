@@ -102,3 +102,93 @@ describe('Supabase migration drift detector', () => {
     expect(workflow).not.toContain('migration-drift-exceptions.json')
   })
 })
+
+// Issue #1072 prevention: a missing canonical migration must be reported as
+// missing (never "repaired"), and history must never be recorded while the
+// materialized schema is still stale.
+describe('canonical migration gate coverage (issue #1072)', () => {
+  test('reports the lagging canonical migration when the remote is behind', () => {
+    const result = compareMigrationHistories(
+      [
+        { version: '20261013005905', name: 'add_diagnostic_copilot_stage2' },
+        { version: '20261013190000', name: 'retire_external_certification_taxonomy' }
+      ],
+      [{ version: '20261013005905', name: 'add_diagnostic_copilot_stage2' }]
+    )
+    expect(result.missing.map((m) => m.version)).toEqual(['20261013190000'])
+    expect(result.extra).toEqual([])
+    expect(result.timestampAliases).toEqual([])
+  })
+
+  test('the pending taxonomy migration is canonical in this repository', () => {
+    const versions = canonicalRepositoryMigrations('WORKTREE').migrations.map((m) => m.version)
+    expect(versions).toContain('20261013190000')
+  })
+})
+
+describe('migration application gate (issue #1072)', () => {
+  const { evaluateApplicationGate } = require('../scripts/verify-supabase-migration-drift.js')
+
+  const VERSION = '20261013190000'
+  const expected = {
+    pre: { legacy_prefix_columns: ['scenario_catalog', 'scenario_questions'], diagnostic_area_columns: [] },
+    post: { legacy_prefix_columns: [], diagnostic_area_columns: ['scenario_catalog', 'scenario_questions'] }
+  }
+
+  test('refuses a history repair while the materialized schema is still stale', () => {
+    const gate = evaluateApplicationGate({
+      history: [{ version: VERSION, name: 'retire_external_certification_taxonomy' }],
+      schemaProbe: expected.pre,
+      version: VERSION,
+      expected
+    })
+    expect(gate.decision).toBe('history_recorded_but_schema_stale')
+    expect(gate.ok).toBe(false)
+    expect(gate.requiresTrackedApplication).toBe(true)
+    expect(gate.reason).toMatch(/apply the canonical SQL/i)
+  })
+
+  test('requires tracked application when unapplied and still in the pre-state', () => {
+    const gate = evaluateApplicationGate({ history: [], schemaProbe: expected.pre, version: VERSION, expected })
+    expect(gate.decision).toBe('apply_required')
+    expect(gate.ok).toBe(true)
+    expect(gate.requiresTrackedApplication).toBe(true)
+  })
+
+  test('reports already_applied when recorded and in the post-state', () => {
+    const gate = evaluateApplicationGate({
+      history: [{ version: VERSION, name: 'retire_external_certification_taxonomy' }],
+      schemaProbe: expected.post,
+      version: VERSION,
+      expected
+    })
+    expect(gate.decision).toBe('already_applied')
+    expect(gate.ok).toBe(true)
+    expect(gate.requiresTrackedApplication).toBe(false)
+  })
+
+  test('flags a materialized migration that was never recorded', () => {
+    const gate = evaluateApplicationGate({ history: [], schemaProbe: expected.post, version: VERSION, expected })
+    expect(gate.decision).toBe('schema_applied_but_history_missing')
+    expect(gate.ok).toBe(false)
+    expect(gate.reason).toMatch(/evidence of the original tracked application/i)
+  })
+
+  test('is indeterminate when the probe matches neither expected state', () => {
+    const gate = evaluateApplicationGate({
+      history: [],
+      schemaProbe: { legacy_prefix_columns: ['scenario_questions'], diagnostic_area_columns: [] },
+      version: VERSION,
+      expected
+    })
+    expect(gate.decision).toBe('indeterminate')
+    expect(gate.ok).toBe(false)
+  })
+
+  test('stays indeterminate without a schema probe rather than guessing', () => {
+    const gate = evaluateApplicationGate({ history: [], schemaProbe: null, version: VERSION, expected })
+    expect(gate.decision).toBe('indeterminate')
+    expect(gate.ok).toBe(false)
+  })
+})
+
