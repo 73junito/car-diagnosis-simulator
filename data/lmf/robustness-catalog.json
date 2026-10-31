@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 1,
+  "subject": "AutoLearnPro LMF",
+  "releasePolicy": "gated-not-scored",
+  "domains": [
+    "Software engineering",
+    "Security and data integrity",
+    "Automotive and educational quality",
+    "Institutional operations"
+  ],
+  "dimensions": [
+    {
+      "id": "architecture-modularity",
+      "domain": "Software engineering",
+      "priority": "P1",
+      "acceptance": "Module boundary and fault-injection tests; no cross-layer authorization",
+      "reviewerRole": "Architect reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "automated-test-coverage",
+      "domain": "Software engineering",
+      "priority": "P1",
+      "acceptance": "Regression, boundary and failure-path test suites pass",
+      "reviewerRole": "QA reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "solver-correctness",
+      "domain": "Software engineering",
+      "priority": "P0",
+      "acceptance": "Independent numerical fixtures within preapproved tolerances; unsupported returns no value",
+      "reviewerRole": "Engineering reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "cross-platform-compatibility",
+      "domain": "Software engineering",
+      "priority": "P1",
+      "acceptance": "Supported browser/device/deployment matrix passes",
+      "reviewerRole": "QA reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "security-design",
+      "domain": "Security and data integrity",
+      "priority": "P0",
+      "acceptance": "Threat model and authorization-negative tests pass",
+      "reviewerRole": "Security reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "evidence-provenance",
+      "domain": "Security and data integrity",
+      "priority": "P0",
+      "acceptance": "Signature, chain, provenance and tamper tests pass",
+      "reviewerRole": "Security reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "authentication-reliability",
+      "domain": "Security and data integrity",
+      "priority": "P0",
+      "acceptance": "Valid tokens accepted; invalid/revoked/expired tokens rejected",
+      "reviewerRole": "Security reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "database-integration",
+      "domain": "Security and data integrity",
+      "priority": "P0",
+      "acceptance": "Canonical migration parity, concurrency and rollback checks pass",
+      "reviewerRole": "Database reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "multi-tenant-lifecycle-isolation",
+      "domain": "Security and data integrity",
+      "priority": "P0",
+      "acceptance": "Cross-tenant access denied across join, transfer, suspend and delete",
+      "reviewerRole": "Security reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "data-governance-retention",
+      "domain": "Security and data integrity",
+      "priority": "P1",
+      "acceptance": "Retention, export and deletion controls conform to approved policy",
+      "reviewerRole": "Privacy reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "engineering-model-fidelity",
+      "domain": "Automotive and educational quality",
+      "priority": "P0",
+      "acceptance": "Reference cases independently validated with stated numerical tolerances",
+      "reviewerRole": "Automotive engineering reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "educational-assessment-integrity",
+      "domain": "Automotive and educational quality",
+      "priority": "P0",
+      "acceptance": "Unapproved simulation outputs cannot modify scoring or eligibility",
+      "reviewerRole": "Instructional reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "ai-grounding-reliability",
+      "domain": "Automotive and educational quality",
+      "priority": "P0",
+      "acceptance": "Controlled technical claim set source-grounded or explicitly uncertain",
+      "reviewerRole": "AI evaluation reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "accessibility-inclusive-learning",
+      "domain": "Automotive and educational quality",
+      "priority": "P1",
+      "acceptance": "WCAG 2.2 AA audit and nonvisual lab pathway checks",
+      "reviewerRole": "Accessibility reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "deployment-operations",
+      "domain": "Institutional operations",
+      "priority": "P1",
+      "acceptance": "Staging promotion, alerting, rollback, disaster recovery demonstrated",
+      "reviewerRole": "SRE reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "supply-chain-security",
+      "domain": "Institutional operations",
+      "priority": "P1",
+      "acceptance": "Dependency scanning, licenses, build and artifact provenance reviewed",
+      "reviewerRole": "Security reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "versioning-reproducibility",
+      "domain": "Institutional operations",
+      "priority": "P1",
+      "acceptance": "Pinned model/solver/config reproduce recorded reference results",
+      "reviewerRole": "Engineering reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    },
+    {
+      "id": "institutional-scalability",
+      "domain": "Institutional operations",
+      "priority": "P2",
+      "acceptance": "Approved concurrent institution/classroom load target met without leakage",
+      "reviewerRole": "Performance reviewer",
+      "applicability": "planned",
+      "status": "not-evaluated",
+      "evidence": null
+    }
+  ]
+}

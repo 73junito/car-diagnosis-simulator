@@ -1,7 +1,7 @@
 {
   "$comment": "Declared coverage intent for the R22 PGlite harness. scripts/verify-rls-policy-coverage.mjs compares this against BOTH the case-insensitive policy inventory derived from supabase/migrations AND the assertions a real harness run actually executed and passed. Being listed in policyTablesTested is a claim that must be backed by passing assertions; it is never taken on trust.",
-  "$phaseNote": "Phase 1 (classes, enrollments) completed: both moved into policyTablesTested with measured evidence. Those two tables carry 12 historical policy statements but only 6 effective policies, because the optimize migration drops and recreates each one.",
-  "policyTablesTested": ["classes", "enrollments", "scenario_catalog", "syllabi", "syllabus_scenarios"],
+  "$phaseNote": "Phase 1 (classes, enrollments) completed: both moved into policyTablesTested with measured evidence. Those two tables carry 12 historical policy statements but only 6 effective policies, because the optimize migration drops and recreates each one. Phase 5 (lmf_reference_sessions, lmf_reference_events) completed the same way: measured, not scheduled. Counting note: a create-policy statement is not an effective policy. 43 statements collapse to 31 distinct (table, name) pairs because twelve classroom policies are dropped and recreated, so policy percentages must be read against the distinct denominator as well as the statement one.",
+  "policyTablesTested": ["classes", "enrollments", "lmf_reference_events", "lmf_reference_sessions", "scenario_catalog", "syllabi", "syllabus_scenarios"],
   "phases": [
     {
       "phase": 2,

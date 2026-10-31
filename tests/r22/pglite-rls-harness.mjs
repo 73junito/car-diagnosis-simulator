@@ -48,6 +48,12 @@ const REQUIRED_MIGRATIONS = [
   // shape that is not effective in production.
   '20260924052734_restore_classroom_api_schema.sql',
   '20260924052757_optimize_classroom_api_rls.sql',
+  // R22 phase 5: LMF reference evidence (PR #1128). Applied unmodified. The first creates
+  // both policy tables; the other two add the service-only append and retention functions,
+  // which the suite exercises as positive controls.
+  '20261024212822_lmf_reference_evidence_access.sql',
+  '20261024213613_lmf_atomic_reference_append.sql',
+  '20261024221008_lmf_reference_retention_guard.sql',
 ]
 
 const PGLITE_CANDIDATES = [
@@ -125,6 +131,17 @@ const SYLLABUS_B = 'bbbbbbbb-2222-4222-8222-bbbbbbbbbbbb'
 const MAP_A = 'cccccccc-1111-4111-8111-cccccccccccc'
 const MAP_B = 'dddddddd-2222-4222-8222-dddddddddddd'
 
+// R22 phase 5: LMF reference evidence (PR #1128). The three LMF migrations are applied
+// unmodified; these ids only name the rows the assertions refer to.
+const LMF_MODEL_REF = '/data/circuit-templates/12v-starting-system-v2.json'
+const LMF_HASH_A = 'a'.repeat(64)
+const LMF_HASH_B = 'b'.repeat(64)
+const LMF_SESSION_ACTIVE = 'a1a1a1a1-1111-4111-8111-111111111111'
+const LMF_SESSION_EXPIRED = 'a2a2a2a2-2222-4222-8222-222222222222'
+const LMF_SESSION_OTHER = 'b3b3b3b3-3333-4333-8333-333333333333'
+const LMF_EVENT_ACTIVE = 'c1c1c1c1-1111-4111-8111-111111111111'
+const LMF_EVENT_EXPIRED = 'c2c2c2c2-2222-4222-8222-222222222222'
+
 const SEED_SQL = `
 insert into auth.users (id) values ('${USER_A}'), ('${USER_B}');
 insert into public.syllabi (id, owner_id, title)
@@ -139,7 +156,24 @@ insert into public.syllabus_scenarios (id, syllabus_id, scenario_id, position)
          ('${MAP_B}', '${SYLLABUS_B}', 'scenario-active', 1);
 `
 
-const ROLES = new Set(['anon', 'authenticated', 'service_role'])
+// Roles the harness may SET ROLE to. `rls_probe` is a transient probe role created inside the
+// LMF suite: it holds the write privileges `authenticated` lacks, so its rejections are pure RLS
+// evidence. It is dropped again at the end of that suite.
+const ROLES = new Set(['anon', 'authenticated', 'service_role', 'rls_probe'])
+
+
+// LMF fixtures, seeded as the harness superuser after every migration has been applied.
+// The expired session has to carry an earlier created_at so the migration's own
+// `check (expires_at > created_at)` holds.
+const LMF_SEED_SQL = `
+insert into public.lmf_reference_sessions (id, owner_id, model_ref, model_sha256, expires_at, created_at)
+  values ('${LMF_SESSION_ACTIVE}', '${USER_A}', '${LMF_MODEL_REF}', '${LMF_HASH_A}', now() + interval '1 hour', now()),
+         ('${LMF_SESSION_EXPIRED}', '${USER_A}', '${LMF_MODEL_REF}', '${LMF_HASH_A}', now() - interval '1 day', now() - interval '2 days'),
+         ('${LMF_SESSION_OTHER}', '${USER_B}', '${LMF_MODEL_REF}', '${LMF_HASH_A}', now() + interval '1 hour', now());
+insert into public.lmf_reference_events (id, session_id, owner_id, sequence_number, payload, previous_hash, event_hash, event_signature)
+  values ('${LMF_EVENT_ACTIVE}', '${LMF_SESSION_ACTIVE}', '${USER_A}', 1, '{"n":1}'::jsonb, null, '${LMF_HASH_A}', '${LMF_HASH_A}'),
+         ('${LMF_EVENT_EXPIRED}', '${LMF_SESSION_EXPIRED}', '${USER_A}', 1, '{"n":1}'::jsonb, null, '${LMF_HASH_B}', '${LMF_HASH_B}');
+`
 
 /** Run fn with SET ROLE + request.jwt.claims, restoring session state afterwards. */
 async function asRole(db, role, sub, fn) {
@@ -558,6 +592,182 @@ async function runPrivilegeAudit(db) {
 }
 
 // ---------------------------------------------------------------------------
+// R22 phase 5: LMF reference evidence (PR #1128)
+// ---------------------------------------------------------------------------
+/**
+ * Two tables, one SELECT-owner policy each, and no client write policy at all.
+ *
+ * The denials here come from two independent layers and the suite keeps them apart:
+ *   - PRIVILEGE: the migration revokes everything from anon/authenticated and re-grants
+ *     SELECT only, so client writes fail with `permission denied for table`;
+ *   - RLS: the transient `rls_probe` role HOLDS insert/update/delete, so its rejection can
+ *     only be the absence of a write policy. Without that probe, re-granting the privilege
+ *     later would leave every denial assertion green while the RLS layer silently lapsed.
+ *
+ * Positive controls run last: they mutate state (a second session, an appended event, a
+ * purge) and would otherwise change the counts the visibility assertions rely on.
+ */
+async function runLmfReferenceSuite(db) {
+  console.log('\n=== R22 phase 5: LMF reference evidence ===')
+
+  await db.exec(`
+    create role rls_probe nologin;
+    grant authenticated to rls_probe;
+    grant usage on schema public, auth to rls_probe;
+    grant select, insert, update, delete on public.lmf_reference_sessions to rls_probe;
+    grant select, insert, update, delete on public.lmf_reference_events   to rls_probe;
+  `)
+
+  const insertSessionSql = (owner) => `insert into public.lmf_reference_sessions
+      (owner_id, model_ref, model_sha256, expires_at)
+      values ('${owner}', '${LMF_MODEL_REF}', '${LMF_HASH_A}', now() + interval '1 hour') returning id`
+
+  try {
+    // --- sessions: visibility and expiry -----------------------------------
+    await expectRows(
+      db, 'authenticated', USER_A, 'owner reads own unexpired LMF session',
+      `select id from public.lmf_reference_sessions where id = '${LMF_SESSION_ACTIVE}'`, 1
+    )
+    await expectRows(
+      db, 'authenticated', USER_A, 'owner does NOT see their own expired LMF session',
+      `select id from public.lmf_reference_sessions where id = '${LMF_SESSION_EXPIRED}'`, 0
+    )
+    await expectRows(
+      db, 'authenticated', USER_B, 'other user cannot see institution A\'s LMF session',
+      `select id from public.lmf_reference_sessions where id = '${LMF_SESSION_ACTIVE}'`, 0
+    )
+    await expectRejected(
+      db, 'anon', null, 'anon SELECT on LMF sessions (privilege denial, no grant at all)',
+      'select id from public.lmf_reference_sessions', /permission denied for table/i
+    )
+    await expectRejected(
+      db, 'authenticated', USER_A, 'authenticated INSERT on LMF sessions (privilege denial)',
+      insertSessionSql(USER_A), /permission denied for table/i
+    )
+    await expectRejected(
+      db, 'authenticated', USER_A, 'authenticated UPDATE on LMF sessions (privilege denial)',
+      `update public.lmf_reference_sessions set model_sha256 = '${LMF_HASH_B}' where id = '${LMF_SESSION_ACTIVE}' returning id`,
+      /permission denied for table/i
+    )
+    await expectRejected(
+      db, 'authenticated', USER_A, 'authenticated DELETE on LMF sessions (privilege denial)',
+      `delete from public.lmf_reference_sessions where id = '${LMF_SESSION_EXPIRED}' returning id`,
+      /permission denied for table/i
+    )
+
+    // --- events: visibility, expiry of the parent session, write denial ------
+    await expectRows(
+      db, 'authenticated', USER_A, 'owner reads own LMF event',
+      `select id from public.lmf_reference_events where session_id = '${LMF_SESSION_ACTIVE}'`, 1
+    )
+    await expectRows(
+      db, 'authenticated', USER_B, 'other user sees no LMF events at all',
+      'select id from public.lmf_reference_events', 0
+    )
+    await expectRows(
+      db, 'authenticated', USER_A, 'expired parent session hides its own events (session-join clause)',
+      'select id from public.lmf_reference_events', 1
+    )
+    await expectRejected(
+      db, 'authenticated', USER_A, 'authenticated INSERT on LMF events (privilege denial)',
+      `insert into public.lmf_reference_events
+         (session_id, owner_id, sequence_number, payload, previous_hash, event_hash, event_signature)
+         values ('${LMF_SESSION_ACTIVE}', '${USER_A}', 2, '{"n":2}'::jsonb, '${LMF_HASH_A}', '${LMF_HASH_B}', '${LMF_HASH_B}')
+       returning id`,
+      /permission denied for table/i
+    )
+    await expectRejected(
+      db, 'authenticated', USER_A, 'authenticated UPDATE on LMF events (privilege denial)',
+      `update public.lmf_reference_events set event_signature = '${LMF_HASH_B}' where id = '${LMF_EVENT_ACTIVE}' returning id`,
+      /permission denied for table/i
+    )
+    await expectRejected(
+      db, 'anon', null, 'anon SELECT on LMF events (privilege denial, no grant at all)',
+      'select id from public.lmf_reference_events', /permission denied for table/i
+    )
+
+    // --- the service-only write path is unreachable from the API role --------
+    // --- the service-only write path is unreachable from the API role --------
+    await expectRejected(
+      db, 'authenticated', USER_A, 'authenticated cannot EXECUTE the atomic append function',
+      `select lmf_private.append_reference_event('${LMF_SESSION_ACTIVE}', '${USER_A}', 2, '${LMF_HASH_A}', '{"n":2}'::jsonb, '${LMF_HASH_B}', '${LMF_HASH_B}')`,
+      /permission denied for schema lmf_private/i
+    )
+
+    // --- RLS layer, independent of privilege --------------------------------
+    // rls_probe HOLDS insert/update/delete on both tables, so a rejection here can only be
+    // the absence of a write policy. This is the assertion that would fail if the grant were
+    // ever widened without a policy, which the privilege-denial tests above cannot detect.
+    await expectRejected(
+      db, 'rls_probe', USER_A, 'RLS rejects INSERT on LMF sessions even though the privilege is held',
+      insertSessionSql(USER_A), /violates row-level security policy/i
+    )
+    await expectRejected(
+      db, 'rls_probe', USER_A, 'RLS rejects INSERT on LMF events even though the privilege is held',
+      `insert into public.lmf_reference_events
+         (session_id, owner_id, sequence_number, payload, previous_hash, event_hash, event_signature)
+         values ('${LMF_SESSION_ACTIVE}', '${USER_A}', 3, '{"n":3}'::jsonb, '${LMF_HASH_A}', '${LMF_HASH_B}', '${LMF_HASH_B}')
+       returning id`,
+      /violates row-level security policy/i
+    )
+    await expectRows(
+      db, 'rls_probe', USER_A, 'RLS policy (not privilege) still scopes rls_probe reads to its own rows',
+      'select id from public.lmf_reference_sessions', 1
+    )
+
+    // --- positive controls ---------------------------------------------------
+    // Without these, a schema that denied everything would look green. They run last
+    // because they add rows the visibility assertions above count on.
+    await expectAffected(
+      db, 'service_role', null, 'service_role can insert an LMF session',
+      `insert into public.lmf_reference_sessions (id, owner_id, model_ref, model_sha256, expires_at)
+         values ('d4d4d4d4-4444-4444-8444-444444444444', '${USER_B}', '${LMF_MODEL_REF}', '${LMF_HASH_A}', now() + interval '1 hour')
+       returning id`, 1
+    )
+    await expectAffected(
+      db, 'service_role', null, 'service_role can insert an LMF event',
+      `insert into public.lmf_reference_events
+         (session_id, owner_id, sequence_number, payload, previous_hash, event_hash, event_signature)
+         values ('d4d4d4d4-4444-4444-8444-444444444444', '${USER_B}', 1, '{"n":1}'::jsonb, null, '${LMF_HASH_A}', '${LMF_HASH_A}')
+       returning id`, 1
+    )
+    await expectRows(
+      db, 'service_role', null, 'atomic append succeeds with the correct expected sequence and previous hash',
+      `select lmf_private.append_reference_event('${LMF_SESSION_ACTIVE}', '${USER_A}', 2, '${LMF_HASH_A}', '{"n":2}'::jsonb, '${LMF_HASH_B}', '${LMF_HASH_B}') as id`, 1
+    )
+    await expectRejected(
+      db, 'service_role', null, 'atomic append rejects a broken chain (wrong expected sequence)',
+      `select lmf_private.append_reference_event('${LMF_SESSION_ACTIVE}', '${USER_A}', 99, '${LMF_HASH_A}', '{"n":9}'::jsonb, '${LMF_HASH_B}', '${LMF_HASH_B}')`,
+      /Stale or broken reference evidence chain/i
+    )
+    await expectRejected(
+      db, 'service_role', null, 'atomic append rejects an append to an expired session',
+      `select lmf_private.append_reference_event('${LMF_SESSION_EXPIRED}', '${USER_A}', 2, '${LMF_HASH_B}', '{"n":2}'::jsonb, '${LMF_HASH_A}', '${LMF_HASH_A}')`,
+      /Session missing, expired, or owner mismatch/i
+    )
+
+    let purged = 'error'
+    try {
+      const out = await asRole(db, 'service_role', null, () =>
+        db.query('select lmf_private.purge_expired_reference_sessions(10) as n')
+      )
+      purged = out.rows[0].n
+    } catch (error) {
+      purged = `error: ${firstLine(error.message)}`
+    }
+    // The purge returns a scalar, so attribute the assertion to the table it must have emptied.
+    await expectRows(
+      db, 'service_role', null, `retention purge removed the expired session (function returned ${purged})`,
+      `select id from public.lmf_reference_sessions where id = '${LMF_SESSION_EXPIRED}'`, 0
+    )
+  } finally {
+    // Leaves no role, grant or object behind if an assertion throws.
+    await db.exec('drop owned by rls_probe').catch(() => {})
+    await db.exec('drop role if exists rls_probe').catch(() => {})
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Migration compatibility sweep (reporting only, never gates the suite)
 // ---------------------------------------------------------------------------
 async function runMatrix(PGlite, from) {
@@ -614,12 +824,14 @@ async function main() {
 
   await db.exec(SEED_SQL)
   await db.exec(CLASSROOM_SEED_SQL)
-  console.log('fixtures seeded: 4 owners/users, syllabi, catalog, classes (3), enrollments (1)')
+  await db.exec(LMF_SEED_SQL)
+  console.log('fixtures seeded: 4 owners/users, syllabi, catalog, classes (3), enrollments (1), LMF sessions (3) + events (2)')
 
   await runSuite(db)
   await runClassroomSuite(db)
   await runRoleBoundarySuite(db)
   await runPrivilegeAudit(db)
+  await runLmfReferenceSuite(db)
 
   const rlsEnabled = await db.query(
     `select c.relname, c.relrowsecurity, c.relforcerowsecurity

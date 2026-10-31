@@ -1,0 +1,39 @@
+name: LMF Release Evidence Gate
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'data/lmf/release-evidence.json'
+      - 'scripts/check-lmf-release-gates.cjs'
+      - 'tests/lmf-release-gates.test.js'
+      - 'docs/lmf-release-gates.md'
+      - 'data/lmf/robustness-catalog.json'
+      - 'scripts/check-lmf-robustness-catalog.cjs'
+      - 'tests/lmf-robustness-catalog.test.js'
+      - '.github/workflows/lmf-release-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Cancel superseded PR evidence checks without treating pending evidence as passed.
+concurrency:
+  group: lmf-release-evidence-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test gate invariants
+        run: node --test tests/lmf-release-gates.test.js tests/lmf-robustness-catalog.test.js
+      - name: Validate robustness catalog
+        run: node scripts/check-lmf-robustness-catalog.cjs
+      - name: Require validated release evidence
+        run: node scripts/check-lmf-release-gates.cjs

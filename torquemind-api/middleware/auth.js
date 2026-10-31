@@ -24,7 +24,12 @@ module.exports = function createAuthMiddleware(supabase){
       }
     } catch (e) { void e; }
     try {
-      let { data, error } = await supabase.auth.getUser(token);
+      // Verify each bearer token with an isolated, stateless client. A shared
+      // Supabase Auth client can retain mutable session state between requests.
+      const verifier = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+      });
+      let { data, error } = await verifier.auth.getUser(token);
       // The SDK can return AuthSessionMissingError in stateless API processes.
       // In that specific case, verify the supplied bearer token with GoTrue's
       // /user endpoint. Never trust decoded JWT claims or bypass verification.

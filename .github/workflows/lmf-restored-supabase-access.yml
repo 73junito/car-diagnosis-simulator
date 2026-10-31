@@ -1,0 +1,51 @@
+name: Restored Supabase Access Smoke
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/lmf-restored-supabase-access.yml'
+      - 'scripts/smoke-restored-supabase-access.cjs'
+      - 'scripts/smoke-restored-supabase-authenticated.cjs'
+permissions:
+  contents: read
+jobs:
+  restored-access:
+    if: >-
+      github.repository == '73junito/car-diagnosis-simulator' &&
+      ((github.event_name == 'pull_request' &&
+        github.event.pull_request.head.repo.full_name == '73junito/car-diagnosis-simulator' &&
+        github.event.pull_request.head.ref == 'feat/lmf-unified-runtime-foundation') ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.ref == 'refs/heads/feat/lmf-unified-runtime-foundation'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: nbgvllelsfhnmuwuqlkw
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify isolated restored-project credentials and anonymous access
+        env:
+          EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
+          RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
+        run: node scripts/smoke-restored-supabase-access.cjs
+      # Read-only GoTrue configuration report: answers whether email/password sign-in is available,
+      # so the authenticated smoke's prerequisites can be assessed without creating a user or
+      # attempting a sign-in. Uses the existing environment anon key, prints only allowlisted fields,
+      # and never emits the key, headers or a raw response body. Restored project only.
+      - name: Report restored-project Auth configuration (read-only)
+        env:
+          EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
+          RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
+        run: node scripts/report-restored-auth-config.cjs
+      - name: Verify dedicated authenticated restored-project catalog read when configured
+        env:
+          EXPECTED_SUPABASE_REF: ${{ vars.EXPECTED_SUPABASE_REF }}
+          RESTORED_SUPABASE_ANON_KEY: ${{ secrets.ANON_KEY }}
+          RESTORED_TEST_USER_EMAIL: ${{ secrets.RESTORED_TEST_USER_EMAIL }}
+          RESTORED_TEST_USER_PASSWORD: ${{ secrets.RESTORED_TEST_USER_PASSWORD }}
+        run: node scripts/smoke-restored-supabase-authenticated.cjs
