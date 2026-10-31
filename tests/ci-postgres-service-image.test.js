@@ -11,7 +11,11 @@ describe('CI disposable Postgres registry policy', () => {
     const result = verifyCiPostgresServiceImage()
 
     expect(result.approvedImage).toBe('postgres:14')
-    expect(result.occurrenceCount).toBe(3)
+    // Exhaustive inventory, not a permission list. Every service-container declaration in the
+    // repository is recorded here so that adding one fails this test until it has been reviewed
+    // and added deliberately. The list is therefore expected to reach four, and to grow only by
+    // explicit review: it never exempts an entry from APPROVED_IMAGE, which is enforced above.
+    expect(result.occurrenceCount).toBe(4)
     expect(result.occurrences).toEqual([
       {
         workflow: '.github/workflows/apply-migrations.yml',
@@ -19,6 +23,10 @@ describe('CI disposable Postgres registry policy', () => {
       },
       {
         workflow: '.github/workflows/apply-migrations.yml',
+        image: 'postgres:14'
+      },
+      {
+        workflow: '.github/workflows/lmf-db-verification.yml',
         image: 'postgres:14'
       },
       {
