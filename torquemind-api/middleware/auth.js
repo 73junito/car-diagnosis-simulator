@@ -3,6 +3,7 @@ const { createClient } = require('@supabase/supabase-js');
 module.exports = function createAuthMiddleware(supabase){
   return async function authMiddleware(req, res, next){
     const debugAuth = process.env.DEBUG_AUTH === 'true';
+    const verificationDiagnostics = process.env.AUTH_VERIFY_DIAGNOSTICS === 'true';
     // Quick request-level trace to confirm middleware invocation in CI (guarded)
     try {
       if (debugAuth) console.log('Auth middleware entry', { method: req.method, path: req.path, hasAuth: !!(req.headers && (req.headers.authorization || req.headers.Authorization)) });
@@ -19,16 +20,12 @@ module.exports = function createAuthMiddleware(supabase){
 
     const token = auth.replace(/^Bearer\s+/i, '');
     try {
-      if (debugAuth) {
-        try { console.log('Auth token snippet', { length: token.length, snippet: token.slice(0, 8) }); } catch (e) { void e; }
-      }
-    } catch (e) { void e; }
-    try {
       let { data, error } = await supabase.auth.getUser(token);
       // The SDK can return AuthSessionMissingError in stateless API processes.
       // In that specific case, verify the supplied bearer token with GoTrue's
       // /user endpoint. Never trust decoded JWT claims or bypass verification.
       if (error && (error.name === 'AuthSessionMissingError' || error.message === 'Auth session missing!')) {
+        if (verificationDiagnostics) console.log('Auth verification fallback', { path: req.path, reason: 'session-missing' });
         const url = process.env.SUPABASE_URL;
         const anon = process.env.SUPABASE_ANON_KEY;
         if (url && anon) {
@@ -36,6 +33,7 @@ module.exports = function createAuthMiddleware(supabase){
             headers: { apikey: anon, Authorization: `Bearer ${token}`, Accept: 'application/json' },
             signal: AbortSignal.timeout(10000),
           });
+          if (verificationDiagnostics) console.log('Auth verifier response', { path: req.path, status: response.status, ok: response.ok });
           if (response.ok) {
             const verified = await response.json();
             const verifiedUser = verified && (verified.user || verified);
@@ -46,7 +44,7 @@ module.exports = function createAuthMiddleware(supabase){
           }
         }
       }
-      if (debugAuth) console.log('getUser result', { userId: data && data.user && data.user.id, error: error && error.message });
+      if (verificationDiagnostics) console.log('Auth verification outcome', { path: req.path, verified: !!(data && data.user && !error), errorType: error ? error.name : null });
       if (error || !data || !data.user) {
         console.warn('Auth failed: invalid/expired token', error && error.message);
         req.user = null;
