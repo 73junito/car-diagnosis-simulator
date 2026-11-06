@@ -195,7 +195,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
     "hono": "^4.13.14",
-    "three": "^0.186.1"
+    "three": "^0.187.0"
   },
   "description": "Evidence-aware automotive technology learning, diagnostic scenario, and lab platform",
   "homepage": "https://autolearnpro.com/",
