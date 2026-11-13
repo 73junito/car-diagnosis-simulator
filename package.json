@@ -193,8 +193,8 @@
     "wrangler": "^4.153.0"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.118.0",
-    "hono": "^4.13.14",
+    "@supabase/supabase-js": "^2.119.0",
+    "hono": "^4.13.17",
     "three": "^0.186.1"
   },
   "description": "Evidence-aware automotive technology learning, diagnostic scenario, and lab platform",
